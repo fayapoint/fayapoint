@@ -138,8 +138,8 @@ export default function RegisterPage() {
 
           <div className="bg-popover/50 backdrop-blur-sm rounded-lg p-6 border border-border">
             <p className="text-gray-300 italic">
-              "A FayaPoint mudou completamente minha forma de trabalhar com IA. 
-              Em apenas 2 meses, já automatizei 80% das minhas tarefas repetitivas."
+              &ldquo;A FayaPoint mudou completamente minha forma de trabalhar com IA. 
+              Em apenas 2 meses, já automatizei 80% das minhas tarefas repetitivas.&rdquo;
             </p>
             <div className="flex items-center gap-4 mt-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />

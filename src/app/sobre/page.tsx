@@ -250,8 +250,8 @@ export default function AboutPage() {
             >
               <Quote className="w-12 h-12 mx-auto mb-6 text-purple-400" />
               <blockquote className="text-2xl md:text-3xl font-medium mb-6">
-                "A IA não é o futuro, é o presente. E quem não aprender a usá-la 
-                hoje, ficará para trás amanhã."
+                &ldquo;A IA não é o futuro, é o presente. E quem não aprender a usá-la 
+                hoje, ficará para trás amanhã.&rdquo;
               </blockquote>
               <cite className="text-gray-400">— Ricardo Faya, Fundador da FayaPoint</cite>
             </motion.div>

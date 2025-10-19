@@ -84,7 +84,7 @@ export function TestimonialsSection() {
                   ))}
                 </div>
                 <p className="text-gray-300 mb-6 italic flex-grow">
-                  "{testimonial.content}"
+                  &ldquo;{testimonial.content}&rdquo;
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
