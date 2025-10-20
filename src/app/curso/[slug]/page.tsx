@@ -47,6 +47,10 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
 import { getCourseBySlug } from "@/data/courses";
 
+type LessonItem = { id: number; title: string; duration: string; isFree?: boolean };
+type ModuleItem = { id: number; title: string; duration: string; lessons: number | LessonItem[] };
+type ReviewLike = { name: string; rating: number; comment: string; role?: string; date?: string };
+
 export default function CoursePage() {
   const params = useParams();
   const course = getCourseBySlug(params.slug as string);
@@ -196,6 +200,22 @@ export default function CoursePage() {
   ],
 };
   
+  // Build a typed testimonials list from either `testimonials` or legacy `reviews`
+  const obj = courseData as unknown as Record<string, unknown>;
+  const tRaw = obj["testimonials"];
+  const rRaw = obj["reviews"];
+  const testimonialsList: ReviewLike[] = (Array.isArray(tRaw) ? tRaw : Array.isArray(rRaw) ? rRaw : []).map((item: unknown) => {
+    const o = item as Record<string, unknown>;
+    return {
+      name: String(o.name ?? ""),
+      rating: Number(o.rating ?? 0),
+      comment: String(o.comment ?? ""),
+      role: typeof o.role === "string" ? o.role : undefined,
+      date: typeof o.date === "string" ? o.date : undefined,
+    };
+  });
+  const testimonialsCount = testimonialsList.length;
+  
   // State & handlers
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [activeTab, setActiveTab] = useState("overview");
@@ -261,7 +281,7 @@ export default function CoursePage() {
                     <div className="flex items-center gap-1">
                       <Star className="text-yellow-400 fill-yellow-400" size={18} />
                       <span className="font-semibold">{courseData.rating}</span>
-                      <span className="text-gray-400">{(((courseData as any).testimonials?.length ?? (courseData as any).reviews?.length ?? 0) as number).toLocaleString("pt-BR")} avaliações</span>
+                      <span className="text-gray-400">{testimonialsCount.toLocaleString("pt-BR")} avaliações</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Users size={18} className="text-gray-400" />
@@ -440,7 +460,7 @@ export default function CoursePage() {
                   </div>
 
                   <div className="space-y-4">
-                    {(courseData.modules || []).map((module: any) => (
+                    {(courseData.modules || []).map((module: ModuleItem) => (
                       <div key={module.id} className="border border-border rounded-lg overflow-hidden">
                         <button
                           onClick={() => toggleModule(module.id)}
@@ -464,7 +484,7 @@ export default function CoursePage() {
 
                         {expandedModules.includes(module.id) && Array.isArray(module.lessons) && (
                           <div className="border-t border-border">
-                            {module.lessons.map((lesson: any) => (
+                            {module.lessons.map((lesson: LessonItem) => (
                               <div
                                 key={lesson.id}
                                 className="flex items-center justify-between p-4 hover:bg-popover/30 transition"
@@ -505,12 +525,12 @@ export default function CoursePage() {
                           <Star key={i} className="text-yellow-400 fill-yellow-400" size={20} />
                         ))}
                       </div>
-                      <p className="text-gray-400">{((courseData as any).testimonials?.length ?? (courseData as any).reviews?.length ?? 0)} avaliações</p>
+                      <p className="text-gray-400">{testimonialsCount} avaliações</p>
                     </div>
                   </div>
 
                   <div className="space-y-6">
-                    {(((courseData as any).testimonials || (courseData as any).reviews || []) as any[]).map((review: any, i: number) => (
+                    {testimonialsList.map((review: ReviewLike, i: number) => (
                       <div key={i} className="border-b border-border pb-6">
                         <div className="flex items-start gap-4">
                           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">

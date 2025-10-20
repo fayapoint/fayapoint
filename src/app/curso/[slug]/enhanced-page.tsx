@@ -350,7 +350,7 @@ export default function EnhancedCoursePage() {
                   </div>
                   
                   <p className="text-gray-300 mb-4">
-                    "{testimonial.comment}"
+                    &ldquo;{testimonial.comment}&rdquo;
                   </p>
                   
                   {testimonial.impact && (

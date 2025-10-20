@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Star, Quote, TrendingUp, Sparkles, User } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useRef, useState } from "react";
+import Link from "next/link";
 
 const testimonials = [
   {
@@ -264,13 +265,13 @@ export function TestimonialsSection() {
           className="text-center mt-12"
         >
           <p className="text-gray-400 mb-4">Seja o próximo caso de sucesso</p>
-          <motion.button
+          <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="relative group"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-md group-hover:blur-lg transition-all duration-300" />
-            <a 
+            <Link 
               href="/cursos"
               className="relative inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
             >
@@ -281,8 +282,8 @@ export function TestimonialsSection() {
               >
                 <Sparkles className="w-4 h-4" />
               </motion.div>
-            </a>
-          </motion.button>
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
     </section>
