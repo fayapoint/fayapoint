@@ -267,6 +267,50 @@
     }
   }
   
+  @keyframes gradient-y {
+    0%, 100% {
+      background-position: 50% 0%;
+    }
+    50% {
+      background-position: 50% 100%;
+    }
+  }
+  
+  @keyframes gradient-xy {
+    0%, 100% {
+      background-position: 0% 0%;
+    }
+    25% {
+      background-position: 100% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 0% 100%;
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+      filter: blur(0px);
+    }
+    50% {
+      opacity: 0.8;
+      filter: blur(10px);
+    }
+  }
+  
   @keyframes marquee {
     0% {
       transform: translateX(0%);
@@ -287,8 +331,38 @@
     }
   }
   
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  
   .animate-gradient-x {
     animation: gradient-x 6s ease infinite;
+  }
+  
+  .animate-gradient-y {
+    animation: gradient-y 6s ease infinite;
+  }
+  
+  .animate-gradient-xy {
+    animation: gradient-xy 10s ease infinite;
+  }
+  
+  .animate-gradient {
+    background-size: 400% 400%;
+    animation: gradient-xy 15s ease infinite;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
   }
   
   .animate-marquee {
@@ -299,9 +373,79 @@
     animation: fade-up 0.5s ease-out;
   }
   
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+  
   .text-gradient {
     @apply bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent;
     background-size: 200% auto;
     animation: gradient-x 6s ease infinite;
+  }
+  
+  /* Glassmorphism utilities */
+  .glass {
+    @apply backdrop-blur-md bg-white/5 border border-white/10;
+  }
+  
+  .glass-sm {
+    @apply backdrop-blur-sm bg-white/3 border border-white/5;
+  }
+  
+  .glass-lg {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply backdrop-blur-md bg-black/20 border border-white/10;
+  }
+  
+  .glass-light {
+    @apply backdrop-blur-md bg-white/30 border border-black/10;
+  }
+  
+  /* Enhanced shadow utilities */
+  .shadow-glow {
+    box-shadow: 0 0 30px rgba(147, 51, 234, 0.3);
+  }
+  
+  .shadow-glow-lg {
+    box-shadow: 0 0 60px rgba(147, 51, 234, 0.4);
+  }
+  
+  .shadow-glow-pink {
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.3);
+  }
+  
+  .shadow-glow-cyan {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+  }
+  
+  /* 3D transform utilities */
+  .transform-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  
+  .rotate-y-12 {
+    transform: rotateY(12deg);
+  }
+  
+  .-rotate-y-12 {
+    transform: rotateY(-12deg);
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-10px) scale(1.02);
   }
 }

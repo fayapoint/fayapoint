@@ -22,7 +22,20 @@ import {
   MessageSquare,
   Share2,
   Heart,
-  ShoppingCart
+  ShoppingCart,
+  TrendingUp,
+  Zap,
+  Building2,
+  User,
+  Sparkles,
+  Trophy,
+  Gift,
+  Shield,
+  HelpCircle,
+  ArrowRight,
+  Rocket,
+  Brain,
+  DollarSign
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -32,9 +45,14 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
+import { getCourseBySlug } from "@/data/courses";
 
-// Mock course data - in production this would come from API
-const courseData = {
+export default function CoursePage() {
+  const params = useParams();
+  const course = getCourseBySlug(params.slug as string);
+  
+  // Fallback data for old structure
+  const courseData = course || {
   id: 1,
   title: "ChatGPT Masterclass: Do Zero ao Avançado",
   subtitle: "Domine o ChatGPT e transforme sua produtividade com técnicas avançadas de prompt engineering",
@@ -177,9 +195,8 @@ const courseData = {
     },
   ],
 };
-
-export default function CoursePage() {
-  const params = useParams();
+  
+  // State & handlers
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [activeTab, setActiveTab] = useState("overview");
   const [isInCart, setIsInCart] = useState(false);
@@ -244,18 +261,18 @@ export default function CoursePage() {
                     <div className="flex items-center gap-1">
                       <Star className="text-yellow-400 fill-yellow-400" size={18} />
                       <span className="font-semibold">{courseData.rating}</span>
-                      <span className="text-gray-400">({courseData.totalRatings.toLocaleString("pt-BR")} avaliações)</span>
+                      <span className="text-gray-400">{(((courseData as any).testimonials?.length ?? (courseData as any).reviews?.length ?? 0) as number).toLocaleString("pt-BR")} avaliações</span>
                     </div>
                     <div className="flex items-center gap-1">
-                    <Users size={18} className="text-gray-400" />
-                    <span>{courseData.students.toLocaleString("pt-BR")} alunos</span>
-                  </div>
+                      <Users size={18} className="text-gray-400" />
+                      <span>{courseData.students.toLocaleString("pt-BR")} alunos</span>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Globe size={16} />
-                      {courseData.language}
+                      Português
                     </span>
                     <span className="flex items-center gap-1">
                       <Calendar size={16} />
@@ -274,10 +291,8 @@ export default function CoursePage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-400">Instrutor</p>
-                      <p className="font-semibold">{courseData.instructor.name}</p>
-                      <p className="text-sm text-gray-400">
-                        {courseData.instructor.students.toLocaleString("pt-BR")} alunos • {courseData.instructor.courses} cursos
-                      </p>
+                      <p className="font-semibold">Ricardo Faya</p>
+                      <p className="text-sm text-gray-400">50.000+ alunos • 20+ cursos</p>
                     </div>
                   </div>
                 </motion.div>
@@ -305,7 +320,7 @@ export default function CoursePage() {
                       <div className="flex items-baseline gap-2 mb-2">
                         <span className="text-3xl font-bold">R$ {courseData.price}</span>
                         <span className="text-gray-500 line-through">R$ {courseData.originalPrice}</span>
-                        <Badge className="bg-green-500 text-black">50% OFF</Badge>
+                        <Badge className="bg-green-500 text-black">{Math.max(0, Math.round(((courseData.originalPrice - courseData.price) / courseData.originalPrice) * 100))}% OFF</Badge>
                       </div>
                       <p className="text-sm text-gray-400">
                         ou 12x de R$ {(courseData.price / 12).toFixed(2)}
@@ -349,7 +364,7 @@ export default function CoursePage() {
                     <Separator className="my-6 bg-border" />
                     <div className="space-y-3">
                       <h3 className="font-semibold mb-3">Este curso inclui:</h3>
-                      {courseData.features.map((feature, i) => (
+                      {(courseData.features || []).map((feature: string, i: number) => (
                         <div key={i} className="flex items-center gap-2 text-sm">
                           <CheckCircle className="text-green-400 flex-shrink-0" size={16} />
                           <span>{feature}</span>
@@ -359,11 +374,12 @@ export default function CoursePage() {
                   </Card>
                 </motion.div>
               </div>
+
             </div>
           </div>
         </section>
 
-        {/* Content Section */}
+        {/* Tabs Section */}
         <section className="py-12">
           <div className="container mx-auto px-4">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -379,7 +395,7 @@ export default function CoursePage() {
                 <Card className="backdrop-blur border-border p-6">
                   <h2 className="text-2xl font-bold mb-4">O que você aprenderá</h2>
                   <div className="grid md:grid-cols-2 gap-4">
-                    {courseData.whatYouLearn.map((item, i) => (
+                    {(courseData.whatYouLearn || []).map((item: string, i: number) => (
                       <div key={i} className="flex items-start gap-3">
                         <CheckCircle className="text-green-400 mt-1 flex-shrink-0" size={20} />
                         <span>{item}</span>
@@ -391,7 +407,7 @@ export default function CoursePage() {
                 <Card className="backdrop-blur border-border p-6">
                   <h2 className="text-2xl font-bold mb-4">Requisitos</h2>
                   <ul className="space-y-2">
-                    {courseData.requirements.map((req, i) => (
+                    {(courseData.requirements || []).map((req: string, i: number) => (
                       <li key={i} className="flex items-center gap-2">
                         <Target className="text-purple-400" size={16} />
                         <span>{req}</span>
@@ -403,7 +419,7 @@ export default function CoursePage() {
                 <Card className="backdrop-blur border-border p-6">
                   <h2 className="text-2xl font-bold mb-4">Para quem é este curso</h2>
                   <ul className="space-y-2">
-                    {courseData.targetAudience.map((audience, i) => (
+                    {(courseData.targetAudience || []).map((audience: string, i: number) => (
                       <li key={i} className="flex items-center gap-2">
                         <Users className="text-blue-400" size={16} />
                         <span>{audience}</span>
@@ -419,12 +435,12 @@ export default function CoursePage() {
                   <div className="mb-6">
                     <h2 className="text-2xl font-bold mb-2">Conteúdo do Curso</h2>
                     <p className="text-gray-400">
-                      {courseData.modules.length} módulos • {courseData.totalLessons} aulas • {courseData.duration} total
+                      {(courseData.modules || []).length} módulos • {(courseData.totalLessons || 0)} aulas • {(courseData.duration || '')} total
                     </p>
                   </div>
 
                   <div className="space-y-4">
-                    {courseData.modules.map(module => (
+                    {(courseData.modules || []).map((module: any) => (
                       <div key={module.id} className="border border-border rounded-lg overflow-hidden">
                         <button
                           onClick={() => toggleModule(module.id)}
@@ -433,7 +449,7 @@ export default function CoursePage() {
                           <div className="flex items-center gap-3">
                             <span className="text-lg font-semibold">{module.title}</span>
                             <Badge variant="outline" className="text-xs">
-                              {module.lessons.length} aulas
+                              {Array.isArray(module.lessons) ? module.lessons.length : module.lessons} aulas
                             </Badge>
                           </div>
                           <div className="flex items-center gap-3">
@@ -446,9 +462,9 @@ export default function CoursePage() {
                           </div>
                         </button>
 
-                        {expandedModules.includes(module.id) && (
+                        {expandedModules.includes(module.id) && Array.isArray(module.lessons) && (
                           <div className="border-t border-border">
-                            {module.lessons.map(lesson => (
+                            {module.lessons.map((lesson: any) => (
                               <div
                                 key={lesson.id}
                                 className="flex items-center justify-between p-4 hover:bg-popover/30 transition"
@@ -481,7 +497,6 @@ export default function CoursePage() {
               <TabsContent value="reviews">
                 <Card className="backdrop-blur border-border p-6">
                   <h2 className="text-2xl font-bold mb-6">Avaliações dos Alunos</h2>
-                  
                   <div className="grid md:grid-cols-3 gap-8 mb-8">
                     <div className="text-center">
                       <div className="text-5xl font-bold mb-2">{courseData.rating}</div>
@@ -490,28 +505,28 @@ export default function CoursePage() {
                           <Star key={i} className="text-yellow-400 fill-yellow-400" size={20} />
                         ))}
                       </div>
-                      <p className="text-gray-400">{courseData.totalRatings} avaliações</p>
+                      <p className="text-gray-400">{((courseData as any).testimonials?.length ?? (courseData as any).reviews?.length ?? 0)} avaliações</p>
                     </div>
                   </div>
 
                   <div className="space-y-6">
-                    {courseData.reviews.map(review => (
-                      <div key={review.id} className="border-b border-border pb-6">
+                    {(((courseData as any).testimonials || (courseData as any).reviews || []) as any[]).map((review: any, i: number) => (
+                      <div key={i} className="border-b border-border pb-6">
                         <div className="flex items-start gap-4">
                           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
                             <span className="font-bold">
-                              {review.name.split(' ').map(n => n[0]).join('')}
+                              {review.name.split(' ').map((n: string) => n[0]).join('')}
                             </span>
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-4 mb-2">
                               <span className="font-semibold">{review.name}</span>
                               <div className="flex">
-                                {[...Array(review.rating)].map((_, i) => (
-                                  <Star key={i} className="text-yellow-400 fill-yellow-400" size={16} />
+                                {[...Array(review.rating)].map((_, j) => (
+                                  <Star key={j} className="text-yellow-400 fill-yellow-400" size={16} />
                                 ))}
                               </div>
-                              <span className="text-sm text-gray-400">{review.date}</span>
+                              <span className="text-sm text-gray-400">{review.role || review.date || ""}</span>
                             </div>
                             <p className="text-gray-300">{review.comment}</p>
                           </div>
@@ -534,20 +549,20 @@ export default function CoursePage() {
                       <span className="text-4xl font-bold">RF</span>
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-2xl font-bold mb-2">{courseData.instructor.name}</h2>
-                      <p className="text-gray-400 mb-4">{courseData.instructor.bio}</p>
+                      <h2 className="text-2xl font-bold mb-2">Ricardo Faya</h2>
+                      <p className="text-gray-400 mb-4">Especialista em IA e Automação</p>
                       
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                         <div>
-                          <div className="text-2xl font-bold">{courseData.instructor.rating}</div>
+                          <div className="text-2xl font-bold">4.9</div>
                           <div className="text-sm text-gray-400">Avaliação</div>
                         </div>
                         <div>
-                          <div className="text-2xl font-bold">{courseData.instructor.students.toLocaleString("pt-BR")}</div>
+                          <div className="text-2xl font-bold">50.000+</div>
                           <div className="text-sm text-gray-400">Alunos</div>
                         </div>
                         <div>
-                          <div className="text-2xl font-bold">{courseData.instructor.courses}</div>
+                          <div className="text-2xl font-bold">20+</div>
                           <div className="text-sm text-gray-400">Cursos</div>
                         </div>
                         <div>
@@ -574,3 +589,4 @@ export default function CoursePage() {
     </div>
   );
 }
+

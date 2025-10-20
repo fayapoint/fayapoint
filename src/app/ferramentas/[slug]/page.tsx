@@ -6,37 +6,40 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Star, CheckCircle, LinkIcon, BookOpen, Rocket, Shield, AlertTriangle } from "lucide-react";
+import { Star, CheckCircle, LinkIcon, BookOpen, Rocket, Shield, AlertTriangle, User, Building2, TrendingUp } from "lucide-react";
+import { toolsData } from "@/data/tools-complete";
 
-const toolsMap: Record<string, {
-  title: string;
-  category: string;
-  vendor: string;
-  pricing: string;
-  rating: number;
-  description: string;
-  features: string[];
-  gettingStarted: string[];
-  useCases: string[];
-  integrations: string[];
-  bestPractices: string[];
-  pitfalls: string[];
-  prompts: { title: string; content: string }[];
-  relatedCourses: { title: string; slug: string; level: string; price: number }[];
-  docUrl?: string;
-}> = {
-  chatgpt: {
-    title: "ChatGPT",
-    category: "IA Conversacional",
+const toolsMap: Record<string, any> = {
+  ...toolsData,
+  // Legacy entries for backward compatibility
+  dalle: {
+    title: "DALL-E 3",
+    category: "Imagem",
     vendor: "OpenAI",
     pricing: "Freemium",
     rating: 4.9,
-    description: "Assistente conversacional para texto, código e automação. Ideal para produtividade, atendimento e prototipagem.",
+    description: "Geração de imagens com IA integrada ao ChatGPT. Crie visuais instantâneos a partir de descrições.",
+    detailedDescription: `DALL-E 3 é o gerador de imagens mais avançado da OpenAI, totalmente integrado ao ecossistema ChatGPT. Transforme ideias em imagens impressionantes instantaneamente.`,
+    impactForIndividuals: [
+      "🎨 Crie imagens profissionais instantaneamente",
+      "💰 Elimine custos com designers para projetos simples",
+      "🚀 Visualize ideias imediatamente"
+    ],
+    impactForEntrepreneurs: [
+      "📸 Crie visuais para marketing rapidamente",
+      "🎨 Prototipe conceitos visuais",
+      "📈 Gere conteúdo visual ilimitado"
+    ],
+    impactForCompanies: [
+      "🎨 Produção visual rápida para apresentações",
+      "📊 Conceitos visuais instantâneos",
+      "🚀 Marketing visual ágil"
+    ],
     features: [
-      "Geração e revisão de texto",
-      "Auxílio em código e documentação",
-      "Memória e instruções personalizadas",
-      "Integração via API",
+      "Geração de imagens HD",
+      "Integrado ao ChatGPT",
+      "Múltiplos estilos",
+      "Edição e variações"
     ],
     gettingStarted: [
       "Crie uma conta gratuita no ChatGPT",
@@ -71,9 +74,13 @@ const toolsMap: Record<string, {
       { title: "Prompt Engineering Avançado", slug: "prompt-engineering", level: "Intermediário", price: 247 },
     ],
     docUrl: "https://platform.openai.com/docs",
-  },
-  claude: {
-    title: "Claude",
+  }
+  // Note: Other legacy mappings removed to avoid duplication
+};
+
+// Old duplicate entries removed - using main toolsData instead
+const oldToolsMap = {
+  "old-claude": {
     category: "IA Conversacional",
     vendor: "Anthropic",
     pricing: "Freemium",
@@ -88,9 +95,14 @@ const toolsMap: Record<string, {
     prompts: [
       { title: "Análise de Documento", content: "Você é analista jurídico. Leia o contrato abaixo e gere um resumo com riscos, prazos e cláusulas críticas:```[trechos]```" },
     ],
-    relatedCourses: [{ title: "Claude para Devs", slug: "claude-desenvolvedores", level: "Avançado", price: 247 }],
+    relatedCourses: [],
+    detailedDescription: "DALL-E é o gerador de imagens da OpenAI, integrado ao ecossistema ChatGPT.",
+    impactForIndividuals: ["Crie imagens instantâneas", "Explore criatividade", "Gere arte única"],
+    impactForEntrepreneurs: ["Crie visuais para marketing", "Prototipe ideias", "Gere conteúdo visual"],
+    impactForCompanies: ["Produção visual rápida", "Conceitos visuais", "Marketing visual"],
+    docUrl: "https://openai.com/dall-e"
   },
-  gemini: {
+  "dall-e": {
     title: "Gemini",
     category: "IA Conversacional",
     vendor: "Google",
@@ -272,7 +284,11 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
               <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                   <Card className="p-6 backdrop-blur border-border">
-                    <p className="text-gray-300">{tool.description}</p>
+                    <h2 className="text-xl font-semibold mb-3">Sobre {tool.title}</h2>
+                    <p className="text-gray-300 mb-4">{tool.description}</p>
+                    {tool.detailedDescription && (
+                      <p className="text-gray-400 text-sm">{tool.detailedDescription}</p>
+                    )}
                     <div className="mt-6 flex gap-3">
                       <Link href={`/cursos?search=${encodeURIComponent(tool.title)}`}>
                         <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
@@ -286,6 +302,51 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                       </Link>
                     </div>
                   </Card>
+
+                  {/* Impact Section */}
+                  {(tool.impactForIndividuals || tool.impactForEntrepreneurs || tool.impactForCompanies) && (
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {tool.impactForIndividuals && (
+                        <Card className="p-4 backdrop-blur border-purple-500/20">
+                          <div className="flex items-center gap-2 mb-3">
+                            <User className="text-purple-400" size={20} />
+                            <h3 className="font-semibold">Para Você</h3>
+                          </div>
+                          <ul className="space-y-2">
+                            {tool.impactForIndividuals.slice(0, 3).map((impact: string, i: number) => (
+                              <li key={i} className="text-xs text-gray-300">{impact}</li>
+                            ))}
+                          </ul>
+                        </Card>
+                      )}
+                      {tool.impactForEntrepreneurs && (
+                        <Card className="p-4 backdrop-blur border-purple-500/20">
+                          <div className="flex items-center gap-2 mb-3">
+                            <TrendingUp className="text-purple-400" size={20} />
+                            <h3 className="font-semibold">Para Empreendedores</h3>
+                          </div>
+                          <ul className="space-y-2">
+                            {tool.impactForEntrepreneurs.slice(0, 3).map((impact: string, i: number) => (
+                              <li key={i} className="text-xs text-gray-300">{impact}</li>
+                            ))}
+                          </ul>
+                        </Card>
+                      )}
+                      {tool.impactForCompanies && (
+                        <Card className="p-4 backdrop-blur border-purple-500/20">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Building2 className="text-purple-400" size={20} />
+                            <h3 className="font-semibold">Para Empresas</h3>
+                          </div>
+                          <ul className="space-y-2">
+                            {tool.impactForCompanies.slice(0, 3).map((impact: string, i: number) => (
+                              <li key={i} className="text-xs text-gray-300">{impact}</li>
+                            ))}
+                          </ul>
+                        </Card>
+                      )}
+                    </div>
+                  )}
 
                   <Tabs defaultValue="overview" className="space-y-6">
                     <TabsList className="bg-popover/50 border border-border">
@@ -302,7 +363,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                         <Card className="p-6 backdrop-blur border-border">
                           <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><Rocket size={18} /> Capacidades</h3>
                           <ul className="space-y-2">
-                            {tool.features.map((f, i) => (
+                            {tool.features.map((f: string, i: number) => (
                               <li key={i} className="flex items-center gap-2"><CheckCircle className="text-green-400" size={18} /> {f}</li>
                             ))}
                           </ul>
@@ -310,7 +371,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                         <Card className="p-6 backdrop-blur border-border">
                           <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><BookOpen size={18} /> Casos de Uso</h3>
                           <ul className="space-y-2">
-                            {tool.useCases.map((u, i) => (
+                            {tool.useCases.map((u: string, i: number) => (
                               <li key={i} className="list-disc list-inside text-gray-300">{u}</li>
                             ))}
                           </ul>
@@ -322,7 +383,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                       <Card className="p-6 backdrop-blur border-border">
                         <h3 className="text-xl font-semibold mb-4">Como começar</h3>
                         <ol className="list-decimal list-inside space-y-2 text-gray-300">
-                          {tool.gettingStarted.map((s, i) => (<li key={i}>{s}</li>))}
+                          {tool.gettingStarted.map((s: string, i: number) => (<li key={i}>{s}</li>))}
                         </ol>
                       </Card>
                     </TabsContent>
@@ -331,7 +392,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                       <Card className="p-6 backdrop-blur border-border">
                         <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><LinkIcon size={18} /> Integrações</h3>
                         <div className="flex flex-wrap gap-2">
-                          {tool.integrations.map((name) => (
+                          {tool.integrations.map((name: string) => (
                             <Badge key={name} variant="outline" className="border-purple-500/30">{name}</Badge>
                           ))}
                         </div>
@@ -345,7 +406,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                           {tool.prompts.length === 0 && (
                             <p className="text-gray-400">Prompts em breve.</p>
                           )}
-                          {tool.prompts.map((p, i) => (
+                          {tool.prompts.map((p: {title: string; content: string}, i: number) => (
                             <div key={i} className="border border-gray-800 rounded-lg p-4">
                               <h4 className="font-semibold mb-2">{p.title}</h4>
                               <pre className="text-sm whitespace-pre-wrap text-gray-300">{p.content}</pre>
@@ -360,7 +421,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                         {tool.relatedCourses.length === 0 && (
                           <Card className="p-6 backdrop-blur border-border">Sem cursos relacionados no momento.</Card>
                         )}
-                        {tool.relatedCourses.map((c) => (
+                        {tool.relatedCourses.map((c: {slug: string; title: string; level: string; price: number}) => (
                           <Link key={c.slug} href={`/curso/${c.slug}`}>
                             <Card className="p-6 backdrop-blur border-border hover:bg-card/80 transition">
                               <Badge variant="outline" className="mb-2 text-xs">{c.level}</Badge>
@@ -377,13 +438,13 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                         <Card className="p-6 backdrop-blur border-border">
                           <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><Shield size={18} /> Boas práticas</h3>
                           <ul className="space-y-2 text-gray-300">
-                            {tool.bestPractices.map((b, i) => (<li key={i} className="list-disc list-inside">{b}</li>))}
+                            {tool.bestPractices.map((b: string, i: number) => (<li key={i} className="list-disc list-inside">{b}</li>))}
                           </ul>
                         </Card>
                         <Card className="p-6 backdrop-blur border-border">
                           <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><AlertTriangle size={18} /> Armadilhas comuns</h3>
                           <ul className="space-y-2 text-gray-300">
-                            {tool.pitfalls.map((p, i) => (<li key={i} className="list-disc list-inside">{p}</li>))}
+                            {tool.pitfalls.map((p: string, i: number) => (<li key={i} className="list-disc list-inside">{p}</li>))}
                           </ul>
                         </Card>
                       </div>
@@ -404,7 +465,7 @@ export default function ToolPage({ params }: { params: { slug: string } }) {
                     <div className="space-y-2">
                       <h4 className="font-semibold">Integrações populares</h4>
                       <div className="flex flex-wrap gap-2">
-                        {tool.integrations.slice(0, 6).map(i => (
+                        {tool.integrations.slice(0, 6).map((i: string) => (
                           <Badge key={i} variant="outline" className="border-purple-500/30">{i}</Badge>
                         ))}
                       </div>
