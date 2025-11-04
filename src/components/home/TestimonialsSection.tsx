@@ -1,9 +1,10 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Star, Quote, TrendingUp, Sparkles, User } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { useRef, useState } from "react";
+import { Quote, Star, ChevronRight, MessageSquare, Sparkles, TrendingUp } from "lucide-react";
+import { SectionDivider } from "@/components/ui/section-divider";
+import { Card } from "@/components/ui/card";
 import Link from "next/link";
 
 const testimonials = [
@@ -54,7 +55,7 @@ const testimonials = [
 export function TestimonialsSection() {
   const sectionRef = useRef(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"]
@@ -64,7 +65,9 @@ export function TestimonialsSection() {
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
   
   return (
-    <section ref={sectionRef} className="py-20 relative overflow-hidden">
+    <section ref={sectionRef} className="py-20 relative overflow-visible">
+      <SectionDivider icon={MessageSquare} />
+      
       {/* Enhanced Background with Floating Elements */}
       <div className="absolute inset-0">
         <motion.div
@@ -180,7 +183,7 @@ export function TestimonialsSection() {
                   transition={{ duration: 0.3 }}
                 />
                 
-                <Card className="relative backdrop-blur-xl bg-white/[0.03] border-white/10 hover:border-white/20 p-6 h-full flex flex-col rounded-2xl transition-all duration-300">
+                <Card className="relative backdrop-blur-xl bg-card/50 border-border hover:border-primary/30 p-6 h-full flex flex-col rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-primary/5">
                   {/* Quote icon */}
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -219,7 +222,7 @@ export function TestimonialsSection() {
                   {/* Testimonial content with glassmorphism */}
                   <div className="relative flex-grow mb-6">
                     <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-lg" />
-                    <p className="relative text-gray-200 italic leading-relaxed">
+                    <p className="relative text-foreground/90 italic leading-relaxed">
                       &ldquo;{testimonial.content}&rdquo;
                     </p>
                   </div>
@@ -237,8 +240,8 @@ export function TestimonialsSection() {
                       </div>
                     </motion.div>
                     <div>
-                      <div className="font-semibold text-white">{testimonial.name}</div>
-                      <div className="text-sm text-gray-400">{testimonial.role}</div>
+                      <div className="font-semibold text-foreground">{testimonial.name}</div>
+                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
                     </div>
                   </div>
                   
@@ -248,7 +251,7 @@ export function TestimonialsSection() {
                     whileInView={{ width: "100%" }}
                     transition={{ delay: 0.8 + i * 0.1, duration: 1 }}
                     viewport={{ once: true }}
-                    className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-b-2xl"
+                    className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-primary to-accent rounded-b-2xl"
                   />
                 </Card>
               </motion.div>

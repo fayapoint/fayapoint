@@ -84,7 +84,7 @@ export function Header() {
           {/* Logo */}
           <Link 
             href="/" 
-            className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent hover:from-purple-500 hover:to-pink-500 transition"
+            className="text-2xl font-bold text-primary hover:opacity-80 transition"
           >
             FayaPoint AI
           </Link>
@@ -95,7 +95,7 @@ export function Header() {
               <NavigationMenuList>
                 {/* Cursos Dropdown */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-gray-300 hover:text-white">
+                  <NavigationMenuTrigger className="bg-transparent text-foreground/90 hover:text-primary font-medium">
                     Cursos
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -134,7 +134,7 @@ export function Header() {
 
                 {/* Ferramentas Dropdown */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-gray-300 hover:text-white">
+                  <NavigationMenuTrigger className="bg-transparent text-foreground/90 hover:text-primary font-medium">
                     Ferramentas
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -176,8 +176,8 @@ export function Header() {
                   <Link href="/blog" className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/blog" 
-                      ? "text-purple-400" 
-                      : "text-gray-300 hover:text-white"
+                      ? "text-primary" 
+                      : "text-foreground/90 hover:text-primary"
                   )}>
                     Blog
                   </Link>
@@ -187,8 +187,8 @@ export function Header() {
                   <Link href="/sobre" className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/sobre" 
-                      ? "text-purple-400" 
-                      : "text-gray-300 hover:text-white"
+                      ? "text-primary" 
+                      : "text-foreground/90 hover:text-primary"
                   )}>
                     Sobre
                   </Link>
@@ -198,8 +198,8 @@ export function Header() {
                   <Link href="/comunidade" className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/comunidade" 
-                      ? "text-purple-400" 
-                      : "text-gray-300 hover:text-white"
+                      ? "text-primary" 
+                      : "text-foreground/90 hover:text-primary"
                   )}>
                     Comunidade
                   </Link>
@@ -217,7 +217,7 @@ export function Header() {
               </Button>
             </Link>
             <Link href="/registro">
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 Começar Grátis
               </Button>
             </Link>
@@ -255,21 +255,21 @@ export function Header() {
               </Link>
               <Link
                 href="/blog"
-                className="block text-foreground/80 hover:text-foreground py-2"
+                className="block text-foreground/90 hover:text-primary transition font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Blog
               </Link>
               <Link
                 href="/sobre"
-                className="block text-foreground/80 hover:text-foreground py-2"
+                className="block text-foreground/90 hover:text-primary transition font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Sobre
               </Link>
               <Link
                 href="/comunidade"
-                className="block text-foreground/80 hover:text-foreground py-2"
+                className="block text-foreground/90 hover:text-primary transition font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Comunidade
@@ -281,7 +281,7 @@ export function Header() {
                   </Button>
                 </Link>
                 <Link href="/registro" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600">
+                  <Button className="w-full bg-primary text-primary-foreground">
                     Começar Grátis
                   </Button>
                 </Link>

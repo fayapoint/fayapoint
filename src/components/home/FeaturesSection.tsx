@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { X, CheckCircle2, TrendingDown, TrendingUp, AlertCircle, Sparkles } from "lucide-react";
+import { XCircle, CheckCircle, ArrowRight, Sparkles, Zap, AlertCircle, TrendingDown, X, TrendingUp, CheckCircle2 } from "lucide-react";
+import { SectionDivider } from "@/components/ui/section-divider";
 import { useRef } from "react";
 
 const problems = [
@@ -31,7 +32,9 @@ export function FeaturesSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
   
   return (
-    <section ref={sectionRef} className="py-20 relative overflow-hidden">
+    <section ref={sectionRef} className="py-20 relative overflow-visible">
+      <SectionDivider icon={Zap} />
+      
       {/* Animated Background */}
       <div className="absolute inset-0">
         <motion.div
@@ -117,15 +120,15 @@ export function FeaturesSection() {
                   whileHover={{ scale: 1.02, x: 10 }}
                   className="group relative"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-red-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="relative flex items-start gap-3 p-5 backdrop-blur-lg bg-red-900/10 rounded-xl border border-red-500/20 hover:border-red-500/40 transition-all duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-600/30 to-red-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative flex items-start gap-3 p-5 backdrop-blur-lg bg-red-500/20 dark:bg-red-900/30 rounded-xl border-2 border-red-500/50 hover:border-red-500/80 hover:bg-red-500/25 dark:hover:bg-red-900/40 transition-all duration-300 shadow-lg shadow-red-500/10">
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
                     >
                       <X className="text-red-400 mt-1 flex-shrink-0" size={20} />
                     </motion.div>
-                    <span className="text-gray-200">{problem}</span>
+                    <span className="text-gray-800 dark:text-gray-200 font-medium">{problem}</span>
                   </div>
                 </motion.div>
               ))}
@@ -175,8 +178,8 @@ export function FeaturesSection() {
                   whileHover={{ scale: 1.02, x: -10 }}
                   className="group relative"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 to-green-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="relative flex items-start gap-3 p-5 backdrop-blur-lg bg-green-900/10 rounded-xl border border-green-500/20 hover:border-green-500/40 transition-all duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-600/30 to-green-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative flex items-start gap-3 p-5 backdrop-blur-lg bg-green-500/20 dark:bg-green-900/30 rounded-xl border-2 border-green-500/50 hover:border-green-500/80 hover:bg-green-500/25 dark:hover:bg-green-900/40 transition-all duration-300 shadow-lg shadow-green-500/10">
                     <motion.div
                       animate={{ 
                         scale: [1, 1.2, 1],
@@ -191,7 +194,7 @@ export function FeaturesSection() {
                     >
                       <CheckCircle2 className="text-green-400 mt-1 flex-shrink-0" size={20} />
                     </motion.div>
-                    <span className="text-gray-200">{solution}</span>
+                    <span className="text-gray-800 dark:text-gray-200 font-medium">{solution}</span>
                     <motion.div
                       className="absolute -right-2 -top-2"
                       initial={{ opacity: 0, scale: 0 }}

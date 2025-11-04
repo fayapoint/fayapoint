@@ -23,35 +23,30 @@ import { Button } from "@/components/ui/button";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 
 export function HeroSection() {
-  // Mouse position for 3D effects
+  // Subtle background parallax only (no text rotation)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
-  const rotateX = useSpring(useTransform(mouseY, [-300, 300], [15, -15]));
-  const rotateY = useSpring(useTransform(mouseX, [-300, 300], [-15, 15]));
+  const bgX = useSpring(useTransform(mouseX, [-300, 300], [-10, 10]));
+  const bgY = useSpring(useTransform(mouseY, [-300, 300], [-10, 10]));
   
   // Animated counters
   const [studentsCount, setStudentsCount] = useState(0);
   const [coursesCount, setCoursesCount] = useState(0);
   const [completionRate, setCompletionRate] = useState(0);
-  // Precomputed particle positions (SSR-safe)
-  const [particles] = useState(
-    () => Array.from({ length: 20 }, () => ({
-      leftVw: Math.random() * 100, // initial left in vw
-      topVh: Math.random() * 100,  // initial top in vh
-      dx: (Math.random() - 0.5) * 40, // horizontal offset in px
-      dy: (Math.random() - 0.5) * 40, // vertical offset in px
-      duration: 10 + Math.random() * 10,
-      delay: Math.random() * 3,
-    }))
-  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    mouseX.set(x);
-    mouseY.set(y);
+    // Reduced sensitivity for smoother movement
+    mouseX.set(x * 0.05);
+    mouseY.set(y * 0.05);
   };
 
   useEffect(() => {
@@ -79,7 +74,7 @@ export function HeroSection() {
     >
       {/* Enhanced Animated Background with Glassmorphism */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-black to-pink-900/30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/20" />
         
         {/* Animated Gradient Orbs */}
         <motion.div
@@ -94,7 +89,10 @@ export function HeroSection() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute top-20 left-10 w-[400px] h-[400px] bg-gradient-to-r from-purple-500/40 to-pink-500/40 rounded-full blur-[100px]"
+          className="absolute top-20 left-10 w-[400px] h-[400px] rounded-full blur-[100px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.3), transparent 70%)'
+          }}
         />
         <motion.div
           animate={{
@@ -109,7 +107,10 @@ export function HeroSection() {
             ease: "easeInOut",
             delay: 5,
           }}
-          className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-gradient-to-r from-blue-500/30 to-cyan-500/30 rounded-full blur-[120px]"
+          className="absolute bottom-20 right-10 w-[500px] h-[500px] rounded-full blur-[120px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.25), transparent 70%)'
+          }}
         />
         <motion.div
           animate={{
@@ -123,7 +124,10 @@ export function HeroSection() {
             ease: "linear",
             delay: 2,
           }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-full blur-[150px]"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[150px]"
+          style={{
+            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.2), transparent 70%)'
+          }}
         />
         
         {/* Animated Grid Pattern */}
@@ -134,14 +138,27 @@ export function HeroSection() {
           }}
         />
         
-        {/* Floating particles (SSR-safe, no window usage) */}
-        {particles.map((p, i) => (
+        {/* Floating particles - only render on client */}
+        {mounted && Array.from({ length: 15 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-purple-400/50 rounded-full"
-            style={{ left: `${p.leftVw}vw`, top: `${p.topVh}vh` }}
-            animate={{ x: [0, p.dx, 0], y: [0, p.dy, 0] }}
-            transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "linear" }}
+            className="absolute w-2 h-2 rounded-full"
+            style={{ 
+              left: `${(i * 7 + 10) % 90}%`, 
+              top: `${(i * 11 + 5) % 90}%`,
+              background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.4) 0%, transparent 70%)'
+            }}
+            animate={{
+              y: [-20, 20, -20],
+              opacity: [0.3, 0.6, 0.3],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 8 + (i % 5) * 2,
+              repeat: Infinity,
+              delay: i * 0.4,
+              ease: "easeInOut"
+            }}
           />
         ))}
       </div>
@@ -243,56 +260,76 @@ export function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Enhanced Main Heading with 3D Effect */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            style={{ perspective: 1000 }}
-          >
-            <motion.h1
-              style={{ rotateX, rotateY }}
-              className="text-5xl md:text-7xl font-bold mb-6 leading-tight transform-gpu"
-            >
+          {/* Enhanced Main Heading - Beautiful Animations */}
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
               <motion.span
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="inline-block"
               >
                 Domine a{" "}
               </motion.span>
               <motion.span 
                 className="relative inline-block"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
+                initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.7, 
+                  delay: 0.4,
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 15
+                }}
               >
-                <span className="relative z-10 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent animate-gradient">
-                  Inteligência Artificial
-                </span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-pink-500/30 blur-2xl"
+                {/* Animated gradient background */}
+                <motion.span 
+                  className="absolute inset-0 -z-10 blur-2xl opacity-60"
                   animate={{ 
-                    scale: [1, 1.2, 1],
-                    opacity: [0.5, 0.8, 0.5]
+                    backgroundImage: [
+                      'radial-gradient(ellipse at center, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
+                      'radial-gradient(ellipse at center, rgba(236, 72, 153, 0.4) 0%, transparent 70%)',
+                      'radial-gradient(ellipse at center, rgba(6, 182, 212, 0.4) 0%, transparent 70%)',
+                      'radial-gradient(ellipse at center, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
+                    ],
+                    scale: [1, 1.2, 1.1, 1]
                   }}
-                  transition={{
-                    duration: 3,
+                  transition={{ 
+                    duration: 5, 
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
                 />
+                <motion.span 
+                  className="relative z-10 bg-clip-text text-transparent"
+                  animate={{
+                    backgroundImage: [
+                      'linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153), rgb(6, 182, 212))',
+                      'linear-gradient(to right, rgb(236, 72, 153), rgb(6, 182, 212), rgb(168, 85, 247))',
+                      'linear-gradient(to right, rgb(6, 182, 212), rgb(168, 85, 247), rgb(236, 72, 153))',
+                      'linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153), rgb(6, 182, 212))',
+                    ]
+                  }}
+                  transition={{ 
+                    duration: 4, 
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                  style={{ backgroundClip: 'text', WebkitBackgroundClip: 'text' }}
+                >
+                  Inteligência Artificial
+                </motion.span>
               </motion.span>
               <br />
               <motion.span
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="inline-block"
               >
                 e Transforme sua Carreira
               </motion.span>
-            </motion.h1>
-          </motion.div>
+            </h1>
 
           {/* Glassmorphism Subheading Card */}
           <motion.div
@@ -304,10 +341,10 @@ export function HeroSection() {
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 blur-xl group-hover:blur-2xl transition-all duration-300" />
               <div className="relative backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
-                <p className="text-xl text-gray-200 leading-relaxed">
-                  Aprenda com quem tem <span className="text-purple-400 font-bold">28+ anos</span> de experiência em mídia e tecnologia. 
-                  Cursos práticos de <span className="text-pink-400">ChatGPT</span>, <span className="text-pink-400">Midjourney</span>, 
-                  automação e mais de <span className="text-cyan-400 font-bold">100 ferramentas de IA</span>.
+                <p className="text-xl text-foreground/90 font-medium leading-relaxed">
+                  Aprenda com quem tem <span className="text-primary font-bold">28+ anos</span> de experiência em mídia e tecnologia. 
+                  Cursos práticos de <span className="text-primary font-semibold">ChatGPT</span>, <span className="text-primary font-semibold">Midjourney</span>, 
+                  automação e mais de <span className="text-accent font-bold">100 ferramentas de IA</span>.
                 </p>
               </div>
             </div>
@@ -327,7 +364,7 @@ export function HeroSection() {
               <Link href="/aula-gratis">
                 <Button 
                   size="lg" 
-                  className="relative bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg px-10 py-7 group overflow-hidden"
+                  className="relative bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-10 py-7 group overflow-hidden"
                 >
                   <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   <span className="relative flex items-center">
@@ -349,11 +386,11 @@ export function HeroSection() {
             >
               <Link href="/cursos">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/50 to-primary/50 rounded-lg blur opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
                   <Button 
                     size="lg" 
-                    variant="outline" 
-                    className="relative border-purple-500/50 text-purple-300 hover:text-white backdrop-blur-sm bg-black/50 hover:bg-purple-500/20 text-lg px-10 py-7"
+                    variant="outline"
+                    className="text-lg px-10 py-7 border-2 border-primary/50 hover:border-primary hover:bg-primary/10 text-foreground" 
                   >
                     Ver Todos os Cursos 
                     <motion.div
@@ -403,7 +440,7 @@ export function HeroSection() {
                       <div className="text-2xl font-bold">
                         {typeof stat.value === 'number' ? stat.value.toLocaleString("pt-BR") : stat.value}{stat.suffix}
                       </div>
-                      <div className="text-sm text-gray-400">{stat.label}</div>
+                      <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
                     </div>
                   </div>
                 </div>

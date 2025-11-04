@@ -100,8 +100,9 @@ const toolsMap: Record<string, Tool> = {
   // Note: Other legacy mappings removed to avoid duplication
 };
 
-export default function ToolPage({ params }: { params: { slug: string } }) {
-  const tool = toolsMap[params.slug];
+export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const tool = toolsMap[slug];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
