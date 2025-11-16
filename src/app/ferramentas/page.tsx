@@ -42,7 +42,7 @@ export default function ToolsPage() {
   const pricingOptions = ["Todos", "Gratuito", "Freemium", "Open Source", "Pago"];
 
   const filtered = useMemo(() => {
-    let filtered = products.filter(product => {
+    const filtered = products.filter(product => {
       const matchesSearch = search === "" || 
         product.name.toLowerCase().includes(search.toLowerCase()) ||
         product.tool.toLowerCase().includes(search.toLowerCase()) ||

@@ -17,7 +17,7 @@ interface AttractiveCourseCardProps {
 }
 
 // Course-specific gradients and icons
-const courseStyles: Record<string, { gradient: string; icon: any; accentColor: string }> = {
+const courseStyles: Record<string, { gradient: string; icon: React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>; accentColor: string }> = {
   'prompt-engineering-fundamentos': {
     gradient: 'from-purple-500 via-purple-600 to-blue-600',
     icon: Sparkles,

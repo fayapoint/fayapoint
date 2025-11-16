@@ -136,7 +136,7 @@ export interface Product {
     keywords: string[];
     ogImage?: string;
   };
-  digitalAssets: any[];
+  digitalAssets: unknown[];
   features: string[];
   createdAt: string;
   updatedAt: string;
@@ -150,7 +150,7 @@ export async function getAllProducts(options?: {
 }): Promise<Product[]> {
   const collection = await getProductsCollection();
   
-  let sort: any = {};
+  let sort: Record<string, 1 | -1> = {};
   switch (options?.sortBy) {
     case 'students':
       sort = { 'metrics.students': -1 };
@@ -168,7 +168,7 @@ export async function getAllProducts(options?: {
       sort = { 'metrics.students': -1 };
   }
   
-  const query: any = { status: 'active' };
+  const query: Record<string, unknown> = { status: 'active' };
   if (options?.type) {
     query.type = options.type;
   }
@@ -261,7 +261,7 @@ export async function searchProducts(query: string, type?: 'course' | 'tool'): P
   const collection = await getProductsCollection();
   const searchRegex = new RegExp(query, 'i');
   
-  const mongoQuery: any = {
+  const mongoQuery: Record<string, unknown> = {
     status: 'active',
     $or: [
       { name: searchRegex },

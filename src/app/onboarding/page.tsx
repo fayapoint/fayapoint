@@ -16,6 +16,13 @@ import { Footer } from '@/components/layout/Footer';
 import { Progress } from '@/components/ui/progress';
 import { useUser } from '@/contexts/UserContext';
 
+interface FormData {
+  name: string;
+  email: string;
+  role: string;
+  interest: string;
+}
+
 const steps = [
   { id: 1, title: 'Bem-vindo!', icon: Zap },
   { id: 2, title: 'Seu Perfil', icon: User },
@@ -230,8 +237,8 @@ const Step1 = ({ next }: { next: () => void }) => (
 
 const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUser }: { 
   next: () => void, 
-  data: any, 
-  onChange: any,
+  data: FormData, 
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
   onEmailBlur: (email: string) => void,
   checkingUser: boolean,
   isReturningUser: boolean
@@ -317,9 +324,9 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
 );
 
 const Step3 = ({ submit, data, setFormData, loading, isReturningUser }: { 
-  submit: any, 
-  data: any, 
-  setFormData: any,
+  submit: (e: React.FormEvent) => void, 
+  data: FormData, 
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>,
   loading: boolean, 
   isReturningUser: boolean 
 }) => {

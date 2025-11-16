@@ -650,7 +650,7 @@ export default function CourseSalesPage() {
                         <Star key={j} className="text-yellow-400 fill-yellow-400 mr-1" size={16} />
                       ))}
                     </div>
-                    <p className="text-gray-300 mb-3 italic">"{testimonial.comment}"</p>
+                    <p className="text-gray-300 mb-3 italic">&ldquo;{testimonial.comment}&rdquo;</p>
                     <p className="text-purple-400 text-sm font-semibold">{testimonial.impact}</p>
                   </motion.div>
                 ))}

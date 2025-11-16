@@ -1,4 +1,4 @@
-import { MongoClient, Collection, ObjectId } from 'mongodb';
+import { MongoClient, Collection, ObjectId, Document } from 'mongodb';
 
 const DEFAULT_MONGODB_URI = 'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/?retryWrites=true&w=majority&appName=aicornercluster';
 
@@ -65,7 +65,7 @@ export async function createUser(userData: Omit<User, '_id' | 'createdAt' | 'upd
     updatedAt: new Date(),
   };
   
-  const result = await collection.insertOne(user as any);
+  const result = await collection.insertOne(user as Document);
   
   return {
     ...user,
