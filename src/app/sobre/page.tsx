@@ -95,6 +95,19 @@ const certifications = [
   "Advanced Video Production",
 ];
 
+const galleryImages = [
+  {
+    src: "/rwx3.jpg",
+    title: "Workshops Presenciais",
+    description: "Turmas enxutas para acelerar a aprendizagem com acompanhamento direto.",
+  },
+  {
+    src: "/rwx4.jpg",
+    title: "Laboratórios Imersivos",
+    description: "Experiências práticas em que cada participante aplica IA ao seu contexto.",
+  },
+];
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -103,8 +116,16 @@ export default function AboutPage() {
       <main className="pt-24">
         {/* Hero Section */}
         <section className="py-20 relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20" />
+          <div className="absolute inset-0 -z-10">
+            <Image
+              src="/rwx1.jpg"
+              alt="Ricardo Faya apresentando um workshop de IA"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover opacity-40"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-900/60 via-black/80 to-pink-900/50" />
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
@@ -122,10 +143,14 @@ export default function AboutPage() {
                   Inteligência Artificial
                 </span>
               </h1>
-              <p className="text-xl text-gray-300 mb-8">
+              <p className="text-xl text-gray-200 mb-12">
                 De editor de vídeo internacional a pioneiro no ensino de IA no Brasil. 
                 Conheça a jornada que nos trouxe até aqui.
               </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Badge className="bg-white/10 border-white/30 text-gray-100">+ de 5 mil profissionais impactados</Badge>
+                <Badge className="bg-white/10 border-white/30 text-gray-100">Comunidade ativa de IA</Badge>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -161,13 +186,16 @@ export default function AboutPage() {
                 viewport={{ once: true }}
               >
                 <div className="relative">
-                  <div className="aspect-square rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 p-1">
-                    <div className="w-full h-full rounded-2xl bg-gray-900 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="text-6xl font-bold text-white mb-2">RF</div>
-                        <p className="text-gray-400">Ricardo Faya</p>
-                      </div>
-                    </div>
+                  <div className="absolute -bottom-10 -left-12 hidden lg:block w-40 h-40 bg-purple-600/20 blur-3xl rounded-full" />
+                  <div className="relative aspect-[3/4] rounded-3xl overflow-hidden ring-1 ring-white/15 shadow-2xl">
+                    <Image
+                      src="/rwx2.jpg"
+                      alt="Retrato de Ricardo Faya em treinamento presencial"
+                      fill
+                      priority
+                      sizes="(min-width: 1024px) 480px, 90vw"
+                      className="object-cover"
+                    />
                   </div>
                   {/* Social Links */}
                   <div className="flex justify-center gap-4 mt-6">
@@ -235,6 +263,50 @@ export default function AboutPage() {
                   </div>
                 </div>
               </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Behind the Scenes Gallery */}
+        <section className="py-20 bg-gradient-to-b from-black/20 via-transparent to-black/20">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <Badge className="bg-purple-600/20 text-purple-300 border-purple-500/40 mb-4">
+                Dentro da FayaPoint
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Aprendizado que Acontece ao Vivo</h2>
+              <p className="text-lg text-gray-400">
+                Os encontros presenciais e labs híbridos criam conexões reais e aceleram a implementação
+                das ferramentas de IA nos negócios dos alunos.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {galleryImages.map((image, index) => (
+                <motion.div
+                  key={image.src}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5"
+                >
+                  <div className="relative aspect-[4/3]">
+                    <Image
+                      src={image.src}
+                      alt={image.title}
+                      fill
+                      sizes="(min-width: 768px) 45vw, 90vw"
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <p className="text-sm uppercase tracking-wide text-purple-300 mb-1">{image.title}</p>
+                      <p className="text-lg font-semibold text-white">{image.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>

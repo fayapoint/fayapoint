@@ -100,14 +100,14 @@ export function Footer() {
             <div className="space-y-2 text-gray-400">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <a href="mailto:contato@fayapoint.com.br" className="hover:text-white">
-                  contato@fayapoint.com.br
+                <a href="mailto:ricardofaya@gmail.com" className="hover:text-white">
+                  ricardofaya@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                <a href="tel:+5521999999999" className="hover:text-white">
-                  (21) 99999-9999
+                <a href="tel:+5521971908530" className="hover:text-white">
+                  (21) 97190-8530
                 </a>
               </div>
               <div className="flex items-center gap-2">

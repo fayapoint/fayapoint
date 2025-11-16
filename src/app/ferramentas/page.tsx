@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, SlidersHorizontal, Filter, Star, Tag, Layers, ArrowRight } from "lucide-react";
@@ -12,47 +12,55 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const tools = [
-  { title: "ChatGPT", slug: "chatgpt", category: "IA Conversacional", vendor: "OpenAI", pricing: "Freemium", rating: 4.9, tags: ["texto","assistente","code"], popularity: 100, description: "Assistente conversacional poderoso para texto, código e automação." },
-  { title: "Claude", slug: "claude", category: "IA Conversacional", vendor: "Anthropic", pricing: "Freemium", rating: 4.9, tags: ["texto","longo","segurança"], popularity: 95, description: "IA focada em segurança e contexto extenso, ótima para devs." },
-  { title: "Gemini", slug: "gemini", category: "IA Conversacional", vendor: "Google", pricing: "Gratuito", rating: 4.7, tags: ["google","multimodal"], popularity: 85, description: "IA multimodal com forte integração no ecossistema Google." },
-  { title: "Perplexity", slug: "perplexity", category: "Pesquisa", vendor: "Perplexity", pricing: "Freemium", rating: 4.8, tags: ["pesquisa","fontes"], popularity: 90, description: "Pesquisa com fontes em tempo real e ótima curadoria." },
-  { title: "Midjourney", slug: "midjourney", category: "Imagem", vendor: "Midjourney", pricing: "Pago", rating: 4.8, tags: ["arte","imagem"], popularity: 98, description: "Gere arte e imagens profissionais com prompts avançados." },
-  { title: "DALL-E", slug: "dalle", category: "Imagem", vendor: "OpenAI", pricing: "Pago", rating: 4.6, tags: ["imagem","geração"], popularity: 80, description: "Geração de imagens integrada ao ecossistema OpenAI." },
-  { title: "Stable Diffusion", slug: "stable-diffusion", category: "Imagem", vendor: "Stability AI", pricing: "Open Source", rating: 4.6, tags: ["open-source","difusão"], popularity: 75, description: "Modelo de imagem open-source altamente personalizável." },
-  { title: "Leonardo AI", slug: "leonardo", category: "Imagem", vendor: "Leonardo", pricing: "Freemium", rating: 4.7, tags: ["imagem","fotos"], popularity: 70, description: "Imagens de alta qualidade com presets prontos e fácil uso." },
-  { title: "n8n", slug: "n8n", category: "Automação", vendor: "n8n", pricing: "Open Source", rating: 4.8, tags: ["automação","workflows"], popularity: 92, description: "Automação poderosa com nós, webhooks e integrações." },
-  { title: "Make", slug: "make", category: "Automação", vendor: "Make", pricing: "Pago", rating: 4.5, tags: ["integração","automação"], popularity: 65, description: "Crie fluxos com centenas de integrações visuais." },
-  { title: "Zapier", slug: "zapier", category: "Automação", vendor: "Zapier", pricing: "Pago", rating: 4.4, tags: ["automação","integração"], popularity: 60, description: "Automação simples e popular para apps SaaS." },
-  { title: "Flowise", slug: "flowise", category: "Low-code", vendor: "Flowise", pricing: "Open Source", rating: 4.6, tags: ["low-code","chatbot"], popularity: 68, description: "Crie chatbots e pipelines de LLMs com interface visual." },
-];
+
+import type { Product } from "@/lib/products";
 
 export default function ToolsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("Todas");
   const [pricing, setPricing] = useState<string>("Todos");
   const [sortBy, setSortBy] = useState<string>("popular");
 
-  const categories = useMemo(() => ["Todas", ...Array.from(new Set(tools.map(t => t.category)))], []);
+  useEffect(() => {
+    async function fetchTools() {
+      try {
+        const response = await fetch('/api/products?type=tool');
+        const data = await response.json();
+        setProducts(data.products || []);
+      } catch (error) {
+        console.error('Error fetching tools:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTools();
+  }, []);
+
+  const categories = useMemo(() => ["Todas", ...Array.from(new Set(products.map(p => p.categoryPrimary)))], [products]);
   const pricingOptions = ["Todos", "Gratuito", "Freemium", "Open Source", "Pago"];
 
   const filtered = useMemo(() => {
-    const base = tools.filter(t =>
-      (category === "Todas" || t.category === category) &&
-      (pricing === "Todos" || t.pricing === pricing) &&
-      (
-        t.title.toLowerCase().includes(search.toLowerCase()) ||
-        t.vendor.toLowerCase().includes(search.toLowerCase()) ||
-        t.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()))
-      )
-    );
-    return [...base].sort((a, b) => {
-      if (sortBy === "popular") return b.popularity - a.popularity;
-      if (sortBy === "rating") return b.rating - a.rating;
-      if (sortBy === "az") return a.title.localeCompare(b.title, "pt-BR");
+    let filtered = products.filter(product => {
+      const matchesSearch = search === "" || 
+        product.name.toLowerCase().includes(search.toLowerCase()) ||
+        product.tool.toLowerCase().includes(search.toLowerCase()) ||
+        product.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
+      
+      const matchesCategory = category === "Todas" || product.categoryPrimary === category;
+      const matchesPricing = pricing === "Todos" || product.pricing.price === 0 && pricing === "Gratuito" || product.pricing.price > 0 && pricing === "Pago";
+      
+      return matchesSearch && matchesCategory && matchesPricing;
+    });
+
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "popular") return b.metrics.students - a.metrics.students;
+      if (sortBy === "rating") return b.metrics.rating - a.metrics.rating;
+      if (sortBy === "az") return a.name.localeCompare(b.name, "pt-BR");
       return 0;
     });
-  }, [search, category, pricing, sortBy]);
+  }, [products, search, category, pricing, sortBy]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -124,14 +132,14 @@ export default function ToolsPage() {
               <motion.div key={t.slug} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
                 <Card className="p-6 border-border hover:bg-card/80 transition group h-full">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge variant="outline" className="text-xs">{t.category}</Badge>
-                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/40 text-xs">{t.pricing}</Badge>
+                    <Badge variant="outline" className="text-xs">{t.categoryPrimary}</Badge>
+                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/40 text-xs">{t.pricing.price > 0 ? 'Pago' : 'Gratuito'}</Badge>
                   </div>
-                  <h3 className="text-xl font-semibold mb-1 group-hover:text-purple-400 transition">{t.title}</h3>
-                  <p className="text-gray-400 text-sm mb-3">{t.description}</p>
+                  <h3 className="text-xl font-semibold mb-1 group-hover:text-purple-400 transition">{t.name}</h3>
+                  <p className="text-gray-400 text-sm mb-3">{t.copy.shortDescription}</p>
                   <div className="flex items-center gap-3 text-sm text-gray-400 mb-4">
-                    <span className="flex items-center gap-1"><Star className="text-yellow-400" size={16} /> {t.rating}</span>
-                    <span className="text-gray-500">Fornecedor: <span className="text-gray-300">{t.vendor}</span></span>
+                    <span className="flex items-center gap-1"><Star className="text-yellow-400" size={16} /> {t.metrics.rating}</span>
+                    <span className="text-gray-500">Fornecedor: <span className="text-gray-300">{t.tool}</span></span>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {t.tags.map(tag => (
@@ -144,7 +152,7 @@ export default function ToolsPage() {
                         Ver detalhes <ArrowRight className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
-                    <Link href={`/cursos?search=${encodeURIComponent(t.title)}`} className="flex-1">
+                    <Link href={`/cursos?search=${encodeURIComponent(t.name)}`} className="flex-1">
                       <Button variant="outline" className="w-full border-purple-500 text-purple-400 hover:bg-purple-500/10">
                         Cursos relacionados
                       </Button>

@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, LogOut, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
+import { useUser } from "@/contexts/UserContext";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -20,25 +21,25 @@ const coursesMenu = [
   {
     title: "Iniciante",
     items: [
-      { title: "ChatGPT do Zero", href: "/cursos/chatgpt-zero" },
-      { title: "Primeiras Automações", href: "/cursos/primeiras-automacoes" },
-      { title: "IA para o Dia a Dia", href: "/cursos/ia-dia-a-dia" },
+      { title: "ChatGPT do Zero", href: "/curso/chatgpt-zero" },
+      { title: "Primeiras Automações", href: "/curso/primeiras-automacoes" },
+      { title: "IA para o Dia a Dia", href: "/curso/ia-dia-a-dia" },
     ],
   },
   {
     title: "Intermediário",
     items: [
-      { title: "Prompt Engineering", href: "/cursos/prompt-engineering" },
-      { title: "Automação com n8n", href: "/cursos/automacao-n8n" },
-      { title: "Midjourney Masterclass", href: "/cursos/midjourney-masterclass" },
+      { title: "Prompt Engineering", href: "/curso/prompt-engineering" },
+      { title: "Automação com n8n", href: "/curso/automacao-n8n" },
+      { title: "Midjourney Masterclass", href: "/curso/midjourney-masterclass" },
     ],
   },
   {
     title: "Avançado",
     items: [
-      { title: "Agentes de IA", href: "/cursos/agentes-ia" },
-      { title: "RAG e Knowledge Bases", href: "/cursos/rag-knowledge" },
-      { title: "IA em Produção", href: "/cursos/ia-producao" },
+      { title: "Agentes de IA", href: "/curso/agentes-ia" },
+      { title: "RAG e Knowledge Bases", href: "/curso/rag-knowledge" },
+      { title: "IA em Produção", href: "/curso/ia-producao" },
     ],
   },
 ];
@@ -76,6 +77,7 @@ const toolsMenu = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { user, isLoggedIn, logout, mounted } = useUser();
 
   return (
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border">
@@ -211,16 +213,36 @@ export function Header() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeSwitcher />
-            <Link href="/login">
-              <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
-                Entrar
-              </Button>
-            </Link>
-            <Link href="/registro">
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                Começar Grátis
-              </Button>
-            </Link>
+            {mounted && isLoggedIn && user ? (
+              <>
+                <div className="flex items-center gap-2 text-foreground/80">
+                  <UserCircle size={20} />
+                  <span className="text-sm">Olá, {user.name.split(' ')[0]}!</span>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={logout}
+                  className="text-foreground/80 hover:text-foreground"
+                >
+                  <LogOut size={16} className="mr-2" />
+                  Sair
+                </Button>
+              </>
+            ) : mounted ? (
+              <>
+                <Link href="/onboarding">
+                  <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
+                    Entrar
+                  </Button>
+                </Link>
+                <Link href="/onboarding">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                    Começar Grátis
+                  </Button>
+                </Link>
+              </>
+            ) : null}
           </div>
 
           {/* Mobile Menu Button */}
@@ -275,16 +297,38 @@ export function Header() {
                 Comunidade
               </Link>
               <div className="pt-4 space-y-3 border-t border-gray-800">
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full">
-                    Entrar
-                  </Button>
-                </Link>
-                <Link href="/registro" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-primary text-primary-foreground">
-                    Começar Grátis
-                  </Button>
-                </Link>
+                {mounted && isLoggedIn && user ? (
+                  <>
+                    <div className="flex items-center gap-2 text-foreground/80 px-4 py-2">
+                      <UserCircle size={20} />
+                      <span className="text-sm">Olá, {user.name.split(' ')[0]}!</span>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => {
+                        logout();
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      <LogOut size={16} className="mr-2" />
+                      Sair
+                    </Button>
+                  </>
+                ) : mounted ? (
+                  <>
+                    <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)}>
+                      <Button variant="outline" className="w-full">
+                        Entrar
+                      </Button>
+                    </Link>
+                    <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)}>
+                      <Button className="w-full bg-primary text-primary-foreground">
+                        Começar Grátis
+                      </Button>
+                    </Link>
+                  </>
+                ) : null}
               </div>
             </div>
           </div>

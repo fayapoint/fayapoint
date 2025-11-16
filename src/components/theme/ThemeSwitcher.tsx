@@ -11,6 +11,8 @@ const THEME_CLASSES = [
   "theme-sunset",
   "theme-emerald",
 ];
+const THEME_STORAGE_KEY = "theme-preference";
+const DEFAULT_THEME = "dark";
 
 function applyTheme(next: string) {
   const root = document.documentElement;
@@ -39,21 +41,25 @@ export function ThemeSwitcher() {
     []
   );
 
-  const [value, setValue] = useState<string>("default");
+  const [value, setValue] = useState<string>(DEFAULT_THEME);
 
   useEffect(() => {
-    const stored = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
-    const initial = stored && THEME_CLASSES.some((cls) => stored === cls.replace("theme-", "")) ? stored : "default";
+    const stored = typeof window !== "undefined" ? localStorage.getItem(THEME_STORAGE_KEY) : null;
+    const isValidStoredTheme = stored && THEME_CLASSES.some((cls) => stored === cls.replace("theme-", ""));
+    const initial = isValidStoredTheme ? stored : DEFAULT_THEME;
     setValue(initial);
     if (typeof window !== "undefined") {
       applyTheme(initial);
+      if (!isValidStoredTheme) {
+        localStorage.setItem(THEME_STORAGE_KEY, DEFAULT_THEME);
+      }
     }
   }, []);
 
   const onChange = (v: string) => {
     setValue(v);
     if (typeof window !== "undefined") {
-      localStorage.setItem("theme", v);
+      localStorage.setItem(THEME_STORAGE_KEY, v);
       applyTheme(v);
     }
   };

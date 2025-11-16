@@ -1,12 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { Rocket, MessageCircle, Calendar, Sparkles, Star, CheckCircle2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+// Generate consistent particle positions
+const generateParticles = () => {
+  return [...Array(20)].map((_, i) => ({
+    id: i,
+    left: (i * 17 + 13) % 100, // Deterministic positions
+    top: (i * 23 + 7) % 100,
+    duration: 3 + (i % 3),
+    delay: (i % 5) * 0.4,
+  }));
+};
+
 export function CTASection() {
+  const [mounted, setMounted] = useState(false);
+  const particles = useMemo(() => generateParticles(), []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <section className="py-32 relative overflow-hidden">
       {/* Enhanced Background Effects */}
@@ -34,22 +53,22 @@ export function CTASection() {
         />
         
         {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
+        {mounted && particles.map((particle) => (
           <motion.div
-            key={i}
+            key={particle.id}
             className="absolute w-2 h-2 bg-primary/30 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
             }}
             animate={{
               y: [-20, 20, -20],
               opacity: [0, 1, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: particle.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: particle.delay,
             }}
           />
         ))}
@@ -196,7 +215,7 @@ export function CTASection() {
                 </motion.div>
                 <p className="text-muted-foreground mb-4 font-medium">Prefere conversar primeiro?</p>
                 <a 
-                  href="https://wa.me/5521999999999?text=Olá! Gostaria de saber mais sobre os cursos de IA da FayaPoint."
+                  href="https://wa.me/5521971908530?text=Olá! Gostaria de saber mais sobre os cursos de IA da FayaPoint."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-green-500 hover:text-green-400 transition-colors font-bold text-lg"

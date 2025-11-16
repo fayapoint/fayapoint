@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
@@ -15,31 +15,50 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { allCourses, calculateDiscountPercentage } from "@/data/courses";
+import type { Product } from "@/lib/products";
+import { AttractiveCourseCard } from "@/components/courses/AttractiveCourseCard";
 
 export default function CoursesPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [selectedLevel, setSelectedLevel] = useState("Todos");
   const [sortBy, setSortBy] = useState("popular");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
+  // Fetch products from MongoDB on mount
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products?type=course');
+        const data = await response.json();
+        setProducts(data.products || []);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
+
   const categories = useMemo(() => [
     "Todas",
-    ...Array.from(new Set(allCourses.map(c => c.category)))
-  ], []);
+    ...Array.from(new Set(products.map(p => p.categoryPrimary)))
+  ], [products]);
 
   const levels = ["Todos", "Iniciante", "Intermediário", "Avançado", "Todos os níveis"];
 
   const filteredCourses = useMemo(() => {
-    let filtered = allCourses.filter(course => {
+    let filtered = products.filter(product => {
       const matchesSearch = searchTerm === "" || 
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.tool.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.shortDescription.toLowerCase().includes(searchTerm.toLowerCase());
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.tool.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.copy.shortDescription.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesCategory = selectedCategory === "Todas" || course.category === selectedCategory;
-      const matchesLevel = selectedLevel === "Todos" || course.level.includes(selectedLevel) || course.level === "Todos os níveis";
+      const matchesCategory = selectedCategory === "Todas" || product.categoryPrimary === selectedCategory;
+      const matchesLevel = selectedLevel === "Todos" || product.level.includes(selectedLevel) || product.level === "Todos os níveis";
       
       return matchesSearch && matchesCategory && matchesLevel;
     });
@@ -48,21 +67,21 @@ export default function CoursesPage() {
     filtered = [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "price-low":
-          return a.price - b.price;
+          return a.pricing.price - b.pricing.price;
         case "price-high":
-          return b.price - a.price;
+          return b.pricing.price - a.pricing.price;
         case "rating":
-          return b.rating - a.rating;
+          return b.metrics.rating - a.metrics.rating;
         case "newest":
-          return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
         case "popular":
         default:
-          return b.students - a.students;
+          return b.metrics.students - a.metrics.students;
       }
     });
 
     return filtered;
-  }, [searchTerm, selectedCategory, selectedLevel, sortBy]);
+  }, [products, searchTerm, selectedCategory, selectedLevel, sortBy]);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -96,21 +115,23 @@ export default function CoursesPage() {
           >
             <div>
               <p className="text-3xl font-bold text-purple-400">
-                {allCourses.reduce((sum, c) => sum + c.students, 0).toLocaleString()}+
+                {loading ? '...' : products.reduce((sum, p) => sum + p.metrics.students, 0).toLocaleString()}+
               </p>
               <p className="text-gray-400">Alunos</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-purple-400">{allCourses.length}</p>
+              <p className="text-3xl font-bold text-purple-400">{loading ? '...' : products.length}</p>
               <p className="text-gray-400">Cursos</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-purple-400">4.8</p>
+              <p className="text-3xl font-bold text-purple-400">
+                {loading ? '...' : (products.reduce((sum, p) => sum + p.metrics.rating, 0) / products.length).toFixed(1)}
+              </p>
               <p className="text-gray-400">Avaliação Média</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-purple-400">
-                {allCourses.reduce((sum, c) => sum + c.totalLessons, 0)}+
+                {loading ? '...' : products.reduce((sum, p) => sum + p.metrics.lessons, 0).toLocaleString()}+
               </p>
               <p className="text-gray-400">Aulas</p>
             </div>
@@ -210,106 +231,19 @@ export default function CoursesPage() {
             ? "grid md:grid-cols-2 lg:grid-cols-3 gap-6" 
             : "space-y-6"
           }>
-            {filteredCourses.map((course, index) => (
-              <motion.div
-                key={course.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link href={`/curso/${course.slug}`}>
-                  <Card className={`group hover:border-purple-500 transition-all duration-300 overflow-hidden ${
-                    viewMode === "list" ? "flex gap-6" : ""
-                  }`}>
-                    {/* Course Image/Header */}
-                    <div className={`relative ${viewMode === "list" ? "w-48 shrink-0" : ""}`}>
-                      <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-8 text-center">
-                        <BookOpen className="mx-auto mb-2 text-white" size={32} />
-                        <p className="text-white font-semibold">{course.tool}</p>
-                      </div>
-                      
-                      {/* Badges */}
-                      <div className="absolute top-2 left-2 flex flex-col gap-2">
-                        {course.students > 5000 && (
-                          <Badge className="bg-red-500 text-white">
-                            <TrendingUp size={12} className="mr-1" />
-                            Bestseller
-                          </Badge>
-                        )}
-                        {new Date(course.lastUpdated).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000 && (
-                          <Badge className="bg-green-500 text-white">
-                            <Zap size={12} className="mr-1" />
-                            Novo
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Course Info */}
-                    <div className="p-6 flex-1">
-                      <div className="mb-2">
-                        <Badge variant="outline" className="text-xs">
-                          {course.category}
-                        </Badge>
-                      </div>
-                      
-                      <h3 className="text-xl font-semibold mb-2 group-hover:text-purple-400 transition-colors">
-                        {course.title}
-                      </h3>
-                      
-                      <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                        {course.shortDescription}
-                      </p>
-                      
-                      <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-                        <span className="flex items-center gap-1">
-                          <Star className="text-yellow-400" size={16} />
-                          <strong className="text-white">{course.rating}</strong>
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Users size={16} />
-                          {course.students.toLocaleString()}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock size={16} />
-                          {course.duration}
-                        </span>
-                      </div>
-                      
-                      <Separator className="mb-4" />
-                      
-                      <div className="flex items-center justify-between">
-                        <div>
-                          {course.originalPrice > course.price && (
-                            <p className="text-gray-400 line-through text-sm">
-                              R$ {course.originalPrice}
-                            </p>
-                          )}
-                          <p className="text-2xl font-bold text-purple-400">
-                            R$ {course.price}
-                          </p>
-                        </div>
-                        <Button 
-                          className="bg-purple-600 hover:bg-purple-700 group-hover:translate-x-1 transition-transform"
-                        >
-                          Ver Curso
-                          <ChevronRight size={16} className="ml-1" />
-                        </Button>
-                      </div>
-                      
-                      {/* Discount Badge */}
-                      {course.originalPrice > course.price && (
-                        <div className="mt-3">
-                          <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                            {calculateDiscountPercentage(course)}% OFF
-                          </Badge>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
+            {loading ? (
+              <div className="col-span-full text-center py-20">
+                <p className="text-gray-400 text-lg">Carregando cursos...</p>
+              </div>
+            ) : (
+              filteredCourses.map((product, index) => (
+                <AttractiveCourseCard 
+                  key={product.slug}
+                  product={product}
+                  index={index}
+                />
+              ))
+            )}
           </div>
           
           {filteredCourses.length === 0 && (

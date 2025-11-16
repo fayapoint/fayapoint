@@ -21,8 +21,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
+import { useUser } from "@/contexts/UserContext";
 
 export function HeroSection() {
+  const { user, isLoggedIn, mounted: userMounted } = useUser();
   // Subtle background parallax only (no text rotation)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -268,7 +270,7 @@ export function HeroSection() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="inline-block"
               >
-                Domine a{" "}
+                {userMounted && isLoggedIn && user ? `${user.name.split(' ')[0]}, domine a` : "Domine a"}{" "}
               </motion.span>
               <motion.span 
                 className="relative inline-block"
@@ -342,9 +344,19 @@ export function HeroSection() {
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 blur-xl group-hover:blur-2xl transition-all duration-300" />
               <div className="relative backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
                 <p className="text-xl text-foreground/90 font-medium leading-relaxed">
-                  Aprenda com quem tem <span className="text-primary font-bold">28+ anos</span> de experiência em mídia e tecnologia. 
-                  Cursos práticos de <span className="text-primary font-semibold">ChatGPT</span>, <span className="text-primary font-semibold">Midjourney</span>, 
-                  automação e mais de <span className="text-accent font-bold">100 ferramentas de IA</span>.
+                  {userMounted && isLoggedIn && user ? (
+                    <>
+                      Ótimo te ver aqui de novo, <span className="text-primary font-bold">{user.name.split(' ')[0]}</span>! 
+                      Continue sua jornada de aprendizado com nossos cursos práticos de <span className="text-primary font-semibold">ChatGPT</span>, <span className="text-primary font-semibold">Midjourney</span>, 
+                      automação e mais de <span className="text-accent font-bold">100 ferramentas de IA</span>.
+                    </>
+                  ) : (
+                    <>
+                      Aprenda com quem tem <span className="text-primary font-bold">28+ anos</span> de experiência em mídia e tecnologia. 
+                      Cursos práticos de <span className="text-primary font-semibold">ChatGPT</span>, <span className="text-primary font-semibold">Midjourney</span>, 
+                      automação e mais de <span className="text-accent font-bold">100 ferramentas de IA</span>.
+                    </>
+                  )}
                 </p>
               </div>
             </div>

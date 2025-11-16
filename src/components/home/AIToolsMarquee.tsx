@@ -149,7 +149,7 @@ export function AIToolsMarquee() {
   const [isPaused, setIsPaused] = useState(false);
 
   return (
-    <section className="py-16 pb-32 relative overflow-visible">
+    <section className="py-16 pb-32 relative overflow-visible z-20">
       {/* Gradient borders */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />

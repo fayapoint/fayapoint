@@ -546,3 +546,22 @@
     transform: translateY(-10px) scale(1.02);
   }
 }
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(0.15 0.01 280);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: oklch(0.35 0.02 280);
+  border-radius: 10px;
+  border: 3px solid oklch(0.15 0.01 280);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(0.45 0.02 280);
+}
