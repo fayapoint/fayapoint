@@ -237,7 +237,7 @@ export default function AIConsultingPage() {
               Trusted by Industry Leaders
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-              See how we've helped businesses like yours achieve AI success
+              See how we&rsquo;ve helped businesses like yours achieve AI success
             </p>
           </div>
           
