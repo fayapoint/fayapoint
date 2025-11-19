@@ -267,7 +267,7 @@ export default function CasesPage() {
                   Projetos realizados
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Selecionamos cases que nasceram do nosso banco "realizados" — iniciativas completas,
+                  Selecionamos cases que nasceram do nosso banco &quot;realizados&quot; — iniciativas completas,
                   com métricas acompanhadas e handoff pronto para o time do cliente.
                 </p>
               </div>

@@ -249,7 +249,7 @@ export default function AIConsultingPage() {
                     <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-lg mb-6 leading-relaxed text-pretty">"{testimonial.quote}"</p>
+                <p className="text-lg mb-6 leading-relaxed text-pretty">&quot;{testimonial.quote}&quot;</p>
                 <div>
                   <div className="font-semibold">{testimonial.author}</div>
                   <div className="text-sm text-muted-foreground">{testimonial.role}</div>
