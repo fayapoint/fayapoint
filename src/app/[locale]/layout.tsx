@@ -81,12 +81,15 @@ const localizedMetadata: Record<string, Metadata> = {
   },
 };
 
+type LocaleParams = { locale: string };
+
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<LocaleParams>;
 }): Promise<Metadata> {
-  return localizedMetadata[params.locale] ?? localizedMetadata["pt-BR"];
+  const { locale } = await params;
+  return localizedMetadata[locale] ?? localizedMetadata["pt-BR"];
 }
 
 export default async function RootLayout({
@@ -94,9 +97,9 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<LocaleParams>;
 }>) {
-  const { locale } = params;
+  const { locale } = await params;
 
   if (!hasLocale(routing.locales, locale)) {
     notFound();

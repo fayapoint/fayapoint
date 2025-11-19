@@ -20,13 +20,10 @@ const firaCode = Fira_Code({
 
 type RootLayoutProps = {
   children: ReactNode;
-  params?: {
-    locale?: string;
-  };
 };
 
-export default function RootLayout({ children, params }: RootLayoutProps) {
-  const lang = params?.locale ?? "pt-BR";
+export default function RootLayout({ children }: RootLayoutProps) {
+  const lang = "pt-BR";
   return (
     <html lang={lang} className="scroll-smooth theme-dark dark">
       <body
