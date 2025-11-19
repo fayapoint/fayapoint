@@ -449,5 +449,275 @@
       "rating": "4.9/5 rating",
       "footnote": "Cancel anytime • No fees • No fine print"
     }
+  },
+  "About": {
+    "hero": {
+      "badge": "Our Story",
+      "title": "Transforming Lives with <highlight>Artificial Intelligence</highlight>",
+      "description": "From international video editor to AI education pioneer in Brazil. Discover the journey that brought us here.",
+      "highlights": [
+        "5k+ professionals impacted",
+        "Active AI community"
+      ]
+    },
+    "stats": [
+      { "number": "28+", "label": "Years of Experience" },
+      { "number": "5000+", "label": "Students Trained" },
+      { "number": "150+", "label": "Courses Created" },
+      { "number": "94%", "label": "Satisfaction Rate" }
+    ],
+    "aboutRicardo": {
+      "title": "Ricardo Faya",
+      "paragraphs": [
+        "With more than 28 years in media and technology, Ricardo Faya is one of Brazil's pioneers in Artificial Intelligence education.",
+        "His journey began as a professional video editor, working at international companies like Fox International Channels and leading teams at FGV as Editor in Chief.",
+        "In 2020, after seeing AI's transformational potential, he started an intensive study journey, earning Google Cloud certifications in Generative AI, Machine Learning, and Prompt Engineering.",
+        "Today he is fully dedicated to helping professionals and companies master AI tools through a practical, results-driven approach."
+      ],
+      "certificationsTitle": "Certifications"
+    },
+    "certifications": [
+      "Prompt Design in Vertex AI",
+      "Introduction to Large Language Models",
+      "Introduction to Generative AI",
+      "Applying AI Principles with Google Cloud",
+      "Machine Learning Fundamentals",
+      "Advanced Video Production"
+    ],
+    "gallery": {
+      "badge": "Inside FayaPoint",
+      "title": "Learning that Happens Live",
+      "description": "In-person meetups and hybrid labs create real connections and fast-track the adoption of AI tools in our students' businesses.",
+      "items": [
+        {
+          "src": "/rwx3.jpg",
+          "title": "In-person Workshops",
+          "description": "Lean groups to accelerate learning with direct mentoring."
+        },
+        {
+          "src": "/rwx4.jpg",
+          "title": "Immersive Labs",
+          "description": "Hands-on experiences where each participant applies AI to their own context."
+        }
+      ]
+    },
+    "quote": {
+      "text": "“AI isn't the future, it's the present. Anyone who doesn't learn to use it today will be left behind tomorrow.”",
+      "cite": "— Ricardo Faya, Founder of FayaPoint"
+    },
+    "timeline": {
+      "title": "Our Journey",
+      "subtitle": "A path of transformation and innovation",
+      "items": [
+        {
+          "year": "1996",
+          "title": "Media Beginnings",
+          "description": "Started career as a professional video editor"
+        },
+        {
+          "year": "2008",
+          "title": "Fox International Channels",
+          "description": "Senior editor overseeing international productions"
+        },
+        {
+          "year": "2015",
+          "title": "FGV Editor in Chief",
+          "description": "Led educational content production teams"
+        },
+        {
+          "year": "2020",
+          "title": "AI Transition",
+          "description": "Began intensive Artificial Intelligence studies"
+        },
+        {
+          "year": "2023",
+          "title": "Google Cloud Certifications",
+          "description": "Earned Generative AI and Machine Learning credentials"
+        },
+        {
+          "year": "2025",
+          "title": "FayaPoint AI Academy",
+          "description": "Founded Brazil's leading AI education platform"
+        }
+      ]
+    },
+    "values": {
+      "title": "Our Values",
+      "subtitle": "What guides our mission to democratize AI knowledge",
+      "items": [
+        {
+          "title": "Results-Driven",
+          "description": "Our courses are practical and focused on real market outcomes"
+        },
+        {
+          "title": "Strong Community",
+          "description": "More than 5,000 professionals sharing knowledge"
+        },
+        {
+          "title": "Constant Innovation",
+          "description": "Always up-to-date with the latest AI tools and trends"
+        },
+        {
+          "title": "Teaching Excellence",
+          "description": "Proven methodology with a 94% completion rate"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Begin Your Journey?",
+      "description": "Join thousands of professionals already transforming their careers with AI.",
+      "primaryButton": "Start for Free",
+      "secondaryButton": "View Our Courses"
+    }
+  },
+  "Community": {
+    "title": "Community",
+    "description": "Space for discussions, projects, and networking between students. Full-featured experience coming soon."
+  },
+  "Consultation": {
+    "title": "Book a Consultation",
+    "description": "Share your details and we'll follow up to confirm the best time.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "details": "Describe your needs"
+    },
+    "submit": "Send"
+  },
+  "Contact": {
+    "hero": {
+      "badge": "Let's talk",
+      "title": "Transform your AI initiatives with the FayaPoint team",
+      "description": "Strategic partnerships, press, course questions, or corporate plans — we're ready to reply within 24 business hours.",
+      "imageAlt": "Ricardo Faya leading a strategic session"
+    },
+    "form": {
+      "badge": "Form",
+      "title": "Tell us more about you",
+      "description": "Our team personally answers every message with clear next steps.",
+      "fields": {
+        "fullName": "Full name",
+        "email": "Work email",
+        "company": "Company",
+        "role": "Role",
+        "detailsPlaceholder": "How can we help? Share needs, deadlines, and objectives."
+      },
+      "submit": "Send message"
+    },
+    "highlightCard": {
+      "badge": "Dedicated team",
+      "title": "Hands-on support from first contact to onboarding",
+      "imageAlt": "FayaPoint team in a client meeting"
+    },
+    "infoCards": [
+      {
+        "icon": "mail",
+        "label": "Email",
+        "value": "ricardofaya@gmail.com",
+        "description": "Reply within 1 business day"
+      },
+      {
+        "icon": "phone",
+        "label": "WhatsApp Business",
+        "value": "+55 21 97190-8530",
+        "description": "Support from 9 a.m. to 6 p.m. (BRT)"
+      },
+      {
+        "icon": "calendar",
+        "label": "Consulting",
+        "value": "Exclusive schedule for teams and executives",
+        "description": "Click to reserve a time",
+        "href": "/agendar-consultoria"
+      },
+      {
+        "icon": "map",
+        "label": "In-person studio",
+        "value": "Rua Sebastião de Aquino, 11, 207",
+        "description": "Visits by appointment"
+      }
+    ]
+  },
+  "Courses": {
+    "hero": {
+      "title": "AI & Automation Courses",
+      "subtitle": "Master the most powerful tools on the market with hands-on projects"
+    },
+    "searchPlaceholder": "Search courses...",
+    "stats": {
+      "students": "Students",
+      "courses": "Courses",
+      "rating": "Average Rating",
+      "lessons": "Lessons"
+    },
+    "filters": {
+      "categoryPlaceholder": "Category",
+      "levelPlaceholder": "Level",
+      "sortPlaceholder": "Sort by",
+      "allCategoriesLabel": "All",
+      "results": "{count} courses found",
+      "levelOptions": [
+        { "value": "all", "label": "All" },
+        { "value": "Iniciante", "label": "Beginner" },
+        { "value": "Intermediário", "label": "Intermediate" },
+        { "value": "Avançado", "label": "Advanced" },
+        { "value": "Todos os níveis", "label": "All levels" }
+      ],
+      "sortOptions": [
+        { "value": "popular", "label": "Most Popular" },
+        { "value": "rating", "label": "Top Rated" },
+        { "value": "newest", "label": "Newest" },
+        { "value": "price-low", "label": "Lowest Price" },
+        { "value": "price-high", "label": "Highest Price" }
+      ]
+    },
+    "loading": "Loading courses...",
+    "empty": {
+      "title": "No courses found",
+      "description": "Try adjusting the filters"
+    }
+  },
+  "Resources": {
+    "title": "Resources",
+    "links": [
+      { "href": "/recursos/guias", "label": "Free Guides" },
+      { "href": "/recursos/templates", "label": "Templates" },
+      { "href": "/recursos/calculadora-roi", "label": "ROI Calculator" },
+      { "href": "/recursos/glossario", "label": "AI Glossary" }
+    ]
+  },
+  "FAQ": {
+    "title": "Frequently Asked Questions",
+    "description": "Content coming soon."
+  },
+  "CoursesByTool": {
+    "title": "Courses by Tool",
+    "cta": "View courses for {tool}",
+    "tools": [
+      "ChatGPT",
+      "Claude",
+      "Gemini",
+      "Perplexity",
+      "Midjourney",
+      "DALL-E",
+      "Stable Diffusion",
+      "n8n",
+      "Make",
+      "Zapier",
+      "Flowise"
+    ]
+  },
+  "CoursesBySector": {
+    "title": "Courses by Industry",
+    "cta": "View courses for {sector}",
+    "sectors": [
+      "E-commerce",
+      "Education",
+      "Healthcare",
+      "Law",
+      "Digital Marketing",
+      "HR",
+      "Finance",
+      "Industry"
+    ]
   }
 }

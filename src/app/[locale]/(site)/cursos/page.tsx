@@ -3,27 +3,48 @@
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { 
-  Search, Filter, SlidersHorizontal, Star, Clock, Users, DollarSign, 
-  CheckCircle, TrendingUp, Award, BookOpen, Zap, Grid, List, ChevronRight 
+import {
+  Search,
+  Grid,
+  List,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import type { Product } from "@/lib/products";
 import { AttractiveCourseCard } from "@/components/courses/AttractiveCourseCard";
 
+type LevelOption = {
+  value: string;
+  label: string;
+};
+
+type SortOption = {
+  value: string;
+  label: string;
+};
+
+type StatsLabels = {
+  students: string;
+  courses: string;
+  rating: string;
+  lessons: string;
+};
+
 export default function CoursesPage() {
+  const t = useTranslations("Courses");
+  const locale = useLocale();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Todas");
-  const [selectedLevel, setSelectedLevel] = useState("Todos");
+  const allCategoriesLabel = t("filters.allCategoriesLabel");
+  const [selectedCategory, setSelectedCategory] = useState(allCategoriesLabel);
+  const levelOptions = t.raw("filters.levelOptions") as LevelOption[];
+  const sortOptions = t.raw("filters.sortOptions") as SortOption[];
+  const [selectedLevel, setSelectedLevel] = useState(levelOptions[0]?.value ?? "all");
   const [sortBy, setSortBy] = useState("popular");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -44,11 +65,9 @@ export default function CoursesPage() {
   }, []);
 
   const categories = useMemo(() => [
-    "Todas",
+    allCategoriesLabel,
     ...Array.from(new Set(products.map(p => p.categoryPrimary)))
-  ], [products]);
-
-  const levels = ["Todos", "Iniciante", "Intermediário", "Avançado", "Todos os níveis"];
+  ], [products, allCategoriesLabel]);
 
   const filteredCourses = useMemo(() => {
     let filtered = products.filter(product => {
@@ -57,8 +76,11 @@ export default function CoursesPage() {
         product.tool.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.copy.shortDescription.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesCategory = selectedCategory === "Todas" || product.categoryPrimary === selectedCategory;
-      const matchesLevel = selectedLevel === "Todos" || product.level.includes(selectedLevel) || product.level === "Todos os níveis";
+      const matchesCategory = selectedCategory === allCategoriesLabel || product.categoryPrimary === selectedCategory;
+      const matchesLevel =
+        selectedLevel === "all" ||
+        product.level.includes(selectedLevel) ||
+        product.level === "Todos os níveis";
       
       return matchesSearch && matchesCategory && matchesLevel;
     });
@@ -81,7 +103,23 @@ export default function CoursesPage() {
     });
 
     return filtered;
-  }, [products, searchTerm, selectedCategory, selectedLevel, sortBy]);
+  }, [products, searchTerm, selectedCategory, selectedLevel, sortBy, allCategoriesLabel]);
+
+  const statsLabels = t.raw("stats") as StatsLabels;
+  const heroTitle = t("hero.title");
+  const heroSubtitle = t("hero.subtitle");
+  const searchPlaceholder = t("searchPlaceholder");
+  const filtersLabels = t.raw("filters") as { categoryPlaceholder: string; levelPlaceholder: string; sortPlaceholder: string; results: string; };
+  const loadingLabel = t("loading");
+  const emptyStateTitle = t("empty.title");
+  const emptyStateDescription = t("empty.description");
+
+  const totalStudents = products.reduce((sum, p) => sum + p.metrics.students, 0).toLocaleString(locale);
+  const totalCourses = products.length;
+  const averageRating = products.length
+    ? (products.reduce((sum, p) => sum + p.metrics.rating, 0) / products.length).toFixed(1)
+    : "0.0";
+  const totalLessons = products.reduce((sum, p) => sum + p.metrics.lessons, 0).toLocaleString(locale);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -95,7 +133,7 @@ export default function CoursesPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl font-bold mb-4"
           >
-            Cursos de IA e Automação
+            {heroTitle}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: -20 }}
@@ -103,7 +141,7 @@ export default function CoursesPage() {
             transition={{ delay: 0.1 }}
             className="text-xl text-gray-300 mb-8"
           >
-            Domine as ferramentas mais poderosas do mercado com projetos práticos
+            {heroSubtitle}
           </motion.p>
           
           {/* Stats */}
@@ -115,25 +153,25 @@ export default function CoursesPage() {
           >
             <div>
               <p className="text-3xl font-bold text-purple-400">
-                {loading ? '...' : products.reduce((sum, p) => sum + p.metrics.students, 0).toLocaleString()}+
+                {loading ? "..." : `${totalStudents}+`}
               </p>
-              <p className="text-gray-400">Alunos</p>
+              <p className="text-gray-400">{statsLabels.students}</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-purple-400">{loading ? '...' : products.length}</p>
-              <p className="text-gray-400">Cursos</p>
+              <p className="text-gray-400">{statsLabels.courses}</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-purple-400">
-                {loading ? '...' : (products.reduce((sum, p) => sum + p.metrics.rating, 0) / products.length).toFixed(1)}
+                {loading ? "..." : averageRating}
               </p>
-              <p className="text-gray-400">Avaliação Média</p>
+              <p className="text-gray-400">{statsLabels.rating}</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-purple-400">
-                {loading ? '...' : products.reduce((sum, p) => sum + p.metrics.lessons, 0).toLocaleString()}+
+                {loading ? "..." : `${totalLessons}+`}
               </p>
-              <p className="text-gray-400">Aulas</p>
+              <p className="text-gray-400">{statsLabels.lessons}</p>
             </div>
           </motion.div>
           
@@ -148,7 +186,7 @@ export default function CoursesPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <Input
                 type="text"
-                placeholder="Buscar cursos..."
+                placeholder={searchPlaceholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-12 pr-4 py-3 bg-gray-900 border-gray-700 text-white"
@@ -165,7 +203,7 @@ export default function CoursesPage() {
             <div className="flex flex-wrap gap-3">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-[150px] bg-gray-900 border-gray-700">
-                  <SelectValue placeholder="Categoria" />
+                  <SelectValue placeholder={filtersLabels.categoryPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map(cat => (
@@ -176,32 +214,34 @@ export default function CoursesPage() {
               
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
                 <SelectTrigger className="w-[150px] bg-gray-900 border-gray-700">
-                  <SelectValue placeholder="Nível" />
+                  <SelectValue placeholder={filtersLabels.levelPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
-                  {levels.map(level => (
-                    <SelectItem key={level} value={level}>{level}</SelectItem>
+                  {levelOptions.map(option => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[150px] bg-gray-900 border-gray-700">
-                  <SelectValue placeholder="Ordenar por" />
+                  <SelectValue placeholder={filtersLabels.sortPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="popular">Mais Popular</SelectItem>
-                  <SelectItem value="rating">Melhor Avaliado</SelectItem>
-                  <SelectItem value="newest">Mais Recente</SelectItem>
-                  <SelectItem value="price-low">Menor Preço</SelectItem>
-                  <SelectItem value="price-high">Maior Preço</SelectItem>
+                  {sortOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             
             <div className="flex items-center gap-2">
               <p className="text-sm text-gray-400">
-                {filteredCourses.length} cursos encontrados
+                {t("filters.results", { count: filteredCourses.length })}
               </p>
               <div className="flex gap-1">
                 <Button
@@ -233,7 +273,7 @@ export default function CoursesPage() {
           }>
             {loading ? (
               <div className="col-span-full text-center py-20">
-                <p className="text-gray-400 text-lg">Carregando cursos...</p>
+                <p className="text-gray-400 text-lg">{loadingLabel}</p>
               </div>
             ) : (
               filteredCourses.map((product, index) => (
@@ -248,8 +288,8 @@ export default function CoursesPage() {
           
           {filteredCourses.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-400">Nenhum curso encontrado</p>
-              <p className="text-gray-500 mt-2">Tente ajustar os filtros</p>
+              <p className="text-xl text-gray-400">{emptyStateTitle}</p>
+              <p className="text-gray-500 mt-2">{emptyStateDescription}</p>
             </div>
           )}
         </div>

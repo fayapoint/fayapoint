@@ -449,5 +449,407 @@
       "rating": "4.9/5 de avaliação",
       "footnote": "Cancele quando quiser • Sem multas • Sem pegadinhas"
     }
+  },
+  "About": {
+    "hero": {
+      "badge": "Nossa História",
+      "title": "Transformando Vidas com <highlight>Inteligência Artificial</highlight>",
+      "description": "De editor de vídeo internacional a pioneiro no ensino de IA no Brasil. Conheça a jornada que nos trouxe até aqui.",
+      "highlights": [
+        "+ de 5 mil profissionais impactados",
+        "Comunidade ativa de IA"
+      ]
+    },
+    "stats": [
+      { "number": "28+", "label": "Anos de Experiência" },
+      { "number": "5000+", "label": "Alunos Formados" },
+      { "number": "150+", "label": "Cursos Criados" },
+      { "number": "94%", "label": "Taxa de Satisfação" }
+    ],
+    "aboutRicardo": {
+      "title": "Ricardo Faya",
+      "paragraphs": [
+        "Com mais de 28 anos de experiência em mídia e tecnologia, Ricardo Faya é um dos pioneiros no ensino de Inteligência Artificial no Brasil.",
+        "Sua jornada começou como editor de vídeo profissional, trabalhando em empresas internacionais como Fox International Channels e liderando equipes na FGV como Editor Chefe.",
+        "Em 2020, percebendo o potencial transformador da IA, iniciou uma intensa jornada de estudos, obtendo certificações do Google Cloud em IA Generativa, Machine Learning e Prompt Engineering.",
+        "Hoje, dedica-se integralmente a ensinar profissionais e empresas a dominarem as ferramentas de IA, com uma abordagem prática e resultados comprovados."
+      ],
+      "certificationsTitle": "Certificações"
+    },
+    "certifications": [
+      "Prompt Design in Vertex AI",
+      "Introduction to Large Language Models",
+      "Introduction to Generative AI",
+      "Applying AI Principles with Google Cloud",
+      "Machine Learning Fundamentals",
+      "Advanced Video Production"
+    ],
+    "gallery": {
+      "badge": "Dentro da FayaPoint",
+      "title": "Aprendizado que Acontece ao Vivo",
+      "description": "Os encontros presenciais e labs híbridos criam conexões reais e aceleram a implementação das ferramentas de IA nos negócios dos alunos.",
+      "items": [
+        {
+          "src": "/rwx3.jpg",
+          "title": "Workshops Presenciais",
+          "description": "Turmas enxutas para acelerar a aprendizagem com acompanhamento direto."
+        },
+        {
+          "src": "/rwx4.jpg",
+          "title": "Laboratórios Imersivos",
+          "description": "Experiências práticas em que cada participante aplica IA ao seu contexto."
+        }
+      ]
+    },
+    "quote": {
+      "text": "“A IA não é o futuro, é o presente. E quem não aprender a usá-la hoje, ficará para trás amanhã.”",
+      "cite": "— Ricardo Faya, Fundador da FayaPoint"
+    },
+    "timeline": {
+      "title": "Nossa Trajetória",
+      "subtitle": "Uma jornada de transformação e inovação",
+      "items": [
+        {
+          "year": "1996",
+          "title": "Início na Mídia",
+          "description": "Começou a carreira como editor de vídeo profissional"
+        },
+        {
+          "year": "2008",
+          "title": "Fox International Channels",
+          "description": "Editor sênior responsável por produções internacionais"
+        },
+        {
+          "year": "2015",
+          "title": "Editor Chefe na FGV",
+          "description": "Liderou equipe de produção de conteúdo educacional"
+        },
+        {
+          "year": "2020",
+          "title": "Transição para IA",
+          "description": "Iniciou estudos intensivos em Inteligência Artificial"
+        },
+        {
+          "year": "2023",
+          "title": "Certificações Google Cloud",
+          "description": "Obteve certificações em IA Generativa e Machine Learning"
+        },
+        {
+          "year": "2025",
+          "title": "FayaPoint AI Academy",
+          "description": "Fundou a principal plataforma de ensino de IA do Brasil"
+        }
+      ]
+    },
+    "values": {
+      "title": "Nossos Valores",
+      "subtitle": "O que guia nossa missão de democratizar o conhecimento em IA",
+      "items": [
+        {
+          "title": "Foco em Resultados",
+          "description": "Nossos cursos são práticos e orientados para resultados reais no mercado"
+        },
+        {
+          "title": "Comunidade Forte",
+          "description": "Mais de 5.000 profissionais conectados, compartilhando conhecimento"
+        },
+        {
+          "title": "Inovação Constante",
+          "description": "Sempre atualizados com as últimas ferramentas e tendências de IA"
+        },
+        {
+          "title": "Excelência no Ensino",
+          "description": "Metodologia comprovada com 94% de taxa de conclusão"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Pronto para Começar sua Jornada?",
+      "description": "Junte-se a milhares de profissionais que já estão transformando suas carreiras com IA.",
+      "primaryButton": "Começar Gratuitamente",
+      "secondaryButton": "Ver Nossos Cursos"
+    }
+  },
+  "Community": {
+    "title": "Comunidade",
+    "description": "Espaço para discussões, projetos e networking entre alunos. Em breve com recursos completos."
+  },
+  "Consultation": {
+    "title": "Agendar Consultoria",
+    "description": "Preencha seus dados e retornaremos para confirmar o melhor horário.",
+    "fields": {
+      "name": "Nome",
+      "email": "Email",
+      "details": "Descreva sua necessidade"
+    },
+    "submit": "Enviar"
+  },
+  "Contact": {
+    "hero": {
+      "badge": "Vamos conversar",
+      "title": "Transforme suas iniciativas de IA com o time da FayaPoint",
+      "description": "Parcerias estratégicas, imprensa, dúvidas sobre cursos ou planos corporativos — estamos prontos para responder em até 24h úteis.",
+      "imageAlt": "Ricardo Faya facilitando uma sessão estratégica"
+    },
+    "form": {
+      "badge": "Formulário",
+      "title": "Conte mais sobre você",
+      "description": "Nossa equipe responde pessoalmente cada mensagem com direcionamentos claros.",
+      "fields": {
+        "fullName": "Nome completo",
+        "email": "Email profissional",
+        "company": "Empresa",
+        "role": "Cargo",
+        "detailsPlaceholder": "Como podemos ajudar? Descreva sua necessidade, prazos e objetivos."
+      },
+      "submit": "Enviar mensagem"
+    },
+    "highlightCard": {
+      "badge": "Equipe dedicada",
+      "title": "Acompanhamento próximo do primeiro contato ao onboarding",
+      "imageAlt": "Equipe da FayaPoint em reunião de atendimento"
+    },
+    "infoCards": [
+      {
+        "icon": "mail",
+        "label": "Email",
+        "value": "ricardofaya@gmail.com",
+        "description": "Retorno em até 1 dia útil"
+      },
+      {
+        "icon": "phone",
+        "label": "WhatsApp Business",
+        "value": "+55 21 97190-8530",
+        "description": "Atendimento das 9h às 18h (BRT)"
+      },
+      {
+        "icon": "calendar",
+        "label": "Consultorias",
+        "value": "Agenda exclusiva para times e executivos",
+        "description": "Clique para reservar um horário",
+        "href": "/agendar-consultoria"
+      },
+      {
+        "icon": "map",
+        "label": "Studio presencial",
+        "value": "Rua Sebastião de Aquino, 11, 207",
+        "description": "Visitas mediante agendamento"
+      }
+    ]
+  },
+  "Blog": {
+    "hero": {
+      "title": "Blog FayaPoint",
+      "description": "Insights, tutoriais e novidades sobre Inteligência Artificial"
+    },
+    "searchPlaceholder": "Buscar artigos...",
+    "loadMore": "Carregar Mais Artigos",
+    "badges": {
+      "featured": "Destaque"
+    },
+    "labels": {
+      "viewsSuffix": "visualizações",
+      "categories": "Categorias",
+      "popularTags": "Tags Populares",
+      "recentPosts": "Posts Recentes",
+      "newsletter": "Newsletter",
+      "newsletterDescription": "Receba as últimas novidades de IA direto no seu email.",
+      "newsletterSubmit": "Inscrever"
+    },
+    "categories": [
+      "Todos",
+      "IA Generativa",
+      "Criação Visual",
+      "Automação",
+      "Desenvolvimento",
+      "Áudio e Voz",
+      "Negócios",
+      "Tutoriais",
+      "Novidades"
+    ],
+    "popularTags": [
+      "ChatGPT",
+      "Midjourney",
+      "Claude",
+      "n8n",
+      "Automação",
+      "Produtividade",
+      "Marketing",
+      "Design",
+      "Programação",
+      "ROI"
+    ],
+    "newsletter": {
+      "placeholder": "seu@email.com"
+    },
+    "posts": [
+      {
+        "id": 1,
+        "title": "Como o ChatGPT está Revolucionando o Mercado de Trabalho em 2025",
+        "slug": "chatgpt-revolucionando-mercado-trabalho-2025",
+        "excerpt": "Descubra como profissionais estão usando o ChatGPT para aumentar sua produtividade em até 300% e as profissões que mais se beneficiam dessa tecnologia.",
+        "category": "IA Generativa",
+        "author": "Ricardo Faya",
+        "date": "18 Out, 2025",
+        "readTime": "8 min",
+        "views": 3456,
+        "image": "/blog/chatgpt-work.jpg",
+        "featured": true,
+        "tags": ["ChatGPT", "Produtividade", "Carreira"]
+      },
+      {
+        "id": 2,
+        "title": "Guia Completo: Criando Arte Profissional com Midjourney v6",
+        "slug": "guia-midjourney-v6",
+        "excerpt": "Aprenda técnicas avançadas de prompt engineering para Midjourney, incluindo styles, parameters e como criar consistência visual.",
+        "category": "Criação Visual",
+        "author": "Ricardo Faya",
+        "date": "17 Out, 2025",
+        "readTime": "12 min",
+        "views": 2891,
+        "image": "/blog/midjourney-guide.jpg",
+        "featured": true,
+        "tags": ["Midjourney", "Design", "Arte Digital"]
+      },
+      {
+        "id": 3,
+        "title": "Automação com n8n: 10 Workflows que Todo Negócio Precisa",
+        "slug": "automacao-n8n-workflows",
+        "excerpt": "Economize 20 horas por semana com estes workflows de automação essenciais para qualquer negócio digital.",
+        "category": "Automação",
+        "author": "Ricardo Faya",
+        "date": "16 Out, 2025",
+        "readTime": "15 min",
+        "views": 2234,
+        "image": "/blog/n8n-workflows.jpg",
+        "featured": false,
+        "tags": ["n8n", "Automação", "Produtividade"]
+      },
+      {
+        "id": 4,
+        "title": "Claude vs ChatGPT: Qual é Melhor para Programação?",
+        "slug": "claude-vs-chatgpt-programacao",
+        "excerpt": "Comparação detalhada entre Claude e ChatGPT para desenvolvimento de software, debugging e arquitetura de sistemas.",
+        "category": "Desenvolvimento",
+        "author": "Ricardo Faya",
+        "date": "15 Out, 2025",
+        "readTime": "10 min",
+        "views": 4102,
+        "image": "/blog/claude-chatgpt.jpg",
+        "featured": false,
+        "tags": ["Claude", "ChatGPT", "Programação"]
+      },
+      {
+        "id": 5,
+        "title": "O Futuro da Voz: Como ElevenLabs está Mudando o Jogo",
+        "slug": "elevenlabs-futuro-voz",
+        "excerpt": "Clonagem de voz, dublagem automática e narrações ultra-realistas. Entenda o impacto dessa tecnologia.",
+        "category": "Áudio e Voz",
+        "author": "Ricardo Faya",
+        "date": "14 Out, 2025",
+        "readTime": "6 min",
+        "views": 1876,
+        "image": "/blog/elevenlabs.jpg",
+        "featured": false,
+        "tags": ["ElevenLabs", "Áudio", "IA de Voz"]
+      },
+      {
+        "id": 6,
+        "title": "ROI de IA: Como Medir o Retorno do Investimento em IA",
+        "slug": "roi-inteligencia-artificial",
+        "excerpt": "Framework completo para calcular e demonstrar o ROI de projetos de IA na sua empresa.",
+        "category": "Negócios",
+        "author": "Ricardo Faya",
+        "date": "13 Out, 2025",
+        "readTime": "20 min",
+        "views": 3567,
+        "image": "/blog/roi-ai.jpg",
+        "featured": true,
+        "tags": ["ROI", "Negócios", "Estratégia"]
+      }
+    ]
+  },
+  "Courses": {
+    "hero": {
+      "title": "Cursos de IA e Automação",
+      "subtitle": "Domine as ferramentas mais poderosas do mercado com projetos práticos"
+    },
+    "searchPlaceholder": "Buscar cursos...",
+    "stats": {
+      "students": "Alunos",
+      "courses": "Cursos",
+      "rating": "Avaliação Média",
+      "lessons": "Aulas"
+    },
+    "filters": {
+      "categoryPlaceholder": "Categoria",
+      "levelPlaceholder": "Nível",
+      "sortPlaceholder": "Ordenar por",
+      "allCategoriesLabel": "Todas",
+      "results": "{count} cursos encontrados",
+      "levelOptions": [
+        { "value": "all", "label": "Todos" },
+        { "value": "Iniciante", "label": "Iniciante" },
+        { "value": "Intermediário", "label": "Intermediário" },
+        { "value": "Avançado", "label": "Avançado" },
+        { "value": "Todos os níveis", "label": "Todos os níveis" }
+      ],
+      "sortOptions": [
+        { "value": "popular", "label": "Mais Popular" },
+        { "value": "rating", "label": "Melhor Avaliado" },
+        { "value": "newest", "label": "Mais Recente" },
+        { "value": "price-low", "label": "Menor Preço" },
+        { "value": "price-high", "label": "Maior Preço" }
+      ]
+    },
+    "loading": "Carregando cursos...",
+    "empty": {
+      "title": "Nenhum curso encontrado",
+      "description": "Tente ajustar os filtros"
+    }
+  },
+  "Resources": {
+    "title": "Recursos",
+    "links": [
+      { "href": "/recursos/guias", "label": "Guias Gratuitos" },
+      { "href": "/recursos/templates", "label": "Templates" },
+      { "href": "/recursos/calculadora-roi", "label": "Calculadora ROI" },
+      { "href": "/recursos/glossario", "label": "Glossário IA" }
+    ]
+  },
+  "FAQ": {
+    "title": "Perguntas Frequentes",
+    "description": "Conteúdo em breve."
+  },
+  "CoursesByTool": {
+    "title": "Cursos por Ferramenta",
+    "cta": "Ver cursos de {tool}",
+    "tools": [
+      "ChatGPT",
+      "Claude",
+      "Gemini",
+      "Perplexity",
+      "Midjourney",
+      "DALL-E",
+      "Stable Diffusion",
+      "n8n",
+      "Make",
+      "Zapier",
+      "Flowise"
+    ]
+  },
+  "CoursesBySector": {
+    "title": "Cursos por Setor",
+    "cta": "Ver cursos para {sector}",
+    "sectors": [
+      "E-commerce",
+      "Educação",
+      "Saúde",
+      "Advocacia",
+      "Marketing Digital",
+      "RH",
+      "Finanças",
+      "Indústria"
+    ]
   }
 }
