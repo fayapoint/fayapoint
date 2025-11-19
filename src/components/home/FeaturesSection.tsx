@@ -4,22 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { XCircle, CheckCircle, ArrowRight, Sparkles, Zap, AlertCircle, TrendingDown, X, TrendingUp, CheckCircle2 } from "lucide-react";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { useRef } from "react";
-
-const problems = [
-  "Perdido com tantas ferramentas de IA disponíveis",
-  "Gastando horas em tarefas repetitivas",
-  "Ficando para trás da concorrência",
-  "Pagando caro por consultorias fragmentadas",
-  "Sem saber medir o ROI da IA",
-];
-
-const solutions = [
-  "Dominando as melhores ferramentas de IA do mercado",
-  "Automatizando 80% das tarefas repetitivas",
-  "Liderando a transformação digital",
-  "Aprendendo com quem realmente entende do assunto",
-  "ROI comprovado em menos de 30 dias",
-];
+import { useTranslations } from "next-intl";
 
 export function FeaturesSection() {
   const sectionRef = useRef(null);
@@ -27,7 +12,15 @@ export function FeaturesSection() {
     target: sectionRef,
     offset: ["start end", "end start"]
   });
-  
+  const t = useTranslations("Home.Features");
+  const badge = t("badge");
+  const title = t("title");
+  const description = t("description");
+  const problems = t.raw("problems") as string[];
+  const solutions = t.raw("solutions") as string[];
+  const withoutTitle = t("withoutTitle");
+  const withTitle = t("withTitle");
+
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
   
@@ -66,7 +59,7 @@ export function FeaturesSection() {
               <div className="relative backdrop-blur-sm bg-white/5 border border-white/10 rounded-full px-5 py-2 flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-yellow-400" />
                 <span className="text-sm font-medium bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                  Transforme desafios em oportunidades
+                  {badge}
                 </span>
               </div>
             </div>
@@ -74,11 +67,11 @@ export function FeaturesSection() {
           
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-red-400 to-green-400 bg-clip-text text-transparent">
-              Seus Desafios, Nossas Soluções
+              {title}
             </span>
           </h2>
           <p className="text-xl text-gray-300">
-            Sabemos exatamente o que você está enfrentando
+            {description}
           </p>
         </motion.div>
 
@@ -100,7 +93,7 @@ export function FeaturesSection() {
                 <TrendingDown className="text-red-400" size={28} />
               </motion.div>
               <h3 className="text-2xl font-bold text-red-400">
-                Sem a FayaPoint
+                {withoutTitle}
               </h3>
             </div>
             
@@ -152,7 +145,7 @@ export function FeaturesSection() {
                 <TrendingUp className="text-green-400" size={28} />
               </motion.div>
               <h3 className="text-2xl font-bold text-green-400">
-                Com a FayaPoint
+                {withTitle}
               </h3>
               <motion.div
                 animate={{ scale: [1, 1.3, 1] }}

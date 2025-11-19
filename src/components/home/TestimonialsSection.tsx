@@ -2,59 +2,29 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
-import { Quote, Star, ChevronRight, MessageSquare, Sparkles, TrendingUp } from "lucide-react";
+import { Quote, Star, MessageSquare, Sparkles, TrendingUp } from "lucide-react";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-const testimonials = [
-  {
-    name: "Ana Silva",
-    role: "CEO, TechStart",
-    content: "Implementei IA na minha empresa e reduzi 40% dos custos operacionais. Os cursos do Ricardo são práticos e diretos ao ponto.",
-    rating: 5,
-    image: "/testimonials/ana.jpg",
-  },
-  {
-    name: "Carlos Mendes",
-    role: "Criador de Conteúdo",
-    content: "Triplicei minha produção de conteúdo usando as técnicas ensinadas. Agora uso IA diariamente no meu workflow.",
-    rating: 5,
-    image: "/testimonials/carlos.jpg",
-  },
-  {
-    name: "Juliana Costa",
-    role: "Gerente de Marketing",
-    content: "O ROI foi imediato! Em 2 meses já havia economizado o valor investido em todos os cursos.",
-    rating: 5,
-    image: "/testimonials/juliana.jpg",
-  },
-  {
-    name: "Pedro Santos",
-    role: "Desenvolvedor Full Stack",
-    content: "As aulas de automação com n8n mudaram completamente minha forma de trabalhar. Economizo 20 horas por semana!",
-    rating: 5,
-    image: "/testimonials/pedro.jpg",
-  },
-  {
-    name: "Mariana Oliveira",
-    role: "Designer Freelancer",
-    content: "Midjourney e DALL-E viraram minhas ferramentas principais. Consigo entregar projetos 3x mais rápido.",
-    rating: 5,
-    image: "/testimonials/mariana.jpg",
-  },
-  {
-    name: "Roberto Lima",
-    role: "Consultor Empresarial",
-    content: "A visão estratégica sobre IA que aprendi aqui me diferencia completamente no mercado.",
-    rating: 5,
-    image: "/testimonials/roberto.jpg",
-  },
+const testimonialMeta = [
+  { key: "ana", image: "/testimonials/ana.jpg", rating: 5 },
+  { key: "carlos", image: "/testimonials/carlos.jpg", rating: 5 },
+  { key: "juliana", image: "/testimonials/juliana.jpg", rating: 5 },
+  { key: "pedro", image: "/testimonials/pedro.jpg", rating: 5 },
+  { key: "mariana", image: "/testimonials/mariana.jpg", rating: 5 },
+  { key: "roberto", image: "/testimonials/roberto.jpg", rating: 5 },
 ];
 
 export function TestimonialsSection() {
   const sectionRef = useRef(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const t = useTranslations("Home.Testimonials");
+  const testimonials = testimonialMeta.map((meta) => {
+    const copy = t.raw(`items.${meta.key}`) as { name: string; role: string; content: string };
+    return { ...meta, ...copy };
+  });
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -128,7 +98,7 @@ export function TestimonialsSection() {
                   <Sparkles className="w-5 h-5 text-yellow-400" />
                 </motion.div>
                 <span className="text-sm font-semibold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                  +5000 Alunos Transformados
+                  {t("badge")}
                 </span>
                 <motion.div
                   animate={{ scale: [1, 1.3, 1] }}
@@ -142,11 +112,11 @@ export function TestimonialsSection() {
           
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              Histórias de Transformação
+              {t("title")}
             </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Veja o que nossos alunos conquistaram com o poder da IA
+            {t("description")}
           </p>
         </motion.div>
 
@@ -267,7 +237,7 @@ export function TestimonialsSection() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <p className="text-gray-400 mb-4">Seja o próximo caso de sucesso</p>
+          <p className="text-gray-400 mb-4">{t("ctaLabel")}</p>
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -278,7 +248,7 @@ export function TestimonialsSection() {
               href="/cursos"
               className="relative inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
             >
-              Começar Agora
+              {t("ctaButton")}
               <motion.div
                 animate={{ x: [0, 5, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}

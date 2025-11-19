@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { 
@@ -20,11 +20,13 @@ import {
   Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { useUser } from "@/contexts/UserContext";
+import { useLocale, useTranslations } from "next-intl";
 
 export function HeroSection() {
   const { user, isLoggedIn, mounted: userMounted } = useUser();
+  const t = useTranslations("Home.Hero");
+  const locale = useLocale();
   // Subtle background parallax only (no text rotation)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -37,6 +39,27 @@ export function HeroSection() {
   const [coursesCount, setCoursesCount] = useState(0);
   const [completionRate, setCompletionRate] = useState(0);
   const [mounted, setMounted] = useState(false);
+
+  const formatNumber = useMemo(() => new Intl.NumberFormat(locale), [locale]);
+  const headlinePrefix = userMounted && isLoggedIn && user
+    ? t("headline.prefixLogged", { name: user.name.split(" ")[0] })
+    : t("headline.prefix");
+  const subheadingContent = userMounted && isLoggedIn && user
+    ? t.rich("subheading.returning", {
+        name: user.name.split(" ")[0],
+        primary: (chunks) => <span className="text-primary font-semibold">{chunks}</span>,
+        accent: (chunks) => <span className="text-accent font-bold">{chunks}</span>,
+      })
+    : t.rich("subheading.guest", {
+        primary: (chunks) => <span className="text-primary font-semibold">{chunks}</span>,
+        accent: (chunks) => <span className="text-accent font-bold">{chunks}</span>,
+      });
+  const stats = [
+    { icon: Users, color: "purple", value: studentsCount, label: t("stats.students"), suffix: "+" },
+    { icon: BookOpen, color: "pink", value: coursesCount, label: t("stats.courses"), suffix: "+" },
+    { icon: Trophy, color: "yellow", value: completionRate, label: t("stats.completion"), suffix: "%" },
+    { icon: Star, color: "orange", value: t("stats.ratingValue"), label: t("stats.rating"), suffix: "" },
+  ];
 
   useEffect(() => {
     setMounted(true);
@@ -250,7 +273,7 @@ export function HeroSection() {
                   <Sparkles className="w-5 h-5 text-purple-400" />
                 </motion.div>
                 <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent font-semibold">
-                  Nova Era da Educação em IA no Brasil
+                  {t("badge")}
                 </span>
                 <motion.div
                   animate={{ scale: [1, 1.2, 1] }}
@@ -270,7 +293,7 @@ export function HeroSection() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="inline-block"
               >
-                {userMounted && isLoggedIn && user ? `${user.name.split(' ')[0]}, domine a` : "Domine a"}{" "}
+                {headlinePrefix}{" "}
               </motion.span>
               <motion.span 
                 className="relative inline-block"
@@ -319,7 +342,7 @@ export function HeroSection() {
                   }}
                   style={{ backgroundClip: 'text', WebkitBackgroundClip: 'text' }}
                 >
-                  Inteligência Artificial
+                  {t("headline.highlight")}
                 </motion.span>
               </motion.span>
               <br />
@@ -329,7 +352,7 @@ export function HeroSection() {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 className="inline-block"
               >
-                e Transforme sua Carreira
+                {t("headline.suffix")}
               </motion.span>
             </h1>
 
@@ -344,19 +367,7 @@ export function HeroSection() {
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 blur-xl group-hover:blur-2xl transition-all duration-300" />
               <div className="relative backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
                 <p className="text-xl text-foreground/90 font-medium leading-relaxed">
-                  {userMounted && isLoggedIn && user ? (
-                    <>
-                      Ótimo te ver aqui de novo, <span className="text-primary font-bold">{user.name.split(' ')[0]}</span>! 
-                      Continue sua jornada de aprendizado com nossos cursos práticos de <span className="text-primary font-semibold">ChatGPT</span>, <span className="text-primary font-semibold">Midjourney</span>, 
-                      automação e mais de <span className="text-accent font-bold">100 ferramentas de IA</span>.
-                    </>
-                  ) : (
-                    <>
-                      Aprenda com quem tem <span className="text-primary font-bold">28+ anos</span> de experiência em mídia e tecnologia. 
-                      Cursos práticos de <span className="text-primary font-semibold">ChatGPT</span>, <span className="text-primary font-semibold">Midjourney</span>, 
-                      automação e mais de <span className="text-accent font-bold">100 ferramentas de IA</span>.
-                    </>
-                  )}
+                  {subheadingContent}
                 </p>
               </div>
             </div>
@@ -386,7 +397,7 @@ export function HeroSection() {
                     >
                       <Play className="mr-2" />
                     </motion.div>
-                    Assistir Aula Grátis
+                    {t("cta.watchClass")}
                   </span>
                 </Button>
               </Link>
@@ -404,7 +415,7 @@ export function HeroSection() {
                     variant="outline"
                     className="text-lg px-10 py-7 border-2 border-primary/50 hover:border-primary hover:bg-primary/10 text-foreground" 
                   >
-                    Ver Todos os Cursos 
+                    {t("cta.viewCourses")} 
                     <motion.div
                       animate={{ x: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
@@ -424,12 +435,7 @@ export function HeroSection() {
             transition={{ duration: 0.7, delay: 1.2 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
           >
-            {[
-              { icon: Users, color: "purple", value: studentsCount, label: "Alunos", suffix: "+" },
-              { icon: BookOpen, color: "pink", value: coursesCount, label: "Cursos", suffix: "+" },
-              { icon: Trophy, color: "yellow", value: completionRate, label: "Conclusão", suffix: "%" },
-              { icon: Star, color: "orange", value: "4.9/5", label: "Avaliação", suffix: "" },
-            ].map((stat, index) => (
+            {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -450,7 +456,7 @@ export function HeroSection() {
                     </motion.div>
                     <div>
                       <div className="text-2xl font-bold">
-                        {typeof stat.value === 'number' ? stat.value.toLocaleString("pt-BR") : stat.value}{stat.suffix}
+                        {typeof stat.value === "number" ? formatNumber.format(stat.value) : stat.value}{stat.suffix}
                       </div>
                       <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
                     </div>

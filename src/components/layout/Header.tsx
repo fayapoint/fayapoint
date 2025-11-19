@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Menu, X, ChevronDown, LogOut, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
+import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
 import { useUser } from "@/contexts/UserContext";
 import {
   NavigationMenu,
@@ -19,57 +21,57 @@ import { cn } from "@/lib/utils";
 
 const coursesMenu = [
   {
-    title: "Iniciante",
+    titleKey: "menus.courses.sections.beginner.title",
     items: [
-      { title: "ChatGPT do Zero", href: "/curso/chatgpt-zero" },
-      { title: "Primeiras Automações", href: "/curso/primeiras-automacoes" },
-      { title: "IA para o Dia a Dia", href: "/curso/ia-dia-a-dia" },
+      { labelKey: "menus.courses.sections.beginner.items.chatgptZero", href: "/curso/chatgpt-zero" },
+      { labelKey: "menus.courses.sections.beginner.items.firstAutomations", href: "/curso/primeiras-automacoes" },
+      { labelKey: "menus.courses.sections.beginner.items.everydayAI", href: "/curso/ia-dia-a-dia" },
     ],
   },
   {
-    title: "Intermediário",
+    titleKey: "menus.courses.sections.intermediate.title",
     items: [
-      { title: "Prompt Engineering", href: "/curso/prompt-engineering" },
-      { title: "Automação com n8n", href: "/curso/automacao-n8n" },
-      { title: "Midjourney Masterclass", href: "/curso/midjourney-masterclass" },
+      { labelKey: "menus.courses.sections.intermediate.items.promptEngineering", href: "/curso/prompt-engineering" },
+      { labelKey: "menus.courses.sections.intermediate.items.n8nAutomation", href: "/curso/automacao-n8n" },
+      { labelKey: "menus.courses.sections.intermediate.items.midjourneyMasterclass", href: "/curso/midjourney-masterclass" },
     ],
   },
   {
-    title: "Avançado",
+    titleKey: "menus.courses.sections.advanced.title",
     items: [
-      { title: "Agentes de IA", href: "/curso/agentes-ia" },
-      { title: "RAG e Knowledge Bases", href: "/curso/rag-knowledge" },
-      { title: "IA em Produção", href: "/curso/ia-producao" },
+      { labelKey: "menus.courses.sections.advanced.items.aiAgents", href: "/curso/agentes-ia" },
+      { labelKey: "menus.courses.sections.advanced.items.ragKnowledge", href: "/curso/rag-knowledge" },
+      { labelKey: "menus.courses.sections.advanced.items.aiInProduction", href: "/curso/ia-producao" },
     ],
   },
 ];
 
 const toolsMenu = [
   {
-    title: "IA Conversacional",
+    titleKey: "menus.tools.sections.conversational.title",
     items: [
-      { title: "ChatGPT", href: "/ferramentas/chatgpt" },
-      { title: "Claude", href: "/ferramentas/claude" },
-      { title: "Gemini", href: "/ferramentas/gemini" },
-      { title: "Perplexity", href: "/ferramentas/perplexity" },
+      { labelKey: "menus.tools.sections.conversational.items.chatgpt", href: "/ferramentas/chatgpt" },
+      { labelKey: "menus.tools.sections.conversational.items.claude", href: "/ferramentas/claude" },
+      { labelKey: "menus.tools.sections.conversational.items.gemini", href: "/ferramentas/gemini" },
+      { labelKey: "menus.tools.sections.conversational.items.perplexity", href: "/ferramentas/perplexity" },
     ],
   },
   {
-    title: "Criação Visual",
+    titleKey: "menus.tools.sections.visual.title",
     items: [
-      { title: "Midjourney", href: "/ferramentas/midjourney" },
-      { title: "DALL-E", href: "/ferramentas/dalle" },
-      { title: "Stable Diffusion", href: "/ferramentas/stable-diffusion" },
-      { title: "Leonardo AI", href: "/ferramentas/leonardo" },
+      { labelKey: "menus.tools.sections.visual.items.midjourney", href: "/ferramentas/midjourney" },
+      { labelKey: "menus.tools.sections.visual.items.dalle", href: "/ferramentas/dalle" },
+      { labelKey: "menus.tools.sections.visual.items.stableDiffusion", href: "/ferramentas/stable-diffusion" },
+      { labelKey: "menus.tools.sections.visual.items.leonardo", href: "/ferramentas/leonardo" },
     ],
   },
   {
-    title: "Automação",
+    titleKey: "menus.tools.sections.automation.title",
     items: [
-      { title: "n8n", href: "/ferramentas/n8n" },
-      { title: "Make", href: "/ferramentas/make" },
-      { title: "Zapier", href: "/ferramentas/zapier" },
-      { title: "Flowise", href: "/ferramentas/flowise" },
+      { labelKey: "menus.tools.sections.automation.items.n8n", href: "/ferramentas/n8n" },
+      { labelKey: "menus.tools.sections.automation.items.make", href: "/ferramentas/make" },
+      { labelKey: "menus.tools.sections.automation.items.zapier", href: "/ferramentas/zapier" },
+      { labelKey: "menus.tools.sections.automation.items.flowise", href: "/ferramentas/flowise" },
     ],
   },
 ];
@@ -78,6 +80,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { user, isLoggedIn, logout, mounted } = useUser();
+  const t = useTranslations("Header");
 
   return (
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border">
@@ -88,7 +91,7 @@ export function Header() {
             href="/" 
             className="text-2xl font-bold text-primary hover:opacity-80 transition"
           >
-            FayaPoint AI
+            {t("logo")}
           </Link>
 
           {/* Desktop Navigation */}
@@ -98,14 +101,14 @@ export function Header() {
                 {/* Cursos Dropdown */}
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent text-foreground/90 hover:text-primary font-medium">
-                    Cursos
+                    {t("nav.courses")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="grid grid-cols-3 gap-4 p-6 w-[600px] bg-gray-900/95 backdrop-blur-xl">
                       {coursesMenu.map((section) => (
-                        <div key={section.title}>
+                        <div key={section.titleKey}>
                           <h3 className="font-semibold text-purple-400 mb-3">
-                            {section.title}
+                            {t(section.titleKey)}
                           </h3>
                           <ul className="space-y-2">
                             {section.items.map((item) => (
@@ -114,7 +117,7 @@ export function Header() {
                                   href={item.href}
                                   className="text-sm text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 block"
                                 >
-                                  {item.title}
+                                  {t(item.labelKey)}
                                 </Link>
                               </li>
                             ))}
@@ -126,7 +129,7 @@ export function Header() {
                           href="/cursos"
                           className="text-purple-400 hover:text-purple-300 font-medium flex items-center gap-2"
                         >
-                          Ver Todos os Cursos
+                          {t("menus.courses.viewAll")}
                           <ChevronDown className="w-4 h-4 -rotate-90" />
                         </Link>
                       </div>
@@ -137,14 +140,14 @@ export function Header() {
                 {/* Ferramentas Dropdown */}
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent text-foreground/90 hover:text-primary font-medium">
-                    Ferramentas
+                    {t("nav.tools")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="grid grid-cols-3 gap-4 p-6 w-[600px] bg-gray-900/95 backdrop-blur-xl">
                       {toolsMenu.map((section) => (
-                        <div key={section.title}>
+                        <div key={section.titleKey}>
                           <h3 className="font-semibold text-purple-400 mb-3">
-                            {section.title}
+                            {t(section.titleKey)}
                           </h3>
                           <ul className="space-y-2">
                             {section.items.map((item) => (
@@ -153,7 +156,7 @@ export function Header() {
                                   href={item.href}
                                   className="text-sm text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 block"
                                 >
-                                  {item.title}
+                                  {t(item.labelKey)}
                                 </Link>
                               </li>
                             ))}
@@ -165,7 +168,7 @@ export function Header() {
                           href="/ferramentas"
                           className="text-purple-400 hover:text-purple-300 font-medium flex items-center gap-2"
                         >
-                          Ver Todas as Ferramentas
+                          {t("menus.tools.viewAll")}
                           <ChevronDown className="w-4 h-4 -rotate-90" />
                         </Link>
                       </div>
@@ -181,7 +184,7 @@ export function Header() {
                       ? "text-primary" 
                       : "text-foreground/90 hover:text-primary"
                   )}>
-                    Blog
+                    {t("nav.blog")}
                   </Link>
                 </NavigationMenuItem>
 
@@ -192,7 +195,7 @@ export function Header() {
                       ? "text-primary" 
                       : "text-foreground/90 hover:text-primary"
                   )}>
-                    Sobre
+                    {t("nav.about")}
                   </Link>
                 </NavigationMenuItem>
 
@@ -203,7 +206,7 @@ export function Header() {
                       ? "text-primary" 
                       : "text-foreground/90 hover:text-primary"
                   )}>
-                    Comunidade
+                    {t("nav.community")}
                   </Link>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -212,12 +215,13 @@ export function Header() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
+            <LocaleSwitcher />
             <ThemeSwitcher />
             {mounted && isLoggedIn && user ? (
               <>
                 <div className="flex items-center gap-2 text-foreground/80">
                   <UserCircle size={20} />
-                  <span className="text-sm">Olá, {user.name.split(' ')[0]}!</span>
+                  <span className="text-sm">{t("auth.greeting", { name: user.name.split(" ")[0] })}</span>
                 </div>
                 <Button 
                   variant="ghost" 
@@ -226,19 +230,19 @@ export function Header() {
                   className="text-foreground/80 hover:text-foreground"
                 >
                   <LogOut size={16} className="mr-2" />
-                  Sair
+                  {t("buttons.signOut")}
                 </Button>
               </>
             ) : mounted ? (
               <>
                 <Link href="/onboarding">
                   <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
-                    Entrar
+                    {t("buttons.signIn")}
                   </Button>
                 </Link>
                 <Link href="/onboarding">
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                    Começar Grátis
+                    {t("buttons.startFree")}
                   </Button>
                 </Link>
               </>
@@ -258,7 +262,8 @@ export function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-16 left-0 right-0 bg-popover/95 backdrop-blur-xl border-b border-border">
             <div className="px-4 py-6 space-y-4">
-              <div className="pb-2">
+              <div className="pb-2 flex items-center gap-3">
+                <LocaleSwitcher />
                 <ThemeSwitcher />
               </div>
               <Link
@@ -301,7 +306,7 @@ export function Header() {
                   <>
                     <div className="flex items-center gap-2 text-foreground/80 px-4 py-2">
                       <UserCircle size={20} />
-                      <span className="text-sm">Olá, {user.name.split(' ')[0]}!</span>
+                      <span className="text-sm">{t("auth.greeting", { name: user.name.split(" ")[0] })}</span>
                     </div>
                     <Button 
                       variant="outline" 
@@ -312,19 +317,19 @@ export function Header() {
                       }}
                     >
                       <LogOut size={16} className="mr-2" />
-                      Sair
+                      {t("buttons.signOut")}
                     </Button>
                   </>
                 ) : mounted ? (
                   <>
                     <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="outline" className="w-full">
-                        Entrar
+                        {t("buttons.signIn")}
                       </Button>
                     </Link>
                     <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)}>
                       <Button className="w-full bg-primary text-primary-foreground">
-                        Começar Grátis
+                        {t("buttons.startFree")}
                       </Button>
                     </Link>
                   </>

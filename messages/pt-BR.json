@@ -1,0 +1,453 @@
+{
+  "LocaleLayout": {
+    "title": "FayaPoint AI Academy"
+  },
+  "Header": {
+    "logo": "FayaPoint AI",
+    "nav": {
+      "courses": "Cursos",
+      "tools": "Ferramentas",
+      "blog": "Blog",
+      "about": "Sobre",
+      "community": "Comunidade"
+    },
+    "menus": {
+      "courses": {
+        "viewAll": "Ver Todos os Cursos",
+        "sections": {
+          "beginner": {
+            "title": "Iniciante",
+            "items": {
+              "chatgptZero": "ChatGPT do Zero",
+              "firstAutomations": "Primeiras Automações",
+              "everydayAI": "IA para o Dia a Dia"
+            }
+          },
+          "intermediate": {
+            "title": "Intermediário",
+            "items": {
+              "promptEngineering": "Prompt Engineering",
+              "n8nAutomation": "Automação com n8n",
+              "midjourneyMasterclass": "Midjourney Masterclass"
+            }
+          },
+          "advanced": {
+            "title": "Avançado",
+            "items": {
+              "aiAgents": "Agentes de IA",
+              "ragKnowledge": "RAG e Knowledge Bases",
+              "aiInProduction": "IA em Produção"
+            }
+          }
+        }
+      },
+      "tools": {
+        "viewAll": "Ver Todas as Ferramentas",
+        "sections": {
+          "conversational": {
+            "title": "IA Conversacional",
+            "items": {
+              "chatgpt": "ChatGPT",
+              "claude": "Claude",
+              "gemini": "Gemini",
+              "perplexity": "Perplexity"
+            }
+          },
+          "visual": {
+            "title": "Criação Visual",
+            "items": {
+              "midjourney": "Midjourney",
+              "dalle": "DALL-E",
+              "stableDiffusion": "Stable Diffusion",
+              "leonardo": "Leonardo AI"
+            }
+          },
+          "automation": {
+            "title": "Automação",
+            "items": {
+              "n8n": "n8n",
+              "make": "Make",
+              "zapier": "Zapier",
+              "flowise": "Flowise"
+            }
+          }
+        }
+      }
+    },
+    "buttons": {
+      "signIn": "Entrar",
+      "startFree": "Começar Grátis",
+      "signOut": "Sair"
+    },
+    "auth": {
+      "greeting": "Olá, {name}!"
+    }
+  },
+  "Footer": {
+    "newsletter": {
+      "title": "Receba as Novidades de IA Toda Semana",
+      "description": "Junte-se a mais de 5.000 profissionais que recebem nossa newsletter com dicas, ferramentas e estratégias de IA.",
+      "placeholder": "seu@email.com",
+      "cta": "Inscrever"
+    },
+    "company": {
+      "tagline": "A plataforma definitiva para dominar Inteligência Artificial no Brasil. Transforme sua carreira com conhecimento prático e aplicado.",
+      "location": "Rio de Janeiro, Brasil"
+    },
+    "links": {
+      "courses": {
+        "title": "Cursos",
+        "items": {
+          "beginner": "Iniciantes",
+          "intermediate": "Intermediário",
+          "advanced": "Avançado",
+          "byTool": "Por Ferramenta",
+          "byIndustry": "Por Setor",
+          "certifications": "Certificações"
+        }
+      },
+      "resources": {
+        "title": "Recursos",
+        "items": {
+          "blog": "Blog",
+          "guides": "Guias Gratuitos",
+          "templates": "Templates",
+          "roiCalculator": "Calculadora ROI",
+          "glossary": "Glossário IA",
+          "apiDocs": "API Docs"
+        }
+      },
+      "company": {
+        "title": "Empresa",
+        "items": {
+          "about": "Sobre Nós",
+          "instructors": "Instrutores",
+          "careers": "Carreiras",
+          "partnerships": "Parcerias",
+          "affiliates": "Afiliados",
+          "contact": "Contato"
+        }
+      },
+      "support": {
+        "title": "Suporte",
+        "items": {
+          "helpCenter": "Central de Ajuda",
+          "faq": "FAQ",
+          "community": "Comunidade",
+          "status": "Status",
+          "terms": "Termos de Uso",
+          "privacy": "Privacidade"
+        }
+      }
+    },
+    "bottom": {
+      "rights": "© 2025 FayaPoint AI Academy. Todos os direitos reservados.",
+      "paymentsLabel": "Pagamento Seguro:"
+    }
+  },
+  "Home": {
+    "Hero": {
+      "badge": "Nova Era da Educação em IA no Brasil",
+      "headline": {
+        "prefix": "Domine a",
+        "prefixLogged": "{name}, domine a",
+        "highlight": "Inteligência Artificial",
+        "suffix": "e Transforme sua Carreira"
+      },
+      "subheading": {
+        "returning": "Ótimo te ver aqui de novo, <primary>{name}</primary>! Continue sua jornada de aprendizado com nossos cursos práticos de <primary>ChatGPT</primary>, <primary>Midjourney</primary>, automação e mais de <accent>100 ferramentas de IA</accent>.",
+        "guest": "Aprenda com quem tem <primary>28+ anos</primary> de experiência em mídia e tecnologia. Cursos práticos de <primary>ChatGPT</primary>, <primary>Midjourney</primary>, automação e mais de <accent>100 ferramentas de IA</accent>."
+      },
+      "cta": {
+        "watchClass": "Assistir Aula Grátis",
+        "viewCourses": "Ver Todos os Cursos"
+      },
+      "stats": {
+        "students": "Alunos",
+        "courses": "Cursos",
+        "completion": "Conclusão",
+        "rating": "Avaliação",
+        "ratingValue": "4.9/5"
+      }
+    },
+    "AIToolsMarquee": {
+      "badge": "+100 Ferramentas de IA",
+      "subtitle": "Domine mais de 100 ferramentas de IA com nossos cursos especializados",
+      "linkLabel": "Ver ferramenta",
+      "tools": {
+        "chatgpt": {
+          "name": "ChatGPT",
+          "description": "Assistente de IA conversacional mais avançado",
+          "category": "IA Generativa"
+        },
+        "claude": {
+          "name": "Claude",
+          "description": "IA conversacional da Anthropic com raciocínio avançado",
+          "category": "IA Generativa"
+        },
+        "midjourney": {
+          "name": "Midjourney",
+          "description": "Gerador de imagens com qualidade artística",
+          "category": "Criação Visual"
+        },
+        "dalle3": {
+          "name": "DALL-E 3",
+          "description": "Criação de imagens fotorealistas da OpenAI",
+          "category": "Criação Visual"
+        },
+        "perplexity": {
+          "name": "Perplexity",
+          "description": "Motor de busca potencializado por IA",
+          "category": "IA Generativa"
+        },
+        "gemini": {
+          "name": "Gemini",
+          "description": "IA multimodal do Google",
+          "category": "IA Generativa"
+        },
+        "stableDiffusion": {
+          "name": "Stable Diffusion",
+          "description": "Modelo open-source de geração de imagens",
+          "category": "Criação Visual"
+        },
+        "runwayml": {
+          "name": "RunwayML",
+          "description": "Ferramentas criativas de IA para vídeo e imagem",
+          "category": "Criação Visual"
+        },
+        "elevenlabs": {
+          "name": "ElevenLabs",
+          "description": "Síntese de voz ultra-realista",
+          "category": "Áudio"
+        },
+        "suno": {
+          "name": "Suno",
+          "description": "Geração de música completa com IA",
+          "category": "Áudio"
+        },
+        "githubCopilot": {
+          "name": "GitHub Copilot",
+          "description": "Assistente de programação da GitHub",
+          "category": "Código"
+        },
+        "cursor": {
+          "name": "Cursor",
+          "description": "IDE com IA integrada",
+          "category": "Código"
+        },
+        "n8n": {
+          "name": "n8n",
+          "description": "Automação de workflows com nodes visuais",
+          "category": "Automação"
+        },
+        "make": {
+          "name": "Make",
+          "description": "Automação visual de processos (ex-Integromat)",
+          "category": "Automação"
+        },
+        "zapier": {
+          "name": "Zapier",
+          "description": "Conecte apps e automatize workflows",
+          "category": "Automação"
+        },
+        "flowise": {
+          "name": "Flowise",
+          "description": "Construa agentes LLM com interface visual",
+          "category": "Agentes"
+        },
+        "notebooklm": {
+          "name": "NotebookLM",
+          "description": "Assistente de pesquisa do Google",
+          "category": "Produtividade"
+        },
+        "pikaLabs": {
+          "name": "Pika Labs",
+          "description": "Geração de vídeos com IA",
+          "category": "Criação Visual"
+        }
+      }
+    },
+    "Features": {
+      "badge": "Transforme desafios em oportunidades",
+      "title": "Seus Desafios, Nossas Soluções",
+      "description": "Sabemos exatamente o que você está enfrentando",
+      "withoutTitle": "Sem a FayaPoint",
+      "withTitle": "Com a FayaPoint",
+      "problems": [
+        "Perdido com tantas ferramentas de IA disponíveis",
+        "Gastando horas em tarefas repetitivas",
+        "Ficando para trás da concorrência",
+        "Pagando caro por consultorias fragmentadas",
+        "Sem saber medir o ROI da IA"
+      ],
+      "solutions": [
+        "Dominando as melhores ferramentas de IA do mercado",
+        "Automatizando 80% das tarefas repetitivas",
+        "Liderando a transformação digital",
+        "Aprendendo com quem realmente entende do assunto",
+        "ROI comprovado em menos de 30 dias"
+      ]
+    },
+    "CourseCategories": {
+      "title": "Trilhas de Aprendizado Completas",
+      "description": "Mais de 150 cursos organizados para seu sucesso",
+      "coursesLabel": "{count} cursos",
+      "exploreButton": "Explorar",
+      "allCoursesCta": "Ver Todos os Cursos",
+      "categories": {
+        "generativeAI": {
+          "title": "IA Generativa",
+          "description": "ChatGPT, Claude, Gemini e prompts avançados"
+        },
+        "visualCreation": {
+          "title": "Criação Visual",
+          "description": "Midjourney, DALL-E, Stable Diffusion"
+        },
+        "automation": {
+          "title": "Automação",
+          "description": "n8n, Make, Zapier, APIs e integrações"
+        },
+        "agents": {
+          "title": "Agentes de IA",
+          "description": "AutoGPT, AgentGPT, Custom Agents"
+        },
+        "data": {
+          "title": "Análise de Dados",
+          "description": "Julius AI, DataRobot, análise sem código"
+        },
+        "business": {
+          "title": "IA para Negócios",
+          "description": "ROI, implementação, casos práticos"
+        }
+      }
+    },
+    "Testimonials": {
+      "badge": "+5000 Alunos Transformados",
+      "title": "Histórias de Transformação",
+      "description": "Veja o que nossos alunos conquistaram com o poder da IA",
+      "ctaLabel": "Seja o próximo caso de sucesso",
+      "ctaButton": "Começar Agora",
+      "items": {
+        "ana": {
+          "name": "Ana Silva",
+          "role": "CEO, TechStart",
+          "content": "Implementei IA na minha empresa e reduzi 40% dos custos operacionais. Os cursos do Ricardo são práticos e diretos ao ponto."
+        },
+        "carlos": {
+          "name": "Carlos Mendes",
+          "role": "Criador de Conteúdo",
+          "content": "Triplicei minha produção de conteúdo usando as técnicas ensinadas. Agora uso IA diariamente no meu workflow."
+        },
+        "juliana": {
+          "name": "Juliana Costa",
+          "role": "Gerente de Marketing",
+          "content": "O ROI foi imediato! Em 2 meses já havia economizado o valor investido em todos os cursos."
+        },
+        "pedro": {
+          "name": "Pedro Santos",
+          "role": "Desenvolvedor Full Stack",
+          "content": "As aulas de automação com n8n mudaram completamente minha forma de trabalhar. Economizo 20 horas por semana!"
+        },
+        "mariana": {
+          "name": "Mariana Oliveira",
+          "role": "Designer Freelancer",
+          "content": "Midjourney e DALL-E viraram minhas ferramentas principais. Consigo entregar projetos 3x mais rápido."
+        },
+        "roberto": {
+          "name": "Roberto Lima",
+          "role": "Consultor Empresarial",
+          "content": "A visão estratégica sobre IA que aprendi aqui me diferencia completamente no mercado."
+        }
+      }
+    },
+    "CTA": {
+      "badge": "Transforme Sua Carreira Agora",
+      "title": "Pronto para Dominar a IA?",
+      "description": "Junte-se a mais de <primary>5.000 profissionais</primary> que já transformaram suas carreiras. Comece agora e descubra o poder da Inteligência Artificial.",
+      "primaryButton": "Começar Minha Jornada",
+      "secondaryButton": "Agendar Consultoria Grátis",
+      "trust": {
+        "items": [
+          {
+            "title": "Sem cartão de crédito",
+            "description": "Começar é 100% gratuito"
+          },
+          {
+            "title": "Acesso imediato",
+            "description": "Comece agora mesmo"
+          },
+          {
+            "title": "Garantia de 30 dias",
+            "description": "Risco zero para você"
+          }
+        ]
+      },
+      "whatsapp": {
+        "prompt": "Prefere conversar primeiro?",
+        "linkLabel": "Fale conosco no WhatsApp",
+        "message": "Olá! Gostaria de saber mais sobre os cursos de IA da FayaPoint."
+      }
+    },
+    "Pricing": {
+      "title": "Investimento que se Paga",
+      "description": "Escolha o plano ideal para sua jornada",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "price": "47",
+          "period": "/mês",
+          "description": "Perfeito para começar sua jornada",
+          "features": [
+            "5 cursos básicos por mês",
+            "Acesso à comunidade",
+            "Certificados de conclusão",
+            "Suporte por email",
+            "Material de apoio"
+          ],
+          "cta": "Começar Agora",
+          "href": "/checkout/starter"
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "197",
+          "period": "/mês",
+          "description": "Para profissionais sérios sobre IA",
+          "features": [
+            "Acesso ilimitado a todos os cursos",
+            "Mentorias em grupo mensais",
+            "Projetos práticos exclusivos",
+            "Suporte prioritário",
+            "Templates e automações prontas",
+            "Acesso antecipado a novos cursos",
+            "Descontos em ferramentas parceiras"
+          ],
+          "highlighted": true,
+          "badge": "MAIS POPULAR",
+          "cta": "Escolher Pro",
+          "href": "/checkout/pro"
+        },
+        "business": {
+          "name": "Business",
+          "price": "497",
+          "period": "/mês",
+          "description": "Transforme sua empresa com IA",
+          "features": [
+            "Tudo do plano Pro",
+            "Consultoria individual mensal",
+            "Treinamento para sua equipe",
+            "Implementação personalizada",
+            "Dashboard de métricas",
+            "Acesso via API",
+            "Opções white-label",
+            "Suporte 24/7 via WhatsApp"
+          ],
+          "cta": "Falar com Vendas",
+          "href": "/contato/vendas"
+        }
+      },
+      "guarantee": "Garantia de 30 dias",
+      "rating": "4.9/5 de avaliação",
+      "footnote": "Cancele quando quiser • Sem multas • Sem pegadinhas"
+    }
+  }
+}

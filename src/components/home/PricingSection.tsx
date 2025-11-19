@@ -7,65 +7,27 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { useTranslations } from "next-intl";
 
-const plans = [
-  {
-    name: "Starter",
-    price: "47",
-    period: "/mês",
-    description: "Perfeito para começar sua jornada",
-    features: [
-      "5 cursos básicos por mês",
-      "Acesso à comunidade",
-      "Certificados de conclusão",
-      "Suporte por email",
-      "Material de apoio",
-    ],
-    highlighted: false,
-    cta: "Começar Agora",
-    href: "/checkout/starter",
-  },
-  {
-    name: "Pro",
-    price: "197",
-    period: "/mês",
-    description: "Para profissionais sérios sobre IA",
-    features: [
-      "Acesso ilimitado a todos os cursos",
-      "Mentorias em grupo mensais",
-      "Projetos práticos exclusivos",
-      "Suporte prioritário",
-      "Templates e automações prontas",
-      "Acesso antecipado a novos cursos",
-      "Descontos em ferramentas parceiras",
-    ],
-    highlighted: true,
-    badge: "MAIS POPULAR",
-    cta: "Escolher Pro",
-    href: "/checkout/pro",
-  },
-  {
-    name: "Business",
-    price: "497",
-    period: "/mês",
-    description: "Transforme sua empresa com IA",
-    features: [
-      "Tudo do plano Pro",
-      "Consultoria individual mensal",
-      "Treinamento para sua equipe",
-      "Implementação personalizada",
-      "Dashboard de métricas",
-      "API access",
-      "White-label options",
-      "Suporte 24/7 via WhatsApp",
-    ],
-    highlighted: false,
-    cta: "Falar com Vendas",
-    href: "/contato/vendas",
-  },
-];
+const planKeys = ["starter", "pro", "business"] as const;
 
 export function PricingSection() {
+  const t = useTranslations("Home.Pricing");
+  const plans = planKeys.map((key) => {
+    const plan = t.raw(`plans.${key}`) as {
+      name: string;
+      price: string;
+      period: string;
+      description: string;
+      features: string[];
+      highlighted?: boolean;
+      badge?: string;
+      cta: string;
+      href: string;
+    };
+    return { key, highlighted: false, ...plan };
+  });
+
   return (
     <section className="py-20 relative bg-gradient-to-b from-background to-muted/30">
       <SectionDivider icon={DollarSign} />
@@ -78,10 +40,10 @@ export function PricingSection() {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            Investimento que se Paga
+            {t("title")}
           </h2>
           <p className="text-xl text-muted-foreground">
-            Escolha o plano ideal para sua jornada
+            {t("description")}
           </p>
         </motion.div>
 
@@ -224,7 +186,7 @@ export function PricingSection() {
               transition={{ type: "spring" }}
             >
               <Shield className="w-5 h-5 text-primary" />
-              <span>Garantia de 30 dias</span>
+              <span>{t("guarantee")}</span>
             </motion.div>
             <motion.div 
               className="flex items-center gap-2 text-muted-foreground"
@@ -232,11 +194,11 @@ export function PricingSection() {
               transition={{ type: "spring" }}
             >
               <Star className="w-5 h-5 text-primary fill-primary" />
-              <span>4.9/5 de avaliação</span>
+              <span>{t("rating")}</span>
             </motion.div>
           </div>
           <p className="text-sm text-muted-foreground/70">
-            Cancele quando quiser • Sem multas • Sem pegadinhas
+            {t("footnote")}
           </p>
         </motion.div>
       </div>

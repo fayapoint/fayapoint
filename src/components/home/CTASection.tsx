@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Rocket, MessageCircle, Calendar, Sparkles, Star, CheckCircle2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 // Generate consistent particle positions
 const generateParticles = () => {
@@ -21,6 +22,14 @@ const generateParticles = () => {
 export function CTASection() {
   const [mounted, setMounted] = useState(false);
   const particles = useMemo(() => generateParticles(), []);
+  const t = useTranslations("Home.CTA");
+  const trustItems = t.raw("trust.items") as { title: string; description: string }[];
+  const trustIcons = [CheckCircle2, Zap, Star];
+  const description = t.rich("description", {
+    primary: (chunks) => <span className="text-primary font-bold">{chunks}</span>,
+  });
+  const whatsappMessage = encodeURIComponent(t("whatsapp.message"));
+  const whatsappUrl = `https://wa.me/5521971908530?text=${whatsappMessage}`;
 
   useEffect(() => {
     setMounted(true);
@@ -99,7 +108,7 @@ export function CTASection() {
           >
             <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-6 py-3">
               <Sparkles className="w-5 h-5 text-primary" />
-              <span className="text-primary font-semibold">Transforme Sua Carreira Agora</span>
+              <span className="text-primary font-semibold">{t("badge")}</span>
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
           </motion.div>
@@ -112,7 +121,7 @@ export function CTASection() {
             transition={{ delay: 0.3 }}
           >
             <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              Pronto para Dominar a IA?
+              {t("title")}
             </span>
           </motion.h2>
           
@@ -122,8 +131,7 @@ export function CTASection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            Junte-se a mais de <span className="text-primary font-bold">5.000 profissionais</span> que já transformaram suas carreiras.
-            Comece agora e descubra o poder da Inteligência Artificial.
+            {description}
           </motion.p>
           
           {/* CTA Buttons */}
@@ -142,7 +150,7 @@ export function CTASection() {
                 >
                   <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                   <Rocket className="mr-2 group-hover:rotate-12 transition-transform" /> 
-                  <span>Começar Minha Jornada</span>
+                  <span>{t("primaryButton")}</span>
                   <Zap className="ml-2 w-5 h-5 group-hover:scale-125 transition-transform" />
                 </Button>
               </Link>
@@ -162,7 +170,7 @@ export function CTASection() {
                   className="border-2 border-primary text-foreground hover:bg-primary/10 text-lg px-12 py-8 shadow-lg hover:shadow-xl hover:border-primary transition-all duration-300"
                 >
                   <Calendar className="mr-2" /> 
-                  Agendar Consultoria Grátis
+                  {t("secondaryButton")}
                 </Button>
               </Link>
             </motion.div>
@@ -175,23 +183,22 @@ export function CTASection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
           >
-            {[
-              { icon: CheckCircle2, text: "Sem cartão de crédito", desc: "Começar é 100% gratuito" },
-              { icon: Zap, text: "Acesso imediato", desc: "Comece agora mesmo" },
-              { icon: Star, text: "Garantia de 30 dias", desc: "Risco zero para você" },
-            ].map((item, i) => (
+            {trustItems.map((item, i) => {
+              const Icon = trustIcons[i % trustIcons.length];
+              return (
               <motion.div
-                key={i}
+                key={`${item.title}-${i}`}
                 whileHover={{ scale: 1.05, y: -4 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Card className="p-6 bg-card/50 border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 text-center">
-                  <item.icon className="w-10 h-10 text-primary mx-auto mb-3" />
-                  <h4 className="font-bold text-foreground mb-1">{item.text}</h4>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  <Icon className="w-10 h-10 text-primary mx-auto mb-3" />
+                  <h4 className="font-bold text-foreground mb-1">{item.title}</h4>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
                 </Card>
               </motion.div>
-            ))}
+            );
+            })}
           </motion.div>
 
           {/* WhatsApp Contact - Enhanced */}
@@ -213,14 +220,14 @@ export function CTASection() {
                     <MessageCircle className="w-8 h-8 text-white" />
                   </div>
                 </motion.div>
-                <p className="text-muted-foreground mb-4 font-medium">Prefere conversar primeiro?</p>
+                <p className="text-muted-foreground mb-4 font-medium">{t("whatsapp.prompt")}</p>
                 <a 
-                  href="https://wa.me/5521971908530?text=Olá! Gostaria de saber mais sobre os cursos de IA da FayaPoint."
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-green-500 hover:text-green-400 transition-colors font-bold text-lg"
                 >
-                  <span>Fale conosco no WhatsApp</span>
+                  <span>{t("whatsapp.linkLabel")}</span>
                   <motion.div
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}

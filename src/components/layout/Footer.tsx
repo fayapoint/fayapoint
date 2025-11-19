@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { 
   Facebook, 
   Instagram, 
@@ -14,36 +15,36 @@ import { Input } from "@/components/ui/input";
 
 const footerLinks = {
   cursos: [
-    { title: "Iniciantes", href: "/cursos?level=beginner" },
-    { title: "Intermediário", href: "/cursos?level=intermediate" },
-    { title: "Avançado", href: "/cursos?level=advanced" },
-    { title: "Por Ferramenta", href: "/cursos/por-ferramenta" },
-    { title: "Por Setor", href: "/cursos/por-setor" },
-    { title: "Certificações", href: "/certificacoes" },
+    { key: "links.courses.items.beginner", href: "/cursos?level=beginner" },
+    { key: "links.courses.items.intermediate", href: "/cursos?level=intermediate" },
+    { key: "links.courses.items.advanced", href: "/cursos?level=advanced" },
+    { key: "links.courses.items.byTool", href: "/cursos/por-ferramenta" },
+    { key: "links.courses.items.byIndustry", href: "/cursos/por-setor" },
+    { key: "links.courses.items.certifications", href: "/certificacoes" },
   ],
   recursos: [
-    { title: "Blog", href: "/blog" },
-    { title: "Guias Gratuitos", href: "/recursos/guias" },
-    { title: "Templates", href: "/recursos/templates" },
-    { title: "Calculadora ROI", href: "/recursos/calculadora-roi" },
-    { title: "Glossário IA", href: "/recursos/glossario" },
-    { title: "API Docs", href: "/api-docs" },
+    { key: "links.resources.items.blog", href: "/blog" },
+    { key: "links.resources.items.guides", href: "/recursos/guias" },
+    { key: "links.resources.items.templates", href: "/recursos/templates" },
+    { key: "links.resources.items.roiCalculator", href: "/recursos/calculadora-roi" },
+    { key: "links.resources.items.glossary", href: "/recursos/glossario" },
+    { key: "links.resources.items.apiDocs", href: "/api-docs" },
   ],
   empresa: [
-    { title: "Sobre Nós", href: "/sobre" },
-    { title: "Instrutores", href: "/instrutores" },
-    { title: "Carreiras", href: "/carreiras" },
-    { title: "Parcerias", href: "/parcerias" },
-    { title: "Afiliados", href: "/afiliados" },
-    { title: "Contato", href: "/contato" },
+    { key: "links.company.items.about", href: "/sobre" },
+    { key: "links.company.items.instructors", href: "/instrutores" },
+    { key: "links.company.items.careers", href: "/carreiras" },
+    { key: "links.company.items.partnerships", href: "/parcerias" },
+    { key: "links.company.items.affiliates", href: "/afiliados" },
+    { key: "links.company.items.contact", href: "/contato" },
   ],
   suporte: [
-    { title: "Central de Ajuda", href: "/ajuda" },
-    { title: "FAQ", href: "/faq" },
-    { title: "Comunidade", href: "/comunidade" },
-    { title: "Status", href: "/status" },
-    { title: "Termos de Uso", href: "/termos" },
-    { title: "Privacidade", href: "/privacidade" },
+    { key: "links.support.items.helpCenter", href: "/ajuda" },
+    { key: "links.support.items.faq", href: "/faq" },
+    { key: "links.support.items.community", href: "/comunidade" },
+    { key: "links.support.items.status", href: "/status" },
+    { key: "links.support.items.terms", href: "/termos" },
+    { key: "links.support.items.privacy", href: "/privacidade" },
   ],
 };
 
@@ -56,6 +57,8 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const t = useTranslations("Footer");
+
   return (
     <footer className="bg-background border-t border-border">
       {/* Newsletter Section */}
@@ -63,20 +66,19 @@ export function Footer() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-2xl font-bold mb-4">
-              Receba as Novidades de IA Toda Semana
+              {t("newsletter.title")}
             </h3>
             <p className="text-gray-400 mb-6">
-              Junte-se a mais de 5.000 profissionais que recebem nossa newsletter
-              com dicas, ferramentas e estratégias de IA.
+              {t("newsletter.description")}
             </p>
             <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <Input
                 type="email"
-                placeholder="seu@email.com"
+                placeholder={t("newsletter.placeholder")}
                 className="flex-1 bg-input border-border"
               />
               <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                Inscrever
+                {t("newsletter.cta")}
               </Button>
             </form>
           </div>
@@ -94,8 +96,7 @@ export function Footer() {
               </h2>
             </Link>
             <p className="text-gray-400 mb-4">
-              A plataforma definitiva para dominar Inteligência Artificial no Brasil.
-              Transforme sua carreira com conhecimento prático e aplicado.
+              {t("company.tagline")}
             </p>
             <div className="space-y-2 text-gray-400">
               <div className="flex items-center gap-2">
@@ -112,14 +113,14 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>Rio de Janeiro, Brasil</span>
+                <span>{t("company.location")}</span>
               </div>
             </div>
           </div>
 
           {/* Links Sections */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Cursos</h4>
+            <h4 className="font-semibold text-white mb-4">{t("links.courses.title")}</h4>
             <ul className="space-y-2">
               {footerLinks.cursos.map((link) => (
                 <li key={link.href}>
@@ -127,7 +128,7 @@ export function Footer() {
                     href={link.href}
                     className="text-gray-400 hover:text-white transition"
                   >
-                    {link.title}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -135,7 +136,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-4">Recursos</h4>
+            <h4 className="font-semibold text-white mb-4">{t("links.resources.title")}</h4>
             <ul className="space-y-2">
               {footerLinks.recursos.map((link) => (
                 <li key={link.href}>
@@ -143,7 +144,7 @@ export function Footer() {
                     href={link.href}
                     className="text-gray-400 hover:text-white transition"
                   >
-                    {link.title}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -151,7 +152,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-4">Empresa</h4>
+            <h4 className="font-semibold text-white mb-4">{t("links.company.title")}</h4>
             <ul className="space-y-2">
               {footerLinks.empresa.map((link) => (
                 <li key={link.href}>
@@ -159,7 +160,7 @@ export function Footer() {
                     href={link.href}
                     className="text-gray-400 hover:text-white transition"
                   >
-                    {link.title}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -167,7 +168,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-4">Suporte</h4>
+            <h4 className="font-semibold text-white mb-4">{t("links.support.title")}</h4>
             <ul className="space-y-2">
               {footerLinks.suporte.map((link) => (
                 <li key={link.href}>
@@ -175,7 +176,7 @@ export function Footer() {
                     href={link.href}
                     className="text-gray-400 hover:text-white transition"
                   >
-                    {link.title}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -187,7 +188,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-gray-400 text-sm">
-              © 2025 FayaPoint AI Academy. Todos os direitos reservados.
+              {t("bottom.rights")}
             </div>
             
             {/* Social Links */}
@@ -208,7 +209,7 @@ export function Footer() {
 
             {/* Payment Methods */}
             <div className="flex items-center gap-4 text-gray-400 text-sm">
-              <span>Pagamento Seguro:</span>
+              <span>{t("bottom.paymentsLabel")}</span>
               <div className="flex gap-2">
                 <span>Visa</span>
                 <span>Master</span>

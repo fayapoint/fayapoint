@@ -6,139 +6,120 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { ExternalLink, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface AITool {
-  name: string;
-  description: string;
-  category: string;
-  logo: string; // Emoji or icon representing the tool
+  key:
+    | "chatgpt"
+    | "claude"
+    | "midjourney"
+    | "dalle3"
+    | "perplexity"
+    | "gemini"
+    | "stableDiffusion"
+    | "runwayml"
+    | "elevenlabs"
+    | "suno"
+    | "githubCopilot"
+    | "cursor"
+    | "n8n"
+    | "make"
+    | "zapier"
+    | "flowise"
+    | "notebooklm"
+    | "pikaLabs";
+  logo: string;
   slug: string;
 }
 
 const aiTools: AITool[] = [
   { 
-    name: "ChatGPT", 
-    description: "Assistente de IA conversacional mais avançado", 
-    category: "IA Generativa", 
+    key: "chatgpt",
     logo: "https://cdn.oaistatic.com/_next/static/media/apple-touch-icon.82af6fe1.png",
     slug: "chatgpt" 
   },
   { 
-    name: "Claude", 
-    description: "IA conversacional da Anthropic com raciocínio avançado", 
-    category: "IA Generativa", 
+    key: "claude",
     logo: "https://claude.ai/images/claude_app_icon.png",
     slug: "claude" 
   },
   { 
-    name: "Midjourney", 
-    description: "Gerador de imagens com qualidade artística", 
-    category: "Criação Visual", 
+    key: "midjourney",
     logo: "https://cdn.midjourney.com/logo/logo-midjourney.svg",
     slug: "midjourney" 
   },
   { 
-    name: "DALL-E 3", 
-    description: "Criação de imagens fotorealistas da OpenAI", 
-    category: "Criação Visual", 
+    key: "dalle3",
     logo: "https://cdn.oaistatic.com/_next/static/media/apple-touch-icon.82af6fe1.png",
     slug: "dall-e" 
   },
   { 
-    name: "Perplexity", 
-    description: "Motor de busca potencializado por IA", 
-    category: "IA Generativa", 
+    key: "perplexity",
     logo: "https://www.perplexity.ai/favicon.svg",
     slug: "perplexity" 
   },
   { 
-    name: "Gemini", 
-    description: "IA multimodal do Google", 
-    category: "IA Generativa", 
+    key: "gemini",
     logo: "https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg",
     slug: "gemini" 
   },
   { 
-    name: "Stable Diffusion", 
-    description: "Modelo open-source de geração de imagens", 
-    category: "Criação Visual", 
+    key: "stableDiffusion",
     logo: "https://stability.ai/favicon.ico",
     slug: "stable-diffusion" 
   },
   { 
-    name: "RunwayML", 
-    description: "Ferramentas criativas de IA para vídeo e imagem", 
-    category: "Criação Visual", 
+    key: "runwayml",
     logo: "https://runwayml.com/favicon.ico",
     slug: "runwayml" 
   },
   { 
-    name: "ElevenLabs", 
-    description: "Síntese de voz ultra-realista", 
-    category: "Áudio", 
+    key: "elevenlabs",
     logo: "https://elevenlabs.io/favicon.ico",
     slug: "elevenlabs" 
   },
   { 
-    name: "Suno", 
-    description: "Geração de música completa com IA", 
-    category: "Áudio", 
+    key: "suno",
     logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='75' font-size='80'%3E🎵%3C/text%3E%3C/svg%3E",
     slug: "suno" 
   },
   { 
-    name: "GitHub Copilot", 
-    description: "Assistente de programação da GitHub", 
-    category: "Código", 
+    key: "githubCopilot",
     logo: "https://github.githubassets.com/favicons/favicon.svg",
     slug: "github-copilot" 
   },
   { 
-    name: "Cursor", 
-    description: "IDE com IA integrada", 
-    category: "Código", 
+    key: "cursor",
     logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23FF6B00'%3E%3Cpolygon points='50,10 90,90 10,90'/%3E%3C/svg%3E",
     slug: "cursor" 
   },
   { 
-    name: "n8n", 
-    description: "Automação de workflows com nodes visuais", 
-    category: "Automação", 
+    key: "n8n",
     logo: "https://n8n.io/favicon.ico",
     slug: "n8n" 
   },
   { 
-    name: "Make", 
-    description: "Automação visual de processos (ex-Integromat)", 
-    category: "Automação", 
+    key: "make",
     logo: "https://www.make.com/en/favicon.ico",
     slug: "make" 
   },
   { 
-    name: "Zapier", 
-    description: "Conecte apps e automatize workflows", 
-    category: "Automação", 
+    key: "zapier",
     logo: "https://cdn.zappy.app/8d67c00a2da6bb3b23e85d1c38fd2b07.png",
     slug: "zapier" 
   },
   { 
-    name: "Flowise", 
-    description: "Construa agentes LLM com interface visual", 
-    category: "Agentes", 
+    key: "flowise",
     logo: "https://docs.flowiseai.com/img/favicon.ico",
     slug: "flowise" 
   },
   { 
-    name: "NotebookLM", 
-    description: "Assistente de pesquisa do Google", 
-    category: "Produtividade", 
+    key: "notebooklm",
     logo: "https://www.gstatic.com/lamda/images/favicon_v1_150160cddff7f294ce30.svg",
     slug: "notebooklm" 
   },
   { 
-    name: "Pika Labs", 
-    description: "Geração de vídeos com IA", 
-    category: "Criação Visual", 
+    key: "pikaLabs",
     logo: "https://pika.art/pika-logo.png",
     slug: "pika-labs" 
   },
@@ -147,6 +128,7 @@ const aiTools: AITool[] = [
 export function AIToolsMarquee() {
   const [hoveredTool, setHoveredTool] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const t = useTranslations("Home.AIToolsMarquee");
 
   return (
     <section className="py-16 pb-32 relative overflow-visible z-20">
@@ -168,12 +150,12 @@ export function AIToolsMarquee() {
           <div className="flex items-center justify-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-primary" />
             <p className="text-sm font-semibold text-primary uppercase tracking-wider">
-              +100 Ferramentas de IA
+              {t("badge")}
             </p>
             <Sparkles className="w-5 h-5 text-primary" />
           </div>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Domine mais de 100 ferramentas de IA com nossos cursos especializados
+            {t("subtitle")}
           </p>
         </motion.div>
       </div>
@@ -199,11 +181,19 @@ export function AIToolsMarquee() {
             repeatType: "loop"
           }}
         >
-          {[...aiTools, ...aiTools, ...aiTools].map((tool, i) => (
+          {[...aiTools, ...aiTools, ...aiTools].map((tool, i) => {
+            const toolCopy = t.raw(`tools.${tool.key}`) as {
+              name: string;
+              description: string;
+              category: string;
+            };
+            const { name, description, category } = toolCopy;
+
+            return (
             <motion.div
-              key={`${tool.name}-${i}`}
+              key={`${tool.key}-${i}`}
               className="relative group flex-shrink-0"
-              onMouseEnter={() => setHoveredTool(`${tool.name}-${i}`)}
+              onMouseEnter={() => setHoveredTool(`${tool.key}-${i}`)}
               onMouseLeave={() => setHoveredTool(null)}
               whileHover={{ scale: 1.05, y: -4 }}
             >
@@ -216,12 +206,12 @@ export function AIToolsMarquee() {
                 <div className="relative z-10 group-hover:scale-110 transition-transform duration-300">
                   <img 
                     src={tool.logo} 
-                    alt={`${tool.name} logo`}
+                    alt={`${name} logo`}
                     className="w-16 h-16 object-contain"
                     onError={(e) => {
                       // Fallback to text if image fails to load
                       e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement!.innerHTML = `<div class="text-4xl">${tool.name.charAt(0)}</div>`;
+                      e.currentTarget.parentElement!.innerHTML = `<div class="text-4xl">${name.charAt(0)}</div>`;
                     }}
                   />
                 </div>
@@ -232,14 +222,14 @@ export function AIToolsMarquee() {
                     variant="secondary" 
                     className="w-full text-xs truncate bg-background/80 backdrop-blur text-center justify-center border-primary/20"
                   >
-                    {tool.name}
+                    {name}
                   </Badge>
                 </div>
               </Card>
 
               {/* Hover Tooltip Popup - Positioned ABOVE the card */}
               <AnimatePresence>
-                {hoveredTool === `${tool.name}-${i}` && (
+                {hoveredTool === `${tool.key}-${i}` && (
                   <motion.div
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -251,24 +241,24 @@ export function AIToolsMarquee() {
                       <div className="flex items-start gap-3 mb-3">
                         <img 
                           src={tool.logo} 
-                          alt={`${tool.name} logo`}
+                          alt={`${name} logo`}
                           className="w-12 h-12 object-contain rounded"
                         />
                         <div className="flex-1">
-                          <h4 className="font-bold text-foreground mb-1">{tool.name}</h4>
+                          <h4 className="font-bold text-foreground mb-1">{name}</h4>
                           <Badge variant="secondary" className="text-xs">
-                            {tool.category}
+                            {category}
                           </Badge>
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground mb-3">
-                        {tool.description}
+                        {description}
                       </p>
                       <Link 
                         href={`/ferramentas/${tool.slug}`}
                         className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group/link"
                       >
-                        <span>Ver ferramenta</span>
+                        <span>{t("linkLabel")}</span>
                         <ExternalLink className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                       </Link>
                     </Card>
@@ -276,7 +266,8 @@ export function AIToolsMarquee() {
                 )}
               </AnimatePresence>
             </motion.div>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
     </section>
