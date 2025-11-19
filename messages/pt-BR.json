@@ -9,7 +9,8 @@
       "tools": "Ferramentas",
       "blog": "Blog",
       "about": "Sobre",
-      "community": "Comunidade"
+      "community": "Comunidade",
+      "cases": "Casos"
     },
     "menus": {
       "courses": {
@@ -168,6 +169,55 @@
         "completion": "Conclusão",
         "rating": "Avaliação",
         "ratingValue": "4.9/5"
+      }
+    },
+    "Services": {
+      "title": "Nossos Serviços",
+      "subtitle": "Soluções profissionais para escalar seu negócio com IA e automação",
+      "learnMore": "Saiba Mais",
+      "website-building": {
+        "title": "Construção de Sites",
+        "description": "Sites modernos, responsivos e de alta performance feitos sob medida.",
+        "summary": "Landing pages premium, áreas de membros e lojas com SEO e velocidade impecáveis.",
+        "price": "A partir de R$4.900",
+        "bullets": [
+          "Entrega em até 15 dias úteis",
+          "Stack moderna (Next.js, Vercel, CMS headless)",
+          "Monitoramento e otimização por 30 dias"
+        ]
+      },
+      "video-editing": {
+        "title": "Edição de Vídeo",
+        "description": "Edição profissional para conteúdo engajador e storytelling.",
+        "summary": "Pacotes para creators e marcas com storytelling, motion graphics e legendas nativas.",
+        "price": "A partir de R$2.400/mês",
+        "bullets": [
+          "Calendário de vídeos semanais",
+          "Templates com identidade visual",
+          "Entrega otimizada para reels, YouTube e ads"
+        ]
+      },
+      "ai-consulting": {
+        "title": "Consultoria em IA",
+        "description": "Orientação estratégica para integrar IA nos seus processos de negócio.",
+        "summary": "Diagnóstico executivo, plano de adoção e treinamento do time para projetos de IA.",
+        "price": "A partir de R$6.900",
+        "bullets": [
+          "Workshops para squads e liderança",
+          "Roadmap de ferramentas e governança",
+          "Medição de ROI e indicadores críticos"
+        ]
+      },
+      "automation": {
+        "title": "Automação e Integração",
+        "description": "Otimize fluxos de trabalho e conecte suas ferramentas para máxima eficiência.",
+        "summary": "Mapeamos processos, criamos integrações com n8n/Make/Zapier e monitoramos KPIs.",
+        "price": "A partir de R$6.700",
+        "bullets": [
+          "Blueprint completo dos fluxos",
+          "Implementação low-code + APIs",
+          "Alertas, logs e suporte contínuo"
+        ]
       }
     },
     "AIToolsMarquee": {
@@ -364,25 +414,24 @@
       "badge": "Transforme Sua Carreira Agora",
       "title": "Pronto para Dominar a IA?",
       "description": "Junte-se a mais de <primary>5.000 profissionais</primary> que já transformaram suas carreiras. Comece agora e descubra o poder da Inteligência Artificial.",
-      "primaryButton": "Começar Minha Jornada",
-      "secondaryButton": "Agendar Consultoria Grátis",
+      "primaryButton": "Começar Meu Plano",
+      "secondaryButton": "Agendar Consultoria Gratuita",
+      "whatsapp": {
+        "prompt": "Prefere falar antes?",
+        "linkLabel": "Chamar no WhatsApp",
+        "message": "Oi! Quero saber mais sobre a FayaPoint e os planos de IA."
+      },
       "trust": {
         "items": [
           {
             "title": "Sem cartão de crédito",
-            "description": "Começar é 100% gratuito"
+            "description": "Comece 100% grátis"
           },
           {
             "title": "Acesso imediato",
             "description": "Comece agora mesmo"
-          },
-          {
-            "title": "Garantia de 30 dias",
-            "description": "Risco zero para você"
           }
-        ]
-      },
-      "whatsapp": {
+        ],
         "prompt": "Prefere conversar primeiro?",
         "linkLabel": "Fale conosco no WhatsApp",
         "message": "Olá! Gostaria de saber mais sobre os cursos de IA da FayaPoint."
@@ -681,95 +730,18 @@
     ],
     "newsletter": {
       "placeholder": "seu@email.com"
-    },
-    "posts": [
-      {
-        "id": 1,
-        "title": "Como o ChatGPT está Revolucionando o Mercado de Trabalho em 2025",
-        "slug": "chatgpt-revolucionando-mercado-trabalho-2025",
-        "excerpt": "Descubra como profissionais estão usando o ChatGPT para aumentar sua produtividade em até 300% e as profissões que mais se beneficiam dessa tecnologia.",
-        "category": "IA Generativa",
-        "author": "Ricardo Faya",
-        "date": "18 Out, 2025",
-        "readTime": "8 min",
-        "views": 3456,
-        "image": "/blog/chatgpt-work.jpg",
-        "featured": true,
-        "tags": ["ChatGPT", "Produtividade", "Carreira"]
-      },
-      {
-        "id": 2,
-        "title": "Guia Completo: Criando Arte Profissional com Midjourney v6",
-        "slug": "guia-midjourney-v6",
-        "excerpt": "Aprenda técnicas avançadas de prompt engineering para Midjourney, incluindo styles, parameters e como criar consistência visual.",
-        "category": "Criação Visual",
-        "author": "Ricardo Faya",
-        "date": "17 Out, 2025",
-        "readTime": "12 min",
-        "views": 2891,
-        "image": "/blog/midjourney-guide.jpg",
-        "featured": true,
-        "tags": ["Midjourney", "Design", "Arte Digital"]
-      },
-      {
-        "id": 3,
-        "title": "Automação com n8n: 10 Workflows que Todo Negócio Precisa",
-        "slug": "automacao-n8n-workflows",
-        "excerpt": "Economize 20 horas por semana com estes workflows de automação essenciais para qualquer negócio digital.",
-        "category": "Automação",
-        "author": "Ricardo Faya",
-        "date": "16 Out, 2025",
-        "readTime": "15 min",
-        "views": 2234,
-        "image": "/blog/n8n-workflows.jpg",
-        "featured": false,
-        "tags": ["n8n", "Automação", "Produtividade"]
-      },
-      {
-        "id": 4,
-        "title": "Claude vs ChatGPT: Qual é Melhor para Programação?",
-        "slug": "claude-vs-chatgpt-programacao",
-        "excerpt": "Comparação detalhada entre Claude e ChatGPT para desenvolvimento de software, debugging e arquitetura de sistemas.",
-        "category": "Desenvolvimento",
-        "author": "Ricardo Faya",
-        "date": "15 Out, 2025",
-        "readTime": "10 min",
-        "views": 4102,
-        "image": "/blog/claude-chatgpt.jpg",
-        "featured": false,
-        "tags": ["Claude", "ChatGPT", "Programação"]
-      },
-      {
-        "id": 5,
-        "title": "O Futuro da Voz: Como ElevenLabs está Mudando o Jogo",
-        "slug": "elevenlabs-futuro-voz",
-        "excerpt": "Clonagem de voz, dublagem automática e narrações ultra-realistas. Entenda o impacto dessa tecnologia.",
-        "category": "Áudio e Voz",
-        "author": "Ricardo Faya",
-        "date": "14 Out, 2025",
-        "readTime": "6 min",
-        "views": 1876,
-        "image": "/blog/elevenlabs.jpg",
-        "featured": false,
-        "tags": ["ElevenLabs", "Áudio", "IA de Voz"]
-      },
-      {
-        "id": 6,
-        "title": "ROI de IA: Como Medir o Retorno do Investimento em IA",
-        "slug": "roi-inteligencia-artificial",
-        "excerpt": "Framework completo para calcular e demonstrar o ROI de projetos de IA na sua empresa.",
-        "category": "Negócios",
-        "author": "Ricardo Faya",
-        "date": "13 Out, 2025",
-        "readTime": "20 min",
-        "views": 3567,
-        "image": "/blog/roi-ai.jpg",
-        "featured": true,
-        "tags": ["ROI", "Negócios", "Estratégia"]
-      }
-    ]
+    }
   },
   "Courses": {
+    "list": {
+      "title": "Projetos em destaque",
+      "description": "Cada card representa um projeto público com código aberto ou exemplos para clientes e alunos.",
+      "languageFallback": "Stack não informada",
+      "empty": "Nenhum repositório público encontrado neste momento.",
+      "error": "Não foi possível carregar os repositórios agora.",
+      "updatedLabel": "Atualizado em",
+      "viewRepo": "Ver repositório"
+    },
     "hero": {
       "title": "Cursos de IA e Automação",
       "subtitle": "Domine as ferramentas mais poderosas do mercado com projetos práticos"

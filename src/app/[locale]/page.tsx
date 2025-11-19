@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
+import { ServicesCarousel } from "@/components/home/ServicesCarousel";
 import { AIToolsMarquee } from "@/components/home/AIToolsMarquee";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
 import { CourseCategoriesSection } from "@/components/home/CourseCategoriesSection";
@@ -14,6 +15,7 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
+        <ServicesCarousel />
         <AIToolsMarquee />
         <FeaturesSection />
         <CourseCategoriesSection />

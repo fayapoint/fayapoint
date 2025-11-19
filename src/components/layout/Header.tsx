@@ -209,6 +209,17 @@ export function Header() {
                     {t("nav.community")}
                   </Link>
                 </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link href="/casos" className={cn(
+                    "px-3 py-2 text-sm font-medium transition",
+                    pathname === "/casos" 
+                      ? "text-primary" 
+                      : "text-foreground/90 hover:text-primary"
+                  )}>
+                    {t("nav.cases")}
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -300,6 +311,13 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Comunidade
+              </Link>
+              <Link
+                href="/casos"
+                className="block text-foreground/90 hover:text-primary transition font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t("nav.cases")}
               </Link>
               <div className="pt-4 space-y-3 border-t border-gray-800">
                 {mounted && isLoggedIn && user ? (

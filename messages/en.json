@@ -9,7 +9,8 @@
       "tools": "Tools",
       "blog": "Blog",
       "about": "About",
-      "community": "Community"
+      "community": "Community",
+      "cases": "Cases"
     },
     "menus": {
       "courses": {
@@ -168,6 +169,55 @@
         "completion": "Completion",
         "rating": "Rating",
         "ratingValue": "4.9/5"
+      }
+    },
+    "Services": {
+      "title": "Our Services",
+      "subtitle": "Professional solutions to scale your business with AI and automation",
+      "learnMore": "Learn More",
+      "website-building": {
+        "title": "Website Building",
+        "description": "Modern, responsive, and high-performance websites tailored to your brand.",
+        "summary": "Premium landing pages, member areas, and stores with flawless SEO and speed.",
+        "price": "Starting at R$4,900",
+        "bullets": [
+          "Delivery in as little as 15 business days",
+          "Modern stack (Next.js, Vercel, headless CMS)",
+          "30 days of monitoring and optimization"
+        ]
+      },
+      "video-editing": {
+        "title": "Video Editing",
+        "description": "Professional editing for engaging content and storytelling.",
+        "summary": "Creator and brand packages with storytelling, motion graphics, and native captions.",
+        "price": "Starting at R$2,400/mo",
+        "bullets": [
+          "Weekly video calendar",
+          "Templates with your visual identity",
+          "Delivery optimized for reels, YouTube, and ads"
+        ]
+      },
+      "ai-consulting": {
+        "title": "AI Consulting",
+        "description": "Strategic guidance to integrate AI into your business processes.",
+        "summary": "Executive diagnosis, adoption roadmap, and team enablement for AI projects.",
+        "price": "Starting at R$6,900",
+        "bullets": [
+          "Workshops for squads and leadership",
+          "Tooling and governance roadmap",
+          "ROI measurement and critical KPIs"
+        ]
+      },
+      "automation": {
+        "title": "Automation & Integration",
+        "description": "Streamline workflows and connect your tools for maximum efficiency.",
+        "summary": "We map processes, build n8n/Make/Zapier integrations, and monitor KPIs.",
+        "price": "Starting at R$3,700",
+        "bullets": [
+          "Full flow blueprint",
+          "Low-code + API implementation",
+          "Alerts, logs, and ongoing support"
+        ]
       }
     },
     "AIToolsMarquee": {
@@ -375,14 +425,8 @@
           {
             "title": "Immediate access",
             "description": "Start right away"
-          },
-          {
-            "title": "30-day guarantee",
-            "description": "Zero risk for you"
           }
-        ]
-      },
-      "whatsapp": {
+        ],
         "prompt": "Prefer to talk first?",
         "linkLabel": "Chat with us on WhatsApp",
         "message": "Hi! I'd like to learn more about FayaPoint's AI courses."
