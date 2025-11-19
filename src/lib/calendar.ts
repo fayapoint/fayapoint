@@ -1,4 +1,4 @@
-import ical from "ical";
+import ical, { ICalEvent } from "ical";
 import { addDays, addMinutes, isWeekend, set, startOfDay } from "date-fns";
 import { formatInTimeZone, toZonedTime, fromZonedTime } from "date-fns-tz";
 
@@ -89,10 +89,12 @@ async function fetchBusySlots(): Promise<BusySlot[]> {
   const parsed = ical.parseICS(rawCalendar);
 
   return Object.values(parsed)
-    .filter((event: any) => event.type === "VEVENT" && event.start && event.end)
-    .map((event: any) => ({
-      startUtc: new Date(event.start),
-      endUtc: new Date(event.end),
+    .filter((event): event is ICalEvent & Required<Pick<ICalEvent, "start" | "end">> => {
+      return event?.type === "VEVENT" && Boolean(event.start) && Boolean(event.end);
+    })
+    .map((event) => ({
+      startUtc: new Date(event.start!),
+      endUtc: new Date(event.end!),
     }))
     .sort((a, b) => a.startUtc.getTime() - b.startUtc.getTime());
 }
