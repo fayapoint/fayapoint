@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Monitor, Video, Bot, Workflow, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 
 const colorStyles = {
   blue: {
@@ -170,11 +171,13 @@ export function ServicesCarousel() {
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
                   </Link>
-                  <Link href="/agendar-consultoria" className="block">
-                    <Button variant="outline" className="w-full py-6 text-base">
-                      Agendar consultoria
-                    </Button>
-                  </Link>
+                  <ScheduleConsultationButton
+                    variant="outline"
+                    className="w-full py-6 text-base"
+                    source={`services-carousel-${activeService.id}`}
+                  >
+                    Agendar consultoria
+                  </ScheduleConsultationButton>
                 </div>
               </div>
             </motion.div>

@@ -2,7 +2,10 @@
 
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { ArrowRight, CheckCircle2, CircuitBoard, Gauge, Link2, Workflow } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -89,14 +92,17 @@ export default function AutomationIntegrationPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-6">{t("title")}</h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8">{t("description")}</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/agendar-consultoria">
-              <Button size="lg" className="px-8 py-6 text-lg">
-                Agendar diagnóstico gratuito <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
+            <ScheduleConsultationButton
+              size="lg"
+              className="px-8 py-6 text-lg"
+              source="automation-hero"
+              showCompanyRole
+            >
+              Agendar diagnóstico gratuito <ArrowRight className="ml-2 w-5 h-5" />
+            </ScheduleConsultationButton>
             <Link href="/contato">
-              <Button variant="outline" size="lg" className="px-8 py-6 text-lg">
-                Falar com um especialista
+              <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
+                Falar com especialista
               </Button>
             </Link>
           </div>

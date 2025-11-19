@@ -629,9 +629,11 @@
     "fields": {
       "name": "Nome",
       "email": "Email",
-      "details": "Descreva sua necessidade"
+      "details": "Descreva sua necessidade",
+      "detailsPlaceholder": "Conte onde precisa de apoio, prazos e objetivos."
     },
-    "submit": "Enviar"
+    "submit": "Enviar",
+    "ctaLabel": "Agendar consultoria"
   },
   "Contact": {
     "hero": {

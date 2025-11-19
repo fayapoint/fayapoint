@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import {
   ArrowRight,
   Camera,
@@ -179,12 +180,14 @@ export default function VideoEditingPage() {
                 {t("description")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link href="/agendar-consultoria">
-                  <Button size="lg" className="text-lg px-8 py-6 group">
-                    Montar pipeline de conteúdo
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                <ScheduleConsultationButton
+                  size="lg"
+                  className="text-lg px-8 py-6 group"
+                  source="video-editing-hero"
+                >
+                  Montar pipeline de conteúdo
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </ScheduleConsultationButton>
                 <Link href="/contato">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6">
                     Receber portfólio
@@ -318,11 +321,22 @@ export default function VideoEditingPage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href={pkg.cta.href}>
-                    <Button className="w-full" variant={pkg.featured ? "default" : "outline"}>
+                  {pkg.cta.href === "/agendar-consultoria" ? (
+                    <ScheduleConsultationButton
+                      className="w-full"
+                      variant={pkg.featured ? "default" : "outline"}
+                      source={`video-editing-package-${pkg.tier.toLowerCase()}`}
+                      showCompanyRole
+                    >
                       {pkg.cta.label}
-                    </Button>
-                  </Link>
+                    </ScheduleConsultationButton>
+                  ) : (
+                    <Link href={pkg.cta.href}>
+                      <Button className="w-full" variant={pkg.featured ? "default" : "outline"}>
+                        {pkg.cta.label}
+                      </Button>
+                    </Link>
+                  )}
                 </Card>
               ))}
             </div>
@@ -337,12 +351,15 @@ export default function VideoEditingPage() {
               <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
                 Em menos de 7 dias montamos um sprint piloto com guidelines, exemplos e calendário aprovado.
               </p>
-              <Link href="/agendar-consultoria">
-                <Button size="lg" className="text-lg px-8 py-6 group">
-                  Planejar produção agora
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+              <ScheduleConsultationButton
+                size="lg"
+                className="text-lg px-8 py-6 group"
+                source="video-editing-final"
+                showCompanyRole
+              >
+                Planejar produção agora
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </ScheduleConsultationButton>
               <p className="text-sm text-muted-foreground mt-6">
                 Inclui diagnóstico gratuito • roadmap de 30 dias • squad dedicado
               </p>

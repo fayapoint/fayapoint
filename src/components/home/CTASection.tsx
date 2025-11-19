@@ -7,6 +7,7 @@ import { Rocket, MessageCircle, Calendar, Sparkles, Star, CheckCircle2, Zap } fr
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
+import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 
 // Generate consistent particle positions
 const generateParticles = () => {
@@ -163,16 +164,16 @@ export function CTASection() {
               whileHover={{ scale: 1.05, y: -4 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Link href="/agendar-consultoria">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-2 border-primary text-foreground hover:bg-primary/10 text-lg px-12 py-8 shadow-lg hover:shadow-xl hover:border-primary transition-all duration-300"
-                >
-                  <Calendar className="mr-2" /> 
-                  {t("secondaryButton")}
-                </Button>
-              </Link>
+              <ScheduleConsultationButton
+                size="lg"
+                variant="outline"
+                className="border-2 border-primary text-foreground hover:bg-primary/10 text-lg px-12 py-8 shadow-lg hover:shadow-xl hover:border-primary transition-all duration-300"
+                source="home-cta-secondary"
+                showCompanyRole={false}
+              >
+                <Calendar className="mr-2" />
+                {t("secondaryButton")}
+              </ScheduleConsultationButton>
             </motion.div>
           </div>
 

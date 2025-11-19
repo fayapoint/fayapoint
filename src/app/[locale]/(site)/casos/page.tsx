@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import {
   ArrowRight,
   BarChart3,
@@ -231,13 +232,16 @@ export default function CasesPage() {
                 {t("hero.subtitle")}
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="/agendar-consultoria">
-                  <Button size="lg" className="gap-2">
-                    <Sparkles className="w-5 h-5" />
-                    {t("hero.secondaryCta")}
-                  </Button>
-                </Link>
-                <Link href="/contato">
+                <ScheduleConsultationButton
+                  size="lg"
+                  className="gap-2"
+                  source="cases-hero"
+                  showCompanyRole
+                >
+                  <Sparkles className="w-5 h-5" />
+                  {t("hero.secondaryCta")}
+                </ScheduleConsultationButton>
+                <Link href="/contato" className="inline-flex">
                   <Button size="lg" variant="outline" className="gap-2">
                     <ArrowRight className="w-5 h-5" />
                     {t("hero.primaryCta")}
@@ -421,12 +425,15 @@ export default function CasesPage() {
                 Enviamos um dossiê com diagnóstico, estimativa de esforço e quais ativos digitais podemos construir em até 90 dias.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/agendar-consultoria">
-                  <Button size="lg" className="gap-2">
-                    <ArrowRight className="w-5 h-5" />
-                    Agendar diagnóstico
-                  </Button>
-                </Link>
+                <ScheduleConsultationButton
+                  size="lg"
+                  className="gap-2"
+                  source="cases-final"
+                  showCompanyRole
+                >
+                  <ArrowRight className="w-5 h-5" />
+                  Agendar diagnóstico
+                </ScheduleConsultationButton>
                 <Link href="/contato">
                   <Button size="lg" variant="outline">
                     Receber portfólio completo

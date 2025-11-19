@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Mail, Phone, MapPin, CalendarDays } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ScheduleMeetingForm } from "@/components/consultation/ScheduleMeetingForm";
 
 type ContactHero = {
   badge: string;
@@ -88,29 +87,22 @@ export default function ContactPage() {
         <section className="container mx-auto px-4 mt-[-80px] relative z-10">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
             <div className="bg-card/90 border border-border rounded-3xl shadow-2xl shadow-purple-900/20 p-8 backdrop-blur">
-              <div className="mb-8">
-                <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-3">
-                  {form.badge}
-                </p>
-                <h2 className="text-3xl font-semibold mb-2">{form.title}</h2>
-                <p className="text-muted-foreground">{form.description}</p>
-              </div>
-
-              <div className="grid gap-5">
-                <Input placeholder={form.fields.fullName} className="h-12" />
-                <Input type="email" placeholder={form.fields.email} className="h-12" />
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <Input placeholder={form.fields.company} className="h-12" />
-                  <Input placeholder={form.fields.role} className="h-12" />
-                </div>
-                <textarea
-                  className="bg-transparent border border-border rounded-2xl px-4 py-3 min-h-[140px] text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-                  placeholder={form.fields.detailsPlaceholder}
-                />
-                <Button className="h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                  {form.submit}
-                </Button>
-              </div>
+              <ScheduleMeetingForm
+                copy={{
+                  badge: form.badge,
+                  title: form.title,
+                  description: form.description,
+                  submit: form.submit,
+                  fields: {
+                    fullName: form.fields.fullName,
+                    email: form.fields.email,
+                    company: form.fields.company,
+                    role: form.fields.role,
+                    detailsPlaceholder: form.fields.detailsPlaceholder,
+                  },
+                }}
+                source="contact-page"
+              />
             </div>
 
             <div className="space-y-8">

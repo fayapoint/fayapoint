@@ -624,9 +624,11 @@
     "fields": {
       "name": "Name",
       "email": "Email",
-      "details": "Describe your needs"
+      "details": "Describe your needs",
+      "detailsPlaceholder": "Tell us where you need help, deadlines, and goals."
     },
-    "submit": "Send"
+    "submit": "Send",
+    "ctaLabel": "Schedule consultation"
   },
   "Contact": {
     "hero": {

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 
 const stats = [
   { icon: TrendingUp, value: "+43%", label: "Conversão média" },
@@ -194,12 +195,14 @@ export default function WebsiteBuildingPage() {
                 {t("description")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link href="/agendar-consultoria">
-                  <Button size="lg" className="text-lg px-8 py-6 group">
-                    Planejar projeto
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
+                <ScheduleConsultationButton
+                  size="lg"
+                  className="text-lg px-8 py-6 group"
+                  source="website-building-hero"
+                >
+                  Planejar projeto
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </ScheduleConsultationButton>
                 <Link href="/contato">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6">
                     Receber estimativa
@@ -365,11 +368,22 @@ export default function WebsiteBuildingPage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href={pkg.cta.href}>
-                    <Button className="w-full" variant={pkg.featured ? "default" : "outline"}>
+                  {pkg.cta.href === "/agendar-consultoria" ? (
+                    <ScheduleConsultationButton
+                      className="w-full"
+                      variant={pkg.featured ? "default" : "outline"}
+                      source={`website-building-package-${pkg.tier.toLowerCase()}`}
+                      showCompanyRole
+                    >
                       {pkg.cta.label}
-                    </Button>
-                  </Link>
+                    </ScheduleConsultationButton>
+                  ) : (
+                    <Link href={pkg.cta.href}>
+                      <Button className="w-full" variant={pkg.featured ? "default" : "outline"}>
+                        {pkg.cta.label}
+                      </Button>
+                    </Link>
+                  )}
                 </Card>
               ))}
             </div>
@@ -384,12 +398,15 @@ export default function WebsiteBuildingPage() {
               <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
                 Em 48 horas entregamos blueprint, cronograma e estimativa de investimento para seu novo site.
               </p>
-              <Link href="/agendar-consultoria">
-                <Button size="lg" className="text-lg px-8 py-6 group">
-                  Agendar blueprint
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+              <ScheduleConsultationButton
+                size="lg"
+                className="text-lg px-8 py-6 group"
+                source="website-building-final"
+                showCompanyRole
+              >
+                Agendar blueprint
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </ScheduleConsultationButton>
               <p className="text-sm text-muted-foreground mt-6">Inclui sessão estratégica + entregáveis em PDF</p>
             </Card>
           </div>

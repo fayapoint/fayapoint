@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Bot, ArrowRight, Sparkles, TrendingUp, Users, Zap, Target, BarChart3, Brain, Rocket, Shield, Clock, DollarSign, Star } from 'lucide-react';
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 
 export default function AIConsultingPage() {
   const t = useTranslations("Home.Services.ai-consulting");
@@ -130,12 +131,14 @@ export default function AIConsultingPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/agendar-consultoria">
-                <Button size="lg" className="text-lg px-8 py-6 group">
-                  Book Free Consultation
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+              <ScheduleConsultationButton
+                size="lg"
+                className="text-lg px-8 py-6 group"
+                source="ai-consulting-hero"
+              >
+                Book Free Consultation
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </ScheduleConsultationButton>
               <Button size="lg" variant="outline" className="text-lg px-8 py-6">
                 View Case Studies
               </Button>
@@ -287,11 +290,14 @@ export default function AIConsultingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/agendar-consultoria">
-                <Button variant="outline" className="w-full">
-                  Get Started
-                </Button>
-              </Link>
+              <ScheduleConsultationButton
+                variant="outline"
+                className="w-full"
+                source="ai-consulting-starter"
+                showCompanyRole
+              >
+                Get Started
+              </ScheduleConsultationButton>
             </Card>
 
             <Card className="p-8 border-primary shadow-lg relative bg-card">
@@ -311,11 +317,13 @@ export default function AIConsultingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/agendar-consultoria">
-                <Button className="w-full">
-                  Get Started
-                </Button>
-              </Link>
+              <ScheduleConsultationButton
+                className="w-full"
+                source="ai-consulting-professional"
+                showCompanyRole
+              >
+                Get Started
+              </ScheduleConsultationButton>
             </Card>
 
             <Card className="p-8 border-border bg-card">
@@ -332,11 +340,14 @@ export default function AIConsultingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/agendar-consultoria">
-                <Button variant="outline" className="w-full">
-                  Contact Sales
-                </Button>
-              </Link>
+              <ScheduleConsultationButton
+                variant="outline"
+                className="w-full"
+                source="ai-consulting-enterprise"
+                showCompanyRole
+              >
+                Contact Sales
+              </ScheduleConsultationButton>
             </Card>
           </div>
         </div>
@@ -353,12 +364,15 @@ export default function AIConsultingPage() {
             <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
               Book a free consultation and discover how AI can revolutionize your operations
             </p>
-            <Link href="/agendar-consultoria">
-              <Button size="lg" className="text-lg px-8 py-6 group">
-                Schedule Free Consultation
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+            <ScheduleConsultationButton
+              size="lg"
+              className="text-lg px-8 py-6 group"
+              source="ai-consulting-final"
+              showCompanyRole
+            >
+              Schedule Free Consultation
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </ScheduleConsultationButton>
             <p className="text-sm text-muted-foreground mt-6">
               No credit card required • 30-minute strategy session • Actionable insights guaranteed
             </p>
