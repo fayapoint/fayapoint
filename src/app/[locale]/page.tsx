@@ -9,8 +9,6 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { PricingSection } from "@/components/home/PricingSection";
 import { CTASection } from "@/components/home/CTASection";
 import { ServicePackagesSection } from "@/components/home/ServicePackagesSection";
-import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
-import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 
 export default function Home() {
   return (
@@ -24,10 +22,7 @@ export default function Home() {
         <CourseCategoriesSection />
         <TestimonialsSection />
         <PricingSection />
-        <ServiceCartProvider>
-          <ServicePackagesSection />
-          <ServiceBuilderSection />
-        </ServiceCartProvider>
+        <ServicePackagesSection />
         <CTASection />
       </main>
       <Footer />

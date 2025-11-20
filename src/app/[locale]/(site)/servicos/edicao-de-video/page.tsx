@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
+import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 
 const benefits = [
   { icon: TrendingUp, stat: "3x", label: "Mais alcance orgânico" },
@@ -366,6 +368,19 @@ export default function VideoEditingPage() {
             </Card>
           </div>
         </section>
+
+        <ServiceCartProvider>
+          <ServiceBuilderSection
+            serviceSlug="video-production"
+            restrictToServiceSlug
+            badgeLabel="Configurar pipeline"
+            title="Monte seu estúdio sob demanda"
+            subtitle="Combine story design, captação, edição, motion e pós para criar um pacote perfeito para sua operação."
+            sectionId="video-builder"
+            showServiceTabs={false}
+            source="video-editing-builder"
+          />
+        </ServiceCartProvider>
       </main>
       <Footer />
     </div>

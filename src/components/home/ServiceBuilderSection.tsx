@@ -10,6 +10,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
 
 const serviceLabels: Record<
@@ -61,15 +63,38 @@ function makeKey(price: ServicePrice) {
   return `${price.serviceSlug}:${price.unitLabel}`;
 }
 
-export function ServiceBuilderSection() {
-  const { prices, loading, error, groupedByService } = useServicePrices();
+interface ServiceBuilderSectionProps {
+  serviceSlug?: string;
+  title?: string;
+  subtitle?: string;
+  badgeLabel?: string;
+  showServiceTabs?: boolean;
+  restrictToServiceSlug?: boolean;
+  sectionId?: string;
+  source?: string;
+}
+
+export function ServiceBuilderSection({
+  serviceSlug,
+  title,
+  subtitle,
+  badgeLabel = "Construtor de serviços",
+  showServiceTabs,
+  restrictToServiceSlug = false,
+  sectionId = "builder",
+  source,
+}: ServiceBuilderSectionProps) {
+  const { prices, loading, error, groupedByService } = useServicePrices(
+    restrictToServiceSlug && serviceSlug ? serviceSlug : undefined,
+  );
   const { items, setItemQuantity, clearCart } = useServiceCart();
   const [activeService, setActiveService] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [contact, setContact] = useState({ name: "", email: "", company: "", notes: "" });
 
   const catalog = useMemo(() => {
-    return Object.entries(groupedByService)
+    const entries = Object.entries(groupedByService)
       .filter(([slug]) => slug !== "bundles")
       .map(([slug, items]) => ({
         slug,
@@ -83,13 +108,23 @@ export function ServiceBuilderSection() {
           return acc;
         }, {}),
       }));
-  }, [groupedByService]);
+
+    if (restrictToServiceSlug && serviceSlug) {
+      return entries.filter((entry) => entry.slug === serviceSlug);
+    }
+    return entries;
+  }, [groupedByService, restrictToServiceSlug, serviceSlug]);
 
   useEffect(() => {
-    if (!activeService && catalog.length > 0) {
-      setActiveService(catalog[0].slug);
+    if (serviceSlug && restrictToServiceSlug) {
+      setActiveService(serviceSlug);
+      return;
     }
-  }, [catalog, activeService]);
+
+    if (!activeService && catalog.length > 0) {
+      setActiveService(serviceSlug ?? catalog[0].slug);
+    }
+  }, [catalog, activeService, serviceSlug, restrictToServiceSlug]);
 
   const priceIndex = useMemo(() => {
     const map = new Map<string, ServicePrice>();
@@ -146,10 +181,19 @@ export function ServiceBuilderSection() {
 
   async function handleSubmitBundle() {
     if (cartLines.length === 0 || submitting) return;
+    if (!contact.name.trim() || !contact.email.trim()) {
+      toast.error("Informe seu nome e email para prosseguir.");
+      return;
+    }
     setSubmitting(true);
     setSubmitStatus("idle");
     try {
       const payload = {
+        name: contact.name.trim(),
+        email: contact.email.trim(),
+        company: contact.company.trim() || undefined,
+        notes: contact.notes.trim() || undefined,
+        source: source ?? `${activeService || "multi"}-builder`,
         total,
         selections: cartLines.map((line) => ({
           serviceSlug: line.price.serviceSlug,
@@ -174,6 +218,7 @@ export function ServiceBuilderSection() {
       setSubmitStatus("success");
       toast.success("Bundle enviado! Entraremos em contato para validar escopo.");
       clearCart();
+      setContact({ name: "", email: "", company: "", notes: "" });
     } catch (err) {
       console.error(err);
       setSubmitStatus("error");
@@ -189,16 +234,17 @@ export function ServiceBuilderSection() {
     : [];
 
   return (
-    <section className="py-24 bg-background" id="builder">
+    <section className="py-24 bg-background" id={sectionId}>
       <SectionDivider icon={Layers} />
       <div className="container mx-auto px-4">
         <div className="text-center max-w-4xl mx-auto mb-14">
-          <Badge className="mb-4">Construtor de serviços</Badge>
+          <Badge className="mb-4">{badgeLabel}</Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Monte seu bundle ideal e veja o valor em tempo real
+            {title ?? "Monte seu bundle ideal e veja o valor em tempo real"}
           </h2>
           <p className="text-muted-foreground text-lg">
-            Combine etapas estratégicas, execução e suporte. Ajuste quantidades e receba uma estimativa de investimento instantânea para compartilhar com stakeholders ou seguir para a contratação.
+            {subtitle ??
+              "Combine etapas estratégicas, execução e suporte. Ajuste quantidades e receba uma estimativa de investimento instantânea para compartilhar com stakeholders ou seguir para a contratação."}
           </p>
         </div>
 
@@ -210,17 +256,19 @@ export function ServiceBuilderSection() {
         {!loading && !error && catalog.length > 0 && (
           <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
             <Card className="p-6 space-y-6">
-              <div className="flex flex-wrap gap-3">
-                {catalog.map((service) => (
-                  <Button
-                    key={service.slug}
-                    variant={service.slug === activeService ? "default" : "outline"}
-                    onClick={() => setActiveService(service.slug)}
-                  >
-                    {serviceLabels[service.slug]?.name ?? service.slug}
-                  </Button>
-                ))}
-              </div>
+              {catalog.length > 1 && (showServiceTabs ?? !restrictToServiceSlug) && (
+                <div className="flex flex-wrap gap-3">
+                  {catalog.map((service) => (
+                    <Button
+                      key={service.slug}
+                      variant={service.slug === activeService ? "default" : "outline"}
+                      onClick={() => setActiveService(service.slug)}
+                    >
+                      {serviceLabels[service.slug]?.name ?? service.slug}
+                    </Button>
+                  ))}
+                </div>
+              )}
 
               {activeCatalog && (
                 <div className="rounded-2xl border border-border/60 p-5 relative overflow-hidden">
@@ -331,6 +379,31 @@ export function ServiceBuilderSection() {
                 </div>
               )}
 
+              <div className="space-y-3">
+                <Input
+                  placeholder="Seu nome completo"
+                  value={contact.name}
+                  onChange={(e) => setContact((prev) => ({ ...prev, name: e.target.value }))}
+                />
+                <Input
+                  type="email"
+                  placeholder="Email de contato"
+                  value={contact.email}
+                  onChange={(e) => setContact((prev) => ({ ...prev, email: e.target.value }))}
+                />
+                <Input
+                  placeholder="Empresa (opcional)"
+                  value={contact.company}
+                  onChange={(e) => setContact((prev) => ({ ...prev, company: e.target.value }))}
+                />
+                <Textarea
+                  placeholder="Observações sobre escopo, prazos ou integrações"
+                  value={contact.notes}
+                  onChange={(e) => setContact((prev) => ({ ...prev, notes: e.target.value }))}
+                  rows={3}
+                />
+              </div>
+
               <div className="border-t border-border/60 pt-4">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-muted-foreground">Subtotal estimado</span>
@@ -362,6 +435,10 @@ export function ServiceBuilderSection() {
               </div>
             </Card>
           </div>
+        )}
+
+        {!loading && !error && catalog.length === 0 && (
+          <div className="text-center text-muted-foreground">Nenhum item disponível para este serviço.</div>
         )}
       </div>
     </section>

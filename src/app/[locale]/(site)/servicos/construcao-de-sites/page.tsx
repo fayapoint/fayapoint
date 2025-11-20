@@ -5,25 +5,28 @@ import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
 import {
-  ArrowRight,
-  Blocks,
   CheckCircle,
-  Compass,
+  ArrowRight,
+  Rocket,
   Globe,
   Layers,
-  Monitor,
-  Palette,
-  Rocket,
   Shield,
-  Spline,
-  TrendingUp,
+  Monitor,
+  Code,
   Zap,
+  TrendingUp,
+  Palette,
+  Compass,
+  Blocks,
+  Spline,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
+import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
+import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 
 const stats = [
   { icon: TrendingUp, value: "+43%", label: "Conversão média" },
@@ -411,6 +414,18 @@ export default function WebsiteBuildingPage() {
             </Card>
           </div>
         </section>
+
+        <ServiceCartProvider>
+          <ServiceBuilderSection
+            serviceSlug="website-full"
+            restrictToServiceSlug
+            badgeLabel="Personalize seu projeto"
+            title="Monte seu site sob medida"
+            subtitle="Escolha discovery, UX/UI, desenvolvimento, QA e suporte conforme a maturidade do seu produto digital."
+            sectionId="website-builder"
+            showServiceTabs={false}
+          />
+        </ServiceCartProvider>
       </main>
       <Footer />
     </div>
