@@ -106,6 +106,7 @@ export default function PortalPage() {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [myCreations, setMyCreations] = useState<any[]>([]);
 
   useEffect(() => {
@@ -598,6 +599,7 @@ export default function PortalPage() {
                                   <ImageIcon size={18} /> Suas Criações Recentes
                               </h3>
                               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                   {myCreations.map((creation: any) => (
                                       <div key={creation._id} className="group relative aspect-square rounded-lg overflow-hidden bg-gray-900 cursor-pointer" onClick={() => setGeneratedImage(creation.imageUrl)}>
                                           <img src={creation.imageUrl} alt={creation.prompt} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" />

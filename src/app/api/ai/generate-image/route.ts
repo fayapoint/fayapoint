@@ -28,6 +28,7 @@ export async function POST(request: Request) {
     }
 
     const token = authHeader.split(' ')[1];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let decoded: any;
     
     try {

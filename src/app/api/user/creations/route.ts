@@ -18,6 +18,7 @@ export async function GET() {
         return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
     const token = authHeader.split(' ')[1];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let decoded: any;
     try {
         decoded = jwt.verify(token, JWT_SECRET);
