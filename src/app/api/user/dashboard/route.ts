@@ -43,6 +43,40 @@ const RESOURCES_BY_PLAN = {
   ],
 };
 
+interface ProposalSelection {
+    serviceSlug: string;
+    unitLabel?: string;
+    quantity?: number;
+    unitPrice?: number;
+  }
+
+interface ProposalDoc {
+    _id: unknown;
+    selections?: ProposalSelection[];
+    total?: number;
+    status?: string;
+    createdAt: string | Date;
+    updatedAt: string | Date;
+}
+
+interface MappedOrder {
+    _id: unknown;
+    userId: string;
+    items: {
+        id: string;
+        type: string;
+        name: string;
+        quantity: number;
+        price: number;
+        details: ProposalSelection;
+    }[];
+    totalAmount: number;
+    status: string;
+    createdAt: string | Date;
+    updatedAt: string | Date;
+    isExternal: boolean;
+}
+
 export async function GET(request: Request) {
   try {
     await dbConnect();
@@ -95,7 +129,7 @@ export async function GET(request: Request) {
     const orders = await Order.find({ userId }).sort({ createdAt: -1 });
 
     // Fetch proposals/orders from fayapointProdutos
-    let externalOrders: any[] = [];
+    let externalOrders: MappedOrder[] = [];
     try {
       const client = await getMongoClient();
       const productsDb = client.db('fayapointProdutos');
@@ -105,23 +139,6 @@ export async function GET(request: Request) {
         .find({ email: user.email })
         .sort({ createdAt: -1 })
         .toArray();
-
-      // Define shape for mapping to avoid 'any'
-      interface ProposalSelection {
-        serviceSlug: string;
-        unitLabel?: string;
-        quantity?: number;
-        unitPrice?: number;
-      }
-
-      interface ProposalDoc {
-        _id: unknown;
-        selections?: ProposalSelection[];
-        total?: number;
-        status?: string;
-        createdAt: string | Date;
-        updatedAt: string | Date;
-      }
 
       externalOrders = (proposals as unknown as ProposalDoc[]).map(p => ({
         _id: p._id,
