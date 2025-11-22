@@ -21,10 +21,49 @@ export interface User {
   name: string;
   email: string;
   role?: string;
-  interest?: string;
+  interest?: string; // Keep for backward compatibility, but use interests array
+  source?: string;
+  
+  // Profile Fields
+  gender?: string;
+  birthDate?: Date;
+  image?: string;
+  bio?: string;
+  profession?: string;
+  company?: string;
+  website?: string;
+  phone?: string;
+  whatsapp?: string;
+  location?: {
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  socialLinks?: {
+    platform: string;
+    url: string;
+  }[];
+  interests?: string[];
+  goals?: string;
+  values?: string;
+  personality?: string;
+  experience?: string;
+  education?: string;
+  skills?: string[];
+  languages?: string[];
+  targetAudience?: string;
+  marketSegment?: string;
+  contentPreferences?: string;
+  communicationTone?: string;
+  inspirations?: string;
+  funFacts?: string;
+  contactAvailability?: string;
+  importantLinks?: string[];
+  
+  bookDiscountCode?: string;
+  
   createdAt: Date;
   updatedAt: Date;
-  source?: string;
 }
 
 async function getMongoClient(): Promise<MongoClient> {
@@ -96,18 +135,17 @@ export async function updateUser(email: string, updates: Partial<Omit<User, '_id
 /**
  * Create or update user (upsert)
  */
-export async function upsertUser(userData: Omit<User, '_id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+export async function upsertUser(userData: Partial<User> & { email: string; name: string }): Promise<User> {
   const existingUser = await getUserByEmail(userData.email);
   
   if (existingUser) {
-    const updated = await updateUser(userData.email, {
-      name: userData.name,
-      role: userData.role,
-      interest: userData.interest,
-      source: userData.source,
-    });
+    // Remove fields that shouldn't be overwritten if undefined in userData
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, email, createdAt, updatedAt, ...updates } = userData;
+    
+    const updated = await updateUser(userData.email, updates as any);
     return updated!;
   } else {
-    return await createUser(userData);
+    return await createUser(userData as any);
   }
 }

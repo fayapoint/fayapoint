@@ -27,12 +27,7 @@ export async function GET(request: NextRequest) {
     
     return NextResponse.json({
       exists: true,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        interest: user.interest,
-      }
+      user
     });
     
   } catch (error) {
@@ -50,7 +45,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, role, interest, source } = body;
+    const { name, email, source } = body;
     
     if (!name || !email) {
       return NextResponse.json(
@@ -59,22 +54,15 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Pass the entire body to upsertUser, allowing it to handle all profile fields
     const user = await upsertUser({
-      name,
-      email,
-      role,
-      interest,
+      ...body,
       source: source || 'onboarding',
     });
     
     return NextResponse.json({
       success: true,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        interest: user.interest,
-      }
+      user
     });
     
   } catch (error) {

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
+import { CompleteRegistrationForm } from "@/components/registration/CompleteRegistrationForm";
 
 // Generate consistent particle positions
 const generateParticles = () => {
@@ -177,6 +178,16 @@ export function CTASection() {
               </ScheduleConsultationButton>
             </motion.div>
           </div>
+
+          {/* Special Offer CTA */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65 }}
+            className="flex justify-center mb-16"
+          >
+            <CompleteRegistrationForm />
+          </motion.div>
 
           {/* Trust Elements - Enhanced */}
           <motion.div 
