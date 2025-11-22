@@ -177,7 +177,7 @@ Each product includes:
 
 Make sure you have in `.env.local`:
 ```env
-MONGODB_URI=mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/?retryWrites=true&w=majority&appName=aicornercluster
+MONGODB_URI=your_mongodb_connection_string_here
 ```
 
 ## 🎓 Resources

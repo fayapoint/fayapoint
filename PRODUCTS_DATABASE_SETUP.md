@@ -169,7 +169,7 @@ Each product document contains:
 Create a `.env.local` file:
 
 ```env
-MONGODB_URI=mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/?retryWrites=true&w=majority&appName=aicornercluster
+MONGODB_URI=your_mongodb_connection_string_here
 ```
 
 ### 2. Install Dependencies
@@ -200,7 +200,7 @@ This will:
 
 ```bash
 # Check MongoDB directly
-mongosh "mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/"
+mongosh "your_mongodb_connection_string_here"
 
 use fayapointProdutos
 db.products.countDocuments()
