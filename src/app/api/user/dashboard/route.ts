@@ -95,7 +95,6 @@ export async function GET(request: Request) {
 
     // Determine resources based on plan
     const plan = user.subscription?.plan || 'free';
-    // @ts-ignore
     const resources = RESOURCES_BY_PLAN[plan as keyof typeof RESOURCES_BY_PLAN] || RESOURCES_BY_PLAN.free;
 
     return NextResponse.json({
