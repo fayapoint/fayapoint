@@ -18,7 +18,7 @@ const COLLECTION_NAME = "products_prices";
 
 let cachedClient: MongoClient | null = null;
 
-async function getMongoClient(): Promise<MongoClient> {
+export async function getMongoClient(): Promise<MongoClient> {
   if (cachedClient) {
     return cachedClient;
   }

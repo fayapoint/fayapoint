@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Monitor, Video, Bot, Workflow, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Monitor, Video, Bot, Workflow, ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
@@ -33,6 +33,12 @@ const colorStyles = {
     icon: "text-orange-500",
     glow: "from-orange-500/40 via-amber-400/10 to-transparent",
   },
+  green: {
+    tileBg: "bg-emerald-500/10",
+    tileBorder: "border-emerald-500/20",
+    icon: "text-emerald-500",
+    glow: "from-emerald-500/40 via-green-400/10 to-transparent",
+  },
 } as const;
 
 const services = [
@@ -59,6 +65,12 @@ const services = [
     icon: Workflow,
     color: "orange",
     link: "/servicos/automacao-e-integracao",
+  },
+  {
+    id: "local-seo",
+    icon: MapPin,
+    color: "green",
+    link: "/servicos/seo-local",
   },
 ];
 

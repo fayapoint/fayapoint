@@ -218,6 +218,17 @@
           "Low-code + API implementation",
           "Alerts, logs, and ongoing support"
         ]
+      },
+      "local-seo": {
+        "title": "Local SEO & Google Business",
+        "description": "Dominate local search results and attract customers near you.",
+        "summary": "Complete Google Business Profile optimization, review management, and local citations.",
+        "price": "Starting at R$1,500/mo",
+        "bullets": [
+          "Optimized Google Business Profile",
+          "Reputation and review management",
+          "Local traffic strategy"
+        ]
       }
     },
     "AIToolsMarquee": {

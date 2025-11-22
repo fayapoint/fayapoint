@@ -7,6 +7,8 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "next-intl";
+import { getPricingTranslation, getPricingDescriptionTranslation } from "@/data/pricing-translations";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -22,6 +24,14 @@ const packageEmojis: Record<string, string> = {
   "AI Automation Jumpstart": "🤖",
 };
 
+const packageUrls: Record<string, string> = {
+  "Local Authority Launch": "/servicos/seo-local#builder",
+  "Content Engine Pro": "/servicos/edicao-de-video#builder", 
+  "Conversion Website Sprint": "/servicos/construcao-de-sites#builder",
+  "Video Growth Kit": "/servicos/edicao-de-video#builder",
+  "AI Automation Jumpstart": "/servicos/automacao-e-integracao#builder",
+};
+
 function splitDescription(description: string): string[] {
   if (!description) return [];
   return description
@@ -32,6 +42,7 @@ function splitDescription(description: string): string[] {
 
 export function ServicePackagesSection() {
   const { prices, loading, error } = useServicePrices("bundles");
+  const locale = useLocale();
 
   return (
     <section className="py-24 bg-muted/30" id="packages">
@@ -85,7 +96,7 @@ export function ServicePackagesSection() {
                       Passo sugerido
                     </p>
                     <h3 className="text-2xl font-semibold leading-tight">
-                      {pkg.unitLabel}
+                      {getPricingTranslation(pkg.unitLabel, locale)}
                     </h3>
                   </div>
                   <div>
@@ -97,7 +108,7 @@ export function ServicePackagesSection() {
                     </p>
                   </div>
                   <div className="space-y-2">
-                    {splitDescription(pkg.description).map((item) => (
+                    {splitDescription(getPricingDescriptionTranslation(pkg.description, pkg.unitLabel, locale)).map((item) => (
                       <div key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
                         <Sparkles className="w-4 h-4 text-primary mt-0.5" />
                         <span>{item}</span>
@@ -105,7 +116,7 @@ export function ServicePackagesSection() {
                     ))}
                   </div>
                   <Button asChild className="w-full" variant="secondary">
-                    <a href="#builder" className="flex items-center justify-center gap-2">
+                    <a href={`${packageUrls[pkg.unitLabel] ?? "#builder"}?bundle=${encodeURIComponent(pkg.unitLabel)}`} className="flex items-center justify-center gap-2">
                       Personalizar pacote
                       <ArrowRight className="w-4 h-4" />
                     </a>

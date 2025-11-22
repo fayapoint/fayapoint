@@ -144,17 +144,18 @@ export function CTASection() {
               whileHover={{ scale: 1.05, y: -4 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Link href="/registro">
-                <Button 
-                  size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-12 py-8 shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 group relative overflow-hidden"
-                >
+              <Button 
+                asChild
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-12 py-8 shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 group relative overflow-hidden"
+              >
+                <Link href="/registro">
                   <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                   <Rocket className="mr-2 group-hover:rotate-12 transition-transform" /> 
                   <span>{t("primaryButton")}</span>
                   <Zap className="ml-2 w-5 h-5 group-hover:scale-125 transition-transform" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </motion.div>
             
             <motion.div

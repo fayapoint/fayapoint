@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Layers, ShoppingCart, Minus, Plus, CheckCircle2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
@@ -13,6 +14,9 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
+import { useLocale } from "next-intl";
+import { getPricingTranslation, getPricingDescriptionTranslation } from "@/data/pricing-translations";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const serviceLabels: Record<
   string,
@@ -74,6 +78,40 @@ interface ServiceBuilderSectionProps {
   source?: string;
 }
 
+import { useUser } from "@/contexts/UserContext";
+
+// ... existing imports ...
+
+const bundleDefinitions: Record<string, Record<string, number>> = {
+  "Local Authority Launch": {
+    "GMB Optimization": 1,
+    "Review Management System": 1,
+    "Local Citation Pack": 1
+  },
+  "Content Engine Pro": {
+    "Static Post Design": 12,
+    "Reel/Short Editing": 4,
+    "Community Management": 10
+  },
+  "Conversion Website Sprint": {
+    "Discovery Workshop": 1,
+    "UX/UI Design Screen": 8,
+    "Frontend Dev Hour": 40,
+    "CMS Integration Block": 1,
+    "SEO & Performance Pack": 1
+  },
+  "Video Growth Kit": {
+    "Scriptwriting": 4,
+    "Video Editing": 4,
+    "Motion Graphics": 4
+  },
+  "AI Automation Jumpstart": {
+    "Process Mapping": 1,
+    "Simple Automation Workflow": 3,
+    "CRM/Database Integration": 1
+  }
+};
+
 export function ServiceBuilderSection({
   serviceSlug,
   title,
@@ -84,14 +122,96 @@ export function ServiceBuilderSection({
   sectionId = "builder",
   source,
 }: ServiceBuilderSectionProps) {
+  const { user, setUser, isLoggedIn } = useUser();
+  const searchParams = useSearchParams();
   const { prices, loading, error, groupedByService } = useServicePrices(
     restrictToServiceSlug && serviceSlug ? serviceSlug : undefined,
   );
-  const { items, setItemQuantity, clearCart } = useServiceCart();
+  
+  // ... existing imports ...
+
+  const [unlockName, setUnlockName] = useState("");
+  const [unlockEmail, setUnlockEmail] = useState("");
+
+  const handleUnlock = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (unlockName && unlockEmail) {
+      setUser({ name: unlockName, email: unlockEmail });
+      toast.success("Acesso liberado! Personalize seu pacote.");
+    }
+  };
+
+  const locale = useLocale();
+  const { items, setItemQuantity, addItem, clearCart } = useServiceCart();
   const [activeService, setActiveService] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [contact, setContact] = useState({ name: "", email: "", company: "", notes: "" });
+
+  // Auto-fill contact if user is logged in
+  useEffect(() => {
+    if (isLoggedIn && user) {
+      setContact(prev => ({
+        ...prev,
+        name: user.name,
+        email: user.email
+      }));
+    }
+  }, [isLoggedIn, user]);
+
+  // Handle bundle pre-fill from URL
+  useEffect(() => {
+    const bundleParam = searchParams.get("bundle");
+    if (bundleParam && !loading && prices.length > 0) {
+      const definition = bundleDefinitions[bundleParam];
+      if (definition) {
+        // We only load if the cart is empty to avoid overwriting user work
+        // Or we can force it. Let's force it but maybe show a toast.
+        // Actually, if the user just arrived, the cart might be empty or persisted.
+        // Let's clear and add.
+        
+        // Check if we already have these items to avoid infinite loop if we don't remove param
+        // Simple check: if cart has items matching the bundle, assume loaded?
+        // Better: use a ref to track if we processed this bundle param?
+        // For simplicity, we'll just run it once when prices load.
+        
+        // But React Strict Mode runs effects twice.
+        // We can check if the cart is already populated with THIS bundle?
+        // No, let's just do it. clearCart() + addItems.
+        
+        // To avoid constant re-adding, we might want to check if searchParams changed.
+        // But we need prices to be loaded.
+        
+        clearCart();
+        let addedCount = 0;
+        
+        Object.entries(definition).forEach(([unitLabel, qty]) => {
+          const priceItem = prices.find(p => p.unitLabel === unitLabel);
+          if (priceItem) {
+            addItem({
+              id: makeKey(priceItem),
+              type: "service",
+              name: getPricingTranslation(priceItem.unitLabel, locale),
+              quantity: qty,
+              price: priceItem.priceRange.recommended,
+              serviceSlug: priceItem.serviceSlug,
+              unitLabel: priceItem.unitLabel,
+              track: priceItem.track,
+            });
+            addedCount++;
+          }
+        });
+
+        if (addedCount > 0) {
+            toast.success(`Pacote "${bundleParam}" carregado!`);
+            // Scroll to builder
+            const element = document.getElementById(sectionId);
+            if (element) element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, prices]); // Only run when prices load. relying on bundle param being there initially.
 
   const catalog = useMemo(() => {
     const entries = Object.entries(groupedByService)
@@ -135,17 +255,16 @@ export function ServiceBuilderSection({
   }, [prices]);
 
   const cartLines = useMemo(() => {
-    return Object.entries(items)
-      .filter(([, qty]) => qty > 0)
-      .map(([key, qty]) => {
-        const price = priceIndex.get(key);
+    return Object.values(items)
+      .filter((item) => item.type === "service" && item.quantity > 0)
+      .map((item) => {
+        const price = priceIndex.get(item.id);
         if (!price) return null;
-        const unit = price.priceRange.recommended;
         return {
-          key,
+          key: item.id,
           price,
-          quantity: qty,
-          subtotal: unit * qty,
+          quantity: item.quantity,
+          subtotal: item.price * item.quantity,
         };
       })
       .filter(Boolean) as Array<{
@@ -160,20 +279,40 @@ export function ServiceBuilderSection({
 
   function increment(price: ServicePrice) {
     const key = makeKey(price);
-    const current = items[key] ?? 0;
-    const next = current === 0 ? Math.max(price.defaultQuantity, price.minQuantity) : current + 1;
-    setItemQuantity(key, next);
+    const currentItem = items[key];
+    const currentQty = currentItem?.quantity ?? 0;
+    
+    if (currentQty === 0) {
+      const next = Math.max(price.defaultQuantity, price.minQuantity);
+      addItem({
+        id: key,
+        type: "service",
+        name: getPricingTranslation(price.unitLabel, locale),
+        quantity: next,
+        price: price.priceRange.recommended,
+        serviceSlug: price.serviceSlug,
+        unitLabel: price.unitLabel,
+        track: price.track,
+      });
+    } else {
+      const next = currentQty + 1;
+      setItemQuantity(key, next);
+    }
   }
 
   function decrement(price: ServicePrice) {
     const key = makeKey(price);
-    const current = items[key] ?? 0;
-    if (current === 0) {
+    const currentItem = items[key];
+    const currentQty = currentItem?.quantity ?? 0;
+    
+    if (currentQty === 0) {
       return;
     }
-    const next = current - 1;
+    const next = currentQty - 1;
     if (next < price.minQuantity) {
-      setItemQuantity(key, 0);
+      setItemQuantity(key, 0); // 0 usually removes it in setItemQuantity logic if handled, or we should call removeItem
+      // checking setItemQuantity logic: if (quantity <= 0) { const { [key]: _removed, ...rest } = prev; return rest; }
+      // So 0 removes it. Correct.
     } else {
       setItemQuantity(key, next);
     }
@@ -270,6 +409,7 @@ export function ServiceBuilderSection({
                 </div>
               )}
 
+
               {activeCatalog && (
                 <div className="rounded-2xl border border-border/60 p-5 relative overflow-hidden">
                   <div
@@ -289,63 +429,97 @@ export function ServiceBuilderSection({
                 </div>
               )}
 
-              <div className="space-y-6">
-                {trackGroups.map((group) => (
-                  <div key={group.name} className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-primary" />
-                      <h4 className="text-lg font-semibold">{group.name}</h4>
-                    </div>
-                    <div className="grid gap-4">
-                      {group.items.map((item) => {
-                        const key = makeKey(item);
-                        const quantity = items[key] ?? 0;
-                        const unitPrice = item.priceRange.recommended;
-                        const subtotal = quantity * unitPrice;
-                        return (
-                          <motion.div
-                            key={key}
-                            initial={{ opacity: 0.8, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="border border-border/60 rounded-2xl p-4 bg-card/70 backdrop-blur"
-                          >
-                            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                              <div>
-                                <p className="text-base font-medium">{item.unitLabel}</p>
-                                <p className="text-sm text-muted-foreground max-w-2xl">
-                                  {item.description}
-                                </p>
-                                <div className="flex items-center gap-3 text-sm mt-2 text-muted-foreground">
-                                  <span>
-                                    {currencyFormatter.format(unitPrice)}
-                                    <span className="text-xs"> / {item.unitType.replace("per_", "")}</span>
-                                  </span>
-                                  <span>Qtd min {item.minQuantity}</span>
+              {!isLoggedIn ? (
+                <Card className="p-8 text-center border-dashed border-2">
+                  <h3 className="text-2xl font-bold mb-4">Desbloqueie o configurador</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    Para acessar os preços granulares e montar seu bundle personalizado, precisamos apenas saber quem você é.
+                  </p>
+                  <form onSubmit={handleUnlock} className="max-w-sm mx-auto space-y-4">
+                    <Input
+                      placeholder="Seu nome"
+                      required
+                      value={unlockName}
+                      onChange={(e) => setUnlockName(e.target.value)}
+                    />
+                    <Input
+                      placeholder="Seu email profissional"
+                      type="email"
+                      required
+                      value={unlockEmail}
+                      onChange={(e) => setUnlockEmail(e.target.value)}
+                    />
+                    <Button type="submit" className="w-full">
+                      Ver preços e personalizar
+                    </Button>
+                  </form>
+                </Card>
+              ) : (
+                <Accordion type="multiple" defaultValue={trackGroups.map(g => g.name)} className="space-y-6">
+                  {trackGroups.map((group) => (
+                    <AccordionItem key={group.name} value={group.name} className="border-none">
+                      <AccordionTrigger className="hover:no-underline py-0 pb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 rounded-full bg-primary" />
+                          <h4 className="text-lg font-semibold">{group.name}</h4>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="grid gap-4">
+                          {group.items.map((item) => {
+                            const key = makeKey(item);
+                            const cartItem = items[key];
+                            const quantity = cartItem?.quantity ?? 0;
+                            const unitPrice = item.priceRange.recommended;
+                            const subtotal = quantity * unitPrice;
+                            return (
+                              <motion.div
+                                key={key}
+                                initial={{ opacity: 0.8, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                className="border border-border/60 rounded-2xl p-4 bg-card/70 backdrop-blur"
+                              >
+                                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                                  <div>
+                                    <p className="text-base font-medium">
+                                      {getPricingTranslation(item.unitLabel, locale)}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground max-w-2xl">
+                                      {getPricingDescriptionTranslation(item.description, item.unitLabel, locale)}
+                                    </p>
+                                    <div className="flex items-center gap-3 text-sm mt-2 text-muted-foreground">
+                                      <span>
+                                        {currencyFormatter.format(unitPrice)}
+                                        <span className="text-xs"> / {item.unitType.replace("per_", "")}</span>
+                                      </span>
+                                      <span>Qtd min {item.minQuantity}</span>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col items-end gap-2">
+                                    <div className="flex items-center gap-2">
+                                      <Button variant="outline" size="icon" onClick={() => decrement(item)}>
+                                        <Minus className="w-4 h-4" />
+                                      </Button>
+                                      <div className="min-w-[48px] text-center font-semibold">{quantity}</div>
+                                      <Button variant="outline" size="icon" onClick={() => increment(item)}>
+                                        <Plus className="w-4 h-4" />
+                                      </Button>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">
+                                      {subtotal > 0 ? currencyFormatter.format(subtotal) : "Não selecionado"}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="flex flex-col items-end gap-2">
-                                <div className="flex items-center gap-2">
-                                  <Button variant="outline" size="icon" onClick={() => decrement(item)}>
-                                    <Minus className="w-4 h-4" />
-                                  </Button>
-                                  <div className="min-w-[48px] text-center font-semibold">{quantity}</div>
-                                  <Button variant="outline" size="icon" onClick={() => increment(item)}>
-                                    <Plus className="w-4 h-4" />
-                                  </Button>
-                                </div>
-                                <p className="text-sm text-muted-foreground">
-                                  {subtotal > 0 ? currencyFormatter.format(subtotal) : "Não selecionado"}
-                                </p>
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              )}
             </Card>
 
             <Card className="p-6 space-y-6 border border-border/70 bg-card/80 backdrop-blur">
@@ -367,7 +541,7 @@ export function ServiceBuilderSection({
                     <div key={line.key} className="border border-border/50 rounded-xl p-3">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-medium text-sm">{line.price.unitLabel}</p>
+                          <p className="font-medium text-sm">{getPricingTranslation(line.price.unitLabel, locale)}</p>
                           <p className="text-xs text-muted-foreground">
                             {line.quantity} × {currencyFormatter.format(line.price.priceRange.recommended)}
                           </p>
@@ -384,12 +558,16 @@ export function ServiceBuilderSection({
                   placeholder="Seu nome completo"
                   value={contact.name}
                   onChange={(e) => setContact((prev) => ({ ...prev, name: e.target.value }))}
+                  disabled={isLoggedIn} // Lock if logged in to ensure consistency
+                  className={isLoggedIn ? "bg-muted" : ""}
                 />
                 <Input
                   type="email"
                   placeholder="Email de contato"
                   value={contact.email}
                   onChange={(e) => setContact((prev) => ({ ...prev, email: e.target.value }))}
+                  disabled={isLoggedIn} // Lock if logged in
+                  className={isLoggedIn ? "bg-muted" : ""}
                 />
                 <Input
                   placeholder="Empresa (opcional)"

@@ -9,6 +9,8 @@ import { CheckCircle, Bot, ArrowRight, Sparkles, TrendingUp, Users, Zap, Target,
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
+import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
+
 
 export default function AIConsultingPage() {
   const t = useTranslations("Home.Services.ai-consulting");
@@ -379,6 +381,16 @@ export default function AIConsultingPage() {
           </Card>
         </div>
       </section>
+
+      <ServiceBuilderSection
+        serviceSlug="consulting"
+        restrictToServiceSlug
+        badgeLabel="Personalize sua consultoria"
+        title="Monte seu plano de consultoria"
+        subtitle="Escolha auditoria, roadmap, treinamento e assessoria executiva conforme suas necessidades."
+        sectionId="builder"
+        showServiceTabs={false}
+      />
       </main>
       <Footer />
     </div>

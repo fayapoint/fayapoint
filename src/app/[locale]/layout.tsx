@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
 import { UserProvider } from "@/contexts/UserContext";
+import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { routing } from "@/i18n/routing";
 
 const baseMetadata = {
@@ -110,22 +111,24 @@ export default async function RootLayout({
 
   return (
     <UserProvider>
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        {children}
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          gutter={8}
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: "#1f2937",
-              color: "#fff",
-              border: "1px solid #374151",
-            },
-          }}
-        />
-      </NextIntlClientProvider>
+      <ServiceCartProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            gutter={8}
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: "#1f2937",
+                color: "#fff",
+                border: "1px solid #374151",
+              },
+            }}
+          />
+        </NextIntlClientProvider>
+      </ServiceCartProvider>
     </UserProvider>
   );
 }

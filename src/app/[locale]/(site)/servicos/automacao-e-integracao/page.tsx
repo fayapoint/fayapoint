@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
+import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
 import { ArrowRight, CheckCircle2, CircuitBoard, Gauge, Link2, Workflow } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -179,6 +180,16 @@ export default function AutomationIntegrationPage() {
           </div>
         </div>
         </div>
+        
+        <ServiceBuilderSection
+          serviceSlug="automation-ai"
+          restrictToServiceSlug
+          badgeLabel="Personalize sua automação"
+          title="Monte seu fluxo automatizado"
+          subtitle="Escolha mapeamento, implementações simples ou complexas, e agentes de IA conforme sua necessidade."
+          sectionId="builder"
+          showServiceTabs={false}
+        />
       </main>
       <Footer />
     </div>

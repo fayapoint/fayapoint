@@ -9,15 +9,9 @@ import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
 import { useUser } from "@/contexts/UserContext";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { NavCart } from "@/components/cart/NavCart";
 
 const coursesMenu = [
   {
@@ -226,6 +220,7 @@ export function Header() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
+            <NavCart />
             <LocaleSwitcher />
             <ThemeSwitcher />
             {mounted && isLoggedIn && user ? (
@@ -274,6 +269,7 @@ export function Header() {
           <div className="md:hidden absolute top-16 left-0 right-0 bg-popover/95 backdrop-blur-xl border-b border-border">
             <div className="px-4 py-6 space-y-4">
               <div className="pb-2 flex items-center gap-3">
+                <NavCart />
                 <LocaleSwitcher />
                 <ThemeSwitcher />
               </div>

@@ -218,6 +218,17 @@
           "Implementação low-code + APIs",
           "Alertas, logs e suporte contínuo"
         ]
+      },
+      "local-seo": {
+        "title": "SEO Local & Google Business",
+        "description": "Domine as buscas locais e atraia clientes próximos ao seu negócio.",
+        "summary": "Otimização completa do Perfil de Negócio Google, gestão de avaliações e citações locais.",
+        "price": "A partir de R$1.500/mês",
+        "bullets": [
+          "Perfil Google Business otimizado",
+          "Gestão de reputação e reviews",
+          "Estratégia de tráfego local"
+        ]
       }
     },
     "AIToolsMarquee": {

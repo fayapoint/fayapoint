@@ -20,10 +20,17 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { Product } from "@/lib/products";
+import { useServiceCart } from "@/contexts/ServiceCartContext";
+import { useUser } from "@/contexts/UserContext";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function CourseSalesPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const router = useRouter();
+  const { addItem } = useServiceCart();
+  const { isLoggedIn } = useUser();
   
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -285,24 +292,48 @@ export default function CourseSalesPage() {
 
                     {/* CTAs */}
                     <div className="space-y-3 mb-6">
-                      <Link href="/onboarding" className="w-full">
-                        <Button
-                          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-6 text-lg shadow-lg shadow-purple-500/50"
-                          size="lg"
-                        >
-                          <ShoppingCart className="mr-2" size={20} />
-                          Comprar Agora
-                        </Button>
-                      </Link>
-                      <Link href="/onboarding" className="w-full">
-                        <Button
-                          variant="outline"
-                          className="w-full border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10"
-                          size="lg"
-                        >
-                          Adicionar ao Carrinho
-                        </Button>
-                      </Link>
+                      <Button
+                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-6 text-lg shadow-lg shadow-purple-500/50"
+                        size="lg"
+                        onClick={() => {
+                          addItem({
+                            id: `course:${product.slug}`,
+                            type: 'course',
+                            name: product.name,
+                            quantity: 1,
+                            price: product.pricing.price,
+                            slug: product.slug
+                          });
+                          toast.success("Curso adicionado ao carrinho!");
+                          if (isLoggedIn) {
+                            router.push('/checkout/cart');
+                          } else {
+                            router.push('/onboarding');
+                          }
+                        }}
+                      >
+                        <ShoppingCart className="mr-2" size={20} />
+                        Comprar Agora
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        className="w-full border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10"
+                        size="lg"
+                        onClick={() => {
+                          addItem({
+                            id: `course:${product.slug}`,
+                            type: 'course',
+                            name: product.name,
+                            quantity: 1,
+                            price: product.pricing.price,
+                            slug: product.slug
+                          });
+                          toast.success("Adicionado ao carrinho!");
+                        }}
+                      >
+                        Adicionar ao Carrinho
+                      </Button>
                     </div>
 
                     {/* What's Included */}
@@ -508,15 +539,29 @@ export default function CourseSalesPage() {
 
               {/* CTA */}
               <div className="mt-12 text-center">
-                <Link href="/onboarding">
-                  <Button
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg"
-                    size="lg"
-                  >
-                    Sim, Quero Dominar Tudo Isso Agora
-                    <ArrowRight className="ml-2" size={20} />
-                  </Button>
-                </Link>
+                <Button
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg"
+                  size="lg"
+                  onClick={() => {
+                    addItem({
+                      id: `course:${product.slug}`,
+                      type: 'course',
+                      name: product.name,
+                      quantity: 1,
+                      price: product.pricing.price,
+                      slug: product.slug
+                    });
+                    toast.success("Curso adicionado ao carrinho!");
+                    if (isLoggedIn) {
+                      router.push('/checkout/cart');
+                    } else {
+                      router.push('/onboarding');
+                    }
+                  }}
+                >
+                  Sim, Quero Dominar Tudo Isso Agora
+                  <ArrowRight className="ml-2" size={20} />
+                </Button>
                 <p className="text-sm text-gray-400 mt-4">
                   ✓ Acesso imediato ✓ Garantia de 30 dias ✓ Certificado incluído
                 </p>

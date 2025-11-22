@@ -415,17 +415,15 @@ export default function WebsiteBuildingPage() {
           </div>
         </section>
 
-        <ServiceCartProvider>
-          <ServiceBuilderSection
-            serviceSlug="website-full"
-            restrictToServiceSlug
-            badgeLabel="Personalize seu projeto"
-            title="Monte seu site sob medida"
-            subtitle="Escolha discovery, UX/UI, desenvolvimento, QA e suporte conforme a maturidade do seu produto digital."
-            sectionId="website-builder"
-            showServiceTabs={false}
-          />
-        </ServiceCartProvider>
+        <ServiceBuilderSection
+          serviceSlug="website-full"
+          restrictToServiceSlug
+          badgeLabel="Personalize seu projeto"
+          title="Monte seu site sob medida"
+          subtitle="Escolha discovery, UX/UI, desenvolvimento, QA e suporte conforme a maturidade do seu produto digital."
+          sectionId="builder"
+          showServiceTabs={false}
+        />
       </main>
       <Footer />
     </div>
