@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IUser extends Document {
   email: string;
+  password?: string;
   name: string;
   image?: string;
   role: 'student' | 'instructor' | 'admin';
@@ -57,6 +58,10 @@ const UserSchema = new Schema<IUser>({
     unique: true,
     lowercase: true,
     trim: true,
+  },
+  password: {
+    type: String,
+    select: false, // Don't return password by default
   },
   name: {
     type: String,

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -31,50 +32,11 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useUser } from "@/contexts/UserContext";
+import { getCourseBySlug } from "@/data/courses";
+import { toast } from "react-hot-toast";
 
-const userStats = {
-  name: "João Silva",
-  avatar: "/avatar.jpg",
-  level: 12,
-  points: 3450,
-  currentStreak: 7,
-  longestStreak: 21,
-  coursesCompleted: 8,
-  coursesInProgress: 3,
-  totalHours: 47,
-  certificates: 5,
-};
-
-const inProgressCourses = [
-  {
-    id: 1,
-    title: "ChatGPT Masterclass",
-    progress: 75,
-    nextLesson: "Automação com APIs",
-    thumbnail: "/courses/chatgpt.jpg",
-    totalLessons: 24,
-    completedLessons: 18,
-  },
-  {
-    id: 2,
-    title: "Midjourney: Arte com IA",
-    progress: 45,
-    nextLesson: "Parameters Avançados",
-    thumbnail: "/courses/midjourney.jpg",
-    totalLessons: 20,
-    completedLessons: 9,
-  },
-  {
-    id: 3,
-    title: "n8n Workflows",
-    progress: 30,
-    nextLesson: "Integração com ChatGPT",
-    thumbnail: "/courses/n8n.jpg",
-    totalLessons: 30,
-    completedLessons: 9,
-  },
-];
-
+// Keep static for layout demo
 const upcomingEvents = [
   {
     id: 1,
@@ -145,7 +107,81 @@ const recommendations = [
 ];
 
 export default function PortalPage() {
+  const router = useRouter();
+  const { user, setUser, logout } = useUser();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [isLoading, setIsLoading] = useState(true);
+  const [userCourses, setUserCourses] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const token = localStorage.getItem('fayapoint_token');
+      
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/user/dashboard', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (res.status === 401) {
+          logout();
+          router.push('/login');
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error('Falha ao carregar dados');
+        }
+
+        const data = await res.json();
+        setUser(data.user);
+
+        // Map progress to course details
+        const mappedCourses = data.courses.map((progress: any) => {
+          const courseDetails = getCourseBySlug(progress.courseId);
+          return {
+            ...progress,
+            details: courseDetails
+          };
+        });
+        
+        setUserCourses(mappedCourses);
+      } catch (error) {
+        console.error('Error fetching dashboard:', error);
+        toast.error("Erro ao carregar dashboard");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [router, setUser, logout]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
+  const userStats = user.progress || {
+    level: 1,
+    points: 0,
+    currentStreak: 0,
+    coursesCompleted: 0,
+    coursesInProgress: 0,
+    totalHours: 0,
+    certificates: 0,
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -162,10 +198,12 @@ export default function PortalPage() {
             >
               <div className="flex items-center gap-4">
                 <Avatar className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500">
-                  <span className="text-2xl font-bold">JS</span>
+                  <span className="text-2xl font-bold">
+                    {user.name ? user.name.substring(0, 2).toUpperCase() : 'US'}
+                  </span>
                 </Avatar>
                 <div>
-                  <h1 className="text-2xl font-bold">Bem-vindo, {userStats.name}!</h1>
+                  <h1 className="text-2xl font-bold">Bem-vindo, {user.name}!</h1>
                   <div className="flex items-center gap-4 mt-1">
                     <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/50">
                       Nível {userStats.level}
@@ -189,7 +227,10 @@ export default function PortalPage() {
                   <Bell size={20} />
                   <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" onClick={() => {
+                  logout();
+                  router.push('/');
+                }}>
                   <LogOut size={20} />
                 </Button>
               </div>
@@ -243,7 +284,7 @@ export default function PortalPage() {
                   <div className="flex items-center gap-3">
                     <Award className="text-green-400" size={24} />
                     <div>
-                      <p className="text-2xl font-bold">{userStats.certificates}</p>
+                      <p className="text-2xl font-bold">{userStats.certificates || 0}</p>
                       <p className="text-sm text-gray-400">Certificados</p>
                     </div>
                   </div>
@@ -256,33 +297,44 @@ export default function PortalPage() {
                   <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
                     <h2 className="text-xl font-semibold mb-4">Continuar Aprendendo</h2>
                     <div className="space-y-4">
-                      {inProgressCourses.map(course => (
-                        <div key={course.id} className="flex gap-4 items-center">
-                          <div className="w-24 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                            <PlayCircle size={24} className="text-white/70" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold">{course.title}</h3>
-                            <p className="text-sm text-gray-400 mb-2">
-                              Próxima aula: {course.nextLesson}
-                            </p>
-                            <div className="flex items-center gap-4">
-                              <Progress value={course.progress} className="flex-1 h-2" />
-                              <span className="text-sm text-gray-400">
-                                {course.progress}%
-                              </span>
+                      {userCourses.length > 0 ? (
+                        userCourses.map(progress => (
+                          <div key={progress._id} className="flex gap-4 items-center">
+                            <div className="w-24 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center overflow-hidden relative">
+                               {/* Ideally use course image */}
+                               <PlayCircle size={24} className="text-white/70 absolute z-10" />
+                               {/* If we had image url: <img src={progress.details?.imageUrl} ... /> */}
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {course.completedLessons}/{course.totalLessons} aulas
-                            </p>
+                            <div className="flex-1">
+                              <h3 className="font-semibold">{progress.details?.title || progress.courseId}</h3>
+                              <p className="text-sm text-gray-400 mb-2">
+                                Próxima aula: {progress.nextLesson || 'Introdução'}
+                              </p>
+                              <div className="flex items-center gap-4">
+                                <Progress value={progress.progressPercent} className="flex-1 h-2" />
+                                <span className="text-sm text-gray-400">
+                                  {progress.progressPercent}%
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {progress.completedLessons?.length || 0}/{progress.details?.totalLessons || '?'} aulas
+                              </p>
+                            </div>
+                            <Link href={`/curso/${progress.courseId}`}>
+                              <Button size="sm" variant="ghost">
+                                <ChevronRight size={16} />
+                              </Button>
+                            </Link>
                           </div>
-                          <Link href={`/curso/${course.id}/continuar`}>
-                            <Button size="sm" variant="ghost">
-                              <ChevronRight size={16} />
-                            </Button>
+                        ))
+                      ) : (
+                        <div className="text-center py-8 text-gray-400">
+                          <p>Você ainda não começou nenhum curso.</p>
+                          <Link href="/cursos">
+                            <Button className="mt-4" variant="outline">Explorar Cursos</Button>
                           </Link>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </Card>
 

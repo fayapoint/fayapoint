@@ -3,10 +3,20 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface User {
+  _id?: string;
   name: string;
   email: string;
   role?: string;
   interest?: string;
+  progress?: {
+    level: number;
+    points: number;
+    currentStreak: number;
+    coursesCompleted: number;
+    coursesInProgress: number;
+    totalHours: number;
+    certificates?: number;
+  };
 }
 
 interface UserContextType {

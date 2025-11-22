@@ -20,8 +20,11 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
 
+import { useUser } from "@/contexts/UserContext";
+
 export default function LoginPage() {
   const router = useRouter();
+  const { setUser } = useUser();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -34,12 +37,37 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate login
-    setTimeout(() => {
-      toast.success("Login realizado com sucesso!");
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao fazer login');
+      }
+
+      // Save token
+      localStorage.setItem('fayapoint_token', data.token);
+      
+      // Update user context
+      setUser(data.user);
+
+      toast.success(`Bem-vindo, ${data.user.name}!`);
       router.push("/portal");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const handleGoogleLogin = () => {
