@@ -1,12 +1,25 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import { v2 as cloudinary } from 'cloudinary';
+import dbConnect from '@/lib/mongodb';
+import User from '@/models/User';
+import ImageCreation from '@/models/ImageCreation';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: 'dfd7iigzq',
+  api_key: '751676242221239',
+  api_secret: 'd5mrrcPRmUHAKY61Q6PvUgdiXP4'
+});
+
 export async function POST(request: Request) {
   try {
+    await dbConnect();
+    
     const headersList = await headers();
     const authHeader = headersList.get('authorization');
 
@@ -15,10 +28,17 @@ export async function POST(request: Request) {
     }
 
     const token = authHeader.split(' ')[1];
+    let decoded: any;
+    
     try {
-      jwt.verify(token, JWT_SECRET);
+      decoded = jwt.verify(token, JWT_SECRET);
     } catch {
       return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
+    }
+
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+        return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
     const body = await request.json();
@@ -32,13 +52,14 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'API Key não configurada no servidor' }, { status: 500 });
     }
 
+    // Generate Image
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://fayapoint.com', // Optional, for including your app on openrouter.ai rankings.
-        'X-Title': 'Fayapoint AI', // Optional. Shows in rankings on openrouter.ai.
+        'HTTP-Referer': 'https://fayapoint.com',
+        'X-Title': 'Fayapoint AI',
       },
       body: JSON.stringify({
         model: 'black-forest-labs/flux-1-schnell',
@@ -58,29 +79,48 @@ export async function POST(request: Request) {
     }
 
     const result = await response.json();
-    let imageUrl = null;
+    let tempImageUrl = null;
 
     if (result.choices && result.choices[0].message && result.choices[0].message.images) {
-        // Look for images in the message
         const images = result.choices[0].message.images;
         if (images.length > 0) {
-             imageUrl = images[0].image_url.url;
+             tempImageUrl = images[0].image_url.url;
         }
     } else if (result.choices && result.choices[0].message && result.choices[0].message.content) {
-         // Sometimes the content might contain a link if it's not structured as 'images'
-         // But for 'gemini-3-pro-image-preview' via OpenRouter, it typically returns an image block or url.
-         // Let's assume the user snippet is correct about `message.images`.
-         // If it's text, we return it as a fallback description?
-         // Actually, looking at user snippet: `message.images.forEach(...)`.
+        const content = result.choices[0].message.content;
+        const urlMatch = content.match(/https?:\/\/[^\s)]+/);
+        if (urlMatch) {
+            tempImageUrl = urlMatch[0];
+        }
     }
 
-    if (!imageUrl) {
-         // Fallback check if it's in content (sometimes models behave differently)
-         // For now, return error if no image found
+    if (!tempImageUrl) {
          return NextResponse.json({ error: 'Nenhuma imagem gerada' }, { status: 500 });
     }
 
-    return NextResponse.json({ imageUrl });
+    // Upload to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(tempImageUrl, {
+        folder: 'fayapoint-ai-creations',
+        context: {
+            username: user.name,
+            prompt: prompt
+        }
+    });
+
+    // Save to MongoDB
+    const newCreation = await ImageCreation.create({
+        userId: user._id,
+        userName: user.name,
+        prompt: prompt,
+        imageUrl: uploadResult.secure_url,
+        publicId: uploadResult.public_id,
+        provider: 'flux-1-schnell'
+    });
+
+    return NextResponse.json({ 
+        imageUrl: uploadResult.secure_url,
+        creationId: newCreation._id
+    });
 
   } catch (error) {
     console.error('Image generation error:', error);

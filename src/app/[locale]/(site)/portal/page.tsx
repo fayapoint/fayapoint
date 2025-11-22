@@ -29,7 +29,8 @@ import {
   Save,
   Loader2,
   Check,
-  Lock
+  Lock,
+  Sparkles
 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -105,6 +106,27 @@ export default function PortalPage() {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [myCreations, setMyCreations] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (activeTab === 'aitools') {
+        fetchCreations();
+    }
+  }, [activeTab]);
+
+  const fetchCreations = async () => {
+      const token = localStorage.getItem('fayapoint_token');
+      if(!token) return;
+      try {
+          const res = await fetch('/api/user/creations', {
+              headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if(res.ok) {
+              const data = await res.json();
+              setMyCreations(data);
+          }
+      } catch(e) { console.error(e); }
+  };
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -231,6 +253,7 @@ export default function PortalPage() {
 
         setGeneratedImage(data.imageUrl);
         toast.success("Imagem gerada com sucesso!");
+        fetchCreations(); // Refresh gallery
     } catch (error) {
         const message = error instanceof Error ? error.message : "Erro ao gerar imagem";
         toast.error(message);
@@ -511,54 +534,81 @@ export default function PortalPage() {
               <div className="grid lg:grid-cols-3 gap-6">
                   <div className="lg:col-span-1 space-y-6">
                       <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
-                          <h2 className="text-xl font-semibold mb-4">Studio de Criação</h2>
+                          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                            <Sparkles className="text-purple-400" /> Studio de Criação
+                          </h2>
                           <p className="text-sm text-gray-400 mb-4">
-                              Gere imagens incríveis usando o modelo Gemini 3 Pro Image Preview.
+                              Gere imagens incríveis usando o modelo Flux 1 Schnell. Suas criações são salvas automaticamente na galeria pública e no seu perfil.
                           </p>
                           
                           <div className="space-y-4">
                               <div className="space-y-2">
                                   <Label>Seu Prompt Criativo</Label>
                                   <Textarea 
-                                    placeholder="Um por do sol cyberpunk sobre uma cidade futurista..." 
-                                    className="bg-black/50 border-gray-700 min-h-[120px]"
+                                    placeholder="Um por do sol cyberpunk sobre uma cidade futurista, 8k, detalhado..." 
+                                    className="bg-black/50 border-gray-700 min-h-[150px] focus:ring-purple-500"
                                     value={prompt}
                                     onChange={(e) => setPrompt(e.target.value)}
                                   />
                               </div>
                               <Button 
-                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg shadow-purple-900/20"
                                 onClick={handleGenerateImage}
                                 disabled={isGenerating || !prompt.trim()}
                               >
                                   {isGenerating ? (
-                                      <><Loader2 className="animate-spin mr-2" size={16} /> Gerando...</>
+                                      <><Loader2 className="animate-spin mr-2" size={16} /> Criando sua arte...</>
                                   ) : (
                                       <><Flame className="mr-2" size={16} /> Gerar Imagem</>
                                   )}
                               </Button>
                           </div>
                       </Card>
+
+                      {/* Recent Prompt History / Tips could go here */}
                   </div>
                   
-                  <div className="lg:col-span-2">
-                      <Card className="bg-white/5 backdrop-blur border-white/10 p-6 min-h-[400px] flex items-center justify-center border-dashed">
+                  <div className="lg:col-span-2 space-y-6">
+                      {/* Main Preview Area */}
+                      <Card className="bg-white/5 backdrop-blur border-white/10 p-6 min-h-[400px] flex items-center justify-center border-dashed relative overflow-hidden group">
                           {generatedImage ? (
-                              <div className="relative group w-full h-full">
-                                  <img src={generatedImage} alt="Generated" className="w-full h-auto rounded-lg shadow-2xl" />
-                                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-4">
-                                      <Button variant="secondary" onClick={() => window.open(generatedImage, '_blank')}>
-                                          <Download className="mr-2" size={16} /> Baixar
+                              <div className="relative w-full h-full flex flex-col items-center">
+                                  <img src={generatedImage} alt="Generated" className="max-h-[500px] w-auto rounded-lg shadow-2xl object-contain" />
+                                  <div className="absolute bottom-4 right-4 flex gap-2">
+                                      <Button variant="secondary" size="sm" onClick={() => window.open(generatedImage, '_blank')}>
+                                          <Download className="mr-2" size={16} /> Baixar HD
                                       </Button>
                                   </div>
                               </div>
                           ) : (
                               <div className="text-center text-gray-500">
-                                  <ImageIcon size={48} className="mx-auto mb-4 opacity-50" />
-                                  <p>Sua obra de arte aparecerá aqui</p>
+                                  <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <ImageIcon size={32} className="opacity-50" />
+                                  </div>
+                                  <p className="text-lg font-medium">Sua obra de arte aparecerá aqui</p>
+                                  <p className="text-sm opacity-60">Digite um prompt ao lado para começar</p>
                               </div>
                           )}
                       </Card>
+
+                      {/* My Creations Gallery */}
+                      {myCreations.length > 0 && (
+                          <div className="space-y-4">
+                              <h3 className="text-lg font-semibold flex items-center gap-2">
+                                  <ImageIcon size={18} /> Suas Criações Recentes
+                              </h3>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                  {myCreations.map((creation: any) => (
+                                      <div key={creation._id} className="group relative aspect-square rounded-lg overflow-hidden bg-gray-900 cursor-pointer" onClick={() => setGeneratedImage(creation.imageUrl)}>
+                                          <img src={creation.imageUrl} alt={creation.prompt} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" />
+                                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                              <p className="text-xs text-white p-2 text-center line-clamp-3">{creation.prompt}</p>
+                                          </div>
+                                      </div>
+                                  ))}
+                              </div>
+                          </div>
+                      )}
                   </div>
               </div>
             </TabsContent>

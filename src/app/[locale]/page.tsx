@@ -9,6 +9,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { PricingSection } from "@/components/home/PricingSection";
 import { CTASection } from "@/components/home/CTASection";
 import { ServicePackagesSection } from "@/components/home/ServicePackagesSection";
+import { CommunityGallery } from "@/components/home/CommunityGallery";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
+        <CommunityGallery />
         <ServicesCarousel />
         <AIToolsMarquee />
         <FeaturesSection />
