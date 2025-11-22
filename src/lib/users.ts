@@ -1,6 +1,6 @@
 import { MongoClient, Collection, ObjectId, Document } from 'mongodb';
 
-const DEFAULT_MONGODB_URI = 'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/?retryWrites=true&w=majority&appName=aicornercluster';
+const DEFAULT_MONGODB_URI = '';
 
 function resolveMongoUri() {
   const envUri = process.env.MONGODB_URI;

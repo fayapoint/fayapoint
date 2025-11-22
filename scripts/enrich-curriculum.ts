@@ -7,8 +7,7 @@
 
 import { MongoClient } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_URI || 
-  'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/?retryWrites=true&w=majority&appName=aicornercluster';
+const MONGODB_URI = process.env.MONGODB_URI || '';
 
 const DATABASE_NAME = 'fayapointProdutos';
 const COLLECTION_NAME = 'products';

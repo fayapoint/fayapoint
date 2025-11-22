@@ -4,7 +4,7 @@ import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret-key-change-me';
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 export async function POST(request: Request) {
   try {

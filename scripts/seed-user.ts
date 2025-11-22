@@ -1,10 +1,10 @@
-
 import { MongoClient } from 'mongodb';
 import bcrypt from 'bcryptjs';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/?retryWrites=true&w=majority&appName=aicornercluster';
-const DATABASE_NAME = 'fayapoint';
-const COLLECTION_NAME = 'users'; // Mongoose usually pluralizes 'User' to 'users'
+const MONGODB_URI = process.env.MONGODB_URI || '';
+const DATABASE_NAME = process.env.DATABASE_NAME || 'fayapoint';
+const COLLECTION_NAME = process.env.COLLECTION_NAME || 'users'; // Mongoose usually pluralizes 'User' to 'users'
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 async function seedUser() {
   const client = new MongoClient(MONGODB_URI);

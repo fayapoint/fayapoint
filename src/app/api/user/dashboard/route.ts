@@ -5,7 +5,7 @@ import CourseProgress from '@/models/CourseProgress';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret-key-change-me';
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 export async function GET(request: Request) {
   try {
