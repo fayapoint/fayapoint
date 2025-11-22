@@ -325,6 +325,151 @@
           "name": "Pika Labs",
           "description": "AI-generated videos",
           "category": "Visual Creation"
+        },
+        "meta": {
+          "name": "Meta AI",
+          "description": "Llama and open source technologies from Meta",
+          "category": "LLM Open Source"
+        },
+        "mistral": {
+          "name": "Mistral AI",
+          "description": "Efficient and powerful AI models from Europe",
+          "category": "LLM Open Source"
+        },
+        "cohere": {
+          "name": "Cohere",
+          "description": "AI focused on enterprise and developers",
+          "category": "LLM Enterprise"
+        },
+        "huggingface": {
+          "name": "Hugging Face",
+          "description": "The AI community and open source hub",
+          "category": "Model Hub"
+        },
+        "langchain": {
+          "name": "LangChain",
+          "description": "Build LLM applications easily",
+          "category": "Framework"
+        },
+        "pinecone": {
+          "name": "Pinecone",
+          "description": "Vector database for AI",
+          "category": "Vector DB"
+        },
+        "jasper": {
+          "name": "Jasper",
+          "description": "Create marketing content with AI",
+          "category": "Marketing"
+        },
+        "copyai": {
+          "name": "Copy.ai",
+          "description": "Automated writing for sales and marketing",
+          "category": "Marketing"
+        },
+        "descript": {
+          "name": "Descript",
+          "description": "Audio and video editing as text",
+          "category": "Video Editing"
+        },
+        "synthesia": {
+          "name": "Synthesia",
+          "description": "AI avatar videos in minutes",
+          "category": "Avatar AI"
+        },
+        "heygen": {
+          "name": "HeyGen",
+          "description": "Realistic AI avatar video generation",
+          "category": "Avatar AI"
+        },
+        "canva": {
+          "name": "Canva",
+          "description": "Simple design with magic AI tools",
+          "category": "Design"
+        },
+        "notion": {
+          "name": "Notion AI",
+          "description": "Your connected workspace with AI",
+          "category": "Productivity"
+        },
+        "linear": {
+          "name": "Linear",
+          "description": "Modern and fast project management",
+          "category": "Management"
+        },
+        "vercel": {
+          "name": "Vercel",
+          "description": "Frontend infrastructure and edge AI",
+          "category": "Deploy"
+        },
+        "replit": {
+          "name": "Replit",
+          "description": "Collaborative IDE and instant deploy",
+          "category": "Coding"
+        },
+        "docker": {
+          "name": "Docker",
+          "description": "Containers for modern development",
+          "category": "DevOps"
+        },
+        "postman": {
+          "name": "Postman",
+          "description": "Platform for building APIs",
+          "category": "API"
+        },
+        "figma": {
+          "name": "Figma",
+          "description": "Collaborative interface design",
+          "category": "Design"
+        },
+        "slack": {
+          "name": "Slack",
+          "description": "Where work happens",
+          "category": "Communication"
+        },
+        "discord": {
+          "name": "Discord",
+          "description": "Place to chat and interact",
+          "category": "Community"
+        },
+        "zoom": {
+          "name": "Zoom",
+          "description": "Video conferencing with integrated AI",
+          "category": "Meetings"
+        },
+        "microsoft": {
+          "name": "Microsoft",
+          "description": "Copilot for Microsoft 365",
+          "category": "Productivity"
+        },
+        "google": {
+          "name": "Google",
+          "description": "Gemini and Google AI ecosystem",
+          "category": "Tech Giant"
+        },
+        "supabase": {
+          "name": "Supabase",
+          "description": "The Open Source Firebase alternative",
+          "category": "Backend"
+        },
+        "stripe": {
+          "name": "Stripe",
+          "description": "Financial infrastructure for the internet",
+          "category": "Payments"
+        },
+        "gamma": {
+          "name": "Gamma",
+          "description": "Beautiful AI-generated presentations",
+          "category": "Presentations"
+        },
+        "tome": {
+          "name": "Tome",
+          "description": "Generative storytelling format",
+          "category": "Storytelling"
+        },
+        "beautifulai": {
+          "name": "Beautiful.ai",
+          "description": "Professional design slides with AI",
+          "category": "Presentations"
         }
       }
     },

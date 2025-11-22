@@ -9,11 +9,11 @@ import ImageCreation from '@/models/ImageCreation';
 const JWT_SECRET = process.env.JWT_SECRET || '';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-// Configure Cloudinary
+// Configure Cloudinary from Environment Variables
 cloudinary.config({
-  cloud_name: 'dfd7iigzq',
-  api_key: '751676242221239',
-  api_secret: 'd5mrrcPRmUHAKY61Q6PvUgdiXP4'
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 export async function POST(request: Request) {
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { prompt } = body;
+    const { prompt, model = 'flux-1-schnell' } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt é obrigatório' }, { status: 400 });
@@ -50,6 +50,17 @@ export async function POST(request: Request) {
 
     if (!OPENROUTER_API_KEY) {
         return NextResponse.json({ error: 'API Key não configurada no servidor' }, { status: 500 });
+    }
+
+    // Determine model configuration
+    let targetModel = 'black-forest-labs/flux-1-schnell';
+    let additionalBodyParams = {};
+
+    if (model === 'nano-banana-pro') {
+        targetModel = 'google/gemini-3-pro-image-preview';
+        additionalBodyParams = {
+            modalities: ['image', 'text']
+        };
     }
 
     // Generate Image
@@ -62,13 +73,14 @@ export async function POST(request: Request) {
         'X-Title': 'Fayapoint AI',
       },
       body: JSON.stringify({
-        model: 'black-forest-labs/flux-1-schnell',
+        model: targetModel,
         messages: [
             {
               "role": "user",
               "content": prompt
             }
           ],
+        ...additionalBodyParams
       }),
     });
 
@@ -81,16 +93,19 @@ export async function POST(request: Request) {
     const result = await response.json();
     let tempImageUrl = null;
 
-    if (result.choices && result.choices[0].message && result.choices[0].message.images) {
-        const images = result.choices[0].message.images;
-        if (images.length > 0) {
-             tempImageUrl = images[0].image_url.url;
-        }
-    } else if (result.choices && result.choices[0].message && result.choices[0].message.content) {
-        const content = result.choices[0].message.content;
-        const urlMatch = content.match(/https?:\/\/[^\s)]+/);
-        if (urlMatch) {
-            tempImageUrl = urlMatch[0];
+    // Handle Response (Gemini 3 Pro returns base64 in message.images, Flux returns url in message.images or content)
+    if (result.choices && result.choices[0].message) {
+        const message = result.choices[0].message;
+        
+        if (message.images && message.images.length > 0) {
+             // Works for both URL and Base64 Data URI
+             tempImageUrl = message.images[0].image_url.url; 
+        } else if (message.content) {
+             // Fallback for models returning URL in text
+             const urlMatch = message.content.match(/https?:\/\/[^\s)]+/);
+             if (urlMatch) {
+                 tempImageUrl = urlMatch[0];
+             }
         }
     }
 
