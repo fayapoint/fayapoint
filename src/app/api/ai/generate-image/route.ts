@@ -57,11 +57,26 @@ export async function POST(request: Request) {
     let targetModel = 'black-forest-labs/flux-1-schnell';
     let additionalBodyParams = {};
 
-    if (model === 'nano-banana-pro') {
-        targetModel = 'google/gemini-3-pro-image-preview';
-        additionalBodyParams = {
-            modalities: ['image', 'text']
-        };
+    switch (model) {
+        case 'nano-banana-pro':
+            targetModel = 'google/gemini-2.0-flash-exp:free'; // Using 2.0 Flash Exp as "Nano Banana Pro"
+            additionalBodyParams = {
+                modalities: ['image', 'text']
+            };
+            break;
+        case 'flux-1-dev':
+            targetModel = 'black-forest-labs/flux-1-dev';
+            break;
+        case 'recraft-v3':
+            targetModel = 'recraft-ai/recraft-v3';
+            break;
+        case 'stable-diffusion-3.5-large':
+            targetModel = 'stabilityai/stable-diffusion-3-5-large';
+            break;
+        case 'flux-1-schnell':
+        default:
+            targetModel = 'black-forest-labs/flux-1-schnell';
+            break;
     }
 
     // Generate Image

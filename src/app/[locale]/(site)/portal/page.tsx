@@ -30,8 +30,29 @@ import {
   Loader2,
   Check,
   Lock,
-  Sparkles
+  Sparkles,
+  Wand2,
+  Palette,
+  Layout,
+  Aperture,
+  Zap,
+  Monitor,
+  Camera,
+  Maximize,
+  Grid,
+  Sun,
+  Moon,
+  Layers,
+  Smartphone,
+  Box
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -78,6 +99,47 @@ interface IOrder {
   }[];
 }
 
+const AI_MODELS = [
+  { id: "nano-banana-pro", name: "Nano Banana Pro (Recomendado)", icon: Zap, description: "O mais avançado e equilibrado" },
+  { id: "flux-1-schnell", name: "Flux 1 Schnell (Rápido)", icon: Flame, description: "Geração ultra-rápida" },
+  { id: "flux-1-dev", name: "Flux 1 Dev (Qualidade)", icon: Star, description: "Maior detalhamento" },
+  { id: "recraft-v3", name: "Recraft V3 (Design)", icon: Layout, description: "Ótimo para vetores e design" },
+  { id: "stable-diffusion-3.5-large", name: "Stable Diffusion 3.5", icon: Aperture, description: "Versatilidade máxima" },
+];
+
+const STYLES = [
+  { id: "none", name: "Normal", icon: Monitor },
+  { id: "photorealistic", name: "Fotorealista", icon: Camera },
+  { id: "anime", name: "Anime", icon: Sparkles },
+  { id: "cyberpunk", name: "Cyberpunk", icon: Zap },
+  { id: "oil-painting", name: "Pintura a Óleo", icon: Palette },
+  { id: "3d-render", name: "3D Render", icon: Box },
+  { id: "minimalist", name: "Minimalista", icon: Layout },
+];
+
+const MOODS = [
+  { id: "none", name: "Padrão" },
+  { id: "cinematic", name: "Cinematográfico" },
+  { id: "dark", name: "Sombrio" },
+  { id: "cheerful", name: "Alegre" },
+  { id: "mysterious", name: "Misterioso" },
+  { id: "ethereal", name: "Etéreo" },
+];
+
+const LIGHTING = [
+  { id: "none", name: "Padrão" },
+  { id: "natural", name: "Luz Natural" },
+  { id: "studio", name: "Estúdio" },
+  { id: "neon", name: "Neon" },
+  { id: "golden-hour", name: "Golden Hour" },
+];
+
+const RATIOS = [
+  { id: "1:1", name: "1:1", icon: Grid },
+  { id: "16:9", name: "16:9", icon: Maximize },
+  { id: "9:16", name: "9:16", icon: Smartphone },
+];
+
 export default function PortalPage() {
   const router = useRouter();
   const { user, setUser, logout } = useUser();
@@ -108,6 +170,13 @@ export default function PortalPage() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [myCreations, setMyCreations] = useState<any[]>([]);
+
+  // Studio Controls
+  const [selectedModel, setSelectedModel] = useState("nano-banana-pro");
+  const [aspectRatio, setAspectRatio] = useState("1:1");
+  const [style, setStyle] = useState("none");
+  const [mood, setMood] = useState("none");
+  const [lighting, setLighting] = useState("none");
 
   useEffect(() => {
     if (activeTab === 'aitools') {
@@ -239,6 +308,14 @@ export default function PortalPage() {
     setGeneratedImage(null);
     const token = localStorage.getItem('fayapoint_token');
 
+    const fullPrompt = [
+      prompt,
+      style !== 'none' ? `estilo ${STYLES.find(s => s.id === style)?.name}` : '',
+      mood !== 'none' ? `atmosfera ${MOODS.find(m => m.id === mood)?.name}` : '',
+      lighting !== 'none' ? `iluminação ${LIGHTING.find(l => l.id === lighting)?.name}` : '',
+      aspectRatio !== '1:1' ? `formato ${aspectRatio}` : ''
+    ].filter(Boolean).join(', ');
+
     try {
         const res = await fetch('/api/ai/generate-image', {
             method: 'POST',
@@ -246,7 +323,10 @@ export default function PortalPage() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ prompt })
+            body: JSON.stringify({ 
+                prompt: fullPrompt,
+                model: selectedModel
+            })
         });
 
         const data = await res.json();
@@ -532,85 +612,168 @@ export default function PortalPage() {
 
             {/* AI Tools Tab */}
             <TabsContent value="aitools">
-              <div className="grid lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-1 space-y-6">
-                      <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
-                          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                            <Sparkles className="text-purple-400" /> Studio de Criação
-                          </h2>
-                          <p className="text-sm text-gray-400 mb-4">
-                              Gere imagens incríveis usando o modelo Flux 1 Schnell. Suas criações são salvas automaticamente na galeria pública e no seu perfil.
-                          </p>
+              <div className="space-y-6">
+                  <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
+                      <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-8 border-b border-white/10 pb-6">
+                          <div>
+                            <h2 className="text-2xl font-bold flex items-center gap-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                                <Sparkles className="text-purple-400" /> Studio AI Pro
+                            </h2>
+                            <p className="text-sm text-gray-400 mt-1">
+                                Crie arte visual impressionante com os modelos mais avançados do mercado.
+                            </p>
+                          </div>
+                          <div className="w-full md:w-80">
+                             <Label className="mb-2 block text-xs uppercase text-gray-500 font-bold tracking-wider">Modelo de IA</Label>
+                             <Select value={selectedModel} onValueChange={setSelectedModel}>
+                                <SelectTrigger className="bg-black/50 border-gray-700 h-10">
+                                  <SelectValue placeholder="Selecione o modelo" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                                  {AI_MODELS.map(m => (
+                                    <SelectItem key={m.id} value={m.id} className="focus:bg-white/10 cursor-pointer">
+                                      <div className="flex items-center gap-3 py-1">
+                                        <div className="p-1.5 bg-white/5 rounded-md text-purple-400">
+                                            <m.icon size={14} />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium leading-none">{m.name}</p>
+                                            <p className="text-[10px] text-gray-500 mt-0.5 leading-none">{m.description}</p>
+                                        </div>
+                                      </div>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                             </Select>
+                          </div>
+                       </div>
+
+                       {/* Visual Controls */}
+                       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
                           
-                          <div className="space-y-4">
-                              <div className="space-y-2">
-                                  <Label>Seu Prompt Criativo</Label>
-                                  <Textarea 
-                                    placeholder="Um por do sol cyberpunk sobre uma cidade futurista, 8k, detalhado..." 
-                                    className="bg-black/50 border-gray-700 min-h-[150px] focus:ring-purple-500"
-                                    value={prompt}
-                                    onChange={(e) => setPrompt(e.target.value)}
-                                  />
-                              </div>
+                          {/* Aspect Ratio - Col 3 */}
+                          <div className="md:col-span-3 space-y-3">
+                             <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Grid size={14}/> Formato</Label>
+                             <div className="flex gap-2">
+                                {RATIOS.map(r => (
+                                   <Button
+                                      key={r.id}
+                                      variant={aspectRatio === r.id ? "default" : "outline"}
+                                      className={`flex-1 h-12 ${aspectRatio === r.id ? 'bg-purple-600 border-purple-600 hover:bg-purple-700' : 'bg-black/30 border-gray-800 hover:bg-white/5 text-gray-400'}`}
+                                      onClick={() => setAspectRatio(r.id)}
+                                      title={r.name}
+                                   >
+                                      <r.icon size={20} />
+                                   </Button>
+                                ))}
+                             </div>
+                          </div>
+
+                          {/* Style - Col 9 (Scrollable) */}
+                          <div className="md:col-span-9 space-y-3">
+                             <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Palette size={14}/> Estilo Visual</Label>
+                             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                                {STYLES.map(s => (
+                                   <button
+                                     key={s.id}
+                                     onClick={() => setStyle(s.id)}
+                                     className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all min-w-[90px] group ${style === s.id ? 'bg-purple-500/20 border-purple-500 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'bg-black/30 border-gray-800 hover:bg-white/5 text-gray-400 hover:border-gray-700'}`}
+                                   >
+                                     <s.icon size={24} className={`transition-transform group-hover:scale-110 ${style === s.id ? 'text-purple-400' : 'opacity-70'}`} />
+                                     <span className="text-xs font-medium whitespace-nowrap">{s.name}</span>
+                                   </button>
+                                ))}
+                             </div>
+                          </div>
+                       </div>
+
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                           <div className="space-y-3">
+                              <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Wand2 size={14}/> Atmosfera</Label>
+                               <Select value={mood} onValueChange={setMood}>
+                                 <SelectTrigger className="bg-black/30 border-gray-800 h-11"><SelectValue /></SelectTrigger>
+                                 <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                                    {MOODS.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                 </SelectContent>
+                              </Select>
+                           </div>
+                           <div className="space-y-3">
+                              <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Sun size={14}/> Iluminação</Label>
+                               <Select value={lighting} onValueChange={setLighting}>
+                                 <SelectTrigger className="bg-black/30 border-gray-800 h-11"><SelectValue /></SelectTrigger>
+                                 <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                                    {LIGHTING.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                 </SelectContent>
+                              </Select>
+                           </div>
+                       </div>
+
+                       {/* Prompt Area */}
+                       <div className="relative">
+                          <Textarea 
+                            placeholder="Descreva sua imaginação aqui... Ex: Um astronauta flutuando em um jardim bioluminescente..." 
+                            className="bg-black/50 border-gray-700 min-h-[120px] text-lg p-4 focus:ring-purple-500 resize-none pr-32"
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                          />
+                          <div className="absolute bottom-4 right-4">
                               <Button 
-                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg shadow-purple-900/20"
+                                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-900/20 font-bold px-8"
                                 onClick={handleGenerateImage}
                                 disabled={isGenerating || !prompt.trim()}
                               >
                                   {isGenerating ? (
-                                      <><Loader2 className="animate-spin mr-2" size={16} /> Criando sua arte...</>
+                                      <Loader2 className="animate-spin" size={20} />
                                   ) : (
-                                      <><Flame className="mr-2" size={16} /> Gerar Imagem</>
+                                      <><Flame className="mr-2" size={18} /> Gerar Arte</>
                                   )}
                               </Button>
                           </div>
-                      </Card>
+                       </div>
+                  </Card>
 
-                      {/* Recent Prompt History / Tips could go here */}
-                  </div>
-                  
-                  <div className="lg:col-span-2 space-y-6">
-                      {/* Main Preview Area */}
-                      <Card className="bg-white/5 backdrop-blur border-white/10 p-6 min-h-[400px] flex items-center justify-center border-dashed relative overflow-hidden group">
-                          {generatedImage ? (
-                              <div className="relative w-full h-full flex flex-col items-center">
-                                  <img src={generatedImage} alt="Generated" className="max-h-[500px] w-auto rounded-lg shadow-2xl object-contain" />
-                                  <div className="absolute bottom-4 right-4 flex gap-2">
-                                      <Button variant="secondary" size="sm" onClick={() => window.open(generatedImage, '_blank')}>
-                                          <Download className="mr-2" size={16} /> Baixar HD
-                                      </Button>
-                                  </div>
-                              </div>
-                          ) : (
-                              <div className="text-center text-gray-500">
-                                  <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <ImageIcon size={32} className="opacity-50" />
-                                  </div>
-                                  <p className="text-lg font-medium">Sua obra de arte aparecerá aqui</p>
-                                  <p className="text-sm opacity-60">Digite um prompt ao lado para começar</p>
-                              </div>
-                          )}
-                      </Card>
-
-                      {/* My Creations Gallery */}
-                      {myCreations.length > 0 && (
-                          <div className="space-y-4">
-                              <h3 className="text-lg font-semibold flex items-center gap-2">
-                                  <ImageIcon size={18} /> Suas Criações Recentes
-                              </h3>
-                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                                  {myCreations.map((creation: any) => (
-                                      <div key={creation._id} className="group relative aspect-square rounded-lg overflow-hidden bg-gray-900 cursor-pointer" onClick={() => setGeneratedImage(creation.imageUrl)}>
-                                          <img src={creation.imageUrl} alt={creation.prompt} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" />
-                                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                              <p className="text-xs text-white p-2 text-center line-clamp-3">{creation.prompt}</p>
-                                          </div>
+                  {/* Preview & Gallery Section */}
+                  <div className="grid lg:grid-cols-3 gap-6">
+                      <div className="lg:col-span-2">
+                          <Card className="bg-white/5 backdrop-blur border-white/10 p-6 min-h-[500px] flex items-center justify-center border-dashed relative overflow-hidden group transition-colors hover:border-purple-500/30">
+                              {generatedImage ? (
+                                  <div className="relative w-full h-full flex flex-col items-center justify-center">
+                                      <img src={generatedImage} alt="Generated" className="max-h-[600px] w-auto rounded-lg shadow-2xl object-contain" />
+                                      <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                          <Button variant="secondary" size="sm" onClick={() => window.open(generatedImage, '_blank')}>
+                                              <Download className="mr-2" size={16} /> Baixar HD
+                                          </Button>
                                       </div>
-                                  ))}
-                              </div>
-                          </div>
-                      )}
+                                  </div>
+                              ) : (
+                                  <div className="text-center text-gray-500">
+                                      <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                        {isGenerating ? <Loader2 className="animate-spin opacity-50" size={40}/> : <ImageIcon size={40} className="opacity-50" />}
+                                      </div>
+                                      <p className="text-xl font-medium mb-2">{isGenerating ? 'Criando sua obra prima...' : 'Sua obra de arte aparecerá aqui'}</p>
+                                      <p className="text-sm opacity-60">Configure os parâmetros acima e clique em Gerar</p>
+                                  </div>
+                              )}
+                          </Card>
+                      </div>
+
+                      <div className="lg:col-span-1">
+                          {myCreations.length > 0 && (
+                              <Card className="bg-white/5 backdrop-blur border-white/10 p-4 h-full max-h-[600px] overflow-hidden flex flex-col">
+                                  <h3 className="text-lg font-semibold flex items-center gap-2 mb-4 px-2">
+                                      <ImageIcon size={18} /> Recentes
+                                  </h3>
+                                  <div className="grid grid-cols-2 gap-3 overflow-y-auto pr-2 pb-2 custom-scrollbar">
+                                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                                      {myCreations.map((creation: any) => (
+                                          <div key={creation._id} className="group relative aspect-square rounded-lg overflow-hidden bg-gray-900 cursor-pointer border border-transparent hover:border-purple-500 transition" onClick={() => setGeneratedImage(creation.imageUrl)}>
+                                              <img src={creation.imageUrl} alt={creation.prompt} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" />
+                                          </div>
+                                      ))}
+                                  </div>
+                              </Card>
+                          )}
+                      </div>
                   </div>
               </div>
             </TabsContent>
