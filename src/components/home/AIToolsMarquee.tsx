@@ -159,26 +159,23 @@ export function AIToolsMarquee() {
   const firstRow = allTools.slice(0, midPoint);
   const secondRow = allTools.slice(midPoint);
 
-  const MarqueeRow = ({ tools, direction = "left", speed = 40 }: { tools: AITool[], direction?: "left" | "right", speed?: number }) => (
-    <div className="flex overflow-hidden select-none py-4">
-      <motion.div
+  const MarqueeRow = ({ tools, direction = "left", speed = 80 }: { tools: AITool[], direction?: "left" | "right", speed?: number }) => (
+    <div 
+      className="flex overflow-hidden select-none py-6 group/marquee"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div
         className="flex gap-4 flex-shrink-0"
-        initial={{ x: direction === "left" ? 0 : "-50%" }}
-        animate={{ 
-          x: direction === "left" ? "-50%" : 0 
+        style={{
+          animation: `marquee ${speed}s linear infinite`,
+          animationDirection: direction === "right" ? "reverse" : "normal",
+          animationPlayState: isPaused ? "paused" : "running",
+          willChange: "transform"
         }}
-        transition={{
-          duration: speed,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop"
-        }}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        style={{ animationPlayState: isPaused ? "paused" : "running" }}
       >
-        {/* Repeat the list enough times to ensure smooth infinite scroll */}
-        {[...tools, ...tools, ...tools].map((tool, i) => {
+        {/* Repeat the list twice for seamless infinite scroll (0% to -50%) */}
+        {[...tools, ...tools].map((tool, i) => {
           // Try to get translation, fallback to tool object properties
           let name = tool.name || "";
           let description = tool.description || "";
@@ -206,21 +203,26 @@ export function AIToolsMarquee() {
           return (
             <motion.div
               key={`${tool.key}-${i}`}
-              className="relative group flex-shrink-0"
+              className="relative group/card flex-shrink-0"
               onMouseEnter={() => setHoveredTool(`${tool.key}-${i}`)}
               onMouseLeave={() => setHoveredTool(null)}
-              whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ 
+                scale: 1.1, 
+                y: -5,
+                zIndex: 50,
+                transition: { type: "spring", stiffness: 400, damping: 25 }
+              }}
             >
-              <Link href={linkUrl} target={isInternal ? "_self" : "_blank"}>
+              <Link href={linkUrl} target={isInternal ? "_self" : "_blank"} className="block">
                 {/* Tool Logo Card - n8n style: white/clean rounded square */}
-                <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center bg-white rounded-xl shadow-sm border border-border/50 hover:shadow-md hover:border-primary/30 transition-all duration-300 cursor-pointer overflow-hidden relative z-10">
+                <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center bg-white dark:bg-secondary/10 rounded-2xl shadow-sm border border-border/50 group-hover/card:shadow-xl group-hover/card:border-primary/30 transition-colors duration-300 cursor-pointer overflow-hidden relative z-10">
                   <img 
                     src={tool.logo} 
                     alt={`${name} logo`}
-                    className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                    className="w-10 h-10 md:w-12 md:h-12 object-contain filter grayscale group-hover/card:grayscale-0 transition-all duration-300"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement!.innerHTML = `<div class="text-xl font-bold text-gray-800">${name.charAt(0)}</div>`;
+                      e.currentTarget.parentElement!.innerHTML = `<div class="text-xl font-bold text-gray-800 dark:text-gray-200">${name.charAt(0)}</div>`;
                     }}
                   />
                 </div>
@@ -232,29 +234,48 @@ export function AIToolsMarquee() {
                   <motion.div
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-[50] w-60 pointer-events-none"
+                    exit={{ opacity: 0, y: 5, scale: 0.98 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-[100] w-64 pointer-events-none"
                   >
-                    <div className="p-3 bg-white/95 backdrop-blur dark:bg-card/95 border border-border/50 shadow-xl rounded-xl text-left">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <h4 className="font-bold text-sm text-foreground">{name}</h4>
+                    <div className="p-4 bg-white/95 backdrop-blur-xl dark:bg-gray-900/95 border border-gray-200/50 dark:border-gray-800/50 shadow-2xl rounded-xl text-left relative">
+                      {/* Little arrow pointing up */}
+                      <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-gray-900 border-t border-l border-gray-200/50 dark:border-gray-800/50 transform rotate-45" />
+                      
+                      <div className="flex items-center gap-2 mb-2 relative z-10">
+                        <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{name}</h4>
                         {category && (
-                          <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium truncate max-w-[100px]">
+                          <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full font-semibold truncate max-w-[110px]">
                             {category}
                           </span>
                         )}
                       </div>
                       {description && (
-                        <p className="text-[11px] text-muted-foreground leading-snug line-clamp-2 mb-2">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mb-3 relative z-10">
                           {description}
                         </p>
                       )}
-                      <div className="flex items-center gap-1 text-[11px] font-medium text-primary">
+                      <div className="flex items-center gap-1.5 text-xs font-semibold text-primary relative z-10">
                          {isInternal ? (
-                           <>Ver curso <Sparkles className="w-3 h-3" /></>
+                           <>
+                             Ver curso 
+                             <motion.span
+                               animate={{ x: [0, 3, 0] }}
+                               transition={{ repeat: Infinity, duration: 1.5 }}
+                             >
+                               <ArrowUpRight className="w-3 h-3" />
+                             </motion.span>
+                           </>
                          ) : (
-                           <>Visitar site <ArrowUpRight className="w-3 h-3" /></>
+                           <>
+                             Visitar site 
+                             <motion.span
+                               animate={{ x: [0, 3, 0] }}
+                               transition={{ repeat: Infinity, duration: 1.5 }}
+                             >
+                               <ExternalLink className="w-3 h-3" />
+                             </motion.span>
+                           </>
                          )}
                       </div>
                     </div>
@@ -264,7 +285,7 @@ export function AIToolsMarquee() {
             </motion.div>
           );
         })}
-      </motion.div>
+      </div>
     </div>
   );
 
