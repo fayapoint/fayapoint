@@ -33,7 +33,7 @@ import { Progress } from "@/components/ui/progress";
 import { Avatar } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUser } from "@/contexts/UserContext";
-import { getCourseBySlug } from "@/data/courses";
+import { getCourseBySlug, CourseData } from "@/data/courses";
 import { toast } from "react-hot-toast";
 
 // Keep static for layout demo
@@ -106,12 +106,21 @@ const recommendations = [
   },
 ];
 
+interface DashboardCourseProgress {
+  _id: string;
+  courseId: string;
+  progressPercent: number;
+  completedLessons: string[];
+  nextLesson?: string;
+  details?: CourseData;
+}
+
 export default function PortalPage() {
   const router = useRouter();
   const { user, setUser, logout } = useUser();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isLoading, setIsLoading] = useState(true);
-  const [userCourses, setUserCourses] = useState<any[]>([]);
+  const [userCourses, setUserCourses] = useState<DashboardCourseProgress[]>([]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -143,7 +152,7 @@ export default function PortalPage() {
         setUser(data.user);
 
         // Map progress to course details
-        const mappedCourses = data.courses.map((progress: any) => {
+        const mappedCourses: DashboardCourseProgress[] = data.courses.map((progress: DashboardCourseProgress) => {
           const courseDetails = getCourseBySlug(progress.courseId);
           return {
             ...progress,

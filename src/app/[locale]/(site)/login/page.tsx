@@ -63,8 +63,9 @@ export default function LoginPage() {
 
       toast.success(`Bem-vindo, ${data.user.name}!`);
       router.push("/portal");
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Ocorreu um erro inesperado';
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

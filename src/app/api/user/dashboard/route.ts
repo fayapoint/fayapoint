@@ -23,10 +23,17 @@ export async function GET(request: Request) {
 
     const token = authHeader.split(' ')[1];
 
-    let decoded: any;
+    let decoded: { id: string; iat: number; exp: number } | string | jwt.JwtPayload;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
-    } catch (e) {
+    } catch {
+      return NextResponse.json(
+        { error: 'Token inválido' },
+        { status: 401 }
+      );
+    }
+
+    if (typeof decoded === 'string' || !decoded.id) {
       return NextResponse.json(
         { error: 'Token inválido' },
         { status: 401 }
