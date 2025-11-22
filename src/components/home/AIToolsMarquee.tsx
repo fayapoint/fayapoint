@@ -3,10 +3,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ExternalLink, Sparkles, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { createPortal } from "react-dom";
 
 interface AITool {
   key: string;
@@ -67,7 +68,7 @@ const originalTools: AITool[] = [
   },
   { 
     key: "suno",
-    logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='75' font-size='80'%3E🎵%3C/text%3E%3C/svg%3E",
+    logo: "https://logo.clearbit.com/suno.ai",
     slug: "suno" 
   },
   { 
@@ -77,7 +78,7 @@ const originalTools: AITool[] = [
   },
   { 
     key: "cursor",
-    logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23FF6B00'%3E%3Cpolygon points='50,10 90,90 10,90'/%3E%3C/svg%3E",
+    logo: "https://logo.clearbit.com/cursor.sh",
     slug: "cursor" 
   },
   { 
@@ -145,25 +146,128 @@ const additionalTools: AITool[] = [
   { key: "beautifulai", logo: "https://logo.clearbit.com/beautiful.ai", name: "Beautiful.ai", category: "Apresentações", url: "https://beautiful.ai/", description: "Slides de design profissional com IA." },
 ];
 
-// Combine and shuffle slightly for variety (simple interleave or just concat)
-// We put original tools first as they are "ours"
 const allTools = [...originalTools, ...additionalTools];
 
-export function AIToolsMarquee() {
-  const [hoveredTool, setHoveredTool] = useState<string | null>(null);
+// ToolIcon component to handle image errors gracefully
+const ToolIcon = ({ logo, name, className }: { logo: string, name: string, className: string }) => {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <div className={`${className} flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full`}>
+        <span className="text-lg font-bold text-gray-500">{name.charAt(0)}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img 
+      src={logo} 
+      alt={`${name} logo`}
+      className={className}
+      onError={() => setError(true)}
+    />
+  );
+};
+
+// Portal Tooltip Component
+const PortalTooltip = ({ 
+  content, 
+  position, 
+  onClose 
+}: { 
+  content: any, 
+  position: { x: number, y: number } | null, 
+  onClose: () => void 
+}) => {
+  if (!position || !content) return null;
+
+  return createPortal(
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 5, scale: 0.98 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="fixed z-[9999] pointer-events-none"
+        style={{ 
+          left: position.x, 
+          top: position.y, 
+          transform: 'translate(-50%, 0)' 
+        }}
+      >
+        <div className="p-4 bg-white/95 backdrop-blur-xl dark:bg-gray-900/95 border border-gray-200/50 dark:border-gray-800/50 shadow-2xl rounded-xl text-left w-64 relative mt-4">
+           {/* Little arrow pointing up */}
+           <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-gray-900 border-t border-l border-gray-200/50 dark:border-gray-800/50 transform rotate-45" />
+
+          <div className="flex items-center gap-2 mb-2 relative z-10">
+            <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{content.name}</h4>
+            {content.category && (
+              <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full font-semibold truncate max-w-[110px]">
+                {content.category}
+              </span>
+            )}
+          </div>
+          {content.description && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mb-3 relative z-10">
+              {content.description}
+            </p>
+          )}
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-primary relative z-10">
+              {content.isInternal ? (
+                <>
+                  Ver curso 
+                  <motion.span
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  >
+                    <ArrowUpRight className="w-3 h-3" />
+                  </motion.span>
+                </>
+              ) : (
+                <>
+                  Visitar site 
+                  <motion.span
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                  </motion.span>
+                </>
+              )}
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>,
+    document.body
+  );
+};
+
+const MarqueeRow = ({ 
+  tools, 
+  direction = "left", 
+  speed = 80,
+  onHoverTool,
+  onLeaveTool,
+  t
+}: { 
+  tools: AITool[], 
+  direction?: "left" | "right", 
+  speed?: number,
+  onHoverTool: (e: React.MouseEvent, tool: any) => void,
+  onLeaveTool: () => void,
+  t: any
+}) => {
   const [isPaused, setIsPaused] = useState(false);
-  const t = useTranslations("Home.AIToolsMarquee");
 
-  // Split tools into two rows
-  const midPoint = Math.ceil(allTools.length / 2);
-  const firstRow = allTools.slice(0, midPoint);
-  const secondRow = allTools.slice(midPoint);
-
-  const MarqueeRow = ({ tools, direction = "left", speed = 80 }: { tools: AITool[], direction?: "left" | "right", speed?: number }) => (
+  return (
     <div 
       className="flex overflow-hidden select-none py-6 group/marquee"
       onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      onMouseLeave={() => {
+        setIsPaused(false);
+        onLeaveTool();
+      }}
     >
       <div
         className="flex gap-4 flex-shrink-0"
@@ -174,9 +278,7 @@ export function AIToolsMarquee() {
           willChange: "transform"
         }}
       >
-        {/* Repeat the list twice for seamless infinite scroll (0% to -50%) */}
         {[...tools, ...tools].map((tool, i) => {
-          // Try to get translation, fallback to tool object properties
           let name = tool.name || "";
           let description = tool.description || "";
           let category = tool.category || "IA";
@@ -184,17 +286,15 @@ export function AIToolsMarquee() {
           try {
              // eslint-disable-next-line @typescript-eslint/no-explicit-any
              const toolCopy = t.raw(`tools.${tool.key}`) as any;
-             // Check if we actually got an object back, not just the key string
              if (toolCopy && typeof toolCopy === 'object' && toolCopy.name) {
                 name = toolCopy.name;
                 description = toolCopy.description;
                 category = toolCopy.category;
              }
           } catch (e) {
-            // Translation missing, use fallbacks
+            // Translation missing
           }
           
-          // Use fallback if name is still empty (e.g. translation key returned string)
           if (!name) name = tool.key;
 
           const isInternal = !!tool.slug && originalTools.some(t => t.key === tool.key);
@@ -204,8 +304,8 @@ export function AIToolsMarquee() {
             <motion.div
               key={`${tool.key}-${i}`}
               className="relative group/card flex-shrink-0"
-              onMouseEnter={() => setHoveredTool(`${tool.key}-${i}`)}
-              onMouseLeave={() => setHoveredTool(null)}
+              onMouseEnter={(e) => onHoverTool(e, { ...tool, name, description, category, isInternal })}
+              onMouseLeave={onLeaveTool}
               whileHover={{ 
                 scale: 1.1, 
                 y: -5,
@@ -214,80 +314,53 @@ export function AIToolsMarquee() {
               }}
             >
               <Link href={linkUrl} target={isInternal ? "_self" : "_blank"} className="block">
-                {/* Tool Logo Card - n8n style: white/clean rounded square */}
                 <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center bg-white dark:bg-secondary/10 rounded-2xl shadow-sm border border-border/50 group-hover/card:shadow-xl group-hover/card:border-primary/30 transition-colors duration-300 cursor-pointer overflow-hidden relative z-10">
-                  <img 
-                    src={tool.logo} 
-                    alt={`${name} logo`}
+                  <ToolIcon 
+                    logo={tool.logo} 
+                    name={name} 
                     className="w-10 h-10 md:w-12 md:h-12 object-contain filter grayscale group-hover/card:grayscale-0 transition-all duration-300"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement!.innerHTML = `<div class="text-xl font-bold text-gray-800 dark:text-gray-200">${name.charAt(0)}</div>`;
-                    }}
                   />
                 </div>
               </Link>
-
-              {/* Hover Tooltip Popup - n8n inspired cleaner look */}
-              <AnimatePresence>
-                {hoveredTool === `${tool.key}-${i}` && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 5, scale: 0.98 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-[100] w-64 pointer-events-none"
-                  >
-                    <div className="p-4 bg-white/95 backdrop-blur-xl dark:bg-gray-900/95 border border-gray-200/50 dark:border-gray-800/50 shadow-2xl rounded-xl text-left relative">
-                      {/* Little arrow pointing up */}
-                      <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-gray-900 border-t border-l border-gray-200/50 dark:border-gray-800/50 transform rotate-45" />
-                      
-                      <div className="flex items-center gap-2 mb-2 relative z-10">
-                        <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{name}</h4>
-                        {category && (
-                          <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full font-semibold truncate max-w-[110px]">
-                            {category}
-                          </span>
-                        )}
-                      </div>
-                      {description && (
-                        <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mb-3 relative z-10">
-                          {description}
-                        </p>
-                      )}
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-primary relative z-10">
-                         {isInternal ? (
-                           <>
-                             Ver curso 
-                             <motion.span
-                               animate={{ x: [0, 3, 0] }}
-                               transition={{ repeat: Infinity, duration: 1.5 }}
-                             >
-                               <ArrowUpRight className="w-3 h-3" />
-                             </motion.span>
-                           </>
-                         ) : (
-                           <>
-                             Visitar site 
-                             <motion.span
-                               animate={{ x: [0, 3, 0] }}
-                               transition={{ repeat: Infinity, duration: 1.5 }}
-                             >
-                               <ExternalLink className="w-3 h-3" />
-                             </motion.span>
-                           </>
-                         )}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           );
         })}
       </div>
     </div>
   );
+};
+
+export function AIToolsMarquee() {
+  const t = useTranslations("Home.AIToolsMarquee");
+  const [tooltipState, setTooltipState] = useState<{
+    content: any;
+    position: { x: number, y: number } | null;
+  } | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleHoverTool = (e: React.MouseEvent, toolContent: any) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltipState({
+      content: toolContent,
+      position: {
+        x: rect.left + rect.width / 2,
+        y: rect.bottom
+      }
+    });
+  };
+
+  const handleLeaveTool = () => {
+    setTooltipState(null);
+  };
+
+  // Split tools into two rows
+  const midPoint = Math.ceil(allTools.length / 2);
+  const firstRow = allTools.slice(0, midPoint);
+  const secondRow = allTools.slice(midPoint);
 
   return (
     <section className="py-20 relative overflow-hidden z-10">
@@ -317,10 +390,32 @@ export function AIToolsMarquee() {
         <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
 
         <div className="flex flex-col gap-6 -rotate-1 scale-[1.02] transform origin-center">
-           <MarqueeRow tools={firstRow} direction="left" speed={80} />
-           <MarqueeRow tools={secondRow} direction="right" speed={80} />
+           <MarqueeRow 
+             tools={firstRow} 
+             direction="left" 
+             speed={80} 
+             onHoverTool={handleHoverTool}
+             onLeaveTool={handleLeaveTool}
+             t={t}
+           />
+           <MarqueeRow 
+             tools={secondRow} 
+             direction="right" 
+             speed={80} 
+             onHoverTool={handleHoverTool}
+             onLeaveTool={handleLeaveTool}
+             t={t}
+           />
         </div>
       </div>
+
+      {mounted && tooltipState && (
+        <PortalTooltip 
+          content={tooltipState.content} 
+          position={tooltipState.position} 
+          onClose={handleLeaveTool} 
+        />
+      )}
     </section>
   );
 }
