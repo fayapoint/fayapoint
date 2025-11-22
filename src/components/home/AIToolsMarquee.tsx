@@ -185,6 +185,7 @@ export function AIToolsMarquee() {
           let category = tool.category || "IA";
 
           try {
+             // eslint-disable-next-line @typescript-eslint/no-explicit-any
              const toolCopy = t.raw(`tools.${tool.key}`) as any;
              // Check if we actually got an object back, not just the key string
              if (toolCopy && typeof toolCopy === 'object' && toolCopy.name) {
