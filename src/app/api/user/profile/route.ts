@@ -18,11 +18,15 @@ export async function PUT(request: Request) {
     }
 
     const token = authHeader.split(' ')[1];
-    let decoded: any;
+    let decoded: jwt.JwtPayload | string;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
     } catch {
       return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
+    }
+
+    if (typeof decoded === 'string') {
+         return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
     }
 
     const userId = decoded.id;
@@ -31,7 +35,7 @@ export async function PUT(request: Request) {
     // Validate allowed fields to update
     const { name, profile, preferences } = body;
 
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
     if (name) updateData.name = name;
     if (profile) {
         // Use dot notation for nested updates to avoid overwriting the whole object

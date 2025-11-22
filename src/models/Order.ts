@@ -8,7 +8,7 @@ export interface IOrder extends Document {
     name: string;
     quantity: number;
     price: number;
-    details?: any;
+    details?: Schema.Types.Mixed;
   }[];
   totalAmount: number;
   status: 'pending' | 'completed' | 'failed' | 'refunded';

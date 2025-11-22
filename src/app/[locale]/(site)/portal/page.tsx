@@ -68,7 +68,13 @@ interface IOrder {
   createdAt: string;
   status: string;
   totalAmount: number;
-  items: any[];
+  items: {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    type: string;
+  }[];
 }
 
 export default function PortalPage() {
@@ -225,8 +231,9 @@ export default function PortalPage() {
 
         setGeneratedImage(data.imageUrl);
         toast.success("Imagem gerada com sucesso!");
-    } catch (error: any) {
-        toast.error(error.message || "Erro ao gerar imagem");
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Erro ao gerar imagem";
+        toast.error(message);
     } finally {
         setIsGenerating(false);
     }
@@ -424,7 +431,7 @@ export default function PortalPage() {
                    <Card className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border-purple-500/30 p-6">
                     <h2 className="text-xl font-semibold mb-4">Dica do Dia</h2>
                     <p className="text-sm text-gray-300 italic">
-                        "Use o Gemini para criar estruturas de código complexas e depois refine com o Claude para melhor legibilidade."
+                        &quot;Use o Gemini para criar estruturas de código complexas e depois refine com o Claude para melhor legibilidade.&quot;
                     </p>
                     <Button className="w-full mt-4" size="sm" variant="outline" onClick={() => setActiveTab('aitools')}>
                         Testar IA Agora
