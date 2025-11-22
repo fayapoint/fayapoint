@@ -150,7 +150,7 @@ export default function CourseReaderPage() {
                             )
                         },
                         pre: ({node, ...props}) => <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto mb-6 border border-gray-800" {...props} />,
-                        img: ({node, ...props}) => <img className="rounded-lg border border-gray-800 my-6 max-w-full h-auto" {...props} />,
+                        img: ({node, ...props}) => <img className="rounded-lg border border-gray-800 my-6 max-w-full h-auto" alt={props.alt || "Course Image"} {...props} />,
                         hr: ({node, ...props}) => <hr className="my-8 border-gray-800" {...props} />,
                         table: ({node, ...props}) => <div className="overflow-x-auto mb-6"><table className="min-w-full border-collapse border border-gray-800 text-left" {...props} /></div>,
                         th: ({node, ...props}) => <th className="bg-gray-900 border border-gray-800 p-2 font-semibold text-purple-300" {...props} />,

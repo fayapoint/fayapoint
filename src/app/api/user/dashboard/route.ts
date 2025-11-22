@@ -106,10 +106,27 @@ export async function GET(request: Request) {
         .sort({ createdAt: -1 })
         .toArray();
 
-      externalOrders = proposals.map(p => ({
+      // Define shape for mapping to avoid 'any'
+      interface ProposalSelection {
+        serviceSlug: string;
+        unitLabel?: string;
+        quantity?: number;
+        unitPrice?: number;
+      }
+
+      interface ProposalDoc {
+        _id: unknown;
+        selections?: ProposalSelection[];
+        total?: number;
+        status?: string;
+        createdAt: string | Date;
+        updatedAt: string | Date;
+      }
+
+      externalOrders = (proposals as unknown as ProposalDoc[]).map(p => ({
         _id: p._id,
         userId: userId, // map to current user
-        items: p.selections?.map((s: any) => ({
+        items: p.selections?.map((s) => ({
             id: s.serviceSlug,
             type: 'service',
             name: s.unitLabel || s.serviceSlug,
@@ -128,9 +145,11 @@ export async function GET(request: Request) {
       // Don't fail the whole request if secondary DB fails
     }
 
-    const allOrders = [...orders, ...externalOrders].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    const allOrders = [...orders, ...externalOrders].sort((a, b) => {
+      const dateA = new Date(a.createdAt as string | number | Date).getTime();
+      const dateB = new Date(b.createdAt as string | number | Date).getTime();
+      return dateB - dateA;
+    });
 
     // Determine resources based on plan
     const plan = user.subscription?.plan || 'free';
