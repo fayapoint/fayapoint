@@ -5,6 +5,7 @@ import CourseProgress from '@/models/CourseProgress';
 import Order from '@/models/Order';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
+import { getMongoClient } from '@/lib/database';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -90,8 +91,46 @@ export async function GET(request: Request) {
     // Fetch course progress
     const progress = await CourseProgress.find({ userId }).sort({ lastAccessedAt: -1 });
 
-    // Fetch orders
+    // Fetch orders from main DB
     const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+
+    // Fetch proposals/orders from fayapointProdutos
+    let externalOrders: any[] = [];
+    try {
+      const client = await getMongoClient();
+      const productsDb = client.db('fayapointProdutos');
+      
+      // Search by email since userId might differ
+      const proposals = await productsDb.collection('service_proposals')
+        .find({ email: user.email })
+        .sort({ createdAt: -1 })
+        .toArray();
+
+      externalOrders = proposals.map(p => ({
+        _id: p._id,
+        userId: userId, // map to current user
+        items: p.selections?.map((s: any) => ({
+            id: s.serviceSlug,
+            type: 'service',
+            name: s.unitLabel || s.serviceSlug,
+            quantity: s.quantity || 1,
+            price: s.unitPrice || 0,
+            details: s
+        })) || [],
+        totalAmount: p.total || 0,
+        status: p.status === 'closed' || p.status === 'converted' ? 'completed' : 'pending',
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+        isExternal: true // flag for frontend
+      }));
+    } catch (err) {
+      console.error('Error fetching external orders:', err);
+      // Don't fail the whole request if secondary DB fails
+    }
+
+    const allOrders = [...orders, ...externalOrders].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
     // Determine resources based on plan
     const plan = user.subscription?.plan || 'free';
@@ -100,7 +139,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       user,
       courses: progress,
-      orders,
+      orders: allOrders,
       resources,
       plan,
     });

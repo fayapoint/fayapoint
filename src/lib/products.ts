@@ -24,7 +24,7 @@ const COLLECTION_NAME = 'products';
 let cachedClient: MongoClient | null = null;
 
 // Get MongoDB client (cached for serverless)
-async function getMongoClient(): Promise<MongoClient> {
+export async function getMongoClient(): Promise<MongoClient> {
   if (cachedClient) {
     return cachedClient;
   }

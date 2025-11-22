@@ -407,7 +407,7 @@ export default function PortalPage() {
                                 </span>
                               </div>
                             </div>
-                            <Link href={`/curso/${progress.courseId}`}>
+                            <Link href={`/portal/learn/${progress.courseId}`}>
                               <Button size="sm" variant="secondary">
                                 <ChevronRight size={16} />
                               </Button>
@@ -448,7 +448,7 @@ export default function PortalPage() {
                 <div className="grid md:grid-cols-2 gap-4">
                      {userCourses.length > 0 ? (
                         userCourses.map(progress => (
-                            <Link key={progress._id} href={`/curso/${progress.courseId}`}>
+                            <Link key={progress._id} href={`/portal/learn/${progress.courseId}`}>
                                 <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:border-purple-500/50 transition group">
                                     <div className="h-32 bg-gray-800 relative">
                                         {/* Placeholder for course image */}

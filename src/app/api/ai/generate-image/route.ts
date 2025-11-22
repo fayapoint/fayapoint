@@ -37,16 +37,17 @@ export async function POST(request: Request) {
       headers: {
         Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://fayapoint.com', // Optional, for including your app on openrouter.ai rankings.
+        'X-Title': 'Fayapoint AI', // Optional. Shows in rankings on openrouter.ai.
       },
       body: JSON.stringify({
-        model: 'google/gemini-3-pro-image-preview',
+        model: 'black-forest-labs/flux-1-schnell',
         messages: [
             {
               "role": "user",
               "content": prompt
             }
           ],
-        modalities: ['image', 'text']
       }),
     });
 
