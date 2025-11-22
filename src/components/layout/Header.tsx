@@ -226,8 +226,10 @@ export function Header() {
             {mounted && isLoggedIn && user ? (
               <>
                 <div className="flex items-center gap-2 text-foreground/80">
-                  <UserCircle size={20} />
-                  <span className="text-sm">{t("auth.greeting", { name: user.name.split(" ")[0] })}</span>
+                  <Link href="/portal" className="flex items-center gap-2 hover:text-primary transition">
+                    <UserCircle size={20} />
+                    <span className="text-sm font-medium">{t("auth.greeting", { name: user.name.split(" ")[0] })}</span>
+                  </Link>
                 </div>
                 <Button 
                   variant="ghost" 

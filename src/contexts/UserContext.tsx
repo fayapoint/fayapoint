@@ -7,7 +7,20 @@ interface User {
   name: string;
   email: string;
   role?: string;
+  image?: string;
   interest?: string;
+  subscription?: {
+    plan: 'free' | 'starter' | 'pro' | 'business';
+    status: string;
+  };
+  profile?: {
+    bio?: string;
+    linkedin?: string;
+    company?: string;
+    position?: string;
+    website?: string;
+    location?: string;
+  };
   progress?: {
     level: number;
     points: number;

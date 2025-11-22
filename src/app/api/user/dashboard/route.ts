@@ -2,10 +2,45 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import CourseProgress from '@/models/CourseProgress';
+import Order from '@/models/Order';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
+
+const RESOURCES_BY_PLAN = {
+  free: [
+    { name: 'Acesso à Comunidade', available: true },
+    { name: 'Cursos Introdutórios', available: true },
+    { name: 'Geração de Imagens AI', available: false, limit: '0/mês' },
+    { name: 'Suporte Prioritário', available: false },
+    { name: 'Download de Materiais', available: false },
+  ],
+  starter: [
+    { name: 'Acesso à Comunidade', available: true },
+    { name: 'Cursos Introdutórios', available: true },
+    { name: 'Geração de Imagens AI', available: true, limit: '50/mês' },
+    { name: 'Suporte Prioritário', available: false },
+    { name: 'Download de Materiais', available: true },
+  ],
+  pro: [
+    { name: 'Acesso à Comunidade', available: true },
+    { name: 'Todos os Cursos', available: true },
+    { name: 'Geração de Imagens AI', available: true, limit: 'Ilimitado' },
+    { name: 'Suporte Prioritário', available: true },
+    { name: 'Download de Materiais', available: true },
+    { name: 'Mentoria Mensal', available: true },
+  ],
+  business: [
+    { name: 'Acesso à Comunidade', available: true },
+    { name: 'Todos os Cursos', available: true },
+    { name: 'Geração de Imagens AI', available: true, limit: 'Ilimitado' },
+    { name: 'Suporte Dedicado', available: true },
+    { name: 'Download de Materiais', available: true },
+    { name: 'Gestão de Equipe', available: true },
+    { name: 'API Access', available: true },
+  ],
+};
 
 export async function GET(request: Request) {
   try {
@@ -55,16 +90,20 @@ export async function GET(request: Request) {
     // Fetch course progress
     const progress = await CourseProgress.find({ userId }).sort({ lastAccessedAt: -1 });
 
-    // Here we would ideally fetch course details (title, thumbnail) from the Products collection
-    // For now, we'll return the raw progress and let the frontend map it to known courses,
-    // OR we could fetch the product data here if we had the model.
-    // Since products are in a different DB or collection, we might need a Product model.
-    // But we know the `fayapoint` connection is used. If products are in `fayapointProdutos`, we can't easily join.
-    // The frontend has `allCourses` in `src/data/courses`. We can use that on the frontend to enrich the data.
+    // Fetch orders
+    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+
+    // Determine resources based on plan
+    const plan = user.subscription?.plan || 'free';
+    // @ts-ignore
+    const resources = RESOURCES_BY_PLAN[plan] || RESOURCES_BY_PLAN.free;
 
     return NextResponse.json({
       user,
       courses: progress,
+      orders,
+      resources,
+      plan,
     });
 
   } catch (error) {
