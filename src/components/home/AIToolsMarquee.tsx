@@ -19,6 +19,10 @@ interface AITool {
   category?: string; // Fallback category
 }
 
+interface ToolContent extends AITool {
+  isInternal: boolean;
+}
+
 // Original tools with internal pages
 const originalTools: AITool[] = [
   { 
@@ -176,7 +180,7 @@ const PortalTooltip = ({
   position, 
   onClose 
 }: { 
-  content: any, 
+  content: ToolContent, 
   position: { x: number, y: number } | null, 
   onClose: () => void 
 }) => {
@@ -254,8 +258,9 @@ const MarqueeRow = ({
   tools: AITool[], 
   direction?: "left" | "right", 
   speed?: number,
-  onHoverTool: (e: React.MouseEvent, tool: any) => void,
+  onHoverTool: (e: React.MouseEvent, tool: ToolContent) => void,
   onLeaveTool: () => void,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   t: any
 }) => {
   const [isPaused, setIsPaused] = useState(false);
@@ -333,7 +338,7 @@ const MarqueeRow = ({
 export function AIToolsMarquee() {
   const t = useTranslations("Home.AIToolsMarquee");
   const [tooltipState, setTooltipState] = useState<{
-    content: any;
+    content: ToolContent;
     position: { x: number, y: number } | null;
   } | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -342,7 +347,7 @@ export function AIToolsMarquee() {
     setMounted(true);
   }, []);
 
-  const handleHoverTool = (e: React.MouseEvent, toolContent: any) => {
+  const handleHoverTool = (e: React.MouseEvent, toolContent: ToolContent) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setTooltipState({
       content: toolContent,
