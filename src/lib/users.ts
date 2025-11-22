@@ -140,12 +140,11 @@ export async function upsertUser(userData: Partial<User> & { email: string; name
   
   if (existingUser) {
     // Remove fields that shouldn't be overwritten if undefined in userData
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, email, createdAt, updatedAt, ...updates } = userData;
     
-    const updated = await updateUser(userData.email, updates as any);
+    const updated = await updateUser(userData.email, updates as Partial<Omit<User, '_id' | 'email' | 'createdAt'>>);
     return updated!;
   } else {
-    return await createUser(userData as any);
+    return await createUser(userData as Omit<User, '_id' | 'createdAt' | 'updatedAt'>);
   }
 }
