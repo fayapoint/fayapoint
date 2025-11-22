@@ -130,145 +130,130 @@ export function AIToolsMarquee() {
   const [isPaused, setIsPaused] = useState(false);
   const t = useTranslations("Home.AIToolsMarquee");
 
-  return (
-    <section className="py-16 pb-32 relative overflow-visible z-20">
-      {/* Gradient borders */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-      
-      {/* Background glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-primary/5" />
-      
-      <div className="container mx-auto px-4 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Sparkles className="w-5 h-5 text-primary" />
-            <p className="text-sm font-semibold text-primary uppercase tracking-wider">
-              {t("badge")}
-            </p>
-            <Sparkles className="w-5 h-5 text-primary" />
-          </div>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            {t("subtitle")}
-          </p>
-        </motion.div>
-      </div>
+  // Split tools into two rows
+  const midPoint = Math.ceil(aiTools.length / 2);
+  const firstRow = aiTools.slice(0, midPoint);
+  const secondRow = aiTools.slice(midPoint);
 
-      <div 
-        className="relative"
+  const MarqueeRow = ({ tools, direction = "left", speed = 40 }: { tools: AITool[], direction?: "left" | "right", speed?: number }) => (
+    <div className="flex overflow-hidden select-none py-4">
+      <motion.div
+        className="flex gap-4 flex-shrink-0"
+        initial={{ x: direction === "left" ? 0 : "-50%" }}
+        animate={{ 
+          x: direction === "left" ? "-50%" : 0 
+        }}
+        transition={{
+          duration: speed,
+          repeat: Infinity,
+          ease: "linear",
+          repeatType: "loop"
+        }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
+        style={{ animationPlayState: isPaused ? "paused" : "running" }}
       >
-        {/* Gradient overlays for fade effect */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-        
-        <motion.div 
-          className="flex gap-6"
-          animate={{ 
-            x: isPaused ? undefined : ["-50%", "0%"]
-          }}
-          transition={{
-            duration: 60,
-            repeat: Infinity,
-            ease: "linear",
-            repeatType: "loop"
-          }}
-        >
-          {[...aiTools, ...aiTools, ...aiTools].map((tool, i) => {
-            const toolCopy = t.raw(`tools.${tool.key}`) as {
-              name: string;
-              description: string;
-              category: string;
-            };
-            const { name, description, category } = toolCopy;
+        {/* Repeat the list enough times to ensure smooth infinite scroll */}
+        {[...tools, ...tools, ...tools, ...tools].map((tool, i) => {
+          const toolCopy = t.raw(`tools.${tool.key}`) as {
+            name: string;
+            description: string;
+            category: string;
+          };
+          const { name, description, category } = toolCopy;
 
-            return (
+          return (
             <motion.div
               key={`${tool.key}-${i}`}
               className="relative group flex-shrink-0"
               onMouseEnter={() => setHoveredTool(`${tool.key}-${i}`)}
               onMouseLeave={() => setHoveredTool(null)}
-              whileHover={{ scale: 1.05, y: -4 }}
+              whileHover={{ scale: 1.05, y: -2 }}
             >
-              {/* Tool Logo Card */}
-              <Card className="w-32 h-32 flex items-center justify-center bg-card/50 border-border hover:border-primary/50 hover:bg-primary/5 backdrop-blur transition-all duration-300 cursor-pointer relative overflow-hidden">
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {/* Logo */}
-                <div className="relative z-10 group-hover:scale-110 transition-transform duration-300">
-                  <img 
-                    src={tool.logo} 
-                    alt={`${name} logo`}
-                    className="w-16 h-16 object-contain"
-                    onError={(e) => {
-                      // Fallback to text if image fails to load
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.parentElement!.innerHTML = `<div class="text-4xl">${name.charAt(0)}</div>`;
-                    }}
-                  />
-                </div>
-                
-                {/* Tool name badge */}
-                <div className="absolute bottom-2 left-2 right-2">
-                  <Badge 
-                    variant="secondary" 
-                    className="w-full text-xs truncate bg-background/80 backdrop-blur text-center justify-center border-primary/20"
-                  >
-                    {name}
-                  </Badge>
-                </div>
-              </Card>
+              {/* Tool Logo Card - n8n style: white/clean rounded square */}
+              <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center bg-white rounded-xl shadow-sm border border-border/50 hover:shadow-md hover:border-primary/30 transition-all duration-300 cursor-pointer overflow-hidden">
+                <img 
+                  src={tool.logo} 
+                  alt={`${name} logo`}
+                  className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML = `<div class="text-xl font-bold text-gray-800">${name.charAt(0)}</div>`;
+                  }}
+                />
+              </div>
 
-              {/* Hover Tooltip Popup - Positioned ABOVE the card */}
+              {/* Hover Tooltip Popup */}
               <AnimatePresence>
                 {hoveredTool === `${tool.key}-${i}` && (
                   <motion.div
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute bottom-full mb-6 left-1/2 -translate-x-1/2 z-[100] w-72"
+                    className="absolute top-full mt-4 left-1/2 -translate-x-1/2 z-[100] w-64 pointer-events-none"
                   >
-                    <Card className="p-4 bg-card border-primary/50 shadow-2xl shadow-primary/20">
-                      <div className="flex items-start gap-3 mb-3">
-                        <img 
-                          src={tool.logo} 
-                          alt={`${name} logo`}
-                          className="w-12 h-12 object-contain rounded"
-                        />
-                        <div className="flex-1">
-                          <h4 className="font-bold text-foreground mb-1">{name}</h4>
-                          <Badge variant="secondary" className="text-xs">
+                    <Card className="p-3 bg-popover border-primary/20 shadow-xl">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
+                          <img 
+                            src={tool.logo} 
+                            alt={`${name} logo`}
+                            className="w-5 h-5 object-contain"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-sm">{name}</h4>
+                          <Badge variant="outline" className="text-[10px] h-5">
                             {category}
                           </Badge>
                         </div>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-3">
+                      <p className="text-xs text-muted-foreground line-clamp-2">
                         {description}
                       </p>
-                      <Link 
-                        href={`/ferramentas/${tool.slug}`}
-                        className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group/link"
-                      >
-                        <span>{t("linkLabel")}</span>
-                        <ExternalLink className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                      </Link>
                     </Card>
                   </motion.div>
                 )}
               </AnimatePresence>
             </motion.div>
-            );
-          })}
+          );
+        })}
+      </motion.div>
+    </div>
+  );
+
+  return (
+    <section className="py-20 relative overflow-hidden z-10">
+      {/* Background glow/gradients */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background opacity-50" />
+      
+      <div className="container mx-auto px-4 mb-12 text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
+              Mais de 100 Ferramentas
+            </span>
+          </h2>
+          <p className="text-muted-foreground">
+            {t("subtitle")}
+          </p>
         </motion.div>
+      </div>
+
+      <div className="relative w-full max-w-[100vw] overflow-hidden">
+        {/* Side Gradients for Fade Effect */}
+        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
+
+        <div className="flex flex-col gap-6 -rotate-1 scale-[1.02] transform origin-center">
+           <MarqueeRow tools={firstRow} direction="left" speed={60} />
+           <MarqueeRow tools={secondRow} direction="right" speed={50} />
+        </div>
       </div>
     </section>
   );
