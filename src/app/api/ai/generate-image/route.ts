@@ -89,6 +89,7 @@ export async function POST(request: Request) {
 
     // Determine model configuration
     let primaryModel = 'google/gemini-3-pro-image-preview';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let additionalBodyParams: any = {};
 
     switch (model) {
@@ -127,6 +128,7 @@ export async function POST(request: Request) {
         try {
             console.log(`Attempting generation with model: ${currentModel}`);
             
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const requestBody: any = {
                 model: currentModel,
                 messages: [
