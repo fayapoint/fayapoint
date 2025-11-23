@@ -11,8 +11,8 @@ function resolveMongoUri() {
 }
 
 const MONGODB_URI = resolveMongoUri();
-const DATABASE_NAME = 'fayapointProdutos';
-const COLLECTION_NAME = 'usuarios';
+const DATABASE_NAME = 'fayapoint';
+const COLLECTION_NAME = 'users';
 
 let cachedClient: MongoClient | null = null;
 

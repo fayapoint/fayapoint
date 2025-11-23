@@ -132,7 +132,6 @@ const UserSchema = new Schema<IUser>({
 });
 
 // Indexes for better query performance
-UserSchema.index({ email: 1 });
 UserSchema.index({ 'subscription.stripeCustomerId': 1 });
 UserSchema.index({ createdAt: -1 });
 

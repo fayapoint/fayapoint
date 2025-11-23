@@ -47,7 +47,7 @@ const originalTools: AITool[] = [
   },
   { 
     key: "perplexity",
-    logo: "https://www.perplexity.ai/favicon.svg",
+    logo: "https://logo.clearbit.com/perplexity.ai",
     slug: "perplexity" 
   },
   { 
