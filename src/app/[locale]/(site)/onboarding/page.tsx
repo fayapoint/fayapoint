@@ -7,7 +7,7 @@ import {
   Mail, User, ArrowRight, Zap, Briefcase, BarChart, BrainCircuit,
   Code, Palette, TrendingUp, Users, Lightbulb, Rocket, Target,
   GraduationCap, Building2, Megaphone, Camera, PenTool, Calculator,
-  Sparkles, Crown, Star
+  Sparkles, Crown, Star, Lock, Eye, EyeOff
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,7 @@ import { useUser } from '@/contexts/UserContext';
 interface FormData {
   name: string;
   email: string;
+  password?: string;
   role: string;
   interest: string;
 }
@@ -53,9 +54,10 @@ const interestOptions = [
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
+    password: '',
     role: '',
     interest: '',
   });
@@ -104,35 +106,58 @@ export default function OnboardingPage() {
     setLoading(true);
 
     try {
-      // Save user to MongoDB
-      const userResponse = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...formData, source: 'onboarding_v2' }),
-      });
+      let userResponse;
+      let userData;
 
-      const userData = await userResponse.json();
-      
-      // Save user to global context
-      if (userData.success && userData.user) {
-        setUser(userData.user);
+      if (isReturningUser) {
+        // Update existing user
+         userResponse = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...formData, source: 'onboarding_v2_update' }),
+        });
+        userData = await userResponse.json();
+      } else {
+        // Create new user via Auth Register to get Token + Password Hash
+        userResponse = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...formData, source: 'onboarding_v2' }),
+        });
+        userData = await userResponse.json();
       }
 
-      // Send webhook
+      // Save user to global context
+      if (userData.success || userData.token) { // Handle both formats
+        const user = userData.user;
+        const token = userData.token;
+
+        setUser(user);
+        
+        // Force update localStorage for PortalPage access
+        if (typeof window !== 'undefined' && token) {
+            localStorage.setItem('fayapoint_token', token);
+            localStorage.setItem('fayapoint_user', JSON.stringify(user));
+        }
+      }
+
+      // Send webhook (legacy/n8n support)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...webhookData } = formData;
       await fetch('/api/webhooks/onboarding', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...formData, source: 'onboarding_v2' }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...webhookData, source: 'onboarding_v2' }),
       });
-    } catch (error) {
-      console.error('Error sending webhook:', error);
-    }
+      
+      // Redirect to Dashboard immediately for new users
+      router.push('/portal');
 
-    router.push('/waiting-list');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      // Fallback redirect
+      router.push('/portal');
+    }
   };
 
   const progress = (step / steps.length) * 100;
@@ -242,86 +267,111 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
   onEmailBlur: (email: string) => void,
   checkingUser: boolean,
   isReturningUser: boolean
-}) => (
-  <div className="space-y-6">
-    {isReturningUser ? (
-      <div className="text-center space-y-4">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", duration: 0.6 }}
-        >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 mb-4">
-            <Crown className="w-10 h-10 text-white" />
-          </div>
-        </motion.div>
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent">
-          Que bom te ver de novo, {data.name}! ✨
-        </h2>
-        <p className="text-gray-300">Você já está na nossa lista VIP! Vamos atualizar suas informações?</p>
-        <Button onClick={next} size="lg" className="mt-6 bg-gradient-to-r from-green-500 to-emerald-600">
-          Atualizar Meu Perfil <ArrowRight className="ml-2" />
-        </Button>
-      </div>
-    ) : (
-      <>
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Vamos começar! 🚀</h2>
-          <p className="text-sm text-gray-400">Só precisamos de seu nome e email</p>
-        </div>
-        
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <Input 
-            name="email" 
-            type="email" 
-            placeholder="seu@email.com" 
-            value={data.email} 
-            onChange={onChange}
-            onBlur={(e) => onEmailBlur(e.target.value)}
-            className="pl-10 h-12 text-lg" 
-            required 
-          />
-          {checkingUser && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="absolute right-3 top-1/2 -translate-y-1/2"
-            >
-              <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary border-t-transparent" />
-            </motion.div>
-          )}
-        </div>
-        
-        <div className="relative">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <Input 
-            name="name" 
-            placeholder="Seu nome completo" 
-            value={data.name} 
-            onChange={onChange} 
-            className="pl-10 h-12 text-lg" 
-            required 
-          />
-        </div>
-        
-        <div className="flex gap-3">
-          <Button 
-            onClick={next} 
-            disabled={!data.name || !data.email || checkingUser}
-            className="flex-1 h-12 text-lg"
+}) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="space-y-6">
+      {isReturningUser ? (
+        <div className="text-center space-y-4">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", duration: 0.6 }}
           >
-            Continuar <ArrowRight className="ml-2" />
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 mb-4">
+              <Crown className="w-10 h-10 text-white" />
+            </div>
+          </motion.div>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent">
+            Que bom te ver de novo, {data.name}! ✨
+          </h2>
+          <p className="text-gray-300">Você já está na nossa lista VIP! Vamos atualizar suas informações?</p>
+          <Button onClick={next} size="lg" className="mt-6 bg-gradient-to-r from-green-500 to-emerald-600">
+            Atualizar Meu Perfil <ArrowRight className="ml-2" />
           </Button>
         </div>
-        
-        <p className="text-xs text-center text-gray-500">
-          💡 <strong>Dica:</strong> Complete todas as etapas para aumentar suas chances de acesso antecipado!
-        </p>
-      </>
-    )}
-  </div>
-);
+      ) : (
+        <>
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-2">Vamos começar! 🚀</h2>
+            <p className="text-sm text-gray-400">Crie sua conta gratuita para acessar</p>
+          </div>
+          
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Input 
+              name="email" 
+              type="email" 
+              placeholder="seu@email.com" 
+              value={data.email} 
+              onChange={onChange}
+              onBlur={(e) => onEmailBlur(e.target.value)}
+              className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors" 
+              required 
+            />
+            {checkingUser && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+              </motion.div>
+            )}
+          </div>
+          
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Input 
+              name="name" 
+              placeholder="Seu nome completo" 
+              value={data.name} 
+              onChange={onChange} 
+              className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors" 
+              required 
+            />
+          </div>
+
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Input 
+              name="password" 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Crie uma senha segura" 
+              value={data.password || ''} 
+              onChange={onChange} 
+              className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors pr-10" 
+              required 
+              minLength={6}
+            />
+            <button 
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+          
+          <div className="flex gap-3">
+            <Button 
+              onClick={next} 
+              disabled={!data.name || !data.email || !data.password || checkingUser}
+              className="flex-1 h-12 text-lg bg-primary hover:bg-primary/90"
+            >
+              Continuar <ArrowRight className="ml-2" />
+            </Button>
+          </div>
+          
+          <p className="text-xs text-center text-gray-500">
+            💡 <strong>Dica:</strong> Sua senha garante acesso exclusivo ao dashboard e ferramentas.
+          </p>
+        </>
+      )}
+    </div>
+  );
+};
 
 const Step3 = ({ submit, data, setFormData, loading, isReturningUser }: { 
   submit: (e: React.FormEvent) => void, 
