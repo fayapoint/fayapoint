@@ -88,16 +88,31 @@ export async function POST(request: Request) {
     }
 
     // Determine model configuration
-    let primaryModel = 'google/gemini-3-pro-image-preview';
+    let primaryModel = 'google/gemini-2.0-flash-exp:free';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let additionalBodyParams: any = {};
 
+    // Check plan for Pro models
+    if (model === 'nano-banana-pro' && plan === 'free') {
+        return NextResponse.json({ 
+            error: 'O modelo Nano Banana Pro está disponível apenas para planos Starter ou superior.' 
+        }, { status: 403 });
+    }
+
     switch (model) {
+        case 'nano-banana-1':
+            // Gemini 2.5 Flash (New Default)
+            primaryModel = 'google/gemini-2.5-flash-image';
+            break;
         case 'nano-banana-pro':
+            // Gemini 3 Pro Image Preview (Premium)
             primaryModel = 'google/gemini-3-pro-image-preview';
             additionalBodyParams = {
                 modalities: ['image', 'text']
             };
+            break;
+        case 'gpt-5-image-mini':
+            primaryModel = 'openai/gpt-5-image-mini';
             break;
         case 'flux-1-dev':
             primaryModel = 'black-forest-labs/flux-1-dev';
@@ -111,6 +126,10 @@ export async function POST(request: Request) {
         case 'flux-1-schnell':
         default:
             primaryModel = 'black-forest-labs/flux-1-schnell';
+            if (model === 'nano-banana-1') {
+                 // Fallback if nano-banana-1 is not explicitly matched (though it is above)
+                 primaryModel = 'google/gemini-2.5-flash-image';
+            }
             break;
     }
 

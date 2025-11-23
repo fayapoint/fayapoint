@@ -44,7 +44,8 @@ import {
   Moon,
   Layers,
   Smartphone,
-  Box
+  Box,
+  Crown
 } from "lucide-react";
 import {
   Select,
@@ -100,7 +101,9 @@ interface IOrder {
 }
 
 const AI_MODELS = [
-  { id: "nano-banana-pro", name: "Nano Banana Pro (Recomendado)", icon: Zap, description: "O mais avançado e equilibrado" },
+  { id: "nano-banana-1", name: "Nano Banana 1 (Padrão)", icon: Zap, description: "Rápido e eficiente (Gemini 2.5)" },
+  { id: "nano-banana-pro", name: "Nano Banana Pro (Premium)", icon: Crown, description: "Qualidade máxima (Gemini 3) - Pro Only", proOnly: true },
+  { id: "gpt-5-image-mini", name: "GPT 5 Image Mini", icon: Sparkles, description: "Nova geração OpenAI" },
   { id: "flux-1-schnell", name: "Flux 1 Schnell (Rápido)", icon: Flame, description: "Geração ultra-rápida" },
   { id: "flux-1-dev", name: "Flux 1 Dev (Qualidade)", icon: Star, description: "Maior detalhamento" },
   { id: "recraft-v3", name: "Recraft V3 (Design)", icon: Layout, description: "Ótimo para vetores e design" },
@@ -172,7 +175,7 @@ export default function PortalPage() {
   const [myCreations, setMyCreations] = useState<any[]>([]);
 
   // Studio Controls
-  const [selectedModel, setSelectedModel] = useState("nano-banana-pro");
+  const [selectedModel, setSelectedModel] = useState("nano-banana-1");
   const [aspectRatio, setAspectRatio] = useState("1:1");
   const [style, setStyle] = useState("none");
   const [mood, setMood] = useState("none");
@@ -632,13 +635,21 @@ export default function PortalPage() {
                                 </SelectTrigger>
                                 <SelectContent className="bg-gray-900 border-gray-800 text-white">
                                   {AI_MODELS.map(m => (
-                                    <SelectItem key={m.id} value={m.id} className="focus:bg-white/10 cursor-pointer">
+                                    <SelectItem 
+                                        key={m.id} 
+                                        value={m.id} 
+                                        disabled={m.proOnly && plan === 'free'}
+                                        className="focus:bg-white/10 cursor-pointer"
+                                    >
                                       <div className="flex items-center gap-3 py-1">
-                                        <div className="p-1.5 bg-white/5 rounded-md text-purple-400">
-                                            <m.icon size={14} />
+                                        <div className={`p-1.5 bg-white/5 rounded-md ${m.proOnly && plan === 'free' ? 'text-gray-600' : 'text-purple-400'}`}>
+                                            {m.proOnly && plan === 'free' ? <Lock size={14} /> : <m.icon size={14} />}
                                         </div>
-                                        <div>
-                                            <p className="font-medium leading-none">{m.name}</p>
+                                        <div className={m.proOnly && plan === 'free' ? 'opacity-50' : ''}>
+                                            <p className="font-medium leading-none flex items-center gap-2">
+                                                {m.name}
+                                                {m.proOnly && <Badge variant="outline" className="text-[10px] px-1 h-4 border-yellow-500/50 text-yellow-500">PRO</Badge>}
+                                            </p>
                                             <p className="text-[10px] text-gray-500 mt-0.5 leading-none">{m.description}</p>
                                         </div>
                                       </div>
