@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -25,11 +25,12 @@ interface FormData {
   interest: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Translator = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (key: string, values?: Record<string, any>): string;
-  rich(key: string, values?: Record<string, any>): any;
-  raw(key: string): any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rich(key: string, values?: Record<string, any>): ReactNode;
+  raw(key: string): unknown;
 };
 
 const steps = [
@@ -236,7 +237,7 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
       className="text-lg text-gray-300 max-w-md mx-auto"
     >
       {t.rich("step1.description", {
-          bold: (chunks: any) => <span className="font-bold text-purple-400">{chunks}</span>
+          bold: (chunks: ReactNode) => <span className="font-bold text-purple-400">{chunks}</span>
       })}
     </motion.p>
     
@@ -256,7 +257,7 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
         </div>
         <span>{t.rich("step1.joinCount", {
             count: "2.847+",
-            strong: (chunks: any) => <strong className="text-white">{chunks}</strong>
+            strong: (chunks: ReactNode) => <strong className="text-white">{chunks}</strong>
         })}</span>
       </div>
       
@@ -380,7 +381,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
           
           <p className="text-xs text-center text-gray-500">
             {t.rich("step2.new.hint", {
-                strong: (chunks: any) => <strong>{chunks}</strong>
+                strong: (chunks: ReactNode) => <strong>{chunks}</strong>
             })}
           </p>
         </>

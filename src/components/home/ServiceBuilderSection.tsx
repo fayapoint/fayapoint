@@ -14,6 +14,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
+import { useUser } from "@/contexts/UserContext";
 import { useLocale, useTranslations } from "next-intl";
 import { getPricingTranslation, getPricingDescriptionTranslation } from "@/data/pricing-translations";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -77,10 +78,6 @@ interface ServiceBuilderSectionProps {
   sectionId?: string;
   source?: string;
 }
-
-import { useUser } from "@/contexts/UserContext";
-
-// ... existing imports ...
 
 const bundleDefinitions: Record<string, Record<string, number>> = {
   "Local Authority Launch": {
