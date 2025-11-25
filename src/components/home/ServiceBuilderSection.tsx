@@ -116,13 +116,14 @@ export function ServiceBuilderSection({
   serviceSlug,
   title,
   subtitle,
-  badgeLabel,
+  badgeLabel: badgeLabelProp,
   showServiceTabs,
   restrictToServiceSlug = false,
   sectionId = "builder",
   source,
 }: ServiceBuilderSectionProps) {
   const t = useTranslations("ServiceBuilder");
+  const badgeLabel = badgeLabelProp ?? t("badge");
   const { user, setUser, isLoggedIn } = useUser();
   const searchParams = useSearchParams();
   const { prices, loading, error, groupedByService } = useServicePrices(
@@ -217,24 +218,27 @@ export function ServiceBuilderSection({
   const catalog = useMemo(() => {
     const entries = Object.entries(groupedByService)
       .filter(([slug]) => slug !== "bundles")
-      .map(([slug, items]) => ({
-        slug,
-        meta: serviceLabels[slug] ?? {
-          name: slug,
-          description: "Configure as etapas necessárias",
-          color: "from-slate-500/30 via-slate-500/10 to-transparent",
-        },
-        tracks: items.reduce<Record<string, ServicePrice[]>>((acc, item) => {
-          acc[item.track] = acc[item.track] ? [...acc[item.track], item] : [item];
-          return acc;
-        }, {}),
-      }));
+      .map(([slug, items]) => {
+        const camelSlug = slug.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+        return {
+          slug,
+          meta: {
+            name: t(`services.${camelSlug}.name`),
+            description: t(`services.${camelSlug}.description`),
+            color: serviceLabels[slug]?.color ?? "from-slate-500/30 via-slate-500/10 to-transparent",
+          },
+          tracks: items.reduce<Record<string, ServicePrice[]>>((acc, item) => {
+            acc[item.track] = acc[item.track] ? [...acc[item.track], item] : [item];
+            return acc;
+          }, {}),
+        };
+      });
 
     if (restrictToServiceSlug && serviceSlug) {
       return entries.filter((entry) => entry.slug === serviceSlug);
     }
     return entries;
-  }, [groupedByService, restrictToServiceSlug, serviceSlug]);
+  }, [groupedByService, restrictToServiceSlug, serviceSlug, t]);
 
   useEffect(() => {
     if (serviceSlug && restrictToServiceSlug) {
@@ -322,7 +326,7 @@ export function ServiceBuilderSection({
   async function handleSubmitBundle() {
     if (cartLines.length === 0 || submitting) return;
     if (!contact.name.trim() || !contact.email.trim()) {
-      toast.error("Informe seu nome e email para prosseguir.");
+      toast.error(t("messages.nameEmailRequired"));
       return;
     }
     setSubmitting(true);
@@ -352,17 +356,17 @@ export function ServiceBuilderSection({
       });
 
       if (!res.ok) {
-        throw new Error("Falha ao enviar proposta");
+        throw new Error(t("messages.submitError"));
       }
 
       setSubmitStatus("success");
-      toast.success("Bundle enviado! Entraremos em contato para validar escopo.");
+      toast.success(t("messages.bundleSent"));
       clearCart();
       setContact({ name: "", email: "", company: "", notes: "" });
     } catch (err) {
       console.error(err);
       setSubmitStatus("error");
-      toast.error("Não conseguimos enviar agora. Recarregue a página ou tente novamente em instantes.");
+      toast.error(t("messages.networkError"));
     } finally {
       setSubmitting(false);
     }
@@ -380,16 +384,15 @@ export function ServiceBuilderSection({
         <div className="text-center max-w-4xl mx-auto mb-14">
           <Badge className="mb-4">{badgeLabel}</Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {title ?? "Monte seu bundle ideal e veja o valor em tempo real"}
+            {title ?? t("title")}
           </h2>
           <p className="text-muted-foreground text-lg">
-            {subtitle ??
-              "Combine etapas estratégicas, execução e suporte. Ajuste quantidades e receba uma estimativa de investimento instantânea para compartilhar com stakeholders ou seguir para a contratação."}
+            {subtitle ?? t("subtitle")}
           </p>
         </div>
 
         {loading && (
-          <div className="text-center text-muted-foreground">Carregando itens...</div>
+          <div className="text-center text-muted-foreground">{t("loading")}</div>
         )}
         {error && (<div className="text-center text-destructive">{error}</div>)}
 
@@ -404,7 +407,7 @@ export function ServiceBuilderSection({
                       variant={service.slug === activeService ? "default" : "outline"}
                       onClick={() => setActiveService(service.slug)}
                     >
-                      {serviceLabels[service.slug]?.name ?? service.slug}
+                      {service.meta.name}
                     </Button>
                   ))}
                 </div>
@@ -420,7 +423,7 @@ export function ServiceBuilderSection({
                   />
                   <div className="relative z-10">
                     <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground mb-1">
-                      Serviço selecionado
+                      {t("selectedService")}
                     </p>
                     <h3 className="text-2xl font-semibold">{activeCatalog.meta.name}</h3>
                     <p className="text-muted-foreground max-w-2xl">
@@ -432,26 +435,26 @@ export function ServiceBuilderSection({
 
               {!isLoggedIn ? (
                 <Card className="p-8 text-center border-dashed border-2">
-                  <h3 className="text-2xl font-bold mb-4">Desbloqueie o configurador</h3>
+                  <h3 className="text-2xl font-bold mb-4">{t("unlock.title")}</h3>
                   <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                    Para acessar os preços granulares e montar seu bundle personalizado, precisamos apenas saber quem você é.
+                    {t("unlock.description")}
                   </p>
                   <form onSubmit={handleUnlock} className="max-w-sm mx-auto space-y-4">
                     <Input
-                      placeholder="Seu nome"
+                      placeholder={t("unlock.namePlaceholder")}
                       required
                       value={unlockName}
                       onChange={(e) => setUnlockName(e.target.value)}
                     />
                     <Input
-                      placeholder="Seu email profissional"
+                      placeholder={t("unlock.emailPlaceholder")}
                       type="email"
                       required
                       value={unlockEmail}
                       onChange={(e) => setUnlockEmail(e.target.value)}
                     />
                     <Button type="submit" className="w-full">
-                      Ver preços e personalizar
+                      {t("unlock.cta")}
                     </Button>
                   </form>
                 </Card>
@@ -494,7 +497,7 @@ export function ServiceBuilderSection({
                                         {currencyFormatter.format(unitPrice)}
                                         <span className="text-xs"> / {item.unitType.replace("per_", "")}</span>
                                       </span>
-                                      <span>Qtd min {item.minQuantity}</span>
+                                      <span>{t("cart.minQty", { qty: item.minQuantity })}</span>
                                     </div>
                                   </div>
                                   <div className="flex flex-col items-end gap-2">
@@ -508,7 +511,7 @@ export function ServiceBuilderSection({
                                       </Button>
                                     </div>
                                     <p className="text-sm text-muted-foreground">
-                                      {subtotal > 0 ? currencyFormatter.format(subtotal) : "Não selecionado"}
+                                      {subtotal > 0 ? currencyFormatter.format(subtotal) : t("cart.notSelected")}
                                     </p>
                                   </div>
                                 </div>
@@ -527,14 +530,14 @@ export function ServiceBuilderSection({
               <div className="flex items-center gap-3">
                 <ShoppingCart className="w-6 h-6 text-primary" />
                 <div>
-                  <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">Resumo</p>
-                  <h3 className="text-2xl font-semibold">Seu bundle</h3>
+                  <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">{t("cart.summary")}</p>
+                  <h3 className="text-2xl font-semibold">{t("cart.yourBundle")}</h3>
                 </div>
               </div>
 
               {cartLines.length === 0 ? (
                 <p className="text-muted-foreground text-sm">
-                  Selecione etapas nos cards ao lado para começar a montar seu orçamento personalizado.
+                  {t("cart.empty")}
                 </p>
               ) : (
                 <div className="space-y-4 max-h-[380px] overflow-y-auto pr-2">
@@ -556,7 +559,7 @@ export function ServiceBuilderSection({
 
               <div className="space-y-3">
                 <Input
-                  placeholder="Seu nome completo"
+                  placeholder={t("cart.namePlaceholder")}
                   value={contact.name}
                   onChange={(e) => setContact((prev) => ({ ...prev, name: e.target.value }))}
                   disabled={isLoggedIn} // Lock if logged in to ensure consistency
@@ -564,19 +567,19 @@ export function ServiceBuilderSection({
                 />
                 <Input
                   type="email"
-                  placeholder="Email de contato"
+                  placeholder={t("cart.emailPlaceholder")}
                   value={contact.email}
                   onChange={(e) => setContact((prev) => ({ ...prev, email: e.target.value }))}
                   disabled={isLoggedIn} // Lock if logged in
                   className={isLoggedIn ? "bg-muted" : ""}
                 />
                 <Input
-                  placeholder="Empresa (opcional)"
+                  placeholder={t("cart.companyPlaceholder")}
                   value={contact.company}
                   onChange={(e) => setContact((prev) => ({ ...prev, company: e.target.value }))}
                 />
                 <Textarea
-                  placeholder="Observações sobre escopo, prazos ou integrações"
+                  placeholder={t("cart.notesPlaceholder")}
                   value={contact.notes}
                   onChange={(e) => setContact((prev) => ({ ...prev, notes: e.target.value }))}
                   rows={3}
@@ -585,11 +588,11 @@ export function ServiceBuilderSection({
 
               <div className="border-t border-border/60 pt-4">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-muted-foreground">Subtotal estimado</span>
+                  <span className="text-muted-foreground">{t("cart.subtotal")}</span>
                   <span className="text-2xl font-bold">{currencyFormatter.format(total)}</span>
                 </div>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Valores base recomendados em USD. Após finalizar, compartilharemos um PDF detalhado e agenda para validar escopo.
+                  {t("cart.disclaimer")}
                 </p>
                 <Button
                   className="w-full"
@@ -597,19 +600,19 @@ export function ServiceBuilderSection({
                   disabled={cartLines.length === 0 || submitting}
                   onClick={handleSubmitBundle}
                 >
-                  {submitting ? "Enviando..." : "Solicitar proposta com este bundle"}
+                  {submitting ? t("cart.submitting") : t("cart.submit")}
                 </Button>
                 {submitStatus === "success" && (
-                  <p className="text-xs text-emerald-500">Recebemos seu bundle! Entraremos em contato.</p>
+                  <p className="text-xs text-emerald-500">{t("cart.successMessage")}</p>
                 )}
                 {submitStatus === "error" && (
                   <p className="text-xs text-destructive">
-                    Não foi possível enviar agora. Tente novamente ou fale com nosso time.
+                    {t("cart.errorMessage")}
                   </p>
                 )}
                 <div className="flex items-center gap-2 text-xs text-muted-foreground mt-3">
                   <CheckCircle2 className="w-4 h-4 text-primary" />
-                  Combos multi-serviço recebem condições personalizadas.
+                  {t("cart.multiServiceHint")}
                 </div>
               </div>
             </Card>
@@ -617,7 +620,7 @@ export function ServiceBuilderSection({
         )}
 
         {!loading && !error && catalog.length === 0 && (
-          <div className="text-center text-muted-foreground">Nenhum item disponível para este serviço.</div>
+          <div className="text-center text-muted-foreground">{t("noItems")}</div>
         )}
       </div>
     </section>

@@ -25,10 +25,17 @@ interface FormData {
   interest: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Translator = {
+  (key: string, values?: Record<string, any>): string;
+  rich(key: string, values?: Record<string, any>): any;
+  raw(key: string): any;
+};
+
 const steps = [
-  { id: 1, title: 'Bem-vindo!', icon: Zap },
-  { id: 2, title: 'Seu Perfil', icon: User },
-  { id: 3, title: 'Seus Interesses', icon: BrainCircuit },
+  { id: 1, key: 'welcome', icon: Zap },
+  { id: 2, key: 'profile', icon: User },
+  { id: 3, key: 'interests', icon: BrainCircuit },
 ];
 
 const roleOptions = [
@@ -144,7 +151,6 @@ export default function OnboardingPage() {
       }
 
       // Send webhook (legacy/n8n support)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...webhookData } = formData;
       await fetch('/api/webhooks/onboarding', {
         method: 'POST',
@@ -175,7 +181,7 @@ export default function OnboardingPage() {
               {steps.map((s) => (
                 <div key={s.id} className={`flex items-center gap-2 ${s.id <= step ? 'text-white' : 'text-gray-500'}`}>
                   <s.icon className="w-5 h-5" />
-                  <span>{s.title}</span>
+                  <span>{t(`steps.${s.key}`)}</span>
                 </div>
               ))}
             </div>
@@ -202,8 +208,7 @@ export default function OnboardingPage() {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Step1 = ({ next, t }: { next: () => void; t: any }) => (
+const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
   <div className="text-center space-y-6">
     <motion.div
       initial={{ scale: 0, rotate: -180 }}
@@ -221,7 +226,7 @@ const Step1 = ({ next, t }: { next: () => void; t: any }) => (
       transition={{ delay: 0.3 }}
       className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 bg-clip-text text-transparent"
     >
-      Bem-vindo à Elite da IA! 🚀
+      {t("step1.title")}
     </motion.h1>
     
     <motion.p 
@@ -230,7 +235,9 @@ const Step1 = ({ next, t }: { next: () => void; t: any }) => (
       transition={{ delay: 0.5 }}
       className="text-lg text-gray-300 max-w-md mx-auto"
     >
-      Você está a poucos passos de garantir <span className="font-bold text-purple-400">acesso exclusivo</span> aos melhores cursos e ferramentas de IA do Brasil.
+      {t.rich("step1.description", {
+          bold: (chunks: any) => <span className="font-bold text-purple-400">{chunks}</span>
+      })}
     </motion.p>
     
     <motion.div
@@ -247,7 +254,10 @@ const Step1 = ({ next, t }: { next: () => void; t: any }) => (
             </div>
           ))}
         </div>
-        <span>Junte-se a <strong className="text-white">2.847+</strong> pioneiros</span>
+        <span>{t.rich("step1.joinCount", {
+            count: "2.847+",
+            strong: (chunks: any) => <strong className="text-white">{chunks}</strong>
+        })}</span>
       </div>
       
       <Button 
@@ -255,15 +265,14 @@ const Step1 = ({ next, t }: { next: () => void; t: any }) => (
         size="lg"
         className="mt-4 h-14 px-8 text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
       >
-        Começar Agora <ArrowRight className="ml-2" />
+        {t("step1.button")} <ArrowRight className="ml-2" />
       </Button>
       
-      <p className="text-xs text-gray-500 mt-2">⏱️ Leva menos de 60 segundos</p>
+      <p className="text-xs text-gray-500 mt-2">{t("step1.timeEstimate")}</p>
     </motion.div>
   </div>
 );
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUser, t }: { 
   next: () => void, 
   data: FormData, 
@@ -271,7 +280,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
   onEmailBlur: (email: string) => void,
   checkingUser: boolean,
   isReturningUser: boolean,
-  t: any
+  t: Translator
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -289,18 +298,18 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
             </div>
           </motion.div>
           <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent">
-            Que bom te ver de novo, {data.name}! ✨
+            {t("step2.returning.title", { name: data.name })}
           </h2>
-          <p className="text-gray-300">Você já está na nossa lista VIP! Vamos atualizar suas informações?</p>
+          <p className="text-gray-300">{t("step2.returning.description")}</p>
           <Button onClick={next} size="lg" className="mt-6 bg-gradient-to-r from-green-500 to-emerald-600">
-            Atualizar Meu Perfil <ArrowRight className="ml-2" />
+            {t("step2.returning.cta")} <ArrowRight className="ml-2" />
           </Button>
         </div>
       ) : (
         <>
           <div className="text-center">
-            <h2 className="text-2xl font-bold mb-2">Vamos começar! 🚀</h2>
-            <p className="text-sm text-gray-400">Crie sua conta gratuita para acessar</p>
+            <h2 className="text-2xl font-bold mb-2">{t("step2.new.title")}</h2>
+            <p className="text-sm text-gray-400">{t("step2.new.description")}</p>
           </div>
           
           <div className="relative">
@@ -308,7 +317,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
             <Input 
               name="email" 
               type="email" 
-              placeholder="seu@email.com" 
+              placeholder={t("step2.new.fields.email")} 
               value={data.email} 
               onChange={onChange}
               onBlur={(e) => onEmailBlur(e.target.value)}
@@ -330,7 +339,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
             <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input 
               name="name" 
-              placeholder="Seu nome completo" 
+              placeholder={t("step2.new.fields.name")} 
               value={data.name} 
               onChange={onChange} 
               className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors" 
@@ -343,7 +352,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
             <Input 
               name="password" 
               type={showPassword ? "text" : "password"} 
-              placeholder="Crie uma senha segura" 
+              placeholder={t("step2.new.fields.password")} 
               value={data.password || ''} 
               onChange={onChange} 
               className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors pr-10" 
@@ -365,12 +374,14 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
               disabled={!data.name || !data.email || !data.password || checkingUser}
               className="flex-1 h-12 text-lg bg-primary hover:bg-primary/90"
             >
-              Continuar <ArrowRight className="ml-2" />
+              {t("step2.new.cta")} <ArrowRight className="ml-2" />
             </Button>
           </div>
           
           <p className="text-xs text-center text-gray-500">
-            💡 <strong>Dica:</strong> Sua senha garante acesso exclusivo ao dashboard e ferramentas.
+            {t.rich("step2.new.hint", {
+                strong: (chunks: any) => <strong>{chunks}</strong>
+            })}
           </p>
         </>
       )}
@@ -378,14 +389,13 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: { 
   submit: (e: React.FormEvent) => void, 
   data: FormData, 
   setFormData: React.Dispatch<React.SetStateAction<FormData>>,
   loading: boolean, 
   isReturningUser: boolean,
-  t: any
+  t: Translator
 }) => {
   const [selectedRoles, setSelectedRoles] = useState<string[]>(data.role ? data.role.split(',') : []);
   const [selectedInterests, setSelectedInterests] = useState<string[]>(data.interest ? data.interest.split(',') : []);
@@ -410,14 +420,14 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
     <form onSubmit={submit} className="space-y-8">
       <div className="text-center space-y-2">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-          Quase lá! ✨
+          {t("step3.title")}
         </h2>
         <p className="text-gray-400">
-          Personalize sua experiência para receber conteúdo exclusivo
+          {t("step3.description")}
         </p>
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-sm">
           <Star className="w-4 h-4 text-yellow-400" />
-          <span className="text-purple-300">Mais informações = Prioridade na fila!</span>
+          <span className="text-purple-300">{t("step3.priorityHint")}</span>
         </div>
       </div>
 
@@ -425,7 +435,7 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
       <div className="space-y-4">
         <label className="text-lg font-semibold flex items-center gap-2">
           <Briefcase className="w-5 h-5 text-purple-400" />
-          Qual é sua área? (pode escolher mais de uma)
+          {t("step3.roleLabel")}
         </label>
         <div className="grid grid-cols-2 gap-3">
           {roleOptions.map((option) => (
@@ -443,7 +453,7 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{option.emoji}</span>
-                <span className="font-medium text-sm">{option.label}</span>
+                <span className="font-medium text-sm">{t(`roles.${option.value}`)}</span>
               </div>
             </motion.button>
           ))}
@@ -454,7 +464,7 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
       <div className="space-y-4">
         <label className="text-lg font-semibold flex items-center gap-2">
           <BrainCircuit className="w-5 h-5 text-pink-400" />
-          O que mais te interessa? (escolha quantos quiser)
+          {t("step3.interestLabel")}
         </label>
         <div className="grid grid-cols-2 gap-3">
           {interestOptions.map((option) => (
@@ -472,7 +482,7 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{option.emoji}</span>
-                <span className="font-medium text-sm">{option.label}</span>
+                <span className="font-medium text-sm">{t(`interests.${option.value}`)}</span>
               </div>
             </motion.button>
           ))}
@@ -493,12 +503,12 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
           {loading ? (
             <div className="flex items-center gap-2">
               <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-              <span>Processando...</span>
+              <span>{t("step3.submitting")}</span>
             </div>
           ) : (
             <>
               <span className="relative z-10">
-                {isReturningUser ? '✨ Atualizar & Confirmar' : '🚀 Garantir Meu Lugar VIP'}
+                {isReturningUser ? t("step3.submitReturning") : t("step3.submitNew")}
               </span>
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400"
@@ -512,7 +522,7 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
         
         {(selectedRoles.length === 0 || selectedInterests.length === 0) && (
           <p className="text-xs text-center text-gray-500 mt-2">
-            ⬆️ Selecione pelo menos uma opção em cada categoria
+            {t("step3.selectionHint")}
           </p>
         )}
       </motion.div>
