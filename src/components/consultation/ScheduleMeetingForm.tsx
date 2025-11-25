@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ export function ScheduleMeetingForm({
   source = "calendar",
   onSuccess,
 }: ScheduleMeetingFormProps) {
+  const t = useTranslations("ScheduleMeeting");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -59,7 +61,7 @@ export function ScheduleMeetingForm({
     event.preventDefault();
 
     if (!formData.fullName.trim() || !formData.email.trim()) {
-      toast.error("Informe nome e email para continuar.");
+      toast.error(t("messages.nameEmailRequired"));
       return;
     }
 
@@ -79,27 +81,27 @@ export function ScheduleMeetingForm({
       });
 
       if (!upsertResponse.ok) {
-        throw new Error("Falha ao salvar seus dados");
+        throw new Error(t("messages.saveError"));
       }
 
       const slotResponse = await fetch("/api/calendar/next-slot", { cache: "no-store" });
 
       if (!slotResponse.ok) {
-        throw new Error("Não conseguimos obter um horário disponível");
+        throw new Error(t("messages.slotError"));
       }
 
       const data = await slotResponse.json();
 
       if (!data?.bookingUrl) {
-        throw new Error("Resposta inesperada da agenda");
+        throw new Error(t("messages.unexpectedResponse"));
       }
 
-      toast.success("Abrindo Google Agenda para confirmar o horário ✨");
+      toast.success(t("messages.success"));
       onSuccess?.();
       window.location.href = data.bookingUrl as string;
     } catch (error) {
       console.error("ScheduleMeetingForm error", error);
-      toast.error("Não conseguimos agendar agora. Tente novamente em instantes.");
+      toast.error(t("messages.genericError"));
     } finally {
       setIsLoading(false);
     }
@@ -161,10 +163,10 @@ export function ScheduleMeetingForm({
         className="h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
         disabled={isLoading}
       >
-        {isLoading ? "Conectando com Google Calendar..." : copy.submit}
+        {isLoading ? t("submitting") : copy.submit}
       </Button>
       <p className="text-xs text-muted-foreground">
-        Após enviar, abriremos sua Google Agenda com o próximo horário disponível para confirmação.
+        {t("footer")}
       </p>
     </form>
   );

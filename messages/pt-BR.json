@@ -981,5 +981,363 @@
       "Finanças",
       "Indústria"
     ]
+  },
+  "Portal": {
+    "welcome": "Bem-vindo, {name}!",
+    "plan": "Plano {plan}",
+    "points": "{points} pts",
+    "days": "{days} dias",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "courses": "Meus Cursos",
+      "resources": "Recursos",
+      "studio": "Studio AI",
+      "history": "Histórico",
+      "profile": "Perfil"
+    },
+    "stats": {
+      "inProgress": "Em Progresso",
+      "completed": "Concluídos",
+      "study": "Estudo",
+      "certificates": "Certificados"
+    },
+    "continueLearning": {
+      "title": "Continuar Aprendendo",
+      "empty": "Você ainda não começou nenhum curso.",
+      "exploreCourses": "Explorar Cursos"
+    },
+    "tipOfDay": {
+      "title": "Dica do Dia",
+      "content": "Use o Gemini para criar estruturas de código complexas e depois refine com o Claude para melhor legibilidade.",
+      "testAI": "Testar IA Agora"
+    },
+    "myCourses": {
+      "title": "Meus Cursos",
+      "completedPercent": "{percent}% Concluído",
+      "empty": "Nenhum curso encontrado.",
+      "defaultDescription": "Curso completo de IA"
+    },
+    "resources": {
+      "title": "Seus Recursos Disponíveis",
+      "available": "Disponível",
+      "upgradeRequired": "Upgrade necessário",
+      "upgradeTitle": "Faça Upgrade para Business",
+      "upgradeDescription": "Desbloqueie todos os recursos e suporte dedicado.",
+      "viewPlans": "Ver Planos"
+    },
+    "studio": {
+      "title": "Studio AI Pro",
+      "subtitle": "Crie arte visual impressionante com os modelos mais avançados do mercado.",
+      "modelLabel": "Modelo de IA",
+      "selectModel": "Selecione o modelo",
+      "formatLabel": "Formato",
+      "styleLabel": "Estilo Visual",
+      "moodLabel": "Atmosfera",
+      "lightingLabel": "Iluminação",
+      "placeholder": "Descreva sua imaginação aqui... Ex: Um astronauta flutuando em um jardim bioluminescente...",
+      "generate": "Gerar Arte",
+      "downloadHD": "Baixar HD",
+      "creating": "Criando sua obra prima...",
+      "previewEmpty": "Sua obra de arte aparecerá aqui",
+      "previewHint": "Configure os parâmetros acima e clique em Gerar",
+      "recent": "Recentes",
+      "styles": {
+        "none": "Normal",
+        "photorealistic": "Fotorealista",
+        "anime": "Anime",
+        "cyberpunk": "Cyberpunk",
+        "oilPainting": "Pintura a Óleo",
+        "3dRender": "3D Render",
+        "minimalist": "Minimalista"
+      },
+      "moods": {
+        "none": "Padrão",
+        "cinematic": "Cinematográfico",
+        "dark": "Sombrio",
+        "cheerful": "Alegre",
+        "mysterious": "Misterioso",
+        "ethereal": "Etéreo"
+      },
+      "lighting": {
+        "none": "Padrão",
+        "natural": "Luz Natural",
+        "studio": "Estúdio",
+        "neon": "Neon",
+        "goldenHour": "Golden Hour"
+      },
+      "models": {
+        "nanoBanana1": "Nano Banana 1 (Padrão)",
+        "nanoBanana1Desc": "Rápido e eficiente (Gemini 2.5)",
+        "nanoBananaPro": "Nano Banana Pro (Premium)",
+        "nanoBananaProDesc": "Qualidade máxima (Gemini 3) - Pro Only",
+        "gpt5ImageMini": "GPT 5 Image Mini",
+        "gpt5ImageMiniDesc": "Nova geração OpenAI",
+        "flux1Schnell": "Flux 1 Schnell (Rápido)",
+        "flux1SchnellDesc": "Geração ultra-rápida",
+        "flux1Dev": "Flux 1 Dev (Qualidade)",
+        "flux1DevDesc": "Maior detalhamento",
+        "recraftV3": "Recraft V3 (Design)",
+        "recraftV3Desc": "Ótimo para vetores e design",
+        "stableDiffusion": "Stable Diffusion 3.5",
+        "stableDiffusionDesc": "Versatilidade máxima"
+      }
+    },
+    "history": {
+      "cartTitle": "Carrinho Atual",
+      "service": "Serviço",
+      "course": "Curso",
+      "cartEmpty": "Seu carrinho está vazio no momento.",
+      "estimatedTotal": "Total Estimado",
+      "checkout": "Finalizar Compra",
+      "ordersTitle": "Histórico de Pedidos",
+      "orderNumber": "Pedido #{id}",
+      "noOrders": "Nenhum pedido concluído encontrado."
+    },
+    "profile": {
+      "title": "Editar Perfil",
+      "edit": "Editar",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "fields": {
+        "fullName": "Nome Completo",
+        "email": "Email",
+        "company": "Empresa",
+        "position": "Cargo / Posição",
+        "bio": "Bio",
+        "location": "Localização",
+        "website": "Website",
+        "linkedin": "LinkedIn"
+      }
+    },
+    "messages": {
+      "loadError": "Erro ao carregar dashboard",
+      "profileUpdated": "Perfil atualizado com sucesso!",
+      "profileError": "Erro ao atualizar perfil",
+      "imageGenerated": "Imagem gerada com sucesso!",
+      "imageError": "Erro ao gerar imagem"
+    }
+  },
+  "Login": {
+    "title": "FayaPoint AI",
+    "subtitle": "Bem-vindo de volta! Faça login para continuar.",
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "seu@email.com",
+      "password": "Senha",
+      "passwordPlaceholder": "••••••••"
+    },
+    "rememberMe": "Lembrar de mim",
+    "forgotPassword": "Esqueceu a senha?",
+    "submit": "Entrar",
+    "submitting": "Entrando...",
+    "orContinueWith": "ou continue com",
+    "noAccount": "Não tem uma conta?",
+    "createAccount": "Crie sua conta grátis",
+    "features": {
+      "instantAccess": "Acesso instantâneo",
+      "freeCertificates": "Certificados gratuitos"
+    },
+    "messages": {
+      "welcomeBack": "Bem-vindo, {name}!",
+      "loginError": "Erro ao fazer login",
+      "unexpectedError": "Ocorreu um erro inesperado",
+      "googleInDev": "Login com Google em desenvolvimento",
+      "githubInDev": "Login com GitHub em desenvolvimento"
+    }
+  },
+  "Register": {
+    "title": "FayaPoint AI",
+    "subtitle": "Crie sua conta gratuita",
+    "heroTitle": "Junte-se a mais de",
+    "heroHighlight": "5.000 profissionais",
+    "heroDescription": "Crie sua conta gratuita e comece sua jornada para dominar a Inteligência Artificial hoje mesmo.",
+    "benefits": [
+      "Acesso a aulas gratuitas",
+      "Certificado de conclusão",
+      "Comunidade exclusiva",
+      "Atualizações semanais"
+    ],
+    "testimonial": {
+      "quote": "A FayaPoint mudou completamente minha forma de trabalhar com IA. Em apenas 2 meses, já automatizei 80% das minhas tarefas repetitivas.",
+      "name": "Maria Silva",
+      "role": "CEO, TechStartup"
+    },
+    "fields": {
+      "fullName": "Nome Completo",
+      "fullNamePlaceholder": "João Silva",
+      "email": "Email",
+      "emailPlaceholder": "seu@email.com",
+      "password": "Senha",
+      "confirmPassword": "Confirmar Senha",
+      "passwordPlaceholder": "••••••••"
+    },
+    "terms": {
+      "accept": "Eu aceito os",
+      "termsOfUse": "Termos de Uso",
+      "and": "e a",
+      "privacyPolicy": "Política de Privacidade"
+    },
+    "submit": "Criar Conta Grátis",
+    "submitting": "Criando conta...",
+    "orSignUpWith": "ou cadastre-se com",
+    "hasAccount": "Já tem uma conta?",
+    "login": "Faça login",
+    "messages": {
+      "passwordMismatch": "As senhas não coincidem",
+      "acceptTerms": "Você precisa aceitar os termos de uso",
+      "success": "Conta criada com sucesso! Bem-vindo à FayaPoint!",
+      "googleInDev": "Cadastro com Google em desenvolvimento",
+      "githubInDev": "Cadastro com GitHub em desenvolvimento"
+    }
+  },
+  "Onboarding": {
+    "steps": {
+      "welcome": "Bem-vindo!",
+      "profile": "Seu Perfil",
+      "interests": "Seus Interesses"
+    },
+    "step1": {
+      "title": "Bem-vindo à Elite da IA! 🚀",
+      "description": "Você está a poucos passos de garantir <highlight>acesso exclusivo</highlight> aos melhores cursos e ferramentas de IA do Brasil.",
+      "pioneers": "Junte-se a <strong>{count}+</strong> pioneiros",
+      "cta": "Começar Agora",
+      "hint": "⏱️ Leva menos de 60 segundos"
+    },
+    "step2": {
+      "returning": {
+        "title": "Que bom te ver de novo, {name}! ✨",
+        "description": "Você já está na nossa lista VIP! Vamos atualizar suas informações?",
+        "cta": "Atualizar Meu Perfil"
+      },
+      "new": {
+        "title": "Vamos começar! 🚀",
+        "description": "Crie sua conta gratuita para acessar",
+        "fields": {
+          "email": "seu@email.com",
+          "name": "Seu nome completo",
+          "password": "Crie uma senha segura"
+        },
+        "cta": "Continuar",
+        "hint": "💡 <strong>Dica:</strong> Sua senha garante acesso exclusivo ao dashboard e ferramentas."
+      }
+    },
+    "step3": {
+      "title": "Quase lá! ✨",
+      "description": "Personalize sua experiência para receber conteúdo exclusivo",
+      "priorityHint": "Mais informações = Prioridade na fila!",
+      "roleLabel": "Qual é sua área? (pode escolher mais de uma)",
+      "interestLabel": "O que mais te interessa? (escolha quantos quiser)",
+      "submitReturning": "✨ Atualizar & Confirmar",
+      "submitNew": "🚀 Garantir Meu Lugar VIP",
+      "submitting": "Processando...",
+      "selectionHint": "⬆️ Selecione pelo menos uma opção em cada categoria"
+    },
+    "roles": {
+      "developer": "Desenvolvedor",
+      "designer": "Designer",
+      "marketing": "Marketing",
+      "business": "Empresário",
+      "sales": "Vendas",
+      "student": "Estudante",
+      "content": "Criador de Conteúdo",
+      "other": "Outro"
+    },
+    "interests": {
+      "automation": "Automação",
+      "chatgpt": "ChatGPT & IA Conversacional",
+      "image": "Geração de Imagens",
+      "productivity": "Produtividade",
+      "business": "Negócios & Estratégia",
+      "learning": "Aprendizado Contínuo",
+      "innovation": "Inovação",
+      "all": "Tudo sobre IA!"
+    }
+  },
+  "ServiceBuilder": {
+    "badge": "Construtor de serviços",
+    "title": "Monte seu bundle ideal e veja o valor em tempo real",
+    "subtitle": "Combine etapas estratégicas, execução e suporte. Ajuste quantidades e receba uma estimativa de investimento instantânea para compartilhar com stakeholders ou seguir para a contratação.",
+    "loading": "Carregando itens...",
+    "noItems": "Nenhum item disponível para este serviço.",
+    "services": {
+      "websiteFull": {
+        "name": "Website completo",
+        "description": "Da descoberta ao deploy com UX, UI e código sob medida."
+      },
+      "socialManagement": {
+        "name": "Social media & growth",
+        "description": "Conteúdo, mídia e comunidade com consistência e insights."
+      },
+      "localSeo": {
+        "name": "Google Maps & Local SEO",
+        "description": "Domine o pack local com reputação e páginas locais."
+      },
+      "videoProduction": {
+        "name": "Vídeo & conteúdo audiovisual",
+        "description": "Pré-produção, filmagem e pós completas em um só lugar."
+      },
+      "automationAi": {
+        "name": "Automação & IA aplicada",
+        "description": "Mapeamento de processos, agentes e integrações inteligentes."
+      }
+    },
+    "selectedService": "Serviço selecionado",
+    "defaultServiceDesc": "Configure as etapas necessárias",
+    "unlock": {
+      "title": "Desbloqueie o configurador",
+      "description": "Para acessar os preços granulares e montar seu bundle personalizado, precisamos apenas saber quem você é.",
+      "namePlaceholder": "Seu nome",
+      "emailPlaceholder": "Seu email profissional",
+      "cta": "Ver preços e personalizar",
+      "success": "Acesso liberado! Personalize seu pacote."
+    },
+    "cart": {
+      "summary": "Resumo",
+      "yourBundle": "Seu bundle",
+      "empty": "Selecione etapas nos cards ao lado para começar a montar seu orçamento personalizado.",
+      "notSelected": "Não selecionado",
+      "minQty": "Qtd min {qty}",
+      "namePlaceholder": "Seu nome completo",
+      "emailPlaceholder": "Email de contato",
+      "companyPlaceholder": "Empresa (opcional)",
+      "notesPlaceholder": "Observações sobre escopo, prazos ou integrações",
+      "subtotal": "Subtotal estimado",
+      "disclaimer": "Valores base recomendados em USD. Após finalizar, compartilharemos um PDF detalhado e agenda para validar escopo.",
+      "submit": "Solicitar proposta com este bundle",
+      "submitting": "Enviando...",
+      "successMessage": "Recebemos seu bundle! Entraremos em contato.",
+      "errorMessage": "Não foi possível enviar agora. Tente novamente ou fale com nosso time.",
+      "multiServiceHint": "Combos multi-serviço recebem condições personalizadas."
+    },
+    "messages": {
+      "nameEmailRequired": "Informe seu nome e email para prosseguir.",
+      "submitError": "Falha ao enviar proposta",
+      "bundleLoaded": "Pacote \"{name}\" carregado!",
+      "bundleSent": "Bundle enviado! Entraremos em contato para validar escopo.",
+      "networkError": "Não conseguimos enviar agora. Recarregue a página ou tente novamente em instantes."
+    }
+  },
+  "CommunityGallery": {
+    "badge": "Galeria da Comunidade",
+    "title": "O que estão criando agora",
+    "description": "Explore as obras de arte geradas pelos alunos e mentores da nossa comunidade.",
+    "empty": "Nenhuma criação encontrada. Seja o primeiro a criar!"
+  },
+  "ScheduleMeeting": {
+    "messages": {
+      "nameEmailRequired": "Informe nome e email para continuar.",
+      "saveError": "Falha ao salvar seus dados",
+      "slotError": "Não conseguimos obter um horário disponível",
+      "unexpectedResponse": "Resposta inesperada da agenda",
+      "success": "Abrindo Google Agenda para confirmar o horário ✨",
+      "genericError": "Não conseguimos agendar agora. Tente novamente em instantes."
+    },
+    "submitting": "Conectando com Google Calendar...",
+    "footer": "Após enviar, abriremos sua Google Agenda com o próximo horário disponível para confirmação."
+  },
+  "ServicesCarousel": {
+    "investment": "Investimento",
+    "onRequest": "Sob consulta",
+    "scheduleConsultation": "Agendar consultoria"
   }
 }

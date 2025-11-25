@@ -65,6 +65,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslations } from "next-intl";
 import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
 import { getCourseBySlug, CourseData } from "@/data/courses";
@@ -144,6 +145,7 @@ const RATIOS = [
 ];
 
 export default function PortalPage() {
+  const t = useTranslations("Portal");
   const router = useRouter();
   const { user, setUser, logout } = useUser();
   const { items: cartItems, cartTotal } = useServiceCart();
@@ -258,7 +260,7 @@ export default function PortalPage() {
 
       } catch (error) {
         console.error('Error fetching dashboard:', error);
-        toast.error("Erro ao carregar dashboard");
+        toast.error(t("messages.loadError"));
       } finally {
         setIsLoading(false);
       }
@@ -297,10 +299,10 @@ export default function PortalPage() {
 
         const data = await res.json();
         setUser(data.user);
-        toast.success("Perfil atualizado com sucesso!");
+        toast.success(t("messages.profileUpdated"));
         setIsEditingProfile(false);
     } catch (error) {
-        toast.error("Erro ao atualizar perfil");
+        toast.error(t("messages.profileError"));
     } finally {
         setIsSavingProfile(false);
     }
@@ -337,10 +339,10 @@ export default function PortalPage() {
         if (!res.ok) throw new Error(data.error || 'Falha na geração');
 
         setGeneratedImage(data.imageUrl);
-        toast.success("Imagem gerada com sucesso!");
+        toast.success(t("messages.imageGenerated"));
         fetchCreations(); // Refresh gallery
     } catch (error) {
-        const message = error instanceof Error ? error.message : "Erro ao gerar imagem";
+        const message = error instanceof Error ? error.message : t("messages.imageError");
         toast.error(message);
     } finally {
         setIsGenerating(false);
@@ -387,7 +389,7 @@ export default function PortalPage() {
                   </span>
                 </Avatar>
                 <div>
-                  <h1 className="text-2xl font-bold">Bem-vindo, {user.name}!</h1>
+                  <h1 className="text-2xl font-bold">{t("welcome", { name: user.name })}</h1>
                   <p className="text-gray-400 text-sm mb-2">
                     {user.profile?.position ? `${user.profile.position} at ${user.profile.company || 'Freelancer'}` : user.email}
                   </p>
@@ -430,12 +432,12 @@ export default function PortalPage() {
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-gray-900/50 border border-gray-800 w-full justify-start overflow-x-auto p-1">
-              <TabsTrigger value="dashboard" className="gap-2"><TrendingUp size={16}/> Dashboard</TabsTrigger>
-              <TabsTrigger value="courses" className="gap-2"><BookOpen size={16}/> Meus Cursos</TabsTrigger>
-              <TabsTrigger value="resources" className="gap-2"><Target size={16}/> Recursos</TabsTrigger>
-              <TabsTrigger value="aitools" className="gap-2"><ImageIcon size={16}/> Studio AI</TabsTrigger>
-              <TabsTrigger value="history" className="gap-2"><ShoppingBag size={16}/> Histórico</TabsTrigger>
-              <TabsTrigger value="profile" className="gap-2"><User size={16}/> Perfil</TabsTrigger>
+              <TabsTrigger value="dashboard" className="gap-2"><TrendingUp size={16}/> {t("tabs.dashboard")}</TabsTrigger>
+              <TabsTrigger value="courses" className="gap-2"><BookOpen size={16}/> {t("tabs.courses")}</TabsTrigger>
+              <TabsTrigger value="resources" className="gap-2"><Target size={16}/> {t("tabs.resources")}</TabsTrigger>
+              <TabsTrigger value="aitools" className="gap-2"><ImageIcon size={16}/> {t("tabs.studio")}</TabsTrigger>
+              <TabsTrigger value="history" className="gap-2"><ShoppingBag size={16}/> {t("tabs.history")}</TabsTrigger>
+              <TabsTrigger value="profile" className="gap-2"><User size={16}/> {t("tabs.profile")}</TabsTrigger>
             </TabsList>
 
             {/* Dashboard Tab */}
@@ -449,7 +451,7 @@ export default function PortalPage() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{userStats.coursesInProgress}</p>
-                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">Em Progresso</p>
+                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">{t("stats.inProgress")}</p>
                     </div>
                   </div>
                 </Card>
@@ -461,7 +463,7 @@ export default function PortalPage() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{userStats.coursesCompleted}</p>
-                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">Concluídos</p>
+                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">{t("stats.completed")}</p>
                     </div>
                   </div>
                 </Card>
@@ -473,7 +475,7 @@ export default function PortalPage() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{userStats.totalHours}h</p>
-                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">Estudo</p>
+                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">{t("stats.study")}</p>
                     </div>
                   </div>
                 </Card>
@@ -485,7 +487,7 @@ export default function PortalPage() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold">{userStats.certificates || 0}</p>
-                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">Certificados</p>
+                      <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">{t("stats.certificates")}</p>
                     </div>
                   </div>
                 </Card>
@@ -496,7 +498,7 @@ export default function PortalPage() {
                 <div className="lg:col-span-2 space-y-6">
                   <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
                     <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                        <PlayCircle className="text-purple-400" /> Continuar Aprendendo
+                        <PlayCircle className="text-purple-400" /> {t("continueLearning.title")}
                     </h2>
                     <div className="space-y-4">
                       {userCourses.length > 0 ? (
@@ -524,9 +526,9 @@ export default function PortalPage() {
                         ))
                       ) : (
                         <div className="text-center py-8 text-gray-400 border-2 border-dashed border-gray-800 rounded-lg">
-                          <p>Você ainda não começou nenhum curso.</p>
+                          <p>{t("continueLearning.empty")}</p>
                           <Link href="/cursos">
-                            <Button className="mt-4" variant="outline">Explorar Cursos</Button>
+                            <Button className="mt-4" variant="outline">{t("continueLearning.exploreCourses")}</Button>
                           </Link>
                         </div>
                       )}
@@ -537,12 +539,12 @@ export default function PortalPage() {
                 {/* Quick Recommendations */}
                 <div className="space-y-6">
                    <Card className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border-purple-500/30 p-6">
-                    <h2 className="text-xl font-semibold mb-4">Dica do Dia</h2>
+                    <h2 className="text-xl font-semibold mb-4">{t("tipOfDay.title")}</h2>
                     <p className="text-sm text-gray-300 italic">
-                        &quot;Use o Gemini para criar estruturas de código complexas e depois refine com o Claude para melhor legibilidade.&quot;
+                        &quot;{t("tipOfDay.content")}&quot;
                     </p>
                     <Button className="w-full mt-4" size="sm" variant="outline" onClick={() => setActiveTab('aitools')}>
-                        Testar IA Agora
+                        {t("tipOfDay.testAI")}
                     </Button>
                   </Card>
                 </div>
@@ -552,7 +554,7 @@ export default function PortalPage() {
             {/* Courses Tab */}
             <TabsContent value="courses">
               <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
-                <h2 className="text-xl font-semibold mb-4">Meus Cursos</h2>
+                <h2 className="text-xl font-semibold mb-4">{t("myCourses.title")}</h2>
                 <div className="grid md:grid-cols-2 gap-4">
                      {userCourses.length > 0 ? (
                         userCourses.map(progress => (
@@ -564,18 +566,18 @@ export default function PortalPage() {
                                             <BookOpen size={32} />
                                         </div>
                                         <div className="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded text-xs font-mono">
-                                            {progress.progressPercent}% Concluído
+                                            {t("myCourses.completedPercent", { percent: progress.progressPercent })}
                                         </div>
                                     </div>
                                     <div className="p-4">
                                         <h3 className="font-bold group-hover:text-purple-400 transition">{progress.details?.title || progress.courseId}</h3>
-                                        <p className="text-sm text-gray-400 mt-1 line-clamp-2">{progress.details?.shortDescription || 'Curso completo de IA'}</p>
+                                        <p className="text-sm text-gray-400 mt-1 line-clamp-2">{progress.details?.shortDescription || t("myCourses.defaultDescription")}</p>
                                     </div>
                                 </div>
                             </Link>
                         ))
                      ) : (
-                         <p className="text-gray-400 col-span-2">Nenhum curso encontrado.</p>
+                         <p className="text-gray-400 col-span-2">{t("myCourses.empty")}</p>
                      )}
                 </div>
               </Card>
@@ -585,7 +587,7 @@ export default function PortalPage() {
             <TabsContent value="resources">
               <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-semibold">Seus Recursos Disponíveis</h2>
+                    <h2 className="text-xl font-semibold">{t("resources.title")}</h2>
                     <Badge className="bg-purple-600 text-white hover:bg-purple-700">Plano {plan.toUpperCase()}</Badge>
                 </div>
                 
@@ -597,7 +599,7 @@ export default function PortalPage() {
                                 {resource.limit && <span className="text-xs bg-white/10 px-2 py-1 rounded">{resource.limit}</span>}
                             </div>
                             <h3 className="font-medium">{resource.name}</h3>
-                            <p className="text-xs text-gray-400 mt-1">{resource.available ? 'Disponível' : 'Upgrade necessário'}</p>
+                            <p className="text-xs text-gray-400 mt-1">{resource.available ? t("resources.available") : t("resources.upgradeRequired")}</p>
                         </div>
                     ))}
                 </div>
@@ -605,10 +607,10 @@ export default function PortalPage() {
                 {!resources.some(r => r.limit === 'Ilimitado') && (
                     <div className="mt-8 p-4 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-lg border border-purple-500/30 flex items-center justify-between">
                         <div>
-                            <h3 className="font-bold text-purple-300">Faça Upgrade para Business</h3>
-                            <p className="text-sm text-gray-300">Desbloqueie todos os recursos e suporte dedicado.</p>
+                            <h3 className="font-bold text-purple-300">{t("resources.upgradeTitle")}</h3>
+                            <p className="text-sm text-gray-300">{t("resources.upgradeDescription")}</p>
                         </div>
-                        <Button>Ver Planos</Button>
+                        <Button>{t("resources.viewPlans")}</Button>
                     </div>
                 )}
               </Card>
@@ -621,17 +623,17 @@ export default function PortalPage() {
                       <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-8 border-b border-white/10 pb-6">
                           <div>
                             <h2 className="text-2xl font-bold flex items-center gap-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                                <Sparkles className="text-purple-400" /> Studio AI Pro
+                                <Sparkles className="text-purple-400" /> {t("studio.title")}
                             </h2>
                             <p className="text-sm text-gray-400 mt-1">
-                                Crie arte visual impressionante com os modelos mais avançados do mercado.
+                                {t("studio.subtitle")}
                             </p>
                           </div>
                           <div className="w-full md:w-80">
-                             <Label className="mb-2 block text-xs uppercase text-gray-500 font-bold tracking-wider">Modelo de IA</Label>
+                             <Label className="mb-2 block text-xs uppercase text-gray-500 font-bold tracking-wider">{t("studio.modelLabel")}</Label>
                              <Select value={selectedModel} onValueChange={setSelectedModel}>
                                 <SelectTrigger className="bg-black/50 border-gray-700 h-10">
-                                  <SelectValue placeholder="Selecione o modelo" />
+                                  <SelectValue placeholder={t("studio.selectModel")} />
                                 </SelectTrigger>
                                 <SelectContent className="bg-gray-900 border-gray-800 text-white">
                                   {AI_MODELS.map(m => (
@@ -665,7 +667,7 @@ export default function PortalPage() {
                           
                           {/* Aspect Ratio - Col 3 */}
                           <div className="md:col-span-3 space-y-3">
-                             <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Grid size={14}/> Formato</Label>
+                             <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Grid size={14}/> {t("studio.formatLabel")}</Label>
                              <div className="flex gap-2">
                                 {RATIOS.map(r => (
                                    <Button
@@ -683,7 +685,7 @@ export default function PortalPage() {
 
                           {/* Style - Col 9 (Scrollable) */}
                           <div className="md:col-span-9 space-y-3">
-                             <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Palette size={14}/> Estilo Visual</Label>
+                             <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Palette size={14}/> {t("studio.styleLabel")}</Label>
                              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                                 {STYLES.map(s => (
                                    <button
@@ -701,7 +703,7 @@ export default function PortalPage() {
 
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                            <div className="space-y-3">
-                              <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Wand2 size={14}/> Atmosfera</Label>
+                              <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Wand2 size={14}/> {t("studio.moodLabel")}</Label>
                                <Select value={mood} onValueChange={setMood}>
                                  <SelectTrigger className="bg-black/30 border-gray-800 h-11"><SelectValue /></SelectTrigger>
                                  <SelectContent className="bg-gray-900 border-gray-800 text-white">
@@ -710,7 +712,7 @@ export default function PortalPage() {
                               </Select>
                            </div>
                            <div className="space-y-3">
-                              <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Sun size={14}/> Iluminação</Label>
+                              <Label className="text-xs uppercase text-gray-500 font-bold flex items-center gap-2"><Sun size={14}/> {t("studio.lightingLabel")}</Label>
                                <Select value={lighting} onValueChange={setLighting}>
                                  <SelectTrigger className="bg-black/30 border-gray-800 h-11"><SelectValue /></SelectTrigger>
                                  <SelectContent className="bg-gray-900 border-gray-800 text-white">
@@ -723,7 +725,7 @@ export default function PortalPage() {
                        {/* Prompt Area */}
                        <div className="relative">
                           <Textarea 
-                            placeholder="Descreva sua imaginação aqui... Ex: Um astronauta flutuando em um jardim bioluminescente..." 
+                            placeholder={t("studio.placeholder")} 
                             className="bg-black/50 border-gray-700 min-h-[120px] text-lg p-4 focus:ring-purple-500 resize-none pr-32"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
@@ -737,7 +739,7 @@ export default function PortalPage() {
                                   {isGenerating ? (
                                       <Loader2 className="animate-spin" size={20} />
                                   ) : (
-                                      <><Flame className="mr-2" size={18} /> Gerar Arte</>
+                                      <><Flame className="mr-2" size={18} /> {t("studio.generate")}</>
                                   )}
                               </Button>
                           </div>
@@ -753,7 +755,7 @@ export default function PortalPage() {
                                       <img src={generatedImage} alt="Generated" className="max-h-[600px] w-auto rounded-lg shadow-2xl object-contain" />
                                       <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                           <Button variant="secondary" size="sm" onClick={() => window.open(generatedImage, '_blank')}>
-                                              <Download className="mr-2" size={16} /> Baixar HD
+                                              <Download className="mr-2" size={16} /> {t("studio.downloadHD")}
                                           </Button>
                                       </div>
                                   </div>
@@ -762,8 +764,8 @@ export default function PortalPage() {
                                       <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
                                         {isGenerating ? <Loader2 className="animate-spin opacity-50" size={40}/> : <ImageIcon size={40} className="opacity-50" />}
                                       </div>
-                                      <p className="text-xl font-medium mb-2">{isGenerating ? 'Criando sua obra prima...' : 'Sua obra de arte aparecerá aqui'}</p>
-                                      <p className="text-sm opacity-60">Configure os parâmetros acima e clique em Gerar</p>
+                                      <p className="text-xl font-medium mb-2">{isGenerating ? t("studio.creating") : t("studio.previewEmpty")}</p>
+                                      <p className="text-sm opacity-60">{t("studio.previewHint")}</p>
                                   </div>
                               )}
                           </Card>
@@ -773,7 +775,7 @@ export default function PortalPage() {
                           {myCreations.length > 0 && (
                               <Card className="bg-white/5 backdrop-blur border-white/10 p-4 h-full max-h-[600px] overflow-hidden flex flex-col">
                                   <h3 className="text-lg font-semibold flex items-center gap-2 mb-4 px-2">
-                                      <ImageIcon size={18} /> Recentes
+                                      <ImageIcon size={18} /> {t("studio.recent")}
                                   </h3>
                                   <div className="grid grid-cols-2 gap-3 overflow-y-auto pr-2 pb-2 custom-scrollbar">
                                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
@@ -795,7 +797,7 @@ export default function PortalPage() {
                <div className="space-y-6">
                     <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
                         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                            <ShoppingBag size={20} /> Carrinho Atual
+                            <ShoppingBag size={20} /> {t("history.cartTitle")}
                         </h2>
                         <div className="space-y-4">
                             {Object.keys(cartItems).length > 0 ? (
@@ -807,7 +809,7 @@ export default function PortalPage() {
                                             </div>
                                             <div>
                                                 <h4 className="font-medium">{item.name}</h4>
-                                                <p className="text-sm text-gray-400">{item.type === 'service' ? 'Serviço' : 'Curso'}</p>
+                                                <p className="text-sm text-gray-400">{item.type === 'service' ? t("history.service") : t("history.course")}</p>
                                             </div>
                                         </div>
                                         <div className="text-right">
@@ -817,16 +819,16 @@ export default function PortalPage() {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-400 italic">Seu carrinho está vazio no momento.</p>
+                                <p className="text-gray-400 italic">{t("history.cartEmpty")}</p>
                             )}
                         </div>
                         {cartTotal > 0 && (
                             <div className="mt-6 flex justify-end border-t border-gray-800 pt-4">
                                 <div className="text-right">
-                                    <p className="text-sm text-gray-400">Total Estimado</p>
+                                    <p className="text-sm text-gray-400">{t("history.estimatedTotal")}</p>
                                     <p className="text-2xl font-bold text-green-400">R$ {cartTotal.toLocaleString('pt-BR')}</p>
                                     <Link href="/carrinho">
-                                        <Button className="mt-2">Finalizar Compra</Button>
+                                        <Button className="mt-2">{t("history.checkout")}</Button>
                                     </Link>
                                 </div>
                             </div>
@@ -834,7 +836,7 @@ export default function PortalPage() {
                     </Card>
 
                     <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
-                        <h2 className="text-xl font-semibold mb-4">Histórico de Pedidos</h2>
+                        <h2 className="text-xl font-semibold mb-4">{t("history.ordersTitle")}</h2>
                         <div className="space-y-4">
                             {orders.length > 0 ? (
                                 orders.map(order => (
@@ -852,7 +854,7 @@ export default function PortalPage() {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-400 text-center py-4">Nenhum pedido concluído encontrado.</p>
+                                <p className="text-gray-400 text-center py-4">{t("history.noOrders")}</p>
                             )}
                         </div>
                     </Card>
@@ -863,16 +865,16 @@ export default function PortalPage() {
             <TabsContent value="profile">
               <Card className="bg-white/5 backdrop-blur border-white/10 p-6 max-w-2xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-semibold">Editar Perfil</h2>
+                    <h2 className="text-xl font-semibold">{t("profile.title")}</h2>
                     {!isEditingProfile ? (
                         <Button variant="outline" size="sm" onClick={() => setIsEditingProfile(true)}>
-                            <Edit size={16} className="mr-2" /> Editar
+                            <Edit size={16} className="mr-2" /> {t("profile.edit")}
                         </Button>
                     ) : (
                         <div className="flex gap-2">
-                            <Button variant="ghost" size="sm" onClick={() => setIsEditingProfile(false)}>Cancelar</Button>
+                            <Button variant="ghost" size="sm" onClick={() => setIsEditingProfile(false)}>{t("profile.cancel")}</Button>
                             <Button size="sm" onClick={handleUpdateProfile} disabled={isSavingProfile}>
-                                {isSavingProfile ? <Loader2 className="animate-spin" /> : <Save size={16} />} Salvar
+                                {isSavingProfile ? <Loader2 className="animate-spin" /> : <Save size={16} />} {t("profile.save")}
                             </Button>
                         </div>
                     )}
@@ -881,7 +883,7 @@ export default function PortalPage() {
                 <div className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label>Nome Completo</Label>
+                            <Label>{t("profile.fields.fullName")}</Label>
                             <Input 
                                 disabled={!isEditingProfile} 
                                 value={profileForm.name} 
@@ -890,7 +892,7 @@ export default function PortalPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Email</Label>
+                            <Label>{t("profile.fields.email")}</Label>
                             <Input 
                                 disabled={true} 
                                 value={user.email} 
@@ -901,7 +903,7 @@ export default function PortalPage() {
 
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label>Empresa</Label>
+                            <Label>{t("profile.fields.company")}</Label>
                             <Input 
                                 disabled={!isEditingProfile} 
                                 value={profileForm.company} 
@@ -910,7 +912,7 @@ export default function PortalPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Cargo / Posição</Label>
+                            <Label>{t("profile.fields.position")}</Label>
                             <Input 
                                 disabled={!isEditingProfile} 
                                 value={profileForm.position} 
@@ -921,7 +923,7 @@ export default function PortalPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label>Bio</Label>
+                        <Label>{t("profile.fields.bio")}</Label>
                         <Textarea 
                             disabled={!isEditingProfile} 
                             value={profileForm.bio} 
@@ -932,7 +934,7 @@ export default function PortalPage() {
 
                     <div className="grid md:grid-cols-3 gap-4">
                          <div className="space-y-2">
-                            <Label>Localização</Label>
+                            <Label>{t("profile.fields.location")}</Label>
                             <Input 
                                 disabled={!isEditingProfile} 
                                 value={profileForm.location} 
@@ -941,7 +943,7 @@ export default function PortalPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Website</Label>
+                            <Label>{t("profile.fields.website")}</Label>
                             <Input 
                                 disabled={!isEditingProfile} 
                                 value={profileForm.website} 
@@ -950,7 +952,7 @@ export default function PortalPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>LinkedIn</Label>
+                            <Label>{t("profile.fields.linkedin")}</Label>
                             <Input 
                                 disabled={!isEditingProfile} 
                                 value={profileForm.linkedin} 

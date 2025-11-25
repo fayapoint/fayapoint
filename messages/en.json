@@ -921,5 +921,363 @@
       "Finance",
       "Industry"
     ]
+  },
+  "Portal": {
+    "welcome": "Welcome, {name}!",
+    "plan": "{plan} Plan",
+    "points": "{points} pts",
+    "days": "{days} days",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "courses": "My Courses",
+      "resources": "Resources",
+      "studio": "AI Studio",
+      "history": "History",
+      "profile": "Profile"
+    },
+    "stats": {
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "study": "Study",
+      "certificates": "Certificates"
+    },
+    "continueLearning": {
+      "title": "Continue Learning",
+      "empty": "You haven't started any courses yet.",
+      "exploreCourses": "Explore Courses"
+    },
+    "tipOfDay": {
+      "title": "Tip of the Day",
+      "content": "Use Gemini to create complex code structures and then refine with Claude for better readability.",
+      "testAI": "Test AI Now"
+    },
+    "myCourses": {
+      "title": "My Courses",
+      "completedPercent": "{percent}% Completed",
+      "empty": "No courses found.",
+      "defaultDescription": "Complete AI course"
+    },
+    "resources": {
+      "title": "Your Available Resources",
+      "available": "Available",
+      "upgradeRequired": "Upgrade required",
+      "upgradeTitle": "Upgrade to Business",
+      "upgradeDescription": "Unlock all resources and dedicated support.",
+      "viewPlans": "View Plans"
+    },
+    "studio": {
+      "title": "AI Studio Pro",
+      "subtitle": "Create stunning visual art with the most advanced models on the market.",
+      "modelLabel": "AI Model",
+      "selectModel": "Select model",
+      "formatLabel": "Format",
+      "styleLabel": "Visual Style",
+      "moodLabel": "Mood",
+      "lightingLabel": "Lighting",
+      "placeholder": "Describe your imagination here... E.g.: An astronaut floating in a bioluminescent garden...",
+      "generate": "Generate Art",
+      "downloadHD": "Download HD",
+      "creating": "Creating your masterpiece...",
+      "previewEmpty": "Your artwork will appear here",
+      "previewHint": "Configure the parameters above and click Generate",
+      "recent": "Recent",
+      "styles": {
+        "none": "Normal",
+        "photorealistic": "Photorealistic",
+        "anime": "Anime",
+        "cyberpunk": "Cyberpunk",
+        "oilPainting": "Oil Painting",
+        "3dRender": "3D Render",
+        "minimalist": "Minimalist"
+      },
+      "moods": {
+        "none": "Default",
+        "cinematic": "Cinematic",
+        "dark": "Dark",
+        "cheerful": "Cheerful",
+        "mysterious": "Mysterious",
+        "ethereal": "Ethereal"
+      },
+      "lighting": {
+        "none": "Default",
+        "natural": "Natural Light",
+        "studio": "Studio",
+        "neon": "Neon",
+        "goldenHour": "Golden Hour"
+      },
+      "models": {
+        "nanoBanana1": "Nano Banana 1 (Default)",
+        "nanoBanana1Desc": "Fast and efficient (Gemini 2.5)",
+        "nanoBananaPro": "Nano Banana Pro (Premium)",
+        "nanoBananaProDesc": "Maximum quality (Gemini 3) - Pro Only",
+        "gpt5ImageMini": "GPT 5 Image Mini",
+        "gpt5ImageMiniDesc": "New generation OpenAI",
+        "flux1Schnell": "Flux 1 Schnell (Fast)",
+        "flux1SchnellDesc": "Ultra-fast generation",
+        "flux1Dev": "Flux 1 Dev (Quality)",
+        "flux1DevDesc": "Higher detail",
+        "recraftV3": "Recraft V3 (Design)",
+        "recraftV3Desc": "Great for vectors and design",
+        "stableDiffusion": "Stable Diffusion 3.5",
+        "stableDiffusionDesc": "Maximum versatility"
+      }
+    },
+    "history": {
+      "cartTitle": "Current Cart",
+      "service": "Service",
+      "course": "Course",
+      "cartEmpty": "Your cart is currently empty.",
+      "estimatedTotal": "Estimated Total",
+      "checkout": "Checkout",
+      "ordersTitle": "Order History",
+      "orderNumber": "Order #{id}",
+      "noOrders": "No completed orders found."
+    },
+    "profile": {
+      "title": "Edit Profile",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "fields": {
+        "fullName": "Full Name",
+        "email": "Email",
+        "company": "Company",
+        "position": "Position / Role",
+        "bio": "Bio",
+        "location": "Location",
+        "website": "Website",
+        "linkedin": "LinkedIn"
+      }
+    },
+    "messages": {
+      "loadError": "Error loading dashboard",
+      "profileUpdated": "Profile updated successfully!",
+      "profileError": "Error updating profile",
+      "imageGenerated": "Image generated successfully!",
+      "imageError": "Error generating image"
+    }
+  },
+  "Login": {
+    "title": "FayaPoint AI",
+    "subtitle": "Welcome back! Sign in to continue.",
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "password": "Password",
+      "passwordPlaceholder": "••••••••"
+    },
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "orContinueWith": "or continue with",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create your free account",
+    "features": {
+      "instantAccess": "Instant access",
+      "freeCertificates": "Free certificates"
+    },
+    "messages": {
+      "welcomeBack": "Welcome, {name}!",
+      "loginError": "Error signing in",
+      "unexpectedError": "An unexpected error occurred",
+      "googleInDev": "Google sign-in coming soon",
+      "githubInDev": "GitHub sign-in coming soon"
+    }
+  },
+  "Register": {
+    "title": "FayaPoint AI",
+    "subtitle": "Create your free account",
+    "heroTitle": "Join over",
+    "heroHighlight": "5,000 professionals",
+    "heroDescription": "Create your free account and start your journey to master Artificial Intelligence today.",
+    "benefits": [
+      "Access to free classes",
+      "Completion certificate",
+      "Exclusive community",
+      "Weekly updates"
+    ],
+    "testimonial": {
+      "quote": "FayaPoint completely changed how I work with AI. In just 2 months, I automated 80% of my repetitive tasks.",
+      "name": "Maria Silva",
+      "role": "CEO, TechStartup"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "John Smith",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "passwordPlaceholder": "••••••••"
+    },
+    "terms": {
+      "accept": "I accept the",
+      "termsOfUse": "Terms of Use",
+      "and": "and the",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "submit": "Create Free Account",
+    "submitting": "Creating account...",
+    "orSignUpWith": "or sign up with",
+    "hasAccount": "Already have an account?",
+    "login": "Sign in",
+    "messages": {
+      "passwordMismatch": "Passwords don't match",
+      "acceptTerms": "You need to accept the terms of use",
+      "success": "Account created successfully! Welcome to FayaPoint!",
+      "googleInDev": "Google sign-up coming soon",
+      "githubInDev": "GitHub sign-up coming soon"
+    }
+  },
+  "Onboarding": {
+    "steps": {
+      "welcome": "Welcome!",
+      "profile": "Your Profile",
+      "interests": "Your Interests"
+    },
+    "step1": {
+      "title": "Welcome to the AI Elite! 🚀",
+      "description": "You're just a few steps away from securing <highlight>exclusive access</highlight> to the best AI courses and tools in Brazil.",
+      "pioneers": "Join <strong>{count}+</strong> pioneers",
+      "cta": "Get Started",
+      "hint": "⏱️ Takes less than 60 seconds"
+    },
+    "step2": {
+      "returning": {
+        "title": "Great to see you again, {name}! ✨",
+        "description": "You're already on our VIP list! Let's update your info?",
+        "cta": "Update My Profile"
+      },
+      "new": {
+        "title": "Let's get started! 🚀",
+        "description": "Create your free account to access",
+        "fields": {
+          "email": "your@email.com",
+          "name": "Your full name",
+          "password": "Create a secure password"
+        },
+        "cta": "Continue",
+        "hint": "💡 <strong>Tip:</strong> Your password grants exclusive access to the dashboard and tools."
+      }
+    },
+    "step3": {
+      "title": "Almost there! ✨",
+      "description": "Personalize your experience to receive exclusive content",
+      "priorityHint": "More info = Priority in the queue!",
+      "roleLabel": "What's your field? (you can choose more than one)",
+      "interestLabel": "What interests you most? (choose as many as you like)",
+      "submitReturning": "✨ Update & Confirm",
+      "submitNew": "🚀 Secure My VIP Spot",
+      "submitting": "Processing...",
+      "selectionHint": "⬆️ Select at least one option in each category"
+    },
+    "roles": {
+      "developer": "Developer",
+      "designer": "Designer",
+      "marketing": "Marketing",
+      "business": "Business Owner",
+      "sales": "Sales",
+      "student": "Student",
+      "content": "Content Creator",
+      "other": "Other"
+    },
+    "interests": {
+      "automation": "Automation",
+      "chatgpt": "ChatGPT & Conversational AI",
+      "image": "Image Generation",
+      "productivity": "Productivity",
+      "business": "Business & Strategy",
+      "learning": "Continuous Learning",
+      "innovation": "Innovation",
+      "all": "Everything AI!"
+    }
+  },
+  "ServiceBuilder": {
+    "badge": "Service Builder",
+    "title": "Build your ideal bundle and see the value in real time",
+    "subtitle": "Combine strategic stages, execution, and support. Adjust quantities and get an instant investment estimate to share with stakeholders or proceed to hiring.",
+    "loading": "Loading items...",
+    "noItems": "No items available for this service.",
+    "services": {
+      "websiteFull": {
+        "name": "Complete Website",
+        "description": "From discovery to deploy with UX, UI, and custom code."
+      },
+      "socialManagement": {
+        "name": "Social Media & Growth",
+        "description": "Content, media, and community with consistency and insights."
+      },
+      "localSeo": {
+        "name": "Google Maps & Local SEO",
+        "description": "Dominate the local pack with reputation and local pages."
+      },
+      "videoProduction": {
+        "name": "Video & Audiovisual Content",
+        "description": "Pre-production, filming, and post-production all in one place."
+      },
+      "automationAi": {
+        "name": "Automation & Applied AI",
+        "description": "Process mapping, agents, and intelligent integrations."
+      }
+    },
+    "selectedService": "Selected service",
+    "defaultServiceDesc": "Configure the necessary steps",
+    "unlock": {
+      "title": "Unlock the configurator",
+      "description": "To access granular pricing and build your custom bundle, we just need to know who you are.",
+      "namePlaceholder": "Your name",
+      "emailPlaceholder": "Your professional email",
+      "cta": "See prices and customize",
+      "success": "Access granted! Customize your package."
+    },
+    "cart": {
+      "summary": "Summary",
+      "yourBundle": "Your bundle",
+      "empty": "Select stages from the cards on the side to start building your custom quote.",
+      "notSelected": "Not selected",
+      "minQty": "Min qty {qty}",
+      "namePlaceholder": "Your full name",
+      "emailPlaceholder": "Contact email",
+      "companyPlaceholder": "Company (optional)",
+      "notesPlaceholder": "Notes about scope, deadlines, or integrations",
+      "subtotal": "Estimated subtotal",
+      "disclaimer": "Base recommended values in USD. After completing, we'll share a detailed PDF and schedule to validate scope.",
+      "submit": "Request proposal with this bundle",
+      "submitting": "Sending...",
+      "successMessage": "We received your bundle! We'll be in touch.",
+      "errorMessage": "Couldn't submit now. Try again or contact our team.",
+      "multiServiceHint": "Multi-service combos get custom conditions."
+    },
+    "messages": {
+      "nameEmailRequired": "Please provide your name and email to proceed.",
+      "submitError": "Failed to submit proposal",
+      "bundleLoaded": "Package \"{name}\" loaded!",
+      "bundleSent": "Bundle sent! We'll contact you to validate scope.",
+      "networkError": "Couldn't send now. Reload the page or try again shortly."
+    }
+  },
+  "CommunityGallery": {
+    "badge": "Community Gallery",
+    "title": "What they're creating now",
+    "description": "Explore artwork generated by students and mentors from our community.",
+    "empty": "No creations found. Be the first to create!"
+  },
+  "ScheduleMeeting": {
+    "messages": {
+      "nameEmailRequired": "Please provide name and email to continue.",
+      "saveError": "Failed to save your data",
+      "slotError": "Couldn't get an available time slot",
+      "unexpectedResponse": "Unexpected response from calendar",
+      "success": "Opening Google Calendar to confirm the time ✨",
+      "genericError": "Couldn't schedule now. Please try again shortly."
+    },
+    "submitting": "Connecting with Google Calendar...",
+    "footer": "After submitting, we'll open your Google Calendar with the next available slot for confirmation."
+  },
+  "ServicesCarousel": {
+    "investment": "Investment",
+    "onRequest": "On request",
+    "scheduleConsultation": "Schedule consultation"
   }
 }

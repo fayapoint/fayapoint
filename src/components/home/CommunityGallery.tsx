@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, User, Sparkles } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
+import { useTranslations } from 'next-intl';
 
 interface Creation {
   _id: string;
@@ -14,6 +15,7 @@ interface Creation {
 }
 
 export function CommunityGallery() {
+  const t = useTranslations("CommunityGallery");
   const [creations, setCreations] = useState<Creation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [ref, inView] = useInView({
@@ -53,7 +55,7 @@ export function CommunityGallery() {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-4"
             >
                 <Sparkles size={16} className="text-purple-400" />
-                <span className="text-sm text-purple-200">Galeria da Comunidade</span>
+                <span className="text-sm text-purple-200">{t("badge")}</span>
             </motion.div>
             
             <motion.h2 
@@ -62,7 +64,7 @@ export function CommunityGallery() {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6"
             >
-                O que estão criando agora
+                {t("title")}
             </motion.h2>
             
             <motion.p 
@@ -71,7 +73,7 @@ export function CommunityGallery() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-gray-400 max-w-2xl mx-auto"
             >
-                Explore as obras de arte geradas pelos alunos e mentores da nossa comunidade.
+                {t("description")}
             </motion.p>
         </div>
 
@@ -81,7 +83,7 @@ export function CommunityGallery() {
           </div>
         ) : creations.length === 0 ? (
           <div className="text-center py-20 text-gray-500">
-            <p>Nenhuma criação encontrada. Seja o primeiro a criar!</p>
+            <p>{t("empty")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

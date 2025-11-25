@@ -9,6 +9,7 @@ import {
   GraduationCap, Building2, Megaphone, Camera, PenTool, Calculator,
   Sparkles, Crown, Star, Lock, Eye, EyeOff
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Header } from '@/components/layout/Header';
@@ -53,6 +54,7 @@ const interestOptions = [
 ];
 
 export default function OnboardingPage() {
+  const t = useTranslations("Onboarding");
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -188,9 +190,9 @@ export default function OnboardingPage() {
               transition={{ duration: 0.3 }}
               className="w-full p-8 bg-gray-900/50 backdrop-blur-xl border border-purple-500/50 rounded-2xl shadow-2xl shadow-purple-500/20"
             >
-              {step === 1 && <Step1 next={handleNextStep} />}
-              {step === 2 && <Step2 next={handleNextStep} data={formData} onChange={handleChange} onEmailBlur={checkUserExists} checkingUser={checkingUser} isReturningUser={isReturningUser} />}
-              {step === 3 && <Step3 submit={handleSubmit} data={formData} setFormData={setFormData} loading={loading} isReturningUser={isReturningUser} />}
+              {step === 1 && <Step1 next={handleNextStep} t={t} />}
+              {step === 2 && <Step2 next={handleNextStep} data={formData} onChange={handleChange} onEmailBlur={checkUserExists} checkingUser={checkingUser} isReturningUser={isReturningUser} t={t} />}
+              {step === 3 && <Step3 submit={handleSubmit} data={formData} setFormData={setFormData} loading={loading} isReturningUser={isReturningUser} t={t} />}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -200,7 +202,8 @@ export default function OnboardingPage() {
   );
 }
 
-const Step1 = ({ next }: { next: () => void }) => (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Step1 = ({ next, t }: { next: () => void; t: any }) => (
   <div className="text-center space-y-6">
     <motion.div
       initial={{ scale: 0, rotate: -180 }}
@@ -260,13 +263,15 @@ const Step1 = ({ next }: { next: () => void }) => (
   </div>
 );
 
-const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUser }: { 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUser, t }: { 
   next: () => void, 
   data: FormData, 
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
   onEmailBlur: (email: string) => void,
   checkingUser: boolean,
-  isReturningUser: boolean
+  isReturningUser: boolean,
+  t: any
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -373,12 +378,14 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUse
   );
 };
 
-const Step3 = ({ submit, data, setFormData, loading, isReturningUser }: { 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: { 
   submit: (e: React.FormEvent) => void, 
   data: FormData, 
   setFormData: React.Dispatch<React.SetStateAction<FormData>>,
   loading: boolean, 
-  isReturningUser: boolean 
+  isReturningUser: boolean,
+  t: any
 }) => {
   const [selectedRoles, setSelectedRoles] = useState<string[]>(data.role ? data.role.split(',') : []);
   const [selectedInterests, setSelectedInterests] = useState<string[]>(data.interest ? data.interest.split(',') : []);

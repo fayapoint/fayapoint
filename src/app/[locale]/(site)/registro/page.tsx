@@ -15,20 +15,16 @@ import {
   Github,
   Chrome
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
 
-const benefits = [
-  "Acesso a aulas gratuitas",
-  "Certificado de conclusão",
-  "Comunidade exclusiva",
-  "Atualizações semanais",
-];
-
 export default function RegisterPage() {
+  const t = useTranslations("Register");
+  const benefits = t.raw("benefits") as string[];
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,12 +40,12 @@ export default function RegisterPage() {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      toast.error("As senhas não coincidem");
+      toast.error(t("messages.passwordMismatch"));
       return;
     }
 
     if (!formData.acceptTerms) {
-      toast.error("Você precisa aceitar os termos de uso");
+      toast.error(t("messages.acceptTerms"));
       return;
     }
 
@@ -57,18 +53,18 @@ export default function RegisterPage() {
 
     // Simulate registration
     setTimeout(() => {
-      toast.success("Conta criada com sucesso! Bem-vindo à FayaPoint!");
+      toast.success(t("messages.success"));
       router.push("/portal");
       setIsLoading(false);
     }, 2000);
   };
 
   const handleGoogleSignup = () => {
-    toast.success("Cadastro com Google em desenvolvimento");
+    toast.success(t("messages.googleInDev"));
   };
 
   const handleGithubSignup = () => {
-    toast.success("Cadastro com GitHub em desenvolvimento");
+    toast.success(t("messages.githubInDev"));
   };
 
   return (
@@ -112,13 +108,13 @@ export default function RegisterPage() {
           className="hidden lg:block"
         >
           <h2 className="text-4xl font-bold mb-6">
-            Junte-se a mais de{" "}
+            {t("heroTitle")}{" "}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              5.000 profissionais
+              {t("heroHighlight")}
             </span>
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Crie sua conta gratuita e comece sua jornada para dominar a Inteligência Artificial hoje mesmo.
+            {t("heroDescription")}
           </p>
           
           <div className="space-y-4 mb-8">
@@ -138,14 +134,13 @@ export default function RegisterPage() {
 
           <div className="bg-popover/50 backdrop-blur-sm rounded-lg p-6 border border-border">
             <p className="text-gray-300 italic">
-              &ldquo;A FayaPoint mudou completamente minha forma de trabalhar com IA. 
-              Em apenas 2 meses, já automatizei 80% das minhas tarefas repetitivas.&rdquo;
+              &ldquo;{t("testimonial.quote")}&rdquo;
             </p>
             <div className="flex items-center gap-4 mt-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
               <div>
-                <p className="font-semibold">Maria Silva</p>
-                <p className="text-sm text-gray-400">CEO, TechStartup</p>
+                <p className="font-semibold">{t("testimonial.name")}</p>
+                <p className="text-sm text-gray-400">{t("testimonial.role")}</p>
               </div>
             </div>
           </div>
@@ -161,11 +156,11 @@ export default function RegisterPage() {
           <div className="text-center mb-8 lg:text-left">
             <Link href="/" className="inline-block">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                FayaPoint AI
+                {t("title")}
               </h1>
             </Link>
             <p className="text-gray-400">
-              Crie sua conta gratuita
+              {t("subtitle")}
             </p>
           </div>
 
@@ -174,13 +169,13 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Name Field */}
               <div className="space-y-2">
-                <Label htmlFor="name">Nome Completo</Label>
+                <Label htmlFor="name">{t("fields.fullName")}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
                   <Input
                     id="name"
                     type="text"
-                    placeholder="João Silva"
+                    placeholder={t("fields.fullNamePlaceholder")}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="pl-10 bg-input border-border"
@@ -191,13 +186,13 @@ export default function RegisterPage() {
 
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("fields.email")}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="seu@email.com"
+                    placeholder={t("fields.emailPlaceholder")}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="pl-10 bg-input border-border"
@@ -209,13 +204,13 @@ export default function RegisterPage() {
               {/* Password Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="password">Senha</Label>
+                  <Label htmlFor="password">{t("fields.password")}</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
+                      placeholder={t("fields.passwordPlaceholder")}
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       className="pl-10 pr-10 bg-input border-border"
@@ -232,13 +227,13 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+                  <Label htmlFor="confirmPassword">{t("fields.confirmPassword")}</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
                     <Input
                       id="confirmPassword"
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
+                      placeholder={t("fields.passwordPlaceholder")}
                       value={formData.confirmPassword}
                       onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                       className="pl-10 bg-input border-border"
@@ -258,13 +253,13 @@ export default function RegisterPage() {
                   className="mt-1 rounded border-border bg-input"
                 />
                 <label htmlFor="terms" className="text-sm text-muted-foreground">
-                  Eu aceito os{" "}
+                  {t("terms.accept")}{" "}
                   <Link href="/termos" className="text-purple-400 hover:text-purple-300">
-                    Termos de Uso
+                    {t("terms.termsOfUse")}
                   </Link>{" "}
-                  e a{" "}
+                  {t("terms.and")}{" "}
                   <Link href="/privacidade" className="text-purple-400 hover:text-purple-300">
-                    Política de Privacidade
+                    {t("terms.privacyPolicy")}
                   </Link>
                 </label>
               </div>
@@ -279,11 +274,11 @@ export default function RegisterPage() {
                 {isLoading ? (
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Criando conta...
+                    {t("submitting")}
                   </div>
                 ) : (
                   <>
-                    Criar Conta Grátis <ArrowRight className="ml-2" size={20} />
+                    {t("submit")} <ArrowRight className="ml-2" size={20} />
                   </>
                 )}
               </Button>
@@ -293,7 +288,7 @@ export default function RegisterPage() {
             <div className="relative my-6">
               <Separator className="bg-border" />
               <span className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-sm text-muted-foreground">
-                ou cadastre-se com
+                {t("orSignUpWith")}
               </span>
             </div>
 
@@ -321,12 +316,12 @@ export default function RegisterPage() {
 
             {/* Login Link */}
             <p className="text-center mt-6 text-gray-400">
-              Já tem uma conta?{" "}
+              {t("hasAccount")}{" "}
               <Link 
                 href="/login" 
                 className="text-purple-400 hover:text-purple-300 font-medium"
               >
-                Faça login
+                {t("login")}
               </Link>
             </p>
           </div>

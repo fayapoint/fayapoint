@@ -84,6 +84,7 @@ type ServiceCopy = {
 
 export function ServicesCarousel() {
   const t = useTranslations("Home.Services");
+  const t2 = useTranslations("ServicesCarousel");
   const [activeServiceId, setActiveServiceId] = useState<string>(services[0].id);
 
   const activeService = services.find((service) => service.id === activeServiceId) ?? services[0];
@@ -170,8 +171,8 @@ export function ServicesCarousel() {
 
               <div className="relative z-10 flex flex-col justify-between rounded-2xl border border-border/70 bg-background/60 p-6">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">Investimento</p>
-                  <p className="text-3xl font-bold mb-6">{serviceCopy?.price ?? "Sob consulta"}</p>
+                  <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">{t2("investment")}</p>
+                  <p className="text-3xl font-bold mb-6">{serviceCopy?.price ?? t2("onRequest")}</p>
                   <div className="text-sm text-muted-foreground leading-relaxed">
                     {t(`${activeService.id}.description`)}
                   </div>
@@ -188,7 +189,7 @@ export function ServicesCarousel() {
                     className="w-full py-6 text-base"
                     source={`services-carousel-${activeService.id}`}
                   >
-                    Agendar consultoria
+                    {t2("scheduleConsultation")}
                   </ScheduleConsultationButton>
                 </div>
               </div>

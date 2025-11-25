@@ -14,6 +14,7 @@ import {
   Github,
   Chrome
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +24,7 @@ import { toast } from "react-hot-toast";
 import { useUser } from "@/contexts/UserContext";
 
 export default function LoginPage() {
+  const t = useTranslations("Login");
   const router = useRouter();
   const { setUser } = useUser();
   const [showPassword, setShowPassword] = useState(false);
@@ -52,7 +54,7 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || 'Erro ao fazer login');
+        throw new Error(data.error || t("messages.loginError"));
       }
 
       // Save token
@@ -61,10 +63,10 @@ export default function LoginPage() {
       // Update user context
       setUser(data.user);
 
-      toast.success(`Bem-vindo, ${data.user.name}!`);
+      toast.success(t("messages.welcomeBack", { name: data.user.name }));
       router.push("/portal");
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Ocorreu um erro inesperado';
+      const errorMessage = error instanceof Error ? error.message : t("messages.unexpectedError");
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -72,11 +74,11 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    toast.success("Login com Google em desenvolvimento");
+    toast.success(t("messages.googleInDev"));
   };
 
   const handleGithubLogin = () => {
-    toast.success("Login com GitHub em desenvolvimento");
+    toast.success(t("messages.githubInDev"));
   };
 
   return (
@@ -121,11 +123,11 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <Link href="/" className="inline-block">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                FayaPoint AI
+                {t("title")}
               </h1>
             </Link>
             <p className="text-gray-400">
-              Bem-vindo de volta! Faça login para continuar.
+              {t("subtitle")}
             </p>
           </div>
 
@@ -134,13 +136,13 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("fields.email")}</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="seu@email.com"
+                    placeholder={t("fields.emailPlaceholder")}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="pl-10 bg-input border-border"
@@ -151,7 +153,7 @@ export default function LoginPage() {
 
               {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password">{t("fields.password")}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
                   <Input
@@ -182,13 +184,13 @@ export default function LoginPage() {
                     onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
                     className="rounded border-border bg-input"
                   />
-                  <span className="text-muted-foreground">Lembrar de mim</span>
+                  <span className="text-muted-foreground">{t("rememberMe")}</span>
                 </label>
                 <Link 
                   href="/recuperar-senha" 
                   className="text-sm text-purple-400 hover:text-purple-300"
                 >
-                  Esqueceu a senha?
+                  {t("forgotPassword")}
                 </Link>
               </div>
 
@@ -202,11 +204,11 @@ export default function LoginPage() {
                 {isLoading ? (
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Entrando...
+                    {t("submitting")}
                   </div>
                 ) : (
                   <>
-                    Entrar <ArrowRight className="ml-2" size={20} />
+                    {t("submit")} <ArrowRight className="ml-2" size={20} />
                   </>
                 )}
               </Button>
@@ -216,7 +218,7 @@ export default function LoginPage() {
             <div className="relative my-6">
               <Separator className="bg-border" />
               <span className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-sm text-muted-foreground">
-                ou continue com
+                {t("orContinueWith")}
               </span>
             </div>
 
@@ -244,12 +246,12 @@ export default function LoginPage() {
 
             {/* Sign Up Link */}
             <p className="text-center mt-6 text-gray-400">
-              Não tem uma conta?{" "}
+              {t("noAccount")}{" "}
               <Link 
                 href="/registro" 
                 className="text-purple-400 hover:text-purple-300 font-medium"
               >
-                Crie sua conta grátis
+                {t("createAccount")}
               </Link>
             </p>
           </div>
@@ -259,11 +261,11 @@ export default function LoginPage() {
             <div className="flex items-center justify-center gap-4">
               <span className="flex items-center gap-1">
                 <Sparkles className="w-4 h-4 text-purple-400" />
-                Acesso instantâneo
+                {t("features.instantAccess")}
               </span>
               <span className="flex items-center gap-1">
                 <Sparkles className="w-4 h-4 text-purple-400" />
-                Certificados gratuitos
+                {t("features.freeCertificates")}
               </span>
             </div>
           </div>

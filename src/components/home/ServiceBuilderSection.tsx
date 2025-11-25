@@ -14,7 +14,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getPricingTranslation, getPricingDescriptionTranslation } from "@/data/pricing-translations";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
@@ -116,12 +116,13 @@ export function ServiceBuilderSection({
   serviceSlug,
   title,
   subtitle,
-  badgeLabel = "Construtor de serviços",
+  badgeLabel,
   showServiceTabs,
   restrictToServiceSlug = false,
   sectionId = "builder",
   source,
 }: ServiceBuilderSectionProps) {
+  const t = useTranslations("ServiceBuilder");
   const { user, setUser, isLoggedIn } = useUser();
   const searchParams = useSearchParams();
   const { prices, loading, error, groupedByService } = useServicePrices(
@@ -137,7 +138,7 @@ export function ServiceBuilderSection({
     e.preventDefault();
     if (unlockName && unlockEmail) {
       setUser({ name: unlockName, email: unlockEmail });
-      toast.success("Acesso liberado! Personalize seu pacote.");
+      toast.success(t("unlock.success"));
     }
   };
 
@@ -203,7 +204,7 @@ export function ServiceBuilderSection({
         });
 
         if (addedCount > 0) {
-            toast.success(`Pacote "${bundleParam}" carregado!`);
+            toast.success(t("messages.bundleLoaded", { name: bundleParam }));
             // Scroll to builder
             const element = document.getElementById(sectionId);
             if (element) element.scrollIntoView({ behavior: "smooth" });
