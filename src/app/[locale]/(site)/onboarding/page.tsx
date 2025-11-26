@@ -4,10 +4,10 @@ import { useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Mail, User, ArrowRight, Zap, Briefcase, BarChart, BrainCircuit,
+  Mail, User, ArrowRight, Zap, Briefcase, BrainCircuit,
   Code, Palette, TrendingUp, Users, Lightbulb, Rocket, Target,
-  GraduationCap, Building2, Megaphone, Camera, PenTool, Calculator,
-  Sparkles, Crown, Star, Lock, Eye, EyeOff
+  GraduationCap, Building2, Megaphone, Camera,
+  Sparkles, Star, Lock, Eye, EyeOff, AlertCircle
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
@@ -16,11 +16,13 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Progress } from '@/components/ui/progress';
 import { useUser } from '@/contexts/UserContext';
+import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 interface FormData {
   name: string;
   email: string;
-  password?: string;
+  password: string;
   role: string;
   interest: string;
 }
@@ -73,12 +75,24 @@ export default function OnboardingPage() {
   });
   const [loading, setLoading] = useState(false);
   const [checkingUser, setCheckingUser] = useState(false);
-  const [isReturningUser, setIsReturningUser] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { setUser } = useUser();
+  const { isLoggedIn, setUser, mounted } = useUser();
+
+  // Redirect logged-in users to portal
+  useEffect(() => {
+    if (mounted && isLoggedIn) {
+      router.push('/portal');
+    }
+  }, [mounted, isLoggedIn, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(null);
+    if (e.target.name === 'email') {
+      setEmailExists(false);
+    }
   };
 
   const checkUserExists = async (email: string) => {
@@ -86,19 +100,13 @@ export default function OnboardingPage() {
     
     setCheckingUser(true);
     try {
-      const response = await fetch(`/api/users?email=${encodeURIComponent(email)}`);
+      const response = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email)}`);
       const data = await response.json();
       
-      if (data.exists && data.user) {
-        setIsReturningUser(true);
-        setFormData(prev => ({
-          ...prev,
-          name: data.user.name || prev.name,
-          role: data.user.role || prev.role,
-          interest: data.user.interest || prev.interest,
-        }));
+      if (data.exists) {
+        setEmailExists(true);
       } else {
-        setIsReturningUser(false);
+        setEmailExists(false);
       }
     } catch (error) {
       console.error('Error checking user:', error);
@@ -108,47 +116,37 @@ export default function OnboardingPage() {
   };
 
   const handleNextStep = () => {
+    if (emailExists) {
+      // Don't proceed if email exists - redirect to login
+      router.push('/login');
+      return;
+    }
     setStep(step + 1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     try {
-      let userResponse;
-      let userData;
+      // Register new user
+      const userResponse = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, source: 'onboarding_v2' }),
+      });
+      const userData = await userResponse.json();
 
-      if (isReturningUser) {
-        // Update existing user
-         userResponse = await fetch('/api/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...formData, source: 'onboarding_v2_update' }),
-        });
-        userData = await userResponse.json();
-      } else {
-        // Create new user via Auth Register to get Token + Password Hash
-        userResponse = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...formData, source: 'onboarding_v2' }),
-        });
-        userData = await userResponse.json();
+      if (!userResponse.ok) {
+        throw new Error(userData.error || 'Erro ao criar conta');
       }
 
-      // Save user to global context
-      if (userData.success || userData.token) { // Handle both formats
-        const user = userData.user;
-        const token = userData.token;
-
-        setUser(user);
-        
-        // Force update localStorage for PortalPage access
-        if (typeof window !== 'undefined' && token) {
-            localStorage.setItem('fayapoint_token', token);
-            localStorage.setItem('fayapoint_user', JSON.stringify(user));
-        }
+      // Save user to global context and localStorage
+      if (userData.token) {
+        setUser(userData.user);
+        localStorage.setItem('fayapoint_token', userData.token);
+        localStorage.setItem('fayapoint_user', JSON.stringify(userData.user));
       }
 
       // Send webhook (legacy/n8n support)
@@ -157,19 +155,31 @@ export default function OnboardingPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...webhookData, source: 'onboarding_v2' }),
-      });
+      }).catch(() => {}); // Don't fail if webhook fails
       
-      // Redirect to Dashboard immediately for new users
+      toast.success('Conta criada com sucesso!');
       router.push('/portal');
 
     } catch (error) {
       console.error('Error submitting form:', error);
-      // Fallback redirect
-      router.push('/portal');
+      const message = error instanceof Error ? error.message : 'Erro ao criar conta';
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const progress = (step / steps.length) * 100;
+
+  // Show loading while checking auth state
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -198,8 +208,8 @@ export default function OnboardingPage() {
               className="w-full p-8 bg-gray-900/50 backdrop-blur-xl border border-purple-500/50 rounded-2xl shadow-2xl shadow-purple-500/20"
             >
               {step === 1 && <Step1 next={handleNextStep} t={t} />}
-              {step === 2 && <Step2 next={handleNextStep} data={formData} onChange={handleChange} onEmailBlur={checkUserExists} checkingUser={checkingUser} isReturningUser={isReturningUser} t={t} />}
-              {step === 3 && <Step3 submit={handleSubmit} data={formData} setFormData={setFormData} loading={loading} isReturningUser={isReturningUser} t={t} />}
+              {step === 2 && <Step2 next={handleNextStep} data={formData} onChange={handleChange} onEmailBlur={checkUserExists} checkingUser={checkingUser} emailExists={emailExists} error={error} t={t} />}
+              {step === 3 && <Step3 submit={handleSubmit} data={formData} setFormData={setFormData} loading={loading} t={t} />}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -274,128 +284,131 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
   </div>
 );
 
-const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, isReturningUser, t }: { 
+const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, error, t }: { 
   next: () => void, 
   data: FormData, 
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
   onEmailBlur: (email: string) => void,
   checkingUser: boolean,
-  isReturningUser: boolean,
+  emailExists: boolean,
+  error: string | null,
   t: Translator
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="space-y-6">
-      {isReturningUser ? (
-        <div className="text-center space-y-4">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-2">{t("step2.new.title")}</h2>
+        <p className="text-sm text-gray-400">{t("step2.new.description")}</p>
+      </div>
+      
+      <div className="relative">
+        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <Input 
+          name="email" 
+          type="email" 
+          placeholder={t("step2.new.fields.email")} 
+          value={data.email} 
+          onChange={onChange}
+          onBlur={(e) => onEmailBlur(e.target.value)}
+          className={`pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors ${emailExists ? 'border-yellow-500' : ''}`}
+          required 
+        />
+        {checkingUser && (
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", duration: 0.6 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute right-3 top-1/2 -translate-y-1/2"
           >
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 mb-4">
-              <Crown className="w-10 h-10 text-white" />
-            </div>
+            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
           </motion.div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent">
-            {t("step2.returning.title", { name: data.name })}
-          </h2>
-          <p className="text-gray-300">{t("step2.returning.description")}</p>
-          <Button onClick={next} size="lg" className="mt-6 bg-gradient-to-r from-green-500 to-emerald-600">
-            {t("step2.returning.cta")} <ArrowRight className="ml-2" />
-          </Button>
-        </div>
-      ) : (
-        <>
-          <div className="text-center">
-            <h2 className="text-2xl font-bold mb-2">{t("step2.new.title")}</h2>
-            <p className="text-sm text-gray-400">{t("step2.new.description")}</p>
-          </div>
-          
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input 
-              name="email" 
-              type="email" 
-              placeholder={t("step2.new.fields.email")} 
-              value={data.email} 
-              onChange={onChange}
-              onBlur={(e) => onEmailBlur(e.target.value)}
-              className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors" 
-              required 
-            />
-            {checkingUser && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2"
-              >
-                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-              </motion.div>
-            )}
-          </div>
-          
-          <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input 
-              name="name" 
-              placeholder={t("step2.new.fields.name")} 
-              value={data.name} 
-              onChange={onChange} 
-              className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors" 
-              required 
-            />
-          </div>
+        )}
+      </div>
 
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input 
-              name="password" 
-              type={showPassword ? "text" : "password"} 
-              placeholder={t("step2.new.fields.password")} 
-              value={data.password || ''} 
-              onChange={onChange} 
-              className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors pr-10" 
-              required 
-              minLength={6}
-            />
-            <button 
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+      {/* Email exists warning */}
+      {emailExists && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg"
+        >
+          <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-yellow-200 text-sm">Este email já está cadastrado.</p>
+            <Link href="/login" className="text-yellow-400 hover:text-yellow-300 text-sm underline">
+              Clique aqui para fazer login
+            </Link>
           </div>
-          
-          <div className="flex gap-3">
-            <Button 
-              onClick={next} 
-              disabled={!data.name || !data.email || !data.password || checkingUser}
-              className="flex-1 h-12 text-lg bg-primary hover:bg-primary/90"
-            >
-              {t("step2.new.cta")} <ArrowRight className="ml-2" />
-            </Button>
-          </div>
-          
-          <p className="text-xs text-center text-gray-500">
-            {t.rich("step2.new.hint", {
-                strong: (chunks: ReactNode) => <strong>{chunks}</strong>
-            })}
-          </p>
-        </>
+        </motion.div>
       )}
+
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg"
+        >
+          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+          <p className="text-red-200 text-sm">{error}</p>
+        </motion.div>
+      )}
+      
+      <div className="relative">
+        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <Input 
+          name="name" 
+          placeholder={t("step2.new.fields.name")} 
+          value={data.name} 
+          onChange={onChange} 
+          className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors" 
+          required 
+        />
+      </div>
+
+      <div className="relative">
+        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <Input 
+          name="password" 
+          type={showPassword ? "text" : "password"} 
+          placeholder={t("step2.new.fields.password")} 
+          value={data.password} 
+          onChange={onChange} 
+          className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors pr-10" 
+          required 
+          minLength={6}
+        />
+        <button 
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+        >
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
+      </div>
+      
+      <div className="flex gap-3">
+        <Button 
+          onClick={next} 
+          disabled={!data.name || !data.email || !data.password || checkingUser || emailExists}
+          className="flex-1 h-12 text-lg bg-primary hover:bg-primary/90"
+        >
+          {t("step2.new.cta")} <ArrowRight className="ml-2" />
+        </Button>
+      </div>
+      
+      <p className="text-xs text-center text-gray-500">
+        Já tem uma conta? <Link href="/login" className="text-purple-400 hover:text-purple-300 underline">Fazer login</Link>
+      </p>
     </div>
   );
 };
 
-const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: { 
+const Step3 = ({ submit, data, setFormData, loading, t }: { 
   submit: (e: React.FormEvent) => void, 
   data: FormData, 
   setFormData: React.Dispatch<React.SetStateAction<FormData>>,
-  loading: boolean, 
-  isReturningUser: boolean,
+  loading: boolean,
   t: Translator
 }) => {
   const [selectedRoles, setSelectedRoles] = useState<string[]>(data.role ? data.role.split(',') : []);
@@ -509,7 +522,7 @@ const Step3 = ({ submit, data, setFormData, loading, isReturningUser, t }: {
           ) : (
             <>
               <span className="relative z-10">
-                {isReturningUser ? t("step3.submitReturning") : t("step3.submitNew")}
+                {t("step3.submitNew")}
               </span>
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400"

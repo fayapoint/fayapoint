@@ -22,7 +22,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const isMatch = await bcrypt.compare(password, user.password || '');
+    // Check if user has a valid password set
+    if (!user.password || user.password.length < 20) {
+      return NextResponse.json(
+        { error: 'Sua conta não tem senha definida. Por favor, use o link "Esqueci a senha" para criar uma.' },
+        { status: 400 }
+      );
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return NextResponse.json(

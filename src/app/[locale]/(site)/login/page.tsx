@@ -248,7 +248,7 @@ export default function LoginPage() {
             <p className="text-center mt-6 text-gray-400">
               {t("noAccount")}{" "}
               <Link 
-                href="/registro" 
+                href="/onboarding" 
                 className="text-purple-400 hover:text-purple-300 font-medium"
               >
                 {t("createAccount")}

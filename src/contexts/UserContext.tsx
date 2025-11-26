@@ -76,6 +76,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('fayapoint_token');
+      localStorage.removeItem('fayapoint_user');
+    }
   };
 
   const isLoggedIn = mounted && !!user;

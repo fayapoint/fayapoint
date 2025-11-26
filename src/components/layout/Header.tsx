@@ -243,7 +243,7 @@ export function Header() {
               </>
             ) : mounted ? (
               <>
-                <Link href="/onboarding">
+                <Link href="/login">
                   <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
                     {t("buttons.signIn")}
                   </Button>
@@ -338,7 +338,7 @@ export function Header() {
                   </>
                 ) : mounted ? (
                   <>
-                    <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)}>
+                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                       <Button variant="outline" className="w-full">
                         {t("buttons.signIn")}
                       </Button>
