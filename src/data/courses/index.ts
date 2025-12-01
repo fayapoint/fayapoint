@@ -7,6 +7,7 @@ import { bananaDevCourse } from './banana-dev-course';
 import { midjourneyCourse } from './midjourney-course';
 import { claudeCourse } from './claude-course';
 import { perplexityCourse } from './perplexity-course';
+import { chatGPTAllowlistingCourse } from './chatgpt-allowlisting-course';
 
 export interface CourseModule {
   id: number;
@@ -79,7 +80,8 @@ export const allCourses: CourseData[] = [
   bananaDevCourse,
   midjourneyCourse,
   claudeCourse,
-  perplexityCourse
+  perplexityCourse,
+  chatGPTAllowlistingCourse
 ];
 
 // Helper function to get course by slug

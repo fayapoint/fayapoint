@@ -37,7 +37,8 @@
             "items": {
               "aiAgents": "Agentes de IA",
               "ragKnowledge": "RAG e Knowledge Bases",
-              "aiInProduction": "IA em Produção"
+              "aiInProduction": "IA em Produção",
+              "chatgptAllowlisting": "ChatGPT Allowlisting"
             }
           }
         }

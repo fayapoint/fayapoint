@@ -36,6 +36,7 @@ const coursesMenu = [
       { labelKey: "menus.courses.sections.advanced.items.aiAgents", href: "/curso/agentes-ia" },
       { labelKey: "menus.courses.sections.advanced.items.ragKnowledge", href: "/curso/rag-knowledge" },
       { labelKey: "menus.courses.sections.advanced.items.aiInProduction", href: "/curso/ia-producao" },
+      { labelKey: "menus.courses.sections.advanced.items.chatgptAllowlisting", href: "/chatgpt-allowlisting" },
     ],
   },
 ];
