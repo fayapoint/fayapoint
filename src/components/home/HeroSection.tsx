@@ -94,7 +94,7 @@ export function HeroSection() {
 
   return (
     <section 
-      className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden"
+      className="relative z-0 min-h-screen flex items-center justify-center pt-16 overflow-hidden"
       onMouseMove={handleMouseMove}
     >
       {/* Enhanced Animated Background with Glassmorphism */}
