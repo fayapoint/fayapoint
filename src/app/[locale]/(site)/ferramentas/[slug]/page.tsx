@@ -100,6 +100,12 @@ const toolsMap: Record<string, Tool> = {
   // Note: Other legacy mappings removed to avoid duplication
 };
 
+export async function generateStaticParams() {
+  return Object.keys(toolsMap).map((slug) => ({
+    slug,
+  }));
+}
+
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const tool = toolsMap[slug];

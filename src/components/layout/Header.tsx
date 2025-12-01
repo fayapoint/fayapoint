@@ -100,7 +100,7 @@ export function Header() {
   const t = useTranslations("Header");
 
   return (
-    <header className="fixed top-0 w-full h-16 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
+    <header className="fixed top-0 w-full h-16 z-[100] bg-background/80 backdrop-blur-xl border-b border-border">
       <nav className="container mx-auto px-4">
         <div className="flex items-center h-16">
           {/* Logo */}
@@ -405,7 +405,7 @@ export function Header() {
 
       {/* Mobile Menu Button */}
       <button
-        className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 z-[100] flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 transition-all pointer-events-auto"
+        className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 z-[101] flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 transition-all pointer-events-auto"
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         aria-expanded={mobileMenuOpen}
