@@ -10,7 +10,9 @@
       "blog": "Blog",
       "about": "About",
       "community": "Community",
-      "cases": "Cases"
+      "cases": "Cases",
+      "quickActions": "Quick Actions",
+      "viewDashboard": "View Dashboard"
     },
     "menus": {
       "courses": {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Menu, X, ChevronDown, LogOut, UserCircle } from "lucide-react";
+import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
@@ -12,6 +12,28 @@ import { useUser } from "@/contexts/UserContext";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { NavCart } from "@/components/cart/NavCart";
+import type { LucideIcon } from "lucide-react";
+
+// Mobile navigation link component
+interface MobileNavLinkProps {
+  href: string;
+  icon: LucideIcon;
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+function MobileNavLink({ href, icon: Icon, children, onClick }: MobileNavLinkProps) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className="flex items-center gap-3 px-3 py-3 rounded-xl text-foreground/90 hover:text-foreground hover:bg-accent active:bg-accent/80 transition-colors"
+    >
+      <Icon size={20} className="text-muted-foreground" />
+      <span className="font-medium">{children}</span>
+    </Link>
+  );
+}
 
 const coursesMenu = [
   {
@@ -78,16 +100,19 @@ export function Header() {
   const t = useTranslations("Header");
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border">
+    <header className="fixed top-0 w-full h-16 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
       <nav className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center h-16">
           {/* Logo */}
           <Link 
             href="/" 
-            className="text-2xl font-bold text-primary hover:opacity-80 transition"
+            className="text-2xl font-bold text-primary hover:opacity-80 transition flex-shrink-0"
           >
             {t("logo")}
           </Link>
+
+          {/* Spacer - pushes content to right */}
+          <div className="flex-1" />
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -257,105 +282,136 @@ export function Header() {
               </>
             ) : null}
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-gray-300 hover:text-white"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
+
+        {/* Mobile Menu Overlay - only render when menu is open */}
+        {mobileMenuOpen && (
+          <div 
+            className="md:hidden fixed inset-0 top-16 bg-black/50 backdrop-blur-sm z-40 animate-in fade-in duration-200"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-popover/95 backdrop-blur-xl border-b border-border">
-            <div className="px-4 py-6 space-y-4">
-              <div className="pb-2 flex items-center gap-3">
+          <div 
+            className="md:hidden fixed top-16 left-0 right-0 bg-background border-b border-border shadow-2xl z-50 animate-in slide-in-from-top-2 duration-200"
+          >
+          <div className="px-4 py-5 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
+            {/* Quick Actions */}
+            <div className="pb-4 flex items-center justify-between border-b border-border">
+              <span className="text-sm text-muted-foreground font-medium">Quick Actions</span>
+              <div className="flex items-center gap-2">
                 <NavCart />
                 <LocaleSwitcher />
                 <ThemeSwitcher />
               </div>
-              <Link
-                href="/cursos"
-                className="block text-foreground/80 hover:text-foreground py-2"
+            </div>
+
+            {/* Navigation Links */}
+            <nav className="py-2 space-y-1">
+              <MobileNavLink 
+                href="/cursos" 
+                icon={BookOpen}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Cursos
-              </Link>
-              <Link
-                href="/ferramentas"
-                className="block text-foreground/80 hover:text-foreground py-2"
+                {t("nav.courses")}
+              </MobileNavLink>
+              <MobileNavLink 
+                href="/ferramentas" 
+                icon={Wrench}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Ferramentas
-              </Link>
-              <Link
-                href="/blog"
-                className="block text-foreground/90 hover:text-primary transition font-medium"
+                {t("nav.tools")}
+              </MobileNavLink>
+              <MobileNavLink 
+                href="/blog" 
+                icon={Newspaper}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Blog
-              </Link>
-              <Link
-                href="/sobre"
-                className="block text-foreground/90 hover:text-primary transition font-medium"
+                {t("nav.blog")}
+              </MobileNavLink>
+              <MobileNavLink 
+                href="/sobre" 
+                icon={Info}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Sobre
-              </Link>
-              <Link
-                href="/comunidade"
-                className="block text-foreground/90 hover:text-primary transition font-medium"
+                {t("nav.about")}
+              </MobileNavLink>
+              <MobileNavLink 
+                href="/comunidade" 
+                icon={Users}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Comunidade
-              </Link>
-              <Link
-                href="/casos"
-                className="block text-foreground/90 hover:text-primary transition font-medium"
+                {t("nav.community")}
+              </MobileNavLink>
+              <MobileNavLink 
+                href="/casos" 
+                icon={Briefcase}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.cases")}
-              </Link>
-              <div className="pt-4 space-y-3 border-t border-gray-800">
-                {mounted && isLoggedIn && user ? (
-                  <>
-                    <div className="flex items-center gap-2 text-foreground/80 px-4 py-2">
-                      <UserCircle size={20} />
-                      <span className="text-sm">{t("auth.greeting", { name: user.name.split(" ")[0] })}</span>
+              </MobileNavLink>
+            </nav>
+
+            {/* Auth Section */}
+            <div className="pt-4 space-y-3 border-t border-border">
+              {mounted && isLoggedIn && user ? (
+                <>
+                  <Link 
+                    href="/portal" 
+                    className="flex items-center gap-3 p-3 rounded-xl bg-accent/50 hover:bg-accent transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <UserCircle size={24} className="text-primary" />
                     </div>
-                    <Button 
-                      variant="outline" 
-                      className="w-full"
-                      onClick={() => {
-                        logout();
-                        setMobileMenuOpen(false);
-                      }}
-                    >
-                      <LogOut size={16} className="mr-2" />
-                      {t("buttons.signOut")}
+                    <div>
+                      <p className="font-medium text-foreground">{user.name}</p>
+                      <p className="text-sm text-muted-foreground">View Dashboard</p>
+                    </div>
+                  </Link>
+                  <Button 
+                    variant="outline" 
+                    className="w-full h-12 text-base"
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut size={18} className="mr-2" />
+                    {t("buttons.signOut")}
+                  </Button>
+                </>
+              ) : mounted ? (
+                <div className="grid grid-cols-2 gap-3">
+                  <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="block">
+                    <Button variant="outline" className="w-full h-12 text-base">
+                      {t("buttons.signIn")}
                     </Button>
-                  </>
-                ) : mounted ? (
-                  <>
-                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" className="w-full">
-                        {t("buttons.signIn")}
-                      </Button>
-                    </Link>
-                    <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full bg-primary text-primary-foreground">
-                        {t("buttons.startFree")}
-                      </Button>
-                    </Link>
-                  </>
-                ) : null}
-              </div>
+                  </Link>
+                  <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)} className="block">
+                    <Button className="w-full h-12 text-base bg-primary text-primary-foreground">
+                      {t("buttons.startFree")}
+                    </Button>
+                  </Link>
+                </div>
+              ) : null}
             </div>
           </div>
+        </div>
         )}
       </nav>
+
+      {/* Mobile Menu Button */}
+      <button
+        className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 z-[100] flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 transition-all pointer-events-auto"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={mobileMenuOpen}
+      >
+        {mobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
+      </button>
     </header>
   );
 }
