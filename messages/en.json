@@ -497,6 +497,54 @@
         "See ROI in under 30 days"
       ]
     },
+    "WhatWeDo": {
+      "badge": "Design & Content Studio",
+      "title": "Design that feels like magic, delivered like engineering",
+      "subtitle": "Our digital design Operating System unites branding, UX/UI, motion, and content engines with automation, QA, and governance.",
+      "stage": {
+        "title": "Design Operating System",
+        "subtitle": "Live pipeline"
+      },
+      "chips": {
+        "brand": "Brand systems",
+        "ux": "UX/UI & product",
+        "motion": "Motion & reels",
+        "content": "Content engine"
+      },
+      "metrics": {
+        "speed": { "label": "Speed", "value": "x3" },
+        "consistency": { "label": "Consistency", "value": "99%" },
+        "launch": { "label": "Time-to-launch", "value": "15d" }
+      },
+      "capabilities": {
+        "brandSystems": {
+          "title": "Brand Systems",
+          "description": "Modular identity, design tokens, interactive guidelines, and squad-ready kits.",
+          "metric": "Design tokens + libs",
+          "cta": "View systems"
+        },
+        "productUx": {
+          "title": "Product & UX",
+          "description": "End-to-end flows, microinteractions, and navigable prototypes with flawless technical handoff.",
+          "metric": "Figma prototypes + QA",
+          "cta": "View prototypes"
+        },
+        "motionContent": {
+          "title": "Motion & Content",
+          "description": "Motion packs, reels, and bumpers with scripts, storyboards, and edit-ready assets.",
+          "metric": "Weekly drops",
+          "cta": "View packs"
+        },
+        "contentEngine": {
+          "title": "Content Engine",
+          "description": "Pipelines for generation, review, and publishing with AI, automation, and brand-safety checks.",
+          "metric": "Automated workflows",
+          "cta": "View engine"
+        }
+      },
+      "ctaPrimary": "Explore the Operating System",
+      "ctaSecondary": "See cases"
+    },
     "CourseCategories": {
       "title": "Complete Learning Paths",
       "description": "150+ courses organized for your success",
@@ -1282,5 +1330,289 @@
     "investment": "Investment",
     "onRequest": "On request",
     "scheduleConsultation": "Schedule consultation"
+  },
+  "WhatWeDo": {
+    "Hero": {
+      "badge": "Integrated pipeline of design + technology",
+      "title": {
+        "line1": "Everything you need",
+        "line2": "for your digital to perform"
+      },
+      "subtitle": "Fast sites with local SEO, automations and integrations, AI agents and training, plus a content/video studio — all orchestrated as one measured, governed pipeline.",
+      "cta": {
+        "primary": "Explore the pipeline",
+        "secondary": "Book a diagnostic"
+      }
+    },
+    "Mission": {
+      "badge": "Why we exist",
+      "title": {
+        "part1": "Design and technology for",
+        "part2": "real growth"
+      },
+      "description": "We operate like an integrated production line: planning, building, automation, AI, and content working together to accelerate acquisition, retention, and revenue.",
+      "quote": "Pipeline is about consistency: every delivery connects to the next without bottlenecks or rework.",
+      "values": {
+        "passion": {
+          "title": "Obsessed with outcomes",
+          "description": "Every delivery must move a KPI: traffic, MQL, LTV, or efficiency."
+        },
+        "excellence": {
+          "title": "Technical excellence",
+          "description": "Technical SEO, robust automations, AI governance, and content QA."
+        },
+        "accessibility": {
+          "title": "Clarity and governance",
+          "description": "Visual playbooks, SLAs, and monitoring to keep everything auditable."
+        },
+        "innovation": {
+          "title": "AI by default",
+          "description": "Agents, RAG, and copilots in every stage to gain speed and consistency."
+        }
+      }
+    },
+    "Pillars": {
+      "webProduct": {
+        "title": "Web, Apps & Google Digital Identity",
+        "description": "Fast sites, PWAs, member portals, advanced technical SEO and the perfect presence in the Google ecosystem — Maps, Business Profile, Search Console and Workspace integrated.",
+        "features": {
+          "performance": {
+            "title": "90+/Lighthouse Performance & PWA",
+            "description": "Next.js/React architecture with SSR/ISR, smart caching, lazy loading, WebP/AVIF images and load testing. Sites that become installable apps on mobile."
+          },
+          "seo": {
+            "title": "Technical SEO + Google Business Profile",
+            "description": "Complete schema markup, dynamic sitemaps, green Core Web Vitals, lossless ranking migrations. Optimized Google Maps profile: photos, posts, Q&A, managed reviews and consistent NAP to appear in local pack."
+          },
+          "cms": {
+            "title": "Headless CMS + Google Workspace",
+            "description": "Sanity/Strapi/Payload for content management. Professional emails with your own domain via Workspace, shared Drive, integrated Calendar and corporate security."
+          },
+          "googleMaps": {
+            "title": "Google Maps & Local Pack Dominance",
+            "description": "Your business appears when someone searches for you or the service in the region. Review management, responses, updated photos and weekly posts that increase clicks and calls."
+          },
+          "workspace": {
+            "title": "Corporate Google Workspace",
+            "description": "Email with your domain (e.g., you@yourcompany.com), unlimited Drive for team, unlimited Meet, Admin Console for governance and SSO. Professional image + productivity."
+          }
+        }
+      },
+      "automation": {
+        "title": "Automations, Integrations & Smart Bots",
+        "description": "Process orchestration with n8n/Make/Zapier, integrations with CRMs, ERPs, billing, WhatsApp Business API and bots that converse, qualify and sell 24/7.",
+        "features": {
+          "workflows": {
+            "title": "Orchestrated and resilient workflows",
+            "description": "Process mapping, webhooks, queues, automatic retries, escalation and versioning. Each flow documented and monitored."
+          },
+          "bots": {
+            "title": "Multichannel bots + WhatsApp Business API",
+            "description": "Customer service, lead qualification, scheduling and sales on WhatsApp, Instagram, Messenger and website chat. Human handoff when needed."
+          },
+          "monitoring": {
+            "title": "Observability and governance",
+            "description": "Real-time alerts, execution dashboards, distributed tracing, structured logs and documented SLAs. You know exactly what's running."
+          },
+          "integrations": {
+            "title": "Native integrations and APIs",
+            "description": "We connect your CRM (HubSpot, Pipedrive, RD), ERP, payment gateway, email platforms and any REST/GraphQL API."
+          }
+        }
+      },
+      "aiTraining": {
+        "title": "Applied AI, Agents & Training",
+        "description": "From executive diagnosis to production agent deployment. We implement ChatGPT/Claude/Gemini in your processes, create custom copilots and train your team with hands-on workshops.",
+        "features": {
+          "diagnostic": {
+            "title": "AI Diagnostic and Roadmap",
+            "description": "We map processes, identify quick wins, assess hallucination risks and data governance. We deliver a plan prioritized by ROI."
+          },
+          "agents": {
+            "title": "Agents, RAG & Copilots",
+            "description": "We design and implement autonomous agents, RAG systems with your knowledge base and copilots that assist sales, support and operations."
+          },
+          "chatgptAoe": {
+            "title": "ChatGPT AOE — Enterprise Operations Area",
+            "description": "We configure your ChatGPT Team/Enterprise with personalized instructions, custom GPTs for each department, usage policies and sensitive data governance."
+          },
+          "training": {
+            "title": "Tailored team training",
+            "description": "Hands-on workshops, playbooks, optimized prompts and labs with real cases from your business. They leave using AI the next day."
+          }
+        }
+      },
+      "contentVideo": {
+        "title": "Content & Video Studio",
+        "description": "From strategy to publication: scripting, professional capture, senior editing, motion graphics and weekly packages that keep your brand present across all channels.",
+        "features": {
+          "motion": {
+            "title": "Motion graphics & cinematic editing",
+            "description": "Animations, transitions, color grading and editing rhythm that captures attention. Optimized versions for feed, stories, reels, YouTube and LinkedIn."
+          },
+          "kits": {
+            "title": "Multimedia brand kits",
+            "description": "Editable templates, bumpers, lower-thirds, thumbnails, quote cards and reusable assets aligned to your branding."
+          },
+          "packs": {
+            "title": "Weekly/monthly recurring packages",
+            "description": "Editorial calendar, approved scripts, capture, review, subtitling and publishing. You just approve; we execute."
+          },
+          "ads": {
+            "title": "Ad creatives and launches",
+            "description": "Sales videos, VSLs, teasers, ads for Meta Ads and Google Ads with A/B variations ready for testing."
+          }
+        }
+      }
+    },
+    "Process": {
+      "badge": "How we deliver",
+      "title": "Integrated pipeline from diagnostic to content",
+      "subtitle": "One flow: discover, build, automate, train, and publish with clear metrics.",
+      "steps": [
+        {
+          "title": "Diagnostic & blueprint",
+          "description": "Goals, KPIs, risks, data sources, and architecture."
+        },
+        {
+          "title": "Build & integrations",
+          "description": "Sites/portals, technical SEO, APIs, webhooks, and workflows."
+        },
+        {
+          "title": "AI & training",
+          "description": "Agents, RAG, copilots, and team enablement."
+        },
+        {
+          "title": "Content & optimization",
+          "description": "Weekly packages, QA, observability, and continuous improvements."
+        }
+      ]
+    },
+    "Pipeline": {
+      "badge": "Integrated production line",
+      "title": "From blueprint to recurring content",
+      "subtitle": "Each stage hands off artifacts to the next — no rework, with metrics and governance.",
+      "items": [
+        {
+          "title": "Discover & blueprint",
+          "description": "Goals, KPIs, data map, risks, and information architecture.",
+          "metrics": [
+            "Clear KPIs per stage",
+            "Data map + sources"
+          ]
+        },
+        {
+          "title": "Build & SEO",
+          "description": "Prototypes, design system, 90+/Lighthouse performance, and technical/local SEO.",
+          "metrics": [
+            "Green CWV",
+            "Schema + sitemaps"
+          ]
+        },
+        {
+          "title": "Automate & AI",
+          "description": "Workflows, bots, agents, RAG, and governance (logs, tracing, alerts).",
+          "metrics": [
+            "Monitored workflows",
+            "Alerts and SLAs"
+          ]
+        },
+        {
+          "title": "Content & optimization",
+          "description": "Kits, weekly packages, editorial QA, and experiments with reporting.",
+          "metrics": [
+            "Weekly cadence",
+            "Content dashboards"
+          ]
+        }
+      ]
+    },
+    "Outcomes": {
+      "badge": "Proven results",
+      "title": "What you gain with the integrated pipeline",
+      "cards": [
+        {
+          "title": "Google Visibility",
+          "value": "Top 3 local pack",
+          "description": "Optimized Google Business Profile, managed reviews, weekly posts and consistent NAP. Your business appears when people search for the service in the region."
+        },
+        {
+          "title": "Performance & SEO",
+          "value": "90+/Lighthouse + Schema",
+          "description": "Green Core Web Vitals, complete schema markup, dynamic sitemaps and lossless ranking migrations. More qualified organic traffic."
+        },
+        {
+          "title": "AI Productivity",
+          "value": "-20h/week per team",
+          "description": "Agents, copilots and ChatGPT AOE configured for each department. Team focuses on what matters while AI handles the rest."
+        },
+        {
+          "title": "Omnichannel Presence",
+          "value": "recurring content",
+          "description": "Weekly video and post packages, multimedia kits, 24/7 bots on WhatsApp and site. Your brand present at every touchpoint."
+        },
+        {
+          "title": "Google Professionalism",
+          "value": "complete Workspace",
+          "description": "Email with your own domain, unlimited Drive, unlimited Meet and Admin Console. Corporate image + secure collaboration."
+        },
+        {
+          "title": "Automated Sales",
+          "value": "qualifying bots",
+          "description": "WhatsApp Business API, chatbots on site and Instagram that serve, qualify leads and schedule meetings 24/7 without human intervention."
+        }
+      ]
+    },
+    "Stacks": {
+      "badge": "Complete stack & deliverables",
+      "title": "Everything we use and deliver in each track",
+      "subtitle": "Cutting-edge technology and documented processes so you know exactly what you receive.",
+      "columns": {
+        "webSeo": {
+          "title": "Web, SEO & Google",
+          "items": [
+            "Next.js 14, React 18, Vercel Edge",
+            "Sanity/Strapi/Payload headless CMS",
+            "Optimized Google Business Profile",
+            "Google Workspace (email, Drive, Meet)",
+            "Schema markup + dynamic sitemaps",
+            "Lighthouse 90+ and green Core Web Vitals",
+            "Search Console + Analytics 4 integrated"
+          ]
+        },
+        "automationAi": {
+          "title": "Automations, AI & Bots",
+          "items": [
+            "n8n/Make/Zapier + webhooks/APIs",
+            "WhatsApp Business API + chatbots",
+            "ChatGPT Team/Enterprise (AOE configured)",
+            "Autonomous agents + custom RAG",
+            "Copilots for sales, support and ops",
+            "Tracing, logs, alerts and SLAs",
+            "CRM/ERP/billing integrations"
+          ]
+        },
+        "contentVideo": {
+          "title": "Content, Video & Ads",
+          "items": [
+            "Editorial strategy + calendar",
+            "Professional 4K capture",
+            "Senior editing + motion graphics",
+            "Templates, bumpers, lower-thirds",
+            "Weekly packages with QA and publishing",
+            "Creatives for Meta Ads and Google Ads",
+            "Subtitling, thumbnails and A/B variations"
+          ]
+        }
+      }
+    },
+    "CTA": {
+      "title": "Ready to run as one pipeline?",
+      "subtitle": "Web/SEO, automations, AI, and content working together with governance and metrics.",
+      "cta": {
+        "primary": "Build my pipeline",
+        "secondary": "Talk now"
+      }
+    }
   }
 }

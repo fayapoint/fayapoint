@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
+import { WhatWeDoSection } from "@/components/home/WhatWeDoSection";
 import { ServicesCarousel } from "@/components/home/ServicesCarousel";
 import { ChatGPTAllowlistingBanner } from "@/components/home/ChatGPTAllowlistingBanner";
 import { AIToolsMarquee } from "@/components/home/AIToolsMarquee";
@@ -19,6 +20,7 @@ export default function Home() {
       <main>
         <HeroSection />
         <ChatGPTAllowlistingBanner />
+        <WhatWeDoSection />
         <CommunityGallery />
         <ServicesCarousel />
         <AIToolsMarquee />
