@@ -81,6 +81,7 @@ import { AchievementsPanel } from "@/components/portal/AchievementsPanel";
 import { LeaderboardPanel } from "@/components/portal/LeaderboardPanel";
 import { ChallengesPanel } from "@/components/portal/ChallengesPanel";
 import { AIAssistantPanel } from "@/components/portal/AIAssistantPanel";
+import { ProfilePanel } from "@/components/portal/ProfilePanel";
 
 // Types
 interface DashboardCourseProgress {
@@ -432,6 +433,7 @@ export default function PortalPage() {
         user={user}
         stats={stats}
         plan={plan}
+        achievements={gamification?.achievements || []}
       />
 
       {/* Main Content */}
@@ -441,6 +443,7 @@ export default function PortalPage() {
           <div>
             <h1 className="text-lg font-semibold">
               {activeTab === "dashboard" && "Dashboard"}
+              {activeTab === "profile" && "Meu Perfil"}
               {activeTab === "courses" && "Meus Cursos"}
               {activeTab === "studio" && "Studio AI"}
               {activeTab === "assistant" && "Assistente IA"}
@@ -809,6 +812,38 @@ export default function PortalPage() {
                     </Card>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Profile Tab */}
+            {activeTab === "profile" && (
+              <motion.div
+                key="profile"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <ProfilePanel
+                  user={{
+                    name: user.name,
+                    email: user.email,
+                    image: user.image,
+                    profile: user.profile,
+                  }}
+                  stats={{
+                    ...stats,
+                    longestStreak: stats.longestStreak || stats.streak,
+                  }}
+                  plan={plan}
+                  achievements={gamification?.achievements || []}
+                  totalAchievements={gamification?.totalAchievements || 0}
+                  onUserUpdate={(updatedUser) => {
+                    // Update local user state
+                    if (updatedUser) {
+                      setUser({ ...user, ...updatedUser });
+                    }
+                  }}
+                />
               </motion.div>
             )}
 

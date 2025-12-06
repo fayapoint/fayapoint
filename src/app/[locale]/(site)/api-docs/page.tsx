@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -570,15 +571,15 @@ const dashboard = await fetch('https://fayapoint.com/api/user/dashboard', {
             </p>
             <div className="flex justify-center gap-4">
               <Button asChild variant="outline">
-                <a href="/contato">
+                <Link href="/contato">
                   Falar com o time
-                </a>
+                </Link>
               </Button>
               <Button asChild className="bg-gradient-to-r from-purple-600 to-pink-600">
-                <a href="/agendar-consultoria">
+                <Link href="/agendar-consultoria">
                   Agendar consultoria
                   <ExternalLink className="w-4 h-4 ml-2" />
-                </a>
+                </Link>
               </Button>
             </div>
           </div>

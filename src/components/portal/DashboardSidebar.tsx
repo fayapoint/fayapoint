@@ -27,6 +27,17 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { UserAvatarWithBadges } from "@/components/user/UserAvatarWithBadges";
+
+interface Achievement {
+  id: string;
+  category: string;
+  tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
+  icon: string;
+  xpReward: number;
+  unlocked: boolean;
+  unlockedAt?: Date;
+}
 
 interface DashboardSidebarProps {
   activeTab: string;
@@ -44,10 +55,12 @@ interface DashboardSidebarProps {
     streak: number;
   };
   plan: string;
+  achievements?: Achievement[];
 }
 
 const MENU_ITEMS = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", proOnly: false },
+  { id: "profile", icon: Crown, label: "Meu Perfil", proOnly: false },
   { id: "courses", icon: BookOpen, label: "Meus Cursos", proOnly: false },
   { id: "studio", icon: ImageIcon, label: "Studio AI", proOnly: false, badge: "AI" },
   { id: "assistant", icon: Bot, label: "Assistente IA", proOnly: true, badge: "PRO" },
@@ -59,7 +72,7 @@ const MENU_ITEMS = [
   { id: "rewards", icon: Gift, label: "Recompensas", proOnly: true, badge: "PRO" },
 ];
 
-export function DashboardSidebar({ activeTab, onTabChange, user, stats, plan }: DashboardSidebarProps) {
+export function DashboardSidebar({ activeTab, onTabChange, user, stats, plan, achievements = [] }: DashboardSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const isPro = ["pro", "business", "starter"].includes(plan);
 
@@ -97,16 +110,14 @@ export function DashboardSidebar({ activeTab, onTabChange, user, stats, plan }: 
       {/* User Profile Card */}
       <div className={cn("p-4 border-b border-gray-800", isCollapsed && "px-2")}>
         <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
-          <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-lg font-bold">
-              {user.name?.substring(0, 2).toUpperCase() || "US"}
-            </div>
-            {isPro && (
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
-                <Crown size={12} className="text-black" />
-              </div>
-            )}
-          </div>
+          <UserAvatarWithBadges
+            user={user}
+            achievements={achievements}
+            size={isCollapsed ? "sm" : "md"}
+            isPro={isPro}
+            showBadges={!isCollapsed}
+            maxBadges={3}
+          />
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
               <p className="font-semibold truncate">{user.name}</p>
