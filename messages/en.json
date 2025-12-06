@@ -937,6 +937,138 @@
       }
     ]
   },
+  "Blog": {
+    "hero": {
+      "title": "FayaPoint Blog",
+      "description": "Insights, tutorials and news about Artificial Intelligence"
+    },
+    "searchPlaceholder": "Search articles...",
+    "loadMore": "Load More Articles",
+    "badges": {
+      "featured": "Featured"
+    },
+    "labels": {
+      "viewsSuffix": "views",
+      "categories": "Categories",
+      "popularTags": "Popular Tags",
+      "recentPosts": "Recent Posts",
+      "newsletter": "Newsletter",
+      "newsletterDescription": "Get the latest AI news delivered to your inbox.",
+      "newsletterSubmit": "Subscribe"
+    },
+    "categories": [
+      "All",
+      "Generative AI",
+      "Visual Creation",
+      "Automation",
+      "Development",
+      "Audio & Voice",
+      "Business",
+      "Tutorials",
+      "News"
+    ],
+    "popularTags": [
+      "ChatGPT",
+      "Midjourney",
+      "Claude",
+      "n8n",
+      "Automation",
+      "Productivity",
+      "Marketing",
+      "Design",
+      "Programming",
+      "ROI"
+    ],
+    "newsletter": {
+      "placeholder": "your@email.com"
+    },
+    "posts": [
+      {
+        "id": 1,
+        "title": "How to Use ChatGPT to Triple Your Productivity",
+        "slug": "chatgpt-productivity",
+        "excerpt": "Discover advanced prompt engineering techniques that can transform the way you work with generative AI.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Nov 15, 2024",
+        "readTime": "8 min",
+        "views": 15420,
+        "image": "/blog/chatgpt-produtividade.jpg",
+        "featured": true,
+        "tags": ["ChatGPT", "Productivity", "Prompt Engineering"]
+      },
+      {
+        "id": 2,
+        "title": "Midjourney v6: Complete Guide to New Features",
+        "slug": "midjourney-v6-guide",
+        "excerpt": "Explore all the new features in Midjourney version 6 and learn to create even more impressive images.",
+        "category": "Visual Creation",
+        "author": "Ricardo Faya",
+        "date": "Nov 10, 2024",
+        "readTime": "12 min",
+        "views": 12350,
+        "image": "/blog/midjourney-v6.jpg",
+        "featured": false,
+        "tags": ["Midjourney", "Design", "Generative AI"]
+      },
+      {
+        "id": 3,
+        "title": "Automating Processes with n8n: From Zero to Advanced",
+        "slug": "n8n-complete-automation",
+        "excerpt": "Learn to create powerful automation workflows using n8n, the open-source tool revolutionizing the market.",
+        "category": "Automation",
+        "author": "Ricardo Faya",
+        "date": "Nov 5, 2024",
+        "readTime": "15 min",
+        "views": 9870,
+        "image": "/blog/n8n-automacao.jpg",
+        "featured": false,
+        "tags": ["n8n", "Automation", "No-Code"]
+      },
+      {
+        "id": 4,
+        "title": "Claude vs ChatGPT: Which AI to Choose in 2024?",
+        "slug": "claude-vs-chatgpt-2024",
+        "excerpt": "A detailed analysis comparing the two conversational AI giants and when to use each one.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Nov 1, 2024",
+        "readTime": "10 min",
+        "views": 18900,
+        "image": "/blog/claude-chatgpt.jpg",
+        "featured": true,
+        "tags": ["Claude", "ChatGPT", "Comparison"]
+      },
+      {
+        "id": 5,
+        "title": "Creating AI Agents with LangChain and Python",
+        "slug": "ai-agents-langchain",
+        "excerpt": "Step-by-step tutorial to build autonomous agents capable of executing complex tasks.",
+        "category": "Development",
+        "author": "Ricardo Faya",
+        "date": "Oct 28, 2024",
+        "readTime": "20 min",
+        "views": 7650,
+        "image": "/blog/langchain-agentes.jpg",
+        "featured": false,
+        "tags": ["LangChain", "Python", "Agents"]
+      },
+      {
+        "id": 6,
+        "title": "The Future of Work with AI: Trends for 2025",
+        "slug": "future-work-ai-2025",
+        "excerpt": "Analysis of the main AI trends that will transform the job market in the coming years.",
+        "category": "Business",
+        "author": "Ricardo Faya",
+        "date": "Oct 20, 2024",
+        "readTime": "7 min",
+        "views": 21300,
+        "image": "/blog/futuro-ia.jpg",
+        "featured": false,
+        "tags": ["Trends", "Market", "Future"]
+      }
+    ]
+  },
   "Courses": {
     "hero": {
       "title": "AI & Automation Courses",
@@ -1939,6 +2071,174 @@
       "title": "Master the Art of Prompts",
       "description": "Learn advanced prompt engineering techniques in our courses.",
       "button": "Explore Courses"
+    }
+  },
+  "Cases": {
+    "hero": {
+      "badge": "Cases & Portfolio",
+      "title": "Projects That Deliver Real Results",
+      "subtitle": "Discover real client cases that transformed their operations with AI, automation, and digital platforms developed by FayaPoint.",
+      "primaryCta": "Talk to a Specialist",
+      "secondaryCta": "Schedule Diagnostic"
+    },
+    "metrics": {
+      "projectsDelivered": "Projects delivered",
+      "avgTimeROI": "Average time to ROI",
+      "automatedProcesses": "Automated processes",
+      "sectorsServed": "Sectors served"
+    },
+    "projects": {
+      "sectionTitle": "Completed Projects",
+      "sectionDescription": "We selected cases from our \"completed\" portfolio — full initiatives, with tracked metrics and handoff ready for the client team.",
+      "sectorsBadge": "Operations, education, retail, SaaS and more",
+      "collections": {
+        "aiAutomation": {
+          "title": "AI + Automation",
+          "description": "Agents and flows that reduce operational costs and expand service capacity."
+        },
+        "saasProducts": {
+          "title": "SaaS & Digital Products",
+          "description": "Complete platforms with dashboards, billing, and assisted onboarding."
+        },
+        "immersive": {
+          "title": "Immersive Experiences",
+          "description": "Brand experiences, portals, and command centers for digital leaders."
+        }
+      },
+      "items": {
+        "atlasSupportAi": {
+          "title": "Atlas Insurance • AI Support Operations",
+          "client": "Atlas Insurance",
+          "industry": "Financial",
+          "timeframe": "8 weeks",
+          "description": "We created an automation hub connecting WhatsApp, Freshdesk, and n8n with AI agents trained on the broker's knowledge base.",
+          "highlights": ["Multilingual agent with intelligent routing", "Proactive alerts when a human needs to take over"],
+          "metrics": {
+            "responseTime": { "label": "Response time", "value": "-65%" },
+            "csat": { "label": "CSAT", "value": "+32%" },
+            "automation": { "label": "Automation", "value": "78% tickets" }
+          }
+        },
+        "auroraLearningAgent": {
+          "title": "Aurora Education • AI Tutor",
+          "client": "Aurora Education",
+          "industry": "Education",
+          "timeframe": "6 weeks",
+          "description": "Personalized assistant integrated with LMS that tracks student progress and generates reports for mentors.",
+          "highlights": ["Multimodal experience", "Dashboard with weekly insights"],
+          "metrics": {
+            "retention": { "label": "Retention", "value": "+21%" },
+            "mentorTime": { "label": "Mentor time", "value": "-12h/week" }
+          }
+        },
+        "fluxOrchestrator": {
+          "title": "Flux Orchestrator • B2B Platform",
+          "client": "VertexOps",
+          "industry": "SaaS",
+          "timeframe": "10 weeks",
+          "description": "Multi-tenant application connecting Salesforce, Notion, and Slack for operations squads with event-based automation.",
+          "highlights": ["Multi-region architecture", "White-label component library"],
+          "metrics": {
+            "onboarding": { "label": "Onboarding", "value": "-30 days" },
+            "mrr": { "label": "MRR", "value": "+18%" }
+          }
+        },
+        "omniCommerce": {
+          "title": "Omni Commerce • Digital Products Hub",
+          "client": "RumoX",
+          "industry": "Retail",
+          "timeframe": "9 weeks",
+          "description": "Headless marketplace with proprietary CMS, recurring payments, and partner area.",
+          "highlights": ["Proprietary design system", "Integration with VTEX and Tiny"],
+          "metrics": {
+            "conversion": { "label": "Conversion", "value": "+27%" },
+            "avgTicket": { "label": "Average ticket", "value": "+19%" }
+          }
+        },
+        "talentScout": {
+          "title": "Talent Scout • Creator Marketplace",
+          "client": "SparkClub",
+          "industry": "Creative economy",
+          "timeframe": "7 weeks",
+          "description": "Platform connecting brands to creators with AI-based matching and contract automation.",
+          "highlights": ["Recommendation engine", "Signature via DocuSign"],
+          "metrics": {
+            "matching": { "label": "Matching", "value": "+2.4x" },
+            "proposalTime": { "label": "Proposal time", "value": "-72%" }
+          }
+        },
+        "cortexCommand": {
+          "title": "Cortex Labs • Command Center",
+          "client": "Cortex Labs",
+          "industry": "Industry 4.0",
+          "timeframe": "6 weeks",
+          "description": "Immersive dashboard for monitoring factory KPIs with alerts and a copilot that suggests actions.",
+          "highlights": ["Real-time TV wall", "Interactive playbooks"],
+          "metrics": {
+            "criticalAlerts": { "label": "Critical alerts", "value": "-43%" },
+            "predictiveAccuracy": { "label": "Predictive accuracy", "value": "+18%" }
+          }
+        },
+        "luminaExperience": {
+          "title": "Lumina • Innovation Portal",
+          "client": "Lumina Ventures",
+          "industry": "Venture Capital",
+          "timeframe": "5 weeks",
+          "description": "Editorial site with deal library, research section, and mini CRM integration.",
+          "highlights": ["Semantic search", "Collaborative publishing"],
+          "metrics": {
+            "subscribers": { "label": "Subscribers", "value": "+12k" },
+            "qualifiedMql": { "label": "Qualified MQLs", "value": "+34%" }
+          }
+        }
+      }
+    },
+    "delivery": {
+      "title": "How We Deliver",
+      "description": "Every project is born from a playbook tested in 60+ executions, always with a dedicated squad and clear indicators.",
+      "pillars": {
+        "blueprint": {
+          "title": "Blueprint & Discovery",
+          "description": "Executive workshops, data collection, and KPI definition guided by more than 20 proprietary frameworks."
+        },
+        "execution": {
+          "title": "Guided Execution",
+          "description": "Hybrid squad (product + engineering + AI) operating in sprints with navigable deliveries and living documentation."
+        },
+        "operation": {
+          "title": "Assisted Operation",
+          "description": "Monitoring, training, and playbooks focused on empowering the client team to evolve the digital asset."
+        }
+      }
+    },
+    "indicators": {
+      "title": "Indicators we track",
+      "timeToValue": { "label": "Time to value", "value": "< 6 weeks" },
+      "teamAdoption": { "label": "Team adoption", "value": "92%" },
+      "handoffQuality": { "label": "Handoff quality", "value": "9.6/10" }
+    },
+    "squad": {
+      "title": "Plug-and-play Squad",
+      "description": "Strategist, product lead, AI engineer, and designer connect to your team to accelerate deliveries and transfer knowledge.",
+      "availability": "4-7 specialists available full-time during the cycle"
+    },
+    "testimonials": [
+      {
+        "quote": "FayaPoint took on our critical backlog and in 60 days delivered an entire portal with embedded AI. Now we can test new ideas every week.",
+        "author": "Carla Ramos",
+        "role": "COO, SparkClub"
+      },
+      {
+        "quote": "Scaling support with intelligent agents was a priority. We reduced response time by 65% and customers noticed immediately.",
+        "author": "Leandro Vilela",
+        "role": "Head of CX, Atlas Insurance"
+      }
+    ],
+    "cta": {
+      "title": "Want to see a project in your sector?",
+      "description": "We send a dossier with diagnosis, effort estimate, and which digital assets we can build in up to 90 days.",
+      "primaryButton": "Schedule Diagnostic",
+      "secondaryButton": "Receive Complete Portfolio"
     }
   }
 }
