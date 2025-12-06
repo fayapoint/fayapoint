@@ -25,6 +25,7 @@ import {
   ShoppingBag,
   Store,
   ShoppingCart,
+  Palette,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -64,7 +65,8 @@ interface DashboardSidebarProps {
 
 const MENU_ITEMS = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", proOnly: false },
-  { id: "store", icon: Store, label: "Loja", proOnly: false, badge: "NOVO" },
+  { id: "pod-store", icon: Palette, label: "Minha Loja POD", proOnly: false, badge: "NOVO" },
+  { id: "store", icon: Store, label: "Loja Tech", proOnly: false },
   { id: "cart", icon: ShoppingCart, label: "Carrinho", proOnly: false },
   { id: "profile", icon: Crown, label: "Meu Perfil", proOnly: false },
   { id: "courses", icon: BookOpen, label: "Meus Cursos", proOnly: false },

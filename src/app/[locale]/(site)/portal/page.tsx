@@ -86,6 +86,7 @@ import { AIAssistantPanel } from "@/components/portal/AIAssistantPanel";
 import { ProfilePanel } from "@/components/portal/ProfilePanel";
 import { StorePanel } from "@/components/portal/StorePanel";
 import { CartPanel } from "@/components/portal/CartPanel";
+import { PODStorePanel } from "@/components/portal/PODStorePanel";
 
 // Types
 interface DashboardCourseProgress {
@@ -456,7 +457,8 @@ export default function PortalPage() {
           <div>
             <h1 className="text-lg font-semibold">
               {activeTab === "dashboard" && "Dashboard"}
-              {activeTab === "store" && "Loja"}
+              {activeTab === "pod-store" && "Minha Loja POD"}
+              {activeTab === "store" && "Loja Tech"}
               {activeTab === "cart" && "Carrinho"}
               {activeTab === "profile" && "Meu Perfil"}
               {activeTab === "courses" && "Meus Cursos"}
@@ -827,6 +829,18 @@ export default function PortalPage() {
                     </Card>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {/* POD Store Tab */}
+            {activeTab === "pod-store" && (
+              <motion.div
+                key="pod-store"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <PODStorePanel isCompact={sidebarCollapsed} />
               </motion.div>
             )}
 
