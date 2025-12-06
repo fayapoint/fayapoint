@@ -69,7 +69,7 @@ interface ProfilePanelProps {
   plan: string;
   achievements?: Achievement[];
   totalAchievements?: number;
-  onUserUpdate?: (updatedUser: any) => void;
+  onUserUpdate?: (updatedUser: Partial<ProfilePanelProps['user']>) => void;
 }
 
 const TIER_COLORS = {
@@ -156,7 +156,7 @@ export function ProfilePanel({
   };
 
   const handleAvatarUpdate = (newImageUrl: string | null) => {
-    onUserUpdate?.({ ...user, image: newImageUrl });
+    onUserUpdate?.({ ...user, image: newImageUrl ?? undefined });
   };
 
   return (
