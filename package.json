@@ -9,6 +9,7 @@
     "lint": "eslint",
     "seed": "tsx scripts/seed-products.ts",
     "seed:watch": "tsx watch scripts/seed-products.ts",
+    "seed:admin": "tsx scripts/seed-admin.ts",
     "enrich": "tsx scripts/enrich-curriculum.ts"
   },
   "dependencies": {
