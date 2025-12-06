@@ -14,7 +14,6 @@ import {
   Tag,
   X,
   Check,
-  ChevronRight,
   Sparkles,
   History,
   BookOpen,
@@ -24,40 +23,33 @@ import {
   Download,
   Printer,
   Calendar,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useServiceCart, CartItem } from "@/contexts/ServiceCartContext";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-// Mock order history data
-const mockOrders = [
-  {
-    id: "ORD-2024-001",
-    date: "2024-12-01",
-    status: "delivered",
-    total: 15999.90,
-    items: [
-      { name: "PC Gamer RTX 4070", type: "product", quantity: 1, price: 12999.90 },
-      { name: "Mouse Logitech G Pro", type: "product", quantity: 1, price: 899.90 },
-      { name: "Mousepad Artisan", type: "product", quantity: 1, price: 349.90 },
-    ]
-  },
-  {
-    id: "ORD-2024-002",
-    date: "2024-11-15",
-    status: "delivered",
-    total: 997.00,
-    items: [
-      { name: "Curso ChatGPT Masterclass", type: "course", quantity: 1, price: 497.00 },
-      { name: "Curso N8N Automação", type: "course", quantity: 1, price: 500.00 },
-    ]
-  },
-];
+interface OrderItem {
+  id: string;
+  name: string;
+  type: string;
+  quantity: number;
+  price: number;
+  image?: string;
+}
+
+interface Order {
+  _id: string;
+  createdAt: string;
+  status: string;
+  totalAmount: number;
+  items: OrderItem[];
+}
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
@@ -76,11 +68,47 @@ const statusLabels: Record<string, string> = {
 };
 
 export function CartPanel() {
+  const router = useRouter();
   const { items, setItemQuantity, removeItem, clearCart, itemCount, cartTotal } = useServiceCart();
   const [activeTab, setActiveTab] = useState("cart");
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+
+  // Fetch orders when switching to history tab
+  useEffect(() => {
+    if (activeTab === "history") {
+      fetchOrders();
+    }
+  }, [activeTab]);
+
+  const fetchOrders = async () => {
+    setIsLoadingOrders(true);
+    try {
+      const token = localStorage.getItem("auth_token");
+      if (!token) {
+        setOrders([]);
+        return;
+      }
+
+      const response = await fetch("/api/orders", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setOrders(data.orders || []);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setIsLoadingOrders(false);
+    }
+  };
 
   const cartItems = Object.values(items);
   
@@ -332,6 +360,7 @@ export function CartPanel() {
         <Button 
           className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-base font-bold rounded-xl"
           disabled={cartItems.length === 0}
+          onClick={() => router.push("/pt-BR/checkout/cart")}
         >
           <CreditCard size={18} className="mr-2" />
           Finalizar Compra
@@ -475,69 +504,88 @@ export function CartPanel() {
           >
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold">Histórico de Pedidos</h2>
-              <Button variant="outline" size="sm" className="border-gray-700 gap-2">
+              <Button variant="outline" size="sm" className="border-gray-700 gap-2" onClick={fetchOrders}>
                 <Download size={14} />
-                Exportar
+                Atualizar
               </Button>
             </div>
 
-            {mockOrders.map((order) => (
-              <div key={order.id} className="relative rounded-2xl overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/10" />
-                
-                <div className="relative p-5">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                        <Receipt size={18} className="text-purple-400" />
-                      </div>
-                      <div>
-                        <p className="font-semibold">{order.id}</p>
-                        <p className="text-xs text-gray-400 flex items-center gap-1">
-                          <Calendar size={10} />
-                          {formatDate(order.date)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Badge className={cn("border", statusColors[order.status])}>
-                        {statusLabels[order.status]}
-                      </Badge>
-                      <p className="text-lg font-bold text-green-400">{formatPrice(order.total)}</p>
-                    </div>
-                  </div>
-
-                  {/* Items */}
-                  <div className="space-y-2 pt-4 border-t border-white/10">
-                    {order.items.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-2">
-                          {item.type === "product" ? <Package size={14} className="text-gray-500" /> : <BookOpen size={14} className="text-gray-500" />}
-                          <span className="text-gray-300">{item.name}</span>
-                          <span className="text-gray-600">x{item.quantity}</span>
+            {isLoadingOrders ? (
+              <div className="flex flex-col items-center justify-center min-h-[30vh]">
+                <Loader2 className="w-8 h-8 animate-spin text-purple-400 mb-4" />
+                <p className="text-gray-400">Carregando pedidos...</p>
+              </div>
+            ) : orders.length === 0 ? (
+              <div className="flex flex-col items-center justify-center min-h-[30vh]">
+                <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                  <Receipt size={36} className="text-gray-600" />
+                </div>
+                <h2 className="text-xl font-bold mb-2">Nenhum Pedido</h2>
+                <p className="text-gray-400 text-center max-w-sm">
+                  Você ainda não fez nenhum pedido. Explore nossa loja!
+                </p>
+              </div>
+            ) : (
+              orders.map((order) => (
+                <div key={order._id} className="relative rounded-2xl overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/10" />
+                  
+                  <div className="relative p-5">
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                          <Receipt size={18} className="text-purple-400" />
                         </div>
-                        <span className="text-gray-400">{formatPrice(item.price)}</span>
+                        <div>
+                          <p className="font-semibold text-sm">#{order._id.slice(-8).toUpperCase()}</p>
+                          <p className="text-xs text-gray-400 flex items-center gap-1">
+                            <Calendar size={10} />
+                            {formatDate(order.createdAt)}
+                          </p>
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                      <div className="flex items-center gap-3">
+                        <Badge className={cn("border", statusColors[order.status] || statusColors.pending)}>
+                          {statusLabels[order.status] || order.status}
+                        </Badge>
+                        <p className="text-lg font-bold text-green-400">{formatPrice(order.totalAmount)}</p>
+                      </div>
+                    </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
-                    <Button variant="outline" size="sm" className="border-gray-700 gap-2 flex-1">
-                      <Receipt size={14} />
-                      Ver Recibo
-                    </Button>
-                    <Button variant="outline" size="sm" className="border-gray-700 gap-2">
-                      <Printer size={14} />
-                    </Button>
-                    <Button variant="outline" size="sm" className="border-gray-700 gap-2">
-                      <Download size={14} />
-                    </Button>
+                    {/* Items */}
+                    <div className="space-y-2 pt-4 border-t border-white/10">
+                      {order.items.map((item: OrderItem, idx: number) => (
+                        <div key={idx} className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2">
+                            {item.type === "product" ? <Package size={14} className="text-gray-500" /> : 
+                             item.type === "course" ? <BookOpen size={14} className="text-gray-500" /> :
+                             <Wrench size={14} className="text-gray-500" />}
+                            <span className="text-gray-300">{item.name}</span>
+                            <span className="text-gray-600">x{item.quantity}</span>
+                          </div>
+                          <span className="text-gray-400">{formatPrice(item.price * item.quantity)}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
+                      <Button variant="outline" size="sm" className="border-gray-700 gap-2 flex-1">
+                        <Receipt size={14} />
+                        Ver Detalhes
+                      </Button>
+                      <Button variant="outline" size="sm" className="border-gray-700 gap-2">
+                        <Printer size={14} />
+                      </Button>
+                      <Button variant="outline" size="sm" className="border-gray-700 gap-2">
+                        <Download size={14} />
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </motion.div>
         )}
       </AnimatePresence>

@@ -36,17 +36,69 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (isCartCheckout && cartItems.length === 0) {
+      toast.error("Seu carrinho está vazio.");
+      return;
+    }
+
     setLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success("Pedido realizado com sucesso!");
-    clearCart();
-    setLoading(false);
-    
-    // Redirect to a success page or dashboard
-    // router.push('/dashboard'); 
+
+    try {
+      // Get auth token from localStorage
+      const token = localStorage.getItem("auth_token");
+      
+      if (!token) {
+        toast.error("Você precisa estar logado para finalizar a compra.");
+        setLoading(false);
+        return;
+      }
+
+      // Prepare order items
+      const orderItems = cartItems.map(item => ({
+        id: item.id,
+        type: item.id.startsWith("store-") ? "product" : item.type,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        image: item.image,
+      }));
+
+      // Create order via API
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          items: orderItems,
+          totalAmount: cartTotal,
+          paymentMethod: "pending", // Will be set when payment is implemented
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erro ao criar pedido");
+      }
+
+      toast.success("Pedido realizado com sucesso!");
+      
+      if (data.xpAwarded > 0) {
+        toast.success(`+${data.xpAwarded} XP ganhos!`, { icon: "🎉" });
+      }
+
+      clearCart();
+      
+      // Redirect to portal orders
+      router.push("/pt-BR/portal?tab=carrinho");
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error(error instanceof Error ? error.message : "Erro ao processar pedido");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const cartItems = Object.values(items);
