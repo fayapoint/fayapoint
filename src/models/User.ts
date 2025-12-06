@@ -33,6 +33,33 @@ export interface IUser extends Document {
     badges: mongoose.Types.ObjectId[];
     points: number;
     level: number;
+    xp: number;
+    xpToNextLevel: number;
+    lastActiveDate?: Date;
+    weeklyXp: number;
+    monthlyXp: number;
+  };
+  gamification: {
+    achievements: {
+      id: string;
+      unlockedAt: Date;
+      progress?: number;
+    }[];
+    dailyChallenge?: {
+      id: string;
+      date: Date;
+      completed: boolean;
+      reward: number;
+    };
+    weeklyGoal: {
+      target: number;
+      current: number;
+      type: 'lessons' | 'hours' | 'xp';
+    };
+    streakFreeze: number;
+    totalImagesGenerated: number;
+    totalAiChats: number;
+    referrals: number;
   };
   preferences: {
     language: string;
@@ -109,6 +136,33 @@ const UserSchema = new Schema<IUser>({
     badges: [{ type: Schema.Types.ObjectId, ref: 'Badge' }],
     points: { type: Number, default: 0 },
     level: { type: Number, default: 1 },
+    xp: { type: Number, default: 0 },
+    xpToNextLevel: { type: Number, default: 100 },
+    lastActiveDate: Date,
+    weeklyXp: { type: Number, default: 0 },
+    monthlyXp: { type: Number, default: 0 },
+  },
+  gamification: {
+    achievements: [{
+      id: String,
+      unlockedAt: Date,
+      progress: Number,
+    }],
+    dailyChallenge: {
+      id: String,
+      date: Date,
+      completed: { type: Boolean, default: false },
+      reward: Number,
+    },
+    weeklyGoal: {
+      target: { type: Number, default: 5 },
+      current: { type: Number, default: 0 },
+      type: { type: String, enum: ['lessons', 'hours', 'xp'], default: 'lessons' },
+    },
+    streakFreeze: { type: Number, default: 0 },
+    totalImagesGenerated: { type: Number, default: 0 },
+    totalAiChats: { type: Number, default: 0 },
+    referrals: { type: Number, default: 0 },
   },
   preferences: {
     language: { type: String, default: 'pt-BR' },

@@ -1303,4 +1303,3 @@ export default function PortalPage() {
     </div>
   );
 }
-

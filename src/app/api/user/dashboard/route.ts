@@ -6,8 +6,24 @@ import Order from '@/models/Order';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
 import { getMongoClient } from '@/lib/database';
+import { ACHIEVEMENTS, DAILY_CHALLENGES, WEEKLY_MISSIONS } from '@/models/Achievement';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
+
+// XP required per level (exponential curve)
+const getXpForLevel = (level: number) => Math.floor(100 * Math.pow(1.5, level - 1));
+
+// Get a daily challenge based on date (deterministic)
+const getDailyChallenge = (date: Date) => {
+  const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000);
+  return DAILY_CHALLENGES[dayOfYear % DAILY_CHALLENGES.length];
+};
+
+// Get weekly mission for Pro users
+const getWeeklyMission = (date: Date) => {
+  const weekOfYear = Math.floor(date.getTime() / (7 * 24 * 60 * 60 * 1000));
+  return WEEKLY_MISSIONS[weekOfYear % WEEKLY_MISSIONS.length];
+};
 
 const RESOURCES_BY_PLAN = {
   free: [
@@ -172,12 +188,111 @@ export async function GET(request: Request) {
     const plan = user.subscription?.plan || 'free';
     const resources = RESOURCES_BY_PLAN[plan as keyof typeof RESOURCES_BY_PLAN] || RESOURCES_BY_PLAN.free;
 
+    // Get today's challenge
+    const today = new Date();
+    const dailyChallenge = getDailyChallenge(today);
+    const userDailyChallenge = user.gamification?.dailyChallenge;
+    const isSameDay = userDailyChallenge?.date && 
+      new Date(userDailyChallenge.date).toDateString() === today.toDateString();
+    
+    // Weekly mission for Pro+ users
+    const weeklyMission = ['pro', 'business'].includes(plan) ? getWeeklyMission(today) : null;
+
+    // Calculate level progress
+    const currentXp = user.progress?.xp || 0;
+    const currentLevel = user.progress?.level || 1;
+    const xpForCurrentLevel = getXpForLevel(currentLevel);
+    const xpForNextLevel = getXpForLevel(currentLevel + 1);
+    const levelProgress = Math.min(100, Math.floor(((currentXp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100));
+
+    // Fetch leaderboard (top 10 by weekly XP)
+    const leaderboard = await User.find({})
+      .select('name image progress.weeklyXp progress.level subscription.plan')
+      .sort({ 'progress.weeklyXp': -1 })
+      .limit(10)
+      .lean();
+
+    // Find user's rank
+    const userRank = await User.countDocuments({ 'progress.weeklyXp': { $gt: user.progress?.weeklyXp || 0 } }) + 1;
+
+    // Map achievements with unlock status
+    const allAchievements = Object.values(ACHIEVEMENTS).map(achievement => {
+      const userAchievement = user.gamification?.achievements?.find(
+        (a: { id: string }) => a.id === achievement.id
+      );
+      return {
+        ...achievement,
+        unlocked: !!userAchievement,
+        unlockedAt: userAchievement?.unlockedAt,
+        progress: userAchievement?.progress || 0,
+      };
+    });
+
+    // Recent activity (last 7 days of study)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const recentActivity = await CourseProgress.find({
+      userId,
+      lastAccessedAt: { $gte: sevenDaysAgo }
+    }).select('courseId lastAccessedAt progressPercent').lean();
+
+    // Generate streak calendar (last 30 days)
+    const streakCalendar = [];
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      const wasActive = recentActivity.some(a => 
+        new Date(a.lastAccessedAt).toISOString().split('T')[0] === dateStr
+      );
+      streakCalendar.push({ date: dateStr, active: wasActive });
+    }
+
     return NextResponse.json({
       user,
       courses: progress,
       orders: allOrders,
       resources,
       plan,
+      gamification: {
+        dailyChallenge: {
+          ...dailyChallenge,
+          completed: isSameDay ? userDailyChallenge?.completed : false,
+        },
+        weeklyMission,
+        weeklyGoal: user.gamification?.weeklyGoal || { target: 5, current: 0, type: 'lessons' },
+        streakFreeze: user.gamification?.streakFreeze || 0,
+        achievements: allAchievements,
+        totalAchievements: allAchievements.filter(a => a.unlocked).length,
+      },
+      stats: {
+        level: currentLevel,
+        xp: currentXp,
+        xpToNextLevel: xpForNextLevel,
+        levelProgress,
+        streak: user.progress?.currentStreak || 0,
+        longestStreak: user.progress?.longestStreak || 0,
+        imagesGenerated: user.gamification?.totalImagesGenerated || 0,
+        aiChats: user.gamification?.totalAiChats || 0,
+      },
+      leaderboard: {
+        users: leaderboard.map((u, idx) => ({
+          rank: idx + 1,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          id: (u as any)._id,
+          name: u.name,
+          image: u.image,
+          weeklyXp: u.progress?.weeklyXp || 0,
+          level: u.progress?.level || 1,
+          plan: u.subscription?.plan || 'free',
+          isCurrentUser: u._id?.toString() === userId,
+        })),
+        userRank,
+      },
+      activity: {
+        streakCalendar,
+        recentCourses: recentActivity.slice(0, 5),
+      },
     });
 
   } catch (error) {
