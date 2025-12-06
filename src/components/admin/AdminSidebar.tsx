@@ -21,12 +21,15 @@ import {
   CreditCard,
   Layers,
   Zap,
+  Search,
+  Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAdmin } from "@/contexts/AdminContext";
 
 const MENU_ITEMS = [
   { id: "dashboard", path: "/admin", icon: LayoutDashboard, label: "Dashboard" },
+  { id: "dropshipping", path: "/admin/dropshipping", icon: Globe, label: "Dropshipping", badge: "AI" },
   { id: "users", path: "/admin/users", icon: Users, label: "Usuários" },
   { id: "products", path: "/admin/products", icon: Package, label: "Produtos" },
   { id: "orders", path: "/admin/orders", icon: ShoppingCart, label: "Pedidos" },
@@ -170,9 +173,17 @@ export function AdminSidebar() {
                   />
                   
                   {!isCollapsed && (
-                    <span className="relative z-10 flex-1 text-sm font-medium">
-                      {item.label}
-                    </span>
+                    <>
+                      <span className="relative z-10 flex-1 text-sm font-medium">
+                        {item.label}
+                      </span>
+                      {/* Badge for special items */}
+                      {'badge' in item && item.badge && (
+                        <span className="relative z-10 px-1.5 py-0.5 text-[10px] font-bold rounded bg-gradient-to-r from-emerald-500 to-cyan-500 text-white">
+                          {item.badge}
+                        </span>
+                      )}
+                    </>
                   )}
 
                   {/* Active indicator bar */}
