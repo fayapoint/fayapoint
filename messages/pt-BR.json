@@ -1045,10 +1045,6 @@
       { "href": "/recursos/glossario", "label": "Glossário IA" }
     ]
   },
-  "FAQ": {
-    "title": "Perguntas Frequentes",
-    "description": "Conteúdo em breve."
-  },
   "CoursesByTool": {
     "title": "Cursos por Ferramenta",
     "cta": "Ver cursos de {tool}",
@@ -1720,6 +1716,289 @@
         "primary": "Montar meu pipeline",
         "secondary": "Falar agora"
       }
+    }
+  },
+  "FAQ": {
+    "badge": "Perguntas Frequentes",
+    "title": "Dúvidas? Temos Respostas",
+    "description": "Encontre respostas para as perguntas mais comuns sobre nossa plataforma, cursos e serviços.",
+    "categories": [
+      {
+        "title": "Sobre a Plataforma",
+        "items": [
+          { "question": "O que é a FayaPoint AI Academy?", "answer": "A FayaPoint é uma plataforma completa de educação em Inteligência Artificial, oferecendo cursos práticos, ferramentas de IA e consultoria especializada para profissionais e empresas." },
+          { "question": "Preciso de conhecimento prévio em programação?", "answer": "Não! Nossos cursos são projetados para todos os níveis. Temos trilhas específicas para iniciantes que não exigem conhecimento técnico prévio." },
+          { "question": "Como funciona o acesso aos cursos?", "answer": "Após a inscrição, você tem acesso imediato a todo o conteúdo do curso através do nosso portal. O acesso é vitalício para cursos pagos." }
+        ]
+      },
+      {
+        "title": "Pagamentos e Planos",
+        "items": [
+          { "question": "Quais formas de pagamento são aceitas?", "answer": "Aceitamos cartões de crédito (Visa, Mastercard, Elo), PIX e boleto bancário. Parcelamos em até 12x sem juros." },
+          { "question": "Existe garantia de reembolso?", "answer": "Sim! Oferecemos garantia de 7 dias. Se não estiver satisfeito, devolvemos 100% do valor investido." },
+          { "question": "Posso cancelar minha assinatura a qualquer momento?", "answer": "Sim, você pode cancelar sua assinatura quando quiser. Seu acesso permanece ativo até o final do período já pago." }
+        ]
+      },
+      {
+        "title": "Studio AI e Ferramentas",
+        "items": [
+          { "question": "O que é o Studio AI?", "answer": "O Studio AI é nossa ferramenta de geração de imagens com inteligência artificial. Você pode criar arte única usando prompts de texto." },
+          { "question": "Quantas imagens posso gerar?", "answer": "Usuários gratuitos podem gerar 1 imagem. Planos pagos têm limites maiores: Starter (50/mês), Pro e Business (ilimitado)." },
+          { "question": "Posso usar as imagens comercialmente?", "answer": "Sim! Todas as imagens geradas no Studio AI são de sua propriedade e podem ser usadas comercialmente." }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Não encontrou sua resposta?",
+      "description": "Nossa equipe está pronta para ajudar com qualquer dúvida.",
+      "button": "Falar com Suporte"
+    }
+  },
+  "Terms": {
+    "badge": "Documento Legal",
+    "title": "Termos de Uso",
+    "lastUpdated": "Última atualização: Dezembro 2024",
+    "intro": "Ao acessar e usar a plataforma FayaPoint AI Academy, você concorda com os termos e condições descritos neste documento. Leia atentamente antes de utilizar nossos serviços.",
+    "sections": [
+      { "title": "Aceitação dos Termos", "content": "Ao criar uma conta ou usar nossos serviços, você confirma que leu, entendeu e concorda com estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não deve usar nossa plataforma." },
+      { "title": "Descrição dos Serviços", "content": "A FayaPoint oferece uma plataforma de educação em Inteligência Artificial, incluindo cursos online, ferramentas de IA (como o Studio AI), comunidade e serviços de consultoria. Reservamo-nos o direito de modificar, suspender ou descontinuar qualquer serviço a qualquer momento." },
+      { "title": "Conta do Usuário", "content": "Você é responsável por manter a confidencialidade de sua senha e conta. Todas as atividades realizadas sob sua conta são de sua responsabilidade. Notifique-nos imediatamente sobre qualquer uso não autorizado." },
+      { "title": "Propriedade Intelectual", "content": "Todo o conteúdo da plataforma, incluindo cursos, vídeos, textos e materiais, é propriedade da FayaPoint ou seus licenciadores. É proibida a reprodução, distribuição ou modificação sem autorização expressa." },
+      { "title": "Uso Aceitável", "content": "Você concorda em usar a plataforma apenas para fins legais e de acordo com estes termos. É proibido compartilhar credenciais, baixar conteúdo para redistribuição, usar automações para acessar a plataforma ou violar direitos de terceiros." },
+      { "title": "Pagamentos e Reembolsos", "content": "Os preços são exibidos em Reais (BRL). Oferecemos garantia de 7 dias para reembolso integral. Após esse período, não há reembolso para cursos acessados. Assinaturas podem ser canceladas a qualquer momento." },
+      { "title": "Limitação de Responsabilidade", "content": "A FayaPoint não se responsabiliza por danos indiretos, incidentais ou consequenciais. Nossa responsabilidade máxima é limitada ao valor pago pelo usuário nos últimos 12 meses." },
+      { "title": "Modificações", "content": "Podemos atualizar estes termos periodicamente. Notificaremos sobre mudanças significativas por email ou através da plataforma. O uso continuado após as alterações constitui aceitação dos novos termos." }
+    ]
+  },
+  "Privacy": {
+    "badge": "Privacidade & LGPD",
+    "title": "Política de Privacidade",
+    "lastUpdated": "Última atualização: Dezembro 2024",
+    "lgpdCompliance": "Em conformidade com a Lei Geral de Proteção de Dados (LGPD)",
+    "intro": "A FayaPoint valoriza sua privacidade. Esta política descreve como coletamos, usamos e protegemos seus dados pessoais em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).",
+    "sections": [
+      { "title": "Dados que Coletamos", "content": "Coletamos dados que você fornece diretamente (nome, email, dados de pagamento), dados de uso (páginas visitadas, progresso em cursos), dados técnicos (IP, navegador, dispositivo) e cookies para melhorar sua experiência." },
+      { "title": "Como Usamos seus Dados", "content": "Utilizamos seus dados para fornecer e melhorar nossos serviços, processar pagamentos, enviar comunicações relevantes, personalizar sua experiência, prevenir fraudes e cumprir obrigações legais." },
+      { "title": "Base Legal", "content": "O tratamento de dados é realizado com base no consentimento do titular, execução de contrato, cumprimento de obrigação legal ou interesse legítimo, conforme aplicável a cada situação." },
+      { "title": "Compartilhamento de Dados", "content": "Não vendemos seus dados. Compartilhamos apenas com processadores de pagamento, provedores de infraestrutura, ferramentas de análise e quando exigido por lei. Todos os parceiros seguem padrões de segurança adequados." },
+      { "title": "Seus Direitos (LGPD)", "content": "Você tem direito a: acessar seus dados, corrigir dados incompletos, solicitar anonimização ou exclusão, revogar consentimento, solicitar portabilidade e obter informações sobre compartilhamento. Para exercer esses direitos, contate-nos." },
+      { "title": "Segurança", "content": "Implementamos medidas técnicas e organizacionais para proteger seus dados, incluindo criptografia, controles de acesso, monitoramento e backups regulares." },
+      { "title": "Retenção de Dados", "content": "Mantemos seus dados enquanto sua conta estiver ativa ou conforme necessário para cumprir obrigações legais. Após exclusão da conta, dados são removidos em até 30 dias, exceto quando exigido por lei." },
+      { "title": "Contato do DPO", "content": "Para questões sobre privacidade ou exercício de direitos LGPD, entre em contato com nosso Encarregado de Proteção de Dados através do email: privacidade@fayapoint.com" }
+    ]
+  },
+  "HelpCenter": {
+    "badge": "Central de Ajuda",
+    "title": "Como Podemos Ajudar?",
+    "description": "Encontre guias, tutoriais e suporte para aproveitar ao máximo a plataforma.",
+    "viewMore": "Ver mais",
+    "categories": [
+      { "icon": "BookOpen", "title": "Primeiros Passos", "description": "Guias para começar a usar a plataforma rapidamente", "href": "/recursos/guias" },
+      { "icon": "Video", "title": "Tutoriais em Vídeo", "description": "Assista demonstrações práticas de funcionalidades", "href": "/cursos" },
+      { "icon": "FileText", "title": "Documentação", "description": "Documentação técnica e referências de API", "href": "/api-docs" },
+      { "icon": "Users", "title": "Comunidade", "description": "Conecte-se com outros usuários e tire dúvidas", "href": "/comunidade" },
+      { "icon": "Zap", "title": "Dicas e Truques", "description": "Aprenda técnicas avançadas de IA", "href": "/blog" },
+      { "icon": "MessageCircle", "title": "FAQ", "description": "Respostas para perguntas frequentes", "href": "/faq" }
+    ],
+    "support": {
+      "title": "Precisa de Ajuda Personalizada?",
+      "description": "Nossa equipe de suporte está disponível para resolver suas dúvidas.",
+      "contactButton": "Falar com Suporte",
+      "faqButton": "Ver FAQ"
+    }
+  },
+  "Status": {
+    "badge": "Status do Sistema",
+    "title": "Status da Plataforma",
+    "description": "Monitore a disponibilidade dos nossos serviços em tempo real.",
+    "servicesTitle": "Serviços",
+    "allOperational": "Todos os sistemas operacionais",
+    "someIssues": "Alguns serviços com problemas",
+    "uptime": "Uptime",
+    "lastUpdated": "Última atualização",
+    "statusLabels": {
+      "operational": "Operacional",
+      "degraded": "Degradado",
+      "outage": "Fora do ar"
+    },
+    "services": [
+      { "name": "Plataforma Web", "status": "operational", "uptime": "99.9%" },
+      { "name": "API de Cursos", "status": "operational", "uptime": "99.8%" },
+      { "name": "Studio AI", "status": "operational", "uptime": "99.5%" },
+      { "name": "Sistema de Pagamentos", "status": "operational", "uptime": "99.9%" },
+      { "name": "Autenticação", "status": "operational", "uptime": "99.9%" },
+      { "name": "CDN de Vídeos", "status": "operational", "uptime": "99.7%" }
+    ]
+  },
+  "Careers": {
+    "badge": "Trabalhe Conosco",
+    "title": "Construa o Futuro da IA no Brasil",
+    "description": "Junte-se a uma equipe apaixonada por educação e tecnologia. Estamos sempre buscando talentos excepcionais.",
+    "benefitsTitle": "Por que FayaPoint?",
+    "benefits": [
+      { "icon": "Laptop", "title": "100% Remoto", "description": "Trabalhe de onde quiser, com flexibilidade total de horários." },
+      { "icon": "Heart", "title": "Saúde & Bem-estar", "description": "Plano de saúde, auxílio academia e suporte à saúde mental." },
+      { "icon": "Zap", "title": "Aprendizado Contínuo", "description": "Acesso gratuito a todos os cursos e budget para conferências." },
+      { "icon": "Users", "title": "Cultura Colaborativa", "description": "Time diverso, comunicação aberta e decisões baseadas em dados." },
+      { "icon": "Coffee", "title": "Equipamentos", "description": "Setup completo para home office com os melhores equipamentos." },
+      { "icon": "Clock", "title": "Férias Flexíveis", "description": "Política de férias flexíveis para você descansar quando precisar." }
+    ],
+    "positionsTitle": "Vagas Abertas",
+    "positions": [],
+    "noPositions": "No momento não temos vagas abertas. Envie seu currículo para futuras oportunidades!",
+    "cta": {
+      "title": "Não encontrou sua vaga?",
+      "description": "Estamos sempre interessados em conhecer talentos. Envie seu currículo.",
+      "button": "Enviar Currículo"
+    }
+  },
+  "Partnerships": {
+    "badge": "Parcerias",
+    "title": "Cresça Conosco",
+    "description": "Explore oportunidades de parceria e leve a educação em IA para sua organização.",
+    "types": [
+      {
+        "icon": "Building",
+        "title": "Empresas",
+        "description": "Treine sua equipe com programas corporativos personalizados.",
+        "benefits": ["Cursos customizados para sua empresa", "Dashboard de progresso dos colaboradores", "Certificados corporativos", "Suporte dedicado"]
+      },
+      {
+        "icon": "GraduationCap",
+        "title": "Instituições de Ensino",
+        "description": "Integre nosso conteúdo ao currículo da sua instituição.",
+        "benefits": ["Licenças educacionais com desconto", "Materiais didáticos complementares", "Co-certificação", "Laboratórios práticos"]
+      },
+      {
+        "icon": "Megaphone",
+        "title": "Influenciadores",
+        "description": "Divulgue nossos cursos e ganhe comissões atrativas.",
+        "benefits": ["Comissões de até 40%", "Materiais promocionais exclusivos", "Dashboard de performance", "Pagamentos mensais"]
+      },
+      {
+        "icon": "Handshake",
+        "title": "Integradores",
+        "description": "Revenda nossos serviços de IA e automação.",
+        "benefits": ["Margens competitivas", "Treinamento comercial", "Leads qualificados", "Suporte técnico"]
+      }
+    ],
+    "cta": {
+      "title": "Vamos Conversar?",
+      "description": "Entre em contato para discutir como podemos trabalhar juntos.",
+      "button": "Iniciar Conversa"
+    }
+  },
+  "Affiliates": {
+    "badge": "Programa de Afiliados",
+    "title": "Ganhe Indicando",
+    "description": "Monetize sua audiência recomendando os melhores cursos de IA do Brasil.",
+    "commissionRate": "30%",
+    "commissionLabel": "de comissão por venda",
+    "howItWorksTitle": "Como Funciona",
+    "steps": [
+      { "title": "Cadastre-se", "description": "Crie sua conta gratuita de afiliado em menos de 2 minutos." },
+      { "title": "Compartilhe", "description": "Use seu link exclusivo para divulgar cursos nas redes sociais, blog ou email." },
+      { "title": "Ganhe", "description": "Receba comissões por cada venda realizada através do seu link." }
+    ],
+    "benefitsTitle": "Vantagens",
+    "benefits": [
+      { "icon": "Percent", "title": "30% de Comissão", "description": "Uma das maiores taxas do mercado de educação." },
+      { "icon": "Clock", "title": "Cookie de 60 dias", "description": "Você recebe comissão mesmo se a compra for depois." },
+      { "icon": "BarChart", "title": "Dashboard Completo", "description": "Acompanhe cliques, conversões e ganhos em tempo real." },
+      { "icon": "Gift", "title": "Materiais Prontos", "description": "Banners, copies e criativos para suas campanhas." },
+      { "icon": "DollarSign", "title": "Pagamento Mensal", "description": "Receba via PIX todo dia 10 sem mínimo." },
+      { "icon": "Users", "title": "Suporte Dedicado", "description": "Time de afiliados pronto para ajudar você a vender mais." }
+    ],
+    "cta": {
+      "title": "Comece a Ganhar Hoje",
+      "description": "Cadastre-se gratuitamente e comece a monetizar sua audiência.",
+      "button": "Tornar-se Afiliado"
+    }
+  },
+  "Instructors": {
+    "badge": "Corpo Docente",
+    "title": "Aprenda com Especialistas",
+    "description": "Nossos instrutores são profissionais atuantes no mercado, com experiência real em projetos de IA.",
+    "list": [
+      {
+        "name": "Ricardo Faya",
+        "role": "Fundador & Instrutor Principal",
+        "bio": "Especialista em IA com mais de 15 anos de experiência em tecnologia. Formou milhares de profissionais em automação e inteligência artificial.",
+        "image": "/rwx1.jpg",
+        "expertise": ["ChatGPT", "Automação", "Agentes de IA"],
+        "linkedin": "https://linkedin.com/in/ricardofaya"
+      }
+    ],
+    "cta": {
+      "title": "Quer ser Instrutor?",
+      "description": "Se você é especialista em IA e quer compartilhar conhecimento, queremos conhecer você.",
+      "button": "Candidatar-se"
+    }
+  },
+  "Glossary": {
+    "badge": "Glossário de IA",
+    "title": "Glossário de Inteligência Artificial",
+    "description": "Entenda os principais termos e conceitos do mundo da IA.",
+    "searchPlaceholder": "Buscar termo...",
+    "allCategories": "Todas",
+    "noResults": "Nenhum termo encontrado.",
+    "categories": ["Modelos", "Técnicas", "Ferramentas", "Conceitos"],
+    "terms": [
+      { "term": "API", "definition": "Interface de Programação de Aplicações. Permite que diferentes sistemas se comuniquem entre si.", "category": "Conceitos" },
+      { "term": "ChatGPT", "definition": "Modelo de linguagem da OpenAI capaz de gerar texto similar ao humano em conversas.", "category": "Modelos" },
+      { "term": "Claude", "definition": "Assistente de IA desenvolvido pela Anthropic, focado em segurança e utilidade.", "category": "Modelos" },
+      { "term": "Embedding", "definition": "Representação numérica de texto que captura seu significado semântico.", "category": "Técnicas" },
+      { "term": "Fine-tuning", "definition": "Processo de ajustar um modelo pré-treinado para uma tarefa específica.", "category": "Técnicas" },
+      { "term": "GPT", "definition": "Generative Pre-trained Transformer. Arquitetura de modelo de linguagem da OpenAI.", "category": "Modelos" },
+      { "term": "Hallucination", "definition": "Quando um modelo de IA gera informações falsas ou inventadas com aparência de verdade.", "category": "Conceitos" },
+      { "term": "LLM", "definition": "Large Language Model. Modelos de linguagem treinados em grandes quantidades de texto.", "category": "Modelos" },
+      { "term": "n8n", "definition": "Plataforma open-source de automação de workflows e integrações.", "category": "Ferramentas" },
+      { "term": "Prompt", "definition": "Instrução ou pergunta dada a um modelo de IA para orientar sua resposta.", "category": "Conceitos" },
+      { "term": "Prompt Engineering", "definition": "Arte de criar prompts eficazes para obter melhores resultados de modelos de IA.", "category": "Técnicas" },
+      { "term": "RAG", "definition": "Retrieval-Augmented Generation. Combina busca de informações com geração de texto.", "category": "Técnicas" },
+      { "term": "Token", "definition": "Unidade básica de texto processada por modelos de linguagem (pode ser palavra ou parte dela).", "category": "Conceitos" },
+      { "term": "Transformer", "definition": "Arquitetura de rede neural que revolucionou o processamento de linguagem natural.", "category": "Conceitos" },
+      { "term": "Vector Database", "definition": "Banco de dados otimizado para armazenar e buscar embeddings vetoriais.", "category": "Ferramentas" },
+      { "term": "Zero-shot", "definition": "Capacidade de um modelo realizar tarefas sem exemplos prévios específicos.", "category": "Técnicas" }
+    ]
+  },
+  "Guides": {
+    "badge": "Guias Gratuitos",
+    "title": "Guias Práticos de IA",
+    "description": "Materiais completos para você dominar ferramentas e técnicas de Inteligência Artificial.",
+    "featured": "Destaque",
+    "list": [
+      { "title": "ChatGPT para Iniciantes", "description": "Aprenda a usar o ChatGPT de forma eficiente para trabalho e estudos.", "category": "Iniciante", "readTime": "15 min", "downloads": 12500, "featured": true },
+      { "title": "Prompt Engineering Avançado", "description": "Técnicas avançadas para extrair o máximo dos modelos de linguagem.", "category": "Avançado", "readTime": "25 min", "downloads": 8300, "featured": true },
+      { "title": "Automação com n8n", "description": "Crie workflows automatizados sem código usando n8n.", "category": "Intermediário", "readTime": "20 min", "downloads": 6700, "featured": false },
+      { "title": "Introdução a Agentes de IA", "description": "Entenda como funcionam agentes autônomos e como implementá-los.", "category": "Avançado", "readTime": "30 min", "downloads": 4200, "featured": false },
+      { "title": "IA para Criação de Conteúdo", "description": "Use IA para criar textos, imagens e vídeos de alta qualidade.", "category": "Intermediário", "readTime": "18 min", "downloads": 9100, "featured": false },
+      { "title": "RAG na Prática", "description": "Implemente sistemas de busca semântica com geração aumentada.", "category": "Avançado", "readTime": "35 min", "downloads": 3800, "featured": false }
+    ],
+    "cta": {
+      "title": "Quer Aprender Mais?",
+      "description": "Acesse nossos cursos completos para um aprendizado estruturado.",
+      "button": "Ver Cursos"
+    }
+  },
+  "Templates": {
+    "badge": "Templates & Prompts",
+    "title": "Templates Prontos para Usar",
+    "description": "Copie e use prompts testados para diversas situações do dia a dia.",
+    "copyPrompt": "Copiar Prompt",
+    "copied": "Copiado!",
+    "list": [
+      { "title": "Resumidor de Textos", "description": "Resuma documentos longos mantendo as informações principais.", "category": "Produtividade", "tool": "ChatGPT", "prompt": "Resuma o seguinte texto em 3 parágrafos, destacando os pontos principais e conclusões:\n\n[COLE O TEXTO AQUI]" },
+      { "title": "Gerador de Emails", "description": "Crie emails profissionais para diferentes situações.", "category": "Comunicação", "tool": "ChatGPT", "prompt": "Escreva um email profissional com o seguinte objetivo: [OBJETIVO]\n\nTom: [formal/informal]\nDestinatário: [QUEM]\nContexto adicional: [CONTEXTO]" },
+      { "title": "Análise de Código", "description": "Revise e melhore seu código com sugestões de IA.", "category": "Desenvolvimento", "tool": "Claude", "prompt": "Analise o código abaixo e forneça:\n1. Bugs potenciais\n2. Melhorias de performance\n3. Sugestões de refatoração\n4. Boas práticas aplicáveis\n\n```\n[COLE O CÓDIGO AQUI]\n```" },
+      { "title": "Criador de Posts", "description": "Gere posts engajadores para redes sociais.", "category": "Marketing", "tool": "ChatGPT", "prompt": "Crie 3 variações de post para [REDE SOCIAL] sobre:\nTema: [TEMA]\nTom: [profissional/casual/inspirador]\nObjetivo: [engajamento/vendas/awareness]\nIncluir: hashtags relevantes e CTA" },
+      { "title": "Roteiro de Vídeo", "description": "Estruture roteiros para YouTube ou TikTok.", "category": "Conteúdo", "tool": "ChatGPT", "prompt": "Crie um roteiro de vídeo de [DURAÇÃO] sobre [TEMA].\n\nFormato: [YouTube/TikTok/Reels]\nPúblico: [DESCRIÇÃO DO PÚBLICO]\n\nInclua: gancho inicial, desenvolvimento em tópicos e CTA final." },
+      { "title": "Plano de Estudos", "description": "Monte um cronograma personalizado de aprendizado.", "category": "Educação", "tool": "ChatGPT", "prompt": "Crie um plano de estudos de [SEMANAS] semanas para aprender [TEMA].\n\nNível atual: [iniciante/intermediário/avançado]\nHoras disponíveis por semana: [HORAS]\nObjetivo final: [OBJETIVO]\n\nInclua recursos recomendados e marcos de progresso." }
+    ],
+    "cta": {
+      "title": "Domine a Arte dos Prompts",
+      "description": "Aprenda técnicas avançadas de prompt engineering em nossos cursos.",
+      "button": "Explorar Cursos"
     }
   }
 }

@@ -985,10 +985,6 @@
       { "href": "/recursos/glossario", "label": "AI Glossary" }
     ]
   },
-  "FAQ": {
-    "title": "Frequently Asked Questions",
-    "description": "Content coming soon."
-  },
   "CoursesByTool": {
     "title": "Courses by Tool",
     "cta": "View courses for {tool}",
@@ -1660,6 +1656,289 @@
         "primary": "Build my pipeline",
         "secondary": "Talk now"
       }
+    }
+  },
+  "FAQ": {
+    "badge": "Frequently Asked Questions",
+    "title": "Questions? We Have Answers",
+    "description": "Find answers to the most common questions about our platform, courses and services.",
+    "categories": [
+      {
+        "title": "About the Platform",
+        "items": [
+          { "question": "What is FayaPoint AI Academy?", "answer": "FayaPoint is a complete AI education platform, offering practical courses, AI tools and specialized consulting for professionals and companies." },
+          { "question": "Do I need prior programming knowledge?", "answer": "No! Our courses are designed for all levels. We have specific tracks for beginners that don't require prior technical knowledge." },
+          { "question": "How does course access work?", "answer": "After enrollment, you have immediate access to all course content through our portal. Access is lifetime for paid courses." }
+        ]
+      },
+      {
+        "title": "Payments & Plans",
+        "items": [
+          { "question": "What payment methods are accepted?", "answer": "We accept credit cards (Visa, Mastercard), PIX and bank slip. We offer up to 12 interest-free installments." },
+          { "question": "Is there a refund guarantee?", "answer": "Yes! We offer a 7-day guarantee. If you're not satisfied, we refund 100% of the amount invested." },
+          { "question": "Can I cancel my subscription anytime?", "answer": "Yes, you can cancel your subscription whenever you want. Your access remains active until the end of the already paid period." }
+        ]
+      },
+      {
+        "title": "Studio AI & Tools",
+        "items": [
+          { "question": "What is Studio AI?", "answer": "Studio AI is our AI-powered image generation tool. You can create unique art using text prompts." },
+          { "question": "How many images can I generate?", "answer": "Free users can generate 1 image. Paid plans have higher limits: Starter (50/month), Pro and Business (unlimited)." },
+          { "question": "Can I use the images commercially?", "answer": "Yes! All images generated in Studio AI are your property and can be used commercially." }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Didn't find your answer?",
+      "description": "Our team is ready to help with any questions.",
+      "button": "Contact Support"
+    }
+  },
+  "Terms": {
+    "badge": "Legal Document",
+    "title": "Terms of Use",
+    "lastUpdated": "Last updated: December 2024",
+    "intro": "By accessing and using the FayaPoint AI Academy platform, you agree to the terms and conditions described in this document. Read carefully before using our services.",
+    "sections": [
+      { "title": "Acceptance of Terms", "content": "By creating an account or using our services, you confirm that you have read, understood and agree to these Terms of Use. If you do not agree with any part of these terms, you should not use our platform." },
+      { "title": "Description of Services", "content": "FayaPoint offers an AI education platform, including online courses, AI tools (such as Studio AI), community and consulting services. We reserve the right to modify, suspend or discontinue any service at any time." },
+      { "title": "User Account", "content": "You are responsible for maintaining the confidentiality of your password and account. All activities carried out under your account are your responsibility. Notify us immediately of any unauthorized use." },
+      { "title": "Intellectual Property", "content": "All platform content, including courses, videos, texts and materials, is the property of FayaPoint or its licensors. Reproduction, distribution or modification without express authorization is prohibited." },
+      { "title": "Acceptable Use", "content": "You agree to use the platform only for legal purposes and in accordance with these terms. It is prohibited to share credentials, download content for redistribution, use automation to access the platform or violate third-party rights." },
+      { "title": "Payments and Refunds", "content": "Prices are displayed in local currency. We offer a 7-day guarantee for full refund. After this period, there is no refund for accessed courses. Subscriptions can be canceled at any time." },
+      { "title": "Limitation of Liability", "content": "FayaPoint is not responsible for indirect, incidental or consequential damages. Our maximum liability is limited to the amount paid by the user in the last 12 months." },
+      { "title": "Modifications", "content": "We may update these terms periodically. We will notify you of significant changes by email or through the platform. Continued use after changes constitutes acceptance of the new terms." }
+    ]
+  },
+  "Privacy": {
+    "badge": "Privacy & Data Protection",
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: December 2024",
+    "lgpdCompliance": "In compliance with data protection regulations",
+    "intro": "FayaPoint values your privacy. This policy describes how we collect, use and protect your personal data in compliance with applicable data protection laws.",
+    "sections": [
+      { "title": "Data We Collect", "content": "We collect data you provide directly (name, email, payment data), usage data (pages visited, course progress), technical data (IP, browser, device) and cookies to improve your experience." },
+      { "title": "How We Use Your Data", "content": "We use your data to provide and improve our services, process payments, send relevant communications, personalize your experience, prevent fraud and comply with legal obligations." },
+      { "title": "Legal Basis", "content": "Data processing is carried out based on the consent of the holder, contract execution, compliance with legal obligation or legitimate interest, as applicable to each situation." },
+      { "title": "Data Sharing", "content": "We do not sell your data. We only share with payment processors, infrastructure providers, analytics tools and when required by law. All partners follow adequate security standards." },
+      { "title": "Your Rights", "content": "You have the right to: access your data, correct incomplete data, request anonymization or deletion, revoke consent, request portability and obtain information about sharing. To exercise these rights, contact us." },
+      { "title": "Security", "content": "We implement technical and organizational measures to protect your data, including encryption, access controls, monitoring and regular backups." },
+      { "title": "Data Retention", "content": "We keep your data while your account is active or as necessary to comply with legal obligations. After account deletion, data is removed within 30 days, except when required by law." },
+      { "title": "DPO Contact", "content": "For privacy questions or to exercise data rights, contact our Data Protection Officer at: privacy@fayapoint.com" }
+    ]
+  },
+  "HelpCenter": {
+    "badge": "Help Center",
+    "title": "How Can We Help?",
+    "description": "Find guides, tutorials and support to get the most out of the platform.",
+    "viewMore": "View more",
+    "categories": [
+      { "icon": "BookOpen", "title": "Getting Started", "description": "Guides to start using the platform quickly", "href": "/recursos/guias" },
+      { "icon": "Video", "title": "Video Tutorials", "description": "Watch practical demonstrations of features", "href": "/cursos" },
+      { "icon": "FileText", "title": "Documentation", "description": "Technical documentation and API references", "href": "/api-docs" },
+      { "icon": "Users", "title": "Community", "description": "Connect with other users and ask questions", "href": "/comunidade" },
+      { "icon": "Zap", "title": "Tips & Tricks", "description": "Learn advanced AI techniques", "href": "/blog" },
+      { "icon": "MessageCircle", "title": "FAQ", "description": "Answers to frequently asked questions", "href": "/faq" }
+    ],
+    "support": {
+      "title": "Need Personalized Help?",
+      "description": "Our support team is available to answer your questions.",
+      "contactButton": "Contact Support",
+      "faqButton": "View FAQ"
+    }
+  },
+  "Status": {
+    "badge": "System Status",
+    "title": "Platform Status",
+    "description": "Monitor the availability of our services in real time.",
+    "servicesTitle": "Services",
+    "allOperational": "All systems operational",
+    "someIssues": "Some services with issues",
+    "uptime": "Uptime",
+    "lastUpdated": "Last updated",
+    "statusLabels": {
+      "operational": "Operational",
+      "degraded": "Degraded",
+      "outage": "Outage"
+    },
+    "services": [
+      { "name": "Web Platform", "status": "operational", "uptime": "99.9%" },
+      { "name": "Courses API", "status": "operational", "uptime": "99.8%" },
+      { "name": "Studio AI", "status": "operational", "uptime": "99.5%" },
+      { "name": "Payment System", "status": "operational", "uptime": "99.9%" },
+      { "name": "Authentication", "status": "operational", "uptime": "99.9%" },
+      { "name": "Video CDN", "status": "operational", "uptime": "99.7%" }
+    ]
+  },
+  "Careers": {
+    "badge": "Work With Us",
+    "title": "Build the Future of AI in Brazil",
+    "description": "Join a team passionate about education and technology. We're always looking for exceptional talent.",
+    "benefitsTitle": "Why FayaPoint?",
+    "benefits": [
+      { "icon": "Laptop", "title": "100% Remote", "description": "Work from anywhere with full schedule flexibility." },
+      { "icon": "Heart", "title": "Health & Wellbeing", "description": "Health plan, gym stipend and mental health support." },
+      { "icon": "Zap", "title": "Continuous Learning", "description": "Free access to all courses and budget for conferences." },
+      { "icon": "Users", "title": "Collaborative Culture", "description": "Diverse team, open communication and data-driven decisions." },
+      { "icon": "Coffee", "title": "Equipment", "description": "Complete home office setup with the best equipment." },
+      { "icon": "Clock", "title": "Flexible PTO", "description": "Flexible vacation policy so you can rest when needed." }
+    ],
+    "positionsTitle": "Open Positions",
+    "positions": [],
+    "noPositions": "We currently have no open positions. Send your resume for future opportunities!",
+    "cta": {
+      "title": "Didn't find your position?",
+      "description": "We're always interested in meeting talent. Send your resume.",
+      "button": "Send Resume"
+    }
+  },
+  "Partnerships": {
+    "badge": "Partnerships",
+    "title": "Grow With Us",
+    "description": "Explore partnership opportunities and bring AI education to your organization.",
+    "types": [
+      {
+        "icon": "Building",
+        "title": "Companies",
+        "description": "Train your team with customized corporate programs.",
+        "benefits": ["Courses customized for your company", "Employee progress dashboard", "Corporate certificates", "Dedicated support"]
+      },
+      {
+        "icon": "GraduationCap",
+        "title": "Educational Institutions",
+        "description": "Integrate our content into your institution's curriculum.",
+        "benefits": ["Discounted educational licenses", "Complementary teaching materials", "Co-certification", "Practical labs"]
+      },
+      {
+        "icon": "Megaphone",
+        "title": "Influencers",
+        "description": "Promote our courses and earn attractive commissions.",
+        "benefits": ["Up to 40% commissions", "Exclusive promotional materials", "Performance dashboard", "Monthly payments"]
+      },
+      {
+        "icon": "Handshake",
+        "title": "Integrators",
+        "description": "Resell our AI and automation services.",
+        "benefits": ["Competitive margins", "Sales training", "Qualified leads", "Technical support"]
+      }
+    ],
+    "cta": {
+      "title": "Let's Talk?",
+      "description": "Get in touch to discuss how we can work together.",
+      "button": "Start Conversation"
+    }
+  },
+  "Affiliates": {
+    "badge": "Affiliate Program",
+    "title": "Earn by Referring",
+    "description": "Monetize your audience by recommending the best AI courses in Brazil.",
+    "commissionRate": "30%",
+    "commissionLabel": "commission per sale",
+    "howItWorksTitle": "How It Works",
+    "steps": [
+      { "title": "Sign Up", "description": "Create your free affiliate account in less than 2 minutes." },
+      { "title": "Share", "description": "Use your exclusive link to promote courses on social media, blog or email." },
+      { "title": "Earn", "description": "Receive commissions for each sale made through your link." }
+    ],
+    "benefitsTitle": "Benefits",
+    "benefits": [
+      { "icon": "Percent", "title": "30% Commission", "description": "One of the highest rates in the education market." },
+      { "icon": "Clock", "title": "60-Day Cookie", "description": "You receive commission even if the purchase is later." },
+      { "icon": "BarChart", "title": "Complete Dashboard", "description": "Track clicks, conversions and earnings in real time." },
+      { "icon": "Gift", "title": "Ready Materials", "description": "Banners, copies and creatives for your campaigns." },
+      { "icon": "DollarSign", "title": "Monthly Payment", "description": "Receive via transfer every 10th with no minimum." },
+      { "icon": "Users", "title": "Dedicated Support", "description": "Affiliate team ready to help you sell more." }
+    ],
+    "cta": {
+      "title": "Start Earning Today",
+      "description": "Sign up for free and start monetizing your audience.",
+      "button": "Become an Affiliate"
+    }
+  },
+  "Instructors": {
+    "badge": "Faculty",
+    "title": "Learn from Experts",
+    "description": "Our instructors are working professionals with real experience in AI projects.",
+    "list": [
+      {
+        "name": "Ricardo Faya",
+        "role": "Founder & Lead Instructor",
+        "bio": "AI specialist with over 15 years of technology experience. Trained thousands of professionals in automation and artificial intelligence.",
+        "image": "/rwx1.jpg",
+        "expertise": ["ChatGPT", "Automation", "AI Agents"],
+        "linkedin": "https://linkedin.com/in/ricardofaya"
+      }
+    ],
+    "cta": {
+      "title": "Want to be an Instructor?",
+      "description": "If you're an AI expert and want to share knowledge, we want to meet you.",
+      "button": "Apply"
+    }
+  },
+  "Glossary": {
+    "badge": "AI Glossary",
+    "title": "Artificial Intelligence Glossary",
+    "description": "Understand the main terms and concepts of the AI world.",
+    "searchPlaceholder": "Search term...",
+    "allCategories": "All",
+    "noResults": "No terms found.",
+    "categories": ["Models", "Techniques", "Tools", "Concepts"],
+    "terms": [
+      { "term": "API", "definition": "Application Programming Interface. Allows different systems to communicate with each other.", "category": "Concepts" },
+      { "term": "ChatGPT", "definition": "OpenAI's language model capable of generating human-like text in conversations.", "category": "Models" },
+      { "term": "Claude", "definition": "AI assistant developed by Anthropic, focused on safety and usefulness.", "category": "Models" },
+      { "term": "Embedding", "definition": "Numerical representation of text that captures its semantic meaning.", "category": "Techniques" },
+      { "term": "Fine-tuning", "definition": "Process of adjusting a pre-trained model for a specific task.", "category": "Techniques" },
+      { "term": "GPT", "definition": "Generative Pre-trained Transformer. OpenAI's language model architecture.", "category": "Models" },
+      { "term": "Hallucination", "definition": "When an AI model generates false or invented information that appears true.", "category": "Concepts" },
+      { "term": "LLM", "definition": "Large Language Model. Language models trained on large amounts of text.", "category": "Models" },
+      { "term": "n8n", "definition": "Open-source workflow automation and integration platform.", "category": "Tools" },
+      { "term": "Prompt", "definition": "Instruction or question given to an AI model to guide its response.", "category": "Concepts" },
+      { "term": "Prompt Engineering", "definition": "The art of creating effective prompts to get better results from AI models.", "category": "Techniques" },
+      { "term": "RAG", "definition": "Retrieval-Augmented Generation. Combines information retrieval with text generation.", "category": "Techniques" },
+      { "term": "Token", "definition": "Basic unit of text processed by language models (can be a word or part of it).", "category": "Concepts" },
+      { "term": "Transformer", "definition": "Neural network architecture that revolutionized natural language processing.", "category": "Concepts" },
+      { "term": "Vector Database", "definition": "Database optimized for storing and searching vector embeddings.", "category": "Tools" },
+      { "term": "Zero-shot", "definition": "Ability of a model to perform tasks without prior specific examples.", "category": "Techniques" }
+    ]
+  },
+  "Guides": {
+    "badge": "Free Guides",
+    "title": "Practical AI Guides",
+    "description": "Complete materials to master Artificial Intelligence tools and techniques.",
+    "featured": "Featured",
+    "list": [
+      { "title": "ChatGPT for Beginners", "description": "Learn to use ChatGPT efficiently for work and studies.", "category": "Beginner", "readTime": "15 min", "downloads": 12500, "featured": true },
+      { "title": "Advanced Prompt Engineering", "description": "Advanced techniques to extract the most from language models.", "category": "Advanced", "readTime": "25 min", "downloads": 8300, "featured": true },
+      { "title": "Automation with n8n", "description": "Create automated workflows without code using n8n.", "category": "Intermediate", "readTime": "20 min", "downloads": 6700, "featured": false },
+      { "title": "Introduction to AI Agents", "description": "Understand how autonomous agents work and how to implement them.", "category": "Advanced", "readTime": "30 min", "downloads": 4200, "featured": false },
+      { "title": "AI for Content Creation", "description": "Use AI to create high-quality text, images and videos.", "category": "Intermediate", "readTime": "18 min", "downloads": 9100, "featured": false },
+      { "title": "RAG in Practice", "description": "Implement semantic search systems with augmented generation.", "category": "Advanced", "readTime": "35 min", "downloads": 3800, "featured": false }
+    ],
+    "cta": {
+      "title": "Want to Learn More?",
+      "description": "Access our complete courses for structured learning.",
+      "button": "View Courses"
+    }
+  },
+  "Templates": {
+    "badge": "Templates & Prompts",
+    "title": "Ready-to-Use Templates",
+    "description": "Copy and use tested prompts for various everyday situations.",
+    "copyPrompt": "Copy Prompt",
+    "copied": "Copied!",
+    "list": [
+      { "title": "Text Summarizer", "description": "Summarize long documents while keeping the main information.", "category": "Productivity", "tool": "ChatGPT", "prompt": "Summarize the following text in 3 paragraphs, highlighting the main points and conclusions:\n\n[PASTE TEXT HERE]" },
+      { "title": "Email Generator", "description": "Create professional emails for different situations.", "category": "Communication", "tool": "ChatGPT", "prompt": "Write a professional email with the following objective: [OBJECTIVE]\n\nTone: [formal/informal]\nRecipient: [WHO]\nAdditional context: [CONTEXT]" },
+      { "title": "Code Analysis", "description": "Review and improve your code with AI suggestions.", "category": "Development", "tool": "Claude", "prompt": "Analyze the code below and provide:\n1. Potential bugs\n2. Performance improvements\n3. Refactoring suggestions\n4. Applicable best practices\n\n```\n[PASTE CODE HERE]\n```" },
+      { "title": "Post Creator", "description": "Generate engaging posts for social media.", "category": "Marketing", "tool": "ChatGPT", "prompt": "Create 3 post variations for [SOCIAL NETWORK] about:\nTopic: [TOPIC]\nTone: [professional/casual/inspirational]\nObjective: [engagement/sales/awareness]\nInclude: relevant hashtags and CTA" },
+      { "title": "Video Script", "description": "Structure scripts for YouTube or TikTok.", "category": "Content", "tool": "ChatGPT", "prompt": "Create a video script of [DURATION] about [TOPIC].\n\nFormat: [YouTube/TikTok/Reels]\nAudience: [AUDIENCE DESCRIPTION]\n\nInclude: initial hook, topic development and final CTA." },
+      { "title": "Study Plan", "description": "Build a personalized learning schedule.", "category": "Education", "tool": "ChatGPT", "prompt": "Create a study plan of [WEEKS] weeks to learn [TOPIC].\n\nCurrent level: [beginner/intermediate/advanced]\nAvailable hours per week: [HOURS]\nFinal goal: [GOAL]\n\nInclude recommended resources and progress milestones." }
+    ],
+    "cta": {
+      "title": "Master the Art of Prompts",
+      "description": "Learn advanced prompt engineering techniques in our courses.",
+      "button": "Explore Courses"
     }
   }
 }
