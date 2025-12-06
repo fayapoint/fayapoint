@@ -6,6 +6,7 @@ import Order from '@/models/Order';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
 import { getMongoClient } from '@/lib/products';
+import { SubscriptionPlan, TIER_CONFIGS } from '@/lib/course-tiers';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -43,39 +44,41 @@ export async function GET(
     const userId = decoded.id;
 
     // 1. Check Access
-    // Check if user has purchased the course (in Orders) or has progress (started) or has subscription
     const user = await User.findById(userId);
     if (!user) {
         return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
-    // Access logic:
-    // - Admin/Instructor: Access all
-    // - Plan: 'business' or 'pro' gets all courses (as per dashboard logic)
-    // - Purchased: Order exists
-    // - Started: CourseProgress exists (maybe free course?)
+    const userPlan = (user.subscription?.plan || 'free') as SubscriptionPlan;
+    const tierConfig = TIER_CONFIGS[userPlan];
 
     let hasAccess = false;
 
-    // Check Role/Plan
+    // Check Role - Admin/Instructor always have access
     if (user.role === 'admin' || user.role === 'instructor') hasAccess = true;
-    if (user.subscription?.plan === 'business' || user.subscription?.plan === 'pro') hasAccess = true;
 
-    // Check Progress (if it exists, they likely have access)
+    // Check if business plan (unlimited)
+    if (tierConfig.limits.unlimited) hasAccess = true;
+
+    // Check enrolled courses (NEW TIER SYSTEM)
+    if (!hasAccess) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const isEnrolled = user.enrolledCourses?.some((c: any) => c.courseSlug === slug && c.isActive);
+        if (isEnrolled) hasAccess = true;
+    }
+
+    // Check Progress (backwards compatibility - if progress exists, they have access)
     if (!hasAccess) {
         const progress = await CourseProgress.findOne({ userId, courseId: slug });
         if (progress) hasAccess = true;
     }
 
-    // Check Orders (Internal)
+    // Check Orders (purchased courses)
     if (!hasAccess) {
-        // Check for "course" type items with the slug
-        // Note: Order items might store ID as slug or ID. Usually slug or productID.
-        // The dashboard logic maps serviceSlug to ID.
         const order = await Order.findOne({
             userId,
             status: 'completed',
-            'items.id': { $regex: new RegExp(slug, 'i') } // Loose match for now
+            'items.id': { $regex: new RegExp(slug, 'i') }
         });
         if (order) hasAccess = true;
     }
@@ -97,14 +100,11 @@ export async function GET(
     }
 
     if (!hasAccess) {
-        // Allow "intro" courses for free users? 
-        // For now, stricter.
-        // return NextResponse.json({ error: 'Acesso negado. Adquira o curso para continuar.' }, { status: 403 });
-        
-        // Allow for now during debugging/development if requested, but better safe.
-        // Wait, the user said "provided the fact that we are in a high enough tier, we should have access".
-        // I checked tiers above.
-        return NextResponse.json({ error: 'Acesso negado. Faça upgrade ou compre o curso.' }, { status: 403 });
+        return NextResponse.json({ 
+            error: 'Acesso negado. Matricule-se no curso ou faça upgrade do seu plano.',
+            requiresEnrollment: true,
+            courseSlug: slug
+        }, { status: 403 });
     }
 
     // 2. Fetch Content

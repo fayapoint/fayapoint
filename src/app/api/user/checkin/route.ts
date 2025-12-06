@@ -29,13 +29,16 @@ const getLevelFromXp = (xp: number): number => {
 };
 
 // Check and unlock achievements
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const checkAchievements = (user: any): { id: string; xpReward: number }[] => {
   const newAchievements: { id: string; xpReward: number }[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const existingIds = user.gamification?.achievements?.map((a: any) => a.id) || [];
 
   for (const [id, achievement] of Object.entries(ACHIEVEMENTS)) {
     if (existingIds.includes(id)) continue;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { requirement, xpReward } = achievement as any;
     let unlocked = false;
 
@@ -120,6 +123,7 @@ export async function POST(request: Request) {
     lastActive?.setHours(0, 0, 0, 0);
 
     let xpEarned = 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updates: any = {};
     const newAchievements: { id: string; xpReward: number }[] = [];
 

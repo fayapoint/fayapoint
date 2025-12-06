@@ -1183,6 +1183,39 @@
       "empty": "No courses found.",
       "defaultDescription": "Complete AI course"
     },
+    "tiers": {
+      "free": "Free",
+      "starter": "Starter",
+      "pro": "Professional",
+      "business": "Business",
+      "slots": {
+        "title": "Your Courses - {plan} Plan",
+        "unlimitedAccess": "Unlimited access to all courses!",
+        "manageEnrollments": "Manage your enrollments according to your plan",
+        "upgradeForMore": "Upgrade for more courses",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "enrollment": {
+        "enrolled": "Enrolled",
+        "continue": "Continue",
+        "enroll": "Enroll",
+        "upgrade": "Upgrade",
+        "enrolling": "Enrolling...",
+        "success": "Successfully enrolled!",
+        "limitReached": "You have reached the course limit for your plan",
+        "upgradeRequired": "Upgrade to access this course level"
+      },
+      "levels": {
+        "free": "Free",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "inProgress": "Courses in Progress",
+      "availableCourses": "Available Courses for Enrollment"
+    },
     "resources": {
       "title": "Your Available Resources",
       "available": "Available",

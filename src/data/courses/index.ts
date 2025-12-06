@@ -8,6 +8,7 @@ import { midjourneyCourse } from './midjourney-course';
 import { claudeCourse } from './claude-course';
 import { perplexityCourse } from './perplexity-course';
 import { chatGPTAllowlistingCourse } from './chatgpt-allowlisting-course';
+import { normalizeCourseLevel, CourseLevel } from '@/lib/course-tiers';
 
 export interface CourseModule {
   id: number;
@@ -45,7 +46,9 @@ export interface CourseData {
   subtitle: string;
   tool: string;
   category: string;
-  level: string;
+  level: string; // Original level string (e.g., "Todos os níveis")
+  normalizedLevel?: CourseLevel; // Standardized level for tier system
+  isFree?: boolean; // Explicitly marked as free
   duration: string;
   totalLessons: number;
   price: number;
@@ -84,9 +87,33 @@ export const allCourses: CourseData[] = [
   chatGPTAllowlistingCourse
 ];
 
-// Helper function to get course by slug
+// Helper function to get course by slug with normalized level
 export const getCourseBySlug = (slug: string): CourseData | undefined => {
-  return allCourses.find(course => course.slug === slug);
+  const course = allCourses.find(course => course.slug === slug);
+  if (course) {
+    return {
+      ...course,
+      normalizedLevel: getNormalizedLevel(course)
+    };
+  }
+  return undefined;
+};
+
+// Get normalized level for a course
+export const getNormalizedLevel = (course: CourseData): CourseLevel => {
+  // If explicitly free (price = 0 or isFree = true)
+  if (course.isFree || course.price === 0) {
+    return 'free';
+  }
+  return normalizeCourseLevel(course.level);
+};
+
+// Get all courses with normalized levels
+export const getAllCoursesWithLevels = (): (CourseData & { normalizedLevel: CourseLevel })[] => {
+  return allCourses.map(course => ({
+    ...course,
+    normalizedLevel: getNormalizedLevel(course)
+  }));
 };
 
 // Helper function to get courses by category

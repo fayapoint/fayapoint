@@ -1,5 +1,15 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
+// Course enrollment tracking for tier system
+export interface IEnrolledCourse {
+  courseId: string;
+  courseSlug: string;
+  level: 'free' | 'beginner' | 'intermediate' | 'advanced';
+  enrolledAt: Date;
+  isActive: boolean;
+  source: 'subscription' | 'purchase' | 'gift' | 'promotion';
+}
+
 export interface IUser extends Document {
   email: string;
   password?: string;
@@ -7,6 +17,7 @@ export interface IUser extends Document {
   image?: string;
   role: 'student' | 'instructor' | 'admin';
   emailVerified?: Date;
+  enrolledCourses: IEnrolledCourse[];
   subscription: {
     plan: 'free' | 'starter' | 'pro' | 'business';
     status: 'active' | 'cancelled' | 'past_due';
@@ -73,10 +84,30 @@ export interface IUser extends Document {
     theme: 'light' | 'dark' | 'system';
     playbackSpeed: number;
   };
+  // Helper methods for course access
+  getActiveEnrollments(): IEnrolledCourse[];
+  isEnrolledIn(courseSlug: string): boolean;
   createdAt: Date;
   updatedAt: Date;
   lastLoginAt?: Date;
 }
+
+const EnrolledCourseSchema = new Schema({
+  courseId: { type: String, required: true },
+  courseSlug: { type: String, required: true },
+  level: {
+    type: String,
+    enum: ['free', 'beginner', 'intermediate', 'advanced'],
+    required: true
+  },
+  enrolledAt: { type: Date, default: Date.now },
+  isActive: { type: Boolean, default: true },
+  source: {
+    type: String,
+    enum: ['subscription', 'purchase', 'gift', 'promotion'],
+    default: 'subscription'
+  }
+}, { _id: false });
 
 const UserSchema = new Schema<IUser>({
   email: {
@@ -102,6 +133,7 @@ const UserSchema = new Schema<IUser>({
     default: 'student',
   },
   emailVerified: Date,
+  enrolledCourses: [EnrolledCourseSchema],
   subscription: {
     plan: {
       type: String,
@@ -188,6 +220,18 @@ const UserSchema = new Schema<IUser>({
 // Indexes for better query performance
 UserSchema.index({ 'subscription.stripeCustomerId': 1 });
 UserSchema.index({ createdAt: -1 });
+UserSchema.index({ 'enrolledCourses.courseSlug': 1 });
+
+// Instance methods
+UserSchema.methods.getActiveEnrollments = function(): IEnrolledCourse[] {
+  return this.enrolledCourses?.filter((c: IEnrolledCourse) => c.isActive) || [];
+};
+
+UserSchema.methods.isEnrolledIn = function(courseSlug: string): boolean {
+  return this.enrolledCourses?.some(
+    (c: IEnrolledCourse) => c.courseSlug === courseSlug && c.isActive
+  ) || false;
+};
 
 const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
 

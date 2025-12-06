@@ -1197,6 +1197,39 @@
       "empty": "Nenhum curso encontrado.",
       "defaultDescription": "Curso completo de IA"
     },
+    "tiers": {
+      "free": "Gratuito",
+      "starter": "Iniciante",
+      "pro": "Profissional",
+      "business": "Empresarial",
+      "slots": {
+        "title": "Seus Cursos - Plano {plan}",
+        "unlimitedAccess": "Acesso ilimitado a todos os cursos!",
+        "manageEnrollments": "Gerencie suas matrículas de acordo com seu plano",
+        "upgradeForMore": "Upgrade para mais cursos",
+        "beginner": "Iniciante",
+        "intermediate": "Intermediário",
+        "advanced": "Avançado"
+      },
+      "enrollment": {
+        "enrolled": "Matriculado",
+        "continue": "Continuar",
+        "enroll": "Matricular",
+        "upgrade": "Fazer Upgrade",
+        "enrolling": "Matriculando...",
+        "success": "Matrícula realizada com sucesso!",
+        "limitReached": "Você atingiu o limite de cursos do seu plano",
+        "upgradeRequired": "Faça upgrade para acessar este nível de curso"
+      },
+      "levels": {
+        "free": "Gratuito",
+        "beginner": "Iniciante",
+        "intermediate": "Intermediário",
+        "advanced": "Avançado"
+      },
+      "inProgress": "Cursos em Andamento",
+      "availableCourses": "Cursos Disponíveis para Matrícula"
+    },
     "resources": {
       "title": "Seus Recursos Disponíveis",
       "available": "Disponível",

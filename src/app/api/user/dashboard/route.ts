@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
 import { getMongoClient } from '@/lib/database';
 import { ACHIEVEMENTS, DAILY_CHALLENGES, WEEKLY_MISSIONS } from '@/models/Achievement';
+import { calculateEnrollmentSlots, SubscriptionPlan, CourseLevel } from '@/lib/course-tiers';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -188,6 +189,15 @@ export async function GET(request: Request) {
     const plan = user.subscription?.plan || 'free';
     const resources = RESOURCES_BY_PLAN[plan as keyof typeof RESOURCES_BY_PLAN] || RESOURCES_BY_PLAN.free;
 
+    // Calculate enrollment slots based on tier
+    const enrolledCourses = (user.enrolledCourses || []).map((c: { courseId: string; level: string; enrolledAt: Date; isActive: boolean }) => ({
+      courseId: c.courseId,
+      level: c.level as CourseLevel,
+      enrolledAt: c.enrolledAt,
+      isActive: c.isActive
+    }));
+    const enrollmentSlots = calculateEnrollmentSlots(plan as SubscriptionPlan, enrolledCourses);
+
     // Get today's challenge
     const today = new Date();
     const dailyChallenge = getDailyChallenge(today);
@@ -254,6 +264,8 @@ export async function GET(request: Request) {
       orders: allOrders,
       resources,
       plan,
+      enrollmentSlots,
+      enrolledCourses: user.enrolledCourses || [],
       gamification: {
         dailyChallenge: {
           ...dailyChallenge,

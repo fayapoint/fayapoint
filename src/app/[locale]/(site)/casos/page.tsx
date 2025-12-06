@@ -156,7 +156,6 @@ export default function CasesPage() {
                   </div>
                   <div className="grid gap-8 md:grid-cols-2">
                     {collection.projects.map((project) => {
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       const highlights = t.raw(`projects.items.${project.key}.highlights`) as string[];
 
                       return (

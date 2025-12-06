@@ -70,9 +70,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "next-intl";
 import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
-import { getCourseBySlug, CourseData } from "@/data/courses";
+import { getCourseBySlug, CourseData, allCourses, getNormalizedLevel } from "@/data/courses";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { TIER_CONFIGS, SubscriptionPlan, EnrollmentSlots } from "@/lib/course-tiers";
 
 // Components
 import { DashboardSidebar } from "@/components/portal/DashboardSidebar";
@@ -111,13 +112,15 @@ interface IOrder {
   }[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface DashboardData {
   user: any;
   courses: DashboardCourseProgress[];
   orders: IOrder[];
   resources: Resource[];
   plan: string;
+  enrollmentSlots?: EnrollmentSlots;
+  enrolledCourses?: { courseSlug: string; level: string; isActive: boolean }[];
   gamification: {
     dailyChallenge: any;
     weeklyMission: any;
@@ -145,6 +148,7 @@ interface DashboardData {
     recentCourses: any[];
   };
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const AI_MODELS = [
   { id: "nano-banana-1", name: "Nano Banana 1", icon: Zap, description: "Rápido e eficiente" },
@@ -181,6 +185,9 @@ export default function PortalPage() {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [plan, setPlan] = useState("free");
+  const [enrollmentSlots, setEnrollmentSlots] = useState<EnrollmentSlots | null>(null);
+  const [enrolledSlugs, setEnrolledSlugs] = useState<string[]>([]);
+  const [isEnrolling, setIsEnrolling] = useState<string | null>(null);
 
   // AI Gen State
   const [prompt, setPrompt] = useState("");
@@ -195,6 +202,77 @@ export default function PortalPage() {
   const [style, setStyle] = useState("none");
 
   const isPro = ["pro", "business", "starter"].includes(plan);
+  const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
+
+  // Fetch course access data when courses tab is active
+  useEffect(() => {
+    if (activeTab === "courses") {
+      fetchCourseAccess();
+    }
+  }, [activeTab]);
+
+  const fetchCourseAccess = async () => {
+    const token = localStorage.getItem("fayapoint_token");
+    if (!token) return;
+    try {
+      const res = await fetch("/api/courses/access", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEnrollmentSlots(data.slots);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setEnrolledSlugs(data.activeEnrollments?.map((e: any) => e.courseSlug) || []);
+      }
+    } catch (e) {
+      console.error("Error fetching course access:", e);
+    }
+  };
+
+  const handleEnroll = async (courseSlug: string) => {
+    const token = localStorage.getItem("fayapoint_token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    setIsEnrolling(courseSlug);
+    try {
+      const res = await fetch("/api/courses/enroll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ courseSlug }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.upgradeRequired) {
+          toast.error(`${data.error}. Faça upgrade para ${data.suggestedPlan || 'Pro'}!`);
+        } else {
+          toast.error(data.error || "Erro ao matricular");
+        }
+        return;
+      }
+
+      toast.success("Matrícula realizada com sucesso!");
+      setEnrolledSlugs((prev) => [...prev, courseSlug]);
+      
+      // Refresh slots
+      fetchCourseAccess();
+      
+      // Navigate to course
+      router.push(`/portal/learn/${courseSlug}`);
+    } catch (error) {
+      console.error("Enrollment error:", error);
+      toast.error("Erro ao matricular no curso");
+    } finally {
+      setIsEnrolling(null);
+    }
+  };
 
   useEffect(() => {
     if (activeTab === "studio") {
@@ -743,48 +821,220 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-6"
               >
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {userCourses.length > 0 ? (
-                    userCourses.map((progress) => (
-                      <Link key={progress._id} href={`/portal/learn/${progress.courseId}`}>
-                        <Card className="bg-white/5 border-white/10 overflow-hidden hover:border-purple-500/50 transition group cursor-pointer">
-                          <div className="h-40 bg-gradient-to-br from-gray-800 to-gray-900 relative">
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <BookOpen size={48} className="text-gray-700" />
-                            </div>
-                            <div className="absolute bottom-3 right-3">
-                              <Badge className="bg-black/80 text-white">
-                                {progress.progressPercent}% completo
-                              </Badge>
-                            </div>
-                          </div>
-                          <div className="p-5">
-                            <h3 className="font-bold text-lg group-hover:text-purple-400 transition mb-2">
-                              {progress.details?.title || progress.courseId}
-                            </h3>
-                            <p className="text-sm text-gray-400 line-clamp-2 mb-4">
-                              {progress.details?.shortDescription || ""}
-                            </p>
-                            <Progress value={progress.progressPercent} className="h-2 bg-gray-700" />
-                          </div>
-                        </Card>
-                      </Link>
-                    ))
-                  ) : (
-                    <div className="col-span-full text-center py-16">
-                      <BookOpen size={64} className="mx-auto mb-4 text-gray-700" />
-                      <h3 className="text-xl font-bold mb-2">Nenhum curso iniciado</h3>
-                      <p className="text-gray-400 mb-6">
-                        Comece sua jornada de aprendizado hoje!
+                {/* Enrollment Slots Overview */}
+                <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-500/30 p-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-xl font-bold flex items-center gap-2">
+                        <BookOpen className="text-purple-400" />
+                        Seus Cursos - Plano {tierConfig.displayName}
+                      </h2>
+                      <p className="text-gray-400 text-sm mt-1">
+                        {tierConfig.limits.unlimited 
+                          ? "Acesso ilimitado a todos os cursos!"
+                          : "Gerencie suas matrículas de acordo com seu plano"
+                        }
                       </p>
-                      <Link href="/cursos">
-                        <Button size="lg">
-                          <Sparkles className="mr-2" size={18} />
-                          Explorar Cursos
+                    </div>
+                    {!tierConfig.limits.unlimited && (
+                      <Link href="/precos">
+                        <Button className="bg-gradient-to-r from-purple-600 to-pink-600">
+                          <Crown size={16} className="mr-2" />
+                          Upgrade para mais cursos
                         </Button>
                       </Link>
+                    )}
+                  </div>
+
+                  {/* Slot indicators */}
+                  {!tierConfig.limits.unlimited && enrollmentSlots && (
+                    <div className="grid grid-cols-3 gap-4 mt-6">
+                      <div className="bg-black/30 rounded-xl p-4 text-center">
+                        <div className="text-2xl font-bold text-green-400">
+                          {enrollmentSlots.free.used}/{enrollmentSlots.free.limit === Infinity ? '∞' : enrollmentSlots.free.limit}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">Iniciante</p>
+                        <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
+                          <div 
+                            className="bg-green-500 h-1.5 rounded-full" 
+                            style={{ width: `${Math.min(100, (enrollmentSlots.free.used / enrollmentSlots.free.limit) * 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                      <div className="bg-black/30 rounded-xl p-4 text-center">
+                        <div className="text-2xl font-bold text-yellow-400">
+                          {enrollmentSlots.intermediate.used}/{enrollmentSlots.intermediate.limit === Infinity ? '∞' : enrollmentSlots.intermediate.limit}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">Intermediário</p>
+                        <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
+                          <div 
+                            className="bg-yellow-500 h-1.5 rounded-full" 
+                            style={{ width: enrollmentSlots.intermediate.limit > 0 ? `${Math.min(100, (enrollmentSlots.intermediate.used / enrollmentSlots.intermediate.limit) * 100)}%` : '0%' }}
+                          />
+                        </div>
+                      </div>
+                      <div className="bg-black/30 rounded-xl p-4 text-center">
+                        <div className="text-2xl font-bold text-purple-400">
+                          {enrollmentSlots.advanced.used}/{enrollmentSlots.advanced.limit === Infinity ? '∞' : enrollmentSlots.advanced.limit}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">Avançado</p>
+                        <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
+                          <div 
+                            className="bg-purple-500 h-1.5 rounded-full" 
+                            style={{ width: enrollmentSlots.advanced.limit > 0 ? `${Math.min(100, (enrollmentSlots.advanced.used / enrollmentSlots.advanced.limit) * 100)}%` : '0%' }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   )}
+                </Card>
+
+                {/* My Enrolled Courses */}
+                {userCourses.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                      <PlayCircle className="text-green-400" size={20} />
+                      Cursos em Andamento
+                    </h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {userCourses.map((progress) => (
+                        <Link key={progress._id} href={`/portal/learn/${progress.courseId}`}>
+                          <Card className="bg-white/5 border-white/10 overflow-hidden hover:border-green-500/50 transition group cursor-pointer">
+                            <div className="h-32 bg-gradient-to-br from-green-900/30 to-emerald-900/30 relative">
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <PlayCircle size={40} className="text-green-400/50 group-hover:text-green-400 transition" />
+                              </div>
+                              <div className="absolute top-3 left-3">
+                                <Badge className="bg-green-500/80 text-white text-xs">
+                                  Matriculado
+                                </Badge>
+                              </div>
+                              <div className="absolute bottom-3 right-3">
+                                <Badge className="bg-black/80 text-white">
+                                  {progress.progressPercent}%
+                                </Badge>
+                              </div>
+                            </div>
+                            <div className="p-4">
+                              <h3 className="font-semibold group-hover:text-green-400 transition mb-2 line-clamp-1">
+                                {progress.details?.title || progress.courseId}
+                              </h3>
+                              <Progress value={progress.progressPercent} className="h-1.5 bg-gray-700" />
+                            </div>
+                          </Card>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Available Courses to Enroll */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Sparkles className="text-purple-400" size={20} />
+                    Cursos Disponíveis para Matrícula
+                  </h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {allCourses.map((course) => {
+                      const normalizedLevel = getNormalizedLevel(course);
+                      const isEnrolled = enrolledSlugs.includes(course.slug);
+                      const canAccessLevel = tierConfig.canAccessLevel(normalizedLevel);
+                      const slotCategory = normalizedLevel === 'free' || normalizedLevel === 'beginner' ? 'free' : normalizedLevel;
+                      const hasAvailableSlot = enrollmentSlots 
+                        ? enrollmentSlots[slotCategory as keyof EnrollmentSlots]?.available > 0 
+                        : true;
+                      const canEnroll = canAccessLevel && (hasAvailableSlot || tierConfig.limits.unlimited);
+                      
+                      const levelColors: Record<string, string> = {
+                        free: 'bg-green-500/20 text-green-400 border-green-500/50',
+                        beginner: 'bg-blue-500/20 text-blue-400 border-blue-500/50',
+                        intermediate: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50',
+                        advanced: 'bg-purple-500/20 text-purple-400 border-purple-500/50'
+                      };
+
+                      return (
+                        <Card 
+                          key={course.slug}
+                          className={cn(
+                            "overflow-hidden transition-all",
+                            isEnrolled 
+                              ? "bg-green-500/5 border-green-500/30 opacity-60"
+                              : canEnroll
+                                ? "bg-white/5 border-white/10 hover:border-purple-500/50"
+                                : "bg-gray-900/50 border-gray-800 opacity-50"
+                          )}
+                        >
+                          <div className={cn(
+                            "h-28 relative",
+                            isEnrolled 
+                              ? "bg-gradient-to-br from-green-900/30 to-emerald-900/30"
+                              : canEnroll
+                                ? "bg-gradient-to-br from-gray-800 to-gray-900"
+                                : "bg-gray-900"
+                          )}>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              {isEnrolled ? (
+                                <Check size={32} className="text-green-400" />
+                              ) : canEnroll ? (
+                                <BookOpen size={32} className="text-gray-600" />
+                              ) : (
+                                <Lock size={32} className="text-gray-600" />
+                              )}
+                            </div>
+                            <div className="absolute top-2 left-2">
+                              <Badge className={cn("text-xs", levelColors[normalizedLevel])}>
+                                {normalizedLevel === 'free' ? 'Gratuito' : 
+                                 normalizedLevel === 'beginner' ? 'Iniciante' :
+                                 normalizedLevel === 'intermediate' ? 'Intermediário' : 'Avançado'}
+                              </Badge>
+                            </div>
+                            {!canAccessLevel && (
+                              <div className="absolute top-2 right-2">
+                                <Badge className="bg-red-500/20 text-red-400 border-red-500/50 text-xs">
+                                  <Lock size={10} className="mr-1" />
+                                  Upgrade
+                                </Badge>
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-4">
+                            <h4 className="font-semibold line-clamp-1 mb-1">{course.title}</h4>
+                            <p className="text-xs text-gray-400 mb-3 line-clamp-2">{course.shortDescription}</p>
+                            
+                            {isEnrolled ? (
+                              <Link href={`/portal/learn/${course.slug}`}>
+                                <Button size="sm" className="w-full bg-green-600 hover:bg-green-700">
+                                  <PlayCircle size={14} className="mr-1" />
+                                  Continuar
+                                </Button>
+                              </Link>
+                            ) : canEnroll ? (
+                              <Button 
+                                size="sm" 
+                                className="w-full bg-purple-600 hover:bg-purple-700"
+                                onClick={() => handleEnroll(course.slug)}
+                                disabled={isEnrolling === course.slug}
+                              >
+                                {isEnrolling === course.slug ? (
+                                  <Loader2 size={14} className="animate-spin mr-1" />
+                                ) : (
+                                  <Sparkles size={14} className="mr-1" />
+                                )}
+                                Matricular
+                              </Button>
+                            ) : (
+                              <Link href="/precos">
+                                <Button size="sm" variant="outline" className="w-full border-gray-700">
+                                  <Crown size={14} className="mr-1" />
+                                  Fazer Upgrade
+                                </Button>
+                              </Link>
+                            )}
+                          </div>
+                        </Card>
+                      );
+                    })}
+                  </div>
                 </div>
               </motion.div>
             )}
