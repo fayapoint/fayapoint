@@ -5,6 +5,7 @@ import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers';
 import mongoose from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -111,6 +112,32 @@ export async function POST(request: NextRequest) {
       shippingAddress,
       notes,
     });
+
+    // Update stock for store products (type: 'product')
+    const storeProductsCol = mongoose.connection.db?.collection('storeproducts');
+    if (storeProductsCol) {
+      for (const item of validatedItems) {
+        if (item.type === 'product' && item.id) {
+          try {
+            // Try to update by ObjectId first
+            const filter = ObjectId.isValid(item.id) 
+              ? { _id: new ObjectId(item.id) }
+              : { slug: item.id };
+            await storeProductsCol.updateOne(
+              filter,
+              { 
+                $inc: { 
+                  stock: -(item.quantity || 1),
+                  soldCount: (item.quantity || 1)
+                }
+              }
+            );
+          } catch (stockError) {
+            console.error('Error updating stock for product:', item.id, stockError);
+          }
+        }
+      }
+    }
 
     // Award XP for purchase (10 XP per R$100 spent)
     const xpAwarded = Math.floor(totalAmount / 100) * 10;
