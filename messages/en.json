@@ -1505,6 +1505,10 @@
       "automationAi": {
         "name": "Automation & Applied AI",
         "description": "Process mapping, agents, and intelligent integrations."
+      },
+      "consulting": {
+        "name": "AI Consulting",
+        "description": "Diagnostic, roadmap, training, and executive advisory for digital transformation with AI."
       }
     },
     "selectedService": "Selected service",
@@ -2379,6 +2383,164 @@
       "subtitle": "Book a free consultation and discover how we can help achieve your goals.",
       "button": "Book Free Consultation",
       "disclaimer": "No commitment • 30 minutes • 100% free"
+    }
+  },
+  "AIConsultingPage": {
+    "hero": {
+      "badge": "Transform Your Business with AI",
+      "cta": {
+        "primary": "Book Free Consultation",
+        "secondary": "View Case Studies"
+      },
+      "guarantees": {
+        "noContracts": "No long-term contracts",
+        "results30days": "Results in 30 days",
+        "moneyBack": "Money-back guarantee"
+      }
+    },
+    "stats": {
+      "productivity": {
+        "value": "40%",
+        "label": "Average Productivity Increase"
+      },
+      "savedTime": {
+        "value": "15hrs",
+        "label": "Saved Per Employee/Week"
+      },
+      "roi": {
+        "value": "3-6mo",
+        "label": "Typical ROI Timeline"
+      },
+      "companies": {
+        "value": "100+",
+        "label": "Companies Transformed"
+      }
+    },
+    "services": {
+      "title": "Comprehensive AI Solutions",
+      "subtitle": "End-to-end AI consulting services designed to accelerate your digital transformation",
+      "items": {
+        "strategy": {
+          "title": "AI Strategy Development",
+          "description": "Custom roadmap aligned with your business goals and industry requirements"
+        },
+        "tools": {
+          "title": "Tool Selection & Implementation",
+          "description": "Choose and deploy the right AI tools that deliver measurable ROI"
+        },
+        "training": {
+          "title": "Team Training & Workshops",
+          "description": "Empower your team with hands-on AI skills and best practices"
+        },
+        "agents": {
+          "title": "Custom AI Agent Development",
+          "description": "Build intelligent agents tailored to your specific workflows"
+        },
+        "optimization": {
+          "title": "Process Optimization",
+          "description": "Identify and automate bottlenecks for maximum efficiency gains"
+        },
+        "security": {
+          "title": "Security & Compliance",
+          "description": "Ensure your AI implementation meets industry standards and regulations"
+        }
+      }
+    },
+    "process": {
+      "title": "Our Proven Process",
+      "subtitle": "A systematic approach to AI transformation that delivers results",
+      "steps": {
+        "discovery": {
+          "step": "01",
+          "title": "Discovery Call",
+          "description": "We analyze your current operations and identify AI opportunities"
+        },
+        "strategy": {
+          "step": "02",
+          "title": "Strategy Design",
+          "description": "Custom AI roadmap with clear milestones and expected outcomes"
+        },
+        "implementation": {
+          "step": "03",
+          "title": "Implementation",
+          "description": "Deploy solutions with hands-on support and team training"
+        },
+        "optimization": {
+          "step": "04",
+          "title": "Optimization",
+          "description": "Continuous monitoring and refinement for maximum impact"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Trusted by Industry Leaders",
+      "subtitle": "See how we've helped businesses like yours achieve AI success",
+      "items": [
+        {
+          "quote": "The AI implementation reduced our response time by 60% and our team is more productive than ever.",
+          "author": "Sarah Chen",
+          "role": "CEO, TechFlow"
+        },
+        {
+          "quote": "From strategy to execution, they made AI accessible and practical for our business.",
+          "author": "Marcus Rodriguez",
+          "role": "Operations Director"
+        }
+      ]
+    },
+    "packages": {
+      "title": "Flexible Engagement Models",
+      "subtitle": "Choose the package that fits your needs and budget",
+      "starter": {
+        "label": "STARTER",
+        "title": "AI Assessment",
+        "description": "Perfect for businesses exploring AI opportunities",
+        "features": [
+          "Initial consultation",
+          "Opportunity analysis",
+          "Strategic recommendations",
+          "Implementation roadmap"
+        ],
+        "cta": "Get Started"
+      },
+      "professional": {
+        "label": "PROFESSIONAL",
+        "badge": "Most Popular",
+        "title": "Full Implementation",
+        "description": "Complete AI transformation with ongoing support",
+        "features": [
+          "Everything in Starter",
+          "Custom AI development",
+          "Team training",
+          "3 months support",
+          "Performance monitoring"
+        ],
+        "cta": "Get Started"
+      },
+      "enterprise": {
+        "label": "ENTERPRISE",
+        "title": "Strategic Partnership",
+        "description": "Long-term AI innovation and competitive advantage",
+        "features": [
+          "Everything in Professional",
+          "Dedicated AI team",
+          "Priority support",
+          "Quarterly strategy reviews",
+          "Custom integrations"
+        ],
+        "cta": "Contact Sales"
+      }
+    },
+    "finalCta": {
+      "title": "Ready to Transform Your Business?",
+      "subtitle": "Book a free consultation and discover how AI can revolutionize your operations",
+      "button": "Schedule Free Consultation",
+      "disclaimer": "No credit card required • 30-minute strategy session • Actionable insights guaranteed"
+    },
+    "builder": {
+      "badge": "Customize your consultation",
+      "title": "Build your consultation plan",
+      "subtitle": "Choose audit, roadmap, training, and executive advisory according to your needs."
     }
   }
 }

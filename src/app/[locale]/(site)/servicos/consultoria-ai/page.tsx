@@ -5,8 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Bot, ArrowRight, Sparkles, TrendingUp, Users, Zap, Target, BarChart3, Brain, Rocket, Shield, Clock, DollarSign, Star } from 'lucide-react';
-import Link from "next/link";
+import { CheckCircle, Bot, ArrowRight, Sparkles, TrendingUp, Users, Zap, Target, Brain, Rocket, Shield, Clock, DollarSign, Star } from 'lucide-react';
 import { useTranslations } from "next-intl";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
@@ -14,100 +13,30 @@ import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
 
 export default function AIConsultingPage() {
   const t = useTranslations("Home.Services.ai-consulting");
+  const p = useTranslations("AIConsultingPage");
 
-  const services = [
-    {
-      icon: Brain,
-      title: "AI Strategy Development",
-      description: "Custom roadmap aligned with your business goals and industry requirements"
-    },
-    {
-      icon: Zap,
-      title: "Tool Selection & Implementation",
-      description: "Choose and deploy the right AI tools that deliver measurable ROI"
-    },
-    {
-      icon: Users,
-      title: "Team Training & Workshops",
-      description: "Empower your team with hands-on AI skills and best practices"
-    },
-    {
-      icon: Bot,
-      title: "Custom AI Agent Development",
-      description: "Build intelligent agents tailored to your specific workflows"
-    },
-    {
-      icon: Target,
-      title: "Process Optimization",
-      description: "Identify and automate bottlenecks for maximum efficiency gains"
-    },
-    {
-      icon: Shield,
-      title: "Security & Compliance",
-      description: "Ensure your AI implementation meets industry standards and regulations"
-    }
-  ];
+  const serviceKeys = ["strategy", "tools", "training", "agents", "optimization", "security"] as const;
+  const serviceIcons = {
+    strategy: Brain,
+    tools: Zap,
+    training: Users,
+    agents: Bot,
+    optimization: Target,
+    security: Shield
+  };
 
-  const benefits = [
-    {
-      icon: TrendingUp,
-      stat: "40%",
-      label: "Average Productivity Increase"
-    },
-    {
-      icon: Clock,
-      stat: "15hrs",
-      label: "Saved Per Employee/Week"
-    },
-    {
-      icon: DollarSign,
-      stat: "3-6mo",
-      label: "Typical ROI Timeline"
-    },
-    {
-      icon: Users,
-      stat: "100+",
-      label: "Companies Transformed"
-    }
-  ];
+  const statKeys = ["productivity", "savedTime", "roi", "companies"] as const;
+  const statIcons = {
+    productivity: TrendingUp,
+    savedTime: Clock,
+    roi: DollarSign,
+    companies: Users
+  };
 
-  const process = [
-    {
-      step: "01",
-      title: "Discovery Call",
-      description: "We analyze your current operations and identify AI opportunities"
-    },
-    {
-      step: "02",
-      title: "Strategy Design",
-      description: "Custom AI roadmap with clear milestones and expected outcomes"
-    },
-    {
-      step: "03",
-      title: "Implementation",
-      description: "Deploy solutions with hands-on support and team training"
-    },
-    {
-      step: "04",
-      title: "Optimization",
-      description: "Continuous monitoring and refinement for maximum impact"
-    }
-  ];
+  const processKeys = ["discovery", "strategy", "implementation", "optimization"] as const;
 
-  const testimonials = [
-    {
-      quote: "The AI implementation reduced our response time by 60% and our team is more productive than ever.",
-      author: "Sarah Chen",
-      role: "CEO, TechFlow",
-      rating: 5
-    },
-    {
-      quote: "From strategy to execution, they made AI accessible and practical for our business.",
-      author: "Marcus Rodriguez",
-      role: "Operations Director",
-      rating: 5
-    }
-  ];
+  // Get testimonials as raw array
+  const testimonials = p.raw("testimonials.items") as Array<{quote: string; author: string; role: string}>;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -121,7 +50,7 @@ export default function AIConsultingPage() {
           <div className="text-center max-w-4xl mx-auto">
             <Badge className="mb-6 px-4 py-2 text-sm font-medium" variant="secondary">
               <Sparkles className="w-4 h-4 mr-2 inline" />
-              Transform Your Business with AI
+              {p("hero.badge")}
             </Badge>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance leading-tight">
@@ -138,26 +67,26 @@ export default function AIConsultingPage() {
                 className="text-lg px-8 py-6 group"
                 source="ai-consulting-hero"
               >
-                Book Free Consultation
+                {p("hero.cta.primary")}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </ScheduleConsultationButton>
               <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                View Case Studies
+                {p("hero.cta.secondary")}
               </Button>
             </div>
             
             <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>No long-term contracts</span>
+                <span>{p("hero.guarantees.noContracts")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>Results in 30 days</span>
+                <span>{p("hero.guarantees.results30days")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-500" />
-                <span>Money-back guarantee</span>
+                <span>{p("hero.guarantees.moneyBack")}</span>
               </div>
             </div>
           </div>
@@ -168,15 +97,18 @@ export default function AIConsultingPage() {
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {benefits.map((benefit, i) => (
-              <div key={i} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
-                  <benefit.icon className="w-6 h-6" />
+            {statKeys.map((key) => {
+              const Icon = statIcons[key];
+              return (
+                <div key={key} className="text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">{p(`stats.${key}.value`)}</div>
+                  <div className="text-sm text-muted-foreground">{p(`stats.${key}.label`)}</div>
                 </div>
-                <div className="text-3xl md:text-4xl font-bold mb-2">{benefit.stat}</div>
-                <div className="text-sm text-muted-foreground">{benefit.label}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -186,23 +118,26 @@ export default function AIConsultingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-              Comprehensive AI Solutions
+              {p("services.title")}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-              End-to-end AI consulting services designed to accelerate your digital transformation
+              {p("services.subtitle")}
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, i) => (
-              <Card key={i} className="p-6 hover:shadow-lg transition-shadow border-border bg-card">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <service.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{service.description}</p>
-              </Card>
-            ))}
+            {serviceKeys.map((key) => {
+              const Icon = serviceIcons[key];
+              return (
+                <Card key={key} className="p-6 hover:shadow-lg transition-shadow border-border bg-card">
+                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">{p(`services.items.${key}.title`)}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{p(`services.items.${key}.description`)}</p>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -212,20 +147,20 @@ export default function AIConsultingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-              Our Proven Process
+              {p("process.title")}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-              A systematic approach to AI transformation that delivers results
+              {p("process.subtitle")}
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {process.map((item, i) => (
-              <div key={i} className="relative">
-                <div className="text-6xl font-bold text-primary/10 mb-4">{item.step}</div>
-                <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
-                {i < process.length - 1 && (
+            {processKeys.map((key, i) => (
+              <div key={key} className="relative">
+                <div className="text-6xl font-bold text-primary/10 mb-4">{p(`process.steps.${key}.step`)}</div>
+                <h3 className="text-xl font-semibold mb-3">{p(`process.steps.${key}.title`)}</h3>
+                <p className="text-muted-foreground leading-relaxed">{p(`process.steps.${key}.description`)}</p>
+                {i < processKeys.length - 1 && (
                   <ArrowRight className="hidden lg:block absolute top-8 -right-4 w-8 h-8 text-muted-foreground/30" />
                 )}
               </div>
@@ -239,10 +174,10 @@ export default function AIConsultingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-              Trusted by Industry Leaders
+              {p("testimonials.title")}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-              See how we&rsquo;ve helped businesses like yours achieve AI success
+              {p("testimonials.subtitle")}
             </p>
           </div>
           
@@ -250,8 +185,8 @@ export default function AIConsultingPage() {
             {testimonials.map((testimonial, i) => (
               <Card key={i} className="p-8 border-border bg-card">
                 <div className="flex gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
                 <p className="text-lg mb-6 leading-relaxed text-pretty">&quot;{testimonial.quote}&quot;</p>
@@ -270,22 +205,22 @@ export default function AIConsultingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-              Flexible Engagement Models
+              {p("packages.title")}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-              Choose the package that fits your needs and budget
+              {p("packages.subtitle")}
             </p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="p-8 border-border bg-card">
-              <div className="text-sm font-semibold text-primary mb-2">STARTER</div>
-              <h3 className="text-2xl font-bold mb-4">AI Assessment</h3>
+              <div className="text-sm font-semibold text-primary mb-2">{p("packages.starter.label")}</div>
+              <h3 className="text-2xl font-bold mb-4">{p("packages.starter.title")}</h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Perfect for businesses exploring AI opportunities
+                {p("packages.starter.description")}
               </p>
               <ul className="space-y-3 mb-8">
-                {["Initial consultation", "Opportunity analysis", "Strategic recommendations", "Implementation roadmap"].map((item, i) => (
+                {(p.raw("packages.starter.features") as string[]).map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-sm">{item}</span>
@@ -298,21 +233,21 @@ export default function AIConsultingPage() {
                 source="ai-consulting-starter"
                 showCompanyRole
               >
-                Get Started
+                {p("packages.starter.cta")}
               </ScheduleConsultationButton>
             </Card>
 
             <Card className="p-8 border-primary shadow-lg relative bg-card">
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
-                Most Popular
+                {p("packages.professional.badge")}
               </Badge>
-              <div className="text-sm font-semibold text-primary mb-2">PROFESSIONAL</div>
-              <h3 className="text-2xl font-bold mb-4">Full Implementation</h3>
+              <div className="text-sm font-semibold text-primary mb-2">{p("packages.professional.label")}</div>
+              <h3 className="text-2xl font-bold mb-4">{p("packages.professional.title")}</h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Complete AI transformation with ongoing support
+                {p("packages.professional.description")}
               </p>
               <ul className="space-y-3 mb-8">
-                {["Everything in Starter", "Custom AI development", "Team training", "3 months support", "Performance monitoring"].map((item, i) => (
+                {(p.raw("packages.professional.features") as string[]).map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-sm">{item}</span>
@@ -324,18 +259,18 @@ export default function AIConsultingPage() {
                 source="ai-consulting-professional"
                 showCompanyRole
               >
-                Get Started
+                {p("packages.professional.cta")}
               </ScheduleConsultationButton>
             </Card>
 
             <Card className="p-8 border-border bg-card">
-              <div className="text-sm font-semibold text-primary mb-2">ENTERPRISE</div>
-              <h3 className="text-2xl font-bold mb-4">Strategic Partnership</h3>
+              <div className="text-sm font-semibold text-primary mb-2">{p("packages.enterprise.label")}</div>
+              <h3 className="text-2xl font-bold mb-4">{p("packages.enterprise.title")}</h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Long-term AI innovation and competitive advantage
+                {p("packages.enterprise.description")}
               </p>
               <ul className="space-y-3 mb-8">
-                {["Everything in Professional", "Dedicated AI team", "Priority support", "Quarterly strategy reviews", "Custom integrations"].map((item, i) => (
+                {(p.raw("packages.enterprise.features") as string[]).map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-sm">{item}</span>
@@ -348,7 +283,7 @@ export default function AIConsultingPage() {
                 source="ai-consulting-enterprise"
                 showCompanyRole
               >
-                Contact Sales
+                {p("packages.enterprise.cta")}
               </ScheduleConsultationButton>
             </Card>
           </div>
@@ -361,10 +296,10 @@ export default function AIConsultingPage() {
           <Card className="p-12 text-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
             <Rocket className="w-16 h-16 mx-auto mb-6 text-primary" />
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-              Ready to Transform Your Business?
+              {p("finalCta.title")}
             </h2>
             <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-              Book a free consultation and discover how AI can revolutionize your operations
+              {p("finalCta.subtitle")}
             </p>
             <ScheduleConsultationButton
               size="lg"
@@ -372,11 +307,11 @@ export default function AIConsultingPage() {
               source="ai-consulting-final"
               showCompanyRole
             >
-              Schedule Free Consultation
+              {p("finalCta.button")}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </ScheduleConsultationButton>
             <p className="text-sm text-muted-foreground mt-6">
-              No credit card required • 30-minute strategy session • Actionable insights guaranteed
+              {p("finalCta.disclaimer")}
             </p>
           </Card>
         </div>
@@ -385,9 +320,9 @@ export default function AIConsultingPage() {
       <ServiceBuilderSection
         serviceSlug="consulting"
         restrictToServiceSlug
-        badgeLabel="Personalize sua consultoria"
-        title="Monte seu plano de consultoria"
-        subtitle="Escolha auditoria, roadmap, treinamento e assessoria executiva conforme suas necessidades."
+        badgeLabel={p("builder.badge")}
+        title={p("builder.title")}
+        subtitle={p("builder.subtitle")}
         sectionId="builder"
         showServiceTabs={false}
       />

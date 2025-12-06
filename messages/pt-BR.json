@@ -1514,6 +1514,10 @@
       "automationAi": {
         "name": "Automação & IA aplicada",
         "description": "Mapeamento de processos, agentes e integrações inteligentes."
+      },
+      "consulting": {
+        "name": "Consultoria em IA",
+        "description": "Diagnóstico, roadmap, treinamentos e assessoria executiva para transformação digital com IA."
       }
     },
     "selectedService": "Serviço selecionado",
@@ -2388,6 +2392,164 @@
       "subtitle": "Agende uma consultoria gratuita e descubra como podemos ajudar a alcançar seus objetivos.",
       "button": "Agendar Consultoria Gratuita",
       "disclaimer": "Sem compromisso • 30 minutos • 100% gratuito"
+    }
+  },
+  "AIConsultingPage": {
+    "hero": {
+      "badge": "Transforme seu Negócio com IA",
+      "cta": {
+        "primary": "Agendar Consultoria Gratuita",
+        "secondary": "Ver Casos de Sucesso"
+      },
+      "guarantees": {
+        "noContracts": "Sem contratos longos",
+        "results30days": "Resultados em 30 dias",
+        "moneyBack": "Garantia de satisfação"
+      }
+    },
+    "stats": {
+      "productivity": {
+        "value": "40%",
+        "label": "Aumento médio de produtividade"
+      },
+      "savedTime": {
+        "value": "15h",
+        "label": "Economizadas por colaborador/semana"
+      },
+      "roi": {
+        "value": "3-6 meses",
+        "label": "Tempo típico de ROI"
+      },
+      "companies": {
+        "value": "100+",
+        "label": "Empresas transformadas"
+      }
+    },
+    "services": {
+      "title": "Soluções Completas em IA",
+      "subtitle": "Serviços de consultoria em IA de ponta a ponta, projetados para acelerar sua transformação digital",
+      "items": {
+        "strategy": {
+          "title": "Desenvolvimento de Estratégia de IA",
+          "description": "Roadmap personalizado alinhado com seus objetivos de negócio e requisitos do setor"
+        },
+        "tools": {
+          "title": "Seleção e Implementação de Ferramentas",
+          "description": "Escolha e implemente as ferramentas de IA certas que entregam ROI mensurável"
+        },
+        "training": {
+          "title": "Treinamento e Workshops",
+          "description": "Capacite sua equipe com habilidades práticas de IA e melhores práticas"
+        },
+        "agents": {
+          "title": "Desenvolvimento de Agentes de IA",
+          "description": "Construa agentes inteligentes customizados para seus fluxos de trabalho específicos"
+        },
+        "optimization": {
+          "title": "Otimização de Processos",
+          "description": "Identifique e automatize gargalos para máximos ganhos de eficiência"
+        },
+        "security": {
+          "title": "Segurança e Compliance",
+          "description": "Garanta que sua implementação de IA atenda padrões e regulamentações do setor"
+        }
+      }
+    },
+    "process": {
+      "title": "Nosso Processo Comprovado",
+      "subtitle": "Uma abordagem sistemática para transformação com IA que entrega resultados",
+      "steps": {
+        "discovery": {
+          "step": "01",
+          "title": "Diagnóstico Inicial",
+          "description": "Analisamos suas operações atuais e identificamos oportunidades de IA"
+        },
+        "strategy": {
+          "step": "02",
+          "title": "Design da Estratégia",
+          "description": "Roadmap de IA personalizado com marcos claros e resultados esperados"
+        },
+        "implementation": {
+          "step": "03",
+          "title": "Implementação",
+          "description": "Implantamos soluções com suporte prático e treinamento da equipe"
+        },
+        "optimization": {
+          "step": "04",
+          "title": "Otimização",
+          "description": "Monitoramento contínuo e refinamento para máximo impacto"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Confiado por Líderes do Mercado",
+      "subtitle": "Veja como ajudamos empresas como a sua a alcançar sucesso com IA",
+      "items": [
+        {
+          "quote": "A implementação de IA reduziu nosso tempo de resposta em 60% e nossa equipe está mais produtiva do que nunca.",
+          "author": "Sarah Chen",
+          "role": "CEO, TechFlow"
+        },
+        {
+          "quote": "Da estratégia à execução, eles tornaram a IA acessível e prática para nosso negócio.",
+          "author": "Marcus Rodriguez",
+          "role": "Diretor de Operações"
+        }
+      ]
+    },
+    "packages": {
+      "title": "Modelos de Engajamento Flexíveis",
+      "subtitle": "Escolha o pacote que se encaixa nas suas necessidades e orçamento",
+      "starter": {
+        "label": "INICIANTE",
+        "title": "Diagnóstico de IA",
+        "description": "Perfeito para empresas explorando oportunidades de IA",
+        "features": [
+          "Consultoria inicial",
+          "Análise de oportunidades",
+          "Recomendações estratégicas",
+          "Roadmap de implementação"
+        ],
+        "cta": "Começar"
+      },
+      "professional": {
+        "label": "PROFISSIONAL",
+        "badge": "Mais Popular",
+        "title": "Implementação Completa",
+        "description": "Transformação completa com IA e suporte contínuo",
+        "features": [
+          "Tudo do Iniciante",
+          "Desenvolvimento de IA customizado",
+          "Treinamento da equipe",
+          "3 meses de suporte",
+          "Monitoramento de performance"
+        ],
+        "cta": "Começar"
+      },
+      "enterprise": {
+        "label": "ENTERPRISE",
+        "title": "Parceria Estratégica",
+        "description": "Inovação contínua em IA e vantagem competitiva",
+        "features": [
+          "Tudo do Profissional",
+          "Time dedicado de IA",
+          "Suporte prioritário",
+          "Revisões estratégicas trimestrais",
+          "Integrações customizadas"
+        ],
+        "cta": "Falar com Vendas"
+      }
+    },
+    "finalCta": {
+      "title": "Pronto para Transformar seu Negócio?",
+      "subtitle": "Agende uma consultoria gratuita e descubra como a IA pode revolucionar suas operações",
+      "button": "Agendar Consultoria Gratuita",
+      "disclaimer": "Sem cartão de crédito • Sessão de 30 minutos • Insights acionáveis garantidos"
+    },
+    "builder": {
+      "badge": "Personalize sua consultoria",
+      "title": "Monte seu plano de consultoria",
+      "subtitle": "Escolha auditoria, roadmap, treinamento e assessoria executiva conforme suas necessidades."
     }
   }
 }
