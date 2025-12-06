@@ -21,6 +21,8 @@ import {
   User,
   LogOut,
   ChevronRight,
+  ChevronDown,
+  Package,
   Flame,
   Star,
   Image as ImageIcon,
@@ -187,6 +189,7 @@ export default function PortalPage() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [userCourses, setUserCourses] = useState<DashboardCourseProgress[]>([]);
   const [orders, setOrders] = useState<IOrder[]>([]);
+  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
   const [plan, setPlan] = useState("free");
   const [enrollmentSlots, setEnrollmentSlots] = useState<EnrollmentSlots | null>(null);
@@ -1492,33 +1495,116 @@ export default function PortalPage() {
 
                 <Card className="bg-white/5 border-white/10 p-6">
                   <h2 className="text-xl font-semibold mb-4">Histórico de Pedidos</h2>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {orders.length > 0 ? (
-                      orders.map((order) => (
-                        <div
-                          key={order._id}
-                          className="flex items-center justify-between border-b border-gray-800 pb-4 last:border-0"
-                        >
-                          <div>
-                            <p className="font-medium">
-                              Pedido #{order._id.substring(order._id.length - 6)}
-                            </p>
-                            <p className="text-sm text-gray-400">
-                              {new Date(order.createdAt).toLocaleDateString("pt-BR")}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <Badge
-                              variant={order.status === "completed" ? "default" : "outline"}
+                      orders.map((order) => {
+                        const isExpanded = expandedOrderId === order._id;
+                        return (
+                          <div
+                            key={order._id}
+                            className="border border-gray-800 rounded-lg overflow-hidden"
+                          >
+                            {/* Order Header - Clickable */}
+                            <div
+                              className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors"
+                              onClick={() => setExpandedOrderId(isExpanded ? null : order._id)}
                             >
-                              {order.status}
-                            </Badge>
-                            <p className="font-bold">
-                              R$ {order.totalAmount.toLocaleString("pt-BR")}
-                            </p>
+                              <div className="flex items-center gap-3">
+                                <div className={cn(
+                                  "transition-transform duration-200",
+                                  isExpanded && "rotate-90"
+                                )}>
+                                  <ChevronRight size={18} className="text-gray-400" />
+                                </div>
+                                <div>
+                                  <p className="font-medium">
+                                    Pedido #{order._id.substring(order._id.length - 6)}
+                                  </p>
+                                  <p className="text-sm text-gray-400">
+                                    {new Date(order.createdAt).toLocaleDateString("pt-BR")} • {order.items.length} {order.items.length === 1 ? 'item' : 'itens'}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                <Badge
+                                  variant={order.status === "completed" ? "default" : "outline"}
+                                  className={cn(
+                                    order.status === "pending" && "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+                                    order.status === "processing" && "bg-blue-500/20 text-blue-400 border-blue-500/30",
+                                    order.status === "completed" && "bg-green-500/20 text-green-400 border-green-500/30",
+                                    order.status === "shipped" && "bg-purple-500/20 text-purple-400 border-purple-500/30",
+                                    order.status === "delivered" && "bg-green-500/20 text-green-400 border-green-500/30",
+                                  )}
+                                >
+                                  {order.status === "pending" ? "Pendente" :
+                                   order.status === "processing" ? "Processando" :
+                                   order.status === "completed" ? "Concluído" :
+                                   order.status === "shipped" ? "Enviado" :
+                                   order.status === "delivered" ? "Entregue" :
+                                   order.status}
+                                </Badge>
+                                <p className="font-bold text-green-400">
+                                  R$ {order.totalAmount.toLocaleString("pt-BR")}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Expanded Order Items */}
+                            <AnimatePresence>
+                              {isExpanded && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="border-t border-gray-800 bg-black/30 p-4">
+                                    <p className="text-sm text-gray-400 mb-3">Itens do pedido:</p>
+                                    <div className="space-y-3">
+                                      {order.items.map((item, idx) => (
+                                        <div 
+                                          key={idx} 
+                                          className="flex items-center justify-between bg-white/5 rounded-lg p-3"
+                                        >
+                                          <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                              {item.type === "product" ? (
+                                                <Package size={18} className="text-purple-400" />
+                                              ) : item.type === "course" ? (
+                                                <BookOpen size={18} className="text-blue-400" />
+                                              ) : (
+                                                <Settings size={18} className="text-green-400" />
+                                              )}
+                                            </div>
+                                            <div>
+                                              <p className="font-medium text-sm">{item.name}</p>
+                                              <p className="text-xs text-gray-400">
+                                                {item.type === "product" ? "Produto" : 
+                                                 item.type === "course" ? "Curso" : "Serviço"} 
+                                                {item.quantity > 1 && ` × ${item.quantity}`}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <p className="font-medium">
+                                            R$ {(item.price * item.quantity).toLocaleString("pt-BR")}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <div className="mt-4 pt-3 border-t border-gray-800 flex justify-between items-center">
+                                      <span className="text-sm text-gray-400">Total do pedido</span>
+                                      <span className="text-lg font-bold text-green-400">
+                                        R$ {order.totalAmount.toLocaleString("pt-BR")}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
-                        </div>
-                      ))
+                        );
+                      })
                     ) : (
                       <p className="text-gray-400 text-center py-4">Nenhum pedido encontrado</p>
                     )}
