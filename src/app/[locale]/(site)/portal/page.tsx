@@ -82,6 +82,8 @@ import { LeaderboardPanel } from "@/components/portal/LeaderboardPanel";
 import { ChallengesPanel } from "@/components/portal/ChallengesPanel";
 import { AIAssistantPanel } from "@/components/portal/AIAssistantPanel";
 import { ProfilePanel } from "@/components/portal/ProfilePanel";
+import { StorePanel } from "@/components/portal/StorePanel";
+import { CartPanel } from "@/components/portal/CartPanel";
 
 // Types
 interface DashboardCourseProgress {
@@ -443,6 +445,8 @@ export default function PortalPage() {
           <div>
             <h1 className="text-lg font-semibold">
               {activeTab === "dashboard" && "Dashboard"}
+              {activeTab === "store" && "Loja"}
+              {activeTab === "cart" && "Carrinho"}
               {activeTab === "profile" && "Meu Perfil"}
               {activeTab === "courses" && "Meus Cursos"}
               {activeTab === "studio" && "Studio AI"}
@@ -812,6 +816,30 @@ export default function PortalPage() {
                     </Card>
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Store Tab */}
+            {activeTab === "store" && (
+              <motion.div
+                key="store"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <StorePanel />
+              </motion.div>
+            )}
+
+            {/* Cart Tab */}
+            {activeTab === "cart" && (
+              <motion.div
+                key="cart"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <CartPanel />
               </motion.div>
             )}
 
