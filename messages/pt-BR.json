@@ -827,8 +827,55 @@
     }
   },
   "Community": {
-    "title": "Comunidade",
-    "description": "Espaço para discussões, projetos e networking entre alunos. Em breve com recursos completos."
+    "hero": {
+      "badge": "Comunidade Criativa",
+      "title": "Onde a Criatividade Encontra a IA",
+      "subtitle": "Explore milhares de criações da nossa comunidade. Inspire-se, crie e compartilhe suas próprias obras de arte geradas por inteligência artificial."
+    },
+    "stats": {
+      "creations": "Criações",
+      "creators": "Criadores",
+      "todayCreations": "Criações Hoje"
+    },
+    "gallery": {
+      "title": "Galeria da Comunidade",
+      "description": "As criações mais recentes dos nossos membros",
+      "loadMore": "Carregar Mais",
+      "loading": "Carregando...",
+      "empty": "Nenhuma criação ainda. Seja o primeiro!",
+      "filters": {
+        "all": "Todas",
+        "recent": "Recentes",
+        "popular": "Populares"
+      }
+    },
+    "cta": {
+      "title": "Pronto para criar?",
+      "description": "Acesse nosso Studio AI e comece a gerar suas próprias imagens com inteligência artificial. É grátis para começar!",
+      "button": "Abrir Studio AI",
+      "secondaryButton": "Ver Como Funciona"
+    },
+    "howTo": {
+      "title": "Como Participar",
+      "steps": {
+        "create": {
+          "title": "Crie uma Conta",
+          "description": "Cadastre-se gratuitamente para ter acesso ao Studio AI"
+        },
+        "generate": {
+          "title": "Gere Suas Imagens",
+          "description": "Use prompts criativos e nossos modelos de IA para criar arte única"
+        },
+        "share": {
+          "title": "Compartilhe na Galeria",
+          "description": "Suas criações aparecem automaticamente para toda a comunidade"
+        }
+      }
+    },
+    "featured": {
+      "title": "Criadores em Destaque",
+      "description": "Membros que mais contribuíram este mês"
+    }
   },
   "Consultation": {
     "title": "Agendar Consultoria",

@@ -822,8 +822,55 @@
     }
   },
   "Community": {
-    "title": "Community",
-    "description": "Space for discussions, projects, and networking between students. Full-featured experience coming soon."
+    "hero": {
+      "badge": "Creative Community",
+      "title": "Where Creativity Meets AI",
+      "subtitle": "Explore thousands of creations from our community. Get inspired, create, and share your own AI-generated artwork."
+    },
+    "stats": {
+      "creations": "Creations",
+      "creators": "Creators",
+      "todayCreations": "Creations Today"
+    },
+    "gallery": {
+      "title": "Community Gallery",
+      "description": "Latest creations from our members",
+      "loadMore": "Load More",
+      "loading": "Loading...",
+      "empty": "No creations yet. Be the first!",
+      "filters": {
+        "all": "All",
+        "recent": "Recent",
+        "popular": "Popular"
+      }
+    },
+    "cta": {
+      "title": "Ready to create?",
+      "description": "Access our AI Studio and start generating your own images with artificial intelligence. It's free to start!",
+      "button": "Open AI Studio",
+      "secondaryButton": "See How It Works"
+    },
+    "howTo": {
+      "title": "How to Participate",
+      "steps": {
+        "create": {
+          "title": "Create an Account",
+          "description": "Sign up for free to access AI Studio"
+        },
+        "generate": {
+          "title": "Generate Your Images",
+          "description": "Use creative prompts and our AI models to create unique art"
+        },
+        "share": {
+          "title": "Share in the Gallery",
+          "description": "Your creations automatically appear for the entire community"
+        }
+      }
+    },
+    "featured": {
+      "title": "Featured Creators",
+      "description": "Top contributors this month"
+    }
   },
   "Consultation": {
     "title": "Book a Consultation",

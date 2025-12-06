@@ -26,10 +26,10 @@ export function CommunityGallery() {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const res = await fetch('/api/public/gallery');
+        const res = await fetch('/api/public/gallery?limit=12');
         if (res.ok) {
           const data = await res.json();
-          setCreations(data);
+          setCreations(data.creations || data);
         }
       } catch (error) {
         console.error(error);
