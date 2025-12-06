@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -388,34 +389,34 @@ export default function AdminDashboardPage() {
       >
         <h3 className="text-lg font-semibold text-white mb-4">Ações Rápidas</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <a
+          <Link
             href="/admin/users"
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Users className="w-6 h-6 text-violet-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-sm font-medium text-white">Gerenciar Usuários</p>
-          </a>
-          <a
+          </Link>
+          <Link
             href="/admin/products"
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Package className="w-6 h-6 text-amber-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-sm font-medium text-white">Gerenciar Produtos</p>
-          </a>
-          <a
+          </Link>
+          <Link
             href="/admin/database"
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Database className="w-6 h-6 text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-sm font-medium text-white">Banco de Dados</p>
-          </a>
-          <a
+          </Link>
+          <Link
             href="/admin/logs"
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Activity className="w-6 h-6 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-sm font-medium text-white">Ver Logs</p>
-          </a>
+          </Link>
         </div>
       </motion.div>
     </div>

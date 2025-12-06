@@ -90,8 +90,8 @@ export async function PUT(
         { returnDocument: 'after' }
       );
     } catch {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       result = await col.findOneAndUpdate(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         { _id: id as any },
         { $set: updateData },
         { returnDocument: 'after' }
