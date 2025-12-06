@@ -183,6 +183,7 @@ export default function PortalPage() {
   const { items: cartItems, cartTotal } = useServiceCart();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isLoading, setIsLoading] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [userCourses, setUserCourses] = useState<DashboardCourseProgress[]>([]);
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -436,10 +437,17 @@ export default function PortalPage() {
         stats={stats}
         plan={plan}
         achievements={gamification?.achievements || []}
+        isCollapsed={sidebarCollapsed}
+        onCollapsedChange={setSidebarCollapsed}
       />
 
       {/* Main Content */}
-      <main className="ml-[280px] min-h-screen">
+      <motion.main 
+        initial={false}
+        animate={{ marginLeft: sidebarCollapsed ? 80 : 280 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="min-h-screen"
+      >
         {/* Top Bar */}
         <header className="h-16 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-30 flex items-center justify-between px-6">
           <div>
@@ -827,7 +835,7 @@ export default function PortalPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                <StorePanel />
+                <StorePanel isCompact={sidebarCollapsed} />
               </motion.div>
             )}
 
@@ -1612,7 +1620,7 @@ export default function PortalPage() {
             )}
           </AnimatePresence>
         </div>
-      </main>
+      </motion.main>
     </div>
   );
 }

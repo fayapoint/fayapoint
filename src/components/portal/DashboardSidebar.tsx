@@ -58,6 +58,8 @@ interface DashboardSidebarProps {
   };
   plan: string;
   achievements?: Achievement[];
+  isCollapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 const MENU_ITEMS = [
@@ -76,8 +78,25 @@ const MENU_ITEMS = [
   { id: "rewards", icon: Gift, label: "Recompensas", proOnly: true, badge: "PRO" },
 ];
 
-export function DashboardSidebar({ activeTab, onTabChange, user, stats, plan, achievements = [] }: DashboardSidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+export function DashboardSidebar({ 
+  activeTab, 
+  onTabChange, 
+  user, 
+  stats, 
+  plan, 
+  achievements = [],
+  isCollapsed: controlledCollapsed,
+  onCollapsedChange
+}: DashboardSidebarProps) {
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+  
+  // Support both controlled and uncontrolled mode
+  const isCollapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
+  const setIsCollapsed = (value: boolean) => {
+    setInternalCollapsed(value);
+    onCollapsedChange?.(value);
+  };
+  
   const isPro = ["pro", "business", "starter"].includes(plan);
 
   return (

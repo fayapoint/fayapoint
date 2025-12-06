@@ -7,6 +7,7 @@ import {
   Filter,
   Grid,
   LayoutGrid,
+  Boxes,
   List,
   ChevronRight,
   Star,
@@ -102,7 +103,11 @@ interface FiltersState {
   brands: string[];
 }
 
-export function StorePanel() {
+interface StorePanelProps {
+  isCompact?: boolean;
+}
+
+export function StorePanel({ isCompact = false }: StorePanelProps) {
   const { addItem, items } = useServiceCart();
   const [products, setProducts] = useState<StoreProduct[]>([]);
   const [featuredData, setFeaturedData] = useState<{
@@ -738,153 +743,36 @@ export function StorePanel() {
     </div>
   );
 
-  // Products List Section
-  const ProductsSection = () => (
-    <div className="flex gap-6">
-      {/* Sidebar Filters */}
-      <div className={cn(
-        "w-64 flex-shrink-0 space-y-6 hidden lg:block"
-      )}>
-        <Card className="bg-white/5 border-white/10 p-4">
-          <h3 className="font-semibold mb-4 flex items-center gap-2">
-            <Filter size={18} />
-            Filtros
-          </h3>
-
-          {/* Categories */}
-          <div className="mb-6">
-            <p className="text-sm font-medium text-gray-400 mb-2">Categoria</p>
-            <div className="space-y-1">
-              <button
-                className={cn(
-                  "w-full text-left px-3 py-2 rounded-lg text-sm transition",
-                  !selectedCategory
-                    ? "bg-purple-500/20 text-purple-400"
-                    : "hover:bg-white/5 text-gray-300"
-                )}
-                onClick={() => {
-                  setSelectedCategory(null);
-                  setSelectedSubcategory(null);
-                }}
-              >
-                Todas
-              </button>
-              {filters && Object.entries(filters.categories).map(([id, cat]) => (
-                <button
-                  key={id}
-                  className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg text-sm transition flex justify-between",
-                    selectedCategory === id
-                      ? "bg-purple-500/20 text-purple-400"
-                      : "hover:bg-white/5 text-gray-300"
-                  )}
-                  onClick={() => {
-                    setSelectedCategory(id);
-                    setSelectedSubcategory(null);
-                  }}
-                >
-                  <span>{cat.name}</span>
-                  <span className="text-gray-500">{filters.categoryCounts[id] || 0}</span>
-                </button>
-              ))}
+  // Compact Icon Filter Bar Component
+  const CompactFilterBar = () => (
+    <motion.div 
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="mb-6"
+    >
+      {/* Glass Container */}
+      <div className="relative rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-xl" />
+        <div className="relative p-4">
+          {/* Search and Controls Row */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Input
+                placeholder="Buscar..."
+                className="pl-10 h-10 bg-black/30 border-white/10 rounded-xl text-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-          </div>
-
-          {/* Subcategories */}
-          {selectedCategory && filters?.categories[selectedCategory] && (
-            <div className="mb-6">
-              <p className="text-sm font-medium text-gray-400 mb-2">Subcategoria</p>
-              <div className="space-y-1">
-                <button
-                  className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg text-sm transition",
-                    !selectedSubcategory
-                      ? "bg-purple-500/20 text-purple-400"
-                      : "hover:bg-white/5 text-gray-300"
-                  )}
-                  onClick={() => setSelectedSubcategory(null)}
-                >
-                  Todas
-                </button>
-                {filters.categories[selectedCategory].subcategories.map((sub) => (
-                  <button
-                    key={sub}
-                    className={cn(
-                      "w-full text-left px-3 py-2 rounded-lg text-sm transition",
-                      selectedSubcategory === sub
-                        ? "bg-purple-500/20 text-purple-400"
-                        : "hover:bg-white/5 text-gray-300"
-                    )}
-                    onClick={() => setSelectedSubcategory(sub)}
-                  >
-                    {sub}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Brands */}
-          {filters?.brands && filters.brands.length > 0 && (
-            <div className="mb-6">
-              <p className="text-sm font-medium text-gray-400 mb-2">Marca</p>
-              <Select value={selectedBrand || "__all__"} onValueChange={(v) => setSelectedBrand(v === "__all__" ? null : v)}>
-                <SelectTrigger className="bg-black/30 border-gray-700">
-                  <SelectValue placeholder="Todas as marcas" />
-                </SelectTrigger>
-                <SelectContent className="bg-gray-900 border-gray-800 text-white">
-                  <SelectItem value="__all__">Todas</SelectItem>
-                  {filters.brands.map((brand) => (
-                    <SelectItem key={brand} value={brand}>
-                      {brand}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          {/* Clear Filters */}
-          {(selectedCategory || selectedBrand || selectedSubcategory) && (
-            <Button
-              variant="outline"
-              className="w-full border-gray-700"
-              onClick={() => {
-                setSelectedCategory(null);
-                setSelectedSubcategory(null);
-                setSelectedBrand(null);
-              }}
-            >
-              <X size={16} className="mr-2" />
-              Limpar Filtros
-            </Button>
-          )}
-        </Card>
-      </div>
-
-      {/* Products Grid */}
-      <div className="flex-1">
-        {/* Toolbar */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          {/* Search */}
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <Input
-              placeholder="Buscar produtos..."
-              className="pl-10 bg-white/5 border-gray-700"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <div className="flex gap-2">
-            {/* Sort */}
+            
+            {/* Sort Dropdown - Compact */}
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 bg-white/5 border-gray-700">
-                <ArrowUpDown size={16} className="mr-2" />
-                <SelectValue />
+              <SelectTrigger className="w-10 h-10 p-0 bg-black/30 border-white/10 rounded-xl [&>span]:hidden">
+                <ArrowUpDown size={16} />
               </SelectTrigger>
-              <SelectContent className="bg-gray-900 border-gray-800 text-white">
+              <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/10 text-white">
                 <SelectItem value="createdAt">Mais Recentes</SelectItem>
                 <SelectItem value="price-asc">Menor Preço</SelectItem>
                 <SelectItem value="price-desc">Maior Preço</SelectItem>
@@ -892,44 +780,311 @@ export function StorePanel() {
                 <SelectItem value="sold">Mais Vendidos</SelectItem>
               </SelectContent>
             </Select>
-
+            
             {/* View Mode */}
-            <div className="flex border border-gray-700 rounded-md overflow-hidden">
-              <Button
-                variant="ghost"
-                size="icon"
+            <div className="flex bg-black/30 rounded-xl overflow-hidden border border-white/10">
+              <button
                 className={cn(
-                  "rounded-none",
-                  viewMode === "grid" && "bg-purple-500/20 text-purple-400"
+                  "w-10 h-10 flex items-center justify-center transition-all",
+                  viewMode === "grid" ? "bg-purple-500/30 text-purple-400" : "text-gray-400 hover:text-white"
                 )}
                 onClick={() => setViewMode("grid")}
               >
-                <Grid size={18} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
+                <Grid size={16} />
+              </button>
+              <button
                 className={cn(
-                  "rounded-none",
-                  viewMode === "list" && "bg-purple-500/20 text-purple-400"
+                  "w-10 h-10 flex items-center justify-center transition-all",
+                  viewMode === "list" ? "bg-purple-500/30 text-purple-400" : "text-gray-400 hover:text-white"
                 )}
                 onClick={() => setViewMode("list")}
               >
-                <List size={18} />
-              </Button>
+                <List size={16} />
+              </button>
             </div>
-
-            {/* Mobile Filters */}
-            <Button
-              variant="outline"
-              size="icon"
-              className="lg:hidden border-gray-700"
-              onClick={() => setShowFilters(!showFilters)}
+          </div>
+          
+          {/* Category Icons Row */}
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1">
+            {/* All Categories */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={cn(
+                "flex flex-col items-center gap-1 p-3 rounded-xl transition-all min-w-[60px]",
+                !selectedCategory 
+                  ? "bg-purple-500/30 text-purple-400 border border-purple-500/50" 
+                  : "bg-black/20 text-gray-400 hover:bg-white/10 hover:text-white border border-transparent"
+              )}
+              onClick={() => {
+                setSelectedCategory(null);
+                setSelectedSubcategory(null);
+              }}
             >
-              <SlidersHorizontal size={18} />
-            </Button>
+              <LayoutGrid size={20} />
+              <span className="text-[10px] font-medium">Todos</span>
+            </motion.button>
+            
+            {/* Category Icons */}
+            {filters && Object.entries(filters.categories).map(([id, cat]) => {
+              const IconComponent = CATEGORY_ICONS[id] || Package;
+              return (
+                <motion.button
+                  key={id}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={cn(
+                    "flex flex-col items-center gap-1 p-3 rounded-xl transition-all min-w-[60px] relative",
+                    selectedCategory === id 
+                      ? "bg-purple-500/30 text-purple-400 border border-purple-500/50" 
+                      : "bg-black/20 text-gray-400 hover:bg-white/10 hover:text-white border border-transparent"
+                  )}
+                  onClick={() => {
+                    setSelectedCategory(id);
+                    setSelectedSubcategory(null);
+                  }}
+                >
+                  <IconComponent size={20} />
+                  <span className="text-[10px] font-medium truncate max-w-[50px]">
+                    {cat.name.split(' ')[0]}
+                  </span>
+                  {/* Count Badge */}
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-500 text-white text-[9px] rounded-full flex items-center justify-center">
+                    {filters.categoryCounts[id] || 0}
+                  </span>
+                </motion.button>
+              );
+            })}
+            
+            {/* Clear Filter */}
+            {(selectedCategory || selectedBrand) && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex flex-col items-center gap-1 p-3 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 min-w-[60px]"
+                onClick={() => {
+                  setSelectedCategory(null);
+                  setSelectedSubcategory(null);
+                  setSelectedBrand(null);
+                }}
+              >
+                <X size={20} />
+                <span className="text-[10px] font-medium">Limpar</span>
+              </motion.button>
+            )}
           </div>
         </div>
+      </div>
+    </motion.div>
+  );
+
+  // Products List Section
+  const ProductsSection = () => (
+    <div className={cn("flex gap-6", isCompact && "flex-col")}>
+      {/* Compact Mode: Icon Filter Bar */}
+      {isCompact && <CompactFilterBar />}
+      
+      {/* Full Mode: Sidebar Filters */}
+      <AnimatePresence>
+        {!isCompact && (
+          <motion.div 
+            initial={{ opacity: 0, x: -20, width: 0 }}
+            animate={{ opacity: 1, x: 0, width: 256 }}
+            exit={{ opacity: 0, x: -20, width: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="flex-shrink-0 space-y-6 hidden lg:block overflow-hidden"
+          >
+            <Card className="bg-white/5 border-white/10 p-4">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <Filter size={18} />
+                Filtros
+              </h3>
+
+              {/* Categories */}
+              <div className="mb-6">
+                <p className="text-sm font-medium text-gray-400 mb-2">Categoria</p>
+                <div className="space-y-1">
+                  <button
+                    className={cn(
+                      "w-full text-left px-3 py-2 rounded-lg text-sm transition",
+                      !selectedCategory
+                        ? "bg-purple-500/20 text-purple-400"
+                        : "hover:bg-white/5 text-gray-300"
+                    )}
+                    onClick={() => {
+                      setSelectedCategory(null);
+                      setSelectedSubcategory(null);
+                    }}
+                  >
+                    Todas
+                  </button>
+                  {filters && Object.entries(filters.categories).map(([id, cat]) => (
+                    <button
+                      key={id}
+                      className={cn(
+                        "w-full text-left px-3 py-2 rounded-lg text-sm transition flex justify-between",
+                        selectedCategory === id
+                          ? "bg-purple-500/20 text-purple-400"
+                          : "hover:bg-white/5 text-gray-300"
+                      )}
+                      onClick={() => {
+                        setSelectedCategory(id);
+                        setSelectedSubcategory(null);
+                      }}
+                    >
+                      <span>{cat.name}</span>
+                      <span className="text-gray-500">{filters.categoryCounts[id] || 0}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Subcategories */}
+              {selectedCategory && filters?.categories[selectedCategory] && (
+                <div className="mb-6">
+                  <p className="text-sm font-medium text-gray-400 mb-2">Subcategoria</p>
+                  <div className="space-y-1">
+                    <button
+                      className={cn(
+                        "w-full text-left px-3 py-2 rounded-lg text-sm transition",
+                        !selectedSubcategory
+                          ? "bg-purple-500/20 text-purple-400"
+                          : "hover:bg-white/5 text-gray-300"
+                      )}
+                      onClick={() => setSelectedSubcategory(null)}
+                    >
+                      Todas
+                    </button>
+                    {filters.categories[selectedCategory].subcategories.map((sub) => (
+                      <button
+                        key={sub}
+                        className={cn(
+                          "w-full text-left px-3 py-2 rounded-lg text-sm transition",
+                          selectedSubcategory === sub
+                            ? "bg-purple-500/20 text-purple-400"
+                            : "hover:bg-white/5 text-gray-300"
+                        )}
+                        onClick={() => setSelectedSubcategory(sub)}
+                      >
+                        {sub}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Brands */}
+              {filters?.brands && filters.brands.length > 0 && (
+                <div className="mb-6">
+                  <p className="text-sm font-medium text-gray-400 mb-2">Marca</p>
+                  <Select value={selectedBrand || "__all__"} onValueChange={(v) => setSelectedBrand(v === "__all__" ? null : v)}>
+                    <SelectTrigger className="bg-black/30 border-gray-700">
+                      <SelectValue placeholder="Todas as marcas" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                      <SelectItem value="__all__">Todas</SelectItem>
+                      {filters.brands.map((brand) => (
+                        <SelectItem key={brand} value={brand}>
+                          {brand}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              {/* Clear Filters */}
+              {(selectedCategory || selectedBrand || selectedSubcategory) && (
+                <Button
+                  variant="outline"
+                  className="w-full border-gray-700"
+                  onClick={() => {
+                    setSelectedCategory(null);
+                    setSelectedSubcategory(null);
+                    setSelectedBrand(null);
+                  }}
+                >
+                  <X size={16} className="mr-2" />
+                  Limpar Filtros
+                </Button>
+              )}
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Products Grid */}
+      <div className="flex-1">
+        {/* Toolbar - Only show in full mode */}
+        {!isCompact && (
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Input
+                placeholder="Buscar produtos..."
+                className="pl-10 bg-white/5 border-gray-700"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <div className="flex gap-2">
+              {/* Sort */}
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-48 bg-white/5 border-gray-700">
+                  <ArrowUpDown size={16} className="mr-2" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                  <SelectItem value="createdAt">Mais Recentes</SelectItem>
+                  <SelectItem value="price-asc">Menor Preço</SelectItem>
+                  <SelectItem value="price-desc">Maior Preço</SelectItem>
+                  <SelectItem value="rating">Melhor Avaliados</SelectItem>
+                  <SelectItem value="sold">Mais Vendidos</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* View Mode */}
+              <div className="flex border border-gray-700 rounded-md overflow-hidden">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "rounded-none",
+                    viewMode === "grid" && "bg-purple-500/20 text-purple-400"
+                  )}
+                  onClick={() => setViewMode("grid")}
+                >
+                  <Grid size={18} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "rounded-none",
+                    viewMode === "list" && "bg-purple-500/20 text-purple-400"
+                  )}
+                  onClick={() => setViewMode("list")}
+                >
+                  <List size={18} />
+                </Button>
+              </div>
+
+              {/* Mobile Filters */}
+              <Button
+                variant="outline"
+                size="icon"
+                className="lg:hidden border-gray-700"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <SlidersHorizontal size={18} />
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Back Button & Breadcrumb */}
         <div className="flex items-center gap-4 mb-4">
