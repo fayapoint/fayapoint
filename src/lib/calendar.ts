@@ -28,6 +28,20 @@ interface AvailableSlotResponse {
   bookingUrl: string;
 }
 
+export interface BookingDetails {
+  userName?: string;
+  userEmail?: string;
+  company?: string;
+  source?: string;
+  details?: string;
+  cartItems?: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+  }>;
+  cartTotal?: number;
+}
+
 function stripSeconds(date: Date) {
   const cloned = new Date(date);
   cloned.setSeconds(0, 0);
@@ -107,21 +121,93 @@ function formatForGoogle(date: Date) {
   return formatInTimeZone(date, "UTC", "yyyyMMdd'T'HHmmss'Z'");
 }
 
-function buildBookingUrl(startUtc: Date, endUtc: Date) {
+function buildBookingUrl(startUtc: Date, endUtc: Date, details?: BookingDetails) {
   const url = new URL("https://calendar.google.com/calendar/render");
   url.searchParams.set("action", "TEMPLATE");
   url.searchParams.set("src", CALENDAR_ID);
   url.searchParams.set("ctz", TIME_ZONE);
-  url.searchParams.set("text", "Consulta com FayaPoint");
-  url.searchParams.set(
-    "details",
-    "Agendamento automático enviado pelo site da FayaPoint. Ajuste livremente o horário dentro da agenda.",
-  );
+  
+  // Build event title with user name if available
+  const eventTitle = details?.userName 
+    ? `Consulta com ${details.userName} - FayaPoint`
+    : "Consulta com FayaPoint";
+  url.searchParams.set("text", eventTitle);
+  
+  // Build rich description with all available details
+  const descriptionParts: string[] = [];
+  
+  descriptionParts.push("📅 Agendamento automático enviado pelo site da FayaPoint.");
+  descriptionParts.push("");
+  
+  // User information
+  if (details?.userName || details?.userEmail) {
+    descriptionParts.push("👤 INFORMAÇÕES DO CLIENTE:");
+    if (details.userName) descriptionParts.push(`   Nome: ${details.userName}`);
+    if (details.userEmail) descriptionParts.push(`   Email: ${details.userEmail}`);
+    if (details.company) descriptionParts.push(`   Empresa: ${details.company}`);
+    descriptionParts.push("");
+  }
+  
+  // Source/Origin
+  if (details?.source) {
+    const sourceLabels: Record<string, string> = {
+      'video-editing': 'Página de Edição de Vídeo',
+      'ai-automation': 'Página de Automação com IA',
+      'web-development': 'Página de Desenvolvimento Web',
+      'ai-training': 'Página de Treinamentos em IA',
+      'contact-page': 'Página de Contato',
+      'agenda-page': 'Página de Agendamento',
+      'home-page': 'Página Inicial',
+      'pricing-page': 'Página de Preços',
+      'services-page': 'Página de Serviços',
+    };
+    const sourceLabel = sourceLabels[details.source] || details.source;
+    descriptionParts.push(`📍 Origem: ${sourceLabel}`);
+    descriptionParts.push("");
+  }
+  
+  // Cart items
+  if (details?.cartItems && details.cartItems.length > 0) {
+    descriptionParts.push("🛒 ITENS NO CARRINHO:");
+    details.cartItems.forEach(item => {
+      const priceFormatted = new Intl.NumberFormat('pt-BR', { 
+        style: 'currency', 
+        currency: 'BRL' 
+      }).format(item.price * item.quantity);
+      descriptionParts.push(`   • ${item.name} (x${item.quantity}) - ${priceFormatted}`);
+    });
+    if (details.cartTotal) {
+      const totalFormatted = new Intl.NumberFormat('pt-BR', { 
+        style: 'currency', 
+        currency: 'BRL' 
+      }).format(details.cartTotal);
+      descriptionParts.push(`   💰 Total: ${totalFormatted}`);
+    }
+    descriptionParts.push("");
+  }
+  
+  // Additional details/message
+  if (details?.details) {
+    descriptionParts.push("💬 MENSAGEM DO CLIENTE:");
+    descriptionParts.push(`   ${details.details}`);
+    descriptionParts.push("");
+  }
+  
+  descriptionParts.push("---");
+  descriptionParts.push("Ajuste livremente o horário dentro da agenda se necessário.");
+  
+  url.searchParams.set("details", descriptionParts.join("\n"));
   url.searchParams.set("dates", `${formatForGoogle(startUtc)}/${formatForGoogle(endUtc)}`);
+  
+  // Add guest email if available
+  if (details?.userEmail) {
+    url.searchParams.set("add", details.userEmail);
+  }
+  
   return url.toString();
 }
 
-export async function getNextAvailableSlot(): Promise<AvailableSlotResponse> {
+export async function getNextAvailableSlot(bookingDetails?: BookingDetails): Promise<AvailableSlotResponse> {
   const busySlots = await fetchBusySlots();
   const nowLocal = toZonedTime(new Date(), TIME_ZONE);
 
@@ -139,7 +225,7 @@ export async function getNextAvailableSlot(): Promise<AvailableSlotResponse> {
         startUtc: startUtc.toISOString(),
         endUtc: endUtc.toISOString(),
         startInTimeZone: formatInTimeZone(startUtc, TIME_ZONE, "EEEE, dd 'de' MMMM 'às' HH:mm"),
-        bookingUrl: buildBookingUrl(startUtc, endUtc),
+        bookingUrl: buildBookingUrl(startUtc, endUtc, bookingDetails),
       };
     }
 

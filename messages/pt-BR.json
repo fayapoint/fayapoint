@@ -879,6 +879,7 @@
     }
   },
   "Consultation": {
+    "badge": "Agenda exclusiva",
     "title": "Agendar Consultoria",
     "description": "Preencha seus dados e retornaremos para confirmar o melhor horário.",
     "fields": {

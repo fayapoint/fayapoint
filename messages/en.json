@@ -874,6 +874,7 @@
     }
   },
   "Consultation": {
+    "badge": "Exclusive schedule",
     "title": "Book a Consultation",
     "description": "Share your details and we'll follow up to confirm the best time.",
     "fields": {
