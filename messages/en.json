@@ -11,6 +11,7 @@
       "about": "About",
       "community": "Community",
       "cases": "Cases",
+      "pricing": "Pricing",
       "quickActions": "Quick Actions",
       "viewDashboard": "View Dashboard"
     },
@@ -2272,6 +2273,86 @@
       "description": "We send a dossier with diagnosis, effort estimate, and which digital assets we can build in up to 90 days.",
       "primaryButton": "Schedule Diagnostic",
       "secondaryButton": "Receive Complete Portfolio"
+    }
+  },
+  "Pricing": {
+    "badge": "Transparent Pricing",
+    "hero": {
+      "title": "Clear Investment, Real Results",
+      "subtitle": "Transparent pricing for every service. No surprises, no hidden costs. Build your custom project or choose one of our ready-made packages.",
+      "cta": "Book Free Consultation",
+      "ctaSecondary": "Build Your Quote",
+      "guarantee1": "Satisfaction guarantee",
+      "guarantee2": "24h response time",
+      "guarantee3": "100+ clients served"
+    },
+    "stats": {
+      "clients": "Clients Served",
+      "efficiency": "Efficiency Gain",
+      "rating": "Average Rating",
+      "response": "Response Time"
+    },
+    "bundles": {
+      "badge": "Popular Packages",
+      "title": "Ready-to-Go Packages",
+      "subtitle": "Tested and proven combinations that deliver fast results. Choose what fits your needs best.",
+      "popular": "Most Popular",
+      "perProject": "per project",
+      "selectCta": "Select Package"
+    },
+    "services": {
+      "badge": "Full Catalog",
+      "title": "All Services Detailed",
+      "subtitle": "Explore every item in our catalog with transparent pricing. Combine services to create the perfect solution.",
+      "searchPlaceholder": "Search services...",
+      "all": "All",
+      "categories": {
+        "website_full": "Full Website",
+        "social_management": "Social Media",
+        "local_seo": "Local SEO",
+        "video_production": "Video Production",
+        "automation_ai": "Automation & AI",
+        "consulting": "Consulting"
+      },
+      "itemsAvailable": "items available",
+      "items": "items",
+      "priceRange": "Price range",
+      "unit": "Unit",
+      "minQty": "Min qty",
+      "range": "Range",
+      "recommended": "Recommended",
+      "ctaText": "Need help choosing? Our team is ready to build the ideal package for you.",
+      "learnMore": "Learn More",
+      "getQuote": "Get Quote",
+      "noResults": "No services found. Try a different search."
+    },
+    "builder": {
+      "badge": "Build Your Project",
+      "title": "Interactive Quote Builder",
+      "subtitle": "Use our tool to select exactly what you need and receive a personalized proposal.",
+      "interactiveTitle": "Build Your Custom Package",
+      "interactiveDesc": "Select services, adjust quantities, and get a detailed proposal in minutes. No commitment.",
+      "ctaButton": "Open Quote Builder"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Get answers about our pricing and process",
+      "q1": "How does the quote process work?",
+      "a1": "After selecting your desired services, you'll receive a detailed proposal within 24 hours. We'll schedule a call to align expectations and adjust the scope as needed.",
+      "q2": "Are the prices fixed or can they vary?",
+      "a2": "Listed prices are market references. The final value may vary based on project complexity, deadlines, and workload. We always present a closed quote before starting.",
+      "q3": "Do you offer payment plans?",
+      "a3": "Yes! We offer up to 12 installments on credit card or special conditions for full payment. For larger projects, we offer payment plans tied to deliverables.",
+      "q4": "What's the average delivery time?",
+      "a4": "It depends on scope, but most projects are delivered within 2 to 8 weeks. More complex projects can take up to 12 weeks. We always define clear milestones upfront.",
+      "q5": "What if I'm not satisfied?",
+      "a5": "We offer a satisfaction guarantee. If results don't meet aligned expectations, we work on adjustments at no extra cost. Your success is our goal."
+    },
+    "cta": {
+      "title": "Ready to Transform Your Business?",
+      "subtitle": "Book a free consultation and discover how we can help achieve your goals.",
+      "button": "Book Free Consultation",
+      "disclaimer": "No commitment • 30 minutes • 100% free"
     }
   }
 }

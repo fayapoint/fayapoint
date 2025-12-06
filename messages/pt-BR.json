@@ -11,6 +11,7 @@
       "about": "Sobre",
       "community": "Comunidade",
       "cases": "Casos",
+      "pricing": "Preços",
       "quickActions": "Ações Rápidas",
       "viewDashboard": "Ver Painel"
     },
@@ -2286,6 +2287,86 @@
       "description": "Enviamos um dossiê com diagnóstico, estimativa de esforço e quais ativos digitais podemos construir em até 90 dias.",
       "primaryButton": "Agendar Diagnóstico",
       "secondaryButton": "Receber Portfólio Completo"
+    }
+  },
+  "Pricing": {
+    "badge": "Preços Transparentes",
+    "hero": {
+      "title": "Investimento Claro, Resultados Reais",
+      "subtitle": "Preços transparentes para cada serviço. Sem surpresas, sem custos ocultos. Monte seu projeto sob medida ou escolha um de nossos pacotes prontos.",
+      "cta": "Agendar Consultoria Gratuita",
+      "ctaSecondary": "Montar Orçamento",
+      "guarantee1": "Garantia de satisfação",
+      "guarantee2": "Resposta em 24h",
+      "guarantee3": "100+ clientes atendidos"
+    },
+    "stats": {
+      "clients": "Clientes Atendidos",
+      "efficiency": "Ganho de Eficiência",
+      "rating": "Avaliação Média",
+      "response": "Tempo de Resposta"
+    },
+    "bundles": {
+      "badge": "Pacotes Populares",
+      "title": "Pacotes Prontos para Começar",
+      "subtitle": "Combinações testadas e aprovadas que entregam resultado rápido. Escolha o que mais se encaixa no seu momento.",
+      "popular": "Mais Popular",
+      "perProject": "por projeto",
+      "selectCta": "Selecionar Pacote"
+    },
+    "services": {
+      "badge": "Catálogo Completo",
+      "title": "Todos os Serviços Detalhados",
+      "subtitle": "Explore cada item do nosso catálogo com preços transparentes. Combine serviços para criar a solução perfeita.",
+      "searchPlaceholder": "Buscar serviços...",
+      "all": "Todos",
+      "categories": {
+        "website_full": "Website Completo",
+        "social_management": "Social Media",
+        "local_seo": "SEO Local",
+        "video_production": "Produção de Vídeo",
+        "automation_ai": "Automação & IA",
+        "consulting": "Consultoria"
+      },
+      "itemsAvailable": "itens disponíveis",
+      "items": "itens",
+      "priceRange": "Faixa de preço",
+      "unit": "Unidade",
+      "minQty": "Qtd. mín",
+      "range": "Faixa",
+      "recommended": "Recomendado",
+      "ctaText": "Precisa de ajuda para escolher? Nossa equipe está pronta para montar o pacote ideal.",
+      "learnMore": "Saiba Mais",
+      "getQuote": "Solicitar Orçamento",
+      "noResults": "Nenhum serviço encontrado. Tente uma busca diferente."
+    },
+    "builder": {
+      "badge": "Monte Seu Projeto",
+      "title": "Construtor Interativo de Orçamento",
+      "subtitle": "Use nossa ferramenta para selecionar exatamente o que precisa e receber uma proposta personalizada.",
+      "interactiveTitle": "Monte Seu Pacote Personalizado",
+      "interactiveDesc": "Selecione os serviços, ajuste as quantidades e receba uma proposta detalhada em minutos. Sem compromisso.",
+      "ctaButton": "Abrir Construtor de Orçamento"
+    },
+    "faq": {
+      "title": "Perguntas Frequentes",
+      "subtitle": "Tire suas dúvidas sobre nossos preços e processos",
+      "q1": "Como funciona o processo de orçamento?",
+      "a1": "Após selecionar os serviços desejados, você receberá uma proposta detalhada em até 24h. Agendamos uma call para alinhar expectativas e ajustar o escopo conforme necessário.",
+      "q2": "Os preços são fixos ou podem variar?",
+      "a2": "Os preços listados são referências de mercado. O valor final pode variar de acordo com a complexidade do projeto, prazos e volume de trabalho. Sempre apresentamos um orçamento fechado antes de iniciar.",
+      "q3": "Vocês oferecem parcelamento?",
+      "a3": "Sim! Trabalhamos com parcelamento em até 12x no cartão ou condições especiais para pagamento à vista. Para projetos maiores, oferecemos planos de pagamento atrelados às entregas.",
+      "q4": "Qual o prazo médio de entrega?",
+      "a4": "Depende do escopo, mas a maioria dos projetos é entregue entre 2 a 8 semanas. Projetos mais complexos podem levar até 12 semanas. Sempre definimos milestones claros no início.",
+      "q5": "E se eu não ficar satisfeito?",
+      "a5": "Oferecemos garantia de satisfação. Se o resultado não atender às expectativas alinhadas, trabalhamos em ajustes sem custo adicional. Nosso objetivo é seu sucesso."
+    },
+    "cta": {
+      "title": "Pronto para Transformar seu Negócio?",
+      "subtitle": "Agende uma consultoria gratuita e descubra como podemos ajudar a alcançar seus objetivos.",
+      "button": "Agendar Consultoria Gratuita",
+      "disclaimer": "Sem compromisso • 30 minutos • 100% gratuito"
     }
   }
 }

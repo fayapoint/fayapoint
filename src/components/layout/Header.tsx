@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info } from "lucide-react";
+import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
@@ -240,6 +240,17 @@ export function Header() {
                     {t("nav.cases")}
                   </Link>
                 </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link href="/precos" className={cn(
+                    "px-3 py-2 text-sm font-medium transition",
+                    pathname === "/precos" 
+                      ? "text-primary" 
+                      : "text-foreground/90 hover:text-primary"
+                  )}>
+                    {t("nav.pricing")}
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -351,6 +362,13 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.cases")}
+              </MobileNavLink>
+              <MobileNavLink 
+                href="/precos" 
+                icon={DollarSign}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t("nav.pricing")}
               </MobileNavLink>
             </nav>
 
