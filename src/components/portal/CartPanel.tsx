@@ -87,7 +87,7 @@ export function CartPanel() {
   const fetchOrders = async () => {
     setIsLoadingOrders(true);
     try {
-      const token = localStorage.getItem("auth_token");
+      const token = localStorage.getItem("fayapoint_token");
       if (!token) {
         setOrders([]);
         return;

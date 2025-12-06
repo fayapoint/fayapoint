@@ -45,7 +45,7 @@ export default function CheckoutPage() {
 
     try {
       // Get auth token from localStorage
-      const token = localStorage.getItem("auth_token");
+      const token = localStorage.getItem("fayapoint_token");
       
       if (!token) {
         toast.error("Você precisa estar logado para finalizar a compra.");
