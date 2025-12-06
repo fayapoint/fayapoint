@@ -380,7 +380,7 @@ export function AIToolsMarquee() {
         >
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
-              Mais de 100 Ferramentas
+              {t("badge")}
             </span>
           </h2>
           <p className="text-muted-foreground">

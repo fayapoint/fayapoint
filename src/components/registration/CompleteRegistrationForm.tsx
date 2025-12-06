@@ -37,6 +37,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUser } from '@/contexts/UserContext';
 import { toast } from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 // --- Icons Mapping ---
 const socialIcons: Record<string, React.ReactNode> = {
@@ -104,6 +105,7 @@ export function CompleteRegistrationForm() {
   const { user, setUser } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations("Home.CompleteRegistration");
   const [successCode, setSuccessCode] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("basic");
 
@@ -241,7 +243,7 @@ export function CompleteRegistrationForm() {
           size="lg" 
           className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition hover:scale-105"
         >
-          Completar Cadastro & Ganhar 90% OFF no Livro
+          {t("button")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">

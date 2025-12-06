@@ -7,7 +7,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getPricingTranslation, getPricingDescriptionTranslation } from "@/data/pricing-translations";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -43,23 +43,24 @@ function splitDescription(description: string): string[] {
 export function ServicePackagesSection() {
   const { prices, loading, error } = useServicePrices("bundles");
   const locale = useLocale();
+  const t = useTranslations("Home.ServicePackages");
 
   return (
     <section className="py-24 bg-muted/30" id="packages">
       <SectionDivider icon={Package} />
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <Badge className="mb-4">Pacotes Inteligentes</Badge>
+          <Badge className="mb-4">{t("badge")}</Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Escolha um pacote pronto ou personalize o seu bundle
+            {t("title")}
           </h2>
           <p className="text-muted-foreground text-lg">
-            Cada pacote combina etapas estratégicas + execução para acelerar resultados. Use-os como ponto de partida e ajuste tudo no configurador abaixo.
+            {t("description")}
           </p>
         </div>
 
         {loading && (
-          <div className="text-center text-muted-foreground">Carregando pacotes...</div>
+          <div className="text-center text-muted-foreground">{t("loading")}</div>
         )}
 
         {error && (
@@ -68,7 +69,7 @@ export function ServicePackagesSection() {
 
         {!loading && prices.length === 0 && !error && (
           <div className="text-center text-muted-foreground">
-            Nenhum pacote cadastrado no momento.
+            {t("empty")}
           </div>
         )}
 
@@ -93,7 +94,7 @@ export function ServicePackagesSection() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground uppercase tracking-[0.35em] mb-2">
-                      Passo sugerido
+                      {t("suggestedStep")}
                     </p>
                     <h3 className="text-2xl font-semibold leading-tight">
                       {getPricingTranslation(pkg.unitLabel, locale)}
@@ -104,7 +105,7 @@ export function ServicePackagesSection() {
                       {currencyFormatter.format(pkg.priceRange.recommended)}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Valor estimado. Ajuste itens no configurador para montar seu orçamento final.
+                      {t("estimatedValue")}
                     </p>
                   </div>
                   <div className="space-y-2">
@@ -117,7 +118,7 @@ export function ServicePackagesSection() {
                   </div>
                   <Button asChild className="w-full" variant="secondary">
                     <a href={`${packageUrls[pkg.unitLabel] ?? "#builder"}?bundle=${encodeURIComponent(pkg.unitLabel)}`} className="flex items-center justify-center gap-2">
-                      Personalizar pacote
+                      {t("customizePackage")}
                       <ArrowRight className="w-4 h-4" />
                     </a>
                   </Button>

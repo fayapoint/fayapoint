@@ -705,6 +705,26 @@
       "guarantee": "Garantia de 30 dias",
       "rating": "4.9/5 de avaliação",
       "footnote": "Cancele quando quiser • Sem multas • Sem pegadinhas"
+    },
+    "ServicePackages": {
+      "badge": "Pacotes Inteligentes",
+      "title": "Escolha um pacote pronto ou personalize o seu bundle",
+      "description": "Cada pacote combina etapas estratégicas + execução para acelerar resultados. Use-os como ponto de partida e ajuste tudo no configurador abaixo.",
+      "loading": "Carregando pacotes...",
+      "empty": "Nenhum pacote cadastrado no momento.",
+      "suggestedStep": "Passo sugerido",
+      "estimatedValue": "Valor estimado. Ajuste itens no configurador para montar seu orçamento final.",
+      "customizePackage": "Personalizar pacote"
+    },
+    "AllowlistingBanner": {
+      "badge": "NOVO",
+      "category": "SEO para IA",
+      "title": "Seu site aparece no ChatGPT?",
+      "description": "Aprenda a configurar o Allowlisting Oficial e garanta que sua marca seja citada nas respostas da IA.",
+      "cta": "Saiba Mais"
+    },
+    "CompleteRegistration": {
+      "button": "Completar Cadastro & Ganhar 90% OFF no Livro"
     }
   },
   "About": {

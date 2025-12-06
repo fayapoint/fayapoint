@@ -507,10 +507,10 @@
         "subtitle": "Live pipeline"
       },
       "chips": {
-        "brand": "Brand systems",
-        "ux": "UX/UI & product",
-        "motion": "Motion & reels",
-        "content": "Content engine"
+        "web": "Web & Apps",
+        "automation": "Automations",
+        "content": "Content & Video",
+        "ai": "AI & Training"
       },
       "metrics": {
         "speed": { "label": "Speed", "value": "x3" },
@@ -518,29 +518,29 @@
         "launch": { "label": "Time-to-launch", "value": "15d" }
       },
       "capabilities": {
-        "brandSystems": {
-          "title": "Brand Systems",
-          "description": "Modular identity, design tokens, interactive guidelines, and squad-ready kits.",
-          "metric": "Design tokens + libs",
-          "cta": "View systems"
+        "webProduct": {
+          "title": "Web, Apps & Local SEO",
+          "description": "Landing pages, stores, portals and member areas with technical SEO, 90+/Lighthouse performance and local schema.",
+          "metric": "Sites, portals, SEO",
+          "cta": "View products"
         },
-        "productUx": {
-          "title": "Product & UX",
-          "description": "End-to-end flows, microinteractions, and navigable prototypes with flawless technical handoff.",
-          "metric": "Figma prototypes + QA",
-          "cta": "View prototypes"
+        "automation": {
+          "title": "Automations & Integrations",
+          "description": "n8n/Make/Zapier, CRMs, ERPs, billing, bots and observability. Fewer manual tasks, more scale.",
+          "metric": "Orchestrated workflows",
+          "cta": "View integrations"
         },
-        "motionContent": {
-          "title": "Motion & Content",
-          "description": "Motion packs, reels, and bumpers with scripts, storyboards, and edit-ready assets.",
-          "metric": "Weekly drops",
-          "cta": "View packs"
+        "aiTraining": {
+          "title": "AI Consulting & Training",
+          "description": "Diagnosis, AI roadmaps, agents, RAG, team automation and practical tracks for teams.",
+          "metric": "Workshops + playbooks",
+          "cta": "View consulting"
         },
-        "contentEngine": {
-          "title": "Content Engine",
-          "description": "Pipelines for generation, review, and publishing with AI, automation, and brand-safety checks.",
-          "metric": "Automated workflows",
-          "cta": "View engine"
+        "contentVideo": {
+          "title": "Content & Video",
+          "description": "Script, recording, editing, motion and weekly packages for social, ads and launches.",
+          "metric": "Weekly packages",
+          "cta": "View studio"
         }
       },
       "ctaPrimary": "Explore the Operating System",
@@ -624,6 +624,11 @@
       "description": "Join <primary>5,000+ professionals</primary> who have already transformed their careers. Start now and experience the power of Artificial Intelligence.",
       "primaryButton": "Start My Journey",
       "secondaryButton": "Book a Free Consultation",
+      "whatsapp": {
+        "prompt": "Prefer to talk first?",
+        "linkLabel": "Chat with us on WhatsApp",
+        "message": "Hi! I'd like to learn more about FayaPoint's AI courses."
+      },
       "trust": {
         "items": [
           {
@@ -700,6 +705,26 @@
       "guarantee": "30-day guarantee",
       "rating": "4.9/5 rating",
       "footnote": "Cancel anytime • No fees • No fine print"
+    },
+    "ServicePackages": {
+      "badge": "Smart Bundles",
+      "title": "Choose a ready-made package or customize your bundle",
+      "description": "Each package combines strategic steps + execution to accelerate results. Use them as a starting point and adjust everything in the configurator below.",
+      "loading": "Loading packages...",
+      "empty": "No packages registered at the moment.",
+      "suggestedStep": "Suggested step",
+      "estimatedValue": "Estimated value. Adjust items in the configurator to build your final quote.",
+      "customizePackage": "Customize package"
+    },
+    "AllowlistingBanner": {
+      "badge": "NEW",
+      "category": "AI SEO",
+      "title": "Does your site appear in ChatGPT?",
+      "description": "Learn how to configure Official Allowlisting and ensure your brand is mentioned in AI responses.",
+      "cta": "Learn More"
+    },
+    "CompleteRegistration": {
+      "button": "Complete Registration & Get 90% OFF on the Book"
     }
   },
   "About": {
