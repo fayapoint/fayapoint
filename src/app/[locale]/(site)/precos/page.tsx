@@ -7,11 +7,9 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useServicePrices } from "@/hooks/useServicePrices";
 import { useTranslations, useLocale } from "next-intl";
-import { getPricingTranslation, getPricingDescriptionTranslation } from "@/data/pricing-translations";
+import { getPricingTranslation } from "@/data/pricing-translations";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import Link from "next/link";
 import {
@@ -24,62 +22,77 @@ import {
   ArrowRight,
   CheckCircle,
   Sparkles,
-  Search,
-  DollarSign,
   Users,
   Clock,
   ShieldCheck,
   Star,
-  TrendingUp,
   Package,
-  ChevronDown,
-  ChevronUp,
-  Info,
-  Calculator,
 } from "lucide-react";
 
+// Service configurations with emojis and colors
 const serviceConfig: Record<
   string,
   {
     icon: React.ElementType;
+    emoji: string;
     gradient: string;
+    tileBg: string;
+    tileBorder: string;
     accentColor: string;
     href: string;
   }
 > = {
   "website-full": {
     icon: Globe,
+    emoji: "🌐",
     gradient: "from-blue-500 to-cyan-400",
+    tileBg: "bg-blue-500/10",
+    tileBorder: "border-blue-500/20",
     accentColor: "text-blue-500",
     href: "/servicos/construcao-de-sites",
   },
   "social-management": {
     icon: Share2,
+    emoji: "📱",
     gradient: "from-pink-500 to-rose-400",
+    tileBg: "bg-pink-500/10",
+    tileBorder: "border-pink-500/20",
     accentColor: "text-pink-500",
     href: "/servicos/social-media",
   },
   "local-seo": {
     icon: MapPin,
+    emoji: "📍",
     gradient: "from-emerald-500 to-green-400",
+    tileBg: "bg-emerald-500/10",
+    tileBorder: "border-emerald-500/20",
     accentColor: "text-emerald-500",
     href: "/servicos/seo-local",
   },
   "video-production": {
     icon: Video,
+    emoji: "🎬",
     gradient: "from-purple-500 to-violet-400",
+    tileBg: "bg-purple-500/10",
+    tileBorder: "border-purple-500/20",
     accentColor: "text-purple-500",
     href: "/servicos/edicao-de-video",
   },
   "automation-ai": {
     icon: Zap,
+    emoji: "⚡",
     gradient: "from-amber-500 to-orange-400",
+    tileBg: "bg-amber-500/10",
+    tileBorder: "border-amber-500/20",
     accentColor: "text-amber-500",
     href: "/servicos/automacao-e-integracao",
   },
   consulting: {
     icon: Bot,
+    emoji: "🤖",
     gradient: "from-indigo-500 to-blue-400",
+    tileBg: "bg-indigo-500/10",
+    tileBorder: "border-indigo-500/20",
     accentColor: "text-indigo-500",
     href: "/servicos/consultoria-ai",
   },
@@ -89,47 +102,43 @@ const bundles = [
   {
     id: "local-authority",
     name: "Local Authority Launch",
+    emoji: "📍",
     price: 2450,
-    description: "GBP setup, listing enhancement, 2 city pages, review workflow",
-    includes: ["GMB Optimization", "Review Management System", "Local Citation Pack"],
+    includes: ["GMB Optimization", "Review Management", "Local Citations"],
     gradient: "from-emerald-500 to-green-400",
-    popular: false,
   },
   {
     id: "content-engine",
     name: "Content Engine Pro",
+    emoji: "📱",
     price: 4250,
-    description: "Strategy audit, 12 static posts, 4 reels, moderation 10h, monthly report",
-    includes: ["Social Strategy Audit", "Static Post Design x12", "Reel/Short Editing x4", "Community Management"],
+    includes: ["12 Posts", "4 Reels", "Community Mgmt"],
     gradient: "from-pink-500 to-rose-400",
-    popular: false,
   },
   {
     id: "conversion-sprint",
-    name: "Conversion Website Sprint",
+    name: "Conversion Website",
+    emoji: "🌐",
     price: 11800,
-    description: "Discovery, 8 UX/UI screens, copywriting, FE build, CMS, QA, launch",
-    includes: ["Discovery Workshop", "UX/UI Design x8", "Frontend Development", "CMS Integration", "SEO Pack"],
+    includes: ["8 UX/UI Screens", "Frontend Dev", "CMS + SEO"],
     gradient: "from-blue-500 to-cyan-400",
     popular: true,
   },
   {
     id: "video-growth",
     name: "Video Growth Kit",
+    emoji: "🎬",
     price: 14600,
-    description: "Concept, script, storyboard, 2 production days, edit, color, sound, subtitles",
-    includes: ["Concept Treatment", "Scriptwriting", "Storyboard", "2 Production Days", "Full Post-Production"],
+    includes: ["Script + Storyboard", "2 Production Days", "Full Post"],
     gradient: "from-purple-500 to-violet-400",
-    popular: false,
   },
   {
     id: "ai-jumpstart",
-    name: "AI Automation Jumpstart",
+    name: "AI Jumpstart",
+    emoji: "⚡",
     price: 9800,
-    description: "Workshop, roadmap, 3 workflows, CRM integration, training, 2-mo support",
-    includes: ["Process Mapping Workshop", "Automation Roadmap", "3 Workflow Implementations", "CRM Integration"],
+    includes: ["3 Workflows", "CRM Integration", "2mo Support"],
     gradient: "from-amber-500 to-orange-400",
-    popular: false,
   },
 ];
 
@@ -143,23 +152,14 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 export default function PricingPage() {
   const t = useTranslations("Pricing");
   const locale = useLocale();
-  const { prices, loading, groupedByService } = useServicePrices();
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeService, setActiveService] = useState<string | null>(null);
-  const [expandedTracks, setExpandedTracks] = useState<Record<string, boolean>>({});
+  const { loading, groupedByService } = useServicePrices();
+  const [activeServiceSlug, setActiveServiceSlug] = useState<string>("website-full");
 
   const services = useMemo(() => {
     return Object.entries(groupedByService)
-      .filter(([slug]) => slug !== "bundles")
+      .filter(([slug]) => slug !== "bundles" && serviceConfig[slug])
       .map(([slug, items]) => {
-        const config = serviceConfig[slug] || {
-          icon: Zap,
-          gradient: "from-gray-500 to-gray-400",
-          accentColor: "text-gray-500",
-          href: "#",
-        };
-
+        const config = serviceConfig[slug];
         const tracks = items.reduce<Record<string, typeof items>>((acc, item) => {
           acc[item.track] = acc[item.track] || [];
           acc[item.track].push(item);
@@ -169,214 +169,80 @@ export default function PricingPage() {
         const minPrice = Math.min(...items.map((i) => i.priceRange.min));
         const maxPrice = Math.max(...items.map((i) => i.priceRange.max));
 
-        return {
-          slug,
-          items,
-          tracks,
-          minPrice,
-          maxPrice,
-          ...config,
-        };
+        return { slug, items, tracks, minPrice, maxPrice, ...config };
       });
   }, [groupedByService]);
 
-  const filteredServices = useMemo(() => {
-    if (!searchQuery.trim()) return services;
-
-    const query = searchQuery.toLowerCase();
-    return services
-      .map((service) => {
-        const filteredItems = service.items.filter(
-          (item) =>
-            item.unitLabel.toLowerCase().includes(query) ||
-            item.description.toLowerCase().includes(query) ||
-            item.track.toLowerCase().includes(query)
-        );
-
-        if (filteredItems.length === 0) return null;
-
-        const tracks = filteredItems.reduce<Record<string, typeof filteredItems>>((acc, item) => {
-          acc[item.track] = acc[item.track] || [];
-          acc[item.track].push(item);
-          return acc;
-        }, {});
-
-        return {
-          ...service,
-          items: filteredItems,
-          tracks,
-        };
-      })
-      .filter(Boolean) as typeof services;
-  }, [services, searchQuery]);
-
-  const toggleTrack = (serviceSlug: string, track: string) => {
-    const key = `${serviceSlug}-${track}`;
-    setExpandedTracks((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
-  const isTrackExpanded = (serviceSlug: string, track: string) => {
-    return expandedTracks[`${serviceSlug}-${track}`] ?? true;
-  };
+  const activeService = services.find((s) => s.slug === activeServiceSlug) || services[0];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        {/* Hero Section - Compact */}
+        <section className="relative pt-28 pb-12 px-4 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse delay-1000" />
-
-          <div className="container mx-auto max-w-6xl relative">
-            <div className="text-center max-w-4xl mx-auto">
-              <Badge className="mb-6 px-4 py-2 text-sm font-medium" variant="secondary">
-                <DollarSign className="w-4 h-4 mr-2 inline" />
-                {t("badge")}
-              </Badge>
-
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance leading-tight">
-                {t("hero.title")}
-              </h1>
-
-              <p className="text-xl md:text-2xl text-muted-foreground mb-8 text-pretty max-w-3xl mx-auto leading-relaxed">
-                {t("hero.subtitle")}
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <ScheduleConsultationButton
-                  size="lg"
-                  className="text-lg px-8 py-6 group"
-                  source="pricing-hero"
-                >
-                  {t("hero.cta")}
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </ScheduleConsultationButton>
-                <Button size="lg" variant="outline" className="text-lg px-8 py-6" asChild>
-                  <Link href="#builder">
-                    <Calculator className="w-5 h-5 mr-2" />
-                    {t("hero.ctaSecondary")}
-                  </Link>
-                </Button>
+          <div className="container mx-auto max-w-5xl relative text-center">
+            <Badge className="mb-4 px-4 py-2" variant="secondary">
+              <Sparkles className="w-4 h-4 mr-2 inline" />
+              {t("badge")}
+            </Badge>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">{t("hero.title")}</h1>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
+              {t("hero.subtitle")}
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-green-500" />
+                {t("hero.guarantee1")}
               </div>
-
-              <div className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-green-500" />
-                  <span>{t("hero.guarantee1")}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-blue-500" />
-                  <span>{t("hero.guarantee2")}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-purple-500" />
-                  <span>{t("hero.guarantee3")}</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-blue-500" />
+                {t("hero.guarantee2")}
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-purple-500" />
+                {t("hero.guarantee3")}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-16 px-4 bg-muted/30 border-y">
+        {/* Quick Bundles - Horizontal Cards */}
+        <section className="py-12 px-4 bg-muted/30" id="bundles">
           <div className="container mx-auto max-w-6xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { icon: Users, value: "100+", label: t("stats.clients") },
-                { icon: TrendingUp, value: "40%", label: t("stats.efficiency") },
-                { icon: Star, value: "4.9/5", label: t("stats.rating") },
-                { icon: Clock, value: "24h", label: t("stats.response") },
-              ].map((stat, i) => (
-                <div key={i} className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
-                    <stat.icon className="w-6 h-6" />
-                  </div>
-                  <div className="text-3xl md:text-4xl font-bold mb-2">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Bundles Section */}
-        <section className="py-20 px-4" id="bundles">
-          <div className="container mx-auto max-w-7xl">
-            <div className="text-center mb-16">
-              <Badge className="mb-4" variant="outline">
-                <Package className="w-4 h-4 mr-2" />
-                {t("bundles.badge")}
-              </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-                {t("bundles.title")}
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                {t("bundles.subtitle")}
-              </p>
+            <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <Package className="w-6 h-6 text-primary" />
+                <h2 className="text-2xl font-bold">{t("bundles.title")}</h2>
+              </div>
+              <Link href="#services" className="text-primary hover:underline text-sm flex items-center gap-1">
+                {t("services.learnMore")} <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {bundles.map((bundle, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {bundles.map((bundle) => (
                 <motion.div
                   key={bundle.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  whileHover={{ y: -4 }}
+                  className="relative"
                 >
-                  <Card
-                    className={`relative p-6 h-full flex flex-col ${
-                      bundle.popular ? "border-2 border-primary shadow-lg" : "border-border"
-                    }`}
-                  >
+                  <Card className={`p-4 h-full ${bundle.popular ? "ring-2 ring-primary" : ""}`}>
                     {bundle.popular && (
-                      <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary">
-                        {t("bundles.popular")}
-                      </Badge>
+                      <Badge className="absolute -top-2 right-2 text-xs bg-primary">⭐</Badge>
                     )}
-
-                    <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${bundle.gradient} flex items-center justify-center mb-4`}
-                    >
-                      <Sparkles className="w-6 h-6 text-white" />
-                    </div>
-
-                    <h3 className="text-xl font-bold mb-2">
-                      {getPricingTranslation(bundle.name, locale)}
-                    </h3>
-
-                    <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                      {bundle.description}
-                    </p>
-
-                    <div className="mb-4">
-                      <span className="text-3xl font-bold">{currencyFormatter.format(bundle.price)}</span>
-                      <span className="text-muted-foreground ml-2">{t("bundles.perProject")}</span>
-                    </div>
-
-                    <ul className="space-y-2 mb-6">
-                      {bundle.includes.map((item, j) => (
-                        <li key={j} className="flex items-start gap-2 text-sm">
-                          <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span>{getPricingTranslation(item, locale)}</span>
+                    <div className="text-3xl mb-2">{bundle.emoji}</div>
+                    <h3 className="font-semibold text-sm mb-1">{getPricingTranslation(bundle.name, locale)}</h3>
+                    <p className="text-2xl font-bold mb-3">{currencyFormatter.format(bundle.price)}</p>
+                    <ul className="text-xs text-muted-foreground space-y-1">
+                      {bundle.includes.map((item, i) => (
+                        <li key={i} className="flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3 text-green-500" />
+                          {item}
                         </li>
                       ))}
                     </ul>
-
-                    <Button
-                      className="w-full mt-auto"
-                      variant={bundle.popular ? "default" : "outline"}
-                      asChild
-                    >
-                      <Link href={`?bundle=${bundle.name}#builder`}>
-                        {t("bundles.selectCta")}
-                      </Link>
-                    </Button>
                   </Card>
                 </motion.div>
               ))}
@@ -384,309 +250,183 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Granular Pricing Section */}
-        <section className="py-20 px-4 bg-muted/30" id="services">
-          <div className="container mx-auto max-w-7xl">
-            <div className="text-center mb-12">
-              <Badge className="mb-4" variant="outline">
-                <DollarSign className="w-4 h-4 mr-2" />
-                {t("services.badge")}
-              </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-                {t("services.title")}
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty mb-8">
-                {t("services.subtitle")}
-              </p>
-
-              {/* Search */}
-              <div className="max-w-md mx-auto relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder={t("services.searchPlaceholder")}
-                  className="pl-10"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
+        {/* Interactive Service Selector - Like Main Page */}
+        <section className="py-16 px-4" id="services">
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold mb-2">{t("services.title")}</h2>
+              <p className="text-muted-foreground">{t("services.subtitle")}</p>
             </div>
 
-            {/* Service Tabs */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
-              <Button
-                variant={activeService === null ? "default" : "outline"}
-                onClick={() => setActiveService(null)}
-                className="rounded-full"
-              >
-                {t("services.all")}
-              </Button>
+            {/* Service Tiles - Main Page Style */}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-10">
               {services.map((service) => {
-                const Icon = service.icon;
+                const isActive = service.slug === activeServiceSlug;
                 return (
-                  <Button
+                  <motion.button
                     key={service.slug}
-                    variant={activeService === service.slug ? "default" : "outline"}
-                    onClick={() => setActiveService(service.slug)}
-                    className="rounded-full"
+                    onClick={() => setActiveServiceSlug(service.slug)}
+                    className={`w-20 h-20 md:w-24 md:h-24 rounded-2xl ${service.tileBg} flex flex-col items-center justify-center border ${service.tileBorder} transition-all duration-300 ${
+                      isActive ? "ring-2 ring-offset-2 ring-offset-background ring-primary shadow-lg scale-105" : "shadow-sm hover:scale-105"
+                    }`}
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.96 }}
                   >
-                    <Icon className="w-4 h-4 mr-2" />
-                    {t(`services.categories.${service.slug.replace(/-/g, "_")}`)}
-                  </Button>
+                    <span className="text-2xl md:text-3xl mb-1">{service.emoji}</span>
+                    <span className={`text-xs font-medium ${isActive ? service.accentColor : "text-muted-foreground"}`}>
+                      {t(`services.categories.${service.slug.replace(/-/g, "_")}`).split(" ")[0]}
+                    </span>
+                  </motion.button>
                 );
               })}
             </div>
 
-            {loading ? (
-              <div className="grid md:grid-cols-2 gap-6">
-                {[1, 2, 3, 4].map((i) => (
-                  <Card key={i} className="p-6">
-                    <Skeleton className="h-8 w-48 mb-4" />
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-4 w-2/3" />
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {(activeService
-                  ? filteredServices.filter((s) => s.slug === activeService)
-                  : filteredServices
-                ).map((service) => {
-                  const Icon = service.icon;
-                  return (
-                    <motion.div
-                      key={service.slug}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                    >
-                      <Card className="overflow-hidden">
-                        {/* Service Header */}
-                        <div
-                          className={`p-6 bg-gradient-to-r ${service.gradient} bg-opacity-10`}
-                        >
-                          <div className="flex items-center justify-between flex-wrap gap-4">
-                            <div className="flex items-center gap-4">
-                              <div
-                                className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg`}
-                              >
-                                <Icon className="w-7 h-7 text-white" />
-                              </div>
-                              <div>
-                                <h3 className="text-2xl font-bold">
-                                  {t(`services.categories.${service.slug.replace(/-/g, "_")}`)}
-                                </h3>
-                                <p className="text-muted-foreground">
-                                  {service.items.length} {t("services.itemsAvailable")}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-sm text-muted-foreground">{t("services.priceRange")}</p>
-                              <p className="text-xl font-bold">
-                                {currencyFormatter.format(service.minPrice)} -{" "}
-                                {currencyFormatter.format(service.maxPrice)}
-                              </p>
-                            </div>
-                          </div>
+            {/* Active Service Detail Card */}
+            {!loading && activeService && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeServiceSlug}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.25 }}
+                  className="grid gap-6 lg:grid-cols-[2fr_1fr]"
+                >
+                  {/* Left: Service Details */}
+                  <Card className={`p-6 relative overflow-hidden`}>
+                    <div className={`absolute inset-0 pointer-events-none bg-gradient-to-br ${activeService.gradient} opacity-5`} />
+                    <div className="relative z-10">
+                      {/* Header */}
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${activeService.gradient} flex items-center justify-center shadow-lg`}>
+                          <span className="text-3xl">{activeService.emoji}</span>
                         </div>
-
-                        {/* Tracks */}
-                        <div className="p-6 space-y-6">
-                          {Object.entries(service.tracks).map(([track, items]) => (
-                            <div key={track} className="border rounded-xl overflow-hidden">
-                              <button
-                                onClick={() => toggleTrack(service.slug, track)}
-                                className="w-full flex items-center justify-between p-4 bg-muted/30 hover:bg-muted/50 transition-colors"
-                              >
-                                <div className="flex items-center gap-3">
-                                  <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${service.gradient}`} />
-                                  <span className="font-semibold">{getPricingTranslation(track, locale)}</span>
-                                  <Badge variant="secondary" className="ml-2">
-                                    {items.length} {t("services.items")}
-                                  </Badge>
-                                </div>
-                                {isTrackExpanded(service.slug, track) ? (
-                                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                                ) : (
-                                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                                )}
-                              </button>
-
-                              <AnimatePresence>
-                                {isTrackExpanded(service.slug, track) && (
-                                  <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                  >
-                                    <div className="divide-y">
-                                      {items.map((item) => (
-                                        <div
-                                          key={item.unitLabel}
-                                          className="p-4 hover:bg-muted/20 transition-colors"
-                                        >
-                                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                            <div className="flex-1">
-                                              <h4 className="font-medium flex items-center gap-2">
-                                                {getPricingTranslation(item.unitLabel, locale)}
-                                                <button className="text-muted-foreground hover:text-foreground">
-                                                  <Info className="w-4 h-4" />
-                                                </button>
-                                              </h4>
-                                              <p className="text-sm text-muted-foreground mt-1">
-                                                {getPricingDescriptionTranslation(
-                                                  item.description,
-                                                  item.unitLabel,
-                                                  locale
-                                                )}
-                                              </p>
-                                              <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                                                <span className="flex items-center gap-1">
-                                                  <span className="font-medium">{t("services.unit")}:</span>
-                                                  {item.unitType.replace("per_", "")}
-                                                </span>
-                                                <span className="flex items-center gap-1">
-                                                  <span className="font-medium">{t("services.minQty")}:</span>
-                                                  {item.minQuantity}
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <div className="flex items-center gap-6 md:text-right">
-                                              <div>
-                                                <p className="text-xs text-muted-foreground">{t("services.range")}</p>
-                                                <p className="text-sm">
-                                                  {currencyFormatter.format(item.priceRange.min)} -{" "}
-                                                  {currencyFormatter.format(item.priceRange.max)}
-                                                </p>
-                                              </div>
-                                              <div className="border-l pl-6">
-                                                <p className="text-xs text-muted-foreground">{t("services.recommended")}</p>
-                                                <p className={`text-lg font-bold ${service.accentColor}`}>
-                                                  {currencyFormatter.format(item.priceRange.recommended)}
-                                                </p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Service CTA */}
-                        <div className="p-6 border-t bg-muted/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-                          <p className="text-sm text-muted-foreground">
-                            {t("services.ctaText")}
+                        <div>
+                          <h3 className="text-2xl font-bold">
+                            {t(`services.categories.${activeService.slug.replace(/-/g, "_")}`)}
+                          </h3>
+                          <p className="text-muted-foreground">
+                            {activeService.items.length} {t("services.itemsAvailable")}
                           </p>
-                          <div className="flex gap-3">
-                            <Button variant="outline" asChild>
-                              <Link href={service.href}>
-                                {t("services.learnMore")}
-                              </Link>
-                            </Button>
-                            <ScheduleConsultationButton source={`pricing-${service.slug}`}>
-                              {t("services.getQuote")}
-                            </ScheduleConsultationButton>
-                          </div>
                         </div>
-                      </Card>
-                    </motion.div>
-                  );
-                })}
+                      </div>
 
-                {filteredServices.length === 0 && (
-                  <div className="text-center py-12">
-                    <p className="text-muted-foreground">{t("services.noResults")}</p>
-                  </div>
-                )}
+                      {/* Tracks Grid */}
+                      <div className="space-y-4">
+                        {Object.entries(activeService.tracks).map(([track, items]) => (
+                          <div key={track} className="border rounded-xl p-4 bg-card/50">
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${activeService.gradient}`} />
+                              {getPricingTranslation(track, locale)}
+                              <Badge variant="secondary" className="ml-auto text-xs">
+                                {items.length}
+                              </Badge>
+                            </h4>
+                            <div className="grid gap-2">
+                              {items.slice(0, 4).map((item) => (
+                                <div key={item.unitLabel} className="flex items-center justify-between text-sm py-1 border-b border-border/50 last:border-0">
+                                  <span className="text-muted-foreground">
+                                    {getPricingTranslation(item.unitLabel, locale)}
+                                  </span>
+                                  <span className={`font-semibold ${activeService.accentColor}`}>
+                                    {currencyFormatter.format(item.priceRange.recommended)}
+                                  </span>
+                                </div>
+                              ))}
+                              {items.length > 4 && (
+                                <p className="text-xs text-muted-foreground text-center pt-1">
+                                  +{items.length - 4} {t("services.items")}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Right: Summary & CTA */}
+                  <Card className="p-6 flex flex-col">
+                    <div className="mb-6">
+                      <p className="text-sm uppercase tracking-wider text-muted-foreground mb-2">
+                        {t("services.priceRange")}
+                      </p>
+                      <p className="text-3xl font-bold">
+                        {currencyFormatter.format(activeService.minPrice)}
+                        <span className="text-muted-foreground text-lg font-normal"> - </span>
+                        {currencyFormatter.format(activeService.maxPrice)}
+                      </p>
+                    </div>
+
+                    <div className="flex-1 space-y-3 text-sm text-muted-foreground mb-6">
+                      <div className="flex items-center gap-2">
+                        <Star className="w-4 h-4 text-yellow-500" />
+                        <span>{t("stats.rating")}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-blue-500" />
+                        <span>{t("hero.guarantee2")}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="w-4 h-4 text-green-500" />
+                        <span>{t("hero.guarantee1")}</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Button className="w-full" asChild>
+                        <Link href={activeService.href}>
+                          {t("services.learnMore")}
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </Link>
+                      </Button>
+                      <ScheduleConsultationButton
+                        variant="outline"
+                        className="w-full"
+                        source={`pricing-${activeService.slug}`}
+                      >
+                        {t("services.getQuote")}
+                      </ScheduleConsultationButton>
+                    </div>
+                  </Card>
+                </motion.div>
+              </AnimatePresence>
+            )}
+
+            {loading && (
+              <div className="text-center py-12 text-muted-foreground">
+                {t("services.noResults")}
               </div>
             )}
           </div>
         </section>
 
-        {/* Builder Section */}
-        <section className="py-20 px-4" id="builder">
-          <div className="container mx-auto max-w-6xl">
-            <div className="text-center mb-12">
-              <Badge className="mb-4" variant="outline">
-                <Calculator className="w-4 h-4 mr-2" />
-                {t("builder.badge")}
-              </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-                {t("builder.title")}
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                {t("builder.subtitle")}
-              </p>
-            </div>
-
-            <Card className="p-8 text-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
-              <Sparkles className="w-16 h-16 mx-auto mb-6 text-primary" />
-              <h3 className="text-2xl font-bold mb-4">{t("builder.interactiveTitle")}</h3>
-              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                {t("builder.interactiveDesc")}
-              </p>
-              <Button size="lg" asChild>
-                <Link href="/#service-builder">
-                  {t("builder.ctaButton")}
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-              </Button>
-            </Card>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-20 px-4 bg-muted/30" id="faq">
-          <div className="container mx-auto max-w-4xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-                {t("faq.title")}
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                {t("faq.subtitle")}
-              </p>
-            </div>
-
-            <div className="space-y-4">
+        {/* FAQ - Compact Accordion Style */}
+        <section className="py-12 px-4 bg-muted/30" id="faq">
+          <div className="container mx-auto max-w-3xl">
+            <h2 className="text-2xl font-bold text-center mb-8">{t("faq.title")}</h2>
+            <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Card key={i} className="p-6">
-                  <h3 className="font-semibold mb-2">{t(`faq.q${i}`)}</h3>
-                  <p className="text-muted-foreground">{t(`faq.a${i}`)}</p>
+                <Card key={i} className="p-4">
+                  <h3 className="font-semibold text-sm mb-1">{t(`faq.q${i}`)}</h3>
+                  <p className="text-sm text-muted-foreground">{t(`faq.a${i}`)}</p>
                 </Card>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Final CTA */}
-        <section className="py-20 px-4">
-          <div className="container mx-auto max-w-4xl">
-            <Card className="p-12 text-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-                {t("cta.title")}
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-                {t("cta.subtitle")}
-              </p>
-              <ScheduleConsultationButton
-                size="lg"
-                className="text-lg px-8 py-6 group"
-                source="pricing-final"
-              >
+        {/* Final CTA - Compact */}
+        <section className="py-12 px-4">
+          <div className="container mx-auto max-w-3xl">
+            <Card className="p-8 text-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
+              <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
+              <p className="text-muted-foreground mb-6">{t("cta.subtitle")}</p>
+              <ScheduleConsultationButton size="lg" className="px-8" source="pricing-final">
                 {t("cta.button")}
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 w-5 h-5" />
               </ScheduleConsultationButton>
-              <p className="text-sm text-muted-foreground mt-6">
-                {t("cta.disclaimer")}
-              </p>
+              <p className="text-xs text-muted-foreground mt-4">{t("cta.disclaimer")}</p>
             </Card>
           </div>
         </section>
