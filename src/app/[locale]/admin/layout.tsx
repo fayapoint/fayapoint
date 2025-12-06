@@ -10,11 +10,16 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Check if current path is login page (handles locale prefix)
+  const isLoginPage = pathname?.endsWith("/admin/login");
+
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && pathname !== "/admin/login") {
-      router.push("/admin/login");
+    if (!isLoading && !isAuthenticated && !isLoginPage) {
+      // Get current locale from pathname
+      const locale = pathname?.split("/")[1] || "pt-BR";
+      router.push(`/${locale}/admin/login`);
     }
-  }, [isAuthenticated, isLoading, pathname, router]);
+  }, [isAuthenticated, isLoading, pathname, router, isLoginPage]);
 
   // Show loading state
   if (isLoading) {
@@ -29,7 +34,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   // Login page - no sidebar
-  if (pathname === "/admin/login") {
+  if (isLoginPage) {
     return <>{children}</>;
   }
 

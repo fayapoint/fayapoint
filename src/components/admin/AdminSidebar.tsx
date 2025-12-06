@@ -40,6 +40,9 @@ export function AdminSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
   const { admin, logout } = useAdmin();
+  
+  // Extract locale from pathname (e.g., /pt-BR/admin -> pt-BR)
+  const locale = pathname?.split("/")[1] || "pt-BR";
 
   return (
     <motion.aside
@@ -134,11 +137,12 @@ export function AdminSidebar() {
       <nav className="flex-1 overflow-y-auto py-4 px-2">
         <div className="space-y-1">
           {MENU_ITEMS.map((item) => {
-            const isActive = pathname === item.path || 
-              (item.path !== "/admin" && pathname.startsWith(item.path));
+            const fullPath = `/${locale}${item.path}`;
+            const isActive = pathname === fullPath || 
+              (item.path !== "/admin" && pathname?.includes(item.path));
 
             return (
-              <Link key={item.id} href={item.path}>
+              <Link key={item.id} href={fullPath}>
                 <div
                   className={cn(
                     "relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group",

@@ -18,7 +18,9 @@ export default function AdminLoginPage() {
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.push("/admin");
+      // Get current locale from URL
+      const locale = window.location.pathname.split("/")[1] || "pt-BR";
+      router.push(`/${locale}/admin`);
     }
   }, [isAuthenticated, isLoading, router]);
 
@@ -30,7 +32,9 @@ export default function AdminLoginPage() {
     const result = await login(email, password);
     
     if (result.success) {
-      router.push("/admin");
+      // Get current locale from URL
+      const locale = window.location.pathname.split("/")[1] || "pt-BR";
+      router.push(`/${locale}/admin`);
     } else {
       setError(result.error || "Erro ao fazer login");
       setIsSubmitting(false);

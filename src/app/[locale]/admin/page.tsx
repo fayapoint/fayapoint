@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -144,6 +145,8 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const pathname = usePathname();
+  const locale = pathname?.split("/")[1] || "pt-BR";
   const [dbStatus, setDbStatus] = useState<{ connected: boolean; latency?: number } | null>(null);
   const { token, admin } = useAdmin();
 
@@ -390,28 +393,28 @@ export default function AdminDashboardPage() {
         <h3 className="text-lg font-semibold text-white mb-4">Ações Rápidas</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link
-            href="/admin/users"
+            href={`/${locale}/admin/users`}
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Users className="w-6 h-6 text-violet-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-sm font-medium text-white">Gerenciar Usuários</p>
           </Link>
           <Link
-            href="/admin/products"
+            href={`/${locale}/admin/products`}
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Package className="w-6 h-6 text-amber-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-sm font-medium text-white">Gerenciar Produtos</p>
           </Link>
           <Link
-            href="/admin/database"
+            href={`/${locale}/admin/database`}
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Database className="w-6 h-6 text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-sm font-medium text-white">Banco de Dados</p>
           </Link>
           <Link
-            href="/admin/logs"
+            href={`/${locale}/admin/logs`}
             className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group"
           >
             <Activity className="w-6 h-6 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
