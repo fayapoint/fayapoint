@@ -16,10 +16,24 @@ const DesignEditor = dynamic(() => import("./DesignEditor"), {
   ssr: false,
   loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-purple-500" size={32} /></div>
 });
+const PODDesignEditor = dynamic(() => import("./PODDesignEditor"), { 
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-purple-500" size={32} /></div>
+});
 const ProdigiStorePanel = dynamic(() => import("./ProdigiStorePanel"), {
   ssr: false,
   loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-blue-500" size={32} /></div>
 });
+
+// Design settings interface for editor
+interface DesignSettings {
+  scale: number;
+  x: number;
+  y: number;
+  rotation: number;
+  flipX: boolean;
+  flipY: boolean;
+}
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -689,6 +703,12 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     if (file.size > 50 * 1024 * 1024) { toast.error("Max 50MB"); return; }
     setDesignFile(file);
     setDesignPreview(URL.createObjectURL(file));
+    setUploadedDesignUrl(null); // Clear uploaded URL to force re-upload
+    // Clear existing mockups when new file is selected
+    if (printifyMockups.length > 0) {
+      setPrintifyMockups([]);
+      toast("Novo design selecionado - gere novos mockups", { icon: "🎨" });
+    }
   };
 
   const uploadDesign = async (): Promise<string | null> => {
@@ -770,7 +790,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     } finally {
       setIsGeneratingMockups(false);
     }
-  }, [selectedBlueprint, selectedProvider, selectedVariants]);
+  }, [selectedBlueprint, selectedProvider, selectedVariants, variants, designScale, designPosition]);
 
   const inferCategory = (title: string): string => {
     const l = title.toLowerCase();
@@ -1418,6 +1438,9 @@ function CreateWizard(props: {
   const [selectedProductImageIndex, setSelectedProductImageIndex] = useState(0);
   const [showMockupGalleryModal, setShowMockupGalleryModal] = useState(false);
   const [showAdvancedEditor, setShowAdvancedEditor] = useState(false);
+  const [showDesignEditor, setShowDesignEditor] = useState(false);
+  const [designSettings, setDesignSettings] = useState<DesignSettings | null>(null);
+  const [mockupsOutdated, setMockupsOutdated] = useState(false); // Track if mockups need regeneration
 
   // Reset selected image when blueprint changes
   useEffect(() => {
@@ -1662,7 +1685,35 @@ function CreateWizard(props: {
   const selectGalleryImage = (imageUrl: string) => {
     setDesignPreview(imageUrl);
     setUploadedDesignUrl(imageUrl); // Already uploaded, so set URL directly
+    // Mark mockups as outdated if they exist
+    if (printifyMockups.length > 0) {
+      setMockupsOutdated(true);
+    }
     toast.success('Design selecionado!');
+  };
+
+  // Handle design settings from editor
+  const handleDesignSettingsApply = (newSettings: DesignSettings) => {
+    setDesignSettings(newSettings);
+    setShowDesignEditor(false);
+    // Mark mockups as outdated since position/scale changed
+    if (printifyMockups.length > 0) {
+      setMockupsOutdated(true);
+    }
+  };
+
+  // Regenerate mockups with current design settings
+  const handleRegenerateMockups = async () => {
+    if (!uploadedDesignUrl) {
+      const url = await uploadDesign();
+      if (!url) {
+        toast.error("Erro no upload do design");
+        return;
+      }
+      setUploadedDesignUrl(url);
+    }
+    setMockupsOutdated(false);
+    generatePrintifyMockups(uploadedDesignUrl!);
   };
 
   if (step === 3) {
@@ -1931,89 +1982,93 @@ function CreateWizard(props: {
                   
                   {/* Design Placement Options */}
                   {designPreview && selectedVariants.length > 0 && !isGeneratingMockups && (
-                    <Card className="bg-white/5 border-white/10 p-4 space-y-4">
-                      <h5 className="font-semibold text-sm flex items-center gap-2">
-                        <Settings size={14} className="text-purple-400" />
-                        Posicionamento do Design
-                      </h5>
+                    <div className="space-y-3">
+                      {/* Edit Position Button - Opens new editor */}
+                      <Button 
+                        variant="outline" 
+                        className="w-full border-purple-500/50 hover:bg-purple-600/20 text-purple-400"
+                        onClick={() => setShowDesignEditor(true)}
+                      >
+                        <Settings size={16} className="mr-2" />
+                        Editar Posição do Design
+                        {designSettings && (
+                          <Badge variant="secondary" className="ml-2 text-xs">
+                            Customizado
+                          </Badge>
+                        )}
+                      </Button>
                       
-                      {/* Scale Options */}
-                      <div>
-                        <p className="text-xs text-gray-400 mb-2">Tamanho</p>
-                        <div className="grid grid-cols-4 gap-2">
-                          {[
-                            { id: 'small', label: 'P', desc: '40%' },
-                            { id: 'medium', label: 'M', desc: '60%' },
-                            { id: 'large', label: 'G', desc: '80%' },
-                            { id: 'fill', label: 'XG', desc: '100%' },
-                          ].map((opt) => (
-                            <button
-                              key={opt.id}
-                              onClick={() => setDesignScale(opt.id as typeof designScale)}
-                              className={cn(
-                                "flex flex-col items-center p-2 rounded-lg text-xs font-medium transition-all",
-                                designScale === opt.id 
-                                  ? "bg-purple-600 text-white" 
-                                  : "bg-white/5 text-gray-400 hover:bg-white/10"
-                              )}
-                            >
-                              <span className="text-base">{opt.label}</span>
-                              <span className="text-[10px] opacity-70">{opt.desc}</span>
-                            </button>
-                          ))}
-                        </div>
+                      {/* Quick Scale Buttons */}
+                      <div className="flex gap-2">
+                        {[
+                          { id: 'small', label: 'P', value: 0.4 },
+                          { id: 'medium', label: 'M', value: 0.6 },
+                          { id: 'large', label: 'G', value: 0.8 },
+                          { id: 'fill', label: 'XG', value: 1.0 },
+                        ].map((opt) => (
+                          <button
+                            key={opt.id}
+                            onClick={() => {
+                              setDesignScale(opt.id as typeof designScale);
+                              if (printifyMockups.length > 0) setMockupsOutdated(true);
+                            }}
+                            className={cn(
+                              "flex-1 py-2 rounded-lg text-xs font-medium transition-all",
+                              designScale === opt.id 
+                                ? "bg-purple-600 text-white" 
+                                : "bg-white/5 text-gray-400 hover:bg-white/10"
+                            )}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
                       </div>
-                      
-                      {/* Position Options */}
-                      <div>
-                        <p className="text-xs text-gray-400 mb-2">Posição Vertical</p>
-                        <div className="grid grid-cols-3 gap-2">
-                          {[
-                            { id: 'top', label: 'Topo', icon: '↑' },
-                            { id: 'center', label: 'Centro', icon: '•' },
-                            { id: 'bottom', label: 'Base', icon: '↓' },
-                          ].map((opt) => (
-                            <button
-                              key={opt.id}
-                              onClick={() => setDesignPosition(opt.id as typeof designPosition)}
-                              className={cn(
-                                "flex items-center justify-center gap-1 p-2 rounded-lg text-xs font-medium transition-all",
-                                designPosition === opt.id 
-                                  ? "bg-purple-600 text-white" 
-                                  : "bg-white/5 text-gray-400 hover:bg-white/10"
-                              )}
-                            >
-                              <span>{opt.icon}</span>
-                              <span>{opt.label}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </Card>
+                    </div>
                   )}
                   
-                  {/* Generate Mockups Button */}
-                  {designPreview && selectedVariants.length > 0 && printifyMockups.length === 0 && !isGeneratingMockups && (
-                    <Button 
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                      onClick={async () => {
-                        let url = uploadedDesignUrl;
-                        if (!url) {
-                          toast.loading("Fazendo upload...");
-                          url = await uploadDesign();
-                          if (url) setUploadedDesignUrl(url);
-                          toast.dismiss();
-                        }
-                        if (url) {
-                          generatePrintifyMockups(url);
-                        } else {
-                          toast.error("Erro no upload do design");
-                        }
-                      }}
-                    >
-                      <Sparkles size={16} className="mr-2" />
-                      Gerar Mockups Profissionais
-                    </Button>
+                  {/* Generate / Regenerate Mockups Button */}
+                  {designPreview && selectedVariants.length > 0 && !isGeneratingMockups && (
+                    <>
+                      {printifyMockups.length === 0 ? (
+                        <Button 
+                          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                          onClick={async () => {
+                            let url = uploadedDesignUrl;
+                            if (!url) {
+                              toast.loading("Fazendo upload...");
+                              url = await uploadDesign();
+                              if (url) setUploadedDesignUrl(url);
+                              toast.dismiss();
+                            }
+                            if (url) {
+                              generatePrintifyMockups(url);
+                            } else {
+                              toast.error("Erro no upload do design");
+                            }
+                          }}
+                        >
+                          <Sparkles size={16} className="mr-2" />
+                          Gerar Mockups Profissionais
+                        </Button>
+                      ) : mockupsOutdated && (
+                        <Card className="bg-yellow-500/10 border-yellow-500/30 p-3">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 text-yellow-400">
+                              <AlertCircle size={16} />
+                              <span className="text-sm">Design alterado</span>
+                            </div>
+                            <Button 
+                              size="sm"
+                              className="bg-yellow-600 hover:bg-yellow-700"
+                              onClick={handleRegenerateMockups}
+                            >
+                              <RefreshCw size={14} className="mr-1" />
+                              Atualizar Mockups
+                            </Button>
+                          </div>
+                        </Card>
+                      )}
+                    </>
                   )}
                   
                   {/* Info Card - only show when no mockups (MockupGallery has its own info) */}
@@ -2077,7 +2132,32 @@ function CreateWizard(props: {
           )}
         </AnimatePresence>
 
-        {/* Advanced Design Editor Modal */}
+        {/* POD Design Editor Modal - NEW improved editor */}
+        <AnimatePresence>
+          {showDesignEditor && selectedBlueprint && designPreview && (
+            <PODDesignEditor
+              productImage={selectedBlueprint.images[0]}
+              productTitle={selectedBlueprint.title}
+              designImage={designPreview}
+              initialSettings={designSettings || undefined}
+              onApply={(newSettings) => {
+                handleDesignSettingsApply(newSettings);
+                // Update design scale/position based on editor settings
+                if (newSettings.scale <= 0.45) setDesignScale('small');
+                else if (newSettings.scale <= 0.65) setDesignScale('medium');
+                else if (newSettings.scale <= 0.85) setDesignScale('large');
+                else setDesignScale('fill');
+                
+                if (newSettings.y <= 0.35) setDesignPosition('top');
+                else if (newSettings.y <= 0.65) setDesignPosition('center');
+                else setDesignPosition('bottom');
+              }}
+              onCancel={() => setShowDesignEditor(false)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Advanced Design Editor Modal - for text/layers */}
         <AnimatePresence>
           {showAdvancedEditor && selectedBlueprint && (
             <motion.div 
@@ -2108,6 +2188,10 @@ function CreateWizard(props: {
                     <Button 
                       className="bg-purple-600 hover:bg-purple-700"
                       onClick={() => {
+                        // Mark mockups as outdated since design may have changed
+                        if (printifyMockups.length > 0) {
+                          setMockupsOutdated(true);
+                        }
                         toast.success("Design salvo!");
                         setShowAdvancedEditor(false);
                       }}
