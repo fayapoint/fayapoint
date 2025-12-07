@@ -39,7 +39,8 @@ export async function GET(request: NextRequest) {
     
     switch (type) {
       case 'public':
-        query = { isPublic: true };
+        // Show all AI-generated images (not manual uploads) for public gallery
+        query = { provider: { $nin: ['upload', 'printify-mockup'] } };
         break;
       case 'my-creations':
         // AI-generated images (not uploads or mockups)

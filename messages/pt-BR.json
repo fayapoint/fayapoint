@@ -1560,7 +1560,9 @@
     "badge": "Galeria da Comunidade",
     "title": "O que estão criando agora",
     "description": "Explore as obras de arte geradas pelos alunos e mentores da nossa comunidade.",
-    "empty": "Nenhuma criação encontrada. Seja o primeiro a criar!"
+    "empty": "Nenhuma criação encontrada. Seja o primeiro a criar!",
+    "cta": "Criar Minha Arte",
+    "imagesCreated": "imagens criadas pela comunidade"
   },
   "ScheduleMeeting": {
     "messages": {

@@ -1429,7 +1429,8 @@ function CreateWizard(props: {
     setIsLoadingGallery(true);
     try {
       const token = localStorage.getItem('fayapoint_token');
-      const res = await fetch(`/api/gallery?type=${type}&limit=12`, {
+      // Fetch more images (30) for better gallery experience
+      const res = await fetch(`/api/gallery?type=${type}&limit=30`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (res.ok) {

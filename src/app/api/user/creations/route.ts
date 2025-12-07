@@ -26,7 +26,7 @@ export async function GET() {
         return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
     }
 
-    const creations = await ImageCreation.find({ userId: decoded.userId })
+    const creations = await ImageCreation.find({ userId: decoded.id || decoded.userId })
         .sort({ createdAt: -1 })
         .select('imageUrl prompt createdAt provider');
 

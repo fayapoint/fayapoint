@@ -14,13 +14,16 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const skip = (page - 1) * limit;
     
+    // Fetch all images - both public shared ones and AI-generated ones (excluding manual uploads)
+    const query = { provider: { $nin: ['upload'] } }; // Show AI creations, exclude manual uploads
+    
     const [creations, total] = await Promise.all([
-      ImageCreation.find()
+      ImageCreation.find(query)
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .select('userName imageUrl prompt createdAt'),
-      ImageCreation.countDocuments()
+        .select('userName imageUrl prompt createdAt category likes'),
+      ImageCreation.countDocuments(query)
     ]);
 
     return NextResponse.json({
