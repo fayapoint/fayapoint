@@ -6,7 +6,7 @@ import {
   Store, Plus, Search, Filter, MoreVertical, Eye, Edit, Trash2, Play, Pause,
   Package, DollarSign, ShoppingBag, Sparkles, Shirt, Home, Frame, Coffee,
   Smartphone, Upload, Image as ImageIcon, CheckCircle, Clock, AlertCircle,
-  ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck,
+  ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck, Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -277,6 +277,9 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const [isGeneratingMockups, setIsGeneratingMockups] = useState(false);
   const [mockupProductId, setMockupProductId] = useState<string | null>(null);
   const [mockupShopId, setMockupShopId] = useState<number | null>(null);
+  // Design placement options
+  const [designScale, setDesignScale] = useState<'small' | 'medium' | 'large' | 'fill'>('medium');
+  const [designPosition, setDesignPosition] = useState<'top' | 'center' | 'bottom'>('center');
   const [productTitle, setProductTitle] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [sellingPrice, setSellingPrice] = useState(0);
@@ -419,7 +422,15 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     const placeholderWidth = placeholder?.width || 4500;
     const placeholderHeight = placeholder?.height || 5100;
     
-    console.log('[POD] Generating mockups with placeholder:', placeholderWidth, 'x', placeholderHeight);
+    // Calculate scale factor based on user selection
+    const scaleFactors = { small: 0.4, medium: 0.6, large: 0.8, fill: 1.0 };
+    const scaleFactor = scaleFactors[designScale];
+    
+    // Calculate Y position based on user selection
+    const positionY = { top: 0.3, center: 0.5, bottom: 0.7 };
+    const yPosition = positionY[designPosition];
+    
+    console.log('[POD] Generating mockups - scale:', designScale, 'position:', designPosition);
     
     try {
       const res = await fetch("/api/pod/mockup", {
@@ -432,7 +443,9 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
           variantIds: selectedVariants,
           productTitle: selectedBlueprint.title,
           placeholderWidth,
-          placeholderHeight
+          placeholderHeight,
+          scaleFactor,
+          yPosition
         })
       });
       
@@ -569,6 +582,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         resetCreateWizard={resetCreateWizard} formatCurrency={formatCurrency} userXP={userXP} canPublish={canPublish}
         printifyMockups={printifyMockups} isGeneratingMockups={isGeneratingMockups} generatePrintifyMockups={generatePrintifyMockups}
         uploadDesign={uploadDesign} uploadedDesignUrl={uploadedDesignUrl} setUploadedDesignUrl={setUploadedDesignUrl}
+        designScale={designScale} setDesignScale={setDesignScale} designPosition={designPosition} setDesignPosition={setDesignPosition}
       />
     </div>
   );
@@ -599,6 +613,8 @@ function PODPanelContent(props: {
   printifyMockups: { src: string; variantIds: number[]; position: string; isDefault: boolean }[];
   isGeneratingMockups: boolean; generatePrintifyMockups: (designUrl: string) => Promise<void>;
   uploadDesign: () => Promise<string | null>; uploadedDesignUrl: string | null; setUploadedDesignUrl: (url: string | null) => void;
+  designScale: 'small' | 'medium' | 'large' | 'fill'; setDesignScale: (s: 'small' | 'medium' | 'large' | 'fill') => void;
+  designPosition: 'top' | 'center' | 'bottom'; setDesignPosition: (p: 'top' | 'center' | 'bottom') => void;
 }) {
   const { activeTab, setActiveTab, isLoading, products, stats, searchQuery, setSearchQuery, statusFilter, setStatusFilter,
     selectedProduct, setSelectedProduct, editingProduct, setEditingProduct, createStep, setCreateStep,
@@ -608,7 +624,8 @@ function PODPanelContent(props: {
     baseCost, setBaseCost, isCreating, isFetchingBlueprints, isFetchingProviders, isFetchingVariants, fileInputRef,
     handleFileSelect, fetchBlueprints, fetchProviders, fetchVariants, createProduct, updateProduct, deleteProduct,
     publishProduct, resetCreateWizard, formatCurrency, userXP, canPublish,
-    printifyMockups, isGeneratingMockups, generatePrintifyMockups, uploadDesign, uploadedDesignUrl, setUploadedDesignUrl } = props;
+    printifyMockups, isGeneratingMockups, generatePrintifyMockups, uploadDesign, uploadedDesignUrl, setUploadedDesignUrl,
+    designScale, setDesignScale, designPosition, setDesignPosition } = props;
 
   return (
     <>
@@ -701,6 +718,7 @@ function PODPanelContent(props: {
               fetchVariants={fetchVariants} createProduct={createProduct} userXP={userXP} canPublish={canPublish} formatCurrency={formatCurrency}
               printifyMockups={printifyMockups} isGeneratingMockups={isGeneratingMockups} generatePrintifyMockups={generatePrintifyMockups}
               uploadDesign={uploadDesign} uploadedDesignUrl={uploadedDesignUrl} setUploadedDesignUrl={setUploadedDesignUrl}
+              designScale={designScale} setDesignScale={setDesignScale} designPosition={designPosition} setDesignPosition={setDesignPosition}
             />
           </motion.div>
         )}
@@ -784,6 +802,8 @@ function CreateWizard(props: {
   printifyMockups: { src: string; variantIds: number[]; position: string; isDefault: boolean }[];
   isGeneratingMockups: boolean; generatePrintifyMockups: (designUrl: string) => Promise<void>;
   uploadDesign: () => Promise<string | null>; uploadedDesignUrl: string | null; setUploadedDesignUrl: (url: string | null) => void;
+  designScale: 'small' | 'medium' | 'large' | 'fill'; setDesignScale: (s: 'small' | 'medium' | 'large' | 'fill') => void;
+  designPosition: 'top' | 'center' | 'bottom'; setDesignPosition: (p: 'top' | 'center' | 'bottom') => void;
 }) {
   const { step, setStep, blueprintSearch, setBlueprintSearch, selectedCategory, setSelectedCategory, blueprints,
     selectedBlueprint, setSelectedBlueprint, providers, selectedProvider, setSelectedProvider, variants,
@@ -791,7 +811,8 @@ function CreateWizard(props: {
     setProductDescription, sellingPrice, setSellingPrice, baseCost, setBaseCost, isCreating, isFetchingBlueprints,
     isFetchingProviders, isFetchingVariants, fileInputRef, handleFileSelect, fetchBlueprints, fetchProviders,
     fetchVariants, createProduct, userXP, canPublish, formatCurrency,
-    printifyMockups, isGeneratingMockups, generatePrintifyMockups, uploadDesign, uploadedDesignUrl, setUploadedDesignUrl } = props;
+    printifyMockups, isGeneratingMockups, generatePrintifyMockups, uploadDesign, uploadedDesignUrl, setUploadedDesignUrl,
+    designScale, setDesignScale, designPosition, setDesignPosition } = props;
 
   // Pagination state for blueprints
   const [currentPage, setCurrentPage] = useState(0);
@@ -1290,6 +1311,69 @@ function CreateWizard(props: {
                       productTitle={selectedBlueprint.title}
                       className="aspect-square w-full"
                     />
+                  )}
+                  
+                  {/* Design Placement Options */}
+                  {designPreview && selectedVariants.length > 0 && !isGeneratingMockups && (
+                    <Card className="bg-white/5 border-white/10 p-4 space-y-4">
+                      <h5 className="font-semibold text-sm flex items-center gap-2">
+                        <Settings size={14} className="text-purple-400" />
+                        Posicionamento do Design
+                      </h5>
+                      
+                      {/* Scale Options */}
+                      <div>
+                        <p className="text-xs text-gray-400 mb-2">Tamanho</p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {[
+                            { id: 'small', label: 'P', desc: '40%' },
+                            { id: 'medium', label: 'M', desc: '60%' },
+                            { id: 'large', label: 'G', desc: '80%' },
+                            { id: 'fill', label: 'XG', desc: '100%' },
+                          ].map((opt) => (
+                            <button
+                              key={opt.id}
+                              onClick={() => setDesignScale(opt.id as typeof designScale)}
+                              className={cn(
+                                "flex flex-col items-center p-2 rounded-lg text-xs font-medium transition-all",
+                                designScale === opt.id 
+                                  ? "bg-purple-600 text-white" 
+                                  : "bg-white/5 text-gray-400 hover:bg-white/10"
+                              )}
+                            >
+                              <span className="text-base">{opt.label}</span>
+                              <span className="text-[10px] opacity-70">{opt.desc}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Position Options */}
+                      <div>
+                        <p className="text-xs text-gray-400 mb-2">Posição Vertical</p>
+                        <div className="grid grid-cols-3 gap-2">
+                          {[
+                            { id: 'top', label: 'Topo', icon: '↑' },
+                            { id: 'center', label: 'Centro', icon: '•' },
+                            { id: 'bottom', label: 'Base', icon: '↓' },
+                          ].map((opt) => (
+                            <button
+                              key={opt.id}
+                              onClick={() => setDesignPosition(opt.id as typeof designPosition)}
+                              className={cn(
+                                "flex items-center justify-center gap-1 p-2 rounded-lg text-xs font-medium transition-all",
+                                designPosition === opt.id 
+                                  ? "bg-purple-600 text-white" 
+                                  : "bg-white/5 text-gray-400 hover:bg-white/10"
+                              )}
+                            >
+                              <span>{opt.icon}</span>
+                              <span>{opt.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </Card>
                   )}
                   
                   {/* Generate Mockups Button */}

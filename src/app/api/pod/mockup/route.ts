@@ -30,7 +30,10 @@ export async function POST(request: NextRequest) {
       productTitle = 'Mockup Preview',
       // Optional: placeholder dimensions for proper scaling
       placeholderWidth = 4500, // Default print area width
-      placeholderHeight = 5100 // Default print area height
+      placeholderHeight = 5100, // Default print area height
+      // User-selected placement options
+      scaleFactor = 0.6, // 0.4=small, 0.6=medium, 0.8=large, 1.0=fill
+      yPosition = 0.5 // 0.3=top, 0.5=center, 0.7=bottom
     } = body;
 
     // Validate required fields
@@ -66,15 +69,16 @@ export async function POST(request: NextRequest) {
       }, { status: 500 });
     }
 
-    // Step 3: Calculate proper scale to fill the print area
-    // The scale should make the image cover the print area
+    // Step 3: Calculate proper scale based on user selection
+    // scaleX/scaleY = how much to scale image to fit placeholder
     const scaleX = placeholderWidth / upload.width;
     const scaleY = placeholderHeight / upload.height;
-    // Use smaller scale to fit (contain) or larger to fill (cover)
-    // For apparel, we usually want to fill width and let height extend
-    const scale = Math.min(scaleX, scaleY) * 0.9; // 90% to leave some margin
+    // Base scale to fit the image in the area
+    const baseScale = Math.min(scaleX, scaleY);
+    // Apply user's scale factor (0.4=small, 0.6=medium, 0.8=large, 1.0=fill)
+    const scale = baseScale * scaleFactor;
     
-    console.log('[Mockup API] Calculated scale:', scale, 'from image:', upload.width, 'x', upload.height);
+    console.log('[Mockup API] Scale:', scale, '(factor:', scaleFactor, ') Position Y:', yPosition);
 
     // Step 4: Create draft product with the design
     const variants = variantIds.map((id: number) => ({
@@ -90,8 +94,8 @@ export async function POST(request: NextRequest) {
         images: [{
           id: upload.id,
           x: 0.5, // Center horizontally
-          y: 0.5, // Center vertically
-          scale: scale, // Calculated scale to fill print area
+          y: yPosition, // User-selected vertical position (0.3=top, 0.5=center, 0.7=bottom)
+          scale: scale, // User-selected scale
           angle: 0
         }]
       }]
