@@ -7,7 +7,7 @@ import {
   Package, DollarSign, ShoppingBag, Sparkles, Shirt, Home, Frame, Coffee,
   Smartphone, Upload, Image as ImageIcon, CheckCircle, Clock, AlertCircle,
   ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck, Settings,
-  Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw,
+  Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw, Maximize2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -219,6 +219,224 @@ function MockupPreview({
     </div>
   );
 }
+
+// Mockup Gallery Component - Printify-style gallery with labeled thumbnails
+function MockupGallery({ 
+  mockups, 
+  selectedIndex, 
+  onSelectIndex,
+  isLoading = false,
+  onClose 
+}: { 
+  mockups: { src: string; variantIds?: number[]; position?: string; isDefault?: boolean }[];
+  selectedIndex: number;
+  onSelectIndex: (idx: number) => void;
+  isLoading?: boolean;
+  onClose?: () => void;
+}) {
+  // Generate labels for mockups based on position or index
+  const getMockupLabel = (mockup: { position?: string; isDefault?: boolean }, index: number): string => {
+    if (mockup.position) {
+      // Parse Printify position format
+      const pos = mockup.position.toLowerCase();
+      if (pos.includes('front')) return `Frente ${index + 1}`;
+      if (pos.includes('back')) return `Costas ${index + 1}`;
+      if (pos.includes('left')) return `Esquerda ${index + 1}`;
+      if (pos.includes('right')) return `Direita ${index + 1}`;
+      return mockup.position;
+    }
+    
+    // Generate descriptive labels based on common mockup patterns
+    const labels = [
+      'Pessoa 1 Frente', 'Pessoa 1 Costas', 'Pessoa 2 Frente', 'Pessoa 2 Costas',
+      'Pessoa 3 Frente', 'Pessoa 3 Costas', 'Pessoa 4 Frente', 'Pessoa 4 Costas',
+      'Lifestyle', 'Duo', 'Duo 2', 'Duo 3', 'Duo 4',
+      'Pessoa 5 Frente', 'Pessoa 5 Costas', 'Pessoa 6 Frente', 'Pessoa 6 Costas',
+      'Manga Esq', 'Manga Dir', 'Close-up', 'Detalhe'
+    ];
+    
+    // If it's the default mockup, mark it
+    if (mockup.isDefault) return 'Principal';
+    
+    return labels[index] || `Vista ${index + 1}`;
+  };
+
+  const handlePrev = () => {
+    const newIndex = selectedIndex > 0 ? selectedIndex - 1 : mockups.length - 1;
+    onSelectIndex(newIndex);
+  };
+
+  const handleNext = () => {
+    const newIndex = selectedIndex < mockups.length - 1 ? selectedIndex + 1 : 0;
+    onSelectIndex(newIndex);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 bg-gray-800 rounded-xl">
+        <Loader2 className="animate-spin text-purple-500 mb-3" size={48} />
+        <p className="text-purple-400 font-medium">Gerando mockups profissionais...</p>
+        <p className="text-xs text-gray-500 mt-1">Printify está processando seu design</p>
+      </div>
+    );
+  }
+
+  if (mockups.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-3">
+      {/* Gallery Layout */}
+      <div className="flex gap-4">
+        {/* Main Preview with Navigation */}
+        <div className="flex-1 relative">
+          <div className="aspect-square w-full rounded-xl overflow-hidden bg-white relative group">
+            <img 
+              src={mockups[selectedIndex]?.src} 
+              alt={getMockupLabel(mockups[selectedIndex], selectedIndex)}
+              className="w-full h-full object-contain"
+            />
+            
+            {/* Navigation Arrows */}
+            {mockups.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrev}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <ChevronLeft size={24} className="text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <ChevronRight size={24} className="text-gray-700" />
+                </button>
+              </>
+            )}
+
+            {/* Counter Badge */}
+            <div className="absolute bottom-3 left-3 px-2 py-1 bg-black/50 rounded text-xs text-white">
+              {selectedIndex + 1} / {mockups.length}
+            </div>
+
+            {/* Fullscreen/Close button */}
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="absolute top-3 right-3 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center"
+              >
+                <X size={18} className="text-white" />
+              </button>
+            )}
+          </div>
+
+          {/* Current Mockup Label */}
+          <p className="text-center text-sm text-gray-400 mt-2">
+            {getMockupLabel(mockups[selectedIndex], selectedIndex)}
+          </p>
+        </div>
+
+        {/* Thumbnails Grid - Scrollable */}
+        {mockups.length > 1 && (
+          <div className="w-48 shrink-0">
+            <div className="max-h-[400px] overflow-y-auto pr-1 space-y-2 custom-scrollbar">
+              {mockups.map((mockup, idx) => (
+                <motion.div
+                  key={idx}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => onSelectIndex(idx)}
+                  className={cn(
+                    "cursor-pointer rounded-lg overflow-hidden border-2 transition-all",
+                    selectedIndex === idx 
+                      ? "border-purple-500 ring-2 ring-purple-500/30" 
+                      : "border-gray-700 hover:border-gray-500"
+                  )}
+                >
+                  <div className="aspect-square bg-white">
+                    <img 
+                      src={mockup.src} 
+                      alt={getMockupLabel(mockup, idx)}
+                      className="w-full h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="px-2 py-1.5 bg-gray-800 text-xs text-gray-300 truncate">
+                    {getMockupLabel(mockup, idx)}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Summary */}
+      <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2 text-green-400">
+          <CheckCircle size={16} />
+          <span>{mockups.length} mockups profissionais gerados</span>
+        </div>
+        <Badge className="bg-purple-600">Printify</Badge>
+      </div>
+    </div>
+  );
+}
+
+// Fullscreen Mockup Gallery Modal
+function MockupGalleryModal({ 
+  mockups, 
+  initialIndex, 
+  onClose 
+}: { 
+  mockups: { src: string; variantIds?: number[]; position?: string; isDefault?: boolean }[];
+  initialIndex: number;
+  onClose: () => void;
+}) {
+  const [selectedIndex, setSelectedIndex] = useState(initialIndex);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        setSelectedIndex(i => i > 0 ? i - 1 : mockups.length - 1);
+      } else if (e.key === 'ArrowRight') {
+        setSelectedIndex(i => i < mockups.length - 1 ? i + 1 : 0);
+      } else if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mockups.length, onClose]);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div 
+        initial={{ scale: 0.9 }} 
+        animate={{ scale: 1 }}
+        className="w-full max-w-6xl max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <MockupGallery 
+          mockups={mockups}
+          selectedIndex={selectedIndex}
+          onSelectIndex={setSelectedIndex}
+          onClose={onClose}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 interface PODProduct {
   _id: string; title: string; slug: string; description: string; category: string; templateId: string; templateName: string;
   baseProductType: string; designFiles: { url: string; width: number; height: number }[]; mockupImages: string[];
@@ -287,6 +505,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const [isGeneratingMockups, setIsGeneratingMockups] = useState(false);
   const [mockupProductId, setMockupProductId] = useState<string | null>(null);
   const [mockupShopId, setMockupShopId] = useState<number | null>(null);
+  const [showMockupGalleryModal, setShowMockupGalleryModal] = useState(false);
   // Design placement options
   const [designScale, setDesignScale] = useState<'small' | 'medium' | 'large' | 'fill'>('medium');
   const [designPosition, setDesignPosition] = useState<'top' | 'center' | 'bottom'>('center');
@@ -1139,6 +1358,7 @@ function CreateWizard(props: {
   const [galleryImages, setGalleryImages] = useState<{ _id: string; imageUrl: string; prompt: string; userName?: string; likes?: number }[]>([]);
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
   const [selectedProductImageIndex, setSelectedProductImageIndex] = useState(0);
+  const [showMockupGalleryModal, setShowMockupGalleryModal] = useState(false);
 
   // Reset selected image when blueprint changes
   useEffect(() => {
@@ -1595,27 +1815,39 @@ function CreateWizard(props: {
             
             {/* Right: Mockup Preview */}
             <div className="space-y-4">
-              <h4 className="font-semibold flex items-center gap-2">
-                <Sparkles size={18} className="text-purple-400" />
-                Preview do Produto
-              </h4>
+              <div className="flex items-center justify-between">
+                <h4 className="font-semibold flex items-center gap-2">
+                  <Sparkles size={18} className="text-purple-400" />
+                  Preview do Produto
+                </h4>
+                {printifyMockups.length > 0 && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setShowMockupGalleryModal(true)}
+                    className="text-purple-400 hover:text-purple-300"
+                  >
+                    <Maximize2 size={14} className="mr-1" />
+                    Expandir
+                  </Button>
+                )}
+              </div>
               {selectedBlueprint && (
                 <div className="space-y-4">
-                  {/* Main Mockup - Show Printify mockups if available */}
+                  {/* Main Mockup - Show Printify Gallery if available */}
                   {printifyMockups.length > 0 ? (
-                    <div className="aspect-square w-full rounded-xl overflow-hidden bg-white">
-                      <img 
-                        src={printifyMockups[selectedProductImageIndex]?.src || printifyMockups[0]?.src} 
-                        alt="Printify Mockup" 
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+                    <MockupGallery 
+                      mockups={printifyMockups}
+                      selectedIndex={selectedProductImageIndex}
+                      onSelectIndex={setSelectedProductImageIndex}
+                    />
                   ) : isGeneratingMockups ? (
-                    <div className="aspect-square w-full rounded-xl bg-gray-800 flex flex-col items-center justify-center">
-                      <Loader2 className="animate-spin text-purple-500 mb-3" size={48} />
-                      <p className="text-purple-400 font-medium">Gerando mockups profissionais...</p>
-                      <p className="text-xs text-gray-500 mt-1">Printify está processando seu design</p>
-                    </div>
+                    <MockupGallery 
+                      mockups={[]}
+                      selectedIndex={0}
+                      onSelectIndex={() => {}}
+                      isLoading={true}
+                    />
                   ) : (
                     <MockupPreview 
                       productImage={selectedBlueprint.images[selectedProductImageIndex] || selectedBlueprint.images[0]} 
@@ -1712,52 +1944,24 @@ function CreateWizard(props: {
                     </Button>
                   )}
                   
-                  {/* Info Card */}
-                  <Card className="bg-white/5 border-white/10 p-4">
-                    <h5 className="font-semibold mb-1">{selectedBlueprint.title}</h5>
-                    <p className="text-sm text-gray-400 mb-3">{selectedBlueprint.brand}</p>
-                    
-                    {printifyMockups.length > 0 ? (
-                      <div className="flex items-center gap-2 text-green-400 text-sm">
-                        <CheckCircle size={16} />
-                        <span>Mockups profissionais gerados pelo Printify!</span>
-                      </div>
-                    ) : designPreview ? (
-                      <div className="flex items-center gap-2 text-yellow-400 text-sm">
-                        <AlertCircle size={16} />
-                        <span>Clique em &quot;Gerar Mockups&quot; para ver resultado real</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-gray-400 text-sm">
-                        <AlertCircle size={16} />
-                        <span>Faça upload do seu design para começar</span>
-                      </div>
-                    )}
-                  </Card>
-                  
-                  {/* Printify Mockup Thumbnails */}
-                  {printifyMockups.length > 1 && (
-                    <div className="space-y-2">
-                      <p className="text-xs text-gray-400">Mockups gerados ({printifyMockups.length}):</p>
-                      <div className="grid grid-cols-4 gap-2">
-                        {printifyMockups.slice(0, 8).map((mockup, idx) => (
-                          <motion.div 
-                            key={idx} 
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setSelectedProductImageIndex(idx)}
-                            className={cn(
-                              "aspect-square bg-white rounded-lg overflow-hidden cursor-pointer transition-all border-2",
-                              selectedProductImageIndex === idx 
-                                ? "border-purple-500 ring-2 ring-purple-500/50" 
-                                : "border-transparent opacity-70 hover:opacity-100"
-                            )}
-                          >
-                            <img src={mockup.src} alt={`Mockup ${idx + 1}`} className="w-full h-full object-contain" loading="lazy" />
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
+                  {/* Info Card - only show when no mockups (MockupGallery has its own info) */}
+                  {printifyMockups.length === 0 && (
+                    <Card className="bg-white/5 border-white/10 p-4">
+                      <h5 className="font-semibold mb-1">{selectedBlueprint.title}</h5>
+                      <p className="text-sm text-gray-400 mb-3">{selectedBlueprint.brand}</p>
+                      
+                      {designPreview ? (
+                        <div className="flex items-center gap-2 text-yellow-400 text-sm">
+                          <AlertCircle size={16} />
+                          <span>Clique em &quot;Gerar Mockups&quot; para ver resultado real</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-gray-400 text-sm">
+                          <AlertCircle size={16} />
+                          <span>Faça upload do seu design para começar</span>
+                        </div>
+                      )}
+                    </Card>
                   )}
                   
                   {/* Fallback to product images if no printify mockups */}
@@ -1789,6 +1993,17 @@ function CreateWizard(props: {
             </div>
           </div>
         </div>
+        
+        {/* Fullscreen Mockup Gallery Modal */}
+        <AnimatePresence>
+          {showMockupGalleryModal && printifyMockups.length > 0 && (
+            <MockupGalleryModal
+              mockups={printifyMockups}
+              initialIndex={selectedProductImageIndex}
+              onClose={() => setShowMockupGalleryModal(false)}
+            />
+          )}
+        </AnimatePresence>
         
         {/* Sticky Bottom Bar */}
         <AnimatePresence>
