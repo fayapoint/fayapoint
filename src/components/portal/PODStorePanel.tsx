@@ -7,6 +7,7 @@ import {
   Package, DollarSign, ShoppingBag, Sparkles, Shirt, Home, Frame, Coffee,
   Smartphone, Upload, Image as ImageIcon, CheckCircle, Clock, AlertCircle,
   ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck, Settings,
+  Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -221,9 +222,12 @@ function MockupPreview({
 interface PODProduct {
   _id: string; title: string; slug: string; description: string; category: string; templateId: string; templateName: string;
   baseProductType: string; designFiles: { url: string; width: number; height: number }[]; mockupImages: string[];
-  primaryMockup?: string; variants: { id: string; name: string; sellingPrice: number; basePrice: number }[];
+  primaryMockup?: string; variants: { id: string; name: string; sellingPrice: number; basePrice: number; providerVariantId?: string; sku?: string; isActive?: boolean; options?: Record<string, string> }[];
   baseCost: number; suggestedPrice: number; status: "draft" | "pending_review" | "active" | "paused" | "rejected" | "archived";
-  isPublished: boolean; views: number; sales: number; revenue: number; rating: number; createdAt: string;
+  isPublished: boolean; showInMarketplace?: boolean; showInUserStore?: boolean; 
+  views: number; sales: number; revenue: number; rating: number; createdAt: string;
+  providers?: { providerId: string; providerSlug: string; providerProductId?: string; syncStatus?: string; publishedUrl?: string }[];
+  shortDescription?: string; tags?: string[];
 }
 interface UserData { progress?: { xp?: number; level?: number }; subscription?: { plan?: string }; }
 
@@ -251,7 +255,13 @@ interface PODStorePanelProps {
 export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   // isCompact can be used for responsive layout adjustments
   void isCompact;
-  const [activeTab, setActiveTab] = useState<"products" | "create">("products");
+  const [activeTab, setActiveTab] = useState<"products" | "create" | "orders" | "earnings">("products");
+  const [orders, setOrders] = useState<{ _id: string; orderNumber: string; status: string; createdAt: string; grandTotal: number; totalCreatorCommission: number; items: { title: string; quantity: number; mockupImage?: string }[] }[]>([]);
+  const [orderStats, setOrderStats] = useState<{ total: number; pending: number; inProduction: number; shipped: number; delivered: number; totalRevenue: number; totalCommission: number } | null>(null);
+  const [earningsData, setEarningsData] = useState<{ summary: { totalEarnings: number; pendingEarnings: number; paidEarnings: number; availableForPayout: number; totalSales: number; totalOrders: number; commissionRate: number; canRequestPayout: boolean; minPayoutAmount: number }; monthlyBreakdown: { month: string; commission: number }[] } | null>(null);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+  const [isLoadingEarnings, setIsLoadingEarnings] = useState(false);
+  const [isPublishing, setIsPublishing] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState<PODProduct[]>([]);
   const [stats, setStats] = useState<{ total: number; active: number; draft: number; totalSales: number; totalRevenue: number } | null>(null);
@@ -378,8 +388,67 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     finally { setIsFetchingVariants(false); }
   }, []);
 
+  // Fetch orders
+  const fetchOrders = useCallback(async () => {
+    const token = localStorage.getItem("fayapoint_token");
+    if (!token) return;
+    setIsLoadingOrders(true);
+    try {
+      const res = await fetch("/api/pod/orders", { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = await res.json();
+        setOrders(data.orders || []);
+        setOrderStats(data.stats);
+      }
+    } catch (e) { console.error("Error:", e); toast.error("Erro ao carregar pedidos"); }
+    finally { setIsLoadingOrders(false); }
+  }, []);
+
+  // Fetch earnings
+  const fetchEarnings = useCallback(async () => {
+    const token = localStorage.getItem("fayapoint_token");
+    if (!token) return;
+    setIsLoadingEarnings(true);
+    try {
+      const res = await fetch("/api/pod/earnings", { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = await res.json();
+        setEarningsData(data);
+      }
+    } catch (e) { console.error("Error:", e); toast.error("Erro ao carregar ganhos"); }
+    finally { setIsLoadingEarnings(false); }
+  }, []);
+
+  // Publish to store
+  const publishToStore = useCallback(async (productId: string) => {
+    const token = localStorage.getItem("fayapoint_token");
+    if (!token) return;
+    setIsPublishing(productId);
+    try {
+      const res = await fetch("/api/pod/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ productId }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        toast.success("Produto publicado na loja!");
+        fetchProducts();
+        if (data.data?.storeUrl) {
+          toast.success(`Disponível em: ${data.data.storeUrl}`, { duration: 5000 });
+        }
+      } else {
+        const err = await res.json();
+        toast.error(err.error || "Erro ao publicar");
+      }
+    } catch (e) { console.error("Error:", e); toast.error("Erro ao publicar"); }
+    finally { setIsPublishing(null); }
+  }, [fetchProducts]);
+
   useEffect(() => { fetchUserData(); fetchProducts(); }, [fetchUserData, fetchProducts]);
   useEffect(() => { if (activeTab === "create" && blueprints.length === 0) fetchBlueprints(); }, [activeTab, blueprints.length, fetchBlueprints]);
+  useEffect(() => { if (activeTab === "orders") fetchOrders(); }, [activeTab, fetchOrders]);
+  useEffect(() => { if (activeTab === "earnings") fetchEarnings(); }, [activeTab, fetchEarnings]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -583,6 +652,9 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         printifyMockups={printifyMockups} isGeneratingMockups={isGeneratingMockups} generatePrintifyMockups={generatePrintifyMockups}
         uploadDesign={uploadDesign} uploadedDesignUrl={uploadedDesignUrl} setUploadedDesignUrl={setUploadedDesignUrl}
         designScale={designScale} setDesignScale={setDesignScale} designPosition={designPosition} setDesignPosition={setDesignPosition}
+        orders={orders} orderStats={orderStats} isLoadingOrders={isLoadingOrders} fetchOrders={fetchOrders}
+        earningsData={earningsData} isLoadingEarnings={isLoadingEarnings} fetchEarnings={fetchEarnings}
+        publishToStore={publishToStore} isPublishing={isPublishing}
       />
     </div>
   );
@@ -590,7 +662,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
 // Separate content component for cleaner organization
 function PODPanelContent(props: {
-  activeTab: string; setActiveTab: (t: "products" | "create") => void; isLoading: boolean; products: PODProduct[];
+  activeTab: string; setActiveTab: (t: "products" | "create" | "orders" | "earnings") => void; isLoading: boolean; products: PODProduct[];
   stats: { total: number; active: number; draft: number; totalSales: number; totalRevenue: number } | null;
   searchQuery: string; setSearchQuery: (s: string) => void; statusFilter: string; setStatusFilter: (s: string) => void;
   selectedProduct: PODProduct | null; setSelectedProduct: (p: PODProduct | null) => void;
@@ -615,6 +687,12 @@ function PODPanelContent(props: {
   uploadDesign: () => Promise<string | null>; uploadedDesignUrl: string | null; setUploadedDesignUrl: (url: string | null) => void;
   designScale: 'small' | 'medium' | 'large' | 'fill'; setDesignScale: (s: 'small' | 'medium' | 'large' | 'fill') => void;
   designPosition: 'top' | 'center' | 'bottom'; setDesignPosition: (p: 'top' | 'center' | 'bottom') => void;
+  orders: { _id: string; orderNumber: string; status: string; createdAt: string; grandTotal: number; totalCreatorCommission: number; items: { title: string; quantity: number; mockupImage?: string }[] }[];
+  orderStats: { total: number; pending: number; inProduction: number; shipped: number; delivered: number; totalRevenue: number; totalCommission: number } | null;
+  isLoadingOrders: boolean; fetchOrders: () => void;
+  earningsData: { summary: { totalEarnings: number; pendingEarnings: number; paidEarnings: number; availableForPayout: number; totalSales: number; totalOrders: number; commissionRate: number; canRequestPayout: boolean; minPayoutAmount: number }; monthlyBreakdown: { month: string; commission: number }[] } | null;
+  isLoadingEarnings: boolean; fetchEarnings: () => void;
+  publishToStore: (id: string) => void; isPublishing: string | null;
 }) {
   const { activeTab, setActiveTab, isLoading, products, stats, searchQuery, setSearchQuery, statusFilter, setStatusFilter,
     selectedProduct, setSelectedProduct, editingProduct, setEditingProduct, createStep, setCreateStep,
@@ -625,7 +703,9 @@ function PODPanelContent(props: {
     handleFileSelect, fetchBlueprints, fetchProviders, fetchVariants, createProduct, updateProduct, deleteProduct,
     publishProduct, resetCreateWizard, formatCurrency, userXP, canPublish,
     printifyMockups, isGeneratingMockups, generatePrintifyMockups, uploadDesign, uploadedDesignUrl, setUploadedDesignUrl,
-    designScale, setDesignScale, designPosition, setDesignPosition } = props;
+    designScale, setDesignScale, designPosition, setDesignPosition,
+    orders, orderStats, isLoadingOrders, fetchOrders, earningsData, isLoadingEarnings, fetchEarnings,
+    publishToStore, isPublishing } = props;
 
   return (
     <>
@@ -646,12 +726,19 @@ function PODPanelContent(props: {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 border-b border-gray-800 pb-2">
-        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2", activeTab === "products" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => setActiveTab("products")}>
-          <Package size={16} className="mr-2" />Meus Produtos
+      <div className="flex gap-2 mb-6 border-b border-gray-800 pb-2 overflow-x-auto">
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "products" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => setActiveTab("products")}>
+          <Package size={16} className="mr-2" />Produtos
         </Button>
-        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2", activeTab === "create" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => { setActiveTab("create"); if (blueprints.length === 0) fetchBlueprints(); }}>
-          <Sparkles size={16} className="mr-2" />Criar Novo
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "create" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => { setActiveTab("create"); if (blueprints.length === 0) fetchBlueprints(); }}>
+          <Sparkles size={16} className="mr-2" />Criar
+        </Button>
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "orders" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => setActiveTab("orders")}>
+          <Receipt size={16} className="mr-2" />Pedidos
+          {orderStats && orderStats.pending > 0 && <Badge className="ml-1.5 h-5 bg-orange-500">{orderStats.pending}</Badge>}
+        </Button>
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "earnings" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => setActiveTab("earnings")}>
+          <Wallet size={16} className="mr-2" />Ganhos
         </Button>
       </div>
 
@@ -690,7 +777,7 @@ function PODPanelContent(props: {
             : products.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.filter(p => !searchQuery || p.title.toLowerCase().includes(searchQuery.toLowerCase())).map((product) => (
-                  <ProductCard key={product._id} product={product} setSelectedProduct={setSelectedProduct} setEditingProduct={setEditingProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} publishProduct={publishProduct} canPublish={canPublish} formatCurrency={formatCurrency} />
+                  <ProductCard key={product._id} product={product} setSelectedProduct={setSelectedProduct} setEditingProduct={setEditingProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} publishProduct={publishProduct} canPublish={canPublish} formatCurrency={formatCurrency} publishToStore={publishToStore} isPublishing={isPublishing} />
                 ))}
               </div>
             ) : (
@@ -722,6 +809,177 @@ function PODPanelContent(props: {
             />
           </motion.div>
         )}
+
+        {activeTab === "orders" && (
+          <motion.div key="orders" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            {/* Order Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <Card className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 border-orange-500/30 p-4">
+                <div className="flex items-center gap-3"><Clock className="text-orange-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.pending || 0}</p><p className="text-xs text-gray-400">Pendentes</p></div></div>
+              </Card>
+              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
+                <div className="flex items-center gap-3"><Package className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.inProduction || 0}</p><p className="text-xs text-gray-400">Produção</p></div></div>
+              </Card>
+              <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30 p-4">
+                <div className="flex items-center gap-3"><Truck className="text-purple-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.shipped || 0}</p><p className="text-xs text-gray-400">Enviados</p></div></div>
+              </Card>
+              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
+                <div className="flex items-center gap-3"><CheckCircle className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.delivered || 0}</p><p className="text-xs text-gray-400">Entregues</p></div></div>
+              </Card>
+            </div>
+
+            {/* Orders List */}
+            {isLoadingOrders ? (
+              <div className="flex justify-center py-12"><Loader2 className="animate-spin text-purple-500" size={40} /></div>
+            ) : orders.length > 0 ? (
+              <div className="space-y-4">
+                {orders.map((order) => (
+                  <Card key={order._id} className="bg-white/5 border-white/10 p-4">
+                    <div className="flex flex-col md:flex-row md:items-center gap-4">
+                      <div className="flex items-center gap-3 flex-1">
+                        {order.items[0]?.mockupImage ? (
+                          <img src={order.items[0].mockupImage} alt="" className="w-16 h-16 rounded-lg object-cover bg-gray-800" />
+                        ) : (
+                          <div className="w-16 h-16 rounded-lg bg-gray-800 flex items-center justify-center"><Package className="text-gray-600" /></div>
+                        )}
+                        <div>
+                          <p className="font-semibold">#{order.orderNumber}</p>
+                          <p className="text-sm text-gray-400">{order.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</p>
+                          <p className="text-xs text-gray-500">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="font-bold text-green-400">{formatCurrency(order.totalCreatorCommission)}</p>
+                          <p className="text-xs text-gray-400">Comissão</p>
+                        </div>
+                        <Badge className={cn(
+                          order.status === 'delivered' && 'bg-green-600',
+                          order.status === 'shipped' && 'bg-purple-600',
+                          order.status === 'in_production' && 'bg-blue-600',
+                          ['pending', 'confirmed', 'processing'].includes(order.status) && 'bg-orange-600',
+                          ['cancelled', 'refunded'].includes(order.status) && 'bg-red-600',
+                        )}>
+                          {order.status === 'delivered' && 'Entregue'}
+                          {order.status === 'shipped' && 'Enviado'}
+                          {order.status === 'in_production' && 'Produção'}
+                          {['pending', 'confirmed', 'processing'].includes(order.status) && 'Pendente'}
+                          {['cancelled', 'refunded'].includes(order.status) && 'Cancelado'}
+                        </Badge>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card className="bg-white/5 border-white/10 p-12 text-center">
+                <Receipt size={64} className="mx-auto mb-4 text-gray-600" />
+                <h3 className="text-xl font-semibold mb-2">Nenhum pedido ainda</h3>
+                <p className="text-gray-400 mb-6">Quando seus produtos forem vendidos, os pedidos aparecerão aqui</p>
+              </Card>
+            )}
+
+            <div className="flex justify-center mt-6">
+              <Button variant="outline" className="border-gray-700" onClick={fetchOrders}>
+                <RefreshCw size={16} className="mr-2" />Atualizar
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === "earnings" && (
+          <motion.div key="earnings" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            {/* Earnings Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
+                <div className="flex items-center gap-3"><DollarSign className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.totalEarnings || 0)}</p><p className="text-xs text-gray-400">Total Ganho</p></div></div>
+              </Card>
+              <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-4">
+                <div className="flex items-center gap-3"><Clock className="text-yellow-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.pendingEarnings || 0)}</p><p className="text-xs text-gray-400">Pendente</p></div></div>
+              </Card>
+              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
+                <div className="flex items-center gap-3"><CreditCard className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.paidEarnings || 0)}</p><p className="text-xs text-gray-400">Já Sacado</p></div></div>
+              </Card>
+              <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30 p-4">
+                <div className="flex items-center gap-3"><Wallet className="text-purple-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p><p className="text-xs text-gray-400">Disponível</p></div></div>
+              </Card>
+            </div>
+
+            {isLoadingEarnings ? (
+              <div className="flex justify-center py-12"><Loader2 className="animate-spin text-purple-500" size={40} /></div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Commission Info */}
+                <Card className="bg-white/5 border-white/10 p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><TrendingUp className="text-green-400" />Sua Comissão</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-green-500/10 rounded-lg">
+                      <div>
+                        <p className="text-sm text-gray-400">Taxa de Comissão</p>
+                        <p className="text-3xl font-bold text-green-400">{earningsData?.summary.commissionRate || 70}%</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-400">do lucro</p>
+                        <p className="text-xs text-gray-500">(Preço - Custo)</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-center">
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <p className="text-2xl font-bold">{earningsData?.summary.totalOrders || 0}</p>
+                        <p className="text-xs text-gray-400">Pedidos</p>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.totalSales || 0)}</p>
+                        <p className="text-xs text-gray-400">Vendas Totais</p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* Payout Card */}
+                <Card className="bg-white/5 border-white/10 p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><Wallet className="text-purple-400" />Saque</h3>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-purple-500/10 rounded-lg text-center">
+                      <p className="text-sm text-gray-400 mb-1">Disponível para Saque</p>
+                      <p className="text-4xl font-bold text-purple-400">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p>
+                      <p className="text-xs text-gray-500 mt-2">Mínimo: {formatCurrency(earningsData?.summary.minPayoutAmount || 50)}</p>
+                    </div>
+                    <Button 
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                      disabled={!earningsData?.summary.canRequestPayout}
+                    >
+                      <CreditCard size={16} className="mr-2" />
+                      {earningsData?.summary.canRequestPayout ? 'Solicitar Saque' : `Mínimo R$ ${earningsData?.summary.minPayoutAmount || 50}`}
+                    </Button>
+                    <p className="text-xs text-gray-500 text-center">Saques processados em até 5 dias úteis via PIX</p>
+                  </div>
+                </Card>
+
+                {/* Monthly Breakdown */}
+                {earningsData?.monthlyBreakdown && earningsData.monthlyBreakdown.length > 0 && (
+                  <Card className="bg-white/5 border-white/10 p-6 md:col-span-2">
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><TrendingUp className="text-green-400" />Ganhos Mensais</h3>
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+                      {earningsData.monthlyBreakdown.map((m) => (
+                        <div key={m.month} className="flex-1 min-w-[80px] text-center p-3 bg-white/5 rounded-lg">
+                          <p className="text-xs text-gray-400">{m.month}</p>
+                          <p className="font-bold text-green-400">{formatCurrency(m.commission)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+              </div>
+            )}
+
+            <div className="flex justify-center mt-6">
+              <Button variant="outline" className="border-gray-700" onClick={fetchEarnings}>
+                <RefreshCw size={16} className="mr-2" />Atualizar
+              </Button>
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Modals */}
@@ -734,14 +992,17 @@ function PODPanelContent(props: {
 }
 
 // Product Card Component
-function ProductCard({ product, setSelectedProduct, setEditingProduct, updateProduct, deleteProduct, publishProduct, canPublish, formatCurrency }: {
+function ProductCard({ product, setSelectedProduct, setEditingProduct, updateProduct, deleteProduct, publishProduct, canPublish, formatCurrency, publishToStore, isPublishing }: {
   product: PODProduct; setSelectedProduct: (p: PODProduct) => void; setEditingProduct: (p: PODProduct) => void;
   updateProduct: (id: string, u: Partial<PODProduct>) => void; deleteProduct: (id: string) => void;
   publishProduct: (id: string) => void; canPublish: boolean; formatCurrency: (v: number) => string;
+  publishToStore?: (id: string) => void; isPublishing?: string | null;
 }) {
   const statusInfo = STATUS_CONFIG[product.status];
   const StatusIcon = statusInfo.icon;
   const CategoryIcon = CATEGORY_ICONS[product.category] || Package;
+  const isInStore = product.isPublished && product.showInMarketplace;
+  const isPublishingThis = isPublishing === product._id;
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="group relative">
@@ -749,6 +1010,7 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
         <div className="relative aspect-square bg-gradient-to-br from-gray-800 to-gray-900">
           {product.primaryMockup ? <img src={product.primaryMockup} alt={product.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><CategoryIcon size={48} className="text-gray-600" /></div>}
           <Badge className={cn("absolute top-2 left-2", statusInfo.color, "text-white")}><StatusIcon size={12} className="mr-1" />{statusInfo.label}</Badge>
+          {isInStore && <Badge className="absolute top-2 left-24 bg-green-600 text-white"><Store size={12} className="mr-1" />Na Loja</Badge>}
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <DropdownMenu>
               <DropdownMenuTrigger asChild><Button size="icon" variant="secondary" className="h-8 w-8"><MoreVertical size={16} /></Button></DropdownMenuTrigger>
@@ -757,6 +1019,17 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
                 <DropdownMenuItem onClick={() => setEditingProduct(product)}><Edit size={14} className="mr-2" />Editar</DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-gray-800" />
                 {product.status === "draft" && <DropdownMenuItem onClick={() => publishProduct(product._id)} className={!canPublish ? "opacity-50" : ""}><Send size={14} className="mr-2" />{canPublish ? "Publicar" : `${MIN_XP_TO_PUBLISH} XP`}</DropdownMenuItem>}
+                {product.status === "active" && !isInStore && publishToStore && (
+                  <DropdownMenuItem onClick={() => publishToStore(product._id)} disabled={isPublishingThis}>
+                    {isPublishingThis ? <Loader2 size={14} className="mr-2 animate-spin" /> : <Store size={14} className="mr-2" />}
+                    {isPublishingThis ? "Publicando..." : "Publicar na Loja"}
+                  </DropdownMenuItem>
+                )}
+                {isInStore && (
+                  <DropdownMenuItem className="text-green-400" onClick={() => window.open(`/loja`, '_blank')}>
+                    <ExternalLink size={14} className="mr-2" />Ver na Loja
+                  </DropdownMenuItem>
+                )}
                 {product.status === "active" && <DropdownMenuItem onClick={() => updateProduct(product._id, { status: "paused" })}><Pause size={14} className="mr-2" />Pausar</DropdownMenuItem>}
                 {product.status === "paused" && <DropdownMenuItem onClick={() => updateProduct(product._id, { status: "active" })}><Play size={14} className="mr-2" />Reativar</DropdownMenuItem>}
                 <DropdownMenuSeparator className="bg-gray-800" />

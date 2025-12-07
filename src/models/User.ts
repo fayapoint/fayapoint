@@ -72,6 +72,25 @@ export interface IUser extends Document {
     totalAiChats: number;
     referrals: number;
   };
+  // POD earnings and commissions
+  podEarnings: {
+    totalEarnings: number;
+    pendingEarnings: number;
+    paidEarnings: number;
+    totalSales: number;
+    totalOrders: number;
+    totalProducts: number;
+    lastPayoutDate?: Date;
+    payoutMethod?: 'pix' | 'bank_transfer' | 'paypal';
+    payoutDetails?: {
+      pixKey?: string;
+      bankAccount?: string;
+      bankAgency?: string;
+      bankName?: string;
+      paypalEmail?: string;
+    };
+    commissionRate: number; // Default 70%
+  };
   preferences: {
     language: string;
     notifications: {
@@ -195,6 +214,24 @@ const UserSchema = new Schema<IUser>({
     totalImagesGenerated: { type: Number, default: 0 },
     totalAiChats: { type: Number, default: 0 },
     referrals: { type: Number, default: 0 },
+  },
+  podEarnings: {
+    totalEarnings: { type: Number, default: 0 },
+    pendingEarnings: { type: Number, default: 0 },
+    paidEarnings: { type: Number, default: 0 },
+    totalSales: { type: Number, default: 0 },
+    totalOrders: { type: Number, default: 0 },
+    totalProducts: { type: Number, default: 0 },
+    lastPayoutDate: Date,
+    payoutMethod: { type: String, enum: ['pix', 'bank_transfer', 'paypal'] },
+    payoutDetails: {
+      pixKey: String,
+      bankAccount: String,
+      bankAgency: String,
+      bankName: String,
+      paypalEmail: String,
+    },
+    commissionRate: { type: Number, default: 70 },
   },
   preferences: {
     language: { type: String, default: 'pt-BR' },
