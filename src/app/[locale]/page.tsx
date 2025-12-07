@@ -8,10 +8,9 @@ import { AIToolsMarquee } from "@/components/home/AIToolsMarquee";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
 import { CourseCategoriesSection } from "@/components/home/CourseCategoriesSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { PricingSection } from "@/components/home/PricingSection";
 import { CTASection } from "@/components/home/CTASection";
-import { ServicePackagesSection } from "@/components/home/ServicePackagesSection";
 import { CommunityGallery } from "@/components/home/CommunityGallery";
+import { ValuePropositionCTA } from "@/components/home/ValuePropositionCTA";
 
 export default function Home() {
   return (
@@ -19,16 +18,15 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
+        <ValuePropositionCTA />
+        <CommunityGallery />
         <ChatGPTAllowlistingBanner />
         <WhatWeDoSection />
-        <CommunityGallery />
         <ServicesCarousel />
         <AIToolsMarquee />
         <FeaturesSection />
         <CourseCategoriesSection />
         <TestimonialsSection />
-        <PricingSection />
-        <ServicePackagesSection />
         <CTASection />
       </main>
       <Footer />

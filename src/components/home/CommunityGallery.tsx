@@ -16,7 +16,7 @@ interface Creation {
   likes?: number;
 }
 
-// Infinite scroll marquee row
+// Infinite scroll marquee row - CSS-based for seamless loop
 function MarqueeRow({ 
   images, 
   direction = 'left', 
@@ -28,30 +28,24 @@ function MarqueeRow({
   speed?: number;
   onImageClick: (img: Creation, idx: number) => void;
 }) {
-  const duplicatedImages = [...images, ...images]; // Duplicate for seamless loop
+  // Triple the images to ensure seamless loop
+  const tripleImages = [...images, ...images, ...images];
   
   return (
-    <div className="relative overflow-hidden py-2 group/row">
-      <motion.div
-        className="flex gap-3"
-        animate={{
-          x: direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%'],
+    <div className="relative overflow-hidden py-2">
+      <div 
+        className={`flex gap-3 ${direction === 'left' ? 'animate-marquee-left' : 'animate-marquee-right'}`}
+        style={{ 
+          animationDuration: `${speed}s`,
+          width: 'max-content'
         }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: speed,
-            ease: "linear",
-          },
-        }}
-        style={{ willChange: 'transform' }}
       >
-        {duplicatedImages.map((img, idx) => (
+        {tripleImages.map((img, idx) => (
           <motion.div
             key={`${img._id}-${idx}`}
             className="relative shrink-0 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-lg overflow-hidden cursor-pointer group"
-            whileHover={{ scale: 1.05, zIndex: 10 }}
+            whileHover={{ scale: 1.08, zIndex: 10 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => onImageClick(img, idx % images.length)}
           >
             <img
@@ -61,12 +55,29 @@ function MarqueeRow({
               loading="lazy"
             />
             {/* Hover overlay */}
-            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-              <Sparkles className="text-white/80" size={20} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-center pb-2">
+              <Sparkles className="text-white/90" size={16} />
             </div>
           </motion.div>
         ))}
-      </motion.div>
+      </div>
+      {/* CSS Animation Styles */}
+      <style jsx>{`
+        @keyframes marquee-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
+        }
+        @keyframes marquee-right {
+          0% { transform: translateX(-33.333%); }
+          100% { transform: translateX(0); }
+        }
+        .animate-marquee-left {
+          animation: marquee-left linear infinite;
+        }
+        .animate-marquee-right {
+          animation: marquee-right linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

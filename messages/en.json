@@ -645,6 +645,22 @@
         "message": "Hi! I'd like to learn more about FayaPoint's AI courses."
       }
     },
+    "ValueCTA": {
+      "badge": "100% FREE",
+      "title1": "Create AI Art",
+      "title2": "Print It & Sell on Our Store",
+      "subtitle": "Use our AI to create unique designs, apply them to t-shirts, mugs, prints, and more. Earn commission on every sale — all without investing anything.",
+      "step1": "Generate AI art",
+      "step2": "Choose product",
+      "step3": "Customize",
+      "step4": "Earn per sale",
+      "feature1": "Unlimited image generation",
+      "feature2": "Integrated POD store",
+      "feature3": "Up to 70% commission",
+      "ctaPrimary": "Start Free Now",
+      "ctaSecondary": "View Plans",
+      "trustNote": "No credit card • Start in 30 seconds • Cancel anytime"
+    },
     "Pricing": {
       "title": "Investments That Pay for Themselves",
       "description": "Choose the plan that fits your journey",

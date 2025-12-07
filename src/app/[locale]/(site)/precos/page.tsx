@@ -11,6 +11,7 @@ import { useServicePrices } from "@/hooks/useServicePrices";
 import { useTranslations, useLocale } from "next-intl";
 import { getPricingTranslation } from "@/data/pricing-translations";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
+import { useUser } from "@/contexts/UserContext";
 import Link from "next/link";
 import {
   Globe,
@@ -21,12 +22,19 @@ import {
   Share2,
   ArrowRight,
   CheckCircle,
+  CheckCircle2,
   Sparkles,
   Users,
   Clock,
   ShieldCheck,
   Star,
   Package,
+  Lock,
+  LogIn,
+  ChevronDown,
+  ChevronUp,
+  Info,
+  DollarSign,
 } from "lucide-react";
 
 // Service configurations with emojis and colors
@@ -149,11 +157,65 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
+// Subscription plans data
+const planKeys = ["starter", "pro", "business"] as const;
+
+// Plan details for expanded view
+const planDetails: Record<string, string[]> = {
+  starter: [
+    "Acesso a 5 cursos básicos por mês para construir sua base de conhecimento",
+    "Comunidade exclusiva para networking e tirar dúvidas com outros alunos",
+    "Certificados digitais verificáveis para cada curso concluído",
+    "Suporte por email com resposta em até 48h úteis",
+    "Material complementar em PDF para download"
+  ],
+  pro: [
+    "Acesso ILIMITADO a todos os 50+ cursos da plataforma, incluindo lançamentos",
+    "2 sessões de mentoria em grupo por mês com especialistas da área",
+    "Projetos práticos exclusivos com feedback personalizado",
+    "Suporte prioritário via chat com resposta em até 4h",
+    "Biblioteca completa de templates, prompts e automações prontas",
+    "Acesso antecipado de 30 dias a novos cursos e ferramentas",
+    "Descontos especiais em ferramentas parceiras (n8n, Make, OpenAI)"
+  ],
+  business: [
+    "TUDO do plano Pro, mais benefícios exclusivos para empresas",
+    "1 sessão mensal de consultoria individual (1h) para seu negócio",
+    "Treinamento personalizado para até 5 membros da sua equipe",
+    "Implementação assistida de automações e integrações",
+    "Dashboard executivo com métricas de progresso e ROI",
+    "Acesso à API para integrações customizadas",
+    "Opção white-label para conteúdo interno",
+    "Suporte 24/7 via WhatsApp direto com nosso time"
+  ]
+};
+
 export default function PricingPage() {
   const t = useTranslations("Pricing");
+  const tHome = useTranslations("Home.Pricing");
   const locale = useLocale();
+  const { user } = useUser();
   const { loading, groupedByService } = useServicePrices();
   const [activeServiceSlug, setActiveServiceSlug] = useState<string>("website-full");
+  const [expandedPlan, setExpandedPlan] = useState<string | null>(null);
+
+  const isLoggedIn = !!user;
+
+  // Get subscription plans from translations
+  const plans = planKeys.map((key) => {
+    const plan = tHome.raw(`plans.${key}`) as {
+      name: string;
+      price: string;
+      period: string;
+      description: string;
+      features: string[];
+      highlighted?: boolean;
+      badge?: string;
+      cta: string;
+      href: string;
+    };
+    return { key, highlighted: key === 'pro', ...plan };
+  });
 
   const services = useMemo(() => {
     return Object.entries(groupedByService)
@@ -174,6 +236,19 @@ export default function PricingPage() {
   }, [groupedByService]);
 
   const activeService = services.find((s) => s.slug === activeServiceSlug) || services[0];
+
+  // Login prompt component
+  const LoginPrompt = () => (
+    <Link href="/login" className="block">
+      <div className="flex items-center justify-center gap-2 py-3 px-4 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-lg transition-all group">
+        <Lock className="w-4 h-4 text-primary" />
+        <span className="text-sm font-medium text-primary group-hover:underline">
+          {locale === 'pt-BR' ? 'Faça login para ver preços' : 'Login to see prices'}
+        </span>
+        <LogIn className="w-4 h-4 text-primary" />
+      </div>
+    </Link>
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -208,6 +283,132 @@ export default function PricingPage() {
           </div>
         </section>
 
+        {/* Subscription Plans Section */}
+        <section className="py-16 px-4" id="subscription">
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-12">
+              <Badge className="mb-4" variant="outline">
+                <DollarSign className="w-4 h-4 mr-1" />
+                {locale === 'pt-BR' ? 'Planos de Assinatura' : 'Subscription Plans'}
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">{tHome("title")}</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">{tHome("description")}</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {plans.map((plan, i) => (
+                <motion.div
+                  key={plan.key}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ scale: 1.02, y: -8 }}
+                  transition={{ delay: i * 0.1, type: "spring", stiffness: 200, damping: 20 }}
+                  viewport={{ once: true }}
+                  className={`relative ${plan.highlighted ? "md:-mt-4 md:mb-4" : ""}`}
+                >
+                  <Card className={`${plan.highlighted ? 'border-primary bg-primary/5 shadow-2xl shadow-primary/20' : 'border-border bg-card/50'} backdrop-blur p-6 h-full flex flex-col`}>
+                    {plan.badge && (
+                      <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-accent text-primary-foreground px-4">
+                        <Sparkles className="w-3 h-3 inline mr-1" />
+                        {plan.badge}
+                      </Badge>
+                    )}
+
+                    <div className="mb-4">
+                      <h3 className="text-2xl font-bold mb-1">{plan.name}</h3>
+                      <p className="text-sm text-muted-foreground">{plan.description}</p>
+                    </div>
+
+                    {/* Price - Login Gated */}
+                    <div className="mb-6">
+                      {isLoggedIn ? (
+                        <div>
+                          <span className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                            R${plan.price}
+                          </span>
+                          <span className="text-muted-foreground">{plan.period}</span>
+                        </div>
+                      ) : (
+                        <LoginPrompt />
+                      )}
+                    </div>
+
+                    {/* Features */}
+                    <ul className="space-y-2 mb-6 flex-1">
+                      {plan.features.map((feature, j) => (
+                        <li key={j} className="flex items-start gap-2 text-sm">
+                          <CheckCircle2 className="text-primary mt-0.5 flex-shrink-0" size={16} />
+                          <span className="text-foreground/90">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Expand Details */}
+                    <button
+                      onClick={() => setExpandedPlan(expandedPlan === plan.key ? null : plan.key)}
+                      className="flex items-center justify-center gap-2 text-sm text-primary hover:underline mb-4"
+                    >
+                      <Info size={14} />
+                      {locale === 'pt-BR' ? 'Ver detalhes completos' : 'See full details'}
+                      {expandedPlan === plan.key ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    </button>
+
+                    {/* Expanded Details */}
+                    <AnimatePresence>
+                      {expandedPlan === plan.key && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden mb-4"
+                        >
+                          <div className="p-4 bg-muted/50 rounded-lg space-y-2">
+                            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                              {locale === 'pt-BR' ? 'O que está incluído:' : 'What\'s included:'}
+                            </p>
+                            {planDetails[plan.key]?.map((detail, idx) => (
+                              <p key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
+                                <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                {detail}
+                              </p>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* CTA */}
+                    <Link href={isLoggedIn ? plan.href : '/login'} className="mt-auto">
+                      <Button
+                        className={`w-full ${plan.highlighted ? 'bg-primary hover:bg-primary/90' : ''}`}
+                        variant={plan.highlighted ? 'default' : 'outline'}
+                        size="lg"
+                      >
+                        {plan.cta}
+                      </Button>
+                    </Link>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Trust indicators */}
+            <div className="flex items-center justify-center gap-8 mt-10 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-green-500" />
+                <span>{tHome("guarantee")}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                <span>{tHome("rating")}</span>
+              </div>
+            </div>
+            <p className="text-center text-xs text-muted-foreground/70 mt-4">
+              {tHome("footnote")}
+            </p>
+          </div>
+        </section>
+
         {/* Quick Bundles - Horizontal Cards */}
         <section className="py-12 px-4 bg-muted/30" id="bundles">
           <div className="container mx-auto max-w-6xl">
@@ -234,7 +435,14 @@ export default function PricingPage() {
                     )}
                     <div className="text-3xl mb-2">{bundle.emoji}</div>
                     <h3 className="font-semibold text-sm mb-1">{getPricingTranslation(bundle.name, locale)}</h3>
-                    <p className="text-2xl font-bold mb-3">{currencyFormatter.format(bundle.price)}</p>
+                    {isLoggedIn ? (
+                      <p className="text-2xl font-bold mb-3 text-primary">{currencyFormatter.format(bundle.price)}</p>
+                    ) : (
+                      <Link href="/login" className="flex items-center gap-1 text-xs text-primary hover:underline mb-3">
+                        <Lock className="w-3 h-3" />
+                        {locale === 'pt-BR' ? 'Login para ver' : 'Login to see'}
+                      </Link>
+                    )}
                     <ul className="text-xs text-muted-foreground space-y-1">
                       {bundle.includes.map((item, i) => (
                         <li key={i} className="flex items-center gap-1">
@@ -328,9 +536,15 @@ export default function PricingPage() {
                                   <span className="text-muted-foreground">
                                     {getPricingTranslation(item.unitLabel, locale)}
                                   </span>
-                                  <span className={`font-semibold ${activeService.accentColor}`}>
-                                    {currencyFormatter.format(item.priceRange.recommended)}
-                                  </span>
+                                  {isLoggedIn ? (
+                                    <span className={`font-semibold ${activeService.accentColor}`}>
+                                      {currencyFormatter.format(item.priceRange.recommended)}
+                                    </span>
+                                  ) : (
+                                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                      <Lock className="w-3 h-3" />
+                                    </span>
+                                  )}
                                 </div>
                               ))}
                               {items.length > 4 && (
@@ -351,11 +565,15 @@ export default function PricingPage() {
                       <p className="text-sm uppercase tracking-wider text-muted-foreground mb-2">
                         {t("services.priceRange")}
                       </p>
-                      <p className="text-3xl font-bold">
-                        {currencyFormatter.format(activeService.minPrice)}
-                        <span className="text-muted-foreground text-lg font-normal"> - </span>
-                        {currencyFormatter.format(activeService.maxPrice)}
-                      </p>
+                      {isLoggedIn ? (
+                        <p className="text-3xl font-bold">
+                          {currencyFormatter.format(activeService.minPrice)}
+                          <span className="text-muted-foreground text-lg font-normal"> - </span>
+                          {currencyFormatter.format(activeService.maxPrice)}
+                        </p>
+                      ) : (
+                        <LoginPrompt />
+                      )}
                     </div>
 
                     <div className="flex-1 space-y-3 text-sm text-muted-foreground mb-6">

@@ -645,6 +645,22 @@
         "message": "Olá! Gostaria de saber mais sobre os cursos de IA da FayaPoint."
       }
     },
+    "ValueCTA": {
+      "badge": "100% GRÁTIS",
+      "title1": "Crie Imagens com IA",
+      "title2": "Estampe e Venda na Nossa Loja",
+      "subtitle": "Use nossa IA para criar designs únicos, aplique em camisetas, canecas, quadros e muito mais. Ganhe comissão por cada venda — tudo isso sem investir nada.",
+      "step1": "Gere arte com IA",
+      "step2": "Escolha o produto",
+      "step3": "Personalize",
+      "step4": "Ganhe por venda",
+      "feature1": "Geração ilimitada de imagens",
+      "feature2": "Loja POD integrada",
+      "feature3": "Comissão de até 70%",
+      "ctaPrimary": "Começar Grátis Agora",
+      "ctaSecondary": "Ver Planos",
+      "trustNote": "Sem cartão de crédito • Comece em 30 segundos • Cancele quando quiser"
+    },
     "Pricing": {
       "title": "Investimento que se Paga",
       "description": "Escolha o plano ideal para sua jornada",
