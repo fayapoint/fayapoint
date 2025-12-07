@@ -79,6 +79,11 @@ export interface PrintifyVariant {
     height: number;
     width: number;
   }[];
+  // Pricing info (in cents USD)
+  price?: number;
+  cost?: number;
+  is_available?: boolean;
+  is_default?: boolean;
 }
 
 export interface PrintifyShippingInfo {

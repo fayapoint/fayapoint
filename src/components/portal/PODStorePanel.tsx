@@ -6,7 +6,7 @@ import {
   Store, Plus, Search, Filter, MoreVertical, Eye, Edit, Trash2, Play, Pause,
   Package, DollarSign, ShoppingBag, Sparkles, Shirt, Home, Frame, Coffee,
   Smartphone, Upload, Image as ImageIcon, CheckCircle, Clock, AlertCircle,
-  ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send,
+  ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -22,7 +22,20 @@ import toast from "react-hot-toast";
 // Types
 interface PrintifyBlueprint { id: number; title: string; description: string; brand: string; model: string; images: string[]; }
 interface PrintifyProvider { id: number; title: string; location: { country: string; city?: string }; }
-interface PrintifyVariant { id: number; title: string; options: Record<string, string>; placeholders: { position: string; height: number; width: number }[]; }
+interface PrintifyVariant { 
+  id: number; title: string; options: Record<string, string>; 
+  placeholders: { position: string; height: number; width: number }[];
+  price?: number; cost?: number; is_available?: boolean;
+}
+interface PrintifyShipping {
+  handling_time: { value: number; unit: string };
+  profiles: { variant_ids: number[]; first_item: { cost: number; currency: string }; countries: string[] }[];
+}
+
+// Pricing constants
+const MARGIN_PERCENTAGE = 35; // 35% profit margin
+const USD_TO_BRL = 5.50; // Exchange rate (should ideally be fetched)
+const BRAZIL_SHIPPING_DAYS = { min: 15, max: 30 }; // Delivery estimate to Brazil
 
 // Print area configurations for different product types
 // Values are percentages of the product image dimensions
@@ -256,9 +269,14 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const [selectedProvider, setSelectedProvider] = useState<PrintifyProvider | null>(null);
   const [variants, setVariants] = useState<PrintifyVariant[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<number[]>([]);
+  const [shippingInfo, setShippingInfo] = useState<PrintifyShipping | null>(null);
   const [designFile, setDesignFile] = useState<File | null>(null);
   const [designPreview, setDesignPreview] = useState<string | null>(null);
   const [uploadedDesignUrl, setUploadedDesignUrl] = useState<string | null>(null);
+  const [printifyMockups, setPrintifyMockups] = useState<{ src: string; variantIds: number[]; position: string; isDefault: boolean }[]>([]);
+  const [isGeneratingMockups, setIsGeneratingMockups] = useState(false);
+  const [mockupProductId, setMockupProductId] = useState<string | null>(null);
+  const [mockupShopId, setMockupShopId] = useState<number | null>(null);
   const [productTitle, setProductTitle] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [sellingPrice, setSellingPrice] = useState(0);
@@ -333,8 +351,25 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       const res = await fetch(`/api/pod/blueprints?action=variants&blueprintId=${blueprintId}&providerId=${providerId}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const data = await res.json();
-        setVariants(data.variants || []);
-        if (data.variants?.length > 0) setSelectedVariants(data.variants.slice(0, 5).map((v: PrintifyVariant) => v.id));
+        const variantList = data.variants || [];
+        setVariants(variantList);
+        setShippingInfo(data.shipping || null);
+        
+        // Auto-select first 3 available variants
+        const availableVariants = variantList.filter((v: PrintifyVariant) => v.is_available !== false);
+        if (availableVariants.length > 0) {
+          setSelectedVariants(availableVariants.slice(0, 3).map((v: PrintifyVariant) => v.id));
+          
+          // Calculate base cost from first variant (convert from cents USD to BRL)
+          const firstVariant = availableVariants[0];
+          const costInCents = firstVariant.price || firstVariant.cost || 1200; // Default $12.00
+          const costInBRL = (costInCents / 100) * USD_TO_BRL;
+          setBaseCost(Math.round(costInBRL * 100) / 100);
+          
+          // Set selling price with margin
+          const sellPrice = costInBRL * (1 + MARGIN_PERCENTAGE / 100);
+          setSellingPrice(Math.round(sellPrice * 100) / 100);
+        }
       }
     } catch (e) { console.error("Error:", e); }
     finally { setIsFetchingVariants(false); }
@@ -365,6 +400,51 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     } catch (e) { console.error("Upload error:", e); }
     return null;
   };
+
+  // Generate real Printify mockups
+  const generatePrintifyMockups = useCallback(async (designUrl: string) => {
+    if (!selectedBlueprint || !selectedProvider || !selectedVariants.length) {
+      toast.error("Selecione produto, fornecedor e variantes primeiro");
+      return;
+    }
+    
+    setIsGeneratingMockups(true);
+    setPrintifyMockups([]); // Clear old mockups
+    
+    try {
+      const res = await fetch("/api/pod/mockup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          designUrl,
+          blueprintId: selectedBlueprint.id,
+          printProviderId: selectedProvider.id,
+          variantIds: selectedVariants,
+          productTitle: selectedBlueprint.title
+        })
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.mockups?.length) {
+          setPrintifyMockups(data.mockups);
+          setMockupProductId(data.productId);
+          setMockupShopId(data.shopId);
+          toast.success(`${data.mockups.length} mockups gerados!`);
+        } else {
+          toast.error("Nenhum mockup retornado");
+        }
+      } else {
+        const err = await res.json();
+        toast.error(err.error || "Erro ao gerar mockups");
+      }
+    } catch (error) {
+      console.error("Mockup generation error:", error);
+      toast.error("Erro ao conectar com Printify");
+    } finally {
+      setIsGeneratingMockups(false);
+    }
+  }, [selectedBlueprint, selectedProvider, selectedVariants]);
 
   const inferCategory = (title: string): string => {
     const l = title.toLowerCase();
@@ -438,6 +518,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const resetCreateWizard = () => {
     setCreateStep(1); setSelectedBlueprint(null); setSelectedProvider(null); setProviders([]); setVariants([]);
     setSelectedVariants([]); setDesignFile(null); setDesignPreview(null); setUploadedDesignUrl(null);
+    setPrintifyMockups([]); setIsGeneratingMockups(false); setMockupProductId(null); setMockupShopId(null);
     setProductTitle(""); setProductDescription(""); setSellingPrice(0); setBaseCost(0);
   };
 
@@ -466,6 +547,8 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         fetchBlueprints={fetchBlueprints} fetchProviders={fetchProviders} fetchVariants={fetchVariants}
         createProduct={createProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} publishProduct={publishProduct}
         resetCreateWizard={resetCreateWizard} formatCurrency={formatCurrency} userXP={userXP} canPublish={canPublish}
+        printifyMockups={printifyMockups} isGeneratingMockups={isGeneratingMockups} generatePrintifyMockups={generatePrintifyMockups}
+        uploadDesign={uploadDesign} uploadedDesignUrl={uploadedDesignUrl} setUploadedDesignUrl={setUploadedDesignUrl}
       />
     </div>
   );
@@ -493,6 +576,9 @@ function PODPanelContent(props: {
   updateProduct: (id: string, u: Partial<PODProduct>) => void; deleteProduct: (id: string) => void;
   publishProduct: (id: string) => void; resetCreateWizard: () => void; formatCurrency: (v: number) => string;
   userXP: number; canPublish: boolean;
+  printifyMockups: { src: string; variantIds: number[]; position: string; isDefault: boolean }[];
+  isGeneratingMockups: boolean; generatePrintifyMockups: (designUrl: string) => Promise<void>;
+  uploadDesign: () => Promise<string | null>; uploadedDesignUrl: string | null; setUploadedDesignUrl: (url: string | null) => void;
 }) {
   const { activeTab, setActiveTab, isLoading, products, stats, searchQuery, setSearchQuery, statusFilter, setStatusFilter,
     selectedProduct, setSelectedProduct, editingProduct, setEditingProduct, createStep, setCreateStep,
@@ -501,7 +587,8 @@ function PODPanelContent(props: {
     designPreview, setDesignPreview, productTitle, setProductTitle, productDescription, setProductDescription, sellingPrice, setSellingPrice,
     baseCost, setBaseCost, isCreating, isFetchingBlueprints, isFetchingProviders, isFetchingVariants, fileInputRef,
     handleFileSelect, fetchBlueprints, fetchProviders, fetchVariants, createProduct, updateProduct, deleteProduct,
-    publishProduct, resetCreateWizard, formatCurrency, userXP, canPublish } = props;
+    publishProduct, resetCreateWizard, formatCurrency, userXP, canPublish,
+    printifyMockups, isGeneratingMockups, generatePrintifyMockups, uploadDesign, uploadedDesignUrl, setUploadedDesignUrl } = props;
 
   return (
     <>
@@ -592,6 +679,8 @@ function PODPanelContent(props: {
               isFetchingProviders={isFetchingProviders} isFetchingVariants={isFetchingVariants} fileInputRef={fileInputRef}
               handleFileSelect={handleFileSelect} fetchBlueprints={fetchBlueprints} fetchProviders={fetchProviders}
               fetchVariants={fetchVariants} createProduct={createProduct} userXP={userXP} canPublish={canPublish} formatCurrency={formatCurrency}
+              printifyMockups={printifyMockups} isGeneratingMockups={isGeneratingMockups} generatePrintifyMockups={generatePrintifyMockups}
+              uploadDesign={uploadDesign} uploadedDesignUrl={uploadedDesignUrl} setUploadedDesignUrl={setUploadedDesignUrl}
             />
           </motion.div>
         )}
@@ -672,13 +761,17 @@ function CreateWizard(props: {
   handleFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void; fetchBlueprints: (c?: string, s?: string) => void;
   fetchProviders: (id: number) => void; fetchVariants: (bId: number, pId: number) => void;
   createProduct: (p: boolean) => void; userXP: number; canPublish: boolean; formatCurrency: (v: number) => string;
+  printifyMockups: { src: string; variantIds: number[]; position: string; isDefault: boolean }[];
+  isGeneratingMockups: boolean; generatePrintifyMockups: (designUrl: string) => Promise<void>;
+  uploadDesign: () => Promise<string | null>; uploadedDesignUrl: string | null; setUploadedDesignUrl: (url: string | null) => void;
 }) {
   const { step, setStep, blueprintSearch, setBlueprintSearch, selectedCategory, setSelectedCategory, blueprints,
     selectedBlueprint, setSelectedBlueprint, providers, selectedProvider, setSelectedProvider, variants,
     selectedVariants, setSelectedVariants, designPreview, setDesignPreview, productTitle, setProductTitle, productDescription,
     setProductDescription, sellingPrice, setSellingPrice, baseCost, setBaseCost, isCreating, isFetchingBlueprints,
     isFetchingProviders, isFetchingVariants, fileInputRef, handleFileSelect, fetchBlueprints, fetchProviders,
-    fetchVariants, createProduct, userXP, canPublish, formatCurrency } = props;
+    fetchVariants, createProduct, userXP, canPublish, formatCurrency,
+    printifyMockups, isGeneratingMockups, generatePrintifyMockups, uploadDesign, uploadedDesignUrl, setUploadedDesignUrl } = props;
 
   // Pagination state for blueprints
   const [currentPage, setCurrentPage] = useState(0);
@@ -1063,35 +1156,81 @@ function CreateWizard(props: {
                 </div>
               )}
               
-              {/* Variants */}
-              <div className="mt-4">
-                <h4 className="font-semibold mb-2 flex items-center gap-2">
+              {/* Variants & Pricing */}
+              <div className="mt-4 space-y-4">
+                <h4 className="font-semibold flex items-center gap-2">
                   <Package size={18} className="text-purple-400" />
-                  Variantes ({variants.length})
+                  Variantes Disponíveis
                 </h4>
-                <div className="space-y-2 max-h-48 overflow-y-auto bg-white/5 rounded-lg p-3">
+                <div className="space-y-2 max-h-40 overflow-y-auto bg-white/5 rounded-lg p-3">
                   {isFetchingVariants ? (
                     <div className="flex justify-center py-4">
                       <Loader2 className="animate-spin text-purple-500" />
                     </div>
-                  ) : variants.slice(0, 12).map((v) => (
-                    <label key={v.id} className="flex items-center gap-2 p-2 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
-                      <input 
-                        type="checkbox" 
-                        checked={selectedVariants.includes(v.id)} 
-                        onChange={(e) => e.target.checked 
-                          ? setSelectedVariants([...selectedVariants, v.id]) 
-                          : setSelectedVariants(selectedVariants.filter(id => id !== v.id))
-                        } 
-                        className="rounded border-gray-600" 
-                      />
-                      <span className="text-sm">{v.title}</span>
+                  ) : variants.filter(v => v.is_available !== false).slice(0, 10).map((v) => (
+                    <label key={v.id} className={cn(
+                      "flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors",
+                      selectedVariants.includes(v.id) ? "bg-purple-500/20 border border-purple-500/50" : "bg-white/5 hover:bg-white/10"
+                    )}>
+                      <div className="flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedVariants.includes(v.id)} 
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedVariants([...selectedVariants, v.id]);
+                            } else {
+                              setSelectedVariants(selectedVariants.filter(id => id !== v.id));
+                            }
+                          }} 
+                          className="rounded border-gray-600 text-purple-500" 
+                        />
+                        <span className="text-sm">{v.title}</span>
+                      </div>
                     </label>
                   ))}
-                  {selectedVariants.length > 0 && (
-                    <p className="text-xs text-green-400 mt-2">{selectedVariants.length} variante(s) selecionada(s)</p>
-                  )}
                 </div>
+
+                {/* Pricing Summary Card */}
+                {selectedVariants.length > 0 && (
+                  <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30 p-4">
+                    <h5 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                      <DollarSign size={16} className="text-green-400" />
+                      Resumo do Preço
+                    </h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between text-gray-400">
+                        <span>Custo base (Printify)</span>
+                        <span>{formatCurrency(baseCost)}</span>
+                      </div>
+                      <div className="flex justify-between text-gray-400">
+                        <span>Frete estimado (Brasil)</span>
+                        <span>Incluso</span>
+                      </div>
+                      <div className="flex justify-between text-gray-400">
+                        <span>Sua margem ({MARGIN_PERCENTAGE}%)</span>
+                        <span className="text-green-400">+{formatCurrency(sellingPrice - baseCost)}</span>
+                      </div>
+                      <div className="h-px bg-gray-700 my-2" />
+                      <div className="flex justify-between font-bold text-lg">
+                        <span>Preço de Venda</span>
+                        <span className="text-green-400">{formatCurrency(sellingPrice)}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Delivery Info */}
+                    <div className="mt-3 pt-3 border-t border-gray-700 flex items-center gap-2 text-xs text-gray-400">
+                      <Truck size={14} />
+                      <span>Entrega: {BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias úteis para o Brasil</span>
+                    </div>
+                    
+                    {/* Profit Highlight */}
+                    <div className="mt-3 p-2 bg-green-500/10 rounded-lg text-center">
+                      <p className="text-xs text-gray-400">Seu lucro por venda</p>
+                      <p className="text-xl font-bold text-green-400">{formatCurrency(sellingPrice - baseCost)}</p>
+                    </div>
+                  </Card>
+                )}
               </div>
             </div>
             
@@ -1103,38 +1242,108 @@ function CreateWizard(props: {
               </h4>
               {selectedBlueprint && (
                 <div className="space-y-4">
-                  {/* Main Mockup */}
-                  <MockupPreview 
-                    productImage={selectedBlueprint.images[selectedProductImageIndex] || selectedBlueprint.images[0]} 
-                    designImage={designPreview}
-                    productTitle={selectedBlueprint.title}
-                    className="aspect-square w-full"
-                  />
+                  {/* Main Mockup - Show Printify mockups if available */}
+                  {printifyMockups.length > 0 ? (
+                    <div className="aspect-square w-full rounded-xl overflow-hidden bg-white">
+                      <img 
+                        src={printifyMockups[selectedProductImageIndex]?.src || printifyMockups[0]?.src} 
+                        alt="Printify Mockup" 
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  ) : isGeneratingMockups ? (
+                    <div className="aspect-square w-full rounded-xl bg-gray-800 flex flex-col items-center justify-center">
+                      <Loader2 className="animate-spin text-purple-500 mb-3" size={48} />
+                      <p className="text-purple-400 font-medium">Gerando mockups profissionais...</p>
+                      <p className="text-xs text-gray-500 mt-1">Printify está processando seu design</p>
+                    </div>
+                  ) : (
+                    <MockupPreview 
+                      productImage={selectedBlueprint.images[selectedProductImageIndex] || selectedBlueprint.images[0]} 
+                      designImage={designPreview}
+                      productTitle={selectedBlueprint.title}
+                      className="aspect-square w-full"
+                    />
+                  )}
+                  
+                  {/* Generate Mockups Button */}
+                  {designPreview && selectedVariants.length > 0 && printifyMockups.length === 0 && !isGeneratingMockups && (
+                    <Button 
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                      onClick={async () => {
+                        let url = uploadedDesignUrl;
+                        if (!url) {
+                          toast.loading("Fazendo upload...");
+                          url = await uploadDesign();
+                          if (url) setUploadedDesignUrl(url);
+                          toast.dismiss();
+                        }
+                        if (url) {
+                          generatePrintifyMockups(url);
+                        } else {
+                          toast.error("Erro no upload do design");
+                        }
+                      }}
+                    >
+                      <Sparkles size={16} className="mr-2" />
+                      Gerar Mockups Profissionais
+                    </Button>
+                  )}
                   
                   {/* Info Card */}
                   <Card className="bg-white/5 border-white/10 p-4">
                     <h5 className="font-semibold mb-1">{selectedBlueprint.title}</h5>
                     <p className="text-sm text-gray-400 mb-3">{selectedBlueprint.brand}</p>
                     
-                    {designPreview ? (
+                    {printifyMockups.length > 0 ? (
                       <div className="flex items-center gap-2 text-green-400 text-sm">
                         <CheckCircle size={16} />
-                        <span>Design aplicado ao produto!</span>
+                        <span>Mockups profissionais gerados pelo Printify!</span>
                       </div>
-                    ) : (
+                    ) : designPreview ? (
                       <div className="flex items-center gap-2 text-yellow-400 text-sm">
                         <AlertCircle size={16} />
-                        <span>Faça upload do seu design para ver o mockup</span>
+                        <span>Clique em &quot;Gerar Mockups&quot; para ver resultado real</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-gray-400 text-sm">
+                        <AlertCircle size={16} />
+                        <span>Faça upload do seu design para começar</span>
                       </div>
                     )}
                   </Card>
                   
-                  {/* Alternative Views - Clickable Thumbnails */}
-                  {selectedBlueprint.images.length > 1 && (
+                  {/* Printify Mockup Thumbnails */}
+                  {printifyMockups.length > 1 && (
                     <div className="space-y-2">
-                      <p className="text-xs text-gray-400">Clique para ver outras visualizações:</p>
+                      <p className="text-xs text-gray-400">Mockups gerados ({printifyMockups.length}):</p>
                       <div className="grid grid-cols-4 gap-2">
-                        {selectedBlueprint.images.slice(0, 8).map((img, idx) => (
+                        {printifyMockups.slice(0, 8).map((mockup, idx) => (
+                          <motion.div 
+                            key={idx} 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setSelectedProductImageIndex(idx)}
+                            className={cn(
+                              "aspect-square bg-white rounded-lg overflow-hidden cursor-pointer transition-all border-2",
+                              selectedProductImageIndex === idx 
+                                ? "border-purple-500 ring-2 ring-purple-500/50" 
+                                : "border-transparent opacity-70 hover:opacity-100"
+                            )}
+                          >
+                            <img src={mockup.src} alt={`Mockup ${idx + 1}`} className="w-full h-full object-contain" loading="lazy" />
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Fallback to product images if no printify mockups */}
+                  {printifyMockups.length === 0 && selectedBlueprint.images.length > 1 && (
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-400">Imagens do produto:</p>
+                      <div className="grid grid-cols-4 gap-2">
+                        {selectedBlueprint.images.slice(0, 4).map((img, idx) => (
                           <motion.div 
                             key={idx} 
                             whileHover={{ scale: 1.05 }}
@@ -1170,12 +1379,16 @@ function CreateWizard(props: {
             >
               <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden">
-                    <MockupPreview productImage={selectedBlueprint?.images[0] || ''} designImage={designPreview} productTitle={selectedBlueprint?.title || ''} className="w-full h-full" />
+                  <div className="w-12 h-12 rounded-lg bg-white overflow-hidden">
+                    {printifyMockups.length > 0 ? (
+                      <img src={printifyMockups[0].src} alt="Mockup" className="w-full h-full object-contain" />
+                    ) : (
+                      <MockupPreview productImage={selectedBlueprint?.images[0] || ''} designImage={designPreview} productTitle={selectedBlueprint?.title || ''} className="w-full h-full" />
+                    )}
                   </div>
                   <div>
                     <p className="font-medium">{selectedVariants.length} variante(s)</p>
-                    <p className="text-xs text-gray-400">Pronto para configurar preços</p>
+                    <p className="text-xs text-gray-400">{printifyMockups.length > 0 ? 'Mockups prontos!' : 'Pronto para configurar preços'}</p>
                   </div>
                 </div>
                 <Button className="bg-purple-600 hover:bg-purple-700" onClick={() => setStep(4)}>
@@ -1240,6 +1453,33 @@ function CreateWizard(props: {
           
           {/* Right: Form (3 cols) */}
           <div className="md:col-span-3 space-y-6">
+            {/* Product Highlights */}
+            <Card className="bg-white/5 border-white/10 p-4">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Star size={18} className="text-purple-400" />
+                  </div>
+                  <p className="text-sm font-medium">Qualidade Premium</p>
+                  <p className="text-xs text-gray-500">Material de alta qualidade</p>
+                </div>
+                <div>
+                  <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Truck size={18} className="text-green-400" />
+                  </div>
+                  <p className="text-sm font-medium">{BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias</p>
+                  <p className="text-xs text-gray-500">Entrega para Brasil</p>
+                </div>
+                <div>
+                  <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <CheckCircle size={18} className="text-blue-400" />
+                  </div>
+                  <p className="text-sm font-medium">Sob Demanda</p>
+                  <p className="text-xs text-gray-500">Feito quando vendido</p>
+                </div>
+              </div>
+            </Card>
+            
             {/* Title & Description */}
             <div className="space-y-4">
               <div>
