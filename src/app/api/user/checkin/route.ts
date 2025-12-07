@@ -193,6 +193,7 @@ export async function POST(request: Request) {
       }
 
       case 'image_generated': {
+        xpEarned = 5; // 5 XP per image generated
         updates['$inc'] = {
           ...updates['$inc'],
           'gamification.totalImagesGenerated': 1,

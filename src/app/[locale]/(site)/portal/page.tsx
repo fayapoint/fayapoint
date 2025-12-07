@@ -337,6 +337,30 @@ export default function PortalPage() {
         setResources(data.resources || []);
         setPlan(data.plan || "free");
 
+        // Daily login checkin for XP
+        try {
+          const checkinRes = await fetch("/api/user/checkin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ action: "daily_login" }),
+          });
+          if (checkinRes.ok) {
+            const checkinData = await checkinRes.json();
+            if (checkinData.xpEarned > 0) {
+              toast.success(`+${checkinData.xpEarned} XP ganho hoje!`);
+              // Update local user XP
+              if (data.user?.progress) {
+                data.user.progress.xp = (data.user.progress.xp || 0) + checkinData.xpEarned;
+              }
+            }
+          }
+        } catch (checkinError) {
+          console.error("Checkin error:", checkinError);
+        }
+
         // Map progress to course details
         if (data.courses) {
           const mappedCourses: DashboardCourseProgress[] = data.courses.map(
@@ -395,6 +419,20 @@ export default function PortalPage() {
       setGeneratedImage(data.imageUrl);
       toast.success(t("messages.imageGenerated"));
       fetchCreations();
+      
+      // Award XP for image generation
+      try {
+        await fetch("/api/user/checkin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ action: "image_generated" }),
+        });
+      } catch (e) {
+        console.error("Checkin error:", e);
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : t("messages.imageError");
       toast.error(message);
