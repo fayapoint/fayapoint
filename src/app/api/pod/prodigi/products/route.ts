@@ -6,13 +6,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import {
-  getProductDetails,
   PRODIGI_CATALOG,
-  searchProdigiCatalog,
-  getProdigiProductsByCategory,
-  convertProdigiCost,
-  calculateSellingPrice,
-} from '@/lib/prodigi-api';
+  PRODIGI_CATEGORIES,
+  getProductBySku,
+  getAllProducts,
+  searchProducts,
+  gbpToBrl,
+  getProductWithPricing,
+} from '@/lib/prodigi-catalog';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 
@@ -160,54 +161,34 @@ export async function GET(request: NextRequest) {
 
     // Get product details by SKU
     if (action === 'details' && sku) {
-      try {
-        const response = await getProductDetails(sku);
-        const product = response.product;
-
-        if (!product) {
-          return NextResponse.json({ error: 'Produto não encontrado' }, { status: 404 });
-        }
-
-        // Find product in our catalog for additional metadata
-        const catalogProduct = searchProdigiCatalog(sku).find(p => p.sku === sku);
-        const categoryKey = Object.entries(PRODIGI_CATALOG).find(
-          ([, products]) => products.some(p => p.sku === sku)
-        )?.[0];
-        const categoryInfo = categoryKey ? CATEGORY_INFO[categoryKey as keyof typeof CATEGORY_INFO] : null;
-
-        return NextResponse.json({
-          product: {
-            ...product,
-            catalogInfo: catalogProduct,
-            categoryInfo,
-            shipsToSouthAmerica: product.variants?.some(v => 
-              v.shipsTo?.includes('BR') || v.shipsTo?.includes('AR') || v.shipsTo?.includes('CL')
-            ),
-            shipsToBrazil: product.variants?.some(v => v.shipsTo?.includes('BR')),
-          },
-        });
-      } catch (error) {
-        console.error('[Prodigi] Error fetching product details:', error);
-        return NextResponse.json({ error: 'Erro ao buscar detalhes do produto' }, { status: 500 });
+      const product = getProductBySku(sku);
+      if (!product) {
+        return NextResponse.json({ error: 'Produto não encontrado' }, { status: 404 });
       }
+
+      const productWithPricing = getProductWithPricing(product);
+      const categoryInfo = PRODIGI_CATEGORIES.find(c => 
+        PRODIGI_CATALOG[c.key]?.some(p => p.sku === sku)
+      );
+
+      return NextResponse.json({
+        product: {
+          ...productWithPricing,
+          categoryInfo,
+          shipsToBrazil: true,
+        },
+      });
     }
 
     // Search products
     if (action === 'search' && search) {
-      const results = searchProdigiCatalog(search);
-      
-      // Enrich with category info
+      const results = searchProducts(search);
       const enrichedResults = results.map(product => {
-        const categoryKey = Object.entries(PRODIGI_CATALOG).find(
-          ([, products]) => products.some(p => p.sku === product.sku)
-        )?.[0];
-        const categoryInfo = categoryKey ? CATEGORY_INFO[categoryKey as keyof typeof CATEGORY_INFO] : null;
-        
+        const pricedProduct = getProductWithPricing(product);
         return {
-          ...product,
-          categoryInfo,
-          estimatedBaseCostBRL: 50, // Placeholder - should fetch from API
-          suggestedSellingPriceBRL: calculateSellingPrice(50, categoryInfo?.baseMargin || 45),
+          ...pricedProduct,
+          estimatedBaseCostBRL: pricedProduct.basePriceBRL,
+          suggestedSellingPriceBRL: pricedProduct.suggestedPriceBRL,
         };
       });
 
@@ -216,19 +197,17 @@ export async function GET(request: NextRequest) {
 
     // Get products by category
     if (category && category !== 'all') {
-      const products = getProdigiProductsByCategory(category as keyof typeof PRODIGI_CATALOG);
-      const categoryInfo = CATEGORY_INFO[category as keyof typeof CATEGORY_INFO];
+      const products = PRODIGI_CATALOG[category] || [];
+      const categoryInfo = PRODIGI_CATEGORIES.find(c => c.key === category);
 
-      // Enrich with pricing estimates
-      const enrichedProducts = products.map(product => ({
-        ...product,
-        categoryInfo,
-        estimatedBaseCostBRL: getEstimatedBaseCost(product.sku),
-        suggestedSellingPriceBRL: calculateSellingPrice(
-          getEstimatedBaseCost(product.sku),
-          categoryInfo?.baseMargin || 45
-        ),
-      }));
+      const enrichedProducts = products.map(product => {
+        const pricedProduct = getProductWithPricing(product);
+        return {
+          ...pricedProduct,
+          estimatedBaseCostBRL: pricedProduct.basePriceBRL,
+          suggestedSellingPriceBRL: pricedProduct.suggestedPriceBRL,
+        };
+      });
 
       return NextResponse.json({
         category: categoryInfo,
@@ -237,27 +216,24 @@ export async function GET(request: NextRequest) {
     }
 
     // Default: return full catalog with categories
-    const catalog = Object.entries(PRODIGI_CATALOG).map(([key, products]) => {
-      const info = CATEGORY_INFO[key as keyof typeof CATEGORY_INFO];
+    const catalog = PRODIGI_CATEGORIES.map(catInfo => {
+      const products = PRODIGI_CATALOG[catInfo.key] || [];
       return {
-        key,
-        ...info,
+        ...catInfo,
         productCount: products.length,
-        products: products.map(p => ({
-          ...p,
-          estimatedBaseCostBRL: getEstimatedBaseCost(p.sku),
-          suggestedSellingPriceBRL: calculateSellingPrice(
-            getEstimatedBaseCost(p.sku),
-            info?.baseMargin || 45
-          ),
-        })),
+        products: products.map(product => {
+          const pricedProduct = getProductWithPricing(product);
+          return {
+            ...pricedProduct,
+            estimatedBaseCostBRL: pricedProduct.basePriceBRL,
+            suggestedSellingPriceBRL: pricedProduct.suggestedPriceBRL,
+          };
+        }),
       };
     });
 
     // Stats
-    const totalProducts = Object.values(PRODIGI_CATALOG).reduce(
-      (sum, products) => sum + products.length, 0
-    );
+    const totalProducts = getAllProducts().length;
 
     return NextResponse.json({
       catalog,
@@ -280,98 +256,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Helper to estimate base cost in BRL based on SKU
-function getEstimatedBaseCost(sku: string): number {
-  // Base costs in GBP (approximate Prodigi pricing)
-  const skuPricing: Record<string, number> = {
-    // Canvas
-    'GLOBAL-CAN-10X10': 12,
-    'GLOBAL-CAN-12X12': 14,
-    'GLOBAL-CAN-16X16': 18,
-    'GLOBAL-CAN-20X20': 24,
-    'GLOBAL-CAN-8X10': 11,
-    'GLOBAL-CAN-11X14': 15,
-    'GLOBAL-CAN-12X16': 16,
-    'GLOBAL-CAN-16X20': 20,
-    'GLOBAL-CAN-18X24': 26,
-    'GLOBAL-CAN-20X30': 32,
-    'GLOBAL-CAN-24X36': 42,
-    // Framed
-    'GLOBAL-CFPM-8X10': 18,
-    'GLOBAL-CFPM-11X14': 24,
-    'GLOBAL-CFPM-12X16': 28,
-    'GLOBAL-CFPM-16X20': 35,
-    'GLOBAL-CFPM-18X24': 42,
-    'GLOBAL-CFPM-20X30': 52,
-    'GLOBAL-CFPM-24X36': 68,
-    // Fine Art
-    'GLOBAL-FAP-8X10': 8,
-    'GLOBAL-FAP-10X10': 9,
-    'GLOBAL-FAP-11X14': 11,
-    'GLOBAL-FAP-12X12': 10,
-    'GLOBAL-FAP-12X16': 13,
-    'GLOBAL-FAP-16X20': 17,
-    'GLOBAL-FAP-18X24': 22,
-    'GLOBAL-FAP-20X30': 28,
-    'GLOBAL-FAP-24X36': 38,
-    // Posters
-    'GLOBAL-HPR-8X10': 4,
-    'GLOBAL-HPR-11X14': 6,
-    'GLOBAL-HPR-12X16': 7,
-    'GLOBAL-HPR-16X20': 9,
-    'GLOBAL-HPR-18X24': 12,
-    'GLOBAL-HPR-24X36': 18,
-    // Metal
-    'GLOBAL-MET-8X10': 22,
-    'GLOBAL-MET-10X10': 26,
-    'GLOBAL-MET-12X12': 32,
-    'GLOBAL-MET-12X16': 36,
-    'GLOBAL-MET-16X16': 45,
-    'GLOBAL-MET-16X20': 52,
-    'GLOBAL-MET-18X24': 65,
-    'GLOBAL-MET-20X20': 58,
-    'GLOBAL-MET-20X30': 78,
-    'GLOBAL-MET-24X36': 105,
-    // Acrylic
-    'GLOBAL-ACRY-8X10': 28,
-    'GLOBAL-ACRY-10X10': 32,
-    'GLOBAL-ACRY-12X12': 42,
-    'GLOBAL-ACRY-12X16': 48,
-    'GLOBAL-ACRY-16X20': 68,
-    'GLOBAL-ACRY-18X24': 85,
-    'GLOBAL-ACRY-20X30': 110,
-    // Phone Cases
-    'GLOBAL-TECH-IP15PM-SC-CP': 8,
-    'GLOBAL-TECH-IP15P-SC-CP': 8,
-    'GLOBAL-TECH-IP15-SC-CP': 8,
-    'GLOBAL-TECH-IP14PM-SC-CP': 8,
-    'GLOBAL-TECH-IP14P-SC-CP': 8,
-    'GLOBAL-TECH-IP14-SC-CP': 8,
-    'GLOBAL-TECH-IP13PM-SC-CP': 8,
-    'GLOBAL-TECH-IP13P-SC-CP': 8,
-    'GLOBAL-TECH-IP13-SC-CP': 8,
-    'GLOBAL-TECH-SAMS24U-SC-CP': 8,
-    'GLOBAL-TECH-SAMS24P-SC-CP': 8,
-    'GLOBAL-TECH-SAMS24-SC-CP': 8,
-    // Mugs
-    'GLOBAL-CER-11OZ': 5,
-    'GLOBAL-CER-15OZ': 6,
-    'GLOBAL-CER-MUG-ENAMEL': 9,
-    // Cards
-    'GLOBAL-GCB-A5': 2,
-    'GLOBAL-GCB-A6': 1.5,
-    'GLOBAL-GCB-SQ': 2,
-    // Calendars
-    'GLOBAL-WCCL-A3-LAND': 15,
-    'GLOBAL-WCCL-A4-PORT': 12,
-    // Photobooks
-    'BOOK-A4-L-HARD-M': 22,
-    'BOOK-A4-P-HARD-M': 22,
-    'BOOK-A5-L-HARD-M': 18,
-    'BOOK-A5-P-HARD-M': 18,
-    'BOOK-8X8-HARD-M': 20,
-  };
-
-  const priceGBP = skuPricing[sku] || 15; // Default £15
-  return Math.round(priceGBP * EXCHANGE_RATES.GBP_TO_BRL * 100) / 100;
-}
+// Pricing is now managed in prodigi-catalog.ts with basePriceGBP in each product

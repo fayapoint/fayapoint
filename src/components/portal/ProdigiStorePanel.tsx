@@ -25,6 +25,9 @@ interface ProdigiProduct {
   name: string;
   size: string;
   category: string;
+  mockupImage: string;
+  aspectRatio: string;
+  printDimensions: { widthPx: number; heightPx: number };
   estimatedBaseCostBRL: number;
   suggestedSellingPriceBRL: number;
 }
@@ -72,6 +75,7 @@ interface CartItem {
   category: string;
   copies: number;
   designUrl: string;
+  mockupUrl: string;
   baseCostBRL: number;
   sellingPriceBRL: number;
 }
@@ -285,6 +289,30 @@ export default function ProdigiStorePanel() {
     return null;
   };
 
+  // Generate mockup
+  const generateMockup = async (sku: string, designUrl: string): Promise<string> => {
+    const token = localStorage.getItem("fayapoint_token");
+    if (!token) return designUrl;
+
+    try {
+      const res = await fetch("/api/pod/prodigi/mockup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ sku, designUrl }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.mockups?.[0]?.url || designUrl;
+      }
+    } catch (e) {
+      console.error("Mockup generation error:", e);
+    }
+    return designUrl;
+  };
+
   // Add to cart
   const addToCart = async () => {
     if (!selectedProduct || !designPreview) {
@@ -292,12 +320,19 @@ export default function ProdigiStorePanel() {
       return;
     }
 
+    toast.loading("Processando design...");
+
     // Upload design first
     const designUrl = await uploadDesign();
     if (!designUrl) {
+      toast.dismiss();
       toast.error("Erro ao fazer upload do design");
       return;
     }
+
+    // Generate mockup
+    const mockupUrl = await generateMockup(selectedProduct.sku, designUrl);
+    toast.dismiss();
 
     const sellingPrice = customPrice > 0 ? customPrice : selectedProduct.suggestedSellingPriceBRL;
 
@@ -310,6 +345,7 @@ export default function ProdigiStorePanel() {
         category: selectedProduct.category,
         copies,
         designUrl,
+        mockupUrl,
         baseCostBRL: selectedProduct.estimatedBaseCostBRL,
         sellingPriceBRL: sellingPrice,
       },
@@ -574,35 +610,46 @@ export default function ProdigiStorePanel() {
                   {currentCategory.products.map(product => (
                     <Card
                       key={product.sku}
-                      className="bg-gray-800 border-gray-700 p-4 cursor-pointer hover:border-purple-500 transition-all"
+                      className="bg-gray-800 border-gray-700 overflow-hidden cursor-pointer hover:border-purple-500 transition-all group"
                       onClick={() => {
                         setSelectedProduct(product);
                         setCustomPrice(product.suggestedSellingPriceBRL);
                       }}
                     >
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
+                      {/* Product Mockup Image */}
+                      <div className="relative aspect-square bg-gray-900 overflow-hidden">
+                        <img
+                          src={product.mockupImage}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        />
+                        <Badge className="absolute top-2 right-2 bg-purple-600">{product.size}</Badge>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+                          <Badge className="bg-gray-900/80 text-xs">{product.aspectRatio}</Badge>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <div className="mb-3">
                           <h4 className="font-semibold text-white">{product.name}</h4>
                           <p className="text-xs text-gray-500">{product.sku}</p>
                         </div>
-                        <Badge className="bg-purple-600">{product.size}</Badge>
-                      </div>
-                      <div className="space-y-1 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Custo base:</span>
-                          <span className="text-white">R$ {product.estimatedBaseCostBRL.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Venda sugerida:</span>
-                          <span className="text-green-400 font-semibold">
-                            R$ {product.suggestedSellingPriceBRL.toFixed(2)}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Lucro estimado:</span>
-                          <span className="text-purple-400">
-                            R$ {(product.suggestedSellingPriceBRL - product.estimatedBaseCostBRL).toFixed(2)}
-                          </span>
+                        <div className="space-y-1 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Custo base:</span>
+                            <span className="text-white">R$ {product.estimatedBaseCostBRL.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Venda sugerida:</span>
+                            <span className="text-green-400 font-semibold">
+                              R$ {product.suggestedSellingPriceBRL.toFixed(2)}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Lucro estimado:</span>
+                            <span className="text-purple-400">
+                              R$ {(product.suggestedSellingPriceBRL - product.estimatedBaseCostBRL).toFixed(2)}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </Card>
@@ -623,32 +670,74 @@ export default function ProdigiStorePanel() {
                 </button>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Left: Design Upload */}
+                  {/* Left: Product Info & Design Upload */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-white">{selectedProduct.name}</h3>
-                    <p className="text-gray-400">Tamanho: {selectedProduct.size}</p>
+                    <div className="flex items-start gap-4">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-white">{selectedProduct.name}</h3>
+                        <p className="text-gray-400">Tamanho: {selectedProduct.size}</p>
+                        <div className="flex gap-2 mt-2">
+                          <Badge className="bg-purple-600/50">{selectedProduct.aspectRatio}</Badge>
+                          <Badge className="bg-gray-700">{selectedProduct.printDimensions?.widthPx}x{selectedProduct.printDimensions?.heightPx}px</Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Product Mockup Preview */}
+                    <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-900 border border-gray-700">
+                      <img
+                        src={selectedProduct.mockupImage}
+                        alt={selectedProduct.name}
+                        className="w-full h-full object-cover"
+                      />
+                      {designPreview && (
+                        <div 
+                          className="absolute inset-0 flex items-center justify-center p-8"
+                          style={{ 
+                            background: 'rgba(0,0,0,0.3)',
+                          }}
+                        >
+                          <img
+                            src={designPreview}
+                            alt="Your Design"
+                            className="max-w-[70%] max-h-[70%] object-contain rounded shadow-2xl"
+                          />
+                        </div>
+                      )}
+                      {!designPreview && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                          <p className="text-white/70 text-sm">Seu design aparecerá aqui</p>
+                        </div>
+                      )}
+                    </div>
 
                     {/* Upload Area */}
                     <div
                       onClick={() => fileInputRef.current?.click()}
                       className={cn(
-                        "aspect-square rounded-xl border-2 border-dashed cursor-pointer transition-all flex items-center justify-center",
+                        "rounded-xl border-2 border-dashed cursor-pointer transition-all flex items-center justify-center p-6",
                         designPreview
                           ? "border-purple-500 bg-gray-800"
                           : "border-gray-600 hover:border-purple-500 bg-gray-800/50"
                       )}
                     >
                       {designPreview ? (
-                        <img
-                          src={designPreview}
-                          alt="Design"
-                          className="w-full h-full object-contain rounded-lg"
-                        />
+                        <div className="flex items-center gap-4">
+                          <img
+                            src={designPreview}
+                            alt="Design"
+                            className="w-16 h-16 object-contain rounded"
+                          />
+                          <div>
+                            <p className="text-white font-medium">Design carregado</p>
+                            <p className="text-sm text-gray-400">Clique para trocar</p>
+                          </div>
+                        </div>
                       ) : (
-                        <div className="text-center p-8">
-                          <Upload size={48} className="mx-auto text-gray-500 mb-4" />
-                          <p className="text-white font-medium">Clique para fazer upload</p>
-                          <p className="text-sm text-gray-500 mt-1">PNG, JPG ou WebP até 50MB</p>
+                        <div className="text-center">
+                          <Upload size={32} className="mx-auto text-gray-500 mb-2" />
+                          <p className="text-white font-medium">Upload do design</p>
+                          <p className="text-xs text-gray-500 mt-1">PNG, JPG ou WebP até 50MB</p>
                         </div>
                       )}
                     </div>
@@ -816,21 +905,29 @@ export default function ProdigiStorePanel() {
                   {cart.map((item, index) => (
                     <Card key={index} className="bg-gray-800 border-gray-700 p-4">
                       <div className="flex gap-4">
-                        <img
-                          src={item.designUrl}
-                          alt={item.name}
-                          className="w-20 h-20 object-cover rounded-lg"
-                        />
+                        <div className="relative w-24 h-24">
+                          <img
+                            src={item.mockupUrl || item.designUrl}
+                            alt={item.name}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                          <div className="absolute bottom-1 right-1">
+                            <Badge className="bg-purple-600 text-[10px] px-1">{item.size}</Badge>
+                          </div>
+                        </div>
                         <div className="flex-1">
                           <h4 className="font-semibold text-white">{item.name}</h4>
                           <p className="text-sm text-gray-500">{item.sku}</p>
-                          <div className="flex items-center gap-4 mt-2 text-sm">
+                          <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
                             <span className="text-gray-400">Qtd: {item.copies}</span>
                             <span className="text-gray-400">
                               Custo: R$ {(item.baseCostBRL * item.copies).toFixed(2)}
                             </span>
                             <span className="text-green-400 font-semibold">
                               Venda: R$ {(item.sellingPriceBRL * item.copies).toFixed(2)}
+                            </span>
+                            <span className="text-purple-400">
+                              Lucro: R$ {((item.sellingPriceBRL - item.baseCostBRL) * item.copies).toFixed(2)}
                             </span>
                           </div>
                         </div>
