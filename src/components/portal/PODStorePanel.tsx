@@ -7,8 +7,15 @@ import {
   Package, DollarSign, ShoppingBag, Sparkles, Shirt, Home, Frame, Coffee,
   Smartphone, Upload, Image as ImageIcon, CheckCircle, Clock, AlertCircle,
   ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck, Settings,
-  Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw, Maximize2,
+  Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw, Maximize2, Type, Layers, Wand2,
 } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// Lazy load the advanced design editor
+const DesignEditor = dynamic(() => import("./DesignEditor"), { 
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-purple-500" size={32} /></div>
+});
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -1359,6 +1366,7 @@ function CreateWizard(props: {
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
   const [selectedProductImageIndex, setSelectedProductImageIndex] = useState(0);
   const [showMockupGalleryModal, setShowMockupGalleryModal] = useState(false);
+  const [showAdvancedEditor, setShowAdvancedEditor] = useState(false);
 
   // Reset selected image when blueprint changes
   useEffect(() => {
@@ -1673,6 +1681,18 @@ function CreateWizard(props: {
                     </>
                   )}
                 </Card>
+              )}
+
+              {/* Advanced Editor Button */}
+              {designPreview && selectedBlueprint && (
+                <Button 
+                  variant="outline" 
+                  className="w-full border-purple-500/50 hover:bg-purple-600/20 text-purple-400"
+                  onClick={() => setShowAdvancedEditor(true)}
+                >
+                  <Wand2 size={16} className="mr-2" />
+                  Modo Avançado: Adicionar Texto, Camadas e Posicionamento
+                </Button>
               )}
 
               {/* Gallery Tabs (Creations, Uploads, Public) */}
@@ -2002,6 +2022,70 @@ function CreateWizard(props: {
               initialIndex={selectedProductImageIndex}
               onClose={() => setShowMockupGalleryModal(false)}
             />
+          )}
+        </AnimatePresence>
+
+        {/* Advanced Design Editor Modal */}
+        <AnimatePresence>
+          {showAdvancedEditor && selectedBlueprint && (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/95 overflow-auto"
+            >
+              <div className="min-h-screen p-4 md:p-8">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold flex items-center gap-2">
+                      <Layers size={24} className="text-purple-400" />
+                      Editor Avançado
+                    </h2>
+                    <p className="text-gray-400">Adicione texto, camadas e posicione com precisão</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="outline" 
+                      className="border-gray-700"
+                      onClick={() => setShowAdvancedEditor(false)}
+                    >
+                      <X size={16} className="mr-2" />
+                      Cancelar
+                    </Button>
+                    <Button 
+                      className="bg-purple-600 hover:bg-purple-700"
+                      onClick={() => {
+                        toast.success("Design salvo!");
+                        setShowAdvancedEditor(false);
+                      }}
+                    >
+                      <CheckCircle size={16} className="mr-2" />
+                      Aplicar Design
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Editor */}
+                <DesignEditor
+                  productImage={selectedBlueprint.images[0]}
+                  printAreaWidth={variants[0]?.placeholders?.[0]?.width || 4500}
+                  printAreaHeight={variants[0]?.placeholders?.[0]?.height || 5100}
+                  availablePositions={['front', 'back']}
+                  initialLayers={designPreview ? [{
+                    type: 'image' as const,
+                    id: 'main-design',
+                    imageUrl: designPreview,
+                    width: 2000,
+                    height: 2000,
+                    x: 0.5,
+                    y: 0.5,
+                    scale: 0.6,
+                    angle: 0,
+                  }] : []}
+                />
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
         

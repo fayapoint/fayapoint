@@ -278,29 +278,99 @@ export async function getProduct(shopId: number, productId: string): Promise<Pri
 }
 
 /**
+ * Image layer for print areas
+ */
+export interface PrintifyImageLayer {
+  id: string;       // Upload ID from Printify
+  x: number;        // Horizontal position (0.0 to 1.0, 0.5 = center)
+  y: number;        // Vertical position (0.0 to 1.0, 0.5 = center)
+  scale: number;    // Scale factor (1.0 = original size relative to print area)
+  angle: number;    // Rotation in degrees
+}
+
+/**
+ * Print area placeholder (position like front, back, sleeve, etc.)
+ */
+export interface PrintifyPlaceholder {
+  position: string; // 'front', 'back', 'left_sleeve', 'right_sleeve', 'neck_label', etc.
+  images: PrintifyImageLayer[]; // Up to 20 layers per position
+}
+
+/**
+ * Print area configuration
+ */
+export interface PrintifyPrintArea {
+  variant_ids: number[];
+  placeholders: PrintifyPlaceholder[];
+}
+
+/**
+ * Product creation options
+ */
+export interface CreateProductOptions {
+  title: string;
+  description: string;
+  blueprint_id: number;
+  print_provider_id: number;
+  variants: { id: number; price: number; is_enabled: boolean }[];
+  print_areas: PrintifyPrintArea[];
+  tags?: string[];
+}
+
+/**
  * Create a new product
+ * Supports multiple print areas (front, back, sleeves, etc.) and multiple layers per area (up to 20)
  */
 export async function createProduct(
   shopId: number,
-  product: {
-    title: string;
-    description: string;
-    blueprint_id: number;
-    print_provider_id: number;
-    variants: { id: number; price: number; is_enabled: boolean }[];
-    print_areas: {
-      variant_ids: number[];
-      placeholders: {
-        position: string;
-        images: { id: string; x: number; y: number; scale: number; angle: number }[];
-      }[];
-    }[];
-  }
+  product: CreateProductOptions
 ): Promise<PrintifyProduct> {
   return printifyRequest<PrintifyProduct>(`/shops/${shopId}/products.json`, {
     method: 'POST',
     body: JSON.stringify(product),
   });
+}
+
+/**
+ * Available print positions by product type
+ */
+export const PRINT_POSITIONS = {
+  // Apparel (t-shirts, hoodies, etc.)
+  apparel: ['front', 'back', 'left_sleeve', 'right_sleeve', 'neck_label'],
+  // Mugs and drinkware
+  mug: ['front', 'back', 'wrap'],
+  // Wall art (posters, canvas)
+  poster: ['front'],
+  canvas: ['front'],
+  // Phone cases
+  phone_case: ['front', 'back'],
+  // Pillows
+  pillow: ['front', 'back'],
+  // Bags
+  tote_bag: ['front', 'back'],
+  // All-over print (special)
+  allover: ['front', 'back', 'sleeve'],
+};
+
+/**
+ * Get available print positions for a blueprint
+ */
+export async function getBlueprintPrintPositions(blueprintId: number, printProviderId: number): Promise<string[]> {
+  try {
+    const variantsData = await getBlueprintVariants(blueprintId, printProviderId);
+    const positions = new Set<string>();
+    
+    variantsData.variants.forEach(variant => {
+      variant.placeholders?.forEach(placeholder => {
+        positions.add(placeholder.position);
+      });
+    });
+    
+    return Array.from(positions);
+  } catch (error) {
+    console.error('Failed to get print positions:', error);
+    return ['front']; // Default fallback
+  }
 }
 
 /**
