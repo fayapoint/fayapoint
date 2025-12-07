@@ -8,7 +8,9 @@ import {
   Smartphone, Upload, Image as ImageIcon, CheckCircle, Clock, AlertCircle,
   ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck, Settings,
   Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw, Maximize2, Type, Layers, Wand2, Gem,
+  QrCode, Copy, Share2, Tag, Hash, ToggleLeft, ToggleRight,
 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import dynamic from "next/dynamic";
 
 // Lazy load components
@@ -2484,34 +2486,217 @@ function CreateWizard(props: {
   );
 }
 
-// Detail Modal
+// Detail Modal with QR Code Sharing
 function DetailModal({ product, onClose, setEditingProduct, publishProduct, canPublish, formatCurrency }: {
   product: PODProduct; onClose: () => void; setEditingProduct: (p: PODProduct) => void;
   publishProduct: (id: string) => void; canPublish: boolean; formatCurrency: (v: number) => string;
 }) {
+  const [showQR, setShowQR] = useState(false);
+  const [copied, setCopied] = useState(false);
   const statusInfo = STATUS_CONFIG[product.status];
+  
+  // Generate shareable URL
+  const shareUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/loja/produto/${product.slug}` 
+    : `/loja/produto/${product.slug}`;
+
+  const copyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast.success("Link copiado!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch { toast.error("Erro ao copiar"); }
+  };
+
+  const downloadQRCode = () => {
+    const svg = document.getElementById('product-qr-code');
+    if (!svg) return;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx?.drawImage(img, 0, 0);
+      const pngFile = canvas.toDataURL('image/png');
+      const downloadLink = document.createElement('a');
+      downloadLink.download = `qrcode-${product.slug}.png`;
+      downloadLink.href = pngFile;
+      downloadLink.click();
+      toast.success("QR Code baixado!");
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  };
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={onClose}>
-      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-3xl max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-4xl max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
         <div className="grid md:grid-cols-2 gap-6 p-6">
-          <div className="aspect-square bg-gray-800 rounded-xl overflow-hidden">{product.primaryMockup ? <img src={product.primaryMockup} alt="" className="w-full h-full object-cover" /> : <div className="flex items-center justify-center h-full"><Package size={64} className="text-gray-600" /></div>}</div>
+          {/* Left: Product Image */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between"><Badge className={cn(statusInfo.color, "text-white")}>{statusInfo.label}</Badge><Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button></div>
+            <div className="aspect-square bg-gray-800 rounded-xl overflow-hidden relative group">
+              {product.primaryMockup ? (
+                <img src={product.primaryMockup} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="flex items-center justify-center h-full"><Package size={64} className="text-gray-600" /></div>
+              )}
+            </div>
+            
+            {/* QR Code Section */}
+            <Card className="bg-white/5 border-gray-800 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <QrCode size={20} className="text-purple-400" />
+                  <span className="font-medium">Compartilhar Produto</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={() => setShowQR(!showQR)}>
+                  {showQR ? "Esconder" : "Mostrar QR"}
+                </Button>
+              </div>
+              
+              <AnimatePresence>
+                {showQR && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }} 
+                    animate={{ height: "auto", opacity: 1 }} 
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="flex flex-col items-center gap-4 py-4">
+                      <div className="bg-white p-4 rounded-xl">
+                        <QRCodeSVG 
+                          id="product-qr-code"
+                          value={shareUrl} 
+                          size={180} 
+                          level="H"
+                          includeMargin
+                          imageSettings={{
+                            src: product.primaryMockup || "/logo-icon.png",
+                            x: undefined,
+                            y: undefined,
+                            height: 36,
+                            width: 36,
+                            excavate: true,
+                          }}
+                        />
+                      </div>
+                      <Button variant="outline" size="sm" onClick={downloadQRCode} className="border-gray-700">
+                        <Download size={16} className="mr-2" />
+                        Baixar QR Code
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              <div className="flex gap-2">
+                <Input 
+                  value={shareUrl} 
+                  readOnly 
+                  className="bg-white/5 border-gray-700 text-sm flex-1 text-gray-400" 
+                />
+                <Button variant="outline" size="icon" onClick={copyUrl} className="border-gray-700 shrink-0">
+                  {copied ? <CheckCircle size={18} className="text-green-400" /> : <Copy size={18} />}
+                </Button>
+              </div>
+            </Card>
+          </div>
+
+          {/* Right: Product Info */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Badge className={cn(statusInfo.color, "text-white")}>{statusInfo.label}</Badge>
+              <Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button>
+            </div>
+            
             <h2 className="text-2xl font-bold">{product.title}</h2>
+            {product.shortDescription && <p className="text-gray-400 text-sm">{product.shortDescription}</p>}
             <p className="text-gray-400">{product.description}</p>
+            
+            {/* Tags */}
+            {product.tags && product.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {product.tags.map((tag, i) => (
+                  <Badge key={i} variant="outline" className="border-gray-700 text-gray-400">
+                    <Hash size={12} className="mr-1" />{tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            {/* Pricing */}
             <div className="bg-white/5 rounded-lg p-4 space-y-2">
-              <div className="flex justify-between"><span className="text-gray-400">Venda</span><span className="text-xl font-bold text-green-400">{formatCurrency(product.suggestedPrice)}</span></div>
-              <div className="flex justify-between text-sm"><span className="text-gray-500">Custo</span><span>{formatCurrency(product.baseCost)}</span></div>
-              <div className="flex justify-between text-sm"><span className="text-gray-500">Lucro</span><span className="text-purple-400">{formatCurrency(product.suggestedPrice - product.baseCost)}</span></div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Preço de Venda</span>
+                <span className="text-xl font-bold text-green-400">{formatCurrency(product.suggestedPrice)}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">Custo Base</span>
+                <span>{formatCurrency(product.baseCost)}</span>
+              </div>
+              <div className="flex justify-between text-sm border-t border-gray-700 pt-2 mt-2">
+                <span className="text-gray-400 font-medium">Lucro por venda</span>
+                <span className="text-purple-400 font-bold">{formatCurrency(product.suggestedPrice - product.baseCost)}</span>
+              </div>
+              <div className="text-xs text-gray-500 text-right">
+                Margem: {(((product.suggestedPrice - product.baseCost) / product.suggestedPrice) * 100).toFixed(0)}%
+              </div>
             </div>
+
+            {/* Stats */}
             <div className="grid grid-cols-3 gap-3 text-center">
-              <Card className="bg-white/5 p-3"><Eye size={20} className="mx-auto mb-1 text-blue-400" /><p className="font-bold">{product.views}</p><p className="text-xs text-gray-500">Views</p></Card>
-              <Card className="bg-white/5 p-3"><ShoppingBag size={20} className="mx-auto mb-1 text-green-400" /><p className="font-bold">{product.sales}</p><p className="text-xs text-gray-500">Vendas</p></Card>
-              <Card className="bg-white/5 p-3"><DollarSign size={20} className="mx-auto mb-1 text-yellow-400" /><p className="font-bold">{formatCurrency(product.revenue)}</p><p className="text-xs text-gray-500">Receita</p></Card>
+              <Card className="bg-white/5 p-3 border-gray-800">
+                <Eye size={20} className="mx-auto mb-1 text-blue-400" />
+                <p className="font-bold">{product.views}</p>
+                <p className="text-xs text-gray-500">Visualizações</p>
+              </Card>
+              <Card className="bg-white/5 p-3 border-gray-800">
+                <ShoppingBag size={20} className="mx-auto mb-1 text-green-400" />
+                <p className="font-bold">{product.sales}</p>
+                <p className="text-xs text-gray-500">Vendas</p>
+              </Card>
+              <Card className="bg-white/5 p-3 border-gray-800">
+                <DollarSign size={20} className="mx-auto mb-1 text-yellow-400" />
+                <p className="font-bold">{formatCurrency(product.revenue)}</p>
+                <p className="text-xs text-gray-500">Receita</p>
+              </Card>
             </div>
-            <div className="flex gap-3">
-              <Button className="flex-1 bg-purple-600 hover:bg-purple-700" onClick={() => { setEditingProduct(product); onClose(); }}><Edit size={16} className="mr-2" />Editar</Button>
-              {product.status === "draft" && canPublish && <Button className="flex-1 bg-green-600 hover:bg-green-700" onClick={() => { publishProduct(product._id); onClose(); }}><Send size={16} className="mr-2" />Publicar</Button>}
+
+            {/* Visibility Status */}
+            <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                {product.showInUserStore ? (
+                  <ToggleRight size={18} className="text-green-400" />
+                ) : (
+                  <ToggleLeft size={18} className="text-gray-500" />
+                )}
+                <span className="text-gray-400">Minha Loja</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {product.showInMarketplace ? (
+                  <ToggleRight size={18} className="text-green-400" />
+                ) : (
+                  <ToggleLeft size={18} className="text-gray-500" />
+                )}
+                <span className="text-gray-400">Marketplace</span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 pt-2">
+              <Button className="flex-1 bg-purple-600 hover:bg-purple-700" onClick={() => { setEditingProduct(product); onClose(); }}>
+                <Edit size={16} className="mr-2" />Editar
+              </Button>
+              {product.status === "draft" && canPublish && (
+                <Button className="flex-1 bg-green-600 hover:bg-green-700" onClick={() => { publishProduct(product._id); onClose(); }}>
+                  <Send size={16} className="mr-2" />Publicar
+                </Button>
+              )}
+              <Button variant="outline" className="border-gray-700" onClick={() => window.open(shareUrl, '_blank')}>
+                <ExternalLink size={16} />
+              </Button>
             </div>
           </div>
         </div>
@@ -2520,26 +2705,446 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
   );
 }
 
-// Edit Modal
+// Enhanced Edit Modal with Full Product Management
 function EditModal({ product, onClose, updateProduct }: { product: PODProduct; onClose: () => void; updateProduct: (id: string, u: Partial<PODProduct>) => void }) {
+  const [activeTab, setActiveTab] = useState<'info' | 'pricing' | 'visibility' | 'share'>('info');
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Form state
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description);
+  const [shortDescription, setShortDescription] = useState(product.shortDescription || '');
+  const [tags, setTags] = useState<string[]>(product.tags || []);
+  const [tagInput, setTagInput] = useState('');
   const [price, setPrice] = useState(product.suggestedPrice);
+  const [status, setStatus] = useState(product.status);
+  const [showInUserStore, setShowInUserStore] = useState(product.showInUserStore ?? true);
+  const [showInMarketplace, setShowInMarketplace] = useState(product.showInMarketplace ?? false);
+  const [copied, setCopied] = useState(false);
+
+  const profit = price - product.baseCost;
+  const margin = price > 0 ? ((profit / price) * 100).toFixed(1) : '0';
+  
+  const shareUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/loja/produto/${product.slug}` 
+    : `/loja/produto/${product.slug}`;
+
+  const addTag = () => {
+    const newTag = tagInput.trim().toLowerCase();
+    if (newTag && !tags.includes(newTag) && tags.length < 10) {
+      setTags([...tags, newTag]);
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter(t => t !== tagToRemove));
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await updateProduct(product._id, {
+        title,
+        description,
+        shortDescription: shortDescription || undefined,
+        tags,
+        suggestedPrice: price,
+        status,
+        showInUserStore,
+        showInMarketplace,
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const copyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast.success("Link copiado!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch { toast.error("Erro ao copiar"); }
+  };
+
+  const downloadQRCode = () => {
+    const svg = document.getElementById('edit-product-qr-code');
+    if (!svg) return;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx?.drawImage(img, 0, 0);
+      const pngFile = canvas.toDataURL('image/png');
+      const downloadLink = document.createElement('a');
+      downloadLink.download = `qrcode-${product.slug}.png`;
+      downloadLink.href = pngFile;
+      downloadLink.click();
+      toast.success("QR Code baixado!");
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  };
+
+  const tabs = [
+    { id: 'info', label: 'Informações', icon: Type },
+    { id: 'pricing', label: 'Preço', icon: DollarSign },
+    { id: 'visibility', label: 'Visibilidade', icon: Eye },
+    { id: 'share', label: 'Compartilhar', icon: Share2 },
+  ] as const;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={onClose}>
-      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-lg p-6" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-6"><h2 className="text-xl font-bold">Editar Produto</h2><Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button></div>
-        <div className="space-y-4">
-          <div><Label>Título</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} className="bg-white/5 border-gray-700" /></div>
-          <div><Label>Descrição</Label><Textarea value={description} onChange={(e) => setDescription(e.target.value)} className="bg-white/5 border-gray-700" rows={3} /></div>
-          <div><Label>Preço (R$)</Label><Input type="number" value={price} onChange={(e) => setPrice(parseFloat(e.target.value) || 0)} className="bg-white/5 border-gray-700" /></div>
+      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-800">
+          <div className="flex items-center gap-3">
+            {product.primaryMockup && (
+              <img src={product.primaryMockup} alt="" className="w-10 h-10 rounded-lg object-cover" />
+            )}
+            <div>
+              <h2 className="text-lg font-bold">Editar Produto</h2>
+              <p className="text-xs text-gray-500">{product.templateName}</p>
+            </div>
+          </div>
+          <Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button>
         </div>
-        <div className="flex gap-3 mt-6">
-          <Button variant="outline" className="flex-1 border-gray-700" onClick={onClose}>Cancelar</Button>
-          <Button className="flex-1 bg-purple-600 hover:bg-purple-700" onClick={() => updateProduct(product._id, { title, description, suggestedPrice: price })}>Salvar</Button>
+
+        {/* Tabs */}
+        <div className="flex border-b border-gray-800">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
+                activeTab === tab.id 
+                  ? "text-purple-400 border-b-2 border-purple-400 bg-purple-500/10" 
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
+              )}
+            >
+              <tab.icon size={16} />
+              <span className="hidden sm:inline">{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-auto p-6">
+          {activeTab === 'info' && (
+            <div className="space-y-5">
+              <div>
+                <Label className="text-gray-300">Título do Produto</Label>
+                <Input 
+                  value={title} 
+                  onChange={(e) => setTitle(e.target.value)} 
+                  className="bg-white/5 border-gray-700 mt-1.5" 
+                  placeholder="Ex: Camiseta Arte Digital Minimalista"
+                />
+              </div>
+              
+              <div>
+                <Label className="text-gray-300">Descrição Curta</Label>
+                <Input 
+                  value={shortDescription} 
+                  onChange={(e) => setShortDescription(e.target.value)} 
+                  className="bg-white/5 border-gray-700 mt-1.5" 
+                  placeholder="Uma linha de destaque sobre o produto"
+                  maxLength={150}
+                />
+                <p className="text-xs text-gray-500 mt-1">{shortDescription.length}/150 caracteres</p>
+              </div>
+              
+              <div>
+                <Label className="text-gray-300">Descrição Completa</Label>
+                <Textarea 
+                  value={description} 
+                  onChange={(e) => setDescription(e.target.value)} 
+                  className="bg-white/5 border-gray-700 mt-1.5" 
+                  rows={4}
+                  placeholder="Descreva seu produto em detalhes..."
+                />
+              </div>
+              
+              <div>
+                <Label className="text-gray-300">Tags</Label>
+                <p className="text-xs text-gray-500 mb-2">Adicione até 10 tags para ajudar na busca</p>
+                <div className="flex gap-2 mb-2">
+                  <Input 
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                    className="bg-white/5 border-gray-700 flex-1" 
+                    placeholder="Digite uma tag e pressione Enter"
+                  />
+                  <Button variant="outline" onClick={addTag} className="border-gray-700">
+                    <Plus size={16} />
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag, i) => (
+                    <Badge key={i} variant="secondary" className="bg-purple-500/20 text-purple-300 pr-1">
+                      <Hash size={12} className="mr-1" />{tag}
+                      <button onClick={() => removeTag(tag)} className="ml-2 hover:text-red-400">
+                        <X size={14} />
+                      </button>
+                    </Badge>
+                  ))}
+                  {tags.length === 0 && <span className="text-gray-500 text-sm">Nenhuma tag adicionada</span>}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'pricing' && (
+            <div className="space-y-5">
+              <Card className="bg-white/5 border-gray-800 p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <DollarSign size={20} className="text-green-400" />
+                  <span className="font-medium">Definir Preço de Venda</span>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-gray-300">Preço de Venda (R$)</Label>
+                    <Input 
+                      type="number" 
+                      value={price} 
+                      onChange={(e) => setPrice(parseFloat(e.target.value) || 0)} 
+                      className="bg-white/5 border-gray-700 mt-1.5 text-xl font-bold"
+                      step="0.01"
+                      min={product.baseCost}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Preço mínimo: {(product.baseCost).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-700">
+                    <div>
+                      <span className="text-gray-500 text-sm">Custo Base</span>
+                      <p className="text-lg font-medium">{product.baseCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 text-sm">Seu Lucro</span>
+                      <p className={cn("text-lg font-bold", profit >= 0 ? "text-green-400" : "text-red-400")}>
+                        {profit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300">Margem de Lucro</span>
+                      <span className={cn("text-2xl font-bold", parseFloat(margin) >= 30 ? "text-green-400" : parseFloat(margin) >= 15 ? "text-yellow-400" : "text-red-400")}>
+                        {margin}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+                      <div 
+                        className={cn("h-2 rounded-full transition-all", parseFloat(margin) >= 30 ? "bg-green-500" : parseFloat(margin) >= 15 ? "bg-yellow-500" : "bg-red-500")}
+                        style={{ width: `${Math.min(parseFloat(margin), 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">
+                      {parseFloat(margin) >= 30 ? "✓ Excelente margem!" : parseFloat(margin) >= 15 ? "Margem adequada" : "⚠ Margem baixa"}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === 'visibility' && (
+            <div className="space-y-5">
+              <Card className="bg-white/5 border-gray-800 p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <Settings size={20} className="text-blue-400" />
+                  <span className="font-medium">Status do Produto</span>
+                </div>
+                
+                <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
+                  <SelectTrigger className="bg-white/5 border-gray-700">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-900 border-gray-700">
+                    <SelectItem value="draft">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-gray-500" />
+                        Rascunho
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="active">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500" />
+                        Ativo
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="paused">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-orange-500" />
+                        Pausado
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="archived">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-gray-600" />
+                        Arquivado
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </Card>
+
+              <Card className="bg-white/5 border-gray-800 p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <Globe size={20} className="text-purple-400" />
+                  <span className="font-medium">Onde exibir seu produto</span>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Store size={20} className="text-blue-400" />
+                      <div>
+                        <p className="font-medium">Minha Loja</p>
+                        <p className="text-xs text-gray-500">Visível na sua loja pessoal</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowInUserStore(!showInUserStore)}
+                      className={cn("relative w-12 h-6 rounded-full transition-colors", showInUserStore ? "bg-green-500" : "bg-gray-600")}
+                    >
+                      <div className={cn("absolute w-5 h-5 bg-white rounded-full top-0.5 transition-transform", showInUserStore ? "translate-x-6" : "translate-x-0.5")} />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Globe size={20} className="text-purple-400" />
+                      <div>
+                        <p className="font-medium">Marketplace FayaPoint</p>
+                        <p className="text-xs text-gray-500">Visível para todos os usuários</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowInMarketplace(!showInMarketplace)}
+                      className={cn("relative w-12 h-6 rounded-full transition-colors", showInMarketplace ? "bg-green-500" : "bg-gray-600")}
+                    >
+                      <div className={cn("absolute w-5 h-5 bg-white rounded-full top-0.5 transition-transform", showInMarketplace ? "translate-x-6" : "translate-x-0.5")} />
+                    </button>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === 'share' && (
+            <div className="space-y-5">
+              <Card className="bg-white/5 border-gray-800 p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <QrCode size={20} className="text-purple-400" />
+                  <span className="font-medium">QR Code do Produto</span>
+                </div>
+                
+                <div className="flex flex-col items-center gap-4 py-4">
+                  <div className="bg-white p-4 rounded-xl shadow-lg">
+                    <QRCodeSVG 
+                      id="edit-product-qr-code"
+                      value={shareUrl} 
+                      size={200} 
+                      level="H"
+                      includeMargin
+                      imageSettings={{
+                        src: product.primaryMockup || "/logo-icon.png",
+                        x: undefined,
+                        y: undefined,
+                        height: 40,
+                        width: 40,
+                        excavate: true,
+                      }}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-400 text-center">
+                    Escaneie o QR Code para acessar a página do produto
+                  </p>
+                  <Button variant="outline" onClick={downloadQRCode} className="border-gray-700">
+                    <Download size={16} className="mr-2" />
+                    Baixar QR Code PNG
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="bg-white/5 border-gray-800 p-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <Share2 size={20} className="text-blue-400" />
+                  <span className="font-medium">Link de Compartilhamento</span>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Input 
+                    value={shareUrl} 
+                    readOnly 
+                    className="bg-white/5 border-gray-700 text-sm flex-1 text-gray-400 font-mono" 
+                  />
+                  <Button variant="outline" onClick={copyUrl} className="border-gray-700">
+                    {copied ? <CheckCircle size={18} className="text-green-400" /> : <Copy size={18} />}
+                  </Button>
+                </div>
+
+                <div className="flex gap-2 mt-4">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 border-gray-700"
+                    onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Confira meu produto: ${title} - ${shareUrl}`)}`, '_blank')}
+                  >
+                    WhatsApp
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 border-gray-700"
+                    onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Confira meu produto: ${title}`)}&url=${encodeURIComponent(shareUrl)}`, '_blank')}
+                  >
+                    Twitter
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 border-gray-700"
+                    onClick={() => window.open(shareUrl, '_blank')}
+                  >
+                    <ExternalLink size={16} />
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex gap-3 p-4 border-t border-gray-800 bg-gray-900/50">
+          <Button variant="outline" className="flex-1 border-gray-700" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button 
+            className="flex-1 bg-purple-600 hover:bg-purple-700" 
+            onClick={handleSave}
+            disabled={isSaving}
+          >
+            {isSaving ? <Loader2 size={16} className="mr-2 animate-spin" /> : <Save size={16} className="mr-2" />}
+            Salvar Alterações
+          </Button>
         </div>
       </motion.div>
     </motion.div>
   );
 }
+
+// Download icon helper (using Lucide)
+const Download = ({ size, className }: { size?: number; className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
+  </svg>
+);
