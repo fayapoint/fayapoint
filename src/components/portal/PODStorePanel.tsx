@@ -781,6 +781,45 @@ function CreateWizard(props: {
   // Reset page when category/search changes
   useEffect(() => { setCurrentPage(0); }, [selectedCategory, blueprintSearch]);
 
+  // Gallery state for Step 3 - MUST be at top level, not conditional
+  const [designTab, setDesignTab] = useState<'upload' | 'creations' | 'uploads' | 'public'>('upload');
+  const [galleryImages, setGalleryImages] = useState<{ _id: string; imageUrl: string; prompt: string; userName?: string; likes?: number }[]>([]);
+  const [isLoadingGallery, setIsLoadingGallery] = useState(false);
+  const [selectedProductImageIndex, setSelectedProductImageIndex] = useState(0);
+
+  // Reset selected image when blueprint changes
+  useEffect(() => {
+    setSelectedProductImageIndex(0);
+  }, [selectedBlueprint?.id]);
+
+  // Fetch gallery images
+  const fetchGalleryImages = useCallback(async (type: string) => {
+    setIsLoadingGallery(true);
+    try {
+      const token = localStorage.getItem('fayapoint_token');
+      const res = await fetch(`/api/gallery?type=${type}&limit=12`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setGalleryImages(data.images || []);
+      }
+    } catch (e) { console.error('Gallery fetch error:', e); }
+    finally { setIsLoadingGallery(false); }
+  }, []);
+
+  // Fetch gallery when tab changes
+  useEffect(() => {
+    if (step === 3 && designTab !== 'upload') {
+      const typeMap: Record<string, string> = {
+        'creations': 'my-creations',
+        'uploads': 'my-uploads',
+        'public': 'public'
+      };
+      fetchGalleryImages(typeMap[designTab] || designTab);
+    }
+  }, [step, designTab, fetchGalleryImages]);
+
   if (step === 1) {
     return (
       <div className="relative pb-24">
@@ -986,41 +1025,7 @@ function CreateWizard(props: {
     );
   }
 
-  // Gallery state for Step 3
-  const [designTab, setDesignTab] = useState<'upload' | 'creations' | 'uploads' | 'public'>('upload');
-  const [galleryImages, setGalleryImages] = useState<{ _id: string; imageUrl: string; prompt: string; userName?: string; likes?: number }[]>([]);
-  const [isLoadingGallery, setIsLoadingGallery] = useState(false);
-  const [selectedProductImageIndex, setSelectedProductImageIndex] = useState(0);
-
-  // Reset selected image when blueprint changes
-  useEffect(() => {
-    setSelectedProductImageIndex(0);
-  }, [selectedBlueprint?.id]);
-
-  const fetchGalleryImages = useCallback(async (type: string) => {
-    setIsLoadingGallery(true);
-    try {
-      const token = localStorage.getItem('fayapoint_token');
-      const res = await fetch(`/api/gallery?type=${type}&limit=12`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setGalleryImages(data.images || []);
-      }
-    } catch (error) {
-      console.error('Gallery fetch error:', error);
-    } finally {
-      setIsLoadingGallery(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (step === 3 && designTab !== 'upload') {
-      fetchGalleryImages(designTab === 'creations' ? 'my-creations' : designTab === 'uploads' ? 'my-uploads' : 'public');
-    }
-  }, [step, designTab, fetchGalleryImages]);
-
+  // Helper function for gallery image selection (moved from conditional block)
   const selectGalleryImage = (imageUrl: string) => {
     setDesignPreview(imageUrl);
     toast.success('Design selecionado!');
