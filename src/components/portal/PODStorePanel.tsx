@@ -24,8 +24,71 @@ interface PrintifyBlueprint { id: number; title: string; description: string; br
 interface PrintifyProvider { id: number; title: string; location: { country: string; city?: string }; }
 interface PrintifyVariant { id: number; title: string; options: Record<string, string>; placeholders: { position: string; height: number; width: number }[]; }
 
-// Mockup Preview Component - Overlays design on product image
-function MockupPreview({ productImage, designImage, className }: { productImage: string; designImage: string | null; className?: string }) {
+// Print area configurations for different product types
+// Values are percentages of the product image dimensions
+const PRINT_AREAS: Record<string, { x: number; y: number; width: number; height: number; blend: string }> = {
+  // Apparel
+  'tshirt': { x: 25, y: 20, width: 50, height: 45, blend: 'multiply' },
+  'hoodie': { x: 25, y: 25, width: 50, height: 40, blend: 'multiply' },
+  'tanktop': { x: 25, y: 15, width: 50, height: 50, blend: 'multiply' },
+  'sweatshirt': { x: 25, y: 22, width: 50, height: 42, blend: 'multiply' },
+  // Wall Art & Posters (design fills the frame/canvas area)
+  'poster': { x: 10, y: 10, width: 80, height: 80, blend: 'source-over' },
+  'canvas': { x: 8, y: 8, width: 84, height: 84, blend: 'source-over' },
+  'frame': { x: 12, y: 12, width: 76, height: 76, blend: 'source-over' },
+  'art': { x: 10, y: 10, width: 80, height: 80, blend: 'source-over' },
+  // Bags
+  'tote': { x: 25, y: 30, width: 50, height: 40, blend: 'multiply' },
+  'bag': { x: 28, y: 32, width: 44, height: 36, blend: 'multiply' },
+  'backpack': { x: 28, y: 25, width: 44, height: 45, blend: 'multiply' },
+  // Drinkware
+  'mug': { x: 20, y: 25, width: 60, height: 50, blend: 'multiply' },
+  'tumbler': { x: 15, y: 20, width: 70, height: 60, blend: 'multiply' },
+  'bottle': { x: 25, y: 20, width: 50, height: 55, blend: 'multiply' },
+  // Tech & Accessories
+  'phone': { x: 10, y: 10, width: 80, height: 80, blend: 'source-over' },
+  'case': { x: 10, y: 10, width: 80, height: 80, blend: 'source-over' },
+  'mousepad': { x: 5, y: 5, width: 90, height: 90, blend: 'source-over' },
+  // Home
+  'pillow': { x: 15, y: 15, width: 70, height: 70, blend: 'multiply' },
+  'blanket': { x: 10, y: 10, width: 80, height: 80, blend: 'multiply' },
+  // Default for unknown products
+  'default': { x: 20, y: 20, width: 60, height: 60, blend: 'multiply' },
+};
+
+// Detect product type from title
+function detectProductType(title: string): string {
+  const lowerTitle = title.toLowerCase();
+  
+  // Check each product type
+  for (const type of Object.keys(PRINT_AREAS)) {
+    if (type !== 'default' && lowerTitle.includes(type)) {
+      return type;
+    }
+  }
+  
+  // Additional keyword matching
+  if (lowerTitle.includes('shirt') || lowerTitle.includes('tee')) return 'tshirt';
+  if (lowerTitle.includes('hood') || lowerTitle.includes('sweat')) return 'hoodie';
+  if (lowerTitle.includes('print') || lowerTitle.includes('wall') || lowerTitle.includes('framed')) return 'frame';
+  if (lowerTitle.includes('cup') || lowerTitle.includes('drink')) return 'mug';
+  if (lowerTitle.includes('cushion')) return 'pillow';
+  
+  return 'default';
+}
+
+// Enhanced Mockup Preview Component
+function MockupPreview({ 
+  productImage, 
+  designImage, 
+  productTitle = '',
+  className 
+}: { 
+  productImage: string; 
+  designImage: string | null; 
+  productTitle?: string;
+  className?: string;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,65 +105,93 @@ function MockupPreview({ productImage, designImage, className }: { productImage:
     productImg.crossOrigin = 'anonymous';
     
     productImg.onload = () => {
-      // Set canvas size
-      canvas.width = 400;
-      canvas.height = 400;
+      // Determine canvas size based on image aspect ratio
+      const aspectRatio = productImg.width / productImg.height;
+      let canvasWidth = 400;
+      let canvasHeight = 400;
       
-      // Draw product image
-      ctx.drawImage(productImg, 0, 0, 400, 400);
+      if (aspectRatio > 1) {
+        canvasHeight = 400 / aspectRatio;
+      } else if (aspectRatio < 1) {
+        canvasWidth = 400 * aspectRatio;
+      }
+      
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      
+      // Draw product image to fill canvas
+      ctx.drawImage(productImg, 0, 0, canvasWidth, canvasHeight);
       
       if (designImage) {
         const designImg = new Image();
         designImg.crossOrigin = 'anonymous';
         
         designImg.onload = () => {
-          // Calculate design placement (centered on product print area)
-          // Typical t-shirt print area: ~35% from top, ~25% from sides, ~40% of width
-          const printAreaX = 100; // 25% from left
-          const printAreaY = 100; // 25% from top
-          const printAreaWidth = 200; // 50% of canvas
-          const printAreaHeight = 200; // 50% of canvas
+          // Get print area based on product type
+          const productType = detectProductType(productTitle);
+          const printArea = PRINT_AREAS[productType] || PRINT_AREAS.default;
           
-          // Maintain aspect ratio of design
+          // Calculate actual pixel positions from percentages
+          const printX = (printArea.x / 100) * canvasWidth;
+          const printY = (printArea.y / 100) * canvasHeight;
+          const printWidth = (printArea.width / 100) * canvasWidth;
+          const printHeight = (printArea.height / 100) * canvasHeight;
+          
+          // Calculate design dimensions maintaining aspect ratio
           const designAspect = designImg.width / designImg.height;
-          let drawWidth = printAreaWidth;
-          let drawHeight = printAreaHeight;
+          const printAspect = printWidth / printHeight;
           
-          if (designAspect > 1) {
-            drawHeight = printAreaWidth / designAspect;
+          let drawWidth: number;
+          let drawHeight: number;
+          
+          if (designAspect > printAspect) {
+            // Design is wider than print area
+            drawWidth = printWidth;
+            drawHeight = printWidth / designAspect;
           } else {
-            drawWidth = printAreaHeight * designAspect;
+            // Design is taller than print area
+            drawHeight = printHeight;
+            drawWidth = printHeight * designAspect;
           }
           
-          const drawX = printAreaX + (printAreaWidth - drawWidth) / 2;
-          const drawY = printAreaY + (printAreaHeight - drawHeight) / 2;
+          // Center the design within the print area
+          const drawX = printX + (printWidth - drawWidth) / 2;
+          const drawY = printY + (printHeight - drawHeight) / 2;
           
-          // Apply multiply blend mode for realistic look
-          ctx.globalCompositeOperation = 'multiply';
+          // Apply blend mode based on product type
+          ctx.globalCompositeOperation = printArea.blend as GlobalCompositeOperation;
           ctx.drawImage(designImg, drawX, drawY, drawWidth, drawHeight);
           
-          // Reset blend mode and add slight overlay for depth
+          // Reset and add subtle shadow for depth on non-frame products
           ctx.globalCompositeOperation = 'source-over';
-          ctx.fillStyle = 'rgba(0,0,0,0.05)';
-          ctx.fillRect(drawX, drawY, drawWidth, drawHeight);
+          if (printArea.blend === 'multiply') {
+            ctx.fillStyle = 'rgba(0,0,0,0.03)';
+            ctx.fillRect(drawX, drawY, drawWidth, drawHeight);
+          }
           
           setIsLoading(false);
         };
         
-        designImg.onerror = () => setIsLoading(false);
+        designImg.onerror = () => {
+          console.error('Failed to load design image');
+          setIsLoading(false);
+        };
         designImg.src = designImage;
       } else {
         setIsLoading(false);
       }
     };
     
-    productImg.onerror = () => setIsLoading(false);
+    productImg.onerror = () => {
+      console.error('Failed to load product image');
+      setIsLoading(false);
+    };
     productImg.src = productImage;
-  }, [productImage, designImage]);
+  }, [productImage, designImage, productTitle]);
 
   return (
-    <div className={cn("relative bg-gray-800 rounded-lg overflow-hidden", className)}>
-      <canvas ref={canvasRef} className="w-full h-full" />
+    <div className={cn("relative bg-gray-800 rounded-lg overflow-hidden flex items-center justify-center", className)}>
+      <canvas ref={canvasRef} className="max-w-full max-h-full object-contain" />
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
           <Loader2 className="animate-spin text-purple-500" size={32} />
@@ -367,7 +458,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         setSelectedCategory={setSelectedCategory} blueprints={blueprints} selectedBlueprint={selectedBlueprint}
         setSelectedBlueprint={setSelectedBlueprint} providers={providers} selectedProvider={selectedProvider}
         setSelectedProvider={setSelectedProvider} variants={variants} selectedVariants={selectedVariants}
-        setSelectedVariants={setSelectedVariants} designPreview={designPreview} productTitle={productTitle}
+        setSelectedVariants={setSelectedVariants} designPreview={designPreview} setDesignPreview={setDesignPreview} productTitle={productTitle}
         setProductTitle={setProductTitle} productDescription={productDescription} setProductDescription={setProductDescription}
         sellingPrice={sellingPrice} setSellingPrice={setSellingPrice} baseCost={baseCost} setBaseCost={setBaseCost}
         isCreating={isCreating} isFetchingBlueprints={isFetchingBlueprints} isFetchingProviders={isFetchingProviders}
@@ -392,7 +483,7 @@ function PODPanelContent(props: {
   selectedBlueprint: PrintifyBlueprint | null; setSelectedBlueprint: (b: PrintifyBlueprint | null) => void;
   providers: PrintifyProvider[]; selectedProvider: PrintifyProvider | null; setSelectedProvider: (p: PrintifyProvider | null) => void;
   variants: PrintifyVariant[]; selectedVariants: number[]; setSelectedVariants: (v: number[]) => void;
-  designPreview: string | null; productTitle: string; setProductTitle: (s: string) => void;
+  designPreview: string | null; setDesignPreview: (s: string | null) => void; productTitle: string; setProductTitle: (s: string) => void;
   productDescription: string; setProductDescription: (s: string) => void; sellingPrice: number; setSellingPrice: (n: number) => void;
   baseCost: number; setBaseCost: (n: number) => void; isCreating: boolean; isFetchingBlueprints: boolean;
   isFetchingProviders: boolean; isFetchingVariants: boolean; fileInputRef: React.RefObject<HTMLInputElement | null>;
@@ -407,7 +498,7 @@ function PODPanelContent(props: {
     selectedProduct, setSelectedProduct, editingProduct, setEditingProduct, createStep, setCreateStep,
     blueprintSearch, setBlueprintSearch, selectedCategory, setSelectedCategory, blueprints, selectedBlueprint,
     setSelectedBlueprint, providers, selectedProvider, setSelectedProvider, variants, selectedVariants, setSelectedVariants,
-    designPreview, productTitle, setProductTitle, productDescription, setProductDescription, sellingPrice, setSellingPrice,
+    designPreview, setDesignPreview, productTitle, setProductTitle, productDescription, setProductDescription, sellingPrice, setSellingPrice,
     baseCost, setBaseCost, isCreating, isFetchingBlueprints, isFetchingProviders, isFetchingVariants, fileInputRef,
     handleFileSelect, fetchBlueprints, fetchProviders, fetchVariants, createProduct, updateProduct, deleteProduct,
     publishProduct, resetCreateWizard, formatCurrency, userXP, canPublish } = props;
@@ -494,7 +585,7 @@ function PODPanelContent(props: {
               selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} blueprints={blueprints}
               selectedBlueprint={selectedBlueprint} setSelectedBlueprint={setSelectedBlueprint} providers={providers}
               selectedProvider={selectedProvider} setSelectedProvider={setSelectedProvider} variants={variants}
-              selectedVariants={selectedVariants} setSelectedVariants={setSelectedVariants} designPreview={designPreview}
+              selectedVariants={selectedVariants} setSelectedVariants={setSelectedVariants} designPreview={designPreview} setDesignPreview={setDesignPreview}
               productTitle={productTitle} setProductTitle={setProductTitle} productDescription={productDescription}
               setProductDescription={setProductDescription} sellingPrice={sellingPrice} setSellingPrice={setSellingPrice}
               baseCost={baseCost} setBaseCost={setBaseCost} isCreating={isCreating} isFetchingBlueprints={isFetchingBlueprints}
@@ -574,7 +665,7 @@ function CreateWizard(props: {
   selectedBlueprint: PrintifyBlueprint | null; setSelectedBlueprint: (b: PrintifyBlueprint | null) => void;
   providers: PrintifyProvider[]; selectedProvider: PrintifyProvider | null; setSelectedProvider: (p: PrintifyProvider | null) => void;
   variants: PrintifyVariant[]; selectedVariants: number[]; setSelectedVariants: (v: number[]) => void;
-  designPreview: string | null; productTitle: string; setProductTitle: (s: string) => void;
+  designPreview: string | null; setDesignPreview: (s: string | null) => void; productTitle: string; setProductTitle: (s: string) => void;
   productDescription: string; setProductDescription: (s: string) => void; sellingPrice: number; setSellingPrice: (n: number) => void;
   baseCost: number; setBaseCost: (n: number) => void; isCreating: boolean; isFetchingBlueprints: boolean;
   isFetchingProviders: boolean; isFetchingVariants: boolean; fileInputRef: React.RefObject<HTMLInputElement | null>;
@@ -584,7 +675,7 @@ function CreateWizard(props: {
 }) {
   const { step, setStep, blueprintSearch, setBlueprintSearch, selectedCategory, setSelectedCategory, blueprints,
     selectedBlueprint, setSelectedBlueprint, providers, selectedProvider, setSelectedProvider, variants,
-    selectedVariants, setSelectedVariants, designPreview, productTitle, setProductTitle, productDescription,
+    selectedVariants, setSelectedVariants, designPreview, setDesignPreview, productTitle, setProductTitle, productDescription,
     setProductDescription, sellingPrice, setSellingPrice, baseCost, setBaseCost, isCreating, isFetchingBlueprints,
     isFetchingProviders, isFetchingVariants, fileInputRef, handleFileSelect, fetchBlueprints, fetchProviders,
     fetchVariants, createProduct, userXP, canPublish, formatCurrency } = props;
@@ -802,52 +893,175 @@ function CreateWizard(props: {
     );
   }
 
+  // Gallery state for Step 3
+  const [designTab, setDesignTab] = useState<'upload' | 'creations' | 'uploads' | 'public'>('upload');
+  const [galleryImages, setGalleryImages] = useState<{ _id: string; imageUrl: string; prompt: string; userName?: string; likes?: number }[]>([]);
+  const [isLoadingGallery, setIsLoadingGallery] = useState(false);
+  const [selectedProductImageIndex, setSelectedProductImageIndex] = useState(0);
+
+  // Reset selected image when blueprint changes
+  useEffect(() => {
+    setSelectedProductImageIndex(0);
+  }, [selectedBlueprint?.id]);
+
+  const fetchGalleryImages = useCallback(async (type: string) => {
+    setIsLoadingGallery(true);
+    try {
+      const token = localStorage.getItem('fayapoint_token');
+      const res = await fetch(`/api/gallery?type=${type}&limit=12`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setGalleryImages(data.images || []);
+      }
+    } catch (error) {
+      console.error('Gallery fetch error:', error);
+    } finally {
+      setIsLoadingGallery(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (step === 3 && designTab !== 'upload') {
+      fetchGalleryImages(designTab === 'creations' ? 'my-creations' : designTab === 'uploads' ? 'my-uploads' : 'public');
+    }
+  }, [step, designTab, fetchGalleryImages]);
+
+  const selectGalleryImage = (imageUrl: string) => {
+    setDesignPreview(imageUrl);
+    toast.success('Design selecionado!');
+  };
+
   if (step === 3) {
     return (
       <div className="space-y-6 pb-24">
         <Button variant="ghost" onClick={() => setStep(2)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Upload do Design</h2>
-          <p className="text-gray-400">Envie sua arte e veja o resultado no produto</p>
+          <h2 className="text-2xl font-bold mb-2">Escolha seu Design</h2>
+          <p className="text-gray-400">Faça upload, use suas criações ou escolha da galeria pública</p>
         </div>
         
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Left: Upload Area */}
+            {/* Left: Design Selection */}
             <div className="space-y-4">
-              <h4 className="font-semibold flex items-center gap-2">
-                <Upload size={18} className="text-purple-400" />
-                Seu Design
-              </h4>
-              <Card 
-                className={cn(
-                  "bg-white/5 border-white/10 border-dashed p-8 text-center cursor-pointer transition-all hover:border-purple-500/50", 
-                  designPreview && "border-green-500/50 border-solid"
-                )} 
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/svg+xml" className="hidden" onChange={handleFileSelect} />
-                {designPreview ? (
-                  <div className="space-y-4">
-                    <img src={designPreview} alt="Preview" className="max-h-48 mx-auto rounded-lg shadow-lg" />
-                    <p className="text-green-400 flex items-center justify-center gap-2">
-                      <CheckCircle size={16} />Design carregado!
-                    </p>
-                    <Button variant="outline" size="sm" className="border-gray-600">
-                      <ImageIcon size={14} className="mr-2" />Trocar imagem
-                    </Button>
-                  </div>
-                ) : (
-                  <>
-                    <Upload size={48} className="mx-auto mb-4 text-purple-400" />
-                    <h3 className="font-semibold mb-2">Arraste seu design aqui</h3>
-                    <p className="text-sm text-gray-400 mb-4">PNG, JPG, SVG até 50MB</p>
-                    <Button className="bg-purple-600 hover:bg-purple-700">
-                      <ImageIcon size={16} className="mr-2" />Escolher Arquivo
-                    </Button>
-                  </>
-                )}
-              </Card>
+              {/* Tabs */}
+              <div className="flex gap-1 p-1 bg-white/5 rounded-lg">
+                {[
+                  { id: 'upload', label: 'Upload', icon: Upload },
+                  { id: 'creations', label: 'Minhas Criações', icon: Sparkles },
+                  { id: 'uploads', label: 'Meus Uploads', icon: ImageIcon },
+                  { id: 'public', label: 'Galeria', icon: Globe },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setDesignTab(tab.id as typeof designTab)}
+                    className={cn(
+                      "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-all",
+                      designTab === tab.id 
+                        ? "bg-purple-600 text-white" 
+                        : "text-gray-400 hover:text-white hover:bg-white/5"
+                    )}
+                  >
+                    <tab.icon size={14} />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Upload Tab */}
+              {designTab === 'upload' && (
+                <Card 
+                  className={cn(
+                    "bg-white/5 border-white/10 border-dashed p-8 text-center cursor-pointer transition-all hover:border-purple-500/50", 
+                    designPreview && "border-green-500/50 border-solid"
+                  )} 
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/svg+xml" className="hidden" onChange={handleFileSelect} />
+                  {designPreview ? (
+                    <div className="space-y-4">
+                      <img src={designPreview} alt="Preview" className="max-h-48 mx-auto rounded-lg shadow-lg" />
+                      <p className="text-green-400 flex items-center justify-center gap-2">
+                        <CheckCircle size={16} />Design carregado!
+                      </p>
+                      <Button variant="outline" size="sm" className="border-gray-600">
+                        <ImageIcon size={14} className="mr-2" />Trocar imagem
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <Upload size={48} className="mx-auto mb-4 text-purple-400" />
+                      <h3 className="font-semibold mb-2">Arraste seu design aqui</h3>
+                      <p className="text-sm text-gray-400 mb-4">PNG, JPG, SVG até 50MB</p>
+                      <Button className="bg-purple-600 hover:bg-purple-700">
+                        <ImageIcon size={16} className="mr-2" />Escolher Arquivo
+                      </Button>
+                    </>
+                  )}
+                </Card>
+              )}
+
+              {/* Gallery Tabs (Creations, Uploads, Public) */}
+              {designTab !== 'upload' && (
+                <div className="space-y-3">
+                  {isLoadingGallery ? (
+                    <div className="flex justify-center py-12">
+                      <Loader2 className="animate-spin text-purple-500" size={32} />
+                    </div>
+                  ) : galleryImages.length > 0 ? (
+                    <div className="grid grid-cols-3 gap-2 max-h-[400px] overflow-y-auto p-1">
+                      {galleryImages.map((img) => (
+                        <motion.div
+                          key={img._id}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className={cn(
+                            "aspect-square rounded-lg overflow-hidden cursor-pointer relative group border-2 transition-all",
+                            designPreview === img.imageUrl 
+                              ? "border-purple-500 ring-2 ring-purple-500/50" 
+                              : "border-transparent hover:border-purple-500/50"
+                          )}
+                          onClick={() => selectGalleryImage(img.imageUrl)}
+                        >
+                          <img 
+                            src={img.imageUrl} 
+                            alt={img.prompt} 
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          {/* Overlay */}
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
+                            <p className="text-xs text-white line-clamp-2">{img.prompt}</p>
+                            {designTab === 'public' && img.userName && (
+                              <p className="text-xs text-gray-400 mt-1">por {img.userName}</p>
+                            )}
+                          </div>
+                          {/* Selection indicator */}
+                          {designPreview === img.imageUrl && (
+                            <div className="absolute top-1 right-1 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+                              <CheckCircle size={12} className="text-white" />
+                            </div>
+                          )}
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="bg-white/5 border-white/10 p-8 text-center">
+                      <ImageIcon size={40} className="mx-auto mb-3 text-gray-600" />
+                      <p className="text-gray-400 mb-2">
+                        {designTab === 'creations' && "Nenhuma criação encontrada"}
+                        {designTab === 'uploads' && "Nenhum upload encontrado"}
+                        {designTab === 'public' && "Galeria vazia"}
+                      </p>
+                      {designTab === 'creations' && (
+                        <p className="text-sm text-gray-500">Crie imagens no Studio AI para usar aqui</p>
+                      )}
+                    </Card>
+                  )}
+                </div>
+              )}
               
               {/* Variants */}
               <div className="mt-4">
@@ -891,8 +1105,9 @@ function CreateWizard(props: {
                 <div className="space-y-4">
                   {/* Main Mockup */}
                   <MockupPreview 
-                    productImage={selectedBlueprint.images[0]} 
-                    designImage={designPreview} 
+                    productImage={selectedBlueprint.images[selectedProductImageIndex] || selectedBlueprint.images[0]} 
+                    designImage={designPreview}
+                    productTitle={selectedBlueprint.title}
                     className="aspect-square w-full"
                   />
                   
@@ -914,14 +1129,28 @@ function CreateWizard(props: {
                     )}
                   </Card>
                   
-                  {/* Alternative Views */}
+                  {/* Alternative Views - Clickable Thumbnails */}
                   {selectedBlueprint.images.length > 1 && (
-                    <div className="grid grid-cols-4 gap-2">
-                      {selectedBlueprint.images.slice(0, 4).map((img, idx) => (
-                        <div key={idx} className="aspect-square bg-gray-800 rounded-lg overflow-hidden opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
-                          <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
-                        </div>
-                      ))}
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-400">Clique para ver outras visualizações:</p>
+                      <div className="grid grid-cols-4 gap-2">
+                        {selectedBlueprint.images.slice(0, 8).map((img, idx) => (
+                          <motion.div 
+                            key={idx} 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setSelectedProductImageIndex(idx)}
+                            className={cn(
+                              "aspect-square bg-gray-800 rounded-lg overflow-hidden cursor-pointer transition-all border-2",
+                              selectedProductImageIndex === idx 
+                                ? "border-purple-500 opacity-100 ring-2 ring-purple-500/50" 
+                                : "border-transparent opacity-70 hover:opacity-100"
+                            )}
+                          >
+                            <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                          </motion.div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -942,7 +1171,7 @@ function CreateWizard(props: {
               <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden">
-                    <MockupPreview productImage={selectedBlueprint?.images[0] || ''} designImage={designPreview} className="w-full h-full" />
+                    <MockupPreview productImage={selectedBlueprint?.images[0] || ''} designImage={designPreview} productTitle={selectedBlueprint?.title || ''} className="w-full h-full" />
                   </div>
                   <div>
                     <p className="font-medium">{selectedVariants.length} variante(s)</p>
@@ -983,7 +1212,8 @@ function CreateWizard(props: {
             {selectedBlueprint && (
               <MockupPreview 
                 productImage={selectedBlueprint.images[0]} 
-                designImage={designPreview} 
+                designImage={designPreview}
+                productTitle={selectedBlueprint.title}
                 className="aspect-square w-full rounded-xl shadow-2xl"
               />
             )}
