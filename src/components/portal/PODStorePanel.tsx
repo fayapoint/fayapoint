@@ -7,14 +7,18 @@ import {
   Package, DollarSign, ShoppingBag, Sparkles, Shirt, Home, Frame, Coffee,
   Smartphone, Upload, Image as ImageIcon, CheckCircle, Clock, AlertCircle,
   ChevronRight, ChevronLeft, Globe, Loader2, X, Star, Lock, Trophy, ArrowRight, Save, Send, Truck, Settings,
-  Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw, Maximize2, Type, Layers, Wand2,
+  Receipt, TrendingUp, Wallet, CreditCard, ExternalLink, RefreshCw, Maximize2, Type, Layers, Wand2, Gem,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 
-// Lazy load the advanced design editor
+// Lazy load components
 const DesignEditor = dynamic(() => import("./DesignEditor"), { 
   ssr: false,
   loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-purple-500" size={32} /></div>
+});
+const ProdigiStorePanel = dynamic(() => import("./ProdigiStorePanel"), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-blue-500" size={32} /></div>
 });
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -480,6 +484,8 @@ interface PODStorePanelProps {
 export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   // isCompact can be used for responsive layout adjustments
   void isCompact;
+  // POD Provider selection - Printify or Prodigi
+  const [podProvider, setPodProvider] = useState<"printify" | "prodigi">("printify");
   const [activeTab, setActiveTab] = useState<"products" | "create" | "orders" | "earnings">("products");
   const [orders, setOrders] = useState<{ _id: string; orderNumber: string; status: string; createdAt: string; grandTotal: number; totalCreatorCommission: number; items: { title: string; quantity: number; mockupImage?: string }[] }[]>([]);
   const [orderStats, setOrderStats] = useState<{ total: number; pending: number; inProduction: number; shipped: number; delivered: number; totalRevenue: number; totalCommission: number } | null>(null);
@@ -895,32 +901,77 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   // CONTINUED IN NEXT EDIT - Component render functions
   return (
-    <div className="min-h-full">
-      {/* Main content will be rendered here */}
-      <PODPanelContent
-        activeTab={activeTab} setActiveTab={setActiveTab} isLoading={isLoading} products={products}
-        stats={stats} searchQuery={searchQuery} setSearchQuery={setSearchQuery} statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct}
-        editingProduct={editingProduct} setEditingProduct={setEditingProduct} createStep={createStep} setCreateStep={setCreateStep}
-        blueprintSearch={blueprintSearch} setBlueprintSearch={setBlueprintSearch} selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory} blueprints={blueprints} selectedBlueprint={selectedBlueprint}
-        setSelectedBlueprint={setSelectedBlueprint} providers={providers} selectedProvider={selectedProvider}
-        setSelectedProvider={setSelectedProvider} variants={variants} selectedVariants={selectedVariants}
-        setSelectedVariants={setSelectedVariants} designPreview={designPreview} setDesignPreview={setDesignPreview} productTitle={productTitle}
-        setProductTitle={setProductTitle} productDescription={productDescription} setProductDescription={setProductDescription}
-        sellingPrice={sellingPrice} setSellingPrice={setSellingPrice} baseCost={baseCost} setBaseCost={setBaseCost}
-        isCreating={isCreating} isFetchingBlueprints={isFetchingBlueprints} isFetchingProviders={isFetchingProviders}
-        isFetchingVariants={isFetchingVariants} fileInputRef={fileInputRef} handleFileSelect={handleFileSelect}
-        fetchBlueprints={fetchBlueprints} fetchProviders={fetchProviders} fetchVariants={fetchVariants}
-        createProduct={createProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} publishProduct={publishProduct}
-        resetCreateWizard={resetCreateWizard} formatCurrency={formatCurrency} userXP={userXP} canPublish={canPublish}
-        printifyMockups={printifyMockups} isGeneratingMockups={isGeneratingMockups} generatePrintifyMockups={generatePrintifyMockups}
-        uploadDesign={uploadDesign} uploadedDesignUrl={uploadedDesignUrl} setUploadedDesignUrl={setUploadedDesignUrl}
-        designScale={designScale} setDesignScale={setDesignScale} designPosition={designPosition} setDesignPosition={setDesignPosition}
-        orders={orders} orderStats={orderStats} isLoadingOrders={isLoadingOrders} fetchOrders={fetchOrders}
-        earningsData={earningsData} isLoadingEarnings={isLoadingEarnings} fetchEarnings={fetchEarnings}
-        publishToStore={publishToStore} isPublishing={isPublishing}
-      />
+    <div className="min-h-full space-y-6">
+      {/* POD Provider Selector */}
+      <div className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl border border-gray-800">
+        <span className="text-sm text-gray-400 font-medium">Fornecedor:</span>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPodProvider("printify")}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
+              podProvider === "printify"
+                ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white"
+                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+            )}
+          >
+            <Shirt size={18} />
+            <span className="font-medium">Printify</span>
+            <Badge className="bg-green-500/20 text-green-300 text-xs">900+</Badge>
+          </button>
+          <button
+            onClick={() => setPodProvider("prodigi")}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
+              podProvider === "prodigi"
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+            )}
+          >
+            <Frame size={18} />
+            <span className="font-medium">Prodigi</span>
+            <Badge className="bg-blue-500/20 text-blue-300 text-xs">PREMIUM</Badge>
+          </button>
+        </div>
+        <div className="flex-1" />
+        <div className="text-xs text-gray-500">
+          {podProvider === "printify" ? (
+            <span>Camisetas, canecas, almofadas e 900+ produtos</span>
+          ) : (
+            <span>Canvas, metal prints, fine art e wall art premium</span>
+          )}
+        </div>
+      </div>
+
+      {/* Conditional Content Based on Provider */}
+      {podProvider === "prodigi" ? (
+        <ProdigiStorePanel />
+      ) : (
+        <PODPanelContent
+          activeTab={activeTab} setActiveTab={setActiveTab} isLoading={isLoading} products={products}
+          stats={stats} searchQuery={searchQuery} setSearchQuery={setSearchQuery} statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct}
+          editingProduct={editingProduct} setEditingProduct={setEditingProduct} createStep={createStep} setCreateStep={setCreateStep}
+          blueprintSearch={blueprintSearch} setBlueprintSearch={setBlueprintSearch} selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory} blueprints={blueprints} selectedBlueprint={selectedBlueprint}
+          setSelectedBlueprint={setSelectedBlueprint} providers={providers} selectedProvider={selectedProvider}
+          setSelectedProvider={setSelectedProvider} variants={variants} selectedVariants={selectedVariants}
+          setSelectedVariants={setSelectedVariants} designPreview={designPreview} setDesignPreview={setDesignPreview} productTitle={productTitle}
+          setProductTitle={setProductTitle} productDescription={productDescription} setProductDescription={setProductDescription}
+          sellingPrice={sellingPrice} setSellingPrice={setSellingPrice} baseCost={baseCost} setBaseCost={setBaseCost}
+          isCreating={isCreating} isFetchingBlueprints={isFetchingBlueprints} isFetchingProviders={isFetchingProviders}
+          isFetchingVariants={isFetchingVariants} fileInputRef={fileInputRef} handleFileSelect={handleFileSelect}
+          fetchBlueprints={fetchBlueprints} fetchProviders={fetchProviders} fetchVariants={fetchVariants}
+          createProduct={createProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} publishProduct={publishProduct}
+          resetCreateWizard={resetCreateWizard} formatCurrency={formatCurrency} userXP={userXP} canPublish={canPublish}
+          printifyMockups={printifyMockups} isGeneratingMockups={isGeneratingMockups} generatePrintifyMockups={generatePrintifyMockups}
+          uploadDesign={uploadDesign} uploadedDesignUrl={uploadedDesignUrl} setUploadedDesignUrl={setUploadedDesignUrl}
+          designScale={designScale} setDesignScale={setDesignScale} designPosition={designPosition} setDesignPosition={setDesignPosition}
+          orders={orders} orderStats={orderStats} isLoadingOrders={isLoadingOrders} fetchOrders={fetchOrders}
+          earningsData={earningsData} isLoadingEarnings={isLoadingEarnings} fetchEarnings={fetchEarnings}
+          publishToStore={publishToStore} isPublishing={isPublishing}
+        />
+      )}
     </div>
   );
 }
