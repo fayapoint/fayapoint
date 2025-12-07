@@ -413,6 +413,14 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     setIsGeneratingMockups(true);
     setPrintifyMockups([]); // Clear old mockups
     
+    // Get placeholder dimensions from first selected variant
+    const firstVariant = variants.find(v => selectedVariants.includes(v.id));
+    const placeholder = firstVariant?.placeholders?.[0];
+    const placeholderWidth = placeholder?.width || 4500;
+    const placeholderHeight = placeholder?.height || 5100;
+    
+    console.log('[POD] Generating mockups with placeholder:', placeholderWidth, 'x', placeholderHeight);
+    
     try {
       const res = await fetch("/api/pod/mockup", {
         method: "POST",
@@ -422,7 +430,9 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
           blueprintId: selectedBlueprint.id,
           printProviderId: selectedProvider.id,
           variantIds: selectedVariants,
-          productTitle: selectedBlueprint.title
+          productTitle: selectedBlueprint.title,
+          placeholderWidth,
+          placeholderHeight
         })
       });
       

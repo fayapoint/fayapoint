@@ -1,6 +1,6 @@
 /**
  * API Route for generating Printify mockups
- * Fast path - returns Printify mockup URLs directly without extra processing
+ * Returns Printify mockup URLs with proper scaling
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -13,7 +13,10 @@ import {
 } from '@/lib/printify-api';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 30; // Allow up to 30 seconds for Printify operations
+export const maxDuration = 60; // Allow up to 60 seconds for Printify operations
+
+// Helper to wait with timeout
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // POST - Generate mockups using Printify
 export async function POST(request: NextRequest) {
@@ -24,7 +27,10 @@ export async function POST(request: NextRequest) {
       blueprintId, 
       printProviderId, 
       variantIds,
-      productTitle = 'Mockup Preview'
+      productTitle = 'Mockup Preview',
+      // Optional: placeholder dimensions for proper scaling
+      placeholderWidth = 4500, // Default print area width
+      placeholderHeight = 5100 // Default print area height
     } = body;
 
     // Validate required fields
@@ -51,7 +57,7 @@ export async function POST(request: NextRequest) {
     let upload;
     try {
       upload = await uploadImageByUrl(fileName, designUrl);
-      console.log('[Mockup API] Design uploaded:', upload.id);
+      console.log('[Mockup API] Design uploaded:', upload.id, 'size:', upload.width, 'x', upload.height);
     } catch (uploadError) {
       console.error('[Mockup API] Upload failed:', uploadError);
       return NextResponse.json({ 
@@ -60,7 +66,17 @@ export async function POST(request: NextRequest) {
       }, { status: 500 });
     }
 
-    // Step 3: Create draft product with the design
+    // Step 3: Calculate proper scale to fill the print area
+    // The scale should make the image cover the print area
+    const scaleX = placeholderWidth / upload.width;
+    const scaleY = placeholderHeight / upload.height;
+    // Use smaller scale to fit (contain) or larger to fill (cover)
+    // For apparel, we usually want to fill width and let height extend
+    const scale = Math.min(scaleX, scaleY) * 0.9; // 90% to leave some margin
+    
+    console.log('[Mockup API] Calculated scale:', scale, 'from image:', upload.width, 'x', upload.height);
+
+    // Step 4: Create draft product with the design
     const variants = variantIds.map((id: number) => ({
       id,
       price: 2500,
@@ -73,9 +89,9 @@ export async function POST(request: NextRequest) {
         position: 'front',
         images: [{
           id: upload.id,
-          x: 0.5,
-          y: 0.5,
-          scale: 1,
+          x: 0.5, // Center horizontally
+          y: 0.5, // Center vertically
+          scale: scale, // Calculated scale to fill print area
           angle: 0
         }]
       }]
@@ -100,33 +116,49 @@ export async function POST(request: NextRequest) {
       }, { status: 500 });
     }
 
-    // Step 4: Wait briefly for Printify to generate mockups
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Fetch the product to get mockup images
-    let updatedProduct;
-    try {
-      updatedProduct = await getProduct(shopId, product.id);
-    } catch {
-      updatedProduct = product;
+    // Step 5: Poll for mockups (Printify generates them asynchronously)
+    // Try up to 5 times with increasing delays
+    let mockups: { src: string; variantIds?: number[]; position?: string; isDefault?: boolean }[] = [];
+    const maxAttempts = 5;
+    const delays = [1500, 2000, 2500, 3000, 3500];
+    
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      await wait(delays[attempt]);
+      
+      try {
+        const updatedProduct = await getProduct(shopId, product.id);
+        const images = updatedProduct.images || [];
+        
+        console.log('[Mockup API] Attempt', attempt + 1, '- found', images.length, 'images');
+        
+        if (images.length > 0) {
+          mockups = images.map((img: { src: string; variant_ids?: number[]; position?: string; is_default?: boolean }) => ({
+            src: img.src,
+            variantIds: img.variant_ids,
+            position: img.position,
+            isDefault: img.is_default
+          }));
+          
+          // If we have multiple mockups, we're done
+          if (mockups.length >= 2 || attempt >= 2) {
+            break;
+          }
+        }
+      } catch (e) {
+        console.error('[Mockup API] Poll attempt', attempt + 1, 'failed:', e);
+      }
     }
 
-    // Extract mockup images - return Printify URLs directly (fast)
-    const mockups = (updatedProduct.images || []).map((img: { src: string; variant_ids?: number[]; position?: string; is_default?: boolean }) => ({
-      src: img.src,
-      variantIds: img.variant_ids,
-      position: img.position,
-      isDefault: img.is_default
-    }));
-
-    console.log('[Mockup API] Generated', mockups.length, 'mockups');
+    console.log('[Mockup API] Final result:', mockups.length, 'mockups');
 
     return NextResponse.json({
       success: true,
       mockups,
       productId: product.id,
       uploadId: upload.id,
-      shopId
+      shopId,
+      imageSize: { width: upload.width, height: upload.height },
+      calculatedScale: scale
     });
 
   } catch (error) {
