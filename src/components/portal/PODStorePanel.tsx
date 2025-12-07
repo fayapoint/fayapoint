@@ -410,22 +410,13 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       return;
     }
     
-    const token = localStorage.getItem("fayapoint_token");
-    if (!token) {
-      toast.error("Sessão expirada. Faça login novamente.");
-      return;
-    }
-    
     setIsGeneratingMockups(true);
     setPrintifyMockups([]); // Clear old mockups
     
     try {
       const res = await fetch("/api/pod/mockup", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           designUrl,
           blueprintId: selectedBlueprint.id,
