@@ -80,6 +80,16 @@ export const STORE_CATEGORIES = {
     name: 'Armazenamento',
     icon: 'HardDrive',
     subcategories: ['NAS', 'HDs Externos', 'Pendrives', 'Cartões SD']
+  },
+  pod: {
+    name: 'Print on Demand',
+    icon: 'Palette',
+    subcategories: ['Camisetas', 'Moletons', 'Canecas', 'Posters', 'Canvas', 'Capinhas', 'Bolsas', 'Almofadas', 'Adesivos', 'Outros']
+  },
+  dropshipping: {
+    name: 'Dropshipping',
+    icon: 'Truck',
+    subcategories: ['Eletrônicos', 'Casa & Jardim', 'Moda', 'Esportes', 'Beleza', 'Brinquedos', 'Ferramentas', 'Outros']
   }
 } as const;
 

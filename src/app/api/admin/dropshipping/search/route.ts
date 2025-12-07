@@ -15,6 +15,12 @@ import {
   searchAllPlatforms,
   ScrapedProduct,
 } from '@/lib/product-scrapers';
+import {
+  searchAllProductAPIs,
+  searchGoogleShopping,
+  searchBraveProducts,
+  ProductSearchResult,
+} from '@/lib/product-search-apis';
 
 interface SearchFilters {
   query: string;
@@ -259,20 +265,101 @@ export async function POST(request: NextRequest) {
     const sourcesMap = new Map(activeSources.map(s => [s.slug, s]));
 
     // Determine which platforms to search
-    // Default priority: mercadolivre (has reliable public API), then others
     const platformsToSearch = sources.length > 0 
       ? sources 
-      : ['mercadolivre', 'shopee', 'aliexpress', 'amazon'];
+      : ['google', 'amazon', 'mercadolivre', 'aliexpress'];
 
     console.log(`[Dropshipping Search] Searching platforms: ${platformsToSearch.join(', ')}`);
 
-    // Perform REAL search across platforms
-    const searchResults = await searchAllPlatforms(query, {
-      platforms: platformsToSearch,
-      maxResultsPerPlatform: Math.ceil(limit / platformsToSearch.length) + 5,
-      minPrice,
-      maxPrice,
-    });
+    // STRATEGY: Try multiple methods for better results
+    // 1. First try reliable external APIs (SerpAPI, RapidAPI)
+    // 2. Then try direct scraping as fallback
+    // 3. Finally use Brave Search as last resort
+
+    let searchResults: { platform: string; products: ScrapedProduct[]; error?: string }[] = [];
+    
+    // Method 1: Try reliable external APIs first
+    const hasRapidAPI = !!process.env.RAPIDAPI_KEY;
+    const hasSerpAPI = !!(process.env.SERPAPI_KEY || process.env.SerpAPI);
+    const hasBraveAPI = !!(process.env.BRAVE_API_KEY || process.env.Brave_API);
+    
+    console.log(`[Dropshipping Search] API keys: RapidAPI=${hasRapidAPI}, SerpAPI=${hasSerpAPI}, Brave=${hasBraveAPI}`);
+
+    if (hasRapidAPI || hasSerpAPI) {
+      const apiResults = await searchAllProductAPIs(query, platformsToSearch, Math.ceil(limit / platformsToSearch.length) + 5);
+      
+      // Convert ProductSearchResult to ScrapedProduct format
+      for (const result of apiResults) {
+        const convertedProducts: ScrapedProduct[] = result.products.map(p => ({
+          externalId: p.externalId,
+          name: p.name,
+          description: p.description,
+          price: p.price,
+          currency: p.currency,
+          originalPrice: p.originalPrice,
+          imageUrl: p.imageUrl,
+          images: p.images,
+          productUrl: p.productUrl,
+          sourceName: p.sourceName,
+          sourceSlug: p.sourceSlug,
+          rating: p.rating,
+          reviewCount: p.reviewCount,
+          soldCount: p.soldCount,
+          deliveryDays: p.deliveryDays,
+          sellerName: p.sellerName,
+          inStock: p.inStock,
+          shippingInfo: p.shippingInfo,
+        }));
+        
+        searchResults.push({
+          platform: result.platform,
+          products: convertedProducts,
+          error: result.error,
+        });
+      }
+    }
+    
+    // Method 2: If no API keys or no results, try direct scraping
+    if (searchResults.every(r => r.products.length === 0)) {
+      console.log('[Dropshipping Search] Trying direct scraping as fallback...');
+      searchResults = await searchAllPlatforms(query, {
+        platforms: platformsToSearch,
+        maxResultsPerPlatform: Math.ceil(limit / platformsToSearch.length) + 5,
+        minPrice,
+        maxPrice,
+      });
+    }
+    
+    // Method 3: If still no results and have Brave API, use it as last resort
+    if (hasBraveAPI && searchResults.every(r => r.products.length === 0)) {
+      console.log('[Dropshipping Search] Using Brave Search as last resort...');
+      const braveResults = await searchBraveProducts(query, limit);
+      if (braveResults.length > 0) {
+        searchResults.push({
+          platform: 'brave',
+          products: braveResults.map(p => ({
+            externalId: p.externalId,
+            name: p.name,
+            description: p.description,
+            price: p.price,
+            currency: p.currency,
+            originalPrice: p.originalPrice,
+            imageUrl: p.imageUrl,
+            images: p.images,
+            productUrl: p.productUrl,
+            sourceName: p.sourceName,
+            sourceSlug: p.sourceSlug,
+            rating: p.rating,
+            reviewCount: p.reviewCount,
+            soldCount: p.soldCount,
+            deliveryDays: p.deliveryDays,
+            sellerName: p.sellerName,
+            inStock: p.inStock,
+            shippingInfo: p.shippingInfo,
+          })),
+        });
+      }
+    }
 
     // Log results from each platform
     const platformSummary: Record<string, number> = {};
