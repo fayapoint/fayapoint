@@ -585,9 +585,28 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       if (res.ok) {
         const data = await res.json();
         if (publish && data.product?._id) {
-          await fetch("/api/pod/products", { method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: data.product._id, status: "active" }) });
+          // Publish to Printify and create StoreProduct
+          toast.loading("Publicando no Printify e na loja...");
+          const publishRes = await fetch("/api/pod/publish", { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, 
+            body: JSON.stringify({ productId: data.product._id }) 
+          });
+          toast.dismiss();
+          if (publishRes.ok) {
+            const publishData = await publishRes.json();
+            toast.success("Produto publicado na loja!", { duration: 5000 });
+            if (publishData.data?.storeUrl) {
+              toast.success(`URL: ${publishData.data.storeUrl}`, { duration: 8000 });
+            }
+          } else {
+            const publishErr = await publishRes.json();
+            toast.error(publishErr.error || "Erro ao publicar no Printify");
+            // Still saved as draft
+          }
+        } else {
+          toast.success("Salvo como rascunho!");
         }
-        toast.success(publish ? "Publicado!" : "Salvo!");
         resetCreateWizard(); setActiveTab("products"); fetchProducts();
       } else { const err = await res.json(); toast.error(err.error || "Erro"); }
     } catch (e) { console.error(e); toast.error("Erro ao criar"); }
@@ -614,7 +633,27 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const publishProduct = async (productId: string) => {
     const userXP = userData?.progress?.xp || 0;
     if (userXP < MIN_XP_TO_PUBLISH) { toast.error(`Precisa ${MIN_XP_TO_PUBLISH} XP. Atual: ${userXP}`); return; }
-    await updateProduct(productId, { status: "active" });
+    const token = localStorage.getItem("fayapoint_token");
+    try {
+      toast.loading("Publicando no Printify e na loja...");
+      const res = await fetch("/api/pod/publish", { 
+        method: "POST", 
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, 
+        body: JSON.stringify({ productId }) 
+      });
+      toast.dismiss();
+      if (res.ok) {
+        const data = await res.json();
+        toast.success("Produto publicado na loja!", { duration: 5000 });
+        if (data.data?.storeUrl) {
+          toast.success(`URL: ${data.data.storeUrl}`, { duration: 8000 });
+        }
+        fetchProducts();
+      } else {
+        const err = await res.json();
+        toast.error(err.error || "Erro ao publicar");
+      }
+    } catch (e) { console.error(e); toast.error("Erro ao publicar"); }
   };
 
   const resetCreateWizard = () => {
