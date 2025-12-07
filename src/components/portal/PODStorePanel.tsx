@@ -23,6 +23,97 @@ import toast from "react-hot-toast";
 interface PrintifyBlueprint { id: number; title: string; description: string; brand: string; model: string; images: string[]; }
 interface PrintifyProvider { id: number; title: string; location: { country: string; city?: string }; }
 interface PrintifyVariant { id: number; title: string; options: Record<string, string>; placeholders: { position: string; height: number; width: number }[]; }
+
+// Mockup Preview Component - Overlays design on product image
+function MockupPreview({ productImage, designImage, className }: { productImage: string; designImage: string | null; className?: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!canvasRef.current || !productImage) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    setIsLoading(true);
+
+    const productImg = new Image();
+    productImg.crossOrigin = 'anonymous';
+    
+    productImg.onload = () => {
+      // Set canvas size
+      canvas.width = 400;
+      canvas.height = 400;
+      
+      // Draw product image
+      ctx.drawImage(productImg, 0, 0, 400, 400);
+      
+      if (designImage) {
+        const designImg = new Image();
+        designImg.crossOrigin = 'anonymous';
+        
+        designImg.onload = () => {
+          // Calculate design placement (centered on product print area)
+          // Typical t-shirt print area: ~35% from top, ~25% from sides, ~40% of width
+          const printAreaX = 100; // 25% from left
+          const printAreaY = 100; // 25% from top
+          const printAreaWidth = 200; // 50% of canvas
+          const printAreaHeight = 200; // 50% of canvas
+          
+          // Maintain aspect ratio of design
+          const designAspect = designImg.width / designImg.height;
+          let drawWidth = printAreaWidth;
+          let drawHeight = printAreaHeight;
+          
+          if (designAspect > 1) {
+            drawHeight = printAreaWidth / designAspect;
+          } else {
+            drawWidth = printAreaHeight * designAspect;
+          }
+          
+          const drawX = printAreaX + (printAreaWidth - drawWidth) / 2;
+          const drawY = printAreaY + (printAreaHeight - drawHeight) / 2;
+          
+          // Apply multiply blend mode for realistic look
+          ctx.globalCompositeOperation = 'multiply';
+          ctx.drawImage(designImg, drawX, drawY, drawWidth, drawHeight);
+          
+          // Reset blend mode and add slight overlay for depth
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.fillStyle = 'rgba(0,0,0,0.05)';
+          ctx.fillRect(drawX, drawY, drawWidth, drawHeight);
+          
+          setIsLoading(false);
+        };
+        
+        designImg.onerror = () => setIsLoading(false);
+        designImg.src = designImage;
+      } else {
+        setIsLoading(false);
+      }
+    };
+    
+    productImg.onerror = () => setIsLoading(false);
+    productImg.src = productImage;
+  }, [productImage, designImage]);
+
+  return (
+    <div className={cn("relative bg-gray-800 rounded-lg overflow-hidden", className)}>
+      <canvas ref={canvasRef} className="w-full h-full" />
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
+          <Loader2 className="animate-spin text-purple-500" size={32} />
+        </div>
+      )}
+      {designImage && !isLoading && (
+        <div className="absolute bottom-2 right-2 px-2 py-1 bg-green-500/80 rounded text-xs font-medium text-white flex items-center gap-1">
+          <CheckCircle size={12} /> Mockup
+        </div>
+      )}
+    </div>
+  );
+}
 interface PODProduct {
   _id: string; title: string; slug: string; description: string; category: string; templateId: string; templateName: string;
   baseProductType: string; designFiles: { url: string; width: number; height: number }[]; mockupImages: string[];
@@ -713,63 +804,339 @@ function CreateWizard(props: {
 
   if (step === 3) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 pb-24">
         <Button variant="ghost" onClick={() => setStep(2)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
-        <div className="text-center"><h2 className="text-2xl font-bold mb-2">Upload do Design</h2><p className="text-gray-400">Envie sua arte</p></div>
-        <div className="max-w-2xl mx-auto">
-          <Card className={cn("bg-white/5 border-white/10 border-dashed p-8 text-center cursor-pointer transition-all hover:border-purple-500/50", designPreview && "border-green-500/50")} onClick={() => fileInputRef.current?.click()}>
-            <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/svg+xml" className="hidden" onChange={handleFileSelect} />
-            {designPreview ? (<div className="space-y-4"><img src={designPreview} alt="Preview" className="max-h-64 mx-auto rounded-lg" /><p className="text-green-400 flex items-center justify-center gap-2"><CheckCircle size={16} />Carregado!</p></div>)
-            : (<><Upload size={48} className="mx-auto mb-4 text-purple-400" /><h3 className="font-semibold mb-2">Arraste seu design</h3><p className="text-sm text-gray-400 mb-4">PNG, JPG, SVG até 50MB</p><Button className="bg-purple-600"><ImageIcon size={16} className="mr-2" />Escolher</Button></>)}
-          </Card>
-          {selectedBlueprint && (
-            <div className="mt-6 grid md:grid-cols-2 gap-6">
-              <div><h4 className="font-semibold mb-2">Preview</h4><Card className="bg-gray-800 aspect-square overflow-hidden"><img src={selectedBlueprint.images[0]} alt="Product" className="w-full h-full object-cover" /></Card></div>
-              <div><h4 className="font-semibold mb-2">Variantes ({variants.length})</h4>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {isFetchingVariants ? <Loader2 className="animate-spin mx-auto" /> : variants.slice(0, 10).map((v) => (
-                    <label key={v.id} className="flex items-center gap-2 p-2 bg-white/5 rounded-lg cursor-pointer">
-                      <input type="checkbox" checked={selectedVariants.includes(v.id)} onChange={(e) => e.target.checked ? setSelectedVariants([...selectedVariants, v.id]) : setSelectedVariants(selectedVariants.filter(id => id !== v.id))} className="rounded" />
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-2">Upload do Design</h2>
+          <p className="text-gray-400">Envie sua arte e veja o resultado no produto</p>
+        </div>
+        
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Left: Upload Area */}
+            <div className="space-y-4">
+              <h4 className="font-semibold flex items-center gap-2">
+                <Upload size={18} className="text-purple-400" />
+                Seu Design
+              </h4>
+              <Card 
+                className={cn(
+                  "bg-white/5 border-white/10 border-dashed p-8 text-center cursor-pointer transition-all hover:border-purple-500/50", 
+                  designPreview && "border-green-500/50 border-solid"
+                )} 
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/svg+xml" className="hidden" onChange={handleFileSelect} />
+                {designPreview ? (
+                  <div className="space-y-4">
+                    <img src={designPreview} alt="Preview" className="max-h-48 mx-auto rounded-lg shadow-lg" />
+                    <p className="text-green-400 flex items-center justify-center gap-2">
+                      <CheckCircle size={16} />Design carregado!
+                    </p>
+                    <Button variant="outline" size="sm" className="border-gray-600">
+                      <ImageIcon size={14} className="mr-2" />Trocar imagem
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <Upload size={48} className="mx-auto mb-4 text-purple-400" />
+                    <h3 className="font-semibold mb-2">Arraste seu design aqui</h3>
+                    <p className="text-sm text-gray-400 mb-4">PNG, JPG, SVG até 50MB</p>
+                    <Button className="bg-purple-600 hover:bg-purple-700">
+                      <ImageIcon size={16} className="mr-2" />Escolher Arquivo
+                    </Button>
+                  </>
+                )}
+              </Card>
+              
+              {/* Variants */}
+              <div className="mt-4">
+                <h4 className="font-semibold mb-2 flex items-center gap-2">
+                  <Package size={18} className="text-purple-400" />
+                  Variantes ({variants.length})
+                </h4>
+                <div className="space-y-2 max-h-48 overflow-y-auto bg-white/5 rounded-lg p-3">
+                  {isFetchingVariants ? (
+                    <div className="flex justify-center py-4">
+                      <Loader2 className="animate-spin text-purple-500" />
+                    </div>
+                  ) : variants.slice(0, 12).map((v) => (
+                    <label key={v.id} className="flex items-center gap-2 p-2 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedVariants.includes(v.id)} 
+                        onChange={(e) => e.target.checked 
+                          ? setSelectedVariants([...selectedVariants, v.id]) 
+                          : setSelectedVariants(selectedVariants.filter(id => id !== v.id))
+                        } 
+                        className="rounded border-gray-600" 
+                      />
                       <span className="text-sm">{v.title}</span>
                     </label>
                   ))}
+                  {selectedVariants.length > 0 && (
+                    <p className="text-xs text-green-400 mt-2">{selectedVariants.length} variante(s) selecionada(s)</p>
+                  )}
                 </div>
               </div>
             </div>
-          )}
+            
+            {/* Right: Mockup Preview */}
+            <div className="space-y-4">
+              <h4 className="font-semibold flex items-center gap-2">
+                <Sparkles size={18} className="text-purple-400" />
+                Preview do Produto
+              </h4>
+              {selectedBlueprint && (
+                <div className="space-y-4">
+                  {/* Main Mockup */}
+                  <MockupPreview 
+                    productImage={selectedBlueprint.images[0]} 
+                    designImage={designPreview} 
+                    className="aspect-square w-full"
+                  />
+                  
+                  {/* Info Card */}
+                  <Card className="bg-white/5 border-white/10 p-4">
+                    <h5 className="font-semibold mb-1">{selectedBlueprint.title}</h5>
+                    <p className="text-sm text-gray-400 mb-3">{selectedBlueprint.brand}</p>
+                    
+                    {designPreview ? (
+                      <div className="flex items-center gap-2 text-green-400 text-sm">
+                        <CheckCircle size={16} />
+                        <span>Design aplicado ao produto!</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-yellow-400 text-sm">
+                        <AlertCircle size={16} />
+                        <span>Faça upload do seu design para ver o mockup</span>
+                      </div>
+                    )}
+                  </Card>
+                  
+                  {/* Alternative Views */}
+                  {selectedBlueprint.images.length > 1 && (
+                    <div className="grid grid-cols-4 gap-2">
+                      {selectedBlueprint.images.slice(0, 4).map((img, idx) => (
+                        <div key={idx} className="aspect-square bg-gray-800 rounded-lg overflow-hidden opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                          <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-        {designPreview && selectedVariants.length > 0 && <div className="flex justify-center"><Button className="bg-purple-600 hover:bg-purple-700" onClick={() => setStep(4)}>Próximo: Preço<ArrowRight size={16} className="ml-2" /></Button></div>}
+        
+        {/* Sticky Bottom Bar */}
+        <AnimatePresence>
+          {designPreview && selectedVariants.length > 0 && (
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-gray-900/95 backdrop-blur-lg border-t border-gray-800 p-4 z-30"
+            >
+              <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden">
+                    <MockupPreview productImage={selectedBlueprint?.images[0] || ''} designImage={designPreview} className="w-full h-full" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{selectedVariants.length} variante(s)</p>
+                    <p className="text-xs text-gray-400">Pronto para configurar preços</p>
+                  </div>
+                </div>
+                <Button className="bg-purple-600 hover:bg-purple-700" onClick={() => setStep(4)}>
+                  Próximo: Preços
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
 
-  // Step 4: Pricing
+  // Step 4: Pricing & Final Review
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24">
       <Button variant="ghost" onClick={() => setStep(3)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
-      <div className="text-center"><h2 className="text-2xl font-bold mb-2">Configure Seu Produto</h2><p className="text-gray-400">Título, descrição e preço</p></div>
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="space-y-4">
-          <div><Label>Título</Label><Input value={productTitle} onChange={(e) => setProductTitle(e.target.value)} className="bg-white/5 border-gray-700" placeholder="Ex: Camiseta Design Exclusivo" /></div>
-          <div><Label>Descrição</Label><Textarea value={productDescription} onChange={(e) => setProductDescription(e.target.value)} className="bg-white/5 border-gray-700" rows={4} /></div>
-        </div>
-        <Card className="bg-white/5 border-white/10 p-6 space-y-4">
-          <h3 className="font-semibold flex items-center gap-2"><DollarSign size={18} className="text-green-400" />Preços</h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div><Label>Custo Base (R$)</Label><Input type="number" value={baseCost} onChange={(e) => setBaseCost(parseFloat(e.target.value) || 0)} className="bg-white/5 border-gray-700" /></div>
-            <div><Label>Preço Venda (R$)</Label><Input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)} className="bg-white/5 border-gray-700" /></div>
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-2">Finalize Seu Produto</h2>
+        <p className="text-gray-400">Configure título, descrição e preço de venda</p>
+      </div>
+      
+      <div className="max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-5 gap-8">
+          {/* Left: Mockup Preview (2 cols) */}
+          <div className="md:col-span-2 space-y-4">
+            <h4 className="font-semibold flex items-center gap-2">
+              <Sparkles size={18} className="text-purple-400" />
+              Seu Produto Final
+            </h4>
+            
+            {/* Main Mockup */}
+            {selectedBlueprint && (
+              <MockupPreview 
+                productImage={selectedBlueprint.images[0]} 
+                designImage={designPreview} 
+                className="aspect-square w-full rounded-xl shadow-2xl"
+              />
+            )}
+            
+            {/* Product Summary */}
+            <Card className="bg-white/5 border-white/10 p-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm">
+                <Package size={14} className="text-gray-400" />
+                <span className="text-gray-400">Produto:</span>
+                <span className="font-medium">{selectedBlueprint?.title}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Globe size={14} className="text-gray-400" />
+                <span className="text-gray-400">Fornecedor:</span>
+                <span className="font-medium">{selectedProvider?.title}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Shirt size={14} className="text-gray-400" />
+                <span className="text-gray-400">Variantes:</span>
+                <span className="font-medium">{selectedVariants.length} selecionada(s)</span>
+              </div>
+            </Card>
           </div>
-          {sellingPrice > baseCost && <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4"><p className="text-green-400 font-semibold">Lucro: {formatCurrency(sellingPrice - baseCost)}</p><p className="text-xs text-gray-400">Margem: {((sellingPrice - baseCost) / sellingPrice * 100).toFixed(1)}%</p></div>}
-        </Card>
-        <Card className={cn("border p-4", canPublish ? "bg-green-500/10 border-green-500/30" : "bg-yellow-500/10 border-yellow-500/30")}>
-          <div className="flex items-center gap-3">
-            <div className={cn("p-2 rounded-full", canPublish ? "bg-green-500/20" : "bg-yellow-500/20")}>{canPublish ? <Trophy className="text-green-400" size={20} /> : <Lock className="text-yellow-400" size={20} />}</div>
-            <div><h4 className="font-semibold">{canPublish ? "Pode publicar!" : "XP Necessário"}</h4><p className="text-sm text-gray-400">{canPublish ? `${userXP} XP (min: ${MIN_XP_TO_PUBLISH})` : `${userXP}/${MIN_XP_TO_PUBLISH} XP`}</p></div>
+          
+          {/* Right: Form (3 cols) */}
+          <div className="md:col-span-3 space-y-6">
+            {/* Title & Description */}
+            <div className="space-y-4">
+              <div>
+                <Label className="text-base font-semibold mb-2 block">Título do Produto</Label>
+                <Input 
+                  value={productTitle} 
+                  onChange={(e) => setProductTitle(e.target.value)} 
+                  className="bg-white/5 border-gray-700 h-12 text-lg" 
+                  placeholder="Ex: Camiseta Design Exclusivo" 
+                />
+              </div>
+              <div>
+                <Label className="text-base font-semibold mb-2 block">Descrição</Label>
+                <Textarea 
+                  value={productDescription} 
+                  onChange={(e) => setProductDescription(e.target.value)} 
+                  className="bg-white/5 border-gray-700" 
+                  rows={4} 
+                  placeholder="Descreva seu produto..."
+                />
+              </div>
+            </div>
+            
+            {/* Pricing Card */}
+            <Card className="bg-gradient-to-br from-purple-900/30 to-pink-900/20 border-purple-500/30 p-6 space-y-4">
+              <h3 className="font-semibold flex items-center gap-2 text-lg">
+                <DollarSign size={20} className="text-green-400" />
+                Definir Preços
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-gray-400 text-sm">Custo Base (R$)</Label>
+                  <Input 
+                    type="number" 
+                    value={baseCost} 
+                    onChange={(e) => setBaseCost(parseFloat(e.target.value) || 0)} 
+                    className="bg-white/5 border-gray-700 h-12 text-lg font-semibold" 
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Custo de produção</p>
+                </div>
+                <div>
+                  <Label className="text-gray-400 text-sm">Preço Venda (R$)</Label>
+                  <Input 
+                    type="number" 
+                    value={sellingPrice} 
+                    onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)} 
+                    className="bg-white/5 border-gray-700 h-12 text-lg font-semibold" 
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Preço para cliente</p>
+                </div>
+              </div>
+              
+              {/* Profit Display */}
+              {sellingPrice > baseCost && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-green-500/20 border border-green-500/40 rounded-xl p-4 flex items-center justify-between"
+                >
+                  <div>
+                    <p className="text-green-400 font-bold text-2xl">{formatCurrency(sellingPrice - baseCost)}</p>
+                    <p className="text-green-400/80 text-sm">Lucro por venda</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-green-400 font-bold text-xl">{((sellingPrice - baseCost) / sellingPrice * 100).toFixed(0)}%</p>
+                    <p className="text-green-400/80 text-sm">Margem</p>
+                  </div>
+                </motion.div>
+              )}
+            </Card>
+            
+            {/* XP Status Card */}
+            <Card className={cn(
+              "border p-4 flex items-center gap-4",
+              canPublish ? "bg-green-500/10 border-green-500/30" : "bg-yellow-500/10 border-yellow-500/30"
+            )}>
+              <div className={cn(
+                "w-12 h-12 rounded-full flex items-center justify-center shrink-0",
+                canPublish ? "bg-green-500/20" : "bg-yellow-500/20"
+              )}>
+                {canPublish ? <Trophy className="text-green-400" size={24} /> : <Lock className="text-yellow-400" size={24} />}
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold">{canPublish ? "Você pode publicar!" : "XP Necessário para Publicar"}</h4>
+                <p className="text-sm text-gray-400">
+                  {canPublish 
+                    ? `Você tem ${userXP} XP (mínimo: ${MIN_XP_TO_PUBLISH})`
+                    : `Seu XP: ${userXP} / ${MIN_XP_TO_PUBLISH} necessário`
+                  }
+                </p>
+              </div>
+              {!canPublish && (
+                <div className="text-right">
+                  <p className="text-yellow-400 font-bold">{MIN_XP_TO_PUBLISH - userXP}</p>
+                  <p className="text-xs text-gray-400">XP faltando</p>
+                </div>
+              )}
+            </Card>
+            
+            {/* Action Buttons */}
+            <div className="flex gap-4 pt-4">
+              <Button 
+                variant="outline" 
+                className="flex-1 h-12 border-gray-700" 
+                onClick={() => createProduct(false)} 
+                disabled={isCreating || !productTitle}
+              >
+                {isCreating ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />}
+                Salvar Rascunho
+              </Button>
+              <Button 
+                className={cn(
+                  "flex-1 h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700", 
+                  !canPublish && "opacity-50 cursor-not-allowed"
+                )} 
+                onClick={() => createProduct(true)} 
+                disabled={isCreating || !canPublish || !productTitle || sellingPrice <= baseCost}
+              >
+                {isCreating ? (
+                  <Loader2 className="animate-spin mr-2" size={16} />
+                ) : (
+                  <Send size={16} className="mr-2" />
+                )}
+                {canPublish ? "Publicar Produto" : `Precisa ${MIN_XP_TO_PUBLISH} XP`}
+              </Button>
+            </div>
           </div>
-        </Card>
-        <div className="flex gap-4 justify-center">
-          <Button variant="outline" className="border-gray-700" onClick={() => createProduct(false)} disabled={isCreating}>{isCreating ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />}Salvar Rascunho</Button>
-          <Button className={cn("bg-purple-600 hover:bg-purple-700", !canPublish && "opacity-50")} onClick={() => createProduct(true)} disabled={isCreating || !canPublish || !productTitle || sellingPrice <= baseCost}>{isCreating ? <Loader2 className="animate-spin mr-2" size={16} /> : <Send size={16} className="mr-2" />}{canPublish ? "Publicar" : `${MIN_XP_TO_PUBLISH} XP`}</Button>
         </div>
       </div>
     </div>
