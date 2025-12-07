@@ -1,5 +1,9 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Facebook, 
   Instagram, 
@@ -8,7 +12,9 @@ import {
   Youtube,
   Mail,
   MapPin,
-  Phone
+  Phone,
+  ArrowUp,
+  Rocket,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,9 +64,60 @@ const socialLinks = [
 
 export function Footer() {
   const t = useTranslations("Footer");
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  // Handle scroll to show/hide back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <footer className="bg-background border-t border-border">
+    <>
+      {/* Back to Top Button */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-50 group"
+          >
+            <div className="relative">
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-lg opacity-60 group-hover:opacity-100 transition-opacity" />
+              
+              {/* Button */}
+              <div className="relative w-14 h-14 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-2xl border border-white/20">
+                <motion.div
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Rocket className="w-6 h-6 text-white transform -rotate-45" />
+                </motion.div>
+              </div>
+              
+              {/* Tooltip */}
+              <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-gray-700">
+                Voltar ao topo
+                <div className="absolute top-full right-4 w-2 h-2 bg-gray-900 transform rotate-45 -mt-1 border-r border-b border-gray-700" />
+              </div>
+            </div>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      <footer className="bg-background border-t border-border">
       {/* Newsletter Section */}
       <div className="bg-gradient-to-r from-primary/15 to-accent/10 py-12">
         <div className="container mx-auto px-4">
@@ -221,5 +278,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
+    </>
   );
 }

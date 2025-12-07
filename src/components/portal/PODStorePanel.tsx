@@ -473,6 +473,9 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
   );
 }
 
+// Pagination constants
+const ITEMS_PER_PAGE = 8;
+
 // Create Wizard Component
 function CreateWizard(props: {
   step: number; setStep: (n: number) => void; blueprintSearch: string; setBlueprintSearch: (s: string) => void;
@@ -495,31 +498,199 @@ function CreateWizard(props: {
     isFetchingProviders, isFetchingVariants, fileInputRef, handleFileSelect, fetchBlueprints, fetchProviders,
     fetchVariants, createProduct, userXP, canPublish, formatCurrency } = props;
 
+  // Pagination state for blueprints
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalPages = Math.ceil(blueprints.length / ITEMS_PER_PAGE);
+  const paginatedBlueprints = blueprints.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
+
+  // Reset page when category/search changes
+  useEffect(() => { setCurrentPage(0); }, [selectedCategory, blueprintSearch]);
+
   if (step === 1) {
     return (
-      <div className="space-y-6">
-        <div className="text-center"><h2 className="text-2xl font-bold mb-2">Escolha o Produto Base</h2><p className="text-gray-400">Selecione o tipo de produto</p></div>
-        <div className="flex flex-wrap gap-4 justify-center">
-          <div className="relative w-full max-w-md"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} /><Input placeholder="Buscar..." className="pl-10 bg-white/5 border-gray-700" value={blueprintSearch} onChange={(e) => setBlueprintSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && fetchBlueprints(selectedCategory || undefined, blueprintSearch)} /></div>
-          <Button variant="outline" className="border-gray-700" onClick={() => fetchBlueprints(selectedCategory || undefined, blueprintSearch)}><Search size={16} className="mr-2" />Buscar</Button>
+      <div className="relative pb-24">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold mb-2">Escolha o Produto Base</h2>
+          <p className="text-gray-400">Selecione o tipo de produto que deseja criar</p>
         </div>
-        <div className="flex flex-wrap gap-2 justify-center">
-          {BLUEPRINT_CATEGORIES.map((cat) => (<Button key={cat.key} variant={selectedCategory === cat.key ? "default" : "outline"} size="sm" className={selectedCategory === cat.key ? "bg-purple-600" : "border-gray-700"} onClick={() => { setSelectedCategory(selectedCategory === cat.key ? null : cat.key); fetchBlueprints(selectedCategory === cat.key ? undefined : cat.key); }}><cat.icon size={14} className="mr-1" />{cat.label}</Button>))}
-        </div>
-        {isFetchingBlueprints ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-purple-500" size={40} /></div>
-        : blueprints.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {blueprints.map((bp) => (
-              <Card key={bp.id} className={cn("bg-white/5 border-white/10 overflow-hidden cursor-pointer transition-all hover:scale-105", selectedBlueprint?.id === bp.id && "ring-2 ring-purple-500")} onClick={() => { setSelectedBlueprint(bp); setProductTitle(bp.title); setProductDescription(bp.description); }}>
-                <div className="aspect-square bg-gray-800">{bp.images?.[0] ? <img src={bp.images[0]} alt={bp.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Package size={32} className="text-gray-600" /></div>}</div>
-                <div className="p-3"><h4 className="font-medium text-sm truncate">{bp.title}</h4><p className="text-xs text-gray-400">{bp.brand}</p></div>
-              </Card>
-            ))}
+
+        {/* Search */}
+        <div className="flex flex-wrap gap-3 justify-center mb-4">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Input 
+              placeholder="Buscar produtos..." 
+              className="pl-10 bg-white/5 border-gray-700" 
+              value={blueprintSearch} 
+              onChange={(e) => setBlueprintSearch(e.target.value)} 
+              onKeyDown={(e) => e.key === "Enter" && fetchBlueprints(selectedCategory || undefined, blueprintSearch)} 
+            />
           </div>
+          <Button variant="outline" className="border-gray-700" onClick={() => fetchBlueprints(selectedCategory || undefined, blueprintSearch)}>
+            <Search size={16} className="mr-2" />Buscar
+          </Button>
+        </div>
+
+        {/* Categories - Horizontal scroll on mobile */}
+        <div className="flex gap-2 justify-start overflow-x-auto pb-2 mb-6 scrollbar-hide">
+          {BLUEPRINT_CATEGORIES.map((cat) => (
+            <Button 
+              key={cat.key} 
+              variant={selectedCategory === cat.key ? "default" : "outline"} 
+              size="sm" 
+              className={cn(
+                "shrink-0",
+                selectedCategory === cat.key ? "bg-purple-600" : "border-gray-700"
+              )} 
+              onClick={() => { 
+                setSelectedCategory(selectedCategory === cat.key ? null : cat.key); 
+                fetchBlueprints(selectedCategory === cat.key ? undefined : cat.key); 
+              }}
+            >
+              <cat.icon size={14} className="mr-1" />{cat.label}
+            </Button>
+          ))}
+        </div>
+
+        {/* Blueprints Grid with Pagination */}
+        {isFetchingBlueprints ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="animate-spin text-purple-500" size={40} />
+          </div>
+        ) : blueprints.length > 0 ? (
+          <>
+            {/* Pagination Info */}
+            <div className="flex items-center justify-between mb-4 text-sm text-gray-400">
+              <span>Mostrando {currentPage * ITEMS_PER_PAGE + 1}-{Math.min((currentPage + 1) * ITEMS_PER_PAGE, blueprints.length)} de {blueprints.length}</span>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="border-gray-700 h-8 w-8 p-0" 
+                  onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                  disabled={currentPage === 0}
+                >
+                  <ChevronLeft size={16} />
+                </Button>
+                <span className="px-2">{currentPage + 1} / {totalPages}</span>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="border-gray-700 h-8 w-8 p-0" 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
+                  disabled={currentPage >= totalPages - 1}
+                >
+                  <ChevronRight size={16} />
+                </Button>
+              </div>
+            </div>
+
+            {/* Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {paginatedBlueprints.map((bp) => (
+                <motion.div
+                  key={bp.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Card 
+                    className={cn(
+                      "bg-white/5 border-white/10 overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-purple-500/50", 
+                      selectedBlueprint?.id === bp.id && "ring-2 ring-purple-500 border-purple-500"
+                    )} 
+                    onClick={() => { 
+                      setSelectedBlueprint(bp); 
+                      setProductTitle(bp.title); 
+                      setProductDescription(bp.description); 
+                    }}
+                  >
+                    <div className="aspect-square bg-gray-800 relative overflow-hidden">
+                      {bp.images?.[0] ? (
+                        <img 
+                          src={bp.images[0]} 
+                          alt={bp.title} 
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Package size={32} className="text-gray-600" />
+                        </div>
+                      )}
+                      {selectedBlueprint?.id === bp.id && (
+                        <div className="absolute top-2 right-2 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                          <CheckCircle size={14} className="text-white" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h4 className="font-medium text-sm truncate">{bp.title}</h4>
+                      <p className="text-xs text-gray-400 truncate">{bp.brand}</p>
+                    </div>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Bottom Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center gap-1 mt-6">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i)}
+                    className={cn(
+                      "w-2.5 h-2.5 rounded-full transition-all",
+                      currentPage === i ? "bg-purple-500 w-6" : "bg-gray-600 hover:bg-gray-500"
+                    )}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         ) : (
-          <Card className="bg-white/5 border-white/10 p-12 text-center"><Package size={48} className="mx-auto mb-4 text-gray-600" /><h3 className="text-lg font-semibold mb-2">Nenhum produto</h3><Button onClick={() => fetchBlueprints()}>Carregar Catálogo</Button></Card>
+          <Card className="bg-white/5 border-white/10 p-12 text-center">
+            <Package size={48} className="mx-auto mb-4 text-gray-600" />
+            <h3 className="text-lg font-semibold mb-2">Nenhum produto encontrado</h3>
+            <p className="text-gray-400 mb-4">Tente outra categoria ou termo de busca</p>
+            <Button onClick={() => fetchBlueprints()}>Carregar Catálogo</Button>
+          </Card>
         )}
-        {selectedBlueprint && <div className="flex justify-center"><Button className="bg-purple-600 hover:bg-purple-700" onClick={() => { setStep(2); fetchProviders(selectedBlueprint.id); }}>Próximo: Fornecedor<ArrowRight size={16} className="ml-2" /></Button></div>}
+
+        {/* Sticky Bottom Bar */}
+        <AnimatePresence>
+          {selectedBlueprint && (
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-gray-900/95 backdrop-blur-lg border-t border-gray-800 p-4 z-30"
+            >
+              <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden shrink-0">
+                    {selectedBlueprint.images?.[0] && (
+                      <img src={selectedBlueprint.images[0]} alt="" className="w-full h-full object-cover" />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-medium truncate">{selectedBlueprint.title}</p>
+                    <p className="text-xs text-gray-400">{selectedBlueprint.brand}</p>
+                  </div>
+                </div>
+                <Button 
+                  className="bg-purple-600 hover:bg-purple-700 shrink-0" 
+                  onClick={() => { setStep(2); fetchProviders(selectedBlueprint.id); }}
+                >
+                  Próximo: Fornecedor
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
