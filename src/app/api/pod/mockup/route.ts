@@ -1,9 +1,15 @@
 /**
  * API Route for generating Printify mockups
  * This uploads the design to Printify and creates a draft product to get professional mockups
+ * Mockups are then saved to Cloudinary in the user's folder
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { v2 as cloudinary } from 'cloudinary';
+import jwt from 'jsonwebtoken';
+import dbConnect from '@/lib/mongodb';
+import User from '@/models/User';
+import ImageCreation from '@/models/ImageCreation';
 import { 
   uploadImageByUrl, 
   createProduct, 
@@ -14,9 +20,41 @@ import {
 
 export const dynamic = 'force-dynamic';
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Helper to get user from token
+async function getUserFromToken(request: NextRequest) {
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) {
+    return null;
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+    await dbConnect();
+    const user = await User.findById(decoded.id).lean();
+    return user as { _id: string; name?: string } | null;
+  } catch {
+    return null;
+  }
+}
+
 // POST - Generate mockups using Printify
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate user
+    const user = await getUserFromToken(request);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
     const { 
       designUrl, 
@@ -33,7 +71,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    console.log('[Mockup API] Starting mockup generation for blueprint:', blueprintId);
+    console.log('[Mockup API] Starting mockup generation for blueprint:', blueprintId, 'user:', user._id);
 
     // Step 1: Get shop ID
     const shops = await getShops();
@@ -116,20 +154,62 @@ export async function POST(request: NextRequest) {
       updatedProduct = product; // Use original if fetch fails
     }
 
-    // Extract mockup images
-    const mockupImages = updatedProduct.images?.map(img => ({
-      src: img.src,
-      variantIds: img.variant_ids,
-      position: img.position,
-      isDefault: img.is_default
-    })) || [];
+    // Extract and save mockup images to Cloudinary
+    const printifyMockups = updatedProduct.images || [];
+    console.log('[Mockup API] Generated', printifyMockups.length, 'mockup images from Printify');
 
-    console.log('[Mockup API] Generated', mockupImages.length, 'mockup images');
+    // Save each mockup to Cloudinary and create ImageCreation records
+    const savedMockups = [];
+    for (let i = 0; i < Math.min(printifyMockups.length, 5); i++) { // Save up to 5 mockups
+      const mockup = printifyMockups[i];
+      try {
+        // Upload to Cloudinary in user's folder
+        const cloudResult = await cloudinary.uploader.upload(mockup.src, {
+          folder: `fayapoint/pod-mockups/${user._id}`,
+          resource_type: 'image',
+          public_id: `mockup_${blueprintId}_${Date.now()}_${i}`,
+        });
 
-    // Return mockup data (don't delete the product yet - we might use it)
+        // Save to ImageCreation for gallery
+        const imageRecord = await ImageCreation.create({
+          userId: user._id,
+          userName: user.name || 'Anônimo',
+          prompt: `${productTitle} - Mockup ${mockup.position || 'front'}`,
+          imageUrl: cloudResult.secure_url,
+          publicId: cloudResult.public_id,
+          provider: 'printify-mockup',
+          isPublic: false,
+          category: 'apparel',
+          tags: ['mockup', 'pod', productTitle.toLowerCase()],
+        });
+
+        savedMockups.push({
+          src: cloudResult.secure_url, // Use Cloudinary URL
+          originalSrc: mockup.src,
+          variantIds: mockup.variant_ids,
+          position: mockup.position,
+          isDefault: mockup.is_default,
+          cloudinaryId: cloudResult.public_id,
+          imageId: imageRecord._id.toString(),
+        });
+      } catch (saveError) {
+        console.error('[Mockup API] Error saving mockup:', saveError);
+        // Still include the mockup with original URL
+        savedMockups.push({
+          src: mockup.src,
+          variantIds: mockup.variant_ids,
+          position: mockup.position,
+          isDefault: mockup.is_default,
+        });
+      }
+    }
+
+    console.log('[Mockup API] Saved', savedMockups.length, 'mockups to Cloudinary');
+
+    // Return mockup data
     return NextResponse.json({
       success: true,
-      mockups: mockupImages,
+      mockups: savedMockups,
       productId: product.id,
       uploadId: upload.id,
       shopId

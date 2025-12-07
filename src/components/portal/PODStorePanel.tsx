@@ -394,6 +394,8 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     const formData = new FormData();
     formData.append("file", designFile);
     formData.append("folder", "pod-designs");
+    formData.append("saveToGallery", "true"); // Save to user's gallery
+    formData.append("description", designFile.name || "Design POD");
     try {
       const res = await fetch("/api/upload", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: formData });
       if (res.ok) { const data = await res.json(); return data.url; }
@@ -408,13 +410,22 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       return;
     }
     
+    const token = localStorage.getItem("fayapoint_token");
+    if (!token) {
+      toast.error("Sessão expirada. Faça login novamente.");
+      return;
+    }
+    
     setIsGeneratingMockups(true);
     setPrintifyMockups([]); // Clear old mockups
     
     try {
       const res = await fetch("/api/pod/mockup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
           designUrl,
           blueprintId: selectedBlueprint.id,
@@ -465,12 +476,20 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     try {
       let designUrl = uploadedDesignUrl;
       if (!designUrl && designFile) { designUrl = await uploadDesign(); if (!designUrl) { toast.error("Erro no upload"); setIsCreating(false); return; } setUploadedDesignUrl(designUrl); }
+      // Use Printify mockups if available, otherwise use blueprint images
+      const mockupUrls = printifyMockups.length > 0 
+        ? printifyMockups.map(m => m.src) 
+        : selectedBlueprint.images;
+      const primaryMockupUrl = printifyMockups.length > 0 
+        ? (printifyMockups.find(m => m.isDefault)?.src || printifyMockups[0]?.src)
+        : selectedBlueprint.images[0];
+
       const productData = {
         title: productTitle || selectedBlueprint.title, description: productDescription || selectedBlueprint.description,
         category: inferCategory(selectedBlueprint.title), templateId: String(selectedBlueprint.id),
         templateName: selectedBlueprint.title, baseProductType: selectedBlueprint.model,
         designFiles: [{ url: designUrl, width: 4000, height: 4000, format: designFile?.type.split("/")[1] || "png", sizeBytes: designFile?.size || 0 }],
-        mockupImages: selectedBlueprint.images, primaryMockup: selectedBlueprint.images[0],
+        mockupImages: mockupUrls, primaryMockup: primaryMockupUrl,
         variants: selectedVariants.map(vId => {
           const v = variants.find(x => x.id === vId);
           return { id: String(vId), providerVariantId: String(vId), name: v?.title || "Variant", options: v?.options || {}, sku: `POD-${selectedBlueprint.id}-${vId}`, basePrice: baseCost, sellingPrice, profit: sellingPrice - baseCost, isActive: true };
@@ -1426,14 +1445,28 @@ function CreateWizard(props: {
               Seu Produto Final
             </h4>
             
-            {/* Main Mockup */}
+            {/* Main Mockup - Use Printify mockups if available */}
             {selectedBlueprint && (
-              <MockupPreview 
-                productImage={selectedBlueprint.images[0]} 
-                designImage={designPreview}
-                productTitle={selectedBlueprint.title}
-                className="aspect-square w-full rounded-xl shadow-2xl"
-              />
+              printifyMockups.length > 0 ? (
+                <div className="relative aspect-square w-full rounded-xl overflow-hidden shadow-2xl bg-white">
+                  <img 
+                    src={printifyMockups.find(m => m.isDefault)?.src || printifyMockups[0]?.src} 
+                    alt="Product Mockup" 
+                    className="w-full h-full object-contain"
+                  />
+                  <Badge className="absolute bottom-3 right-3 bg-green-600">
+                    <CheckCircle size={12} className="mr-1" />
+                    Mockup
+                  </Badge>
+                </div>
+              ) : (
+                <MockupPreview 
+                  productImage={selectedBlueprint.images[0]} 
+                  designImage={designPreview}
+                  productTitle={selectedBlueprint.title}
+                  className="aspect-square w-full rounded-xl shadow-2xl"
+                />
+              )
             )}
             
             {/* Product Summary */}

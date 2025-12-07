@@ -3,6 +3,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
+import ImageCreation from '@/models/ImageCreation';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
@@ -83,6 +84,26 @@ export async function POST(request: NextRequest) {
       ).end(buffer);
     });
 
+    // Check if we should save to gallery (for POD designs and uploads)
+    const saveToGallery = formData.get('saveToGallery') === 'true';
+    const description = formData.get('description') as string || file.name;
+    
+    let imageRecord = null;
+    if (saveToGallery) {
+      // Save to ImageCreation for gallery tracking
+      imageRecord = await ImageCreation.create({
+        userId: user._id,
+        userName: user.name || 'Anônimo',
+        prompt: description,
+        imageUrl: result.secure_url,
+        publicId: result.public_id,
+        provider: 'upload',
+        isPublic: false,
+        category: 'general',
+        tags: [],
+      });
+    }
+
     return NextResponse.json({
       success: true,
       url: result.secure_url,
@@ -91,6 +112,7 @@ export async function POST(request: NextRequest) {
       height: result.height,
       format: result.format,
       size: result.bytes,
+      imageId: imageRecord?._id?.toString(),
     });
 
   } catch (error) {

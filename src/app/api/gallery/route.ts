@@ -42,17 +42,32 @@ export async function GET(request: NextRequest) {
         query = { isPublic: true };
         break;
       case 'my-creations':
+        // AI-generated images (not uploads or mockups)
         if (!userId) {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        query = { userId };
+        query = { userId, provider: { $nin: ['upload', 'printify-mockup'] } };
         break;
       case 'my-uploads':
-        // For uploaded images (not AI-generated), we could filter by provider or add a source field
+        // User-uploaded designs
         if (!userId) {
           return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
         query = { userId, provider: 'upload' };
+        break;
+      case 'my-mockups':
+        // Printify-generated mockups
+        if (!userId) {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        query = { userId, provider: 'printify-mockup' };
+        break;
+      case 'all-my':
+        // All user's images (creations, uploads, mockups)
+        if (!userId) {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        query = { userId };
         break;
       default:
         query = { isPublic: true };
