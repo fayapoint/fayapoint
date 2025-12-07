@@ -1047,6 +1047,7 @@ function CreateWizard(props: {
   // Helper function for gallery image selection (moved from conditional block)
   const selectGalleryImage = (imageUrl: string) => {
     setDesignPreview(imageUrl);
+    setUploadedDesignUrl(imageUrl); // Already uploaded, so set URL directly
     toast.success('Design selecionado!');
   };
 
