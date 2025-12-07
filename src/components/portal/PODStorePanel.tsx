@@ -49,7 +49,13 @@ const BLUEPRINT_CATEGORIES = [
   { key: "tote bag", label: "Bolsas", icon: ShoppingBag }, { key: "pillow", label: "Almofadas", icon: Home },
 ];
 
-export default function PODStorePanel() {
+interface PODStorePanelProps {
+  isCompact?: boolean;
+}
+
+export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
+  // isCompact can be used for responsive layout adjustments
+  void isCompact;
   const [activeTab, setActiveTab] = useState<"products" | "create">("products");
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState<PODProduct[]>([]);

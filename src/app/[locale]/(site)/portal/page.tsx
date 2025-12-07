@@ -86,7 +86,7 @@ import { AIAssistantPanel } from "@/components/portal/AIAssistantPanel";
 import { ProfilePanel } from "@/components/portal/ProfilePanel";
 import { StorePanel } from "@/components/portal/StorePanel";
 import { CartPanel } from "@/components/portal/CartPanel";
-import { PODStorePanel } from "@/components/portal/PODStorePanel";
+import PODStorePanel from "@/components/portal/PODStorePanel";
 
 // Types
 interface DashboardCourseProgress {
