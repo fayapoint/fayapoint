@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -181,15 +182,17 @@ export default function AutomationIntegrationPage() {
         </div>
         </div>
         
-        <ServiceBuilderSection
-          serviceSlug="automation-ai"
-          restrictToServiceSlug
-          badgeLabel="Personalize sua automação"
-          title="Monte seu fluxo automatizado"
-          subtitle="Escolha mapeamento, implementações simples ou complexas, e agentes de IA conforme sua necessidade."
-          sectionId="builder"
-          showServiceTabs={false}
-        />
+        <Suspense fallback={<div className="py-20 text-center">Carregando construtor de serviços...</div>}>
+          <ServiceBuilderSection
+            serviceSlug="automation-ai"
+            restrictToServiceSlug
+            badgeLabel="Personalize sua automação"
+            title="Monte seu fluxo automatizado"
+            subtitle="Escolha mapeamento, implementações simples ou complexas, e agentes de IA conforme sua necessidade."
+            sectionId="builder"
+            showServiceTabs={false}
+          />
+        </Suspense>
       </main>
       <Footer />
     </div>
