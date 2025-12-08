@@ -8,6 +8,10 @@ import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { routing } from "@/i18n/routing";
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 const baseMetadata = {
   metadataBase: new URL("https://fayapoint.com.br"),
   authors: [{ name: "Ricardo Faya" }],

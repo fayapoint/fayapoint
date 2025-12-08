@@ -258,12 +258,50 @@ export async function GET(request: Request) {
       streakCalendar.push({ date: dateStr, active: wasActive });
     }
 
+    // OPTIMIZATION: Handle daily login checkin inline (saves 1 API call)
+    let dailyXpEarned = 0;
+    const lastActive = user.progress?.lastActiveDate 
+      ? new Date(user.progress.lastActiveDate) 
+      : null;
+    if (lastActive) lastActive.setHours(0, 0, 0, 0);
+    
+    if (!lastActive || lastActive.getTime() !== today.getTime()) {
+      // First login of the day - update streak and award XP
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      let newStreak = user.progress?.currentStreak || 0;
+      if (lastActive && lastActive.getTime() === yesterday.getTime()) {
+        newStreak += 1; // Continuing streak
+      } else {
+        newStreak = 1; // Streak broken or first login
+      }
+      
+      // Calculate XP: 10 base + streak bonus (max 50)
+      const streakBonus = Math.min(newStreak * 5, 50);
+      dailyXpEarned = 10 + streakBonus;
+      
+      // Update user in background (don't await to speed up response)
+      User.findByIdAndUpdate(userId, {
+        $set: {
+          'progress.lastActiveDate': new Date(),
+          'progress.currentStreak': newStreak,
+          'progress.longestStreak': Math.max(newStreak, user.progress?.longestStreak || 0),
+        },
+        $inc: {
+          'progress.xp': dailyXpEarned,
+          'progress.weeklyXp': dailyXpEarned,
+        }
+      }).catch(err => console.error('Daily checkin update error:', err));
+    }
+
     return NextResponse.json({
       user,
       courses: progress,
       orders: allOrders,
       resources,
       plan,
+      dailyXpEarned, // OPTIMIZATION: Return XP earned from inline checkin
       enrollmentSlots,
       enrolledCourses: user.enrolledCourses || [],
       gamification: {

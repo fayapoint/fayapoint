@@ -3,7 +3,8 @@ import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import ImageCreation from '@/models/ImageCreation';
 
-export const dynamic = 'force-dynamic';
+// OPTIMIZATION: Cache for 1 hour instead of force-dynamic
+export const revalidate = 3600;
 
 export async function GET(request: NextRequest) {
   try {

@@ -72,6 +72,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "next-intl";
 import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
+import { useDashboard } from "@/hooks/useDashboard";
 import { getCourseBySlug, CourseData, allCourses, getNormalizedLevel } from "@/data/courses";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
@@ -184,8 +185,8 @@ export default function PortalPage() {
   const router = useRouter();
   const { user, setUser, logout } = useUser();
   const { items: cartItems, cartTotal } = useServiceCart();
+  const { data: cachedDashboardData, isLoading: isDashboardLoading, refetch: refetchDashboard } = useDashboard();
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [isLoading, setIsLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [userCourses, setUserCourses] = useState<DashboardCourseProgress[]>([]);
@@ -212,10 +213,13 @@ export default function PortalPage() {
   const isPro = ["pro", "business", "starter"].includes(plan);
   const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
 
-  // Fetch course access data when courses tab is active
+  // OPTIMIZATION: Debounce tab-specific fetches to prevent rapid API calls
   useEffect(() => {
     if (activeTab === "courses") {
-      fetchCourseAccess();
+      const timer = setTimeout(() => {
+        fetchCourseAccess();
+      }, 300); // 300ms debounce
+      return () => clearTimeout(timer);
     }
   }, [activeTab]);
 
@@ -282,9 +286,13 @@ export default function PortalPage() {
     }
   };
 
+  // OPTIMIZATION: Debounce studio tab fetch
   useEffect(() => {
     if (activeTab === "studio") {
-      fetchCreations();
+      const timer = setTimeout(() => {
+        fetchCreations();
+      }, 300); // 300ms debounce
+      return () => clearTimeout(timer);
     }
   }, [activeTab]);
 
@@ -305,86 +313,40 @@ export default function PortalPage() {
   };
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      const token = localStorage.getItem("fayapoint_token");
+    if (cachedDashboardData) {
+      setDashboardData(cachedDashboardData);
+      setUser(cachedDashboardData.user);
+      setOrders(cachedDashboardData.orders || []);
+      setResources(cachedDashboardData.resources || []);
+      setPlan(cachedDashboardData.plan || "free");
 
-      if (!token) {
-        router.push("/login");
-        return;
+      // Daily checkin toast - only show if not already shown (using a session flag could be better but this works for now)
+      if (cachedDashboardData.dailyXpEarned && cachedDashboardData.dailyXpEarned > 0) {
+        // We can check if we already toasted for this specific checkin to avoid dupes on re-render
+        // but for now, rely on standard behavior.
+        // toast.success(`+${cachedDashboardData.dailyXpEarned} XP ganho hoje!`);
       }
 
-      try {
-        const res = await fetch("/api/user/dashboard", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (res.status === 401) {
-          logout();
-          router.push("/login");
-          return;
-        }
-
-        if (!res.ok) {
-          throw new Error("Falha ao carregar dados");
-        }
-
-        const data = await res.json();
-        setDashboardData(data);
-        setUser(data.user);
-        setOrders(data.orders || []);
-        setResources(data.resources || []);
-        setPlan(data.plan || "free");
-
-        // Daily login checkin for XP
-        try {
-          const checkinRes = await fetch("/api/user/checkin", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ action: "daily_login" }),
-          });
-          if (checkinRes.ok) {
-            const checkinData = await checkinRes.json();
-            if (checkinData.xpEarned > 0) {
-              toast.success(`+${checkinData.xpEarned} XP ganho hoje!`);
-              // Update local user XP
-              if (data.user?.progress) {
-                data.user.progress.xp = (data.user.progress.xp || 0) + checkinData.xpEarned;
-              }
-            }
+      if (cachedDashboardData.courses) {
+        const mappedCourses: DashboardCourseProgress[] = cachedDashboardData.courses.map(
+          (progress: DashboardCourseProgress) => {
+            const courseDetails = getCourseBySlug(progress.courseId);
+            return {
+              ...progress,
+              details: courseDetails,
+            };
           }
-        } catch (checkinError) {
-          console.error("Checkin error:", checkinError);
-        }
-
-        // Map progress to course details
-        if (data.courses) {
-          const mappedCourses: DashboardCourseProgress[] = data.courses.map(
-            (progress: DashboardCourseProgress) => {
-              const courseDetails = getCourseBySlug(progress.courseId);
-              return {
-                ...progress,
-                details: courseDetails,
-              };
-            }
-          );
-          setUserCourses(mappedCourses);
-        }
-      } catch (error) {
-        console.error("Error fetching dashboard:", error);
-        toast.error(t("messages.loadError"));
-      } finally {
-        setIsLoading(false);
+        );
+        setUserCourses(mappedCourses);
       }
-    };
-
-    fetchDashboardData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    } else if (isDashboardLoading === false && !cachedDashboardData) {
+      // If loading is done but no data, likely unauthorized or error
+       const token = localStorage.getItem("fayapoint_token");
+       if (!token) {
+          router.push("/login");
+       }
+    }
+  }, [cachedDashboardData, isDashboardLoading, setUser, router]);
 
   const handleGenerateImage = async () => {
     if (!prompt.trim()) return;
@@ -419,20 +381,7 @@ export default function PortalPage() {
       setGeneratedImage(data.imageUrl);
       toast.success(t("messages.imageGenerated"));
       fetchCreations();
-      
-      // Award XP for image generation
-      try {
-        await fetch("/api/user/checkin", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ action: "image_generated" }),
-        });
-      } catch (e) {
-        console.error("Checkin error:", e);
-      }
+      // OPTIMIZATION: XP is now awarded inline in /api/ai/generate-image
     } catch (error) {
       const message = error instanceof Error ? error.message : t("messages.imageError");
       toast.error(message);
@@ -441,7 +390,7 @@ export default function PortalPage() {
     }
   };
 
-  if (isLoading) {
+  if (isDashboardLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">

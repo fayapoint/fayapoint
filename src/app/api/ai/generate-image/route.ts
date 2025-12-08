@@ -269,6 +269,15 @@ export async function POST(request: Request) {
         provider: 'flux-1-schnell'
     });
 
+    // OPTIMIZATION: Award XP inline (saves 1 API call to /api/user/checkin)
+    User.findByIdAndUpdate(user._id, {
+      $inc: { 
+        'gamification.totalImagesGenerated': 1,
+        'progress.xp': 5,
+        'progress.weeklyXp': 5,
+      }
+    }).catch(err => console.error('Image XP update error:', err));
+
     return NextResponse.json({ 
         imageUrl: uploadResult.secure_url,
         creationId: newCreation._id

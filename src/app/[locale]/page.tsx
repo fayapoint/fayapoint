@@ -9,7 +9,8 @@ import { FeaturesSection } from "@/components/home/FeaturesSection";
 import { CourseCategoriesSection } from "@/components/home/CourseCategoriesSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { CTASection } from "@/components/home/CTASection";
-import { CommunityGallery } from "@/components/home/CommunityGallery";
+// DISABLED: High serverless usage - triggers API call on every home page visit
+// import { CommunityGallery } from "@/components/home/CommunityGallery";
 import { ValuePropositionCTA } from "@/components/home/ValuePropositionCTA";
 
 export default function Home() {
@@ -19,7 +20,8 @@ export default function Home() {
       <main>
         <HeroSection />
         <ValuePropositionCTA />
-        <CommunityGallery />
+        {/* DISABLED: High serverless usage - see NETLIFY_ACTION_PLAN.md */}
+        {/* <CommunityGallery /> */}
         <ChatGPTAllowlistingBanner />
         <WhatWeDoSection />
         <ServicesCarousel />
