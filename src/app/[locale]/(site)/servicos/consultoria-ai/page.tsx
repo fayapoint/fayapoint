@@ -1,5 +1,4 @@
-"use client";
-
+import { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -317,15 +316,17 @@ export default function AIConsultingPage() {
         </div>
       </section>
 
-      <ServiceBuilderSection
-        serviceSlug="consulting"
-        restrictToServiceSlug
-        badgeLabel={p("builder.badge")}
-        title={p("builder.title")}
-        subtitle={p("builder.subtitle")}
-        sectionId="builder"
-        showServiceTabs={false}
-      />
+      <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+        <ServiceBuilderSection
+          serviceSlug="consulting"
+          restrictToServiceSlug
+          badgeLabel={p("builder.badge")}
+          title={p("builder.title")}
+          subtitle={p("builder.subtitle")}
+          sectionId="builder"
+          showServiceTabs={false}
+        />
+      </Suspense>
       </main>
       <Footer />
     </div>

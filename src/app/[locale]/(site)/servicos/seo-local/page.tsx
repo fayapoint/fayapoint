@@ -1,5 +1,4 @@
-"use client";
-
+import { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -122,15 +121,17 @@ export default function LocalSEOPage() {
           </div>
         </div>
 
-        <ServiceBuilderSection
-          serviceSlug="local-seo"
-          restrictToServiceSlug
-          badgeLabel="Personalize seu pacote"
-          title="Domine sua região"
-          subtitle="Escolha os serviços de SEO Local ideais para o momento do seu negócio."
-          sectionId="builder"
-          showServiceTabs={false}
-        />
+        <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+          <ServiceBuilderSection
+            serviceSlug="local-seo"
+            restrictToServiceSlug
+            badgeLabel="Personalize seu pacote"
+            title="Domine sua região"
+            subtitle="Escolha os serviços de SEO Local ideais para o momento do seu negócio."
+            sectionId="builder"
+            showServiceTabs={false}
+          />
+        </Suspense>
       </main>
       <Footer />
     </div>

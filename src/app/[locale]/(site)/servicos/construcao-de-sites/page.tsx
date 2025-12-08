@@ -1,5 +1,4 @@
-"use client";
-
+import { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -415,15 +414,17 @@ export default function WebsiteBuildingPage() {
           </div>
         </section>
 
-        <ServiceBuilderSection
-          serviceSlug="website-full"
-          restrictToServiceSlug
-          badgeLabel="Personalize seu projeto"
-          title="Monte seu site sob medida"
-          subtitle="Escolha discovery, UX/UI, desenvolvimento, QA e suporte conforme a maturidade do seu produto digital."
-          sectionId="builder"
-          showServiceTabs={false}
-        />
+        <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+          <ServiceBuilderSection
+            serviceSlug="website-full"
+            restrictToServiceSlug
+            badgeLabel="Personalize seu projeto"
+            title="Monte seu site sob medida"
+            subtitle="Escolha discovery, UX/UI, desenvolvimento, QA e suporte conforme a maturidade do seu produto digital."
+            sectionId="builder"
+            showServiceTabs={false}
+          />
+        </Suspense>
       </main>
       <Footer />
     </div>

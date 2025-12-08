@@ -1,5 +1,4 @@
-"use client";
-
+import { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -370,16 +369,18 @@ export default function VideoEditingPage() {
         </section>
 
         <ServiceCartProvider>
-          <ServiceBuilderSection
-            serviceSlug="video-production"
-            restrictToServiceSlug
-            badgeLabel="Configurar pipeline"
-            title="Monte seu estúdio sob demanda"
-            subtitle="Combine story design, captação, edição, motion e pós para criar um pacote perfeito para sua operação."
-            sectionId="video-builder"
-            showServiceTabs={false}
-            source="video-editing-builder"
-          />
+          <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+            <ServiceBuilderSection
+              serviceSlug="video-production"
+              restrictToServiceSlug
+              badgeLabel="Configurar pipeline"
+              title="Monte seu estúdio sob demanda"
+              subtitle="Combine story design, captação, edição, motion e pós para criar um pacote perfeito para sua operação."
+              sectionId="video-builder"
+              showServiceTabs={false}
+              source="video-editing-builder"
+            />
+          </Suspense>
         </ServiceCartProvider>
       </main>
       <Footer />
