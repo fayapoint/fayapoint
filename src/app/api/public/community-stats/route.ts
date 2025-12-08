@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import ImageCreation from '@/models/ImageCreation';
 
-// OPTIMIZATION: Cache for 1 hour instead of force-dynamic
-export const revalidate = 3600;
+// OPTIMIZATION: Force dynamic to avoid build-time static generation containing secrets (Cloudinary URLs)
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
