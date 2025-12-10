@@ -10,6 +10,7 @@ import {
   AsaasInvoiceWebhookEvent,
   verifyWebhookToken,
 } from '@/lib/asaas';
+import { processFulfillment } from '@/lib/fulfillment';
 
 // Disable body parsing for webhook verification
 export const runtime = 'nodejs';
@@ -108,8 +109,34 @@ export async function POST(request: NextRequest) {
           : new Date();
         payment.invoiceUrl = asaasPayment.invoiceUrl;
         
-        // Grant access/credits to user
+        // Grant access/credits to user (legacy)
         await grantUserAccess(payment);
+        
+        // Trigger automatic fulfillment
+        try {
+          const fulfillmentResult = await processFulfillment(payment._id.toString());
+          console.log(`[Asaas Webhook] Fulfillment result for ${payment.orderNumber}:`, fulfillmentResult);
+          
+          // Store fulfillment reference
+          payment.webhookEvents.push({
+            event: 'FULFILLMENT_TRIGGERED',
+            receivedAt: new Date(),
+            data: {
+              fulfillmentOrderId: fulfillmentResult.fulfillmentOrderId,
+              status: fulfillmentResult.status,
+              success: fulfillmentResult.success,
+            },
+          });
+        } catch (fulfillmentError) {
+          console.error(`[Asaas Webhook] Fulfillment error for ${payment.orderNumber}:`, fulfillmentError);
+          payment.webhookEvents.push({
+            event: 'FULFILLMENT_ERROR',
+            receivedAt: new Date(),
+            data: {
+              error: fulfillmentError instanceof Error ? fulfillmentError.message : 'Unknown error',
+            },
+          });
+        }
         break;
 
       case 'PAYMENT_OVERDUE':

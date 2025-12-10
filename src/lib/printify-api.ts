@@ -620,3 +620,60 @@ export function brlToUsd(brl: number, rate = 0.20): number {
 export function calculateSellingPrice(baseCostCents: number, marginPercent: number): number {
   return Math.round(baseCostCents * (1 + marginPercent / 100));
 }
+
+// ============== FULFILLMENT HELPERS ==============
+
+let cachedShopId: number | null = null;
+
+/**
+ * Get the first available shop ID (cached)
+ */
+export async function getPrintifyShopId(): Promise<number> {
+  if (cachedShopId) return cachedShopId;
+  
+  const shops = await getShops();
+  if (shops.length === 0) {
+    throw new Error('No Printify shops found');
+  }
+  
+  cachedShopId = shops[0].id;
+  return cachedShopId;
+}
+
+/**
+ * Create a Printify order (wrapper for fulfillment)
+ */
+export async function createPrintifyOrder(
+  shopId: number,
+  orderData: CreateOrderInput
+): Promise<PrintifyOrder> {
+  const order = await createOrder(shopId, orderData);
+  
+  // Automatically send to production
+  try {
+    await sendOrderToProduction(shopId, order.id);
+  } catch (error) {
+    console.error('[Printify] Failed to send to production:', error);
+    // Order still created, will be sent manually
+  }
+  
+  return order;
+}
+
+/**
+ * Map Printify order status to internal status
+ */
+export function mapPrintifyStatus(status: string): string {
+  const statusMap: Record<string, string> = {
+    'pending': 'pending',
+    'on-hold': 'processing',
+    'in-production': 'in_production',
+    'fulfilled': 'shipped',
+    'shipped': 'shipped',
+    'canceled': 'cancelled',
+    'payment-not-received': 'failed',
+  };
+  
+  return statusMap[status.toLowerCase()] || 'processing';
+}
+
