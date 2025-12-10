@@ -9,6 +9,15 @@ interface User {
   role?: string;
   image?: string;
   interest?: string;
+  billing?: {
+    phone?: string;
+    cpfCnpj?: string;
+    postalCode?: string;
+    addressNumber?: string;
+    address?: string;
+    city?: string;
+    state?: string;
+  };
   subscription?: {
     plan: 'free' | 'starter' | 'pro' | 'business';
     status: string;

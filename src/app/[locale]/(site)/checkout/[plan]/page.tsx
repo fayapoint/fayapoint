@@ -107,6 +107,14 @@ export default function CheckoutPage() {
       setName(user.name);
       setEmail(user.email);
       
+      // Autofill billing info if available
+      if (user.billing) {
+        if (user.billing.phone) setPhone(user.billing.phone);
+        if (user.billing.cpfCnpj) setCpfCnpj(formatCpfCnpj(user.billing.cpfCnpj));
+        if (user.billing.postalCode) setPostalCode(user.billing.postalCode);
+        if (user.billing.addressNumber) setAddressNumber(user.billing.addressNumber);
+      }
+      
       // Fetch saved cards
       fetchSavedCards();
     }
@@ -118,7 +126,18 @@ export default function CheckoutPage() {
     if (subscriptionPlans.includes(planName)) {
       setIsSubscription(true);
     }
-  }, [planName]);
+    
+    // Also check if cart contains subscription items
+    if (planName === "cart") {
+      const cartItemsArray = Object.values(items);
+      const hasSubscription = cartItemsArray.some(item => 
+        subscriptionPlans.includes(item.id)
+      );
+      if (hasSubscription) {
+        setIsSubscription(true);
+      }
+    }
+  }, [planName, items]);
 
   // Fetch saved cards
   const fetchSavedCards = async () => {
@@ -325,7 +344,20 @@ export default function CheckoutPage() {
       if (isSubscription) {
         requestBody.isSubscription = true;
         requestBody.subscriptionCycle = subscriptionCycle;
-        requestBody.planSlug = planName;
+        
+        // Get plan slug - either from URL or from cart item
+        let subscriptionPlanSlug = planName;
+        if (planName === "cart") {
+          // Find subscription plan in cart
+          const subscriptionPlans = ["starter", "pro", "business"];
+          const subItem = cartItems.find(item => subscriptionPlans.includes(item.id));
+          if (subItem) {
+            subscriptionPlanSlug = subItem.id;
+          }
+        }
+        requestBody.planSlug = subscriptionPlanSlug;
+        requestBody.cycle = subscriptionCycle;
+        requestBody.billingType = selectedMethod === "credit_card" ? "credit_card" : selectedMethod;
       }
 
       // Create payment via API

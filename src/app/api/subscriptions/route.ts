@@ -246,13 +246,33 @@ export async function POST(request: NextRequest) {
 
     await subscription.save();
 
-    // Update user plan
+    // Update user plan and save billing info
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userDoc = user as any;
     if (!userDoc.subscription) userDoc.subscription = {};
     userDoc.subscription.plan = plan.slug;
     userDoc.subscription.status = 'active';
     userDoc.subscription.expiresAt = new Date(Date.now() + (cycle === 'yearly' ? 365 : 30) * 24 * 60 * 60 * 1000);
+    userDoc.subscription.asaasSubscriptionId = asaasSubscription.id;
+    
+    // Save billing info for autofill
+    if (!userDoc.billing) userDoc.billing = {};
+    if (cleanedCpfCnpj && !userDoc.billing.cpfCnpj) {
+      userDoc.billing.cpfCnpj = cleanedCpfCnpj;
+    }
+    if (phone && !userDoc.billing.phone) {
+      userDoc.billing.phone = phone;
+    }
+    if (address?.postalCode && !userDoc.billing.postalCode) {
+      userDoc.billing.postalCode = address.postalCode;
+    }
+    if (address?.number && !userDoc.billing.addressNumber) {
+      userDoc.billing.addressNumber = address.number;
+    }
+    if (asaasCustomer.id) {
+      userDoc.billing.asaasCustomerId = asaasCustomer.id;
+    }
+    
     await userDoc.save();
 
     return NextResponse.json({

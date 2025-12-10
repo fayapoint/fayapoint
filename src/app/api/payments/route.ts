@@ -345,6 +345,46 @@ export async function POST(request: NextRequest) {
 
     await payment.save();
 
+    // Save billing info to user profile for autofill
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const userDoc = user as any;
+    if (!userDoc.billing) userDoc.billing = {};
+    
+    // Only save if we have new data
+    if (cleanedCpfCnpj && !userDoc.billing.cpfCnpj) {
+      userDoc.billing.cpfCnpj = cleanedCpfCnpj;
+    }
+    if (phone && !userDoc.billing.phone) {
+      userDoc.billing.phone = phone;
+    }
+    if (address?.postalCode && !userDoc.billing.postalCode) {
+      userDoc.billing.postalCode = address.postalCode;
+    }
+    if (address?.number && !userDoc.billing.addressNumber) {
+      userDoc.billing.addressNumber = address.number;
+    }
+    if (address?.street && !userDoc.billing.address) {
+      userDoc.billing.address = address.street;
+    }
+    if (address?.city && !userDoc.billing.city) {
+      userDoc.billing.city = address.city;
+    }
+    if (address?.state && !userDoc.billing.state) {
+      userDoc.billing.state = address.state;
+    }
+    // Always update Asaas customer ID
+    if (asaasCustomer.id) {
+      userDoc.billing.asaasCustomerId = asaasCustomer.id;
+    }
+    
+    // Save user with billing info
+    try {
+      await userDoc.save();
+    } catch (error) {
+      console.error('[Payment] Error saving user billing info:', error);
+      // Don't fail the payment, just log
+    }
+
     // Return response
     return NextResponse.json({
       success: true,

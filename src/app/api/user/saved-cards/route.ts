@@ -237,8 +237,23 @@ export async function POST(request: NextRequest) {
       userDoc.savedCards.push(newCard);
     }
 
-    // Store Asaas customer ID
-    userDoc.asaasCustomerId = asaasCustomer.id;
+    // Store Asaas customer ID and billing info
+    if (!userDoc.billing) userDoc.billing = {};
+    userDoc.billing.asaasCustomerId = asaasCustomer.id;
+    
+    // Save billing info for autofill
+    if (cleanedCpfCnpj && !userDoc.billing.cpfCnpj) {
+      userDoc.billing.cpfCnpj = cleanedCpfCnpj;
+    }
+    if (phone && !userDoc.billing.phone) {
+      userDoc.billing.phone = phone;
+    }
+    if (postalCode && !userDoc.billing.postalCode) {
+      userDoc.billing.postalCode = postalCode.replace(/\D/g, '');
+    }
+    if (addressNumber && !userDoc.billing.addressNumber) {
+      userDoc.billing.addressNumber = addressNumber;
+    }
 
     await userDoc.save();
 

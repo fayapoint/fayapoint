@@ -10,6 +10,19 @@ export interface IEnrolledCourse {
   source: 'subscription' | 'purchase' | 'gift' | 'promotion';
 }
 
+// Saved card for tokenized credit cards
+export interface ISavedCard {
+  _id: mongoose.Types.ObjectId;
+  token: string;
+  lastFour: string;
+  brand: string;
+  holderName: string;
+  expiryMonth: string;
+  expiryYear: string;
+  isDefault: boolean;
+  createdAt: Date;
+}
+
 export interface IUser extends Document {
   email: string;
   password?: string;
@@ -18,12 +31,25 @@ export interface IUser extends Document {
   role: 'student' | 'instructor' | 'admin';
   emailVerified?: Date;
   enrolledCourses: IEnrolledCourse[];
+  // Billing info for payments
+  billing: {
+    phone?: string;
+    cpfCnpj?: string;
+    postalCode?: string;
+    addressNumber?: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    asaasCustomerId?: string;
+  };
+  savedCards: ISavedCard[];
   subscription: {
     plan: 'free' | 'starter' | 'pro' | 'business';
     status: 'active' | 'cancelled' | 'past_due';
     expiresAt?: Date;
     stripeCustomerId?: string;
     stripeSubscriptionId?: string;
+    asaasSubscriptionId?: string;
   };
   profile: {
     bio?: string;
@@ -153,6 +179,26 @@ const UserSchema = new Schema<IUser>({
   },
   emailVerified: Date,
   enrolledCourses: [EnrolledCourseSchema],
+  billing: {
+    phone: String,
+    cpfCnpj: String,
+    postalCode: String,
+    addressNumber: String,
+    address: String,
+    city: String,
+    state: String,
+    asaasCustomerId: String,
+  },
+  savedCards: [{
+    token: String,
+    lastFour: String,
+    brand: String,
+    holderName: String,
+    expiryMonth: String,
+    expiryYear: String,
+    isDefault: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now },
+  }],
   subscription: {
     plan: {
       type: String,
@@ -167,6 +213,7 @@ const UserSchema = new Schema<IUser>({
     expiresAt: Date,
     stripeCustomerId: String,
     stripeSubscriptionId: String,
+    asaasSubscriptionId: String,
   },
   profile: {
     bio: String,
@@ -256,6 +303,7 @@ const UserSchema = new Schema<IUser>({
 
 // Indexes for better query performance
 UserSchema.index({ 'subscription.stripeCustomerId': 1 });
+UserSchema.index({ 'billing.asaasCustomerId': 1 });
 UserSchema.index({ createdAt: -1 });
 UserSchema.index({ 'enrolledCourses.courseSlug': 1 });
 
