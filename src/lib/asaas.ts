@@ -822,6 +822,941 @@ export function isPaymentFailed(status: AsaasPaymentStatus): boolean {
 }
 
 // =============================================================================
+// ENHANCED SUBSCRIPTIONS
+// =============================================================================
+
+/**
+ * List all subscriptions
+ */
+export async function listSubscriptions(
+  options: {
+    customer?: string;
+    status?: 'ACTIVE' | 'INACTIVE' | 'EXPIRED';
+    offset?: number;
+    limit?: number;
+  } = {}
+): Promise<{ data: AsaasSubscriptionResponse[]; totalCount: number }> {
+  const params = new URLSearchParams();
+  if (options.customer) params.append('customer', options.customer);
+  if (options.status) params.append('status', options.status);
+  if (options.offset) params.append('offset', String(options.offset));
+  if (options.limit) params.append('limit', String(options.limit));
+  
+  return asaasRequest(`/subscriptions?${params.toString()}`);
+}
+
+/**
+ * Update subscription
+ */
+export async function updateSubscription(
+  subscriptionId: string,
+  data: Partial<Omit<AsaasSubscription, 'id' | 'customer'>>
+): Promise<AsaasSubscriptionResponse> {
+  return asaasRequest<AsaasSubscriptionResponse>(
+    `/subscriptions/${subscriptionId}`,
+    'PUT',
+    data
+  );
+}
+
+/**
+ * Get subscription payments
+ */
+export async function getSubscriptionPayments(
+  subscriptionId: string,
+  status?: AsaasPaymentStatus
+): Promise<{ data: AsaasPaymentResponse[]; totalCount: number }> {
+  let url = `/subscriptions/${subscriptionId}/payments`;
+  if (status) url += `?status=${status}`;
+  return asaasRequest(url);
+}
+
+/**
+ * Generate subscription payment booklet (carnê)
+ */
+export async function getSubscriptionPaymentBook(
+  subscriptionId: string
+): Promise<{ success: boolean; url: string }> {
+  return asaasRequest(`/subscriptions/${subscriptionId}/paymentBook`);
+}
+
+// =============================================================================
+// PAYMENT LINKS
+// =============================================================================
+
+export type PaymentLinkChargeType = 'DETACHED' | 'RECURRENT' | 'INSTALLMENT';
+
+export interface AsaasPaymentLink {
+  id?: string;
+  name: string;
+  description?: string;
+  endDate?: string;
+  value?: number;
+  billingType: AsaasBillingType;
+  chargeType: PaymentLinkChargeType;
+  dueDateLimitDays?: number;
+  subscriptionCycle?: 'WEEKLY' | 'BIWEEKLY' | 'MONTHLY' | 'BIMONTHLY' | 'QUARTERLY' | 'SEMIANNUALLY' | 'YEARLY';
+  maxInstallmentCount?: number;
+  externalReference?: string;
+  notificationEnabled?: boolean;
+  callback?: {
+    successUrl: string;
+    autoRedirect?: boolean;
+  };
+  isAddressRequired?: boolean;
+}
+
+export interface AsaasPaymentLinkResponse extends AsaasPaymentLink {
+  id: string;
+  active: boolean;
+  url: string;
+  deleted: boolean;
+  viewCount: number;
+}
+
+/**
+ * Create a payment link
+ */
+export async function createPaymentLink(
+  link: AsaasPaymentLink
+): Promise<AsaasPaymentLinkResponse> {
+  return asaasRequest<AsaasPaymentLinkResponse>('/paymentLinks', 'POST', link);
+}
+
+/**
+ * Get payment link by ID
+ */
+export async function getPaymentLink(
+  linkId: string
+): Promise<AsaasPaymentLinkResponse> {
+  return asaasRequest<AsaasPaymentLinkResponse>(`/paymentLinks/${linkId}`);
+}
+
+/**
+ * List payment links
+ */
+export async function listPaymentLinks(
+  options: { active?: boolean; offset?: number; limit?: number } = {}
+): Promise<{ data: AsaasPaymentLinkResponse[]; totalCount: number }> {
+  const params = new URLSearchParams();
+  if (options.active !== undefined) params.append('active', String(options.active));
+  if (options.offset) params.append('offset', String(options.offset));
+  if (options.limit) params.append('limit', String(options.limit));
+  
+  return asaasRequest(`/paymentLinks?${params.toString()}`);
+}
+
+/**
+ * Update payment link
+ */
+export async function updatePaymentLink(
+  linkId: string,
+  data: Partial<AsaasPaymentLink>
+): Promise<AsaasPaymentLinkResponse> {
+  return asaasRequest<AsaasPaymentLinkResponse>(
+    `/paymentLinks/${linkId}`,
+    'PUT',
+    data
+  );
+}
+
+/**
+ * Delete payment link
+ */
+export async function deletePaymentLink(
+  linkId: string
+): Promise<AsaasPaymentLinkResponse> {
+  return asaasRequest<AsaasPaymentLinkResponse>(
+    `/paymentLinks/${linkId}`,
+    'DELETE'
+  );
+}
+
+/**
+ * Restore payment link
+ */
+export async function restorePaymentLink(
+  linkId: string
+): Promise<AsaasPaymentLinkResponse> {
+  return asaasRequest<AsaasPaymentLinkResponse>(
+    `/paymentLinks/${linkId}/restore`,
+    'POST'
+  );
+}
+
+// =============================================================================
+// INSTALLMENTS (Parcelamento)
+// =============================================================================
+
+export interface AsaasInstallment {
+  id?: string;
+  installmentCount: number;
+  customer: string;
+  value: number;
+  totalValue?: number;
+  billingType: AsaasBillingType;
+  dueDate: string;
+  description?: string;
+  postalService?: boolean;
+  paymentExternalReference?: string;
+  discount?: {
+    value: number;
+    dueDateLimitDays: number;
+    type: 'FIXED' | 'PERCENTAGE';
+  };
+  fine?: {
+    value: number;
+    type: 'FIXED' | 'PERCENTAGE';
+  };
+  interest?: {
+    value: number;
+  };
+  splits?: AsaasSplit[];
+}
+
+export interface AsaasInstallmentResponse extends AsaasInstallment {
+  id: string;
+  netValue: number;
+  paymentValue: number;
+  billingType: AsaasBillingType;
+  paymentDate?: string;
+  expirationDay: number;
+  dateCreated: string;
+  deleted: boolean;
+  transactionReceiptUrl?: string;
+  creditCard?: {
+    creditCardNumber: string;
+    creditCardBrand: string;
+    creditCardToken?: string;
+  };
+}
+
+/**
+ * Create installment (parcelamento)
+ */
+export async function createInstallment(
+  installment: AsaasInstallment
+): Promise<AsaasInstallmentResponse> {
+  return asaasRequest<AsaasInstallmentResponse>('/installments', 'POST', installment);
+}
+
+/**
+ * Get installment by ID
+ */
+export async function getInstallment(
+  installmentId: string
+): Promise<AsaasInstallmentResponse> {
+  return asaasRequest<AsaasInstallmentResponse>(`/installments/${installmentId}`);
+}
+
+/**
+ * List installments
+ */
+export async function listInstallments(
+  options: { customer?: string; offset?: number; limit?: number } = {}
+): Promise<{ data: AsaasInstallmentResponse[]; totalCount: number }> {
+  const params = new URLSearchParams();
+  if (options.customer) params.append('customer', options.customer);
+  if (options.offset) params.append('offset', String(options.offset));
+  if (options.limit) params.append('limit', String(options.limit));
+  
+  return asaasRequest(`/installments?${params.toString()}`);
+}
+
+/**
+ * Get installment payments
+ */
+export async function getInstallmentPayments(
+  installmentId: string
+): Promise<{ data: AsaasPaymentResponse[]; totalCount: number }> {
+  return asaasRequest(`/installments/${installmentId}/payments`);
+}
+
+/**
+ * Delete installment (cancel all pending charges)
+ */
+export async function deleteInstallment(
+  installmentId: string
+): Promise<AsaasInstallmentResponse> {
+  return asaasRequest<AsaasInstallmentResponse>(
+    `/installments/${installmentId}`,
+    'DELETE'
+  );
+}
+
+/**
+ * Generate installment payment booklet (carnê)
+ */
+export async function getInstallmentPaymentBook(
+  installmentId: string
+): Promise<{ success: boolean; url: string }> {
+  return asaasRequest(`/installments/${installmentId}/paymentBook`);
+}
+
+/**
+ * Refund entire installment
+ */
+export async function refundInstallment(
+  installmentId: string,
+  description?: string
+): Promise<AsaasInstallmentResponse> {
+  return asaasRequest<AsaasInstallmentResponse>(
+    `/installments/${installmentId}/refund`,
+    'POST',
+    description ? { description } : undefined
+  );
+}
+
+// =============================================================================
+// CREDIT CARD TOKENIZATION
+// =============================================================================
+
+export interface AsaasCreditCardToken {
+  creditCardNumber: string;
+  creditCardBrand: 'VISA' | 'MASTERCARD' | 'ELO' | 'DINERS' | 'DISCOVER' | 'AMEX' | 'UNKNOWN';
+  creditCardToken: string;
+}
+
+/**
+ * Tokenize a credit card for future payments
+ */
+export async function tokenizeCreditCard(
+  customerId: string,
+  creditCard: AsaasCreditCard,
+  creditCardHolderInfo: AsaasCreditCardHolderInfo,
+  remoteIp: string
+): Promise<AsaasCreditCardToken> {
+  return asaasRequest<AsaasCreditCardToken>(
+    '/creditCard/tokenizeCreditCard',
+    'POST',
+    {
+      customer: customerId,
+      creditCard,
+      creditCardHolderInfo,
+      remoteIp,
+    }
+  );
+}
+
+/**
+ * Create payment with tokenized credit card
+ */
+export async function createPaymentWithToken(
+  customerId: string,
+  value: number,
+  creditCardToken: string,
+  creditCardHolderInfo: AsaasCreditCardHolderInfo,
+  options: {
+    description?: string;
+    externalReference?: string;
+    installmentCount?: number;
+    installmentValue?: number;
+    callback?: { successUrl: string; autoRedirect?: boolean };
+  } = {}
+): Promise<AsaasPaymentResponse> {
+  const dueDate = getDefaultDueDate(0);
+  
+  return asaasRequest<AsaasPaymentResponse>('/payments', 'POST', {
+    customer: customerId,
+    billingType: 'CREDIT_CARD',
+    value,
+    dueDate,
+    description: options.description,
+    externalReference: options.externalReference,
+    installmentCount: options.installmentCount,
+    installmentValue: options.installmentValue,
+    callback: options.callback,
+    creditCardToken,
+    creditCardHolderInfo,
+  });
+}
+
+// =============================================================================
+// INVOICES (NFS-e - Notas Fiscais de Serviço)
+// =============================================================================
+
+export type InvoiceStatus = 
+  | 'SCHEDULED' 
+  | 'AUTHORIZED' 
+  | 'PROCESSING_CANCELLATION' 
+  | 'CANCELED' 
+  | 'CANCELLATION_DENIED' 
+  | 'ERROR';
+
+export interface AsaasInvoiceTaxes {
+  retainIss: boolean;
+  cofins: number;
+  csll: number;
+  inss: number;
+  ir: number;
+  pis: number;
+  iss: number;
+}
+
+export interface AsaasInvoice {
+  payment?: string;
+  installment?: string;
+  customer?: string;
+  serviceDescription: string;
+  observations: string;
+  externalReference?: string;
+  value: number;
+  deductions: number;
+  effectiveDate: string;
+  municipalServiceId?: string;
+  municipalServiceCode?: string;
+  municipalServiceName: string;
+  updatePayment?: boolean;
+  taxes: AsaasInvoiceTaxes;
+}
+
+export interface AsaasInvoiceResponse extends AsaasInvoice {
+  id: string;
+  status: InvoiceStatus;
+  statusDescription?: string;
+  pdfUrl?: string;
+  xmlUrl?: string;
+  rpsSerie?: string;
+  rpsNumber?: string;
+  number?: string;
+  validationCode?: string;
+  estimatedTaxesDescription?: string;
+}
+
+/**
+ * Schedule an invoice (NFS-e)
+ */
+export async function createInvoice(
+  invoice: AsaasInvoice
+): Promise<AsaasInvoiceResponse> {
+  return asaasRequest<AsaasInvoiceResponse>('/invoices', 'POST', invoice);
+}
+
+/**
+ * Get invoice by ID
+ */
+export async function getInvoice(
+  invoiceId: string
+): Promise<AsaasInvoiceResponse> {
+  return asaasRequest<AsaasInvoiceResponse>(`/invoices/${invoiceId}`);
+}
+
+/**
+ * List invoices
+ */
+export async function listInvoices(
+  options: {
+    payment?: string;
+    installment?: string;
+    customer?: string;
+    status?: InvoiceStatus;
+    offset?: number;
+    limit?: number;
+  } = {}
+): Promise<{ data: AsaasInvoiceResponse[]; totalCount: number }> {
+  const params = new URLSearchParams();
+  if (options.payment) params.append('payment', options.payment);
+  if (options.installment) params.append('installment', options.installment);
+  if (options.customer) params.append('customer', options.customer);
+  if (options.status) params.append('status', options.status);
+  if (options.offset) params.append('offset', String(options.offset));
+  if (options.limit) params.append('limit', String(options.limit));
+  
+  return asaasRequest(`/invoices?${params.toString()}`);
+}
+
+/**
+ * Update invoice
+ */
+export async function updateInvoice(
+  invoiceId: string,
+  data: Partial<AsaasInvoice>
+): Promise<AsaasInvoiceResponse> {
+  return asaasRequest<AsaasInvoiceResponse>(
+    `/invoices/${invoiceId}`,
+    'PUT',
+    data
+  );
+}
+
+/**
+ * Authorize/issue invoice
+ */
+export async function authorizeInvoice(
+  invoiceId: string
+): Promise<AsaasInvoiceResponse> {
+  return asaasRequest<AsaasInvoiceResponse>(
+    `/invoices/${invoiceId}/authorize`,
+    'POST'
+  );
+}
+
+/**
+ * Cancel invoice
+ */
+export async function cancelInvoice(
+  invoiceId: string
+): Promise<AsaasInvoiceResponse> {
+  return asaasRequest<AsaasInvoiceResponse>(
+    `/invoices/${invoiceId}/cancel`,
+    'POST'
+  );
+}
+
+// =============================================================================
+// PAYMENT DUNNING (Cobrança/Negativação)
+// =============================================================================
+
+export type DunningType = 'CREDIT_BUREAU' | 'PROTEST';
+
+export interface AsaasPaymentDunning {
+  payment: string;
+  type: DunningType;
+  description?: string;
+}
+
+export interface AsaasPaymentDunningResponse {
+  id: string;
+  status: string;
+  type: DunningType;
+  payment: string;
+  description?: string;
+  dateCreated: string;
+  value: number;
+  netValue: number;
+  feeValue: number;
+  requestDate?: string;
+  protestDate?: string;
+  cancellationDate?: string;
+}
+
+/**
+ * Create payment dunning (negativação)
+ */
+export async function createPaymentDunning(
+  dunning: AsaasPaymentDunning
+): Promise<AsaasPaymentDunningResponse> {
+  return asaasRequest<AsaasPaymentDunningResponse>('/paymentDunnings', 'POST', dunning);
+}
+
+/**
+ * Get dunning by ID
+ */
+export async function getPaymentDunning(
+  dunningId: string
+): Promise<AsaasPaymentDunningResponse> {
+  return asaasRequest<AsaasPaymentDunningResponse>(`/paymentDunnings/${dunningId}`);
+}
+
+/**
+ * List dunnings
+ */
+export async function listPaymentDunnings(
+  options: { payment?: string; offset?: number; limit?: number } = {}
+): Promise<{ data: AsaasPaymentDunningResponse[]; totalCount: number }> {
+  const params = new URLSearchParams();
+  if (options.payment) params.append('payment', options.payment);
+  if (options.offset) params.append('offset', String(options.offset));
+  if (options.limit) params.append('limit', String(options.limit));
+  
+  return asaasRequest(`/paymentDunnings?${params.toString()}`);
+}
+
+/**
+ * Cancel dunning
+ */
+export async function cancelPaymentDunning(
+  dunningId: string
+): Promise<AsaasPaymentDunningResponse> {
+  return asaasRequest<AsaasPaymentDunningResponse>(
+    `/paymentDunnings/${dunningId}/cancel`,
+    'POST'
+  );
+}
+
+/**
+ * Simulate dunning (get fees before creating)
+ */
+export async function simulatePaymentDunning(
+  payment: string,
+  type: DunningType
+): Promise<{
+  netValue: number;
+  value: number;
+  feeValue: number;
+  requestDate: string;
+  protestDate?: string;
+}> {
+  return asaasRequest('/paymentDunnings/simulate', 'POST', { payment, type });
+}
+
+/**
+ * Get payments available for dunning
+ */
+export async function getPaymentsAvailableForDunning(
+  options: { offset?: number; limit?: number } = {}
+): Promise<{ data: AsaasPaymentResponse[]; totalCount: number }> {
+  const params = new URLSearchParams();
+  if (options.offset) params.append('offset', String(options.offset));
+  if (options.limit) params.append('limit', String(options.limit));
+  
+  return asaasRequest(`/paymentDunnings/paymentsAvailableForDunning?${params.toString()}`);
+}
+
+// =============================================================================
+// SALES SIMULATION
+// =============================================================================
+
+export interface AsaasPaymentSimulation {
+  customer?: string;
+  billingTypes?: AsaasBillingType[];
+  value: number;
+  installmentCount?: number;
+}
+
+export interface AsaasPaymentSimulationResponse {
+  billingTypes: Array<{
+    billingType: AsaasBillingType;
+    installmentCount: number;
+    netValue: number;
+    feeValue: number;
+    feePercentage: number;
+  }>;
+}
+
+/**
+ * Simulate payment to get net value and fees
+ */
+export async function simulatePayment(
+  simulation: AsaasPaymentSimulation
+): Promise<AsaasPaymentSimulationResponse> {
+  return asaasRequest<AsaasPaymentSimulationResponse>(
+    '/payments/simulate',
+    'POST',
+    simulation
+  );
+}
+
+/**
+ * Get payment limits
+ */
+export async function getPaymentLimits(): Promise<{
+  creation: {
+    daily: { limit: number; used: number; available: number };
+    monthly: { limit: number; used: number; available: number };
+  };
+}> {
+  return asaasRequest('/payments/limits');
+}
+
+// =============================================================================
+// PAYMENT DOCUMENTS
+// =============================================================================
+
+/**
+ * Upload document to payment
+ */
+export async function uploadPaymentDocument(
+  paymentId: string,
+  document: {
+    type: string;
+    file: string; // Base64 encoded file
+    name: string;
+  }
+): Promise<{ id: string; type: string; name: string }> {
+  return asaasRequest(`/payments/${paymentId}/documents`, 'POST', document);
+}
+
+/**
+ * List payment documents
+ */
+export async function listPaymentDocuments(
+  paymentId: string
+): Promise<{ data: Array<{ id: string; type: string; name: string }> }> {
+  return asaasRequest(`/payments/${paymentId}/documents`);
+}
+
+// =============================================================================
+// FINANCIAL INFO
+// =============================================================================
+
+/**
+ * Get account balance
+ */
+export async function getAccountBalance(): Promise<{
+  balance: number;
+  blocked: number;
+}> {
+  return asaasRequest('/finance/balance');
+}
+
+/**
+ * Get payment statistics
+ */
+export async function getPaymentStatistics(): Promise<{
+  income: number;
+  incomeCount: number;
+  pending: number;
+  pendingCount: number;
+  overdue: number;
+  overdueCount: number;
+}> {
+  return asaasRequest('/finance/payment/statistics');
+}
+
+/**
+ * Get account fees
+ */
+export async function getAccountFees(): Promise<{
+  payment: { 
+    bankSlip: { defaultValue: number; discountValue: number };
+    pix: { percentageFee: number; fixedFee: number; minimumFee: number };
+    creditCard: { 
+      operationValue: number; 
+      oneInstallmentPercentage: number;
+      twoToSixInstallmentsPercentage: number;
+      sevenToTwelveInstallmentsPercentage: number;
+    };
+  };
+  anticipation: { pixPercentage: number; bankSlipPercentage: number; creditCardPercentage: number };
+  transfer: { pixFee: number; tedFee: number };
+}> {
+  return asaasRequest('/myAccount/fees/');
+}
+
+// =============================================================================
+// REFUNDS (Enhanced)
+// =============================================================================
+
+/**
+ * Get payment refunds
+ */
+export async function getPaymentRefunds(
+  paymentId: string
+): Promise<{
+  data: Array<{
+    dateCreated: string;
+    status: 'PENDING' | 'DONE' | 'CANCELLED';
+    value: number;
+    description?: string;
+    transactionReceiptUrl?: string;
+  }>;
+}> {
+  return asaasRequest(`/payments/${paymentId}/refunds`);
+}
+
+/**
+ * Refund bank slip specifically
+ */
+export async function refundBankSlip(
+  paymentId: string,
+  refundData: {
+    value?: number;
+    description?: string;
+    bankAccount?: {
+      bank: { code: string };
+      accountName: string;
+      ownerName: string;
+      ownerBirthDate?: string;
+      cpfCnpj: string;
+      agency: string;
+      agencyDigit?: string;
+      account: string;
+      accountDigit: string;
+      bankAccountType: 'CONTA_CORRENTE' | 'CONTA_POUPANCA';
+    };
+  }
+): Promise<AsaasPaymentResponse> {
+  return asaasRequest<AsaasPaymentResponse>(
+    `/payments/${paymentId}/bankSlip/refund`,
+    'POST',
+    refundData
+  );
+}
+
+// =============================================================================
+// NOTIFICATIONS
+// =============================================================================
+
+/**
+ * Get customer notifications
+ */
+export async function getCustomerNotifications(
+  customerId: string
+): Promise<{
+  data: Array<{
+    id: string;
+    customer: string;
+    enabled: boolean;
+    emailEnabledForProvider: boolean;
+    smsEnabledForProvider: boolean;
+    phoneCallEnabledForProvider: boolean;
+    whatsappEnabledForProvider: boolean;
+  }>;
+}> {
+  return asaasRequest(`/customers/${customerId}/notifications`);
+}
+
+/**
+ * Update notification settings
+ */
+export async function updateNotification(
+  notificationId: string,
+  settings: {
+    enabled?: boolean;
+    emailEnabledForProvider?: boolean;
+    smsEnabledForProvider?: boolean;
+    phoneCallEnabledForProvider?: boolean;
+    whatsappEnabledForProvider?: boolean;
+  }
+): Promise<{ id: string }> {
+  return asaasRequest(`/notifications/${notificationId}`, 'PUT', settings);
+}
+
+// =============================================================================
+// CHARGEBACKS
+// =============================================================================
+
+/**
+ * Get payment chargeback info
+ */
+export async function getPaymentChargeback(
+  paymentId: string
+): Promise<{
+  id: string;
+  payment: string;
+  status: 'REQUESTED' | 'IN_DISPUTE' | 'DISPUTE_LOST' | 'REVERSED' | 'DONE';
+  reason: string;
+  disputeStartDate: string;
+  value: number;
+}> {
+  return asaasRequest(`/payments/${paymentId}/chargeback`);
+}
+
+/**
+ * Create chargeback dispute
+ */
+export async function createChargebackDispute(
+  chargebackId: string,
+  documents: Array<{ type: string; file: string }>
+): Promise<{ success: boolean }> {
+  return asaasRequest(`/chargebacks/${chargebackId}/dispute`, 'POST', { documents });
+}
+
+/**
+ * List chargebacks
+ */
+export async function listChargebacks(
+  options: { status?: string; offset?: number; limit?: number } = {}
+): Promise<{ data: Array<{ id: string; payment: string; status: string; value: number }> }> {
+  const params = new URLSearchParams();
+  if (options.status) params.append('status', options.status);
+  if (options.offset) params.append('offset', String(options.offset));
+  if (options.limit) params.append('limit', String(options.limit));
+  
+  return asaasRequest(`/chargebacks/?${params.toString()}`);
+}
+
+// =============================================================================
+// PIX FEATURES
+// =============================================================================
+
+/**
+ * Create static PIX QR Code
+ */
+export async function createStaticPixQrCode(
+  options: {
+    addressKey: string;
+    description?: string;
+    value?: number;
+    format?: 'ALL' | 'IMAGE' | 'PAYLOAD';
+    expirationDate?: string;
+    expirationSeconds?: number;
+    allowsMultiplePayments?: boolean;
+  }
+): Promise<{
+  id: string;
+  encodedImage: string;
+  payload: string;
+  allowsMultiplePayments: boolean;
+}> {
+  return asaasRequest('/pix/qrCodes/static', 'POST', options);
+}
+
+/**
+ * List PIX keys
+ */
+export async function listPixKeys(): Promise<{
+  data: Array<{
+    id: string;
+    key: string;
+    type: 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'EVP';
+    status: 'AWAITING_ACTIVATION' | 'ACTIVE' | 'AWAITING_DELETION' | 'DELETED' | 'ERROR';
+    dateCreated: string;
+  }>;
+}> {
+  return asaasRequest('/pix/addressKeys');
+}
+
+// =============================================================================
+// BILLING INFO
+// =============================================================================
+
+/**
+ * Get payment billing info
+ */
+export async function getPaymentBillingInfo(
+  paymentId: string
+): Promise<{
+  creditCard?: {
+    creditCardNumber: string;
+    creditCardBrand: string;
+    creditCardToken?: string;
+  };
+  bankSlip?: {
+    identificationField: string;
+    nossoNumero: string;
+    barCode: string;
+    bankSlipUrl: string;
+  };
+  pix?: {
+    encodedImage: string;
+    payload: string;
+    expirationDate: string;
+  };
+}> {
+  return asaasRequest(`/payments/${paymentId}/billingInfo`);
+}
+
+/**
+ * Get payment viewing info
+ */
+export async function getPaymentViewingInfo(
+  paymentId: string
+): Promise<{
+  invoiceViewed: boolean;
+  bankSlipViewed: boolean;
+  invoiceViewedDate?: string;
+  bankSlipViewedDate?: string;
+}> {
+  return asaasRequest(`/payments/${paymentId}/viewingInfo`);
+}
+
+// =============================================================================
+// TRANSACTION RECEIPTS
+// =============================================================================
+
+/**
+ * Get transaction receipt URL
+ */
+export async function getTransactionReceipt(
+  paymentId: string
+): Promise<{ transactionReceiptUrl?: string }> {
+  const payment = await getPayment(paymentId);
+  return { transactionReceiptUrl: payment.transactionReceiptUrl };
+}
+
+// =============================================================================
 // WEBHOOK VERIFICATION
 // =============================================================================
 
@@ -834,6 +1769,37 @@ export function verifyWebhookToken(
   expectedToken: string = process.env.ASAAS_WEBHOOK_TOKEN || ''
 ): boolean {
   return receivedToken === expectedToken;
+}
+
+// =============================================================================
+// SUBSCRIPTION WEBHOOKS TYPES
+// =============================================================================
+
+export type AsaasSubscriptionWebhookEventType = 
+  | 'SUBSCRIPTION_CREATED'
+  | 'SUBSCRIPTION_UPDATED'
+  | 'SUBSCRIPTION_DELETED'
+  | 'SUBSCRIPTION_PAYMENT_CREATED';
+
+export type AsaasInvoiceWebhookEventType =
+  | 'INVOICE_CREATED'
+  | 'INVOICE_UPDATED'
+  | 'INVOICE_AUTHORIZED'
+  | 'INVOICE_CANCELED'
+  | 'INVOICE_ERROR';
+
+export interface AsaasSubscriptionWebhookEvent {
+  id: string;
+  event: AsaasSubscriptionWebhookEventType;
+  dateCreated: string;
+  subscription: AsaasSubscriptionResponse;
+}
+
+export interface AsaasInvoiceWebhookEvent {
+  id: string;
+  event: AsaasInvoiceWebhookEventType;
+  dateCreated: string;
+  invoice: AsaasInvoiceResponse;
 }
 
 // =============================================================================
@@ -856,6 +1822,7 @@ export default {
   findCustomerByEmail,
   updateCustomer,
   getOrCreateCustomer,
+  getCustomerNotifications,
   
   // Payments
   createPayment,
@@ -871,11 +1838,84 @@ export default {
   cancelPayment,
   refundPayment,
   receiveInCash,
+  getPaymentBillingInfo,
+  getPaymentViewingInfo,
+  getTransactionReceipt,
   
   // Subscriptions
   createSubscription,
   getSubscription,
   cancelSubscription,
+  listSubscriptions,
+  updateSubscription,
+  getSubscriptionPayments,
+  getSubscriptionPaymentBook,
+  
+  // Payment Links
+  createPaymentLink,
+  getPaymentLink,
+  listPaymentLinks,
+  updatePaymentLink,
+  deletePaymentLink,
+  restorePaymentLink,
+  
+  // Installments
+  createInstallment,
+  getInstallment,
+  listInstallments,
+  getInstallmentPayments,
+  deleteInstallment,
+  getInstallmentPaymentBook,
+  refundInstallment,
+  
+  // Credit Card Tokenization
+  tokenizeCreditCard,
+  createPaymentWithToken,
+  
+  // Invoices (NFS-e)
+  createInvoice,
+  getInvoice,
+  listInvoices,
+  updateInvoice,
+  authorizeInvoice,
+  cancelInvoice,
+  
+  // Dunning
+  createPaymentDunning,
+  getPaymentDunning,
+  listPaymentDunnings,
+  cancelPaymentDunning,
+  simulatePaymentDunning,
+  getPaymentsAvailableForDunning,
+  
+  // Simulation & Limits
+  simulatePayment,
+  getPaymentLimits,
+  
+  // Documents
+  uploadPaymentDocument,
+  listPaymentDocuments,
+  
+  // Financial
+  getAccountBalance,
+  getPaymentStatistics,
+  getAccountFees,
+  
+  // Refunds
+  getPaymentRefunds,
+  refundBankSlip,
+  
+  // Chargebacks
+  getPaymentChargeback,
+  createChargebackDispute,
+  listChargebacks,
+  
+  // PIX
+  createStaticPixQrCode,
+  listPixKeys,
+  
+  // Notifications
+  updateNotification,
   
   // Utilities
   getDefaultDueDate,

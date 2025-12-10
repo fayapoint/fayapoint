@@ -21,10 +21,22 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  Wallet,
+  RefreshCw,
 } from "lucide-react";
 import Image from "next/image";
 
 type PaymentMethod = "pix" | "boleto" | "credit_card" | "undefined";
+
+interface SavedCard {
+  id: string;
+  lastFour: string;
+  brand: string;
+  holderName: string;
+  expiryMonth: string;
+  expiryYear: string;
+  isDefault: boolean;
+}
 
 interface PaymentResult {
   success: boolean;
@@ -79,13 +91,63 @@ export default function CheckoutPage() {
   const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null);
   const [copied, setCopied] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(false);
+  
+  // Saved cards state
+  const [savedCards, setSavedCards] = useState<SavedCard[]>([]);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [saveCard, setSaveCard] = useState(true);
+  const [loadingCards, setLoadingCards] = useState(false);
+  
+  // Subscription mode
+  const [isSubscription, setIsSubscription] = useState(false);
+  const [subscriptionCycle, setSubscriptionCycle] = useState<"monthly" | "yearly">("monthly");
 
   useEffect(() => {
     if (isLoggedIn && user) {
       setName(user.name);
       setEmail(user.email);
+      
+      // Fetch saved cards
+      fetchSavedCards();
     }
   }, [isLoggedIn, user]);
+  
+  // Check if this is a subscription plan checkout
+  useEffect(() => {
+    const subscriptionPlans = ["starter", "pro", "business"];
+    if (subscriptionPlans.includes(planName)) {
+      setIsSubscription(true);
+    }
+  }, [planName]);
+
+  // Fetch saved cards
+  const fetchSavedCards = async () => {
+    setLoadingCards(true);
+    try {
+      const token = localStorage.getItem("fayapoint_token");
+      if (!token) return;
+      
+      const response = await fetch("/api/user/saved-cards", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setSavedCards(data.cards || []);
+        
+        // Auto-select default card if available
+        const defaultCard = data.cards?.find((c: SavedCard) => c.isDefault);
+        if (defaultCard) {
+          setSelectedCard(defaultCard.id);
+          setSelectedMethod("credit_card");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching saved cards:", error);
+    } finally {
+      setLoadingCards(false);
+    }
+  };
 
   // Format CPF/CNPJ
   const formatCpfCnpj = (value: string) => {
@@ -190,13 +252,16 @@ export default function CheckoutPage() {
     }
 
     if (selectedMethod === "credit_card") {
-      if (!cardNumber || !cardHolder || !cardExpiry || !cardCvv) {
-        toast.error("Preencha todos os dados do cartão.");
-        return;
-      }
-      if (!postalCode || !addressNumber) {
-        toast.error("Informe CEP e número do endereço para pagamento com cartão.");
-        return;
+      // If using saved card, don't require card details
+      if (!selectedCard) {
+        if (!cardNumber || !cardHolder || !cardExpiry || !cardCvv) {
+          toast.error("Preencha todos os dados do cartão.");
+          return;
+        }
+        if (!postalCode || !addressNumber) {
+          toast.error("Informe CEP e número do endereço para pagamento com cartão.");
+          return;
+        }
       }
     }
 
@@ -232,23 +297,40 @@ export default function CheckoutPage() {
 
       // Add credit card data if applicable
       if (selectedMethod === "credit_card") {
-        const [expMonth, expYear] = cardExpiry.split("/");
-        requestBody.creditCard = {
-          holderName: cardHolder,
-          number: cardNumber.replace(/\D/g, ""),
-          expiryMonth: expMonth,
-          expiryYear: "20" + expYear,
-          ccv: cardCvv,
-        };
-        requestBody.address = {
-          postalCode: postalCode.replace(/\D/g, ""),
-          number: addressNumber,
-        };
+        // Check if using saved card
+        if (selectedCard) {
+          const card = savedCards.find(c => c.id === selectedCard);
+          if (card) {
+            requestBody.savedCardId = selectedCard;
+          }
+        } else {
+          const [expMonth, expYear] = cardExpiry.split("/");
+          requestBody.creditCard = {
+            holderName: cardHolder,
+            number: cardNumber.replace(/\D/g, ""),
+            expiryMonth: expMonth,
+            expiryYear: "20" + expYear,
+            ccv: cardCvv,
+          };
+          requestBody.address = {
+            postalCode: postalCode.replace(/\D/g, ""),
+            number: addressNumber,
+          };
+          requestBody.saveCard = saveCard;
+        }
         requestBody.installments = installments;
       }
 
+      // Handle subscription checkout
+      if (isSubscription) {
+        requestBody.isSubscription = true;
+        requestBody.subscriptionCycle = subscriptionCycle;
+        requestBody.planSlug = planName;
+      }
+
       // Create payment via API
-      const response = await fetch("/api/payments", {
+      const apiEndpoint = isSubscription ? "/api/subscriptions" : "/api/payments";
+      const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -588,6 +670,62 @@ export default function CheckoutPage() {
                 {/* Credit Card Form */}
                 {selectedMethod === "credit_card" && (
                   <div className="space-y-4 pt-4 border-t border-gray-800">
+                    {/* Saved Cards Section */}
+                    {savedCards.length > 0 && (
+                      <div className="mb-4">
+                        <label className="block text-sm text-gray-400 mb-2">
+                          <Wallet className="w-4 h-4 inline mr-2" />
+                          Cartões Salvos
+                        </label>
+                        <div className="space-y-2">
+                          {savedCards.map((card) => (
+                            <button
+                              key={card.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedCard(selectedCard === card.id ? null : card.id);
+                                if (selectedCard !== card.id) {
+                                  // Clear manual card entry
+                                  setCardNumber("");
+                                  setCardHolder("");
+                                  setCardExpiry("");
+                                  setCardCvv("");
+                                }
+                              }}
+                              className={`w-full p-3 rounded-lg border-2 transition-all flex items-center justify-between ${
+                                selectedCard === card.id
+                                  ? "border-purple-500 bg-purple-500/10"
+                                  : "border-gray-700 hover:border-gray-600"
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <CreditCard className="w-5 h-5 text-gray-400" />
+                                <span className="font-mono">•••• {card.lastFour}</span>
+                                <span className="text-xs text-gray-500 capitalize">{card.brand}</span>
+                              </div>
+                              <span className="text-xs text-gray-500">
+                                {card.expiryMonth}/{card.expiryYear}
+                              </span>
+                            </button>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => setSelectedCard(null)}
+                            className={`w-full p-3 rounded-lg border-2 transition-all text-center ${
+                              !selectedCard
+                                ? "border-purple-500 bg-purple-500/10"
+                                : "border-gray-700 hover:border-gray-600"
+                            }`}
+                          >
+                            <CreditCard className="w-4 h-4 inline mr-2" />
+                            Usar outro cartão
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* New Card Form - only show if no saved card selected */}
+                    {!selectedCard && (
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="md:col-span-2">
                         <label className="block text-sm text-gray-400 mb-1">Número do Cartão *</label>
@@ -668,7 +806,59 @@ export default function CheckoutPage() {
                           ))}
                         </select>
                       </div>
+                      
+                      {/* Save card option */}
+                      <div className="md:col-span-2">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={saveCard}
+                            onChange={(e) => setSaveCard(e.target.checked)}
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-purple-500 focus:ring-purple-500"
+                          />
+                          <span className="text-sm text-gray-400">
+                            Salvar cartão para compras futuras
+                          </span>
+                        </label>
+                      </div>
                     </div>
+                    )}
+                    
+                    {/* Subscription Cycle (if subscription) */}
+                    {isSubscription && (
+                      <div className="mt-4 p-4 rounded-lg bg-purple-500/10 border border-purple-500/30">
+                        <label className="block text-sm text-gray-400 mb-2">
+                          <RefreshCw className="w-4 h-4 inline mr-2" />
+                          Ciclo de Cobrança
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSubscriptionCycle("monthly")}
+                            className={`p-3 rounded-lg border-2 transition-all text-center ${
+                              subscriptionCycle === "monthly"
+                                ? "border-purple-500 bg-purple-500/10"
+                                : "border-gray-700 hover:border-gray-600"
+                            }`}
+                          >
+                            <span className="text-sm font-medium block">Mensal</span>
+                            <span className="text-xs text-gray-500">Cobrado todo mês</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSubscriptionCycle("yearly")}
+                            className={`p-3 rounded-lg border-2 transition-all text-center ${
+                              subscriptionCycle === "yearly"
+                                ? "border-purple-500 bg-purple-500/10"
+                                : "border-gray-700 hover:border-gray-600"
+                            }`}
+                          >
+                            <span className="text-sm font-medium block">Anual</span>
+                            <span className="text-xs text-green-400">Economize 17%</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </Card>

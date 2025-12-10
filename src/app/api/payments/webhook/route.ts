@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
-import Payment, { mapAsaasStatusToPaymentStatus, PaymentStatus } from '@/models/Payment';
+import Payment, { mapAsaasStatusToPaymentStatus } from '@/models/Payment';
+import Subscription, { mapAsaasStatusToSubscriptionStatus } from '@/models/Subscription';
 import User from '@/models/User';
 import { 
   AsaasWebhookEvent, 
   AsaasPaymentResponse,
+  AsaasSubscriptionWebhookEvent,
+  AsaasInvoiceWebhookEvent,
   verifyWebhookToken,
-  isPaymentSuccessful,
 } from '@/lib/asaas';
 
 // Disable body parsing for webhook verification
@@ -31,20 +33,32 @@ export async function POST(request: NextRequest) {
       // Don't reject - Asaas might not always send token
     }
 
-    const body = await request.json() as AsaasWebhookEvent;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body = await request.json() as any;
     
     console.log(`[Asaas Webhook] Received event: ${body.event}`, {
       paymentId: body.payment?.id,
-      externalReference: body.payment?.externalReference,
+      subscriptionId: body.subscription?.id,
+      invoiceId: body.invoice?.id,
     });
+
+    await dbConnect();
+
+    // Handle subscription events
+    if (body.event.startsWith('SUBSCRIPTION_')) {
+      return handleSubscriptionEvent(body as AsaasSubscriptionWebhookEvent);
+    }
+
+    // Handle invoice events
+    if (body.event.startsWith('INVOICE_')) {
+      return handleInvoiceEvent(body as AsaasInvoiceWebhookEvent);
+    }
 
     // Only process payment-related events
     if (!body.event.startsWith('PAYMENT_') || !body.payment) {
-      console.log(`[Asaas Webhook] Ignoring non-payment event: ${body.event}`);
+      console.log(`[Asaas Webhook] Ignoring event: ${body.event}`);
       return NextResponse.json({ received: true });
     }
-
-    await dbConnect();
 
     const asaasPayment = body.payment as AsaasPaymentResponse;
 
@@ -287,6 +301,152 @@ async function revokeUserAccess(payment: any) {
 }
 
 // =============================================================================
+// SUBSCRIPTION EVENT HANDLER
+// =============================================================================
+
+async function handleSubscriptionEvent(body: AsaasSubscriptionWebhookEvent) {
+  try {
+    const asaasSubscription = body.subscription;
+    
+    // Find subscription by Asaas ID
+    const subscription = await Subscription.findOne({
+      asaasSubscriptionId: asaasSubscription.id,
+    });
+
+    if (!subscription) {
+      console.warn(`[Asaas Webhook] Subscription not found: ${asaasSubscription.id}`);
+      return NextResponse.json({ 
+        received: true, 
+        warning: 'Subscription not found in database' 
+      });
+    }
+
+    // Update subscription based on event
+    switch (body.event) {
+      case 'SUBSCRIPTION_CREATED':
+        subscription.status = mapAsaasStatusToSubscriptionStatus(asaasSubscription.status);
+        break;
+
+      case 'SUBSCRIPTION_UPDATED':
+        subscription.status = mapAsaasStatusToSubscriptionStatus(asaasSubscription.status);
+        subscription.value = asaasSubscription.value;
+        if (asaasSubscription.nextDueDate) {
+          subscription.nextDueDate = new Date(asaasSubscription.nextDueDate);
+        }
+        break;
+
+      case 'SUBSCRIPTION_DELETED':
+        subscription.status = 'cancelled';
+        subscription.cancelledAt = new Date();
+        
+        // Downgrade user to free plan
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const user = await User.findById(subscription.userId) as any;
+        if (user?.subscription) {
+          user.subscription.plan = 'free';
+          user.subscription.status = 'cancelled';
+          await user.save();
+        }
+        break;
+
+      case 'SUBSCRIPTION_PAYMENT_CREATED':
+        // A new payment was created for this subscription
+        subscription.totalPayments += 1;
+        if (asaasSubscription.nextDueDate) {
+          subscription.nextDueDate = new Date(asaasSubscription.nextDueDate);
+        }
+        break;
+    }
+
+    // Add webhook event
+    subscription.webhookEvents.push({
+      event: body.event,
+      receivedAt: new Date(),
+      data: {
+        asaasStatus: asaasSubscription.status,
+        value: asaasSubscription.value,
+        nextDueDate: asaasSubscription.nextDueDate,
+      },
+    });
+
+    await subscription.save();
+
+    console.log(`[Asaas Webhook] Subscription ${subscription._id} updated: ${body.event}`);
+
+    return NextResponse.json({
+      received: true,
+      subscriptionId: subscription._id,
+      event: body.event,
+    });
+
+  } catch (error) {
+    console.error('[Asaas Webhook] Subscription event error:', error);
+    return NextResponse.json(
+      { received: true, error: 'Internal error processing subscription event' },
+      { status: 200 }
+    );
+  }
+}
+
+// =============================================================================
+// INVOICE EVENT HANDLER
+// =============================================================================
+
+async function handleInvoiceEvent(body: AsaasInvoiceWebhookEvent) {
+  try {
+    const asaasInvoice = body.invoice;
+    
+    console.log(`[Asaas Webhook] Invoice event: ${body.event}`, {
+      invoiceId: asaasInvoice.id,
+      status: asaasInvoice.status,
+      value: asaasInvoice.value,
+    });
+
+    // If invoice is linked to a payment, update payment record
+    if (asaasInvoice.payment) {
+      const payment = await Payment.findOne({
+        providerPaymentId: asaasInvoice.payment,
+      });
+
+      if (payment) {
+        payment.webhookEvents.push({
+          event: body.event,
+          receivedAt: new Date(),
+          data: {
+            invoiceId: asaasInvoice.id,
+            invoiceStatus: asaasInvoice.status,
+            pdfUrl: asaasInvoice.pdfUrl,
+            number: asaasInvoice.number,
+          },
+        });
+
+        // Store invoice URL in payment
+        if (asaasInvoice.pdfUrl) {
+          payment.invoiceUrl = asaasInvoice.pdfUrl;
+        }
+
+        await payment.save();
+        
+        console.log(`[Asaas Webhook] Payment ${payment.orderNumber} invoice updated`);
+      }
+    }
+
+    return NextResponse.json({
+      received: true,
+      invoiceId: asaasInvoice.id,
+      event: body.event,
+    });
+
+  } catch (error) {
+    console.error('[Asaas Webhook] Invoice event error:', error);
+    return NextResponse.json(
+      { received: true, error: 'Internal error processing invoice event' },
+      { status: 200 }
+    );
+  }
+}
+
+// =============================================================================
 // GET - Webhook Health Check
 // =============================================================================
 
@@ -295,5 +455,10 @@ export async function GET() {
     status: 'active',
     provider: 'asaas',
     timestamp: new Date().toISOString(),
+    supportedEvents: [
+      'PAYMENT_*',
+      'SUBSCRIPTION_*',
+      'INVOICE_*',
+    ],
   });
 }
