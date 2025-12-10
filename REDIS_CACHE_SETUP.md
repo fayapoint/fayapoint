@@ -39,6 +39,12 @@ UPSTASH_REDIS_REST_TOKEN=AXxxxx...
 | `/api/public/gallery` | 2 min | `gallery:p{page}:l{limit}` | Gallery pages |
 | `/api/user/dashboard` (leaderboard) | 5 min | `leaderboard:weekly` | Shared leaderboard |
 | `/api/products` | 10 min | `products:*` | Product listings |
+| `/api/store/featured` | 5 min | `store:featured` | Featured products |
+| `/api/store/products/[slug]` | 10 min | `store:product:{slug}` | Individual products |
+| `/api/service-prices` | 30 min | `service:prices` | Service pricing |
+| `/api/calendar/next-slot` | 5 min | `calendar:next-slot` | Calendar availability |
+| `/api/github-repos` | 1 hour | `github:repos:{user}:{limit}` | GitHub repos |
+| `/api/user/creations` | 1 min | `user:{id}:creations` | User's images |
 
 ## Cache Invalidation
 
@@ -64,7 +70,9 @@ This is more than enough for most use cases. The caching strategy is designed to
 ## Expected Impact
 
 With Redis caching enabled, expect:
-- **~60-70% reduction** in serverless function invocations
-- **~50-60% reduction** in MongoDB queries
+- **~70-80% reduction** in serverless function invocations
+- **~60-70% reduction** in MongoDB queries
 - **Faster response times** (cached responses in <10ms vs 100-300ms for DB)
 - **Lower data transfer** (cached JSON served directly)
+- **Reduced GitHub API calls** (saves rate limit)
+- **Reduced external calendar fetches**

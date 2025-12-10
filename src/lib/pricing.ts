@@ -1,4 +1,5 @@
 import { Collection, MongoClient } from "mongodb";
+import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
 
 const DEFAULT_MONGODB_URI = '';
 
@@ -71,17 +72,31 @@ export interface ServicePriceDocument {
   updatedAt?: string;
 }
 
+// CACHED: 30 minutes TTL - prices rarely change
 export async function getAllServicePrices(): Promise<ServicePriceDocument[]> {
-  const collection = await getPricesCollection();
-  return (await collection.find({}).toArray()) as ServicePriceDocument[];
+  return getOrSet<ServicePriceDocument[]>(
+    CACHE_KEYS.SERVICE_PRICES,
+    async () => {
+      const collection = await getPricesCollection();
+      return (await collection.find({}).toArray()) as ServicePriceDocument[];
+    },
+    CACHE_TTL.SERVICE_PRICES
+  );
 }
 
+// CACHED: 30 minutes TTL - prices rarely change
 export async function getServicePricesBySlug(
   serviceSlug: string,
 ): Promise<ServicePriceDocument[]> {
-  const collection = await getPricesCollection();
-  return (await collection
-    .find({ serviceSlug })
-    .sort({ track: 1, unitLabel: 1 })
-    .toArray()) as ServicePriceDocument[];
+  return getOrSet<ServicePriceDocument[]>(
+    CACHE_KEYS.SERVICE_PRICES_BY_SLUG(serviceSlug),
+    async () => {
+      const collection = await getPricesCollection();
+      return (await collection
+        .find({ serviceSlug })
+        .sort({ track: 1, unitLabel: 1 })
+        .toArray()) as ServicePriceDocument[];
+    },
+    CACHE_TTL.SERVICE_PRICES
+  );
 }

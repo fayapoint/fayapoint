@@ -11,12 +11,18 @@ const redis = new Redis({
 
 // Cache TTL values in seconds
 export const CACHE_TTL = {
-  LEADERBOARD: 300,      // 5 minutes - shared, changes slowly
-  COMMUNITY_STATS: 300,  // 5 minutes - shared, aggregate data
-  GALLERY: 120,          // 2 minutes - public gallery pages
-  PRODUCTS: 600,         // 10 minutes - product list rarely changes
-  COURSE_CONTENT: 3600,  // 1 hour - course content rarely changes
-  USER_SESSION: 60,      // 1 minute - user-specific but cacheable
+  LEADERBOARD: 300,       // 5 minutes - shared, changes slowly
+  COMMUNITY_STATS: 300,   // 5 minutes - shared, aggregate data
+  GALLERY: 120,           // 2 minutes - public gallery pages
+  PRODUCTS: 600,          // 10 minutes - product list rarely changes
+  COURSE_CONTENT: 3600,   // 1 hour - course content rarely changes
+  USER_SESSION: 60,       // 1 minute - user-specific but cacheable
+  SERVICE_PRICES: 1800,   // 30 minutes - prices rarely change
+  STORE_FEATURED: 300,    // 5 minutes - featured products
+  STORE_PRODUCT: 600,     // 10 minutes - individual store product
+  CALENDAR_SLOT: 300,     // 5 minutes - next available slot
+  GITHUB_REPOS: 3600,     // 1 hour - GitHub repos
+  COURSES_LIST: 1800,     // 30 minutes - courses list (static data)
 } as const;
 
 // Cache key prefixes
@@ -28,6 +34,16 @@ export const CACHE_KEYS = {
   PRODUCT: (slug: string) => `product:${slug}`,
   COURSE_CONTENT: (slug: string) => `course:${slug}`,
   USER_DASHBOARD_STATIC: (userId: string) => `user:${userId}:dashboard:static`,
+  SERVICE_PRICES: 'service:prices',
+  SERVICE_PRICES_BY_SLUG: (slug: string) => `service:prices:${slug}`,
+  STORE_FEATURED: 'store:featured',
+  STORE_PRODUCT: (slug: string) => `store:product:${slug}`,
+  CALENDAR_SLOT: 'calendar:next-slot',
+  GITHUB_REPOS: (username: string, limit: number) => `github:repos:${username}:${limit}`,
+  COURSES_LIST: 'courses:list',
+  STORE_CATEGORIES: 'store:categories',
+  STORE_BRANDS: 'store:brands',
+  USER_CREATIONS: (userId: string) => `user:${userId}:creations`,
 } as const;
 
 /**
