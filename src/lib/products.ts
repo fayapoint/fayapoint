@@ -2,9 +2,11 @@
  * Product Data Layer
  * 
  * Functions to fetch and manage products from MongoDB
+ * With Redis caching for performance optimization
  */
 
 import { MongoClient, Collection } from 'mongodb';
+import { getOrSet, CACHE_TTL, CACHE_KEYS, invalidateCachePattern } from '@/lib/redis';
 
 const DEFAULT_MONGODB_URI = '';
 
@@ -142,51 +144,72 @@ export interface Product {
   updatedAt: string;
 }
 
-// Get all active products
+// Get all active products (CACHED: 10 minutes)
 export async function getAllProducts(options?: {
   limit?: number;
   sortBy?: 'students' | 'rating' | 'price' | 'newest';
   type?: 'course' | 'tool';
 }): Promise<Product[]> {
-  const collection = await getProductsCollection();
+  // Create a cache key based on options
+  const cacheKey = `${CACHE_KEYS.PRODUCTS}:${options?.sortBy || 'students'}:${options?.type || 'all'}:${options?.limit || 100}`;
   
-  let sort: Record<string, 1 | -1> = {};
-  switch (options?.sortBy) {
-    case 'students':
-      sort = { 'metrics.students': -1 };
-      break;
-    case 'rating':
-      sort = { 'metrics.rating': -1 };
-      break;
-    case 'price':
-      sort = { 'pricing.price': 1 };
-      break;
-    case 'newest':
-      sort = { 'createdAt': -1 };
-      break;
-    default:
-      sort = { 'metrics.students': -1 };
-  }
-  
-  const query: Record<string, unknown> = { status: 'active' };
-  if (options?.type) {
-    query.type = options.type;
-  }
+  return getOrSet<Product[]>(
+    cacheKey,
+    async () => {
+      const collection = await getProductsCollection();
+      
+      let sort: Record<string, 1 | -1> = {};
+      switch (options?.sortBy) {
+        case 'students':
+          sort = { 'metrics.students': -1 };
+          break;
+        case 'rating':
+          sort = { 'metrics.rating': -1 };
+          break;
+        case 'price':
+          sort = { 'pricing.price': 1 };
+          break;
+        case 'newest':
+          sort = { 'createdAt': -1 };
+          break;
+        default:
+          sort = { 'metrics.students': -1 };
+      }
+      
+      const query: Record<string, unknown> = { status: 'active' };
+      if (options?.type) {
+        query.type = options.type;
+      }
 
-  const products = await collection
-    .find(query)
-    .sort(sort)
-    .limit(options?.limit || 100)
-    .toArray();
-  
-  return products as unknown as Product[];
+      const products = await collection
+        .find(query)
+        .sort(sort)
+        .limit(options?.limit || 100)
+        .toArray();
+      
+      return products as unknown as Product[];
+    },
+    CACHE_TTL.PRODUCTS
+  );
 }
 
-// Get product by slug
+// Get product by slug (CACHED: 10 minutes)
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const collection = await getProductsCollection();
-  const product = await collection.findOne({ slug, status: 'active' });
-  return product as unknown as Product | null;
+  return getOrSet<Product | null>(
+    CACHE_KEYS.PRODUCT(slug),
+    async () => {
+      const collection = await getProductsCollection();
+      const product = await collection.findOne({ slug, status: 'active' });
+      return product as unknown as Product | null;
+    },
+    CACHE_TTL.PRODUCTS
+  );
+}
+
+// Invalidate product cache (call when products are updated)
+export async function invalidateProductCache(): Promise<void> {
+  await invalidateCachePattern('products:*');
+  await invalidateCachePattern('product:*');
 }
 
 // Get products by category

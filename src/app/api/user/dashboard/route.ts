@@ -8,6 +8,7 @@ import { headers } from 'next/headers';
 import { getMongoClient } from '@/lib/database';
 import { ACHIEVEMENTS, DAILY_CHALLENGES, WEEKLY_MISSIONS } from '@/models/Achievement';
 import { calculateEnrollmentSlots, SubscriptionPlan, CourseLevel } from '@/lib/course-tiers';
+import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -215,14 +216,28 @@ export async function GET(request: Request) {
     const xpForNextLevel = getXpForLevel(currentLevel + 1);
     const levelProgress = Math.min(100, Math.floor(((currentXp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100));
 
-    // Fetch leaderboard (top 10 by weekly XP)
-    const leaderboard = await User.find({})
-      .select('name image progress.weeklyXp progress.level subscription.plan')
-      .sort({ 'progress.weeklyXp': -1 })
-      .limit(10)
-      .lean();
+    // REDIS CACHE: Leaderboard is shared across all users (5 min TTL)
+    interface LeaderboardUser {
+      _id: unknown;
+      name: string;
+      image?: string;
+      progress?: { weeklyXp?: number; level?: number };
+      subscription?: { plan?: string };
+    }
+    
+    const leaderboard = await getOrSet<LeaderboardUser[]>(
+      CACHE_KEYS.LEADERBOARD,
+      async () => {
+        return User.find({})
+          .select('name image progress.weeklyXp progress.level subscription.plan')
+          .sort({ 'progress.weeklyXp': -1 })
+          .limit(10)
+          .lean() as Promise<LeaderboardUser[]>;
+      },
+      CACHE_TTL.LEADERBOARD
+    );
 
-    // Find user's rank
+    // Find user's rank (quick count, not cached since it's user-specific)
     const userRank = await User.countDocuments({ 'progress.weeklyXp': { $gt: user.progress?.weeklyXp || 0 } }) + 1;
 
     // Map achievements with unlock status

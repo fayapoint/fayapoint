@@ -5,6 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import ImageCreation from '@/models/ImageCreation';
+import { invalidateCachePattern } from '@/lib/redis';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -268,6 +269,10 @@ export async function POST(request: Request) {
         publicId: uploadResult.public_id,
         provider: 'flux-1-schnell'
     });
+
+    // REDIS: Invalidate gallery and community stats cache (new image added)
+    invalidateCachePattern('gallery:*').catch(err => console.error('Gallery cache invalidation error:', err));
+    invalidateCachePattern('community:*').catch(err => console.error('Community cache invalidation error:', err));
 
     // OPTIMIZATION: Award XP inline (saves 1 API call to /api/user/checkin)
     User.findByIdAndUpdate(user._id, {
