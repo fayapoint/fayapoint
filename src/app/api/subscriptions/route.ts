@@ -13,6 +13,8 @@ import asaas, {
   createSubscription as createAsaasSubscription,
   listSubscriptions as listAsaasSubscriptions,
   tokenizeCreditCard,
+  getSubscriptionPayments,
+  getPixQrCode,
   AsaasCreditCard,
   AsaasCreditCardHolderInfo,
   cleanCpfCnpj,
@@ -94,10 +96,16 @@ export async function POST(request: NextRequest) {
     };
 
     // Validate plan
+    console.log('[Subscription] planSlug received:', planSlug);
+    console.log('[Subscription] Available plans:', Object.keys(SUBSCRIPTION_PLANS));
+    
     const plan = SUBSCRIPTION_PLANS[planSlug as keyof typeof SUBSCRIPTION_PLANS];
     if (!plan) {
-      return NextResponse.json({ error: 'Plano inválido' }, { status: 400 });
+      console.error('[Subscription] Invalid plan:', planSlug);
+      return NextResponse.json({ error: `Plano inválido: ${planSlug}` }, { status: 400 });
     }
+    
+    console.log('[Subscription] Plan found:', plan.name, 'Price:', plan.monthlyPrice, '/', plan.yearlyPrice);
 
     // Validate CPF/CNPJ
     const cleanedCpfCnpj = cpfCnpj ? cleanCpfCnpj(cpfCnpj) : '';
@@ -275,11 +283,75 @@ export async function POST(request: NextRequest) {
     
     await userDoc.save();
 
+    // For PIX/Boleto subscriptions, get the first payment details
+    let pixData;
+    let boletoData;
+    let paymentUrl;
+    let firstPaymentId;
+    
+    if (billingType === 'pix' || billingType === 'boleto') {
+      try {
+        // Wait a moment for Asaas to create the first payment
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Get the first payment from the subscription
+        const payments = await getSubscriptionPayments(asaasSubscription.id);
+        console.log('[Subscription] First payments:', payments);
+        
+        if (payments.data && payments.data.length > 0) {
+          const firstPayment = payments.data[0];
+          firstPaymentId = firstPayment.id;
+          paymentUrl = firstPayment.invoiceUrl;
+          
+          if (billingType === 'pix' && firstPayment.id) {
+            try {
+              const qrCode = await getPixQrCode(firstPayment.id);
+              pixData = {
+                qrCodeBase64: qrCode.encodedImage,
+                qrCodePayload: qrCode.payload,
+                expirationDate: qrCode.expirationDate,
+              };
+            } catch (pixError) {
+              console.error('[Subscription] Error getting PIX QR:', pixError);
+            }
+          }
+          
+          if (billingType === 'boleto' && firstPayment.bankSlipUrl) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const paymentAny = firstPayment as any;
+            boletoData = {
+              barCode: paymentAny.nossoNumero || '',
+              digitableLine: paymentAny.identificationField || '',
+              bankSlipUrl: firstPayment.bankSlipUrl,
+              dueDate: firstPayment.dueDate,
+            };
+          }
+        }
+      } catch (error) {
+        console.error('[Subscription] Error fetching first payment:', error);
+      }
+    }
+
+    // Generate order number for display
+    const orderNumber = `SUB-${Date.now().toString(36).toUpperCase()}`;
+
+    // Return response compatible with checkout PaymentResult
     return NextResponse.json({
       success: true,
+      orderNumber,
+      paymentId: subscription._id,
+      status: 'pending',
+      method: billingType,
+      total: value,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      paymentUrl: paymentUrl || (asaasSubscription as any).paymentLink,
+      pixData,
+      boletoData,
+      isPaid: false,
       subscription: {
         id: subscription._id,
         asaasSubscriptionId: asaasSubscription.id,
+        firstPaymentId,
         plan: plan.name,
         value,
         cycle,
