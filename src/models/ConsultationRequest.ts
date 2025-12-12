@@ -25,6 +25,7 @@ export interface IConsultationRequest extends Document {
   details?: string;
   source: string; // e.g., 'video-editing-page', 'home-page', 'contact-page'
   referrerUrl?: string;
+  utm?: Record<string, string | undefined>;
   
   // Cart snapshot at time of request
   cartItems: ICartItemSnapshot[];
@@ -66,6 +67,7 @@ const ConsultationRequestSchema = new Schema<IConsultationRequest>({
   details: String,
   source: { type: String, required: true },
   referrerUrl: String,
+  utm: { type: Schema.Types.Mixed },
   
   cartItems: { type: [CartItemSnapshotSchema], default: [] },
   cartTotal: { type: Number, default: 0 },

@@ -2,9 +2,44 @@ import { NextRequest, NextResponse } from "next/server";
 import { upsertUser } from "@/lib/users";
 import { getClientIpFromRequest, rateLimit } from "@/lib/rate-limit";
 
+function deriveNameFromEmail(email: string) {
+  const localPart = email.split("@")[0] ?? "";
+  const cleaned = localPart.replace(/[._-]+/g, " ").trim();
+  if (!cleaned) return "Lead";
+  return cleaned
+    .split(" ")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function extractUtm(urlString?: string) {
+  if (!urlString) return undefined;
+  try {
+    const u = new URL(urlString);
+    const get = (k: string) => u.searchParams.get(k) ?? undefined;
+    const utm = {
+      utm_source: get("utm_source"),
+      utm_medium: get("utm_medium"),
+      utm_campaign: get("utm_campaign"),
+      utm_content: get("utm_content"),
+      utm_term: get("utm_term"),
+    };
+    const hasAny = Object.values(utm).some(Boolean);
+    return hasAny ? utm : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIpFromRequest(request);
+    const ua = request.headers.get("user-agent") ?? "";
+
+    if (!ua || /bot|crawler|spider|headless/i.test(ua)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const rl = await rateLimit({
       key: `ratelimit:leads:ip:${ip}`,
@@ -38,21 +73,26 @@ export async function POST(request: NextRequest) {
       utm,
     } = body ?? {};
 
-    if (!name || !email) {
-      return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
+    if (!email) {
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
     const normalizedEmail = String(email).trim().toLowerCase();
 
+    const resolvedReferrerUrl =
+      referrerUrl || request.headers.get("referer") || undefined;
+
+    const resolvedUtm = utm || extractUtm(resolvedReferrerUrl);
+
     const lead = await upsertUser({
-      name: String(name).trim(),
+      name: name ? String(name).trim() : deriveNameFromEmail(normalizedEmail),
       email: normalizedEmail,
       source: source || "lead",
       leadType: leadType || "unknown",
       leadDetails: {
-        referrerUrl,
+        referrerUrl: resolvedReferrerUrl,
         details,
-        utm,
+        utm: resolvedUtm,
         capturedAt: new Date().toISOString(),
       },
       ...(bookDiscountCode ? { bookDiscountCode } : {}),

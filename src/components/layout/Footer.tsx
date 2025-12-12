@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
+import { getAttributionUtmPayload } from "@/lib/attribution";
 import { 
   Facebook, 
   Instagram, 
@@ -65,6 +67,8 @@ const socialLinks = [
 export function Footer() {
   const t = useTranslations("Footer");
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
 
   // Handle scroll to show/hide back to top button
   useEffect(() => {
@@ -77,6 +81,39 @@ export function Footer() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const submitNewsletter = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+
+    setNewsletterLoading(true);
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: newsletterEmail,
+          source: "footer_newsletter",
+          leadType: "newsletter",
+          referrerUrl: typeof window !== "undefined" ? window.location.href : undefined,
+          utm: getAttributionUtmPayload(),
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || "Erro ao enviar");
+      }
+
+      setNewsletterEmail("");
+      toast.success("Inscrição realizada!");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Erro ao enviar";
+      toast.error(message);
+    } finally {
+      setNewsletterLoading(false);
+    }
   };
 
   return (
@@ -128,13 +165,23 @@ export function Footer() {
             <p className="text-gray-400 mb-6">
               {t("newsletter.description")}
             </p>
-            <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form
+              className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+              onSubmit={submitNewsletter}
+            >
               <Input
                 type="email"
+                autoComplete="email"
                 placeholder={t("newsletter.placeholder")}
                 className="flex-1 bg-input border-border"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
               />
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+              <Button
+                type="submit"
+                disabled={!newsletterEmail || newsletterLoading}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              >
                 {t("newsletter.cta")}
               </Button>
             </form>

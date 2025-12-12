@@ -1,5 +1,3 @@
-"use client";
-
 import { Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -8,9 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
-import { ArrowRight, CheckCircle2, CircuitBoard, Gauge, Link2, Workflow } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { AutomationToolbox } from "@/components/services/AutomationToolbox";
+import { ArrowRight, CheckCircle2, CircuitBoard, Gauge, Link2, Workflow, BadgeCheck } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import Script from "next/script";
 
 const highlights = [
   {
@@ -61,6 +62,72 @@ const metrics = [
   { label: "Integrações concluídas", value: "300+" },
 ];
 
+const packages = [
+  {
+    tier: "Starter",
+    title: "Quick Wins",
+    description: "Automação de 1-2 fluxos críticos com rastreabilidade e métricas.",
+    highlights: [
+      "Mapa de processos + priorização",
+      "1-2 automações (webhook/API)",
+      "Retentativas + logs",
+      "Entrega em 2-3 semanas",
+    ],
+    featured: false,
+    source: "automation-package-starter",
+  },
+  {
+    tier: "Pro",
+    title: "Ops Automation",
+    description: "Integrações + governança: SLOs, alertas, dedupe e documentação viva.",
+    highlights: [
+      "3-6 automações",
+      "SLA + alertas",
+      "Idempotência + dedupe",
+      "Documentação + handoff",
+    ],
+    featured: true,
+    source: "automation-package-pro",
+  },
+  {
+    tier: "Enterprise",
+    title: "Automation Platform",
+    description: "Arquitetura de automações em escala com filas, observabilidade e roadmap mensal.",
+    highlights: [
+      "Roadmap mensal",
+      "Observabilidade completa",
+      "Segurança + governança",
+      "Squad dedicado",
+    ],
+    featured: false,
+    source: "automation-package-enterprise",
+  },
+];
+
+const faqItems = [
+  {
+    q: "Quais ferramentas vocês usam?",
+    a: "Escolhemos por contexto: n8n, Make, Zapier, APIs custom, filas e serviços cloud. O foco é confiabilidade e governança, não só conectar." ,
+  },
+  {
+    q: "Como evitam automações quebrando?",
+    a: "Implementamos idempotência, retentativas, dead-letter, logs, alertas e SLAs. Em fluxos críticos, adicionamos validação + revisão humana.",
+  },
+  {
+    q: "Isso integra com CRM e WhatsApp?",
+    a: "Sim. Integramos CRM (HubSpot/RD/CRM próprio), WhatsApp, e-mail e sistemas internos. Também rastreamos UTMs para atribuição.",
+  },
+  {
+    q: "Quanto tempo até ver resultado?",
+    a: "Quick wins saem em 2-3 semanas. Operação estável e escalável normalmente evolui em 30-90 dias conforme volume e integrações.",
+  },
+];
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  "https://fayai.shop";
+
 const automations = [
   {
     title: "Funil de vendas",
@@ -76,12 +143,52 @@ const automations = [
   },
 ];
 
-export default function AutomationIntegrationPage() {
+export default function AutomationIntegrationPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations("Home.Services.automation");
+  const isEn = params.locale === "en";
+
+  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/automacao-e-integracao`;
+
+  const serviceLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: isEn ? "Automation & Integration" : "Automação & Integração",
+    url: serviceUrl,
+    provider: {
+      "@type": "Organization",
+      name: "FayaPoint",
+      url: SITE_URL,
+    },
+    areaServed: "BR",
+    serviceType: isEn ? "Automation" : "Automação",
+  };
+
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
+      <Script id="ld-automation-service" type="application/ld+json">
+        {JSON.stringify(serviceLd)}
+      </Script>
+      <Script id="ld-automation-faq" type="application/ld+json">
+        {JSON.stringify(faqLd)}
+      </Script>
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto text-center mb-16">
@@ -102,12 +209,31 @@ export default function AutomationIntegrationPage() {
             >
               Agendar diagnóstico gratuito <ArrowRight className="ml-2 w-5 h-5" />
             </ScheduleConsultationButton>
-            <Link href="/contato">
+            <a href="#toolbox">
               <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                Falar com especialista
+                {isEn ? "Use the free tools" : "Usar ferramentas grátis"}
               </Button>
-            </Link>
+            </a>
           </div>
+
+          <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <BadgeCheck className="w-5 h-5 text-emerald-500" />
+              <span>{isEn ? "No lock-in" : "Sem fidelidade"}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <BadgeCheck className="w-5 h-5 text-emerald-500" />
+              <span>{isEn ? "Observable + reliable" : "Observável + confiável"}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <BadgeCheck className="w-5 h-5 text-emerald-500" />
+              <span>{isEn ? "UTM attribution" : "Atribuição por UTM"}</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="toolbox" className="scroll-mt-28 mb-20">
+          <AutomationToolbox locale={params.locale} />
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-16">
@@ -180,6 +306,75 @@ export default function AutomationIntegrationPage() {
             </div>
           </div>
         </div>
+
+        <div className="max-w-6xl mx-auto mb-20">
+          <div className="text-center mb-10">
+            <Badge variant="secondary" className="mb-4">{isEn ? "Packages" : "Pacotes"}</Badge>
+            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Choose a plan" : "Escolha o plano ideal"}</h2>
+            <p className="text-muted-foreground mt-3">
+              {isEn
+                ? "Start with quick wins, then scale with governance."
+                : "Comece com quick wins e escale com governança."}
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            {packages.map((p) => (
+              <Card
+                key={p.tier}
+                className={`p-7 rounded-3xl border-border bg-card/70 ${p.featured ? "ring-2 ring-orange-500/40" : ""}`}
+              >
+                <div className="flex items-center justify-between">
+                  <Badge variant={p.featured ? "default" : "secondary"}>{p.tier}</Badge>
+                  {p.featured && (
+                    <Badge className="bg-orange-600">{isEn ? "Most popular" : "Mais escolhido"}</Badge>
+                  )}
+                </div>
+                <h3 className="text-2xl font-bold mt-5">{p.title}</h3>
+                <p className="text-muted-foreground mt-2">{p.description}</p>
+                <div className="mt-6 grid gap-3">
+                  {p.highlights.map((h) => (
+                    <div key={h} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5" />
+                      <p className="text-sm text-muted-foreground">{h}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-7 flex gap-3">
+                  <ScheduleConsultationButton
+                    className="flex-1"
+                    source={p.source}
+                    showCompanyRole
+                  >
+                    {isEn ? "Book a call" : "Agendar conversa"}
+                  </ScheduleConsultationButton>
+                  <Link href="/precos">
+                    <Button variant="outline">{isEn ? "Pricing" : "Preços"}</Button>
+                  </Link>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto mb-24">
+          <div className="text-center mb-8">
+            <Badge variant="secondary" className="mb-3">FAQ</Badge>
+            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
+            <p className="text-muted-foreground mt-3">
+              {isEn ? "Clear answers before you book." : "Respostas rápidas antes de agendar."}
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full">
+            {faqItems.map((f) => (
+              <AccordionItem key={f.q} value={f.q}>
+                <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
         </div>
         
         <Suspense fallback={<div className="py-20 text-center">Carregando construtor de serviços...</div>}>
@@ -194,6 +389,21 @@ export default function AutomationIntegrationPage() {
           />
         </Suspense>
       </main>
+
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-3">
+          <div className="flex-1">
+            <p className="text-sm font-medium">{isEn ? "Automation diagnosis" : "Diagnóstico de automação"}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+          </div>
+          <a href="#toolbox">
+            <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>
+          </a>
+          <ScheduleConsultationButton source="automation-sticky" className="px-4">
+            {isEn ? "Book" : "Agendar"}
+          </ScheduleConsultationButton>
+        </div>
+      </div>
       <Footer />
     </div>
   );

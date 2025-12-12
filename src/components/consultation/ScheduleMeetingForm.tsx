@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { getAttributionUtmPayload } from "@/lib/attribution";
 import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
 
@@ -144,6 +145,7 @@ export function ScheduleMeetingForm({
           details: formData.details.trim() || undefined,
           source,
           referrerUrl: typeof window !== 'undefined' ? window.location.href : undefined,
+          utm: getAttributionUtmPayload(),
           cartItems: cartItemsArray,
           cartTotal: cartTotal,
         }),

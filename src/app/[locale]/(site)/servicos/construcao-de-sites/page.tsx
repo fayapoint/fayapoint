@@ -25,7 +25,9 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
-import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { WebsiteToolbox } from "@/components/services/WebsiteToolbox";
+import Script from "next/script";
 
 const stats = [
   { icon: TrendingUp, value: "+43%", label: "Conversão média" },
@@ -67,6 +69,30 @@ const showcases = [
   },
 ];
 
+const faqItems = [
+  {
+    q: "Em quanto tempo fica pronto?",
+    a: "Depende do escopo. Landing pages podem ser entregues em 10-20 dias. Sites institucionais normalmente levam 3-6 semanas. Portais e áreas logadas variam conforme integrações e governança.",
+  },
+  {
+    q: "Vocês entregam SEO e performance?",
+    a: "Sim. Trabalhamos com performance (Core Web Vitals), SEO técnico, schema e instrumentação (eventos + UTMs) para rastrear conversão desde o dia 1.",
+  },
+  {
+    q: "Dá para eu editar depois?",
+    a: "Sim. Podemos entregar com CMS headless e componentes aprovados para você editar com segurança, sem quebrar layout/performance.",
+  },
+  {
+    q: "Integra com CRM e automações?",
+    a: "Sim. Integramos com HubSpot/RD/CRMs, automações (n8n/Make) e eventos para atribuição completa.",
+  },
+];
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  "https://fayai.shop";
+
 const differentiators = [
   {
     icon: Palette,
@@ -100,7 +126,7 @@ const differentiators = [
   },
 ];
 
-const process = [
+const processSteps = [
   {
     step: "01",
     title: "Blueprint digital",
@@ -176,12 +202,52 @@ const packages = [
   },
 ];
 
-export default function WebsiteBuildingPage() {
+export default function WebsiteBuildingPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations("Home.Services.website-building");
+  const isEn = params.locale === "en";
+
+  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/construcao-de-sites`;
+
+  const serviceLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: isEn ? "Website & Landing Page Development" : "Construção de Sites & Landing Pages",
+    url: serviceUrl,
+    provider: {
+      "@type": "Organization",
+      name: "FayaPoint",
+      url: SITE_URL,
+    },
+    areaServed: "BR",
+    serviceType: isEn ? "Website development" : "Desenvolvimento de sites",
+  };
+
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
+      <Script id="ld-website-building-service" type="application/ld+json">
+        {JSON.stringify(serviceLd)}
+      </Script>
+      <Script id="ld-website-building-faq" type="application/ld+json">
+        {JSON.stringify(faqLd)}
+      </Script>
       <main>
         <section className="relative pt-32 pb-20 px-4 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/10 pointer-events-none" />
@@ -220,6 +286,33 @@ export default function WebsiteBuildingPage() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="py-20 px-4">
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-8">
+              <Badge variant="secondary" className="mb-3">FAQ</Badge>
+              <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
+              <p className="text-muted-foreground mt-3">
+                {isEn ? "Clear answers before you start." : "Respostas rápidas antes de começar."}
+              </p>
+            </div>
+
+            <Accordion type="single" collapsible className="w-full">
+              {faqItems.map((f) => (
+                <AccordionItem key={f.q} value={f.q}>
+                  <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </section>
+
+        <section id="toolbox" className="py-20 px-4 bg-muted/30 scroll-mt-28">
+          <div className="container mx-auto max-w-6xl">
+            <WebsiteToolbox locale={params.locale} />
           </div>
         </section>
 
@@ -317,7 +410,7 @@ export default function WebsiteBuildingPage() {
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {process.map((step) => (
+              {processSteps.map((step) => (
                 <div key={step.title} className="relative">
                   <div className="text-6xl font-bold text-primary/10 mb-4">{step.step}</div>
                   <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
@@ -426,6 +519,21 @@ export default function WebsiteBuildingPage() {
           />
         </Suspense>
       </main>
+
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-3">
+          <div className="flex-1">
+            <p className="text-sm font-medium">{isEn ? "Website blueprint" : "Blueprint do site"}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+          </div>
+          <a href="#toolbox">
+            <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>
+          </a>
+          <ScheduleConsultationButton source="website-building-sticky" className="px-4">
+            {isEn ? "Book" : "Agendar"}
+          </ScheduleConsultationButton>
+        </div>
+      </div>
       <Footer />
     </div>
   );

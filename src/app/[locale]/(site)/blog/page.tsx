@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
+import { getAttributionUtmPayload } from "@/lib/attribution";
 
 type BlogPost = {
   id: number;
@@ -66,6 +68,40 @@ export default function BlogPage() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(allCategory);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+
+  const submitNewsletter = async () => {
+    if (!newsletterEmail) return;
+
+    setNewsletterLoading(true);
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: newsletterEmail,
+          source: "blog_newsletter",
+          leadType: "newsletter",
+          referrerUrl: typeof window !== "undefined" ? window.location.href : undefined,
+          utm: getAttributionUtmPayload(),
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || "Erro ao enviar");
+      }
+
+      setNewsletterEmail("");
+      toast.success("Inscrição realizada!");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Erro ao enviar";
+      toast.error(message);
+    } finally {
+      setNewsletterLoading(false);
+    }
+  };
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -293,10 +329,17 @@ export default function BlogPage() {
                 </p>
                 <Input
                   type="email"
+                  autoComplete="email"
                   placeholder={newsletter.placeholder}
                   className="mb-3 bg-gray-800 border-gray-700"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
                 />
-                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                <Button
+                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  onClick={submitNewsletter}
+                  disabled={!newsletterEmail || newsletterLoading}
+                >
                   {labels.newsletterSubmit}
                 </Button>
               </Card>

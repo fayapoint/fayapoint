@@ -8,11 +8,71 @@ import { CheckCircle, Bot, ArrowRight, Sparkles, TrendingUp, Users, Zap, Target,
 import { useTranslations } from "next-intl";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { AIConsultingToolbox } from "@/components/services/AIConsultingToolbox";
+import Script from "next/script";
 
+const faqItems = [
+  {
+    q: "Qual é o primeiro passo?",
+    a: "Começamos com um diagnóstico: objetivos, fluxos, dados, riscos e quick wins. Em seguida definimos um roadmap e um piloto com métricas.",
+  },
+  {
+    q: "Vocês constroem agentes e automações?",
+    a: "Sim. Podemos desenhar e implementar agentes (RAG, assistentes, triagem), integrações (CRM, suporte) e automações com governança e observabilidade.",
+  },
+  {
+    q: "Como garantem segurança e compliance?",
+    a: "Definimos política de uso, controle de acesso, logging, avaliação e revisão humana onde necessário. Também isolamos dados sensíveis e evitamos vazamento de segredos.",
+  },
+  {
+    q: "Quanto tempo para ver resultado?",
+    a: "Quick wins podem aparecer em 2-4 semanas. Roadmap com resultados consistentes normalmente evolui em 30-90 dias.",
+  },
+];
 
-export default function AIConsultingPage() {
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  "https://fayai.shop";
+
+export default function AIConsultingPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations("Home.Services.ai-consulting");
   const p = useTranslations("AIConsultingPage");
+
+  const isEn = params.locale === "en";
+  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/consultoria-ai`;
+
+  const serviceLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: isEn ? "AI Consulting" : "Consultoria em IA",
+    url: serviceUrl,
+    provider: {
+      "@type": "Organization",
+      name: "FayaPoint",
+      url: SITE_URL,
+    },
+    areaServed: "BR",
+    serviceType: isEn ? "AI consulting" : "Consultoria em IA",
+  };
+
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  };
 
   const serviceKeys = ["strategy", "tools", "training", "agents", "optimization", "security"] as const;
   const serviceIcons = {
@@ -40,6 +100,12 @@ export default function AIConsultingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
+      <Script id="ld-ai-consulting-service" type="application/ld+json">
+        {JSON.stringify(serviceLd)}
+      </Script>
+      <Script id="ld-ai-consulting-faq" type="application/ld+json">
+        {JSON.stringify(faqLd)}
+      </Script>
       <main>
         {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
@@ -69,9 +135,11 @@ export default function AIConsultingPage() {
                 {p("hero.cta.primary")}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </ScheduleConsultationButton>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                {p("hero.cta.secondary")}
-              </Button>
+              <a href="#toolbox">
+                <Button size="lg" variant="outline" className="text-lg px-8 py-6">
+                  {isEn ? "Use the free tools" : "Usar ferramentas grátis"}
+                </Button>
+              </a>
             </div>
             
             <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
@@ -89,6 +157,12 @@ export default function AIConsultingPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="toolbox" className="py-20 px-4 bg-muted/30 scroll-mt-28">
+        <div className="container mx-auto max-w-6xl">
+          <AIConsultingToolbox locale={params.locale} />
         </div>
       </section>
 
@@ -289,6 +363,27 @@ export default function AIConsultingPage() {
         </div>
       </section>
 
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-8">
+            <Badge variant="secondary" className="mb-3">FAQ</Badge>
+            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
+            <p className="text-muted-foreground mt-3">
+              {isEn ? "Clear answers before you book." : "Respostas rápidas antes de agendar."}
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full">
+            {faqItems.map((f) => (
+              <AccordionItem key={f.q} value={f.q}>
+                <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
+
         {/* Final CTA */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
@@ -328,6 +423,21 @@ export default function AIConsultingPage() {
         />
       </Suspense>
       </main>
+
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-3">
+          <div className="flex-1">
+            <p className="text-sm font-medium">{isEn ? "AI diagnosis" : "Diagnóstico de IA"}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+          </div>
+          <a href="#toolbox">
+            <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>
+          </a>
+          <ScheduleConsultationButton source="ai-consulting-sticky" className="px-4" showCompanyRole>
+            {isEn ? "Book" : "Agendar"}
+          </ScheduleConsultationButton>
+        </div>
+      </div>
       <Footer />
     </div>
   );

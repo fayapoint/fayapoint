@@ -59,11 +59,12 @@ export async function POST(request: NextRequest) {
       details, 
       source, 
       referrerUrl,
+      utm: utmFromBody,
       cartItems = [],
       cartTotal = 0,
     } = body;
 
-    const utm = extractUtm(referrerUrl);
+    const utm = utmFromBody || extractUtm(referrerUrl);
 
     // Validate required fields
     if (!name || !email) {
@@ -141,6 +142,7 @@ export async function POST(request: NextRequest) {
       details: details?.trim(),
       source: source || 'unknown',
       referrerUrl: referrerUrl,
+      utm,
       cartItems: cartItemsSnapshot,
       cartTotal: cartTotal,
       scheduledStartUtc: new Date(slot.startUtc),

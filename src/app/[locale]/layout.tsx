@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
+import { AttributionTracker } from "@/components/AttributionTracker";
 import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { routing } from "@/i18n/routing";
@@ -157,6 +158,7 @@ export default async function RootLayout({
     <UserProvider>
       <ServiceCartProvider>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <AttributionTracker />
           <Script
             id="ld-organization"
             type="application/ld+json"
