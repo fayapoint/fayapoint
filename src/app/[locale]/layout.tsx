@@ -4,6 +4,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script";
 import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { routing } from "@/i18n/routing";
@@ -12,17 +13,22 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
+  "https://fayai.shop";
+
 const baseMetadata = {
-  metadataBase: new URL("https://fayapoint.com.br"),
+  metadataBase: new URL(SITE_URL),
   authors: [{ name: "Ricardo Faya" }],
   creator: "FayaPoint",
   publisher: "FayaPoint AI Academy",
   openGraph: {
     type: "website" as const,
-    url: "https://fayapoint.com.br",
+    url: SITE_URL,
     siteName: "FayaPoint AI Academy",
     images: [{
-      url: "/og-image.png",
+      url: "/rwx6.jpg",
       width: 1200,
       height: 630,
       alt: "FayaPoint AI Academy",
@@ -31,7 +37,7 @@ const baseMetadata = {
   twitter: {
     card: "summary_large_image" as const,
     creator: "@fayapoint",
-    images: ["/og-image.png"],
+    images: ["/rwx6.jpg"],
   },
   robots: {
     index: true,
@@ -94,7 +100,19 @@ export async function generateMetadata({
   params: Promise<LocaleParams>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  return localizedMetadata[locale] ?? localizedMetadata["pt-BR"];
+  const metadata = localizedMetadata[locale] ?? localizedMetadata["pt-BR"];
+  const canonicalPath = `/${locale}`;
+
+  return {
+    ...metadata,
+    alternates: {
+      canonical: canonicalPath,
+      languages: {
+        "pt-BR": "/pt-BR",
+        en: "/en",
+      },
+    },
+  };
 }
 
 export default async function RootLayout({
@@ -113,10 +131,46 @@ export default async function RootLayout({
   setRequestLocale(locale);
   const messages = await getMessages();
 
+  const organizationLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "FayaPoint",
+    url: SITE_URL,
+    logo: `${SITE_URL}/rwx6.jpg`,
+    sameAs: ["https://www.instagram.com/fayapoint"],
+  };
+
+  const websiteLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "FayaPoint AI Academy",
+    url: SITE_URL,
+    inLanguage: locale,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE_URL}/${locale}/cursos?search={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <UserProvider>
       <ServiceCartProvider>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <Script
+            id="ld-organization"
+            type="application/ld+json"
+            strategy="afterInteractive"
+          >
+            {JSON.stringify(organizationLd)}
+          </Script>
+          <Script
+            id="ld-website"
+            type="application/ld+json"
+            strategy="afterInteractive"
+          >
+            {JSON.stringify(websiteLd)}
+          </Script>
           {children}
           <Toaster
             position="top-center"

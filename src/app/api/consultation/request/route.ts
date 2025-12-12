@@ -3,9 +3,52 @@ import dbConnect from '@/lib/mongodb';
 import { ConsultationRequest, ICartItemSnapshot } from '@/models/ConsultationRequest';
 import { getNextAvailableSlot, BookingDetails } from '@/lib/calendar';
 import { upsertUser } from '@/lib/users';
+import { getClientIpFromRequest, rateLimit } from '@/lib/rate-limit';
+
+function extractUtm(referrerUrl?: string) {
+  if (!referrerUrl) return undefined;
+  try {
+    const u = new URL(referrerUrl);
+    const get = (k: string) => u.searchParams.get(k) ?? undefined;
+    const utm = {
+      utm_source: get('utm_source'),
+      utm_medium: get('utm_medium'),
+      utm_campaign: get('utm_campaign'),
+      utm_content: get('utm_content'),
+      utm_term: get('utm_term'),
+    };
+    const hasAny = Object.values(utm).some(Boolean);
+    return hasAny ? utm : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = getClientIpFromRequest(request);
+    const ua = request.headers.get('user-agent') ?? '';
+
+    if (!ua || /bot|crawler|spider|headless/i.test(ua)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const rl = await rateLimit({
+      key: `ratelimit:consultation:ip:${ip}`,
+      limit: 10,
+      windowSeconds: 60 * 60,
+    });
+
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(rl.resetSeconds) },
+        }
+      );
+    }
+
     const body = await request.json();
     const { 
       name, 
@@ -19,6 +62,8 @@ export async function POST(request: NextRequest) {
       cartItems = [],
       cartTotal = 0,
     } = body;
+
+    const utm = extractUtm(referrerUrl);
 
     // Validate required fields
     if (!name || !email) {
@@ -38,6 +83,13 @@ export async function POST(request: NextRequest) {
         name: name.trim(),
         email: email.trim(),
         source: source || 'consultation',
+        leadType: 'consultation',
+        leadDetails: {
+          referrerUrl,
+          details: details?.trim(),
+          utm,
+          capturedAt: new Date().toISOString(),
+        },
         ...(company && { company: company.trim() }),
         ...(role && { role: role.trim() }),
         ...(phone && { phone: phone.trim() }),

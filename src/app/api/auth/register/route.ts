@@ -3,11 +3,35 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getClientIpFromRequest, rateLimit } from '@/lib/rate-limit';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIpFromRequest(request);
+    const ua = request.headers.get('user-agent') ?? '';
+
+    if (!ua || /bot|crawler|spider|headless/i.test(ua)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const rl = await rateLimit({
+      key: `ratelimit:auth:register:ip:${ip}`,
+      limit: 10,
+      windowSeconds: 60 * 60,
+    });
+
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(rl.resetSeconds) },
+        }
+      );
+    }
+
     await dbConnect();
 
     const body = await request.json();

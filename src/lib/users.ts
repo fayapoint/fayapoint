@@ -23,6 +23,13 @@ export interface User {
   role?: string;
   interest?: string; // Keep for backward compatibility, but use interests array
   source?: string;
+  leadType?: string;
+  leadDetails?: {
+    referrerUrl?: string;
+    details?: string;
+    utm?: Record<string, string | undefined>;
+    capturedAt?: string;
+  };
   
   // Profile Fields
   gender?: string;

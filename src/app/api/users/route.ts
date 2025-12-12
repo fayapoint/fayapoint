@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { upsertUser } from '@/lib/users';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
+import { getClientIpFromRequest, rateLimit } from '@/lib/rate-limit';
 
 /**
  * GET /api/users - REMOVED for security
@@ -23,6 +20,30 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
+    const ip = getClientIpFromRequest(request);
+    const ua = request.headers.get('user-agent') ?? '';
+    const origin = request.headers.get('origin') ?? '';
+
+    if (!ua || /bot|crawler|spider|headless/i.test(ua)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const rl = await rateLimit({
+      key: `ratelimit:users:ip:${ip}`,
+      limit: 25,
+      windowSeconds: 60 * 60,
+    });
+
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(rl.resetSeconds) },
+        }
+      );
+    }
+
     const body = await request.json();
     const { name, email, source } = body;
     
@@ -31,6 +52,21 @@ export async function POST(request: NextRequest) {
         { error: 'Name and email are required' },
         { status: 400 }
       );
+    }
+
+    if (origin) {
+      const allowedOrigin =
+        origin.includes('fayai.shop') ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        origin.includes('.netlify.app');
+
+      if (!allowedOrigin) {
+        return NextResponse.json(
+          { error: 'Invalid origin' },
+          { status: 403 }
+        );
+      }
     }
     
     // Pass the entire body to upsertUser, allowing it to handle all profile fields

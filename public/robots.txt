@@ -34,4 +34,4 @@ User-agent: DotBot
 Disallow: /
 
 # Sitemap location
-Sitemap: https://fayapoint.com/sitemap.xml
+Sitemap: https://fayai.shop/sitemap.xml
