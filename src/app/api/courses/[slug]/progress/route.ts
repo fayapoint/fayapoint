@@ -190,15 +190,16 @@ export async function PUT(
         ? Math.min(100, Math.floor((completedSections.length / totalSections) * 100))
         : null;
 
-    const progressPercentCandidates = [
-      typeof computedPercentBySections === 'number' ? computedPercentBySections : null,
-      typeof body.progressPercent === 'number' ? body.progressPercent : null,
-      typeof body.lastScrollPercent === 'number' ? body.lastScrollPercent : null,
-    ].filter((v): v is number => typeof v === 'number');
-
-    const finalProgressPercent = progressPercentCandidates.length
-      ? Math.min(100, Math.max(0, Math.round(Math.max(...progressPercentCandidates))))
-      : progress?.progressPercent || 0;
+    // If we know total sections, section completion is the source of truth.
+    // Scroll-based % is for resume position only and should not inflate completion.
+    const finalProgressPercent =
+      typeof computedPercentBySections === 'number'
+        ? computedPercentBySections
+        : typeof body.progressPercent === 'number'
+          ? Math.min(100, Math.max(0, Math.round(body.progressPercent)))
+          : typeof body.lastScrollPercent === 'number'
+            ? Math.min(100, Math.max(0, Math.round(body.lastScrollPercent)))
+            : progress?.progressPercent || 0;
 
     const updated = await CourseProgress.findOneAndUpdate(
       { userId: auth.userId, courseId: slug },

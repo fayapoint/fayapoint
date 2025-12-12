@@ -127,13 +127,13 @@ export default function CourseReaderPage() {
     return Math.floor((filteredCompletedSections.length / toc.length) * 100);
   }, [filteredCompletedSections.length, toc.length]);
   const displayProgressPercent = useMemo(() => {
-    const candidates = [
-      computedSectionPercent,
-      progress?.progressPercent ?? 0,
-      progress?.lastScrollPercent ?? 0,
-    ];
+    // If we have headings/sections, section completion is the source of truth.
+    // Scroll percent is only used as a fallback for content with no headings.
+    if (toc.length > 0) return clamp(computedSectionPercent, 0, 100);
+
+    const candidates = [progress?.progressPercent ?? 0, progress?.lastScrollPercent ?? 0];
     return clamp(Math.max(...candidates), 0, 100);
-  }, [computedSectionPercent, progress?.lastScrollPercent, progress?.progressPercent]);
+  }, [computedSectionPercent, progress?.lastScrollPercent, progress?.progressPercent, toc.length]);
 
   const headingIds = useMemo(() => toc.map((t) => t.id), [toc]);
   const readerStyle = useMemo(
@@ -269,13 +269,7 @@ export default function CourseReaderPage() {
         const id = headingIds[myIdx] || slugify(fallbackText) || `section-${myIdx + 1}`;
 
         const Tag = (`h${level}` as const) as "h1" | "h2" | "h3";
-        const headingClasses = cn(
-          "scroll-mt-24",
-          level === 1 && "text-3xl font-bold mb-6 text-purple-200",
-          level === 2 && "text-2xl font-bold mb-4 mt-10 text-purple-100",
-          level === 3 && "text-xl font-semibold mb-3 mt-8 text-white",
-          headingClassName
-        );
+        const headingClasses = cn("scroll-mt-24", headingClassName);
 
         return (
           <Tag id={id} data-course-heading="true" className={headingClasses} {...props}>
@@ -289,19 +283,13 @@ export default function CourseReaderPage() {
       h1: createHeading(1),
       h2: createHeading(2),
       h3: createHeading(3),
-      p: ({ className, ...props }: ParagraphProps) => (
-        <p className={cn("mb-5 text-white/80", className)} {...props} />
-      ),
-      ul: ({ className, ...props }: ListProps) => (
-        <ul className={cn("list-disc pl-6 mb-5 text-white/80 space-y-2", className)} {...props} />
-      ),
-      ol: ({ className, ...props }: OListProps) => (
-        <ol className={cn("list-decimal pl-6 mb-5 text-white/80 space-y-2", className)} {...props} />
-      ),
-      li: ({ className, ...props }: LiProps) => <li className={cn("pl-1", className)} {...props} />,
+      p: ({ className, ...props }: ParagraphProps) => <p className={cn(className)} {...props} />,
+      ul: ({ className, ...props }: ListProps) => <ul className={cn(className)} {...props} />,
+      ol: ({ className, ...props }: OListProps) => <ol className={cn(className)} {...props} />,
+      li: ({ className, ...props }: LiProps) => <li className={cn(className)} {...props} />,
       a: ({ className, ...props }: AnchorProps) => (
         <a
-          className={cn("text-purple-300 hover:underline transition-colors", className)}
+          className={cn("hover:underline transition-colors", className)}
           target="_blank"
           rel="noopener noreferrer"
           {...props}
@@ -310,7 +298,7 @@ export default function CourseReaderPage() {
       blockquote: ({ className, ...props }: BlockquoteProps) => (
         <blockquote
           className={cn(
-            "border-l-2 border-purple-500/70 pl-4 py-2 my-6 bg-white/5 text-white/70 rounded-r",
+            "border-l-2 border-purple-500/70 pl-4 py-2 my-6 bg-white/5 rounded-r",
             className
           )}
           {...props}
@@ -474,7 +462,6 @@ export default function CourseReaderPage() {
         lastScrollY: scrollTop,
         lastScrollPercent: scrollPercent,
         totalSections: toc.length,
-        progressPercent: Math.max(scrollPercent, computedSectionPercent),
       };
 
       if (currentId) nextPayload.lastHeadingId = currentId;
@@ -496,7 +483,7 @@ export default function CourseReaderPage() {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [content, computedSectionPercent, syncProgress, toc.length, tocIds]);
+  }, [content, syncProgress, toc.length, tocIds]);
 
   if (loading) {
     return (
@@ -820,7 +807,20 @@ export default function CourseReaderPage() {
                   </Button>
                 </div>
 
-                <div style={readerStyle} className="max-w-none">
+                <div
+                  style={readerStyle}
+                  className={cn(
+                    "max-w-none",
+                    "prose prose-invert prose-lg",
+                    "prose-headings:text-white prose-strong:text-white",
+                    "prose-p:text-white/80",
+                    "prose-a:text-purple-300 prose-a:no-underline hover:prose-a:underline",
+                    "prose-li:text-white/80",
+                    "prose-code:text-purple-200 prose-pre:bg-black/50",
+                    "prose-hr:border-white/10",
+                    "prose-blockquote:text-white/75 prose-blockquote:border-purple-500/70"
+                  )}
+                >
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                     {content}
                   </ReactMarkdown>
