@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
@@ -158,7 +159,9 @@ export default async function RootLayout({
     <UserProvider>
       <ServiceCartProvider>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AttributionTracker />
+          <Suspense fallback={null}>
+            <AttributionTracker />
+          </Suspense>
           <Script
             id="ld-organization"
             type="application/ld+json"

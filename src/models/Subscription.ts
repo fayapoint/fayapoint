@@ -110,7 +110,7 @@ const SubscriptionSchema = new Schema<ISubscription>({
   planSlug: { type: String, required: true, index: true },
   
   // Asaas info
-  asaasSubscriptionId: { type: String, required: true, unique: true, index: true },
+  asaasSubscriptionId: { type: String, required: true, unique: true },
   asaasCustomerId: { type: String, required: true },
   
   // Subscription details
@@ -184,7 +184,6 @@ const SubscriptionSchema = new Schema<ISubscription>({
 // =============================================================================
 
 SubscriptionSchema.index({ userId: 1, status: 1 });
-SubscriptionSchema.index({ asaasSubscriptionId: 1 });
 SubscriptionSchema.index({ nextDueDate: 1 });
 
 // =============================================================================
