@@ -10,6 +10,8 @@ export type AttributionState = {
 };
 
 const STORAGE_KEY = "fayai_attribution_v1";
+const COOKIE_KEY = "fayai_attribution_v1";
+const COOKIE_MAX_AGE_DAYS = 90;
 
 const UTM_KEYS = [
   "utm_source",
@@ -21,6 +23,44 @@ const UTM_KEYS = [
 
 function hasAnyUtm(utm: UtmData) {
   return UTM_KEYS.some((k) => Boolean(utm[k]));
+}
+
+function safeJsonParse(raw: string | null): AttributionState | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as AttributionState;
+  } catch {
+    return null;
+  }
+}
+
+function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const parts = document.cookie.split(";");
+  for (const part of parts) {
+    const [k, ...rest] = part.trim().split("=");
+    if (k === name) {
+      return rest.join("=") || "";
+    }
+  }
+  return null;
+}
+
+function setCookie(name: string, value: string, maxAgeDays: number) {
+  if (typeof document === "undefined") return;
+  const maxAgeSeconds = Math.floor(maxAgeDays * 24 * 60 * 60);
+  const secure = typeof window !== "undefined" && window.location.protocol === "https:";
+  const cookie = [
+    `${name}=${value}`,
+    `Path=/`,
+    `Max-Age=${maxAgeSeconds}`,
+    `SameSite=Lax`,
+    secure ? "Secure" : "",
+  ]
+    .filter(Boolean)
+    .join("; ");
+
+  document.cookie = cookie;
 }
 
 export function parseUtmFromUrl(urlString: string): UtmData {
@@ -40,17 +80,54 @@ export function readAttribution(): AttributionState | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as AttributionState;
+    const parsed = safeJsonParse(raw);
+    if (parsed) return parsed;
   } catch {
-    return null;
+    // ignore
   }
+
+  try {
+    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    const parsed = safeJsonParse(raw);
+    if (parsed) {
+      writeAttribution(parsed);
+      return parsed;
+    }
+  } catch {
+    // ignore
+  }
+
+  try {
+    const raw = getCookie(COOKIE_KEY);
+    const decoded = raw ? decodeURIComponent(raw) : null;
+    const parsed = safeJsonParse(decoded);
+    if (parsed) {
+      writeAttribution(parsed);
+      return parsed;
+    }
+  } catch {
+    // ignore
+  }
+
+  return null;
 }
 
 export function writeAttribution(state: AttributionState) {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // ignore
+  }
+
+  try {
+    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // ignore
+  }
+
+  try {
+    setCookie(COOKIE_KEY, encodeURIComponent(JSON.stringify(state)), COOKIE_MAX_AGE_DAYS);
   } catch {
     // ignore
   }
