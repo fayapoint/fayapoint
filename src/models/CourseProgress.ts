@@ -4,8 +4,13 @@ export interface ICourseProgress extends Document {
   userId: mongoose.Types.ObjectId;
   courseId: string; // slug or ID
   completedLessons: string[];
+  completedSections?: string[];
   lastAccessedLesson?: string;
+  lastHeadingId?: string;
   progressPercent: number;
+  totalSections?: number;
+  lastScrollY?: number;
+  lastScrollPercent?: number;
   isCompleted: boolean;
   completedAt?: Date;
   startedAt: Date;
@@ -25,10 +30,27 @@ const CourseProgressSchema = new Schema<ICourseProgress>({
   completedLessons: [{
     type: String,
   }],
+  completedSections: [{
+    type: String,
+  }],
   lastAccessedLesson: String,
+  lastHeadingId: String,
   progressPercent: {
     type: Number,
     default: 0,
+    min: 0,
+    max: 100,
+  },
+  totalSections: {
+    type: Number,
+    min: 0,
+  },
+  lastScrollY: {
+    type: Number,
+    min: 0,
+  },
+  lastScrollPercent: {
+    type: Number,
     min: 0,
     max: 100,
   },

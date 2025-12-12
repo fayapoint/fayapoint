@@ -237,19 +237,6 @@ export default function PricingPage() {
 
   const activeService = services.find((s) => s.slug === activeServiceSlug) || services[0];
 
-  // Login prompt component
-  const LoginPrompt = () => (
-    <Link href="/login" className="block">
-      <div className="flex items-center justify-center gap-2 py-3 px-4 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-lg transition-all group">
-        <Lock className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium text-primary group-hover:underline">
-          {locale === 'pt-BR' ? 'Faça login para ver preços' : 'Login to see prices'}
-        </span>
-        <LogIn className="w-4 h-4 text-primary" />
-      </div>
-    </Link>
-  );
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
@@ -323,13 +310,19 @@ export default function PricingPage() {
                     <div className="mb-6">
                       {isLoggedIn ? (
                         <div>
-                          <span className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                            R${plan.price}
-                          </span>
+                          <span className="text-4xl font-bold">{plan.price}</span>
                           <span className="text-muted-foreground">{plan.period}</span>
                         </div>
                       ) : (
-                        <LoginPrompt />
+                        <Link href="/login" className="block">
+                          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-lg transition-all group">
+                            <Lock className="w-4 h-4 text-primary" />
+                            <span className="text-sm font-medium text-primary group-hover:underline">
+                              {locale === 'pt-BR' ? 'Faça login para ver preços' : 'Login to see prices'}
+                            </span>
+                            <LogIn className="w-4 h-4 text-primary" />
+                          </div>
+                        </Link>
                       )}
                     </div>
 
@@ -572,7 +565,15 @@ export default function PricingPage() {
                           {currencyFormatter.format(activeService.maxPrice)}
                         </p>
                       ) : (
-                        <LoginPrompt />
+                        <Link href="/login" className="block">
+                          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-lg transition-all group">
+                            <Lock className="w-4 h-4 text-primary" />
+                            <span className="text-sm font-medium text-primary group-hover:underline">
+                              {locale === 'pt-BR' ? 'Faça login para ver preços' : 'Login to see prices'}
+                            </span>
+                            <LogIn className="w-4 h-4 text-primary" />
+                          </div>
+                        </Link>
                       )}
                     </div>
 

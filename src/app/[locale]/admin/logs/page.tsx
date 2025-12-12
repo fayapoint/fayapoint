@@ -61,6 +61,15 @@ function getCategoryIcon(category: string) {
   }
 }
 
+const CATEGORY_ICON_MAP: Record<string, typeof Activity> = {
+  auth: Shield,
+  user: User,
+  product: Package,
+  order: ShoppingCart,
+  database: Database,
+  system: Settings,
+};
+
 function getCategoryColor(category: string) {
   switch (category) {
     case "auth": return "text-violet-400 bg-violet-500/20 border-violet-500/30";
@@ -74,7 +83,7 @@ function getCategoryColor(category: string) {
 }
 
 function LogRow({ log }: { log: LogEntry }) {
-  const Icon = getCategoryIcon(log.category);
+  const Icon = CATEGORY_ICON_MAP[log.category] || Activity;
   const colorClass = getCategoryColor(log.category);
   const [expanded, setExpanded] = useState(false);
 
