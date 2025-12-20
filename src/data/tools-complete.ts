@@ -148,7 +148,7 @@ export const toolsData = {
     rating: 4.8,
     description: "Pesquisa com fontes verificáveis e respostas objetivas.",
     detailedDescription: `Perplexity revoluciona pesquisa online combinando IA com fontes verificáveis em tempo real, fornecendo sempre informações precisas com citações.`,
-    logo: "https://logo.clearbit.com/perplexity.ai",
+    logo: "https://www.perplexity.ai/favicon.svg",
     impactForIndividuals: [
       "🔍 Torne-se expert em qualquer assunto 10x mais rápido",
       "📚 Acelere pesquisa acadêmica drasticamente",

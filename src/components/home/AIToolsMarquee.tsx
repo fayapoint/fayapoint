@@ -47,7 +47,7 @@ const originalTools: AITool[] = [
   },
   { 
     key: "perplexity",
-    logo: "https://logo.clearbit.com/perplexity.ai",
+    logo: "https://www.perplexity.ai/favicon.svg",
     slug: "perplexity" 
   },
   { 
@@ -72,7 +72,7 @@ const originalTools: AITool[] = [
   },
   { 
     key: "suno",
-    logo: "https://logo.clearbit.com/suno.ai",
+    logo: "https://suno.com/favicon.ico",
     slug: "suno" 
   },
   { 
@@ -82,7 +82,7 @@ const originalTools: AITool[] = [
   },
   { 
     key: "cursor",
-    logo: "https://logo.clearbit.com/cursor.sh",
+    logo: "https://www.cursor.com/favicon.ico",
     slug: "cursor" 
   },
   { 
@@ -119,35 +119,35 @@ const originalTools: AITool[] = [
 
 // New tools to expand the list (Main Players & Popular Tools)
 const additionalTools: AITool[] = [
-  { key: "meta", logo: "https://logo.clearbit.com/meta.com", name: "Meta AI", category: "LLM Open Source", url: "https://ai.meta.com/", description: "Llama e tecnologias open source da Meta." },
-  { key: "mistral", logo: "https://logo.clearbit.com/mistral.ai", name: "Mistral AI", category: "LLM Open Source", url: "https://mistral.ai/", description: "Modelos de IA eficientes e poderosos da Europa." },
-  { key: "cohere", logo: "https://logo.clearbit.com/cohere.com", name: "Cohere", category: "LLM Enterprise", url: "https://cohere.com/", description: "IA focada em empresas e desenvolvedores." },
-  { key: "huggingface", logo: "https://logo.clearbit.com/huggingface.co", name: "Hugging Face", category: "Hub de Modelos", url: "https://huggingface.co/", description: "A comunidade de IA e open source." },
+  { key: "meta", logo: "https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico", name: "Meta AI", category: "LLM Open Source", url: "https://ai.meta.com/", description: "Llama e tecnologias open source da Meta." },
+  { key: "mistral", logo: "https://mistral.ai/favicon.ico", name: "Mistral AI", category: "LLM Open Source", url: "https://mistral.ai/", description: "Modelos de IA eficientes e poderosos da Europa." },
+  { key: "cohere", logo: "https://cohere.com/favicon.ico", name: "Cohere", category: "LLM Enterprise", url: "https://cohere.com/", description: "IA focada em empresas e desenvolvedores." },
+  { key: "huggingface", logo: "https://huggingface.co/favicon.ico", name: "Hugging Face", category: "Hub de Modelos", url: "https://huggingface.co/", description: "A comunidade de IA e open source." },
   { key: "langchain", logo: "https://logowik.com/content/uploads/images/langchain9692.logowik.com.webp", name: "LangChain", category: "Framework", url: "https://langchain.com/", description: "Construa aplicações com LLMs facilmente." },
-  { key: "pinecone", logo: "https://logo.clearbit.com/pinecone.io", name: "Pinecone", category: "Vector DB", url: "https://pinecone.io/", description: "Banco de dados vetorial para IA." },
-  { key: "jasper", logo: "https://logo.clearbit.com/jasper.ai", name: "Jasper", category: "Marketing", url: "https://jasper.ai/", description: "Crie conteúdo de marketing com IA." },
-  { key: "copyai", logo: "https://logo.clearbit.com/copy.ai", name: "Copy.ai", category: "Marketing", url: "https://copy.ai/", description: "Escrita automatizada para vendas e marketing." },
-  { key: "descript", logo: "https://logo.clearbit.com/descript.com", name: "Descript", category: "Edição de Vídeo", url: "https://descript.com/", description: "Edição de áudio e vídeo como texto." },
-  { key: "synthesia", logo: "https://logo.clearbit.com/synthesia.io", name: "Synthesia", category: "Avatar AI", url: "https://synthesia.io/", description: "Vídeos com avatares de IA em minutos." },
-  { key: "heygen", logo: "https://logo.clearbit.com/heygen.com", name: "HeyGen", category: "Avatar AI", url: "https://heygen.com/", description: "Geração de vídeo com avatares realistas." },
-  { key: "canva", logo: "https://logo.clearbit.com/canva.com", name: "Canva", category: "Design", url: "https://canva.com/", description: "Design simples com ferramentas mágicas de IA." },
-  { key: "notion", logo: "https://logo.clearbit.com/notion.so", name: "Notion AI", category: "Produtividade", url: "https://notion.so/", description: "Seu workspace conectado com IA." },
-  { key: "linear", logo: "https://logo.clearbit.com/linear.app", name: "Linear", category: "Gestão", url: "https://linear.app/", description: "Gestão de projetos moderna e rápida." },
-  { key: "vercel", logo: "https://logo.clearbit.com/vercel.com", name: "Vercel", category: "Deploy", url: "https://vercel.com/", description: "Infraestrutura frontend e edge AI." },
-  { key: "replit", logo: "https://logo.clearbit.com/replit.com", name: "Replit", category: "Coding", url: "https://replit.com/", description: "IDE colaborativo e deploy instantâneo." },
-  { key: "docker", logo: "https://logo.clearbit.com/docker.com", name: "Docker", category: "DevOps", url: "https://docker.com/", description: "Containers para desenvolvimento moderno." },
-  { key: "postman", logo: "https://logo.clearbit.com/postman.com", name: "Postman", category: "API", url: "https://postman.com/", description: "Plataforma para construção de APIs." },
-  { key: "figma", logo: "https://logo.clearbit.com/figma.com", name: "Figma", category: "Design", url: "https://figma.com/", description: "Design de interface colaborativo." },
-  { key: "slack", logo: "https://logo.clearbit.com/slack.com", name: "Slack", category: "Comunicação", url: "https://slack.com/", description: "Onde o trabalho acontece." },
-  { key: "discord", logo: "https://logo.clearbit.com/discord.com", name: "Discord", category: "Comunidade", url: "https://discord.com/", description: "Lugar para conversar e interagir." },
-  { key: "zoom", logo: "https://logo.clearbit.com/zoom.us", name: "Zoom", category: "Reuniões", url: "https://zoom.us/", description: "Videoconferências com IA integrada." },
-  { key: "microsoft", logo: "https://logo.clearbit.com/microsoft.com", name: "Microsoft", category: "Produtividade", url: "https://microsoft.com/", description: "Copilot para Microsoft 365." },
-  { key: "google", logo: "https://logo.clearbit.com/google.com", name: "Google", category: "Tech Giant", url: "https://google.com/", description: "Gemini e ecossistema Google AI." },
-  { key: "supabase", logo: "https://logo.clearbit.com/supabase.com", name: "Supabase", category: "Backend", url: "https://supabase.com/", description: "A alternativa Open Source ao Firebase." },
-  { key: "stripe", logo: "https://logo.clearbit.com/stripe.com", name: "Stripe", category: "Pagamentos", url: "https://stripe.com/", description: "Infraestrutura financeira para internet." },
-  { key: "gamma", logo: "https://logo.clearbit.com/gamma.app", name: "Gamma", category: "Apresentações", url: "https://gamma.app/", description: "Apresentações bonitas geradas por IA." },
-  { key: "tome", logo: "https://logo.clearbit.com/tome.app", name: "Tome", category: "Storytelling", url: "https://tome.app/", description: "Formato de storytelling generativo." },
-  { key: "beautifulai", logo: "https://logo.clearbit.com/beautiful.ai", name: "Beautiful.ai", category: "Apresentações", url: "https://beautiful.ai/", description: "Slides de design profissional com IA." },
+  { key: "pinecone", logo: "https://www.pinecone.io/favicon.ico", name: "Pinecone", category: "Vector DB", url: "https://pinecone.io/", description: "Banco de dados vetorial para IA." },
+  { key: "jasper", logo: "https://www.jasper.ai/favicon.ico", name: "Jasper", category: "Marketing", url: "https://jasper.ai/", description: "Crie conteúdo de marketing com IA." },
+  { key: "copyai", logo: "https://www.copy.ai/favicon.ico", name: "Copy.ai", category: "Marketing", url: "https://copy.ai/", description: "Escrita automatizada para vendas e marketing." },
+  { key: "descript", logo: "https://www.descript.com/favicon.ico", name: "Descript", category: "Edição de Vídeo", url: "https://descript.com/", description: "Edição de áudio e vídeo como texto." },
+  { key: "synthesia", logo: "https://www.synthesia.io/favicon.ico", name: "Synthesia", category: "Avatar AI", url: "https://synthesia.io/", description: "Vídeos com avatares de IA em minutos." },
+  { key: "heygen", logo: "https://www.heygen.com/favicon.ico", name: "HeyGen", category: "Avatar AI", url: "https://heygen.com/", description: "Geração de vídeo com avatares realistas." },
+  { key: "canva", logo: "https://static.canva.com/static/images/favicon.ico", name: "Canva", category: "Design", url: "https://canva.com/", description: "Design simples com ferramentas mágicas de IA." },
+  { key: "notion", logo: "https://www.notion.so/images/favicon.ico", name: "Notion AI", category: "Produtividade", url: "https://notion.so/", description: "Seu workspace conectado com IA." },
+  { key: "linear", logo: "https://linear.app/favicon.ico", name: "Linear", category: "Gestão", url: "https://linear.app/", description: "Gestão de projetos moderna e rápida." },
+  { key: "vercel", logo: "https://vercel.com/favicon.ico", name: "Vercel", category: "Deploy", url: "https://vercel.com/", description: "Infraestrutura frontend e edge AI." },
+  { key: "replit", logo: "https://replit.com/public/icons/favicon-196.png", name: "Replit", category: "Coding", url: "https://replit.com/", description: "IDE colaborativo e deploy instantâneo." },
+  { key: "docker", logo: "https://www.docker.com/favicon.ico", name: "Docker", category: "DevOps", url: "https://docker.com/", description: "Containers para desenvolvimento moderno." },
+  { key: "postman", logo: "https://www.postman.com/favicon.ico", name: "Postman", category: "API", url: "https://postman.com/", description: "Plataforma para construção de APIs." },
+  { key: "figma", logo: "https://static.figma.com/app/icon/1/favicon.ico", name: "Figma", category: "Design", url: "https://figma.com/", description: "Design de interface colaborativo." },
+  { key: "slack", logo: "https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png", name: "Slack", category: "Comunicação", url: "https://slack.com/", description: "Onde o trabalho acontece." },
+  { key: "discord", logo: "https://discord.com/assets/847541504914fd33810e70a0ea73177e.ico", name: "Discord", category: "Comunidade", url: "https://discord.com/", description: "Lugar para conversar e interagir." },
+  { key: "zoom", logo: "https://zoom.us/favicon.ico", name: "Zoom", category: "Reuniões", url: "https://zoom.us/", description: "Videoconferências com IA integrada." },
+  { key: "microsoft", logo: "https://www.microsoft.com/favicon.ico", name: "Microsoft", category: "Produtividade", url: "https://microsoft.com/", description: "Copilot para Microsoft 365." },
+  { key: "google", logo: "https://www.google.com/favicon.ico", name: "Google", category: "Tech Giant", url: "https://google.com/", description: "Gemini e ecossistema Google AI." },
+  { key: "supabase", logo: "https://supabase.com/favicon.ico", name: "Supabase", category: "Backend", url: "https://supabase.com/", description: "A alternativa Open Source ao Firebase." },
+  { key: "stripe", logo: "https://stripe.com/favicon.ico", name: "Stripe", category: "Pagamentos", url: "https://stripe.com/", description: "Infraestrutura financeira para internet." },
+  { key: "gamma", logo: "https://gamma.app/favicon.ico", name: "Gamma", category: "Apresentações", url: "https://gamma.app/", description: "Apresentações bonitas geradas por IA." },
+  { key: "tome", logo: "https://tome.app/favicon.ico", name: "Tome", category: "Storytelling", url: "https://tome.app/", description: "Formato de storytelling generativo." },
+  { key: "beautifulai", logo: "https://www.beautiful.ai/favicon.ico", name: "Beautiful.ai", category: "Apresentações", url: "https://beautiful.ai/", description: "Slides de design profissional com IA." },
 ];
 
 const allTools = [...originalTools, ...additionalTools];
