@@ -7,12 +7,16 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
   ArrowLeft,
+  BookOpen,
   CheckCircle2,
   Circle,
+  Bookmark,
   LayoutList,
   Loader2,
   Lock,
   Settings2,
+  Sparkles,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
@@ -528,119 +532,164 @@ export default function CourseReaderPage() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="sticky top-0 z-20 border-b border-white/10 bg-black/70 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="h-16 flex items-center gap-3">
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/portal">
-                <ArrowLeft size={20} />
-              </Link>
-            </Button>
+  // Sidebar TOC component for reuse
+  const TocList = ({ maxHeight = "max-h-[60vh]" }: { maxHeight?: string }) => (
+    <div className={cn("overflow-auto", maxHeight)}>
+      {toc.length ? (
+        <div className="space-y-0.5">
+          {toc.map((item, index) => {
+            const isActive = activeHeadingId === item.id;
+            const isDone = filteredCompletedSections.includes(item.id);
+            const isNext = !isDone && filteredCompletedSections.length === index;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => scrollToHeading(item.id)}
+                className={cn(
+                  "group w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-200",
+                  isActive
+                    ? "bg-gradient-to-r from-purple-500/20 to-violet-500/10 border border-purple-500/30"
+                    : "hover:bg-white/5 border border-transparent",
+                  isNext && !isActive && "bg-purple-500/5"
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex-shrink-0 transition-all duration-200",
+                    isDone ? "text-emerald-400" : isActive ? "text-purple-400" : "text-white/25 group-hover:text-white/40"
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void markSectionCompleted(item.id);
+                  }}
+                >
+                  {isDone ? (
+                    <CheckCircle2 size={18} className="drop-shadow-sm" />
+                  ) : isActive ? (
+                    <div className="w-[18px] h-[18px] rounded-full border-2 border-purple-400 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-purple-400" />
+                    </div>
+                  ) : (
+                    <Circle size={18} />
+                  )}
+                </span>
+                <span
+                  className={cn(
+                    "text-sm leading-snug font-medium transition-colors",
+                    item.level === 2 && "pl-2 text-[13px]",
+                    item.level === 3 && "pl-4 text-xs font-normal",
+                    isActive ? "text-white" : isDone ? "text-white/60" : "text-white/70 group-hover:text-white/90"
+                  )}
+                >
+                  {item.text}
+                </span>
+                {isActive && (
+                  <ChevronRight size={14} className="ml-auto text-purple-400 flex-shrink-0" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="px-4 py-8 text-center">
+          <BookOpen size={32} className="mx-auto mb-3 text-white/20" />
+          <p className="text-sm text-white/40">Nenhum capítulo detectado</p>
+        </div>
+      )}
+    </div>
+  );
 
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#0d0d14] to-[#0a0a0f] text-white">
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-purple-600/[0.03] rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-violet-600/[0.02] rounded-full blur-[100px]" />
+      </div>
+
+      {/* Header */}
+      <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-[#0a0a0f]/80 backdrop-blur-xl backdrop-saturate-150">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="h-16 flex items-center gap-4">
+            {/* Back button */}
+            <Link
+              href="/portal"
+              className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all duration-200 hover:scale-105"
+            >
+              <ArrowLeft size={18} className="text-white/70" />
+            </Link>
+
+            {/* Title & Progress */}
             <div className="min-w-0 flex-1">
-              <div className="truncate font-semibold">{title}</div>
-              <div className="mt-1 flex items-center gap-3">
-                <Progress value={displayProgressPercent} className="h-2 bg-white/10" />
-                <div className="text-xs text-white/60 tabular-nums w-12 text-right">
-                  {displayProgressPercent}%
+              <div className="flex items-center gap-2 mb-1">
+                <BookOpen size={14} className="text-purple-400 flex-shrink-0" />
+                <h1 className="truncate text-sm font-semibold text-white/90">{title}</h1>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${displayProgressPercent}%` }}
+                  />
                 </div>
+                <span className="text-xs font-medium text-white/50 tabular-nums w-10 text-right">
+                  {displayProgressPercent}%
+                </span>
               </div>
             </div>
 
+            {/* Actions */}
             <div className="flex items-center gap-2">
+              {/* Mobile menu */}
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="icon-sm" className="lg:hidden">
-                    <LayoutList size={16} />
-                  </Button>
+                  <button className="lg:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all">
+                    <LayoutList size={16} className="text-white/70" />
+                  </button>
                 </SheetTrigger>
-                <SheetContent side="left" className="bg-black border-white/10">
-                  <SheetHeader>
-                    <SheetTitle className="text-white">Conteúdo</SheetTitle>
-                  </SheetHeader>
-                  <div className="px-4 pb-4 space-y-3">
-                    <div className="rounded-xl border border-white/10 bg-white/[0.02]">
-                      <div className="px-4 py-3">
-                        <div className="text-xs text-white/60">Progresso</div>
-                        <div className="mt-2 flex items-center justify-between">
-                          <div className="text-sm font-semibold text-white">{displayProgressPercent}%</div>
-                          <div className="text-xs text-white/60">
-                            {filteredCompletedSections.length}/{toc.length || 0} seções
-                          </div>
-                        </div>
-                        <div className="mt-2">
-                          <Progress value={displayProgressPercent} className="h-2 bg-white/10" />
-                        </div>
-                      </div>
-                      <Separator className="bg-white/10" />
-                      <div className="p-2 max-h-[calc(100vh-18rem)] overflow-auto">
-                        {toc.length ? (
-                          <div className="space-y-1">
-                            {toc.map((item) => {
-                              const isActive = activeHeadingId === item.id;
-                              const isDone = filteredCompletedSections.includes(item.id);
-                              return (
-                                <button
-                                  key={item.id}
-                                  type="button"
-                                  onClick={() => scrollToHeading(item.id)}
-                                  className={cn(
-                                    "w-full flex items-start gap-2 rounded-lg px-2 py-2 text-left transition-colors",
-                                    isActive ? "bg-white/10" : "hover:bg-white/5"
-                                  )}
-                                >
-                                  <span
-                                    className={cn(
-                                      "mt-0.5",
-                                      isDone ? "text-emerald-400" : "text-white/35"
-                                    )}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      void markSectionCompleted(item.id);
-                                    }}
-                                  >
-                                    {isDone ? <CheckCircle2 size={16} /> : <Circle size={16} />}
-                                  </span>
-                                  <span
-                                    className={cn(
-                                      "text-sm leading-snug",
-                                      item.level === 2 && "pl-3",
-                                      item.level === 3 && "pl-6",
-                                      isActive ? "text-white" : "text-white/75"
-                                    )}
-                                  >
-                                    {item.text}
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        ) : (
-                          <div className="px-3 py-4 text-sm text-white/60">Sem estrutura detectada.</div>
-                        )}
-                      </div>
+                <SheetContent side="left" className="w-80 bg-[#0d0d14] border-white/[0.06] p-0">
+                  <div className="p-4 border-b border-white/[0.06]">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Bookmark size={16} className="text-purple-400" />
+                      <span className="font-semibold text-white">Conteúdo</span>
                     </div>
+                    <div className="flex items-center justify-between text-xs mb-2">
+                      <span className="text-white/50">{filteredCompletedSections.length} de {toc.length} seções</span>
+                      <span className="font-semibold text-purple-400">{displayProgressPercent}%</span>
+                    </div>
+                    <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full"
+                        style={{ width: `${displayProgressPercent}%` }}
+                      />
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <TocList maxHeight="max-h-[calc(100vh-12rem)]" />
                   </div>
                 </SheetContent>
               </Sheet>
 
+              {/* Settings */}
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" size="icon-sm">
-                    <Settings2 size={16} />
-                  </Button>
+                  <button className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all">
+                    <Settings2 size={16} className="text-white/70" />
+                  </button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80 bg-black border-white/10">
-                  <div className="space-y-4">
-                    <div className="text-sm font-semibold text-white">Preferências de Leitura</div>
-                    <Separator className="bg-white/10" />
-
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-white/70">
-                        <span>Tamanho da fonte</span>
-                        <span>{settings.fontSize}px</span>
+                <PopoverContent className="w-80 bg-[#13131a] border-white/[0.08] shadow-2xl shadow-black/50 p-0">
+                  <div className="p-4 border-b border-white/[0.06]">
+                    <div className="flex items-center gap-2">
+                      <Sparkles size={16} className="text-purple-400" />
+                      <span className="font-semibold text-white">Preferências</span>
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-5">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-white/70">Tamanho da fonte</span>
+                        <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">{settings.fontSize}px</span>
                       </div>
                       <Slider
                         min={14}
@@ -648,185 +697,231 @@ export default function CourseReaderPage() {
                         step={1}
                         value={[settings.fontSize]}
                         onValueChange={(v) => setSettings((s) => ({ ...s, fontSize: v[0] }))}
+                        className="[&_[role=slider]]:bg-purple-500 [&_[role=slider]]:border-purple-400"
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-white/70">
-                        <span>Altura da linha</span>
-                        <span>{settings.lineHeight.toFixed(2)}</span>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-white/70">Espaçamento</span>
+                        <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">{settings.lineHeight.toFixed(1)}</span>
                       </div>
                       <Slider
                         min={1.4}
                         max={2.1}
-                        step={0.05}
+                        step={0.1}
                         value={[settings.lineHeight]}
                         onValueChange={(v) => setSettings((s) => ({ ...s, lineHeight: v[0] }))}
+                        className="[&_[role=slider]]:bg-purple-500 [&_[role=slider]]:border-purple-400"
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs text-white/70">
-                        <span>Largura do texto</span>
-                        <span>{settings.maxWidth}px</span>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-white/70">Largura do texto</span>
+                        <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">{settings.maxWidth}px</span>
                       </div>
                       <Slider
-                        min={680}
-                        max={1120}
+                        min={640}
+                        max={1100}
                         step={20}
                         value={[settings.maxWidth]}
                         onValueChange={(v) => setSettings((s) => ({ ...s, maxWidth: v[0] }))}
+                        className="[&_[role=slider]]:bg-purple-500 [&_[role=slider]]:border-purple-400"
                       />
                     </div>
 
-                    <div className="flex items-center justify-between gap-3">
+                    <Separator className="bg-white/[0.06]" />
+
+                    <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-xs font-medium text-white">Modo Foco</div>
-                        <div className="text-xs text-white/60">Oculta o menu lateral</div>
+                        <div className="text-sm font-medium text-white">Modo Foco</div>
+                        <div className="text-xs text-white/40 mt-0.5">Oculta o menu lateral</div>
                       </div>
                       <Switch
                         checked={settings.focusMode}
                         onCheckedChange={(checked) => setSettings((s) => ({ ...s, focusMode: checked }))}
                       />
                     </div>
-
-                    <div className="flex items-center justify-between gap-2">
-                      <Button variant="outline" size="sm" onClick={() => setSettings(DEFAULT_SETTINGS)}>
-                        Resetar
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="bg-purple-600 hover:bg-purple-700"
-                        onClick={resume}
-                        disabled={!progress}
-                      >
-                        Continuar
-                      </Button>
-                    </div>
+                  </div>
+                  <div className="p-4 border-t border-white/[0.06] flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 bg-transparent border-white/[0.08] hover:bg-white/[0.04] text-white/70"
+                      onClick={() => setSettings(DEFAULT_SETTINGS)}
+                    >
+                      Resetar
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 border-0"
+                      onClick={resume}
+                      disabled={!progress}
+                    >
+                      Continuar
+                    </Button>
                   </div>
                 </PopoverContent>
               </Popover>
 
+              {/* Continue button (desktop) */}
               <Button
                 size="sm"
-                className="bg-purple-600 hover:bg-purple-700 hidden sm:inline-flex"
+                className="hidden sm:inline-flex bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 border-0 shadow-lg shadow-purple-500/20"
                 onClick={resume}
                 disabled={!progress}
               >
+                <Bookmark size={14} className="mr-1.5" />
                 Continuar
               </Button>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="mx-auto max-w-6xl px-4 py-8">
+      {/* Main content */}
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8">
         <div className={cn("lg:flex gap-8", settings.focusMode && "lg:block")}>
+          {/* Sidebar */}
           {!settings.focusMode && (
-            <aside className="hidden lg:block w-72 shrink-0">
-              <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-auto rounded-xl border border-white/10 bg-white/[0.02]">
-                <div className="px-4 py-3">
-                  <div className="text-xs text-white/60">Progresso</div>
-                  <div className="mt-2 flex items-center justify-between">
-                    <div className="text-sm font-semibold text-white">{displayProgressPercent}%</div>
-                    <div className="text-xs text-white/60">
-                      {filteredCompletedSections.length}/{toc.length || 0} seções
-                    </div>
+            <aside className="hidden lg:block w-72 flex-shrink-0">
+              <div className="sticky top-24">
+                {/* Progress card */}
+                <div className="mb-4 p-4 rounded-2xl bg-gradient-to-br from-purple-500/10 to-violet-500/5 border border-purple-500/20">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-medium text-white/60">Seu Progresso</span>
+                    <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">
+                      {displayProgressPercent}%
+                    </span>
                   </div>
-                  <div className="mt-2">
-                    <Progress value={displayProgressPercent} className="h-2 bg-white/10" />
+                  <div className="h-2 bg-white/[0.06] rounded-full overflow-hidden mb-2">
+                    <div
+                      className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full transition-all duration-500"
+                      style={{ width: `${displayProgressPercent}%` }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-white/40">
+                    <span>{filteredCompletedSections.length} concluídas</span>
+                    <span>{toc.length - filteredCompletedSections.length} restantes</span>
                   </div>
                 </div>
-                <Separator className="bg-white/10" />
-                <div className="p-2">
-                  {toc.length ? (
-                    <div className="space-y-1">
-                      {toc.map((item) => {
-                        const isActive = activeHeadingId === item.id;
-                        const isDone = filteredCompletedSections.includes(item.id);
-                        return (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => scrollToHeading(item.id)}
-                            className={cn(
-                              "w-full flex items-start gap-2 rounded-lg px-2 py-2 text-left transition-colors",
-                              isActive ? "bg-white/10" : "hover:bg-white/5"
-                            )}
-                          >
-                            <span
-                              className={cn(
-                                "mt-0.5",
-                                isDone ? "text-emerald-400" : "text-white/35"
-                              )}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                void markSectionCompleted(item.id);
-                              }}
-                            >
-                              {isDone ? <CheckCircle2 size={16} /> : <Circle size={16} />}
-                            </span>
-                            <span
-                              className={cn(
-                                "text-sm leading-snug",
-                                item.level === 2 && "pl-3",
-                                item.level === 3 && "pl-6",
-                                isActive ? "text-white" : "text-white/75"
-                              )}
-                            >
-                              {item.text}
-                            </span>
-                          </button>
-                        );
-                      })}
+
+                {/* TOC */}
+                <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] overflow-hidden">
+                  <div className="p-4 border-b border-white/[0.06]">
+                    <div className="flex items-center gap-2">
+                      <Bookmark size={16} className="text-purple-400" />
+                      <span className="text-sm font-semibold text-white">Capítulos</span>
                     </div>
-                  ) : (
-                    <div className="px-3 py-4 text-sm text-white/60">Sem estrutura detectada.</div>
-                  )}
+                  </div>
+                  <div className="p-2">
+                    <TocList maxHeight="max-h-[calc(100vh-20rem)]" />
+                  </div>
                 </div>
               </div>
             </aside>
           )}
 
+          {/* Content */}
           <main className="min-w-0 flex-1">
-            <div className="mx-auto" style={{ maxWidth: settings.maxWidth }}>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
-                <div className="mb-6 flex items-center justify-between gap-3">
-                  <div className="text-xs text-white/60">
-                    {filteredCompletedSections.length}/{toc.length || 0} seções concluídas
+            <article className="mx-auto" style={{ maxWidth: settings.maxWidth }}>
+              {/* Content header */}
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+                    <CheckCircle2 size={14} className="text-emerald-400" />
+                    <span className="text-xs font-medium text-white/60">
+                      {filteredCompletedSections.length}/{toc.length} seções
+                    </span>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      if (activeHeadingId) void markSectionCompleted(activeHeadingId);
-                    }}
-                    disabled={!activeHeadingId}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-transparent border-white/[0.08] hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 transition-all"
+                  onClick={() => {
+                    if (activeHeadingId) void markSectionCompleted(activeHeadingId);
+                  }}
+                  disabled={!activeHeadingId}
+                >
+                  <CheckCircle2 size={14} className="mr-1.5" />
+                  Marcar como lida
+                </Button>
+              </div>
+
+              {/* Content body */}
+              <div className="relative rounded-3xl bg-gradient-to-b from-white/[0.03] to-transparent border border-white/[0.06] overflow-hidden">
+                {/* Decorative top gradient */}
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+                
+                <div className="p-6 sm:p-10 lg:p-12">
+                  <div
+                    style={readerStyle}
+                    className={cn(
+                      "max-w-none",
+                      "prose prose-invert prose-lg",
+                      // Headings
+                      "prose-headings:font-bold prose-headings:tracking-tight",
+                      "prose-h1:text-3xl prose-h1:text-white prose-h1:mb-6 prose-h1:mt-0",
+                      "prose-h2:text-2xl prose-h2:text-white prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-white/[0.06]",
+                      "prose-h3:text-xl prose-h3:text-white/90 prose-h3:mt-8 prose-h3:mb-3",
+                      // Text
+                      "prose-p:text-white/75 prose-p:leading-relaxed",
+                      "prose-strong:text-white prose-strong:font-semibold",
+                      // Links
+                      "prose-a:text-purple-400 prose-a:no-underline prose-a:font-medium hover:prose-a:text-purple-300 hover:prose-a:underline",
+                      // Lists
+                      "prose-li:text-white/75 prose-li:marker:text-purple-500",
+                      "prose-ul:my-4 prose-ol:my-4",
+                      // Code
+                      "prose-code:text-purple-300 prose-code:bg-purple-500/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal prose-code:before:content-[''] prose-code:after:content-['']",
+                      "prose-pre:bg-[#0a0a0f] prose-pre:border prose-pre:border-white/[0.06] prose-pre:rounded-xl prose-pre:shadow-xl",
+                      // Blockquote
+                      "prose-blockquote:border-l-2 prose-blockquote:border-purple-500 prose-blockquote:bg-purple-500/5 prose-blockquote:rounded-r-xl prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:not-italic prose-blockquote:text-white/70",
+                      // HR
+                      "prose-hr:border-white/[0.06] prose-hr:my-10",
+                      // Images
+                      "prose-img:rounded-2xl prose-img:border prose-img:border-white/[0.06] prose-img:shadow-2xl",
+                      // Tables
+                      "prose-table:border prose-table:border-white/[0.06] prose-table:rounded-xl prose-table:overflow-hidden",
+                      "prose-th:bg-white/[0.04] prose-th:text-white prose-th:font-semibold prose-th:px-4 prose-th:py-3",
+                      "prose-td:px-4 prose-td:py-3 prose-td:border-t prose-td:border-white/[0.06]"
+                    )}
                   >
-                    Marcar seção
-                  </Button>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                      {content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
 
-                <div
-                  style={readerStyle}
-                  className={cn(
-                    "max-w-none",
-                    "prose prose-invert prose-lg",
-                    "prose-headings:text-white prose-strong:text-white",
-                    "prose-p:text-white/80",
-                    "prose-a:text-purple-300 prose-a:no-underline hover:prose-a:underline",
-                    "prose-li:text-white/80",
-                    "prose-code:text-purple-200 prose-pre:bg-black/50",
-                    "prose-hr:border-white/10",
-                    "prose-blockquote:text-white/75 prose-blockquote:border-purple-500/70"
-                  )}
-                >
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                    {content}
-                  </ReactMarkdown>
+                {/* Bottom navigation */}
+                <div className="p-6 sm:p-10 lg:p-12 pt-0">
+                  <div className="flex items-center justify-between gap-4 pt-8 border-t border-white/[0.06]">
+                    <div className="text-sm text-white/40">
+                      {filteredCompletedSections.length === toc.length && toc.length > 0 ? (
+                        <span className="flex items-center gap-2 text-emerald-400">
+                          <Sparkles size={16} />
+                          Parabéns! Você completou este conteúdo.
+                        </span>
+                      ) : (
+                        `${toc.length - filteredCompletedSections.length} seções restantes`
+                      )}
+                    </div>
+                    <Button
+                      className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 border-0 shadow-lg shadow-purple-500/20"
+                      onClick={() => {
+                        if (activeHeadingId) void markSectionCompleted(activeHeadingId);
+                      }}
+                      disabled={!activeHeadingId || filteredCompletedSections.includes(activeHeadingId ?? "")}
+                    >
+                      Próxima seção
+                      <ChevronRight size={16} className="ml-1" />
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </article>
           </main>
         </div>
       </div>
