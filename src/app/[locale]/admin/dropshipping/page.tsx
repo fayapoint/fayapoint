@@ -95,9 +95,36 @@ interface Source {
   productCount?: number;
 }
 
+// Sample trend data
+const TRENDING_PRODUCTS = [
+  { keyword: "Fone Bluetooth TWS", volume: 145000, growth: 34, category: "electronics", source: "Google Trends", hot: true },
+  { keyword: "Ring Light Profissional", volume: 89000, growth: 28, category: "photography", source: "Google Trends", hot: true },
+  { keyword: "Smartwatch Fitness", volume: 234000, growth: 45, category: "wearables", source: "Google Trends", hot: true },
+  { keyword: "Câmera de Segurança WiFi", volume: 67000, growth: 19, category: "security", source: "Google Trends", hot: false },
+  { keyword: "Carregador Portátil 20000mAh", volume: 78000, growth: 23, category: "accessories", source: "Google Trends", hot: false },
+  { keyword: "Mouse Gamer RGB", volume: 112000, growth: 31, category: "gaming", source: "Google Trends", hot: true },
+  { keyword: "Teclado Mecânico", volume: 98000, growth: 27, category: "gaming", source: "Google Trends", hot: false },
+  { keyword: "Drone com Câmera 4K", volume: 56000, growth: 42, category: "electronics", source: "Google Trends", hot: true },
+  { keyword: "LED Strip RGB", volume: 134000, growth: 38, category: "home", source: "Pinterest", hot: true },
+  { keyword: "Organizador de Maquiagem", volume: 89000, growth: 15, category: "beauty", source: "TikTok", hot: false },
+  { keyword: "Garrafa Térmica Inteligente", volume: 45000, growth: 52, category: "lifestyle", source: "Amazon", hot: true },
+  { keyword: "Mini Projetor Portátil", volume: 67000, growth: 61, category: "electronics", source: "AliExpress", hot: true },
+];
+
+const TREND_SOURCES = [
+  { name: "Google Trends", icon: "🔍", color: "blue", active: true },
+  { name: "Amazon Best Sellers", icon: "📦", color: "orange", active: true },
+  { name: "AliExpress Hot", icon: "🔥", color: "red", active: true },
+  { name: "TikTok Trending", icon: "🎵", color: "pink", active: true },
+  { name: "Pinterest Trends", icon: "📌", color: "red", active: true },
+  { name: "Polymarket", icon: "📊", color: "purple", active: false },
+  { name: "Etsy Trending", icon: "🎨", color: "orange", active: false },
+  { name: "eBay Trending", icon: "🛒", color: "blue", active: false },
+];
+
 export default function DropshippingPage() {
   const { token } = useAdmin();
-  const [activeTab, setActiveTab] = useState<"search" | "products" | "sources">("search");
+  const [activeTab, setActiveTab] = useState<"search" | "trends" | "products" | "sources">("search");
   
   // Search state
   const [filters, setFilters] = useState<SearchFilters>({
@@ -316,23 +343,24 @@ export default function DropshippingPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-white/10 pb-4">
+      <div className="flex gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-hide">
         {[
-          { id: "search", label: "Buscar Produtos", icon: Search },
-          { id: "products", label: "Produtos Salvos", icon: Package },
+          { id: "search", label: "Buscar", icon: Search },
+          { id: "trends", label: "Tendências", icon: TrendingUp },
+          { id: "products", label: "Salvos", icon: Package },
           { id: "sources", label: "Fontes", icon: Globe },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition whitespace-nowrap text-sm ${
               activeTab === tab.id
                 ? "bg-violet-500/20 text-violet-400 border border-violet-500/30"
                 : "text-gray-400 hover:bg-white/5 hover:text-white"
             }`}
           >
-            <tab.icon size={18} />
-            {tab.label}
+            <tab.icon size={16} />
+            <span className="hidden sm:inline">{tab.label}</span>
           </button>
         ))}
       </div>
@@ -590,6 +618,155 @@ export default function DropshippingPage() {
               </p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Trends Tab */}
+      {activeTab === "trends" && (
+        <div className="space-y-6">
+          {/* Trend Sources */}
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+            <h3 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
+              <Globe size={16} className="text-cyan-400" />
+              Fontes de Tendências
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {TREND_SOURCES.map((source) => (
+                <span
+                  key={source.name}
+                  className={`px-3 py-1.5 rounded-lg text-xs flex items-center gap-2 ${
+                    source.active 
+                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                      : "bg-gray-500/20 text-gray-500 border border-gray-500/30"
+                  }`}
+                >
+                  <span>{source.icon}</span>
+                  {source.name}
+                  {source.active && <Check size={12} />}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Hot Trends */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Sparkles size={20} className="text-orange-400" />
+                Produtos em Alta
+              </h3>
+              <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 text-gray-400 text-xs hover:bg-white/10 transition">
+                <RefreshCcw size={14} />
+                Atualizar
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {TRENDING_PRODUCTS.map((trend, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 hover:border-violet-500/30 transition-all cursor-pointer group"
+                  onClick={() => {
+                    setFilters({ ...filters, query: trend.keyword });
+                    setActiveTab("search");
+                  }}
+                >
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium text-white text-sm truncate group-hover:text-violet-400 transition">
+                          {trend.keyword}
+                        </h4>
+                        {trend.hot && (
+                          <span className="px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-400 text-[10px] font-bold">
+                            HOT
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-gray-500 mt-0.5">{trend.source}</p>
+                    </div>
+                    <span className={`flex items-center gap-0.5 px-2 py-1 rounded text-xs font-medium ${
+                      trend.growth > 30 ? "bg-emerald-500/20 text-emerald-400" :
+                      trend.growth > 15 ? "bg-amber-500/20 text-amber-400" :
+                      "bg-gray-500/20 text-gray-400"
+                    }`}>
+                      <ArrowUpRight size={12} />
+                      {trend.growth}%
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                      <BarChart3 size={12} />
+                      {(trend.volume / 1000).toFixed(0)}K buscas/mês
+                    </div>
+                    <span className="px-2 py-0.5 rounded bg-white/5 text-[10px] text-gray-400 capitalize">
+                      {trend.category}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Search Suggestions */}
+          <div className="p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+            <h4 className="text-sm font-medium text-violet-400 mb-3 flex items-center gap-2">
+              <Sparkles size={14} />
+              Dicas para Encontrar Produtos Vencedores
+            </h4>
+            <ul className="text-xs text-gray-400 space-y-2">
+              <li className="flex items-start gap-2">
+                <Check size={12} className="text-emerald-400 mt-0.5 shrink-0" />
+                Busque produtos com crescimento acima de 20% - indicam demanda em alta
+              </li>
+              <li className="flex items-start gap-2">
+                <Check size={12} className="text-emerald-400 mt-0.5 shrink-0" />
+                Prefira produtos com margem acima de 50% para cobrir custos de marketing
+              </li>
+              <li className="flex items-start gap-2">
+                <Check size={12} className="text-emerald-400 mt-0.5 shrink-0" />
+                Combine tendências de múltiplas fontes para validar demanda real
+              </li>
+              <li className="flex items-start gap-2">
+                <Check size={12} className="text-emerald-400 mt-0.5 shrink-0" />
+                Verifique se há programa de afiliados para renda extra por venda
+              </li>
+            </ul>
+          </div>
+
+          {/* Category Distribution */}
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+            <h4 className="text-sm font-medium text-white mb-4">Categorias em Alta</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { name: "Eletrônicos", count: 45, color: "cyan" },
+                { name: "Gaming", count: 32, color: "violet" },
+                { name: "Casa", count: 28, color: "amber" },
+                { name: "Lifestyle", count: 24, color: "emerald" },
+              ].map((cat) => (
+                <div
+                  key={cat.name}
+                  className={`p-3 rounded-lg border cursor-pointer hover:scale-105 transition-transform ${
+                    cat.color === "cyan" ? "bg-cyan-500/10 border-cyan-500/30" :
+                    cat.color === "violet" ? "bg-violet-500/10 border-violet-500/30" :
+                    cat.color === "amber" ? "bg-amber-500/10 border-amber-500/30" :
+                    "bg-emerald-500/10 border-emerald-500/30"
+                  }`}
+                  onClick={() => {
+                    setFilters({ ...filters, category: cat.name.toLowerCase() });
+                    setActiveTab("search");
+                  }}
+                >
+                  <p className="font-medium text-white text-sm">{cat.name}</p>
+                  <p className="text-xs text-gray-500">{cat.count} produtos</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
