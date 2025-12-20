@@ -685,7 +685,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
       {/* Categories Grid */}
       <div>
         <h2 className="text-xl font-bold mb-4">Categorias</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
           {filters && Object.entries(filters.categories).map(([id, cat]) => (
             <CategoryCard 
               key={id}
