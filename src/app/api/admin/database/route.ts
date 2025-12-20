@@ -39,49 +39,98 @@ export async function GET(request: NextRequest) {
     }
 
     // Get list of databases and their collections
-    const admin = mongoose.connection.db?.admin();
-    const { databases } = await admin?.listDatabases() || { databases: [] };
-
     const databasesInfo = [];
+    
+    try {
+      // Try to list all databases (requires admin privileges)
+      const admin = mongoose.connection.db?.admin();
+      const result = await admin?.listDatabases();
+      const databases = result?.databases || [];
 
-    for (const db of databases) {
-      try {
-        const dbConn = mongoose.connection.useDb(db.name);
-        const collections = await dbConn.db!.listCollections().toArray();
-        
-        const collectionsInfo = [];
-        for (const col of collections) {
-          try {
-            const count = await dbConn.collection(col.name).countDocuments();
-            collectionsInfo.push({
-              name: col.name,
-              type: col.type,
-              count,
-            });
-          } catch {
-            collectionsInfo.push({
-              name: col.name,
-              type: col.type,
-              count: 0,
-              error: 'Unable to count',
-            });
+      for (const db of databases) {
+        try {
+          const dbConn = mongoose.connection.useDb(db.name);
+          const collections = await dbConn.db!.listCollections().toArray();
+          
+          const collectionsInfo = [];
+          for (const col of collections) {
+            try {
+              const count = await dbConn.collection(col.name).countDocuments();
+              collectionsInfo.push({
+                name: col.name,
+                type: col.type,
+                count,
+              });
+            } catch {
+              collectionsInfo.push({
+                name: col.name,
+                type: col.type,
+                count: 0,
+                error: 'Unable to count',
+              });
+            }
           }
-        }
 
-        databasesInfo.push({
-          name: db.name,
-          sizeOnDisk: db.sizeOnDisk,
-          empty: db.empty,
-          collections: collectionsInfo,
-        });
-      } catch {
-        databasesInfo.push({
-          name: db.name,
-          sizeOnDisk: db.sizeOnDisk,
-          empty: db.empty,
-          collections: [],
-          error: 'Unable to list collections',
-        });
+          databasesInfo.push({
+            name: db.name,
+            sizeOnDisk: db.sizeOnDisk,
+            empty: db.empty,
+            collections: collectionsInfo,
+          });
+        } catch {
+          databasesInfo.push({
+            name: db.name,
+            sizeOnDisk: db.sizeOnDisk,
+            empty: db.empty,
+            collections: [],
+            error: 'Unable to list collections',
+          });
+        }
+      }
+    } catch (adminError) {
+      // If listDatabases fails (no admin privileges), just show the current database
+      console.log('listDatabases failed, falling back to current db:', adminError);
+      
+      const currentDb = mongoose.connection.db;
+      if (currentDb) {
+        try {
+          const collections = await currentDb.listCollections().toArray();
+          const collectionsInfo = [];
+          
+          for (const col of collections) {
+            try {
+              const count = await currentDb.collection(col.name).countDocuments();
+              collectionsInfo.push({
+                name: col.name,
+                type: col.type,
+                count,
+              });
+            } catch {
+              collectionsInfo.push({
+                name: col.name,
+                type: col.type,
+                count: 0,
+                error: 'Unable to count',
+              });
+            }
+          }
+
+          // Get db stats for size info
+          let sizeOnDisk = 0;
+          try {
+            const stats = await currentDb.stats();
+            sizeOnDisk = stats.dataSize || 0;
+          } catch {}
+
+          databasesInfo.push({
+            name: currentDb.databaseName,
+            sizeOnDisk,
+            empty: collectionsInfo.length === 0,
+            collections: collectionsInfo,
+          });
+        } catch (dbError) {
+          console.error('Error listing current db collections:', dbError);
+        }
       }
     }
 
