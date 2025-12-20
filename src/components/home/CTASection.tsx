@@ -45,7 +45,7 @@ export function CTASection() {
         
         {/* Animated orbs */}
         <motion.div
-          className="absolute top-20 left-20 w-96 h-96 rounded-full blur-[120px]"
+          className="absolute top-20 -left-20 md:left-20 w-64 md:w-96 h-64 md:h-96 rounded-full blur-[120px]"
           style={{ background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.2), transparent 70%)' }}
           animate={{
             scale: [1, 1.3, 1],
@@ -54,7 +54,7 @@ export function CTASection() {
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-20 right-20 w-96 h-96 rounded-full blur-[120px]"
+          className="absolute bottom-20 -right-20 md:right-20 w-64 md:w-96 h-64 md:h-96 rounded-full blur-[120px]"
           style={{ background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.25), transparent 70%)' }}
           animate={{
             scale: [1, 1.4, 1],

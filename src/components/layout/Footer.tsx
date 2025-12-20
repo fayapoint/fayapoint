@@ -225,12 +225,12 @@ export function Footer() {
           {/* Links Sections */}
           <div>
             <h4 className="font-semibold text-white mb-4">{t("links.courses.title")}</h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {footerLinks.cursos.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition"
+                    className="block py-2 text-gray-400 hover:text-white transition"
                   >
                     {t(link.key)}
                   </Link>
@@ -241,12 +241,12 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-white mb-4">{t("links.resources.title")}</h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {footerLinks.recursos.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition"
+                    className="block py-2 text-gray-400 hover:text-white transition"
                   >
                     {t(link.key)}
                   </Link>
@@ -257,12 +257,12 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-white mb-4">{t("links.company.title")}</h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {footerLinks.empresa.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition"
+                    className="block py-2 text-gray-400 hover:text-white transition"
                   >
                     {t(link.key)}
                   </Link>
@@ -273,12 +273,12 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-white mb-4">{t("links.support.title")}</h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {footerLinks.suporte.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition"
+                    className="block py-2 text-gray-400 hover:text-white transition"
                   >
                     {t(link.key)}
                   </Link>
@@ -296,14 +296,14 @@ export function Footer() {
             </div>
             
             {/* Social Links */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition"
+                  className="flex items-center justify-center w-11 h-11 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
                   aria-label={social.label}
                 >
                   <social.icon className="w-5 h-5" />

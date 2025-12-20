@@ -42,11 +42,11 @@ export function TestimonialsSection() {
       <div className="absolute inset-0">
         <motion.div
           style={{ y }}
-          className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]"
+          className="absolute top-0 -left-20 md:left-1/4 w-64 md:w-96 h-64 md:h-96 bg-purple-500/10 rounded-full blur-[120px]"
         />
         <motion.div
           style={{ y: useTransform(y, v => v * -1.5) }}
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px]"
+          className="absolute bottom-0 -right-20 md:right-1/4 w-64 md:w-96 h-64 md:h-96 bg-pink-500/10 rounded-full blur-[120px]"
         />
         
         {/* Floating quotes */}

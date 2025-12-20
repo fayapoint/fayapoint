@@ -88,6 +88,7 @@ import { ProfilePanel } from "@/components/portal/ProfilePanel";
 import { StorePanel } from "@/components/portal/StorePanel";
 import { CartPanel } from "@/components/portal/CartPanel";
 import PODStorePanel from "@/components/portal/PODStorePanel";
+import { MobileBottomNav } from "@/components/portal/MobileBottomNav";
 
 // Types
 interface DashboardCourseProgress {
@@ -432,15 +433,23 @@ export default function PortalPage() {
         onCollapsedChange={setSidebarCollapsed}
       />
 
-      {/* Main Content */}
-      <motion.main 
-        initial={false}
-        animate={{ marginLeft: sidebarCollapsed ? 80 : 280 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="min-h-screen"
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        plan={plan}
+        stats={stats}
+      />
+
+      {/* Main Content - responsive margin for desktop sidebar */}
+      <main 
+        className={cn(
+          "min-h-screen pb-20 md:pb-0 transition-[margin] duration-300",
+          sidebarCollapsed ? "md:ml-20" : "md:ml-[280px]"
+        )}
       >
         {/* Top Bar */}
-        <header className="h-16 bg-gray-950/80 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-30 flex items-center justify-between px-6">
+        <header className="h-14 md:h-16 bg-gray-950/95 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-30 flex items-center justify-between px-4 md:px-6">
           <div>
             <h1 className="text-lg font-semibold">
               {activeTab === "dashboard" && "Dashboard"}
@@ -1707,7 +1716,7 @@ export default function PortalPage() {
             )}
           </AnimatePresence>
         </div>
-      </motion.main>
+      </main>
     </div>
   );
 }

@@ -107,7 +107,7 @@ export function DashboardSidebar({
     <motion.aside
       initial={false}
       animate={{ width: isCollapsed ? 80 : 280 }}
-      className="fixed left-0 top-0 h-screen bg-gray-950 border-r border-gray-800 z-40 flex flex-col"
+      className="hidden md:flex fixed left-0 top-0 h-screen bg-gray-950 border-r border-gray-800 z-40 flex-col"
     >
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-gray-800">

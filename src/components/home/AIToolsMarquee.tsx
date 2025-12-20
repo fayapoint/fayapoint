@@ -319,11 +319,11 @@ const MarqueeRow = ({
               }}
             >
               <Link href={linkUrl} target={isInternal ? "_self" : "_blank"} className="block">
-                <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center bg-white dark:bg-secondary/10 rounded-2xl shadow-sm border border-border/50 group-hover/card:shadow-xl group-hover/card:border-primary/30 transition-colors duration-300 cursor-pointer overflow-hidden relative z-10">
+                <div className="w-16 h-16 md:w-24 md:h-24 flex items-center justify-center bg-white dark:bg-secondary/10 rounded-xl md:rounded-2xl shadow-sm border border-border/50 group-hover/card:shadow-xl group-hover/card:border-primary/30 transition-colors duration-300 cursor-pointer overflow-hidden relative z-10">
                   <ToolIcon 
                     logo={tool.logo} 
                     name={name} 
-                    className="w-10 h-10 md:w-12 md:h-12 object-contain filter grayscale group-hover/card:grayscale-0 transition-all duration-300"
+                    className="w-8 h-8 md:w-12 md:h-12 object-contain filter grayscale group-hover/card:grayscale-0 transition-all duration-300"
                   />
                 </div>
               </Link>
@@ -368,7 +368,7 @@ export function AIToolsMarquee() {
   const secondRow = allTools.slice(midPoint);
 
   return (
-    <section className="py-20 relative overflow-hidden z-10">
+    <section className="py-12 md:py-20 relative overflow-hidden overflow-x-hidden z-10">
       {/* Background glow/gradients */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background opacity-50" />
       
@@ -389,12 +389,12 @@ export function AIToolsMarquee() {
         </motion.div>
       </div>
 
-      <div className="relative w-full max-w-[100vw] overflow-hidden">
+      <div className="relative w-full overflow-hidden">
         {/* Side Gradients for Fade Effect */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-12 md:w-40 bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 md:w-40 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
 
-        <div className="flex flex-col gap-6 -rotate-1 scale-[1.02] transform origin-center">
+        <div className="flex flex-col gap-4 md:gap-6 md:-rotate-1 transform origin-center">
            <MarqueeRow 
              tools={firstRow} 
              direction="left" 

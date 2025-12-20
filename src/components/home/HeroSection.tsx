@@ -114,7 +114,7 @@ export function HeroSection() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute top-20 left-10 w-[400px] h-[400px] rounded-full blur-[100px]"
+          className="absolute top-20 -left-20 md:left-10 w-[300px] md:w-[400px] h-[300px] md:h-[400px] rounded-full blur-[100px]"
           style={{
             background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.3), transparent 70%)'
           }}
@@ -132,7 +132,7 @@ export function HeroSection() {
             ease: "easeInOut",
             delay: 5,
           }}
-          className="absolute bottom-20 right-10 w-[500px] h-[500px] rounded-full blur-[120px]"
+          className="absolute bottom-20 -right-20 md:right-10 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-[120px]"
           style={{
             background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.25), transparent 70%)'
           }}
@@ -149,7 +149,7 @@ export function HeroSection() {
             ease: "linear",
             delay: 2,
           }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[150px]"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[90vw] md:h-[600px] max-w-[600px] max-h-[600px] rounded-full blur-[150px]"
           style={{
             background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.2), transparent 70%)'
           }}
