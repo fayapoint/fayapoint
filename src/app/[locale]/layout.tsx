@@ -122,12 +122,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const metadata = localizedMetadata[locale] ?? localizedMetadata["pt-BR"];
-  const canonicalPath = `/${locale}`;
 
   return {
     ...metadata,
     alternates: {
-      canonical: canonicalPath,
       languages: {
         "pt-BR": "/pt-BR",
         en: "/en",

@@ -36,7 +36,7 @@ const footerLinks = {
     { key: "links.resources.items.templates", href: "/recursos/templates" },
     { key: "links.resources.items.roiCalculator", href: "/recursos/calculadora-roi" },
     { key: "links.resources.items.glossary", href: "/recursos/glossario" },
-    { key: "links.resources.items.apiDocs", href: "/api-docs" },
+    { key: "links.resources.items.tools", href: "/ferramentas" },
   ],
   empresa: [
     { key: "links.company.items.about", href: "/sobre" },
