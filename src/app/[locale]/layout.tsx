@@ -23,6 +23,10 @@ import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { routing } from "@/i18n/routing";
 
+// Analytics IDs
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+const AHREFS_KEY = process.env.NEXT_PUBLIC_AHREFS_KEY || "1OAn7/HQLLYTfBiptfdygw";
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -171,6 +175,32 @@ export default async function RootLayout({
     <UserProvider>
       <ServiceCartProvider>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          {/* Google Tag Manager */}
+          {GTM_ID && (
+            <>
+              <Script
+                id="gtm-script"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                    })(window,document,'script','dataLayer','${GTM_ID}');
+                  `,
+                }}
+              />
+            </>
+          )}
+          {/* Ahrefs Web Analytics */}
+          <Script
+            id="ahrefs-analytics"
+            src="https://analytics.ahrefs.com/analytics.js"
+            data-key={AHREFS_KEY}
+            strategy="afterInteractive"
+            async
+          />
           <Suspense fallback={null}>
             <AttributionTracker />
           </Suspense>

@@ -23,6 +23,8 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+
 export default function RootLayout({ children }: RootLayoutProps) {
   const lang = "pt-BR";
   return (
@@ -31,6 +33,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
         suppressHydrationWarning
         className={`${inter.variable} ${plusJakarta.variable} ${firaCode.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
       >
+        {/* Google Tag Manager (noscript) */}
+        {GTM_ID && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            />
+          </noscript>
+        )}
         {children}
         <Script id="hotmart-checkout" strategy="lazyOnload">
           {`
