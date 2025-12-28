@@ -8,12 +8,12 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "Edição de Vídeo - FayaPoint AI Academy",
-    description: "Serviços profissionais de edição de vídeo com IA para conteúdo de alta qualidade.",
+    title: "Edição de Vídeo Profissional com IA | FayaPoint",
+    description: "Serviços de edição de vídeo com IA para YouTube, Instagram, TikTok e corporativo. Cortes inteligentes, legendas automáticas, color grading e motion graphics. Entrega rápida.",
   },
   en: {
-    title: "Video Editing - FayaPoint AI Academy",
-    description: "Professional AI-powered video editing services for high-quality content.",
+    title: "Professional AI Video Editing | FayaPoint",
+    description: "AI-powered video editing for YouTube, Instagram, TikTok and corporate content. Smart cuts, automatic captions, color grading and motion graphics. Fast turnaround.",
   },
 };
 

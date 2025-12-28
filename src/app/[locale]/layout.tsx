@@ -126,9 +126,11 @@ export async function generateMetadata({
   return {
     ...metadata,
     alternates: {
+      canonical: `${SITE_URL}/${locale}`,
       languages: {
-        "pt-BR": "/pt-BR",
-        en: "/en",
+        "x-default": `${SITE_URL}/pt-BR`,
+        "pt-BR": `${SITE_URL}/pt-BR`,
+        "en": `${SITE_URL}/en`,
       },
     },
   };

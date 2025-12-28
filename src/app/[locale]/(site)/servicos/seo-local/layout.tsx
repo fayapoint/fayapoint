@@ -8,12 +8,12 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "SEO Local - FayaPoint AI Academy",
-    description: "Otimização para buscas locais. Aumente sua visibilidade no Google Maps e resultados regionais.",
+    title: "SEO Local e Google Meu Negócio | FayaPoint",
+    description: "Otimização para buscas locais e Google Meu Negócio. Aumente visibilidade no Google Maps, gere avaliações positivas e atraia clientes da sua região. Resultados em 30 dias.",
   },
   en: {
-    title: "Local SEO - FayaPoint AI Academy",
-    description: "Local search optimization. Increase your visibility on Google Maps and regional results.",
+    title: "Local SEO & Google Business Profile | FayaPoint",
+    description: "Local search optimization and Google Business Profile management. Boost Google Maps visibility, generate positive reviews and attract local customers. Results in 30 days.",
   },
 };
 

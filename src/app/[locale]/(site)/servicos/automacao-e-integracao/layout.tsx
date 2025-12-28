@@ -8,12 +8,12 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "Automação e Integração - FayaPoint AI Academy",
-    description: "Automatize processos e integre sistemas com n8n, Make, Zapier e APIs personalizadas.",
+    title: "Automação e Integração de Sistemas | FayaPoint",
+    description: "Automatize processos empresariais e integre sistemas com n8n, Make, Zapier e APIs personalizadas. Reduza trabalho manual, elimine erros e aumente produtividade com workflows inteligentes.",
   },
   en: {
-    title: "Automation & Integration - FayaPoint AI Academy",
-    description: "Automate processes and integrate systems with n8n, Make, Zapier and custom APIs.",
+    title: "Business Automation & System Integration | FayaPoint",
+    description: "Automate business processes and integrate systems with n8n, Make, Zapier and custom APIs. Reduce manual work, eliminate errors and boost productivity with intelligent workflows.",
   },
 };
 

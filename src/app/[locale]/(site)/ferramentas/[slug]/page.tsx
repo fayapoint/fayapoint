@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -8,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Star, CheckCircle, LinkIcon, BookOpen, Rocket, Shield, AlertTriangle, User, Building2, TrendingUp } from "lucide-react";
 import { toolsData } from "@/data/tools-complete";
+import { generatePageMetadata } from "@/lib/metadata";
 
 type Tool = {
   title?: string;
@@ -104,6 +106,30 @@ export async function generateStaticParams() {
   return Object.keys(toolsMap).map((slug) => ({
     slug,
   }));
+}
+
+type PageProps = {
+  params: Promise<{ locale: string; slug: string }>;
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const tool = toolsMap[slug];
+
+  const title = tool?.title
+    ? `${tool.title} - Guia Completo e Cursos | FayaPoint`
+    : "Ferramenta de IA | FayaPoint";
+  
+  const description = tool?.description 
+    ? `${tool.description} Aprenda a usar ${tool.title} com cursos práticos e tutoriais. ${tool.category} | ${tool.vendor}`
+    : "Aprenda a usar ferramentas de IA com cursos práticos e tutoriais da FayaPoint.";
+
+  return generatePageMetadata({
+    locale,
+    path: `/ferramentas/${slug}`,
+    title,
+    description,
+  });
 }
 
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -8,12 +8,12 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "O Que Fazemos - FayaPoint AI Academy",
-    description: "Descubra como ajudamos empresas e profissionais a dominar a Inteligência Artificial.",
+    title: "O Que Fazemos - Serviços de IA | FayaPoint",
+    description: "Desenvolvimento web, automação com IA, consultoria e produção de conteúdo. Ajudamos empresas e profissionais a dominar Inteligência Artificial com soluções sob medida.",
   },
   en: {
-    title: "What We Do - FayaPoint AI Academy",
-    description: "Discover how we help businesses and professionals master Artificial Intelligence.",
+    title: "What We Do - AI Services | FayaPoint",
+    description: "Web development, AI automation, consulting and content production. We help businesses and professionals master Artificial Intelligence with custom solutions.",
   },
 };
 

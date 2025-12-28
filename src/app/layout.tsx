@@ -26,9 +26,8 @@ type RootLayoutProps = {
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const lang = "pt-BR";
   return (
-    <html lang={lang} className="scroll-smooth theme-dark dark">
+    <html lang="pt-BR" className="scroll-smooth theme-dark dark" suppressHydrationWarning>
       <body
         suppressHydrationWarning
         className={`${inter.variable} ${plusJakarta.variable} ${firaCode.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
