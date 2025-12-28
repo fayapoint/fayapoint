@@ -71,6 +71,9 @@ const baseMetadata = {
   verification: {
     google: "google-verification-code",
   },
+  other: {
+    "ahrefs-site-verification": "849cd8c9a6b5670a534ad5b0d48c478756a915c5b6a51b24d51f42a99a027a43",
+  },
 } satisfies Metadata;
 
 const localizedMetadata: Record<string, Metadata> = {
