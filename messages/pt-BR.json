@@ -2,6 +2,21 @@
   "LocaleLayout": {
     "title": "FayaPoint AI Academy"
   },
+  "StickyCTA": {
+    "title": "Comece sua jornada em IA hoje!",
+    "subtitle": "Acesso gratuito a cursos, ferramentas e uma comunidade incrível.",
+    "cta": "Criar Conta Grátis"
+  },
+  "ExitIntent": {
+    "title": "Espere! Não vá ainda 🎁",
+    "description": "Crie sua conta grátis e ganhe acesso imediato ao nosso Studio de IA para criar imagens incríveis!",
+    "benefits": {
+      "aiTools": "Ferramentas de IA Gratuitas",
+      "freeCourses": "Cursos Gratuitos"
+    },
+    "cta": "Quero Minha Conta Grátis",
+    "noCreditCard": "Sem cartão de crédito • Acesso instantâneo"
+  },
   "Header": {
     "logo": "FayaPoint AI",
     "nav": {

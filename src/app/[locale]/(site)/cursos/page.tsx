@@ -7,6 +7,15 @@ import {
   Search,
   Grid,
   List,
+  Flame,
+  Trophy,
+  Timer,
+  Shield,
+  Sparkles,
+  ArrowRight,
+  Star,
+  Users,
+  Clock,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Header } from "@/components/layout/Header";
@@ -16,6 +25,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Product } from "@/lib/products";
 import { AttractiveCourseCard } from "@/components/courses/AttractiveCourseCard";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 type LevelOption = {
   value: string;
@@ -195,6 +206,137 @@ export default function CoursesPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Promotional Banner */}
+      <section className="py-6 bg-gradient-to-r from-purple-900/50 via-pink-900/50 to-purple-900/50 border-y border-purple-500/30">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Timer className="text-yellow-400 animate-pulse" size={24} />
+                <span className="text-lg font-bold text-yellow-400">OFERTA ESPECIAL</span>
+              </div>
+              <span className="text-gray-300">Até 75% OFF em cursos selecionados</span>
+            </div>
+            <div className="flex items-center gap-6 text-sm">
+              <div className="flex items-center gap-2 text-gray-300">
+                <Shield className="text-green-400" size={18} />
+                <span>Garantia de 30 dias</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-300">
+                <Sparkles className="text-purple-400" size={18} />
+                <span>Acesso vitalício</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Bestseller Section */}
+      {!loading && products.length > 0 && (
+        <section className="py-12 bg-gradient-to-b from-black to-gray-900/50">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center gap-3 mb-8">
+              <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-lg px-4 py-2">
+                <Flame className="mr-2" size={18} />
+                MAIS VENDIDO
+              </Badge>
+              <h2 className="text-2xl font-bold">Curso em Destaque</h2>
+            </div>
+
+            {/* Featured Course Card */}
+            {(() => {
+              const featured = products.reduce((best, p) => 
+                p.metrics.students > (best?.metrics.students || 0) ? p : best
+              , products[0]);
+              
+              if (!featured) return null;
+              
+              const discount = featured.pricing.originalPrice > featured.pricing.price 
+                ? Math.round(((featured.pricing.originalPrice - featured.pricing.price) / featured.pricing.originalPrice) * 100)
+                : 0;
+              
+              return (
+                <Link href={`/curso/${featured.slug}`}>
+                  <Card className="overflow-hidden border-2 border-yellow-500/50 hover:border-yellow-400 transition-all bg-gradient-to-br from-gray-900 via-gray-900 to-yellow-900/20 hover:shadow-2xl hover:shadow-yellow-500/20">
+                    <div className="grid md:grid-cols-3 gap-0">
+                      {/* Image/Visual Section */}
+                      <div className="relative bg-gradient-to-br from-purple-600 to-pink-600 p-12 flex items-center justify-center">
+                        <div className="text-center">
+                          <Trophy className="mx-auto mb-4 text-yellow-400" size={64} />
+                          <Badge className="bg-yellow-400 text-black font-bold">
+                            #1 Bestseller
+                          </Badge>
+                        </div>
+                        {discount > 0 && (
+                          <div className="absolute top-4 right-4">
+                            <Badge className="bg-red-500 text-white text-xl font-bold px-4 py-2">
+                              -{discount}%
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="md:col-span-2 p-8">
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50">
+                            {featured.categoryPrimary}
+                          </Badge>
+                          <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
+                            {featured.metrics.students.toLocaleString()}+ alunos
+                          </Badge>
+                        </div>
+
+                        <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                          {featured.name}
+                        </h3>
+
+                        <p className="text-gray-400 mb-6 text-lg leading-relaxed">
+                          {featured.copy.shortDescription}
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-6 mb-6 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Star className="text-yellow-400 fill-yellow-400" size={20} />
+                            <span className="font-bold text-lg">{featured.metrics.rating}</span>
+                            <span className="text-gray-400">({featured.metrics.reviewCount} avaliações)</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-300">
+                            <Clock size={18} />
+                            <span>{featured.metrics.duration}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-300">
+                            <Users size={18} />
+                            <span>{featured.metrics.lessons} aulas</span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-6">
+                          <div>
+                            {featured.pricing.originalPrice > featured.pricing.price && (
+                              <span className="text-gray-500 line-through text-lg mr-3">
+                                R$ {featured.pricing.originalPrice.toLocaleString()}
+                              </span>
+                            )}
+                            <span className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                              R$ {featured.pricing.price.toLocaleString()}
+                            </span>
+                          </div>
+                          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-8 py-6 text-lg">
+                            Ver Curso Completo
+                            <ArrowRight className="ml-2" size={20} />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              );
+            })()}
+          </div>
+        </section>
+      )}
 
       {/* Filters */}
       <section className="py-8 border-b border-gray-800">

@@ -16,6 +16,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Progress } from '@/components/ui/progress';
 import { useUser } from '@/contexts/UserContext';
+import { HoneypotField } from '@/components/security/HoneypotField';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -77,6 +78,7 @@ export default function OnboardingPage() {
   const [checkingUser, setCheckingUser] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isBotDetected, setIsBotDetected] = useState(false);
   const router = useRouter();
   const { isLoggedIn, setUser, mounted } = useUser();
 
@@ -126,6 +128,16 @@ export default function OnboardingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Bot detection - silently fail
+    if (isBotDetected) {
+      console.warn('[SECURITY] Bot submission blocked');
+      // Fake success to not tip off bots
+      toast.success('Conta criada com sucesso!');
+      setTimeout(() => router.push('/'), 2000);
+      return;
+    }
+    
     setLoading(true);
     setError(null);
 
@@ -207,6 +219,9 @@ export default function OnboardingPage() {
               transition={{ duration: 0.3 }}
               className="w-full p-8 bg-gray-900/50 backdrop-blur-xl border border-purple-500/50 rounded-2xl shadow-2xl shadow-purple-500/20"
             >
+              {/* Honeypot for bot detection */}
+              <HoneypotField onBotDetected={() => setIsBotDetected(true)} />
+              
               {step === 1 && <Step1 next={handleNextStep} t={t} />}
               {step === 2 && <Step2 next={handleNextStep} data={formData} onChange={handleChange} onEmailBlur={checkUserExists} checkingUser={checkingUser} emailExists={emailExists} error={error} t={t} />}
               {step === 3 && <Step3 submit={handleSubmit} data={formData} setFormData={setFormData} loading={loading} t={t} />}

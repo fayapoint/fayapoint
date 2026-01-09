@@ -216,6 +216,81 @@ export default function CourseSalesPage() {
                     <div className="text-sm text-gray-400">50.000+ alunos • 20+ cursos • 28 anos exp.</div>
                   </div>
                 </div>
+
+                {/* Quick Course Highlights - Fills the gap */}
+                <div className="mt-8 grid grid-cols-2 gap-4">
+                  {[
+                    { icon: PlayCircle, value: `${product.metrics.lessons}+`, label: "Aulas em Vídeo" },
+                    { icon: Clock, value: product.metrics.duration, label: "De Conteúdo" },
+                    { icon: Download, value: "50+", label: "Recursos Baixáveis" },
+                    { icon: Award, value: "Certificado", label: "De Conclusão" }
+                  ].map((item, i) => (
+                    <div key={i} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 text-center">
+                      <item.icon className="mx-auto mb-2 text-purple-400" size={24} />
+                      <div className="font-bold text-lg">{item.value}</div>
+                      <div className="text-xs text-gray-400">{item.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Key Outcomes Preview */}
+                <div className="mt-8 p-6 bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl border border-green-500/30">
+                  <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <Target className="text-green-400" size={20} />
+                    Resultados Garantidos
+                  </h3>
+                  <div className="space-y-3">
+                    {(product.copy.benefits.slice(0, 4) || [
+                      "Domine ChatGPT do básico ao avançado",
+                      "Automatize tarefas e economize tempo",
+                      "Crie conteúdo profissional com IA",
+                      "Aumente sua produtividade em 10x"
+                    ]).map((benefit, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                          <Check className="text-green-400" size={14} />
+                        </div>
+                        <span className="text-gray-300 text-sm">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Who Is This For */}
+                <div className="mt-8 p-6 bg-gray-800/50 rounded-xl border border-gray-700">
+                  <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <Users className="text-purple-400" size={20} />
+                    Para Quem É Este Curso?
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { icon: Building2, text: "Profissionais que querem se destacar no mercado" },
+                      { icon: User, text: "Empreendedores buscando automatizar processos" },
+                      { icon: Rocket, text: "Estudantes querendo acelerar a carreira" },
+                      { icon: Brain, text: "Curiosos sobre o poder da Inteligência Artificial" }
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <item.icon className="text-purple-400 flex-shrink-0" size={18} />
+                        <span className="text-gray-300 text-sm">{item.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Live Activity Indicator */}
+                <div className="mt-8 p-4 bg-gradient-to-r from-orange-900/30 to-red-900/30 rounded-lg border border-orange-500/30">
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                      <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+                    </div>
+                    <div className="flex-1">
+                      <span className="text-orange-400 font-semibold">
+                        {Math.floor(Math.random() * 30) + 45} pessoas estão vendo esta página agora
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* STICKY SIDEBAR - Purchase Card */}
@@ -703,7 +778,173 @@ export default function CourseSalesPage() {
             </div>
           </div>
         </section>
+
+        {/* FAQ SECTION */}
+        <section className="py-16 bg-black">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+                Perguntas <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Frequentes</span>
+              </h2>
+              <p className="text-xl text-gray-400 text-center mb-12">
+                Tire suas dúvidas antes de se matricular
+              </p>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    question: "Quanto tempo tenho acesso ao curso?",
+                    answer: "Você tem acesso VITALÍCIO! Uma vez matriculado, o curso é seu para sempre. Sem mensalidades, sem renovações."
+                  },
+                  {
+                    question: "E se eu não gostar do curso?",
+                    answer: "Oferecemos garantia incondicional de 30 dias. Se não ficar satisfeito por qualquer motivo, devolvemos 100% do seu investimento, sem perguntas."
+                  },
+                  {
+                    question: "Preciso ter conhecimento prévio?",
+                    answer: "Não! O curso foi desenvolvido para levar você do zero ao avançado. Não importa seu nível atual, você conseguirá acompanhar."
+                  },
+                  {
+                    question: "Como funciona o certificado?",
+                    answer: "Ao concluir o curso, você recebe um certificado digital verificável que pode adicionar ao LinkedIn e usar como comprovação profissional."
+                  },
+                  {
+                    question: "Posso assistir no celular?",
+                    answer: "Sim! Nossa plataforma é 100% responsiva. Assista às aulas em qualquer dispositivo: computador, tablet ou smartphone."
+                  },
+                  {
+                    question: "O curso tem suporte?",
+                    answer: "Sim! Você tem acesso a suporte direto com o instrutor e nossa comunidade exclusiva de alunos para tirar dúvidas."
+                  }
+                ].map((faq, i) => (
+                  <div key={i} className="border border-purple-500/30 rounded-lg overflow-hidden bg-gray-900/50">
+                    <button
+                      onClick={() => toggleFaq(i)}
+                      className="w-full flex items-center justify-between p-6 hover:bg-purple-500/10 transition text-left"
+                    >
+                      <span className="font-semibold text-lg pr-4">{faq.question}</span>
+                      {expandedFaqs.includes(i) ? (
+                        <ChevronUp size={20} className="text-purple-400 flex-shrink-0" />
+                      ) : (
+                        <ChevronDown size={20} className="text-purple-400 flex-shrink-0" />
+                      )}
+                    </button>
+                    <AnimatePresence>
+                      {expandedFaqs.includes(i) && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="border-t border-purple-500/20"
+                        >
+                          <p className="p-6 text-gray-300">{faq.answer}</p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FINAL CTA SECTION */}
+        <section className="py-20 bg-gradient-to-b from-purple-900/30 to-black">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black mb-6 text-lg px-6 py-2">
+                <Sparkles className="mr-2" size={18} />
+                ÚLTIMA CHANCE
+              </Badge>
+              
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                Está pronto para <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">transformar sua carreira</span>?
+              </h2>
+              
+              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Junte-se a mais de {product.metrics.students.toLocaleString()} alunos que já estão dominando IA e acelerando suas carreiras.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+                <Button
+                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg shadow-lg shadow-purple-500/50"
+                  size="lg"
+                  onClick={() => {
+                    addItem({
+                      id: `course:${product.slug}`,
+                      type: 'course',
+                      name: product.name,
+                      quantity: 1,
+                      price: product.pricing.price,
+                      slug: product.slug
+                    });
+                    toast.success("Curso adicionado ao carrinho!");
+                    if (isLoggedIn) {
+                      router.push('/checkout/cart');
+                    } else {
+                      router.push('/onboarding');
+                    }
+                  }}
+                >
+                  <ShoppingCart className="mr-2" size={20} />
+                  Matricular Agora por R$ {product.pricing.price.toLocaleString()}
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
+                <div className="flex items-center gap-2">
+                  <Shield className="text-green-400" size={18} />
+                  <span>Garantia de 30 dias</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Lock className="text-purple-400" size={18} />
+                  <span>Pagamento seguro</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Globe className="text-blue-400" size={18} />
+                  <span>Acesso imediato</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
+
+      {/* FLOATING MOBILE CTA BAR */}
+      <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-gray-900/95 backdrop-blur border-t border-purple-500/50 p-4 z-50">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500 line-through text-sm">R$ {product.pricing.originalPrice.toLocaleString()}</span>
+              <Badge className="bg-red-500 text-white text-xs">-{discount}%</Badge>
+            </div>
+            <div className="text-xl font-bold text-purple-400">R$ {product.pricing.price.toLocaleString()}</div>
+          </div>
+          <Button
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-6"
+            onClick={() => {
+              addItem({
+                id: `course:${product.slug}`,
+                type: 'course',
+                name: product.name,
+                quantity: 1,
+                price: product.pricing.price,
+                slug: product.slug
+              });
+              toast.success("Curso adicionado!");
+              if (isLoggedIn) {
+                router.push('/checkout/cart');
+              } else {
+                router.push('/onboarding');
+              }
+            }}
+          >
+            <ShoppingCart className="mr-2" size={18} />
+            Comprar
+          </Button>
+        </div>
+      </div>
+
       <Footer />
     </div>
   );

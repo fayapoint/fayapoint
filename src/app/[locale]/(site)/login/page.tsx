@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
 
 import { useUser } from "@/contexts/UserContext";
+import { HoneypotField } from "@/components/security/HoneypotField";
 
 export default function LoginPage() {
   const t = useTranslations("Login");
@@ -34,9 +35,18 @@ export default function LoginPage() {
     password: "",
     rememberMe: false,
   });
+  const [isBotDetected, setIsBotDetected] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Bot detection - silently fail
+    if (isBotDetected) {
+      console.warn('[SECURITY] Bot login attempt blocked');
+      toast.error(t("messages.loginError"));
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
@@ -134,6 +144,8 @@ export default function LoginPage() {
           {/* Login Form */}
           <div className="bg-popover/50 backdrop-blur-xl rounded-2xl p-8 border border-border">
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Honeypot for bot detection */}
+              <HoneypotField onBotDetected={() => setIsBotDetected(true)} />
               {/* Email Field */}
               <div className="space-y-2">
                 <Label htmlFor="email">{t("fields.email")}</Label>

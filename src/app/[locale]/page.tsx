@@ -12,6 +12,8 @@ import { CTASection } from "@/components/home/CTASection";
 // DISABLED: High serverless usage - triggers API call on every home page visit
 // import { CommunityGallery } from "@/components/home/CommunityGallery";
 import { ValuePropositionCTA } from "@/components/home/ValuePropositionCTA";
+import { StickyCTA } from "@/components/conversion/StickyCTA";
+import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 
 export default function Home() {
   return (
@@ -32,6 +34,10 @@ export default function Home() {
         <CTASection />
       </main>
       <Footer />
+      
+      {/* Conversion optimization */}
+      <StickyCTA />
+      <ExitIntentPopup />
     </div>
   );
 }
