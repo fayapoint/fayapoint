@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -31,6 +32,7 @@ export default function CourseSalesPage() {
   const router = useRouter();
   const { addItem } = useServiceCart();
   const { isLoggedIn } = useUser();
+  const t = useTranslations("CoursePage");
   
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -83,7 +85,7 @@ export default function CourseSalesPage() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Carregando curso...</p>
+          <p className="text-gray-400">{t("loading")}</p>
         </div>
       </div>
     );
@@ -93,9 +95,9 @@ export default function CourseSalesPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Curso não encontrado</h1>
+          <h1 className="text-2xl font-bold mb-4">{t("notFound")}</h1>
           <Link href="/cursos">
-            <Button>Ver Todos os Cursos</Button>
+            <Button>{t("viewAllCourses")}</Button>
           </Link>
         </div>
       </div>
@@ -142,9 +144,9 @@ export default function CourseSalesPage() {
               <div className="lg:col-span-2">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
-                  <Link href="/" className="hover:text-white">Home</Link>
+                  <Link href="/" className="hover:text-white">{t("breadcrumb.home")}</Link>
                   <ChevronRight size={14} />
-                  <Link href="/cursos" className="hover:text-white">Cursos</Link>
+                  <Link href="/cursos" className="hover:text-white">{t("breadcrumb.courses")}</Link>
                   <ChevronRight size={14} />
                   <span className="text-purple-400">{product.categoryPrimary}</span>
                 </div>
@@ -154,16 +156,16 @@ export default function CourseSalesPage() {
                   {product.metrics.students > 5000 && (
                     <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-0">
                       <Flame className="mr-1" size={14} />
-                      Bestseller #{1}
+                      {t("badges.bestseller", { position: 1 })}
                     </Badge>
                   )}
                   <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-black border-0">
                     <Trophy className="mr-1" size={14} />
-                    Mais Vendido {new Date().getFullYear()}
+                    {t("badges.bestSelling", { year: new Date().getFullYear() })}
                     </Badge>
                   <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 animate-pulse">
                     <Timer className="mr-1" size={14} />
-                    Oferta Expira em {timeLeft.hours}h {timeLeft.minutes}m
+                    {t("badges.offerExpires", { hours: timeLeft.hours, minutes: timeLeft.minutes })}
                   </Badge>
                 </div>
 
@@ -185,7 +187,7 @@ export default function CourseSalesPage() {
                     <Star className="text-yellow-400 fill-yellow-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.rating}</div>
-                      <div className="text-xs text-gray-400">{product.metrics.reviewCount} avaliações</div>
+                      <div className="text-xs text-gray-400">{product.metrics.reviewCount} {t("stats.reviews")}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
@@ -193,14 +195,14 @@ export default function CourseSalesPage() {
                     <Users className="text-purple-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.students.toLocaleString()}</div>
-                      <div className="text-xs text-gray-400">alunos matriculados</div>
+                      <div className="text-xs text-gray-400">{t("stats.studentsEnrolled")}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
                     <TrendingUp className="text-green-400" size={20} />
                     <div className="text-sm text-gray-300">
-                      <span className="font-bold text-green-400">127</span> matrículas nas últimas 24h
+                      <span className="font-bold text-green-400">127</span> {t("stats.enrollmentsLast24h")}
                     </div>
                   </div>
                 </div>
@@ -211,19 +213,19 @@ export default function CourseSalesPage() {
                     RF
                   </div>
                   <div>
-                    <div className="text-sm text-gray-400">Criado por</div>
+                    <div className="text-sm text-gray-400">{t("instructor.createdBy")}</div>
                     <div className="font-bold text-lg">Ricardo Faya</div>
-                    <div className="text-sm text-gray-400">50.000+ alunos • 20+ cursos • 28 anos exp.</div>
+                    <div className="text-sm text-gray-400">50.000+ {t("instructor.students")} • 20+ {t("instructor.courses")} • 28 {t("instructor.experience")}</div>
                   </div>
                 </div>
 
                 {/* Quick Course Highlights - Fills the gap */}
                 <div className="mt-8 grid grid-cols-2 gap-4">
                   {[
-                    { icon: PlayCircle, value: `${product.metrics.lessons}+`, label: "Aulas em Vídeo" },
-                    { icon: Clock, value: product.metrics.duration, label: "De Conteúdo" },
-                    { icon: Download, value: "50+", label: "Recursos Baixáveis" },
-                    { icon: Award, value: "Certificado", label: "De Conclusão" }
+                    { icon: PlayCircle, value: `${product.metrics.lessons}+`, label: t("stats.videoLessons") },
+                    { icon: Clock, value: product.metrics.duration, label: t("stats.ofContent") },
+                    { icon: Download, value: "50+", label: t("stats.downloads") },
+                    { icon: Award, value: t("stats.certificate"), label: t("stats.ofCompletion") }
                   ].map((item, i) => (
                     <div key={i} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 text-center">
                       <item.icon className="mx-auto mb-2 text-purple-400" size={24} />
@@ -237,7 +239,7 @@ export default function CourseSalesPage() {
                 <div className="mt-8 p-6 bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl border border-green-500/30">
                   <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
                     <Target className="text-green-400" size={20} />
-                    Resultados Garantidos
+                    {t("highlights.guaranteedResults")}
                   </h3>
                   <div className="space-y-3">
                     {(product.copy.benefits.slice(0, 4) || [
@@ -260,14 +262,14 @@ export default function CourseSalesPage() {
                 <div className="mt-8 p-6 bg-gray-800/50 rounded-xl border border-gray-700">
                   <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
                     <Users className="text-purple-400" size={20} />
-                    Para Quem É Este Curso?
+                    {t("audience.title")}
                   </h3>
                   <div className="space-y-3">
                     {[
-                      { icon: Building2, text: "Profissionais que querem se destacar no mercado" },
-                      { icon: User, text: "Empreendedores buscando automatizar processos" },
-                      { icon: Rocket, text: "Estudantes querendo acelerar a carreira" },
-                      { icon: Brain, text: "Curiosos sobre o poder da Inteligência Artificial" }
+                      { icon: Building2, text: t("audience.professionals") },
+                      { icon: User, text: t("audience.entrepreneurs") },
+                      { icon: Rocket, text: t("audience.students") },
+                      { icon: Brain, text: t("audience.curious") }
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <item.icon className="text-purple-400 flex-shrink-0" size={18} />
@@ -286,7 +288,7 @@ export default function CourseSalesPage() {
                     </div>
                     <div className="flex-1">
                       <span className="text-orange-400 font-semibold">
-                        {Math.floor(Math.random() * 30) + 45} pessoas estão vendo esta página agora
+                        {t("liveActivity", { count: Math.floor(Math.random() * 30) + 45 })}
                       </span>
                     </div>
                   </div>
@@ -308,7 +310,7 @@ export default function CourseSalesPage() {
                         </motion.div>
                       </div>
                       <div className="absolute top-3 right-3 bg-black/70 px-3 py-1 rounded-full text-sm font-semibold">
-                        Preview Gratuito
+                        {t("sidebar.freePreview")}
                       </div>
                       <div className="absolute bottom-3 left-3 bg-black/70 px-3 py-1 rounded-full text-sm">
                         <Clock className="inline mr-1" size={14} />
@@ -320,7 +322,7 @@ export default function CourseSalesPage() {
                     <div className="mb-6 p-4 bg-gradient-to-r from-red-900/50 to-orange-900/50 rounded-lg border-2 border-red-500/50">
                       <div className="flex items-center gap-2 mb-2">
                         <AlertCircle className="text-red-400" size={20} />
-                        <span className="font-bold text-red-400">OFERTA LIMITADA</span>
+                        <span className="font-bold text-red-400">{t("sidebar.limitedOffer")}</span>
                       </div>
                       <div className="flex justify-center gap-2 text-2xl font-bold">
                         <div className="bg-black/50 px-3 py-2 rounded">
@@ -336,7 +338,7 @@ export default function CourseSalesPage() {
                         </div>
                       </div>
                       <p className="text-xs text-center text-gray-400 mt-2">
-                        Garanta seu desconto antes que acabe!
+                        {t("sidebar.getDiscountBefore")}
                       </p>
                     </div>
 
@@ -356,11 +358,11 @@ export default function CourseSalesPage() {
                         </span>
                       </div>
                       <p className="text-gray-400">
-                        ou <span className="font-semibold text-white">12x de R$ {(product.pricing.price / 12).toFixed(2)}</span> sem juros
+                        {t("sidebar.orInstallments", { installments: 12, value: `R$ ${(product.pricing.price / 12).toFixed(2)}` })}
                       </p>
                       <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
                         <span className="text-green-400 font-bold">
-                          Economize R$ {savings.toLocaleString()} hoje!
+                          {t("sidebar.saveToday", { amount: `R$ ${savings.toLocaleString()}` })}
                         </span>
                       </div>
                     </div>
@@ -379,7 +381,7 @@ export default function CourseSalesPage() {
                             price: product.pricing.price,
                             slug: product.slug
                           });
-                          toast.success("Curso adicionado ao carrinho!");
+                          toast.success(t("toast.addedToCart"));
                           if (isLoggedIn) {
                             router.push('/checkout/cart');
                           } else {
@@ -388,7 +390,7 @@ export default function CourseSalesPage() {
                         }}
                       >
                         <ShoppingCart className="mr-2" size={20} />
-                        Comprar Agora
+                        {t("sidebar.buyNow")}
                       </Button>
                       
                       <Button
@@ -404,27 +406,27 @@ export default function CourseSalesPage() {
                             price: product.pricing.price,
                             slug: product.slug
                           });
-                          toast.success("Adicionado ao carrinho!");
+                          toast.success(t("toast.added"));
                         }}
                       >
-                        Adicionar ao Carrinho
+                        {t("sidebar.addToCart")}
                       </Button>
                     </div>
 
                     {/* What's Included */}
                     <div className="space-y-3 mb-6">
                       <h3 className="font-bold text-sm uppercase text-gray-400 mb-3">
-                        Este curso inclui:
+                        {t("sidebar.courseIncludes")}
                       </h3>
                       {[
-                        `${product.metrics.lessons} aulas em vídeo`,
-                        `${product.metrics.duration} de conteúdo`,
-                        'Acesso vitalício',
-                        'Certificado de conclusão',
-                        'Atualizações gratuitas',
-                        'Suporte direto',
-                        'Projetos práticos',
-                        'Comunidade exclusiva'
+                        t("sidebar.lessons", { count: product.metrics.lessons }),
+                        t("sidebar.content", { duration: product.metrics.duration }),
+                        t("sidebar.lifetimeAccess"),
+                        t("sidebar.completionCertificate"),
+                        t("sidebar.freeUpdates"),
+                        t("sidebar.directSupport"),
+                        t("sidebar.practicalProjects"),
+                        t("sidebar.exclusiveCommunity")
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-sm">
                           <Check className="text-green-400 flex-shrink-0" size={16} />
@@ -437,10 +439,10 @@ export default function CourseSalesPage() {
                     <div className="p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border-2 border-green-500/50 text-center">
                       <Shield className="mx-auto mb-2 text-green-400" size={32} />
                       <div className="font-bold text-green-400 mb-1">
-                        Garantia de 30 Dias
+                        {t("sidebar.guarantee", { days: 30 })}
                       </div>
                       <p className="text-xs text-gray-400">
-                        100% do seu dinheiro de volta, sem perguntas
+                        {t("sidebar.guaranteeText")}
                       </p>
                     </div>
 
@@ -448,11 +450,11 @@ export default function CourseSalesPage() {
                     <div className="flex items-center justify-center gap-4 mt-6 text-xs text-gray-500">
                       <div className="flex items-center gap-1">
                         <BadgeCheck size={14} />
-                        <span>Compra Segura</span>
+                        <span>{t("sidebar.securePurchase")}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Lock size={14} />
-                        <span>Dados Protegidos</span>
+                        <span>{t("sidebar.protectedData")}</span>
                       </div>
                     </div>
                   </Card>
@@ -467,18 +469,13 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                <span className="text-red-400">Você está lutando</span> com algum desses problemas?
+                <span className="text-red-400">{t("problems.title").split("<red>")[0]}</span>
+                <span className="text-red-400">{t("problems.title").split("<red>")[1]?.split("</red>")[0]}</span>
+                {t("problems.title").split("</red>")[1]}
               </h2>
               
               <div className="grid md:grid-cols-2 gap-6">
-                {[
-                  "Passa horas em tarefas repetitivas que poderiam ser automatizadas",
-                  "Não sabe como usar IA de forma produtiva no trabalho",
-                  "Vê outros ganhando dinheiro com IA mas não sabe por onde começar",
-                  "Tentou aprender sozinho mas ficou perdido com tanta informação",
-                  "Quer se destacar no mercado mas falta conhecimento técnico",
-                  "Tem medo de ficar para trás na revolução da IA"
-                ].map((problem, i) => (
+                {(t.raw("problems.items") as string[]).map((problem: string, i: number) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, x: -20 }}
@@ -494,10 +491,10 @@ export default function CourseSalesPage() {
 
               <div className="mt-12 p-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-2xl border-2 border-purple-500/50 text-center">
                 <p className="text-2xl font-bold mb-4">
-                  Se você se identificou com pelo menos 2 desses problemas...
+                  {t("problems.identify")}
                 </p>
                 <p className="text-xl text-purple-400">
-                  Este curso foi feito especificamente para você! 👇
+                  {t("problems.madeForYou")}
                 </p>
               </div>
             </div>
@@ -509,7 +506,11 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Imagine transformar <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">sua vida profissional</span> em apenas 30 dias
+                {t("transformation.title").split("<highlight>")[0]}
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  {t("transformation.title").split("<highlight>")[1]?.split("</highlight>")[0]}
+                </span>
+                {t("transformation.title").split("</highlight>")[1]}
               </h2>
             </div>
 
@@ -519,17 +520,11 @@ export default function CourseSalesPage() {
                 <div className="p-8 bg-gray-800/50 border-2 border-gray-700 rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
-                      ANTES
+                      {t("transformation.before")}
                     </Badge>
                   </div>
                   <ul className="space-y-4">
-                    {[
-                      "Trabalhando 60+ horas por semana",
-                      "Tarefas manuais repetitivas",
-                      "Estagnado na carreira",
-                      "Renda limitada",
-                      "Sem tempo para família"
-                    ].map((item, i) => (
+                    {(t.raw("transformation.beforeItems") as string[]).map((item: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <X className="text-red-400 flex-shrink-0 mt-1" size={20} />
                         <span className="text-gray-400">{item}</span>
@@ -542,17 +537,11 @@ export default function CourseSalesPage() {
                 <div className="p-8 bg-gradient-to-br from-purple-900/30 to-pink-900/30 border-2 border-purple-500 rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                      DEPOIS
+                      {t("transformation.after")}
                     </Badge>
                   </div>
                   <ul className="space-y-4">
-                    {[
-                      "Economizando 20+ horas por semana",
-                      "Automação inteligente trabalhando 24/7",
-                      "Promoções e oportunidades chegando",
-                      "Renda aumentada em 40-60%",
-                      "Mais tempo para o que importa"
-                    ].map((item, i) => (
+                    {(t.raw("transformation.afterItems") as string[]).map((item: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <Check className="text-green-400 flex-shrink-0 mt-1" size={20} />
                         <span className="text-white font-semibold">{item}</span>
@@ -565,10 +554,10 @@ export default function CourseSalesPage() {
               {/* Transformation Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
                 {[
-                  { value: "20+", label: "horas economizadas/semana" },
-                  { value: "40-60%", label: "aumento salarial médio" },
-                  { value: "90%", label: "taxa de satisfação" },
-                  { value: "30 dias", label: "para primeiros resultados" }
+                  { value: "20+", label: t("transformation.stats.hoursSaved") },
+                  { value: "40-60%", label: t("transformation.stats.salaryIncrease") },
+                  { value: "90%", label: t("transformation.stats.satisfaction") },
+                  { value: "30 days", label: t("transformation.stats.firstResults") }
                 ].map((stat, i) => (
                   <div key={i} className="text-center p-6 bg-black/50 rounded-lg border border-purple-500/30">
                     <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2">
@@ -587,10 +576,13 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                O que você vai <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">dominar</span>
+                {t("whatYouLearn.title").split("<highlight>")[0]}
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  {t("whatYouLearn.title").split("<highlight>")[1]?.split("</highlight>")[0]}
+                </span>
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
-                Resultados concretos que você alcançará ao concluir este curso
+                {t("whatYouLearn.subtitle")}
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -626,7 +618,7 @@ export default function CourseSalesPage() {
                       price: product.pricing.price,
                       slug: product.slug
                     });
-                    toast.success("Curso adicionado ao carrinho!");
+                    toast.success(t("toast.addedToCart"));
                     if (isLoggedIn) {
                       router.push('/checkout/cart');
                     } else {
@@ -634,11 +626,11 @@ export default function CourseSalesPage() {
                     }
                   }}
                 >
-                  Sim, Quero Dominar Tudo Isso Agora
+                  {t("whatYouLearn.cta")}
                   <ArrowRight className="ml-2" size={20} />
                 </Button>
                 <p className="text-sm text-gray-400 mt-4">
-                  ✓ Acesso imediato ✓ Garantia de 30 dias ✓ Certificado incluído
+                  {t("whatYouLearn.ctaSubtext")}
                 </p>
               </div>
             </div>
@@ -650,10 +642,13 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                Conteúdo do <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Curso</span>
+                {t("curriculum.title").split("<highlight>")[0]}
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  {t("curriculum.title").split("<highlight>")[1]?.split("</highlight>")[0]}
+                </span>
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
-                Um currículo abrangente projetado para resultados reais
+                {t("curriculum.subtitle")}
               </p>
 
               <div className="space-y-6">
@@ -666,7 +661,7 @@ export default function CourseSalesPage() {
                       <div className="flex items-center gap-3 text-left">
                         <span className="text-xl font-semibold">{module.title}</span>
                         <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-400">
-                          {module.lessons} aulas
+                          {module.lessons} {t("curriculum.lessons")}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-3">
@@ -689,8 +684,8 @@ export default function CourseSalesPage() {
               </div>
 
               <div className="mt-12 text-center p-6 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-2xl border-2 border-purple-500/50">
-                <h3 className="text-2xl font-bold mb-4 text-purple-400">{product.curriculum.moduleCount} Módulos • {product.metrics.lessons} Aulas</h3>
-                <p className="text-gray-300">Um sistema passo a passo para garantir seu sucesso</p>
+                <h3 className="text-2xl font-bold mb-4 text-purple-400">{t("curriculum.modules", { count: product.curriculum.moduleCount, lessons: product.metrics.lessons })}</h3>
+                <p className="text-gray-300">{t("curriculum.stepByStep")}</p>
               </div>
             </div>
           </div>
@@ -701,10 +696,13 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                Bônus <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Exclusivos</span>
+                {t("bonuses.title").split("<highlight>")[0]}
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  {t("bonuses.title").split("<highlight>")[1]?.split("</highlight>")[0]}
+                </span>
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
-                Materiais adicionais para acelerar ainda mais seus resultados
+                {t("bonuses.subtitle")}
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -721,7 +719,7 @@ export default function CourseSalesPage() {
                     </div>
                     <div>
                       <p className="text-lg font-semibold mb-1">{bonus.title}</p>
-                      <p className="text-gray-400 mb-2">Valor: R$ {bonus.value.toLocaleString()}</p>
+                      <p className="text-gray-400 mb-2">{t("bonuses.value", { currency: "R$", amount: bonus.value.toLocaleString() })}</p>
                       <p className="text-gray-300 text-sm">{bonus.description}</p>
                     </div>
                   </motion.div>
@@ -729,8 +727,8 @@ export default function CourseSalesPage() {
               </div>
 
               <div className="mt-12 text-center p-8 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-2xl border-2 border-purple-500/60">
-                <h3 className="text-3xl font-bold mb-2 text-purple-400">+R$ {totalBonusValue.toLocaleString()} em Bônus</h3>
-                <p className="text-gray-300">Incluso GRATUITAMENTE na sua matrícula hoje</p>
+                <h3 className="text-3xl font-bold mb-2 text-purple-400">{t("bonuses.totalValue", { currency: "R$", amount: totalBonusValue.toLocaleString() })}</h3>
+                <p className="text-gray-300">{t("bonuses.includedFree")}</p>
               </div>
             </div>
           </div>
@@ -741,10 +739,14 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                O que os <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Alunos</span> Estão Dizendo
+                {t("testimonials.title").split("<highlight>")[0]}
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  {t("testimonials.title").split("<highlight>")[1]?.split("</highlight>")[0]}
+                </span>
+                {t("testimonials.title").split("</highlight>")[1]}
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
-                Histórias reais de transformação com este curso
+                {t("testimonials.subtitle")}
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
@@ -784,39 +786,17 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                Perguntas <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Frequentes</span>
+                {t("faq.title").split("<highlight>")[0]}
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  {t("faq.title").split("<highlight>")[1]?.split("</highlight>")[0]}
+                </span>
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
-                Tire suas dúvidas antes de se matricular
+                {t("faq.subtitle")}
               </p>
 
               <div className="space-y-4">
-                {[
-                  {
-                    question: "Quanto tempo tenho acesso ao curso?",
-                    answer: "Você tem acesso VITALÍCIO! Uma vez matriculado, o curso é seu para sempre. Sem mensalidades, sem renovações."
-                  },
-                  {
-                    question: "E se eu não gostar do curso?",
-                    answer: "Oferecemos garantia incondicional de 30 dias. Se não ficar satisfeito por qualquer motivo, devolvemos 100% do seu investimento, sem perguntas."
-                  },
-                  {
-                    question: "Preciso ter conhecimento prévio?",
-                    answer: "Não! O curso foi desenvolvido para levar você do zero ao avançado. Não importa seu nível atual, você conseguirá acompanhar."
-                  },
-                  {
-                    question: "Como funciona o certificado?",
-                    answer: "Ao concluir o curso, você recebe um certificado digital verificável que pode adicionar ao LinkedIn e usar como comprovação profissional."
-                  },
-                  {
-                    question: "Posso assistir no celular?",
-                    answer: "Sim! Nossa plataforma é 100% responsiva. Assista às aulas em qualquer dispositivo: computador, tablet ou smartphone."
-                  },
-                  {
-                    question: "O curso tem suporte?",
-                    answer: "Sim! Você tem acesso a suporte direto com o instrutor e nossa comunidade exclusiva de alunos para tirar dúvidas."
-                  }
-                ].map((faq, i) => (
+                {(t.raw("faq.items") as Array<{question: string; answer: string}>).map((faq, i) => (
                   <div key={i} className="border border-purple-500/30 rounded-lg overflow-hidden bg-gray-900/50">
                     <button
                       onClick={() => toggleFaq(i)}
@@ -854,15 +834,19 @@ export default function CourseSalesPage() {
             <div className="max-w-4xl mx-auto text-center">
               <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black mb-6 text-lg px-6 py-2">
                 <Sparkles className="mr-2" size={18} />
-                ÚLTIMA CHANCE
+                {t("finalCta.badge")}
               </Badge>
               
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Está pronto para <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">transformar sua carreira</span>?
+                {t("finalCta.title").split("<highlight>")[0]}
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  {t("finalCta.title").split("<highlight>")[1]?.split("</highlight>")[0]}
+                </span>
+                {t("finalCta.title").split("</highlight>")[1]}
               </h2>
               
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Junte-se a mais de {product.metrics.students.toLocaleString()} alunos que já estão dominando IA e acelerando suas carreiras.
+                {t("finalCta.subtitle", { students: product.metrics.students.toLocaleString() })}
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -878,7 +862,7 @@ export default function CourseSalesPage() {
                       price: product.pricing.price,
                       slug: product.slug
                     });
-                    toast.success("Curso adicionado ao carrinho!");
+                    toast.success(t("toast.addedToCart"));
                     if (isLoggedIn) {
                       router.push('/checkout/cart');
                     } else {
@@ -887,22 +871,22 @@ export default function CourseSalesPage() {
                   }}
                 >
                   <ShoppingCart className="mr-2" size={20} />
-                  Matricular Agora por R$ {product.pricing.price.toLocaleString()}
+                  {t("finalCta.enrollNow", { currency: "R$", price: product.pricing.price.toLocaleString() })}
                 </Button>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
                   <Shield className="text-green-400" size={18} />
-                  <span>Garantia de 30 dias</span>
+                  <span>{t("finalCta.guarantee", { days: 30 })}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Lock className="text-purple-400" size={18} />
-                  <span>Pagamento seguro</span>
+                  <span>{t("finalCta.securePayment")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="text-blue-400" size={18} />
-                  <span>Acesso imediato</span>
+                  <span>{t("finalCta.immediateAccess")}</span>
                 </div>
               </div>
             </div>
@@ -931,7 +915,7 @@ export default function CourseSalesPage() {
                 price: product.pricing.price,
                 slug: product.slug
               });
-              toast.success("Curso adicionado!");
+              toast.success(t("toast.added"));
               if (isLoggedIn) {
                 router.push('/checkout/cart');
               } else {
@@ -940,7 +924,7 @@ export default function CourseSalesPage() {
             }}
           >
             <ShoppingCart className="mr-2" size={18} />
-            Comprar
+            {t("mobileCta.buy")}
           </Button>
         </div>
       </div>

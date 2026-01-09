@@ -214,18 +214,18 @@ export default function CoursesPage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Timer className="text-yellow-400 animate-pulse" size={24} />
-                <span className="text-lg font-bold text-yellow-400">OFERTA ESPECIAL</span>
+                <span className="text-lg font-bold text-yellow-400">{t("promo.specialOffer")}</span>
               </div>
-              <span className="text-gray-300">Até 75% OFF em cursos selecionados</span>
+              <span className="text-gray-300">{t("promo.discountText")}</span>
             </div>
             <div className="flex items-center gap-6 text-sm">
               <div className="flex items-center gap-2 text-gray-300">
                 <Shield className="text-green-400" size={18} />
-                <span>Garantia de 30 dias</span>
+                <span>{t("promo.guarantee")}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-300">
                 <Sparkles className="text-purple-400" size={18} />
-                <span>Acesso vitalício</span>
+                <span>{t("promo.lifetimeAccess")}</span>
               </div>
             </div>
           </div>
@@ -239,9 +239,9 @@ export default function CoursesPage() {
             <div className="flex items-center gap-3 mb-8">
               <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-lg px-4 py-2">
                 <Flame className="mr-2" size={18} />
-                MAIS VENDIDO
+                {t("featured.badge")}
               </Badge>
-              <h2 className="text-2xl font-bold">Curso em Destaque</h2>
+              <h2 className="text-2xl font-bold">{t("featured.title")}</h2>
             </div>
 
             {/* Featured Course Card */}
@@ -265,7 +265,7 @@ export default function CoursesPage() {
                         <div className="text-center">
                           <Trophy className="mx-auto mb-4 text-yellow-400" size={64} />
                           <Badge className="bg-yellow-400 text-black font-bold">
-                            #1 Bestseller
+                            {t("featured.bestseller")}
                           </Badge>
                         </div>
                         {discount > 0 && (
@@ -284,7 +284,7 @@ export default function CoursesPage() {
                             {featured.categoryPrimary}
                           </Badge>
                           <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                            {featured.metrics.students.toLocaleString()}+ alunos
+                            {featured.metrics.students.toLocaleString()}+ {t("featured.students")}
                           </Badge>
                         </div>
 
@@ -300,7 +300,7 @@ export default function CoursesPage() {
                           <div className="flex items-center gap-2">
                             <Star className="text-yellow-400 fill-yellow-400" size={20} />
                             <span className="font-bold text-lg">{featured.metrics.rating}</span>
-                            <span className="text-gray-400">({featured.metrics.reviewCount} avaliações)</span>
+                            <span className="text-gray-400">({featured.metrics.reviewCount} {t("featured.reviews")})</span>
                           </div>
                           <div className="flex items-center gap-2 text-gray-300">
                             <Clock size={18} />
@@ -308,7 +308,7 @@ export default function CoursesPage() {
                           </div>
                           <div className="flex items-center gap-2 text-gray-300">
                             <Users size={18} />
-                            <span>{featured.metrics.lessons} aulas</span>
+                            <span>{featured.metrics.lessons} {t("featured.lessons")}</span>
                           </div>
                         </div>
 
@@ -324,7 +324,7 @@ export default function CoursesPage() {
                             </span>
                           </div>
                           <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-8 py-6 text-lg">
-                            Ver Curso Completo
+                            {t("featured.viewCourse")}
                             <ArrowRight className="ml-2" size={20} />
                           </Button>
                         </div>

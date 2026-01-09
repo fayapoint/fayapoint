@@ -1164,6 +1164,21 @@
     "empty": {
       "title": "No courses found",
       "description": "Try adjusting the filters"
+    },
+    "promo": {
+      "specialOffer": "SPECIAL OFFER",
+      "discountText": "Up to 75% OFF on selected courses",
+      "guarantee": "30-day guarantee",
+      "lifetimeAccess": "Lifetime access"
+    },
+    "featured": {
+      "badge": "BESTSELLER",
+      "title": "Featured Course",
+      "bestseller": "#1 Bestseller",
+      "students": "students",
+      "reviews": "reviews",
+      "lessons": "lessons",
+      "viewCourse": "View Full Course"
     }
   },
   "Resources": {
@@ -2574,6 +2589,177 @@
       "badge": "Customize your consultation",
       "title": "Build your consultation plan",
       "subtitle": "Choose audit, roadmap, training, and executive advisory according to your needs."
+    }
+  },
+  "CoursePage": {
+    "loading": "Loading course...",
+    "notFound": "Course not found",
+    "viewAllCourses": "View All Courses",
+    "breadcrumb": {
+      "home": "Home",
+      "courses": "Courses"
+    },
+    "badges": {
+      "bestseller": "Bestseller #{position}",
+      "bestSelling": "Best Selling {year}",
+      "offerExpires": "Offer Expires in {hours}h {minutes}m"
+    },
+    "instructor": {
+      "createdBy": "Created by",
+      "students": "students",
+      "courses": "courses",
+      "experience": "years exp."
+    },
+    "stats": {
+      "videoLessons": "Video Lessons",
+      "ofContent": "Of Content",
+      "downloads": "Downloadable Resources",
+      "certificate": "Certificate",
+      "ofCompletion": "Of Completion",
+      "reviews": "reviews",
+      "studentsEnrolled": "students enrolled",
+      "enrollmentsLast24h": "enrollments in the last 24h"
+    },
+    "highlights": {
+      "guaranteedResults": "Guaranteed Results"
+    },
+    "audience": {
+      "title": "Who Is This Course For?",
+      "professionals": "Professionals who want to stand out in the market",
+      "entrepreneurs": "Entrepreneurs looking to automate processes",
+      "students": "Students wanting to accelerate their careers",
+      "curious": "Anyone curious about the power of Artificial Intelligence"
+    },
+    "liveActivity": "{count} people are viewing this page right now",
+    "sidebar": {
+      "freePreview": "Free Preview",
+      "limitedOffer": "LIMITED OFFER",
+      "getDiscountBefore": "Get your discount before it ends!",
+      "orInstallments": "or {installments}x of {value} interest-free",
+      "saveToday": "Save {amount} today!",
+      "buyNow": "Buy Now",
+      "addToCart": "Add to Cart",
+      "courseIncludes": "This course includes:",
+      "lessons": "{count} video lessons",
+      "content": "{duration} of content",
+      "lifetimeAccess": "Lifetime access",
+      "completionCertificate": "Completion certificate",
+      "freeUpdates": "Free updates",
+      "directSupport": "Direct support",
+      "practicalProjects": "Practical projects",
+      "exclusiveCommunity": "Exclusive community",
+      "guarantee": "{days}-Day Guarantee",
+      "guaranteeText": "100% money back, no questions asked",
+      "securePurchase": "Secure Purchase",
+      "protectedData": "Protected Data"
+    },
+    "problems": {
+      "title": "Are you <red>struggling</red> with any of these problems?",
+      "items": [
+        "Spending hours on repetitive tasks that could be automated",
+        "Not knowing how to use AI productively at work",
+        "Seeing others making money with AI but not knowing where to start",
+        "Tried to learn on your own but got lost with so much information",
+        "Want to stand out in the market but lack technical knowledge",
+        "Afraid of being left behind in the AI revolution"
+      ],
+      "identify": "If you identified with at least 2 of these problems...",
+      "madeForYou": "This course was made specifically for you! 👇"
+    },
+    "transformation": {
+      "title": "Imagine transforming <highlight>your professional life</highlight> in just 30 days",
+      "before": "BEFORE",
+      "after": "AFTER",
+      "beforeItems": [
+        "Working 60+ hours per week",
+        "Manual repetitive tasks",
+        "Stagnant career",
+        "Limited income",
+        "No time for family"
+      ],
+      "afterItems": [
+        "Saving 20+ hours per week",
+        "Smart automation working 24/7",
+        "Promotions and opportunities arriving",
+        "Income increased by 40-60%",
+        "More time for what matters"
+      ],
+      "stats": {
+        "hoursSaved": "hours saved/week",
+        "salaryIncrease": "average salary increase",
+        "satisfaction": "satisfaction rate",
+        "firstResults": "to first results"
+      }
+    },
+    "whatYouLearn": {
+      "title": "What you will <highlight>master</highlight>",
+      "subtitle": "Concrete results you will achieve upon completing this course",
+      "cta": "Yes, I Want to Master All of This Now",
+      "ctaSubtext": "✓ Immediate access ✓ 30-day guarantee ✓ Certificate included"
+    },
+    "curriculum": {
+      "title": "Course <highlight>Content</highlight>",
+      "subtitle": "A comprehensive curriculum designed for real results",
+      "lessons": "lessons",
+      "modules": "{count} Modules • {lessons} Lessons",
+      "stepByStep": "A step-by-step system to ensure your success"
+    },
+    "bonuses": {
+      "title": "Exclusive <highlight>Bonuses</highlight>",
+      "subtitle": "Additional materials to accelerate your results even more",
+      "value": "Value: {currency} {amount}",
+      "totalValue": "+{currency} {amount} in Bonuses",
+      "includedFree": "Included FREE with your enrollment today"
+    },
+    "testimonials": {
+      "title": "What <highlight>Students</highlight> Are Saying",
+      "subtitle": "Real transformation stories from this course"
+    },
+    "faq": {
+      "title": "Frequently Asked <highlight>Questions</highlight>",
+      "subtitle": "Clear your doubts before enrolling",
+      "items": [
+        {
+          "question": "How long do I have access to the course?",
+          "answer": "You have LIFETIME access! Once enrolled, the course is yours forever. No monthly fees, no renewals."
+        },
+        {
+          "question": "What if I don't like the course?",
+          "answer": "We offer an unconditional 30-day guarantee. If you're not satisfied for any reason, we'll refund 100% of your investment, no questions asked."
+        },
+        {
+          "question": "Do I need prior knowledge?",
+          "answer": "No! The course was designed to take you from zero to advanced. No matter your current level, you'll be able to follow along."
+        },
+        {
+          "question": "How does the certificate work?",
+          "answer": "Upon completing the course, you'll receive a verifiable digital certificate that you can add to LinkedIn and use as professional proof."
+        },
+        {
+          "question": "Can I watch on mobile?",
+          "answer": "Yes! Our platform is 100% responsive. Watch lessons on any device: computer, tablet, or smartphone."
+        },
+        {
+          "question": "Does the course have support?",
+          "answer": "Yes! You have direct access to support from the instructor and our exclusive student community for questions."
+        }
+      ]
+    },
+    "finalCta": {
+      "badge": "LAST CHANCE",
+      "title": "Are you ready to <highlight>transform your career</highlight>?",
+      "subtitle": "Join over {students} students who are already mastering AI and accelerating their careers.",
+      "enrollNow": "Enroll Now for {currency} {price}",
+      "guarantee": "{days}-day guarantee",
+      "securePayment": "Secure payment",
+      "immediateAccess": "Immediate access"
+    },
+    "mobileCta": {
+      "buy": "Buy"
+    },
+    "toast": {
+      "addedToCart": "Course added to cart!",
+      "added": "Added to cart!"
     }
   }
 }

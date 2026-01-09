@@ -1173,6 +1173,21 @@
     "empty": {
       "title": "Nenhum curso encontrado",
       "description": "Tente ajustar os filtros"
+    },
+    "promo": {
+      "specialOffer": "OFERTA ESPECIAL",
+      "discountText": "Até 75% OFF em cursos selecionados",
+      "guarantee": "Garantia de 30 dias",
+      "lifetimeAccess": "Acesso vitalício"
+    },
+    "featured": {
+      "badge": "MAIS VENDIDO",
+      "title": "Curso em Destaque",
+      "bestseller": "#1 Bestseller",
+      "students": "alunos",
+      "reviews": "avaliações",
+      "lessons": "aulas",
+      "viewCourse": "Ver Curso Completo"
     }
   },
   "Resources": {
@@ -2583,6 +2598,177 @@
       "badge": "Personalize sua consultoria",
       "title": "Monte seu plano de consultoria",
       "subtitle": "Escolha auditoria, roadmap, treinamento e assessoria executiva conforme suas necessidades."
+    }
+  },
+  "CoursePage": {
+    "loading": "Carregando curso...",
+    "notFound": "Curso não encontrado",
+    "viewAllCourses": "Ver Todos os Cursos",
+    "breadcrumb": {
+      "home": "Home",
+      "courses": "Cursos"
+    },
+    "badges": {
+      "bestseller": "Bestseller #{position}",
+      "bestSelling": "Mais Vendido {year}",
+      "offerExpires": "Oferta Expira em {hours}h {minutes}m"
+    },
+    "instructor": {
+      "createdBy": "Criado por",
+      "students": "alunos",
+      "courses": "cursos",
+      "experience": "anos exp."
+    },
+    "stats": {
+      "videoLessons": "Aulas em Vídeo",
+      "ofContent": "De Conteúdo",
+      "downloads": "Recursos Baixáveis",
+      "certificate": "Certificado",
+      "ofCompletion": "De Conclusão",
+      "reviews": "avaliações",
+      "studentsEnrolled": "alunos matriculados",
+      "enrollmentsLast24h": "matrículas nas últimas 24h"
+    },
+    "highlights": {
+      "guaranteedResults": "Resultados Garantidos"
+    },
+    "audience": {
+      "title": "Para Quem É Este Curso?",
+      "professionals": "Profissionais que querem se destacar no mercado",
+      "entrepreneurs": "Empreendedores buscando automatizar processos",
+      "students": "Estudantes querendo acelerar a carreira",
+      "curious": "Curiosos sobre o poder da Inteligência Artificial"
+    },
+    "liveActivity": "{count} pessoas estão vendo esta página agora",
+    "sidebar": {
+      "freePreview": "Preview Gratuito",
+      "limitedOffer": "OFERTA LIMITADA",
+      "getDiscountBefore": "Garanta seu desconto antes que acabe!",
+      "orInstallments": "ou {installments}x de {value} sem juros",
+      "saveToday": "Economize {amount} hoje!",
+      "buyNow": "Comprar Agora",
+      "addToCart": "Adicionar ao Carrinho",
+      "courseIncludes": "Este curso inclui:",
+      "lessons": "{count} aulas em vídeo",
+      "content": "{duration} de conteúdo",
+      "lifetimeAccess": "Acesso vitalício",
+      "completionCertificate": "Certificado de conclusão",
+      "freeUpdates": "Atualizações gratuitas",
+      "directSupport": "Suporte direto",
+      "practicalProjects": "Projetos práticos",
+      "exclusiveCommunity": "Comunidade exclusiva",
+      "guarantee": "Garantia de {days} Dias",
+      "guaranteeText": "100% do seu dinheiro de volta, sem perguntas",
+      "securePurchase": "Compra Segura",
+      "protectedData": "Dados Protegidos"
+    },
+    "problems": {
+      "title": "Você está <red>lutando</red> com algum desses problemas?",
+      "items": [
+        "Passa horas em tarefas repetitivas que poderiam ser automatizadas",
+        "Não sabe como usar IA de forma produtiva no trabalho",
+        "Vê outros ganhando dinheiro com IA mas não sabe por onde começar",
+        "Tentou aprender sozinho mas ficou perdido com tanta informação",
+        "Quer se destacar no mercado mas falta conhecimento técnico",
+        "Tem medo de ficar para trás na revolução da IA"
+      ],
+      "identify": "Se você se identificou com pelo menos 2 desses problemas...",
+      "madeForYou": "Este curso foi feito especificamente para você! 👇"
+    },
+    "transformation": {
+      "title": "Imagine transformar <highlight>sua vida profissional</highlight> em apenas 30 dias",
+      "before": "ANTES",
+      "after": "DEPOIS",
+      "beforeItems": [
+        "Trabalhando 60+ horas por semana",
+        "Tarefas manuais repetitivas",
+        "Estagnado na carreira",
+        "Renda limitada",
+        "Sem tempo para família"
+      ],
+      "afterItems": [
+        "Economizando 20+ horas por semana",
+        "Automação inteligente trabalhando 24/7",
+        "Promoções e oportunidades chegando",
+        "Renda aumentada em 40-60%",
+        "Mais tempo para o que importa"
+      ],
+      "stats": {
+        "hoursSaved": "horas economizadas/semana",
+        "salaryIncrease": "aumento salarial médio",
+        "satisfaction": "taxa de satisfação",
+        "firstResults": "para primeiros resultados"
+      }
+    },
+    "whatYouLearn": {
+      "title": "O que você vai <highlight>dominar</highlight>",
+      "subtitle": "Resultados concretos que você alcançará ao concluir este curso",
+      "cta": "Sim, Quero Dominar Tudo Isso Agora",
+      "ctaSubtext": "✓ Acesso imediato ✓ Garantia de 30 dias ✓ Certificado incluído"
+    },
+    "curriculum": {
+      "title": "Conteúdo do <highlight>Curso</highlight>",
+      "subtitle": "Um currículo abrangente projetado para resultados reais",
+      "lessons": "aulas",
+      "modules": "{count} Módulos • {lessons} Aulas",
+      "stepByStep": "Um sistema passo a passo para garantir seu sucesso"
+    },
+    "bonuses": {
+      "title": "Bônus <highlight>Exclusivos</highlight>",
+      "subtitle": "Materiais adicionais para acelerar ainda mais seus resultados",
+      "value": "Valor: {currency} {amount}",
+      "totalValue": "+{currency} {amount} em Bônus",
+      "includedFree": "Incluso GRATUITAMENTE na sua matrícula hoje"
+    },
+    "testimonials": {
+      "title": "O que os <highlight>Alunos</highlight> Estão Dizendo",
+      "subtitle": "Histórias reais de transformação com este curso"
+    },
+    "faq": {
+      "title": "Perguntas <highlight>Frequentes</highlight>",
+      "subtitle": "Tire suas dúvidas antes de se matricular",
+      "items": [
+        {
+          "question": "Quanto tempo tenho acesso ao curso?",
+          "answer": "Você tem acesso VITALÍCIO! Uma vez matriculado, o curso é seu para sempre. Sem mensalidades, sem renovações."
+        },
+        {
+          "question": "E se eu não gostar do curso?",
+          "answer": "Oferecemos garantia incondicional de 30 dias. Se não ficar satisfeito por qualquer motivo, devolvemos 100% do seu investimento, sem perguntas."
+        },
+        {
+          "question": "Preciso ter conhecimento prévio?",
+          "answer": "Não! O curso foi desenvolvido para levar você do zero ao avançado. Não importa seu nível atual, você conseguirá acompanhar."
+        },
+        {
+          "question": "Como funciona o certificado?",
+          "answer": "Ao concluir o curso, você recebe um certificado digital verificável que pode adicionar ao LinkedIn e usar como comprovação profissional."
+        },
+        {
+          "question": "Posso assistir no celular?",
+          "answer": "Sim! Nossa plataforma é 100% responsiva. Assista às aulas em qualquer dispositivo: computador, tablet ou smartphone."
+        },
+        {
+          "question": "O curso tem suporte?",
+          "answer": "Sim! Você tem acesso a suporte direto com o instrutor e nossa comunidade exclusiva de alunos para tirar dúvidas."
+        }
+      ]
+    },
+    "finalCta": {
+      "badge": "ÚLTIMA CHANCE",
+      "title": "Está pronto para <highlight>transformar sua carreira</highlight>?",
+      "subtitle": "Junte-se a mais de {students} alunos que já estão dominando IA e acelerando suas carreiras.",
+      "enrollNow": "Matricular Agora por {currency} {price}",
+      "guarantee": "Garantia de {days} dias",
+      "securePayment": "Pagamento seguro",
+      "immediateAccess": "Acesso imediato"
+    },
+    "mobileCta": {
+      "buy": "Comprar"
+    },
+    "toast": {
+      "addedToCart": "Curso adicionado ao carrinho!",
+      "added": "Adicionado ao carrinho!"
     }
   }
 }
