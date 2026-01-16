@@ -2,6 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { getClientIpFromRequest, rateLimit } from "@/lib/rate-limit";
 import { routing, type Locale } from "./i18n/routing";
 
 const nextIntlMiddleware = createMiddleware(routing);
@@ -79,53 +80,17 @@ function getLocaleFromCountry(countryCode: string | null): Locale {
 }
 
 // ============================================================================
-// RATE LIMITING: Simple in-memory rate limiter for admin routes
+// RATE LIMITING: Redis-backed limiter for admin routes
 // ============================================================================
-const adminAttempts = new Map<string, { count: number; timestamp: number }>();
 const ADMIN_RATE_LIMIT = 10; // max attempts
-const ADMIN_RATE_WINDOW = 60 * 1000; // 1 minute
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const record = adminAttempts.get(ip);
-  
-  if (!record || now - record.timestamp > ADMIN_RATE_WINDOW) {
-    adminAttempts.set(ip, { count: 1, timestamp: now });
-    return false;
-  }
-  
-  record.count++;
-  if (record.count > ADMIN_RATE_LIMIT) {
-    return true;
-  }
-  
-  return false;
-}
-
-// Clean up old entries on each request (serverless-safe)
-function cleanupOldEntries() {
-  const now = Date.now();
-  // Only clean if map is getting large
-  if (adminAttempts.size > 100) {
-    for (const [ip, record] of adminAttempts.entries()) {
-      if (now - record.timestamp > ADMIN_RATE_WINDOW * 2) {
-        adminAttempts.delete(ip);
-      }
-    }
-  }
-}
+const ADMIN_RATE_WINDOW_SECONDS = 60; // 1 minute
 
 // ============================================================================
 // MAIN MIDDLEWARE
 // ============================================================================
-export default function middleware(request: NextRequest) {
-  // Serverless-safe cleanup
-  cleanupOldEntries();
-  
+export default async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
-             request.headers.get("x-real-ip") || 
-             "unknown";
+  const ip = getClientIpFromRequest(request);
   const userAgent = request.headers.get("user-agent")?.toLowerCase() || "";
   
   // -------------------------------------------------------------------------
@@ -153,11 +118,17 @@ export default function middleware(request: NextRequest) {
   // -------------------------------------------------------------------------
   if (pathname.includes("/admin")) {
     // Rate limit admin access attempts
-    if (isRateLimited(ip)) {
+    const rl = await rateLimit({
+      key: `ratelimit:admin:ip:${ip}`,
+      limit: ADMIN_RATE_LIMIT,
+      windowSeconds: ADMIN_RATE_WINDOW_SECONDS,
+    });
+
+    if (!rl.allowed) {
       console.warn(`[SECURITY] Rate limited IP: ${ip} on admin route`);
       return new NextResponse("Too Many Requests", { 
         status: 429,
-        headers: { "Retry-After": "60" }
+        headers: { "Retry-After": String(rl.resetSeconds) }
       });
     }
     
