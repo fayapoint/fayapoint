@@ -1,0 +1,205 @@
+# =============================================================================
+# NETLIFY CONFIGURATION - FAYAPOINT SECURITY & OPTIMIZATION
+# =============================================================================
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Use Next.js runtime
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# =============================================================================
+# HEADERS - Security & Caching
+# =============================================================================
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Aggressive caching for static assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Block API crawling
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+# Cache public API responses at edge
+[[headers]]
+  for = "/api/public/*"
+  [headers.values]
+    Cache-Control = "public, s-maxage=3600, stale-while-revalidate=86400"
+
+# Cache calendar slot
+[[headers]]
+  for = "/api/calendar/*"
+  [headers.values]
+    Cache-Control = "public, s-maxage=300, stale-while-revalidate=600"
+
+# Cache service prices
+[[headers]]
+  for = "/api/service-prices"
+  [headers.values]
+    Cache-Control = "public, s-maxage=1800, stale-while-revalidate=3600"
+
+# Cache products
+[[headers]]
+  for = "/api/products/*"
+  [headers.values]
+    Cache-Control = "public, s-maxage=600, stale-while-revalidate=1800"
+
+# Cache store
+[[headers]]
+  for = "/api/store/*"
+  [headers.values]
+    Cache-Control = "public, s-maxage=300, stale-while-revalidate=600"
+
+# =============================================================================
+# REDIRECTS - Block common attack paths and redirect old URLs
+# =============================================================================
+
+# Block WordPress probes with 410 Gone (tells bots to stop trying)
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wp-login.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wp-content/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wp-includes/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/xmlrpc.php"
+  to = "/404"
+  status = 410
+  force = true
+
+# Block PHP probes
+[[redirects]]
+  from = "/*.php"
+  to = "/404"
+  status = 410
+  force = true
+
+# Block common vulnerability paths
+[[redirects]]
+  from = "/.env"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/.git/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/phpmyadmin/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/mysql/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/backup/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/cgi-bin/*"
+  to = "/404"
+  status = 410
+  force = true
+
+# =============================================================================
+# EDGE FUNCTIONS (if available on your plan)
+# =============================================================================
+
+# Rate limiting at the edge for all requests
+# [[edge_functions]]
+#   path = "/*"
+#   function = "rate-limiter"
+
+# =============================================================================
+# ENVIRONMENT-SPECIFIC SETTINGS
+# =============================================================================
+
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+[context.deploy-preview]
+  environment = { NODE_ENV = "preview" }
+
+# =============================================================================
+# FUNCTIONS CONFIGURATION
+# =============================================================================
+
+[functions]
+  # Reduce cold starts by keeping functions warm
+  node_bundler = "esbuild"
+  
+  # Set included files for functions
+  included_files = ["node_modules/**"]
+
+# =============================================================================
+# DEV SETTINGS
+# =============================================================================
+
+[dev]
+  framework = "next"
+  targetPort = 3000
+  autoLaunch = false

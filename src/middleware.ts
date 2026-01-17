@@ -3,201 +3,257 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { getClientIpFromRequest, rateLimit } from "@/lib/rate-limit";
+import { 
+  isBadBot, 
+  isHoneypotPath, 
+  calculateSuspicionScore,
+  getRateLimitTier,
+  generateRequestFingerprint 
+} from "@/lib/bot-detection";
 import { routing, type Locale } from "./i18n/routing";
 
 const nextIntlMiddleware = createMiddleware(routing);
 
 // ============================================================================
-// SECURITY: Bot/Scanner patterns to block immediately
-// ============================================================================
-const BLOCKED_PATHS = [
-  // WordPress probes (common attack vectors)
-  "/wp-admin",
-  "/wp-login",
-  "/wp-content",
-  "/wp-includes",
-  "/wordpress",
-  "/xmlrpc.php",
-  // PHP probes
-  "/index.php",
-  "/admin.php",
-  "/config.php",
-  "/setup.php",
-  "/install.php",
-  // Common vulnerability scanners
-  "/.env",
-  "/.git",
-  "/.svn",
-  "/phpmyadmin",
-  "/phpinfo",
-  "/mysql",
-  "/backup",
-  "/db",
-  "/database",
-  "/sql",
-  // Other common attack paths
-  "/cgi-bin",
-  "/shell",
-  "/cmd",
-  "/exec",
-  "/eval",
-];
-
-// Suspicious user agents (bots/scanners)
-const BLOCKED_USER_AGENTS = [
-  "sqlmap",
-  "nikto",
-  "nmap",
-  "masscan",
-  "zgrab",
-  "gobuster",
-  "dirbuster",
-  "wpscan",
-  "jorgee",
-  "censys",
-  "shodan",
-];
-
-// ============================================================================
 // GEO-IP: Country to locale mapping
 // ============================================================================
 const COUNTRY_TO_LOCALE: Record<string, Locale> = {
-  // Portuguese-speaking countries -> pt-BR
   BR: "pt-BR",
   PT: "pt-BR",
-  AO: "pt-BR", // Angola
-  MZ: "pt-BR", // Mozambique
-  CV: "pt-BR", // Cape Verde
-  GW: "pt-BR", // Guinea-Bissau
-  ST: "pt-BR", // São Tomé
-  TL: "pt-BR", // Timor-Leste
-  // Everything else -> en
+  AO: "pt-BR",
+  MZ: "pt-BR",
+  CV: "pt-BR",
+  GW: "pt-BR",
+  ST: "pt-BR",
+  TL: "pt-BR",
 };
 
 function getLocaleFromCountry(countryCode: string | null): Locale {
-  if (!countryCode) return "en"; // Default to English for unknown
+  if (!countryCode) return "en";
   return COUNTRY_TO_LOCALE[countryCode.toUpperCase()] || "en";
 }
 
 // ============================================================================
-// RATE LIMITING: Redis-backed limiter for admin routes
+// SECURITY HEADERS
 // ============================================================================
-const ADMIN_RATE_LIMIT = 10; // max attempts
-const ADMIN_RATE_WINDOW_SECONDS = 60; // 1 minute
+const SECURITY_HEADERS = {
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "X-XSS-Protection": "1; mode=block",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+function addSecurityHeaders(response: NextResponse): void {
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+    response.headers.set(key, value);
+  }
+}
 
 // ============================================================================
-// MAIN MIDDLEWARE
+// MAIN MIDDLEWARE - COMPREHENSIVE BOT PROTECTION
 // ============================================================================
 export default async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   const ip = getClientIpFromRequest(request);
-  const userAgent = request.headers.get("user-agent")?.toLowerCase() || "";
+  const userAgent = request.headers.get("user-agent") || "";
+  const referer = request.headers.get("referer");
+  const acceptLanguage = request.headers.get("accept-language") || "";
+  const acceptEncoding = request.headers.get("accept-encoding") || "";
+  const isRSC = searchParams.has("_rsc");
   
   // -------------------------------------------------------------------------
-  // 1. BLOCK MALICIOUS REQUESTS
+  // 1. IMMEDIATE BLOCKS - Zero tolerance
   // -------------------------------------------------------------------------
   
-  // Block known bad paths (WordPress probes, etc.)
-  const lowerPath = pathname.toLowerCase();
-  for (const blocked of BLOCKED_PATHS) {
-    if (lowerPath.includes(blocked)) {
-      // Return 404 to not reveal we're blocking them
-      return new NextResponse("Not Found", { status: 404 });
-    }
+  // Block honeypot paths (WordPress, PHP, etc.)
+  if (isHoneypotPath(pathname)) {
+    // Log for monitoring
+    console.warn(`[HONEYPOT] IP: ${ip}, Path: ${pathname}, UA: ${userAgent.slice(0, 50)}`);
+    
+    // Block this IP for 24 hours
+    await rateLimit({
+      key: `blocked:ip:${ip}`,
+      limit: 1,
+      windowSeconds: 86400, // 24 hours
+    });
+    
+    return new NextResponse("Gone", { status: 410 });
   }
   
-  // Block suspicious user agents
-  for (const blocked of BLOCKED_USER_AGENTS) {
-    if (userAgent.includes(blocked)) {
+  // Block known bad bots immediately
+  if (isBadBot(userAgent)) {
+    console.warn(`[BAD_BOT] IP: ${ip}, UA: ${userAgent.slice(0, 100)}`);
+    return new NextResponse("Forbidden", { status: 403 });
+  }
+  
+  // -------------------------------------------------------------------------
+  // 2. CHECK IF IP IS BLOCKED (from previous bad behavior)
+  // -------------------------------------------------------------------------
+  const blockCheck = await rateLimit({
+    key: `blocked:ip:${ip}`,
+    limit: 1,
+    windowSeconds: 86400,
+  });
+  
+  // If they've been blocked before and hit the limit, continue blocking
+  if (!blockCheck.allowed && blockCheck.remaining === 0) {
+    return new NextResponse("Forbidden", { status: 403 });
+  }
+  
+  // -------------------------------------------------------------------------
+  // 3. CALCULATE SUSPICION SCORE & GET RATE LIMIT
+  // -------------------------------------------------------------------------
+  
+  // Get request count for this IP in current window
+  const requestCountResult = await rateLimit({
+    key: `requests:count:${ip}`,
+    limit: 1000, // High limit just to count
+    windowSeconds: 60,
+  });
+  const requestCount = 1000 - requestCountResult.remaining;
+  
+  const suspicionScore = calculateSuspicionScore({
+    userAgent,
+    pathname,
+    hasReferer: !!referer,
+    acceptLanguage,
+    acceptEncoding,
+    isRSC,
+    requestCount,
+  });
+  
+  // Log highly suspicious requests
+  if (suspicionScore >= 50) {
+    const fingerprint = generateRequestFingerprint({ ip, userAgent, acceptLanguage });
+    console.warn(`[SUSPICIOUS] Score: ${suspicionScore}, IP: ${ip}, FP: ${fingerprint}, Path: ${pathname}`);
+  }
+  
+  // Very suspicious = block
+  if (suspicionScore >= 80) {
+    // Block this IP
+    await rateLimit({
+      key: `blocked:ip:${ip}`,
+      limit: 1,
+      windowSeconds: 3600, // 1 hour
+    });
+    return new NextResponse("Forbidden", { status: 403 });
+  }
+  
+  // -------------------------------------------------------------------------
+  // 4. GLOBAL RATE LIMITING
+  // -------------------------------------------------------------------------
+  
+  const hasAuthToken = request.cookies.has("fayapoint_token");
+  const rateLimitTier = getRateLimitTier({
+    suspicionScore,
+    pathname,
+    isAuthenticated: hasAuthToken,
+  });
+  
+  const rl = await rateLimit({
+    key: `ratelimit:global:${ip}`,
+    limit: rateLimitTier.requests,
+    windowSeconds: rateLimitTier.windowSeconds,
+  });
+  
+  if (!rl.allowed) {
+    console.warn(`[RATE_LIMITED] IP: ${ip}, Limit: ${rateLimitTier.requests}/min, Path: ${pathname}`);
+    
+    // If they keep hitting rate limits, block them
+    const strikeResult = await rateLimit({
+      key: `strikes:${ip}`,
+      limit: 3,
+      windowSeconds: 300, // 3 strikes in 5 minutes = blocked
+    });
+    
+    if (!strikeResult.allowed) {
+      await rateLimit({
+        key: `blocked:ip:${ip}`,
+        limit: 1,
+        windowSeconds: 3600, // Block for 1 hour
+      });
       return new NextResponse("Forbidden", { status: 403 });
     }
+    
+    return new NextResponse("Too Many Requests", {
+      status: 429,
+      headers: {
+        "Retry-After": String(rl.resetSeconds),
+        "X-RateLimit-Limit": String(rl.limit),
+        "X-RateLimit-Remaining": String(rl.remaining),
+        "X-RateLimit-Reset": String(rl.resetSeconds),
+      },
+    });
   }
   
   // -------------------------------------------------------------------------
-  // 2. ADMIN ROUTE PROTECTION
+  // 5. SPECIAL PROTECTION FOR ADMIN ROUTES
   // -------------------------------------------------------------------------
   if (pathname.includes("/admin")) {
-    // Rate limit admin access attempts
-    const rl = await rateLimit({
+    const adminRl = await rateLimit({
       key: `ratelimit:admin:ip:${ip}`,
-      limit: ADMIN_RATE_LIMIT,
-      windowSeconds: ADMIN_RATE_WINDOW_SECONDS,
+      limit: 10,
+      windowSeconds: 60,
     });
 
-    if (!rl.allowed) {
-      console.warn(`[SECURITY] Rate limited IP: ${ip} on admin route`);
-      return new NextResponse("Too Many Requests", { 
+    if (!adminRl.allowed) {
+      console.warn(`[ADMIN_BLOCKED] IP: ${ip}, Path: ${pathname}`);
+      return new NextResponse("Too Many Requests", {
         status: 429,
-        headers: { "Retry-After": String(rl.resetSeconds) }
+        headers: { "Retry-After": String(adminRl.resetSeconds) },
       });
     }
     
-    // Log admin access attempts (for monitoring)
-    console.log(`[ADMIN ACCESS] IP: ${ip}, Path: ${pathname}, UA: ${userAgent.slice(0, 50)}`);
+    console.log(`[ADMIN] IP: ${ip}, Path: ${pathname}`);
   }
   
   // -------------------------------------------------------------------------
-  // 3. LOCALE DETECTION WITH GEO-IP
+  // 6. LOCALE DETECTION WITH GEO-IP
   // -------------------------------------------------------------------------
   const segments = pathname.split("/").filter(Boolean);
   const hasLocalePrefix = segments.length > 0 && routing.locales.includes(segments[0] as Locale);
 
   if (!hasLocalePrefix) {
-    // Priority order for locale detection:
-    // 1. Cookie (user explicitly chose)
-    // 2. Geo-IP (Netlify header)
-    // 3. Accept-Language header
-    // 4. Default (English for international)
+    let locale: Locale = "en";
     
-    let locale: Locale = "en"; // Default to English
-    
-    // Check cookie first (user's explicit choice)
     const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
     if (cookieLocale && routing.locales.includes(cookieLocale)) {
       locale = cookieLocale;
     } else {
-      // Try Geo-IP (Netlify provides this header)
-      const country = request.headers.get("x-country") || 
+      const country = request.headers.get("x-country") ||
                       request.headers.get("x-vercel-ip-country") ||
-                      request.headers.get("cf-ipcountry"); // Cloudflare
-      
+                      request.headers.get("cf-ipcountry");
+
       if (country) {
         locale = getLocaleFromCountry(country);
       } else {
-        // Fall back to Accept-Language header
-        const acceptLanguage = request.headers.get("accept-language") || "";
         if (acceptLanguage.toLowerCase().includes("pt")) {
           locale = "pt-BR";
         }
-        // Otherwise stays "en"
       }
     }
-    
+
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
     url.search = searchParams.toString();
-    
+
     const response = NextResponse.redirect(url, 307);
+    addSecurityHeaders(response);
     
-    // Set security headers
-    response.headers.set("X-Content-Type-Options", "nosniff");
-    response.headers.set("X-Frame-Options", "DENY");
-    response.headers.set("X-XSS-Protection", "1; mode=block");
-    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    // Add rate limit headers
+    response.headers.set("X-RateLimit-Remaining", String(rl.remaining));
     
     return response;
   }
 
   const response = nextIntlMiddleware(request);
-  
-  // Add security headers to all responses
+
   if (response) {
-    response.headers.set("X-Content-Type-Options", "nosniff");
-    response.headers.set("X-Frame-Options", "DENY");
-    response.headers.set("X-XSS-Protection", "1; mode=block");
-    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    addSecurityHeaders(response);
+    response.headers.set("X-RateLimit-Remaining", String(rl.remaining));
   }
-  
+
   return response;
 }
 

@@ -1,8 +1,15 @@
+# =============================================================================
 # FayaPoint - Robots.txt
-# Prevent crawlers from hitting API endpoints and sensitive areas
+# COMPREHENSIVE BOT BLOCKING - Prevent scraping and unauthorized crawling
+# =============================================================================
 
+# Default rules for all crawlers
 User-agent: *
 Allow: /
+Allow: /pt-BR/
+Allow: /en/
+
+# Block all private/dynamic areas
 Disallow: /api/
 Disallow: /admin/
 Disallow: /portal/
@@ -10,35 +17,99 @@ Disallow: /login
 Disallow: /onboarding
 Disallow: /configuracoes
 Disallow: /checkout/
+Disallow: /registro
+Disallow: /recuperar-senha
 
-# Block WordPress-like paths (we're not WordPress)
+# Block RSC requests (React Server Components)
+Disallow: /*?_rsc=*
+Disallow: /*?_rsc
+
+# Block WordPress probes (we're not WordPress)
 Disallow: /wp-admin/
 Disallow: /wp-login.php
 Disallow: /wp-content/
 Disallow: /wp-includes/
 Disallow: /xmlrpc.php
+Disallow: /wordpress/
 
-# Block common attack paths
+# Block common attack/scan paths
 Disallow: /.env
 Disallow: /.git
+Disallow: /.svn
 Disallow: /phpmyadmin
 Disallow: /mysql
 Disallow: /backup
+Disallow: /cgi-bin
+Disallow: /admin.php
+Disallow: /config.php
+Disallow: /*.php$
 
-# Allow social media crawlers for OG images only
+# Block internal Next.js paths
+Disallow: /_next/data/
+
+# Crawl rate limiting (1 request per second)
+Crawl-delay: 1
+
+# =============================================================================
+# GOOD BOTS - Allow social media and search engines
+# =============================================================================
+
+# Google (main search)
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /*?_rsc=*
+Crawl-delay: 1
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /*?_rsc=*
+Crawl-delay: 2
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /*?_rsc=*
+Crawl-delay: 2
+
+# Social media crawlers (for link previews)
 User-agent: facebookexternalhit
 Allow: /api/og/
 Disallow: /api/
+Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /api/og/
 Disallow: /api/
+Crawl-delay: 1
 
 User-agent: LinkedInBot
 Allow: /api/og/
 Disallow: /api/
+Crawl-delay: 1
 
-# Block aggressive/malicious crawlers
+User-agent: WhatsApp
+Allow: /api/og/
+Disallow: /api/
+
+User-agent: TelegramBot
+Allow: /api/og/
+Disallow: /api/
+
+# =============================================================================
+# BAD BOTS - BLOCK COMPLETELY
+# =============================================================================
+
+# SEO/Analytics scrapers
 User-agent: AhrefsBot
 Disallow: /
 
@@ -57,6 +128,28 @@ Disallow: /
 User-agent: DataForSeoBot
 Disallow: /
 
+User-agent: SerpstatBot
+Disallow: /
+
+User-agent: SEOkicks
+Disallow: /
+
+User-agent: Sistrix
+Disallow: /
+
+User-agent: RogerBot
+Disallow: /
+
+User-agent: Screaming Frog
+Disallow: /
+
+User-agent: MegaIndex
+Disallow: /
+
+User-agent: Majestic
+Disallow: /
+
+# AI training crawlers
 User-agent: GPTBot
 Disallow: /
 
@@ -69,11 +162,111 @@ Disallow: /
 User-agent: ClaudeBot
 Disallow: /
 
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+# Regional/aggressive crawlers
 User-agent: Bytespider
 Disallow: /
 
 User-agent: PetalBot
 Disallow: /
 
-# Sitemap location
+User-agent: YandexBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: Sogou
+Disallow: /
+
+User-agent: Exabot
+Disallow: /
+
+# Archive crawlers
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: archive.org_bot
+Disallow: /
+
+# Generic scrapers
+User-agent: Scrapy
+Disallow: /
+
+User-agent: python-requests
+Disallow: /
+
+User-agent: Go-http-client
+Disallow: /
+
+User-agent: Java
+Disallow: /
+
+User-agent: libwww-perl
+Disallow: /
+
+User-agent: Wget
+Disallow: /
+
+User-agent: curl
+Disallow: /
+
+User-agent: HTTrack
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: Offline Explorer
+Disallow: /
+
+User-agent: SiteSucker
+Disallow: /
+
+# Headless browsers
+User-agent: HeadlessChrome
+Disallow: /
+
+User-agent: PhantomJS
+Disallow: /
+
+# Vulnerability scanners
+User-agent: sqlmap
+Disallow: /
+
+User-agent: Nikto
+Disallow: /
+
+User-agent: Nmap
+Disallow: /
+
+User-agent: Masscan
+Disallow: /
+
+User-agent: zgrab
+Disallow: /
+
+User-agent: Censys
+Disallow: /
+
+User-agent: Shodan
+Disallow: /
+
+# =============================================================================
+# SITEMAP
+# =============================================================================
 Sitemap: https://fayai.shop/sitemap.xml
