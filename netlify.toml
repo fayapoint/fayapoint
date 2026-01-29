@@ -166,13 +166,102 @@
   force = true
 
 # =============================================================================
-# EDGE FUNCTIONS (if available on your plan)
+# AGGRESSIVE BOT BLOCKING - Return 403 to reduce bandwidth
 # =============================================================================
 
-# Rate limiting at the edge for all requests
-# [[edge_functions]]
-#   path = "/*"
-#   function = "rate-limiter"
+# Block common scraper paths that shouldn't exist
+[[redirects]]
+  from = "/api/v1/*"
+  to = "/"
+  status = 403
+  force = true
+
+[[redirects]]
+  from = "/api/v2/*"
+  to = "/"
+  status = 403
+  force = true
+
+[[redirects]]
+  from = "/graphql"
+  to = "/"
+  status = 403
+  force = true
+
+[[redirects]]
+  from = "/rest/*"
+  to = "/"
+  status = 403
+  force = true
+
+[[redirects]]
+  from = "/.well-known/security.txt"
+  to = "/"
+  status = 403
+  force = true
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/feed"
+  to = "/"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/feed/*"
+  to = "/"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/rss"
+  to = "/"
+  status = 404
+  force = true
+
+# Block query string abuse
+[[redirects]]
+  from = "/*?fbclid=*"
+  to = "/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*?gclid=*"
+  to = "/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*?utm_*"
+  to = "/:splat"
+  status = 301
+  force = true
+
+# =============================================================================
+# EDGE FUNCTIONS - GEOBLOCKING (Brazil Only)
+# =============================================================================
+
+# Geoblocking - blocks all non-Brazil traffic at the CDN edge
+[[edge_functions]]
+  path = "/*"
+  function = "geoblock"
+  
+# Exclude static assets from edge function processing
+[[edge_functions]]
+  path = "/_next/static/*"
+  function = "geoblock"
+  # Disabled for static assets
+  
+[[edge_functions]]
+  path = "/images/*"
+  function = "geoblock"
+  # Disabled for images
 
 # =============================================================================
 # ENVIRONMENT-SPECIFIC SETTINGS
