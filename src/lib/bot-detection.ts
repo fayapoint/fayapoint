@@ -31,6 +31,7 @@ export const BAD_BOT_PATTERNS = [
 ];
 
 // Patterns that indicate suspicious automated behavior
+// RELAXED: Only match clear automation signatures, not partial matches
 export const SUSPICIOUS_PATTERNS = [
   // Empty or minimal user agent
   /^$/,
@@ -40,11 +41,10 @@ export const SUSPICIOUS_PATTERNS = [
   // Unusual characters in user agent
   /[\x00-\x1f]/,
   
-  // Known scraper patterns
-  /bot[^a-z]/i,
-  /spider[^a-z]/i,
-  /crawl[^a-z]/i,
-  /scrape/i,
+  // Only match obvious bot patterns at word boundaries (not partial matches)
+  // Removed aggressive patterns that caused false positives
+  /\bscraper\b/i,
+  /\bcrawler\b/i,
 ];
 
 // Good bots we want to allow (search engines, social media)

@@ -286,9 +286,21 @@ export default async function middleware(request: NextRequest) {
   }
   
   // Block known bad bots immediately (but not for health/webhook endpoints)
+  // RELAXED: Only block if BOTH bad bot pattern AND missing essential headers
+  // Edge function handles geo - middleware only blocks obvious automation
   if (!skipBotDetection && isBadBot(userAgent)) {
-    console.warn(`[BAD_BOT] IP: ${ip}, UA: ${userAgent.slice(0, 100)}`);
-    return new NextResponse("Forbidden", { status: 403 });
+    // Only block if also missing essential browser headers (real bots)
+    const hasAcceptLanguage = !!request.headers.get("accept-language");
+    const hasAcceptEncoding = !!request.headers.get("accept-encoding");
+    const hasSecFetchDest = !!request.headers.get("sec-fetch-dest");
+    
+    // Real browsers always have these headers, bots often don't
+    if (!hasAcceptLanguage && !hasAcceptEncoding) {
+      console.warn(`[BAD_BOT] IP: ${ip}, UA: ${userAgent.slice(0, 100)}`);
+      return new NextResponse("Forbidden", { status: 403 });
+    }
+    // Log suspicious but don't block if they have browser headers
+    console.log(`[SUSPICIOUS_UA] IP: ${ip}, UA: ${userAgent.slice(0, 100)}, hasHeaders: AL=${hasAcceptLanguage}, AE=${hasAcceptEncoding}, SFD=${hasSecFetchDest}`);
   }
   
   // =========================================================================
@@ -401,12 +413,11 @@ export default async function middleware(request: NextRequest) {
     console.warn(`[SUSPICIOUS] Score: ${suspicionScore}, IP: ${ip}, FP: ${fingerprint}, Path: ${pathname}`);
   }
   
-  // Very suspicious = block (but not for health/webhook bypass paths)
-  // Only block if score is VERY high (100+) to avoid false positives
-  // Edge function handles geo-based blocking, middleware only handles bot behavior
-  if (suspicionScore >= 100 && !skipBotDetection) {
-    console.warn(`[BOT_BLOCKED] Score: ${suspicionScore}, IP: ${ip}, Path: ${pathname}, UA: ${userAgent.slice(0, 80)}`);
-    return new NextResponse("Forbidden", { status: 403 });
+  // Very suspicious = log but DON'T block (edge handles geo, avoid false positives)
+  // Only honeypot paths (score 100+) should block, and that's handled separately above
+  if (suspicionScore >= 80 && !skipBotDetection) {
+    console.warn(`[SUSPICIOUS_REQUEST] Score: ${suspicionScore}, IP: ${ip}, Path: ${pathname}, UA: ${userAgent.slice(0, 80)}`);
+    // DO NOT BLOCK - just log for monitoring. Edge function handles geoblocking.
   }
   
   // -------------------------------------------------------------------------
