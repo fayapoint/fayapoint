@@ -280,9 +280,7 @@
 [functions]
   # Reduce cold starts by keeping functions warm
   node_bundler = "esbuild"
-  
-  # Set included files for functions
-  included_files = ["node_modules/**"]
+  # Let esbuild automatically bundle only required dependencies
 
 # =============================================================================
 # DEV SETTINGS
