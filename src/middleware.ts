@@ -16,7 +16,7 @@ import { routing, type Locale } from "./i18n/routing";
 // GEOBLOCKING CONFIGURATION - BRAZIL ONLY
 // =============================================================================
 const GEOBLOCK_CONFIG = {
-  enabled: true, // Master switch - set to false to disable geoblocking
+  enabled: false, // DISABLED - Edge function handles geoblocking now (more efficient)
   allowedCountries: new Set(["BR"]), // Only Brazil allowed
   
   // Paths that bypass geoblocking (always accessible)
@@ -360,17 +360,18 @@ export default async function middleware(request: NextRequest) {
   
   // -------------------------------------------------------------------------
   // 2. CHECK IF IP IS BLOCKED (from previous bad behavior)
+  // TEMPORARILY DISABLED - clearing any previous blocks
   // -------------------------------------------------------------------------
-  const blockCheck = await rateLimit({
-    key: `blocked:ip:${ip}`,
-    limit: 1,
-    windowSeconds: 86400,
-  });
-  
-  // If they've been blocked before and hit the limit, continue blocking
-  if (!blockCheck.allowed && blockCheck.remaining === 0) {
-    return new NextResponse("Forbidden", { status: 403 });
-  }
+  // const blockCheck = await rateLimit({
+  //   key: `blocked:ip:${ip}`,
+  //   limit: 1,
+  //   windowSeconds: 86400,
+  // });
+  // 
+  // // If they've been blocked before and hit the limit, continue blocking
+  // if (!blockCheck.allowed && blockCheck.remaining === 0) {
+  //   return new NextResponse("Forbidden", { status: 403 });
+  // }
   
   // -------------------------------------------------------------------------
   // 3. CALCULATE SUSPICION SCORE & GET RATE LIMIT
@@ -401,13 +402,10 @@ export default async function middleware(request: NextRequest) {
   }
   
   // Very suspicious = block (but not for health/webhook bypass paths)
-  if (suspicionScore >= 80 && !skipBotDetection) {
-    // Block this IP
-    await rateLimit({
-      key: `blocked:ip:${ip}`,
-      limit: 1,
-      windowSeconds: 3600, // 1 hour
-    });
+  // Only block if score is VERY high (100+) to avoid false positives
+  // Edge function handles geo-based blocking, middleware only handles bot behavior
+  if (suspicionScore >= 100 && !skipBotDetection) {
+    console.warn(`[BOT_BLOCKED] Score: ${suspicionScore}, IP: ${ip}, Path: ${pathname}, UA: ${userAgent.slice(0, 80)}`);
     return new NextResponse("Forbidden", { status: 403 });
   }
   

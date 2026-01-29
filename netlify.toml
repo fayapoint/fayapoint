@@ -244,24 +244,14 @@
   force = true
 
 # =============================================================================
-# EDGE FUNCTIONS - GEOBLOCKING (Brazil Only)
+# EDGE FUNCTIONS - GEOBLOCKING v2 (Brazil Only - STRICT MODE)
 # =============================================================================
+# Returns 403 directly at edge (no redirect) = minimal bandwidth cost
+# Webhooks are whitelisted in the edge function itself
 
-# Geoblocking - blocks all non-Brazil traffic at the CDN edge
 [[edge_functions]]
   path = "/*"
   function = "geoblock"
-  
-# Exclude static assets from edge function processing
-[[edge_functions]]
-  path = "/_next/static/*"
-  function = "geoblock"
-  # Disabled for static assets
-  
-[[edge_functions]]
-  path = "/images/*"
-  function = "geoblock"
-  # Disabled for images
 
 # =============================================================================
 # ENVIRONMENT-SPECIFIC SETTINGS

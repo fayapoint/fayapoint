@@ -1,22 +1,40 @@
 import type { Context, Config } from "@netlify/edge-functions";
 
 // =============================================================================
-// GEOBLOCKING EDGE FUNCTION - BRAZIL ONLY
-// This runs at the CDN edge BEFORE the Next.js middleware for maximum protection
+// GEOBLOCKING EDGE FUNCTION v2 - STRICT MODE - BRAZIL ONLY
+// This runs at the CDN edge BEFORE anything else for MAXIMUM protection
+// Returns 403 directly (not redirect) to minimize bandwidth consumption
 // =============================================================================
 
 const ALLOWED_COUNTRIES = new Set(["BR"]);
 
+// Paths that MUST bypass geoblocking (webhooks from external services)
 const BYPASS_PATHS = [
+  // Internal
   "/blocked",
   "/api/health",
-  "/api/webhooks",
-  "/api/payments/webhook",
-  "/api/pod/webhooks",
   "/_next",
   "/favicon.ico",
   "/robots.txt",
   "/sitemap.xml",
+  
+  // Asaas Payment Webhooks (Brazilian payment provider - but whitelist anyway)
+  "/api/payments/webhook",
+  
+  // Printify Webhooks (US/EU servers)
+  "/api/pod/webhooks/printify",
+  "/api/webhooks/printify",
+  
+  // Prodigi Webhooks (UK servers)
+  "/api/pod/prodigi/webhooks",
+  "/api/webhooks/prodigi",
+  
+  // General webhook paths
+  "/api/webhooks",
+  "/api/pod/webhooks",
+  
+  // Fulfillment API (might be called externally)
+  "/api/fulfillment",
 ];
 
 const BYPASS_SECRET = Netlify.env.get("GEOBLOCK_BYPASS_SECRET") || "fayapoint-bypass-2024";
@@ -24,8 +42,11 @@ const BYPASS_SECRET = Netlify.env.get("GEOBLOCK_BYPASS_SECRET") || "fayapoint-by
 export default async (request: Request, context: Context) => {
   const url = new URL(request.url);
   const pathname = url.pathname;
+  const userAgent = request.headers.get("user-agent") || "";
   
-  // Check if path should bypass geoblocking
+  // =========================================================================
+  // 1. BYPASS CHECK - Webhooks and static assets always allowed
+  // =========================================================================
   const shouldBypass = BYPASS_PATHS.some(bypass => 
     pathname.startsWith(bypass) || pathname === bypass
   );
@@ -34,56 +55,71 @@ export default async (request: Request, context: Context) => {
     return context.next();
   }
   
-  // Check for bypass secret header
+  // =========================================================================
+  // 2. BYPASS SECRET - For admin access from anywhere
+  // =========================================================================
   const bypassHeader = request.headers.get("x-geobypass-secret");
   if (bypassHeader === BYPASS_SECRET) {
     return context.next();
   }
   
-  // Check for test override (development only)
+  // =========================================================================
+  // 3. TEST OVERRIDE - For local testing with ?_geo=BR or ?_geo=US
+  // =========================================================================
   const testGeo = url.searchParams.get("_geo");
   if (testGeo) {
     const testCountry = testGeo.toUpperCase();
     if (!ALLOWED_COUNTRIES.has(testCountry)) {
-      return redirectToBlocked(request, testCountry, pathname);
+      return blockRequest(testCountry, pathname, context.ip || "unknown", userAgent);
     }
     return context.next();
   }
   
-  // Get country from Netlify's geo context
+  // =========================================================================
+  // 4. GEOBLOCKING - STRICT MODE
+  // =========================================================================
   const country = context.geo?.country?.code;
   
+  // STRICT MODE: If country is detected and NOT Brazil -> BLOCK
   if (country && !ALLOWED_COUNTRIES.has(country)) {
-    // Log the blocked request
-    console.log(`[GEOBLOCK_EDGE] Blocked: Country=${country}, Path=${pathname}, IP=${context.ip}`);
-    
-    return redirectToBlocked(request, country, pathname);
+    return blockRequest(country, pathname, context.ip || "unknown", userAgent);
   }
   
-  // If country is unknown, allow through (Next.js middleware will handle)
-  // This is permissive mode - change to block if you want strict mode
+  // STRICT MODE: If country is UNKNOWN -> BLOCK (attackers often hide geo)
   if (!country) {
-    console.log(`[GEOBLOCK_EDGE] Unknown country, allowing: Path=${pathname}, IP=${context.ip}`);
+    console.log(`[GEOBLOCK_STRICT] Unknown country BLOCKED: Path=${pathname}, IP=${context.ip}, UA=${userAgent.slice(0, 50)}`);
+    return blockRequest("UNKNOWN", pathname, context.ip || "unknown", userAgent);
   }
   
-  // Add country header for downstream use
+  // =========================================================================
+  // 5. ALLOWED - Brazil traffic passes through
+  // =========================================================================
   const response = await context.next();
   
-  // Clone response to add headers
+  // Add country header for downstream middleware
   const newResponse = new Response(response.body, response);
-  if (country) {
-    newResponse.headers.set("x-geo-country", country);
-  }
+  newResponse.headers.set("x-geo-country", country);
   
   return newResponse;
 };
 
-function redirectToBlocked(request: Request, country: string, pathname: string): Response {
-  const blockedUrl = new URL("/blocked", request.url);
-  blockedUrl.searchParams.set("from", country);
-  blockedUrl.searchParams.set("path", pathname);
+// Return 403 directly - NO redirect, NO page render = minimal bandwidth
+function blockRequest(country: string, pathname: string, ip: string, userAgent: string): Response {
+  console.log(`[GEOBLOCK_EDGE] BLOCKED: Country=${country}, Path=${pathname}, IP=${ip}, UA=${userAgent.slice(0, 50)}`);
   
-  return Response.redirect(blockedUrl.toString(), 307);
+  // Minimal response - just text, no HTML = ~50 bytes vs ~20KB for page
+  return new Response(
+    `Access denied. This service is only available in Brazil. [${country}]`,
+    {
+      status: 403,
+      headers: {
+        "Content-Type": "text/plain",
+        "Cache-Control": "public, max-age=86400", // Cache 403 for 24h at CDN
+        "X-Blocked-Country": country,
+        "X-Blocked-Reason": "geoblocking",
+      },
+    }
+  );
 }
 
 export const config: Config = {
