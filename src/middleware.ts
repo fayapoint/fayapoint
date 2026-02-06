@@ -310,7 +310,7 @@ export default async function middleware(request: NextRequest) {
     // Stricter rate limit for API routes
     const apiRl = await rateLimit({
       key: `api:global:${ip}`,
-      limit: 30, // 30 requests per minute for API
+      limit: 60, // 60 requests per minute for API
       windowSeconds: 60,
     });
     
@@ -358,16 +358,11 @@ export default async function middleware(request: NextRequest) {
       }
     }
     
-    // Bandwidth tracking per IP
-    await rateLimit({
-      key: `bandwidth:${ip}`,
-      limit: 500, // Track up to 500 requests for monitoring
-      windowSeconds: 3600, // Per hour
-    });
-    
-    // Log all API requests for investigation
-    const now = new Date().toISOString();
-    console.log(`[API_ACCESS] ${now} | IP: ${ip} | Path: ${pathname} | UA: ${userAgent.slice(0, 80)}`);
+    // Log API requests (skip verbose logging for common paths)
+    if (!pathname.startsWith('/api/public/') && !pathname.startsWith('/api/user/dashboard')) {
+      const now = new Date().toISOString();
+      console.log(`[API_ACCESS] ${now} | IP: ${ip} | Path: ${pathname}`);
+    }
   }
   
   // -------------------------------------------------------------------------
@@ -389,14 +384,8 @@ export default async function middleware(request: NextRequest) {
   // 3. CALCULATE SUSPICION SCORE & GET RATE LIMIT
   // -------------------------------------------------------------------------
   
-  // Get request count for this IP in current window
-  const requestCountResult = await rateLimit({
-    key: `requests:count:${ip}`,
-    limit: 1000, // High limit just to count
-    windowSeconds: 60,
-  });
-  const requestCount = 1000 - requestCountResult.remaining;
-  
+  // Skip expensive request counting Redis call for page routes
+  // The global rate limiter (step 4) already handles page route limits
   const suspicionScore = calculateSuspicionScore({
     userAgent,
     pathname,
@@ -404,7 +393,7 @@ export default async function middleware(request: NextRequest) {
     acceptLanguage,
     acceptEncoding,
     isRSC,
-    requestCount,
+    requestCount: 0, // Don't burn a Redis call just to count
   });
   
   // Log highly suspicious requests

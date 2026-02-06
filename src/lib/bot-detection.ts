@@ -105,15 +105,15 @@ export const HONEYPOT_PATHS = [
 // Rate limit tiers based on behavior
 export const RATE_LIMITS = {
   // Strict limit for suspicious IPs
-  SUSPICIOUS: { requests: 10, windowSeconds: 60 },
-  // Normal limit for regular traffic
-  NORMAL: { requests: 60, windowSeconds: 60 },
+  SUSPICIOUS: { requests: 15, windowSeconds: 60 },
+  // Normal limit for regular traffic (page loads generate many sub-requests: HTML, RSC, prefetches)
+  NORMAL: { requests: 120, windowSeconds: 60 },
   // Higher limit for known good actors
-  TRUSTED: { requests: 120, windowSeconds: 60 },
+  TRUSTED: { requests: 200, windowSeconds: 60 },
   // API endpoints
-  API: { requests: 30, windowSeconds: 60 },
-  // Auth endpoints (login, register)
-  AUTH: { requests: 5, windowSeconds: 60 },
+  API: { requests: 60, windowSeconds: 60 },
+  // Auth API endpoints (login, register)
+  AUTH: { requests: 15, windowSeconds: 60 },
   // Image generation (expensive)
   IMAGE_GEN: { requests: 3, windowSeconds: 60 },
 } as const;
@@ -244,8 +244,8 @@ export function getRateLimitTier(params: {
     return RATE_LIMITS.SUSPICIOUS;
   }
   
-  // Auth endpoints
-  if (pathname.includes('/auth/') || pathname.includes('/login') || pathname.includes('/register')) {
+  // Auth API endpoints only (NOT page routes like /pt-BR/login)
+  if (pathname.startsWith('/api/auth/')) {
     return RATE_LIMITS.AUTH;
   }
   
