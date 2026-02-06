@@ -410,50 +410,40 @@ export default async function middleware(request: NextRequest) {
   }
   
   // -------------------------------------------------------------------------
-  // 4. GLOBAL RATE LIMITING
+  // 4. GLOBAL RATE LIMITING (page routes only — API routes handled in step 1.5)
   // -------------------------------------------------------------------------
   
-  const hasAuthToken = request.cookies.has("fayapoint_token");
-  const rateLimitTier = getRateLimitTier({
-    suspicionScore,
-    pathname,
-    isAuthenticated: hasAuthToken,
-  });
+  // API routes already have their own rate limiter (step 1.5) with separate keys.
+  // Only apply global rate limit to PAGE routes here to avoid double-counting.
+  let rl = { allowed: true, remaining: 999, limit: 120, resetSeconds: 60 };
   
-  const rl = await rateLimit({
-    key: `ratelimit:global:${ip}`,
-    limit: rateLimitTier.requests,
-    windowSeconds: rateLimitTier.windowSeconds,
-  });
-  
-  if (!rl.allowed) {
-    console.warn(`[RATE_LIMITED] IP: ${ip}, Limit: ${rateLimitTier.requests}/min, Path: ${pathname}`);
-    
-    // If they keep hitting rate limits, block them
-    const strikeResult = await rateLimit({
-      key: `strikes:${ip}`,
-      limit: 3,
-      windowSeconds: 300, // 3 strikes in 5 minutes = blocked
+  if (!isApiRoute) {
+    const hasAuthToken = request.cookies.has("fayapoint_token");
+    const rateLimitTier = getRateLimitTier({
+      suspicionScore,
+      pathname,
+      isAuthenticated: hasAuthToken,
     });
     
-    if (!strikeResult.allowed) {
-      await rateLimit({
-        key: `blocked:ip:${ip}`,
-        limit: 1,
-        windowSeconds: 3600, // Block for 1 hour
+    rl = await rateLimit({
+      key: `ratelimit:pages:${ip}`,
+      limit: rateLimitTier.requests,
+      windowSeconds: rateLimitTier.windowSeconds,
+    });
+    
+    if (!rl.allowed) {
+      console.warn(`[PAGE_RATE_LIMITED] IP: ${ip}, Limit: ${rateLimitTier.requests}/min, Path: ${pathname}`);
+      
+      return new NextResponse("Too Many Requests", {
+        status: 429,
+        headers: {
+          "Retry-After": String(rl.resetSeconds),
+          "X-RateLimit-Limit": String(rl.limit),
+          "X-RateLimit-Remaining": String(rl.remaining),
+          "X-RateLimit-Reset": String(rl.resetSeconds),
+        },
       });
-      return new NextResponse("Forbidden", { status: 403 });
     }
-    
-    return new NextResponse("Too Many Requests", {
-      status: 429,
-      headers: {
-        "Retry-After": String(rl.resetSeconds),
-        "X-RateLimit-Limit": String(rl.limit),
-        "X-RateLimit-Remaining": String(rl.remaining),
-        "X-RateLimit-Reset": String(rl.resetSeconds),
-      },
-    });
   }
   
   // -------------------------------------------------------------------------
