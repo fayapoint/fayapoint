@@ -101,6 +101,13 @@ function hasValidBypassSecret(request: NextRequest): boolean {
 }
 
 // =============================================================================
+// WHITELISTED IPS - Skip all rate limiting and bot detection
+// =============================================================================
+const WHITELISTED_IPS: Set<string> = new Set([
+  "76.13.234.38", // Admin server
+]);
+
+// =============================================================================
 // EMERGENCY IP BLOCKLIST - Add IPs here to block immediately
 // =============================================================================
 const BLOCKED_IPS: Set<string> = new Set([
@@ -226,6 +233,37 @@ export default async function middleware(request: NextRequest) {
   if (BLOCKED_IPS.has(ip)) {
     console.warn(`[BLOCKED_IP] ${ip} attempted access to ${pathname}`);
     return new NextResponse("Forbidden", { status: 403 });
+  }
+  
+  // =========================================================================
+  // 0.1. WHITELISTED IPS - Skip all rate limiting and bot detection
+  // =========================================================================
+  if (WHITELISTED_IPS.has(ip)) {
+    // Whitelisted IPs go straight to locale/API handling - no rate limits
+    if (isApiRoute) {
+      const response = NextResponse.next();
+      addSecurityHeaders(response);
+      return response;
+    }
+    // For page routes, go straight to locale detection (step 6)
+    const segments = pathname.split("/").filter(Boolean);
+    const hasLocalePrefix = segments.length > 0 && routing.locales.includes(segments[0] as Locale);
+    if (!hasLocalePrefix) {
+      let locale: Locale = "pt-BR";
+      const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
+      if (cookieLocale && routing.locales.includes(cookieLocale)) {
+        locale = cookieLocale;
+      }
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
+      url.search = searchParams.toString();
+      const response = NextResponse.redirect(url, 307);
+      addSecurityHeaders(response);
+      return response;
+    }
+    const response = nextIntlMiddleware(request);
+    if (response) addSecurityHeaders(response);
+    return response;
   }
   
   // =========================================================================

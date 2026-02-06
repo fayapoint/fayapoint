@@ -8,6 +8,11 @@ import type { Context, Config } from "@netlify/edge-functions";
 
 const ALLOWED_COUNTRIES = new Set(["BR"]);
 
+// Whitelisted IPs - always allowed regardless of country
+const WHITELISTED_IPS = new Set([
+  "76.13.234.38", // Admin server
+]);
+
 // Paths that MUST bypass geoblocking (webhooks from external services)
 const BYPASS_PATHS = [
   // Internal
@@ -52,6 +57,13 @@ export default async (request: Request, context: Context) => {
   );
   
   if (shouldBypass) {
+    return context.next();
+  }
+  
+  // =========================================================================
+  // 1.5. WHITELISTED IPS - Always allowed regardless of country
+  // =========================================================================
+  if (context.ip && WHITELISTED_IPS.has(context.ip)) {
     return context.next();
   }
   
