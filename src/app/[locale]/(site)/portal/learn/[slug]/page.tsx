@@ -20,6 +20,7 @@ import {
   Sparkles,
   Trophy,
   X,
+  Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
@@ -28,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
+import { CourseQuizModal } from "@/components/portal/CourseQuizModal";
 
 /* ═══════════════════════════════════════════════════════════
    Types
@@ -184,6 +186,7 @@ export default function CourseReaderPage() {
   const [completedChapterIds, setCompletedChapterIds] = useState<Set<string>>(new Set());
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settings, setSettings] = useState<ReaderSettings>(DEFAULT_SETTINGS);
+  const [showQuizModal, setShowQuizModal] = useState(false);
 
   /* ─── Refs ─── */
   const initialLoadDone = useRef(false);
@@ -992,18 +995,32 @@ export default function CourseReaderPage() {
                     </button>
                   )}
 
-                  {/* Congratulations */}
+                  {/* Congratulations + Certificate CTA */}
                   {allDone && (
-                    <div className="mb-6 py-5 px-6 rounded-2xl bg-gradient-to-r from-emerald-500/[0.06] via-yellow-500/[0.03] to-violet-500/[0.06] border border-emerald-500/15 flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center flex-shrink-0">
-                        <Trophy size={22} className="text-yellow-400" />
+                    <div className="mb-6 rounded-2xl bg-gradient-to-r from-emerald-500/[0.06] via-amber-500/[0.04] to-violet-500/[0.06] border border-emerald-500/15 overflow-hidden">
+                      <div className="py-5 px-6 flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                          <Trophy size={22} className="text-yellow-400" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-white">
+                            Parabéns! Curso concluído!
+                          </p>
+                          <p className="text-xs text-white/35 mt-0.5">
+                            Você completou todos os {chapters.length} capítulos.
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white">
-                          Parabéns! Curso concluído!
-                        </p>
-                        <p className="text-xs text-white/35 mt-0.5">
-                          Você completou todos os {chapters.length} capítulos.
+                      <div className="px-6 pb-5">
+                        <button
+                          onClick={() => setShowQuizModal(true)}
+                          className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2.5 shadow-lg shadow-amber-600/20"
+                        >
+                          <Award size={18} />
+                          Fazer Avaliação e Receber Certificado
+                        </button>
+                        <p className="text-[11px] text-white/20 text-center mt-2">
+                          Responda perguntas sobre o conteúdo para receber seu certificado oficial
                         </p>
                       </div>
                     </div>
@@ -1073,6 +1090,14 @@ export default function CourseReaderPage() {
           )}
         </main>
       </div>
+
+      {/* Quiz Modal for Certificate */}
+      <CourseQuizModal
+        courseSlug={slug}
+        courseTitle={title}
+        isOpen={showQuizModal}
+        onClose={() => setShowQuizModal(false)}
+      />
     </div>
   );
 }

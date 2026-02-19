@@ -89,6 +89,7 @@ import { StorePanel } from "@/components/portal/StorePanel";
 import { CartPanel } from "@/components/portal/CartPanel";
 import PODStorePanel from "@/components/portal/PODStorePanel";
 import { MobileBottomNav } from "@/components/portal/MobileBottomNav";
+import { CertificatesPanel } from "@/components/portal/CertificatesPanel";
 
 // Types
 interface DashboardCourseProgress {
@@ -458,6 +459,7 @@ export default function PortalPage() {
               {activeTab === "cart" && "Carrinho"}
               {activeTab === "profile" && "Meu Perfil"}
               {activeTab === "courses" && "Meus Cursos"}
+              {activeTab === "certificates" && "Certificados"}
               {activeTab === "studio" && "Studio AI"}
               {activeTab === "assistant" && "Assistente IA"}
               {activeTab === "achievements" && "Conquistas"}
@@ -1120,6 +1122,18 @@ export default function PortalPage() {
                     })}
                   </div>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Certificates Tab */}
+            {activeTab === "certificates" && (
+              <motion.div
+                key="certificates"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <CertificatesPanel />
               </motion.div>
             )}
 

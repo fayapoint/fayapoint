@@ -28,6 +28,7 @@ import {
   Palette,
   Home,
   ExternalLink,
+  Award,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -72,6 +73,7 @@ const MENU_ITEMS = [
   { id: "cart", icon: ShoppingCart, label: "Carrinho", proOnly: false },
   { id: "profile", icon: Crown, label: "Meu Perfil", proOnly: false },
   { id: "courses", icon: BookOpen, label: "Meus Cursos", proOnly: false },
+  { id: "certificates", icon: Award, label: "Certificados", proOnly: false },
   { id: "studio", icon: ImageIcon, label: "Studio AI", proOnly: false, badge: "AI" },
   { id: "assistant", icon: Bot, label: "Assistente IA", proOnly: true, badge: "PRO" },
   { id: "achievements", icon: Trophy, label: "Conquistas", proOnly: false },
