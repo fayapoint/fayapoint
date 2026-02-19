@@ -53,8 +53,8 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
     ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
     : 0;
 
-  const isBestseller = product.metrics.students > 5000;
-  const isNew = new Date(product.updatedAt).getTime() > Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const isBestseller = product.metrics.students > 100;
+  const isNew = product.metrics.students === 0 || new Date(product.updatedAt).getTime() > Date.now() - 90 * 24 * 60 * 60 * 1000;
   const isAdvanced = product.level.toLowerCase().includes('avançado');
 
   return (
@@ -149,14 +149,16 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
 
             {/* Stats */}
             <div className="flex items-center gap-4 text-sm text-gray-400 py-3 border-y border-gray-800">
+              {product.metrics.rating > 0 && (
+                <div className="flex items-center gap-1.5">
+                  <Star className="text-yellow-400 fill-yellow-400" size={16} />
+                  <span className="font-bold text-white">{product.metrics.rating}</span>
+                </div>
+              )}
               <div className="flex items-center gap-1.5">
-                <Star className="text-yellow-400 fill-yellow-400" size={16} />
-                <span className="font-bold text-white">{product.metrics.rating}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Users className="text-purple-400" size={16} />
+                <Play className="text-purple-400" size={16} />
                 <span className="font-semibold text-white">
-                  {product.metrics.students.toLocaleString()}
+                  {product.metrics.lessons} aulas
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -185,7 +187,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 </div>
                 <div className="flex items-center gap-2 text-gray-300">
                   <Check size={16} className="text-green-400" />
-                  <span>Suporte 24/7</span>
+                  <span>Suporte</span>
                 </div>
               </div>
             </div>
@@ -226,7 +228,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-center justify-center gap-4 text-xs text-gray-500 pt-2">
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />
-                  <span>30 dias garantia</span>
+                  <span>7 dias garantia</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />

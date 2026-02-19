@@ -68,7 +68,7 @@ export function StickyCTA() {
           
           <div className="flex items-center gap-3">
             <Link
-              href="/onboarding"
+              href="/cursos"
               className="px-6 py-3 bg-white text-purple-900 font-semibold rounded-full hover:bg-purple-100 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
             >
               {t("cta")}

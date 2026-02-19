@@ -163,20 +163,8 @@ export default function CoursesPage() {
             className="flex flex-wrap justify-center gap-8 mb-8"
           >
             <div>
-              <p className="text-3xl font-bold text-purple-400">
-                {loading ? "..." : `${totalStudents}+`}
-              </p>
-              <p className="text-gray-400">{statsLabels.students}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-purple-400">{loading ? '...' : products.length}</p>
+              <p className="text-3xl font-bold text-purple-400">{loading ? '...' : totalCourses}</p>
               <p className="text-gray-400">{statsLabels.courses}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-purple-400">
-                {loading ? "..." : averageRating}
-              </p>
-              <p className="text-gray-400">{statsLabels.rating}</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-purple-400">

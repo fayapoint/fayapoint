@@ -113,7 +113,7 @@ export function ExitIntentPopup() {
 
             {/* CTA */}
             <Link
-              href="/onboarding"
+              href="/aula-gratis"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-lg rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105"
               onClick={handleClose}
             >

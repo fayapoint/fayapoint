@@ -55,10 +55,9 @@ export function HeroSection() {
         accent: (chunks) => <span className="text-accent font-bold">{chunks}</span>,
       });
   const stats = [
-    { icon: Users, color: "purple", value: studentsCount, label: t("stats.students"), suffix: "+" },
-    { icon: BookOpen, color: "pink", value: coursesCount, label: t("stats.courses"), suffix: "+" },
-    { icon: Trophy, color: "yellow", value: completionRate, label: t("stats.completion"), suffix: "%" },
-    { icon: Star, color: "orange", value: t("stats.ratingValue"), label: t("stats.rating"), suffix: "" },
+    { icon: BookOpen, color: "purple", value: coursesCount, label: t("stats.courses"), suffix: "+" },
+    { icon: Brain, color: "pink", value: studentsCount, label: locale === 'pt-BR' ? 'Aulas Disponíveis' : 'Available Lessons', suffix: "+" },
+    { icon: Cpu, color: "yellow", value: completionRate, label: locale === 'pt-BR' ? 'Ferramentas de IA' : 'AI Tools', suffix: "+" },
   ];
 
   useEffect(() => {
@@ -76,13 +75,13 @@ export function HeroSection() {
 
   useEffect(() => {
     const timer1 = setInterval(() => {
-      setStudentsCount(prev => prev < 5000 ? prev + 100 : 5000);
+      setStudentsCount(prev => prev < 1000 ? prev + 20 : 1000);
     }, 30);
     const timer2 = setInterval(() => {
-      setCoursesCount(prev => prev < 150 ? prev + 3 : 150);
-    }, 50);
+      setCoursesCount(prev => prev < 18 ? prev + 1 : 18);
+    }, 80);
     const timer3 = setInterval(() => {
-      setCompletionRate(prev => prev < 94 ? prev + 2 : 94);
+      setCompletionRate(prev => prev < 50 ? prev + 1 : 50);
     }, 40);
 
     return () => {

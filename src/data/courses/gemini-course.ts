@@ -8,11 +8,11 @@ export const geminiCourse = {
   level: "Todos os níveis",
   duration: "30+ horas",
   totalLessons: 180,
-  price: 397,
-  originalPrice: 1297,
-  rating: 4.8,
-  students: 9200,
-  lastUpdated: "Dezembro 2024",
+  price: 197,
+  originalPrice: 497,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o Gemini, a IA multimodal do Google. Aprenda a processar texto, imagens, vídeos e código, integrando perfeitamente com todo ecossistema Google.",
   

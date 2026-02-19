@@ -8,11 +8,11 @@ export const bananaDevCourse = {
   level: "Intermediário a Avançado",
   duration: "20+ horas",
   totalLessons: 120,
-  price: 597,
-  originalPrice: 1797,
-  rating: 4.8,
-  students: 3200,
-  lastUpdated: "Dezembro 2024",
+  price: 197,
+  originalPrice: 597,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o Banana Dev e coloque modelos de IA em produção facilmente. Aprenda a fazer deploy, escalar e monetizar modelos de ML sem complexidade de infraestrutura.",
   

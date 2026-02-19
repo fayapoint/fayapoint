@@ -8,11 +8,11 @@ export const midjourneyCourse = {
   level: "Todos os níveis",
   duration: "32+ horas",
   totalLessons: 200,
-  price: 497,
-  originalPrice: 1497,
-  rating: 4.9,
-  students: 15800,
-  lastUpdated: "Dezembro 2024",
+  price: 197,
+  originalPrice: 497,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o Midjourney e crie arte digital extraordinária. Aprenda técnicas avançadas de prompt, estilos artísticos e como criar imagens que vendem.",
   

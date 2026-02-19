@@ -306,24 +306,12 @@ export default function PricingPage() {
                       <p className="text-sm text-muted-foreground">{plan.description}</p>
                     </div>
 
-                    {/* Price - Login Gated */}
+                    {/* Price - Visible to all */}
                     <div className="mb-6">
-                      {isLoggedIn ? (
-                        <div>
-                          <span className="text-4xl font-bold">{plan.price}</span>
-                          <span className="text-muted-foreground">{plan.period}</span>
-                        </div>
-                      ) : (
-                        <Link href="/login" className="block">
-                          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-lg transition-all group">
-                            <Lock className="w-4 h-4 text-primary" />
-                            <span className="text-sm font-medium text-primary group-hover:underline">
-                              {locale === 'pt-BR' ? 'Faça login para ver preços' : 'Login to see prices'}
-                            </span>
-                            <LogIn className="w-4 h-4 text-primary" />
-                          </div>
-                        </Link>
-                      )}
+                      <div>
+                        <span className="text-4xl font-bold">{plan.price}</span>
+                        <span className="text-muted-foreground">{plan.period}</span>
+                      </div>
                     </div>
 
                     {/* Features */}
@@ -371,7 +359,7 @@ export default function PricingPage() {
                     </AnimatePresence>
 
                     {/* CTA */}
-                    <Link href={isLoggedIn ? plan.href : '/login'} className="mt-auto">
+                    <Link href={plan.href} className="mt-auto">
                       <Button
                         className={`w-full ${plan.highlighted ? 'bg-primary hover:bg-primary/90' : ''}`}
                         variant={plan.highlighted ? 'default' : 'outline'}
@@ -428,14 +416,7 @@ export default function PricingPage() {
                     )}
                     <div className="text-3xl mb-2">{bundle.emoji}</div>
                     <h3 className="font-semibold text-sm mb-1">{getPricingTranslation(bundle.name, locale)}</h3>
-                    {isLoggedIn ? (
-                      <p className="text-2xl font-bold mb-3 text-primary">{currencyFormatter.format(bundle.price)}</p>
-                    ) : (
-                      <Link href="/login" className="flex items-center gap-1 text-xs text-primary hover:underline mb-3">
-                        <Lock className="w-3 h-3" />
-                        {locale === 'pt-BR' ? 'Login para ver' : 'Login to see'}
-                      </Link>
-                    )}
+                    <p className="text-2xl font-bold mb-3 text-primary">{currencyFormatter.format(bundle.price)}</p>
                     <ul className="text-xs text-muted-foreground space-y-1">
                       {bundle.includes.map((item, i) => (
                         <li key={i} className="flex items-center gap-1">
@@ -529,15 +510,9 @@ export default function PricingPage() {
                                   <span className="text-muted-foreground">
                                     {getPricingTranslation(item.unitLabel, locale)}
                                   </span>
-                                  {isLoggedIn ? (
-                                    <span className={`font-semibold ${activeService.accentColor}`}>
-                                      {currencyFormatter.format(item.priceRange.recommended)}
-                                    </span>
-                                  ) : (
-                                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                      <Lock className="w-3 h-3" />
-                                    </span>
-                                  )}
+                                  <span className={`font-semibold ${activeService.accentColor}`}>
+                                    {currencyFormatter.format(item.priceRange.recommended)}
+                                  </span>
                                 </div>
                               ))}
                               {items.length > 4 && (
@@ -558,23 +533,11 @@ export default function PricingPage() {
                       <p className="text-sm uppercase tracking-wider text-muted-foreground mb-2">
                         {t("services.priceRange")}
                       </p>
-                      {isLoggedIn ? (
-                        <p className="text-3xl font-bold">
-                          {currencyFormatter.format(activeService.minPrice)}
-                          <span className="text-muted-foreground text-lg font-normal"> - </span>
-                          {currencyFormatter.format(activeService.maxPrice)}
-                        </p>
-                      ) : (
-                        <Link href="/login" className="block">
-                          <div className="flex items-center justify-center gap-2 py-3 px-4 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-lg transition-all group">
-                            <Lock className="w-4 h-4 text-primary" />
-                            <span className="text-sm font-medium text-primary group-hover:underline">
-                              {locale === 'pt-BR' ? 'Faça login para ver preços' : 'Login to see prices'}
-                            </span>
-                            <LogIn className="w-4 h-4 text-primary" />
-                          </div>
-                        </Link>
-                      )}
+                      <p className="text-3xl font-bold">
+                        {currencyFormatter.format(activeService.minPrice)}
+                        <span className="text-muted-foreground text-lg font-normal"> - </span>
+                        {currencyFormatter.format(activeService.maxPrice)}
+                      </p>
                     </div>
 
                     <div className="flex-1 space-y-3 text-sm text-muted-foreground mb-6">

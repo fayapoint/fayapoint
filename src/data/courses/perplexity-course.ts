@@ -8,11 +8,11 @@ export const perplexityCourse = {
   level: "Iniciante a Intermediário",
   duration: "18+ horas",
   totalLessons: 100,
-  price: 297,
-  originalPrice: 897,
-  rating: 4.8,
-  students: 9800,
-  lastUpdated: "Dezembro 2024",
+  price: 147,
+  originalPrice: 397,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o Perplexity e transforme como você pesquisa e aprende. Encontre informações precisas com fontes confiáveis instantaneamente.",
   

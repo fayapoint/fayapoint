@@ -14,6 +14,7 @@ import { CTASection } from "@/components/home/CTASection";
 import { ValuePropositionCTA } from "@/components/home/ValuePropositionCTA";
 import { StickyCTA } from "@/components/conversion/StickyCTA";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
+import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 
 export default function Home() {
   return (
@@ -38,6 +39,7 @@ export default function Home() {
       {/* Conversion optimization */}
       <StickyCTA />
       <ExitIntentPopup />
+      <WhatsAppButton />
     </div>
   );
 }

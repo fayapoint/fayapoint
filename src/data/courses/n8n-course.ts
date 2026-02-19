@@ -8,11 +8,11 @@ export const n8nCourse = {
   level: "Intermediário",
   duration: "35+ horas",
   totalLessons: 180,
-  price: 697,
-  originalPrice: 2497,
-  rating: 4.9,
-  students: 8500,
-  lastUpdated: "Dezembro 2024",
+  price: 247,
+  originalPrice: 697,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o n8n e crie automações poderosas que transformam empresas. Aprenda a construir workflows complexos, integrar APIs e automatizar qualquer processo.",
   

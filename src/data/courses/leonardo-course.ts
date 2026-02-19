@@ -8,11 +8,11 @@ export const leonardoCourse = {
   level: "Iniciante a Avançado",
   duration: "28+ horas",
   totalLessons: 160,
-  price: 397,
-  originalPrice: 1197,
-  rating: 4.9,
-  students: 11300,
-  lastUpdated: "Dezembro 2024",
+  price: 197,
+  originalPrice: 497,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o Leonardo AI e crie visuais profissionais impressionantes. Aprenda a gerar imagens, texturas, concept art e designs únicos com o poder da IA.",
   

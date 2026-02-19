@@ -187,7 +187,7 @@
         "courses": "Cursos",
         "completion": "Conclusão",
         "rating": "Avaliação",
-        "ratingValue": "4.9/5"
+        "ratingValue": ""
       }
     },
     "Services": {
@@ -595,48 +595,48 @@
       }
     },
     "Testimonials": {
-      "badge": "+5000 Alunos Transformados",
-      "title": "Histórias de Transformação",
-      "description": "Veja o que nossos alunos conquistaram com o poder da IA",
-      "ctaLabel": "Seja o próximo caso de sucesso",
-      "ctaButton": "Começar Agora",
+      "badge": "O Que Você Pode Conquistar",
+      "title": "Resultados Reais com IA",
+      "description": "Veja o que é possível alcançar dominando Inteligência Artificial",
+      "ctaLabel": "Comece sua jornada",
+      "ctaButton": "Ver Cursos",
       "items": {
         "ana": {
-          "name": "Ana Silva",
-          "role": "CEO, TechStart",
-          "content": "Implementei IA na minha empresa e reduzi 40% dos custos operacionais. Os cursos do Ricardo são práticos e diretos ao ponto."
+          "name": "Automatização",
+          "role": "Produtividade com IA",
+          "content": "Empresas que adotam IA reduzem até 40% dos custos operacionais. Nossos cursos ensinam na prática como implementar automações reais no seu negócio."
         },
         "carlos": {
-          "name": "Carlos Mendes",
-          "role": "Criador de Conteúdo",
-          "content": "Triplicei minha produção de conteúdo usando as técnicas ensinadas. Agora uso IA diariamente no meu workflow."
+          "name": "Criação de Conteúdo",
+          "role": "Produção com IA",
+          "content": "Com as técnicas certas de prompt engineering, é possível triplicar sua produção de conteúdo. Aprenda a usar ChatGPT e outras IAs no seu workflow diário."
         },
         "juliana": {
-          "name": "Juliana Costa",
-          "role": "Gerente de Marketing",
-          "content": "O ROI foi imediato! Em 2 meses já havia economizado o valor investido em todos os cursos."
+          "name": "Marketing com IA",
+          "role": "ROI Comprovado",
+          "content": "Profissionais de marketing que dominam IA conseguem resultados significativamente melhores em menos tempo. Aprenda as estratégias que funcionam."
         },
         "pedro": {
-          "name": "Pedro Santos",
-          "role": "Desenvolvedor Full Stack",
-          "content": "As aulas de automação com n8n mudaram completamente minha forma de trabalhar. Economizo 20 horas por semana!"
+          "name": "Automação com n8n",
+          "role": "Desenvolvimento No-Code",
+          "content": "Com n8n e automação, desenvolvedores economizam horas por semana em tarefas repetitivas. Aprenda a criar workflows que trabalham por você."
         },
         "mariana": {
-          "name": "Mariana Oliveira",
-          "role": "Designer Freelancer",
-          "content": "Midjourney e DALL-E viraram minhas ferramentas principais. Consigo entregar projetos 3x mais rápido."
+          "name": "Design com IA",
+          "role": "Arte Digital",
+          "content": "Midjourney e outras ferramentas de IA generativa estão revolucionando o design. Aprenda a criar arte profissional e entregar projetos mais rápido."
         },
         "roberto": {
-          "name": "Roberto Lima",
-          "role": "Consultor Empresarial",
-          "content": "A visão estratégica sobre IA que aprendi aqui me diferencia completamente no mercado."
+          "name": "Consultoria em IA",
+          "role": "Diferencial no Mercado",
+          "content": "Profissionais com conhecimento estratégico em IA se destacam no mercado. Desenvolva uma visão que te diferencia da concorrência."
         }
       }
     },
     "CTA": {
       "badge": "Transforme Sua Carreira Agora",
       "title": "Pronto para Dominar a IA?",
-      "description": "Junte-se a mais de <primary>5.000 profissionais</primary> que já transformaram suas carreiras. Comece agora e descubra o poder da Inteligência Artificial.",
+      "description": "Domine <primary>Inteligência Artificial</primary> com cursos práticos e diretos. Comece agora e transforme sua carreira com as habilidades mais valorizadas do mercado.",
       "primaryButton": "Começar Meu Plano",
       "secondaryButton": "Agendar Consultoria Gratuita",
       "whatsapp": {
@@ -764,15 +764,15 @@
       "title": "Transformando Vidas com <highlight>Inteligência Artificial</highlight>",
       "description": "De editor de vídeo internacional a pioneiro no ensino de IA no Brasil. Conheça a jornada que nos trouxe até aqui.",
       "highlights": [
-        "+ de 5 mil profissionais impactados",
+        "Especialista em IA e Automação",
         "Comunidade ativa de IA"
       ]
     },
     "stats": [
       { "number": "28+", "label": "Anos de Experiência" },
-      { "number": "5000+", "label": "Alunos Formados" },
-      { "number": "150+", "label": "Cursos Criados" },
-      { "number": "94%", "label": "Taxa de Satisfação" }
+      { "number": "18+", "label": "Cursos Disponíveis" },
+      { "number": "50+", "label": "Ferramentas de IA" },
+      { "number": "1000+", "label": "Aulas de Conteúdo" }
     ],
     "aboutRicardo": {
       "title": "Ricardo Faya",

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -38,7 +38,7 @@ export default function CourseSalesPage() {
   const [loading, setLoading] = useState(true);
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
-  const [timeLeft, setTimeLeft] = useState({ hours: 3, minutes: 47, seconds: 21 });
+  const locale = useLocale();
   
   // Fetch product from MongoDB
   useEffect(() => {
@@ -56,29 +56,6 @@ export default function CourseSalesPage() {
     fetchProduct();
   }, [slug]);
 
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { hours, minutes, seconds } = prev;
-        
-        if (seconds > 0) {
-          seconds--;
-        } else if (minutes > 0) {
-          minutes--;
-          seconds = 59;
-        } else if (hours > 0) {
-          hours--;
-          minutes = 59;
-          seconds = 59;
-        }
-        
-        return { hours, minutes, seconds };
-      });
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, []);
 
   if (loading) {
     return (
@@ -153,19 +130,18 @@ export default function CourseSalesPage() {
 
                 {/* Badges */}
                 <div className="flex flex-wrap items-center gap-3 mb-6">
-                  {product.metrics.students > 5000 && (
+                  {product.metrics.students > 100 && (
                     <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-0">
                       <Flame className="mr-1" size={14} />
-                      {t("badges.bestseller", { position: 1 })}
+                      {locale === 'pt-BR' ? 'Popular' : 'Popular'}
                     </Badge>
                   )}
-                  <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-black border-0">
-                    <Trophy className="mr-1" size={14} />
-                    {t("badges.bestSelling", { year: new Date().getFullYear() })}
-                    </Badge>
-                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 animate-pulse">
+                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
                     <Timer className="mr-1" size={14} />
-                    {t("badges.offerExpires", { hours: timeLeft.hours, minutes: timeLeft.minutes })}
+                    {locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
+                  </Badge>
+                  <Badge className="bg-gray-700 text-gray-300 border-0">
+                    {product.level}
                   </Badge>
                 </div>
 
@@ -181,28 +157,41 @@ export default function CourseSalesPage() {
                   {product.copy.subheadline}
                 </p>
 
-                {/* Social Proof Bar */}
+                {/* Course Info Bar */}
                 <div className="flex flex-wrap items-center gap-6 mb-8 p-4 bg-gray-900/50 rounded-lg border border-gray-800">
+                  {product.metrics.rating > 0 && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <Star className="text-yellow-400 fill-yellow-400" size={20} />
+                        <div>
+                          <div className="font-bold text-lg">{product.metrics.rating}</div>
+                          <div className="text-xs text-gray-400">{product.metrics.reviewCount} {t("stats.reviews")}</div>
+                        </div>
+                      </div>
+                      <Separator orientation="vertical" className="h-12 hidden md:block" />
+                    </>
+                  )}
                   <div className="flex items-center gap-2">
-                    <Star className="text-yellow-400 fill-yellow-400" size={20} />
+                    <PlayCircle className="text-purple-400" size={20} />
                     <div>
-                      <div className="font-bold text-lg">{product.metrics.rating}</div>
-                      <div className="text-xs text-gray-400">{product.metrics.reviewCount} {t("stats.reviews")}</div>
+                      <div className="font-bold text-lg">{product.metrics.lessons}</div>
+                      <div className="text-xs text-gray-400">{locale === 'pt-BR' ? 'Aulas' : 'Lessons'}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
-                    <Users className="text-purple-400" size={20} />
+                    <Clock className="text-blue-400" size={20} />
                     <div>
-                      <div className="font-bold text-lg">{product.metrics.students.toLocaleString()}</div>
-                      <div className="text-xs text-gray-400">{t("stats.studentsEnrolled")}</div>
+                      <div className="font-bold text-lg">{product.metrics.duration}</div>
+                      <div className="text-xs text-gray-400">{locale === 'pt-BR' ? 'de conteúdo' : 'of content'}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="text-green-400" size={20} />
-                    <div className="text-sm text-gray-300">
-                      <span className="font-bold text-green-400">127</span> {t("stats.enrollmentsLast24h")}
+                    <Award className="text-green-400" size={20} />
+                    <div>
+                      <div className="font-bold text-lg">{locale === 'pt-BR' ? 'Certificado' : 'Certificate'}</div>
+                      <div className="text-xs text-gray-400">{locale === 'pt-BR' ? 'Incluso' : 'Included'}</div>
                     </div>
                   </div>
                 </div>
@@ -215,7 +204,7 @@ export default function CourseSalesPage() {
                   <div>
                     <div className="text-sm text-gray-400">{t("instructor.createdBy")}</div>
                     <div className="font-bold text-lg">Ricardo Faya</div>
-                    <div className="text-sm text-gray-400">50.000+ {t("instructor.students")} • 20+ {t("instructor.courses")} • 28 {t("instructor.experience")}</div>
+                    <div className="text-sm text-gray-400">{locale === 'pt-BR' ? 'Especialista em IA e Automação' : 'AI & Automation Specialist'} • {locale === 'pt-BR' ? 'Instrutor Principal' : 'Lead Instructor'}</div>
                   </div>
                 </div>
 
@@ -279,20 +268,6 @@ export default function CourseSalesPage() {
                   </div>
                 </div>
 
-                {/* Live Activity Indicator */}
-                <div className="mt-8 p-4 bg-gradient-to-r from-orange-900/30 to-red-900/30 rounded-lg border border-orange-500/30">
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                      <div className="absolute inset-0 w-3 h-3 bg-red-500 rounded-full animate-ping" />
-                    </div>
-                    <div className="flex-1">
-                      <span className="text-orange-400 font-semibold">
-                        {t("liveActivity", { count: Math.floor(Math.random() * 30) + 45 })}
-                      </span>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* STICKY SIDEBAR - Purchase Card */}
@@ -318,29 +293,22 @@ export default function CourseSalesPage() {
                       </div>
                     </div>
 
-                    {/* Urgency Timer */}
-                    <div className="mb-6 p-4 bg-gradient-to-r from-red-900/50 to-orange-900/50 rounded-lg border-2 border-red-500/50">
-                      <div className="flex items-center gap-2 mb-2">
-                        <AlertCircle className="text-red-400" size={20} />
-                        <span className="font-bold text-red-400">{t("sidebar.limitedOffer")}</span>
+                    {/* Launch Price Banner */}
+                    {discount > 0 && (
+                      <div className="mb-6 p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border border-green-500/30">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Sparkles className="text-green-400" size={18} />
+                          <span className="font-bold text-green-400">
+                            {locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-400">
+                          {locale === 'pt-BR' 
+                            ? 'Aproveite o preço especial de lançamento. O valor aumentará em breve.' 
+                            : 'Take advantage of the special launch price. Price will increase soon.'}
+                        </p>
                       </div>
-                      <div className="flex justify-center gap-2 text-2xl font-bold">
-                        <div className="bg-black/50 px-3 py-2 rounded">
-                          {timeLeft.hours.toString().padStart(2, '0')}
-                        </div>
-                        <span>:</span>
-                        <div className="bg-black/50 px-3 py-2 rounded">
-                          {timeLeft.minutes.toString().padStart(2, '0')}
-                        </div>
-                        <span>:</span>
-                        <div className="bg-black/50 px-3 py-2 rounded">
-                          {timeLeft.seconds.toString().padStart(2, '0')}
-                        </div>
-                      </div>
-                      <p className="text-xs text-center text-gray-400 mt-2">
-                        {t("sidebar.getDiscountBefore")}
-                      </p>
-                    </div>
+                    )}
 
                     {/* Price */}
                     <div className="mb-6">
@@ -439,7 +407,7 @@ export default function CourseSalesPage() {
                     <div className="p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border-2 border-green-500/50 text-center">
                       <Shield className="mx-auto mb-2 text-green-400" size={32} />
                       <div className="font-bold text-green-400 mb-1">
-                        {t("sidebar.guarantee", { days: 30 })}
+                        {t("sidebar.guarantee", { days: 7 })}
                       </div>
                       <p className="text-xs text-gray-400">
                         {t("sidebar.guaranteeText")}

@@ -8,11 +8,11 @@ export const chatGPTCourse = {
   level: "Todos os níveis",
   duration: "40+ horas",
   totalLessons: 250,
-  price: 497,
-  originalPrice: 1997,
-  rating: 4.9,
-  students: 12500,
-  lastUpdated: "Dezembro 2024",
+  price: 197,
+  originalPrice: 497,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine completamente o ChatGPT e revolucione sua produtividade. Aprenda desde o básico até técnicas avançadas de prompt engineering, automação e integração com outras ferramentas.",
   
@@ -166,52 +166,14 @@ Este curso foi desenvolvido após mais de 2000 horas de experiência prática co
     }
   ],
   
-  testimonials: [
-    {
-      name: "Carlos Eduardo Silva",
-      role: "Diretor de Marketing",
-      company: "TechCorp Brasil",
-      rating: 5,
-      comment: "Este curso literalmente mudou minha carreira. Fui promovido 3 meses após implementar as automações que aprendi. Economizo 30 horas por semana!",
-      impact: "Promovido e salário aumentou 45%"
-    },
-    {
-      name: "Ana Paula Rodrigues",
-      role: "Empreendedora Digital",
-      rating: 5,
-      comment: "Consegui lançar 5 produtos em 2 meses usando as técnicas do curso. Meu faturamento multiplicou por 4. Vale cada centavo investido!",
-      impact: "Faturamento de R$ 8k para R$ 32k/mês"
-    },
-    {
-      name: "Roberto Santos",
-      role: "Desenvolvedor Senior",
-      rating: 5,
-      comment: "Como programador com 15 anos de experiência, achei que sabia tudo sobre ChatGPT. Este curso me mostrou que eu estava usando apenas 10% do potencial.",
-      impact: "Dobrou velocidade de desenvolvimento"
-    },
-    {
-      name: "Mariana Costa",
-      role: "Consultora de Negócios",
-      rating: 5,
-      comment: "Criei um negócio de consultoria em IA após o curso. Hoje faturo R$ 20k/mês apenas com implementação de automações para clientes.",
-      impact: "Novo negócio gerando R$ 20k/mês"
-    },
-    {
-      name: "Felipe Oliveira",
-      role: "Estudante de Administração",
-      rating: 5,
-      comment: "Ainda na faculdade, consegui estágio em empresa multinacional por dominar ChatGPT. O curso me colocou anos à frente dos colegas.",
-      impact: "Conseguiu estágio em multinacional"
-    }
-  ],
+  testimonials: [],
   
   guarantees: [
-    "30 dias de garantia incondicional",
+    "7 dias de garantia incondicional",
     "Acesso vitalício ao conteúdo",
-    "Atualizações mensais incluídas",
-    "Suporte direto por 1 ano",
-    "Certificado reconhecido",
-    "Comunidade exclusiva vitalícia"
+    "Atualizações incluídas",
+    "Suporte por email",
+    "Certificado digital"
   ],
   
   bonuses: [
@@ -265,7 +227,7 @@ Este curso foi desenvolvido após mais de 2000 horas de experiência prática co
     },
     {
       question: "E se eu não gostar?",
-      answer: "30 dias de garantia total. Não gostou, devolvemos 100% do valor."
+      answer: "7 dias de garantia total. Não gostou, devolvemos 100% do valor."
     }
   ]
 };

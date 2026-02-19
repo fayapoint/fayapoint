@@ -187,7 +187,7 @@
         "courses": "Courses",
         "completion": "Completion",
         "rating": "Rating",
-        "ratingValue": "4.9/5"
+        "ratingValue": ""
       }
     },
     "Services": {
@@ -595,48 +595,48 @@
       }
     },
     "Testimonials": {
-      "badge": "+5000 Students Transformed",
-      "title": "Stories of Transformation",
-      "description": "See what our students achieved with AI",
-      "ctaLabel": "Be the next success story",
-      "ctaButton": "Start Now",
+      "badge": "What You Can Achieve",
+      "title": "Real Results with AI",
+      "description": "See what's possible when you master Artificial Intelligence",
+      "ctaLabel": "Start your journey",
+      "ctaButton": "See Courses",
       "items": {
         "ana": {
-          "name": "Ana Silva",
-          "role": "CEO, TechStart",
-          "content": "Implemented AI at my company and cut operational costs by 40%. Ricardo's courses are practical and straight to the point."
+          "name": "Automation",
+          "role": "Productivity with AI",
+          "content": "Companies adopting AI reduce up to 40% of operational costs. Our courses teach you hands-on how to implement real automations in your business."
         },
         "carlos": {
-          "name": "Carlos Mendes",
-          "role": "Content Creator",
-          "content": "Tripled my content output using these techniques. I now rely on AI daily."
+          "name": "Content Creation",
+          "role": "AI-Powered Production",
+          "content": "With the right prompt engineering techniques, you can triple your content output. Learn to use ChatGPT and other AIs in your daily workflow."
         },
         "juliana": {
-          "name": "Juliana Costa",
-          "role": "Marketing Manager",
-          "content": "ROI was immediate! In two months I paid back all my course investments."
+          "name": "AI Marketing",
+          "role": "Proven ROI",
+          "content": "Marketing professionals who master AI achieve significantly better results in less time. Learn the strategies that actually work."
         },
         "pedro": {
-          "name": "Pedro Santos",
-          "role": "Full Stack Developer",
-          "content": "The n8n automation lessons completely changed my workflow. I save 20 hours weekly!"
+          "name": "n8n Automation",
+          "role": "No-Code Development",
+          "content": "With n8n and automation, developers save hours per week on repetitive tasks. Learn to create workflows that work for you."
         },
         "mariana": {
-          "name": "Mariana Oliveira",
-          "role": "Freelance Designer",
-          "content": "Midjourney and DALL-E became my main tools. I deliver projects 3x faster."
+          "name": "AI Design",
+          "role": "Digital Art",
+          "content": "Midjourney and other generative AI tools are revolutionizing design. Learn to create professional art and deliver projects faster."
         },
         "roberto": {
-          "name": "Roberto Lima",
-          "role": "Business Consultant",
-          "content": "The strategic AI vision I learned here sets me apart in the market."
+          "name": "AI Consulting",
+          "role": "Market Differentiator",
+          "content": "Professionals with strategic AI knowledge stand out in the market. Develop a vision that sets you apart from the competition."
         }
       }
     },
     "CTA": {
       "badge": "Transform Your Career Now",
       "title": "Ready to Master AI?",
-      "description": "Join <primary>5,000+ professionals</primary> who have already transformed their careers. Start now and experience the power of Artificial Intelligence.",
+      "description": "Master <primary>Artificial Intelligence</primary> with practical, hands-on courses. Start now and transform your career with the most in-demand skills in the market.",
       "primaryButton": "Start My Journey",
       "secondaryButton": "Book a Free Consultation",
       "whatsapp": {
@@ -764,15 +764,15 @@
       "title": "Transforming Lives with <highlight>Artificial Intelligence</highlight>",
       "description": "From international video editor to AI education pioneer in Brazil. Discover the journey that brought us here.",
       "highlights": [
-        "5k+ professionals impacted",
+        "AI & Automation Specialist",
         "Active AI community"
       ]
     },
     "stats": [
       { "number": "28+", "label": "Years of Experience" },
-      { "number": "5000+", "label": "Students Trained" },
-      { "number": "150+", "label": "Courses Created" },
-      { "number": "94%", "label": "Satisfaction Rate" }
+      { "number": "18+", "label": "Courses Available" },
+      { "number": "50+", "label": "AI Tools Covered" },
+      { "number": "1000+", "label": "Content Lessons" }
     ],
     "aboutRicardo": {
       "title": "Ricardo Faya",

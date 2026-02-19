@@ -8,11 +8,11 @@ export const chatGPTAllowlistingCourse = {
   level: "Todos os níveis",
   duration: "8+ horas",
   totalLessons: 45,
-  price: 297,
-  originalPrice: 997,
-  rating: 4.9,
-  students: 1850,
-  lastUpdated: "Dezembro 2024",
+  price: 147,
+  originalPrice: 397,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Aprenda a configurar seu site para ser indexado e citado pelo ChatGPT, Claude, Gemini e outras IAs. O novo SEO que vai definir quem será encontrado na era da IA.",
   

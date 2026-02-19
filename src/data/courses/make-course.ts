@@ -8,11 +8,11 @@ export const makeCourse = {
   level: "Iniciante a Intermediário",
   duration: "25+ horas",
   totalLessons: 150,
-  price: 497,
-  originalPrice: 1497,
-  rating: 4.8,
-  students: 6800,
-  lastUpdated: "Dezembro 2024",
+  price: 197,
+  originalPrice: 497,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o Make (antigo Integromat) e crie automações visuais poderosas. Conecte centenas de aplicações e automatize processos complexos sem escrever uma linha de código.",
   

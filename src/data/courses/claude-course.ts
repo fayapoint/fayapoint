@@ -8,11 +8,11 @@ export const claudeCourse = {
   level: "Intermediário a Avançado",
   duration: "28+ horas",
   totalLessons: 170,
-  price: 497,
-  originalPrice: 1497,
-  rating: 4.9,
-  students: 7600,
-  lastUpdated: "Dezembro 2024",
+  price: 197,
+  originalPrice: 497,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Janeiro 2025",
   
   shortDescription: "Domine o Claude da Anthropic, a IA preferida por desenvolvedores e analistas. Aprenda a usar suas capacidades únicas de análise profunda, código e raciocínio.",
   
