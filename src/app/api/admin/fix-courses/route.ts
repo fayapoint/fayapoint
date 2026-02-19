@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { getMongoClient } from '@/lib/mongodb-client';
+import { getMongoClient } from '@/lib/database';
 
 const DATABASE_NAME = 'fayapointProdutos';
 const COLLECTION_NAME = 'products';
