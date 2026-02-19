@@ -23,34 +23,17 @@ import { Input } from "@/components/ui/input";
 
 const footerLinks = {
   cursos: [
-    { key: "links.courses.items.beginner", href: "/cursos?level=beginner" },
-    { key: "links.courses.items.intermediate", href: "/cursos?level=intermediate" },
-    { key: "links.courses.items.advanced", href: "/cursos?level=advanced" },
-    { key: "links.courses.items.byTool", href: "/cursos/por-ferramenta" },
-    { key: "links.courses.items.byIndustry", href: "/cursos/por-setor" },
-    { key: "links.courses.items.certifications", href: "/certificacoes" },
-  ],
-  recursos: [
-    { key: "links.resources.items.blog", href: "/blog" },
-    { key: "links.resources.items.guides", href: "/recursos/guias" },
-    { key: "links.resources.items.templates", href: "/recursos/templates" },
-    { key: "links.resources.items.roiCalculator", href: "/recursos/calculadora-roi" },
-    { key: "links.resources.items.glossary", href: "/recursos/glossario" },
-    { key: "links.resources.items.tools", href: "/ferramentas" },
+    { key: "links.courses.items.beginner", href: "/cursos" },
+    { key: "links.courses.items.freeClass", href: "/aula-gratis" },
+    { key: "links.courses.items.pricing", href: "/precos" },
   ],
   empresa: [
     { key: "links.company.items.about", href: "/sobre" },
-    { key: "links.company.items.instructors", href: "/instrutores" },
-    { key: "links.company.items.careers", href: "/carreiras" },
-    { key: "links.company.items.partnerships", href: "/parcerias" },
-    { key: "links.company.items.affiliates", href: "/afiliados" },
+    { key: "links.company.items.whatWeDo", href: "/o-que-fazemos" },
     { key: "links.company.items.contact", href: "/contato" },
   ],
   suporte: [
-    { key: "links.support.items.helpCenter", href: "/ajuda" },
-    { key: "links.support.items.faq", href: "/faq" },
-    { key: "links.support.items.community", href: "/comunidade" },
-    { key: "links.support.items.status", href: "/status" },
+    { key: "links.support.items.whatsapp", href: "https://wa.me/5521971908530" },
     { key: "links.support.items.terms", href: "/termos" },
     { key: "links.support.items.privacy", href: "/privacidade" },
   ],
@@ -227,22 +210,6 @@ export function Footer() {
             <h4 className="font-semibold text-white mb-4">{t("links.courses.title")}</h4>
             <ul className="space-y-1">
               {footerLinks.cursos.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="block py-2 text-gray-400 hover:text-white transition"
-                  >
-                    {t(link.key)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold text-white mb-4">{t("links.resources.title")}</h4>
-            <ul className="space-y-1">
-              {footerLinks.recursos.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}

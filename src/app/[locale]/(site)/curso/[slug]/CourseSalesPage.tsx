@@ -211,9 +211,9 @@ export default function CourseSalesPage() {
                 {/* Quick Course Highlights - Fills the gap */}
                 <div className="mt-8 grid grid-cols-2 gap-4">
                   {[
-                    { icon: PlayCircle, value: `${product.metrics.lessons}+`, label: t("stats.videoLessons") },
+                    { icon: PlayCircle, value: `${product.metrics.lessons}`, label: t("stats.videoLessons") },
                     { icon: Clock, value: product.metrics.duration, label: t("stats.ofContent") },
-                    { icon: Download, value: "50+", label: t("stats.downloads") },
+                    { icon: BookOpen, value: `${product.curriculum?.moduleCount || '10'}`, label: locale === 'pt-BR' ? 'Módulos' : 'Modules' },
                     { icon: Award, value: t("stats.certificate"), label: t("stats.ofCompletion") }
                   ].map((item, i) => (
                     <div key={i} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 text-center">
@@ -522,10 +522,10 @@ export default function CourseSalesPage() {
               {/* Transformation Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
                 {[
-                  { value: "20+", label: t("transformation.stats.hoursSaved") },
-                  { value: "40-60%", label: t("transformation.stats.salaryIncrease") },
-                  { value: "90%", label: t("transformation.stats.satisfaction") },
-                  { value: "30 days", label: t("transformation.stats.firstResults") }
+                  { value: `${product.metrics.lessons}`, label: locale === 'pt-BR' ? 'Aulas Práticas' : 'Practical Lessons' },
+                  { value: product.metrics.duration, label: locale === 'pt-BR' ? 'De Conteúdo' : 'Of Content' },
+                  { value: `${product.curriculum?.moduleCount || 10}`, label: locale === 'pt-BR' ? 'Módulos Completos' : 'Complete Modules' },
+                  { value: locale === 'pt-BR' ? '7 dias' : '7 days', label: locale === 'pt-BR' ? 'Garantia Total' : 'Full Guarantee' }
                 ].map((stat, i) => (
                   <div key={i} className="text-center p-6 bg-black/50 rounded-lg border border-purple-500/30">
                     <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2">
@@ -702,7 +702,8 @@ export default function CourseSalesPage() {
           </div>
         </section>
 
-        {/* TESTIMONIALS SECTION */}
+        {/* TESTIMONIALS SECTION - Only show if testimonials exist */}
+        {product.testimonials && product.testimonials.length > 0 && (
         <section className="py-16 bg-gray-900">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
@@ -748,6 +749,7 @@ export default function CourseSalesPage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* FAQ SECTION */}
         <section className="py-16 bg-black">

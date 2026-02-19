@@ -168,29 +168,7 @@ Ideal para quem quer monetizar modelos de IA, criar startups de IA, ou implement
     }
   ],
   
-  testimonials: [
-    {
-      name: "Bruno Almeida",
-      role: "ML Engineer",
-      rating: 5,
-      comment: "Reduzi tempo de deploy de semanas para horas. Banana Dev é game changer para MLOps!",
-      impact: "Deploy 20x mais rápido"
-    },
-    {
-      name: "Camila Torres",
-      role: "Founder - AI Startup",
-      rating: 5,
-      comment: "Lancei minha startup de IA sem contratar DevOps. Economizei R$ 200k no primeiro ano!",
-      impact: "Economizou R$ 200k em infra"
-    },
-    {
-      name: "Diego Santos",
-      role: "Data Scientist",
-      rating: 5,
-      comment: "Finalmente posso colocar meus modelos em produção sozinho. Libertador!",
-      impact: "5 modelos em produção gerando receita"
-    }
-  ],
+  testimonials: [],
   
   bonuses: [
     {

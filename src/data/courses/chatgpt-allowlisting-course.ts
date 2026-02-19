@@ -196,46 +196,7 @@ Baseado na documentação oficial da OpenAI e nas melhores práticas de mercado,
     }
   ],
   
-  testimonials: [
-    {
-      name: "Rafael Mendes",
-      role: "CEO",
-      company: "TechStart Brasil",
-      rating: 5,
-      comment: "Em 2 semanas após implementar o allowlisting, nosso blog começou a aparecer em respostas do ChatGPT. O tráfego orgânico aumentou 180%!",
-      impact: "Tráfego de IA: 0 → 12k/mês"
-    },
-    {
-      name: "Juliana Castro",
-      role: "Head de SEO",
-      company: "AgênciaDigital",
-      rating: 5,
-      comment: "Oferecemos isso como serviço premium para clientes. ROI absurdo para eles e para nós. Curso essencial para qualquer profissional de SEO.",
-      impact: "Novo serviço gerando R$ 15k/mês"
-    },
-    {
-      name: "Pedro Almeida",
-      role: "E-commerce Owner",
-      rating: 5,
-      comment: "Meus produtos agora aparecem quando pessoas perguntam 'qual melhor [produto] comprar' no ChatGPT. Vendas aumentaram 40%.",
-      impact: "Conversões via IA: +40%"
-    },
-    {
-      name: "Camila Torres",
-      role: "Content Manager",
-      company: "Portal de Notícias",
-      rating: 5,
-      comment: "Nossos artigos são citados constantemente pelo ChatGPT agora. É como ter backlinks infinitos de uma fonte ultra-autoritária.",
-      impact: "Citações de IA: 500+/mês"
-    },
-    {
-      name: "Bruno Oliveira",
-      role: "DevOps Engineer",
-      rating: 5,
-      comment: "A parte técnica de Cloudflare e verificação de assinatura é ouro. Implementei em 15 minutos seguindo o curso.",
-      impact: "Implementação em 15 min"
-    }
-  ],
+  testimonials: [],
   
   guarantees: [
     "30 dias de garantia incondicional",

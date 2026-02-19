@@ -178,29 +178,24 @@ Este curso foi desenvolvido após mais de 2000 horas de experiência prática co
   
   bonuses: [
     {
-      title: "Pack 1000+ Prompts Profissionais",
-      value: 497,
-      description: "Biblioteca com prompts testados para todas situações"
+      title: "Pack 100+ Prompts Profissionais",
+      value: 97,
+      description: "Biblioteca curada com prompts testados para as situações mais comuns do dia a dia"
     },
     {
-      title: "Acesso GPT-4 (3 meses)",
-      value: 300,
-      description: "Use a versão mais avançada do ChatGPT gratuitamente"
+      title: "Guia de Custom Instructions",
+      value: 47,
+      description: "Configurações otimizadas de Custom Instructions para diferentes profissões"
     },
     {
-      title: "Curso Automação com Zapier",
-      value: 297,
-      description: "Aprenda a integrar ChatGPT com centenas de apps"
+      title: "Templates de Automação",
+      value: 97,
+      description: "Modelos prontos de workflows para email, conteúdo e análise de dados"
     },
     {
-      title: "Mentoria em Grupo Mensal",
-      value: 997,
-      description: "Sessões ao vivo para tirar dúvidas e networking"
-    },
-    {
-      title: "Templates de Negócio",
-      value: 497,
-      description: "Modelos prontos para implementar em sua empresa"
+      title: "Checklist de Implementação",
+      value: 47,
+      description: "Passo a passo para implementar IA na sua rotina profissional em 30 dias"
     }
   ],
   

@@ -168,29 +168,7 @@ Do marketing ao financeiro, do RH às vendas, você dominará automações para 
     }
   ],
   
-  testimonials: [
-    {
-      name: "Ricardo Martins",
-      role: "Growth Hacker",
-      rating: 5,
-      comment: "Automatizei todo funil de growth da empresa. Conversão aumentou 180% com menos esforço manual.",
-      impact: "Conversão aumentou 180%"
-    },
-    {
-      name: "Fernanda Silva",
-      role: "Freelancer",
-      rating: 5,
-      comment: "Criei um negócio de R$ 12k/mês fazendo automações para pequenas empresas. Curso sensacional!",
-      impact: "Renda de R$ 12k/mês como freelancer"
-    },
-    {
-      name: "João Paulo",
-      role: "Diretor de Operações",
-      rating: 5,
-      comment: "Economizamos R$ 30k/mês em ferramentas e aumentamos eficiência em 300%. Make é revolucionário.",
-      impact: "Economia de R$ 360k/ano"
-    }
-  ],
+  testimonials: [],
   
   bonuses: [
     {

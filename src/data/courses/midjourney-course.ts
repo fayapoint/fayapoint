@@ -168,36 +168,7 @@ Mais que técnica, você desenvolverá seu olhar artístico e aprenderá a monet
     }
   ],
   
-  testimonials: [
-    {
-      name: "Luisa Cardoso",
-      role: "Artista Digital",
-      rating: 5,
-      comment: "Passei de zero para R$ 25k/mês vendendo arte. Midjourney mudou minha vida completamente!",
-      impact: "Fatura R$ 25k/mês com arte digital"
-    },
-    {
-      name: "André Pinheiro",
-      role: "Diretor Criativo",
-      rating: 5,
-      comment: "Revolucionei o processo criativo da agência. Conceituamos 10x mais rápido com qualidade superior.",
-      impact: "Produtividade criativa 10x maior"
-    },
-    {
-      name: "Sofia Mendes",
-      role: "Influencer",
-      rating: 5,
-      comment: "Meu conteúdo visual explodiu! Cresci de 10k para 500k seguidores em 6 meses.",
-      impact: "Cresceu 50x em seguidores"
-    },
-    {
-      name: "Roberto Lima",
-      role: "Game Designer",
-      rating: 5,
-      comment: "Criei todo concept art do meu game indie sozinho. Economizei R$ 100k em arte!",
-      impact: "Economizou R$ 100k em produção"
-    }
-  ],
+  testimonials: [],
   
   bonuses: [
     {

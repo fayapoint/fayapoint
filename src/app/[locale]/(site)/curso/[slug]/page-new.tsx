@@ -29,7 +29,6 @@ export default function CourseSalesPage() {
   const [loading, setLoading] = useState(true);
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
-  const [timeLeft, setTimeLeft] = useState({ hours: 3, minutes: 47, seconds: 21 });
   
   // Fetch product from MongoDB
   useEffect(() => {
@@ -47,29 +46,6 @@ export default function CourseSalesPage() {
     fetchProduct();
   }, [slug]);
 
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { hours, minutes, seconds } = prev;
-        
-        if (seconds > 0) {
-          seconds--;
-        } else if (minutes > 0) {
-          minutes--;
-          seconds = 59;
-        } else if (hours > 0) {
-          hours--;
-          minutes = 59;
-          seconds = 59;
-        }
-        
-        return { hours, minutes, seconds };
-      });
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, []);
 
   if (loading) {
     return (
@@ -154,9 +130,9 @@ export default function CourseSalesPage() {
                     <Trophy className="mr-1" size={14} />
                     Mais Vendido {new Date().getFullYear()}
                     </Badge>
-                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 animate-pulse">
-                    <Timer className="mr-1" size={14} />
-                    Oferta Expira em {timeLeft.hours}h {timeLeft.minutes}m
+                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                    <Shield className="mr-1" size={14} />
+                    Garantia 7 dias
                   </Badge>
                 </div>
 
@@ -191,9 +167,9 @@ export default function CourseSalesPage() {
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="text-green-400" size={20} />
+                    <BookOpen className="text-green-400" size={20} />
                     <div className="text-sm text-gray-300">
-                      <span className="font-bold text-green-400">127</span> matrículas nas últimas 24h
+                      <span className="font-bold text-green-400">{product.metrics.lessons}</span> aulas práticas
                     </div>
                   </div>
                 </div>
@@ -206,7 +182,7 @@ export default function CourseSalesPage() {
                   <div>
                     <div className="text-sm text-gray-400">Criado por</div>
                     <div className="font-bold text-lg">Ricardo Faya</div>
-                    <div className="text-sm text-gray-400">50.000+ alunos • 20+ cursos • 28 anos exp.</div>
+                    <div className="text-sm text-gray-400">18 cursos de IA • 28 anos experiência em mídia e tech</div>
                   </div>
                 </div>
               </div>
@@ -234,28 +210,26 @@ export default function CourseSalesPage() {
                       </div>
                     </div>
 
-                    {/* Urgency Timer */}
-                    <div className="mb-6 p-4 bg-gradient-to-r from-red-900/50 to-orange-900/50 rounded-lg border-2 border-red-500/50">
+                    {/* Trust Indicators */}
+                    <div className="mb-6 p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border border-green-500/30">
                       <div className="flex items-center gap-2 mb-2">
-                        <AlertCircle className="text-red-400" size={20} />
-                        <span className="font-bold text-red-400">OFERTA LIMITADA</span>
+                        <Shield className="text-green-400" size={20} />
+                        <span className="font-bold text-green-400">COMPRA SEGURA</span>
                       </div>
-                      <div className="flex justify-center gap-2 text-2xl font-bold">
-                        <div className="bg-black/50 px-3 py-2 rounded">
-                          {timeLeft.hours.toString().padStart(2, '0')}
+                      <div className="space-y-2 text-sm text-gray-300">
+                        <div className="flex items-center gap-2">
+                          <Check className="text-green-400" size={14} />
+                          <span>7 dias de garantia incondicional</span>
                         </div>
-                        <span>:</span>
-                        <div className="bg-black/50 px-3 py-2 rounded">
-                          {timeLeft.minutes.toString().padStart(2, '0')}
+                        <div className="flex items-center gap-2">
+                          <Check className="text-green-400" size={14} />
+                          <span>Acesso vitalício ao conteúdo</span>
                         </div>
-                        <span>:</span>
-                        <div className="bg-black/50 px-3 py-2 rounded">
-                          {timeLeft.seconds.toString().padStart(2, '0')}
+                        <div className="flex items-center gap-2">
+                          <Check className="text-green-400" size={14} />
+                          <span>Suporte direto com o instrutor</span>
                         </div>
                       </div>
-                      <p className="text-xs text-center text-gray-400 mt-2">
-                        Garanta seu desconto antes que acabe!
-                      </p>
                     </div>
 
                     {/* Price */}

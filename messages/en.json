@@ -106,7 +106,7 @@
   "Footer": {
     "newsletter": {
       "title": "Get the Latest AI News Weekly",
-      "description": "Join more than 5,000 professionals receiving our newsletter with tips, tools, and AI strategies.",
+      "description": "Get practical tips, tools, and AI strategies delivered to your inbox.",
       "placeholder": "your@email.com",
       "cta": "Subscribe"
     },
@@ -118,43 +118,23 @@
       "courses": {
         "title": "Courses",
         "items": {
-          "beginner": "Beginner",
-          "intermediate": "Intermediate",
-          "advanced": "Advanced",
-          "byTool": "By Tool",
-          "byIndustry": "By Industry",
-          "certifications": "Certifications"
-        }
-      },
-      "resources": {
-        "title": "Resources",
-        "items": {
-          "blog": "Blog",
-          "guides": "Free Guides",
-          "templates": "Templates",
-          "roiCalculator": "ROI Calculator",
-          "glossary": "AI Glossary",
-          "tools": "AI Tools"
+          "beginner": "All Courses",
+          "freeClass": "Free Class",
+          "pricing": "Pricing"
         }
       },
       "company": {
         "title": "Company",
         "items": {
           "about": "About Us",
-          "instructors": "Instructors",
-          "careers": "Careers",
-          "partnerships": "Partnerships",
-          "affiliates": "Affiliates",
+          "whatWeDo": "What We Do",
           "contact": "Contact"
         }
       },
       "support": {
         "title": "Support",
         "items": {
-          "helpCenter": "Help Center",
-          "faq": "FAQ",
-          "community": "Community",
-          "status": "Status",
+          "whatsapp": "WhatsApp",
           "terms": "Terms of Use",
           "privacy": "Privacy"
         }
@@ -596,8 +576,8 @@
     },
     "Testimonials": {
       "badge": "What You Can Achieve",
-      "title": "Real Results with AI",
-      "description": "See what's possible when you master Artificial Intelligence",
+      "title": "What AI Can Do For You",
+      "description": "Areas where our courses prepare you for concrete results",
       "ctaLabel": "Start your journey",
       "ctaButton": "See Courses",
       "items": {

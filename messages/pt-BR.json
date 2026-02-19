@@ -106,7 +106,7 @@
   "Footer": {
     "newsletter": {
       "title": "Receba as Novidades de IA Toda Semana",
-      "description": "Junte-se a mais de 5.000 profissionais que recebem nossa newsletter com dicas, ferramentas e estratégias de IA.",
+      "description": "Receba dicas práticas, ferramentas e estratégias de IA direto no seu email.",
       "placeholder": "seu@email.com",
       "cta": "Inscrever"
     },
@@ -118,43 +118,23 @@
       "courses": {
         "title": "Cursos",
         "items": {
-          "beginner": "Iniciantes",
-          "intermediate": "Intermediário",
-          "advanced": "Avançado",
-          "byTool": "Por Ferramenta",
-          "byIndustry": "Por Setor",
-          "certifications": "Certificações"
-        }
-      },
-      "resources": {
-        "title": "Recursos",
-        "items": {
-          "blog": "Blog",
-          "guides": "Guias Gratuitos",
-          "templates": "Templates",
-          "roiCalculator": "Calculadora ROI",
-          "glossary": "Glossário IA",
-          "tools": "Ferramentas IA"
+          "beginner": "Todos os Cursos",
+          "freeClass": "Aula Grátis",
+          "pricing": "Preços"
         }
       },
       "company": {
         "title": "Empresa",
         "items": {
           "about": "Sobre Nós",
-          "instructors": "Instrutores",
-          "careers": "Carreiras",
-          "partnerships": "Parcerias",
-          "affiliates": "Afiliados",
+          "whatWeDo": "O Que Fazemos",
           "contact": "Contato"
         }
       },
       "support": {
         "title": "Suporte",
         "items": {
-          "helpCenter": "Central de Ajuda",
-          "faq": "FAQ",
-          "community": "Comunidade",
-          "status": "Status",
+          "whatsapp": "WhatsApp",
           "terms": "Termos de Uso",
           "privacy": "Privacidade"
         }
@@ -596,8 +576,8 @@
     },
     "Testimonials": {
       "badge": "O Que Você Pode Conquistar",
-      "title": "Resultados Reais com IA",
-      "description": "Veja o que é possível alcançar dominando Inteligência Artificial",
+      "title": "O Que a IA Pode Fazer Por Você",
+      "description": "Áreas onde nossos cursos preparam você para ter resultados concretos",
       "ctaLabel": "Comece sua jornada",
       "ctaButton": "Ver Cursos",
       "items": {

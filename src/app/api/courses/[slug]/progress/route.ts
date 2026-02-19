@@ -155,6 +155,7 @@ export async function GET(
 
 interface UpdateProgressBody {
   completedSections?: string[];
+  replaceAllSections?: boolean;
   lastHeadingId?: string | null;
   lastScrollY?: number | null;
   lastScrollPercent?: number | null;
@@ -179,10 +180,12 @@ export async function PUT(
 
     const progress = await CourseProgress.findOne({ userId: auth.userId, courseId: slug });
 
-    const completedSections = uniqueStrings([
-      ...((progress?.completedSections as string[]) || []),
-      ...(body.completedSections || []),
-    ]);
+    const completedSections = body.replaceAllSections
+      ? uniqueStrings(body.completedSections || [])
+      : uniqueStrings([
+          ...((progress?.completedSections as string[]) || []),
+          ...(body.completedSections || []),
+        ]);
 
     const totalSections = typeof body.totalSections === 'number' ? body.totalSections : progress?.totalSections;
     const computedPercentBySections =

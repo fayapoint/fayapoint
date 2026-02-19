@@ -182,37 +182,7 @@ Desde automações simples até pipelines complexos de dados, integrações com 
     }
   ],
   
-  testimonials: [
-    {
-      name: "Lucas Ferreira",
-      role: "CTO",
-      company: "StartupTech",
-      rating: 5,
-      comment: "Implementamos n8n e economizamos R$ 50k/mês em ferramentas e mão de obra. Este curso foi fundamental para nosso sucesso.",
-      impact: "Economia de R$ 600k/ano"
-    },
-    {
-      name: "Juliana Mendes",
-      role: "Consultora de Automação",
-      rating: 5,
-      comment: "Saí do zero para faturar R$ 35k/mês com consultoria em n8n. O curso me deu toda base necessária.",
-      impact: "Negócio próprio faturando R$ 35k/mês"
-    },
-    {
-      name: "Pedro Almeida",
-      role: "Gerente de Operações",
-      rating: 5,
-      comment: "Reduzi o tempo de processos de 3 dias para 30 minutos. A empresa toda está impressionada.",
-      impact: "Processos 144x mais rápidos"
-    },
-    {
-      name: "Amanda Costa",
-      role: "Marketing Manager",
-      rating: 5,
-      comment: "Automatizei todo nosso funil de marketing. Conversão aumentou 250% com menos esforço.",
-      impact: "Conversão aumentou 250%"
-    }
-  ],
+  testimonials: [],
   
   realWorldProjects: [
     "Sistema completo de CRM automatizado do zero",

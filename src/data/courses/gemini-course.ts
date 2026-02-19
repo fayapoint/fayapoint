@@ -168,29 +168,7 @@ Você aprenderá a usar Gemini não apenas como assistente, mas como parceiro cr
     }
   ],
   
-  testimonials: [
-    {
-      name: "Marina Santos",
-      role: "Analista de Dados",
-      rating: 5,
-      comment: "O Gemini revolucionou meu trabalho com dados. Analiso planilhas complexas em minutos, não horas!",
-      impact: "Produtividade aumentou 400%"
-    },
-    {
-      name: "Carlos Oliveira",
-      role: "Product Manager",
-      rating: 5,
-      comment: "Integração com Google Workspace é perfeita. Automatizei toda documentação de produto.",
-      impact: "Economiza 15 horas/semana"
-    },
-    {
-      name: "Beatriz Lima",
-      role: "Marketing Director",
-      rating: 5,
-      comment: "Análise de vídeos e imagens para campanhas ficou 10x mais rápida. Gemini é impressionante!",
-      impact: "ROI de campanhas aumentou 250%"
-    }
-  ],
+  testimonials: [],
   
   bonuses: [
     {

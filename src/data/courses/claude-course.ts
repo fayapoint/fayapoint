@@ -168,29 +168,7 @@ De análise jurídica a arquitetura de software, de pesquisa acadêmica a estrat
     }
   ],
   
-  testimonials: [
-    {
-      name: "Dr. Paulo Mendes",
-      role: "Pesquisador",
-      rating: 5,
-      comment: "Claude acelerou minha pesquisa em 10x. Analiso papers e datasets que levariam semanas em horas.",
-      impact: "Publicou 3x mais papers"
-    },
-    {
-      name: "Adriana Costa",
-      role: "Advogada Corporativa",
-      rating: 5,
-      comment: "Revolucionou análise de contratos. Processo due diligence que levava dias agora leva horas.",
-      impact: "Produtividade aumentou 500%"
-    },
-    {
-      name: "Thiago Silva",
-      role: "Tech Lead",
-      rating: 5,
-      comment: "Claude é meu pair programmer senior. Qualidade do código melhorou drasticamente.",
-      impact: "Bugs reduziram 70%"
-    }
-  ],
+  testimonials: [],
   
   bonuses: [
     {

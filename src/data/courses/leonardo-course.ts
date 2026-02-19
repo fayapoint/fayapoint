@@ -182,36 +182,7 @@ Seja para games, marketing, e-commerce ou arte digital, você terá as habilidad
     }
   ],
   
-  testimonials: [
-    {
-      name: "Julia Fernandes",
-      role: "Designer Freelancer",
-      rating: 5,
-      comment: "Triplicou minha capacidade de entrega. Consigo atender 3x mais clientes com qualidade superior!",
-      impact: "Faturamento aumentou 250%"
-    },
-    {
-      name: "Marcos Silva",
-      role: "E-commerce Owner",
-      rating: 5,
-      comment: "Economizei R$ 15k/mês em fotografia de produto. Imagens ficam melhores que estúdio!",
-      impact: "Economia de R$ 180k/ano"
-    },
-    {
-      name: "Patricia Costa",
-      role: "Social Media Manager",
-      rating: 5,
-      comment: "Crio conteúdo visual único diariamente. Engajamento aumentou 400% em 2 meses!",
-      impact: "Engajamento +400%"
-    },
-    {
-      name: "Rafael Oliveira",
-      role: "Game Developer",
-      rating: 5,
-      comment: "Criei todos assets do meu indie game sozinho. Economizei R$ 50k em arte!",
-      impact: "Lançou game com arte profissional"
-    }
-  ],
+  testimonials: [],
   
   bonuses: [
     {

@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/products";
+import { useLocale } from "next-intl";
 
 interface AttractiveCourseCardProps {
   product: Product;
@@ -48,13 +49,14 @@ const courseStyles: Record<string, { gradient: string; icon: React.ComponentType
 export function AttractiveCourseCard({ product, index }: AttractiveCourseCardProps) {
   const style = courseStyles[product.slug] || courseStyles['default'];
   const Icon = style.icon;
+  const locale = useLocale();
+  const isPtBr = locale === 'pt-BR';
   
   const discount = product.pricing.originalPrice > product.pricing.price 
     ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
     : 0;
 
-  const isBestseller = product.metrics.students > 100;
-  const isNew = product.metrics.students === 0 || new Date(product.updatedAt).getTime() > Date.now() - 90 * 24 * 60 * 60 * 1000;
+  const isNew = new Date(product.updatedAt).getTime() > Date.now() - 90 * 24 * 60 * 60 * 1000;
   const isAdvanced = product.level.toLowerCase().includes('avançado');
 
   return (
@@ -95,22 +97,16 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
 
             {/* Badges */}
             <div className="absolute top-3 left-3 flex flex-col gap-2">
-              {isBestseller && (
-                <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white border-0 shadow-lg">
-                  <TrendingUp size={14} className="mr-1" />
-                  <span className="font-bold">Bestseller</span>
-                </Badge>
-              )}
               {isNew && (
                 <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
                   <Zap size={14} className="mr-1" />
-                  <span className="font-bold">Novo</span>
+                  <span className="font-bold">{isPtBr ? 'Novo' : 'New'}</span>
                 </Badge>
               )}
               {isAdvanced && (
                 <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 shadow-lg">
                   <Award size={14} className="mr-1" />
-                  <span className="font-bold">Avançado</span>
+                  <span className="font-bold">{isPtBr ? 'Avançado' : 'Advanced'}</span>
                 </Badge>
               )}
             </div>
@@ -158,7 +154,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-center gap-1.5">
                 <Play className="text-purple-400" size={16} />
                 <span className="font-semibold text-white">
-                  {product.metrics.lessons} aulas
+                  {product.metrics.lessons} {isPtBr ? 'aulas' : 'lessons'}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -170,24 +166,24 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             {/* What's Included */}
             <div className="space-y-2">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Este curso inclui:
+                {isPtBr ? 'Este curso inclui:' : 'This course includes:'}
               </p>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center gap-2 text-gray-300">
                   <Check size={16} className="text-green-400" />
-                  <span>{product.metrics.lessons} aulas</span>
+                  <span>{product.metrics.lessons} {isPtBr ? 'aulas' : 'lessons'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-300">
                   <Check size={16} className="text-green-400" />
-                  <span>Certificado</span>
+                  <span>{isPtBr ? 'Certificado' : 'Certificate'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-300">
                   <Check size={16} className="text-green-400" />
-                  <span>Acesso vitalício</span>
+                  <span>{isPtBr ? 'Acesso vitalício' : 'Lifetime access'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-300">
                   <Check size={16} className="text-green-400" />
-                  <span>Suporte</span>
+                  <span>{isPtBr ? 'Suporte' : 'Support'}</span>
                 </div>
               </div>
             </div>
@@ -207,7 +203,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                     </span>
                     {discount > 0 && (
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                        Economize {discount}%
+                        {isPtBr ? `Economize ${discount}%` : `Save ${discount}%`}
                       </Badge>
                     )}
                   </div>
@@ -220,7 +216,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <Button 
                 className={`w-full bg-gradient-to-r ${style.gradient} hover:opacity-90 transition-opacity text-white font-bold py-6 text-base shadow-lg hover:shadow-xl group/btn`}
               >
-                <span>Ver Curso Completo</span>
+                <span>{isPtBr ? 'Ver Curso Completo' : 'View Full Course'}</span>
                 <Play size={18} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
               </Button>
 
@@ -228,11 +224,11 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-center justify-center gap-4 text-xs text-gray-500 pt-2">
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />
-                  <span>7 dias garantia</span>
+                  <span>{isPtBr ? '7 dias garantia' : '7-day guarantee'}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />
-                  <span>Acesso imediato</span>
+                  <span>{isPtBr ? 'Acesso imediato' : 'Instant access'}</span>
                 </div>
               </div>
             </div>

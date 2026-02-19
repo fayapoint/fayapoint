@@ -57,7 +57,6 @@ export default function ChatGPTAllowlistingPage() {
   const { isLoggedIn } = useUser();
   
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
-  const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 59, seconds: 0 });
   const [activeScenario, setActiveScenario] = useState(0);
   
   const aeoRef = useRef(null);
@@ -67,20 +66,6 @@ export default function ChatGPTAllowlistingPage() {
   const discount = Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100);
   const savings = course.originalPrice - course.price;
   const totalBonusValue = course.bonuses?.reduce((sum, bonus) => sum + bonus.value, 0) || 0;
-
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { hours, minutes, seconds } = prev;
-        if (seconds > 0) seconds--;
-        else if (minutes > 0) { minutes--; seconds = 59; }
-        else if (hours > 0) { hours--; minutes = 59; seconds = 59; }
-        return { hours, minutes, seconds };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // Rotate scenarios
   useEffect(() => {
@@ -149,8 +134,8 @@ export default function ChatGPTAllowlistingPage() {
                     AEO: Answer Engine Optimization
                   </Badge>
                   <Badge className="bg-white/10 text-white/80 border-white/20 px-3 py-1">
-                    <Timer className="mr-1" size={14} />
-                    {timeLeft.hours}h {timeLeft.minutes}m restantes
+                    <Shield className="mr-1" size={14} />
+                    Garantia 30 dias
                   </Badge>
                 </div>
 
@@ -618,82 +603,34 @@ export default function ChatGPTAllowlistingPage() {
           </div>
         </section>
 
-        {/* TESTIMONIALS - Enhanced with Featured Quote */}
+        {/* TRUST SECTION - Course highlights instead of fake testimonials */}
         <section className="py-24 bg-black relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 via-transparent to-transparent" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center mb-16">
-              <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 mb-6 px-4 py-2">
-                <Star className="mr-2 fill-yellow-400" size={16} />
-                Resultados Comprovados
+              <Badge className="bg-green-500/20 text-green-400 border-green-500/30 mb-6 px-4 py-2">
+                <Shield className="mr-2" size={16} />
+                Por que este curso
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Profissionais que <span className="text-green-400">dominaram o AEO</span>
+                Curso <span className="text-green-400">único no Brasil</span> sobre AEO
               </h2>
+              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                O primeiro curso em português que ensina como posicionar seu site nas respostas de IAs como ChatGPT, Perplexity e Gemini.
+              </p>
             </div>
 
-            {/* Featured Testimonial */}
-            <div className="max-w-4xl mx-auto mb-12">
-              <Card className="bg-gradient-to-br from-green-900/20 to-blue-900/20 border-green-500/30 p-8 md:p-12 relative overflow-hidden">
-                <Quote className="absolute top-6 left-6 text-green-500/20 w-20 h-20" />
-                <div className="relative z-10">
-                  <p className="text-2xl md:text-3xl text-white leading-relaxed mb-8 font-light">
-                    &quot;Em 2 semanas após implementar o allowlisting, nosso blog começou a aparecer em respostas do ChatGPT. 
-                    <span className="text-green-400 font-medium"> O tráfego orgânico aumentou 180%!</span>&quot;
-                  </p>
-                  <div className="flex items-center justify-between flex-wrap gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center text-xl font-bold">
-                        RM
-                      </div>
-                      <div>
-                        <div className="font-bold text-white text-lg">Rafael Mendes</div>
-                        <div className="text-gray-400">CEO, TechStart Brasil</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 bg-green-500/20 px-4 py-2 rounded-full">
-                      <BarChart3 className="text-green-400" size={18} />
-                      <span className="font-bold text-green-400">Tráfego: 0 → 12k/mês</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Other Testimonials */}
-            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {course.testimonials.slice(1, 4).map((t, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <Card className="bg-gray-900/80 border-gray-800 p-6 h-full hover:border-green-500/30 transition-all hover:-translate-y-1">
-                    <div className="flex gap-1 mb-4">
-                      {[...Array(5)].map((_, j) => (
-                        <Star key={j} size={14} className="fill-yellow-400 text-yellow-400" />
-                      ))}
-                    </div>
-                    <p className="text-gray-300 mb-6 leading-relaxed">&quot;{t.comment}&quot;</p>
-                    <div className="flex items-center gap-3 mt-auto">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center font-bold text-sm">
-                        {t.name.split(' ').map(n => n[0]).join('')}
-                      </div>
-                      <div>
-                        <div className="font-bold text-white">{t.name}</div>
-                        <div className="text-xs text-gray-500">{t.role}</div>
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-gray-800">
-                      <div className="text-xs font-mono text-green-400 flex items-center gap-2">
-                        <TrendingUp size={14} />
-                        {t.impact}
-                      </div>
-                    </div>
-                  </Card>
-                </motion.div>
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {[
+                { title: "Conteúdo Técnico Real", desc: "Configuração passo a passo de Cloudflare, robots.txt, schema markup e verificação de assinatura OpenAI.", icon: "🔧" },
+                { title: "Estratégia Completa", desc: "Da otimização técnica à criação de conteúdo que IAs priorizam — cobrimos todo o funil.", icon: "📊" },
+                { title: "Garantia de 30 dias", desc: "Se o curso não entregar o que promete, devolvemos 100% do valor. Sem perguntas.", icon: "🛡️" },
+              ].map((item, i) => (
+                <Card key={i} className="bg-gray-900/80 border-gray-800 p-6 hover:border-green-500/30 transition-all">
+                  <div className="text-3xl mb-4">{item.icon}</div>
+                  <h3 className="font-bold text-white text-lg mb-2">{item.title}</h3>
+                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                </Card>
               ))}
             </div>
           </div>

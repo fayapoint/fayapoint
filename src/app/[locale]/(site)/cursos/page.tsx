@@ -195,26 +195,17 @@ export default function CoursesPage() {
         </div>
       </section>
 
-      {/* Promotional Banner */}
+      {/* Trust Banner */}
       <section className="py-6 bg-gradient-to-r from-purple-900/50 via-pink-900/50 to-purple-900/50 border-y border-purple-500/30">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Timer className="text-yellow-400 animate-pulse" size={24} />
-                <span className="text-lg font-bold text-yellow-400">{t("promo.specialOffer")}</span>
-              </div>
-              <span className="text-gray-300">{t("promo.discountText")}</span>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <div className="flex items-center gap-2 text-gray-300">
+              <Shield className="text-green-400" size={18} />
+              <span>{t("promo.guarantee")}</span>
             </div>
-            <div className="flex items-center gap-6 text-sm">
-              <div className="flex items-center gap-2 text-gray-300">
-                <Shield className="text-green-400" size={18} />
-                <span>{t("promo.guarantee")}</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <Sparkles className="text-purple-400" size={18} />
-                <span>{t("promo.lifetimeAccess")}</span>
-              </div>
+            <div className="flex items-center gap-2 text-gray-300">
+              <Sparkles className="text-purple-400" size={18} />
+              <span>{t("promo.lifetimeAccess")}</span>
             </div>
           </div>
         </div>
@@ -416,7 +407,7 @@ export default function CoursesPage() {
             )}
           </div>
           
-          {filteredCourses.length === 0 && (
+          {!loading && filteredCourses.length === 0 && (
             <div className="text-center py-20">
               <p className="text-xl text-gray-400">{emptyStateTitle}</p>
               <p className="text-gray-500 mt-2">{emptyStateDescription}</p>

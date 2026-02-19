@@ -168,36 +168,7 @@ Ideal para profissionais, estudantes, empreendedores e qualquer pessoa que valor
     }
   ],
   
-  testimonials: [
-    {
-      name: "Daniela Ferreira",
-      role: "Jornalista",
-      rating: 5,
-      comment: "Perplexity transformou meu trabalho. Verifico fatos e encontro fontes 10x mais rápido!",
-      impact: "Produz 3x mais matérias"
-    },
-    {
-      name: "Eduardo Lima",
-      role: "Consultor de Estratégia",
-      rating: 5,
-      comment: "Substituí uma equipe de research. Entrego análises que impressionam clientes Fortune 500.",
-      impact: "Fatura R$ 50k/mês como consultor solo"
-    },
-    {
-      name: "Camila Souza",
-      role: "Estudante de Mestrado",
-      rating: 5,
-      comment: "Conclui revisão bibliográfica em 1 semana ao invés de 2 meses. Game changer acadêmico!",
-      impact: "Defendeu mestrado 6 meses antes"
-    },
-    {
-      name: "Fernando Alves",
-      role: "Founder Startup",
-      rating: 5,
-      comment: "Validei 5 ideias de negócio em 1 dia. Escolhi a melhor e já faturamos R$ 100k/mês.",
-      impact: "Lançou startup de sucesso"
-    }
-  ],
+  testimonials: [],
   
   bonuses: [
     {

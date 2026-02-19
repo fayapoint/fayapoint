@@ -9,30 +9,36 @@ import {
   ArrowLeft,
   BookOpen,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Circle,
-  Bookmark,
-  LayoutList,
+  Clock,
   Loader2,
   Lock,
+  Menu,
   Settings2,
   Sparkles,
-  ChevronRight,
+  Trophy,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-type TocItem = {
+/* ═══════════════════════════════════════════════════════════
+   Types
+   ═══════════════════════════════════════════════════════════ */
+
+type Chapter = {
   id: string;
-  text: string;
-  level: 1 | 2 | 3;
+  title: string;
+  content: string;
+  index: number;
+  readingMinutes: number;
 };
 
 type CourseProgressDto = {
@@ -54,17 +60,19 @@ type ReaderSettings = {
   fontSize: number;
   lineHeight: number;
   maxWidth: number;
-  focusMode: boolean;
 };
+
+/* ═══════════════════════════════════════════════════════════
+   Constants & Helpers
+   ═══════════════════════════════════════════════════════════ */
 
 const DEFAULT_SETTINGS: ReaderSettings = {
-  fontSize: 16,
-  lineHeight: 1.75,
-  maxWidth: 900,
-  focusMode: true,
+  fontSize: 17,
+  lineHeight: 1.8,
+  maxWidth: 780,
 };
 
-function slugify(text: string) {
+function slugify(text: string): string {
   return text
     .toLowerCase()
     .normalize("NFD")
@@ -73,183 +81,356 @@ function slugify(text: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+function estimateReadingMinutes(text: string): number {
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
+function splitIntoChapters(markdown: string): Chapter[] {
+  if (!markdown?.trim()) return [];
+
+  const lines = markdown.split("\n");
+  let h1Count = 0;
+  let h2Count = 0;
+  for (const line of lines) {
+    if (/^# [^#]/.test(line)) h1Count++;
+    if (/^## [^#]/.test(line)) h2Count++;
+  }
+
+  // Decide split level: if 3+ h1 → split by h1, else split by h2
+  let splitRegex: RegExp;
+  let headingExtract: RegExp;
+  if (h1Count >= 3) {
+    splitRegex = /^(?=# [^#])/gm;
+    headingExtract = /^# ([^\n]+)/m;
+  } else if (h2Count >= 2) {
+    splitRegex = /^(?=## [^#])/gm;
+    headingExtract = /^## ([^\n]+)/m;
+  } else {
+    return [
+      {
+        id: "content",
+        title: "Conteúdo",
+        content: markdown,
+        index: 0,
+        readingMinutes: estimateReadingMinutes(markdown),
+      },
+    ];
+  }
+
+  const parts = markdown.split(splitRegex);
+  const chapters: Chapter[] = [];
+
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i].trim();
+    if (!part) continue;
+
+    const match = part.match(headingExtract);
+    if (match) {
+      chapters.push({
+        id: slugify(match[1].trim()),
+        title: match[1].trim(),
+        content: part,
+        index: chapters.length,
+        readingMinutes: estimateReadingMinutes(part),
+      });
+    } else if (part.length > 100) {
+      const h1Match = part.match(/^# ([^\n]+)/m);
+      chapters.push({
+        id: "introducao",
+        title: h1Match ? h1Match[1].trim() : "Apresentação",
+        content: part,
+        index: chapters.length,
+        readingMinutes: estimateReadingMinutes(part),
+      });
+    }
+  }
+
+  chapters.forEach((ch, i) => {
+    ch.index = i;
+  });
+  return chapters;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getHeadingText(children: unknown): string {
   if (typeof children === "string") return children;
   if (Array.isArray(children)) return children.map(getHeadingText).join("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (children && typeof children === "object" && "props" in (children as any)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return getHeadingText((children as any).props?.children);
   }
   return "";
 }
 
-function extractToc(markdown: string): TocItem[] {
-  const regex = /^(#{1,3})\s+(.+)$/gm;
-  const seen = new Map<string, number>();
-  const items: TocItem[] = [];
-
-  let match: RegExpExecArray | null;
-  while ((match = regex.exec(markdown)) !== null) {
-    const level = match[1].length as 1 | 2 | 3;
-    const text = match[2].trim();
-    const base = slugify(text);
-    const count = (seen.get(base) || 0) + 1;
-    seen.set(base, count);
-    const id = count > 1 ? `${base}-${count}` : base;
-    items.push({ id, text, level });
-  }
-
-  return items;
-}
-
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
+/* ═══════════════════════════════════════════════════════════
+   Component
+   ═══════════════════════════════════════════════════════════ */
 
 export default function CourseReaderPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const locale = (params.locale as string) || "pt-BR";
   const router = useRouter();
-  
-  const [content, setContent] = useState("");
+
+  /* ─── State ─── */
+  const [rawContent, setRawContent] = useState("");
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [progress, setProgress] = useState<CourseProgressDto | null>(null);
-  const [completedSections, setCompletedSections] = useState<string[]>([]);
-  const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+  const [completedChapterIds, setCompletedChapterIds] = useState<Set<string>>(new Set());
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settings, setSettings] = useState<ReaderSettings>(DEFAULT_SETTINGS);
 
-  const toc = useMemo(() => extractToc(content), [content]);
-  const tocIds = useMemo(() => new Set(toc.map((t) => t.id)), [toc]);
-  const filteredCompletedSections = useMemo(
-    () => completedSections.filter((id) => tocIds.has(id)),
-    [completedSections, tocIds]
+  /* ─── Refs ─── */
+  const initialLoadDone = useRef(false);
+  const rawCompletedRef = useRef<string[]>([]);
+  const resumeHeadingRef = useRef<string | null>(null);
+
+  /* ─── Derived ─── */
+  const chapters = useMemo(() => splitIntoChapters(rawContent), [rawContent]);
+  const currentChapter = chapters[currentChapterIndex] || null;
+  const totalReadingMinutes = useMemo(
+    () => chapters.reduce((sum, ch) => sum + ch.readingMinutes, 0),
+    [chapters]
   );
-  const computedSectionPercent = useMemo(() => {
-    if (!toc.length) return 0;
-    return Math.floor((filteredCompletedSections.length / toc.length) * 100);
-  }, [filteredCompletedSections.length, toc.length]);
-  const displayProgressPercent = useMemo(() => {
-    // If we have headings/sections, section completion is the source of truth.
-    // Scroll percent is only used as a fallback for content with no headings.
-    if (toc.length > 0) return clamp(computedSectionPercent, 0, 100);
+  const progressPercent = useMemo(() => {
+    if (!chapters.length) return 0;
+    return Math.round((completedChapterIds.size / chapters.length) * 100);
+  }, [completedChapterIds.size, chapters.length]);
 
-    const candidates = [progress?.progressPercent ?? 0, progress?.lastScrollPercent ?? 0];
-    return clamp(Math.max(...candidates), 0, 100);
-  }, [computedSectionPercent, progress?.lastScrollPercent, progress?.progressPercent, toc.length]);
-
-  const headingIds = useMemo(() => toc.map((t) => t.id), [toc]);
-  const readerStyle = useMemo(
-    () => ({
-      fontSize: `${settings.fontSize}px`,
-      lineHeight: String(settings.lineHeight),
-    }),
-    [settings.fontSize, settings.lineHeight]
-  );
-
-  const syncTimerRef = useRef<number | null>(null);
-  const pendingSyncRef = useRef<Record<string, unknown>>({});
-  const lastActiveRef = useRef<string | null>(null);
-  const hasRestoredRef = useRef(false);
-
+  /* ─── Settings persistence ─── */
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("fayapoint_reader_settings_v1");
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as Partial<ReaderSettings>;
-      setSettings({
-        fontSize: typeof parsed.fontSize === "number" ? parsed.fontSize : DEFAULT_SETTINGS.fontSize,
-        lineHeight: typeof parsed.lineHeight === "number" ? parsed.lineHeight : DEFAULT_SETTINGS.lineHeight,
-        maxWidth: typeof parsed.maxWidth === "number" ? parsed.maxWidth : DEFAULT_SETTINGS.maxWidth,
-        focusMode: typeof parsed.focusMode === "boolean" ? parsed.focusMode : DEFAULT_SETTINGS.focusMode,
-      });
+      const raw = localStorage.getItem("fayapoint_reader_settings_v2");
+      if (raw) {
+        const p = JSON.parse(raw) as Partial<ReaderSettings>;
+        setSettings((s) => ({
+          fontSize: typeof p.fontSize === "number" ? p.fontSize : s.fontSize,
+          lineHeight: typeof p.lineHeight === "number" ? p.lineHeight : s.lineHeight,
+          maxWidth: typeof p.maxWidth === "number" ? p.maxWidth : s.maxWidth,
+        }));
+      }
     } catch {
-      setSettings(DEFAULT_SETTINGS);
+      /* ignore */
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("fayapoint_reader_settings_v1", JSON.stringify(settings));
+    localStorage.setItem("fayapoint_reader_settings_v2", JSON.stringify(settings));
   }, [settings]);
 
+  /* ─── Open sidebar on desktop by default ─── */
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      setSidebarOpen(true);
+    }
+  }, []);
+
+  /* ─── Progress Sync ─── */
   const syncProgress = useCallback(
-    async (partial: Record<string, unknown>, immediate?: boolean) => {
+    async (data: {
+      completedSections?: string[];
+      replaceAllSections?: boolean;
+      lastHeadingId?: string;
+      totalSections?: number;
+      progressPercent?: number;
+      isCompleted?: boolean;
+    }) => {
       const token = localStorage.getItem("fayapoint_token");
       if (!token) return;
-
-      pendingSyncRef.current = { ...pendingSyncRef.current, ...partial };
-
-      const flush = async () => {
-        const payload = pendingSyncRef.current;
-        pendingSyncRef.current = {};
-        try {
-          const res = await fetch(`/api/courses/${slug}/progress`, {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-          });
-          if (res.ok) {
-            const data = (await res.json()) as { progress?: CourseProgressDto };
-            if (data?.progress) {
-              const incoming = data.progress;
-              setProgress((prev) => (prev ? { ...prev, ...incoming } : incoming));
-            }
-          }
-        } catch (e) {
-          console.error("Progress sync error:", e);
-        }
-      };
-
-      if (syncTimerRef.current) {
-        window.clearTimeout(syncTimerRef.current);
-        syncTimerRef.current = null;
+      try {
+        await fetch(`/api/courses/${slug}/progress`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+      } catch (e) {
+        console.error("Progress sync error:", e);
       }
-
-      if (immediate) {
-        await flush();
-        return;
-      }
-
-      syncTimerRef.current = window.setTimeout(() => {
-        void flush();
-      }, 900);
     },
     [slug]
   );
 
-  const scrollToHeading = useCallback((id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+  /* ─── Navigation ─── */
+  const goToChapter = useCallback(
+    (index: number, markPreviousComplete = false) => {
+      if (index < 0 || index >= chapters.length) return;
 
-  const markSectionCompleted = useCallback(
-    async (id: string) => {
-      if (!id || !tocIds.has(id)) return;
-      setCompletedSections((prev) => (prev.includes(id) ? prev : [...prev, id]));
-      await syncProgress({ completedSections: [id], totalSections: toc.length }, true);
+      const newCompleted = new Set(completedChapterIds);
+      if (markPreviousComplete && currentChapter) {
+        newCompleted.add(currentChapter.id);
+      }
+      setCompletedChapterIds(newCompleted);
+      setCurrentChapterIndex(index);
+      setSidebarOpen((prev) => (window.innerWidth >= 1024 ? prev : false));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      const targetChapter = chapters[index];
+      if (targetChapter) {
+        const allIds = [...newCompleted];
+        syncProgress({
+          lastHeadingId: targetChapter.id,
+          totalSections: chapters.length,
+          completedSections: allIds,
+          replaceAllSections: true,
+          progressPercent: Math.round((newCompleted.size / chapters.length) * 100),
+          isCompleted: newCompleted.size >= chapters.length,
+        });
+      }
     },
-    [syncProgress, toc.length, tocIds]
+    [chapters, currentChapter, completedChapterIds, syncProgress]
   );
 
-  const resume = useCallback(() => {
-    if (!progress) return;
-    if (progress.lastHeadingId) {
-      scrollToHeading(progress.lastHeadingId);
-      return;
+  const goToNextChapter = useCallback(() => {
+    if (currentChapterIndex < chapters.length - 1) {
+      goToChapter(currentChapterIndex + 1, true);
     }
-    if (typeof progress.lastScrollY === "number") {
-      window.scrollTo({ top: progress.lastScrollY, behavior: "smooth" });
-    }
-  }, [progress, scrollToHeading]);
+  }, [currentChapterIndex, chapters.length, goToChapter]);
 
+  const goToPrevChapter = useCallback(() => {
+    if (currentChapterIndex > 0) {
+      goToChapter(currentChapterIndex - 1, false);
+    }
+  }, [currentChapterIndex, goToChapter]);
+
+  const markCurrentComplete = useCallback(() => {
+    if (!currentChapter) return;
+    const newCompleted = new Set(completedChapterIds);
+    newCompleted.add(currentChapter.id);
+    setCompletedChapterIds(newCompleted);
+    const allIds = [...newCompleted];
+    syncProgress({
+      completedSections: allIds,
+      replaceAllSections: true,
+      totalSections: chapters.length,
+      progressPercent: Math.round((newCompleted.size / chapters.length) * 100),
+      isCompleted: newCompleted.size >= chapters.length,
+    });
+    toast.success("Capítulo concluído!");
+  }, [currentChapter, chapters.length, completedChapterIds, syncProgress]);
+
+  const toggleChapterComplete = useCallback(
+    (chapterId: string) => {
+      const newCompleted = new Set(completedChapterIds);
+      if (newCompleted.has(chapterId)) {
+        newCompleted.delete(chapterId);
+      } else {
+        newCompleted.add(chapterId);
+      }
+      setCompletedChapterIds(newCompleted);
+      syncProgress({
+        completedSections: [...newCompleted],
+        replaceAllSections: true,
+        totalSections: chapters.length,
+        progressPercent: Math.round((newCompleted.size / chapters.length) * 100),
+        isCompleted: newCompleted.size >= chapters.length,
+      });
+    },
+    [completedChapterIds, chapters.length, syncProgress]
+  );
+
+  /* ─── Fetch Data ─── */
+  useEffect(() => {
+    const fetchContent = async () => {
+      const token = localStorage.getItem("fayapoint_token");
+      if (!token) {
+        router.push(`/${locale}/login`);
+        return;
+      }
+      try {
+        const [contentRes, progressRes] = await Promise.all([
+          fetch(`/api/courses/${slug}/content`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch(`/api/courses/${slug}/progress`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        if (contentRes.status === 401 || progressRes.status === 401) {
+          router.push(`/${locale}/login`);
+          return;
+        }
+
+        const contentData = await contentRes.json();
+        if (!contentRes.ok) {
+          setError(contentRes.status === 403 ? "access_denied" : "error");
+          return;
+        }
+
+        setRawContent(contentData.content || "");
+        setTitle(contentData.title || "");
+
+        if (progressRes.ok) {
+          const progressData = await progressRes.json();
+          const p = progressData?.progress as CourseProgressDto | undefined;
+          if (p) {
+            rawCompletedRef.current = Array.isArray(p.completedSections)
+              ? p.completedSections
+              : [];
+            resumeHeadingRef.current = p.lastHeadingId || null;
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        setError("error");
+        toast.error("Erro ao carregar conteúdo do curso");
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (slug) fetchContent();
+  }, [slug, router, locale]);
+
+  /* ─── Restore position after chapters computed ─── */
+  useEffect(() => {
+    if (!chapters.length || initialLoadDone.current) return;
+    initialLoadDone.current = true;
+
+    // Filter saved sections to valid chapter IDs
+    const chapterIdSet = new Set(chapters.map((ch) => ch.id));
+    const valid = rawCompletedRef.current.filter((id) => chapterIdSet.has(id));
+    setCompletedChapterIds(new Set(valid));
+
+    // Restore chapter position
+    const savedId = resumeHeadingRef.current;
+    if (savedId) {
+      const idx = chapters.findIndex((ch) => ch.id === savedId);
+      if (idx >= 0) setCurrentChapterIndex(idx);
+    }
+  }, [chapters]);
+
+  /* ─── Keyboard shortcuts ─── */
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return;
+
+      if ((e.ctrlKey || e.metaKey) && (e.key === "ArrowRight" || e.key === "ArrowDown")) {
+        e.preventDefault();
+        goToNextChapter();
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === "ArrowLeft" || e.key === "ArrowUp")) {
+        e.preventDefault();
+        goToPrevChapter();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [goToNextChapter, goToPrevChapter]);
+
+  /* ─── Markdown Components ─── */
   const markdownComponents = useMemo(() => {
-    let idx = 0;
-
     type HeadingProps = ComponentPropsWithoutRef<"h1"> & { node?: unknown; children?: ReactNode };
     type ParagraphProps = ComponentPropsWithoutRef<"p"> & { node?: unknown; children?: ReactNode };
     type ListProps = ComponentPropsWithoutRef<"ul"> & { node?: unknown; children?: ReactNode };
@@ -265,18 +446,12 @@ export default function CourseReaderPage() {
     type TdProps = ComponentPropsWithoutRef<"td"> & { node?: unknown; children?: ReactNode };
 
     const createHeading = (level: 1 | 2 | 3) => {
-      return ({ children, className: headingClassName, ...props }: HeadingProps) => {
-        const myIdx = idx;
-        idx += 1;
-
-        const fallbackText = getHeadingText(children);
-        const id = headingIds[myIdx] || slugify(fallbackText) || `section-${myIdx + 1}`;
-
-        const Tag = (`h${level}` as const) as "h1" | "h2" | "h3";
-        const headingClasses = cn("scroll-mt-24", headingClassName);
-
+      return ({ children, className: cls, ...props }: HeadingProps) => {
+        const text = getHeadingText(children);
+        const id = slugify(text);
+        const Tag = `h${level}` as "h1" | "h2" | "h3";
         return (
-          <Tag id={id} data-course-heading="true" className={headingClasses} {...props}>
+          <Tag id={id} className={cn("scroll-mt-24", cls)} {...props}>
             {children}
           </Tag>
         );
@@ -287,13 +462,24 @@ export default function CourseReaderPage() {
       h1: createHeading(1),
       h2: createHeading(2),
       h3: createHeading(3),
-      p: ({ className, ...props }: ParagraphProps) => <p className={cn(className)} {...props} />,
-      ul: ({ className, ...props }: ListProps) => <ul className={cn(className)} {...props} />,
-      ol: ({ className, ...props }: OListProps) => <ol className={cn(className)} {...props} />,
-      li: ({ className, ...props }: LiProps) => <li className={cn(className)} {...props} />,
+      p: ({ className, ...props }: ParagraphProps) => (
+        <p className={cn("text-[#c0c0ce] leading-[1.85]", className)} {...props} />
+      ),
+      ul: ({ className, ...props }: ListProps) => (
+        <ul className={cn("space-y-2.5 my-5", className)} {...props} />
+      ),
+      ol: ({ className, ...props }: OListProps) => (
+        <ol className={cn("space-y-2.5 my-5", className)} {...props} />
+      ),
+      li: ({ className, ...props }: LiProps) => (
+        <li className={cn("text-[#c0c0ce] pl-1", className)} {...props} />
+      ),
       a: ({ className, ...props }: AnchorProps) => (
         <a
-          className={cn("hover:underline transition-colors", className)}
+          className={cn(
+            "text-violet-400 hover:text-violet-300 underline underline-offset-[3px] decoration-violet-400/30 hover:decoration-violet-300/60 transition-all duration-200",
+            className
+          )}
           target="_blank"
           rel="noopener noreferrer"
           {...props}
@@ -302,7 +488,7 @@ export default function CourseReaderPage() {
       blockquote: ({ className, ...props }: BlockquoteProps) => (
         <blockquote
           className={cn(
-            "border-l-2 border-purple-500/70 pl-4 py-2 my-6 bg-white/5 rounded-r",
+            "relative my-8 pl-6 pr-5 py-4 rounded-2xl bg-gradient-to-r from-violet-500/[0.06] to-purple-500/[0.02] border-l-[3px] border-violet-400/50",
             className
           )}
           {...props}
@@ -311,7 +497,7 @@ export default function CourseReaderPage() {
       pre: ({ className, ...props }: PreProps) => (
         <pre
           className={cn(
-            "bg-black/50 p-4 rounded-lg overflow-x-auto mb-6 border border-white/10",
+            "my-7 p-5 rounded-2xl overflow-x-auto bg-[#07070d] ring-1 ring-white/[0.06] shadow-xl shadow-black/30",
             className
           )}
           {...props}
@@ -319,611 +505,573 @@ export default function CourseReaderPage() {
       ),
       img: ({ className, alt, ...props }: ImgProps) => (
         <img
-          className={cn("rounded-lg border border-white/10 my-6 max-w-full h-auto", className)}
-          alt={alt || "Course Image"}
+          className={cn(
+            "rounded-2xl ring-1 ring-white/[0.06] my-8 max-w-full h-auto shadow-2xl shadow-black/40 hover:shadow-black/50 transition-shadow duration-500",
+            className
+          )}
+          alt={alt || ""}
           {...props}
         />
       ),
-      hr: ({ className, ...props }: HrProps) => <hr className={cn("my-8 border-white/10", className)} {...props} />,
+      hr: ({ className, ...props }: HrProps) => (
+        <hr
+          className={cn(
+            "my-14 border-0 h-px bg-gradient-to-r from-transparent via-violet-400/15 to-transparent",
+            className
+          )}
+          {...props}
+        />
+      ),
       table: ({ className, ...props }: TableProps) => (
-        <div className="overflow-x-auto mb-6">
+        <div className="overflow-x-auto my-8 rounded-2xl ring-1 ring-white/[0.06] shadow-lg shadow-black/10">
           <table
-            className={cn("min-w-full border-collapse border border-white/10 text-left", className)}
+            className={cn("min-w-full border-collapse text-left", className)}
             {...props}
           />
         </div>
       ),
       th: ({ className, ...props }: ThProps) => (
-        <th className={cn("bg-white/5 border border-white/10 p-2 font-semibold text-white/90", className)} {...props} />
+        <th
+          className={cn(
+            "bg-white/[0.03] border-b border-white/[0.06] px-5 py-3.5 text-[13px] font-semibold text-white/85 tracking-wide",
+            className
+          )}
+          {...props}
+        />
       ),
       td: ({ className, ...props }: TdProps) => (
-        <td className={cn("border border-white/10 p-2 text-white/80", className)} {...props} />
+        <td
+          className={cn(
+            "border-b border-white/[0.04] px-5 py-3 text-[13px] text-[#a8a8bb]",
+            className
+          )}
+          {...props}
+        />
       ),
     };
-  }, [headingIds]);
+  }, []);
 
-  useEffect(() => {
-    const fetchContent = async () => {
-      const token = localStorage.getItem('fayapoint_token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      try {
-        const [contentRes, progressRes] = await Promise.all([
-          fetch(`/api/courses/${slug}/content`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-          fetch(`/api/courses/${slug}/progress`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-        ]);
-
-        if (contentRes.status === 401 || progressRes.status === 401) {
-          router.push('/login');
-          return;
-        }
-
-        const contentData = await contentRes.json();
-
-        if (!contentRes.ok) {
-          if (contentRes.status === 403) {
-            setError("access_denied");
-          } else {
-            throw new Error(contentData.error || 'Erro ao carregar conteúdo');
-          }
-          return;
-        }
-
-        setContent(contentData.content);
-        setTitle(contentData.title);
-
-        if (progressRes.ok) {
-          const progressData = await progressRes.json();
-          const p = progressData?.progress as CourseProgressDto | undefined;
-          if (p) {
-            setProgress(p);
-            setCompletedSections(Array.isArray(p.completedSections) ? p.completedSections : []);
-            setActiveHeadingId(p.lastHeadingId || null);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-        setError("error");
-        toast.error("Erro ao carregar conteúdo do curso");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (slug) {
-        fetchContent();
-    }
-  }, [slug, router]);
-
-  // Restore scroll position once after content+progress load
-  useEffect(() => {
-    if (!content || !progress) return;
-    if (hasRestoredRef.current) return;
-    hasRestoredRef.current = true;
-
-    const restore = () => {
-      if (progress.lastHeadingId) {
-        const el = document.getElementById(progress.lastHeadingId);
-        if (el) {
-          el.scrollIntoView({ block: "start" });
-          return;
-        }
-      }
-      if (typeof progress.lastScrollY === "number") {
-        window.scrollTo({ top: progress.lastScrollY });
-      }
-    };
-
-    const t = window.setTimeout(restore, 200);
-    return () => window.clearTimeout(t);
-  }, [content, progress]);
-
-  // Track scroll + active heading and persist progress (debounced)
-  useEffect(() => {
-    if (!content) return;
-
-    let ticking = false;
-
-    const update = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
-
-      const headings = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-course-heading='true']")
-      );
-
-      let currentId: string | null = null;
-      for (const h of headings) {
-        const rect = h.getBoundingClientRect();
-        if (rect.top <= 120) currentId = h.id;
-        else break;
-      }
-
-      if (currentId && currentId !== lastActiveRef.current) {
-        const previousId = lastActiveRef.current;
-        lastActiveRef.current = currentId;
-        setActiveHeadingId(currentId);
-
-        if (previousId && tocIds.has(previousId)) {
-          setCompletedSections((prev) => (prev.includes(previousId) ? prev : [...prev, previousId]));
-          void syncProgress({ completedSections: [previousId], totalSections: toc.length }, false);
-        }
-      }
-
-      const nextPayload: Record<string, unknown> = {
-        lastScrollY: scrollTop,
-        lastScrollPercent: scrollPercent,
-        totalSections: toc.length,
-      };
-
-      if (currentId) nextPayload.lastHeadingId = currentId;
-      void syncProgress(nextPayload, false);
-    };
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(() => {
-        update();
-        ticking = false;
-      });
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    update();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [content, syncProgress, toc.length, tocIds]);
+  /* ═══════════════════════════════════════════════════════════
+     Render: Loading / Error / Access Denied
+     ═══════════════════════════════════════════════════════════ */
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <Loader2 className="animate-spin text-purple-500" size={32} />
+      <div className="min-h-screen bg-[#0b0c13] text-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600/20 to-purple-600/10 border border-violet-500/20 flex items-center justify-center">
+              <BookOpen className="text-violet-400" size={28} />
+            </div>
+            <div className="absolute -inset-4 rounded-3xl bg-violet-500/10 blur-2xl animate-pulse" />
+          </div>
+          <div className="flex flex-col items-center gap-2.5">
+            <p className="text-sm font-medium text-white/50">Preparando sua leitura</p>
+            <div className="flex gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-violet-400/60 animate-bounce [animation-delay:0ms]" />
+              <div className="w-1.5 h-1.5 rounded-full bg-violet-400/40 animate-bounce [animation-delay:150ms]" />
+              <div className="w-1.5 h-1.5 rounded-full bg-violet-400/60 animate-bounce [animation-delay:300ms]" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error === "access_denied") {
-      return (
-        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4">
-            <div className="bg-gray-900 border border-gray-800 p-8 rounded-xl max-w-md text-center">
-                <div className="w-16 h-16 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Lock className="text-red-500" size={32} />
-                </div>
-                <h1 className="text-2xl font-bold mb-4">Acesso Bloqueado</h1>
-                <p className="text-gray-400 mb-6">
-                    Você precisa adquirir este curso ou fazer upgrade do seu plano para acessar este conteúdo.
-                </p>
-                <div className="flex flex-col gap-3">
-                    <Link href={`/curso/${slug}`}>
-                        <Button className="w-full bg-purple-600 hover:bg-purple-700">Ver Detalhes do Curso</Button>
-                    </Link>
-                    <Link href="/portal">
-                        <Button variant="outline" className="w-full">Voltar ao Portal</Button>
-                    </Link>
-                </div>
+    return (
+      <div className="min-h-screen bg-[#0b0c13] text-white flex flex-col items-center justify-center p-6">
+        <div className="relative max-w-sm w-full">
+          <div className="absolute -inset-px bg-gradient-to-b from-red-500/20 via-transparent to-transparent rounded-[1.6rem] blur-sm" />
+          <div className="relative bg-[#12131c] border border-white/[0.06] p-10 rounded-3xl text-center">
+            <div className="w-20 h-20 bg-red-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-500/15">
+              <Lock className="text-red-400/80" size={34} />
             </div>
+            <h1 className="text-2xl font-bold mb-3 tracking-tight">Acesso Restrito</h1>
+            <p className="text-white/35 mb-8 text-sm leading-relaxed">
+              Você precisa adquirir este curso ou fazer upgrade do seu plano para
+              acessar este conteúdo.
+            </p>
+            <div className="flex flex-col gap-3">
+              <Link href={`/${locale}/curso/${slug}`}>
+                <Button className="w-full h-11 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 rounded-xl font-medium shadow-lg shadow-violet-600/20">
+                  Ver Detalhes do Curso
+                </Button>
+              </Link>
+              <Link href={`/${locale}/portal`}>
+                <Button variant="outline" className="w-full h-11 rounded-xl border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50">
+                  Voltar ao Portal
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
-      );
+      </div>
+    );
   }
 
   if (error) {
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
-            <p className="text-red-400 mb-4">Ocorreu um erro ao carregar o curso.</p>
-            <Link href="/portal">
-                <Button variant="outline">Voltar</Button>
-            </Link>
+      <div className="min-h-screen bg-[#0b0c13] text-white flex flex-col items-center justify-center gap-5">
+        <div className="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/15">
+          <X className="text-red-400/70" size={24} />
         </div>
+        <p className="text-white/40 text-sm">Ocorreu um erro ao carregar o curso.</p>
+        <Link href={`/${locale}/portal`}>
+          <Button variant="outline" className="rounded-xl border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50">
+            Voltar ao Portal
+          </Button>
+        </Link>
+      </div>
     );
   }
 
-  // Sidebar TOC component for reuse
-  const TocList = ({ maxHeight = "max-h-[60vh]" }: { maxHeight?: string }) => (
-    <div className={cn("overflow-auto", maxHeight)}>
-      {toc.length ? (
-        <div className="space-y-0.5">
-          {toc.map((item, index) => {
-            const isActive = activeHeadingId === item.id;
-            const isDone = filteredCompletedSections.includes(item.id);
-            const isNext = !isDone && filteredCompletedSections.length === index;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => scrollToHeading(item.id)}
-                className={cn(
-                  "group w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all duration-200",
-                  isActive
-                    ? "bg-gradient-to-r from-purple-500/20 to-violet-500/10 border border-purple-500/30"
-                    : "hover:bg-white/5 border border-transparent",
-                  isNext && !isActive && "bg-purple-500/5"
-                )}
-              >
-                <span
-                  className={cn(
-                    "flex-shrink-0 transition-all duration-200",
-                    isDone ? "text-emerald-400" : isActive ? "text-purple-400" : "text-white/25 group-hover:text-white/40"
-                  )}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    void markSectionCompleted(item.id);
-                  }}
-                >
-                  {isDone ? (
-                    <CheckCircle2 size={18} className="drop-shadow-sm" />
-                  ) : isActive ? (
-                    <div className="w-[18px] h-[18px] rounded-full border-2 border-purple-400 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-purple-400" />
-                    </div>
-                  ) : (
-                    <Circle size={18} />
-                  )}
-                </span>
-                <span
-                  className={cn(
-                    "text-sm leading-snug font-medium transition-colors",
-                    item.level === 2 && "pl-2 text-[13px]",
-                    item.level === 3 && "pl-4 text-xs font-normal",
-                    isActive ? "text-white" : isDone ? "text-white/60" : "text-white/70 group-hover:text-white/90"
-                  )}
-                >
-                  {item.text}
-                </span>
-                {isActive && (
-                  <ChevronRight size={14} className="ml-auto text-purple-400 flex-shrink-0" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="px-4 py-8 text-center">
-          <BookOpen size={32} className="mx-auto mb-3 text-white/20" />
-          <p className="text-sm text-white/40">Nenhum capítulo detectado</p>
-        </div>
-      )}
-    </div>
-  );
+  const isCurrentCompleted = currentChapter
+    ? completedChapterIds.has(currentChapter.id)
+    : false;
+  const allDone = chapters.length > 0 && completedChapterIds.size >= chapters.length;
+
+  /* ═══════════════════════════════════════════════════════════
+     Render: Main Layout
+     ═══════════════════════════════════════════════════════════ */
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#0d0d14] to-[#0a0a0f] text-white">
-      {/* Ambient background effects */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-purple-600/[0.03] rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-violet-600/[0.02] rounded-full blur-[100px]" />
-      </div>
+    <div className="min-h-screen bg-[#0b0c13] text-white flex flex-col">
+      {/* ═══ HEADER ═══ */}
+      <header className="sticky top-0 z-40 flex-shrink-0">
+        {/* Accent gradient line */}
+        <div className="h-[2px] bg-gradient-to-r from-violet-600/80 via-purple-500/60 to-violet-600/80" />
 
-      {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-[#0a0a0f]/80 backdrop-blur-xl backdrop-saturate-150">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="h-16 flex items-center gap-4">
-            {/* Back button */}
-            <Link
-              href="/portal"
-              className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all duration-200 hover:scale-105"
-            >
-              <ArrowLeft size={18} className="text-white/70" />
-            </Link>
+        <div className="h-14 border-b border-white/[0.04] bg-[#0b0c13]/80 backdrop-blur-2xl backdrop-saturate-150 flex items-center px-4 gap-3">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] transition-all duration-200"
+          >
+            {sidebarOpen ? (
+              <X size={15} className="text-white/50" />
+            ) : (
+              <Menu size={15} className="text-white/50" />
+            )}
+          </button>
 
-            {/* Title & Progress */}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <BookOpen size={14} className="text-purple-400 flex-shrink-0" />
-                <h1 className="truncate text-sm font-semibold text-white/90">{title}</h1>
+          <Link
+            href={`/${locale}/portal`}
+            className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] transition-all duration-200"
+          >
+            <ArrowLeft size={15} className="text-white/50" />
+          </Link>
+
+          <div className="min-w-0 flex-1">
+            <span className="truncate text-[13px] font-medium text-white/70 block">{title}</span>
+            <div className="flex items-center gap-2.5 mt-1">
+              <div className="flex-1 h-[3px] bg-white/[0.04] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-violet-500 via-purple-400 to-violet-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${progressPercent}%` }}
+                />
               </div>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${displayProgressPercent}%` }}
-                  />
-                </div>
-                <span className="text-xs font-medium text-white/50 tabular-nums w-10 text-right">
-                  {displayProgressPercent}%
-                </span>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              {/* Mobile menu */}
-              <Sheet>
-                <SheetTrigger asChild>
-                  <button className="lg:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all">
-                    <LayoutList size={16} className="text-white/70" />
-                  </button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-80 bg-[#0d0d14] border-white/[0.06] p-0">
-                  <div className="p-4 border-b border-white/[0.06]">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Bookmark size={16} className="text-purple-400" />
-                      <span className="font-semibold text-white">Conteúdo</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="text-white/50">{filteredCompletedSections.length} de {toc.length} seções</span>
-                      <span className="font-semibold text-purple-400">{displayProgressPercent}%</span>
-                    </div>
-                    <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full"
-                        style={{ width: `${displayProgressPercent}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <TocList maxHeight="max-h-[calc(100vh-12rem)]" />
-                  </div>
-                </SheetContent>
-              </Sheet>
-
-              {/* Settings */}
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all">
-                    <Settings2 size={16} className="text-white/70" />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 bg-[#13131a] border-white/[0.08] shadow-2xl shadow-black/50 p-0">
-                  <div className="p-4 border-b border-white/[0.06]">
-                    <div className="flex items-center gap-2">
-                      <Sparkles size={16} className="text-purple-400" />
-                      <span className="font-semibold text-white">Preferências</span>
-                    </div>
-                  </div>
-                  <div className="p-4 space-y-5">
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-white/70">Tamanho da fonte</span>
-                        <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">{settings.fontSize}px</span>
-                      </div>
-                      <Slider
-                        min={14}
-                        max={22}
-                        step={1}
-                        value={[settings.fontSize]}
-                        onValueChange={(v) => setSettings((s) => ({ ...s, fontSize: v[0] }))}
-                        className="[&_[role=slider]]:bg-purple-500 [&_[role=slider]]:border-purple-400"
-                      />
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-white/70">Espaçamento</span>
-                        <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">{settings.lineHeight.toFixed(1)}</span>
-                      </div>
-                      <Slider
-                        min={1.4}
-                        max={2.1}
-                        step={0.1}
-                        value={[settings.lineHeight]}
-                        onValueChange={(v) => setSettings((s) => ({ ...s, lineHeight: v[0] }))}
-                        className="[&_[role=slider]]:bg-purple-500 [&_[role=slider]]:border-purple-400"
-                      />
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-white/70">Largura do texto</span>
-                        <span className="text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded">{settings.maxWidth}px</span>
-                      </div>
-                      <Slider
-                        min={640}
-                        max={1100}
-                        step={20}
-                        value={[settings.maxWidth]}
-                        onValueChange={(v) => setSettings((s) => ({ ...s, maxWidth: v[0] }))}
-                        className="[&_[role=slider]]:bg-purple-500 [&_[role=slider]]:border-purple-400"
-                      />
-                    </div>
-
-                    <Separator className="bg-white/[0.06]" />
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-sm font-medium text-white">Modo Foco</div>
-                        <div className="text-xs text-white/40 mt-0.5">Oculta o menu lateral</div>
-                      </div>
-                      <Switch
-                        checked={settings.focusMode}
-                        onCheckedChange={(checked) => setSettings((s) => ({ ...s, focusMode: checked }))}
-                      />
-                    </div>
-                  </div>
-                  <div className="p-4 border-t border-white/[0.06] flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 bg-transparent border-white/[0.08] hover:bg-white/[0.04] text-white/70"
-                      onClick={() => setSettings(DEFAULT_SETTINGS)}
-                    >
-                      Resetar
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 border-0"
-                      onClick={resume}
-                      disabled={!progress}
-                    >
-                      Continuar
-                    </Button>
-                  </div>
-                </PopoverContent>
-              </Popover>
-
-              {/* Continue button (desktop) */}
-              <Button
-                size="sm"
-                className="hidden sm:inline-flex bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 border-0 shadow-lg shadow-purple-500/20"
-                onClick={resume}
-                disabled={!progress}
-              >
-                <Bookmark size={14} className="mr-1.5" />
-                Continuar
-              </Button>
+              <span className="text-[11px] font-semibold text-violet-400/70 tabular-nums">
+                {progressPercent}%
+              </span>
             </div>
           </div>
-        </div>
-      </header>
 
-      {/* Main content */}
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8">
-        <div className={cn("lg:flex gap-8", settings.focusMode && "lg:block")}>
-          {/* Sidebar */}
-          {!settings.focusMode && (
-            <aside className="hidden lg:block w-72 flex-shrink-0">
-              <div className="sticky top-24">
-                {/* Progress card */}
-                <div className="mb-4 p-4 rounded-2xl bg-gradient-to-br from-purple-500/10 to-violet-500/5 border border-purple-500/20">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-medium text-white/60">Seu Progresso</span>
-                    <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">
-                      {displayProgressPercent}%
-                    </span>
-                  </div>
-                  <div className="h-2 bg-white/[0.06] rounded-full overflow-hidden mb-2">
-                    <div
-                      className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full transition-all duration-500"
-                      style={{ width: `${displayProgressPercent}%` }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between text-xs text-white/40">
-                    <span>{filteredCompletedSections.length} concluídas</span>
-                    <span>{toc.length - filteredCompletedSections.length} restantes</span>
-                  </div>
-                </div>
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.05]">
+            <span className="text-[10px] font-medium text-white/25">Cap.</span>
+            <span className="text-[10px] font-bold text-violet-400 tabular-nums">
+              {currentChapterIndex + 1}/{chapters.length}
+            </span>
+          </div>
 
-                {/* TOC */}
-                <div className="rounded-2xl bg-white/[0.02] border border-white/[0.06] overflow-hidden">
-                  <div className="p-4 border-b border-white/[0.06]">
-                    <div className="flex items-center gap-2">
-                      <Bookmark size={16} className="text-purple-400" />
-                      <span className="text-sm font-semibold text-white">Capítulos</span>
-                    </div>
-                  </div>
-                  <div className="p-2">
-                    <TocList maxHeight="max-h-[calc(100vh-20rem)]" />
-                  </div>
-                </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] transition-all duration-200">
+                <Settings2 size={14} className="text-white/50" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-72 bg-[#12131c] border-white/[0.06] shadow-2xl shadow-black/50 p-0 rounded-2xl">
+              <div className="p-4 border-b border-white/[0.05]">
+                <span className="text-sm font-semibold text-white/90">
+                  Preferências de Leitura
+                </span>
               </div>
-            </aside>
-          )}
-
-          {/* Content */}
-          <main className="min-w-0 flex-1">
-            <article className="mx-auto" style={{ maxWidth: settings.maxWidth }}>
-              {/* Content header */}
-              <div className="mb-6 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
-                    <CheckCircle2 size={14} className="text-emerald-400" />
-                    <span className="text-xs font-medium text-white/60">
-                      {filteredCompletedSections.length}/{toc.length} seções
+              <div className="p-4 space-y-5">
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white/40">Tamanho da fonte</span>
+                    <span className="text-[11px] font-mono text-violet-400/80 bg-violet-500/10 px-2 py-0.5 rounded-md">
+                      {settings.fontSize}px
                     </span>
                   </div>
+                  <Slider
+                    min={14}
+                    max={22}
+                    step={1}
+                    value={[settings.fontSize]}
+                    onValueChange={(v) =>
+                      setSettings((s) => ({ ...s, fontSize: v[0] }))
+                    }
+                  />
                 </div>
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white/40">Espaçamento entre linhas</span>
+                    <span className="text-[11px] font-mono text-violet-400/80 bg-violet-500/10 px-2 py-0.5 rounded-md">
+                      {settings.lineHeight.toFixed(1)}
+                    </span>
+                  </div>
+                  <Slider
+                    min={1.4}
+                    max={2.2}
+                    step={0.1}
+                    value={[settings.lineHeight]}
+                    onValueChange={(v) =>
+                      setSettings((s) => ({ ...s, lineHeight: v[0] }))
+                    }
+                  />
+                </div>
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white/40">Largura do texto</span>
+                    <span className="text-[11px] font-mono text-violet-400/80 bg-violet-500/10 px-2 py-0.5 rounded-md">
+                      {settings.maxWidth}px
+                    </span>
+                  </div>
+                  <Slider
+                    min={600}
+                    max={1000}
+                    step={20}
+                    value={[settings.maxWidth]}
+                    onValueChange={(v) =>
+                      setSettings((s) => ({ ...s, maxWidth: v[0] }))
+                    }
+                  />
+                </div>
+                <Separator className="bg-white/[0.05]" />
                 <Button
                   variant="outline"
                   size="sm"
-                  className="bg-transparent border-white/[0.08] hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 transition-all"
-                  onClick={() => {
-                    if (activeHeadingId) void markSectionCompleted(activeHeadingId);
-                  }}
-                  disabled={!activeHeadingId}
+                  className="w-full bg-transparent border-white/[0.06] hover:bg-white/[0.03] text-white/40 text-xs rounded-xl"
+                  onClick={() => setSettings(DEFAULT_SETTINGS)}
                 >
-                  <CheckCircle2 size={14} className="mr-1.5" />
-                  Marcar como lida
+                  Resetar Padrões
                 </Button>
               </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </header>
 
-              {/* Content body */}
-              <div className="relative rounded-3xl bg-gradient-to-b from-white/[0.03] to-transparent border border-white/[0.06] overflow-hidden">
-                {/* Decorative top gradient */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-                
-                <div className="p-6 sm:p-10 lg:p-12">
+      {/* ═══ BODY ═══ */}
+      <div className="flex flex-1 min-h-0 relative">
+        {/* Mobile overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/60 z-30 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* ─── SIDEBAR ─── */}
+        <aside
+          className={cn(
+            "fixed lg:relative top-[calc(2px+3.5rem)] lg:top-0 left-0 z-30 lg:z-auto h-[calc(100vh-3.5rem-2px)] w-[280px] flex-shrink-0 flex flex-col transition-transform duration-300 ease-out",
+            "bg-[#0d0e16]/95 lg:bg-[#0d0e16] backdrop-blur-xl lg:backdrop-blur-none border-r border-white/[0.04]",
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          )}
+        >
+          {/* Sidebar header */}
+          <div className="p-5 flex-shrink-0">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/30">Conteúdo</h2>
+              <span className="text-xs font-bold text-violet-400 tabular-nums">{progressPercent}%</span>
+            </div>
+            <div className="relative h-[5px] bg-white/[0.04] rounded-full overflow-hidden mb-2.5">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-400 transition-all duration-700 ease-out"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+            <p className="text-[11px] text-white/20">
+              {completedChapterIds.size} de {chapters.length} concluídos · ~{totalReadingMinutes} min
+            </p>
+          </div>
+
+          <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent mx-3" />
+
+          {/* Chapter list */}
+          <div className="flex-1 overflow-y-auto py-3 px-3">
+            {chapters.map((chapter, i) => {
+              const isCurrent = i === currentChapterIndex;
+              const isDone = completedChapterIds.has(chapter.id);
+              return (
+                <button
+                  key={chapter.id}
+                  onClick={() => goToChapter(i)}
+                  className={cn(
+                    "w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left transition-all duration-200 group relative mb-0.5",
+                    isCurrent
+                      ? "bg-violet-500/[0.08]"
+                      : "hover:bg-white/[0.03]"
+                  )}
+                >
+                  {/* Active accent bar */}
+                  {isCurrent && (
+                    <div className="absolute left-0 top-2.5 bottom-2.5 w-[3px] rounded-full bg-violet-400" />
+                  )}
+
+                  {/* Number badge / Status */}
+                  <span
+                    className="flex-shrink-0 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleChapterComplete(chapter.id);
+                    }}
+                  >
+                    {isDone ? (
+                      <div className="w-8 h-8 rounded-[10px] bg-emerald-500/15 flex items-center justify-center border border-emerald-500/20">
+                        <CheckCircle2 size={15} className="text-emerald-400" />
+                      </div>
+                    ) : isCurrent ? (
+                      <div className="w-8 h-8 rounded-[10px] bg-violet-500/20 border border-violet-400/40 flex items-center justify-center">
+                        <span className="text-xs font-bold text-violet-400 tabular-nums">{i + 1}</span>
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 rounded-[10px] bg-white/[0.02] border border-white/[0.06] flex items-center justify-center group-hover:bg-white/[0.04] group-hover:border-white/[0.1] transition-all duration-200">
+                        <span className="text-xs font-medium text-white/20 group-hover:text-white/35 tabular-nums transition-colors">{i + 1}</span>
+                      </div>
+                    )}
+                  </span>
+
+                  {/* Title + meta */}
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={cn(
+                        "text-[13px] leading-snug line-clamp-2 transition-colors duration-200",
+                        isCurrent
+                          ? "text-white font-semibold"
+                          : isDone
+                          ? "text-white/30"
+                          : "text-white/50 group-hover:text-white/70"
+                      )}
+                    >
+                      {chapter.title}
+                    </p>
+                    <span
+                      className={cn(
+                        "text-[10px] mt-1 block transition-colors",
+                        isCurrent ? "text-violet-400/50" : "text-white/12"
+                      )}
+                    >
+                      {chapter.readingMinutes} min
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Keyboard hints */}
+          <div className="hidden lg:flex items-center justify-center p-3.5 border-t border-white/[0.04] flex-shrink-0">
+            <p className="text-[10px] text-white/15">Ctrl + ← → navegar</p>
+          </div>
+        </aside>
+
+        {/* ─── MAIN CONTENT ─── */}
+        <main
+          className={cn(
+            "flex-1 overflow-y-auto transition-all duration-300",
+            sidebarOpen ? "lg:ml-0" : ""
+          )}
+        >
+          {currentChapter ? (
+            <div className="min-h-full flex flex-col">
+              {/* Chapter header */}
+              <div className="flex-shrink-0 relative overflow-hidden">
+                {/* Gradient mesh background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.04] via-transparent to-purple-600/[0.02]" />
+                <div className="absolute top-0 right-0 w-72 h-72 bg-violet-500/[0.03] rounded-full blur-[80px]" />
+
+                <div
+                  className="relative mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
+                  style={{ maxWidth: settings.maxWidth + 120 }}
+                >
+                  {/* Decorative chapter number */}
+                  <div className="flex items-baseline gap-5 mb-6">
+                    <span className="text-6xl sm:text-7xl font-black bg-gradient-to-b from-violet-400/20 to-violet-400/[0.03] bg-clip-text text-transparent select-none leading-none tabular-nums">
+                      {String(currentChapterIndex + 1).padStart(2, "0")}
+                    </span>
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-400/40">
+                        Capítulo {currentChapterIndex + 1} de {chapters.length}
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[11px] text-white/18 flex items-center gap-1">
+                          <Clock size={10} />
+                          {currentChapter.readingMinutes} min
+                        </span>
+                        {isCurrentCompleted && (
+                          <span className="text-[11px] font-medium text-emerald-400/70 flex items-center gap-1">
+                            <CheckCircle2 size={10} />
+                            Concluído
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <h1 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-bold text-white/95 tracking-tight leading-[1.2]">
+                    {currentChapter.title}
+                  </h1>
+                </div>
+
+                {/* Separator */}
+                <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              </div>
+
+              {/* Chapter content */}
+              <div className="flex-1">
+                <div
+                  className="mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
+                  style={{ maxWidth: settings.maxWidth + 120 }}
+                >
                   <div
-                    style={readerStyle}
+                    style={{
+                      fontSize: `${settings.fontSize}px`,
+                      lineHeight: String(settings.lineHeight),
+                    }}
                     className={cn(
                       "max-w-none",
-                      "prose prose-invert prose-lg",
-                      // Headings
+                      "prose prose-invert",
                       "prose-headings:font-bold prose-headings:tracking-tight",
-                      "prose-h1:text-3xl prose-h1:text-white prose-h1:mb-6 prose-h1:mt-0",
-                      "prose-h2:text-2xl prose-h2:text-white prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-white/[0.06]",
-                      "prose-h3:text-xl prose-h3:text-white/90 prose-h3:mt-8 prose-h3:mb-3",
-                      // Text
-                      "prose-p:text-white/75 prose-p:leading-relaxed",
-                      "prose-strong:text-white prose-strong:font-semibold",
-                      // Links
-                      "prose-a:text-purple-400 prose-a:no-underline prose-a:font-medium hover:prose-a:text-purple-300 hover:prose-a:underline",
-                      // Lists
-                      "prose-li:text-white/75 prose-li:marker:text-purple-500",
-                      "prose-ul:my-4 prose-ol:my-4",
-                      // Code
-                      "prose-code:text-purple-300 prose-code:bg-purple-500/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal prose-code:before:content-[''] prose-code:after:content-['']",
-                      "prose-pre:bg-[#0a0a0f] prose-pre:border prose-pre:border-white/[0.06] prose-pre:rounded-xl prose-pre:shadow-xl",
-                      // Blockquote
-                      "prose-blockquote:border-l-2 prose-blockquote:border-purple-500 prose-blockquote:bg-purple-500/5 prose-blockquote:rounded-r-xl prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:not-italic prose-blockquote:text-white/70",
-                      // HR
-                      "prose-hr:border-white/[0.06] prose-hr:my-10",
-                      // Images
-                      "prose-img:rounded-2xl prose-img:border prose-img:border-white/[0.06] prose-img:shadow-2xl",
-                      // Tables
-                      "prose-table:border prose-table:border-white/[0.06] prose-table:rounded-xl prose-table:overflow-hidden",
-                      "prose-th:bg-white/[0.04] prose-th:text-white prose-th:font-semibold prose-th:px-4 prose-th:py-3",
-                      "prose-td:px-4 prose-td:py-3 prose-td:border-t prose-td:border-white/[0.06]"
+                      "prose-h1:text-[1.65em] prose-h1:text-white/95 prose-h1:mb-6 prose-h1:mt-0 prose-h1:leading-tight",
+                      "prose-h2:text-[1.35em] prose-h2:text-white/90 prose-h2:mt-14 prose-h2:mb-5 prose-h2:leading-snug",
+                      "prose-h3:text-[1.15em] prose-h3:text-white/85 prose-h3:mt-10 prose-h3:mb-4",
+                      "prose-p:text-[#b8b8c8] prose-p:leading-[1.85] prose-p:mb-5",
+                      "prose-strong:text-white/95 prose-strong:font-semibold",
+                      "prose-em:text-[#c0b8d8]",
+                      "prose-a:text-violet-400 prose-a:underline prose-a:underline-offset-[3px] prose-a:decoration-violet-400/30 hover:prose-a:text-violet-300 hover:prose-a:decoration-violet-300/60",
+                      "prose-li:text-[#b8b8c8] prose-li:marker:text-violet-400/40",
+                      "prose-ul:my-5 prose-ol:my-5",
+                      "prose-code:text-violet-300 prose-code:bg-violet-500/[0.08] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-normal prose-code:text-[0.88em] prose-code:before:content-[''] prose-code:after:content-['']",
+                      "prose-pre:bg-[#07070d] prose-pre:ring-1 prose-pre:ring-white/[0.05] prose-pre:rounded-2xl prose-pre:shadow-lg prose-pre:shadow-black/20",
+                      "prose-blockquote:border-l-[3px] prose-blockquote:border-violet-400/40 prose-blockquote:bg-gradient-to-r prose-blockquote:from-violet-500/[0.05] prose-blockquote:to-transparent prose-blockquote:rounded-r-2xl prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:not-italic prose-blockquote:text-[#a8a8bc]",
+                      "prose-hr:border-0",
+                      "prose-img:rounded-2xl prose-img:ring-1 prose-img:ring-white/[0.06] prose-img:shadow-xl prose-img:shadow-black/30",
+                      "prose-table:rounded-2xl prose-table:overflow-hidden prose-table:ring-1 prose-table:ring-white/[0.06]",
+                      "prose-th:bg-white/[0.03] prose-th:text-white/80 prose-th:font-semibold prose-th:px-5 prose-th:py-3.5 prose-th:text-sm",
+                      "prose-td:px-5 prose-td:py-3 prose-td:text-sm prose-td:border-t prose-td:border-white/[0.04]"
                     )}
                   >
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                      {content}
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={markdownComponents}
+                    >
+                      {currentChapter.content}
                     </ReactMarkdown>
                   </div>
                 </div>
+              </div>
 
-                {/* Bottom navigation */}
-                <div className="p-6 sm:p-10 lg:p-12 pt-0">
-                  <div className="flex items-center justify-between gap-4 pt-8 border-t border-white/[0.06]">
-                    <div className="text-sm text-white/40">
-                      {filteredCompletedSections.length === toc.length && toc.length > 0 ? (
-                        <span className="flex items-center gap-2 text-emerald-400">
-                          <Sparkles size={16} />
-                          Parabéns! Você completou este conteúdo.
-                        </span>
-                      ) : (
-                        `${toc.length - filteredCompletedSections.length} seções restantes`
-                      )}
-                    </div>
-                    <Button
-                      className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 border-0 shadow-lg shadow-purple-500/20"
-                      onClick={() => {
-                        if (activeHeadingId) void markSectionCompleted(activeHeadingId);
-                      }}
-                      disabled={!activeHeadingId || filteredCompletedSections.includes(activeHeadingId ?? "")}
+              {/* ─── Bottom Navigation ─── */}
+              <div className="flex-shrink-0">
+                <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+
+                <div
+                  className="mx-auto px-8 sm:px-10 lg:px-14 py-8"
+                  style={{ maxWidth: settings.maxWidth + 120 }}
+                >
+                  {/* Mark as complete button */}
+                  {!isCurrentCompleted && (
+                    <button
+                      onClick={markCurrentComplete}
+                      className="w-full mb-6 py-3.5 rounded-2xl border border-dashed border-emerald-500/20 bg-emerald-500/[0.02] hover:bg-emerald-500/[0.06] hover:border-emerald-500/30 text-emerald-400/60 hover:text-emerald-400 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2.5"
                     >
-                      Próxima seção
-                      <ChevronRight size={16} className="ml-1" />
-                    </Button>
+                      <CheckCircle2 size={17} />
+                      Marcar capítulo como concluído
+                    </button>
+                  )}
+
+                  {/* Congratulations */}
+                  {allDone && (
+                    <div className="mb-6 py-5 px-6 rounded-2xl bg-gradient-to-r from-emerald-500/[0.06] via-yellow-500/[0.03] to-violet-500/[0.06] border border-emerald-500/15 flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                        <Trophy size={22} className="text-yellow-400" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-white">
+                          Parabéns! Curso concluído!
+                        </p>
+                        <p className="text-xs text-white/35 mt-0.5">
+                          Você completou todos os {chapters.length} capítulos.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Navigation buttons */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {currentChapterIndex > 0 ? (
+                      <button
+                        onClick={goToPrevChapter}
+                        className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.04] hover:border-white/[0.08] transition-all duration-200 group text-left"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.03] group-hover:bg-white/[0.06] flex items-center justify-center flex-shrink-0 transition-colors duration-200 border border-white/[0.04]">
+                          <ChevronLeft size={18} className="text-white/25 group-hover:text-white/50" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-[10px] uppercase tracking-wider text-white/18 block">
+                            Anterior
+                          </span>
+                          <span className="text-sm text-white/45 group-hover:text-white/65 truncate block mt-0.5 transition-colors">
+                            {chapters[currentChapterIndex - 1]?.title}
+                          </span>
+                        </div>
+                      </button>
+                    ) : (
+                      <div />
+                    )}
+
+                    {currentChapterIndex < chapters.length - 1 ? (
+                      <button
+                        onClick={goToNextChapter}
+                        className="flex items-center justify-end gap-3 p-4 rounded-2xl bg-violet-500/[0.04] hover:bg-violet-500/[0.08] border border-violet-500/10 hover:border-violet-500/20 transition-all duration-200 group text-right"
+                      >
+                        <div className="min-w-0">
+                          <span className="text-[10px] uppercase tracking-wider text-violet-400/35 block">
+                            Próximo
+                          </span>
+                          <span className="text-sm text-white/55 group-hover:text-white/85 truncate block mt-0.5 transition-colors">
+                            {chapters[currentChapterIndex + 1]?.title}
+                          </span>
+                        </div>
+                        <div className="w-10 h-10 rounded-xl bg-violet-500/10 group-hover:bg-violet-500/15 flex items-center justify-center flex-shrink-0 transition-colors duration-200 border border-violet-500/15">
+                          <ChevronRight size={18} className="text-violet-400/50 group-hover:text-violet-400" />
+                        </div>
+                      </button>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-emerald-500/[0.03] border border-emerald-500/10">
+                        <Sparkles size={15} className="text-emerald-400/50" />
+                        <span className="text-sm text-emerald-400/60 font-medium">
+                          Último capítulo
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </article>
-          </main>
-        </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <BookOpen size={48} className="mx-auto mb-4 text-white/15" />
+                <p className="text-white/30 text-sm">
+                  Nenhum conteúdo disponível
+                </p>
+              </div>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );

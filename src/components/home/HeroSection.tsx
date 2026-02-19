@@ -55,8 +55,8 @@ export function HeroSection() {
         accent: (chunks) => <span className="text-accent font-bold">{chunks}</span>,
       });
   const stats = [
-    { icon: BookOpen, color: "purple", value: coursesCount, label: t("stats.courses"), suffix: "+" },
-    { icon: Brain, color: "pink", value: studentsCount, label: locale === 'pt-BR' ? 'Aulas Disponíveis' : 'Available Lessons', suffix: "+" },
+    { icon: BookOpen, color: "purple", value: coursesCount, label: t("stats.courses"), suffix: "" },
+    { icon: Brain, color: "pink", value: studentsCount, label: locale === 'pt-BR' ? 'Aulas Práticas' : 'Practical Lessons', suffix: "+" },
     { icon: Cpu, color: "yellow", value: completionRate, label: locale === 'pt-BR' ? 'Ferramentas de IA' : 'AI Tools', suffix: "+" },
   ];
 
@@ -75,7 +75,7 @@ export function HeroSection() {
 
   useEffect(() => {
     const timer1 = setInterval(() => {
-      setStudentsCount(prev => prev < 1000 ? prev + 20 : 1000);
+      setStudentsCount(prev => prev < 500 ? prev + 10 : 500);
     }, 30);
     const timer2 = setInterval(() => {
       setCoursesCount(prev => prev < 18 ? prev + 1 : 18);
