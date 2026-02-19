@@ -2,6 +2,84 @@
   "LocaleLayout": {
     "title": "FayaPoint AI Academy"
   },
+  "Gate": {
+    "entering": "Preparing everything for you...",
+    "hero": {
+      "liveNow": "people online right now",
+      "todayVerified": "verified today",
+      "line1": "The Future of AI Is Here.",
+      "line2": "Are You Going to Miss Out?",
+      "subtitle": "Thousands of professionals are already mastering artificial intelligence for free. Courses, tools, and certificates — all inside a platform that will transform your career.",
+      "stat1": "Courses",
+      "stat2": "Practical Lessons",
+      "stat3": "AI Tools",
+      "stat4": "Rating",
+      "cta": "Unlock Free Access"
+    },
+    "preview": {
+      "badge": "Exclusive Preview",
+      "title1": "See what's",
+      "title2": "waiting for you",
+      "subtitle": "A complete AI platform with everything you need to stand out in the market",
+      "card1": "AI Courses",
+      "card2": "Creative Studio",
+      "card3": "Automations",
+      "card4": "Certificates",
+      "locked": "Full content available after verification",
+      "unlockCta": "Unlock Now"
+    },
+    "free": {
+      "badge": "ALL OF THIS FOR FREE",
+      "title": "What you get by entering — without paying anything",
+      "subtitle": "Instant access to tools and content that professionals pay premium for",
+      "freeLabel": "FREE",
+      "feature1": {
+        "title": "Complete AI Courses",
+        "desc": "18 practical courses on ChatGPT, Midjourney, automation and more"
+      },
+      "feature2": {
+        "title": "AI Image Studio",
+        "desc": "Generate professional images with cutting-edge AI models"
+      },
+      "feature3": {
+        "title": "Print-on-Demand Store",
+        "desc": "Create products with your art and earn 70% commission per sale"
+      },
+      "feature4": {
+        "title": "Recognized Certificates",
+        "desc": "Receive verifiable certificates upon completing each course"
+      },
+      "feature5": {
+        "title": "100+ AI Tools",
+        "desc": "Master the tools that are revolutionizing every profession"
+      },
+      "feature6": {
+        "title": "Community & Ranking",
+        "desc": "Earn XP, climb rankings and unlock exclusive badges"
+      }
+    },
+    "fomo": {
+      "urgencyLabel": "Free access expires in",
+      "hours": "hours",
+      "minutes": "minutes",
+      "seconds": "seconds",
+      "verifiedToday": "people verified today",
+      "growing": "Growing 23% per month",
+      "rating": "4.9/5 rating"
+    },
+    "gate": {
+      "title": "Quick Verification",
+      "subtitle": "Complete the verification below to access all content for free",
+      "titleReady": "You're verified!",
+      "subtitleReady": "Click below to enter the platform",
+      "enterCta": "Enter for Free",
+      "waitingCta": "Awaiting verification...",
+      "verifying": "Entering...",
+      "trust1": "Secure verification",
+      "trust2": "Instant access",
+      "trust3": "No credit card"
+    }
+  },
   "StickyCTA": {
     "title": "Start your AI journey today!",
     "subtitle": "Free access to courses, tools, and an amazing community.",
@@ -639,6 +717,38 @@
         "linkLabel": "Chat with us on WhatsApp",
         "message": "Hi! I'd like to learn more about FayaPoint's AI courses."
       }
+    },
+    "FreeOffer": {
+      "badge": "FREE ACCOUNT",
+      "title1": "All of this is",
+      "title2": "100% free",
+      "subtitle": "Create your account now and unlock instant access to all these resources — no credit card required",
+      "benefit1": {
+        "title": "18 Complete AI Courses",
+        "desc": "ChatGPT, Midjourney, Claude, Gemini and more"
+      },
+      "benefit2": {
+        "title": "AI Image Studio",
+        "desc": "Generate art with cutting-edge models"
+      },
+      "benefit3": {
+        "title": "Print-on-Demand Store",
+        "desc": "Sell products with your art, earn 70%"
+      },
+      "benefit4": {
+        "title": "Verifiable Certificates",
+        "desc": "Prove your AI skills"
+      },
+      "benefit5": {
+        "title": "100+ AI Tools",
+        "desc": "Practical tutorials for every tool"
+      },
+      "benefit6": {
+        "title": "Gamification & Ranking",
+        "desc": "XP, badges and daily challenges"
+      },
+      "cta": "Create Free Account Now",
+      "noCreditCard": "No credit card • Instant access • Cancel anytime"
     },
     "ValueCTA": {
       "badge": "100% FREE",

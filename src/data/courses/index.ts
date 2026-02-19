@@ -8,6 +8,8 @@ import { midjourneyCourse } from './midjourney-course';
 import { claudeCourse } from './claude-course';
 import { perplexityCourse } from './perplexity-course';
 import { chatGPTAllowlistingCourse } from './chatgpt-allowlisting-course';
+import { openclawCourse } from './openclaw-course';
+import { claudeCoworkCourse } from './claude-cowork-course';
 import { normalizeCourseLevel, CourseLevel } from '@/lib/course-tiers';
 
 export interface CourseModule {
@@ -84,7 +86,9 @@ export const allCourses: CourseData[] = [
   midjourneyCourse,
   claudeCourse,
   perplexityCourse,
-  chatGPTAllowlistingCourse
+  chatGPTAllowlistingCourse,
+  openclawCourse,
+  claudeCoworkCourse
 ];
 
 // Helper function to get course by slug with normalized level

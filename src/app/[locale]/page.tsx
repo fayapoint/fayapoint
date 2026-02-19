@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
@@ -12,16 +13,30 @@ import { CTASection } from "@/components/home/CTASection";
 // DISABLED: High serverless usage - triggers API call on every home page visit
 // import { CommunityGallery } from "@/components/home/CommunityGallery";
 import { ValuePropositionCTA } from "@/components/home/ValuePropositionCTA";
+import { FreeOfferBanner } from "@/components/home/FreeOfferBanner";
 import { StickyCTA } from "@/components/conversion/StickyCTA";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
+import { GateLandingPage } from "@/components/gate/GateLandingPage";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const gateToken = cookieStore.get("fayapoint_gate")?.value;
+  const authToken = cookieStore.get("fayapoint_token")?.value;
+
+  // Show gate for unverified, non-logged-in visitors
+  const showGate = !gateToken && !authToken;
+
+  if (showGate) {
+    return <GateLandingPage />;
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />
       <main>
         <HeroSection />
+        <FreeOfferBanner />
         <ValuePropositionCTA />
         {/* DISABLED: High serverless usage - see NETLIFY_ACTION_PLAN.md */}
         {/* <CommunityGallery /> */}

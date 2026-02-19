@@ -2,6 +2,84 @@
   "LocaleLayout": {
     "title": "FayaPoint AI Academy"
   },
+  "Gate": {
+    "entering": "Preparando tudo para você...",
+    "hero": {
+      "liveNow": "pessoas online agora",
+      "todayVerified": "verificados hoje",
+      "line1": "O Futuro da IA Está Aqui.",
+      "line2": "Você Vai Ficar de Fora?",
+      "subtitle": "Milhares de brasileiros já estão dominando inteligência artificial gratuitamente. Cursos, ferramentas e certificados — tudo dentro de uma plataforma que vai mudar sua carreira.",
+      "stat1": "Cursos",
+      "stat2": "Aulas Práticas",
+      "stat3": "Ferramentas IA",
+      "stat4": "Avaliação",
+      "cta": "Desbloquear Acesso Gratuito"
+    },
+    "preview": {
+      "badge": "Prévia Exclusiva",
+      "title1": "Veja o que está",
+      "title2": "esperando por você",
+      "subtitle": "Uma plataforma completa de IA com tudo que você precisa para se destacar no mercado",
+      "card1": "Cursos de IA",
+      "card2": "Studio Criativo",
+      "card3": "Automações",
+      "card4": "Certificados",
+      "locked": "Conteúdo completo disponível após verificação",
+      "unlockCta": "Desbloquear Agora"
+    },
+    "free": {
+      "badge": "TUDO ISSO DE GRAÇA",
+      "title": "O que você ganha ao entrar — sem pagar nada",
+      "subtitle": "Acesso imediato a ferramentas e conteúdos que profissionais pagam caro para ter",
+      "freeLabel": "GRÁTIS",
+      "feature1": {
+        "title": "Cursos Completos de IA",
+        "desc": "18 cursos práticos sobre ChatGPT, Midjourney, automação e mais"
+      },
+      "feature2": {
+        "title": "Studio AI para Criar Imagens",
+        "desc": "Gere imagens profissionais com modelos de IA de última geração"
+      },
+      "feature3": {
+        "title": "Loja Print-on-Demand",
+        "desc": "Crie produtos com sua arte e ganhe comissão de 70% por venda"
+      },
+      "feature4": {
+        "title": "Certificados Reconhecidos",
+        "desc": "Receba certificados verificáveis ao completar cada curso"
+      },
+      "feature5": {
+        "title": "100+ Ferramentas de IA",
+        "desc": "Domine as ferramentas que estão revolucionando todas as profissões"
+      },
+      "feature6": {
+        "title": "Comunidade e Ranking",
+        "desc": "Ganhe XP, suba no ranking e conquiste badges exclusivos"
+      }
+    },
+    "fomo": {
+      "urgencyLabel": "Acesso gratuito expira em",
+      "hours": "horas",
+      "minutes": "minutos",
+      "seconds": "segundos",
+      "verifiedToday": "pessoas verificadas hoje",
+      "growing": "Crescendo 23% ao mês",
+      "rating": "4.9/5 de avaliação"
+    },
+    "gate": {
+      "title": "Verificação Rápida",
+      "subtitle": "Complete a verificação abaixo para acessar todo o conteúdo gratuitamente",
+      "titleReady": "Você está verificado!",
+      "subtitleReady": "Clique abaixo para entrar na plataforma",
+      "enterCta": "Entrar Gratuitamente",
+      "waitingCta": "Aguardando verificação...",
+      "verifying": "Entrando...",
+      "trust1": "Verificação segura",
+      "trust2": "Acesso instantâneo",
+      "trust3": "Sem cartão de crédito"
+    }
+  },
   "StickyCTA": {
     "title": "Comece sua jornada em IA hoje!",
     "subtitle": "Acesso gratuito a cursos, ferramentas e uma comunidade incrível.",
@@ -639,6 +717,38 @@
         "linkLabel": "Fale conosco no WhatsApp",
         "message": "Olá! Gostaria de saber mais sobre os cursos de IA da FayaPoint."
       }
+    },
+    "FreeOffer": {
+      "badge": "CONTA GRATUITA",
+      "title1": "Tudo isso é",
+      "title2": "100% gratuito",
+      "subtitle": "Crie sua conta agora e desbloqueie acesso imediato a todos esses recursos — sem cartão de crédito",
+      "benefit1": {
+        "title": "18 Cursos de IA Completos",
+        "desc": "ChatGPT, Midjourney, Claude, Gemini e mais"
+      },
+      "benefit2": {
+        "title": "Studio AI para Criar Imagens",
+        "desc": "Gere arte com modelos de última geração"
+      },
+      "benefit3": {
+        "title": "Loja Print-on-Demand",
+        "desc": "Venda produtos com sua arte, ganhe 70%"
+      },
+      "benefit4": {
+        "title": "Certificados Verificáveis",
+        "desc": "Comprove suas habilidades em IA"
+      },
+      "benefit5": {
+        "title": "100+ Ferramentas de IA",
+        "desc": "Tutoriais práticos de todas as ferramentas"
+      },
+      "benefit6": {
+        "title": "Gamificação e Ranking",
+        "desc": "XP, badges e desafios diários"
+      },
+      "cta": "Criar Conta Grátis Agora",
+      "noCreditCard": "Sem cartão de crédito • Acesso instantâneo • Cancele quando quiser"
     },
     "ValueCTA": {
       "badge": "100% GRÁTIS",

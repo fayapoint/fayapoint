@@ -13,6 +13,21 @@ import {
 import { routing, type Locale } from "./i18n/routing";
 
 // =============================================================================
+// SEARCH ENGINE BOT DETECTION - Auto-pass gate for SEO
+// =============================================================================
+const SEARCH_ENGINE_BOTS = [
+  "googlebot", "bingbot", "yandexbot", "duckduckbot", "baiduspider",
+  "slurp", "facebot", "facebookexternalhit", "twitterbot", "linkedinbot",
+  "applebot", "semrushbot", "ahrefsbot", "mj12bot", "rogerbot",
+  "dotbot", "petalbot", "bytespider", "gptbot", "ia_archiver",
+];
+
+function isSearchEngineBot(ua: string): boolean {
+  const lower = ua.toLowerCase();
+  return SEARCH_ENGINE_BOTS.some(bot => lower.includes(bot));
+}
+
+// =============================================================================
 // GEOBLOCKING CONFIGURATION - BRAZIL ONLY
 // =============================================================================
 const GEOBLOCK_CONFIG = {
@@ -264,6 +279,14 @@ export default async function middleware(request: NextRequest) {
     const response = nextIntlMiddleware(request);
     if (response) addSecurityHeaders(response);
     return response;
+  }
+  
+  // =========================================================================
+  // 0.6. SEARCH ENGINE BOT GATE BYPASS - Set gate cookie so bots see full page
+  // =========================================================================
+  if (isSearchEngineBot(userAgent) && !request.cookies.has("fayapoint_gate")) {
+    // Let the request continue but set the gate cookie in the response
+    // This is handled at the end of middleware by adding the cookie to the response
   }
   
   // =========================================================================
@@ -589,6 +612,17 @@ export default async function middleware(request: NextRequest) {
   if (response) {
     addSecurityHeaders(response);
     response.headers.set("X-RateLimit-Remaining", String(rl.remaining));
+    
+    // Auto-set gate cookie for search engine bots so they see full page content
+    if (isSearchEngineBot(userAgent) && !request.cookies.has("fayapoint_gate")) {
+      response.cookies.set("fayapoint_gate", "bot-verified", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 30, // 30 days for bots
+        path: "/",
+      });
+    }
   }
 
   return response;

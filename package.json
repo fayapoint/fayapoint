@@ -58,6 +58,7 @@
     "next": "^16.0.7",
     "next-auth": "^4.24.11",
     "next-intl": "^4.5.3",
+    "nextjs-turnstile": "^1.0.3",
     "posthog-js": "^1.276.0",
     "qrcode.react": "^4.2.0",
     "react": "19.1.0",
