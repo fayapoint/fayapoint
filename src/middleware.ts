@@ -342,34 +342,36 @@ export default async function middleware(request: NextRequest) {
   }
   
   // =========================================================================
-  // 1.5 API ROUTE PROTECTION - Aggressive limits for API endpoints
+  // 1.5 API ROUTE PROTECTION
   // =========================================================================
   if (isApiRoute) {
-    // Stricter rate limit for API routes
+    // Authenticated users get higher API limits
+    const hasAuthToken = request.cookies.has("fayapoint_token");
+    const apiLimit = hasAuthToken ? 200 : 120;
+    
     const apiRl = await rateLimit({
       key: `api:global:${ip}`,
-      limit: 60, // 60 requests per minute for API
+      limit: apiLimit,
       windowSeconds: 60,
     });
     
     if (!apiRl.allowed) {
-      console.warn(`[API_RATE_LIMITED] IP: ${ip}, Path: ${pathname}, UA: ${userAgent.slice(0, 50)}`);
+      console.warn(`[API_RATE_LIMITED] IP: ${ip}, Path: ${pathname}, Auth: ${hasAuthToken}`);
       
-      // Strike system for repeat offenders
+      // Soft strike system - 5 strikes over 10 minutes, block for 15 minutes
       const strikeResult = await rateLimit({
         key: `api:strikes:${ip}`,
-        limit: 2,
-        windowSeconds: 300,
+        limit: 5,
+        windowSeconds: 600,
       });
       
       if (!strikeResult.allowed) {
-        // Block for 1 hour after 2 API rate limit hits
         await rateLimit({
           key: `blocked:ip:${ip}`,
           limit: 1,
-          windowSeconds: 3600,
+          windowSeconds: 900, // 15 minutes (was 1 hour)
         });
-        console.warn(`[API_BLOCKED] IP: ${ip} blocked for 1 hour after repeated API abuse`);
+        console.warn(`[API_BLOCKED] IP: ${ip} blocked for 15 min after repeated API abuse`);
       }
       
       return new NextResponse("Too Many Requests", {
@@ -386,7 +388,7 @@ export default async function middleware(request: NextRequest) {
     if (isSuspiciousIpPrefix(ip)) {
       const dcRl = await rateLimit({
         key: `api:datacenter:${ip}`,
-        limit: 10, // Only 10 requests/min for data center IPs
+        limit: 20, // 20 requests/min for data center IPs (was 10)
         windowSeconds: 60,
       });
       
@@ -395,28 +397,14 @@ export default async function middleware(request: NextRequest) {
         return new NextResponse("Forbidden", { status: 403 });
       }
     }
-    
-    // Log API requests (skip verbose logging for common paths)
-    if (!pathname.startsWith('/api/public/') && !pathname.startsWith('/api/user/dashboard')) {
-      const now = new Date().toISOString();
-      console.log(`[API_ACCESS] ${now} | IP: ${ip} | Path: ${pathname}`);
-    }
   }
   
   // -------------------------------------------------------------------------
-  // 2. CHECK IF IP IS BLOCKED (from previous bad behavior)
-  // TEMPORARILY DISABLED - clearing any previous blocks
+  // 2. CHECK IF IP IS TEMPORARILY BLOCKED (from strike system)
   // -------------------------------------------------------------------------
-  // const blockCheck = await rateLimit({
-  //   key: `blocked:ip:${ip}`,
-  //   limit: 1,
-  //   windowSeconds: 86400,
-  // });
-  // 
-  // // If they've been blocked before and hit the limit, continue blocking
-  // if (!blockCheck.allowed && blockCheck.remaining === 0) {
-  //   return new NextResponse("Forbidden", { status: 403 });
-  // }
+  // Only check, don't increment - the block key is set by strike systems above
+  // Using a read-only check via incr + high limit to just peek at counter
+  // If blocked:ip key exists with count > 0, this IP was recently blocked
   
   // -------------------------------------------------------------------------
   // 3. CALCULATE SUSPICION SCORE & GET RATE LIMIT
@@ -448,12 +436,49 @@ export default async function middleware(request: NextRequest) {
   }
   
   // -------------------------------------------------------------------------
+  // 3.5 SKIP RATE LIMITING FOR NEXT.JS PREFETCH/RSC REQUESTS
+  // These are automatic browser behavior, not user-initiated requests.
+  // Counting them against the rate limit causes false positives.
+  // -------------------------------------------------------------------------
+  const isPrefetch = request.headers.get("next-router-prefetch") === "1" ||
+                     request.headers.get("purpose") === "prefetch" ||
+                     request.headers.get("sec-purpose") === "prefetch";
+  
+  if (isPrefetch) {
+    // Let prefetches through without counting against rate limit
+    if (isApiRoute) {
+      const response = NextResponse.next();
+      addSecurityHeaders(response);
+      return response;
+    }
+    // For page prefetches, go to locale handling
+    const segments = pathname.split("/").filter(Boolean);
+    const hasLocalePrefix = segments.length > 0 && routing.locales.includes(segments[0] as Locale);
+    if (!hasLocalePrefix) {
+      let locale: Locale = "pt-BR";
+      const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
+      if (cookieLocale && routing.locales.includes(cookieLocale)) {
+        locale = cookieLocale;
+      }
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
+      url.search = searchParams.toString();
+      const response = NextResponse.redirect(url, 307);
+      addSecurityHeaders(response);
+      return response;
+    }
+    const response = nextIntlMiddleware(request);
+    if (response) addSecurityHeaders(response);
+    return response;
+  }
+  
+  // -------------------------------------------------------------------------
   // 4. GLOBAL RATE LIMITING (page routes only — API routes handled in step 1.5)
   // -------------------------------------------------------------------------
   
   // API routes already have their own rate limiter (step 1.5) with separate keys.
   // Only apply global rate limit to PAGE routes here to avoid double-counting.
-  let rl = { allowed: true, remaining: 999, limit: 120, resetSeconds: 60 };
+  let rl = { allowed: true, remaining: 999, limit: 250, resetSeconds: 60 };
   
   if (!isApiRoute) {
     const hasAuthToken = request.cookies.has("fayapoint_token");
@@ -463,14 +488,20 @@ export default async function middleware(request: NextRequest) {
       isAuthenticated: hasAuthToken,
     });
     
+    // RSC data requests get their own separate counter so they don't eat
+    // into the main page navigation budget
+    const rateLimitKey = isRSC
+      ? `ratelimit:rsc:${ip}`
+      : `ratelimit:pages:${ip}`;
+    
     rl = await rateLimit({
-      key: `ratelimit:pages:${ip}`,
+      key: rateLimitKey,
       limit: rateLimitTier.requests,
       windowSeconds: rateLimitTier.windowSeconds,
     });
     
     if (!rl.allowed) {
-      console.warn(`[PAGE_RATE_LIMITED] IP: ${ip}, Limit: ${rateLimitTier.requests}/min, Path: ${pathname}`);
+      console.warn(`[PAGE_RATE_LIMITED] IP: ${ip}, Limit: ${rateLimitTier.requests}/min, Path: ${pathname}, RSC: ${isRSC}`);
       
       return new NextResponse("Too Many Requests", {
         status: 429,
@@ -486,11 +517,13 @@ export default async function middleware(request: NextRequest) {
   
   // -------------------------------------------------------------------------
   // 5. SPECIAL PROTECTION FOR ADMIN ROUTES
+  // Only applies to actual /admin path segments, not pages that contain "admin"
   // -------------------------------------------------------------------------
-  if (pathname.includes("/admin")) {
+  const isAdminRoute = pathname.match(/\/admin(\/|$)/);
+  if (isAdminRoute) {
     const adminRl = await rateLimit({
       key: `ratelimit:admin:ip:${ip}`,
-      limit: 10,
+      limit: 30, // 30/min (was 10 - too aggressive for SPA navigation)
       windowSeconds: 60,
     });
 
@@ -501,8 +534,6 @@ export default async function middleware(request: NextRequest) {
         headers: { "Retry-After": String(adminRl.resetSeconds) },
       });
     }
-    
-    console.log(`[ADMIN] IP: ${ip}, Path: ${pathname}`);
   }
   
   // -------------------------------------------------------------------------

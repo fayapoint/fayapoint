@@ -15,6 +15,9 @@ export async function POST(request: NextRequest) {
   try {
     const patterns = [
       "ratelimit:*",
+      "ratelimit:rsc:*",
+      "ratelimit:pages:*",
+      "ratelimit:admin:*",
       "api:global:*",
       "api:strikes:*",
       "api:datacenter:*",
@@ -22,7 +25,6 @@ export async function POST(request: NextRequest) {
       "strikes:*",
       "requests:count:*",
       "bandwidth:*",
-      "ratelimit:admin:*",
     ];
 
     let totalDeleted = 0;

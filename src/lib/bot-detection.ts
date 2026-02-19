@@ -103,19 +103,22 @@ export const HONEYPOT_PATHS = [
 ];
 
 // Rate limit tiers based on behavior
+// NOTE: A single Next.js page navigation generates 20-40+ sub-requests
+// (HTML, RSC payloads, prefetches, layout RSC, API calls, images)
+// Limits must account for this to avoid blocking legitimate users.
 export const RATE_LIMITS = {
-  // Strict limit for suspicious IPs
-  SUSPICIOUS: { requests: 15, windowSeconds: 60 },
-  // Normal limit for regular traffic (page loads generate many sub-requests: HTML, RSC, prefetches)
-  NORMAL: { requests: 120, windowSeconds: 60 },
-  // Higher limit for known good actors
-  TRUSTED: { requests: 200, windowSeconds: 60 },
-  // API endpoints
-  API: { requests: 60, windowSeconds: 60 },
+  // Strict limit for suspicious IPs (still allows basic browsing)
+  SUSPICIOUS: { requests: 40, windowSeconds: 60 },
+  // Normal limit for regular traffic
+  NORMAL: { requests: 250, windowSeconds: 60 },
+  // Higher limit for authenticated users
+  TRUSTED: { requests: 500, windowSeconds: 60 },
+  // API endpoints (authenticated users make many API calls per page)
+  API: { requests: 120, windowSeconds: 60 },
   // Auth API endpoints (login, register)
   AUTH: { requests: 15, windowSeconds: 60 },
   // Image generation (expensive)
-  IMAGE_GEN: { requests: 3, windowSeconds: 60 },
+  IMAGE_GEN: { requests: 5, windowSeconds: 60 },
 } as const;
 
 /**
@@ -189,9 +192,10 @@ export function calculateSuspicionScore(params: {
     score += 100;
   }
   
-  // No referer on internal navigation = suspicious
-  if (!params.hasReferer && !params.pathname.endsWith('/')) {
-    score += 10;
+  // No referer on direct navigation = mildly suspicious
+  // (First visit or bookmark navigation legitimately has no referer)
+  if (!params.hasReferer && !params.pathname.endsWith('/') && !params.isRSC) {
+    score += 5;
   }
   
   // No accept-language = likely bot
@@ -211,9 +215,10 @@ export function calculateSuspicionScore(params: {
     score += 40;
   }
   
-  // RSC request without proper session = suspicious
+  // RSC request without referer = only mildly suspicious
+  // (Next.js prefetches generate RSC requests without referer normally)
   if (params.isRSC && !params.hasReferer) {
-    score += 15;
+    score += 5;
   }
   
   // Python/Go/Java clients without proper headers
@@ -239,8 +244,8 @@ export function getRateLimitTier(params: {
 }): typeof RATE_LIMITS[keyof typeof RATE_LIMITS] {
   const { suspicionScore, pathname, isAuthenticated } = params;
   
-  // Very suspicious = strict limit
-  if (suspicionScore >= 50) {
+  // Very suspicious = strict limit (raised threshold to reduce false positives)
+  if (suspicionScore >= 60) {
     return RATE_LIMITS.SUSPICIOUS;
   }
   
