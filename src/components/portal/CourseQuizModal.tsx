@@ -89,11 +89,14 @@ export function CourseQuizModal({
   } | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [existingCert, setExistingCert] = useState<CertificateInfo | null>(null);
+  const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
 
   const loadQuiz = useCallback(async () => {
+    if (isLoadingQuiz) return;
+    setIsLoadingQuiz(true);
     setPhase("loading");
     const token = localStorage.getItem("fayapoint_token");
-    if (!token) return;
+    if (!token) { setIsLoadingQuiz(false); return; }
 
     try {
       const res = await fetch(`/api/courses/${courseSlug}/quiz`, {
@@ -132,10 +135,13 @@ export function CourseQuizModal({
       setPhase("intro");
     } catch (e) {
       console.error("Quiz load error:", e);
-      setErrorMsg("Erro de conexão ao carregar avaliação.");
+      setErrorMsg("Erro de conexão ao carregar avaliação. Tente novamente.");
       setPhase("error");
+    } finally {
+      setIsLoadingQuiz(false);
     }
-  }, [courseSlug]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseSlug, isLoadingQuiz]);
 
   const submitQuiz = async () => {
     setPhase("submitting");
@@ -204,7 +210,7 @@ export function CourseQuizModal({
   };
 
   // Start loading quiz when modal opens
-  if (isOpen && phase === "loading" && questions.length === 0) {
+  if (isOpen && phase === "loading" && questions.length === 0 && !isLoadingQuiz) {
     loadQuiz();
   }
 
@@ -634,9 +640,17 @@ export function CourseQuizModal({
             </div>
             <h2 className="text-xl font-bold text-white mb-2">Erro</h2>
             <p className="text-sm text-white/40 mb-6">{errorMsg}</p>
-            <Button variant="outline" onClick={onClose} className="border-white/[0.08] text-white/40">
-              Fechar
-            </Button>
+            <div className="flex gap-3 justify-center">
+              <Button
+                onClick={() => { setErrorMsg(""); loadQuiz(); }}
+                className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
+              >
+                Tentar Novamente
+              </Button>
+              <Button variant="outline" onClick={onClose} className="border-white/[0.08] text-white/40">
+                Fechar
+              </Button>
+            </div>
           </div>
         )}
       </motion.div>

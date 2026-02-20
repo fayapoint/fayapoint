@@ -34,8 +34,85 @@ interface QuizQuestion {
   correctAnswer: number;
 }
 
+const QUIZ_MODELS = [
+  'google/gemini-2.0-flash-exp:free',
+  'google/gemini-2.5-flash-preview',
+  'meta-llama/llama-3.3-70b-instruct:free',
+];
+
+async function callOpenRouterForQuiz(
+  apiKey: string,
+  model: string,
+  systemPrompt: string,
+  userPrompt: string,
+): Promise<string> {
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': 'https://fayapoint.com',
+      'X-Title': 'FayaPoint Quiz Generator',
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      temperature: 0.7,
+      max_tokens: 4000,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error(`OpenRouter quiz error [${model}] ${response.status}:`, errText);
+    throw new Error(`Model ${model} failed (${response.status}): ${errText.slice(0, 200)}`);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: any = await response.json();
+  const content = data.choices?.[0]?.message?.content || '';
+  if (!content) {
+    throw new Error(`Model ${model} returned empty content`);
+  }
+  return content;
+}
+
+function parseQuizResponse(content: string): QuizQuestion[] {
+  // Parse JSON from response (handle markdown code blocks)
+  let jsonStr = content;
+  const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (jsonMatch) {
+    jsonStr = jsonMatch[1];
+  }
+
+  // Try to find JSON array
+  const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
+  if (!arrayMatch) {
+    console.error('Could not find JSON array in response:', content.slice(0, 500));
+    throw new Error('Resposta da AI não contém perguntas válidas');
+  }
+
+  const questions: QuizQuestion[] = JSON.parse(arrayMatch[0]);
+
+  if (!Array.isArray(questions) || questions.length < 5) {
+    throw new Error(`Número insuficiente de perguntas geradas (${questions.length})`);
+  }
+
+  return questions.slice(0, QUIZ_CONFIG.TOTAL_QUESTIONS).map((q) => ({
+    question: q.question,
+    options: q.options.slice(0, 4),
+    correctAnswer: typeof q.correctAnswer === 'number' ? q.correctAnswer : 0,
+  }));
+}
+
 async function generateQuizFromContent(courseContent: string, courseTitle: string): Promise<QuizQuestion[]> {
   const apiKey = OPENROUTER_API_KEY.trim().replace(/^Bearer\s+/i, '');
+  if (!apiKey) {
+    throw new Error('OPENROUTER_API_KEY não configurada');
+  }
 
   const systemPrompt = `You are an academic assessment expert. Generate exactly ${QUIZ_CONFIG.TOTAL_QUESTIONS} multiple-choice questions to evaluate a student's understanding of the course content provided. 
 
@@ -59,70 +136,29 @@ Return format:
 
 correctAnswer is the 0-based index of the correct option.`;
 
-  // Truncate content to fit context window (keep first ~8000 chars)
   const truncatedContent = courseContent.length > 8000
     ? courseContent.substring(0, 8000) + '\n\n[... conteúdo adicional omitido para brevidade ...]'
     : courseContent;
 
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-      'HTTP-Referer': 'https://fayapoint.com',
-      'X-Title': 'FayaPoint Quiz Generator',
-    },
-    body: JSON.stringify({
-      model: 'google/gemini-2.0-flash-exp:free',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        {
-          role: 'user',
-          content: `Gere ${QUIZ_CONFIG.TOTAL_QUESTIONS} perguntas de avaliação para o seguinte curso:\n\nTítulo: ${courseTitle}\n\nConteúdo:\n${truncatedContent}`,
-        },
-      ],
-      temperature: 0.7,
-      max_tokens: 4000,
-    }),
-  });
+  const userPrompt = `Gere ${QUIZ_CONFIG.TOTAL_QUESTIONS} perguntas de avaliação para o seguinte curso:\n\nTítulo: ${courseTitle}\n\nConteúdo:\n${truncatedContent}`;
 
-  if (!response.ok) {
-    const errText = await response.text();
-    console.error('OpenRouter quiz generation error:', errText);
-    throw new Error('Falha ao gerar quiz via AI');
+  const errors: string[] = [];
+
+  for (const model of QUIZ_MODELS) {
+    try {
+      console.log(`[Quiz] Trying model: ${model}`);
+      const content = await callOpenRouterForQuiz(apiKey, model, systemPrompt, userPrompt);
+      const questions = parseQuizResponse(content);
+      console.log(`[Quiz] Success with model: ${model}, ${questions.length} questions`);
+      return questions;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`[Quiz] Model ${model} failed:`, msg);
+      errors.push(`${model}: ${msg}`);
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data: any = await response.json();
-  const content = data.choices?.[0]?.message?.content || '';
-
-  // Parse JSON from response (handle markdown code blocks)
-  let jsonStr = content;
-  const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (jsonMatch) {
-    jsonStr = jsonMatch[1];
-  }
-
-  // Try to find JSON array
-  const arrayMatch = jsonStr.match(/\[[\s\S]*\]/);
-  if (!arrayMatch) {
-    console.error('Could not find JSON array in response:', content);
-    throw new Error('Resposta da AI não contém perguntas válidas');
-  }
-
-  const questions: QuizQuestion[] = JSON.parse(arrayMatch[0]);
-
-  // Validate
-  if (!Array.isArray(questions) || questions.length < 5) {
-    throw new Error('Número insuficiente de perguntas geradas');
-  }
-
-  // Ensure each question is valid
-  return questions.slice(0, QUIZ_CONFIG.TOTAL_QUESTIONS).map((q) => ({
-    question: q.question,
-    options: q.options.slice(0, 4),
-    correctAnswer: typeof q.correctAnswer === 'number' ? q.correctAnswer : 0,
-  }));
+  throw new Error(`Todos os modelos de IA falharam ao gerar o quiz. Detalhes: ${errors.join(' | ')}`);
 }
 
 /**
@@ -259,8 +295,9 @@ export async function GET(
       courseTitle: courseData.title,
     });
   } catch (error) {
-    console.error('Quiz GET error:', error);
-    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Quiz GET error:', msg, error);
+    return NextResponse.json({ error: `Erro ao gerar avaliação: ${msg}` }, { status: 500 });
   }
 }
 
@@ -420,7 +457,8 @@ export async function POST(
       });
     }
   } catch (error) {
-    console.error('Quiz POST error:', error);
-    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Quiz POST error:', msg, error);
+    return NextResponse.json({ error: `Erro ao processar avaliação: ${msg}` }, { status: 500 });
   }
 }

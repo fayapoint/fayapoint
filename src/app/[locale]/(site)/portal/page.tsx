@@ -421,7 +421,7 @@ export default function PortalPage() {
   const activity = dashboardData.activity;
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white">
       {/* Sidebar */}
       <DashboardSidebar
         activeTab={activeTab}
@@ -508,7 +508,7 @@ export default function PortalPage() {
         </header>
 
         {/* Content */}
-        <div className="p-4 md:p-6 overflow-x-hidden">
+        <div className="p-4 md:p-6">
           <AnimatePresence mode="wait">
             {/* Dashboard Tab */}
             {activeTab === "dashboard" && (
