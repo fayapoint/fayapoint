@@ -89,7 +89,7 @@ export async function POST(request: Request) {
     }
 
     // Determine model configuration
-    let primaryModel = 'google/gemini-2.0-flash-exp:free';
+    let primaryModel = 'black-forest-labs/flux-1-schnell';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let additionalBodyParams: any = {};
 

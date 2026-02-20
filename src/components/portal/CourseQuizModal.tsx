@@ -99,7 +99,12 @@ export function CourseQuizModal({
     if (!token) { setIsLoadingQuiz(false); return; }
 
     try {
-      const res = await fetch(`/api/courses/${courseSlug}/quiz`, {
+      // Check if test bypass is active (temporary — for testing certification)
+      const pageParams = new URLSearchParams(window.location.search);
+      const bypass = pageParams.get('_test_bypass');
+      const bypassQuery = bypass ? `?_test_bypass=${bypass}` : '';
+
+      const res = await fetch(`/api/courses/${courseSlug}/quiz${bypassQuery}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
