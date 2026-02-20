@@ -80,6 +80,7 @@ import { TIER_CONFIGS, SubscriptionPlan, EnrollmentSlots } from "@/lib/course-ti
 
 // Components
 import { DashboardSidebar } from "@/components/portal/DashboardSidebar";
+import { DashboardHome } from "@/components/portal/DashboardHome";
 import { AchievementsPanel } from "@/components/portal/AchievementsPanel";
 import { LeaderboardPanel } from "@/components/portal/LeaderboardPanel";
 import { ChallengesPanel } from "@/components/portal/ChallengesPanel";
@@ -329,18 +330,42 @@ export default function PortalPage() {
         // toast.success(`+${cachedDashboardData.dailyXpEarned} XP ganho hoje!`);
       }
 
-      if (cachedDashboardData.courses) {
-        const mappedCourses: DashboardCourseProgress[] = cachedDashboardData.courses.map(
-          (progress: DashboardCourseProgress) => {
-            const courseDetails = getCourseBySlug(progress.courseId);
-            return {
-              ...progress,
-              details: courseDetails,
-            };
-          }
-        );
-        setUserCourses(mappedCourses);
-      }
+      // Build courses list: merge CourseProgress with enrolledCourses (for 0% enrolled)
+      const progressCourses: DashboardCourseProgress[] = (cachedDashboardData.courses || []).map(
+        (progress: DashboardCourseProgress) => {
+          const courseDetails = getCourseBySlug(progress.courseId);
+          return { ...progress, details: courseDetails };
+        }
+      );
+      const progressIds = new Set(progressCourses.map(c => c.courseId));
+
+      // Add enrolled courses that have no progress yet (0%)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const enrolledOnly: DashboardCourseProgress[] = (cachedDashboardData.enrolledCourses || [])
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((e: any) => e.isActive && !progressIds.has(e.courseSlug))
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((e: any) => {
+          const courseDetails = getCourseBySlug(e.courseSlug);
+          return {
+            _id: `enrolled-${e.courseSlug}`,
+            courseId: e.courseSlug,
+            progressPercent: 0,
+            completedLessons: [],
+            details: courseDetails,
+          };
+        });
+
+      const allUserCourses = [...progressCourses, ...enrolledOnly];
+      setUserCourses(allUserCourses);
+
+      // Populate enrolledSlugs from both sources
+      const allSlugs = [
+        ...allUserCourses.map(c => c.courseId),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ...(cachedDashboardData.enrolledCourses || []).map((e: any) => e.courseSlug),
+      ];
+      setEnrolledSlugs(Array.from(new Set(allSlugs)));
     } else if (isDashboardLoading === false && !cachedDashboardData) {
       // If loading is done but no data, likely unauthorized or error
        const token = localStorage.getItem("fayai_token");
@@ -510,323 +535,26 @@ export default function PortalPage() {
         {/* Content */}
         <div className="p-4 md:p-6">
           <AnimatePresence mode="wait">
-            {/* Dashboard Tab */}
+            {/* Dashboard Tab — New Bento Grid Layout */}
             {activeTab === "dashboard" && (
               <motion.div
                 key="dashboard"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="space-y-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                {/* Welcome Banner */}
-                <Card className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-purple-500/30 p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h2 className="text-2xl font-bold mb-2">
-                        Bem-vindo de volta, {user.name?.split(" ")[0]}! 👋
-                      </h2>
-                      <p className="text-gray-400">
-                        {stats.streak > 0
-                          ? `Você está em uma sequência de ${stats.streak} dias! Continue assim! 🔥`
-                          : "Complete uma lição hoje para iniciar seu streak!"}
-                      </p>
-                    </div>
-                    {!isPro && (
-                      <Link href="/precos">
-                        <Button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600">
-                          <Crown size={16} className="mr-2" />
-                          Upgrade Pro
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                </Card>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Card className="bg-white/5 border-white/10 p-4 hover:bg-white/10 transition group">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 bg-purple-500/20 rounded-xl text-purple-400 group-hover:scale-110 transition">
-                        <BookOpen size={24} />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold">{user.progress?.coursesInProgress || 0}</p>
-                        <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">
-                          Em Progresso
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  <Card className="bg-white/5 border-white/10 p-4 hover:bg-white/10 transition group">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 bg-yellow-500/20 rounded-xl text-yellow-400 group-hover:scale-110 transition">
-                        <Trophy size={24} />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold">{user.progress?.coursesCompleted || 0}</p>
-                        <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">
-                          Concluídos
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  <Card className="bg-white/5 border-white/10 p-4 hover:bg-white/10 transition group">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 bg-blue-500/20 rounded-xl text-blue-400 group-hover:scale-110 transition">
-                        <Clock size={24} />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold">{user.progress?.totalHours || 0}h</p>
-                        <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">
-                          De Estudo
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-
-                  <Card className="bg-white/5 border-white/10 p-4 hover:bg-white/10 transition group">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 bg-green-500/20 rounded-xl text-green-400 group-hover:scale-110 transition">
-                        <Award size={24} />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold">{gamification?.totalAchievements || 0}</p>
-                        <p className="text-xs text-gray-400 uppercase font-semibold tracking-wider">
-                          Conquistas
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-
-                <div className="grid lg:grid-cols-3 gap-6">
-                  {/* Continue Learning */}
-                  <div className="lg:col-span-2 space-y-6">
-                    <Card className="bg-white/5 backdrop-blur border-white/10 p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold flex items-center gap-2">
-                          <PlayCircle className="text-purple-400" /> Continuar Aprendendo
-                        </h2>
-                        <Link href="/cursos">
-                          <Button variant="ghost" size="sm">
-                            Ver Todos <ChevronRight size={16} />
-                          </Button>
-                        </Link>
-                      </div>
-                      <div className="space-y-4">
-                        {userCourses.length > 0 ? (
-                          userCourses.slice(0, 3).map((progress) => (
-                            <Link
-                              key={progress._id}
-                              href={`/portal/learn/${progress.courseId}`}
-                            >
-                              <div className="flex gap-4 items-center group bg-white/5 p-4 rounded-xl hover:bg-white/10 transition cursor-pointer">
-                                <div className="w-20 h-14 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center overflow-hidden relative shrink-0">
-                                  <PlayCircle
-                                    size={24}
-                                    className="text-white/70 group-hover:text-purple-400 transition"
-                                  />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h3 className="font-semibold truncate group-hover:text-purple-400 transition">
-                                    {progress.details?.title || progress.courseId}
-                                  </h3>
-                                  <div className="flex items-center gap-4 mt-2">
-                                    <Progress
-                                      value={progress.progressPercent}
-                                      className="flex-1 h-2 bg-gray-700"
-                                    />
-                                    <span className="text-sm font-medium text-purple-400">
-                                      {progress.progressPercent}%
-                                    </span>
-                                  </div>
-                                </div>
-                                <ChevronRight
-                                  size={20}
-                                  className="text-gray-500 group-hover:text-purple-400 transition"
-                                />
-                              </div>
-                            </Link>
-                          ))
-                        ) : (
-                          <div className="text-center py-12 text-gray-400 border-2 border-dashed border-gray-800 rounded-xl">
-                            <Rocket size={48} className="mx-auto mb-4 opacity-50" />
-                            <p className="font-medium mb-2">Nenhum curso iniciado</p>
-                            <p className="text-sm mb-4">
-                              Explore nossos cursos e comece sua jornada!
-                            </p>
-                            <Link href="/cursos">
-                              <Button>
-                                <Sparkles size={16} className="mr-2" />
-                                Explorar Cursos
-                              </Button>
-                            </Link>
-                          </div>
-                        )}
-                      </div>
-                    </Card>
-
-                    {/* Daily Challenge Card */}
-                    {gamification?.dailyChallenge && (
-                      <Card
-                        className={cn(
-                          "p-6 cursor-pointer transition-all hover:scale-[1.02]",
-                          gamification.dailyChallenge.completed
-                            ? "bg-green-900/20 border-green-500/30"
-                            : "bg-gradient-to-r from-purple-900/30 to-pink-900/30 border-purple-500/30"
-                        )}
-                        onClick={() => setActiveTab("challenges")}
-                      >
-                        <div className="flex items-center gap-4">
-                          <div
-                            className={cn(
-                              "w-14 h-14 rounded-2xl flex items-center justify-center",
-                              gamification.dailyChallenge.completed
-                                ? "bg-green-500/20"
-                                : "bg-purple-500/20"
-                            )}
-                          >
-                            {gamification.dailyChallenge.completed ? (
-                              <Check size={28} className="text-green-400" />
-                            ) : (
-                              <Target size={28} className="text-purple-400" />
-                            )}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/50">
-                                Desafio Diário
-                              </Badge>
-                              <div className="flex items-center gap-1 text-yellow-400">
-                                <Zap size={14} />
-                                <span className="text-sm font-semibold">
-                                  +{gamification.dailyChallenge.reward} XP
-                                </span>
-                              </div>
-                            </div>
-                            <p className="font-semibold">
-                              {gamification.dailyChallenge.description}
-                            </p>
-                          </div>
-                          <ArrowRight className="text-gray-500" />
-                        </div>
-                      </Card>
-                    )}
-                  </div>
-
-                  {/* Right Column */}
-                  <div className="space-y-6">
-                    {/* Leaderboard Preview */}
-                    <Card className="bg-white/5 border-white/10 p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-semibold flex items-center gap-2">
-                          <Trophy className="text-yellow-400" size={18} />
-                          Ranking Semanal
-                        </h3>
-                        <Badge
-                          variant="outline"
-                          className="border-purple-500/50 text-purple-400"
-                        >
-                          #{leaderboard?.userRank || "-"}
-                        </Badge>
-                      </div>
-                      <div className="space-y-3">
-                        {leaderboard?.users?.slice(0, 5).map((u, idx) => (
-                          <div
-                            key={u.id}
-                            className={cn(
-                              "flex items-center gap-3 p-2 rounded-lg",
-                              u.isCurrentUser && "bg-purple-500/10"
-                            )}
-                          >
-                            <span
-                              className={cn(
-                                "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                                idx === 0
-                                  ? "bg-yellow-500 text-black"
-                                  : idx === 1
-                                  ? "bg-gray-400 text-black"
-                                  : idx === 2
-                                  ? "bg-amber-700 text-white"
-                                  : "bg-gray-800 text-gray-400"
-                              )}
-                            >
-                              {idx + 1}
-                            </span>
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500/50 to-pink-500/50 flex items-center justify-center text-xs font-semibold">
-                              {u.name?.substring(0, 2).toUpperCase()}
-                            </div>
-                            <span className="flex-1 truncate text-sm">
-                              {u.name}
-                              {u.isCurrentUser && (
-                                <span className="text-purple-400 ml-1">(você)</span>
-                              )}
-                            </span>
-                            <span className="text-xs text-gray-400">{u.weeklyXp} XP</span>
-                          </div>
-                        ))}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        className="w-full mt-4"
-                        onClick={() => setActiveTab("leaderboard")}
-                      >
-                        Ver Ranking Completo
-                      </Button>
-                    </Card>
-
-                    {/* Achievements Preview */}
-                    <Card className="bg-white/5 border-white/10 p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-semibold flex items-center gap-2">
-                          <Star className="text-yellow-400" size={18} />
-                          Conquistas Recentes
-                        </h3>
-                        <span className="text-sm text-gray-400">
-                          {gamification?.totalAchievements || 0}/
-                          {gamification?.achievements?.length || 0}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-4 gap-2">
-                        {gamification?.achievements
-                          ?.filter((a) => a.unlocked)
-                          .slice(0, 8)
-                          .map((achievement) => (
-                            <div
-                              key={achievement.id}
-                              className="aspect-square rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center"
-                              title={achievement.id}
-                            >
-                              <Trophy size={20} className="text-yellow-400" />
-                            </div>
-                          ))}
-                        {(!gamification?.achievements?.filter((a) => a.unlocked).length ||
-                          gamification.achievements.filter((a) => a.unlocked).length <
-                            8) &&
-                          Array.from({
-                            length: 8 - (gamification?.totalAchievements || 0),
-                          }).map((_, i) => (
-                            <div
-                              key={i}
-                              className="aspect-square rounded-lg bg-gray-800/50 flex items-center justify-center"
-                            >
-                              <Lock size={16} className="text-gray-600" />
-                            </div>
-                          ))}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        className="w-full mt-4"
-                        onClick={() => setActiveTab("achievements")}
-                      >
-                        Ver Todas Conquistas
-                      </Button>
-                    </Card>
-                  </div>
-                </div>
+                <DashboardHome
+                  user={user}
+                  stats={stats}
+                  plan={plan}
+                  isPro={isPro}
+                  gamification={gamification}
+                  leaderboard={leaderboard}
+                  activity={activity}
+                  userCourses={userCourses}
+                  onTabChange={setActiveTab}
+                  enrolledSlugs={enrolledSlugs}
+                />
               </motion.div>
             )}
 

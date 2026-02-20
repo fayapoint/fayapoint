@@ -231,23 +231,25 @@ export async function GET(
       }
     }
 
-    // Get course content for quiz generation
-    const courseData = getCourseBySlug(slug);
-    if (!courseData) {
+    // Get course content for quiz generation — try static data first, then MongoDB
+    const staticCourse = getCourseBySlug(slug);
+    const client = await getMongoClient();
+    const product = await client.db('fayapointProdutos').collection('products').findOne({ slug });
+
+    if (!staticCourse && !product) {
       return NextResponse.json({ error: 'Curso não encontrado' }, { status: 404 });
     }
 
-    // Fetch course content from MongoDB
-    const client = await getMongoClient();
-    const product = await client.db('fayapointProdutos').collection('products').findOne({ slug });
-    const courseContent = product?.courseContent || courseData.fullDescription || '';
+    // Build unified course info from whichever source is available
+    const courseTitle = staticCourse?.title || product?.name || slug;
+    const courseContent = product?.courseContent || staticCourse?.fullDescription || '';
 
     if (!courseContent || courseContent.length < 100) {
       return NextResponse.json({ error: 'Conteúdo do curso insuficiente para gerar avaliação' }, { status: 400 });
     }
 
     // Generate quiz questions via AI
-    const questions = await generateQuizFromContent(courseContent, courseData.title);
+    const questions = await generateQuizFromContent(courseContent, courseTitle);
 
     // Create or update certificate record
     if (!certificate) {
@@ -255,14 +257,14 @@ export async function GET(
         userId: auth.userId,
         userName: user.name,
         userEmail: user.email,
-        courseId: String(courseData.id),
+        courseId: String(staticCourse?.id || product?._id || slug),
         courseSlug: slug,
-        courseTitle: courseData.title,
-        courseDescription: courseData.shortDescription || '',
-        courseLevel: courseData.level || '',
-        courseDuration: courseData.duration || '',
-        courseTotalLessons: courseData.totalLessons || 0,
-        courseCategory: courseData.category || '',
+        courseTitle,
+        courseDescription: staticCourse?.shortDescription || product?.shortDescription || '',
+        courseLevel: staticCourse?.level || product?.level || '',
+        courseDuration: staticCourse?.duration || product?.duration || '',
+        courseTotalLessons: staticCourse?.totalLessons || product?.totalLessons || 0,
+        courseCategory: staticCourse?.category || product?.category || '',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         startedAt: progress?.startedAt || (progress as any)?.createdAt || new Date(),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -299,7 +301,7 @@ export async function GET(
         currentAttempt: (certificate.totalQuizAttempts || 0) + 1,
         remainingAttempts: QUIZ_CONFIG.MAX_ATTEMPTS - (certificate.totalQuizAttempts || 0),
       },
-      courseTitle: courseData.title,
+      courseTitle,
     });
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
