@@ -26,7 +26,7 @@ async function printifyRequest<T>(
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'User-Agent': 'FayaPoint-POD/1.0',
+      'User-Agent': 'FayAi-POD/1.0',
       ...options.headers,
     },
   });

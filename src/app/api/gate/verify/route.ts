@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     // Set httpOnly cookie valid for 7 days
     const response = NextResponse.json({ success: true });
-    response.cookies.set("fayapoint_gate", "verified", {
+    response.cookies.set("fayai_gate", "verified", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

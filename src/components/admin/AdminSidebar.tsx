@@ -193,7 +193,7 @@ export function AdminMobileDrawer({
                 </div>
                 <div>
                   <span className="font-bold text-lg text-white">Admin</span>
-                  <p className="text-[10px] text-gray-500">FayaPoint</p>
+                  <p className="text-[10px] text-gray-500">FayAi</p>
                 </div>
               </div>
               <button
@@ -319,7 +319,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
                 <span className="font-bold text-base bg-gradient-to-r from-violet-200 to-purple-300 bg-clip-text text-transparent">
                   Admin
                 </span>
-                <p className="text-[9px] text-gray-500 -mt-0.5">FayaPoint</p>
+                <p className="text-[9px] text-gray-500 -mt-0.5">FayAi</p>
               </div>
             </motion.div>
           )}

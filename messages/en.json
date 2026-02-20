@@ -1,6 +1,6 @@
 {
   "LocaleLayout": {
-    "title": "FayaPoint AI Academy"
+    "title": "FayAi"
   },
   "Gate": {
     "entering": "Preparing everything for you...",
@@ -96,7 +96,7 @@
     "noCreditCard": "No credit card • Instant access"
   },
   "Header": {
-    "logo": "FayaPoint AI",
+    "logo": "FayAi",
     "nav": {
       "courses": "Courses",
       "tools": "Tools",
@@ -219,7 +219,7 @@
       }
     },
     "bottom": {
-      "rights": "© 2025 FayaPoint AI Academy. All rights reserved.",
+      "rights": "© 2025 FayAi. All rights reserved.",
       "paymentsLabel": "Secure Payment:"
     }
   },
@@ -554,8 +554,8 @@
       "badge": "Turn challenges into opportunities",
       "title": "Your Challenges, Our Solutions",
       "description": "We know exactly what you're facing",
-      "withoutTitle": "Without FayaPoint",
-      "withTitle": "With FayaPoint",
+      "withoutTitle": "Without FayAi",
+      "withTitle": "With FayAi",
       "problems": [
         "Overwhelmed by the number of AI tools",
         "Spending hours on repetitive tasks",
@@ -700,7 +700,7 @@
       "whatsapp": {
         "prompt": "Prefer to talk first?",
         "linkLabel": "Chat with us on WhatsApp",
-        "message": "Hi! I'd like to learn more about FayaPoint's AI courses."
+        "message": "Hi! I'd like to learn more about FayAi's AI courses."
       },
       "trust": {
         "items": [
@@ -715,7 +715,7 @@
         ],
         "prompt": "Prefer to talk first?",
         "linkLabel": "Chat with us on WhatsApp",
-        "message": "Hi! I'd like to learn more about FayaPoint's AI courses."
+        "message": "Hi! I'd like to learn more about FayAi's AI courses."
       }
     },
     "FreeOffer": {
@@ -883,7 +883,7 @@
       "Advanced Video Production"
     ],
     "gallery": {
-      "badge": "Inside FayaPoint",
+      "badge": "Inside FayAi",
       "title": "Learning that Happens Live",
       "description": "In-person meetups and hybrid labs create real connections and fast-track the adoption of AI tools in our students' businesses.",
       "items": [
@@ -901,7 +901,7 @@
     },
     "quote": {
       "text": "“AI isn't the future, it's the present. Anyone who doesn't learn to use it today will be left behind tomorrow.”",
-      "cite": "— Ricardo Faya, Founder of FayaPoint"
+      "cite": "— Ricardo Faya, Founder of FayAi"
     },
     "timeline": {
       "title": "Our Journey",
@@ -934,7 +934,7 @@
         },
         {
           "year": "2025",
-          "title": "FayaPoint AI Academy",
+          "title": "FayAi",
           "description": "Founded Brazil's leading AI education platform"
         }
       ]
@@ -1035,7 +1035,7 @@
   "Contact": {
     "hero": {
       "badge": "Let's talk",
-      "title": "Transform your AI initiatives with the FayaPoint team",
+      "title": "Transform your AI initiatives with the FayAi team",
       "description": "Strategic partnerships, press, course questions, or corporate plans — we're ready to reply within 24 business hours.",
       "imageAlt": "Ricardo Faya leading a strategic session"
     },
@@ -1055,7 +1055,7 @@
     "highlightCard": {
       "badge": "Dedicated team",
       "title": "Hands-on support from first contact to onboarding",
-      "imageAlt": "FayaPoint team in a client meeting"
+      "imageAlt": "FayAi team in a client meeting"
     },
     "infoCards": [
       {
@@ -1087,7 +1087,7 @@
   },
   "Blog": {
     "hero": {
-      "title": "FayaPoint Blog",
+      "title": "FayAi Blog",
       "description": "Insights, tutorials and news about Artificial Intelligence"
     },
     "searchPlaceholder": "Search articles...",
@@ -1480,7 +1480,7 @@
     }
   },
   "Login": {
-    "title": "FayaPoint AI",
+    "title": "FayAi",
     "subtitle": "Welcome back! Sign in to continue.",
     "fields": {
       "email": "Email",
@@ -1508,7 +1508,7 @@
     }
   },
   "Register": {
-    "title": "FayaPoint AI",
+    "title": "FayAi",
     "subtitle": "Create your free account",
     "heroTitle": "Join over",
     "heroHighlight": "5,000 professionals",
@@ -1520,7 +1520,7 @@
       "Weekly updates"
     ],
     "testimonial": {
-      "quote": "FayaPoint completely changed how I work with AI. In just 2 months, I automated 80% of my repetitive tasks.",
+      "quote": "FayAi completely changed how I work with AI. In just 2 months, I automated 80% of my repetitive tasks.",
       "name": "Maria Silva",
       "role": "CEO, TechStartup"
     },
@@ -1547,7 +1547,7 @@
     "messages": {
       "passwordMismatch": "Passwords don't match",
       "acceptTerms": "You need to accept the terms of use",
-      "success": "Account created successfully! Welcome to FayaPoint!",
+      "success": "Account created successfully! Welcome to FayAi!",
       "googleInDev": "Google sign-up coming soon",
       "githubInDev": "GitHub sign-up coming soon"
     }
@@ -2000,7 +2000,7 @@
       {
         "title": "About the Platform",
         "items": [
-          { "question": "What is FayaPoint AI Academy?", "answer": "FayaPoint is a complete AI education platform, offering practical courses, AI tools and specialized consulting for professionals and companies." },
+          { "question": "What is FayAi?", "answer": "FayAi is a complete AI education platform, offering practical courses, AI tools and specialized consulting for professionals and companies." },
           { "question": "Do I need prior programming knowledge?", "answer": "No! Our courses are designed for all levels. We have specific tracks for beginners that don't require prior technical knowledge." },
           { "question": "How does course access work?", "answer": "After enrollment, you have immediate access to all course content through our portal. Access is lifetime for paid courses." }
         ]
@@ -2032,15 +2032,15 @@
     "badge": "Legal Document",
     "title": "Terms of Use",
     "lastUpdated": "Last updated: December 2024",
-    "intro": "By accessing and using the FayaPoint AI Academy platform, you agree to the terms and conditions described in this document. Read carefully before using our services.",
+    "intro": "By accessing and using the FayAi platform, you agree to the terms and conditions described in this document. Read carefully before using our services.",
     "sections": [
       { "title": "Acceptance of Terms", "content": "By creating an account or using our services, you confirm that you have read, understood and agree to these Terms of Use. If you do not agree with any part of these terms, you should not use our platform." },
-      { "title": "Description of Services", "content": "FayaPoint offers an AI education platform, including online courses, AI tools (such as Studio AI), community and consulting services. We reserve the right to modify, suspend or discontinue any service at any time." },
+      { "title": "Description of Services", "content": "FayAi offers an AI education platform, including online courses, AI tools (such as Studio AI), community and consulting services. We reserve the right to modify, suspend or discontinue any service at any time." },
       { "title": "User Account", "content": "You are responsible for maintaining the confidentiality of your password and account. All activities carried out under your account are your responsibility. Notify us immediately of any unauthorized use." },
-      { "title": "Intellectual Property", "content": "All platform content, including courses, videos, texts and materials, is the property of FayaPoint or its licensors. Reproduction, distribution or modification without express authorization is prohibited." },
+      { "title": "Intellectual Property", "content": "All platform content, including courses, videos, texts and materials, is the property of FayAi or its licensors. Reproduction, distribution or modification without express authorization is prohibited." },
       { "title": "Acceptable Use", "content": "You agree to use the platform only for legal purposes and in accordance with these terms. It is prohibited to share credentials, download content for redistribution, use automation to access the platform or violate third-party rights." },
       { "title": "Payments and Refunds", "content": "Prices are displayed in local currency. We offer a 7-day guarantee for full refund. After this period, there is no refund for accessed courses. Subscriptions can be canceled at any time." },
-      { "title": "Limitation of Liability", "content": "FayaPoint is not responsible for indirect, incidental or consequential damages. Our maximum liability is limited to the amount paid by the user in the last 12 months." },
+      { "title": "Limitation of Liability", "content": "FayAi is not responsible for indirect, incidental or consequential damages. Our maximum liability is limited to the amount paid by the user in the last 12 months." },
       { "title": "Modifications", "content": "We may update these terms periodically. We will notify you of significant changes by email or through the platform. Continued use after changes constitutes acceptance of the new terms." }
     ]
   },
@@ -2049,7 +2049,7 @@
     "title": "Privacy Policy",
     "lastUpdated": "Last updated: December 2024",
     "lgpdCompliance": "In compliance with data protection regulations",
-    "intro": "FayaPoint values your privacy. This policy describes how we collect, use and protect your personal data in compliance with applicable data protection laws.",
+    "intro": "FayAi values your privacy. This policy describes how we collect, use and protect your personal data in compliance with applicable data protection laws.",
     "sections": [
       { "title": "Data We Collect", "content": "We collect data you provide directly (name, email, payment data), usage data (pages visited, course progress), technical data (IP, browser, device) and cookies to improve your experience." },
       { "title": "How We Use Your Data", "content": "We use your data to provide and improve our services, process payments, send relevant communications, personalize your experience, prevent fraud and comply with legal obligations." },
@@ -2058,7 +2058,7 @@
       { "title": "Your Rights", "content": "You have the right to: access your data, correct incomplete data, request anonymization or deletion, revoke consent, request portability and obtain information about sharing. To exercise these rights, contact us." },
       { "title": "Security", "content": "We implement technical and organizational measures to protect your data, including encryption, access controls, monitoring and regular backups." },
       { "title": "Data Retention", "content": "We keep your data while your account is active or as necessary to comply with legal obligations. After account deletion, data is removed within 30 days, except when required by law." },
-      { "title": "DPO Contact", "content": "For privacy questions or to exercise data rights, contact our Data Protection Officer at: privacy@fayapoint.com" }
+      { "title": "DPO Contact", "content": "For privacy questions or to exercise data rights, contact our Data Protection Officer at: privacy@fayai.shop" }
     ]
   },
   "HelpCenter": {
@@ -2108,7 +2108,7 @@
     "badge": "Work With Us",
     "title": "Build the Future of AI in Brazil",
     "description": "Join a team passionate about education and technology. We're always looking for exceptional talent.",
-    "benefitsTitle": "Why FayaPoint?",
+    "benefitsTitle": "Why FayAi?",
     "benefits": [
       { "icon": "Laptop", "title": "100% Remote", "description": "Work from anywhere with full schedule flexibility." },
       { "icon": "Heart", "title": "Health & Wellbeing", "description": "Health plan, gym stipend and mental health support." },
@@ -2279,7 +2279,7 @@
     "hero": {
       "badge": "Cases & Portfolio",
       "title": "Projects That Deliver Real Results",
-      "subtitle": "Discover real client cases that transformed their operations with AI, automation, and digital platforms developed by FayaPoint.",
+      "subtitle": "Discover real client cases that transformed their operations with AI, automation, and digital platforms developed by FayAi.",
       "primaryCta": "Talk to a Specialist",
       "secondaryCta": "Schedule Diagnostic"
     },
@@ -2426,7 +2426,7 @@
     },
     "testimonials": [
       {
-        "quote": "FayaPoint took on our critical backlog and in 60 days delivered an entire portal with embedded AI. Now we can test new ideas every week.",
+        "quote": "FayAi took on our critical backlog and in 60 days delivered an entire portal with embedded AI. Now we can test new ideas every week.",
         "author": "Carla Ramos",
         "role": "COO, SparkClub"
       },

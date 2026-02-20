@@ -11,11 +11,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   const config = {
     "pt-BR": {
-      title: "Ferramentas de IA - Diretório Completo | FayaPoint",
+      title: "Ferramentas de IA - Diretório Completo | FayAi",
       description: "Descubra e compare as melhores ferramentas de Inteligência Artificial. ChatGPT, Midjourney, Claude, Gemini e mais de 100 ferramentas analisadas.",
     },
     en: {
-      title: "AI Tools Directory - Complete Guide | FayaPoint",
+      title: "AI Tools Directory - Complete Guide | FayAi",
       description: "Discover and compare the best Artificial Intelligence tools. ChatGPT, Midjourney, Claude, Gemini and 100+ tools analyzed.",
     },
   };

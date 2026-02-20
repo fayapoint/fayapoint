@@ -813,7 +813,7 @@ export function buildProdigiOrder(params: {
     items: orderItems,
     metadata: {
       ...metadata,
-      source: 'fayapoint',
+      source: 'fayai',
       createdAt: new Date().toISOString(),
     },
   };

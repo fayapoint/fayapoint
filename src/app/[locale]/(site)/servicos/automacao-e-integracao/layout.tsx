@@ -8,11 +8,11 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "Automação e Integração de Sistemas | FayaPoint",
+    title: "Automação e Integração de Sistemas | FayAi",
     description: "Automatize processos empresariais e integre sistemas com n8n, Make, Zapier e APIs personalizadas. Reduza trabalho manual, elimine erros e aumente produtividade com workflows inteligentes.",
   },
   en: {
-    title: "Business Automation & System Integration | FayaPoint",
+    title: "Business Automation & System Integration | FayAi",
     description: "Automate business processes and integrate systems with n8n, Make, Zapier and custom APIs. Reduce manual work, eliminate errors and boost productivity with intelligent workflows.",
   },
 };

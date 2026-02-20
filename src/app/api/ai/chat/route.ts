@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     }
 
     // Prepare system prompt
-    const systemPrompt = `Você é o assistente de IA da FayaPoint Academy, uma plataforma de cursos sobre Inteligência Artificial, automação e ferramentas digitais.
+    const systemPrompt = `Você é o assistente de IA da FayAi Academy, uma plataforma de cursos sobre Inteligência Artificial, automação e ferramentas digitais.
 
 Seu papel é:
 - Ajudar alunos com dúvidas sobre cursos e conteúdos
@@ -98,8 +98,8 @@ Mantenha as respostas concisas mas úteis. Use emojis moderadamente para tornar 
       headers: {
         'Content-Type': 'application/json',
         'Authorization': authValue,
-        'HTTP-Referer': 'https://fayapoint.com',
-        'X-Title': 'FayaPoint AI Academy',
+        'HTTP-Referer': 'https://fayai.shop',
+        'X-Title': 'FayAi AI Academy',
       },
       body: JSON.stringify({
         model: 'google/gemini-2.0-flash-exp:free',

@@ -60,13 +60,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setMounted(true);
     
     if (typeof window !== 'undefined') {
-      const storedUser = localStorage.getItem('fayapoint_user');
+      const storedUser = localStorage.getItem('fayai_user');
       if (storedUser) {
         try {
           setUserState(JSON.parse(storedUser));
         } catch (error) {
           console.error('Error parsing stored user:', error);
-          localStorage.removeItem('fayapoint_user');
+          localStorage.removeItem('fayai_user');
         }
       }
     }
@@ -76,9 +76,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setUserState(newUser);
     if (typeof window !== 'undefined') {
       if (newUser) {
-        localStorage.setItem('fayapoint_user', JSON.stringify(newUser));
+        localStorage.setItem('fayai_user', JSON.stringify(newUser));
       } else {
-        localStorage.removeItem('fayapoint_user');
+        localStorage.removeItem('fayai_user');
       }
     }
   };
@@ -86,8 +86,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null);
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('fayapoint_token');
-      localStorage.removeItem('fayapoint_user');
+      localStorage.removeItem('fayai_token');
+      localStorage.removeItem('fayai_user');
     }
   };
 

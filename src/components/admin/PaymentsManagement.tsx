@@ -95,7 +95,7 @@ export function PaymentsManagement() {
   const fetchFinancialData = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       const response = await fetch(`/api/admin/financial?period=${period}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -120,7 +120,7 @@ export function PaymentsManagement() {
 
     setCreatingLink(true);
     try {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       const response = await fetch("/api/payment-links", {
         method: "POST",
         headers: {

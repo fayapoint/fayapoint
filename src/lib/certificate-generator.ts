@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 
 // ═══════════════════════════════════════════════════════════════════
-// FayaPoint Certificate Generator
+// FayAi Certificate Generator
 // Inspired by Harvard, Oxford, MIT certificate design traditions
 // ═══════════════════════════════════════════════════════════════════
 
@@ -154,7 +154,7 @@ function drawWatermark(doc: jsPDF, w: number, h: number) {
   doc.setFont('helvetica', 'bold');
 
   // Diagonal watermark
-  doc.text('FAYAPOINT', w / 2, h / 2, {
+  doc.text('FAYAI', w / 2, h / 2, {
     align: 'center',
     angle: 35,
   });
@@ -213,13 +213,13 @@ function drawSeal(doc: jsPDF, x: number, y: number, radius: number) {
     }
   }
 
-  // Circular text: "FAYAPOINT" top, "CERTIFICADO" bottom
+  // Circular text: "FAYAI" top, "CERTIFICADO" bottom
   doc.setFontSize(5.5);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(COLORS.goldDark);
 
   const textRadius = radius - 11;
-  const topText = 'FAYAPOINT ACADEMY';
+  const topText = 'FAYAI ACADEMY';
   const bottomText = 'CERTIFICADO OFICIAL';
 
   // Top arc text
@@ -457,7 +457,7 @@ export function generateCertificatePDF(data: CertificateData): jsPDF {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7);
   doc.setTextColor(COLORS.textSecondary);
-  doc.text('FayaPoint Academy', w - 55 - sigLineW / 2, sigY + 4, { align: 'center' });
+  doc.text('FayAi Academy', w - 55 - sigLineW / 2, sigY + 4, { align: 'center' });
   doc.setFontSize(6);
   doc.setTextColor(COLORS.textTertiary);
   doc.text('Certificado Digital Verificado', w - 55 - sigLineW / 2, sigY + 8, { align: 'center' });
@@ -488,7 +488,7 @@ export function generateCertificatePDF(data: CertificateData): jsPDF {
   doc.setFontSize(4.5);
   doc.setTextColor(COLORS.textTertiary);
   doc.text(
-    'Este documento \u00E9 emitido digitalmente pela FayaPoint Academy e pode ser verificado no endere\u00E7o acima.',
+    'Este documento \u00E9 emitido digitalmente pela FayAi Academy e pode ser verificado no endere\u00E7o acima.',
     centerX,
     footerY + 9,
     { align: 'center' }

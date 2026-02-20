@@ -52,7 +52,7 @@ const GEOBLOCK_CONFIG = {
   
   // Secret header for bypassing (for your own access from abroad)
   bypassHeader: "x-geobypass-secret",
-  bypassSecret: process.env.GEOBLOCK_BYPASS_SECRET || "fayapoint-bypass-2024",
+  bypassSecret: process.env.GEOBLOCK_BYPASS_SECRET || "fayai-bypass-2024",
 };
 
 // Get country code from various Netlify/Vercel/Cloudflare headers
@@ -284,7 +284,7 @@ export default async function middleware(request: NextRequest) {
   // =========================================================================
   // 0.6. SEARCH ENGINE BOT GATE BYPASS - Set gate cookie so bots see full page
   // =========================================================================
-  if (isSearchEngineBot(userAgent) && !request.cookies.has("fayapoint_gate")) {
+  if (isSearchEngineBot(userAgent) && !request.cookies.has("fayai_gate")) {
     // Let the request continue but set the gate cookie in the response
     // This is handled at the end of middleware by adding the cookie to the response
   }
@@ -369,7 +369,7 @@ export default async function middleware(request: NextRequest) {
   // =========================================================================
   if (isApiRoute) {
     // Authenticated users get higher API limits
-    const hasAuthToken = request.cookies.has("fayapoint_token");
+    const hasAuthToken = request.cookies.has("fayai_token");
     const apiLimit = hasAuthToken ? 200 : 120;
     
     const apiRl = await rateLimit({
@@ -504,7 +504,7 @@ export default async function middleware(request: NextRequest) {
   let rl = { allowed: true, remaining: 999, limit: 250, resetSeconds: 60 };
   
   if (!isApiRoute) {
-    const hasAuthToken = request.cookies.has("fayapoint_token");
+    const hasAuthToken = request.cookies.has("fayai_token");
     const rateLimitTier = getRateLimitTier({
       suspicionScore,
       pathname,
@@ -614,8 +614,8 @@ export default async function middleware(request: NextRequest) {
     response.headers.set("X-RateLimit-Remaining", String(rl.remaining));
     
     // Auto-set gate cookie for search engine bots so they see full page content
-    if (isSearchEngineBot(userAgent) && !request.cookies.has("fayapoint_gate")) {
-      response.cookies.set("fayapoint_gate", "bot-verified", {
+    if (isSearchEngineBot(userAgent) && !request.cookies.has("fayai_gate")) {
+      response.cookies.set("fayai_gate", "bot-verified", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",

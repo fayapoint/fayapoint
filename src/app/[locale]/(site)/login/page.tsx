@@ -68,7 +68,7 @@ export default function LoginPage() {
       }
 
       // Save token
-      localStorage.setItem('fayapoint_token', data.token);
+      localStorage.setItem('fayai_token', data.token);
       
       // Update user context
       setUser(data.user);

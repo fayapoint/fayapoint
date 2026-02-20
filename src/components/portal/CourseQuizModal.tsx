@@ -95,7 +95,7 @@ export function CourseQuizModal({
     if (isLoadingQuiz) return;
     setIsLoadingQuiz(true);
     setPhase("loading");
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) { setIsLoadingQuiz(false); return; }
 
     try {
@@ -145,7 +145,7 @@ export function CourseQuizModal({
 
   const submitQuiz = async () => {
     setPhase("submitting");
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
 
     const answersArray = questions.map((_, i) => selectedAnswers[i] ?? -1);
@@ -189,7 +189,7 @@ export function CourseQuizModal({
   };
 
   const handleDownload = async (verificationCode: string) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     try {
       const res = await fetch(`/api/certificates/${verificationCode}/download`, {
@@ -200,7 +200,7 @@ export function CourseQuizModal({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Certificado_FayaPoint_${courseSlug}.pdf`;
+      a.download = `Certificado_FayAi_${courseSlug}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

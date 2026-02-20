@@ -5,7 +5,7 @@ import Subscription from '@/models/Subscription';
 import User from '@/models/User';
 import asaas, { asaasConfig } from '@/lib/asaas';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'fayai-secret';
 
 async function getUserFromToken(request: NextRequest) {
   const authHeader = request.headers.get('Authorization');

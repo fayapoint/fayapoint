@@ -39,22 +39,22 @@ const SITE_URL =
 const baseMetadata = {
   metadataBase: new URL(SITE_URL),
   authors: [{ name: "Ricardo Faya" }],
-  creator: "FayaPoint",
-  publisher: "FayaPoint AI Academy",
+  creator: "FayAi",
+  publisher: "FayAi",
   openGraph: {
     type: "website" as const,
     url: SITE_URL,
-    siteName: "FayaPoint AI Academy",
+    siteName: "FayAi",
     images: [{
       url: "/rwx6.jpg",
       width: 1200,
       height: 630,
-      alt: "FayaPoint AI Academy",
+      alt: "FayAi",
     }],
   },
   twitter: {
     card: "summary_large_image" as const,
-    creator: "@fayapoint",
+    creator: "@fayai",
     images: ["/rwx6.jpg"],
   },
   robots: {
@@ -79,35 +79,35 @@ const baseMetadata = {
 const localizedMetadata: Record<string, Metadata> = {
   "pt-BR": {
     ...baseMetadata,
-    title: "FayaPoint AI Academy - Aprenda IA do Zero ao Avançado",
+    title: "FayAi - Aprenda IA do Zero ao Avançado",
     description: "A plataforma definitiva para dominar Inteligência Artificial. Cursos práticos de IA, automação, ChatGPT, Midjourney e mais de 100 ferramentas.",
     keywords: "inteligência artificial, IA, cursos online, ChatGPT, Midjourney, automação, machine learning, Brasil",
     openGraph: {
       ...baseMetadata.openGraph,
       locale: "pt_BR",
-      title: "FayaPoint AI Academy - Aprenda IA do Zero ao Avançado",
+      title: "FayAi - Aprenda IA do Zero ao Avançado",
       description: "A plataforma definitiva para dominar Inteligência Artificial no Brasil",
     },
     twitter: {
       ...baseMetadata.twitter,
-      title: "FayaPoint AI Academy",
+      title: "FayAi",
       description: "A plataforma definitiva para dominar IA",
     },
   },
   en: {
     ...baseMetadata,
-    title: "FayaPoint AI Academy - Master AI from Beginner to Pro",
+    title: "FayAi - Master AI from Beginner to Pro",
     description: "Brazil's definitive platform to master Artificial Intelligence with hands-on courses covering ChatGPT, Midjourney, automation and 100+ tools.",
     keywords: "artificial intelligence, AI courses, ChatGPT, Midjourney, automation, Brazil",
     openGraph: {
       ...baseMetadata.openGraph,
       locale: "en_US",
-      title: "FayaPoint AI Academy - Master AI from Beginner to Pro",
+      title: "FayAi - Master AI from Beginner to Pro",
       description: "Master Artificial Intelligence with practical training and 100+ AI tools.",
     },
     twitter: {
       ...baseMetadata.twitter,
-      title: "FayaPoint AI Academy",
+      title: "FayAi",
       description: "Master AI with practical courses",
     },
   },
@@ -155,16 +155,16 @@ export default async function RootLayout({
   const organizationLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "FayaPoint",
+    name: "FayAi",
     url: SITE_URL,
     logo: `${SITE_URL}/rwx6.jpg`,
-    sameAs: ["https://www.instagram.com/fayapoint"],
+    sameAs: ["https://www.instagram.com/fayai"],
   };
 
   const websiteLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "FayaPoint AI Academy",
+    name: "FayAi",
     url: SITE_URL,
     inLanguage: locale,
     potentialAction: {

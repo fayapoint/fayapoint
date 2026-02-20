@@ -8,7 +8,7 @@ import asaas, {
   asaasConfig,
 } from '@/lib/asaas';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'fayai-secret';
 
 // =============================================================================
 // HELPER

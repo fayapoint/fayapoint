@@ -662,7 +662,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
       <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-500/30 p-8 relative overflow-hidden">
         <div className="relative z-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            Loja FayaPoint 🛒
+            Loja FayAi 🛒
           </h1>
           <p className="text-gray-300 text-lg mb-6 max-w-xl">
             Equipamentos premium para criadores de conteúdo, desenvolvedores e entusiastas de IA

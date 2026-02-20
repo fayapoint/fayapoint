@@ -113,10 +113,10 @@ function BlockedContent() {
               <p className="text-gray-500 text-sm">
                 Contato / Contact:{" "}
                 <a 
-                  href="mailto:contato@fayapoint.com" 
+                  href="mailto:contato@fayai.com" 
                   className="text-blue-400 hover:text-blue-300 transition-colors"
                 >
-                  contato@fayapoint.com
+                  contato@fayai.com
                 </a>
               </p>
             </div>
@@ -125,7 +125,7 @@ function BlockedContent() {
           {/* Footer */}
           <div className="bg-gray-900/50 border-t border-gray-700/50 px-6 py-4">
             <div className="flex items-center justify-between text-xs text-gray-500">
-              <span>© {new Date().getFullYear()} Fayapoint</span>
+              <span>© {new Date().getFullYear()} FayAi</span>
               <span className="flex items-center gap-1">
                 <ShieldX className="w-3 h-3" />
                 Protected by Geoblocking

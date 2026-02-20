@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import redis from '@/lib/redis';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
-const ADMIN_EMAILS = ['ricardofaya@gmail.com', 'admin@fayapoint.com'];
+const ADMIN_EMAILS = ['ricardofaya@gmail.com', 'admin@fayai.shop'];
 
 export const dynamic = 'force-dynamic';
 

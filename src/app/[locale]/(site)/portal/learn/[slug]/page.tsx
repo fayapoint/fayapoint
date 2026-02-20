@@ -243,7 +243,7 @@ export default function CourseReaderPage() {
       progressPercent?: number;
       isCompleted?: boolean;
     }) => {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       if (!token) return;
       try {
         await fetch(`/api/courses/${slug}/progress`, {
@@ -342,7 +342,7 @@ export default function CourseReaderPage() {
   /* ─── Fetch Data ─── */
   useEffect(() => {
     const fetchContent = async () => {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       if (!token) {
         router.push(`/${locale}/login`);
         return;

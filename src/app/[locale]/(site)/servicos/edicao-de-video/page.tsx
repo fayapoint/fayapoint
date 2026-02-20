@@ -203,7 +203,7 @@ export default function VideoEditingPage({
     url: serviceUrl,
     provider: {
       "@type": "Organization",
-      name: "FayaPoint",
+      name: "FayAi",
       url: SITE_URL,
     },
     areaServed: "BR",

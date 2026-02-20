@@ -716,7 +716,7 @@ export function GateLandingPage() {
 
         {/* Minimal footer */}
         <div className="py-6 text-center text-white/20 text-xs">
-          <p>&copy; {new Date().getFullYear()} FayaPoint AI Academy</p>
+          <p>&copy; {new Date().getFullYear()} FayAi AI Academy</p>
         </div>
       </div>
     </AnimatePresence>

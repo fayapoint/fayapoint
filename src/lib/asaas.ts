@@ -252,7 +252,7 @@ async function asaasRequest<T>(
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     'access_token': ASAAS_API_KEY,
-    'User-Agent': 'FayaPoint/1.0',
+    'User-Agent': 'FayAi/1.0',
   };
 
   const options: RequestInit = {

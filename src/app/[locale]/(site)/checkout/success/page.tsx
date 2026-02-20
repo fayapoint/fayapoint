@@ -201,8 +201,8 @@ function CheckoutSuccessContent() {
           {/* Support */}
           <p className="text-center text-sm text-gray-500 mt-8">
             Precisa de ajuda? Entre em contato pelo email{" "}
-            <a href="mailto:suporte@fayapoint.com" className="text-purple-400 hover:underline">
-              suporte@fayapoint.com
+            <a href="mailto:suporte@fayai.shop" className="text-purple-400 hover:underline">
+              suporte@fayai.shop
             </a>
           </p>
         </div>

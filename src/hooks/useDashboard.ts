@@ -58,7 +58,7 @@ export function useDashboard(): UseDashboardReturn {
     fetchingRef.current = true;
 
     const token = typeof window !== 'undefined' 
-      ? localStorage.getItem('fayapoint_token') 
+      ? localStorage.getItem('fayai_token') 
       : null;
       
     if (!token) {

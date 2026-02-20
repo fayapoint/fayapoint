@@ -51,7 +51,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
     {
       id: "welcome",
       role: "assistant",
-      content: `Olá ${userName}! 👋 Sou o assistente de IA da FayaPoint. Estou aqui para ajudar com suas dúvidas sobre os cursos, ferramentas de IA, automação e muito mais. Como posso ajudar você hoje?`,
+      content: `Olá ${userName}! 👋 Sou o assistente de IA da FayAi. Estou aqui para ajudar com suas dúvidas sobre os cursos, ferramentas de IA, automação e muito mais. Como posso ajudar você hoje?`,
       timestamp: new Date(),
     },
   ]);
@@ -84,7 +84,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       const response = await fetch("/api/ai/chat", {
         method: "POST",
         headers: {

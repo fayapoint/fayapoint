@@ -84,7 +84,7 @@ export default function VerifyCertificatePage() {
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href={`/${locale}`} className="flex items-center gap-2 text-white/50 hover:text-white/80 transition-colors">
             <ArrowLeft size={16} />
-            <span className="text-sm">FayaPoint</span>
+            <span className="text-sm">FayAi</span>
           </Link>
           <div className="flex items-center gap-2">
             <Shield size={16} className="text-amber-400" />
@@ -112,7 +112,7 @@ export default function VerifyCertificatePage() {
                 <CheckCircle2 className="w-10 h-10 text-emerald-400" />
               </motion.div>
               <h1 className="text-2xl font-bold text-white mb-2">Certificado Válido</h1>
-              <p className="text-sm text-white/40">Este certificado é autêntico e foi emitido pela FayaPoint Academy.</p>
+              <p className="text-sm text-white/40">Este certificado é autêntico e foi emitido pela FayAi Academy.</p>
             </div>
 
             <Card className="bg-white/[0.02] border-white/[0.08] overflow-hidden">
@@ -176,7 +176,7 @@ export default function VerifyCertificatePage() {
               <div className="border-t border-white/[0.06] px-8 py-4 bg-white/[0.01]">
                 <div className="flex items-center justify-center gap-2 text-xs text-white/25">
                   <Shield className="w-3 h-3" />
-                  <span>Verificado digitalmente pela FayaPoint Academy</span>
+                  <span>Verificado digitalmente pela FayAi Academy</span>
                 </div>
               </div>
             </Card>

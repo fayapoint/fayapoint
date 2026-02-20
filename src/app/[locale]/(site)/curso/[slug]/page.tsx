@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const course = allCourses.find((c) => c.slug === slug);
   
   const title = course?.title 
-    ? `${course.title} - FayaPoint AI Academy`
-    : "Curso - FayaPoint AI Academy";
+    ? `${course.title} - FayAi AI Academy`
+    : "Curso - FayAi AI Academy";
   const description = course?.shortDescription || "Aprenda IA com cursos práticos e atualizados.";
 
   return generatePageMetadata({

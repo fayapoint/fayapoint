@@ -42,7 +42,7 @@ export function generatePageMetadata({
     openGraph: {
       type: "website",
       url: canonicalUrl,
-      siteName: "FayaPoint AI Academy",
+      siteName: "FayAi",
       locale: locale === "en" ? "en_US" : "pt_BR",
       ...(title && { title }),
       ...(description && { description }),
@@ -50,7 +50,7 @@ export function generatePageMetadata({
         url: `${SITE_URL}${image}`,
         width: 1200,
         height: 630,
-        alt: title || "FayaPoint AI Academy",
+        alt: title || "FayAi",
       }],
     },
     twitter: {
@@ -68,62 +68,62 @@ export function generatePageMetadata({
 export const pageMetadataConfig = {
   cursos: {
     "pt-BR": {
-      title: "Cursos de IA - FayaPoint AI Academy",
+      title: "Cursos de IA - FayAi",
       description: "Explore mais de 50 cursos práticos de Inteligência Artificial. Aprenda ChatGPT, Midjourney, automação com n8n, machine learning e muito mais. Certificado incluso e acesso vitalício.",
     },
     en: {
-      title: "AI Courses - FayaPoint AI Academy",
+      title: "AI Courses - FayAi",
       description: "Explore 50+ hands-on Artificial Intelligence courses. Learn ChatGPT, Midjourney, n8n automation, machine learning and more. Certificate included with lifetime access.",
     },
   },
   contato: {
     "pt-BR": {
-      title: "Contato - FayaPoint AI Academy",
-      description: "Entre em contato com a FayaPoint AI Academy para dúvidas sobre cursos, parcerias corporativas, suporte técnico ou consultoria em IA. Resposta em até 24h úteis.",
+      title: "Contato - FayAi",
+      description: "Entre em contato com a FayAi para dúvidas sobre cursos, parcerias corporativas, suporte técnico ou consultoria em IA. Resposta em até 24h úteis.",
     },
     en: {
-      title: "Contact - FayaPoint AI Academy",
-      description: "Contact FayaPoint AI Academy for course inquiries, corporate partnerships, technical support or AI consulting. We respond within 24 business hours.",
+      title: "Contact - FayAi",
+      description: "Contact FayAi for course inquiries, corporate partnerships, technical support or AI consulting. We respond within 24 business hours.",
     },
   },
   blog: {
     "pt-BR": {
-      title: "Blog de IA - Artigos e Tutoriais | FayaPoint",
+      title: "Blog de IA - Artigos e Tutoriais | FayAi",
       description: "Artigos, tutoriais detalhados e novidades sobre Inteligência Artificial. Aprenda dicas práticas de ChatGPT, Midjourney, automação e tendências do mercado de IA.",
     },
     en: {
-      title: "AI Blog - Articles & Tutorials | FayaPoint",
+      title: "AI Blog - Articles & Tutorials | FayAi",
       description: "In-depth articles, tutorials and news about Artificial Intelligence. Learn practical tips for ChatGPT, Midjourney, automation and AI market trends.",
     },
   },
   sobre: {
     "pt-BR": {
-      title: "Sobre Nós - FayaPoint AI Academy",
-      description: "Conheça a FayaPoint AI Academy, nossa missão de democratizar a Inteligência Artificial no Brasil e a equipe de especialistas por trás dos cursos.",
+      title: "Sobre Nós - FayAi",
+      description: "Conheça a FayAi, nossa missão de democratizar a Inteligência Artificial no Brasil e a equipe de especialistas por trás dos cursos.",
     },
     en: {
-      title: "About Us - FayaPoint AI Academy",
-      description: "Learn about FayaPoint AI Academy, our mission to democratize Artificial Intelligence in Brazil, and the team of experts behind our courses.",
+      title: "About Us - FayAi",
+      description: "Learn about FayAi, our mission to democratize Artificial Intelligence in Brazil, and the team of experts behind our courses.",
     },
   },
   precos: {
     "pt-BR": {
-      title: "Preços e Planos - FayaPoint AI Academy",
-      description: "Compare planos de assinatura e preços de serviços da FayaPoint. Starter, Pro e Business com acesso a cursos, mentoria, certificados e suporte prioritário.",
+      title: "Preços e Planos - FayAi",
+      description: "Compare planos de assinatura e preços de serviços da FayAi. Starter, Pro e Business com acesso a cursos, mentoria, certificados e suporte prioritário.",
     },
     en: {
-      title: "Pricing & Plans - FayaPoint AI Academy",
-      description: "Compare FayaPoint subscription plans and service pricing. Starter, Pro and Business tiers with course access, mentorship, certificates and priority support.",
+      title: "Pricing & Plans - FayAi",
+      description: "Compare FayAi subscription plans and service pricing. Starter, Pro and Business tiers with course access, mentorship, certificates and priority support.",
     },
   },
   faq: {
     "pt-BR": {
-      title: "Perguntas Frequentes - FayaPoint AI Academy",
-      description: "Encontre respostas para dúvidas sobre cursos de IA, planos de assinatura, certificados, métodos de pagamento e acesso à plataforma FayaPoint.",
+      title: "Perguntas Frequentes - FayAi",
+      description: "Encontre respostas para dúvidas sobre cursos de IA, planos de assinatura, certificados, métodos de pagamento e acesso à plataforma FayAi.",
     },
     en: {
-      title: "FAQ - FayaPoint AI Academy",
-      description: "Find answers to questions about AI courses, subscription plans, certificates, payment methods and access to the FayaPoint platform.",
+      title: "FAQ - FayAi",
+      description: "Find answers to questions about AI courses, subscription plans, certificates, payment methods and access to the FayAi platform.",
     },
   },
 } as const;

@@ -77,7 +77,7 @@ export async function GET(
 
     const pdfBuffer = generateCertificateArrayBuffer(certData);
 
-    const fileName = `Certificado_FayaPoint_${certificate.courseSlug}_${certificate.certificateNumber}.pdf`;
+    const fileName = `Certificado_FayAi_${certificate.courseSlug}_${certificate.certificateNumber}.pdf`;
 
     return new Response(pdfBuffer, {
       headers: {

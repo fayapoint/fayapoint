@@ -50,7 +50,7 @@ export function CertificatesPanel() {
   }, []);
 
   const fetchCertificates = async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     try {
       const res = await fetch("/api/certificates", {
@@ -68,7 +68,7 @@ export function CertificatesPanel() {
   };
 
   const handleDownload = async (cert: CertificateItem) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
 
     setDownloading(cert.verificationCode);
@@ -86,7 +86,7 @@ export function CertificatesPanel() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Certificado_FayaPoint_${cert.courseSlug}_${cert.certificateNumber}.pdf`;
+      a.download = `Certificado_FayAi_${cert.courseSlug}_${cert.certificateNumber}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

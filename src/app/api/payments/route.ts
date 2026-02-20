@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
     let asaasPayment;
     const description = `Pedido ${orderNumber} - ${items.map(i => i.name).join(', ')}`;
     const externalReference = orderNumber;
-    const successUrl = `${process.env.NEXTAUTH_URL || 'https://fayapoint.com'}/pt-BR/checkout/success?order=${orderNumber}`;
+    const successUrl = `${process.env.NEXTAUTH_URL || 'https://fayai.shop'}/pt-BR/checkout/success?order=${orderNumber}`;
 
     try {
       switch (method) {

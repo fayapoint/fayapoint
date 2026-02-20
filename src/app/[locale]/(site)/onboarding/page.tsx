@@ -157,8 +157,8 @@ export default function OnboardingPage() {
       // Save user to global context and localStorage
       if (userData.token) {
         setUser(userData.user);
-        localStorage.setItem('fayapoint_token', userData.token);
-        localStorage.setItem('fayapoint_user', JSON.stringify(userData.user));
+        localStorage.setItem('fayai_token', userData.token);
+        localStorage.setItem('fayai_user', JSON.stringify(userData.user));
       }
 
       // Send webhook (legacy/n8n support)

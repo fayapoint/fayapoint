@@ -549,7 +549,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchUserData = useCallback(async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     try {
       const res = await fetch("/api/user/dashboard", { headers: { Authorization: `Bearer ${token}` } });
@@ -558,7 +558,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   }, []);
 
   const fetchProducts = useCallback(async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     setIsLoading(true);
     try {
@@ -571,7 +571,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   }, [statusFilter]);
 
   const fetchBlueprints = useCallback(async (category?: string, search?: string) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     setIsFetchingBlueprints(true);
     try {
@@ -594,7 +594,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   }, []);
 
   const fetchProviders = useCallback(async (blueprintId: number) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     setIsFetchingProviders(true);
     try {
@@ -605,7 +605,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   }, []);
 
   const fetchVariants = useCallback(async (blueprintId: number, providerId: number) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     setIsFetchingVariants(true);
     try {
@@ -638,7 +638,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   // Fetch orders
   const fetchOrders = useCallback(async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     setIsLoadingOrders(true);
     try {
@@ -654,7 +654,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   // Fetch earnings
   const fetchEarnings = useCallback(async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     setIsLoadingEarnings(true);
     try {
@@ -669,7 +669,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   // Publish to store
   const publishToStore = useCallback(async (productId: string) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     setIsPublishing(productId);
     try {
@@ -715,7 +715,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   const uploadDesign = async (): Promise<string | null> => {
     if (!designFile) return null;
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return null;
     const formData = new FormData();
     formData.append("file", designFile);
@@ -809,7 +809,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     const userXP = userData?.progress?.xp || 0;
     if (publish && userXP < MIN_XP_TO_PUBLISH) { toast.error(`Precisa ${MIN_XP_TO_PUBLISH} XP para publicar. Atual: ${userXP}`); return; }
     setIsCreating(true);
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     try {
       let designUrl = uploadedDesignUrl;
       if (!designUrl && designFile) { designUrl = await uploadDesign(); if (!designUrl) { toast.error("Erro no upload"); setIsCreating(false); return; } setUploadedDesignUrl(designUrl); }
@@ -868,7 +868,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   };
 
   const updateProduct = async (productId: string, updates: Partial<PODProduct>) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     try {
       const res = await fetch("/api/pod/products", { method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId, ...updates }) });
       if (res.ok) { toast.success("Atualizado"); fetchProducts(); setEditingProduct(null); setSelectedProduct(null); }
@@ -877,7 +877,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   const deleteProduct = async (productId: string) => {
     if (!confirm("Excluir?")) return;
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     try {
       const res = await fetch(`/api/pod/products?productId=${productId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) { toast.success("Excluído"); fetchProducts(); }
@@ -887,7 +887,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const publishProduct = async (productId: string) => {
     const userXP = userData?.progress?.xp || 0;
     if (userXP < MIN_XP_TO_PUBLISH) { toast.error(`Precisa ${MIN_XP_TO_PUBLISH} XP. Atual: ${userXP}`); return; }
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     try {
       toast.loading("Publicando no Printify e na loja...");
       const res = await fetch("/api/pod/publish", { 
@@ -1453,7 +1453,7 @@ function CreateWizard(props: {
   const fetchGalleryImages = useCallback(async (type: string) => {
     setIsLoadingGallery(true);
     try {
-      const token = localStorage.getItem('fayapoint_token');
+      const token = localStorage.getItem('fayai_token');
       // Fetch more images (30) for better gallery experience
       const res = await fetch(`/api/gallery?type=${type}&limit=30`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -3024,7 +3024,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                     <div className="flex items-center gap-3">
                       <Globe size={20} className="text-purple-400" />
                       <div>
-                        <p className="font-medium">Marketplace FayaPoint</p>
+                        <p className="font-medium">Marketplace FayAi</p>
                         <p className="text-xs text-gray-500">Visível para todos os usuários</p>
                       </div>
                     </div>

@@ -26,7 +26,7 @@ import {
 } from '@/lib/prodigi-api';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const WEBHOOK_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://fayapoint.com';
+const WEBHOOK_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://fayai.shop';
 
 // Exchange rates
 const GBP_TO_BRL = parseFloat(process.env.GBP_TO_BRL || '6.30');

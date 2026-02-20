@@ -8,11 +8,11 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "Construção de Sites e Aplicativos Web | FayaPoint",
+    title: "Construção de Sites e Aplicativos Web | FayAi",
     description: "Desenvolvemos sites modernos, responsivos e otimizados para SEO com Next.js, React e as melhores tecnologias. Landing pages, e-commerce, sistemas web e aplicativos sob medida.",
   },
   en: {
-    title: "Website & Web App Development | FayaPoint",
+    title: "Website & Web App Development | FayAi",
     description: "We build modern, responsive, SEO-optimized websites with Next.js, React and cutting-edge technologies. Landing pages, e-commerce, web systems and custom applications.",
   },
 };

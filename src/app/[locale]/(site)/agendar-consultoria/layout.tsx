@@ -8,11 +8,11 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "Agendar Consultoria - FayaPoint AI Academy",
+    title: "Agendar Consultoria - FayAi AI Academy",
     description: "Agende uma consultoria gratuita com nossos especialistas em IA.",
   },
   en: {
-    title: "Schedule Consultation - FayaPoint AI Academy",
+    title: "Schedule Consultation - FayAi AI Academy",
     description: "Schedule a free consultation with our AI specialists.",
   },
 };

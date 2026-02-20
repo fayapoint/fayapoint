@@ -31,16 +31,16 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   // Initialize from localStorage
   useEffect(() => {
-    const storedToken = localStorage.getItem("fayapoint_admin_token");
-    const storedAdmin = localStorage.getItem("fayapoint_admin");
+    const storedToken = localStorage.getItem("fayai_admin_token");
+    const storedAdmin = localStorage.getItem("fayai_admin");
     
     if (storedToken && storedAdmin) {
       try {
         setToken(storedToken);
         setAdmin(JSON.parse(storedAdmin));
       } catch {
-        localStorage.removeItem("fayapoint_admin_token");
-        localStorage.removeItem("fayapoint_admin");
+        localStorage.removeItem("fayai_admin_token");
+        localStorage.removeItem("fayai_admin");
       }
     }
     setIsLoading(false);
@@ -61,8 +61,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       }
 
       // Store credentials
-      localStorage.setItem("fayapoint_admin_token", data.token);
-      localStorage.setItem("fayapoint_admin", JSON.stringify(data.admin));
+      localStorage.setItem("fayai_admin_token", data.token);
+      localStorage.setItem("fayai_admin", JSON.stringify(data.admin));
       
       setToken(data.token);
       setAdmin(data.admin);
@@ -75,15 +75,15 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("fayapoint_admin_token");
-    localStorage.removeItem("fayapoint_admin");
+    localStorage.removeItem("fayai_admin_token");
+    localStorage.removeItem("fayai_admin");
     setToken(null);
     setAdmin(null);
     router.push("/admin/login");
   }, [router]);
 
   const refreshAdmin = useCallback(async () => {
-    const storedToken = localStorage.getItem("fayapoint_admin_token");
+    const storedToken = localStorage.getItem("fayai_admin_token");
     if (!storedToken) return;
 
     try {

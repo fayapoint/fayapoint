@@ -8,11 +8,11 @@ type Props = {
 
 const servicesMeta = {
   "pt-BR": {
-    title: "Serviços - FayaPoint AI Academy",
+    title: "Serviços - FayAi AI Academy",
     description: "Conheça nossos serviços de consultoria em IA, automação, desenvolvimento web e mais.",
   },
   en: {
-    title: "Services - FayaPoint AI Academy",
+    title: "Services - FayAi AI Academy",
     description: "Discover our AI consulting, automation, web development services and more.",
   },
 };

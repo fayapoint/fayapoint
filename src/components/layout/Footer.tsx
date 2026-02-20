@@ -40,11 +40,11 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Youtube, href: "https://youtube.com/@fayapoint", label: "YouTube" },
-  { icon: Instagram, href: "https://instagram.com/fayapoint", label: "Instagram" },
-  { icon: Linkedin, href: "https://linkedin.com/company/fayapoint", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com/fayapoint", label: "Twitter" },
-  { icon: Facebook, href: "https://facebook.com/fayapoint", label: "Facebook" },
+  { icon: Youtube, href: "https://youtube.com/@fayai", label: "YouTube" },
+  { icon: Instagram, href: "https://instagram.com/fayai", label: "Instagram" },
+  { icon: Linkedin, href: "https://linkedin.com/company/fayai", label: "LinkedIn" },
+  { icon: Twitter, href: "https://twitter.com/fayai", label: "Twitter" },
+  { icon: Facebook, href: "https://facebook.com/fayai", label: "Facebook" },
 ];
 
 export function Footer() {
@@ -179,7 +179,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                FayaPoint AI Academy
+                FayAi
               </h2>
             </Link>
             <p className="text-gray-400 mb-4">

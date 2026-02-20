@@ -24,7 +24,7 @@ import asaas, {
   getDefaultDueDate,
 } from '@/lib/asaas';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'fayai-secret';
 
 // =============================================================================
 // HELPER
@@ -153,10 +153,10 @@ export async function POST(request: NextRequest) {
       value,
       nextDueDate: getDefaultDueDate(0),
       cycle: asaasCycle,
-      description: `Assinatura ${plan.name} - FayaPoint`,
+      description: `Assinatura ${plan.name} - FayAi`,
       externalReference: `sub-${user._id}-${planSlug}`,
       callback: {
-        successUrl: `${process.env.NEXTAUTH_URL || 'https://fayapoint.com'}/pt-BR/portal?tab=assinatura&status=success`,
+        successUrl: `${process.env.NEXTAUTH_URL || 'https://fayai.shop'}/pt-BR/portal?tab=assinatura&status=success`,
         autoRedirect: true,
       },
     };

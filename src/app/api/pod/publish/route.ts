@@ -199,7 +199,7 @@ export async function POST(request: NextRequest) {
       fullDescription: podProduct.description,
       category: 'pod', // Always in POD category
       subcategory: productSubcategory,
-      brand: 'FayaPoint POD',
+      brand: 'FayAi POD',
       sku: `POD-${printifyProduct.id}-${Date.now().toString(36)}`,
       thumbnail: mockupImages[0] || podProduct.primaryMockup || podProduct.mockupImages[0],
       images: mockupImages.length > 0 ? mockupImages : podProduct.mockupImages,

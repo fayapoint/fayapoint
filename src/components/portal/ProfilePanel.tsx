@@ -113,7 +113,7 @@ export function ProfilePanel({
     setIsSaving(true);
     
     try {
-      const token = localStorage.getItem('fayapoint_token');
+      const token = localStorage.getItem('fayai_token');
       if (!token) {
         toast.error('Você precisa estar logado.');
         return;

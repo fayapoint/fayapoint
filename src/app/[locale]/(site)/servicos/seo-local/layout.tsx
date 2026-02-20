@@ -8,11 +8,11 @@ type Props = {
 
 const meta = {
   "pt-BR": {
-    title: "SEO Local e Google Meu Negócio | FayaPoint",
+    title: "SEO Local e Google Meu Negócio | FayAi",
     description: "Otimização para buscas locais e Google Meu Negócio. Aumente visibilidade no Google Maps, gere avaliações positivas e atraia clientes da sua região. Resultados em 30 dias.",
   },
   en: {
-    title: "Local SEO & Google Business Profile | FayaPoint",
+    title: "Local SEO & Google Business Profile | FayAi",
     description: "Local search optimization and Google Business Profile management. Boost Google Maps visibility, generate positive reviews and attract local customers. Results in 30 days.",
   },
 };

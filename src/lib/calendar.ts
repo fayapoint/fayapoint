@@ -129,14 +129,14 @@ function buildBookingUrl(startUtc: Date, endUtc: Date, details?: BookingDetails)
   
   // Build event title with user name if available
   const eventTitle = details?.userName 
-    ? `Consulta com ${details.userName} - FayaPoint`
-    : "Consulta com FayaPoint";
+    ? `Consulta com ${details.userName} - FayAi`
+    : "Consulta com FayAi";
   url.searchParams.set("text", eventTitle);
   
   // Build rich description with all available details
   const descriptionParts: string[] = [];
   
-  descriptionParts.push("📅 Agendamento automático enviado pelo site da FayaPoint.");
+  descriptionParts.push("📅 Agendamento automático enviado pelo site da FayAi.");
   descriptionParts.push("");
   
   // User information

@@ -102,7 +102,7 @@ export default function SettingsPage() {
   const handleSaveProfile = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('fayapoint_token');
+      const token = localStorage.getItem('fayai_token');
       const res = await fetch('/api/user/profile', {
         method: 'PUT',
         headers: {
@@ -150,7 +150,7 @@ export default function SettingsPage() {
 
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('fayapoint_token');
+      const token = localStorage.getItem('fayai_token');
       const res = await fetch('/api/auth/change-password', {
         method: 'POST',
         headers: {
@@ -182,7 +182,7 @@ export default function SettingsPage() {
   const handleSaveNotifications = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('fayapoint_token');
+      const token = localStorage.getItem('fayai_token');
       const res = await fetch('/api/user/profile', {
         method: 'PUT',
         headers: {

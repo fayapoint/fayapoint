@@ -117,12 +117,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const tool = toolsMap[slug];
 
   const title = tool?.title
-    ? `${tool.title} - Guia Completo e Cursos | FayaPoint`
-    : "Ferramenta de IA | FayaPoint";
+    ? `${tool.title} - Guia Completo e Cursos | FayAi`
+    : "Ferramenta de IA | FayAi";
   
   const description = tool?.description 
     ? `${tool.description} Aprenda a usar ${tool.title} com cursos práticos e tutoriais. ${tool.category} | ${tool.vendor}`
-    : "Aprenda a usar ferramentas de IA com cursos práticos e tutoriais da FayaPoint.";
+    : "Aprenda a usar ferramentas de IA com cursos práticos e tutoriais da FayAi.";
 
   return generatePageMetadata({
     locale,

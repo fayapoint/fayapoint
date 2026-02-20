@@ -226,7 +226,7 @@ export default function PortalPage() {
   }, [activeTab]);
 
   const fetchCourseAccess = async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     try {
       const res = await fetch("/api/courses/access", {
@@ -244,7 +244,7 @@ export default function PortalPage() {
   };
 
   const handleEnroll = async (courseSlug: string) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) {
       router.push("/login");
       return;
@@ -299,7 +299,7 @@ export default function PortalPage() {
   }, [activeTab]);
 
   const fetchCreations = async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
     try {
       const res = await fetch("/api/user/creations", {
@@ -343,7 +343,7 @@ export default function PortalPage() {
       }
     } else if (isDashboardLoading === false && !cachedDashboardData) {
       // If loading is done but no data, likely unauthorized or error
-       const token = localStorage.getItem("fayapoint_token");
+       const token = localStorage.getItem("fayai_token");
        if (!token) {
           router.push("/login");
        }
@@ -354,7 +354,7 @@ export default function PortalPage() {
     if (!prompt.trim()) return;
     setIsGenerating(true);
     setGeneratedImage(null);
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
 
     const fullPrompt = [
       prompt,

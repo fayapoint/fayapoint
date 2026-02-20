@@ -16,7 +16,7 @@ export default function ConsultPage() {
         <section className="relative pt-32 pb-20 overflow-hidden">
           <Image
             src="/rwx6.jpg"
-            alt="Equipe FayaPoint"
+            alt="Equipe FayAi"
             fill
             priority
             sizes="100vw"

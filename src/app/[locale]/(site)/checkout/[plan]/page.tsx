@@ -143,7 +143,7 @@ export default function CheckoutPage() {
   const fetchSavedCards = async () => {
     setLoadingCards(true);
     try {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       if (!token) return;
       
       const response = await fetch("/api/user/saved-cards", {
@@ -226,7 +226,7 @@ export default function CheckoutPage() {
     
     setCheckingStatus(true);
     try {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       const response = await fetch(`/api/payments/${paymentResult.paymentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -287,7 +287,7 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("fayapoint_token");
+      const token = localStorage.getItem("fayai_token");
       
       if (!token) {
         toast.error("Você precisa estar logado para finalizar a compra.");

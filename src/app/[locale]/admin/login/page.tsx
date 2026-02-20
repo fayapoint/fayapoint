@@ -95,7 +95,7 @@ export default function AdminLoginPage() {
             <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               Admin Dashboard
             </h1>
-            <p className="text-gray-500 text-sm mt-1">FayaPoint Control Center</p>
+            <p className="text-gray-500 text-sm mt-1">FayAi Control Center</p>
           </div>
 
           {/* Error message */}

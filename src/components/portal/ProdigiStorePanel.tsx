@@ -144,7 +144,7 @@ export default function ProdigiStorePanel() {
 
   // Fetch catalog
   const fetchCatalog = useCallback(async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
 
     setIsLoadingCatalog(true);
@@ -166,7 +166,7 @@ export default function ProdigiStorePanel() {
 
   // Fetch orders
   const fetchOrders = useCallback(async () => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
 
     setIsLoadingOrders(true);
@@ -187,7 +187,7 @@ export default function ProdigiStorePanel() {
 
   // Fetch quote
   const fetchQuote = useCallback(async (items: { sku: string; copies: number }[]) => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token || items.length === 0) return;
 
     setIsLoadingQuote(true);
@@ -266,7 +266,7 @@ export default function ProdigiStorePanel() {
   const uploadDesign = async (): Promise<string | null> => {
     if (!designFile) return null;
 
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return null;
 
     const formData = new FormData();
@@ -291,7 +291,7 @@ export default function ProdigiStorePanel() {
 
   // Generate mockup
   const generateMockup = async (sku: string, designUrl: string): Promise<string> => {
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return designUrl;
 
     try {
@@ -379,7 +379,7 @@ export default function ProdigiStorePanel() {
       return;
     }
 
-    const token = localStorage.getItem("fayapoint_token");
+    const token = localStorage.getItem("fayai_token");
     if (!token) return;
 
     setIsCreatingOrder(true);

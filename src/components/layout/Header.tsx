@@ -293,6 +293,19 @@ export function Header() {
             </NavigationMenu>
           </div>
 
+          {/* Mobile Menu Button - inside flex flow for reliable visibility */}
+          <div className="flex md:hidden items-center gap-2 ml-2">
+            <NavCart />
+            <button
+              className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 transition-all"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
+            </button>
+          </div>
+
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <NavCart />
@@ -458,16 +471,6 @@ export function Header() {
         </div>
         )}
       </nav>
-
-      {/* Mobile Menu Button */}
-      <button
-        className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 z-[1000] flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 transition-all pointer-events-auto"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-        aria-expanded={mobileMenuOpen}
-      >
-        {mobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
-      </button>
     </header>
   );
 }

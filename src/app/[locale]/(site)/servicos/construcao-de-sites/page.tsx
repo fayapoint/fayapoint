@@ -219,7 +219,7 @@ export default function WebsiteBuildingPage({
     url: serviceUrl,
     provider: {
       "@type": "Organization",
-      name: "FayaPoint",
+      name: "FayAi",
       url: SITE_URL,
     },
     areaServed: "BR",
@@ -359,7 +359,7 @@ export default function WebsiteBuildingPage({
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Trabalhos recentes</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Seleção de produtos digitais lançados pela squad FayaPoint — landing pages, portais e lojas completos.
+                Seleção de produtos digitais lançados pela squad FayAi — landing pages, portais e lojas completos.
               </p>
             </div>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
