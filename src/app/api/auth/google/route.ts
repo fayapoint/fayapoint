@@ -9,7 +9,8 @@ import jwt from 'jsonwebtoken';
 import { rateLimit, getClientIpFromRequest } from '@/lib/rate-limit';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID =
+  process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
 
 interface GoogleTokenInfo {
   iss: string;
@@ -86,7 +87,7 @@ export async function POST(request: Request) {
     if (!GOOGLE_CLIENT_ID) {
       console.error('GOOGLE_CLIENT_ID not configured');
       return NextResponse.json(
-        { error: 'Configuração OAuth incompleta' },
+        { error: 'Configuração OAuth incompleta: GOOGLE_CLIENT_ID ausente' },
         { status: 500 }
       );
     }

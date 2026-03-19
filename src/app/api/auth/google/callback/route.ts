@@ -7,12 +7,47 @@ import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID =
+  process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+const LOCALES = ['pt-BR', 'en'] as const;
 
 function getRedirectUri(request: NextRequest): string {
   const url = new URL(request.url);
   return `${url.origin}/api/auth/google/callback`;
+}
+
+function sanitizeRedirectPath(state: string | null): string {
+  if (!state || !state.startsWith('/')) {
+    return '/portal';
+  }
+
+  if (state.startsWith('//')) {
+    return '/portal';
+  }
+
+  return state;
+}
+
+function getLocaleAwareLoginPath(state: string | null): string {
+  const safeRedirect = sanitizeRedirectPath(state);
+  const matchedLocale = LOCALES.find(
+    (locale) => safeRedirect === `/${locale}` || safeRedirect.startsWith(`/${locale}/`)
+  );
+
+  return matchedLocale ? `/${matchedLocale}/login` : '/pt-BR/login';
+}
+
+function buildLoginRedirectUrl(
+  request: NextRequest,
+  errorCode: string,
+  state: string | null
+): URL {
+  const safeRedirect = sanitizeRedirectPath(state);
+  const loginUrl = new URL(getLocaleAwareLoginPath(state), request.url);
+  loginUrl.searchParams.set('error', errorCode);
+  loginUrl.searchParams.set('redirect', safeRedirect);
+  return loginUrl;
 }
 
 interface GoogleTokenResponse {
@@ -44,21 +79,19 @@ export async function GET(request: NextRequest) {
     const state = searchParams.get('state'); // Contains redirect path
 
     if (error) {
-      return NextResponse.redirect(
-        new URL(`/login?error=${encodeURIComponent(error)}`, request.url)
-      );
+      return NextResponse.redirect(buildLoginRedirectUrl(request, error, state));
     }
 
     if (!code) {
       return NextResponse.redirect(
-        new URL('/login?error=no_code', request.url)
+        buildLoginRedirectUrl(request, 'no_code', state)
       );
     }
 
     if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
       console.error('Google OAuth credentials not configured');
       return NextResponse.redirect(
-        new URL('/login?error=config', request.url)
+        buildLoginRedirectUrl(request, 'config', state)
       );
     }
 
@@ -80,7 +113,7 @@ export async function GET(request: NextRequest) {
     if (tokenData.error) {
       console.error('Google token exchange error:', tokenData.error_description);
       return NextResponse.redirect(
-        new URL('/login?error=token_exchange', request.url)
+        buildLoginRedirectUrl(request, 'token_exchange', state)
       );
     }
 
@@ -94,7 +127,7 @@ export async function GET(request: NextRequest) {
 
     if (!userInfoResponse.ok) {
       return NextResponse.redirect(
-        new URL('/login?error=userinfo', request.url)
+        buildLoginRedirectUrl(request, 'userinfo', state)
       );
     }
 
@@ -102,7 +135,7 @@ export async function GET(request: NextRequest) {
 
     if (!googleUser.verified_email) {
       return NextResponse.redirect(
-        new URL('/login?error=email_not_verified', request.url)
+        buildLoginRedirectUrl(request, 'email_not_verified', state)
       );
     }
 
@@ -135,7 +168,7 @@ export async function GET(request: NextRequest) {
     );
 
     // Redirect to the app with token in cookie
-    const redirectPath = state || '/portal';
+    const redirectPath = sanitizeRedirectPath(state);
     const response = NextResponse.redirect(
       new URL(redirectPath, request.url)
     );
@@ -155,7 +188,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Google callback error:', error);
     return NextResponse.redirect(
-      new URL('/login?error=server', request.url)
+      buildLoginRedirectUrl(request, 'server', request.nextUrl.searchParams.get('state'))
     );
   }
 }

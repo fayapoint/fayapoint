@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   Mail, 
@@ -34,7 +34,6 @@ export default function LoginPage() {
 
 function LoginPageContent() {
   const t = useTranslations("Login");
-  const router = useRouter();
   const locale = useLocale();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/portal";
@@ -105,66 +104,28 @@ function LoginPageContent() {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     try {
-      // Load Google Identity Services if not already loaded
-      if (!(window as unknown as Record<string, unknown>).google) {
-        await new Promise<void>((resolve, reject) => {
-          const script = document.createElement("script");
-          script.src = "https://accounts.google.com/gsi/client";
-          script.async = true;
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error("Falha ao carregar Google Sign-In"));
-          document.head.appendChild(script);
-        });
+      const clientId =
+        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+        "167078774916-ktdd044k8l528goetmjc7pdqkgrbranc.apps.googleusercontent.com";
+
+      if (!clientId) {
+        throw new Error("Google OAuth não configurado");
       }
 
-      // Initialize Google Sign-In and get credential
-      const google = (window as unknown as Record<string, unknown>).google as {
-        accounts: {
-          id: {
-            initialize: (config: Record<string, unknown>) => void;
-            prompt: (callback: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean }) => void) => void;
-          };
-        };
-      };
+      const redirectUri = `${window.location.origin}/api/auth/google/callback`;
+      const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+      authUrl.searchParams.set("client_id", clientId);
+      authUrl.searchParams.set("redirect_uri", redirectUri);
+      authUrl.searchParams.set("response_type", "code");
+      authUrl.searchParams.set("scope", "openid email profile");
+      authUrl.searchParams.set("prompt", "select_account");
+      authUrl.searchParams.set("include_granted_scopes", "true");
+      authUrl.searchParams.set("state", resolveRedirectPath());
 
-      await new Promise<void>((resolve, reject) => {
-        google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "167078774916-ktdd044k8l528goetmjc7pdqkgrbranc.apps.googleusercontent.com",
-          callback: async (response: { credential: string }) => {
-            try {
-              const res = await fetch("/api/auth/google", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: response.credential }),
-              });
-              const data = await res.json();
-              if (!res.ok) throw new Error(data.error || "Erro no login Google");
-
-              localStorage.setItem("fayai_token", data.token);
-              setUser(data.user);
-              toast.success(`Bem-vindo, ${data.user.name}!`);
-              window.location.assign(resolveRedirectPath());
-              resolve();
-            } catch (err) {
-              reject(err);
-            }
-          },
-        });
-
-        google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // Fallback: open Google OAuth popup directly
-            const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "167078774916-ktdd044k8l528goetmjc7pdqkgrbranc.apps.googleusercontent.com";
-            const redirectUri = `${window.location.origin}/api/auth/google/callback`;
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&prompt=select_account`;
-            window.location.href = authUrl;
-          }
-        });
-      });
+      window.location.assign(authUrl.toString());
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Erro no login Google";
       toast.error(msg);
-    } finally {
       setIsLoading(false);
     }
   };
