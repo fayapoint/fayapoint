@@ -44,6 +44,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { getClientAuthHeaders } from "@/lib/client-auth";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -549,36 +550,39 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchUserData = useCallback(async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     try {
-      const res = await fetch("/api/user/dashboard", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch("/api/user/dashboard", {
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) { const data = await res.json(); setUserData(data.user); }
     } catch (e) { console.error("Error:", e); }
   }, []);
 
   const fetchProducts = useCallback(async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     setIsLoading(true);
     try {
       const params = new URLSearchParams();
       if (statusFilter !== "all") params.set("status", statusFilter);
-      const res = await fetch(`/api/pod/products?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/pod/products?${params}`, {
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) { const data = await res.json(); setProducts(data.products || []); setStats(data.stats); }
     } catch (e) { console.error("Error:", e); toast.error("Erro ao carregar produtos"); }
     finally { setIsLoading(false); }
   }, [statusFilter]);
 
   const fetchBlueprints = useCallback(async (category?: string, search?: string) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     setIsFetchingBlueprints(true);
     try {
       const params = new URLSearchParams({ action: "catalog" });
       if (category) params.set("category", category);
       if (search) params.set("search", search);
-      const res = await fetch(`/api/pod/blueprints?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/pod/blueprints?${params}`, {
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) {
         const data = await res.json();
         if (data.results) setBlueprints(data.results);
@@ -594,22 +598,24 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   }, []);
 
   const fetchProviders = useCallback(async (blueprintId: number) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     setIsFetchingProviders(true);
     try {
-      const res = await fetch(`/api/pod/blueprints?action=blueprint&blueprintId=${blueprintId}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/pod/blueprints?action=blueprint&blueprintId=${blueprintId}`, {
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) { const data = await res.json(); setProviders(data.providers || []); }
     } catch (e) { console.error("Error:", e); }
     finally { setIsFetchingProviders(false); }
   }, []);
 
   const fetchVariants = useCallback(async (blueprintId: number, providerId: number) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     setIsFetchingVariants(true);
     try {
-      const res = await fetch(`/api/pod/blueprints?action=variants&blueprintId=${blueprintId}&providerId=${providerId}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/pod/blueprints?action=variants&blueprintId=${blueprintId}&providerId=${providerId}`, {
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) {
         const data = await res.json();
         const variantList = data.variants || [];
@@ -638,11 +644,12 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   // Fetch orders
   const fetchOrders = useCallback(async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     setIsLoadingOrders(true);
     try {
-      const res = await fetch("/api/pod/orders", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch("/api/pod/orders", {
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) {
         const data = await res.json();
         setOrders(data.orders || []);
@@ -654,11 +661,12 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   // Fetch earnings
   const fetchEarnings = useCallback(async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     setIsLoadingEarnings(true);
     try {
-      const res = await fetch("/api/pod/earnings", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch("/api/pod/earnings", {
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) {
         const data = await res.json();
         setEarningsData(data);
@@ -669,13 +677,12 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   // Publish to store
   const publishToStore = useCallback(async (productId: string) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     setIsPublishing(productId);
     try {
       const res = await fetch("/api/pod/publish", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        credentials: "include",
+        headers: { "Content-Type": "application/json", ...getClientAuthHeaders() },
         body: JSON.stringify({ productId }),
       });
       if (res.ok) {
@@ -715,15 +722,18 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
 
   const uploadDesign = async (): Promise<string | null> => {
     if (!designFile) return null;
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return null;
     const formData = new FormData();
     formData.append("file", designFile);
     formData.append("folder", "pod-designs");
     formData.append("saveToGallery", "true"); // Save to user's gallery
     formData.append("description", designFile.name || "Design POD");
     try {
-      const res = await fetch("/api/upload", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: formData });
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+        body: formData,
+      });
       if (res.ok) { const data = await res.json(); return data.url; }
     } catch (e) { console.error("Upload error:", e); }
     return null;
@@ -809,7 +819,6 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     const userXP = userData?.progress?.xp || 0;
     if (publish && userXP < MIN_XP_TO_PUBLISH) { toast.error(`Precisa ${MIN_XP_TO_PUBLISH} XP para publicar. Atual: ${userXP}`); return; }
     setIsCreating(true);
-    const token = localStorage.getItem("fayai_token");
     try {
       let designUrl = uploadedDesignUrl;
       if (!designUrl && designFile) { designUrl = await uploadDesign(); if (!designUrl) { toast.error("Erro no upload"); setIsCreating(false); return; } setUploadedDesignUrl(designUrl); }
@@ -835,15 +844,22 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         providers: [{ providerId: String(selectedProvider.id), providerSlug: "printify", syncStatus: "pending" as const }],
         primaryProvider: "printify",
       };
-      const res = await fetch("/api/pod/products", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify(productData) });
+      const authHeaders = getClientAuthHeaders();
+      const res = await fetch("/api/pod/products", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", ...authHeaders },
+        body: JSON.stringify(productData),
+      });
       if (res.ok) {
         const data = await res.json();
         if (publish && data.product?._id) {
           // Publish to Printify and create StoreProduct
           toast.loading("Publicando no Printify e na loja...");
-          const publishRes = await fetch("/api/pod/publish", { 
+          const publishRes = await fetch("/api/pod/publish", {
             method: "POST", 
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, 
+            credentials: "include",
+            headers: { "Content-Type": "application/json", ...authHeaders },
             body: JSON.stringify({ productId: data.product._id }) 
           });
           toast.dismiss();
@@ -868,18 +884,25 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   };
 
   const updateProduct = async (productId: string, updates: Partial<PODProduct>) => {
-    const token = localStorage.getItem("fayai_token");
     try {
-      const res = await fetch("/api/pod/products", { method: "PUT", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId, ...updates }) });
+      const res = await fetch("/api/pod/products", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", ...getClientAuthHeaders() },
+        body: JSON.stringify({ productId, ...updates }),
+      });
       if (res.ok) { toast.success("Atualizado"); fetchProducts(); setEditingProduct(null); setSelectedProduct(null); }
     } catch (e) { console.error(e); toast.error("Erro"); }
   };
 
   const deleteProduct = async (productId: string) => {
     if (!confirm("Excluir?")) return;
-    const token = localStorage.getItem("fayai_token");
     try {
-      const res = await fetch(`/api/pod/products?productId=${productId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/pod/products?productId=${productId}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: getClientAuthHeaders(),
+      });
       if (res.ok) { toast.success("Excluído"); fetchProducts(); }
     } catch (e) { console.error(e); toast.error("Erro"); }
   };
@@ -887,13 +910,13 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const publishProduct = async (productId: string) => {
     const userXP = userData?.progress?.xp || 0;
     if (userXP < MIN_XP_TO_PUBLISH) { toast.error(`Precisa ${MIN_XP_TO_PUBLISH} XP. Atual: ${userXP}`); return; }
-    const token = localStorage.getItem("fayai_token");
     try {
       toast.loading("Publicando no Printify e na loja...");
-      const res = await fetch("/api/pod/publish", { 
-        method: "POST", 
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, 
-        body: JSON.stringify({ productId }) 
+      const res = await fetch("/api/pod/publish", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", ...getClientAuthHeaders() },
+        body: JSON.stringify({ productId })
       });
       toast.dismiss();
       if (res.ok) {
@@ -1453,10 +1476,10 @@ function CreateWizard(props: {
   const fetchGalleryImages = useCallback(async (type: string) => {
     setIsLoadingGallery(true);
     try {
-      const token = localStorage.getItem('fayai_token');
       // Fetch more images (30) for better gallery experience
       const res = await fetch(`/api/gallery?type=${type}&limit=30`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        credentials: "include",
+        headers: getClientAuthHeaders(),
       });
       if (res.ok) {
         const data = await res.json();

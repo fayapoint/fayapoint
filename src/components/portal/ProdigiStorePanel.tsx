@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { getClientAuthHeaders } from "@/lib/client-auth";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -144,13 +145,11 @@ export default function ProdigiStorePanel() {
 
   // Fetch catalog
   const fetchCatalog = useCallback(async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
-
     setIsLoadingCatalog(true);
     try {
       const res = await fetch("/api/pod/prodigi/products", {
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include",
+        headers: getClientAuthHeaders(),
       });
       if (res.ok) {
         const data = await res.json();
@@ -166,13 +165,11 @@ export default function ProdigiStorePanel() {
 
   // Fetch orders
   const fetchOrders = useCallback(async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
-
     setIsLoadingOrders(true);
     try {
       const res = await fetch("/api/pod/prodigi/orders", {
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include",
+        headers: getClientAuthHeaders(),
       });
       if (res.ok) {
         const data = await res.json();
@@ -187,16 +184,16 @@ export default function ProdigiStorePanel() {
 
   // Fetch quote
   const fetchQuote = useCallback(async (items: { sku: string; copies: number }[]) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token || items.length === 0) return;
+    if (items.length === 0) return;
 
     setIsLoadingQuote(true);
     try {
       const res = await fetch("/api/pod/prodigi/quote", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getClientAuthHeaders(),
         },
         body: JSON.stringify({
           items,
@@ -266,9 +263,6 @@ export default function ProdigiStorePanel() {
   const uploadDesign = async (): Promise<string | null> => {
     if (!designFile) return null;
 
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return null;
-
     const formData = new FormData();
     formData.append("file", designFile);
     formData.append("folder", "prodigi-designs");
@@ -276,7 +270,8 @@ export default function ProdigiStorePanel() {
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include",
+        headers: getClientAuthHeaders(),
         body: formData,
       });
       if (res.ok) {
@@ -291,15 +286,13 @@ export default function ProdigiStorePanel() {
 
   // Generate mockup
   const generateMockup = async (sku: string, designUrl: string): Promise<string> => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return designUrl;
-
     try {
       const res = await fetch("/api/pod/prodigi/mockup", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getClientAuthHeaders(),
         },
         body: JSON.stringify({ sku, designUrl }),
       });
@@ -379,16 +372,14 @@ export default function ProdigiStorePanel() {
       return;
     }
 
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
-
     setIsCreatingOrder(true);
     try {
       const res = await fetch("/api/pod/prodigi/orders", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getClientAuthHeaders(),
         },
         body: JSON.stringify({
           items: cart.map(item => ({
