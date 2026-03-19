@@ -12,9 +12,31 @@ const GOOGLE_CLIENT_ID =
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 const LOCALES = ['pt-BR', 'en'] as const;
 
-function getRedirectUri(request: NextRequest): string {
+function getPublicOrigin(request: NextRequest): string {
+  const forwardedProto = request.headers.get('x-forwarded-proto');
+  const forwardedHost =
+    request.headers.get('x-forwarded-host') ||
+    request.headers.get('host');
+
+  if (forwardedHost) {
+    return `${forwardedProto || 'https'}://${forwardedHost}`;
+  }
+
+  const canonicalEnv =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.SITE_URL ||
+    process.env.NEXTAUTH_URL;
+
+  if (canonicalEnv) {
+    return canonicalEnv.replace(/\/$/, '');
+  }
+
   const url = new URL(request.url);
-  return `${url.origin}/api/auth/google/callback`;
+  return url.origin;
+}
+
+function getRedirectUri(request: NextRequest): string {
+  return `${getPublicOrigin(request)}/api/auth/google/callback`;
 }
 
 function sanitizeRedirectPath(state: string | null): string {
@@ -45,7 +67,7 @@ function buildLoginRedirectUrl(
   extraParams?: Record<string, string | null | undefined>
 ): URL {
   const safeRedirect = sanitizeRedirectPath(state);
-  const loginUrl = new URL(getLocaleAwareLoginPath(state), request.url);
+  const loginUrl = new URL(getLocaleAwareLoginPath(state), getPublicOrigin(request));
   loginUrl.searchParams.set('error', errorCode);
   loginUrl.searchParams.set('redirect', safeRedirect);
   if (extraParams) {
@@ -181,7 +203,7 @@ export async function GET(request: NextRequest) {
     // Redirect to the app with token in cookie
     const redirectPath = sanitizeRedirectPath(state);
     const response = NextResponse.redirect(
-      new URL(redirectPath, request.url)
+      new URL(redirectPath, getPublicOrigin(request))
     );
 
     const cookieOptions = {
