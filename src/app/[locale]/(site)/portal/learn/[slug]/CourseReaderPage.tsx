@@ -641,10 +641,19 @@ export default function CourseReaderPage() {
             const progressData = await progressRes.json();
             const p = progressData?.progress as CourseProgressDto | undefined;
             if (p) {
-              rawCompletedRef.current = Array.isArray(p.completedSections)
+              const serverCompletedSections = Array.isArray(p.completedSections)
                 ? p.completedSections
                 : [];
-              resumeHeadingRef.current = p.lastHeadingId || null;
+              const serverLastHeadingId = p.lastHeadingId || null;
+
+              rawCompletedRef.current = serverCompletedSections;
+              resumeHeadingRef.current = serverLastHeadingId;
+
+              writeLocalProgress(slug, {
+                completedSections: serverCompletedSections,
+                lastHeadingId: serverLastHeadingId ?? undefined,
+                progressPercent: typeof p.progressPercent === "number" ? p.progressPercent : 0,
+              });
             }
           }
         } catch {
@@ -682,11 +691,16 @@ export default function CourseReaderPage() {
 
     // Restore chapter position
     const savedId = normalizeSavedHeadingId(resumeHeadingRef.current, chapters);
+    writeLocalProgress(slug, {
+      completedSections: valid,
+      lastHeadingId: savedId ?? undefined,
+      progressPercent: chapters.length ? Math.round((valid.length / chapters.length) * 100) : 0,
+    });
     if (savedId) {
       const idx = chapters.findIndex((ch) => ch.id === savedId);
       if (idx >= 0) setCurrentChapterIndex(idx);
     }
-  }, [chapters]);
+  }, [chapters, slug]);
 
   /* ─── Keyboard shortcuts ─── */
   useEffect(() => {
