@@ -37,6 +37,7 @@ import {
   Check,
   ArrowUpDown,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -53,7 +54,7 @@ import { useServiceCart } from "@/contexts/ServiceCartContext";
 import { toast } from "react-hot-toast";
 
 // Category icons mapping
-const CATEGORY_ICONS: Record<string, React.ElementType> = {
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
   computers: Monitor,
   components: Cpu,
   peripherals: Mouse,
@@ -354,7 +355,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
     onViewAll
   }: { 
     title: string; 
-    icon: React.ElementType; 
+    icon: LucideIcon; 
     products: StoreProduct[];
     color?: string;
     showViewAll?: boolean;

@@ -1,16 +1,20 @@
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
 import { getClientIpFromRequest, rateLimit } from "@/lib/rate-limit";
-import { 
-  isBadBot, 
-  isHoneypotPath, 
+import {
+  isBadBot,
+  isHoneypotPath,
   calculateSuspicionScore,
   getRateLimitTier,
-  generateRequestFingerprint 
+  generateRequestFingerprint
 } from "@/lib/bot-detection";
 import { routing, type Locale } from "./i18n/routing";
+
+// JWT secret for Edge runtime verification (jose)
+const JWT_SECRET_BYTES = new TextEncoder().encode(process.env.JWT_SECRET || "");
 
 // =============================================================================
 // SEARCH ENGINE BOT DETECTION - Auto-pass gate for SEO
@@ -369,9 +373,9 @@ export default async function middleware(request: NextRequest) {
   // =========================================================================
   if (isApiRoute) {
     // Authenticated users get higher API limits
-    const hasAuthToken = request.cookies.has("fayai_token");
+    const hasAuthToken = request.cookies.has("token") || request.cookies.has("fayai_token");
     const apiLimit = hasAuthToken ? 200 : 120;
-    
+
     const apiRl = await rateLimit({
       key: `api:global:${ip}`,
       limit: apiLimit,
@@ -504,7 +508,7 @@ export default async function middleware(request: NextRequest) {
   let rl = { allowed: true, remaining: 999, limit: 250, resetSeconds: 60 };
   
   if (!isApiRoute) {
-    const hasAuthToken = request.cookies.has("fayai_token");
+    const hasAuthToken = request.cookies.has("token") || request.cookies.has("fayai_token");
     const rateLimitTier = getRateLimitTier({
       suspicionScore,
       pathname,
@@ -562,7 +566,7 @@ export default async function middleware(request: NextRequest) {
   // -------------------------------------------------------------------------
   // 6. LOCALE DETECTION WITH GEO-IP (skip for API routes)
   // -------------------------------------------------------------------------
-  
+
   // API routes should NOT get locale prefix
   if (isApiRoute) {
     const response = NextResponse.next();
@@ -570,9 +574,53 @@ export default async function middleware(request: NextRequest) {
     response.headers.set("X-RateLimit-Remaining", String(rl.remaining));
     return response;
   }
-  
+
   const segments = pathname.split("/").filter(Boolean);
   const hasLocalePrefix = segments.length > 0 && routing.locales.includes(segments[0] as Locale);
+
+  // -------------------------------------------------------------------------
+  // 6.1. PORTAL ROUTE PROTECTION - Require valid JWT
+  // -------------------------------------------------------------------------
+  // Strip locale prefix to check raw path (e.g. /pt-BR/portal -> /portal)
+  const rawPathname = hasLocalePrefix
+    ? "/" + segments.slice(1).join("/")
+    : pathname;
+
+  if (rawPathname.startsWith("/portal")) {
+    // Get token from Authorization header or cookie
+    let authToken: string | null = null;
+
+    const authorizationHeader = request.headers.get("authorization");
+    if (authorizationHeader?.startsWith("Bearer ")) {
+      authToken = authorizationHeader.slice(7);
+    }
+    if (!authToken) {
+      authToken = request.cookies.get("token")?.value
+        || request.cookies.get("fayai_token")?.value
+        || null;
+    }
+
+    if (!authToken) {
+      // No token - redirect to login with redirect param
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    try {
+      await jwtVerify(authToken, JWT_SECRET_BYTES);
+      // Token valid - continue to locale handling
+    } catch {
+      // Invalid/expired token - redirect to login and clear cookie
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.searchParams.set("redirect", pathname);
+      const redirectResponse = NextResponse.redirect(loginUrl);
+      redirectResponse.cookies.delete("token");
+      return redirectResponse;
+    }
+  }
 
   if (!hasLocalePrefix) {
     let locale: Locale = "en";

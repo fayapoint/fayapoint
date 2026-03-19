@@ -1,0 +1,58 @@
+export const promptEngineeringCourse = {
+  id: 13,
+  slug: "prompt-engineering",
+  title: "Prompt Engineering: Domine a Arte de Conversar com IAs",
+  subtitle: "De iniciante a especialista: técnicas comprovadas para ChatGPT, Claude, Gemini e mais",
+  tool: "Multi-tool",
+  category: "IA Generativa",
+  level: "Intermediário",
+  duration: "4+ horas",
+  totalLessons: 20,
+  price: 97,
+  originalPrice: 147,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Março 2026",
+  shortDescription: "Curso completo de prompt engineering com técnicas avançadas, frameworks profissionais e casos de uso reais para ChatGPT, Claude e Gemini.",
+  fullDescription: `Aprenda as técnicas mais avançadas de prompt engineering para extrair resultados extraordinários de qualquer modelo de IA. Do básico ao avançado com casos de uso reais.
+
+Este curso cobre desde os fundamentos de como LLMs processam prompts até técnicas avançadas como Chain-of-Thought, Tree-of-Thought, ReAct e meta-prompting. Você vai construir um kit profissional de prompts e aprender a automatizar com APIs.`,
+  impactForIndividuals: [
+    "🚀 Extraia 10x mais valor de qualquer IA com prompts profissionais",
+    "📝 Domine frameworks como CoT, ToT e ReAct",
+    "💼 Aplique prompt engineering no seu trabalho diário",
+    "🤖 Compare e use GPT-4, Claude e Gemini estrategicamente",
+  ],
+  impactForEntrepreneurs: [
+    "📈 Automatize tarefas com APIs e prompt templates",
+    "💰 ROI de 1000%+ em automações com IA",
+    "🎯 Crie conteúdo de marketing que converte com prompts profissionais",
+  ],
+  impactForCompanies: [
+    "👥 Treine sua equipe em prompt engineering",
+    "⚡ Aumente produtividade com biblioteca de prompts compartilhada",
+    "🔧 Integre IA nos processos da empresa",
+  ],
+  whatYouLearn: [
+    "Fundamentos e técnicas avançadas de prompt engineering",
+    "Frameworks: Chain-of-Thought, Tree-of-Thought, ReAct",
+    "Comparação prática de GPT-4, Claude e Gemini",
+    "Automação com APIs e prompt templates",
+    "Projeto final: Kit Profissional de Prompts",
+  ],
+  modules: [
+    { id: 1, title: "Fundamentos", description: "Base sólida de prompt engineering", duration: "1h", lessons: 4, topics: ["O que é PE", "Como LLMs processam", "Anatomia do prompt", "Zero-shot vs Few-shot"] },
+    { id: 2, title: "Técnicas Intermediárias", description: "Eleve a qualidade dos prompts", duration: "1h", lessons: 4, topics: ["Role prompting", "Chain-of-Thought", "Self-consistency", "Formatação"] },
+    { id: 3, title: "Técnicas Avançadas", description: "Técnicas de ponta", duration: "1h", lessons: 4, topics: ["Tree-of-Thought", "ReAct", "Meta-prompting", "Prompt chaining"] },
+    { id: 4, title: "Aplicações Práticas", description: "Uso no mundo real", duration: "1h", lessons: 4, topics: ["Código", "Marketing", "Dados", "Educação"] },
+    { id: 5, title: "Mastery", description: "Torne-se especialista", duration: "1h", lessons: 4, topics: ["Comparando modelos", "APIs", "Futuro do PE", "Kit profissional"] },
+  ],
+  testimonials: [],
+  bonuses: [],
+  faqs: [
+    { question: "Preciso saber programar?", answer: "Não. O curso é acessível para qualquer nível técnico." },
+    { question: "Funciona para qualquer IA?", answer: "Sim. As técnicas são universais e funcionam em ChatGPT, Claude, Gemini e outros." },
+  ],
+  targetAudience: ["Profissionais que usam IA no trabalho", "Empreendedores digitais", "Desenvolvedores", "Criadores de conteúdo"],
+  requirements: ["Acesso a um modelo de IA (ChatGPT, Claude ou Gemini)", "Curiosidade"],
+};

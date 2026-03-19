@@ -10,6 +10,10 @@ import { perplexityCourse } from './perplexity-course';
 import { chatGPTAllowlistingCourse } from './chatgpt-allowlisting-course';
 import { openclawCourse } from './openclaw-course';
 import { claudeCoworkCourse } from './claude-cowork-course';
+import { promptEngineeringCourse } from './prompt-engineering-course';
+import { agentesIACourse } from './agentes-ia-course';
+import { iaSemFiltroCourse } from './ia-sem-filtro-course';
+import { autoresearchCourse } from './autoresearch-course';
 import { normalizeCourseLevel, CourseLevel } from '@/lib/course-tiers';
 
 export interface CourseModule {
@@ -88,7 +92,11 @@ export const allCourses: CourseData[] = [
   perplexityCourse,
   chatGPTAllowlistingCourse,
   openclawCourse,
-  claudeCoworkCourse
+  claudeCoworkCourse,
+  promptEngineeringCourse,
+  agentesIACourse,
+  iaSemFiltroCourse,
+  autoresearchCourse
 ];
 
 // Helper function to get course by slug with normalized level

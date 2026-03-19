@@ -42,3 +42,6 @@ next-env.d.ts
 
 # credentials
 PROJECT_CREDENTIALS.md
+
+# Local Netlify folder
+.netlify

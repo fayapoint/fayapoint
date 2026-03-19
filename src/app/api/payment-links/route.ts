@@ -1,36 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import dbConnect from '@/lib/mongodb';
-import User from '@/models/User';
+import { getAuthUser } from '@/lib/auth';
 import asaas, {
   createPaymentLink,
   listPaymentLinks,
   asaasConfig,
 } from '@/lib/asaas';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fayai-secret';
-
-// =============================================================================
-// HELPER
-// =============================================================================
-
-async function getAdminFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  const token = authHeader.substring(7);
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    await dbConnect();
-    const user = await User.findById(decoded.id);
-    // Only admins can manage payment links
-    if (user?.role !== 'admin') return null;
-    return user;
-  } catch {
-    return null;
-  }
-}
 
 // =============================================================================
 // POST - Create Payment Link
@@ -45,8 +19,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const admin = await getAdminFromToken(request);
-    if (!admin) {
+    const authUser = await getAuthUser();
+    if (!authUser || authUser.role !== 'admin') {
       return NextResponse.json(
         { error: 'Apenas administradores podem criar links de pagamento' },
         { status: 403 }
@@ -174,8 +148,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const admin = await getAdminFromToken(request);
-    if (!admin) {
+    const authUser = await getAuthUser();
+    if (!authUser || authUser.role !== 'admin') {
       return NextResponse.json(
         { error: 'Apenas administradores podem listar links de pagamento' },
         { status: 403 }

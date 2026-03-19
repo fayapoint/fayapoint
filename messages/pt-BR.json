@@ -47,7 +47,7 @@
       },
       "feature4": {
         "title": "Certificados Reconhecidos",
-        "desc": "Receba certificados verificáveis ao completar cada curso"
+        "desc": "Certificados verificáveis online — use no seu currículo, LinkedIn e processos seletivos"
       },
       "feature5": {
         "title": "100+ Ferramentas de IA",
@@ -771,56 +771,51 @@
       "description": "Escolha o plano ideal para sua jornada",
       "plans": {
         "starter": {
-          "name": "Starter",
-          "price": "47",
+          "name": "Explorador",
+          "price": "R$57",
           "period": "/mês",
-          "description": "Perfeito para começar sua jornada",
+          "description": "Perfeito para começar sua jornada em IA",
           "features": [
-            "5 cursos básicos por mês",
-            "Acesso à comunidade",
-            "Certificados de conclusão",
-            "Suporte por email",
-            "Material de apoio"
+            "3 cursos iniciantes por mês",
+            "100 créditos/mês para IA",
+            "10% de desconto em certificações e cursos avulsos",
+            "Certificados verificáveis online",
+            "Acesso à comunidade"
           ],
-          "cta": "Começar Agora",
-          "href": "/checkout/starter"
+          "cta": "Começar a Explorar",
+          "href": "/checkout/explorador"
         },
         "pro": {
-          "name": "Pro",
-          "price": "197",
+          "name": "Profissional",
+          "price": "R$97",
           "period": "/mês",
-          "description": "Para profissionais sérios sobre IA",
+          "description": "Para quem leva IA a sério",
           "features": [
-            "Acesso ilimitado a todos os cursos",
-            "Mentorias em grupo mensais",
-            "Projetos práticos exclusivos",
+            "5 iniciantes + 2 intermediários + 1 avançado/mês",
+            "300 créditos/mês para IA",
+            "20% de desconto em certificações e cursos avulsos",
             "Suporte prioritário",
-            "Templates e automações prontas",
-            "Acesso antecipado a novos cursos",
-            "Descontos em ferramentas parceiras"
+            "Conteúdo exclusivo e antecipado"
           ],
           "highlighted": true,
           "badge": "MAIS POPULAR",
-          "cta": "Escolher Pro",
-          "href": "/checkout/pro"
+          "cta": "Escolher Profissional",
+          "href": "/checkout/profissional"
         },
         "business": {
-          "name": "Business",
-          "price": "497",
+          "name": "Expert",
+          "price": "R$167",
           "period": "/mês",
-          "description": "Transforme sua empresa com IA",
+          "description": "Domine IA por completo",
           "features": [
-            "Tudo do plano Pro",
-            "Consultoria individual mensal",
-            "Treinamento para sua equipe",
-            "Implementação personalizada",
-            "Dashboard de métricas",
-            "Acesso via API",
-            "Opções white-label",
-            "Suporte 24/7 via WhatsApp"
+            "7 iniciantes + 4 intermediários + 3 avançados/mês",
+            "800 créditos/mês para IA",
+            "50% de desconto em certificações e cursos avulsos",
+            "Suporte VIP + conteúdo exclusivo",
+            "Consultoria mensal com especialista"
           ],
-          "cta": "Falar com Vendas",
-          "href": "/contato/vendas"
+          "cta": "Virar Expert",
+          "href": "/checkout/expert"
         }
       },
       "guarantee": "Garantia de 30 dias",
@@ -1321,6 +1316,10 @@
     ]
   },
   "Portal": {
+    "loginRequired": "Login necessário",
+    "loginRequiredDesc": "Faça login para acessar seu portal do aluno.",
+    "loginButton": "Entrar",
+    "homeButton": "Página Inicial",
     "welcome": "Bem-vindo, {name}!",
     "plan": "Plano {plan}",
     "points": "{points} pts",
@@ -2832,7 +2831,7 @@
         },
         {
           "question": "Como funciona o certificado?",
-          "answer": "Ao concluir o curso, você recebe um certificado digital verificável que pode adicionar ao LinkedIn e usar como comprovação profissional."
+          "answer": "Ao concluir o quiz final, você recebe um certificado digital com código único verificável online em fayai.com.br/certificado. Use no seu currículo, LinkedIn e processos seletivos como comprovação oficial de suas habilidades em IA."
         },
         {
           "question": "Posso assistir no celular?",

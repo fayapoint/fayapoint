@@ -17,12 +17,13 @@ import {
   Globe,
   RefreshCcw,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface Integration {
   id: string;
   name: string;
   description: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   status: "connected" | "disconnected" | "partial";
   url: string;
   envKeys: string[];

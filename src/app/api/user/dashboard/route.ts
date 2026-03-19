@@ -3,14 +3,11 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import CourseProgress from '@/models/CourseProgress';
 import Order from '@/models/Order';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
 import { getMongoClient } from '@/lib/database';
 import { ACHIEVEMENTS, DAILY_CHALLENGES, WEEKLY_MISSIONS } from '@/models/Achievement';
 import { calculateEnrollmentSlots, SubscriptionPlan, CourseLevel } from '@/lib/course-tiers';
 import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
+import { getAuthUser } from '@/lib/auth';
 
 // XP required per level (exponential curve)
 const getXpForLevel = (level: number) => Math.floor(100 * Math.pow(1.5, level - 1));
@@ -99,31 +96,10 @@ export async function GET(request: Request) {
   try {
     await dbConnect();
 
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const decoded = await getAuthUser();
+    if (!decoded) {
       return NextResponse.json(
         { error: 'Não autorizado' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    let decoded: { id: string; iat: number; exp: number } | string | jwt.JwtPayload;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json(
-        { error: 'Token inválido' },
-        { status: 401 }
-      );
-    }
-
-    if (typeof decoded === 'string' || !decoded.id) {
-      return NextResponse.json(
-        { error: 'Token inválido' },
         { status: 401 }
       );
     }
@@ -207,7 +183,7 @@ export async function GET(request: Request) {
       new Date(userDailyChallenge.date).toDateString() === today.toDateString();
     
     // Weekly mission for Pro+ users
-    const weeklyMission = ['pro', 'business'].includes(plan) ? getWeeklyMission(today) : null;
+    const weeklyMission = ['pro', 'business', 'profissional', 'expert'].includes(plan) ? getWeeklyMission(today) : null;
 
     // Calculate level progress
     const currentXp = user.progress?.xp || 0;

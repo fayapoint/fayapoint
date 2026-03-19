@@ -20,6 +20,7 @@ import {
   Moon,
   Share2
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import {
@@ -30,7 +31,7 @@ import {
 } from "@/components/ui/tooltip";
 
 // Icon mapping for achievements
-const ACHIEVEMENT_ICONS: Record<string, React.ElementType> = {
+const ACHIEVEMENT_ICONS: Record<string, LucideIcon> = {
   BookOpen,
   GraduationCap,
   Trophy,

@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server';
-import { headers } from 'next/headers';
-import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
+import { getAuthUser } from '@/lib/auth';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -18,24 +15,12 @@ export async function POST(request: Request) {
   try {
     await dbConnect();
 
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let decoded: any;
-
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
@@ -50,15 +35,15 @@ export async function POST(request: Request) {
     // Validate file type
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!validTypes.includes(file.type)) {
-      return NextResponse.json({ 
-        error: 'Formato inválido. Use JPG, PNG, WebP ou GIF.' 
+      return NextResponse.json({
+        error: 'Formato inválido. Use JPG, PNG, WebP ou GIF.'
       }, { status: 400 });
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ 
-        error: 'Imagem muito grande. Máximo 5MB.' 
+      return NextResponse.json({
+        error: 'Imagem muito grande. Máximo 5MB.'
       }, { status: 400 });
     }
 
@@ -111,24 +96,12 @@ export async function DELETE(request: Request) {
   try {
     await dbConnect();
 
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let decoded: any;
-
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }

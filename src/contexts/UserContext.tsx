@@ -55,12 +55,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
 
-  // Load user from localStorage on mount (client-side only)
+  // Load user from localStorage on mount, or hydrate from cookie-based session
   useEffect(() => {
     setMounted(true);
-    
+
     if (typeof window !== 'undefined') {
       const storedUser = localStorage.getItem('fayai_user');
+      const storedToken = localStorage.getItem('fayai_token');
+
       if (storedUser) {
         try {
           setUserState(JSON.parse(storedUser));
@@ -68,6 +70,24 @@ export function UserProvider({ children }: { children: ReactNode }) {
           console.error('Error parsing stored user:', error);
           localStorage.removeItem('fayai_user');
         }
+      } else if (!storedToken) {
+        // No localStorage data — check if there's a cookie-based session
+        // (e.g., from Google OAuth callback which sets httpOnly cookie)
+        fetch('/api/user/profile', { credentials: 'include' })
+          .then(res => {
+            if (res.ok) return res.json();
+            return null;
+          })
+          .then(data => {
+            if (data?.user) {
+              setUserState(data.user);
+              localStorage.setItem('fayai_user', JSON.stringify(data.user));
+              // Note: we can't read the httpOnly token, but the cookie handles auth
+            }
+          })
+          .catch(() => {
+            // No session — user is not logged in, this is fine
+          });
       }
     }
   }, []);
@@ -88,6 +108,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('fayai_token');
       localStorage.removeItem('fayai_user');
+      // Clear httpOnly cookie via server-side API
+      fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
     }
   };
 

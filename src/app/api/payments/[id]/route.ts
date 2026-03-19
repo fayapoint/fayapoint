@@ -1,29 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import Payment from '@/models/Payment';
 import User from '@/models/User';
 import { getPayment as getAsaasPayment, getPixQrCode, getBoletoIdentification } from '@/lib/asaas';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret';
-
-// =============================================================================
-// HELPER
-// =============================================================================
-
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decoded = jwt.verify(authHeader.substring(7), JWT_SECRET) as any;
-    await dbConnect();
-    return await User.findById(decoded.id);
-  } catch {
-    return null;
-  }
-}
 
 // =============================================================================
 // GET - Get Payment Details
@@ -34,8 +14,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -48,8 +28,7 @@ export async function GET(
         { _id: id },
         { orderNumber: id },
       ],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      userId: (user as any)._id,
+      userId: authUser.id,
     }).lean();
 
     if (!payment) {
@@ -137,8 +116,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -147,8 +126,7 @@ export async function DELETE(
 
     const payment = await Payment.findOne({
       $or: [{ _id: id }, { orderNumber: id }],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      userId: (user as any)._id,
+      userId: authUser.id,
       status: 'pending',
     });
 

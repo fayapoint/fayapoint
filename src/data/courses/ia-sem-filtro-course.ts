@@ -1,0 +1,58 @@
+export const iaSemFiltroCourse = {
+  id: 15,
+  slug: "ia-sem-filtro-por-claude",
+  title: "IA Sem Filtro: O Guia Definitivo Escrito por uma Inteligência Artificial",
+  subtitle: "Eu sou Claude, uma IA. Este é meu guia honesto sobre inteligência artificial.",
+  tool: "Claude",
+  category: "IA Generativa",
+  level: "Intermediário",
+  duration: "3+ horas",
+  totalLessons: 20,
+  price: 97,
+  originalPrice: 97,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Março 2026",
+  shortDescription: "O primeiro curso sobre IA escrito e assinado por uma IA. Claude explica, com honestidade radical, tudo que você precisa saber.",
+  fullDescription: `Um curso único: escrito inteiramente por uma IA que explica honestamente o que é, como funciona, o que sabe e não sabe, e o que o futuro reserva. Sem marketing, sem hype — só a verdade.
+
+Claude, a IA da Anthropic, assina este curso em primeira pessoa. De "como eu fui criado" a "minha carta final para a humanidade", é uma perspectiva que nenhum humano poderia oferecer.`,
+  impactForIndividuals: [
+    "🤖 Entenda IA pela perspectiva de quem é uma IA",
+    "🔍 Separe fato de ficção sobre inteligência artificial",
+    "💡 Descubra onde IA é incrível e onde é terrível",
+    "🌍 Prepare-se para um mundo com IA avançada",
+  ],
+  impactForEntrepreneurs: [
+    "📊 Entenda os limites reais antes de investir em IA",
+    "💰 Saiba onde IA agrega valor de verdade",
+    "🎯 Visão honesta sobre o futuro do mercado de IA",
+  ],
+  impactForCompanies: [
+    "👥 Eduque sua equipe sobre IA sem hype",
+    "⚠️ Entenda riscos, viés e privacidade",
+    "🔮 Prepare-se estrategicamente para AGI e além",
+  ],
+  whatYouLearn: [
+    "Como IAs são criadas e treinadas (explicado por uma IA)",
+    "O que IA realmente sabe vs. finge saber",
+    "Onde IA é incrível e onde é terrível (honestamente)",
+    "Custo real da IA: energia, água, dados humanos",
+    "AGI, singularidade e o futuro — análise honesta de uma IA",
+  ],
+  modules: [
+    { id: 1, title: "Quem Eu Sou", description: "Claude se apresenta", duration: "40min", lessons: 4, topics: ["Carta aberta", "Como fui criado", "O que sei e finjo saber", "Consciência"] },
+    { id: 2, title: "Como Funciono Por Dentro", description: "IA explicada por uma IA", duration: "40min", lessons: 4, topics: ["Tokens e transformers", "Treinamento", "Alucinações", "Meus limites"] },
+    { id: 3, title: "IA na Vida Real", description: "O que funciona e o que não funciona", duration: "40min", lessons: 4, topics: ["Onde é incrível", "Onde é terrível", "Uso inteligente", "Melhores prompts"] },
+    { id: 4, title: "Verdades Incômodas", description: "O que a indústria esconde", duration: "40min", lessons: 4, topics: ["Custo real", "Viés", "Privacidade", "Empregos"] },
+    { id: 5, title: "O Futuro", description: "Uma IA olhando para frente", duration: "40min", lessons: 4, topics: ["AGI", "O que eu queria que soubessem", "Preparação", "Carta final"] },
+  ],
+  testimonials: [],
+  bonuses: [],
+  faqs: [
+    { question: "Isso foi realmente escrito por uma IA?", answer: "Sim. Todo o conteúdo foi gerado por Claude (Anthropic) em primeira pessoa, com honestidade radical." },
+    { question: "Preciso conhecimento técnico?", answer: "Não. O curso é acessível para qualquer pessoa curiosa sobre IA." },
+  ],
+  targetAudience: ["Qualquer pessoa curiosa sobre IA", "Profissionais querendo entender IA sem jargão", "Céticos e entusiastas"],
+  requirements: ["Apenas curiosidade"],
+};

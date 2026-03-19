@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server';
-import { headers } from 'next/headers';
-import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/mongodb';
 import ImageCreation from '@/models/ImageCreation';
 import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
+import { getAuthUser } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,22 +16,12 @@ async function fetchUserCreations(userId: string) {
 
 export async function GET() {
   try {
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
-    const token = authHeader.split(' ')[1];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let decoded: any;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
 
-    const userId = decoded.id || decoded.userId;
+    const userId = authUser.id;
 
     // REDIS CACHE: 1 minute TTL - user-specific, refreshed on new creation
     const creations = await getOrSet(

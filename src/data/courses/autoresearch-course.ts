@@ -1,0 +1,58 @@
+export const autoresearchCourse = {
+  id: 16,
+  slug: "autoresearch-singularity",
+  title: "Autoresearch e a Singularidade: Quando a IA Melhora a Si Mesma",
+  subtitle: "O padrão que permite IAs se auto-aperfeiçoarem — e o que isso significa para o futuro",
+  tool: "Multi-tool",
+  category: "IA Generativa",
+  level: "Avançado",
+  duration: "3.5+ horas",
+  totalLessons: 20,
+  price: 167,
+  originalPrice: 247,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Março 2026",
+  shortDescription: "IA que melhora a si mesma: o padrão autoresearch, loops de auto-aperfeiçoamento e o caminho para a singularidade tecnológica.",
+  fullDescription: `Explore o conceito revolucionário de autoresearch: sistemas de IA que iterativamente melhoram seus próprios outputs sem intervenção humana. Entenda a teoria, implemente na prática e reflita sobre as implicações para a singularidade tecnológica.
+
+Inclui caso real: 140+ iterações de melhoria autônoma de escrita, com score subindo de 6.2 para 8.7 usando 5 personas de avaliação por IA.`,
+  impactForIndividuals: [
+    "🔄 Implemente loops de auto-aperfeiçoamento para qualquer domínio",
+    "🐍 Framework completo em Python pronto para usar",
+    "📊 Caso real: 140 iterações, score 6.2→8.7",
+    "🧠 Entenda a singularidade com base técnica real",
+  ],
+  impactForEntrepreneurs: [
+    "💰 Automatize melhoria de qualidade sem intervenção humana",
+    "📈 Aplique a marketing, código, conteúdo e mais",
+    "🎯 Reduza custos com estratégia multi-modelo (local + cloud)",
+  ],
+  impactForCompanies: [
+    "⚡ Implemente autoresearch em pipelines de produção",
+    "🔧 Framework generalizável para qualquer domínio",
+    "📊 Monitoramento de custos e qualidade integrado",
+  ],
+  whatYouLearn: [
+    "O padrão autoresearch: Gerar → Avaliar → Iterar",
+    "Rubrics multi-dimensionais e feedback loops inteligentes",
+    "Implementação Python completa (AutoRunner)",
+    "3 domínios: escrita criativa, código, marketing",
+    "Singularidade, alinhamento e futuro da IA",
+  ],
+  modules: [
+    { id: 1, title: "O Conceito", description: "Entendendo autoresearch", duration: "45min", lessons: 4, topics: ["O que é", "Karpathy", "Loop básico", "Por que funciona"] },
+    { id: 2, title: "A Arquitetura", description: "Fundamentos técnicos", duration: "45min", lessons: 4, topics: ["Componentes", "Rubrics", "Feedback loops", "Estado e convergência"] },
+    { id: 3, title: "Implementação", description: "Construindo na prática", duration: "50min", lessons: 4, topics: ["AutoRunner Python", "Escrita", "Código", "Marketing"] },
+    { id: 4, title: "Casos Reais", description: "Produção e escalabilidade", duration: "45min", lessons: 4, topics: ["140 iterações TCH", "Multi-modelo", "Produção", "Generalização"] },
+    { id: 5, title: "A Singularidade", description: "Filosófico e futuro", duration: "45min", lessons: 4, topics: ["Auto-aperfeiçoamento recursivo", "Singularidade", "Alinhamento", "Futuro iterativo"] },
+  ],
+  testimonials: [],
+  bonuses: [],
+  faqs: [
+    { question: "Preciso saber Python?", answer: "Sim, conhecimento intermediário de Python é recomendado." },
+    { question: "É muito teórico?", answer: "Não. O curso mistura teoria, implementação prática com código real, e reflexão filosófica." },
+  ],
+  targetAudience: ["Desenvolvedores e engenheiros de IA", "Pesquisadores", "Empreendedores", "Futuristas"],
+  requirements: ["Python intermediário", "Familiaridade com APIs de LLM", "Curiosidade sobre o futuro da IA"],
+};

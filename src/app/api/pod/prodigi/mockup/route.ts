@@ -4,11 +4,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import { v2 as cloudinary } from 'cloudinary';
 import { getProductBySku, PRODIGI_CATEGORIES } from '@/lib/prodigi-catalog';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -17,27 +15,14 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Helper to verify auth
-async function verifyAuth(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    return decoded.id;
-  } catch {
-    return null;
-  }
-}
-
 /**
  * POST - Generate mockup image
  * Combines user's design with product template using Cloudinary transformations
  */
 export async function POST(request: NextRequest) {
   try {
-    const userId = await verifyAuth(request);
-    if (!userId) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -231,8 +216,8 @@ async function generateDesignPreview(
  */
 export async function GET(request: NextRequest) {
   try {
-    const userId = await verifyAuth(request);
-    if (!userId) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 

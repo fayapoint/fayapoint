@@ -188,7 +188,7 @@ export default function PortalPage() {
   const router = useRouter();
   const { user, setUser, logout } = useUser();
   const { items: cartItems, cartTotal } = useServiceCart();
-  const { data: cachedDashboardData, isLoading: isDashboardLoading, refetch: refetchDashboard } = useDashboard();
+  const { data: cachedDashboardData, isLoading: isDashboardLoading, error: dashboardError, refetch: refetchDashboard } = useDashboard();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
@@ -369,11 +369,13 @@ export default function PortalPage() {
     } else if (isDashboardLoading === false && !cachedDashboardData) {
       // If loading is done but no data, likely unauthorized or error
        const token = localStorage.getItem("fayai_token");
-       if (!token) {
-          router.push("/login");
+       if (!token || dashboardError === "Unauthorized" || dashboardError === "No token") {
+          // Clear stale token
+          if (token) localStorage.removeItem("fayai_token");
+          // The render logic will show login UI
        }
     }
-  }, [cachedDashboardData, isDashboardLoading, setUser, router]);
+  }, [cachedDashboardData, isDashboardLoading, dashboardError, setUser, router]);
 
   const handleGenerateImage = async () => {
     if (!prompt.trim()) return;
@@ -428,7 +430,55 @@ export default function PortalPage() {
     );
   }
 
-  if (!user || !dashboardData) return null;
+  if (!user || !dashboardData) {
+    // No user/data and not loading — check why
+    const token = typeof window !== "undefined" ? localStorage.getItem("fayai_token") : null;
+
+    // If there's an auth error (401/invalid token), clear stale token and show login
+    const isAuthError = dashboardError === "Unauthorized" || dashboardError === "No token";
+
+    if (!token || isAuthError) {
+      // Clear stale token if it exists but is invalid
+      if (token && isAuthError && typeof window !== "undefined") {
+        localStorage.removeItem("fayai_token");
+      }
+      return (
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          <div className="flex flex-col items-center gap-6 max-w-md text-center px-4">
+            <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center">
+              <Lock className="w-8 h-8 text-purple-400" />
+            </div>
+            <h1 className="text-2xl font-bold">{t("loginRequired") || "Login necessário"}</h1>
+            <p className="text-gray-400">{t("loginRequiredDesc") || "Faça login para acessar seu portal do aluno."}</p>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => router.push("/login")}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-8"
+              >
+                {t("loginButton") || "Entrar"}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => router.push("/")}
+                className="border-white/20 text-white hover:bg-white/5"
+              >
+                {t("homeButton") || "Página Inicial"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    // Has valid token but no data yet — show loading
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-400">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   const stats = dashboardData.stats || {
     level: 1,
@@ -665,13 +715,13 @@ export default function PortalPage() {
                     <div className="grid grid-cols-3 gap-4 mt-6">
                       <div className="bg-black/30 rounded-xl p-4 text-center">
                         <div className="text-2xl font-bold text-green-400">
-                          {enrollmentSlots.free.used}/{enrollmentSlots.free.limit === Infinity ? '∞' : enrollmentSlots.free.limit}
+                          {enrollmentSlots.beginner.used}/{enrollmentSlots.beginner.limit === Infinity ? '∞' : enrollmentSlots.beginner.limit}
                         </div>
                         <p className="text-xs text-gray-400 mt-1">Iniciante</p>
                         <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
                           <div 
                             className="bg-green-500 h-1.5 rounded-full" 
-                            style={{ width: `${Math.min(100, (enrollmentSlots.free.used / enrollmentSlots.free.limit) * 100)}%` }}
+                            style={{ width: `${Math.min(100, (enrollmentSlots.beginner.used / enrollmentSlots.beginner.limit) * 100)}%` }}
                           />
                         </div>
                       </div>

@@ -1,23 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import FulfillmentOrder from '@/models/FulfillmentOrder';
 import { updateTracking, markDelivered } from '@/lib/fulfillment';
-import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const token = request.headers.get('authorization')?.replace('Bearer ', '');
-  if (!token) return null;
-  
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
-    return decoded;
-  } catch {
-    return null;
-  }
-}
 
 // =============================================================================
 // GET - Get fulfillment order details
@@ -29,14 +14,14 @@ export async function GET(
 ) {
   try {
     const { orderId } = await params;
-    const user = await getUserFromToken(request);
-    
-    if (!user) {
+    const authUser = await getAuthUser();
+
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
-    
+
     await dbConnect();
-    
+
     // Find by order ID or order number
     const fulfillmentOrder = await FulfillmentOrder.findOne({
       $or: [
@@ -44,14 +29,14 @@ export async function GET(
         { orderNumber: orderId },
       ],
     });
-    
+
     if (!fulfillmentOrder) {
       return NextResponse.json({ error: 'Pedido não encontrado' }, { status: 404 });
     }
-    
+
     // Check user has access (owner or admin)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((fulfillmentOrder as any).userId.toString() !== user.id) {
+    if ((fulfillmentOrder as any).userId.toString() !== authUser.id) {
       return NextResponse.json({ error: 'Acesso negado' }, { status: 403 });
     }
     
@@ -96,12 +81,12 @@ export async function PUT(
 ) {
   try {
     const { orderId } = await params;
-    const user = await getUserFromToken(request);
-    
-    if (!user) {
+    const authUser = await getAuthUser();
+
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
-    
+
     const body = await request.json();
     const { action, trackingInfo, status } = body;
     

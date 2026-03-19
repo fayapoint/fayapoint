@@ -29,6 +29,7 @@ import {
   Home,
   ExternalLink,
   Award,
+  UserCog,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -103,7 +104,7 @@ export function DashboardSidebar({
     onCollapsedChange?.(value);
   };
   
-  const isPro = ["pro", "business", "starter"].includes(plan);
+  const isPro = ["pro", "business", "starter", "explorador", "profissional", "expert"].includes(plan);
 
   return (
     <motion.aside
@@ -282,8 +283,17 @@ export function DashboardSidebar({
         </div>
       )}
 
-      {/* Settings Link */}
-      <div className="p-2 border-t border-gray-800">
+      {/* Account & Settings Links */}
+      <div className="p-2 border-t border-gray-800 space-y-1">
+        <Link href="/portal/conta">
+          <button className={cn(
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition",
+            isCollapsed && "justify-center"
+          )}>
+            <UserCog size={20} />
+            {!isCollapsed && <span className="text-sm font-medium">Minha Conta</span>}
+          </button>
+        </Link>
         <Link href="/configuracoes">
           <button className={cn(
             "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition",

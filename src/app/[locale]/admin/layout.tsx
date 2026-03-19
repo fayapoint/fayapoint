@@ -62,6 +62,7 @@ function AdminDesktopHeader({ isCollapsed }: { isCollapsed: boolean }) {
       logs: "Logs",
       settings: "Configurações",
       analytics: "Analytics",
+      social: "Social Media",
     };
     return titles[path] || "Admin";
   };

@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import ImageCreation from '@/models/ImageCreation';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -14,27 +12,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    await dbConnect();
-    const user = await User.findById(decoded.id).lean();
-    return user as { _id: string; name?: string; email?: string } | null;
-  } catch {
-    return null;
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id).lean() as { _id: string; name?: string; email?: string } | null;
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -127,7 +113,13 @@ export async function POST(request: NextRequest) {
 // DELETE - Remove uploaded file
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id).lean() as { _id: string; name?: string; email?: string } | null;
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

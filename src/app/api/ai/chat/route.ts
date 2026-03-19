@@ -1,50 +1,22 @@
 import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 
 export async function POST(request: Request) {
   try {
-    await dbConnect();
-
-    // Verify authentication
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Não autorizado' },
         { status: 401 }
       );
     }
 
-    const token = authHeader.split(' ')[1];
-    
-    let decoded: { id: string } | string | jwt.JwtPayload;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json(
-        { error: 'Token inválido' },
-        { status: 401 }
-      );
-    }
-
-    if (typeof decoded === 'string' || !decoded.id) {
-      return NextResponse.json(
-        { error: 'Token inválido' },
-        { status: 401 }
-      );
-    }
-
-    const userId = decoded.id;
-
-    // Fetch user to check plan
-    const user = await User.findById(userId);
+    await dbConnect();
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json(
         { error: 'Usuário não encontrado' },
@@ -52,9 +24,11 @@ export async function POST(request: Request) {
       );
     }
 
+    const userId = authUser.id;
+
     // Check if user has Pro access
     const plan = user.subscription?.plan || 'free';
-    if (!['pro', 'business', 'starter'].includes(plan)) {
+    if (!['pro', 'business', 'starter', 'explorador', 'profissional', 'expert'].includes(plan)) {
       return NextResponse.json(
         { error: 'Este recurso requer um plano Pro ou superior' },
         { status: 403 }

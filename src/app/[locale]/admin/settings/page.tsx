@@ -18,12 +18,13 @@ import {
   Cloud,
   Zap,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface EnvVariable {
   key: string;
   label: string;
   description: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   required: boolean;
   sensitive: boolean;
 }

@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
-import { headers } from 'next/headers';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import redis from '@/lib/redis';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
 const ADMIN_EMAILS = ['ricardofaya@gmail.com', 'admin@fayai.shop'];
 
 export const dynamic = 'force-dynamic';
@@ -18,23 +16,12 @@ interface BandwidthStats {
 export async function GET() {
   try {
     // Auth check - admin only
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let decoded: any;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
-    if (!ADMIN_EMAILS.includes(decoded.email)) {
+    if (!ADMIN_EMAILS.includes(authUser.email)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
@@ -85,23 +72,12 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     // Auth check - admin only
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let decoded: any;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
-    if (!ADMIN_EMAILS.includes(decoded.email)) {
+    if (!ADMIN_EMAILS.includes(authUser.email)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
 
@@ -115,11 +91,11 @@ export async function POST(request: Request) {
     if (action === 'block') {
       // Block the IP for specified duration (default 24 hours)
       await redis.setex(`blocked:ip:${ip}`, duration, '1');
-      console.warn(`[ADMIN_BLOCK] IP ${ip} blocked for ${duration}s by ${decoded.email}`);
+      console.warn(`[ADMIN_BLOCK] IP ${ip} blocked for ${duration}s by ${authUser.email}`);
       return NextResponse.json({ success: true, message: `IP ${ip} blocked for ${duration} seconds` });
     } else if (action === 'unblock') {
       await redis.del(`blocked:ip:${ip}`);
-      console.log(`[ADMIN_UNBLOCK] IP ${ip} unblocked by ${decoded.email}`);
+      console.log(`[ADMIN_UNBLOCK] IP ${ip} unblocked by ${authUser.email}`);
       return NextResponse.json({ success: true, message: `IP ${ip} unblocked` });
     }
 

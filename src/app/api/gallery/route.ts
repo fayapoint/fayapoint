@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { headers } from 'next/headers';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import ImageCreation from '@/models/ImageCreation';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,20 +16,9 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const sort = searchParams.get('sort') || 'recent'; // recent, popular
 
-    // Auth check for user-specific queries
-    let userId: string | null = null;
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-    
-    if (authHeader?.startsWith('Bearer ')) {
-      try {
-        const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, JWT_SECRET) as { id?: string; userId?: string };
-        userId = decoded.id || decoded.userId || null;
-      } catch {
-        // Invalid token, continue without auth for public queries
-      }
-    }
+    // Auth check for user-specific queries (optional for public)
+    const authUser = await getAuthUser();
+    const userId = authUser?.id || null;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let query: any = {};
@@ -118,23 +104,12 @@ export async function POST(request: NextRequest) {
     await dbConnect();
 
     // Auth required
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-    
-    if (!authHeader?.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    let userId: string;
-    
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { id?: string; userId?: string };
-      userId = decoded.id || decoded.userId || '';
-      if (!userId) throw new Error('No user ID');
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
+    const userId = authUser.id;
 
     const body = await request.json();
     const { imageId, action, category, tags } = body;
@@ -191,25 +166,13 @@ export async function PUT(request: NextRequest) {
     await dbConnect();
 
     // Auth required
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-    
-    if (!authHeader?.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    let userId: string;
-    let userName: string = 'User';
-    
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { id?: string; userId?: string; name?: string };
-      userId = decoded.id || decoded.userId || '';
-      userName = decoded.name || 'User';
-      if (!userId) throw new Error('No user ID');
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
+    const userId = authUser.id;
+    const userName = 'User';
 
     const body = await request.json();
     const { imageUrl, prompt, category, tags, publicId } = body;

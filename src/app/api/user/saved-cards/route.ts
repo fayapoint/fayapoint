@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import asaas, {
@@ -11,8 +10,7 @@ import asaas, {
   AsaasCreditCardHolderInfo,
 } from '@/lib/asaas';
 import mongoose from 'mongoose';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret';
+import { getAuthUser } from '@/lib/auth';
 
 // Interface for saved card
 interface ISavedCard {
@@ -28,31 +26,18 @@ interface ISavedCard {
 }
 
 // =============================================================================
-// HELPER
-// =============================================================================
-
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  const token = authHeader.substring(7);
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    await dbConnect();
-    return await User.findById(decoded.id);
-  } catch {
-    return null;
-  }
-}
-
-// =============================================================================
 // GET - List User's Saved Cards
 // =============================================================================
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
@@ -97,7 +82,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await getUserFromToken(request);
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
@@ -178,8 +169,8 @@ export async function POST(request: NextRequest) {
     };
 
     // Get client IP
-    const clientIp = request.headers.get('x-forwarded-for') || 
-                    request.headers.get('x-real-ip') || 
+    const clientIp = request.headers.get('x-forwarded-for') ||
+                    request.headers.get('x-real-ip') ||
                     '0.0.0.0';
 
     // Tokenize the card
@@ -240,7 +231,7 @@ export async function POST(request: NextRequest) {
     // Store Asaas customer ID and billing info
     if (!userDoc.billing) userDoc.billing = {};
     userDoc.billing.asaasCustomerId = asaasCustomer.id;
-    
+
     // Save billing info for autofill
     if (cleanedCpfCnpj && !userDoc.billing.cpfCnpj) {
       userDoc.billing.cpfCnpj = cleanedCpfCnpj;
@@ -282,7 +273,13 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }

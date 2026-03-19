@@ -100,7 +100,7 @@ export function ProfilePanel({
     linkedin: user.profile?.linkedin || "",
   });
 
-  const isPro = ["pro", "business", "starter"].includes(plan);
+  const isPro = ["pro", "business", "starter", "explorador", "profissional", "expert"].includes(plan);
   const unlockedAchievements = achievements.filter(a => a.unlocked);
 
   // Group achievements by tier

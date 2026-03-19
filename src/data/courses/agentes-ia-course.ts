@@ -1,0 +1,58 @@
+export const agentesIACourse = {
+  id: 14,
+  slug: "crie-agentes-de-ia-autonomos",
+  title: "Crie Agentes de IA Autônomos: Do Conceito à Produção",
+  subtitle: "Do conceito à implementação: crie agentes que pensam, planejam e executam",
+  tool: "Multi-tool",
+  category: "IA Generativa",
+  level: "Avançado",
+  duration: "4+ horas",
+  totalLessons: 20,
+  price: 167,
+  originalPrice: 197,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Março 2026",
+  shortDescription: "Curso completo sobre agentes de IA autônomos: conceitos, frameworks (LangChain, CrewAI, Claude Agent SDK) e projetos práticos.",
+  fullDescription: `Aprenda a construir agentes de IA autônomos usando os frameworks mais modernos. De chatbots simples a sistemas multi-agente complexos, domine a tecnologia que está redefinindo a automação.
+
+Inclui projetos práticos: agente pesquisador, agente programador, sistema multi-agente para conteúdo e agente de atendimento ao cliente.`,
+  impactForIndividuals: [
+    "🤖 Construa agentes autônomos que executam tarefas complexas",
+    "🔧 Domine LangChain, CrewAI e Claude Agent SDK",
+    "📊 Implemente padrões como ReAct e Planning",
+    "🚀 Crie automações inteligentes para qualquer negócio",
+  ],
+  impactForEntrepreneurs: [
+    "💰 Automatize processos inteiros com agentes de IA",
+    "📈 Escale operações sem escalar equipe",
+    "🎯 Crie produtos baseados em agentes autônomos",
+  ],
+  impactForCompanies: [
+    "👥 Implemente agentes de atendimento ao cliente",
+    "⚡ Automatize pesquisa, código e conteúdo com multi-agentes",
+    "🔒 Deploy seguro com guardrails e monitoramento",
+  ],
+  whatYouLearn: [
+    "Arquitetura e padrões de agentes de IA",
+    "LangChain, CrewAI e Claude Agent SDK na prática",
+    "Padrões avançados: ReAct, Planning, RAG",
+    "4 projetos completos: pesquisador, coder, multi-agente, atendimento",
+    "Deploy em produção: Docker, APIs, monitoramento",
+  ],
+  modules: [
+    { id: 1, title: "Fundamentos de Agentes", description: "O que são e como funcionam", duration: "1h", lessons: 4, topics: ["O que são agentes", "Arquitetura", "Ciclo ReAct", "Function calling"] },
+    { id: 2, title: "Frameworks", description: "Ferramentas do mercado", duration: "1h", lessons: 4, topics: ["LangChain", "CrewAI", "Claude Agent SDK", "Outros frameworks"] },
+    { id: 3, title: "Padrões Avançados", description: "Técnicas avançadas", duration: "1h", lessons: 4, topics: ["ReAct", "Planning", "RAG/Vectorstores", "Multi-agente"] },
+    { id: 4, title: "Projetos Práticos", description: "Construindo agentes reais", duration: "1h", lessons: 4, topics: ["Pesquisador", "Programador", "Multi-agente", "Atendimento"] },
+    { id: 5, title: "Produção e Futuro", description: "Deploy e tendências", duration: "1h", lessons: 4, topics: ["Deploy", "Segurança", "Otimização", "Futuro"] },
+  ],
+  testimonials: [],
+  bonuses: [],
+  faqs: [
+    { question: "Preciso saber Python?", answer: "Sim, conhecimento básico de Python é necessário." },
+    { question: "Quais APIs são usadas?", answer: "OpenAI, Anthropic (Claude) e Google Gemini. Exemplos com todas." },
+  ],
+  targetAudience: ["Desenvolvedores", "Engenheiros de software", "CTOs e tech leads", "Entusiastas de IA com Python"],
+  requirements: ["Conhecimento básico de Python", "Familiaridade com APIs REST"],
+};

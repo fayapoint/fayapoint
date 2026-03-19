@@ -8,42 +8,28 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import PODOrder from '@/models/PODOrder';
 import User from '@/models/User';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
 // Minimum payout amount in BRL
 const MIN_PAYOUT_AMOUNT = 50;
-
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    const user = await User.findById(decoded.id);
-    return user;
-  } catch {
-    return null;
-  }
-}
 
 // GET - Get earnings summary and history
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const user = await User.findById(authUser.id) as any;
+    if (!user) {
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -155,10 +141,15 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const user = await User.findById(authUser.id) as any;
+    if (!user) {
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
     const body = await request.json();

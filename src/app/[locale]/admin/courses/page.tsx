@@ -33,6 +33,7 @@ import {
   Video,
   Award,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { cn } from "@/lib/utils";
 
@@ -73,7 +74,7 @@ interface Course {
 function StatCard({ label, value, icon: Icon, color, trend }: {
   label: string;
   value: string | number;
-  icon: React.ElementType;
+  icon: LucideIcon;
   color: string;
   trend?: { value: number; up: boolean };
 }) {

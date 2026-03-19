@@ -1,51 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import Order, { IOrderItem } from '@/models/Order';
 import User from '@/models/User';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongodb';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
-
-// Helper to verify auth token
-async function verifyAuth(): Promise<{ userId: string; error?: never } | { error: NextResponse; userId?: never }> {
-  const headersList = await headers();
-  const authHeader = headersList.get('authorization');
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return {
-      error: NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
-    };
-  }
-
-  const token = authHeader.split(' ')[1];
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    if (!decoded.id) {
-      return {
-        error: NextResponse.json({ error: 'Token inválido' }, { status: 401 })
-      };
-    }
-    return { userId: decoded.id };
-  } catch {
-    return {
-      error: NextResponse.json({ error: 'Token inválido' }, { status: 401 })
-    };
-  }
-}
 
 // GET - Fetch user's orders
 export async function GET() {
   try {
-    const auth = await verifyAuth();
-    if (auth.error) return auth.error;
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
 
     await dbConnect();
 
-    const orders = await Order.find({ userId: auth.userId })
+    const orders = await Order.find({ userId: authUser.id })
       .sort({ createdAt: -1 })
       .lean();
 
@@ -62,13 +33,15 @@ export async function GET() {
 // POST - Create a new order
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth();
-    if (auth.error) return auth.error;
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
 
     await dbConnect();
 
     // Get user details
-    const user = await User.findById(auth.userId);
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json(
         { error: 'Usuário não encontrado' },
@@ -100,7 +73,7 @@ export async function POST(request: NextRequest) {
 
     // Create order
     const order = await Order.create({
-      userId: new mongoose.Types.ObjectId(auth.userId),
+      userId: new mongoose.Types.ObjectId(authUser.id),
       userEmail: user.email,
       userName: user.name,
       items: validatedItems,
@@ -142,7 +115,7 @@ export async function POST(request: NextRequest) {
     // Award XP for purchase (10 XP per R$100 spent)
     const xpAwarded = Math.floor(totalAmount / 100) * 10;
     if (xpAwarded > 0) {
-      await User.findByIdAndUpdate(auth.userId, {
+      await User.findByIdAndUpdate(authUser.id, {
         $inc: { xp: xpAwarded }
       });
     }

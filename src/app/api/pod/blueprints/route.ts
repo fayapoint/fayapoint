@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import dbConnect from '@/lib/mongodb';
-import User from '@/models/User';
+import { getAuthUser } from '@/lib/auth';
 import {
   getBlueprints,
   getBlueprint,
@@ -11,26 +9,6 @@ import {
   getShops,
   PrintifyBlueprint,
 } from '@/lib/printify-api';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    await dbConnect();
-    const user = await User.findById(decoded.id).lean();
-    return user;
-  } catch {
-    return null;
-  }
-}
 
 // Popular blueprint categories for filtering
 const POPULAR_CATEGORIES = [
@@ -51,8 +29,8 @@ const POPULAR_CATEGORIES = [
 // GET - Fetch blueprints catalog
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

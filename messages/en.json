@@ -771,56 +771,51 @@
       "description": "Choose the plan that fits your journey",
       "plans": {
         "starter": {
-          "name": "Starter",
-          "price": "47",
+          "name": "Explorer",
+          "price": "R$57",
           "period": "/month",
-          "description": "Perfect to begin your journey",
+          "description": "Perfect to begin your AI journey",
           "features": [
-            "5 foundational courses per month",
-            "Community access",
-            "Completion certificates",
-            "Email support",
-            "Support materials"
+            "3 beginner courses per month",
+            "100 AI credits/month",
+            "10% off certifications & course purchases",
+            "Online-verifiable certificates",
+            "Community access"
           ],
-          "cta": "Get Started",
-          "href": "/checkout/starter"
+          "cta": "Start Exploring",
+          "href": "/checkout/explorador"
         },
         "pro": {
-          "name": "Pro",
-          "price": "197",
+          "name": "Professional",
+          "price": "R$97",
           "period": "/month",
-          "description": "For professionals serious about AI",
+          "description": "For serious AI learners",
           "features": [
-            "Unlimited access to every course",
-            "Monthly group mentorship",
-            "Exclusive practical projects",
+            "5 beginner + 2 intermediate + 1 advanced/month",
+            "300 AI credits/month",
+            "20% off certifications & course purchases",
             "Priority support",
-            "Ready-to-use templates & automations",
-            "Early access to new courses",
-            "Partner tool discounts"
+            "Exclusive early access content"
           ],
           "highlighted": true,
           "badge": "MOST POPULAR",
-          "cta": "Choose Pro",
-          "href": "/checkout/pro"
+          "cta": "Choose Professional",
+          "href": "/checkout/profissional"
         },
         "business": {
-          "name": "Business",
-          "price": "497",
+          "name": "Expert",
+          "price": "R$167",
           "period": "/month",
-          "description": "Transform your company with AI",
+          "description": "Master AI completely",
           "features": [
-            "Everything in Pro",
-            "Monthly 1:1 consulting",
-            "Team training sessions",
-            "Tailored implementation",
-            "Metrics dashboard",
-            "API access",
-            "White-label options",
-            "24/7 WhatsApp support"
+            "7 beginner + 4 intermediate + 3 advanced/month",
+            "800 AI credits/month",
+            "50% off certifications & course purchases",
+            "VIP support + exclusive content",
+            "Monthly expert consultation"
           ],
-          "cta": "Talk to Sales",
-          "href": "/contato/vendas"
+          "cta": "Go Expert",
+          "href": "/checkout/expert"
         }
       },
       "guarantee": "30-day guarantee",
@@ -1312,6 +1307,10 @@
     ]
   },
   "Portal": {
+    "loginRequired": "Login required",
+    "loginRequiredDesc": "Please log in to access your student portal.",
+    "loginButton": "Sign In",
+    "homeButton": "Home",
     "welcome": "Welcome, {name}!",
     "plan": "{plan} Plan",
     "points": "{points} pts",

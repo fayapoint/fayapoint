@@ -42,6 +42,7 @@ import {
   Camera,
   PenTool,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { cn } from "@/lib/utils";
 
@@ -98,7 +99,7 @@ function ImageCard({ image, onView, onDelete, onTogglePublic }: {
 }) {
   const [showMenu, setShowMenu] = useState(false);
 
-  const categoryIcons: Record<string, React.ElementType> = {
+  const categoryIcons: Record<string, LucideIcon> = {
     apparel: Shirt,
     art: Palette,
     logo: PenTool,

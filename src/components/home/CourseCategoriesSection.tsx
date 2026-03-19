@@ -5,8 +5,23 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SectionDivider } from "@/components/ui/section-divider";
-import { ArrowRight, BookOpen, Brain, Palette, Code2, Bot, BarChart3, Briefcase } from "lucide-react";
-import { useTranslations } from "next-intl";
+import {
+  ArrowRight,
+  BookOpen,
+  Brain,
+  Palette,
+  Code2,
+  Bot,
+  BarChart3,
+  Briefcase,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import {
+  DEFAULT_EDITORIAL_VERIFICATION,
+  formatEditorialDate,
+} from "@/lib/editorial-verification";
 
 const categories = [
   {
@@ -55,8 +70,14 @@ const categories = [
 
 export function CourseCategoriesSection() {
   const t = useTranslations("Home.CourseCategories");
+  const locale = useLocale();
+  const isPtBr = locale.toLowerCase().startsWith("pt");
   const coursesLabel = (count: number) => t("coursesLabel", { count });
   const exploreLabel = t("exploreButton");
+  const verifiedAtLabel = formatEditorialDate(
+    DEFAULT_EDITORIAL_VERIFICATION.verifiedAt,
+    isPtBr ? "pt-BR" : "en-US"
+  );
 
   return (
     <section className="py-20 relative overflow-visible">
@@ -75,6 +96,64 @@ export function CourseCategoriesSection() {
           <p className="text-xl text-muted-foreground">
             {t("description")}
           </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="grid gap-3 md:grid-cols-3 max-w-6xl mx-auto mb-10"
+        >
+          <Card className="border-white/10 bg-card/60 p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {isPtBr ? "Verificação editorial" : "Editorial verification"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {isPtBr ? `Revisado em ${verifiedAtLabel}.` : `Reviewed on ${verifiedAtLabel}.`}
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-white/10 bg-card/60 p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {isPtBr ? "Canon de fronteira" : "Frontier canon"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {DEFAULT_EDITORIAL_VERIFICATION.canonModels.join(" / ")}
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="border-white/10 bg-card/60 p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <BookOpen className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  {isPtBr ? "Critério de publicação" : "Publishing standard"}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {isPtBr
+                    ? "Fontes oficiais recentes e cobertura real por aula."
+                    : "Recent official sources and real lesson-by-lesson coverage."}
+                </p>
+              </div>
+            </div>
+          </Card>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">

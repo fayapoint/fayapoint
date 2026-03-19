@@ -8,39 +8,18 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import PODOrder from '@/models/PODOrder';
-import User from '@/models/User';
 import { calculateShipping, getShops, sendOrderToProduction } from '@/lib/printify-api';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    const user = await User.findById(decoded.id).lean();
-    return user;
-  } catch {
-    return null;
-  }
-}
 
 // GET - List orders for creator or get order details
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -54,7 +33,7 @@ export async function GET(request: NextRequest) {
     if (orderId) {
       const order = await PODOrder.findOne({
         _id: orderId,
-        creatorId: user._id,
+        creatorId: authUser.id,
       }).populate('items.podProductId', 'title slug primaryMockup');
 
       if (!order) {
@@ -66,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     // List orders with filters
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = { creatorId: user._id };
+    const query: any = { creatorId: authUser.id };
 
     if (status && status !== 'all') {
       query.status = status;
@@ -85,7 +64,7 @@ export async function GET(request: NextRequest) {
     ]);
 
     // Calculate stats
-    const allOrders = await PODOrder.find({ creatorId: user._id }).lean();
+    const allOrders = await PODOrder.find({ creatorId: authUser.id }).lean();
     const stats = {
       total: allOrders.length,
       pending: allOrders.filter(o => ['pending', 'confirmed', 'processing'].includes(o.status)).length,
@@ -122,9 +101,8 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -188,7 +166,7 @@ export async function POST(request: NextRequest) {
 
         const order = await PODOrder.findOne({
           _id: orderId,
-          creatorId: user._id,
+          creatorId: authUser.id,
         });
 
         if (!order) {

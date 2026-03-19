@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
+import { getAuthUser } from '@/lib/auth';
 import { ACHIEVEMENTS } from '@/models/Achievement';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
 
 // XP rewards
 const XP_REWARDS = {
@@ -82,27 +79,12 @@ export async function POST(request: Request) {
     await dbConnect();
 
     // Verify authentication
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    
-    let decoded: { id: string } | string | jwt.JwtPayload;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    if (typeof decoded === 'string' || !decoded.id) {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    const userId = decoded.id;
+    const userId = authUser.id;
 
     // Get action type from body
     const body = await request.json();
@@ -116,9 +98,9 @@ export async function POST(request: Request) {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
-    const lastActive = user.progress?.lastActiveDate 
-      ? new Date(user.progress.lastActiveDate) 
+
+    const lastActive = user.progress?.lastActiveDate
+      ? new Date(user.progress.lastActiveDate)
       : null;
     lastActive?.setHours(0, 0, 0, 0);
 
@@ -134,9 +116,9 @@ export async function POST(request: Request) {
           // Update streak
           const yesterday = new Date(today);
           yesterday.setDate(yesterday.getDate() - 1);
-          
+
           let newStreak = user.progress?.currentStreak || 0;
-          
+
           if (lastActive && lastActive.getTime() === yesterday.getTime()) {
             // Continuing streak
             newStreak += 1;
@@ -249,7 +231,7 @@ export async function POST(request: Request) {
 
       await User.findByIdAndUpdate(userId, {
         $push: { 'gamification.achievements': { $each: achievementUpdates } },
-        $inc: { 
+        $inc: {
           'progress.xp': achievementXp,
           'progress.points': achievementXp,
           'progress.weeklyXp': achievementXp,

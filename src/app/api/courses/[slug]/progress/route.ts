@@ -3,39 +3,12 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import CourseProgress from '@/models/CourseProgress';
 import Order from '@/models/Order';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
+import { getAuthUser } from '@/lib/auth';
 import { getMongoClient } from '@/lib/products';
 import { SubscriptionPlan, TIER_CONFIGS } from '@/lib/course-tiers';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
-
 function uniqueStrings(values: string[]) {
   return Array.from(new Set(values.map((v) => v.trim()).filter(Boolean)));
-}
-
-async function requireUserId() {
-  const headersList = await headers();
-  const authHeader = headersList.get('authorization');
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { error: NextResponse.json({ error: 'Não autorizado' }, { status: 401 }) };
-  }
-
-  const token = authHeader.split(' ')[1];
-  let decoded: { id: string } | string | jwt.JwtPayload;
-
-  try {
-    decoded = jwt.verify(token, JWT_SECRET);
-  } catch {
-    return { error: NextResponse.json({ error: 'Token inválido' }, { status: 401 }) };
-  }
-
-  if (typeof decoded === 'string' || !decoded.id) {
-    return { error: NextResponse.json({ error: 'Token inválido' }, { status: 401 }) };
-  }
-
-  return { userId: decoded.id };
 }
 
 async function requireCourseAccess(userId: string, slug: string) {
@@ -111,17 +84,19 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const auth = await requireUserId();
-    if (auth.error) return auth.error;
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
 
-    const access = await requireCourseAccess(auth.userId, slug);
+    const access = await requireCourseAccess(authUser.id, slug);
     if (access.error) return access.error;
 
-    let progress = await CourseProgress.findOne({ userId: auth.userId, courseId: slug });
+    let progress = await CourseProgress.findOne({ userId: authUser.id, courseId: slug });
 
     if (!progress) {
       progress = await CourseProgress.create({
-        userId: auth.userId,
+        userId: authUser.id,
         courseId: slug,
         completedLessons: [],
         completedSections: [],
@@ -170,15 +145,17 @@ export async function PUT(
 ) {
   try {
     const { slug } = await params;
-    const auth = await requireUserId();
-    if (auth.error) return auth.error;
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
 
-    const access = await requireCourseAccess(auth.userId, slug);
+    const access = await requireCourseAccess(authUser.id, slug);
     if (access.error) return access.error;
 
     const body = (await request.json()) as UpdateProgressBody;
 
-    const progress = await CourseProgress.findOne({ userId: auth.userId, courseId: slug });
+    const progress = await CourseProgress.findOne({ userId: authUser.id, courseId: slug });
 
     const completedSections = body.replaceAllSections
       ? uniqueStrings(body.completedSections || [])
@@ -205,7 +182,7 @@ export async function PUT(
             : progress?.progressPercent || 0;
 
     const updated = await CourseProgress.findOneAndUpdate(
-      { userId: auth.userId, courseId: slug },
+      { userId: authUser.id, courseId: slug },
       {
         $set: {
           completedSections,

@@ -7,6 +7,12 @@
 
 import { MongoClient, Collection } from 'mongodb';
 import { getOrSet, CACHE_TTL, CACHE_KEYS, invalidateCachePattern } from '@/lib/redis';
+import {
+  computeLessonContentCoverage,
+  normalizeEditorialVerification,
+  type EditorialVerification,
+  type LessonContentCoverage,
+} from '@/lib/editorial-verification';
 
 const DEFAULT_MONGODB_URI = '';
 
@@ -140,8 +146,44 @@ export interface Product {
   };
   digitalAssets: unknown[];
   features: string[];
+  contentChapters?: number;
+  contentUpdatedAt?: string | Date | null;
+  detailedCurriculum?: Array<{
+    title?: string;
+    description?: string;
+    lessons?: Array<{
+      title?: string;
+      description?: string;
+      duration?: number;
+      order?: number;
+      isFree?: boolean;
+      hasContent?: boolean;
+      content?: string;
+      contentLength?: number;
+    }>;
+  }>;
+  editorialVerification?: EditorialVerification;
+  lessonContentCoverage?: LessonContentCoverage;
   createdAt: string;
   updatedAt: string;
+}
+
+function normalizeProduct(product: unknown): Product {
+  const safeProduct = (product || {}) as Product;
+  const detailedCurriculum = Array.isArray(safeProduct.detailedCurriculum)
+    ? safeProduct.detailedCurriculum
+    : [];
+
+  const lessonContentCoverage = computeLessonContentCoverage(detailedCurriculum);
+
+  return {
+    ...safeProduct,
+    detailedCurriculum,
+    lessonContentCoverage,
+    editorialVerification: normalizeEditorialVerification(
+      safeProduct.editorialVerification
+    ),
+  };
 }
 
 // Get all active products (CACHED: 10 minutes)
@@ -187,7 +229,7 @@ export async function getAllProducts(options?: {
         .limit(options?.limit || 100)
         .toArray();
       
-      return products as unknown as Product[];
+      return (products as unknown[]).map(normalizeProduct);
     },
     CACHE_TTL.PRODUCTS
   );
@@ -200,7 +242,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     async () => {
       const collection = await getProductsCollection();
       const product = await collection.findOne({ slug, status: 'active' });
-      return product as unknown as Product | null;
+      return product ? normalizeProduct(product) : null;
     },
     CACHE_TTL.PRODUCTS
   );
@@ -223,7 +265,7 @@ export async function getProductsByCategory(category: string): Promise<Product[]
     .sort({ 'metrics.students': -1 })
     .toArray();
   
-  return products as unknown as Product[];
+  return (products as unknown[]).map(normalizeProduct);
 }
 
 // Get products by tag
@@ -237,7 +279,7 @@ export async function getProductsByTag(tag: string): Promise<Product[]> {
     .sort({ 'metrics.students': -1 })
     .toArray();
   
-  return products as unknown as Product[];
+  return (products as unknown[]).map(normalizeProduct);
 }
 
 // Get all unique categories
@@ -276,7 +318,7 @@ export async function getFeaturedProducts(limit: number = 3): Promise<Product[]>
     .limit(limit)
     .toArray();
   
-  return products as unknown as Product[];
+  return (products as unknown[]).map(normalizeProduct);
 }
 
 // Search products
@@ -304,7 +346,7 @@ export async function searchProducts(query: string, type?: 'course' | 'tool'): P
     .sort({ 'metrics.students': -1 })
     .toArray();
   
-  return products as unknown as Product[];
+  return (products as unknown[]).map(normalizeProduct);
 }
 
 // Get product statistics
@@ -360,5 +402,5 @@ export async function getRelatedProducts(slug: string, limit: number = 3): Promi
     .limit(limit)
     .toArray();
   
-  return products as unknown as Product[];
+  return (products as unknown[]).map(normalizeProduct);
 }

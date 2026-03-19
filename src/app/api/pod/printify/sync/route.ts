@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import StoreProduct from '@/models/StoreProduct';
-import User from '@/models/User';
 import {
   getShops,
   getProducts,
@@ -12,30 +11,11 @@ import {
   PrintifyBlueprint,
 } from '@/lib/printify-api';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    const user = await User.findById(decoded.id).lean();
-    return user as { _id: string; name?: string; email?: string } | null;
-  } catch {
-    return null;
-  }
-}
-
 // GET - List Printify products available to sync
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -121,8 +101,8 @@ export async function GET(request: NextRequest) {
 // POST - Import Printify products to store
 export async function POST(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

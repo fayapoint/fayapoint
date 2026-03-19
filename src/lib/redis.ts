@@ -1,13 +1,30 @@
 import { Redis } from '@upstash/redis';
 
-// Initialize Upstash Redis client
+// Initialize Upstash Redis client only when configured
 // Set these in Netlify env vars:
 // UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
 // UPSTASH_REDIS_REST_TOKEN=xxx
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
+const isRedisConfigured = !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+
+// Real Redis when configured, no-op stub when not (prevents constructor warnings)
+const realRedis = isRedisConfigured
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+  : null;
+
+// No-op proxy so callers using default export don't need null checks
+const noopRedis = new Proxy({} as Redis, {
+  get: (_target, prop) => {
+    if (typeof prop === 'string') {
+      return async (..._args: unknown[]) => null;
+    }
+    return undefined;
+  },
 });
+
+const redis = realRedis || noopRedis;
 
 // Cache TTL values in seconds
 export const CACHE_TTL = {
@@ -58,21 +75,13 @@ export async function getOrSet<T>(
   ttl: number
 ): Promise<T> {
   try {
-    // Skip cache if Redis not configured
-    if (!process.env.UPSTASH_REDIS_REST_URL) {
-      return await fetcher();
-    }
+    if (!realRedis) return await fetcher();
 
-    // Try to get from cache
     const cached = await redis.get<T>(key);
-    if (cached !== null) {
-      return cached;
-    }
+    if (cached !== null) return cached;
 
-    // Fetch fresh data
     const data = await fetcher();
 
-    // Store in cache (fire and forget)
     redis.set(key, data, { ex: ttl }).catch(err => {
       console.error('Redis set error:', err);
     });
@@ -80,7 +89,6 @@ export async function getOrSet<T>(
     return data;
   } catch (error) {
     console.error('Redis getOrSet error:', error);
-    // Fall back to fetcher on any Redis error
     return await fetcher();
   }
 }
@@ -90,7 +98,7 @@ export async function getOrSet<T>(
  */
 export async function invalidateCache(key: string): Promise<void> {
   try {
-    if (!process.env.UPSTASH_REDIS_REST_URL) return;
+    if (!realRedis) return;
     await redis.del(key);
   } catch (error) {
     console.error('Redis invalidate error:', error);
@@ -102,8 +110,7 @@ export async function invalidateCache(key: string): Promise<void> {
  */
 export async function invalidateCachePattern(pattern: string): Promise<void> {
   try {
-    if (!process.env.UPSTASH_REDIS_REST_URL) return;
-    
+    if (!realRedis) return;
     const keys = await redis.keys(pattern);
     if (keys.length > 0) {
       await redis.del(...keys);
@@ -118,7 +125,7 @@ export async function invalidateCachePattern(pattern: string): Promise<void> {
  */
 export async function setCache<T>(key: string, data: T, ttl: number): Promise<void> {
   try {
-    if (!process.env.UPSTASH_REDIS_REST_URL) return;
+    if (!realRedis) return;
     await redis.set(key, data, { ex: ttl });
   } catch (error) {
     console.error('Redis set error:', error);
@@ -130,7 +137,7 @@ export async function setCache<T>(key: string, data: T, ttl: number): Promise<vo
  */
 export async function getCache<T>(key: string): Promise<T | null> {
   try {
-    if (!process.env.UPSTASH_REDIS_REST_URL) return null;
+    if (!realRedis) return null;
     return await redis.get<T>(key);
   } catch (error) {
     console.error('Redis get error:', error);

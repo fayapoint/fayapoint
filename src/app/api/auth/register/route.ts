@@ -44,6 +44,23 @@ export async function POST(request: Request) {
       );
     }
 
+    // Password validation
+    if (password.length < 8) {
+      return NextResponse.json(
+        { error: 'A senha deve ter pelo menos 8 caracteres' },
+        { status: 400 }
+      );
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Formato de email inválido' },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await User.findOne({ email: email.toLowerCase() });
 
     if (existingUser) {
@@ -88,11 +105,22 @@ export async function POST(request: Request) {
     const userObject = newUser.toObject();
     delete userObject.password;
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       token,
       user: userObject,
     });
+
+    // Set httpOnly cookie for middleware portal protection
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Register error:', error);

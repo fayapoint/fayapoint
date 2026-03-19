@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import Payment from '@/models/Payment';
 import User from '@/models/User';
@@ -12,8 +12,6 @@ import asaas, {
   asaasConfig,
   getDefaultDueDate,
 } from '@/lib/asaas';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret';
 
 // Default tax configuration for services
 const DEFAULT_TAXES = {
@@ -33,27 +31,6 @@ const DEFAULT_MUNICIPAL_SERVICE = {
 };
 
 // =============================================================================
-// HELPER
-// =============================================================================
-
-async function getAdminFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  const token = authHeader.substring(7);
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    await dbConnect();
-    const user = await User.findById(decoded.id);
-    if (user?.role !== 'admin') return null;
-    return user;
-  } catch {
-    return null;
-  }
-}
-
-// =============================================================================
 // POST - Create Invoice (NFS-e)
 // =============================================================================
 
@@ -66,8 +43,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const admin = await getAdminFromToken(request);
-    if (!admin) {
+    const authUser = await getAuthUser();
+    if (!authUser || authUser.role !== 'admin') {
       return NextResponse.json(
         { error: 'Apenas administradores podem criar notas fiscais' },
         { status: 403 }
@@ -184,8 +161,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const admin = await getAdminFromToken(request);
-    if (!admin) {
+    const authUser = await getAuthUser();
+    if (!authUser || authUser.role !== 'admin') {
       return NextResponse.json(
         { error: 'Apenas administradores podem listar notas fiscais' },
         { status: 403 }

@@ -136,8 +136,6 @@ const CertificateSchema = new Schema<ICertificate>({
 });
 
 CertificateSchema.index({ userId: 1, courseSlug: 1 }, { unique: true });
-CertificateSchema.index({ verificationCode: 1 });
-CertificateSchema.index({ certificateNumber: 1 });
 CertificateSchema.index({ status: 1 });
 
 CertificateSchema.pre('save', function(next) {

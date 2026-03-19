@@ -21,6 +21,7 @@ import {
   Download,
   ShoppingBag,
   Home,
+  UserCog,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -60,7 +61,7 @@ const MORE_NAV_ITEMS = [
 
 export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileBottomNavProps) {
   const [isMoreOpen, setIsMoreOpen] = useState(false);
-  const isPro = ["pro", "business", "starter"].includes(plan);
+  const isPro = ["pro", "business", "starter", "explorador", "profissional", "expert"].includes(plan);
 
   const isActiveInMore = MORE_NAV_ITEMS.some(item => item.id === activeTab);
 
@@ -154,13 +155,19 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
             <Link href="/" className="flex-1">
               <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white/5 rounded-xl text-gray-400 hover:bg-white/10 transition">
                 <Home size={18} />
-                <span className="text-sm">Página Inicial</span>
+                <span className="text-sm">Início</span>
+              </button>
+            </Link>
+            <Link href="/portal/conta" className="flex-1">
+              <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white/5 rounded-xl text-gray-400 hover:bg-white/10 transition">
+                <UserCog size={18} />
+                <span className="text-sm">Minha Conta</span>
               </button>
             </Link>
             <Link href="/configuracoes" className="flex-1">
               <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white/5 rounded-xl text-gray-400 hover:bg-white/10 transition">
                 <Settings size={18} />
-                <span className="text-sm">Configurações</span>
+                <span className="text-sm">Config</span>
               </button>
             </Link>
           </div>

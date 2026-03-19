@@ -2,35 +2,18 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
+import { getAuthUser } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
     await dbConnect();
 
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    let decoded: jwt.JwtPayload | string;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    if (typeof decoded === 'string') {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    const userId = decoded.id;
+    const userId = authUser.id;
     const { currentPassword, newPassword } = await request.json();
 
     if (!currentPassword || !newPassword) {
@@ -61,7 +44,7 @@ export async function POST(request: Request) {
       const hashedPassword = await bcrypt.hash(newPassword, salt);
       user.password = hashedPassword;
       await user.save();
-      
+
       return NextResponse.json({ success: true, message: 'Senha definida com sucesso' });
     }
 

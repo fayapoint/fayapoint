@@ -44,12 +44,30 @@ export interface IUser extends Document {
   };
   savedCards: ISavedCard[];
   subscription: {
-    plan: 'free' | 'starter' | 'pro' | 'business';
+    plan: 'free' | 'starter' | 'pro' | 'business' | 'explorador' | 'profissional' | 'expert';
     status: 'active' | 'cancelled' | 'past_due';
     expiresAt?: Date;
     stripeCustomerId?: string;
     stripeSubscriptionId?: string;
     asaasSubscriptionId?: string;
+  };
+  credits: {
+    balance: number;                // Current available credits
+    monthlyAllocation: number;      // Credits granted per billing cycle
+    lastRefillDate?: Date;          // When credits were last refilled
+    totalSpent: number;             // Lifetime credits spent
+    totalPurchased: number;         // Lifetime credits purchased (packs)
+    purchasedCredits: {             // Purchased credit packs (expire in 90 days)
+      amount: number;
+      purchasedAt: Date;
+      expiresAt: Date;
+    }[];
+    history: {
+      action: string;               // e.g. 'quiz_attempt', 'image_generation', 'purchase'
+      amount: number;               // positive = added, negative = spent
+      description: string;
+      createdAt: Date;
+    }[];
   };
   profile: {
     bio?: string;
@@ -202,7 +220,7 @@ const UserSchema = new Schema<IUser>({
   subscription: {
     plan: {
       type: String,
-      enum: ['free', 'starter', 'pro', 'business'],
+      enum: ['free', 'starter', 'pro', 'business', 'explorador', 'profissional', 'expert'],
       default: 'free',
     },
     status: {
@@ -214,6 +232,24 @@ const UserSchema = new Schema<IUser>({
     stripeCustomerId: String,
     stripeSubscriptionId: String,
     asaasSubscriptionId: String,
+  },
+  credits: {
+    balance: { type: Number, default: 0 },
+    monthlyAllocation: { type: Number, default: 0 },
+    lastRefillDate: Date,
+    totalSpent: { type: Number, default: 0 },
+    totalPurchased: { type: Number, default: 0 },
+    purchasedCredits: [{
+      amount: { type: Number, required: true },
+      purchasedAt: { type: Date, default: Date.now },
+      expiresAt: { type: Date, required: true },
+    }],
+    history: [{
+      action: { type: String, required: true },
+      amount: { type: Number, required: true },
+      description: String,
+      createdAt: { type: Date, default: Date.now },
+    }],
   },
   profile: {
     bio: String,

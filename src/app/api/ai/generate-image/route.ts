@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
-import { headers } from 'next/headers';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import { v2 as cloudinary } from 'cloudinary';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import ImageCreation from '@/models/ImageCreation';
 import { invalidateCachePattern, invalidateCache, CACHE_KEYS } from '@/lib/redis';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 // Configure Cloudinary from Environment Variables
@@ -19,26 +17,13 @@ cloudinary.config({
 
 export async function POST(request: Request) {
   try {
-    await dbConnect();
-    
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let decoded: any;
-    
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    const user = await User.findById(decoded.id);
+    await dbConnect();
+    const user = await User.findById(authUser.id);
     if (!user) {
         return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
@@ -46,32 +31,32 @@ export async function POST(request: Request) {
     // Check Usage Limits
     const plan = user.subscription?.plan || 'free';
     // Strict limit for Free tier as requested: 1 image total
-    const LIMITS: Record<string, number> = { 
-        free: 1, 
-        starter: 50, 
-        pro: 1000000, // Effectively unlimited
-        business: 1000000 
+    const LIMITS: Record<string, number> = {
+        free: 1,
+        starter: 50, explorador: 50,
+        pro: 1000000, profissional: 1000000, // Effectively unlimited
+        business: 1000000, expert: 1000000
     };
 
     if (plan === 'free') {
         const usageCount = await ImageCreation.countDocuments({ userId: user._id });
         if (usageCount >= LIMITS.free) {
-            return NextResponse.json({ 
-                error: 'Limite do plano Gratuito atingido. Faça upgrade para gerar mais imagens.' 
+            return NextResponse.json({
+                error: 'Limite do plano Gratuito atingido. Faça upgrade para gerar mais imagens.'
             }, { status: 403 });
         }
-    } else if (plan === 'starter') {
-        // For starter, check monthly usage
+    } else if (plan === 'starter' || plan === 'explorador') {
+        // For explorador/starter, check monthly usage
         const startOfMonth = new Date();
         startOfMonth.setDate(1);
         startOfMonth.setHours(0, 0, 0, 0);
-        const usageCount = await ImageCreation.countDocuments({ 
+        const usageCount = await ImageCreation.countDocuments({
             userId: user._id,
             createdAt: { $gte: startOfMonth }
         });
-        if (usageCount >= LIMITS.starter) {
-            return NextResponse.json({ 
-                error: 'Limite mensal do plano Starter atingido.' 
+        if (usageCount >= (LIMITS[plan] || 50)) {
+            return NextResponse.json({
+                error: 'Limite mensal do plano atingido.'
             }, { status: 403 });
         }
     }

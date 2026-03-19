@@ -32,6 +32,7 @@ import {
   Trash2,
   Import,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 
 interface SearchFilters {
@@ -1097,7 +1098,7 @@ function StatCard({
 }: {
   label: string;
   value: string | number;
-  icon: React.ElementType;
+  icon: LucideIcon;
   color: "emerald" | "amber" | "violet" | "cyan";
 }) {
   const colors = {

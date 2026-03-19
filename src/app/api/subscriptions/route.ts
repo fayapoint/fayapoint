@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
-import Subscription, { 
-  SUBSCRIPTION_PLANS, 
+import Subscription, {
+  SUBSCRIPTION_PLANS,
   mapAsaasCycleToSubscriptionCycle,
   mapSubscriptionCycleToAsaas,
   mapAsaasStatusToSubscriptionStatus,
@@ -24,28 +24,6 @@ import asaas, {
   getDefaultDueDate,
 } from '@/lib/asaas';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fayai-secret';
-
-// =============================================================================
-// HELPER
-// =============================================================================
-
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  const token = authHeader.substring(7);
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    await dbConnect();
-    const user = await User.findById(decoded.id);
-    return user;
-  } catch {
-    return null;
-  }
-}
-
 // =============================================================================
 // POST - Create Subscription
 // =============================================================================
@@ -59,9 +37,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id);
+    if (!user) {
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
     const body = await request.json();
@@ -375,8 +359,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -385,6 +369,10 @@ export async function GET(request: NextRequest) {
     const includeAsaasData = searchParams.get('includeAsaas') === 'true';
 
     await dbConnect();
+    const user = await User.findById(authUser.id);
+    if (!user) {
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: any = { userId: user._id };

@@ -29,6 +29,7 @@ import {
   Cpu,
   Video,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -344,7 +345,7 @@ function StacksSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-120px" });
 
-  const columns: { key: "webSeo" | "automationAi" | "contentVideo"; icon: React.ElementType }[] = [
+  const columns: { key: "webSeo" | "automationAi" | "contentVideo"; icon: LucideIcon }[] = [
     { key: "webSeo", icon: LayoutDashboard },
     { key: "automationAi", icon: Workflow },
     { key: "contentVideo", icon: Clapperboard },
@@ -407,9 +408,9 @@ function PillarDetailSection({
 }: {
   pillar: {
     id: string;
-    icon: React.ElementType;
+    icon: LucideIcon;
     gradient: string;
-    features: { icon: React.ElementType; title: string; description: string }[];
+    features: { icon: LucideIcon; title: string; description: string }[];
   };
   index: number;
 }) {

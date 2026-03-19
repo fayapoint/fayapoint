@@ -4,11 +4,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-import ProdigiOrder, { 
-  generateProdigiOrderNumber, 
+import ProdigiOrder, {
+  generateProdigiOrderNumber,
   calculateProdigiCommissionSplit,
   mapProdigiStatusToInternal,
 } from '@/models/ProdigiOrder';
@@ -25,35 +25,23 @@ import {
   ProdigiRecipient,
 } from '@/lib/prodigi-api';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const WEBHOOK_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://fayai.shop';
 
 // Exchange rates
 const GBP_TO_BRL = parseFloat(process.env.GBP_TO_BRL || '6.30');
 
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    await dbConnect();
-    const user = await User.findById(decoded.id).lean();
-    return user;
-  } catch {
-    return null;
-  }
-}
-
 // GET - List orders
 export async function GET(request: NextRequest) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const user = await User.findById(authUser.id).lean() as any;
+    if (!user) {
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
     await dbConnect();
@@ -205,10 +193,15 @@ export async function GET(request: NextRequest) {
 // POST - Create new order
 export async function POST(request: NextRequest) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const user = await User.findById(authUser.id).lean() as any;
+    if (!user) {
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
     await dbConnect();
@@ -468,9 +461,8 @@ export async function POST(request: NextRequest) {
 // PUT - Update order (cancel, etc.)
 export async function PUT(request: NextRequest) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -485,7 +477,7 @@ export async function PUT(request: NextRequest) {
 
     const order = await ProdigiOrder.findOne({
       _id: orderId,
-      $or: [{ customerId: user._id }, { creatorId: user._id }],
+      $or: [{ customerId: authUser.id }, { creatorId: authUser.id }],
     });
 
     if (!order) {

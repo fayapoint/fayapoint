@@ -1,22 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import FulfillmentOrder from '@/models/FulfillmentOrder';
-import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const token = request.headers.get('authorization')?.replace('Bearer ', '');
-  if (!token) return null;
-  
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
-    return decoded;
-  } catch {
-    return null;
-  }
-}
 
 // =============================================================================
 // GET - List user's fulfillment orders
@@ -24,22 +9,22 @@ async function getUserFromToken(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
-    
-    if (!user) {
+    const authUser = await getAuthUser();
+
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
-    
+
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const status = searchParams.get('status');
-    
+
     await dbConnect();
-    
+
     // Build query
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const query: any = { userId: user.id };
+    const query: any = { userId: authUser.id };
     if (status) {
       query.status = status;
     }

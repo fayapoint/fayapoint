@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   Mail, 
@@ -25,8 +25,18 @@ import { useUser } from "@/contexts/UserContext";
 import { HoneypotField } from "@/components/security/HoneypotField";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full" /></div>}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+function LoginPageContent() {
   const t = useTranslations("Login");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/portal";
   const { setUser } = useUser();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +84,7 @@ export default function LoginPage() {
       setUser(data.user);
 
       toast.success(t("messages.welcomeBack", { name: data.user.name }));
-      router.push("/portal");
+      router.push(redirectTo);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : t("messages.unexpectedError");
       toast.error(errorMessage);
@@ -83,8 +93,71 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    toast.success(t("messages.googleInDev"));
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      // Load Google Identity Services if not already loaded
+      if (!(window as unknown as Record<string, unknown>).google) {
+        await new Promise<void>((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://accounts.google.com/gsi/client";
+          script.async = true;
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error("Falha ao carregar Google Sign-In"));
+          document.head.appendChild(script);
+        });
+      }
+
+      // Initialize Google Sign-In and get credential
+      const google = (window as unknown as Record<string, unknown>).google as {
+        accounts: {
+          id: {
+            initialize: (config: Record<string, unknown>) => void;
+            prompt: (callback: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean }) => void) => void;
+          };
+        };
+      };
+
+      await new Promise<void>((resolve, reject) => {
+        google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "167078774916-ktdd044k8l528goetmjc7pdqkgrbranc.apps.googleusercontent.com",
+          callback: async (response: { credential: string }) => {
+            try {
+              const res = await fetch("/api/auth/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: response.credential }),
+              });
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.error || "Erro no login Google");
+
+              localStorage.setItem("fayai_token", data.token);
+              setUser(data.user);
+              toast.success(`Bem-vindo, ${data.user.name}!`);
+              router.push(redirectTo);
+              resolve();
+            } catch (err) {
+              reject(err);
+            }
+          },
+        });
+
+        google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // Fallback: open Google OAuth popup directly
+            const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "167078774916-ktdd044k8l528goetmjc7pdqkgrbranc.apps.googleusercontent.com";
+            const redirectUri = `${window.location.origin}/api/auth/google/callback`;
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&prompt=select_account`;
+            window.location.href = authUrl;
+          }
+        });
+      });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Erro no login Google";
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGithubLogin = () => {

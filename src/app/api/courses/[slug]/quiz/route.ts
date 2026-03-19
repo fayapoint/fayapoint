@@ -4,29 +4,10 @@ import { getMongoClient } from '@/lib/database';
 import User from '@/models/User';
 import CourseProgress from '@/models/CourseProgress';
 import Certificate, { QUIZ_CONFIG } from '@/models/Certificate';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
+import { getAuthUser } from '@/lib/auth';
 import { getCourseBySlug } from '@/data/courses';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
-
-async function requireAuth(): Promise<{ userId: string } | { error: NextResponse }> {
-  const headersList = await headers();
-  const authHeader = headersList.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return { error: NextResponse.json({ error: 'Não autorizado' }, { status: 401 }) };
-  }
-  try {
-    const decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
-    if (typeof decoded === 'string' || !decoded || !(decoded as { id: string }).id) {
-      return { error: NextResponse.json({ error: 'Token inválido' }, { status: 401 }) };
-    }
-    return { userId: (decoded as { id: string }).id };
-  } catch {
-    return { error: NextResponse.json({ error: 'Token inválido' }, { status: 401 }) };
-  }
-}
 
 interface QuizQuestion {
   question: string;
@@ -175,12 +156,14 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const auth = await requireAuth();
-    if ('error' in auth) return auth.error;
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
 
     await dbConnect();
 
-    const user = await User.findById(auth.userId);
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
@@ -190,7 +173,7 @@ export async function GET(
     const testBypass = url.searchParams.get('_test_bypass') === 'cert_test_2026';
 
     // Check course progress — must be 100% (unless test bypass)
-    const progress = await CourseProgress.findOne({ userId: auth.userId, courseId: slug });
+    const progress = await CourseProgress.findOne({ userId: authUser.id, courseId: slug });
     if (!testBypass && (!progress || progress.progressPercent < QUIZ_CONFIG.MIN_PROGRESS_PERCENT)) {
       return NextResponse.json({
         error: 'Você precisa completar 100% do curso antes de fazer a avaliação.',
@@ -200,7 +183,7 @@ export async function GET(
     }
 
     // Check existing certificate
-    let certificate = await Certificate.findOne({ userId: auth.userId, courseSlug: slug });
+    let certificate = await Certificate.findOne({ userId: authUser.id, courseSlug: slug });
 
     if (certificate?.status === 'issued') {
       return NextResponse.json({
@@ -254,7 +237,7 @@ export async function GET(
     // Create or update certificate record
     if (!certificate) {
       certificate = await Certificate.create({
-        userId: auth.userId,
+        userId: authUser.id,
         userName: user.name,
         userEmail: user.email,
         courseId: String(staticCourse?.id || product?._id || slug),
@@ -320,12 +303,14 @@ export async function POST(
 ) {
   try {
     const { slug } = await params;
-    const auth = await requireAuth();
-    if ('error' in auth) return auth.error;
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
 
     await dbConnect();
 
-    const user = await User.findById(auth.userId);
+    const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
@@ -346,7 +331,7 @@ export async function POST(
     }
 
     // Get certificate
-    const certificate = await Certificate.findOne({ userId: auth.userId, courseSlug: slug });
+    const certificate = await Certificate.findOne({ userId: authUser.id, courseSlug: slug });
     if (!certificate) {
       return NextResponse.json({ error: 'Certificado não encontrado. Inicie a avaliação primeiro.' }, { status: 404 });
     }
@@ -402,7 +387,7 @@ export async function POST(
       certificate.issuedAt = new Date();
 
       // Calculate study hours from progress
-      const progress = await CourseProgress.findOne({ userId: auth.userId, courseId: slug });
+      const progress = await CourseProgress.findOne({ userId: authUser.id, courseId: slug });
       if (progress) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const startDate = progress.startedAt || (progress as any).createdAt;
@@ -413,7 +398,7 @@ export async function POST(
       }
 
       // Update user progress
-      await User.findByIdAndUpdate(auth.userId, {
+      await User.findByIdAndUpdate(authUser.id, {
         $inc: {
           'progress.coursesCompleted': 1,
           'progress.xp': 500,

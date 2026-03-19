@@ -1,26 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import Subscription from '@/models/Subscription';
 import User from '@/models/User';
 import asaas, { asaasConfig } from '@/lib/asaas';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fayai-secret';
-
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  const token = authHeader.substring(7);
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    await dbConnect();
-    return await User.findById(decoded.id);
-  } catch {
-    return null;
-  }
-}
 
 // =============================================================================
 // GET - Get Single Subscription
@@ -31,8 +14,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -41,7 +24,7 @@ export async function GET(
 
     const subscription = await Subscription.findOne({
       _id: id,
-      userId: user._id,
+      userId: authUser.id,
     });
 
     if (!subscription) {
@@ -90,8 +73,8 @@ export async function PUT(
       );
     }
 
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -103,7 +86,7 @@ export async function PUT(
 
     const subscription = await Subscription.findOne({
       _id: id,
-      userId: user._id,
+      userId: authUser.id,
     });
 
     if (!subscription) {
@@ -188,8 +171,8 @@ export async function DELETE(
       );
     }
 
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
@@ -198,7 +181,7 @@ export async function DELETE(
 
     const subscription = await Subscription.findOne({
       _id: id,
-      userId: user._id,
+      userId: authUser.id,
     });
 
     if (!subscription) {
@@ -228,13 +211,16 @@ export async function DELETE(
     await subscription.save();
 
     // Downgrade user plan to free
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const userDoc = user as any;
-    if (userDoc.subscription) {
-      userDoc.subscription.plan = 'free';
-      userDoc.subscription.status = 'cancelled';
+    const userDoc = await User.findById(authUser.id);
+    if (userDoc) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const userAny = userDoc as any;
+      if (userAny.subscription) {
+        userAny.subscription.plan = 'free';
+        userAny.subscription.status = 'cancelled';
+      }
+      await userAny.save();
     }
-    await userDoc.save();
 
     return NextResponse.json({
       success: true,

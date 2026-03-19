@@ -41,6 +41,7 @@ import {
   FileText,
   Image as ImageIcon,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { cn } from "@/lib/utils";
 
@@ -87,7 +88,7 @@ function StatCard({
 }: { 
   title: string; 
   value: string | number; 
-  icon: React.ElementType; 
+  icon: LucideIcon; 
   change?: number;
   changeLabel?: string;
   color?: "violet" | "emerald" | "amber" | "cyan" | "pink" | "orange";
@@ -165,7 +166,7 @@ function QuickAction({
   color = "violet",
   badge
 }: { 
-  icon: React.ElementType; 
+  icon: LucideIcon; 
   label: string; 
   href: string;
   color?: string;

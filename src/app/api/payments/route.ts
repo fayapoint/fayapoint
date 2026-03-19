@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
-import Payment, { mapPaymentMethodToAsaasBillingType, PaymentMethod } from '@/models/Payment';
+import Payment, { mapPaymentMethodToAsaasBillingType, PaymentMethod, type PaymentProvider } from '@/models/Payment';
 import User from '@/models/User';
-import asaas, { 
-  getOrCreateCustomer, 
-  createPixPayment, 
+import asaas, {
+  getOrCreateCustomer,
+  createPixPayment,
   createBoletoPayment,
   createCreditCardPayment,
   createUndefinedPayment,
@@ -18,31 +18,11 @@ import asaas, {
   isValidCnpj,
   asaasConfig,
 } from '@/lib/asaas';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fayapoint-secret';
-
-// =============================================================================
-// HELPER FUNCTIONS
-// =============================================================================
-
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.substring(7);
-  
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    await dbConnect();
-    const user = await User.findById(decoded.id);
-    return user;
-  } catch {
-    return null;
-  }
-}
+import {
+  createMPPayment,
+  mpConfig,
+  type MPPaymentMethod,
+} from '@/lib/mercadopago';
 
 // =============================================================================
 // POST - Create Payment
@@ -50,20 +30,49 @@ async function getUserFromToken(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if Asaas is configured
-    if (!asaasConfig.isConfigured) {
-      return NextResponse.json(
-        { error: 'Gateway de pagamento não configurado' },
-        { status: 503 }
-      );
+    // Provider selection (default: asaas, can be mercadopago)
+    const rawBody = await request.clone().json();
+    const selectedProvider: PaymentProvider = rawBody.provider || 'asaas';
+
+    // Check if selected provider is configured
+    if (selectedProvider === 'asaas' && !asaasConfig.isConfigured) {
+      if (mpConfig.isConfigured) {
+        // Auto-fallback to mercadopago
+        rawBody.provider = 'mercadopago';
+      } else {
+        return NextResponse.json(
+          { error: 'Gateway de pagamento não configurado' },
+          { status: 503 }
+        );
+      }
     }
+    if (selectedProvider === 'mercadopago' && !mpConfig.isConfigured) {
+      if (asaasConfig.isConfigured) {
+        rawBody.provider = 'asaas';
+      } else {
+        return NextResponse.json(
+          { error: 'Gateway de pagamento não configurado' },
+          { status: 503 }
+        );
+      }
+    }
+    const provider: PaymentProvider = rawBody.provider || selectedProvider;
 
     // Authenticate user
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Não autorizado' },
         { status: 401 }
+      );
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id);
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Usuário não encontrado' },
+        { status: 404 }
       );
     }
 
@@ -149,6 +158,89 @@ export async function POST(request: NextRequest) {
       unitPrice: item.price,
       totalPrice: item.price * item.quantity,
     }));
+
+    // =================================================================
+    // MERCADO PAGO FLOW
+    // =================================================================
+    if (provider === 'mercadopago') {
+      const nameParts = user.name.split(' ');
+      const mpResult = await createMPPayment(total, {
+        description: `Pedido ${orderNumber} - ${items.map(i => i.name).join(', ')}`,
+        externalReference: orderNumber,
+        method: method === 'undefined' ? 'pix' : method as MPPaymentMethod,
+        payer: {
+          email: user.email,
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' ') || '',
+          cpf: cleanedCpfCnpj || '00000000000',
+          phone,
+          address: address ? {
+            zipCode: address.postalCode || '',
+            street: address.street || '',
+            number: address.number || '',
+            neighborhood: address.neighborhood,
+            city: address.city,
+            state: address.state,
+          } : undefined,
+        },
+        creditCard: creditCard ? {
+          token: (body as any).cardToken || '',
+          installments: installments || 1,
+          issuerId: (body as any).issuerId || '',
+          paymentMethodId: (body as any).paymentMethodId || '',
+        } : undefined,
+      });
+
+      const payment = new Payment({
+        orderNumber,
+        userId: (user as any)._id,
+        userEmail: user.email,
+        userName: user.name,
+        customerCpfCnpj: cleanedCpfCnpj,
+        customerPhone: phone,
+        customerAddress: address,
+        provider: 'mercadopago',
+        providerPaymentId: String(mpResult.id),
+        method,
+        status: mpResult.status === 'approved' ? 'paid' : 'pending',
+        items: paymentItems,
+        subtotal,
+        discount: 0,
+        fees: 0,
+        total,
+        currency: 'BRL',
+        pixData: mpResult.pixData,
+        boletoData: mpResult.boletoData,
+        creditCardData: mpResult.creditCardData,
+        externalReference: orderNumber,
+        source: 'checkout',
+        paidAt: mpResult.status === 'approved' ? new Date() : undefined,
+        webhookEvents: [{
+          event: 'MP_PAYMENT_CREATED',
+          receivedAt: new Date(),
+          data: { mpPaymentId: mpResult.id, mpStatus: mpResult.status },
+        }],
+      });
+
+      await payment.save();
+
+      return NextResponse.json({
+        success: true,
+        orderNumber,
+        paymentId: payment._id,
+        status: payment.status,
+        method,
+        total,
+        provider: 'mercadopago',
+        pixData: mpResult.pixData,
+        boletoData: mpResult.boletoData,
+        isPaid: payment.status === 'paid',
+      });
+    }
+
+    // =================================================================
+    // ASAAS FLOW (original)
+    // =================================================================
 
     // Create or get Asaas customer
     let asaasCustomer;
@@ -424,8 +516,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await getUserFromToken(request);
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Não autorizado' },
         { status: 401 }
@@ -438,6 +530,13 @@ export async function GET(request: NextRequest) {
     const skip = parseInt(searchParams.get('skip') || '0');
 
     await dbConnect();
+    const user = await User.findById(authUser.id);
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Usuário não encontrado' },
+        { status: 404 }
+      );
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: any = { userId: (user as any)._id };

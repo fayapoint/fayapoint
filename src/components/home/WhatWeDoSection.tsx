@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
-import { useRef, useState, type ElementType } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowRight,
   Clapperboard,
@@ -15,12 +15,13 @@ import {
   MonitorSmartphone,
   Rocket,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 
 type Capability = {
   id: "webProduct" | "automation" | "aiTraining" | "contentVideo";
-  icon: ElementType;
+  icon: LucideIcon;
   gradient: string;
   accent: string;
 };

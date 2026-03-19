@@ -25,6 +25,7 @@ import { useServiceCart } from "@/contexts/ServiceCartContext";
 import { useUser } from "@/contexts/UserContext";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { formatEditorialDate } from "@/lib/editorial-verification";
 
 export default function CourseSalesPage() {
   const params = useParams();
@@ -83,6 +84,11 @@ export default function CourseSalesPage() {
 
   const discount = Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100);
   const savings = product.pricing.originalPrice - product.pricing.price;
+  const isPtBr = locale === 'pt-BR';
+  const verifiedAtLabel = formatEditorialDate(
+    product.editorialVerification?.verifiedAt || "2026-03-19",
+    isPtBr ? "pt-BR" : "en-US"
+  );
   
   // Calculate total bonus value
   const totalBonusValue = product.bonuses?.reduce((sum, bonus) => sum + bonus.value, 0) || 0;
@@ -192,6 +198,30 @@ export default function CourseSalesPage() {
                     <div>
                       <div className="font-bold text-lg">{locale === 'pt-BR' ? 'Certificado' : 'Certificate'}</div>
                       <div className="text-xs text-gray-400">{locale === 'pt-BR' ? 'Incluso' : 'Included'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mb-8 rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent p-5">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
+                        <BadgeCheck size={16} />
+                        <span>{isPtBr ? 'Conteúdo verificado editorialmente' : 'Editorially verified content'}</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-300">
+                        {isPtBr
+                          ? `Revisado em ${verifiedAtLabel} com ${product.editorialVerification?.canonModels?.join(" / ")} e ${product.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real por aula.`
+                          : `Reviewed on ${verifiedAtLabel} with ${product.editorialVerification?.canonModels?.join(" / ")} and ${product.lessonContentCoverage?.coveragePercent ?? 0}% real lesson coverage.`}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-xs text-gray-300">
+                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                        {isPtBr ? `${product.contentChapters || 0} capítulos-base` : `${product.contentChapters || 0} base chapters`}
+                      </span>
+                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                        {product.editorialVerification?.canonModels?.join(" / ")}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -383,6 +413,18 @@ export default function CourseSalesPage() {
 
                     {/* What's Included */}
                     <div className="space-y-3 mb-6">
+                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
+                        <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
+                          <BadgeCheck size={15} />
+                          <span>{isPtBr ? 'Atualizado para o cenário atual' : 'Updated for the current landscape'}</span>
+                        </div>
+                        <p className="mt-1 text-xs leading-relaxed text-gray-400">
+                          {isPtBr
+                            ? `Fontes oficiais recentes. Canon editorial: ${product.editorialVerification?.canonModels?.join(" / ")}.`
+                            : `Recent official sources. Editorial canon: ${product.editorialVerification?.canonModels?.join(" / ")}.`}
+                        </p>
+                      </div>
+
                       <h3 className="font-bold text-sm uppercase text-gray-400 mb-3">
                         {t("sidebar.courseIncludes")}
                       </h3>
@@ -437,9 +479,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-                <span className="text-red-400">{t("problems.title").split("<red>")[0]}</span>
-                <span className="text-red-400">{t("problems.title").split("<red>")[1]?.split("</red>")[0]}</span>
-                {t("problems.title").split("</red>")[1]}
+                {t.rich("problems.title", {
+                  red: (chunks) => <span className="text-red-400">{chunks}</span>,
+                })}
               </h2>
               
               <div className="grid md:grid-cols-2 gap-6">
@@ -474,11 +516,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                {t("transformation.title").split("<highlight>")[0]}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  {t("transformation.title").split("<highlight>")[1]?.split("</highlight>")[0]}
-                </span>
-                {t("transformation.title").split("</highlight>")[1]}
+                {t.rich("transformation.title", {
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                })}
               </h2>
             </div>
 
@@ -544,10 +584,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                {t("whatYouLearn.title").split("<highlight>")[0]}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  {t("whatYouLearn.title").split("<highlight>")[1]?.split("</highlight>")[0]}
-                </span>
+                {t.rich("whatYouLearn.title", {
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                })}
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
                 {t("whatYouLearn.subtitle")}
@@ -610,10 +649,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                {t("curriculum.title").split("<highlight>")[0]}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  {t("curriculum.title").split("<highlight>")[1]?.split("</highlight>")[0]}
-                </span>
+                {t.rich("curriculum.title", {
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                })}
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
                 {t("curriculum.subtitle")}
@@ -664,10 +702,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                {t("bonuses.title").split("<highlight>")[0]}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  {t("bonuses.title").split("<highlight>")[1]?.split("</highlight>")[0]}
-                </span>
+                {t.rich("bonuses.title", {
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                })}
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
                 {t("bonuses.subtitle")}
@@ -708,11 +745,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                {t("testimonials.title").split("<highlight>")[0]}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  {t("testimonials.title").split("<highlight>")[1]?.split("</highlight>")[0]}
-                </span>
-                {t("testimonials.title").split("</highlight>")[1]}
+                {t.rich("testimonials.title", {
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                })}
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
                 {t("testimonials.subtitle")}
@@ -756,10 +791,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                {t("faq.title").split("<highlight>")[0]}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  {t("faq.title").split("<highlight>")[1]?.split("</highlight>")[0]}
-                </span>
+                {t.rich("faq.title", {
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                })}
               </h2>
               <p className="text-xl text-gray-400 text-center mb-12">
                 {t("faq.subtitle")}
@@ -808,11 +842,9 @@ export default function CourseSalesPage() {
               </Badge>
               
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                {t("finalCta.title").split("<highlight>")[0]}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  {t("finalCta.title").split("<highlight>")[1]?.split("</highlight>")[0]}
-                </span>
-                {t("finalCta.title").split("</highlight>")[1]}
+                {t.rich("finalCta.title", {
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                })}
               </h2>
               
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">

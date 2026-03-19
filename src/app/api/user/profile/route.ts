@@ -1,35 +1,43 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
+import { getAuthUser } from '@/lib/auth';
 
-const JWT_SECRET = process.env.JWT_SECRET || '';
+/**
+ * GET /api/user/profile
+ * Returns current user profile. Reads from Bearer token or httpOnly cookie.
+ */
+export async function GET() {
+  try {
+    const authUser = await getAuthUser();
+    if (!authUser) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    await dbConnect();
+    const user = await User.findById(authUser.id).select('-password');
+
+    if (!user) {
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
+    }
+
+    return NextResponse.json({ user: user.toObject() });
+  } catch (error) {
+    console.error('Profile GET error:', error);
+    return NextResponse.json({ error: 'Erro interno' }, { status: 500 });
+  }
+}
 
 export async function PUT(request: Request) {
   try {
     await dbConnect();
 
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const token = authHeader.split(' ')[1];
-    let decoded: jwt.JwtPayload | string;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    if (typeof decoded === 'string') {
-         return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
-
-    const userId = decoded.id;
+    const userId = authUser.id;
     const body = await request.json();
 
     // Validate allowed fields to update

@@ -35,13 +35,19 @@ import {
   ChevronUp,
   Info,
   DollarSign,
+  BookOpen,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+  DEFAULT_EDITORIAL_VERIFICATION,
+  formatEditorialDate,
+} from "@/lib/editorial-verification";
 
 // Service configurations with emojis and colors
 const serviceConfig: Record<
   string,
   {
-    icon: React.ElementType;
+    icon: LucideIcon;
     emoji: string;
     gradient: string;
     tileBg: string;
@@ -163,30 +169,31 @@ const planKeys = ["starter", "pro", "business"] as const;
 // Plan details for expanded view
 const planDetails: Record<string, string[]> = {
   starter: [
-    "Acesso a 5 cursos básicos por mês para construir sua base de conhecimento",
-    "Comunidade exclusiva para networking e tirar dúvidas com outros alunos",
-    "Certificados digitais verificáveis para cada curso concluído",
-    "Suporte por email com resposta em até 48h úteis",
-    "Material complementar em PDF para download"
+    "3 cursos iniciantes completos por mês para construir sua base",
+    "100 créditos/mês — use para quiz, certificações, chat IA e imagens",
+    "10% de desconto na compra de quiz + certificação oficial",
+    "10% de desconto na compra de cursos avulsos (além do limite do plano)",
+    "Certificados verificáveis online — use no seu currículo e LinkedIn",
+    "Acesso à comunidade exclusiva para networking e dúvidas",
+    "Compre pacotes extras de créditos quando precisar"
   ],
   pro: [
-    "Acesso ILIMITADO a todos os 50+ cursos da plataforma, incluindo lançamentos",
-    "2 sessões de mentoria em grupo por mês com especialistas da área",
-    "Projetos práticos exclusivos com feedback personalizado",
+    "5 cursos iniciantes + 2 intermediários + 1 avançado por mês",
+    "300 créditos/mês — 3x mais que o Explorador",
+    "20% de desconto em quiz + certificação e cursos avulsos",
     "Suporte prioritário via chat com resposta em até 4h",
-    "Biblioteca completa de templates, prompts e automações prontas",
-    "Acesso antecipado de 30 dias a novos cursos e ferramentas",
-    "Descontos especiais em ferramentas parceiras (n8n, Make, OpenAI)"
+    "Conteúdo exclusivo e antecipado — acesse 30 dias antes",
+    "Acesso a todos os níveis de cursos (iniciante a avançado)",
+    "Pool mensal rotativo: 10 iniciantes, 8 intermediários, 3 avançados"
   ],
   business: [
-    "TUDO do plano Pro, mais benefícios exclusivos para empresas",
+    "7 iniciantes + 4 intermediários + 3 avançados por mês",
+    "800 créditos/mês — o maior pacote de créditos",
+    "50% de desconto em certificações e cursos avulsos — o melhor custo-benefício",
     "1 sessão mensal de consultoria individual (1h) para seu negócio",
-    "Treinamento personalizado para até 5 membros da sua equipe",
-    "Implementação assistida de automações e integrações",
-    "Dashboard executivo com métricas de progresso e ROI",
-    "Acesso à API para integrações customizadas",
-    "Opção white-label para conteúdo interno",
-    "Suporte 24/7 via WhatsApp direto com nosso time"
+    "Suporte VIP dedicado com canal direto",
+    "Conteúdo exclusivo + acesso antecipado a tudo",
+    "Pool completo de cursos rotativos todos os meses"
   ]
 };
 
@@ -200,6 +207,11 @@ export default function PricingPage() {
   const [expandedPlan, setExpandedPlan] = useState<string | null>(null);
 
   const isLoggedIn = !!user;
+  const isPtBr = locale === "pt-BR";
+  const verifiedAtLabel = formatEditorialDate(
+    DEFAULT_EDITORIAL_VERIFICATION.verifiedAt,
+    isPtBr ? "pt-BR" : "en-US"
+  );
 
   // Get subscription plans from translations
   const plans = planKeys.map((key) => {
@@ -265,6 +277,54 @@ export default function PricingPage() {
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-purple-500" />
                 {t("hero.guarantee3")}
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-white/10 bg-card/60 p-4 text-left shadow-lg shadow-black/5">
+              <div className="grid gap-3 md:grid-cols-3">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {isPtBr ? "Verificação editorial" : "Editorial verification"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {isPtBr ? `Revisado em ${verifiedAtLabel}.` : `Reviewed on ${verifiedAtLabel}.`}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {isPtBr ? "Canon editorial" : "Editorial canon"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {DEFAULT_EDITORIAL_VERIFICATION.canonModels.join(" / ")}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {isPtBr ? "Conteúdo confiável" : "Reliable course content"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {isPtBr
+                        ? "Fontes oficiais recentes e cobertura real por aula."
+                        : "Recent official sources and real lesson-by-lesson coverage."}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 import {
   PRODIGI_CATALOG,
   PRODIGI_CATEGORIES,
@@ -14,10 +14,6 @@ import {
   gbpToBrl,
   getProductWithPricing,
 } from '@/lib/prodigi-catalog';
-import dbConnect from '@/lib/mongodb';
-import User from '@/models/User';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Currency exchange rates (should be fetched from API in production)
 const EXCHANGE_RATES = {
@@ -25,30 +21,13 @@ const EXCHANGE_RATES = {
   USD_TO_BRL: parseFloat(process.env.USD_TO_BRL || '5.00'),
 };
 
-// Helper to get user from token
-async function getUserFromToken(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization');
-  if (!authHeader?.startsWith('Bearer ')) return null;
-
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    await dbConnect();
-    const user = await User.findById(decoded.id).lean();
-    return user;
-  } catch {
-    return null;
-  }
-}
-
 // Category metadata is now in prodigi-catalog.ts via PRODIGI_CATEGORIES
 
 // GET - List products or get product details
 export async function GET(request: NextRequest) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user = await getUserFromToken(request) as any;
-    if (!user) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 

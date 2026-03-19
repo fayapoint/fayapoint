@@ -33,6 +33,7 @@ import {
   MessageSquare,
   Calendar,
   HelpCircle,
+  Share2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAdmin } from "@/contexts/AdminContext";
@@ -60,6 +61,7 @@ const MENU_SECTIONS = [
     items: [
       { id: "courses", path: "/admin/courses", icon: BookOpen, label: "Cursos" },
       { id: "creations", path: "/admin/creations", icon: Palette, label: "Criações AI" },
+      { id: "social", path: "/admin/social", icon: Share2, label: "Social Media", badge: "AI" },
       { id: "dropshipping", path: "/admin/dropshipping", icon: Globe, label: "Dropshipping", badge: "AI" },
     ]
   },

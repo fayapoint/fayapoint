@@ -2,19 +2,17 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import CourseProgress from '@/models/CourseProgress';
-import jwt from 'jsonwebtoken';
-import { headers } from 'next/headers';
-import { 
-  canEnrollInCourse, 
-  normalizeCourseLevel, 
+import { getAuthUser } from '@/lib/auth';
+import {
+  canEnrollInCourse,
+  normalizeCourseLevel,
   CourseLevel,
   SubscriptionPlan,
   calculateEnrollmentSlots,
-  getUpgradeSuggestion
+  getUpgradeSuggestion,
+  resolvePlan,
 } from '@/lib/course-tiers';
 import { getCourseBySlug, allCourses } from '@/data/courses';
-
-const JWT_SECRET = process.env.JWT_SECRET || '';
 
 interface EnrollmentRequest {
   courseSlug: string;
@@ -27,33 +25,18 @@ interface EnrollmentRequest {
  */
 export async function POST(request: Request) {
   try {
-    await dbConnect();
-
-    // Authenticate user
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Não autorizado' },
         { status: 401 }
       );
     }
 
-    const token = authHeader.split(' ')[1];
-    let decoded: { id: string } | string | jwt.JwtPayload;
-    
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
+    const userId = authUser.id;
 
-    if (typeof decoded === 'string' || !decoded.id) {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
+    await dbConnect();
 
-    const userId = decoded.id;
     const body: EnrollmentRequest = await request.json();
     const { courseSlug } = body;
 
@@ -77,7 +60,7 @@ export async function POST(request: Request) {
     }
 
     const courseLevel = courseData.normalizedLevel || normalizeCourseLevel(courseData.level);
-    const userPlan = (user.subscription?.plan || 'free') as SubscriptionPlan;
+    const userPlan = resolvePlan(user.subscription?.plan || 'free');
     const enrolledCourses = user.enrolledCourses || [];
 
     // Check if already enrolled
@@ -184,32 +167,18 @@ export async function POST(request: Request) {
  */
 export async function DELETE(request: Request) {
   try {
-    await dbConnect();
-
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authUser = await getAuthUser();
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Não autorizado' },
         { status: 401 }
       );
     }
 
-    const token = authHeader.split(' ')[1];
-    let decoded: { id: string } | string | jwt.JwtPayload;
-    
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
+    const userId = authUser.id;
 
-    if (typeof decoded === 'string' || !decoded.id) {
-      return NextResponse.json({ error: 'Token inválido' }, { status: 401 });
-    }
+    await dbConnect();
 
-    const userId = decoded.id;
     const { searchParams } = new URL(request.url);
     const courseSlug = searchParams.get('courseSlug');
 

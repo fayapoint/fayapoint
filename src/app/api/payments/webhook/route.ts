@@ -249,9 +249,12 @@ async function grantUserAccess(payment: any) {
         case 'subscription':
           // Upgrade user plan
           const planMap: Record<string, string> = {
-            'starter': 'starter',
-            'pro': 'pro',
-            'business': 'business',
+            'starter': 'explorador',
+            'pro': 'profissional',
+            'business': 'expert',
+            'explorador': 'explorador',
+            'profissional': 'profissional',
+            'expert': 'expert',
           };
           const newPlan = planMap[item.productSlug?.toLowerCase() || ''];
           if (newPlan) {

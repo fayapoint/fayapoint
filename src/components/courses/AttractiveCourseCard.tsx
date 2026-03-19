@@ -4,13 +4,14 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
   Star, Clock, Users, TrendingUp, Zap, Award, 
-  BookOpen, Code, Sparkles, Play, Check 
+  BookOpen, Code, Sparkles, Play, Check, ShieldCheck
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/products";
 import { useLocale } from "next-intl";
+import { formatEditorialDate } from "@/lib/editorial-verification";
 
 interface AttractiveCourseCardProps {
   product: Product;
@@ -51,6 +52,10 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   const Icon = style.icon;
   const locale = useLocale();
   const isPtBr = locale === 'pt-BR';
+  const verifiedAtLabel = formatEditorialDate(
+    product.editorialVerification?.verifiedAt || "2026-03-19",
+    isPtBr ? "pt-BR" : "en-US"
+  );
   
   const discount = product.pricing.originalPrice > product.pricing.price 
     ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
@@ -142,6 +147,18 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed">
               {product.copy.shortDescription}
             </p>
+
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
+              <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                <ShieldCheck size={15} className="text-emerald-400" />
+                <span>{isPtBr ? "Conteúdo verificado" : "Verified content"}</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-gray-400">
+                {isPtBr
+                  ? `Revisado em ${verifiedAtLabel} com ${product.editorialVerification?.canonModels?.join(" / ")} e ${product.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real por aula.`
+                  : `Reviewed on ${verifiedAtLabel} with ${product.editorialVerification?.canonModels?.join(" / ")} and ${product.lessonContentCoverage?.coveragePercent ?? 0}% real lesson coverage.`}
+              </p>
+            </div>
 
             {/* Stats */}
             <div className="flex items-center gap-4 text-sm text-gray-400 py-3 border-y border-gray-800">

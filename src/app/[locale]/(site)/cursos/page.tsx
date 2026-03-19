@@ -27,6 +27,10 @@ import type { Product } from "@/lib/products";
 import { AttractiveCourseCard } from "@/components/courses/AttractiveCourseCard";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import {
+  DEFAULT_EDITORIAL_VERIFICATION,
+  formatEditorialDate,
+} from "@/lib/editorial-verification";
 
 type LevelOption = {
   value: string;
@@ -58,6 +62,11 @@ export default function CoursesPage() {
   const [selectedLevel, setSelectedLevel] = useState(levelOptions[0]?.value ?? "all");
   const [sortBy, setSortBy] = useState("popular");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const isPtBr = locale === "pt-BR";
+  const verifiedAtLabel = formatEditorialDate(
+    DEFAULT_EDITORIAL_VERIFICATION.verifiedAt,
+    isPtBr ? "pt-BR" : "en-US"
+  );
 
   // Fetch products from MongoDB on mount
   useEffect(() => {
@@ -207,6 +216,14 @@ export default function CoursesPage() {
               <Sparkles className="text-purple-400" size={18} />
               <span>{t("promo.lifetimeAccess")}</span>
             </div>
+            <div className="flex items-center gap-2 text-gray-300">
+              <Clock className="text-blue-400" size={18} />
+              <span>
+                {isPtBr
+                  ? `Verificado em ${verifiedAtLabel} · ${DEFAULT_EDITORIAL_VERIFICATION.canonModels.join(" / ")}`
+                  : `Verified on ${verifiedAtLabel} · ${DEFAULT_EDITORIAL_VERIFICATION.canonModels.join(" / ")}`}
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -258,6 +275,14 @@ export default function CoursesPage() {
 
                       {/* Content Section */}
                       <div className="md:col-span-2 p-8">
+                        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
+                          <Shield className="h-3.5 w-3.5" />
+                          <span>
+                            {isPtBr
+                              ? `${featured.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real · ${featured.editorialVerification?.canonModels?.join(" / ")}`
+                              : `${featured.lessonContentCoverage?.coveragePercent ?? 0}% real coverage · ${featured.editorialVerification?.canonModels?.join(" / ")}`}
+                          </span>
+                        </div>
                         <div className="flex flex-wrap gap-2 mb-4">
                           <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50">
                             {featured.categoryPrimary}

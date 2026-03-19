@@ -176,14 +176,23 @@ async function seedProducts() {
     const db = client.db(DATABASE_NAME);
     const collection = db.collection(COLLECTION_NAME);
     
-    // Create indexes if they don't exist
+    // Create indexes if they don't exist (skip errors for existing indexes)
     console.log('📇 Creating indexes...');
-    await collection.createIndex({ slug: 1 }, { unique: true, name: 'idx_slug' });
-    await collection.createIndex({ categoryPrimary: 1, status: 1 }, { name: 'idx_category_status' });
-    await collection.createIndex({ tags: 1 }, { name: 'idx_tags' });
-    await collection.createIndex({ productId: 1 }, { unique: true, name: 'idx_productId' });
-    await collection.createIndex({ 'pricing.price': 1 }, { name: 'idx_price' });
-    console.log('✅ Indexes created');
+    const indexes = [
+      [{ slug: 1 }, { unique: true, name: 'idx_slug' }],
+      [{ categoryPrimary: 1, status: 1 }, { name: 'idx_category_status' }],
+      [{ tags: 1 }, { name: 'idx_tags' }],
+      [{ productId: 1 }, { unique: true, name: 'idx_productId' }],
+      [{ 'pricing.price': 1 }, { name: 'idx_price' }],
+    ] as const;
+    for (const [key, opts] of indexes) {
+      try {
+        await collection.createIndex(key as any, opts as any);
+      } catch (e: any) {
+        if (e.code !== 86) throw e; // Only ignore IndexKeySpecsConflict
+      }
+    }
+    console.log('✅ Indexes ready');
     
     // Transform and upsert products
     console.log('📦 Seeding products...');
@@ -193,11 +202,12 @@ async function seedProducts() {
     let updatedCount = 0;
     
     for (const doc of documents) {
+      const { createdAt, ...docWithoutCreatedAt } = doc;
       const result = await collection.updateOne(
         { slug: doc.slug },
-        { 
+        {
           $set: {
-            ...doc,
+            ...docWithoutCreatedAt,
             updatedAt: new Date().toISOString(),
           },
           $setOnInsert: {

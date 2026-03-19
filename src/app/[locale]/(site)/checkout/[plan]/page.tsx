@@ -122,7 +122,7 @@ export default function CheckoutPage() {
   
   // Check if this is a subscription plan checkout
   useEffect(() => {
-    const subscriptionPlans = ["starter", "pro", "business"];
+    const subscriptionPlans = ["starter", "pro", "business", "explorador", "profissional", "expert"];
     if (subscriptionPlans.includes(planName)) {
       setIsSubscription(true);
     }
@@ -349,7 +349,7 @@ export default function CheckoutPage() {
         let subscriptionPlanSlug = planName;
         if (planName === "cart") {
           // Find subscription plan in cart
-          const subscriptionPlans = ["starter", "pro", "business"];
+          const subscriptionPlans = ["starter", "pro", "business", "explorador", "profissional", "expert"];
           const subItem = cartItems.find(item => subscriptionPlans.includes(item.id));
           if (subItem) {
             subscriptionPlanSlug = subItem.id;
