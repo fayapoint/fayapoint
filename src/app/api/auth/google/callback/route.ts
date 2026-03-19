@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
+import { getAuthUser } from '@/lib/auth';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 const GOOGLE_CLIENT_ID =
@@ -12,16 +13,7 @@ const GOOGLE_CLIENT_ID =
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 const LOCALES = ['pt-BR', 'en'] as const;
 
-function getPublicOrigin(request: NextRequest): string {
-  const forwardedProto = request.headers.get('x-forwarded-proto');
-  const forwardedHost =
-    request.headers.get('x-forwarded-host') ||
-    request.headers.get('host');
-
-  if (forwardedHost) {
-    return `${forwardedProto || 'https'}://${forwardedHost}`;
-  }
-
+function getCanonicalOrigin(): string | null {
   const canonicalEnv =
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.SITE_URL ||
@@ -29,6 +21,24 @@ function getPublicOrigin(request: NextRequest): string {
 
   if (canonicalEnv) {
     return canonicalEnv.replace(/\/$/, '');
+  }
+
+  return null;
+}
+
+function getPublicOrigin(request: NextRequest): string {
+  const canonicalOrigin = getCanonicalOrigin();
+  if (canonicalOrigin) {
+    return canonicalOrigin;
+  }
+
+  const forwardedProto = request.headers.get('x-forwarded-proto');
+  const forwardedHost =
+    request.headers.get('x-forwarded-host') ||
+    request.headers.get('host');
+
+  if (forwardedHost) {
+    return `${forwardedProto || 'https'}://${forwardedHost}`;
   }
 
   const url = new URL(request.url);
@@ -142,6 +152,16 @@ export async function GET(request: NextRequest) {
 
     if (tokenData.error) {
       console.error('Google token exchange error:', tokenData.error_description);
+
+      if (tokenData.error === 'invalid_grant') {
+        const authUser = await getAuthUser();
+        if (authUser) {
+          return NextResponse.redirect(
+            new URL(sanitizeRedirectPath(state), getPublicOrigin(request))
+          );
+        }
+      }
+
       return NextResponse.redirect(
         buildLoginRedirectUrl(request, 'token_exchange', state, {
           google_error: tokenData.error,

@@ -322,7 +322,10 @@ export function Header() {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  onClick={logout}
+                  onClick={async () => {
+                    await logout();
+                    window.location.assign("/");
+                  }}
                   className="text-foreground/80 hover:text-foreground"
                 >
                   <LogOut size={16} className="mr-2" />
@@ -443,9 +446,10 @@ export function Header() {
                   <Button 
                     variant="outline" 
                     className="w-full h-12 text-base"
-                    onClick={() => {
-                      logout();
+                    onClick={async () => {
+                      await logout();
                       setMobileMenuOpen(false);
+                      window.location.assign("/");
                     }}
                   >
                     <LogOut size={18} className="mr-2" />

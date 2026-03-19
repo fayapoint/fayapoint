@@ -588,9 +588,9 @@ export default function PortalPage() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => {
-                logout();
-                router.push("/");
+              onClick={async () => {
+                await logout();
+                window.location.assign("/");
               }}
             >
               <LogOut size={20} />

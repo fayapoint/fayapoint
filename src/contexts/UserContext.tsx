@@ -45,7 +45,7 @@ interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   isLoggedIn: boolean;
-  logout: () => void;
+  logout: () => Promise<void>;
   mounted: boolean;
 }
 
@@ -103,13 +103,20 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
     if (typeof window !== 'undefined') {
       localStorage.removeItem('fayai_token');
       localStorage.removeItem('fayai_user');
-      // Clear httpOnly cookie via server-side API
-      fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          credentials: 'include',
+          cache: 'no-store',
+        });
+      } catch {
+        // Best effort; local state is already cleared.
+      }
     }
   };
 

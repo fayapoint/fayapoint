@@ -292,8 +292,8 @@ export default function AccountPage() {
       });
 
       if (res.status === 401) {
-        logout();
-        router.push("/login");
+        await logout();
+        window.location.assign("/login");
         return;
       }
 
