@@ -594,11 +594,21 @@ export default async function middleware(request: NextRequest) {
     ? "/" + segments.slice(1).join("/")
     : pathname;
 
+  const authCookieToken = request.cookies.get("token")?.value
+    || request.cookies.get("fayai_token")?.value
+    || null;
+
   if (
     rawPathname.startsWith("/portal") &&
     (searchParams.has("code") || searchParams.has("error")) &&
     (searchParams.has("state") || searchParams.has("iss"))
   ) {
+    if (authCookieToken) {
+      const cleanPortalUrl = request.nextUrl.clone();
+      cleanPortalUrl.search = "";
+      return NextResponse.redirect(cleanPortalUrl);
+    }
+
     const callbackUrl = request.nextUrl.clone();
     callbackUrl.pathname = "/api/auth/google/callback";
     callbackUrl.searchParams.set("oauth_redirect_path", pathname);
@@ -614,9 +624,7 @@ export default async function middleware(request: NextRequest) {
       authToken = authorizationHeader.slice(7);
     }
     if (!authToken) {
-      authToken = request.cookies.get("token")?.value
-        || request.cookies.get("fayai_token")?.value
-        || null;
+      authToken = authCookieToken;
     }
 
     if (!authToken) {
