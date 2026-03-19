@@ -18,6 +18,8 @@ const BYPASS_PATHS = [
   // Internal
   "/blocked",
   "/api/health",
+  "/api/auth/google",
+  "/api/auth/google/callback",
   "/_next",
   "/favicon.ico",
   "/robots.txt",

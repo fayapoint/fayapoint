@@ -101,6 +101,8 @@ function shouldBypassGeoblock(pathname: string): boolean {
 // Paths that should bypass bot detection (health checks, webhooks)
 const BOT_DETECTION_BYPASS_PATHS = [
   "/api/health",
+  "/api/auth/google",
+  "/api/auth/google/callback",
   "/api/webhooks",
   "/api/payments/webhook",
   "/api/pod/webhooks",
@@ -334,6 +336,12 @@ export default async function middleware(request: NextRequest) {
   
   // Skip bot detection for health checks and webhooks
   const skipBotDetection = shouldBypassBotDetection(pathname);
+
+  if (pathname === "/api/auth/google" || pathname === "/api/auth/google/callback") {
+    const response = NextResponse.next();
+    addSecurityHeaders(response);
+    return response;
+  }
   
   // Block honeypot paths (WordPress, PHP, etc.)
   if (!skipBotDetection && isHoneypotPath(pathname)) {
@@ -585,6 +593,17 @@ export default async function middleware(request: NextRequest) {
   const rawPathname = hasLocalePrefix
     ? "/" + segments.slice(1).join("/")
     : pathname;
+
+  if (
+    rawPathname.startsWith("/portal") &&
+    (searchParams.has("code") || searchParams.has("error")) &&
+    (searchParams.has("state") || searchParams.has("iss"))
+  ) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/api/auth/google/callback";
+    callbackUrl.searchParams.set("oauth_redirect_path", pathname);
+    return NextResponse.redirect(callbackUrl);
+  }
 
   if (rawPathname.startsWith("/portal")) {
     // Get token from Authorization header or cookie

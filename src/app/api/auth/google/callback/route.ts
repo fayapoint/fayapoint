@@ -46,6 +46,11 @@ function getPublicOrigin(request: NextRequest): string {
 }
 
 function getRedirectUri(request: NextRequest): string {
+  const overridePath = request.nextUrl.searchParams.get('oauth_redirect_path');
+  if (overridePath && overridePath.startsWith('/') && !overridePath.startsWith('//')) {
+    return `${getPublicOrigin(request)}${overridePath}`;
+  }
+
   return `${getPublicOrigin(request)}/api/auth/google/callback`;
 }
 
@@ -139,6 +144,7 @@ export async function GET(request: NextRequest) {
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      signal: AbortSignal.timeout(15000),
       body: new URLSearchParams({
         code,
         client_id: GOOGLE_CLIENT_ID,
@@ -174,6 +180,7 @@ export async function GET(request: NextRequest) {
     const userInfoResponse = await fetch(
       'https://www.googleapis.com/oauth2/v2/userinfo',
       {
+        signal: AbortSignal.timeout(15000),
         headers: { Authorization: `Bearer ${tokenData.access_token}` },
       }
     );
@@ -240,8 +247,10 @@ export async function GET(request: NextRequest) {
     return response;
   } catch (error) {
     console.error('Google callback error:', error);
+    const errorName = error instanceof Error ? error.name : null;
+    const errorCode = errorName === 'TimeoutError' ? 'timeout' : 'server';
     return NextResponse.redirect(
-      buildLoginRedirectUrl(request, 'server', request.nextUrl.searchParams.get('state'))
+      buildLoginRedirectUrl(request, errorCode, request.nextUrl.searchParams.get('state'))
     );
   }
 }

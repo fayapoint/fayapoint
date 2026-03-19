@@ -74,6 +74,11 @@ function LoginPageContent() {
       return;
     }
 
+    if (authError === "timeout") {
+      toast.error("Google OAuth demorou demais para responder. Tente novamente.");
+      return;
+    }
+
     if (authError === "userinfo") {
       toast.error("Não foi possível obter os dados do usuário no Google.");
       return;
