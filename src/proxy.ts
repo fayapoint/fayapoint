@@ -611,14 +611,10 @@ export default async function middleware(request: NextRequest) {
     try {
       await jwtVerify(authToken, JWT_SECRET_BYTES);
       // Token valid - continue to locale handling
-    } catch {
-      // Invalid/expired token - redirect to login and clear cookie
-      const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = "/login";
-      loginUrl.searchParams.set("redirect", pathname);
-      const redirectResponse = NextResponse.redirect(loginUrl);
-      redirectResponse.cookies.delete("token");
-      return redirectResponse;
+    } catch (error) {
+      // Let the app/API layer validate next. This avoids false negatives when
+      // edge runtime secrets drift or when a fresh login cookie has just landed.
+      console.warn(`[PORTAL_AUTH_VERIFY_FAILED] ${pathname}`, error);
     }
   }
 

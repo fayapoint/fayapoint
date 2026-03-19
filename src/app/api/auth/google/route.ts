@@ -133,14 +133,16 @@ export async function POST(request: Request) {
       user: userObject,
     });
 
-    // Set httpOnly cookie for middleware portal protection
-    response.cookies.set('token', jwtToken, {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'lax' as const,
       path: '/',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-    });
+      maxAge: 7 * 24 * 60 * 60,
+    };
+
+    response.cookies.set('token', jwtToken, cookieOptions);
+    response.cookies.set('fayai_token', jwtToken, cookieOptions);
 
     return response;
   } catch (error) {

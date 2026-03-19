@@ -140,14 +140,16 @@ export async function GET(request: NextRequest) {
       new URL(redirectPath, request.url)
     );
 
-    // Set JWT as httpOnly cookie
-    response.cookies.set('token', jwtToken, {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      sameSite: 'lax' as const,
+      maxAge: 7 * 24 * 60 * 60,
       path: '/',
-    });
+    };
+
+    response.cookies.set('token', jwtToken, cookieOptions);
+    response.cookies.set('fayai_token', jwtToken, cookieOptions);
 
     return response;
   } catch (error) {

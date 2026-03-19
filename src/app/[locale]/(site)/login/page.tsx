@@ -14,7 +14,7 @@ import {
   Github,
   Chrome
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +35,7 @@ export default function LoginPage() {
 function LoginPageContent() {
   const t = useTranslations("Login");
   const router = useRouter();
+  const locale = useLocale();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/portal";
   const { setUser } = useUser();
@@ -46,6 +47,14 @@ function LoginPageContent() {
     rememberMe: false,
   });
   const [isBotDetected, setIsBotDetected] = useState(false);
+
+  const resolveRedirectPath = () => {
+    const safeRedirect = redirectTo.startsWith("/") ? redirectTo : "/portal";
+    if (safeRedirect.startsWith(`/${locale}/`)) {
+      return safeRedirect;
+    }
+    return `/${locale}${safeRedirect === "/" ? "" : safeRedirect}`;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,7 +93,7 @@ function LoginPageContent() {
       setUser(data.user);
 
       toast.success(t("messages.welcomeBack", { name: data.user.name }));
-      router.push(redirectTo);
+      window.location.assign(resolveRedirectPath());
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : t("messages.unexpectedError");
       toast.error(errorMessage);
@@ -134,7 +143,7 @@ function LoginPageContent() {
               localStorage.setItem("fayai_token", data.token);
               setUser(data.user);
               toast.success(`Bem-vindo, ${data.user.name}!`);
-              router.push(redirectTo);
+              window.location.assign(resolveRedirectPath());
               resolve();
             } catch (err) {
               reject(err);

@@ -111,14 +111,16 @@ export async function POST(request: Request) {
       user: userObject,
     });
 
-    // Set httpOnly cookie for middleware portal protection
-    response.cookies.set('token', token, {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'lax' as const,
       path: '/',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-    });
+      maxAge: 7 * 24 * 60 * 60,
+    };
+
+    response.cookies.set('token', token, cookieOptions);
+    response.cookies.set('fayai_token', token, cookieOptions);
 
     return response;
 
