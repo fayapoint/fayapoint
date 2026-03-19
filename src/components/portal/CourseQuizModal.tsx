@@ -90,13 +90,16 @@ export function CourseQuizModal({
   const [errorMsg, setErrorMsg] = useState("");
   const [existingCert, setExistingCert] = useState<CertificateInfo | null>(null);
   const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
+  const getAuthHeaders = useCallback((): Record<string, string> => {
+    if (typeof window === "undefined") return {};
+    const token = localStorage.getItem("fayai_token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }, []);
 
   const loadQuiz = useCallback(async () => {
     if (isLoadingQuiz) return;
     setIsLoadingQuiz(true);
     setPhase("loading");
-    const token = localStorage.getItem("fayai_token");
-    if (!token) { setIsLoadingQuiz(false); return; }
 
     try {
       // Check if test bypass is active (temporary — for testing certification)
@@ -105,7 +108,8 @@ export function CourseQuizModal({
       const bypassQuery = bypass ? `?_test_bypass=${bypass}` : '';
 
       const res = await fetch(`/api/courses/${courseSlug}/quiz${bypassQuery}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getAuthHeaders(),
+        credentials: "include",
       });
       const data = await res.json();
 
@@ -146,12 +150,10 @@ export function CourseQuizModal({
       setIsLoadingQuiz(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseSlug, isLoadingQuiz]);
+  }, [courseSlug, getAuthHeaders, isLoadingQuiz]);
 
   const submitQuiz = async () => {
     setPhase("submitting");
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
 
     const answersArray = questions.map((_, i) => selectedAnswers[i] ?? -1);
 
@@ -159,9 +161,10 @@ export function CourseQuizModal({
       const res = await fetch(`/api/courses/${courseSlug}/quiz`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+          ...getAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify({
           answers: answersArray,
           answersToken,
@@ -194,11 +197,10 @@ export function CourseQuizModal({
   };
 
   const handleDownload = async (verificationCode: string) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     try {
       const res = await fetch(`/api/certificates/${verificationCode}/download`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getAuthHeaders(),
+        credentials: "include",
       });
       if (!res.ok) { toast.error("Erro ao baixar"); return; }
       const blob = await res.blob();

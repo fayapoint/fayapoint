@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -186,6 +186,8 @@ const RATIOS = [
 export default function PortalPage() {
   const t = useTranslations("Portal");
   const router = useRouter();
+  const params = useParams();
+  const locale = typeof params?.locale === "string" ? params.locale : "pt-BR";
   const { user, setUser, logout } = useUser();
   const { items: cartItems, cartTotal } = useServiceCart();
   const { data: cachedDashboardData, isLoading: isDashboardLoading, error: dashboardError, refetch: refetchDashboard } = useDashboard();
@@ -215,6 +217,11 @@ export default function PortalPage() {
 
   const isPro = ["pro", "business", "starter"].includes(plan);
   const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
+  const getAuthHeaders = (): Record<string, string> => {
+    if (typeof window === "undefined") return {};
+    const token = localStorage.getItem("fayai_token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
 
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
@@ -243,12 +250,16 @@ export default function PortalPage() {
   }, [activeTab]);
 
   const fetchCourseAccess = async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     try {
       const res = await fetch("/api/courses/access", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getAuthHeaders(),
+        credentials: "include",
       });
+      if (res.status === 401) {
+        setEnrollmentSlots(null);
+        setEnrolledSlugs([]);
+        return;
+      }
       if (res.ok) {
         const data = await res.json();
         setEnrollmentSlots(data.slots);
@@ -261,22 +272,22 @@ export default function PortalPage() {
   };
 
   const handleEnroll = async (courseSlug: string) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     setIsEnrolling(courseSlug);
     try {
       const res = await fetch("/api/courses/enroll", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify({ courseSlug }),
       });
+
+      if (res.status === 401) {
+        router.push(`/${locale}/login?redirect=${encodeURIComponent(`/${locale}/portal`)}`);
+        return;
+      }
 
       const data = await res.json();
 
@@ -296,7 +307,7 @@ export default function PortalPage() {
       fetchCourseAccess();
       
       // Navigate to course
-      router.push(`/portal/learn/${courseSlug}`);
+      router.push(`/${locale}/portal/learn/${courseSlug}`);
     } catch (error) {
       console.error("Enrollment error:", error);
       toast.error("Erro ao matricular no curso");
@@ -316,11 +327,10 @@ export default function PortalPage() {
   }, [activeTab]);
 
   const fetchCreations = async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     try {
       const res = await fetch("/api/user/creations", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getAuthHeaders(),
+        credentials: "include",
       });
       if (res.ok) {
         const data = await res.json();
@@ -397,7 +407,6 @@ export default function PortalPage() {
     if (!prompt.trim()) return;
     setIsGenerating(true);
     setGeneratedImage(null);
-    const token = localStorage.getItem("fayai_token");
 
     const fullPrompt = [
       prompt,
@@ -412,8 +421,9 @@ export default function PortalPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify({
           prompt: fullPrompt,
           model: selectedModel,
@@ -447,14 +457,13 @@ export default function PortalPage() {
   }
 
   if (!user || !dashboardData) {
-    // No user/data and not loading — check why
     const token = typeof window !== "undefined" ? localStorage.getItem("fayai_token") : null;
+    const isAuthError =
+      dashboardError === "Unauthorized" ||
+      dashboardError === "No token" ||
+      dashboardError === "No session";
 
-    // If there's an auth error (401/invalid token), clear stale token and show login
-    const isAuthError = dashboardError === "Unauthorized" || dashboardError === "No token";
-
-    if (!token || isAuthError) {
-      // Clear stale token if it exists but is invalid
+    if (isAuthError) {
       if (token && isAuthError && typeof window !== "undefined") {
         localStorage.removeItem("fayai_token");
       }
@@ -468,7 +477,7 @@ export default function PortalPage() {
             <p className="text-gray-400">{t("loginRequiredDesc") || "Faça login para acessar seu portal do aluno."}</p>
             <div className="flex gap-3">
               <Button
-                onClick={() => router.push("/login")}
+                onClick={() => router.push(`/${locale}/login`)}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-8"
               >
                 {t("loginButton") || "Entrar"}

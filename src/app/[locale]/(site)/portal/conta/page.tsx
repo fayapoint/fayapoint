@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
@@ -59,6 +59,7 @@ import { useUser } from "@/contexts/UserContext";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { getClientAuthHeaders, getClientBearerToken } from "@/lib/client-auth";
 
 // ============================================================================
 // Types
@@ -171,8 +172,11 @@ interface CertificateData {
 // ============================================================================
 
 function getToken(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem("fayai_token");
+  return getClientBearerToken();
+}
+
+function getAuthHeaders(): Record<string, string> {
+  return getClientAuthHeaders();
 }
 
 function getInitials(name: string): string {
@@ -219,6 +223,8 @@ function formatCurrency(value: number): string {
 
 export default function AccountPage() {
   const router = useRouter();
+  const params = useParams();
+  const locale = typeof params?.locale === "string" ? params.locale : "pt-BR";
   const { user: ctxUser, setUser: setCtxUser, logout } = useUser();
 
   const [account, setAccount] = useState<AccountData | null>(null);
@@ -280,20 +286,15 @@ export default function AccountPage() {
   // ============================================================================
 
   const fetchAccount = useCallback(async () => {
-    const token = getToken();
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     try {
       const res = await fetch("/api/account", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getAuthHeaders(),
+        credentials: "include",
       });
 
       if (res.status === 401) {
         await logout();
-        window.location.assign("/login");
+        window.location.assign(`/${locale}/login`);
         return;
       }
 
@@ -331,15 +332,13 @@ export default function AccountPage() {
       console.error("Error fetching account:", error);
       toast.error("Erro ao carregar dados da conta");
     }
-  }, [router, logout]);
+  }, [locale, logout]);
 
   const fetchSubscription = useCallback(async () => {
-    const token = getToken();
-    if (!token) return;
-
     try {
       const res = await fetch("/api/account/subscription", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getAuthHeaders(),
+        credentials: "include",
       });
       if (res.ok) {
         const data = await res.json();
@@ -351,12 +350,10 @@ export default function AccountPage() {
   }, []);
 
   const fetchCertificates = useCallback(async () => {
-    const token = getToken();
-    if (!token) return;
-
     try {
       const res = await fetch("/api/account/certificates", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getAuthHeaders(),
+        credentials: "include",
       });
       if (res.ok) {
         const data = await res.json();
@@ -381,17 +378,15 @@ export default function AccountPage() {
   // ============================================================================
 
   const handleSaveProfile = async () => {
-    const token = getToken();
-    if (!token) return;
-
     setSavingProfile(true);
     try {
       const res = await fetch("/api/account", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify({
           name: profileForm.name,
           profile: {
@@ -450,17 +445,15 @@ export default function AccountPage() {
       return;
     }
 
-    const token = getToken();
-    if (!token) return;
-
     setSavingPassword(true);
     try {
       const res = await fetch("/api/account/password", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify({
           currentPassword: passwordForm.current,
           newPassword: passwordForm.new,
@@ -480,17 +473,15 @@ export default function AccountPage() {
   };
 
   const handleSavePreferences = async () => {
-    const token = getToken();
-    if (!token) return;
-
     setSavingPrefs(true);
     try {
       const res = await fetch("/api/account", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify({
           preferences: prefsForm,
         }),

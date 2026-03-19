@@ -21,6 +21,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { getClientAuthHeaders } from "@/lib/client-auth";
 
 interface CertificateItem {
   _id: string;
@@ -50,11 +51,10 @@ export function CertificatesPanel() {
   }, []);
 
   const fetchCertificates = async () => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
     try {
       const res = await fetch("/api/certificates", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getClientAuthHeaders(),
+        credentials: "include",
       });
       if (res.ok) {
         const data = await res.json();
@@ -68,13 +68,11 @@ export function CertificatesPanel() {
   };
 
   const handleDownload = async (cert: CertificateItem) => {
-    const token = localStorage.getItem("fayai_token");
-    if (!token) return;
-
     setDownloading(cert.verificationCode);
     try {
       const res = await fetch(`/api/certificates/${cert.verificationCode}/download`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getClientAuthHeaders(),
+        credentials: "include",
       });
 
       if (!res.ok) {

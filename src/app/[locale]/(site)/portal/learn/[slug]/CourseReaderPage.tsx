@@ -147,6 +147,93 @@ function estimateReadingMinutes(text: string): number {
   return Math.max(1, Math.ceil(words / 200));
 }
 
+function getStoredBearerToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("fayai_token");
+}
+
+function buildClientAuthHeaders(token?: string | null): Record<string, string> {
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+function readLocalProgress(slug: string): {
+  completedSections: string[];
+  lastHeadingId: string | null;
+  progressPercent: number;
+} | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = localStorage.getItem(`fayapoint_progress_${slug}`);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    return {
+      completedSections: Array.isArray(parsed.completedSections)
+        ? parsed.completedSections.filter((value: unknown): value is string => typeof value === "string")
+        : [],
+      lastHeadingId: typeof parsed.lastHeadingId === "string" ? parsed.lastHeadingId : null,
+      progressPercent:
+        typeof parsed.progressPercent === "number" ? parsed.progressPercent : 0,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeLocalProgress(
+  slug: string,
+  data: {
+    completedSections?: string[];
+    lastHeadingId?: string;
+    progressPercent?: number;
+  }
+) {
+  if (typeof window === "undefined") return;
+
+  try {
+    const existing = readLocalProgress(slug);
+    const updated = {
+      completedSections: data.completedSections ?? existing?.completedSections ?? [],
+      lastHeadingId: data.lastHeadingId ?? existing?.lastHeadingId ?? null,
+      progressPercent: data.progressPercent ?? existing?.progressPercent ?? 0,
+      updatedAt: new Date().toISOString(),
+    };
+    localStorage.setItem(`fayapoint_progress_${slug}`, JSON.stringify(updated));
+  } catch {
+    // ignore local cache write errors
+  }
+}
+
+function resolveSavedChapterId(chapterId: string, chapters: Chapter[]): string | null {
+  if (chapters.some((chapter) => chapter.id === chapterId)) {
+    return chapterId;
+  }
+
+  const legacyMatch = chapterId.match(/^chapter-(\d+)$/i);
+  if (legacyMatch) {
+    const index = Number(legacyMatch[1]);
+    return chapters[index]?.id ?? null;
+  }
+
+  return null;
+}
+
+function normalizeSavedChapterIds(savedIds: string[], chapters: Chapter[]): string[] {
+  return Array.from(
+    new Set(
+      savedIds
+        .map((chapterId) => resolveSavedChapterId(chapterId, chapters))
+        .filter((chapterId): chapterId is string => Boolean(chapterId))
+    )
+  );
+}
+
+function normalizeSavedHeadingId(savedId: string | null, chapters: Chapter[]): string | null {
+  if (!savedId) return null;
+  return resolveSavedChapterId(savedId, chapters);
+}
+
 function splitIntoChapters(markdown: string): Chapter[] {
   if (!markdown?.trim()) return [];
 
@@ -326,34 +413,27 @@ export default function CourseReaderPage() {
       progressPercent?: number;
       isCompleted?: boolean;
     }) => {
-      const token = localStorage.getItem("fayai_token");
-      if (!token) {
-        // Free/unauthenticated user — persist to localStorage only
-        try {
-          const existing = localStorage.getItem(`fayapoint_progress_${slug}`);
-          const parsed = existing ? JSON.parse(existing) : {};
-          const updated = {
-            ...parsed,
-            completedSections: data.completedSections ?? parsed.completedSections ?? [],
-            lastHeadingId: data.lastHeadingId ?? parsed.lastHeadingId ?? null,
-            progressPercent: data.progressPercent ?? parsed.progressPercent ?? 0,
-            updatedAt: new Date().toISOString(),
-          };
-          localStorage.setItem(`fayapoint_progress_${slug}`, JSON.stringify(updated));
-        } catch {
-          // ignore
-        }
-        return;
-      }
+      const token = getStoredBearerToken();
+      writeLocalProgress(slug, {
+        completedSections: data.completedSections,
+        lastHeadingId: data.lastHeadingId,
+        progressPercent: data.progressPercent,
+      });
+
       try {
-        await fetch(`/api/courses/${slug}/progress`, {
+        const response = await fetch(`/api/courses/${slug}/progress`, {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            ...buildClientAuthHeaders(token),
           },
+          credentials: "include",
           body: JSON.stringify(data),
         });
+
+        if (!response.ok && response.status !== 401 && response.status !== 403) {
+          console.error("Progress sync failed:", response.status);
+        }
       } catch (e) {
         console.error("Progress sync error:", e);
       }
@@ -465,16 +545,16 @@ export default function CourseReaderPage() {
   /* ─── Fetch Data ─── */
   useEffect(() => {
     const fetchContent = async () => {
-      const token = localStorage.getItem("fayai_token");
+      const token = getStoredBearerToken();
       const authHeaders: Record<string, string> = token
-        ? { Authorization: `Bearer ${token}` }
+        ? buildClientAuthHeaders(token)
         : {};
 
       try {
         // 1. Always check access level first
         const accessRes = await fetch(
           `/api/courses/access?slug=${encodeURIComponent(slug)}`,
-          { headers: authHeaders }
+          { headers: authHeaders, credentials: "include" }
         );
         const accessData = (await accessRes.json()) as CourseAccessDto;
         setCourseAccess(accessData);
@@ -496,6 +576,7 @@ export default function CourseReaderPage() {
         if (token) {
           const contentRes = await fetch(`/api/courses/${slug}/content`, {
             headers: authHeaders,
+            credentials: "include",
           });
 
           if (contentRes.status === 401) {
@@ -549,45 +630,34 @@ export default function CourseReaderPage() {
           });
         }
 
-        // 4. Fetch progress (only for authenticated users)
-        if (token) {
-          try {
-            const progressRes = await fetch(
-              `/api/courses/${slug}/progress`,
-              { headers: authHeaders }
-            );
-            if (progressRes.ok) {
-              const progressData = await progressRes.json();
-              const p = progressData?.progress as
-                | CourseProgressDto
-                | undefined;
-              if (p) {
-                rawCompletedRef.current = Array.isArray(p.completedSections)
-                  ? p.completedSections
-                  : [];
-                resumeHeadingRef.current = p.lastHeadingId || null;
-              }
+        // 4. Fetch progress from server when possible, then fall back to local cache
+        try {
+          const progressRes = await fetch(`/api/courses/${slug}/progress`, {
+            headers: authHeaders,
+            credentials: "include",
+          });
+
+          if (progressRes.ok) {
+            const progressData = await progressRes.json();
+            const p = progressData?.progress as CourseProgressDto | undefined;
+            if (p) {
+              rawCompletedRef.current = Array.isArray(p.completedSections)
+                ? p.completedSections
+                : [];
+              resumeHeadingRef.current = p.lastHeadingId || null;
             }
-          } catch {
-            // Progress fetch failure is non-critical
           }
-        } else {
-          // For free/unauthenticated users: restore from localStorage
-          try {
-            const localProgress = localStorage.getItem(
-              `fayapoint_progress_${slug}`
-            );
-            if (localProgress) {
-              const parsed = JSON.parse(localProgress);
-              if (Array.isArray(parsed.completedSections)) {
-                rawCompletedRef.current = parsed.completedSections;
-              }
-              if (parsed.lastHeadingId) {
-                resumeHeadingRef.current = parsed.lastHeadingId;
-              }
-            }
-          } catch {
-            // ignore
+        } catch {
+          // Progress fetch failure is non-critical; local fallback below handles it
+        }
+
+        const localProgress = readLocalProgress(slug);
+        if (localProgress) {
+          if (rawCompletedRef.current.length === 0 && localProgress.completedSections.length > 0) {
+            rawCompletedRef.current = localProgress.completedSections;
+          }
+          if (!resumeHeadingRef.current && localProgress.lastHeadingId) {
+            resumeHeadingRef.current = localProgress.lastHeadingId;
           }
         }
       } catch (err) {
@@ -606,13 +676,12 @@ export default function CourseReaderPage() {
     if (!chapters.length || initialLoadDone.current) return;
     initialLoadDone.current = true;
 
-    // Filter saved sections to valid chapter IDs
-    const chapterIdSet = new Set(chapters.map((ch) => ch.id));
-    const valid = rawCompletedRef.current.filter((id) => chapterIdSet.has(id));
+    // Normalize saved section IDs so legacy chapter-0 style progress still restores correctly.
+    const valid = normalizeSavedChapterIds(rawCompletedRef.current, chapters);
     setCompletedChapterIds(new Set(valid));
 
     // Restore chapter position
-    const savedId = resumeHeadingRef.current;
+    const savedId = normalizeSavedHeadingId(resumeHeadingRef.current, chapters);
     if (savedId) {
       const idx = chapters.findIndex((ch) => ch.id === savedId);
       if (idx >= 0) setCurrentChapterIndex(idx);

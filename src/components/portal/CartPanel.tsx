@@ -33,6 +33,7 @@ import { cn } from "@/lib/utils";
 import { useServiceCart, CartItem } from "@/contexts/ServiceCartContext";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { getClientAuthHeaders } from "@/lib/client-auth";
 
 interface OrderItem {
   id: string;
@@ -87,17 +88,15 @@ export function CartPanel() {
   const fetchOrders = async () => {
     setIsLoadingOrders(true);
     try {
-      const token = localStorage.getItem("fayai_token");
-      if (!token) {
+      const response = await fetch("/api/orders", {
+        headers: getClientAuthHeaders(),
+        credentials: "include",
+      });
+
+      if (response.status === 401) {
         setOrders([]);
         return;
       }
-
-      const response = await fetch("/api/orders", {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-      });
 
       if (response.ok) {
         const data = await response.json();

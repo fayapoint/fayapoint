@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
 import { toast } from "react-hot-toast";
+import { getClientAuthHeaders, getClientBearerToken } from "@/lib/client-auth";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { 
@@ -143,12 +144,15 @@ export default function CheckoutPage() {
   const fetchSavedCards = async () => {
     setLoadingCards(true);
     try {
-      const token = localStorage.getItem("fayai_token");
-      if (!token) return;
-      
       const response = await fetch("/api/user/saved-cards", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getClientAuthHeaders(),
+        credentials: "include",
       });
+
+      if (response.status === 401) {
+        setSavedCards([]);
+        return;
+      }
       
       if (response.ok) {
         const data = await response.json();
@@ -226,9 +230,9 @@ export default function CheckoutPage() {
     
     setCheckingStatus(true);
     try {
-      const token = localStorage.getItem("fayai_token");
       const response = await fetch(`/api/payments/${paymentResult.paymentId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getClientAuthHeaders(),
+        credentials: "include",
       });
       
       const data = await response.json();
@@ -287,9 +291,9 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("fayai_token");
+      const token = getClientBearerToken();
       
-      if (!token) {
+      if (!isLoggedIn && !token) {
         toast.error("Você precisa estar logado para finalizar a compra.");
         router.push("/pt-BR/login");
         return;
@@ -366,8 +370,9 @@ export default function CheckoutPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          ...getClientAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify(requestBody),
       });
 

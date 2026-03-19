@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
+import { getClientAuthHeaders } from "@/lib/client-auth";
 
 interface Message {
   id: string;
@@ -84,13 +85,13 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem("fayai_token");
       const response = await fetch("/api/ai/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getClientAuthHeaders(),
         },
+        credentials: "include",
         body: JSON.stringify({ message: input.trim() }),
       });
 
