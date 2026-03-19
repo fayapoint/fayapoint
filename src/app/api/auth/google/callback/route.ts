@@ -41,12 +41,20 @@ function getLocaleAwareLoginPath(state: string | null): string {
 function buildLoginRedirectUrl(
   request: NextRequest,
   errorCode: string,
-  state: string | null
+  state: string | null,
+  extraParams?: Record<string, string | null | undefined>
 ): URL {
   const safeRedirect = sanitizeRedirectPath(state);
   const loginUrl = new URL(getLocaleAwareLoginPath(state), request.url);
   loginUrl.searchParams.set('error', errorCode);
   loginUrl.searchParams.set('redirect', safeRedirect);
+  if (extraParams) {
+    for (const [key, value] of Object.entries(extraParams)) {
+      if (value) {
+        loginUrl.searchParams.set(key, value);
+      }
+    }
+  }
   return loginUrl;
 }
 
@@ -113,7 +121,10 @@ export async function GET(request: NextRequest) {
     if (tokenData.error) {
       console.error('Google token exchange error:', tokenData.error_description);
       return NextResponse.redirect(
-        buildLoginRedirectUrl(request, 'token_exchange', state)
+        buildLoginRedirectUrl(request, 'token_exchange', state, {
+          google_error: tokenData.error,
+          google_error_description: tokenData.error_description,
+        })
       );
     }
 

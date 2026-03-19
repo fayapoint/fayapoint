@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
@@ -37,6 +37,9 @@ function LoginPageContent() {
   const locale = useLocale();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/portal";
+  const authError = searchParams.get("error");
+  const googleError = searchParams.get("google_error");
+  const googleErrorDescription = searchParams.get("google_error_description");
   const { setUser } = useUser();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +57,32 @@ function LoginPageContent() {
     }
     return `/${locale}${safeRedirect === "/" ? "" : safeRedirect}`;
   };
+
+  useEffect(() => {
+    if (!authError) {
+      return;
+    }
+
+    if (authError === "token_exchange") {
+      const detail = googleErrorDescription || googleError || "Falha na troca do código OAuth com o Google";
+      toast.error(`Google OAuth: ${detail}`);
+      return;
+    }
+
+    if (authError === "config") {
+      toast.error("Google OAuth não está configurado corretamente.");
+      return;
+    }
+
+    if (authError === "userinfo") {
+      toast.error("Não foi possível obter os dados do usuário no Google.");
+      return;
+    }
+
+    if (authError === "email_not_verified") {
+      toast.error("Seu email do Google precisa estar verificado.");
+    }
+  }, [authError, googleError, googleErrorDescription]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
