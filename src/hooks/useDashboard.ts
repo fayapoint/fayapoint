@@ -57,27 +57,25 @@ export function useDashboard(): UseDashboardReturn {
     }
     fetchingRef.current = true;
 
-    const token = typeof window !== 'undefined' 
-      ? localStorage.getItem('fayai_token') 
-      : null;
-      
-    if (!token) {
-      if (mountedRef.current) {
-        setError('No token');
-        setIsLoading(false);
-      }
-      fetchingRef.current = false;
-      return null;
-    }
-
     try {
+      const token =
+        typeof window !== 'undefined'
+          ? localStorage.getItem('fayai_token')
+          : null;
+
+      const headers: HeadersInit = {};
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const res = await fetch('/api/user/dashboard', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers,
+        credentials: 'include',
       });
 
       if (res.status === 401) {
         if (mountedRef.current) {
-          setError('Unauthorized');
+          setError(token ? 'Unauthorized' : 'No session');
           setIsLoading(false);
         }
         fetchingRef.current = false;

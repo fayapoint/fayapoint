@@ -216,6 +216,22 @@ export default function PortalPage() {
   const isPro = ["pro", "business", "starter"].includes(plan);
   const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
 
+  useEffect(() => {
+    const currentUrl = new URL(window.location.href);
+    const code = currentUrl.searchParams.get("code");
+    const oauthError = currentUrl.searchParams.get("error");
+
+    // Rescue flow: if Google lands on /portal with OAuth params, forward the
+    // full query to the dedicated callback route so cookies/session are created.
+    if (code || oauthError) {
+      const callbackUrl = new URL("/api/auth/google/callback", window.location.origin);
+      currentUrl.searchParams.forEach((value, key) => {
+        callbackUrl.searchParams.set(key, value);
+      });
+      window.location.replace(callbackUrl.toString());
+    }
+  }, []);
+
   // OPTIMIZATION: Debounce tab-specific fetches to prevent rapid API calls
   useEffect(() => {
     if (activeTab === "courses") {
