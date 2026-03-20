@@ -1560,8 +1560,8 @@ export default function CourseReaderPage() {
               </span>
               <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-[11px] text-white/65">
                 {isPtBr
-                  ? `${contentMeta?.contentChapters || chapters.length} capítulos base`
-                  : `${contentMeta?.contentChapters || chapters.length} base chapters`}
+                  ? `${chapters.length} partes de leitura`
+                  : `${chapters.length} reading sections`}
               </span>
               {contentUpdatedLabel && (
                 <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1 text-[11px] text-white/65">

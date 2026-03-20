@@ -80,7 +80,14 @@ export function computeLessonContentCoverage(
 }
 
 export function formatEditorialDate(dateLike: string, locale = "pt-BR") {
-  const parsed = new Date(dateLike);
+  const normalizedInput =
+    /^\d{4}-\d{2}-\d{2}$/.test(dateLike)
+      ? `${dateLike}T12:00:00`
+      : /T00:00:00(\.000)?Z$/.test(dateLike)
+        ? dateLike.replace(/T00:00:00(\.000)?Z$/, "T12:00:00Z")
+        : dateLike;
+
+  const parsed = new Date(normalizedInput);
   if (Number.isNaN(parsed.getTime())) {
     return dateLike;
   }
