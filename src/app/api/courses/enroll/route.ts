@@ -77,6 +77,7 @@ export async function POST(request: Request) {
           userId,
           courseId: courseSlug,
           completedLessons: [],
+          completedSections: [],
           progressPercent: 0,
           isCompleted: false
         });
@@ -131,14 +132,22 @@ export async function POST(request: Request) {
       $inc: { 'progress.coursesInProgress': 1 }
     });
 
-    // Create course progress record
-    const progress = await CourseProgress.create({
-      userId,
-      courseId: courseSlug,
-      completedLessons: [],
-      progressPercent: 0,
-      isCompleted: false
-    });
+    // Reuse any preview progress already created for this course instead of
+    // violating the unique progress index when a user upgrades to full enrollment.
+    const progress = await CourseProgress.findOneAndUpdate(
+      { userId, courseId: courseSlug },
+      {
+        $setOnInsert: {
+          completedLessons: [],
+          completedSections: [],
+          progressPercent: 0,
+          isCompleted: false,
+          startedAt: new Date(),
+          lastAccessedAt: new Date(),
+        },
+      },
+      { new: true, upsert: true }
+    );
 
     // Get updated slots
     const updatedEnrollments = [...enrolledCourses, newEnrollment];

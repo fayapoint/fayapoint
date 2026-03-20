@@ -385,13 +385,13 @@ export default function PortalPage() {
       const allUserCourses = [...progressCourses, ...enrolledOnly];
       setUserCourses(allUserCourses);
 
-      // Populate enrolledSlugs from both sources
-      const allSlugs = [
-        ...allUserCourses.map(c => c.courseId),
+      // Preserve truthful enrollment semantics: preview/progress alone does not mean active enrollment.
+      const activeEnrollmentSlugs = (cachedDashboardData.enrolledCourses || [])
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ...(cachedDashboardData.enrolledCourses || []).map((e: any) => e.courseSlug),
-      ];
-      setEnrolledSlugs(Array.from(new Set(allSlugs)));
+        .filter((e: any) => e.isActive)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((e: any) => e.courseSlug);
+      setEnrolledSlugs(Array.from(new Set(activeEnrollmentSlugs)));
     } else if (isDashboardLoading === false && !cachedDashboardData) {
       // If loading is done but no data, likely unauthorized or error
        const token = localStorage.getItem("fayai_token");

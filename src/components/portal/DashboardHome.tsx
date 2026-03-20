@@ -492,7 +492,7 @@ export function DashboardHome({
                   </div>
                   <div>
                     <h3 className="text-sm font-bold">Sua Jornada</h3>
-                    <p className="text-[10px] text-gray-500">{hasStartedCourses ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} matriculado${userCourses.length > 1 ? 's' : ''}` : "Comece a aprender"}</p>
+                    <p className="text-[10px] text-gray-500">{hasStartedCourses ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} na sua jornada` : "Comece a aprender"}</p>
                   </div>
                 </div>
                 <button onClick={() => onTabChange("courses")} className="text-[10px] text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-0.5">
