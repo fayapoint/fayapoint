@@ -76,6 +76,10 @@ export function CoursesPanel({
       }),
     [userCourses]
   );
+  const activeCourses = startedCourses.filter((course) => course.progressPercent > 0 && course.progressPercent < 100);
+  const readyToStartCourses = startedCourses.filter((course) => course.progressPercent === 0);
+  const completedCourses = startedCourses.filter((course) => course.progressPercent >= 100);
+  const journeyCourses = [...activeCourses, ...readyToStartCourses];
 
   const courseCatalog = useMemo(() => {
     return allCourses.map((course) => {
@@ -97,16 +101,46 @@ export function CoursesPanel({
     });
   }, [enrolledSlugs, enrollmentSlots, tierConfig]);
 
-  const featuredCourse = startedCourses[0] ?? null;
-  const secondaryStartedCourses = startedCourses.slice(1, 4);
+  const featuredCourse = journeyCourses[0] ?? completedCourses[0] ?? null;
+  const featuredCourseState = featuredCourse
+    ? activeCourses.some((course) => course._id === featuredCourse._id)
+      ? "active"
+      : readyToStartCourses.some((course) => course._id === featuredCourse._id)
+        ? "ready"
+        : "completed"
+    : null;
+  const secondaryJourneyCourses = journeyCourses
+    .filter((course) => course._id !== featuredCourse?._id)
+    .slice(0, 6);
   const availableToEnrollCourses = courseCatalog.filter((course) => course.canEnroll).slice(0, 6);
   const upgradeCourses = courseCatalog.filter((course) => !course.isEnrolled && !course.canEnroll).slice(0, 4);
-  const totalSlotsUsed = enrollmentSlots
-    ? enrollmentSlots.beginner.used + enrollmentSlots.intermediate.used + enrollmentSlots.advanced.used
-    : startedCourses.length;
   const totalSlotsAvailable = enrollmentSlots
     ? enrollmentSlots.beginner.available + enrollmentSlots.intermediate.available + enrollmentSlots.advanced.available
     : 0;
+  const featuredBadgeLabel =
+    featuredCourseState === "active"
+      ? "Continue agora"
+      : featuredCourseState === "ready"
+        ? "Pronto para começar"
+        : "Concluído";
+  const featuredEyebrow =
+    featuredCourseState === "active"
+      ? "Curso em destaque da sua jornada"
+      : featuredCourseState === "ready"
+        ? "Próximo curso pronto para destravar"
+        : "Conquista já concluída";
+  const featuredDescription =
+    featuredCourseState === "active"
+      ? featuredCourse?.details?.shortDescription || "Retome exatamente de onde você parou, com progresso salvo e continuidade imediata."
+      : featuredCourseState === "ready"
+        ? featuredCourse?.details?.shortDescription || "Esse curso já está liberado para você começar agora, sem atrito e sem perder ritmo."
+        : featuredCourse?.details?.shortDescription || "Curso concluído com sucesso. Você pode revisar pontos-chave ou seguir para a próxima trilha."
+  const featuredNextStepCopy =
+    featuredCourseState === "active"
+      ? "Seu próximo passo já está pronto para continuar."
+      : featuredCourseState === "ready"
+        ? "Tudo pronto para começar essa trilha agora."
+        : "Essa trilha já foi concluída. Hora de puxar a próxima."
 
   return (
     <div className="space-y-6">
@@ -120,7 +154,7 @@ export function CoursesPanel({
                 Plano {tierConfig.displayName}
               </Badge>
               <Badge className="border-emerald-400/30 bg-emerald-500/10 text-emerald-200">
-                {startedCourses.length} curso{startedCourses.length === 1 ? "" : "s"} na jornada
+                {userCourses.length} curso{userCourses.length === 1 ? "" : "s"} no seu acervo
               </Badge>
               {!tierConfig.limits.unlimited && enrollmentSlots && (
                 <Badge className="border-white/10 bg-white/5 text-white/80">
@@ -141,18 +175,18 @@ export function CoursesPanel({
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Em andamento</p>
-                <p className="mt-2 text-3xl font-black text-white">{startedCourses.length}</p>
-                <p className="mt-1 text-xs text-gray-400">Cursos com retomada instantânea.</p>
+                <p className="mt-2 text-3xl font-black text-white">{activeCourses.length}</p>
+                <p className="mt-1 text-xs text-gray-400">Cursos que realmente pedem retomada agora.</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Matrículas agora</p>
-                <p className="mt-2 text-3xl font-black text-emerald-300">{availableToEnrollCourses.length}</p>
-                <p className="mt-1 text-xs text-gray-400">Prontas para converter nesta tela.</p>
+                <p className="mt-2 text-3xl font-black text-emerald-300">{readyToStartCourses.length + availableToEnrollCourses.length}</p>
+                <p className="mt-1 text-xs text-gray-400">Entre cursos já liberados e novas entradas do plano.</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Slots usados</p>
-                <p className="mt-2 text-3xl font-black text-fuchsia-300">{totalSlotsUsed}</p>
-                <p className="mt-1 text-xs text-gray-400">Uso real do seu plano neste ciclo.</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Concluídos</p>
+                <p className="mt-2 text-3xl font-black text-fuchsia-300">{completedCourses.length}</p>
+                <p className="mt-1 text-xs text-gray-400">Cursos já fechados e prontos para certificação ou revisão.</p>
               </div>
             </div>
           </div>
@@ -212,20 +246,20 @@ export function CoursesPanel({
           <Link href={`/portal/learn/${featuredCourse.courseId}`}>
             <Card className="group relative overflow-hidden border-emerald-500/20 bg-[linear-gradient(135deg,rgba(6,78,59,0.24),rgba(3,7,18,0.98))] p-6 transition hover:-translate-y-0.5 hover:border-emerald-400/40">
               <div className="absolute right-4 top-4 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200">
-                Continue agora
+                {featuredBadgeLabel}
               </div>
               <div className="flex h-full flex-col justify-between gap-8">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-emerald-200/80">
                     <TrendingUp size={14} />
-                    Curso em destaque da sua jornada
+                    {featuredEyebrow}
                   </div>
                   <div>
                     <h3 className="max-w-2xl text-2xl font-black leading-tight text-white md:text-3xl">
                       {featuredCourse.details?.title || featuredCourse.courseId}
                     </h3>
                     <p className="mt-3 max-w-xl text-sm leading-6 text-emerald-50/80">
-                      {featuredCourse.details?.shortDescription || "Retome exatamente de onde você parou, com progresso salvo e continuidade imediata."}
+                      {featuredDescription}
                     </p>
                   </div>
                 </div>
@@ -248,7 +282,7 @@ export function CoursesPanel({
                 <div className="space-y-3">
                   <Progress value={featuredCourse.progressPercent} className="h-2.5 bg-white/10" />
                   <div className="flex items-center justify-between">
-                    <p className="text-sm text-emerald-100/80">Seu próximo passo já está pronto para continuar.</p>
+                    <p className="text-sm text-emerald-100/80">{featuredNextStepCopy}</p>
                     <div className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-200">
                       Abrir curso
                       <ArrowRight size={16} className="transition group-hover:translate-x-1" />
@@ -260,19 +294,27 @@ export function CoursesPanel({
           </Link>
 
           <div className="space-y-4">
-            {secondaryStartedCourses.length > 0 ? (
-              secondaryStartedCourses.map((course) => (
+            {secondaryJourneyCourses.length > 0 ? (
+              secondaryJourneyCourses.map((course) => {
+                const isActive = course.progressPercent > 0 && course.progressPercent < 100;
+                const badgeLabel = isActive ? "Em andamento" : "Pronto para começar";
+                const badgeClassName = isActive
+                  ? "border-cyan-400/20 bg-cyan-500/10 text-cyan-200"
+                  : "border-emerald-400/20 bg-emerald-500/10 text-emerald-200";
+                const progressCopy = isActive ? `${course.progressPercent}% concluído` : "Ainda não iniciado";
+
+                return (
                 <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
                   <Card className="group border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-400/30 hover:bg-white/[0.05]">
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-2">
-                        <Badge className="border-cyan-400/20 bg-cyan-500/10 text-cyan-200">Em andamento</Badge>
+                        <Badge className={badgeClassName}>{badgeLabel}</Badge>
                         <h4 className="line-clamp-2 text-base font-bold text-white group-hover:text-cyan-200">
                           {course.details?.title || course.courseId}
                         </h4>
                         <div className="flex flex-wrap gap-3 text-xs text-gray-400">
                           <span className="inline-flex items-center gap-1"><Clock size={12} />{course.details?.duration || "Curso completo"}</span>
-                          <span className="inline-flex items-center gap-1"><BarChart3 size={12} />{course.progressPercent}% concluído</span>
+                          <span className="inline-flex items-center gap-1"><BarChart3 size={12} />{progressCopy}</span>
                         </div>
                       </div>
                       <PlayCircle className="mt-1 text-cyan-300 transition group-hover:scale-105" size={22} />
@@ -280,7 +322,8 @@ export function CoursesPanel({
                     <Progress value={course.progressPercent} className="mt-4 h-2 bg-white/10" />
                   </Card>
                 </Link>
-              ))
+                );
+              })
             ) : (
               <Card className="border-dashed border-white/10 bg-white/[0.03] p-5">
                 <div className="flex items-start gap-3">
@@ -294,6 +337,57 @@ export function CoursesPanel({
                 </div>
               </Card>
             )}
+          </div>
+        </div>
+      )}
+
+      {completedCourses.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-bold text-white">Cursos concluídos</h3>
+              <p className="mt-1 text-sm text-gray-400">
+                O que você já terminou precisa aparecer como prova de avanço, não como pendência.
+              </p>
+            </div>
+            <div className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-semibold text-gray-300">
+              {completedCourses.length} concluído{completedCourses.length === 1 ? "" : "s"}
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {completedCourses.slice(0, 6).map((course) => (
+              <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
+                <Card className="group border-white/10 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(3,7,18,0.96))] p-5 transition hover:border-emerald-400/30 hover:bg-[linear-gradient(180deg,rgba(16,185,129,0.12),rgba(3,7,18,0.98))]">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-3">
+                      <Badge className="border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
+                        Concluído
+                      </Badge>
+                      <h4 className="line-clamp-2 text-lg font-bold text-white group-hover:text-emerald-200">
+                        {course.details?.title || course.courseId}
+                      </h4>
+                      <div className="flex flex-wrap gap-3 text-xs text-gray-400">
+                        <span className="inline-flex items-center gap-1"><Clock size={12} />{course.details?.duration || "Curso completo"}</span>
+                        <span className="inline-flex items-center gap-1"><BarChart3 size={12} />100% concluído</span>
+                      </div>
+                    </div>
+                    <BookOpen className="mt-1 text-emerald-300 transition group-hover:scale-105" size={22} />
+                  </div>
+
+                  <div className="mt-5 space-y-3">
+                    <Progress value={100} className="h-2 bg-white/10" />
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-emerald-100/80">Pronto para revisar ou emitir certificado.</span>
+                      <span className="inline-flex items-center gap-2 font-semibold text-emerald-200">
+                        Abrir
+                        <ArrowRight size={15} className="transition group-hover:translate-x-1" />
+                      </span>
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            ))}
           </div>
         </div>
       )}
