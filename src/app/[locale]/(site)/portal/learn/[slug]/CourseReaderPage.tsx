@@ -337,6 +337,7 @@ export default function CourseReaderPage() {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [completedChapterIds, setCompletedChapterIds] = useState<Set<string>>(new Set());
   const [legacyProgressPercent, setLegacyProgressPercent] = useState<number | null>(null);
+  const [progressHydrated, setProgressHydrated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settings, setSettings] = useState<ReaderSettings>(DEFAULT_SETTINGS);
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -551,6 +552,12 @@ export default function CourseReaderPage() {
   /* ─── Fetch Data ─── */
   useEffect(() => {
     const fetchContent = async () => {
+      initialLoadDone.current = false;
+      rawCompletedRef.current = [];
+      rawCompletedLessonsRef.current = [];
+      resumeHeadingRef.current = null;
+      setProgressHydrated(false);
+
       const token = getStoredBearerToken();
       const authHeaders: Record<string, string> = token
         ? buildClientAuthHeaders(token)
@@ -689,6 +696,7 @@ export default function CourseReaderPage() {
         setError("error");
         toast.error("Erro ao carregar conteudo do curso");
       } finally {
+        setProgressHydrated(true);
         setLoading(false);
       }
     };
@@ -697,7 +705,7 @@ export default function CourseReaderPage() {
 
   /* ─── Restore position after chapters computed ─── */
   useEffect(() => {
-    if (!chapters.length || initialLoadDone.current) return;
+    if (!chapters.length || !progressHydrated || initialLoadDone.current) return;
     initialLoadDone.current = true;
 
     // Normalize saved section IDs so legacy chapter-0 style progress still restores correctly.
@@ -728,7 +736,7 @@ export default function CourseReaderPage() {
       const idx = chapters.findIndex((ch) => ch.id === savedId);
       if (idx >= 0) setCurrentChapterIndex(idx);
     }
-  }, [chapters, legacyProgressPercent, slug]);
+  }, [chapters, legacyProgressPercent, progressHydrated, slug]);
 
   /* ─── Keyboard shortcuts ─── */
   useEffect(() => {
