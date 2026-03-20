@@ -336,6 +336,7 @@ export default function CourseReaderPage() {
 
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [completedChapterIds, setCompletedChapterIds] = useState<Set<string>>(new Set());
+  const [legacyProgressPercent, setLegacyProgressPercent] = useState<number | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settings, setSettings] = useState<ReaderSettings>(DEFAULT_SETTINGS);
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -346,6 +347,7 @@ export default function CourseReaderPage() {
   /* ─── Refs ─── */
   const initialLoadDone = useRef(false);
   const rawCompletedRef = useRef<string[]>([]);
+  const rawCompletedLessonsRef = useRef<string[]>([]);
   const resumeHeadingRef = useRef<string | null>(null);
 
   /* ─── Derived ─── */
@@ -355,10 +357,14 @@ export default function CourseReaderPage() {
     () => chapters.reduce((sum, ch) => sum + ch.readingMinutes, 0),
     [chapters]
   );
-  const progressPercent = useMemo(() => {
+  const actualProgressPercent = useMemo(() => {
     if (!chapters.length) return 0;
     return Math.round((completedChapterIds.size / chapters.length) * 100);
   }, [completedChapterIds.size, chapters.length]);
+  const usingLegacyProgressFallback = completedChapterIds.size === 0 && (legacyProgressPercent ?? 0) > 0;
+  const progressPercent = usingLegacyProgressFallback
+    ? legacyProgressPercent ?? 0
+    : actualProgressPercent;
   const isPtBr = locale.toLowerCase().startsWith("pt");
   const editorialVerification = useMemo(
     () =>
@@ -644,10 +650,19 @@ export default function CourseReaderPage() {
               const serverCompletedSections = Array.isArray(p.completedSections)
                 ? p.completedSections
                 : [];
+              const serverCompletedLessons = Array.isArray(p.completedLessons)
+                ? p.completedLessons
+                : [];
               const serverLastHeadingId = p.lastHeadingId || null;
 
               rawCompletedRef.current = serverCompletedSections;
+              rawCompletedLessonsRef.current = serverCompletedLessons;
               resumeHeadingRef.current = serverLastHeadingId;
+              setLegacyProgressPercent(
+                typeof p.progressPercent === "number" && p.progressPercent > 0
+                  ? p.progressPercent
+                  : null
+              );
 
               writeLocalProgress(slug, {
                 completedSections: serverCompletedSections,
@@ -686,21 +701,34 @@ export default function CourseReaderPage() {
     initialLoadDone.current = true;
 
     // Normalize saved section IDs so legacy chapter-0 style progress still restores correctly.
-    const valid = normalizeSavedChapterIds(rawCompletedRef.current, chapters);
+    const validSections = normalizeSavedChapterIds(rawCompletedRef.current, chapters);
+    const validLegacyLessons =
+      validSections.length === 0
+        ? normalizeSavedChapterIds(rawCompletedLessonsRef.current, chapters)
+        : [];
+    const valid = validSections.length > 0 ? validSections : validLegacyLessons;
     setCompletedChapterIds(new Set(valid));
+    if (valid.length > 0) {
+      setLegacyProgressPercent(null);
+    }
 
     // Restore chapter position
     const savedId = normalizeSavedHeadingId(resumeHeadingRef.current, chapters);
     writeLocalProgress(slug, {
       completedSections: valid,
       lastHeadingId: savedId ?? undefined,
-      progressPercent: chapters.length ? Math.round((valid.length / chapters.length) * 100) : 0,
+      progressPercent:
+        valid.length > 0
+          ? chapters.length
+            ? Math.round((valid.length / chapters.length) * 100)
+            : 0
+          : legacyProgressPercent ?? 0,
     });
     if (savedId) {
       const idx = chapters.findIndex((ch) => ch.id === savedId);
       if (idx >= 0) setCurrentChapterIndex(idx);
     }
-  }, [chapters, slug]);
+  }, [chapters, legacyProgressPercent, slug]);
 
   /* ─── Keyboard shortcuts ─── */
   useEffect(() => {
@@ -1399,7 +1427,9 @@ export default function CourseReaderPage() {
               />
             </div>
             <p className="text-[11px] text-white/20">
-              {completedChapterIds.size} de {chapters.length} concluídos · ~{totalReadingMinutes} min
+              {usingLegacyProgressFallback
+                ? `Progresso legado salvo: ${progressPercent}% · ~${totalReadingMinutes} min`
+                : `${completedChapterIds.size} de ${chapters.length} concluídos · ~${totalReadingMinutes} min`}
             </p>
           </div>
 
