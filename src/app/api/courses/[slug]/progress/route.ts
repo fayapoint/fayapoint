@@ -11,6 +11,11 @@ function uniqueStrings(values: string[]) {
   return Array.from(new Set(values.map((v) => v.trim()).filter(Boolean)));
 }
 
+function computeSectionProgressPercent(completedSections: string[], totalSections: number | null | undefined) {
+  if (typeof totalSections !== 'number' || totalSections <= 0) return null;
+  return Math.min(100, Math.max(0, Math.round((completedSections.length / totalSections) * 100)));
+}
+
 async function requireCourseAccess(userId: string, slug: string) {
   await dbConnect();
 
@@ -106,14 +111,20 @@ export async function GET(
       });
     }
 
+    const normalizedCompletedSections = Array.isArray(progress.completedSections)
+      ? progress.completedSections
+      : [];
+    const normalizedProgressPercent =
+      computeSectionProgressPercent(normalizedCompletedSections, progress.totalSections) ?? (progress.progressPercent || 0);
+
     return NextResponse.json({
       progress: {
         courseId: progress.courseId,
         completedLessons: progress.completedLessons || [],
-        completedSections: progress.completedSections || [],
+        completedSections: normalizedCompletedSections,
         lastAccessedLesson: progress.lastAccessedLesson || null,
         lastHeadingId: progress.lastHeadingId || null,
-        progressPercent: progress.progressPercent || 0,
+        progressPercent: normalizedProgressPercent,
         totalSections: progress.totalSections || null,
         lastScrollY: progress.lastScrollY ?? null,
         lastScrollPercent: progress.lastScrollPercent ?? null,
@@ -165,10 +176,7 @@ export async function PUT(
         ]);
 
     const totalSections = typeof body.totalSections === 'number' ? body.totalSections : progress?.totalSections;
-    const computedPercentBySections =
-      typeof totalSections === 'number' && totalSections > 0
-        ? Math.min(100, Math.floor((completedSections.length / totalSections) * 100))
-        : null;
+    const computedPercentBySections = computeSectionProgressPercent(completedSections, totalSections);
 
     // If we know total sections, section completion is the source of truth.
     // Scroll-based % is for resume position only and should not inflate completion.

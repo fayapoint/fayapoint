@@ -24,6 +24,20 @@ const getWeeklyMission = (date: Date) => {
   return WEEKLY_MISSIONS[weekOfYear % WEEKLY_MISSIONS.length];
 };
 
+function normalizeProgressPercent<T extends { completedSections?: string[]; totalSections?: number; progressPercent?: number }>(progress: T): T {
+  if (Array.isArray(progress.completedSections) && typeof progress.totalSections === 'number' && progress.totalSections > 0) {
+    return {
+      ...progress,
+      progressPercent: Math.min(
+        100,
+        Math.max(0, Math.round((progress.completedSections.length / progress.totalSections) * 100))
+      ),
+    };
+  }
+
+  return progress;
+}
+
 const RESOURCES_BY_PLAN = {
   free: [
     { name: 'Acesso à Comunidade', available: true },
@@ -117,7 +131,7 @@ export async function GET(request: Request) {
     }
 
     // Fetch course progress
-    const progress = await CourseProgress.find({ userId }).sort({ lastAccessedAt: -1 });
+    const progress = (await CourseProgress.find({ userId }).sort({ lastAccessedAt: -1 }).lean()).map(normalizeProgressPercent);
 
     // Fetch orders from main DB
     const orders = await Order.find({ userId }).sort({ createdAt: -1 });
@@ -235,7 +249,8 @@ export async function GET(request: Request) {
     const recentActivity = await CourseProgress.find({
       userId,
       lastAccessedAt: { $gte: sevenDaysAgo }
-    }).select('courseId lastAccessedAt progressPercent').lean();
+    }).select('courseId lastAccessedAt progressPercent completedSections totalSections').lean();
+    const normalizedRecentActivity = recentActivity.map(normalizeProgressPercent);
 
     // Generate streak calendar (last 30 days)
     const streakCalendar = [];
@@ -243,7 +258,7 @@ export async function GET(request: Request) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
-      const wasActive = recentActivity.some(a => 
+      const wasActive = normalizedRecentActivity.some(a => 
         new Date(a.lastAccessedAt).toISOString().split('T')[0] === dateStr
       );
       streakCalendar.push({ date: dateStr, active: wasActive });
@@ -332,7 +347,7 @@ export async function GET(request: Request) {
       },
       activity: {
         streakCalendar,
-        recentCourses: recentActivity.slice(0, 5),
+        recentCourses: normalizedRecentActivity.slice(0, 5),
       },
     });
 
