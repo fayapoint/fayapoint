@@ -24,6 +24,7 @@ import {
   AlertCircle,
   Wallet,
   RefreshCw,
+  Gift,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -59,6 +60,12 @@ interface PaymentResult {
     dueDate: string;
   };
   isPaid?: boolean;
+}
+
+interface EnrollmentResult {
+  success?: boolean;
+  error?: string;
+  message?: string;
 }
 
 export default function CheckoutPage() {
@@ -264,7 +271,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!cpfCnpj || cpfCnpj.replace(/\D/g, "").length < 11) {
+    if (!isFreeCourseCheckout && (!cpfCnpj || cpfCnpj.replace(/\D/g, "").length < 11)) {
       toast.error("Por favor, informe um CPF ou CNPJ válido.");
       return;
     }
@@ -274,7 +281,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (selectedMethod === "credit_card") {
+    if (!isFreeCourseCheckout && selectedMethod === "credit_card") {
       // If using saved card, don't require card details
       if (!selectedCard) {
         if (!cardNumber || !cardHolder || !cardExpiry || !cardCvv) {
@@ -299,10 +306,41 @@ export default function CheckoutPage() {
         return;
       }
 
+      if (isFreeCourseCheckout) {
+        for (const item of cartItems) {
+          const response = await fetch("/api/courses/enroll", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...getClientAuthHeaders(),
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              courseSlug: item.slug,
+            }),
+          });
+
+          const data = (await response.json()) as EnrollmentResult;
+
+          if (!response.ok) {
+            throw new Error(data.error || `Não foi possível liberar ${item.name}`);
+          }
+        }
+
+        clearCart();
+        toast.success(
+          cartItems.length === 1
+            ? "Curso liberado com sucesso! Aproveite seu acesso gratuito do mês."
+            : "Cursos liberados com sucesso!"
+        );
+        router.push("/pt-BR/portal?tab=cursos");
+        return;
+      }
+
       // Prepare order items
       const orderItems = cartItems.map(item => ({
         id: item.id,
-        slug: item.id,
+        slug: item.slug || item.id,
         type: item.id.startsWith("store-") ? "product" : item.type,
         name: item.name,
         quantity: item.quantity,
@@ -405,6 +443,17 @@ export default function CheckoutPage() {
   const cartItems = Object.values(items);
   const isCartCheckout = planName === "cart";
   const total = cartTotal;
+  const isFreeCourseCheckout =
+    isCartCheckout &&
+    cartItems.length > 0 &&
+    !isSubscription &&
+    total <= 0 &&
+    cartItems.every((item) => item.type === "course" && Boolean(item.slug));
+  const effectiveTotal = isFreeCourseCheckout
+    ? 0
+    : selectedMethod === "boleto"
+      ? total * 0.95
+      : total;
 
   // Calculate installment options
   const installmentOptions = [];
@@ -620,10 +669,12 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">CPF ou CNPJ *</label>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      {isFreeCourseCheckout ? "CPF ou CNPJ" : "CPF ou CNPJ *"}
+                    </label>
                     <input 
                       className="w-full bg-gray-950 border border-gray-800 rounded p-3 text-white focus:border-purple-500 focus:outline-none transition" 
-                      placeholder="000.000.000-00" 
+                      placeholder={isFreeCourseCheckout ? "Opcional para este acesso grátis" : "000.000.000-00"} 
                       value={cpfCnpj}
                       onChange={(e) => setCpfCnpj(formatCpfCnpj(e.target.value))}
                       maxLength={18}
@@ -652,61 +703,82 @@ export default function CheckoutPage() {
 
               {/* Payment Method Selection */}
               <Card className="p-6 bg-gray-900/50 border-gray-800">
-                <h3 className="text-xl font-semibold mb-4">Forma de Pagamento</h3>
-                
-                <div className="grid grid-cols-3 gap-3 mb-6">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMethod("pix")}
-                    className={`p-4 rounded-lg border-2 transition-all text-center ${
-                      selectedMethod === "pix"
-                        ? "border-green-500 bg-green-500/10"
-                        : "border-gray-700 hover:border-gray-600"
-                    }`}
-                  >
-                    <QrCode className={`w-8 h-8 mx-auto mb-2 ${
-                      selectedMethod === "pix" ? "text-green-400" : "text-gray-400"
-                    }`} />
-                    <span className="text-sm font-medium">PIX</span>
-                    <p className="text-xs text-gray-500 mt-1">Aprovação imediata</p>
-                  </button>
+                <h3 className="text-xl font-semibold mb-4">
+                  {isFreeCourseCheckout ? "Liberação do Acesso" : "Forma de Pagamento"}
+                </h3>
 
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMethod("boleto")}
-                    className={`p-4 rounded-lg border-2 transition-all text-center ${
-                      selectedMethod === "boleto"
-                        ? "border-blue-500 bg-blue-500/10"
-                        : "border-gray-700 hover:border-gray-600"
-                    }`}
-                  >
-                    <FileText className={`w-8 h-8 mx-auto mb-2 ${
-                      selectedMethod === "boleto" ? "text-blue-400" : "text-gray-400"
-                    }`} />
-                    <span className="text-sm font-medium">Boleto</span>
-                    <p className="text-xs text-gray-500 mt-1">Até 3 dias úteis</p>
-                  </button>
+                {isFreeCourseCheckout ? (
+                  <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-5">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-400">
+                        <Gift className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-base font-semibold text-white">
+                          Curso grátis do mês com certificado incluso
+                        </p>
+                        <p className="mt-1 text-sm text-gray-400">
+                          Este pedido não passa pelo gateway. Ao confirmar, o curso será liberado
+                          imediatamente na sua conta.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-3 gap-3 mb-6">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedMethod("pix")}
+                        className={`p-4 rounded-lg border-2 transition-all text-center ${
+                          selectedMethod === "pix"
+                            ? "border-green-500 bg-green-500/10"
+                            : "border-gray-700 hover:border-gray-600"
+                        }`}
+                      >
+                        <QrCode className={`w-8 h-8 mx-auto mb-2 ${
+                          selectedMethod === "pix" ? "text-green-400" : "text-gray-400"
+                        }`} />
+                        <span className="text-sm font-medium">PIX</span>
+                        <p className="text-xs text-gray-500 mt-1">Aprovação imediata</p>
+                      </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMethod("credit_card")}
-                    className={`p-4 rounded-lg border-2 transition-all text-center ${
-                      selectedMethod === "credit_card"
-                        ? "border-purple-500 bg-purple-500/10"
-                        : "border-gray-700 hover:border-gray-600"
-                    }`}
-                  >
-                    <CreditCard className={`w-8 h-8 mx-auto mb-2 ${
-                      selectedMethod === "credit_card" ? "text-purple-400" : "text-gray-400"
-                    }`} />
-                    <span className="text-sm font-medium">Cartão</span>
-                    <p className="text-xs text-gray-500 mt-1">Até 12x sem juros</p>
-                  </button>
-                </div>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedMethod("boleto")}
+                        className={`p-4 rounded-lg border-2 transition-all text-center ${
+                          selectedMethod === "boleto"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-gray-700 hover:border-gray-600"
+                        }`}
+                      >
+                        <FileText className={`w-8 h-8 mx-auto mb-2 ${
+                          selectedMethod === "boleto" ? "text-blue-400" : "text-gray-400"
+                        }`} />
+                        <span className="text-sm font-medium">Boleto</span>
+                        <p className="text-xs text-gray-500 mt-1">Até 3 dias úteis</p>
+                      </button>
 
-                {/* Credit Card Form */}
-                {selectedMethod === "credit_card" && (
-                  <div className="space-y-4 pt-4 border-t border-gray-800">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedMethod("credit_card")}
+                        className={`p-4 rounded-lg border-2 transition-all text-center ${
+                          selectedMethod === "credit_card"
+                            ? "border-purple-500 bg-purple-500/10"
+                            : "border-gray-700 hover:border-gray-600"
+                        }`}
+                      >
+                        <CreditCard className={`w-8 h-8 mx-auto mb-2 ${
+                          selectedMethod === "credit_card" ? "text-purple-400" : "text-gray-400"
+                        }`} />
+                        <span className="text-sm font-medium">Cartão</span>
+                        <p className="text-xs text-gray-500 mt-1">Até 12x sem juros</p>
+                      </button>
+                    </div>
+
+                    {/* Credit Card Form */}
+                    {selectedMethod === "credit_card" && (
+                      <div className="space-y-4 pt-4 border-t border-gray-800">
                     {/* Saved Cards Section */}
                     {savedCards.length > 0 && (
                       <div className="mb-4">
@@ -896,7 +968,9 @@ export default function CheckoutPage() {
                         </div>
                       </div>
                     )}
-                  </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </Card>
             </div>
@@ -930,7 +1004,7 @@ export default function CheckoutPage() {
                         <span>{formatCurrency(total)}</span>
                       </div>
                       
-                      {selectedMethod === "boleto" && (
+                      {!isFreeCourseCheckout && selectedMethod === "boleto" && (
                         <div className="flex justify-between items-center text-green-400">
                           <span>Desconto PIX/Boleto (5%)</span>
                           <span>-{formatCurrency(total * 0.05)}</span>
@@ -942,11 +1016,11 @@ export default function CheckoutPage() {
                       <div className="flex justify-between items-center text-lg font-bold">
                         <span>Total</span>
                         <span className="text-purple-400">
-                          {formatCurrency(selectedMethod === "boleto" ? total * 0.95 : total)}
+                          {formatCurrency(effectiveTotal)}
                         </span>
                       </div>
 
-                      {selectedMethod === "credit_card" && installments > 1 && (
+                      {!isFreeCourseCheckout && selectedMethod === "credit_card" && installments > 1 && (
                         <p className="text-sm text-gray-400 text-center">
                           {installments}x de {formatCurrency(total / installments)} sem juros
                         </p>
@@ -970,14 +1044,23 @@ export default function CheckoutPage() {
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Processando...
+                      {isFreeCourseCheckout ? "Liberando..." : "Processando..."}
                     </>
                   ) : (
                     <>
-                      {selectedMethod === "pix" && <QrCode className="w-5 h-5 mr-2" />}
-                      {selectedMethod === "boleto" && <FileText className="w-5 h-5 mr-2" />}
-                      {selectedMethod === "credit_card" && <CreditCard className="w-5 h-5 mr-2" />}
-                      Pagar {formatCurrency(selectedMethod === "boleto" ? total * 0.95 : total)}
+                      {isFreeCourseCheckout ? (
+                        <>
+                          <CheckCircle2 className="w-5 h-5 mr-2" />
+                          Liberar grátis
+                        </>
+                      ) : (
+                        <>
+                          {selectedMethod === "pix" && <QrCode className="w-5 h-5 mr-2" />}
+                          {selectedMethod === "boleto" && <FileText className="w-5 h-5 mr-2" />}
+                          {selectedMethod === "credit_card" && <CreditCard className="w-5 h-5 mr-2" />}
+                          Pagar {formatCurrency(effectiveTotal)}
+                        </>
+                      )}
                     </>
                   )}
                 </Button>
@@ -985,7 +1068,9 @@ export default function CheckoutPage() {
                 <div className="mt-4 text-center">
                   <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                     <ShieldCheck className="w-4 h-4" />
-                    Pagamento 100% seguro via Asaas
+                    {isFreeCourseCheckout
+                      ? "Liberação imediata sem passar pelo gateway de pagamento"
+                      : "Pagamento 100% seguro via Asaas"}
                   </div>
                 </div>
               </Card>

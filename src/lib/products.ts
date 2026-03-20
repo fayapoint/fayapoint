@@ -13,6 +13,7 @@ import {
   type EditorialVerification,
   type LessonContentCoverage,
 } from '@/lib/editorial-verification';
+import { getCourseMonthlyOfferMeta, type CourseMonthlyOfferMeta } from '@/lib/monthly-course-offers';
 
 const DEFAULT_MONGODB_URI = '';
 
@@ -164,6 +165,7 @@ export interface Product {
   }>;
   editorialVerification?: EditorialVerification;
   lessonContentCoverage?: LessonContentCoverage;
+  monthlyOffer?: CourseMonthlyOfferMeta | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -180,6 +182,8 @@ function normalizeProduct(product: unknown): Product {
     ...safeProduct,
     detailedCurriculum,
     lessonContentCoverage,
+    monthlyOffer:
+      safeProduct.type === 'course' ? getCourseMonthlyOfferMeta(safeProduct.slug) : null,
     editorialVerification: normalizeEditorialVerification(
       safeProduct.editorialVerification
     ),

@@ -7,6 +7,7 @@ import { getAuthUser } from '@/lib/auth';
 import { getMongoClient } from '@/lib/products';
 import { SubscriptionPlan, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
 import Course from '@/models/Course';
+import { isCourseFreeThisMonth } from '@/lib/monthly-course-offers';
 import {
   computeLessonContentCoverage,
   normalizeEditorialVerification,
@@ -129,6 +130,9 @@ export async function GET(
 
     // Check if tier has unlimited access
     if (tierConfig.limits.unlimited) hasAccess = true;
+
+    // Monthly free course is fully unlocked for any authenticated user
+    if (isCourseFreeThisMonth(slug)) hasAccess = true;
 
     // Check enrolled courses (NEW TIER SYSTEM)
     if (!hasAccess) {

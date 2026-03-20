@@ -36,6 +36,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import { TIER_CONFIGS, SubscriptionPlan } from "@/lib/course-tiers";
+import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -163,28 +164,37 @@ export function DashboardHome({
   const unlockedAchievements =
     gamification?.achievements?.filter((a: any) => a.unlocked) || [];
 
+  const availableCatalog = useMemo(() => {
+    const enrolledSet = new Set(enrolledSlugs);
+    const userCourseIds = new Set(userCourses.map(c => c.courseId));
+    return allCourses
+      .filter(c => !enrolledSet.has(c.slug) && !userCourseIds.has(c.slug))
+      .map(c => ({
+        ...c,
+        normalizedLevel: getNormalizedLevel(c),
+        monthlyOffer: getCourseMonthlyOfferMeta(c.slug),
+      }));
+  }, [enrolledSlugs, userCourses]);
+
+  const freeCourseOfMonth = useMemo(
+    () => availableCatalog.find((course) => course.monthlyOffer?.isFreeCourseOfMonth) || null,
+    [availableCatalog]
+  );
+
   // Tier-based course suggestions
   const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
   const suggestedCourses = useMemo(() => {
-    const enrolledSet = new Set(enrolledSlugs);
-    const userCourseIds = new Set(userCourses.map(c => c.courseId));
-    return allCourses
-      .filter(c => !enrolledSet.has(c.slug) && !userCourseIds.has(c.slug))
-      .map(c => ({ ...c, normalizedLevel: getNormalizedLevel(c) }))
-      .filter(c => tierConfig.canAccessLevel(c.normalizedLevel))
+    return availableCatalog
+      .filter(c => !c.monthlyOffer?.isFreeCourseOfMonth && canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
       .slice(0, 4);
-  }, [enrolledSlugs, userCourses, plan, tierConfig]);
+  }, [availableCatalog, tierConfig]);
 
   // Locked courses (need upgrade)
   const lockedCourses = useMemo(() => {
-    const enrolledSet = new Set(enrolledSlugs);
-    const userCourseIds = new Set(userCourses.map(c => c.courseId));
-    return allCourses
-      .filter(c => !enrolledSet.has(c.slug) && !userCourseIds.has(c.slug))
-      .map(c => ({ ...c, normalizedLevel: getNormalizedLevel(c) }))
-      .filter(c => !tierConfig.canAccessLevel(c.normalizedLevel))
+    return availableCatalog
+      .filter(c => c.monthlyOffer?.includedInPool && !c.monthlyOffer?.isFreeCourseOfMonth && !canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
       .slice(0, 2);
-  }, [enrolledSlugs, userCourses, plan, tierConfig]);
+  }, [availableCatalog, tierConfig]);
 
   // Gallery image for Studio showcase
   const [galleryImage, setGalleryImage] = useState<GalleryImage | null>(null);
@@ -542,6 +552,44 @@ export function DashboardHome({
             </Card>
           </motion.div>
 
+          {freeCourseOfMonth && (
+            <motion.div variants={itemVariants}>
+              <Card className="border-emerald-500/15 bg-gray-950 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                      <Gift size={15} className="text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold">Grátis neste mês</h3>
+                      <p className="text-[10px] text-gray-500">Qualquer conta pode liberar agora</p>
+                    </div>
+                  </div>
+                  <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[9px]">
+                    Certificado incluso
+                  </Badge>
+                </div>
+
+                <button
+                  onClick={() => onTabChange("courses")}
+                  className="w-full text-left rounded-xl border border-white/[0.05] bg-black/30 p-3 hover:border-emerald-500/30 transition-all"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-semibold text-white truncate">{freeCourseOfMonth.title}</h4>
+                      <p className="mt-1 text-[11px] text-gray-500 line-clamp-2">{freeCourseOfMonth.shortDescription}</p>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-300 shrink-0">R$ 0</span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-[10px] text-gray-500">
+                    <span>{freeCourseOfMonth.duration}</span>
+                    <span>{freeCourseOfMonth.totalLessons} aulas</span>
+                  </div>
+                </button>
+              </Card>
+            </motion.div>
+          )}
+
           {/* ── COURSE SUGGESTIONS (tier-based) ── */}
           {suggestedCourses.length > 0 && (
             <motion.div variants={itemVariants}>
@@ -552,8 +600,8 @@ export function DashboardHome({
                       <Sparkles size={15} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold">Recomendados para Você</h3>
-                      <p className="text-[10px] text-gray-500">Disponíveis no plano {tierConfig.displayName}</p>
+                      <h3 className="text-sm font-bold">Catálogo do seu plano neste mês</h3>
+                      <p className="text-[10px] text-gray-500">O que já está incluído agora no plano {tierConfig.displayName}</p>
                     </div>
                   </div>
                 </div>
@@ -595,7 +643,7 @@ export function DashboardHome({
               <Card className="border-yellow-500/10 bg-gray-950 p-3.5">
                 <div className="flex items-center gap-2 mb-2">
                   <Lock size={13} className="text-yellow-400" />
-                  <h4 className="text-xs font-bold text-gray-400">Desbloqueie com Upgrade</h4>
+                  <h4 className="text-xs font-bold text-gray-400">Exigem upgrade neste mês</h4>
                 </div>
                 <div className="space-y-1.5">
                   {lockedCourses.map((course) => (

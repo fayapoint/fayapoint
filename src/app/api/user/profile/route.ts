@@ -11,7 +11,7 @@ export async function GET() {
   try {
     const authUser = await getAuthUser();
     if (!authUser) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+      return NextResponse.json({ user: null }, { status: 200 });
     }
 
     await dbConnect();

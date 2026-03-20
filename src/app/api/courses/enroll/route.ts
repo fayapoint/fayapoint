@@ -7,12 +7,12 @@ import {
   canEnrollInCourse,
   normalizeCourseLevel,
   CourseLevel,
-  SubscriptionPlan,
   calculateEnrollmentSlots,
   getUpgradeSuggestion,
   resolvePlan,
 } from '@/lib/course-tiers';
 import { getCourseBySlug, allCourses } from '@/data/courses';
+import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from '@/lib/monthly-course-offers';
 
 interface EnrollmentRequest {
   courseSlug: string;
@@ -91,18 +91,24 @@ export async function POST(request: Request) {
       });
     }
 
+    const monthlyOffer = getCourseMonthlyOfferMeta(courseSlug);
+    const isFreeEnrollment =
+      Boolean(monthlyOffer?.isFreeCourseOfMonth) || courseLevel === 'free' || courseData.price === 0;
+
     // Check if can enroll based on tier limits
-    const enrollmentCheck = canEnrollInCourse(
-      userPlan,
-      courseLevel,
-      enrolledCourses.map((c: { courseId: string; level: string; enrolledAt: Date; isActive: boolean }) => ({
-        courseId: c.courseId,
-        level: c.level as CourseLevel,
-        enrolledAt: c.enrolledAt,
-        isActive: c.isActive
-      })),
-      courseSlug
-    );
+    const enrollmentCheck = isFreeEnrollment
+      ? { canEnroll: true }
+      : canEnrollInCourse(
+          userPlan,
+          courseLevel,
+          enrolledCourses.map((c: { courseId: string; level: string; enrolledAt: Date; isActive: boolean }) => ({
+            courseId: c.courseId,
+            level: c.level as CourseLevel,
+            enrolledAt: c.enrolledAt,
+            isActive: c.isActive
+          })),
+          courseSlug
+        );
 
     if (!enrollmentCheck.canEnroll) {
       const upgradeInfo = getUpgradeSuggestion(userPlan, courseLevel);
@@ -116,6 +122,16 @@ export async function POST(request: Request) {
       }, { status: 403 });
     }
 
+    if (!isFreeEnrollment && !canPlanAccessMonthlyOffer(userPlan, courseSlug)) {
+      return NextResponse.json({
+        error: 'Este curso não faz parte do catálogo liberado neste mês para o seu plano. Você pode aguardar a próxima rotação, fazer upgrade ou comprar individualmente.',
+        upgradeRequired: false,
+        canPurchase: true,
+        monthlyOffer,
+        currentSlots: calculateEnrollmentSlots(userPlan, enrolledCourses),
+      }, { status: 403 });
+    }
+
     // Create enrollment
     const newEnrollment = {
       courseId: String(courseData.id),
@@ -123,7 +139,7 @@ export async function POST(request: Request) {
       level: courseLevel,
       enrolledAt: new Date(),
       isActive: true,
-      source: 'subscription' as const
+      source: isFreeEnrollment ? 'promotion' as const : 'subscription' as const
     };
 
     // Add enrollment to user
@@ -155,10 +171,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Matrícula realizada com sucesso!',
+      message: isFreeEnrollment ? 'Curso liberado com sucesso!' : 'Matrícula realizada com sucesso!',
       enrollment: newEnrollment,
       progress,
-      slots: updatedSlots
+      slots: updatedSlots,
+      monthlyOffer
     });
 
   } catch (error) {

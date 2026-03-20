@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -36,12 +36,24 @@ import {
   Info,
   DollarSign,
   BookOpen,
+  Gift,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
   DEFAULT_EDITORIAL_VERIFICATION,
   formatEditorialDate,
 } from "@/lib/editorial-verification";
+import type { Product } from "@/lib/products";
+
+type MonthlyOfferPayload = {
+  monthKey: string;
+  freeCourse: Product | null;
+  pools: {
+    beginner: Product[];
+    intermediate: Product[];
+    advanced: Product[];
+  };
+};
 
 // Service configurations with emojis and colors
 const serviceConfig: Record<
@@ -205,6 +217,7 @@ export default function PricingPage() {
   const { loading, groupedByService } = useServicePrices();
   const [activeServiceSlug, setActiveServiceSlug] = useState<string>("website-full");
   const [expandedPlan, setExpandedPlan] = useState<string | null>(null);
+  const [monthlyOffers, setMonthlyOffers] = useState<MonthlyOfferPayload | null>(null);
 
   const isLoggedIn = !!user;
   const isPtBr = locale === "pt-BR";
@@ -248,6 +261,21 @@ export default function PricingPage() {
   }, [groupedByService]);
 
   const activeService = services.find((s) => s.slug === activeServiceSlug) || services[0];
+
+  useEffect(() => {
+    async function fetchMonthlyOffers() {
+      try {
+        const response = await fetch("/api/courses/monthly-offers", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await response.json();
+        setMonthlyOffers(data);
+      } catch (error) {
+        console.error("Failed to fetch monthly offers:", error);
+      }
+    }
+
+    void fetchMonthlyOffers();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -329,6 +357,74 @@ export default function PricingPage() {
             </div>
           </div>
         </section>
+
+        {monthlyOffers?.freeCourse && (
+          <section className="px-4 pb-4">
+            <div className="container mx-auto max-w-6xl">
+              <Card className="border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-card/80 to-purple-500/10 p-6 shadow-lg">
+                <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+                  <div>
+                    <Badge className="mb-4 bg-emerald-500/15 text-emerald-300" variant="outline">
+                      <Gift className="mr-2 h-4 w-4" />
+                      {isPtBr ? "Curso grátis do mês" : "Free course of the month"}
+                    </Badge>
+                    <h2 className="text-2xl md:text-3xl font-bold">
+                      {monthlyOffers.freeCourse.name}
+                    </h2>
+                    <p className="mt-3 text-muted-foreground">
+                      {isPtBr
+                        ? "Todo usuário pode experimentar um curso completo por mês, com certificado liberado, para entender exatamente o valor da academia antes de subir de plano."
+                        : "Every user can experience one full course each month, with certificate access included, before deciding to upgrade."}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <Badge variant="secondary">{isPtBr ? "Certificado grátis" : "Free certificate"}</Badge>
+                      <Badge variant="secondary">{monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? "aulas" : "lessons"}</Badge>
+                      <Badge variant="secondary">{monthlyOffers.freeCourse.metrics.duration}</Badge>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                    <div className="rounded-2xl border border-white/10 bg-background/40 p-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Explorador</p>
+                      <p className="mt-2 text-2xl font-bold">{monthlyOffers.pools.beginner.length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {isPtBr ? "cursos iniciantes disponíveis neste mês" : "beginner courses available this month"}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-background/40 p-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Profissional</p>
+                      <p className="mt-2 text-2xl font-bold">{monthlyOffers.pools.intermediate.length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {isPtBr ? "intermediários no catálogo rotativo" : "intermediate courses in the rotating catalog"}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-background/40 p-4">
+                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Expert</p>
+                      <p className="mt-2 text-2xl font-bold">{monthlyOffers.pools.advanced.length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {isPtBr ? "avançados do mês para o topo da escada" : "advanced monthly slots for the top tier"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <Link href={`/curso/${monthlyOffers.freeCourse.slug}`}>
+                    <Button className="bg-gradient-to-r from-emerald-500 to-green-500 text-black hover:from-emerald-400 hover:to-green-400">
+                      {isPtBr ? "Ver curso grátis do mês" : "View free course of the month"}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <p className="text-sm text-muted-foreground">
+                    {isPtBr
+                      ? "O catálogo gira automaticamente no primeiro dia de cada mês."
+                      : "The catalog rotates automatically on the first day of every month."}
+                  </p>
+                </div>
+              </Card>
+            </div>
+          </section>
+        )}
 
         {/* Subscription Plans Section */}
         <section className="py-16 px-4" id="subscription">

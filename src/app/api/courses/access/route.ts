@@ -9,6 +9,7 @@ import {
   calculateEnrollmentSlots,
   resolvePlan,
 } from '@/lib/course-tiers';
+import { isCourseFreeThisMonth } from '@/lib/monthly-course-offers';
 import { allCourses } from '@/data/courses';
 import { getMongoClient } from '@/lib/products';
 
@@ -21,7 +22,8 @@ type AccessReason =
   | 'free_preview'
   | 'not_logged_in'
   | 'admin'
-  | 'enrolled';
+  | 'enrolled'
+  | 'monthly_free_course';
 
 interface AccessResponse {
   access: AccessLevel;
@@ -141,6 +143,21 @@ export async function GET(request: Request) {
         reason: 'admin',
         plan: userPlan,
         canUpgrade: false,
+        coursePrice,
+        courseTitle,
+      };
+      return NextResponse.json(response);
+    }
+
+    // ── Free course of the month → full access for any logged-in user ──
+    if (isCourseFreeThisMonth(slug)) {
+      const response: AccessResponse = {
+        access: 'full',
+        freeChapters: FREE_CHAPTER_LIMIT,
+        totalChapters: null,
+        reason: 'monthly_free_course',
+        plan: userPlan,
+        canUpgrade: userPlan !== 'expert',
         coursePrice,
         courseTitle,
       };

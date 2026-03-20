@@ -76,7 +76,7 @@ import { useDashboard } from "@/hooks/useDashboard";
 import { getCourseBySlug, CourseData, allCourses, getNormalizedLevel } from "@/data/courses";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
-import { TIER_CONFIGS, SubscriptionPlan, EnrollmentSlots } from "@/lib/course-tiers";
+import { TIER_CONFIGS, SubscriptionPlan, EnrollmentSlots, resolvePlan } from "@/lib/course-tiers";
 
 // Components
 import { DashboardSidebar } from "@/components/portal/DashboardSidebar";
@@ -216,7 +216,7 @@ export default function PortalPage() {
   const [aspectRatio, setAspectRatio] = useState("1:1");
   const [style, setStyle] = useState("none");
 
-  const isPro = ["pro", "business", "starter"].includes(plan);
+  const isPro = plan !== "free";
   const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
   const getAuthHeaders = (): Record<string, string> => {
     if (typeof window === "undefined") return {};
@@ -348,7 +348,7 @@ export default function PortalPage() {
       setUser(cachedDashboardData.user);
       setOrders(cachedDashboardData.orders || []);
       setResources(cachedDashboardData.resources || []);
-      setPlan(cachedDashboardData.plan || "free");
+      setPlan(resolvePlan(cachedDashboardData.plan || "free"));
 
       // Daily checkin toast - only show if not already shown (using a session flag could be better but this works for now)
       if (cachedDashboardData.dailyXpEarned && cachedDashboardData.dailyXpEarned > 0) {

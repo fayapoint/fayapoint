@@ -6,6 +6,7 @@ import Order from '@/models/Order';
 import { getAuthUser } from '@/lib/auth';
 import { getMongoClient } from '@/lib/products';
 import { resolvePlan, TIER_CONFIGS } from '@/lib/course-tiers';
+import { isCourseFreeThisMonth } from '@/lib/monthly-course-offers';
 
 function uniqueStrings(values: string[]) {
   return Array.from(new Set(values.map((v) => v.trim()).filter(Boolean)));
@@ -31,6 +32,7 @@ async function requireCourseAccess(userId: string, slug: string) {
 
   if (user.role === 'admin' || user.role === 'instructor') hasAccess = true;
   if (tierConfig.limits.unlimited) hasAccess = true;
+  if (isCourseFreeThisMonth(slug)) hasAccess = true;
 
   if (!hasAccess) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

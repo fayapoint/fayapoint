@@ -52,14 +52,21 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   const Icon = style.icon;
   const locale = useLocale();
   const isPtBr = locale === 'pt-BR';
+  const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
+  const effectivePrice = isFreeCourseOfMonth ? 0 : product.pricing.price;
+  const effectiveOriginalPrice = isFreeCourseOfMonth
+    ? product.pricing.price
+    : product.pricing.originalPrice;
   const verifiedAtLabel = formatEditorialDate(
-    product.editorialVerification?.verifiedAt || "2026-03-19",
+    product.editorialVerification?.verifiedAt || "2026-03-20",
     isPtBr ? "pt-BR" : "en-US"
   );
   
-  const discount = product.pricing.originalPrice > product.pricing.price 
-    ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
-    : 0;
+  const discount = isFreeCourseOfMonth
+    ? 100
+    : product.pricing.originalPrice > product.pricing.price 
+      ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
+      : 0;
 
   const isNew = new Date(product.updatedAt).getTime() > Date.now() - 90 * 24 * 60 * 60 * 1000;
   const isAdvanced = product.level.toLowerCase().includes('avançado');
@@ -106,6 +113,12 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
                   <Zap size={14} className="mr-1" />
                   <span className="font-bold">{isPtBr ? 'Novo' : 'New'}</span>
+                </Badge>
+              )}
+              {isFreeCourseOfMonth && (
+                <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
+                  <Sparkles size={14} className="mr-1" />
+                  <span className="font-bold">{isPtBr ? 'Grátis no mês' : 'Free this month'}</span>
                 </Badge>
               )}
               {isAdvanced && (
@@ -209,31 +222,43 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             <div className="pt-4 space-y-3">
               <div className="flex items-end justify-between">
                 <div>
-                  {product.pricing.originalPrice > product.pricing.price && (
+                  {effectiveOriginalPrice > effectivePrice && (
                     <p className="text-gray-500 line-through text-sm">
-                      R$ {product.pricing.originalPrice}
+                      R$ {effectiveOriginalPrice}
                     </p>
                   )}
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                      R$ {product.pricing.price}
+                      R$ {effectivePrice}
                     </span>
                     {discount > 0 && (
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                        {isPtBr ? `Economize ${discount}%` : `Save ${discount}%`}
+                        {isFreeCourseOfMonth
+                          ? (isPtBr ? 'Certificado incluso' : 'Certificate included')
+                          : isPtBr ? `Economize ${discount}%` : `Save ${discount}%`}
                       </Badge>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    ou 12x de R$ {(product.pricing.price / 12).toFixed(2)}
-                  </p>
+                  {isFreeCourseOfMonth ? (
+                    <p className="text-xs text-emerald-300 mt-1">
+                      {isPtBr ? 'Liberado para todos os usuários neste mês' : 'Unlocked for all users this month'}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-gray-500 mt-1">
+                      ou 12x de R$ {(product.pricing.price / 12).toFixed(2)}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <Button 
                 className={`w-full bg-gradient-to-r ${style.gradient} hover:opacity-90 transition-opacity text-white font-bold py-6 text-base shadow-lg hover:shadow-xl group/btn`}
               >
-                <span>{isPtBr ? 'Ver Curso Completo' : 'View Full Course'}</span>
+                <span>
+                  {isFreeCourseOfMonth
+                    ? (isPtBr ? 'Ver e liberar grátis' : 'View and unlock free')
+                    : isPtBr ? 'Ver Curso Completo' : 'View Full Course'}
+                </span>
                 <Play size={18} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
               </Button>
 

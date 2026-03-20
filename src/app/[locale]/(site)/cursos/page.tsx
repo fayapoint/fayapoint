@@ -32,6 +32,16 @@ import {
   formatEditorialDate,
 } from "@/lib/editorial-verification";
 
+type MonthlyOfferPayload = {
+  monthKey: string;
+  freeCourse: Product | null;
+  pools: {
+    beginner: Product[];
+    intermediate: Product[];
+    advanced: Product[];
+  };
+};
+
 type LevelOption = {
   value: string;
   label: string;
@@ -53,6 +63,7 @@ export default function CoursesPage() {
   const t = useTranslations("Courses");
   const locale = useLocale();
   const [products, setProducts] = useState<Product[]>([]);
+  const [monthlyOffers, setMonthlyOffers] = useState<MonthlyOfferPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const allCategoriesLabel = t("filters.allCategoriesLabel");
@@ -75,6 +86,12 @@ export default function CoursesPage() {
         const response = await fetch('/api/products?type=course');
         const data = await response.json();
         setProducts(data.products || []);
+
+        const monthlyOffersResponse = await fetch('/api/courses/monthly-offers');
+        if (monthlyOffersResponse.ok) {
+          const monthlyData = await monthlyOffersResponse.json();
+          setMonthlyOffers(monthlyData);
+        }
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -227,6 +244,85 @@ export default function CoursesPage() {
           </div>
         </div>
       </section>
+
+      {monthlyOffers?.freeCourse && (
+        <section className="py-10 bg-gradient-to-b from-black to-emerald-950/10">
+          <div className="container mx-auto px-4">
+            <Card className="overflow-hidden border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-black to-purple-900/30 p-6 md:p-8">
+              <div className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr] lg:items-center">
+                <div>
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    <span>{isPtBr ? "Curso grátis do mês" : "Free course of the month"}</span>
+                  </div>
+                  <h2 className="text-3xl font-bold text-white">
+                    {monthlyOffers.freeCourse.name}
+                  </h2>
+                  <p className="mt-3 max-w-3xl text-gray-300">
+                    {isPtBr
+                      ? "Todo usuário pode testar a experiência completa da academia neste curso, incluindo progresso salvo e certificado liberado."
+                      : "Every user can test the full academy experience on this course, including saved progress and certificate access."}
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-2 text-sm text-gray-300">
+                    <Badge className="bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
+                      {isPtBr ? "Certificado incluso" : "Certificate included"}
+                    </Badge>
+                    <Badge className="bg-white/5 text-gray-200 border-white/10">
+                      {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? "aulas" : "lessons"}
+                    </Badge>
+                    <Badge className="bg-white/5 text-gray-200 border-white/10">
+                      {monthlyOffers.freeCourse.metrics.duration}
+                    </Badge>
+                  </div>
+                  <div className="mt-6 flex flex-wrap items-center gap-4">
+                    <Link href={`/curso/${monthlyOffers.freeCourse.slug}`}>
+                      <Button className="bg-gradient-to-r from-emerald-500 to-green-500 text-black hover:from-emerald-400 hover:to-green-400">
+                        {isPtBr ? "Ver curso grátis" : "View free course"}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <p className="text-sm text-gray-400">
+                      {isPtBr
+                        ? `${monthlyOffers.pools.beginner.length} iniciantes, ${monthlyOffers.pools.intermediate.length} intermediários e ${monthlyOffers.pools.advanced.length} avançados no catálogo deste mês.`
+                        : `${monthlyOffers.pools.beginner.length} beginner, ${monthlyOffers.pools.intermediate.length} intermediate, and ${monthlyOffers.pools.advanced.length} advanced courses in this month’s catalog.`}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                      {isPtBr ? "Explorador" : "Explorer"}
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.beginner.length}</p>
+                    <p className="text-sm text-gray-400">
+                      {isPtBr ? "cursos iniciantes liberados neste mês" : "beginner courses unlocked this month"}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                      {isPtBr ? "Profissional" : "Professional"}
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.intermediate.length}</p>
+                    <p className="text-sm text-gray-400">
+                      {isPtBr ? "intermediários no catálogo rotativo" : "intermediate courses in the rotating catalog"}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                      {isPtBr ? "Expert" : "Expert"}
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.advanced.length}</p>
+                    <p className="text-sm text-gray-400">
+                      {isPtBr ? "avançados disponíveis para planos altos" : "advanced courses available for upper tiers"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </section>
+      )}
 
       {/* Featured Bestseller Section */}
       {!loading && products.length > 0 && (

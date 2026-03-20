@@ -4,10 +4,14 @@ import Link from "next/link";
 import { useMemo } from "react";
 import {
   ArrowRight,
+  Award,
   BarChart3,
   BookOpen,
+  CalendarDays,
+  CheckCircle2,
   Clock,
   Crown,
+  Gift,
   Loader2,
   Lock,
   PlayCircle,
@@ -22,6 +26,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import type { EnrollmentSlots, TierConfig } from "@/lib/course-tiers";
+import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
 
 interface CourseProgressCard {
   _id: string;
@@ -86,21 +91,86 @@ export function CoursesPanel({
       const normalizedLevel = getNormalizedLevel(course);
       const isEnrolled = enrolledSlugs.includes(course.slug);
       const canAccessLevel = tierConfig.canAccessLevel(normalizedLevel);
+      const monthlyOffer = getCourseMonthlyOfferMeta(course.slug);
       const slotCategory = normalizedLevel === "free" || normalizedLevel === "beginner" ? "beginner" : normalizedLevel;
       const slotsForLevel = enrollmentSlots?.[slotCategory as keyof EnrollmentSlots] ?? null;
       const hasAvailableSlot = tierConfig.limits.unlimited || !slotsForLevel || slotsForLevel.available > 0;
+      const canAccessThisMonth = canPlanAccessMonthlyOffer(tierConfig.slug, course.slug);
+      const isFreeMonthlyCourse = Boolean(monthlyOffer?.isFreeCourseOfMonth);
 
       return {
         ...course,
         normalizedLevel,
+        monthlyOffer,
         isEnrolled,
         canAccessLevel,
         hasAvailableSlot,
-        canEnroll: !isEnrolled && canAccessLevel && hasAvailableSlot,
+        canAccessThisMonth,
+        isFreeMonthlyCourse,
+        canEnroll: !isEnrolled && (isFreeMonthlyCourse || (canAccessLevel && hasAvailableSlot && canAccessThisMonth)),
       };
     });
   }, [enrolledSlugs, enrollmentSlots, tierConfig]);
 
+  const freeMonthlyCourse = courseCatalog.find((course) => course.isFreeMonthlyCourse) ?? null;
+  const freeMonthlyCourseCanClaim = Boolean(freeMonthlyCourse && freeMonthlyCourse.canEnroll);
+  const freeMonthlyCourseIsEnrolled = Boolean(freeMonthlyCourse && freeMonthlyCourse.isEnrolled);
+  const planMonthlyCourses = courseCatalog
+    .filter(
+      (course) =>
+        !course.isEnrolled &&
+        !course.isFreeMonthlyCourse &&
+        Boolean(course.monthlyOffer?.includedInPool) &&
+        course.canAccessLevel &&
+        course.canAccessThisMonth &&
+        course.hasAvailableSlot
+    )
+    .slice(0, 6);
+  const rotationPreviewCourses = courseCatalog
+    .filter(
+      (course) =>
+        !course.isEnrolled &&
+        !course.isFreeMonthlyCourse &&
+        !course.monthlyOffer?.includedInPool &&
+        course.canAccessLevel
+    )
+    .slice(0, 3);
+  const lockedByPlanCourses = courseCatalog
+    .filter(
+      (course) =>
+        !course.isEnrolled &&
+        !course.isFreeMonthlyCourse &&
+        Boolean(course.monthlyOffer?.includedInPool) &&
+        (!course.canAccessLevel || !course.canAccessThisMonth)
+    )
+    .slice(0, 4);
+  const slotLockedCourses = courseCatalog
+    .filter(
+      (course) =>
+        !course.isEnrolled &&
+        !course.isFreeMonthlyCourse &&
+        Boolean(course.monthlyOffer?.includedInPool) &&
+        course.canAccessLevel &&
+        course.canAccessThisMonth &&
+        !course.hasAvailableSlot
+    )
+    .slice(0, 4);
+  const currentMonthlyPool = courseCatalog
+    .filter((course) => Boolean(course.monthlyOffer?.includedInPool))
+    .sort((left, right) => {
+      if (left.isFreeMonthlyCourse !== right.isFreeMonthlyCourse) {
+        return left.isFreeMonthlyCourse ? -1 : 1;
+      }
+      if (left.normalizedLevel !== right.normalizedLevel) {
+        return left.normalizedLevel.localeCompare(right.normalizedLevel);
+      }
+      return left.title.localeCompare(right.title);
+    });
+  const monthlyPoolByLevel = {
+    beginner: currentMonthlyPool.filter((course) => course.monthlyOffer?.poolLevel === "beginner"),
+    intermediate: currentMonthlyPool.filter((course) => course.monthlyOffer?.poolLevel === "intermediate"),
+    advanced: currentMonthlyPool.filter((course) => course.monthlyOffer?.poolLevel === "advanced"),
+  };
   const featuredCourse = journeyCourses[0] ?? completedCourses[0] ?? null;
   const featuredCourseState = featuredCourse
     ? activeCourses.some((course) => course._id === featuredCourse._id)
@@ -112,11 +182,11 @@ export function CoursesPanel({
   const secondaryJourneyCourses = journeyCourses
     .filter((course) => course._id !== featuredCourse?._id)
     .slice(0, 6);
-  const availableToEnrollCourses = courseCatalog.filter((course) => course.canEnroll).slice(0, 6);
-  const upgradeCourses = courseCatalog.filter((course) => !course.isEnrolled && !course.canEnroll).slice(0, 4);
   const totalSlotsAvailable = enrollmentSlots
     ? enrollmentSlots.beginner.available + enrollmentSlots.intermediate.available + enrollmentSlots.advanced.available
     : 0;
+  const coursesAvailableNow = readyToStartCourses.length + planMonthlyCourses.length + (freeMonthlyCourseCanClaim ? 1 : 0);
+  const certificateDiscountPercent = Math.round((tierConfig.quizDiscount || 0) * 100);
   const featuredBadgeLabel =
     featuredCourseState === "active"
       ? "Continue agora"
@@ -165,7 +235,7 @@ export function CoursesPanel({
 
             <div className="space-y-2">
               <h2 className="text-3xl font-black tracking-tight text-white md:text-4xl">
-                Sua biblioteca precisa vender a próxima decisão.
+                Seu próximo passo em IA precisa estar claro.
               </h2>
               <p className="max-w-2xl text-sm leading-6 text-gray-300 md:text-base">
                 Retome seu próximo capítulo, enxergue o que cabe no seu plano agora e descubra quais cursos desbloqueiam mais valor sem sair da jornada.
@@ -179,9 +249,9 @@ export function CoursesPanel({
                 <p className="mt-1 text-xs text-gray-400">Cursos que realmente pedem retomada agora.</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Matrículas agora</p>
-                <p className="mt-2 text-3xl font-black text-emerald-300">{readyToStartCourses.length + availableToEnrollCourses.length}</p>
-                <p className="mt-1 text-xs text-gray-400">Entre cursos já liberados e novas entradas do plano.</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Disponíveis agora</p>
+                <p className="mt-2 text-3xl font-black text-emerald-300">{coursesAvailableNow}</p>
+                <p className="mt-1 text-xs text-gray-400">Entre cursos liberados, grátis do mês e catálogo atual do plano.</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Concluídos</p>
@@ -223,7 +293,7 @@ export function CoursesPanel({
                       <div>
                         <p className={cn("text-sm font-semibold", tone)}>{label}</p>
                         <p className="mt-1 text-xs text-gray-400">
-                          {slot ? `${slot.available} vaga${slot.available === 1 ? "" : "s"} disponível${slot.available === 1 ? "" : "eis"}` : "Carregando vagas..."}
+                          {slot ? `${slot.available} ${slot.available === 1 ? "vaga disponível" : "vagas disponíveis"}` : "Carregando vagas..."}
                         </p>
                       </div>
                       <div className="text-right">
@@ -240,6 +310,234 @@ export function CoursesPanel({
           </div>
         </div>
       </Card>
+
+      <div className="grid gap-4 xl:grid-cols-[1.1fr,0.9fr]">
+        <Card className="overflow-hidden border-emerald-500/20 bg-[linear-gradient(135deg,rgba(6,95,70,0.18),rgba(3,7,18,0.98))] p-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-3">
+              <Badge className="border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
+                <Gift size={13} className="mr-2" />
+                Curso grátis do mês
+              </Badge>
+              <div>
+                <h3 className="text-2xl font-black text-white">
+                  {freeMonthlyCourse?.title || "Todo mês um curso completo fica gratuito"}
+                </h3>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-50/80">
+                  {freeMonthlyCourse
+                    ? "Esse é o curso que qualquer usuário pode liberar agora, sem gateway e com certificado incluído neste mês."
+                    : "A cada mês um curso completo fica livre para qualquer conta experimentar o valor real da academia."}
+                </p>
+              </div>
+            </div>
+            {freeMonthlyCourse && (
+              <Badge className={cn("border text-xs", courseLevelBadgeStyles[freeMonthlyCourse.normalizedLevel])}>
+                {courseLevelLabels[freeMonthlyCourse.normalizedLevel]}
+              </Badge>
+            )}
+          </div>
+
+          {freeMonthlyCourse ? (
+            <div className="mt-6 grid gap-4 md:grid-cols-[1fr,auto]">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Ferramenta</p>
+                  <p className="mt-2 text-lg font-bold text-white">{freeMonthlyCourse.tool}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Duração</p>
+                  <p className="mt-2 text-lg font-bold text-white">{freeMonthlyCourse.duration}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Certificado</p>
+                  <p className="mt-2 text-lg font-bold text-white">Incluído</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Link href={`/curso/${freeMonthlyCourse.slug}`}>
+                  <Button variant="outline" className="w-full border-white/15 bg-white/5 text-white hover:bg-white/10">
+                    Ver detalhes
+                  </Button>
+                </Link>
+                {freeMonthlyCourseIsEnrolled ? (
+                  <Link href={`/portal/learn/${freeMonthlyCourse.slug}`}>
+                    <Button className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400">
+                      <CheckCircle2 size={16} className="mr-2" />
+                      Já liberado
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400"
+                    onClick={() => freeMonthlyCourseCanClaim && onEnroll(freeMonthlyCourse.slug)}
+                    disabled={!freeMonthlyCourseCanClaim || isEnrolling === freeMonthlyCourse.slug}
+                  >
+                    {isEnrolling === freeMonthlyCourse.slug ? (
+                      <Loader2 size={16} className="mr-2 animate-spin" />
+                    ) : (
+                      <Gift size={16} className="mr-2" />
+                    )}
+                    Liberar grátis
+                  </Button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="mt-5 rounded-2xl border border-dashed border-white/10 bg-black/20 p-5 text-sm text-gray-400">
+              A rotação mensal não encontrou um curso gratuito válido. Vale revisar o catálogo ativo deste mês.
+            </div>
+          )}
+        </Card>
+
+        <Card className="border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.96))] p-6">
+          <div className="flex items-start gap-3">
+            <CalendarDays className="mt-1 text-cyan-300" size={20} />
+            <div>
+              <h3 className="text-xl font-bold text-white">Seu plano neste mês</h3>
+              <p className="mt-1 text-sm text-gray-400">
+                Clareza total sobre o que já está incluído, o que entra na rotação e o que depende de upgrade.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 space-y-3">
+            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Incluído agora</p>
+              <p className="mt-2 text-2xl font-black text-white">{planMonthlyCourses.length + (freeMonthlyCourseCanClaim ? 1 : 0)}</p>
+              <p className="mt-1 text-xs text-gray-400">Curso grátis do mês + catálogo do seu plano disponível nesta rotação.</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Exige upgrade</p>
+              <p className="mt-2 text-2xl font-black text-fuchsia-300">{lockedByPlanCourses.length}</p>
+              <p className="mt-1 text-xs text-gray-400">Cursos do mês atual fora da faixa desbloqueada pelo seu plano.</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Próxima rotação</p>
+              <p className="mt-2 text-2xl font-black text-cyan-300">{rotationPreviewCourses.length}</p>
+              <p className="mt-1 text-xs text-gray-400">Cursos que podem aparecer em outro mês, mantendo a vitrine sempre fresca.</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-[1.15fr,0.85fr]">
+        <Card className="border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)_10%,rgba(3,7,18,0.96)_100%)] p-6 backdrop-blur-2xl">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-bold text-white">Pool mensal completo</h3>
+              <p className="mt-1 text-sm text-gray-400">
+                Aqui está a vitrine inteira do mês, com o que é grátis, o que seu plano já libera e o que ainda pede upgrade.
+              </p>
+            </div>
+            <Badge className="border-white/10 bg-white/[0.04] text-white/80">
+              {currentMonthlyPool.length} curso{currentMonthlyPool.length === 1 ? "" : "s"} na rotação
+            </Badge>
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+            {[
+              { key: "beginner", title: "Iniciantes", tone: "text-cyan-300" },
+              { key: "intermediate", title: "Intermediários", tone: "text-amber-300" },
+              { key: "advanced", title: "Avançados", tone: "text-fuchsia-300" },
+            ].map(({ key, title, tone }) => {
+              const courses = monthlyPoolByLevel[key as keyof typeof monthlyPoolByLevel];
+
+              return (
+                <div key={key} className="rounded-[24px] border border-white/8 bg-black/20 p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <h4 className={cn("text-sm font-semibold", tone)}>{title}</h4>
+                    <span className="text-xs text-gray-500">{courses.length}</span>
+                  </div>
+
+                  <div className="mt-4 space-y-2">
+                    {courses.length > 0 ? (
+                      courses.map((course) => {
+                        const statusLabel = course.isFreeMonthlyCourse
+                          ? "Grátis para todos"
+                          : course.isEnrolled
+                            ? "Já no seu acervo"
+                            : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
+                              ? "Disponível no seu plano"
+                              : course.canAccessLevel && course.canAccessThisMonth && !course.hasAvailableSlot
+                                ? "Sem vaga neste ciclo"
+                                : "Upgrade necessário";
+                        const statusClass = course.isFreeMonthlyCourse
+                          ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-200"
+                          : course.isEnrolled
+                            ? "border-cyan-400/20 bg-cyan-500/10 text-cyan-200"
+                            : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
+                              ? "border-white/10 bg-white/[0.05] text-white/80"
+                              : course.canAccessLevel && course.canAccessThisMonth && !course.hasAvailableSlot
+                                ? "border-amber-400/20 bg-amber-500/10 text-amber-200"
+                                : "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200";
+
+                        return (
+                          <div key={course.slug} className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0">
+                                <p className="truncate text-sm font-semibold text-white">{course.title}</p>
+                                <p className="mt-1 text-xs text-gray-500">{course.duration} · {course.tool}</p>
+                              </div>
+                              <Badge className={cn("border text-[10px]", statusClass)}>
+                                {statusLabel}
+                              </Badge>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-3 text-sm text-gray-500">
+                        Nenhum curso nessa faixa nesta rotação.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+
+        <Card className="border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(3,7,18,0.96))] p-6 backdrop-blur-2xl">
+          <div className="flex items-start gap-3">
+            <Award className="mt-1 text-emerald-300" size={20} />
+            <div>
+              <h3 className="text-xl font-bold text-white">Certificação neste mês</h3>
+              <p className="mt-1 text-sm text-gray-400">
+                Entenda em quais cursos o certificado já está incluído e onde o seu plano entra como vantagem.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 space-y-3">
+            <div className="rounded-[22px] border border-emerald-400/15 bg-emerald-500/8 p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">Curso grátis do mês</p>
+              <p className="mt-2 text-lg font-bold text-white">Certificado incluso para qualquer conta</p>
+              <p className="mt-1 text-sm leading-6 text-emerald-50/75">
+                O curso gratuito mensal já carrega o certificado como parte da experiência completa.
+              </p>
+            </div>
+
+            <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Cursos do plano neste mês</p>
+              <p className="mt-2 text-lg font-bold text-white">
+                {certificateDiscountPercent > 0
+                  ? `Certificação com ${certificateDiscountPercent}% de desconto no seu plano`
+                  : "Certificação disponível conforme a trilha escolhida"}
+              </p>
+              <p className="mt-1 text-sm leading-6 text-gray-400">
+                Ao concluir qualquer curso da sua pool mensal, você decide em qual deles quer avançar com a certificação usando o benefício do seu plano.
+              </p>
+            </div>
+
+            <div className="rounded-[22px] border border-cyan-400/10 bg-cyan-500/[0.04] p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-cyan-300">Como aproveitar melhor este mês</p>
+              <p className="mt-2 text-sm leading-6 text-cyan-50/75">
+                Comece pelo curso grátis do mês, compare a pool liberada no seu plano e use o upgrade só quando quiser destravar o próximo nível.
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       {featuredCourse && (
         <div className="grid gap-4 xl:grid-cols-[1.3fr,0.7fr]">
@@ -347,7 +645,7 @@ export function CoursesPanel({
             <div>
               <h3 className="text-xl font-bold text-white">Cursos concluídos</h3>
               <p className="mt-1 text-sm text-gray-400">
-                O que você já terminou precisa aparecer como prova de avanço, não como pendência.
+                Revise o que já concluiu, escolha onde emitir certificado e mantenha sua evolução visível.
               </p>
             </div>
             <div className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-semibold text-gray-300">
@@ -392,17 +690,17 @@ export function CoursesPanel({
         </div>
       )}
 
-      {availableToEnrollCourses.length > 0 && (
+      {planMonthlyCourses.length > 0 && (
         <div className="space-y-4">
           <div>
-            <h3 className="text-xl font-bold text-white">Melhores matrículas para você agora</h3>
+            <h3 className="text-xl font-bold text-white">Catálogo do seu plano neste mês</h3>
             <p className="mt-1 text-sm text-gray-400">
-              Cursos que cabem no seu plano hoje e fazem a página trabalhar a favor da próxima compra.
+              Estes cursos já fazem parte da vitrine mensal do seu plano e podem ser liberados agora, sem adivinhação.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {availableToEnrollCourses.map((course) => (
+            {planMonthlyCourses.map((course) => (
               <Card key={course.slug} className="group overflow-hidden border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.95))] transition hover:-translate-y-0.5 hover:border-emerald-400/30">
                 <div className="relative overflow-hidden border-b border-white/5 bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.14),transparent_28%),linear-gradient(135deg,rgba(15,23,42,1),rgba(3,7,18,1))] p-5">
                   <div className="flex items-center justify-between gap-3">
@@ -410,8 +708,8 @@ export function CoursesPanel({
                       {courseLevelLabels[course.normalizedLevel]}
                     </Badge>
                     <div className="text-right">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Ferramenta</p>
-                      <p className="text-sm font-semibold text-white">{course.tool}</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Oferta</p>
+                      <p className="text-sm font-semibold text-white">Incluído no mês</p>
                     </div>
                   </div>
                   <h4 className="mt-5 text-xl font-bold leading-tight text-white group-hover:text-emerald-200">
@@ -432,8 +730,8 @@ export function CoursesPanel({
                       <p className="mt-2 text-lg font-bold text-white">{course.duration}</p>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Avulso</p>
-                      <p className="mt-2 text-lg font-bold text-white">R$ {course.price}</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Ferramenta</p>
+                      <p className="mt-2 text-lg font-bold text-white">{course.tool}</p>
                     </div>
                   </div>
 
@@ -447,7 +745,7 @@ export function CoursesPanel({
                     ) : (
                       <Sparkles size={16} className="mr-2" />
                     )}
-                    Matricular agora
+                    Liberar no plano
                   </Button>
                 </div>
               </Card>
@@ -456,13 +754,13 @@ export function CoursesPanel({
         </div>
       )}
 
-      {upgradeCourses.length > 0 && (
+      {lockedByPlanCourses.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <h3 className="text-xl font-bold text-white">O que você destrava com upgrade</h3>
+              <h3 className="text-xl font-bold text-white">O que exige upgrade neste mês</h3>
               <p className="mt-1 text-sm text-gray-400">
-                Cursos que deixam claro o próximo passo comercial sem esfriar a jornada.
+                Aqui fica explícito o que está na vitrine mensal, mas pede um plano acima para ser liberado.
               </p>
             </div>
             <Link href="/precos">
@@ -474,7 +772,7 @@ export function CoursesPanel({
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {upgradeCourses.map((course) => (
+            {lockedByPlanCourses.map((course) => (
               <Card key={course.slug} className="overflow-hidden border-fuchsia-500/15 bg-[linear-gradient(180deg,rgba(120,40,200,0.08),rgba(3,7,18,0.96))]">
                 <div className="border-b border-white/5 bg-black/20 p-4">
                   <div className="flex items-center justify-between gap-3">
@@ -488,9 +786,7 @@ export function CoursesPanel({
                 <div className="space-y-4 p-4">
                   <p className="line-clamp-3 text-sm leading-6 text-gray-400">{course.shortDescription}</p>
                   <div className="rounded-2xl border border-fuchsia-400/15 bg-fuchsia-500/5 p-3 text-sm text-fuchsia-100">
-                    {course.canAccessLevel
-                      ? "Seu plano acessa esse nível, mas as vagas deste ciclo acabaram."
-                      : "Esse curso está fora da faixa desbloqueada pelo seu plano atual."}
+                    Esse curso faz parte da vitrine mensal, mas está fora da faixa desbloqueada pelo seu plano atual.
                   </div>
                   <Link href="/precos">
                     <Button className="w-full bg-white/5 text-white hover:bg-white/10">
@@ -498,6 +794,75 @@ export function CoursesPanel({
                       Fazer upgrade
                     </Button>
                   </Link>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {slotLockedCourses.length > 0 && (
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-xl font-bold text-white">Seu plano já permite, mas faltam vagas</h3>
+            <p className="mt-1 text-sm text-gray-400">
+              Esses cursos já combinam com seu plano, porém as vagas mensais dessa faixa foram consumidas.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {slotLockedCourses.map((course) => (
+              <Card key={course.slug} className="overflow-hidden border-amber-500/15 bg-[linear-gradient(180deg,rgba(245,158,11,0.08),rgba(3,7,18,0.96))]">
+                <div className="border-b border-white/5 bg-black/20 p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
+                      {courseLevelLabels[course.normalizedLevel]}
+                    </Badge>
+                    <CalendarDays size={16} className="text-amber-300" />
+                  </div>
+                  <h4 className="mt-4 line-clamp-2 text-lg font-bold text-white">{course.title}</h4>
+                </div>
+                <div className="space-y-4 p-4">
+                  <p className="line-clamp-3 text-sm leading-6 text-gray-400">{course.shortDescription}</p>
+                  <div className="rounded-2xl border border-amber-400/15 bg-amber-500/5 p-3 text-sm text-amber-100">
+                    Aguarde a próxima virada mensal ou faça upgrade para ganhar mais capacidade nesta faixa.
+                  </div>
+                  <Link href="/precos">
+                    <Button className="w-full bg-white/5 text-white hover:bg-white/10">
+                      <Crown size={15} className="mr-2" />
+                      Ver opções
+                    </Button>
+                  </Link>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {rotationPreviewCourses.length > 0 && (
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-xl font-bold text-white">Mais cursos entram na próxima rotação</h3>
+            <p className="mt-1 text-sm text-gray-400">
+              Transparência total: estes ainda não estão no pool deste mês, mas podem aparecer em ciclos seguintes.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {rotationPreviewCourses.map((course) => (
+              <Card key={course.slug} className="border-white/10 bg-white/[0.03] p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
+                    {courseLevelLabels[course.normalizedLevel]}
+                  </Badge>
+                  <span className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Outro mês</span>
+                </div>
+                <h4 className="mt-4 text-lg font-bold text-white">{course.title}</h4>
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-400">{course.shortDescription}</p>
+                <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+                  <span>{course.duration}</span>
+                  <span>{course.totalLessons} aulas</span>
                 </div>
               </Card>
             ))}

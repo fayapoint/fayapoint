@@ -1,483 +1,319 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { 
-  Play, 
-  ArrowRight, 
-  Users, 
-  BookOpen, 
-  Trophy, 
-  Star, 
-  Sparkles,
-  ChevronDown,
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  CalendarDays,
+  CheckCircle2,
+  Crown,
+  Gift,
+  Layers3,
+  MessageCircle,
   Zap,
-  Brain,
-  Rocket,
-  Code,
-  Cpu,
-  Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/contexts/UserContext";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
+import type { Product } from "@/lib/products";
+
+interface MonthlyOffersResponse {
+  monthKey: string;
+  freeCourse: Product | null;
+  pools: {
+    beginner: Product[];
+    intermediate: Product[];
+    advanced: Product[];
+  };
+}
+
+const statTone = [
+  {
+    icon: BookOpen,
+    value: "25+",
+    labelPt: "cursos com conteúdo real",
+    labelEn: "courses with real content",
+    className: "border-cyan-400/20 bg-cyan-500/10 text-cyan-200",
+  },
+  {
+    icon: Gift,
+    value: "1",
+    labelPt: "curso grátis completo por mês",
+    labelEn: "fully free course each month",
+    className: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
+  },
+  {
+    icon: Award,
+    value: "100%",
+    labelPt: "certificado incluído no curso grátis",
+    labelEn: "certificate included on the free course",
+    className: "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200",
+  },
+];
 
 export function HeroSection() {
   const { user, isLoggedIn, mounted: userMounted } = useUser();
-  const t = useTranslations("Home.Hero");
   const locale = useLocale();
-  // Subtle background parallax only (no text rotation)
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  const bgX = useSpring(useTransform(mouseX, [-300, 300], [-10, 10]));
-  const bgY = useSpring(useTransform(mouseY, [-300, 300], [-10, 10]));
-  
-  // Animated counters
-  const [studentsCount, setStudentsCount] = useState(0);
-  const [coursesCount, setCoursesCount] = useState(0);
-  const [completionRate, setCompletionRate] = useState(0);
-  const [mounted, setMounted] = useState(false);
-
-  const formatNumber = useMemo(() => new Intl.NumberFormat(locale), [locale]);
-  const headlinePrefix = userMounted && isLoggedIn && user
-    ? t("headline.prefixLogged", { name: user.name.split(" ")[0] })
-    : t("headline.prefix");
-  const subheadingContent = userMounted && isLoggedIn && user
-    ? t.rich("subheading.returning", {
-        name: user.name.split(" ")[0],
-        primary: (chunks) => <span className="text-primary font-semibold">{chunks}</span>,
-        accent: (chunks) => <span className="text-accent font-bold">{chunks}</span>,
-      })
-    : t.rich("subheading.guest", {
-        primary: (chunks) => <span className="text-primary font-semibold">{chunks}</span>,
-        accent: (chunks) => <span className="text-accent font-bold">{chunks}</span>,
-      });
-  const stats = [
-    { icon: BookOpen, color: "purple", value: coursesCount, label: t("stats.courses"), suffix: "" },
-    { icon: Brain, color: "pink", value: studentsCount, label: locale === 'pt-BR' ? 'Aulas Práticas' : 'Practical Lessons', suffix: "+" },
-    { icon: Cpu, color: "yellow", value: completionRate, label: locale === 'pt-BR' ? 'Ferramentas de IA' : 'AI Tools', suffix: "+" },
-  ];
+  const isPtBr = locale === "pt-BR";
+  const [monthlyOffers, setMonthlyOffers] = useState<MonthlyOffersResponse | null>(null);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-  
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    // Reduced sensitivity for smoother movement
-    mouseX.set(x * 0.05);
-    mouseY.set(y * 0.05);
-  };
+    async function fetchMonthlyOffers() {
+      try {
+        const response = await fetch("/api/courses/monthly-offers", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = (await response.json()) as MonthlyOffersResponse;
+        setMonthlyOffers(data);
+      } catch (error) {
+        console.error("Failed to fetch monthly offers for hero:", error);
+      }
+    }
 
-  useEffect(() => {
-    const timer1 = setInterval(() => {
-      setStudentsCount(prev => prev < 500 ? prev + 10 : 500);
-    }, 30);
-    const timer2 = setInterval(() => {
-      setCoursesCount(prev => prev < 18 ? prev + 1 : 18);
-    }, 80);
-    const timer3 = setInterval(() => {
-      setCompletionRate(prev => prev < 50 ? prev + 1 : 50);
-    }, 40);
-
-    return () => {
-      clearInterval(timer1);
-      clearInterval(timer2);
-      clearInterval(timer3);
-    };
+    void fetchMonthlyOffers();
   }, []);
+
+  const firstName = user?.name?.split(" ")[0] || "Aluno";
+  const headlineLineOne =
+    userMounted && isLoggedIn && user
+      ? isPtBr
+        ? `${firstName}, sua próxima vantagem em IA já está pronta`
+        : `${firstName}, your next AI advantage is already waiting`
+      : isPtBr
+        ? "Aprenda IA com clareza, valor real e uma oferta que converte"
+        : "Learn AI with clarity, real value, and an offer that converts";
+  const headlineLineTwo = isPtBr
+    ? "entre grátis, prove o resultado e só então avance de plano"
+    : "enter free, prove the result, and only then move up a plan";
+
+  const monthlySummary = useMemo(() => {
+    if (!monthlyOffers) {
+      return isPtBr
+        ? "Todo mês, um curso completo fica gratuito e o restante do catálogo roda por faixa de plano."
+        : "Every month one full course becomes free, and the rest of the catalog rotates by plan tier.";
+    }
+
+    return isPtBr
+      ? `${monthlyOffers.pools.beginner.length} iniciantes, ${monthlyOffers.pools.intermediate.length} intermediários e ${monthlyOffers.pools.advanced.length} avançados compõem a vitrine mensal atual.`
+      : `${monthlyOffers.pools.beginner.length} beginner, ${monthlyOffers.pools.intermediate.length} intermediate, and ${monthlyOffers.pools.advanced.length} advanced courses make up the current monthly catalog.`;
+  }, [isPtBr, monthlyOffers]);
+
+  const freeCourse = monthlyOffers?.freeCourse || null;
 
   return (
-    <section 
-      className="relative z-0 min-h-screen flex items-center justify-center pt-16 overflow-hidden"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Enhanced Animated Background with Glassmorphism */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/20" />
-        
-        {/* Animated Gradient Orbs */}
-        <motion.div
-          animate={{
-            scale: [1, 1.5, 1],
-            opacity: [0.3, 0.6, 0.3],
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-20 -left-20 md:left-10 w-[300px] md:w-[400px] h-[300px] md:h-[400px] rounded-full blur-[100px]"
-          style={{
-            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.3), transparent 70%)'
-          }}
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.8, 1],
-            opacity: [0.3, 0.5, 0.3],
-            x: [0, -100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 5,
-          }}
-          className="absolute bottom-20 -right-20 md:right-10 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full blur-[120px]"
-          style={{
-            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.25), transparent 70%)'
-          }}
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.6, 1],
-            opacity: [0.2, 0.4, 0.2],
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 2,
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[90vw] md:h-[600px] max-w-[600px] max-h-[600px] rounded-full blur-[150px]"
-          style={{
-            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.2), transparent 70%)'
-          }}
-        />
-        
-        {/* Animated Grid Pattern */}
-        <div 
-          className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.1)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e")`,
-          }}
-        />
-        
-        {/* Floating particles - only render on client */}
-        {mounted && Array.from({ length: 15 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 rounded-full"
-            style={{ 
-              left: `${(i * 7 + 10) % 90}%`, 
-              top: `${(i * 11 + 5) % 90}%`,
-              background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.4) 0%, transparent 70%)'
-            }}
-            animate={{
-              y: [-20, 20, -20],
-              opacity: [0.3, 0.6, 0.3],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 8 + (i % 5) * 2,
-              repeat: Infinity,
-              delay: i * 0.4,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
-      
-      {/* Floating Tech Icons */}
-      <motion.div
-        className="absolute top-32 left-[10%] text-purple-400/20"
-        animate={{
-          y: [0, -20, 0],
-          rotate: [0, 10, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        <Brain size={60} />
-      </motion.div>
-      
-      <motion.div
-        className="absolute bottom-32 right-[10%] text-pink-400/20"
-        animate={{
-          y: [0, 20, 0],
-          rotate: [0, -10, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        <Cpu size={50} />
-      </motion.div>
-      
-      <motion.div
-        className="absolute top-1/2 left-[5%] text-blue-400/20"
-        animate={{
-          x: [0, 20, 0],
-          y: [0, -10, 0],
-          rotate: [0, 360],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      >
-        <Code size={40} />
-      </motion.div>
-      
-      <motion.div
-        className="absolute top-1/3 right-[15%] text-cyan-400/20"
-        animate={{
-          scale: [1, 1.2, 1],
-          rotate: [0, -180, -360],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      >
-        <Globe size={45} />
-      </motion.div>
+    <section className="relative overflow-hidden border-b border-white/5 bg-[#030712] pt-24">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.12),transparent_28%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.16),transparent_35%),linear-gradient(180deg,rgba(3,7,18,1),rgba(3,7,18,0.96))]" />
+      <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Glassmorphism Badge */}
+      <div className="container relative z-10 mx-auto px-4 pb-16 pt-10 md:pb-20">
+        <div className="grid gap-8 lg:grid-cols-[1.15fr,0.85fr] lg:items-center">
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ 
-              duration: 0.7,
-              type: "spring",
-              stiffness: 100
-            }}
-            className="inline-block mb-8"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+            className="space-y-7"
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-xl" />
-              <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-6 py-3 flex items-center gap-2">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                >
-                  <Sparkles className="w-5 h-5 text-purple-400" />
-                </motion.div>
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent font-semibold">
-                  {t("badge")}
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge className="border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-emerald-200">
+                <Gift size={14} className="mr-2" />
+                {isPtBr ? "Curso grátis do mês + certificado" : "Free monthly course + certificate"}
+              </Badge>
+              <Badge className="border-cyan-400/15 bg-cyan-500/10 px-3 py-1 text-cyan-100">
+                <CalendarDays size={14} className="mr-2" />
+                {isPtBr ? "Catálogo mensal transparente" : "Transparent monthly catalog"}
+              </Badge>
+            </div>
+
+            <div className="space-y-4">
+              <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-tight text-white md:text-6xl xl:text-7xl">
+                <span className="block">{headlineLineOne}</span>
+                <span className="block bg-gradient-to-r from-emerald-300 via-cyan-300 to-fuchsia-300 bg-clip-text text-transparent">
+                  {headlineLineTwo}
                 </span>
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+              </h1>
+
+              <p className="max-w-2xl text-lg leading-8 text-gray-300 md:text-xl">
+                {isPtBr
+                  ? "Descubra o curso gratuito do mês, veja exatamente quais trilhas entram no seu plano agora e transforme a primeira experiência em confiança para continuar aprendendo."
+                  : "Discover the monthly free course, see exactly which paths belong to your plan right now, and turn the first experience into confidence to keep learning."}
+            </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {statTone.map((stat) => (
+                <div
+                  key={stat.value + stat.labelPt}
+                  className={`relative overflow-hidden rounded-[24px] border p-4 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl ${stat.className}`}
                 >
-                  <Zap className="w-4 h-4 text-yellow-400" />
-                </motion.div>
-              </div>
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.01))]" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
+                  <div className="relative">
+                  <div className="flex items-center gap-2">
+                    <stat.icon size={16} />
+                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
+                      {isPtBr ? "Prova de valor" : "Proof of value"}
+                    </span>
+                  </div>
+                  <p className="mt-4 text-3xl font-black text-white">{stat.value}</p>
+                  <p className="mt-1 text-sm text-white/75">{isPtBr ? stat.labelPt : stat.labelEn}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Link href={freeCourse ? `/curso/${freeCourse.slug}` : "/aula-gratis"}>
+                <Button size="lg" className="h-14 bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 text-base font-bold text-black shadow-[0_14px_40px_rgba(16,185,129,0.24)] hover:from-emerald-400 hover:to-cyan-400">
+                  <Gift className="mr-2 h-5 w-5" />
+                  {freeCourse
+                    ? isPtBr
+                      ? "Liberar curso grátis do mês"
+                      : "Unlock this month's free course"
+                    : isPtBr
+                      ? "Assistir aula gratuita"
+                      : "Watch free class"}
+                </Button>
+              </Link>
+
+              <Link href="/precos">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-14 border-white/15 bg-white/[0.05] px-8 text-base font-semibold text-white backdrop-blur-xl hover:bg-white/[0.1]"
+                >
+                  <Crown className="mr-2 h-5 w-5" />
+                  {isPtBr ? "Ver planos e catálogo do mês" : "View plans and this month's catalog"}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap gap-3 text-sm text-gray-400">
+              <span className="inline-flex items-center gap-2">
+                <CheckCircle2 size={15} className="text-emerald-300" />
+                {isPtBr ? "Curso grátis com progresso salvo e acesso imediato" : "Free course with saved progress and instant access"}
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <CheckCircle2 size={15} className="text-emerald-300" />
+                {isPtBr ? "Certificado verificável incluído na oferta mensal" : "Verifiable certificate included in the monthly offer"}
+              </span>
             </div>
           </motion.div>
 
-          {/* Enhanced Main Heading - Beautiful Animations */}
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="inline-block"
-              >
-                {headlinePrefix}{" "}
-              </motion.span>
-              <motion.span 
-                className="relative inline-block"
-                initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.7, 
-                  delay: 0.4,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 15
-                }}
-              >
-                {/* Animated gradient background */}
-                <motion.span 
-                  className="absolute inset-0 -z-10 blur-2xl opacity-60"
-                  animate={{ 
-                    backgroundImage: [
-                      'radial-gradient(ellipse at center, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
-                      'radial-gradient(ellipse at center, rgba(236, 72, 153, 0.4) 0%, transparent 70%)',
-                      'radial-gradient(ellipse at center, rgba(6, 182, 212, 0.4) 0%, transparent 70%)',
-                      'radial-gradient(ellipse at center, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
-                    ],
-                    scale: [1, 1.2, 1.1, 1]
-                  }}
-                  transition={{ 
-                    duration: 5, 
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <motion.span 
-                  className="relative z-10 bg-clip-text text-transparent"
-                  animate={{
-                    backgroundImage: [
-                      'linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153), rgb(6, 182, 212))',
-                      'linear-gradient(to right, rgb(236, 72, 153), rgb(6, 182, 212), rgb(168, 85, 247))',
-                      'linear-gradient(to right, rgb(6, 182, 212), rgb(168, 85, 247), rgb(236, 72, 153))',
-                      'linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153), rgb(6, 182, 212))',
-                    ]
-                  }}
-                  transition={{ 
-                    duration: 4, 
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                  style={{ backgroundClip: 'text', WebkitBackgroundClip: 'text' }}
-                >
-                  {t("headline.highlight")}
-                </motion.span>
-              </motion.span>
-              <br />
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="inline-block"
-              >
-                {t("headline.suffix")}
-              </motion.span>
-            </h1>
-
-          {/* Glassmorphism Subheading Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="mb-10 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.08 }}
+            className="space-y-4"
           >
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 blur-xl group-hover:blur-2xl transition-all duration-300" />
-              <div className="relative backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
-                <p className="text-xl text-foreground/90 font-medium leading-relaxed">
-                  {subheadingContent}
+            <div className="overflow-hidden rounded-[30px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03)_12%,rgba(3,7,18,0.94)_100%)] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
+              <div className="absolute inset-x-10 top-0 h-px bg-white/20" />
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.22em] text-emerald-300">
+                    {isPtBr ? "Oferta principal do mês" : "Primary offer of the month"}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black text-white">
+                    {freeCourse?.name || (isPtBr ? "Um curso completo grátis todo mês" : "A full course free every month")}
+                  </h2>
+                </div>
+                <div className="rounded-[22px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.2),rgba(16,185,129,0.08))] px-4 py-3 text-right shadow-[0_12px_30px_rgba(16,185,129,0.16)]">
+                  <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
+                  <p className="text-3xl font-black text-white">R$ 0</p>
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm leading-6 text-gray-300">
+                {freeCourse
+                  ? freeCourse.copy?.shortDescription || freeCourse.copy?.subheadline || freeCourse.name
+                  : isPtBr
+                    ? "Entre, teste a experiência completa da academia e entenda o valor real do restante da oferta."
+                    : "Get in, try the full academy experience, and understand the real value of the rest of the offer."}
+              </p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                    {isPtBr ? "O que está incluso" : "What is included"}
+                  </p>
+                  <ul className="mt-3 space-y-2 text-sm text-white/85">
+                    <li className="inline-flex items-center gap-2">
+                      <CheckCircle2 size={14} className="text-emerald-300" />
+                      {isPtBr ? "Acesso completo ao curso" : "Full course access"}
+                    </li>
+                    <li className="inline-flex items-center gap-2">
+                      <CheckCircle2 size={14} className="text-emerald-300" />
+                      {isPtBr ? "Progresso salvo no portal" : "Saved progress in the portal"}
+                    </li>
+                    <li className="inline-flex items-center gap-2">
+                      <CheckCircle2 size={14} className="text-emerald-300" />
+                      {isPtBr ? "Certificado verificável" : "Verifiable certificate"}
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                    {isPtBr ? "Como o modelo funciona" : "How the model works"}
+                  </p>
+                  <ul className="mt-3 space-y-2 text-sm text-white/85">
+                    <li className="inline-flex items-center gap-2">
+                      <Zap size={14} className="text-cyan-300" />
+                      {isPtBr ? "1 curso grátis novo no início de cada mês" : "1 new free course at the start of each month"}
+                    </li>
+                    <li className="inline-flex items-center gap-2">
+                      <Zap size={14} className="text-cyan-300" />
+                      {isPtBr ? "Pool rotativo por faixa de plano" : "Rotating pool by plan tier"}
+                    </li>
+                    <li className="inline-flex items-center gap-2">
+                      <Zap size={14} className="text-cyan-300" />
+                      {isPtBr ? "Upgrade fica claro antes da compra" : "Upgrade value is clear before purchase"}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-[22px] border border-white/10 bg-black/20 p-4 text-sm text-gray-300 backdrop-blur-xl">
+                <p className="font-semibold text-white">{isPtBr ? "Catálogo atual do mês" : "Current monthly catalog"}</p>
+                <p className="mt-1 leading-6">{monthlySummary}</p>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                  {isPtBr ? "Entrada sem fricção" : "Frictionless entry"}
+                </p>
+                <h3 className="mt-2 text-xl font-bold text-white">
+                  {isPtBr ? "O usuário novo entende o valor antes de pagar" : "New users understand the value before paying"}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-gray-400">
+                  {isPtBr
+                    ? "Curso grátis, catálogo mensal e upgrade aparecem com contexto, sem telas confusas."
+                    : "Free course, monthly catalog, and upgrade appear with context, without confusing screens."}
+                </p>
+              </div>
+
+              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
+                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                  {isPtBr ? "Posicionamento" : "Positioning"}
+                </p>
+                <h3 className="mt-2 text-xl font-bold text-white">
+                  {isPtBr ? "Oferta clara, moderna e pronta para vender" : "Clear, modern offer ready to sell"}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-gray-400">
+                  {isPtBr
+                    ? "A página abre com contexto, confiança e caminho de compra, sem ruído desnecessário."
+                    : "The page opens with context, trust, and a buying path, without unnecessary noise."}
                 </p>
               </div>
             </div>
           </motion.div>
-
-          {/* Enhanced CTA Buttons with Hover Effects */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center mb-12"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Link href="/aula-gratis">
-                <Button 
-                  size="lg" 
-                  className="relative bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-10 py-7 group overflow-hidden"
-                >
-                  <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <span className="relative flex items-center">
-                    <motion.div
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      <Play className="mr-2" />
-                    </motion.div>
-                    {t("cta.watchClass")}
-                  </span>
-                </Button>
-              </Link>
-            </motion.div>
-            
-            <motion.div
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Link href="/cursos">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/50 to-primary/50 rounded-lg blur opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    className="text-lg px-10 py-7 border-2 border-primary/50 hover:border-primary hover:bg-primary/10 text-foreground" 
-                  >
-                    {t("cta.viewCourses")} 
-                    <motion.div
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      <ArrowRight className="ml-2" />
-                    </motion.div>
-                  </Button>
-                </div>
-              </Link>
-            </motion.div>
-          </motion.div>
-
-          {/* Glassmorphism Stats Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.2 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.3 + index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="group relative"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-${stat.color}-500/20 to-${stat.color}-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-white/20 transition-all duration-300">
-                  <div className="flex items-center gap-3">
-                    <motion.div
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
-                      className={`text-${stat.color}-400`}
-                    >
-                      <stat.icon size={24} />
-                    </motion.div>
-                    <div>
-                      <div className="text-2xl font-bold">
-                        {typeof stat.value === "number" ? formatNumber.format(stat.value) : stat.value}{stat.suffix}
-                      </div>
-                      <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <div className="animate-bounce">
-          <ChevronDown className="text-gray-400" />
-        </div>
-      </motion.div>
     </section>
   );
 }

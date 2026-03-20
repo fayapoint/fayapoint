@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   BookOpen,
   CheckCircle2,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Circle,
@@ -23,11 +24,15 @@ import {
   Loader2,
   Lock,
   Menu,
+  MousePointerClick,
   Settings2,
   Sparkles,
   Trophy,
   X,
   Award,
+  PanelRightOpen,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
@@ -55,6 +60,9 @@ type Chapter = {
   content: string;
   index: number;
   readingMinutes: number;
+  sourceIds: string[];
+  sourceStartIndex: number;
+  sourceEndIndex: number;
 };
 
 type CourseAccessDto = {
@@ -98,6 +106,12 @@ type ReaderSettings = {
   fontSize: number;
   lineHeight: number;
   maxWidth: number;
+};
+
+type ChapterSubheading = {
+  id: string;
+  title: string;
+  level: 2 | 3;
 };
 
 /* ═══════════════════════════════════════════════════════════
@@ -213,7 +227,13 @@ function resolveSavedChapterId(chapterId: string, chapters: Chapter[]): string |
   const legacyMatch = chapterId.match(/^chapter-(\d+)$/i);
   if (legacyMatch) {
     const index = Number(legacyMatch[1]);
-    return chapters[index]?.id ?? null;
+    return (
+      chapters[index]?.id ??
+      chapters.find(
+        (chapter) => index >= chapter.sourceStartIndex && index <= chapter.sourceEndIndex
+      )?.id ??
+      null
+    );
   }
 
   return null;
@@ -223,7 +243,11 @@ function normalizeSavedChapterIds(savedIds: string[], chapters: Chapter[]): stri
   return Array.from(
     new Set(
       savedIds
-        .map((chapterId) => resolveSavedChapterId(chapterId, chapters))
+        .map((chapterId) => {
+          const direct = resolveSavedChapterId(chapterId, chapters);
+          if (direct) return direct;
+          return chapters.find((chapter) => chapter.sourceIds.includes(chapterId))?.id ?? null;
+        })
         .filter((chapterId): chapterId is string => Boolean(chapterId))
     )
   );
@@ -231,7 +255,11 @@ function normalizeSavedChapterIds(savedIds: string[], chapters: Chapter[]): stri
 
 function normalizeSavedHeadingId(savedId: string | null, chapters: Chapter[]): string | null {
   if (!savedId) return null;
-  return resolveSavedChapterId(savedId, chapters);
+  return (
+    resolveSavedChapterId(savedId, chapters) ||
+    chapters.find((chapter) => chapter.sourceIds.includes(savedId))?.id ||
+    null
+  );
 }
 
 function splitIntoChapters(markdown: string): Chapter[] {
@@ -255,15 +283,18 @@ function splitIntoChapters(markdown: string): Chapter[] {
     splitRegex = /^(?=## [^#])/gm;
     headingExtract = /^## ([^\n]+)/m;
   } else {
-    return [
-      {
-        id: "content",
-        title: "Conteúdo",
-        content: markdown,
-        index: 0,
-        readingMinutes: estimateReadingMinutes(markdown),
-      },
-    ];
+      return [
+        {
+          id: "content",
+          title: "Conteúdo",
+          content: markdown,
+          index: 0,
+          readingMinutes: estimateReadingMinutes(markdown),
+          sourceIds: ["content"],
+          sourceStartIndex: 0,
+          sourceEndIndex: 0,
+        },
+      ];
   }
 
   const parts = markdown.split(splitRegex);
@@ -281,6 +312,9 @@ function splitIntoChapters(markdown: string): Chapter[] {
         content: part,
         index: chapters.length,
         readingMinutes: estimateReadingMinutes(part),
+        sourceIds: [slugify(match[1].trim())],
+        sourceStartIndex: chapters.length,
+        sourceEndIndex: chapters.length,
       });
     } else if (part.length > 100) {
       const h1Match = part.match(/^# ([^\n]+)/m);
@@ -290,6 +324,9 @@ function splitIntoChapters(markdown: string): Chapter[] {
         content: part,
         index: chapters.length,
         readingMinutes: estimateReadingMinutes(part),
+        sourceIds: ["introducao"],
+        sourceStartIndex: chapters.length,
+        sourceEndIndex: chapters.length,
       });
     }
   }
@@ -298,6 +335,131 @@ function splitIntoChapters(markdown: string): Chapter[] {
     ch.index = i;
   });
   return chapters;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function buildReaderSections(rawChapters: Chapter[]): Chapter[] {
+  if (rawChapters.length <= 30) {
+    return rawChapters.map((chapter, index) => ({
+      ...chapter,
+      index,
+    }));
+  }
+
+  const targetCount = clamp(Math.round(rawChapters.length / 4), 15, 24);
+  const baseSize = Math.floor(rawChapters.length / targetCount);
+  const remainder = rawChapters.length % targetCount;
+  const grouped: Chapter[] = [];
+  let cursor = 0;
+
+  for (let groupIndex = 0; groupIndex < targetCount; groupIndex++) {
+    const size = baseSize + (groupIndex < remainder ? 1 : 0);
+    const slice = rawChapters.slice(cursor, cursor + size);
+    cursor += size;
+    if (!slice.length) continue;
+
+    const first = slice[0];
+    const last = slice[slice.length - 1];
+
+    grouped.push({
+      id: `parte-${groupIndex + 1}-${first.id}`,
+      title:
+        slice.length === 1
+          ? first.title
+          : `Parte ${String(groupIndex + 1).padStart(2, "0")} · ${first.title}`,
+      content: slice.map((chapter) => chapter.content.trim()).join("\n\n---\n\n"),
+      index: groupIndex,
+      readingMinutes: slice.reduce((sum, chapter) => sum + chapter.readingMinutes, 0),
+      sourceIds: slice.flatMap((chapter) => chapter.sourceIds),
+      sourceStartIndex: first.sourceStartIndex,
+      sourceEndIndex: last.sourceEndIndex,
+    });
+  }
+
+  return grouped;
+}
+
+function sanitizeChapterTitle(title: string): string {
+  return title
+    .replace(/^Cap[ií]tulo\s+\d+\s*:\s*/i, "")
+    .replace(/\s+-\s+Aula\s+\d+\s*:\s*/i, ": ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+function sanitizeCourseMarkdown(markdown: string): string {
+  if (!markdown?.trim()) return "";
+
+  const lines = markdown.split("\n");
+  const cleanedLines: string[] = [];
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+
+    if (!line) {
+      cleanedLines.push(rawLine);
+      continue;
+    }
+
+    const lower = line.toLowerCase();
+
+    if (
+      lower.includes("canon editorial de fronteira: gpt-5.4 e claude opus 4.6") ||
+      lower.includes("quando a aula precisa de uma referência de fronteira para comparar padrão de qualidade") ||
+      lower.includes("a base editorial desta atualização foi verificada em fontes oficiais") ||
+      lower.includes("isso nos ajuda a evitar conteúdo congelado no tempo") ||
+      lower.includes("criada para alinhar a estrutura real de aprendizagem com o catálogo do curso") ||
+      lower.includes("manter a divisão por módulos coerente")
+    ) {
+      continue;
+    }
+
+    const duplicateChapterHeader = line.match(/^#\s+cap[ií]tulo\s+\d+:\s+(.+)$/i);
+    if (duplicateChapterHeader) {
+      cleanedLines.push(`# ${sanitizeChapterTitle(duplicateChapterHeader[1])}`);
+      continue;
+    }
+
+    const duplicateLessonLine = line.match(/^cap[ií]tulo\s+\d+:\s+(.+)$/i);
+    if (duplicateLessonLine) {
+      const normalized = sanitizeChapterTitle(duplicateLessonLine[1]);
+      const previous = cleanedLines[cleanedLines.length - 1]?.trim().replace(/^#\s+/, "");
+      if (previous?.toLowerCase() === normalized.toLowerCase()) {
+        continue;
+      }
+      cleanedLines.push(`## ${normalized}`);
+      continue;
+    }
+
+    cleanedLines.push(rawLine);
+  }
+
+  return cleanedLines
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function extractChapterSubheadings(markdown: string): ChapterSubheading[] {
+  if (!markdown?.trim()) return [];
+
+  const matches = [...markdown.matchAll(/^(##|###)\s+(.+)$/gm)];
+  return matches
+    .map((match) => {
+      const level = match[1] === "##" ? 2 : 3;
+      const title = match[2].trim();
+      return {
+        id: slugify(title),
+        title,
+        level,
+      } as ChapterSubheading;
+    })
+    .filter((heading, index, list) => {
+      return list.findIndex((item) => item.id === heading.id) === index;
+    });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -352,8 +514,16 @@ export default function CourseReaderPage() {
   const resumeHeadingRef = useRef<string | null>(null);
 
   /* ─── Derived ─── */
-  const chapters = useMemo(() => splitIntoChapters(rawContent), [rawContent]);
+  const sanitizedContent = useMemo(() => sanitizeCourseMarkdown(rawContent), [rawContent]);
+  const chapters = useMemo(
+    () => buildReaderSections(splitIntoChapters(sanitizedContent)),
+    [sanitizedContent]
+  );
   const currentChapter = chapters[currentChapterIndex] || null;
+  const currentChapterSubheadings = useMemo(
+    () => extractChapterSubheadings(currentChapter?.content || ""),
+    [currentChapter?.content]
+  );
   const totalReadingMinutes = useMemo(
     () => chapters.reduce((sum, ch) => sum + ch.readingMinutes, 0),
     [chapters]
@@ -454,11 +624,13 @@ export default function CourseReaderPage() {
       if (!courseAccess) return false;
       if (courseAccess.access === "full") return false;
       if (courseAccess.access === "limited") {
-        return chapterIndex >= courseAccess.freeChapters;
+        const chapter = chapters[chapterIndex];
+        if (!chapter) return true;
+        return chapter.sourceStartIndex >= courseAccess.freeChapters;
       }
       return true;
     },
-    [courseAccess]
+    [chapters, courseAccess]
   );
 
   /* ─── Navigation ─── */
@@ -528,6 +700,19 @@ export default function CourseReaderPage() {
     });
     toast.success("Capítulo concluído!");
   }, [currentChapter, chapters.length, completedChapterIds, syncProgress]);
+
+  const jumpToHeading = useCallback((headingId: string) => {
+    const target = document.getElementById(headingId);
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  const scrollViewportBy = useCallback((direction: "up" | "down") => {
+    window.scrollBy({
+      top: direction === "down" ? window.innerHeight * 0.72 : window.innerHeight * -0.72,
+      behavior: "smooth",
+    });
+  }, []);
 
   const toggleChapterComplete = useCallback(
     (chapterId: string) => {
@@ -1672,6 +1857,118 @@ export default function CourseReaderPage() {
                       {currentChapter.content}
                     </ReactMarkdown>
                   </div>
+                </div>
+              </div>
+
+              {/* Floating navigation widget */}
+              <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3 md:bottom-6 md:right-6">
+                <div className="hidden lg:block w-[280px] rounded-[26px] border border-white/[0.08] bg-[#0d0f18]/86 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.45)] overflow-hidden">
+                  <div className="px-4 py-3 border-b border-white/[0.06] bg-gradient-to-r from-violet-500/[0.16] via-fuchsia-500/[0.07] to-cyan-500/[0.08]">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Navegação rápida</p>
+                        <p className="text-sm font-semibold text-white/90 truncate">
+                          {currentChapter.title}
+                        </p>
+                      </div>
+                      <div className="w-10 h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] flex items-center justify-center">
+                        <PanelRightOpen size={17} className="text-violet-300" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                      >
+                        <ArrowUp size={14} />
+                        Topo
+                      </button>
+                      <button
+                        onClick={() => scrollViewportBy("down")}
+                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                      >
+                        <ChevronDown size={14} />
+                        Próxima dobra
+                      </button>
+                      <button
+                        onClick={() => scrollViewportBy("up")}
+                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                      >
+                        <ArrowDown size={14} className="rotate-180" />
+                        Página acima
+                      </button>
+                      <button
+                        onClick={() => scrollViewportBy("down")}
+                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                      >
+                        <ArrowDown size={14} />
+                        Página abaixo
+                      </button>
+                    </div>
+
+                    <div className="mt-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] p-2">
+                      <div className="flex items-center gap-2 px-2 pb-2">
+                        <MousePointerClick size={14} className="text-cyan-300" />
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/35">
+                          Subtítulos
+                        </p>
+                      </div>
+                      <div className="max-h-[240px] overflow-y-auto pr-1">
+                        {currentChapterSubheadings.length > 0 ? (
+                          <div className="space-y-1">
+                            {currentChapterSubheadings.map((heading) => (
+                              <button
+                                key={heading.id}
+                                onClick={() => jumpToHeading(heading.id)}
+                                className={cn(
+                                  "w-full rounded-xl px-3 py-2 text-left transition-all",
+                                  heading.level === 3 ? "ml-3 w-[calc(100%-0.75rem)]" : "",
+                                  "hover:bg-violet-500/[0.10]"
+                                )}
+                              >
+                                <span className="block text-xs font-medium text-white/72 line-clamp-2">
+                                  {heading.title}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="px-3 py-2 text-xs text-white/35">
+                            Este capítulo está mais linear. Use os botões para continuar a leitura.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-2">
+                  <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    className="w-12 h-12 rounded-2xl border border-white/[0.08] bg-[#0d0f18]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-white/80 hover:text-white hover:bg-white/[0.08] transition-all"
+                    aria-label="Voltar ao topo"
+                  >
+                    <ArrowUp size={18} />
+                  </button>
+                  <button
+                    onClick={goToPrevChapter}
+                    disabled={currentChapterIndex === 0}
+                    className="w-12 h-12 rounded-2xl border border-white/[0.08] bg-[#0d0f18]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-white/80 hover:text-white hover:bg-white/[0.08] transition-all disabled:opacity-35 disabled:hover:bg-[#0d0f18]/88"
+                    aria-label="Capítulo anterior"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <button
+                    onClick={goToNextChapter}
+                    disabled={currentChapterIndex >= chapters.length - 1}
+                    className="w-12 h-12 rounded-2xl border border-violet-400/20 bg-gradient-to-br from-violet-500/[0.22] to-fuchsia-500/[0.16] backdrop-blur-2xl shadow-[0_12px_40px_rgba(92,55,222,0.28)] flex items-center justify-center text-white hover:from-violet-500/[0.28] hover:to-fuchsia-500/[0.22] transition-all disabled:opacity-35 disabled:shadow-none"
+                    aria-label="Próximo capítulo"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
                 </div>
               </div>
 

@@ -26,6 +26,7 @@ import { useUser } from "@/contexts/UserContext";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { formatEditorialDate } from "@/lib/editorial-verification";
+import { getClientAuthHeaders } from "@/lib/client-auth";
 
 export default function CourseSalesPage() {
   const params = useParams();
@@ -85,8 +86,17 @@ export default function CourseSalesPage() {
   const discount = Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100);
   const savings = product.pricing.originalPrice - product.pricing.price;
   const isPtBr = locale === 'pt-BR';
+  const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
+  const effectivePrice = isFreeCourseOfMonth ? 0 : product.pricing.price;
+  const effectiveOriginalPrice = isFreeCourseOfMonth
+    ? product.pricing.price
+    : product.pricing.originalPrice;
+  const effectiveDiscount =
+    isFreeCourseOfMonth && product.pricing.price > 0
+      ? 100
+      : discount;
   const verifiedAtLabel = formatEditorialDate(
-    product.editorialVerification?.verifiedAt || "2026-03-19",
+    product.editorialVerification?.verifiedAt || "2026-03-20",
     isPtBr ? "pt-BR" : "en-US"
   );
   
@@ -104,6 +114,87 @@ export default function CourseSalesPage() {
     setExpandedFaqs(prev =>
       prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
     );
+  };
+
+  const handleFreeCourseClaim = async () => {
+    if (!isLoggedIn) {
+      router.push(`/${locale}/login?redirect=${encodeURIComponent(`/${locale}/curso/${product.slug}`)}`);
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/courses/enroll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...getClientAuthHeaders(),
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          courseSlug: product.slug,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Não foi possível liberar o curso grátis do mês.");
+      }
+
+      toast.success(
+        isPtBr
+          ? "Curso grátis do mês liberado com sucesso!"
+          : "Free course of the month unlocked successfully!"
+      );
+      router.push(`/${locale}/portal/learn/${product.slug}`);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : isPtBr
+            ? "Não foi possível liberar o curso grátis do mês."
+            : "Could not unlock the free course of the month."
+      );
+    }
+  };
+
+  const handlePrimaryCourseAction = () => {
+    if (isFreeCourseOfMonth) {
+      void handleFreeCourseClaim();
+      return;
+    }
+
+    addItem({
+      id: `course:${product.slug}`,
+      type: 'course',
+      name: product.name,
+      quantity: 1,
+      price: product.pricing.price,
+      slug: product.slug
+    });
+    toast.success(t("toast.addedToCart"));
+    if (isLoggedIn) {
+      router.push('/checkout/cart');
+    } else {
+      router.push('/onboarding');
+    }
+  };
+
+  const handleSecondaryCourseAction = () => {
+    if (isFreeCourseOfMonth) {
+      void handleFreeCourseClaim();
+      return;
+    }
+
+    addItem({
+      id: `course:${product.slug}`,
+      type: 'course',
+      name: product.name,
+      quantity: 1,
+      price: product.pricing.price,
+      slug: product.slug
+    });
+    toast.success(t("toast.added"));
   };
 
   return (
@@ -136,6 +227,12 @@ export default function CourseSalesPage() {
 
                 {/* Badges */}
                 <div className="flex flex-wrap items-center gap-3 mb-6">
+                  {isFreeCourseOfMonth && (
+                    <Badge className="bg-gradient-to-r from-emerald-400 to-green-500 text-black border-0">
+                      <Gift className="mr-1" size={14} />
+                      {isPtBr ? "Curso grátis do mês" : "Free course of the month"}
+                    </Badge>
+                  )}
                   {product.metrics.students > 100 && (
                     <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-0">
                       <Flame className="mr-1" size={14} />
@@ -144,7 +241,9 @@ export default function CourseSalesPage() {
                   )}
                   <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
                     <Timer className="mr-1" size={14} />
-                    {locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
+                    {isFreeCourseOfMonth
+                      ? (isPtBr ? 'Acesso aberto no mês' : 'Monthly open access')
+                      : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
                   </Badge>
                   <Badge className="bg-gray-700 text-gray-300 border-0">
                     {product.level}
@@ -324,45 +423,63 @@ export default function CourseSalesPage() {
                     </div>
 
                     {/* Launch Price Banner */}
-                    {discount > 0 && (
+                    {effectiveDiscount > 0 && (
                       <div className="mb-6 p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border border-green-500/30">
                         <div className="flex items-center gap-2 mb-1">
                           <Sparkles className="text-green-400" size={18} />
                           <span className="font-bold text-green-400">
-                            {locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
+                            {isFreeCourseOfMonth
+                              ? (isPtBr ? 'Curso grátis do mês' : 'Free course of the month')
+                              : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
                           </span>
                         </div>
                         <p className="text-xs text-gray-400">
-                          {locale === 'pt-BR' 
-                            ? 'Aproveite o preço especial de lançamento. O valor aumentará em breve.' 
-                            : 'Take advantage of the special launch price. Price will increase soon.'}
+                          {isFreeCourseOfMonth
+                            ? (isPtBr
+                                ? 'Oferta mensal liberada para qualquer usuário logado, com certificado incluso.'
+                                : 'Monthly offer unlocked for any logged-in user, including the certificate.')
+                            : locale === 'pt-BR' 
+                              ? 'Aproveite o preço especial de lançamento. O valor aumentará em breve.' 
+                              : 'Take advantage of the special launch price. Price will increase soon.'}
                         </p>
                       </div>
                     )}
 
                     {/* Price */}
                     <div className="mb-6">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-gray-500 line-through text-2xl">
-                          R$ {product.pricing.originalPrice.toLocaleString()}
-                        </span>
-                        <Badge className="bg-red-500 text-white text-lg px-3 py-1">
-                          -{discount}%
-                        </Badge>
-                      </div>
+                      {effectiveOriginalPrice > effectivePrice && (
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="text-gray-500 line-through text-2xl">
+                            R$ {effectiveOriginalPrice.toLocaleString()}
+                          </span>
+                          <Badge className="bg-red-500 text-white text-lg px-3 py-1">
+                            -{effectiveDiscount}%
+                          </Badge>
+                        </div>
+                      )}
                       <div className="flex items-baseline gap-2 mb-2">
                         <span className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                          R$ {product.pricing.price.toLocaleString()}
+                          R$ {effectivePrice.toLocaleString()}
                         </span>
                       </div>
-                      <p className="text-gray-400">
-                        {t("sidebar.orInstallments", { installments: 12, value: `R$ ${(product.pricing.price / 12).toFixed(2)}` })}
-                      </p>
-                      <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
-                        <span className="text-green-400 font-bold">
-                          {t("sidebar.saveToday", { amount: `R$ ${savings.toLocaleString()}` })}
-                        </span>
-                      </div>
+                      {isFreeCourseOfMonth ? (
+                        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-gray-300">
+                          {isPtBr
+                            ? "Acesso completo liberado neste mês para qualquer usuário logado, com certificado incluído."
+                            : "Full access is unlocked this month for any logged-in user, including the certificate."}
+                        </div>
+                      ) : (
+                        <>
+                          <p className="text-gray-400">
+                            {t("sidebar.orInstallments", { installments: 12, value: `R$ ${(product.pricing.price / 12).toFixed(2)}` })}
+                          </p>
+                          <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
+                            <span className="text-green-400 font-bold">
+                              {t("sidebar.saveToday", { amount: `R$ ${savings.toLocaleString()}` })}
+                            </span>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     {/* CTAs */}
@@ -370,45 +487,24 @@ export default function CourseSalesPage() {
                       <Button
                         className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-6 text-lg shadow-lg shadow-purple-500/50"
                         size="lg"
-                        onClick={() => {
-                          addItem({
-                            id: `course:${product.slug}`,
-                            type: 'course',
-                            name: product.name,
-                            quantity: 1,
-                            price: product.pricing.price,
-                            slug: product.slug
-                          });
-                          toast.success(t("toast.addedToCart"));
-                          if (isLoggedIn) {
-                            router.push('/checkout/cart');
-                          } else {
-                            router.push('/onboarding');
-                          }
-                        }}
+                        onClick={handlePrimaryCourseAction}
                       >
-                        <ShoppingCart className="mr-2" size={20} />
-                        {t("sidebar.buyNow")}
+                        {isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
+                        {isFreeCourseOfMonth
+                          ? (isPtBr ? "Liberar grátis agora" : "Unlock for free now")
+                          : t("sidebar.buyNow")}
                       </Button>
                       
-                      <Button
-                        variant="outline"
-                        className="w-full border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10"
-                        size="lg"
-                        onClick={() => {
-                          addItem({
-                            id: `course:${product.slug}`,
-                            type: 'course',
-                            name: product.name,
-                            quantity: 1,
-                            price: product.pricing.price,
-                            slug: product.slug
-                          });
-                          toast.success(t("toast.added"));
-                        }}
-                      >
-                        {t("sidebar.addToCart")}
-                      </Button>
+                      {!isFreeCourseOfMonth && (
+                        <Button
+                          variant="outline"
+                          className="w-full border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10"
+                          size="lg"
+                          onClick={handleSecondaryCourseAction}
+                        >
+                          {t("sidebar.addToCart")}
+                        </Button>
+                      )}
                     </div>
 
                     {/* What's Included */}
@@ -616,22 +712,7 @@ export default function CourseSalesPage() {
                 <Button
                   className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg"
                   size="lg"
-                  onClick={() => {
-                    addItem({
-                      id: `course:${product.slug}`,
-                      type: 'course',
-                      name: product.name,
-                      quantity: 1,
-                      price: product.pricing.price,
-                      slug: product.slug
-                    });
-                    toast.success(t("toast.addedToCart"));
-                    if (isLoggedIn) {
-                      router.push('/checkout/cart');
-                    } else {
-                      router.push('/onboarding');
-                    }
-                  }}
+                  onClick={handlePrimaryCourseAction}
                 >
                   {t("whatYouLearn.cta")}
                   <ArrowRight className="ml-2" size={20} />
@@ -855,25 +936,12 @@ export default function CourseSalesPage() {
                 <Button
                   className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg shadow-lg shadow-purple-500/50"
                   size="lg"
-                  onClick={() => {
-                    addItem({
-                      id: `course:${product.slug}`,
-                      type: 'course',
-                      name: product.name,
-                      quantity: 1,
-                      price: product.pricing.price,
-                      slug: product.slug
-                    });
-                    toast.success(t("toast.addedToCart"));
-                    if (isLoggedIn) {
-                      router.push('/checkout/cart');
-                    } else {
-                      router.push('/onboarding');
-                    }
-                  }}
+                  onClick={handlePrimaryCourseAction}
                 >
-                  <ShoppingCart className="mr-2" size={20} />
-                  {t("finalCta.enrollNow", { currency: "R$", price: product.pricing.price.toLocaleString() })}
+                  {isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
+                  {isFreeCourseOfMonth
+                    ? (isPtBr ? "Liberar curso grátis do mês" : "Unlock free course of the month")
+                    : t("finalCta.enrollNow", { currency: "R$", price: product.pricing.price.toLocaleString() })}
                 </Button>
               </div>
 
@@ -900,33 +968,20 @@ export default function CourseSalesPage() {
       <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-gray-900/95 backdrop-blur border-t border-purple-500/50 p-4 z-50">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-500 line-through text-sm">R$ {product.pricing.originalPrice.toLocaleString()}</span>
-              <Badge className="bg-red-500 text-white text-xs">-{discount}%</Badge>
-            </div>
-            <div className="text-xl font-bold text-purple-400">R$ {product.pricing.price.toLocaleString()}</div>
+            {effectiveOriginalPrice > effectivePrice && (
+              <div className="flex items-center gap-2">
+                <span className="text-gray-500 line-through text-sm">R$ {effectiveOriginalPrice.toLocaleString()}</span>
+                <Badge className="bg-red-500 text-white text-xs">-{effectiveDiscount}%</Badge>
+              </div>
+            )}
+            <div className="text-xl font-bold text-purple-400">R$ {effectivePrice.toLocaleString()}</div>
           </div>
           <Button
             className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-6"
-            onClick={() => {
-              addItem({
-                id: `course:${product.slug}`,
-                type: 'course',
-                name: product.name,
-                quantity: 1,
-                price: product.pricing.price,
-                slug: product.slug
-              });
-              toast.success(t("toast.added"));
-              if (isLoggedIn) {
-                router.push('/checkout/cart');
-              } else {
-                router.push('/onboarding');
-              }
-            }}
+            onClick={handlePrimaryCourseAction}
           >
-            <ShoppingCart className="mr-2" size={18} />
-            {t("mobileCta.buy")}
+            {isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}
+            {isFreeCourseOfMonth ? (isPtBr ? "Liberar grátis" : "Unlock free") : t("mobileCta.buy")}
           </Button>
         </div>
       </div>

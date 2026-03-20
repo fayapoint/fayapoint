@@ -21,7 +21,7 @@ type CourseModuleLike = {
 };
 
 export const DEFAULT_EDITORIAL_VERIFICATION: EditorialVerification = {
-  verifiedAt: "2026-03-19",
+  verifiedAt: "2026-03-20",
   canonModels: ["GPT-5.4", "Claude Opus 4.6"],
   rule: "Conteúdo revisado com fontes oficiais recentes e cobertura real por aula.",
   sourceGroup: "official-current",

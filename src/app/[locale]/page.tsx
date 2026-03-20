@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Hero3D } from "@/components/home/Hero3D";
+import { HeroSection } from "@/components/home/HeroSection";
 import { WhatWeDoSection } from "@/components/home/WhatWeDoSection";
 import { ServicesCarousel } from "@/components/home/ServicesCarousel";
 import { ChatGPTAllowlistingBanner } from "@/components/home/ChatGPTAllowlistingBanner";
@@ -16,7 +16,6 @@ import { StickyCTA } from "@/components/conversion/StickyCTA";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 import { GateLandingPage } from "@/components/gate/GateLandingPage";
-import { SmoothScroll } from "@/components/3d/SmoothScroll";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -31,29 +30,27 @@ export default async function Home() {
   }
 
   return (
-    <SmoothScroll>
-      <div className="min-h-screen bg-[#030712] text-foreground">
-        <Header />
-        <main>
-          <Hero3D />
-          <FreeOfferBanner />
-          <ValuePropositionCTA />
-          <ChatGPTAllowlistingBanner />
-          <WhatWeDoSection />
-          <ServicesCarousel />
-          <AIToolsMarquee />
-          <FeaturesSection />
-          <CourseCategoriesSection />
-          <TestimonialsSection />
-          <CTASection />
-        </main>
-        <Footer />
+    <div className="min-h-screen bg-[#030712] text-foreground">
+      <Header />
+      <main>
+        <HeroSection />
+        <FreeOfferBanner />
+        <ValuePropositionCTA />
+        <ChatGPTAllowlistingBanner />
+        <WhatWeDoSection />
+        <ServicesCarousel />
+        <AIToolsMarquee />
+        <FeaturesSection />
+        <CourseCategoriesSection />
+        <TestimonialsSection />
+        <CTASection />
+      </main>
+      <Footer />
 
-        {/* Conversion optimization */}
-        <StickyCTA />
-        <ExitIntentPopup />
-        <WhatsAppButton />
-      </div>
-    </SmoothScroll>
+      {/* Conversion optimization */}
+      <StickyCTA />
+      <ExitIntentPopup />
+      <WhatsAppButton />
+    </div>
   );
 }

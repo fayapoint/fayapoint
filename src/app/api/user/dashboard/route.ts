@@ -5,7 +5,7 @@ import CourseProgress from '@/models/CourseProgress';
 import Order from '@/models/Order';
 import { getMongoClient } from '@/lib/database';
 import { ACHIEVEMENTS, DAILY_CHALLENGES, WEEKLY_MISSIONS } from '@/models/Achievement';
-import { calculateEnrollmentSlots, SubscriptionPlan, CourseLevel } from '@/lib/course-tiers';
+import { calculateEnrollmentSlots, SubscriptionPlan, CourseLevel, resolvePlan } from '@/lib/course-tiers';
 import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
 import { getAuthUser } from '@/lib/auth';
 
@@ -45,6 +45,30 @@ const RESOURCES_BY_PLAN = {
     { name: 'Geração de Imagens AI', available: false, limit: '0/mês' },
     { name: 'Suporte Prioritário', available: false },
     { name: 'Download de Materiais', available: false },
+  ],
+  explorador: [
+    { name: 'Acesso à Comunidade', available: true },
+    { name: 'Cursos Iniciantes do Mês', available: true },
+    { name: 'Geração de Imagens AI', available: true, limit: '100 créditos/mês' },
+    { name: 'Suporte Prioritário', available: false },
+    { name: 'Download de Materiais', available: true },
+  ],
+  profissional: [
+    { name: 'Acesso à Comunidade', available: true },
+    { name: 'Cursos de Todas as Faixas', available: true },
+    { name: 'Geração de Imagens AI', available: true, limit: '300 créditos/mês' },
+    { name: 'Suporte Prioritário', available: true },
+    { name: 'Download de Materiais', available: true },
+    { name: 'Conteúdo Exclusivo', available: true },
+  ],
+  expert: [
+    { name: 'Acesso à Comunidade', available: true },
+    { name: 'Cursos de Todas as Faixas', available: true },
+    { name: 'Geração de Imagens AI', available: true, limit: '800 créditos/mês' },
+    { name: 'Suporte VIP', available: true },
+    { name: 'Download de Materiais', available: true },
+    { name: 'Conteúdo Exclusivo', available: true },
+    { name: 'Consultoria Mensal', available: true },
   ],
   starter: [
     { name: 'Acesso à Comunidade', available: true },
@@ -177,7 +201,8 @@ export async function GET(request: Request) {
     });
 
     // Determine resources based on plan
-    const plan = user.subscription?.plan || 'free';
+    const rawPlan = user.subscription?.plan || 'free';
+    const plan = resolvePlan(rawPlan);
     const resources = RESOURCES_BY_PLAN[plan as keyof typeof RESOURCES_BY_PLAN] || RESOURCES_BY_PLAN.free;
 
     // Calculate enrollment slots based on tier
@@ -197,7 +222,7 @@ export async function GET(request: Request) {
       new Date(userDailyChallenge.date).toDateString() === today.toDateString();
     
     // Weekly mission for Pro+ users
-    const weeklyMission = ['pro', 'business', 'profissional', 'expert'].includes(plan) ? getWeeklyMission(today) : null;
+    const weeklyMission = ['profissional', 'expert'].includes(plan) ? getWeeklyMission(today) : null;
 
     // Calculate level progress
     const currentXp = user.progress?.xp || 0;
