@@ -76,7 +76,7 @@ export async function GET(request: Request) {
         });
       }
 
-      const userPlan = (user.subscription?.plan || 'free') as SubscriptionPlan;
+      const userPlan = resolvePlan(user.subscription?.plan || 'free');
       const enrolledCourses = user.enrolledCourses || [];
       const slots = calculateEnrollmentSlots(userPlan, enrolledCourses);
       const activeEnrollments = enrolledCourses.filter(

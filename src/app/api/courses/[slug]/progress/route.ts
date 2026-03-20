@@ -5,7 +5,7 @@ import CourseProgress from '@/models/CourseProgress';
 import Order from '@/models/Order';
 import { getAuthUser } from '@/lib/auth';
 import { getMongoClient } from '@/lib/products';
-import { SubscriptionPlan, TIER_CONFIGS } from '@/lib/course-tiers';
+import { resolvePlan, TIER_CONFIGS } from '@/lib/course-tiers';
 
 function uniqueStrings(values: string[]) {
   return Array.from(new Set(values.map((v) => v.trim()).filter(Boolean)));
@@ -19,7 +19,7 @@ async function requireCourseAccess(userId: string, slug: string) {
     return { error: NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 }) };
   }
 
-  const userPlan = (user.subscription?.plan || 'free') as SubscriptionPlan;
+  const userPlan = resolvePlan(user.subscription?.plan || 'free');
   const tierConfig = TIER_CONFIGS[userPlan];
 
   let hasAccess = false;
