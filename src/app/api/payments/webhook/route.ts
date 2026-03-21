@@ -27,11 +27,15 @@ export async function POST(request: NextRequest) {
     const headerToken = request.headers.get('asaas-access-token');
     const webhookToken = queryToken || headerToken;
 
-    // Verify webhook token (optional but recommended)
+    // Verify webhook token (REQUIRED in production)
     const expectedToken = process.env.ASAAS_WEBHOOK_TOKEN;
-    if (expectedToken && webhookToken && !verifyWebhookToken(webhookToken, expectedToken)) {
+    if (!expectedToken) {
+      console.error('[Asaas Webhook] ASAAS_WEBHOOK_TOKEN not configured');
+      return NextResponse.json({ error: 'Webhook not configured' }, { status: 503 });
+    }
+    if (webhookToken && !verifyWebhookToken(webhookToken, expectedToken)) {
       console.warn('[Asaas Webhook] Invalid webhook token');
-      // Don't reject - Asaas might not always send token
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -93,24 +97,38 @@ export async function POST(request: NextRequest) {
       event: body.event,
       receivedAt: new Date(),
       data: {
+        asaasPaymentId: asaasPayment.id,
         asaasStatus: asaasPayment.status,
         value: asaasPayment.value,
         netValue: asaasPayment.netValue,
       },
     });
 
+    // Idempotency check — skip if this exact event was already processed
+    const eventKey = `${body.event}:${asaasPayment.id}:${asaasPayment.paymentDate || 'no-date'}`;
+    const alreadyProcessed = payment.webhookEvents.some(
+      (e: { event: string; data?: { asaasPaymentId?: string } }) =>
+        e.event === body.event && e.data?.asaasPaymentId === asaasPayment.id
+    );
+    if (alreadyProcessed && previousStatus === newStatus) {
+      console.log(`[Asaas Webhook] Duplicate event skipped: ${eventKey}`);
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+
     // Handle specific events
     switch (body.event) {
       case 'PAYMENT_CONFIRMED':
       case 'PAYMENT_RECEIVED':
         payment.status = 'paid';
-        payment.paidAt = asaasPayment.paymentDate 
-          ? new Date(asaasPayment.paymentDate) 
+        payment.paidAt = asaasPayment.paymentDate
+          ? new Date(asaasPayment.paymentDate)
           : new Date();
         payment.invoiceUrl = asaasPayment.invoiceUrl;
-        
-        // Grant access/credits to user (legacy)
-        await grantUserAccess(payment);
+
+        // Grant access/credits to user (only if not already paid)
+        if (previousStatus !== 'paid') {
+          await grantUserAccess(payment);
+        }
         
         // Trigger automatic fulfillment
         try {

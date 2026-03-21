@@ -137,13 +137,17 @@ export async function DELETE(
       );
     }
 
-    // Cancel in Asaas if exists
+    // Cancel in Asaas if exists — only mark cancelled locally if gateway succeeds
     if (payment.providerPaymentId) {
       try {
         const { cancelPayment } = await import('@/lib/asaas');
         await cancelPayment(payment.providerPaymentId);
       } catch (error) {
         console.error('[Payment] Error cancelling in Asaas:', error);
+        return NextResponse.json(
+          { error: 'Falha ao cancelar no gateway de pagamento. Tente novamente.' },
+          { status: 502 }
+        );
       }
     }
 
