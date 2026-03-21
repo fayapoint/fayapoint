@@ -12,6 +12,10 @@ import {
   computeLessonContentCoverage,
   normalizeEditorialVerification,
 } from '@/lib/editorial-verification';
+import {
+  countCourseContentChapters,
+  sanitizeCourseContent,
+} from '@/lib/course-content-sanitizer';
 
 type CourseModule = {
   title?: string;
@@ -85,13 +89,16 @@ export async function GET(
       );
     }
 
+    const sanitizedContent = sanitizeCourseContent(
+      typeof product.courseContent === 'string' ? product.courseContent : 'Conteúdo em breve...'
+    );
+
     const payload = {
-      content: product.courseContent || 'Conteúdo em breve...',
+      content: sanitizedContent.content || 'Conteúdo em breve...',
       title: product.name || course?.title || slug,
       modules: product.detailedCurriculum || fallbackDetailedCurriculum,
       slug: product.slug || slug,
-      contentChapters:
-        typeof product.contentChapters === 'number' ? product.contentChapters : 0,
+      contentChapters: countCourseContentChapters(sanitizedContent.content),
       contentUpdatedAt: product.contentUpdatedAt || null,
       lessonContentCoverage,
       editorialVerification: normalizeEditorialVerification(

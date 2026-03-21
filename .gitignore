@@ -45,3 +45,7 @@ PROJECT_CREDENTIALS.md
 
 # Local Netlify folder
 .netlify
+
+# playwright artifacts
+.playwright-cli/
+output/

@@ -551,6 +551,11 @@ export default function CourseReaderPage() {
     return formatEditorialDate(contentMeta.contentUpdatedAt, isPtBr ? "pt-BR" : "en-US");
   }, [contentMeta?.contentUpdatedAt, isPtBr]);
   const sourceLinks = editorialVerification.sourceLinks?.slice(0, 2) || [];
+  const isWideReadingMode = !sidebarOpen;
+  const readerContentMaxWidth = isWideReadingMode
+    ? Math.min(settings.maxWidth + 320, 1240)
+    : settings.maxWidth + 120;
+  const compactFloatingNavigation = isWideReadingMode;
 
   /* ─── Settings persistence ─── */
   useEffect(() => {
@@ -1602,9 +1607,11 @@ export default function CourseReaderPage() {
         {/* ─── SIDEBAR ─── */}
         <aside
           className={cn(
-            "fixed lg:relative top-[calc(2px+3.5rem)] lg:top-0 left-0 z-30 lg:z-auto h-[calc(100vh-3.5rem-2px)] w-[280px] flex-shrink-0 flex flex-col transition-transform duration-300 ease-out",
-            "bg-[#0d0e16]/95 lg:bg-[#0d0e16] backdrop-blur-xl lg:backdrop-blur-none border-r border-white/[0.04]",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            "fixed lg:relative top-[calc(2px+3.5rem)] lg:top-0 left-0 z-30 lg:z-auto h-[calc(100vh-3.5rem-2px)] w-[280px] flex flex-col overflow-hidden transition-[transform,width,opacity] duration-300 ease-out",
+            "bg-[#0d0e16]/95 lg:bg-[#0d0e16] backdrop-blur-xl lg:backdrop-blur-none",
+            sidebarOpen
+              ? "translate-x-0 border-r border-white/[0.04] lg:w-[280px] lg:opacity-100"
+              : "-translate-x-full border-r border-white/[0.04] lg:translate-x-0 lg:w-0 lg:opacity-0 lg:pointer-events-none lg:border-r-0"
           )}
         >
           {/* Sidebar header */}
@@ -1722,8 +1729,7 @@ export default function CourseReaderPage() {
         {/* ─── MAIN CONTENT ─── */}
         <main
           className={cn(
-            "flex-1 overflow-y-auto transition-all duration-300",
-            sidebarOpen ? "lg:ml-0" : ""
+            "flex-1 min-w-0 overflow-y-auto transition-all duration-300"
           )}
         >
           {/* ─── Locked chapter → show paywall ─── */}
@@ -1734,7 +1740,7 @@ export default function CourseReaderPage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.04] via-transparent to-purple-600/[0.02]" />
                 <div
                   className="relative mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
-                  style={{ maxWidth: settings.maxWidth + 120 }}
+                  style={{ maxWidth: readerContentMaxWidth }}
                 >
                   <div className="flex items-baseline gap-5 mb-6">
                     <span className="text-6xl sm:text-7xl font-black bg-gradient-to-b from-white/10 to-white/[0.02] bg-clip-text text-transparent select-none leading-none tabular-nums">
@@ -1759,7 +1765,7 @@ export default function CourseReaderPage() {
 
               {/* Paywall */}
               <div className="flex-1 flex items-start justify-center p-6 sm:p-10">
-                <div className="w-full" style={{ maxWidth: settings.maxWidth + 120 }}>
+                <div className="w-full" style={{ maxWidth: readerContentMaxWidth }}>
                   <CoursePaywall
                     courseName={courseAccess?.courseTitle || title}
                     coursePrice={courseAccess?.coursePrice ?? null}
@@ -1781,7 +1787,7 @@ export default function CourseReaderPage() {
 
                 <div
                   className="relative mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
-                  style={{ maxWidth: settings.maxWidth + 120 }}
+                  style={{ maxWidth: readerContentMaxWidth }}
                 >
                   {/* Decorative chapter number */}
                   <div className="flex items-baseline gap-5 mb-6">
@@ -1820,7 +1826,7 @@ export default function CourseReaderPage() {
               <div className="flex-1">
                 <div
                   className="mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
-                  style={{ maxWidth: settings.maxWidth + 120 }}
+                  style={{ maxWidth: readerContentMaxWidth }}
                 >
                   <div
                     style={{
@@ -1862,88 +1868,215 @@ export default function CourseReaderPage() {
 
               {/* Floating navigation widget */}
               <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3 md:bottom-6 md:right-6">
-                <div className="hidden lg:block w-[280px] rounded-[26px] border border-white/[0.08] bg-[#0d0f18]/86 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.45)] overflow-hidden">
-                  <div className="px-4 py-3 border-b border-white/[0.06] bg-gradient-to-r from-violet-500/[0.16] via-fuchsia-500/[0.07] to-cyan-500/[0.08]">
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Navegação rápida</p>
-                        <p className="text-sm font-semibold text-white/90 truncate">
-                          {currentChapter.title}
-                        </p>
+                {compactFloatingNavigation ? (
+                  <div className="hidden lg:block w-[220px] rounded-[24px] border border-white/[0.08] bg-[#0d0f18]/84 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.42)] overflow-hidden">
+                    <div className="px-3.5 py-3 border-b border-white/[0.06] bg-gradient-to-r from-violet-500/[0.14] via-fuchsia-500/[0.06] to-cyan-500/[0.08]">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] flex items-center justify-center flex-shrink-0">
+                          <PanelRightOpen size={16} className="text-violet-300" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">
+                            Modo leitura
+                          </p>
+                          <p className="mt-1 text-sm font-semibold text-white/90 line-clamp-2">
+                            {currentChapter.title}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setSidebarOpen(true)}
+                          className="w-9 h-9 rounded-2xl border border-white/[0.08] bg-white/[0.04] flex items-center justify-center text-white/65 hover:text-white hover:bg-white/[0.07] transition-all"
+                          aria-label="Mostrar sumário"
+                        >
+                          <Menu size={15} />
+                        </button>
                       </div>
-                      <div className="w-10 h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] flex items-center justify-center">
-                        <PanelRightOpen size={17} className="text-violet-300" />
+                    </div>
+
+                    <div className="p-3 space-y-2">
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                          className="flex h-11 items-center justify-center rounded-2xl border border-white/[0.07] bg-white/[0.03] text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                          aria-label="Ir para o topo"
+                        >
+                          <ArrowUp size={15} />
+                        </button>
+                        <button
+                          onClick={() => scrollViewportBy("up")}
+                          className="flex h-11 items-center justify-center rounded-2xl border border-white/[0.07] bg-white/[0.03] text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                          aria-label="Subir página"
+                        >
+                          <ArrowDown size={15} className="rotate-180" />
+                        </button>
+                        <button
+                          onClick={() => scrollViewportBy("down")}
+                          className="flex h-11 items-center justify-center rounded-2xl border border-white/[0.07] bg-white/[0.03] text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                          aria-label="Descer página"
+                        >
+                          <ArrowDown size={15} />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={goToPrevChapter}
+                          disabled={currentChapterIndex === 0}
+                          className="flex h-11 items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all disabled:opacity-35"
+                        >
+                          <ChevronLeft size={14} />
+                          Anterior
+                        </button>
+                        <button
+                          onClick={goToNextChapter}
+                          disabled={currentChapterIndex >= chapters.length - 1}
+                          className="flex h-11 items-center justify-center gap-2 rounded-2xl border border-violet-400/18 bg-violet-500/[0.08] text-xs font-medium text-violet-100 hover:bg-violet-500/[0.14] transition-all disabled:opacity-35"
+                        >
+                          Próximo
+                          <ChevronRight size={14} />
+                        </button>
+                      </div>
+
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button className="flex w-full items-center justify-between rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-left transition-all hover:bg-white/[0.06]">
+                            <div className="flex items-center gap-2">
+                              <MousePointerClick size={14} className="text-cyan-300" />
+                              <div>
+                                <p className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+                                  Seções
+                                </p>
+                                <p className="mt-1 text-xs text-white/72">
+                                  {currentChapterSubheadings.length > 0
+                                    ? `${currentChapterSubheadings.length} pontos neste capítulo`
+                                    : "Capítulo linear"}
+                                </p>
+                              </div>
+                            </div>
+                            <ChevronDown size={14} className="text-white/40" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          align="end"
+                          sideOffset={10}
+                          className="w-[280px] rounded-2xl border border-white/[0.08] bg-[#0d0f18]/96 p-2 text-white shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
+                        >
+                          <div className="max-h-[280px] overflow-y-auto pr-1">
+                            {currentChapterSubheadings.length > 0 ? (
+                              <div className="space-y-1">
+                                {currentChapterSubheadings.map((heading) => (
+                                  <button
+                                    key={heading.id}
+                                    onClick={() => jumpToHeading(heading.id)}
+                                    className={cn(
+                                      "w-full rounded-xl px-3 py-2 text-left transition-all hover:bg-violet-500/[0.10]",
+                                      heading.level === 3 ? "ml-3 w-[calc(100%-0.75rem)]" : ""
+                                    )}
+                                  >
+                                    <span className="block text-xs font-medium text-white/72 line-clamp-2">
+                                      {heading.title}
+                                    </span>
+                                  </button>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="px-3 py-2 text-xs text-white/35">
+                                Este capítulo está mais linear. Use os atalhos acima para continuar a leitura.
+                              </div>
+                            )}
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="hidden lg:block w-[280px] rounded-[26px] border border-white/[0.08] bg-[#0d0f18]/86 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.45)] overflow-hidden">
+                    <div className="px-4 py-3 border-b border-white/[0.06] bg-gradient-to-r from-violet-500/[0.16] via-fuchsia-500/[0.07] to-cyan-500/[0.08]">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Navegação rápida</p>
+                          <p className="text-sm font-semibold text-white/90 truncate">
+                            {currentChapter.title}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setSidebarOpen(false)}
+                          className="w-10 h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] flex items-center justify-center text-violet-300 hover:bg-white/[0.08] hover:text-white transition-all"
+                          aria-label="Recolher sumário"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="p-3">
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                          className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                        >
+                          <ArrowUp size={14} />
+                          Topo
+                        </button>
+                        <button
+                          onClick={() => scrollViewportBy("down")}
+                          className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                        >
+                          <ChevronDown size={14} />
+                          Próxima dobra
+                        </button>
+                        <button
+                          onClick={() => scrollViewportBy("up")}
+                          className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                        >
+                          <ArrowDown size={14} className="rotate-180" />
+                          Página acima
+                        </button>
+                        <button
+                          onClick={() => scrollViewportBy("down")}
+                          className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
+                        >
+                          <ArrowDown size={14} />
+                          Página abaixo
+                        </button>
+                      </div>
+
+                      <div className="mt-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] p-2">
+                        <div className="flex items-center gap-2 px-2 pb-2">
+                          <MousePointerClick size={14} className="text-cyan-300" />
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/35">
+                            Subtítulos
+                          </p>
+                        </div>
+                        <div className="max-h-[240px] overflow-y-auto pr-1">
+                          {currentChapterSubheadings.length > 0 ? (
+                            <div className="space-y-1">
+                              {currentChapterSubheadings.map((heading) => (
+                                <button
+                                  key={heading.id}
+                                  onClick={() => jumpToHeading(heading.id)}
+                                  className={cn(
+                                    "w-full rounded-xl px-3 py-2 text-left transition-all",
+                                    heading.level === 3 ? "ml-3 w-[calc(100%-0.75rem)]" : "",
+                                    "hover:bg-violet-500/[0.10]"
+                                  )}
+                                >
+                                  <span className="block text-xs font-medium text-white/72 line-clamp-2">
+                                    {heading.title}
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="px-3 py-2 text-xs text-white/35">
+                              Este capítulo está mais linear. Use os botões para continuar a leitura.
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  <div className="p-3">
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
-                      >
-                        <ArrowUp size={14} />
-                        Topo
-                      </button>
-                      <button
-                        onClick={() => scrollViewportBy("down")}
-                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
-                      >
-                        <ChevronDown size={14} />
-                        Próxima dobra
-                      </button>
-                      <button
-                        onClick={() => scrollViewportBy("up")}
-                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
-                      >
-                        <ArrowDown size={14} className="rotate-180" />
-                        Página acima
-                      </button>
-                      <button
-                        onClick={() => scrollViewportBy("down")}
-                        className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white/75 hover:bg-white/[0.06] hover:text-white transition-all"
-                      >
-                        <ArrowDown size={14} />
-                        Página abaixo
-                      </button>
-                    </div>
-
-                    <div className="mt-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] p-2">
-                      <div className="flex items-center gap-2 px-2 pb-2">
-                        <MousePointerClick size={14} className="text-cyan-300" />
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/35">
-                          Subtítulos
-                        </p>
-                      </div>
-                      <div className="max-h-[240px] overflow-y-auto pr-1">
-                        {currentChapterSubheadings.length > 0 ? (
-                          <div className="space-y-1">
-                            {currentChapterSubheadings.map((heading) => (
-                              <button
-                                key={heading.id}
-                                onClick={() => jumpToHeading(heading.id)}
-                                className={cn(
-                                  "w-full rounded-xl px-3 py-2 text-left transition-all",
-                                  heading.level === 3 ? "ml-3 w-[calc(100%-0.75rem)]" : "",
-                                  "hover:bg-violet-500/[0.10]"
-                                )}
-                              >
-                                <span className="block text-xs font-medium text-white/72 line-clamp-2">
-                                  {heading.title}
-                                </span>
-                              </button>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="px-3 py-2 text-xs text-white/35">
-                            Este capítulo está mais linear. Use os botões para continuar a leitura.
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                )}
 
                 <div className="flex items-center justify-end gap-2">
                   <button
@@ -1978,7 +2111,7 @@ export default function CourseReaderPage() {
 
                 <div
                   className="mx-auto px-8 sm:px-10 lg:px-14 py-8"
-                  style={{ maxWidth: settings.maxWidth + 120 }}
+                  style={{ maxWidth: readerContentMaxWidth }}
                 >
                   {/* Mark as complete button */}
                   {!isCurrentCompleted && (

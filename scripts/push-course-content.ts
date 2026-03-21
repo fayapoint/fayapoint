@@ -10,6 +10,10 @@
 import { MongoClient } from 'mongodb';
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+  countCourseContentChapters,
+  sanitizeCourseContent,
+} from '../src/lib/course-content-sanitizer';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/';
 const DATABASE_NAME = 'fayapointProdutos';
@@ -29,6 +33,9 @@ const COURSE_SLUGS = [
   'chatgpt-allowlisting',
   'openclaw-ia-open-source',
   'claude-cowork-colaboracao',
+  'prompt-engineering',
+  'crie-agentes-de-ia-autonomos',
+  'autoresearch-singularity',
 ];
 
 // New product templates for courses that don't exist yet in MongoDB
@@ -207,10 +214,17 @@ async function pushCourseContent() {
         continue;
       }
 
-      const content = fs.readFileSync(contentPath, 'utf-8');
-      const chapters = content.split(/^(?=# [^#])/gm).filter(s => s.trim());
+      const rawContent = fs.readFileSync(contentPath, 'utf-8');
+      const sanitizedContent = sanitizeCourseContent(rawContent);
+      const content = sanitizedContent.content;
+      const chapterCount = countCourseContentChapters(content);
 
-      console.log(`📖 ${slug}: ${content.length} chars, ${chapters.length} chapters`);
+      console.log(
+        `📖 ${slug}: ${content.length} chars, ${chapterCount} chapters, ${sanitizedContent.relocatedHeadings.length} secções movidas para apoio`
+      );
+      if (sanitizedContent.relocatedHeadings.length > 0) {
+        console.log(`   🧩 ${sanitizedContent.relocatedHeadings.join(' | ')}`);
+      }
 
       // Check if product exists
       const existing = await collection.findOne({ slug });
@@ -222,7 +236,7 @@ async function pushCourseContent() {
             $set: {
               courseContent: content,
               contentUpdatedAt: new Date().toISOString(),
-              contentChapters: chapters.length,
+              contentChapters: chapterCount,
               contentComplete: true
             }
           }
@@ -235,7 +249,7 @@ async function pushCourseContent() {
           ...NEW_PRODUCTS[slug],
           courseContent: content,
           contentUpdatedAt: new Date().toISOString(),
-          contentChapters: chapters.length,
+          contentChapters: chapterCount,
           contentComplete: true
         };
         await collection.insertOne(newProduct);

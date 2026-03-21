@@ -44,6 +44,10 @@ import {
   formatEditorialDate,
 } from "@/lib/editorial-verification";
 import type { Product } from "@/lib/products";
+import {
+  getSubscriptionMarketingFacts,
+  getSubscriptionMarketingPlans,
+} from "@/lib/subscription-marketing";
 
 type MonthlyOfferPayload = {
   monthKey: string;
@@ -175,43 +179,8 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-// Subscription plans data
-const planKeys = ["starter", "pro", "business"] as const;
-
-// Plan details for expanded view
-const planDetails: Record<string, string[]> = {
-  starter: [
-    "3 cursos iniciantes completos por mês para construir sua base",
-    "100 créditos/mês — use para quiz, certificações, chat IA e imagens",
-    "10% de desconto na compra de quiz + certificação oficial",
-    "10% de desconto na compra de cursos avulsos (além do limite do plano)",
-    "Certificados verificáveis online — use no seu currículo e LinkedIn",
-    "Acesso à comunidade exclusiva para networking e dúvidas",
-    "Compre pacotes extras de créditos quando precisar"
-  ],
-  pro: [
-    "5 cursos iniciantes + 2 intermediários + 1 avançado por mês",
-    "300 créditos/mês — 3x mais que o Explorador",
-    "20% de desconto em quiz + certificação e cursos avulsos",
-    "Suporte prioritário via chat com resposta em até 4h",
-    "Conteúdo exclusivo e antecipado — acesse 30 dias antes",
-    "Acesso a todos os níveis de cursos (iniciante a avançado)",
-    "Pool mensal rotativo: 10 iniciantes, 8 intermediários, 3 avançados"
-  ],
-  business: [
-    "7 iniciantes + 4 intermediários + 3 avançados por mês",
-    "800 créditos/mês — o maior pacote de créditos",
-    "50% de desconto em certificações e cursos avulsos — o melhor custo-benefício",
-    "1 sessão mensal de consultoria individual (1h) para seu negócio",
-    "Suporte VIP dedicado com canal direto",
-    "Conteúdo exclusivo + acesso antecipado a tudo",
-    "Pool completo de cursos rotativos todos os meses"
-  ]
-};
-
 export default function PricingPage() {
   const t = useTranslations("Pricing");
-  const tHome = useTranslations("Home.Pricing");
   const locale = useLocale();
   const { user } = useUser();
   const { loading, groupedByService } = useServicePrices();
@@ -226,21 +195,8 @@ export default function PricingPage() {
     isPtBr ? "pt-BR" : "en-US"
   );
 
-  // Get subscription plans from translations
-  const plans = planKeys.map((key) => {
-    const plan = tHome.raw(`plans.${key}`) as {
-      name: string;
-      price: string;
-      period: string;
-      description: string;
-      features: string[];
-      highlighted?: boolean;
-      badge?: string;
-      cta: string;
-      href: string;
-    };
-    return { key, highlighted: key === 'pro', ...plan };
-  });
+  const plans = useMemo(() => getSubscriptionMarketingPlans(locale), [locale]);
+  const subscriptionFacts = useMemo(() => getSubscriptionMarketingFacts(locale), [locale]);
 
   const services = useMemo(() => {
     return Object.entries(groupedByService)
@@ -434,14 +390,33 @@ export default function PricingPage() {
                 <DollarSign className="w-4 h-4 mr-1" />
                 {locale === 'pt-BR' ? 'Planos de Assinatura' : 'Subscription Plans'}
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">{tHome("title")}</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">{tHome("description")}</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">
+                {isPtBr ? "Planos alinhados com a oferta real do mes" : "Plans aligned with the real monthly offer"}
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                {isPtBr
+                  ? "Aqui a regra fica clara: um curso gratis do mes para qualquer conta, catalogo rotativo por plano e certificacao sem promessas vagas."
+                  : "The rule is clear here: one free monthly course for any account, a rotating catalog by plan, and certification without vague promises."}
+              </p>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 max-w-6xl mx-auto mb-8">
+              {subscriptionFacts.map((fact) => (
+                <Card key={fact.title} className="border-white/10 bg-card/60 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                    {fact.title}
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                    {fact.description}
+                  </p>
+                </Card>
+              ))}
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {plans.map((plan, i) => (
                 <motion.div
-                  key={plan.key}
+                  key={plan.slug}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   whileHover={{ scale: 1.02, y: -8 }}
@@ -458,21 +433,21 @@ export default function PricingPage() {
                     )}
 
                     <div className="mb-4">
-                      <h3 className="text-2xl font-bold mb-1">{plan.name}</h3>
+                      <h3 className="text-2xl font-bold mb-1">{plan.displayName}</h3>
                       <p className="text-sm text-muted-foreground">{plan.description}</p>
                     </div>
 
                     {/* Price - Visible to all */}
                     <div className="mb-6">
                       <div>
-                        <span className="text-4xl font-bold">{plan.price}</span>
-                        <span className="text-muted-foreground">{plan.period}</span>
+                        <span className="text-4xl font-bold">{plan.priceLabel}</span>
+                        <span className="text-muted-foreground">{plan.periodLabel}</span>
                       </div>
                     </div>
 
                     {/* Features */}
                     <ul className="space-y-2 mb-6 flex-1">
-                      {plan.features.map((feature, j) => (
+                      {plan.featureHighlights.map((feature, j) => (
                         <li key={j} className="flex items-start gap-2 text-sm">
                           <CheckCircle2 className="text-primary mt-0.5 flex-shrink-0" size={16} />
                           <span className="text-foreground/90">{feature}</span>
@@ -482,17 +457,17 @@ export default function PricingPage() {
 
                     {/* Expand Details */}
                     <button
-                      onClick={() => setExpandedPlan(expandedPlan === plan.key ? null : plan.key)}
+                      onClick={() => setExpandedPlan(expandedPlan === plan.slug ? null : plan.slug)}
                       className="flex items-center justify-center gap-2 text-sm text-primary hover:underline mb-4"
                     >
                       <Info size={14} />
                       {locale === 'pt-BR' ? 'Ver detalhes completos' : 'See full details'}
-                      {expandedPlan === plan.key ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                      {expandedPlan === plan.slug ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                     </button>
 
                     {/* Expanded Details */}
                     <AnimatePresence>
-                      {expandedPlan === plan.key && (
+                      {expandedPlan === plan.slug && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
@@ -503,7 +478,7 @@ export default function PricingPage() {
                             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                               {locale === 'pt-BR' ? 'O que está incluído:' : 'What\'s included:'}
                             </p>
-                            {planDetails[plan.key]?.map((detail, idx) => (
+                            {plan.details.map((detail, idx) => (
                               <p key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
                                 <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
                                 {detail}
@@ -521,7 +496,7 @@ export default function PricingPage() {
                         variant={plan.highlighted ? 'default' : 'outline'}
                         size="lg"
                       >
-                        {plan.cta}
+                        {isPtBr ? `Assinar ${plan.displayName}` : `Choose ${plan.displayName}`}
                       </Button>
                     </Link>
                   </Card>
@@ -533,15 +508,17 @@ export default function PricingPage() {
             <div className="flex items-center justify-center gap-8 mt-10 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-green-500" />
-                <span>{tHome("guarantee")}</span>
+                <span>{isPtBr ? "Pagamento seguro e acesso imediato" : "Secure payment and instant access"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                <span>{tHome("rating")}</span>
+                <span>{isPtBr ? "Oferta mensal transparente no portal" : "Transparent monthly offer inside the portal"}</span>
               </div>
             </div>
             <p className="text-center text-xs text-muted-foreground/70 mt-4">
-              {tHome("footnote")}
+              {isPtBr
+                ? "O curso gratis do mes e a rotacao mensal aparecem no portal com o mesmo criterio usado nestes planos."
+                : "The free course of the month and the rotating catalog use the same criteria shown in these plans."}
             </p>
           </div>
         </section>
