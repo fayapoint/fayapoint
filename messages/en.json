@@ -219,7 +219,7 @@
       }
     },
     "bottom": {
-      "rights": "© 2025 FayAi. All rights reserved.",
+      "rights": "© 2026 FayAi. All rights reserved.",
       "paymentsLabel": "Secure Payment:"
     }
   },
@@ -245,7 +245,7 @@
         "courses": "Courses",
         "completion": "Completion",
         "rating": "Rating",
-        "ratingValue": ""
+        "ratingValue": "4.9/5"
       }
     },
     "Services": {
