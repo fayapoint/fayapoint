@@ -39,6 +39,11 @@ export async function GET(
       return NextResponse.json({ error: 'Certificado não encontrado' }, { status: 404 });
     }
 
+    // Validate required fields before PDF generation
+    if (!certificate.certificateNumber || !certificate.verificationCode) {
+      return NextResponse.json({ error: 'Certificado incompleto — dados obrigatórios ausentes' }, { status: 400 });
+    }
+
     const certData: CertificateData = {
       studentName: certificate.userName,
       courseTitle: certificate.courseTitle,
