@@ -22,8 +22,9 @@ async function fetchMonthlyOverride(monthKey: string): Promise<MonthlyCourseOffe
       await mongoose.connect(uri, { bufferCommands: false });
     }
 
-    const db = mongoose.connection.db;
-    if (!db) return null;
+    // Explicitly use the fayapoint database (not the default one from the URI)
+    const client = mongoose.connection.getClient();
+    const db = client.db("fayapoint");
 
     const doc = await db.collection("monthly_offers").findOne({
       monthKey,
