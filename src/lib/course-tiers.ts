@@ -255,9 +255,9 @@ export const CREDIT_PACKS: CreditPack[] = [
 // ─── Monthly Rotating Pool ───────────────────────────────
 
 export const MONTHLY_POOL = {
-  beginner: 10,       // 10 beginner courses available per month
-  intermediate: 8,    // 8 intermediate courses available per month
-  advanced: 3,        // 3 advanced courses available per month
+  beginner: 10,       // all beginner courses available per month
+  intermediate: 8,    // all intermediate courses available per month
+  advanced: 5,        // all advanced courses available per month (Expert sees all)
 } as const;
 
 // ─── Price Calculations ──────────────────────────────────
