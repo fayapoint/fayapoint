@@ -1,7 +1,61 @@
 import { allCourses, getCourseBySlug, getNormalizedLevel, type CourseData } from "@/data/courses";
 import { MONTHLY_POOL, resolvePlan, type CourseLevel, type SubscriptionPlan } from "@/lib/course-tiers";
+import mongoose from "mongoose";
 
 const OFFER_TIMEZONE = "America/Sao_Paulo";
+
+// ── MongoDB override cache (TTL 5 min) ────────────────────────────────────
+let _overrideCache: { data: MonthlyCourseOfferSet | null; fetchedAt: number } | null = null;
+const CACHE_TTL = 5 * 60 * 1000;
+
+async function fetchMonthlyOverride(monthKey: string): Promise<MonthlyCourseOfferSet | null> {
+  // Check cache
+  if (_overrideCache && Date.now() - _overrideCache.fetchedAt < CACHE_TTL) {
+    return _overrideCache.data;
+  }
+
+  try {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) return null;
+
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(uri, { bufferCommands: false });
+    }
+
+    const db = mongoose.connection.db;
+    if (!db) return null;
+
+    const doc = await db.collection("monthly_offers").findOne({
+      monthKey,
+      status: { $in: ["active", "published"] },
+    });
+
+    if (!doc || !doc.freeCourseSlug || !doc.pools) {
+      _overrideCache = { data: null, fetchedAt: Date.now() };
+      return null;
+    }
+
+    const bounds = buildMonthBounds();
+    const override: MonthlyCourseOfferSet = {
+      monthKey: doc.monthKey,
+      startsAt: doc.startsAt || bounds.startsAt,
+      endsAt: doc.endsAt || bounds.endsAt,
+      freeCourseSlug: doc.freeCourseSlug,
+      pools: {
+        beginner: doc.pools.beginner || [],
+        intermediate: doc.pools.intermediate || [],
+        advanced: doc.pools.advanced || [],
+      },
+    };
+
+    _overrideCache = { data: override, fetchedAt: Date.now() };
+    return override;
+  } catch (err) {
+    console.error("[monthly-offers] MongoDB override fetch failed, using algorithm:", err);
+    _overrideCache = { data: null, fetchedAt: Date.now() };
+    return null;
+  }
+}
 
 type PoolLevel = "beginner" | "intermediate" | "advanced";
 
@@ -74,7 +128,8 @@ function getPaidCoursesByLevel(level: PoolLevel) {
   return allCourses.filter((course) => getNormalizedLevel(course) === level && course.price > 0);
 }
 
-export function getMonthlyCourseOfferSet(referenceDate: Date = new Date()): MonthlyCourseOfferSet {
+// Synchronous fallback — deterministic algorithm (always works, no DB needed)
+function computeAlgorithmicOfferSet(referenceDate: Date = new Date()): MonthlyCourseOfferSet {
   const monthKey = buildMonthKey(referenceDate);
   const bounds = buildMonthBounds(referenceDate);
 
@@ -99,13 +154,24 @@ export function getMonthlyCourseOfferSet(referenceDate: Date = new Date()): Mont
       .map((course) => course.slug),
   } satisfies Record<PoolLevel, string[]>;
 
-  return {
-    monthKey,
-    startsAt: bounds.startsAt,
-    endsAt: bounds.endsAt,
-    freeCourseSlug,
-    pools,
-  };
+  return { monthKey, startsAt: bounds.startsAt, endsAt: bounds.endsAt, freeCourseSlug, pools };
+}
+
+// Async version — checks MongoDB for Mission Control override first, falls back to algorithm
+export async function getMonthlyCourseOfferSetAsync(referenceDate: Date = new Date()): Promise<MonthlyCourseOfferSet> {
+  const monthKey = buildMonthKey(referenceDate);
+  const override = await fetchMonthlyOverride(monthKey);
+  if (override) return override;
+  return computeAlgorithmicOfferSet(referenceDate);
+}
+
+// Sync version — algorithm only (for places that can't await)
+export function getMonthlyCourseOfferSet(referenceDate: Date = new Date()): MonthlyCourseOfferSet {
+  // If we have a cached override, use it synchronously
+  if (_overrideCache && _overrideCache.data && Date.now() - _overrideCache.fetchedAt < CACHE_TTL) {
+    return _overrideCache.data;
+  }
+  return computeAlgorithmicOfferSet(referenceDate);
 }
 
 export function getCourseMonthlyOfferMeta(

@@ -1,22 +1,28 @@
 import { NextResponse } from "next/server";
 import { getAllProducts } from "@/lib/products";
-import { getMonthlyOfferEntries } from "@/lib/monthly-course-offers";
+import { getMonthlyCourseOfferSetAsync } from "@/lib/monthly-course-offers";
+import { getCourseBySlug } from "@/data/courses";
 
 export async function GET() {
   try {
-    const monthlyOffers = getMonthlyOfferEntries();
+    // Uses MongoDB override if available, falls back to deterministic algorithm
+    const offerSet = await getMonthlyCourseOfferSetAsync();
     const products = await getAllProducts({ type: "course", limit: 100, sortBy: "students" });
     const bySlug = new Map(products.map((product) => [product.slug, product]));
 
+    const freeCourse = offerSet.freeCourseSlug
+      ? bySlug.get(offerSet.freeCourseSlug) || getCourseBySlug(offerSet.freeCourseSlug) || null
+      : null;
+
     return NextResponse.json({
-      monthKey: monthlyOffers.monthKey,
-      startsAt: monthlyOffers.startsAt,
-      endsAt: monthlyOffers.endsAt,
-      freeCourse: monthlyOffers.freeCourseSlug ? bySlug.get(monthlyOffers.freeCourseSlug) || monthlyOffers.freeCourse : null,
+      monthKey: offerSet.monthKey,
+      startsAt: offerSet.startsAt,
+      endsAt: offerSet.endsAt,
+      freeCourse,
       pools: {
-        beginner: monthlyOffers.pools.beginner.map((slug) => bySlug.get(slug)).filter(Boolean),
-        intermediate: monthlyOffers.pools.intermediate.map((slug) => bySlug.get(slug)).filter(Boolean),
-        advanced: monthlyOffers.pools.advanced.map((slug) => bySlug.get(slug)).filter(Boolean),
+        beginner: offerSet.pools.beginner.map((slug) => bySlug.get(slug)).filter(Boolean),
+        intermediate: offerSet.pools.intermediate.map((slug) => bySlug.get(slug)).filter(Boolean),
+        advanced: offerSet.pools.advanced.map((slug) => bySlug.get(slug)).filter(Boolean),
       },
     });
   } catch (error) {
