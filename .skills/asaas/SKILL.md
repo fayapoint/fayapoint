@@ -86,7 +86,8 @@ Key events: `PAYMENT_CREATED`, `PAYMENT_CONFIRMED`, `PAYMENT_RECEIVED`, `PAYMENT
 
 Same event can fire multiple times — implement idempotency.
 
-**FayAi webhook URL:** `https://fayai.com.br/api/payments/webhook/?access_token=fayapoint_asaas_webhook_secret_2024`
+**FayAi webhook URL:** `https://fayai.com.br/api/payments/webhook/?access_token=${ASAAS_WEBHOOK_TOKEN}`
+> The actual token is stored in the `ASAAS_WEBHOOK_TOKEN` env var — never hardcode it.
 
 ## Common Errors
 
