@@ -2060,6 +2060,41 @@
       { "title": "DPO Contact", "content": "For privacy questions or to exercise data rights, contact our Data Protection Officer at: privacy@fayai.shop" }
     ]
   },
+  "DataDeletion": {
+    "badge": "Data Deletion",
+    "title": "Data Deletion Request",
+    "lastUpdated": "Last updated: March 2026",
+    "intro": "In compliance with Brazil's General Data Protection Law (LGPD) and Meta Platforms policies, you may request the complete deletion of your personal data stored by FayAi at any time.",
+    "howToRequest": {
+      "title": "How to request deletion",
+      "description": "Send an email to the address below with the subject \"Data Deletion\" including the email registered on the platform:",
+      "emailNote": "We will respond within 48 business hours confirming receipt of your request."
+    },
+    "whatWeDelete": {
+      "title": "Data that will be deleted",
+      "items": [
+        "Personal data (name, email, profile picture)",
+        "Course progress history",
+        "Issued certificates",
+        "Payment data and transaction history",
+        "Account preferences and settings",
+        "Google or email login data",
+        "Data collected via Facebook/Instagram Login (if applicable)"
+      ]
+    },
+    "timeline": {
+      "title": "Deletion timeline",
+      "description": "Your data will be completely removed within 30 days after confirmation of the request."
+    },
+    "whatWeKeep": {
+      "title": "Data we may retain",
+      "description": "Due to legal obligations (Law No. 12.965/2014 — Brazilian Internet Framework), we may retain access logs for up to 6 months and fiscal transaction data for up to 5 years. This data is kept in anonymized form and cannot be used to identify you."
+    },
+    "lgpd": {
+      "title": "Your rights (LGPD)",
+      "description": "Under Brazil's General Data Protection Law (Law No. 13.709/2018), you have the right to deletion, portability, correction, and anonymization of your personal data. To exercise any of these rights, contact us at fayai.com.br@gmail.com."
+    }
+  },
   "HelpCenter": {
     "badge": "Help Center",
     "title": "How Can We Help?",

@@ -2069,6 +2069,41 @@
       { "title": "Contato do DPO", "content": "Para questões sobre privacidade ou exercício de direitos LGPD, entre em contato com nosso Encarregado de Proteção de Dados através do email: privacidade@fayai.shop" }
     ]
   },
+  "DataDeletion": {
+    "badge": "Exclusão de Dados",
+    "title": "Solicitação de Exclusão de Dados",
+    "lastUpdated": "Última atualização: Março 2026",
+    "intro": "Em conformidade com a Lei Geral de Proteção de Dados (LGPD) e as políticas da Meta Platforms, você pode solicitar a exclusão completa dos seus dados pessoais armazenados pela FayAi a qualquer momento.",
+    "howToRequest": {
+      "title": "Como solicitar a exclusão",
+      "description": "Envie um email para o endereço abaixo com o assunto \"Exclusão de Dados\" incluindo o email cadastrado na plataforma:",
+      "emailNote": "Responderemos em até 48 horas úteis confirmando o recebimento da sua solicitação."
+    },
+    "whatWeDelete": {
+      "title": "Dados que serão excluídos",
+      "items": [
+        "Dados pessoais (nome, email, foto de perfil)",
+        "Histórico de progresso em cursos",
+        "Certificados emitidos",
+        "Dados de pagamento e histórico de transações",
+        "Preferências e configurações da conta",
+        "Dados de login via Google ou email",
+        "Dados coletados via Facebook/Instagram Login (se aplicável)"
+      ]
+    },
+    "timeline": {
+      "title": "Prazo para exclusão",
+      "description": "Seus dados serão completamente removidos em até 30 dias após a confirmação da solicitação."
+    },
+    "whatWeKeep": {
+      "title": "Dados que podemos reter",
+      "description": "Por obrigação legal (Lei nº 12.965/2014 — Marco Civil da Internet), podemos reter registros de acesso por até 6 meses e dados fiscais de transações por até 5 anos. Esses dados são mantidos de forma anonimizada e não podem ser usados para identificá-lo."
+    },
+    "lgpd": {
+      "title": "Seus direitos (LGPD)",
+      "description": "Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem direito à exclusão, portabilidade, correção e anonimização dos seus dados pessoais. Para exercer qualquer um desses direitos, entre em contato pelo email fayai.com.br@gmail.com."
+    }
+  },
   "HelpCenter": {
     "badge": "Central de Ajuda",
     "title": "Como Podemos Ajudar?",

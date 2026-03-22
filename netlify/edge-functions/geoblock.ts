@@ -46,8 +46,10 @@ const BYPASS_PATHS = [
   // Legal/policy pages (must be accessible for Meta, Google, app stores)
   "/pt-BR/privacidade",
   "/pt-BR/termos",
+  "/pt-BR/exclusao-de-dados",
   "/en/privacidade",
   "/en/termos",
+  "/en/exclusao-de-dados",
 ];
 
 // Known legitimate bot/crawler user agents that need access (SEO, social, validators)
