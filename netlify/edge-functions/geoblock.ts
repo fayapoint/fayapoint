@@ -43,6 +43,9 @@ const BYPASS_PATHS = [
   // Fulfillment API (might be called externally)
   "/api/fulfillment",
 
+  // Meta data deletion callback (called by Meta servers)
+  "/api/auth/data-deletion",
+
   // Legal/policy pages (must be accessible for Meta, Google, app stores)
   "/pt-BR/privacidade",
   "/pt-BR/termos",
