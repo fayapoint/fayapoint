@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAuthUser } from '@/lib/auth';
 import redis from '@/lib/redis';
 
-const ADMIN_EMAILS = ['ricardofaya@gmail.com', 'admin@fayai.shop'];
+const ADMIN_EMAILS = ['ricardofaya@gmail.com', 'admin@fayai.com.br'];
 
 export const dynamic = 'force-dynamic';
 

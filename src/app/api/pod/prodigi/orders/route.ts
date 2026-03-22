@@ -25,7 +25,7 @@ import {
   ProdigiRecipient,
 } from '@/lib/prodigi-api';
 
-const WEBHOOK_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://fayai.shop';
+const WEBHOOK_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://fayai.com.br';
 
 // Exchange rates
 const GBP_TO_BRL = parseFloat(process.env.GBP_TO_BRL || '6.30');

@@ -266,7 +266,7 @@ async function fulfillCourse(
     const digitalDelivery: IDigitalDelivery = {
       type: 'course_access',
       courseSlug: item.productSlug,
-      accessUrl: `https://fayai.shop/pt-BR/portal?tab=courses&course=${item.productSlug}`,
+      accessUrl: `https://fayai.com.br/pt-BR/portal?tab=courses&course=${item.productSlug}`,
     };
     
     // Check for Google Drive content
@@ -358,7 +358,7 @@ async function fulfillSubscription(
       const digitalDelivery: IDigitalDelivery = {
         type: 'subscription',
         subscriptionPlan: newPlan,
-        accessUrl: 'https://fayai.shop/pt-BR/portal',
+        accessUrl: 'https://fayai.com.br/pt-BR/portal',
         expiresAt: user.planExpiresAt,
       };
       
@@ -848,7 +848,7 @@ async function fulfillService(
     
     const digitalDelivery: IDigitalDelivery = {
       type: 'email',
-      accessUrl: 'https://fayai.shop/pt-BR/contato',
+      accessUrl: 'https://fayai.com.br/pt-BR/contato',
     };
     
     fulfillmentOrder.items[itemIndex].digitalDelivery = digitalDelivery;

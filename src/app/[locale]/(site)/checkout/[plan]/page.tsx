@@ -147,9 +147,20 @@ function AmexIcon({ className = "h-6" }: { className?: string }) {
   );
 }
 
+function MercadoPagoIcon({ className = "w-10 h-10" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" fill="none">
+      <rect width="64" height="64" rx="12" fill="#00B1EA"/>
+      <path d="M32 16c-8.8 0-16 7.2-16 16s7.2 16 16 16 16-7.2 16-16-7.2-16-16-16zm0 28c-6.6 0-12-5.4-12-12s5.4-12 12-12 12 5.4 12 12-5.4 12-12 12z" fill="#fff"/>
+      <path d="M32 24c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" fill="#fff"/>
+      <circle cx="32" cy="32" r="2" fill="#fff"/>
+    </svg>
+  );
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type PaymentMethod = "pix" | "boleto" | "credit_card" | "undefined";
+type PaymentMethod = "pix" | "boleto" | "credit_card" | "mercadopago" | "undefined";
 
 interface SavedCard {
   id: string; lastFour: string; brand: string; holderName: string;
@@ -350,11 +361,37 @@ export default function CheckoutPage() {
       if (!cardNumber || !cardHolder || !cardExpiry || !cardCvv) { toast.error("Preencha os dados do cartão."); return; }
       if (!postalCode || !addressNumber) { toast.error("Informe CEP e número."); return; }
     }
+    // MercadoPago only needs name, email, cpf — skip card validation
+    if (selectedMethod === "mercadopago" && !isFreeCourseCheckout && !cpfCnpj) {
+      // CPF is optional for MP redirect, but we already validated above
+    }
 
     setLoading(true);
     try {
       const token = getClientBearerToken();
       if (!isLoggedIn && !token) { toast.error("Faça login para continuar."); router.push("/pt-BR/login"); return; }
+
+      // MercadoPago redirect flow
+      if (selectedMethod === "mercadopago" && !isFreeCourseCheckout) {
+        const mpRes = await fetch("/api/payments/mercadopago-preference", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...getClientAuthHeaders() },
+          credentials: "include",
+          body: JSON.stringify({
+            planSlug: planInfo?.slug || planName,
+            planName: planInfo?.name || planName,
+            price: effectiveTotal,
+            cycle: subscriptionCycle,
+          }),
+        });
+        const mpData = await mpRes.json();
+        if (!mpRes.ok) throw new Error(mpData.error || "Erro ao criar checkout MercadoPago");
+        if (mpData.redirectUrl) {
+          window.location.href = mpData.redirectUrl;
+          return;
+        }
+        throw new Error("URL de redirecionamento não encontrada");
+      }
 
       if (isFreeCourseCheckout) {
         for (const item of cartItems) {
@@ -625,7 +662,7 @@ export default function CheckoutPage() {
                 ) : (
                   <>
                     {/* Method Selector */}
-                    <div className="grid grid-cols-3 gap-3 mb-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                       {/* PIX */}
                       <button type="button" onClick={() => setSelectedMethod("pix")}
                         className={`group relative p-4 rounded-xl border-2 transition-all text-center ${
@@ -658,6 +695,17 @@ export default function CheckoutPage() {
                         <span className="text-sm font-semibold block">Cartão</span>
                         <span className="text-xs text-purple-400 font-medium">Até 12x sem juros</span>
                       </button>
+
+                      {/* MercadoPago */}
+                      <button type="button" onClick={() => setSelectedMethod("mercadopago")}
+                        className={`group relative p-4 rounded-xl border-2 transition-all text-center ${
+                          selectedMethod === "mercadopago" ? "border-cyan-500 bg-cyan-500/10 shadow-lg shadow-cyan-500/5" : "border-gray-700/50 hover:border-gray-600"
+                        }`}>
+                        {selectedMethod === "mercadopago" && <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-cyan-500 rounded-full flex items-center justify-center"><Check className="w-3 h-3 text-white" /></div>}
+                        <MercadoPagoIcon className="w-10 h-10 mx-auto mb-2" />
+                        <span className="text-sm font-semibold block">MercadoPago</span>
+                        <span className="text-xs text-cyan-400 font-medium">Checkout seguro</span>
+                      </button>
                     </div>
 
                     {/* Card Brands Strip */}
@@ -668,6 +716,21 @@ export default function CheckoutPage() {
                       <AmexIcon className="h-7 rounded" />
                       <HipercardIcon className="h-7 rounded" />
                     </div>
+
+                    {/* MercadoPago Info */}
+                    {selectedMethod === "mercadopago" && (
+                      <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                          <MercadoPagoIcon className="w-8 h-8 shrink-0" />
+                          <div>
+                            <p className="text-sm font-semibold text-cyan-300">Checkout MercadoPago</p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              Você será redirecionado para o ambiente seguro do MercadoPago para completar o pagamento com PIX, cartão de crédito, débito ou boleto.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Credit Card Form */}
                     {selectedMethod === "credit_card" && (
@@ -831,9 +894,11 @@ export default function CheckoutPage() {
                   disabled={loading || (isCartCheckout && cartItems.length === 0)}
                 >
                   {loading ? (
-                    <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> {isFreeCourseCheckout ? "Liberando..." : "Processando..."}</>
+                    <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> {isFreeCourseCheckout ? "Liberando..." : selectedMethod === "mercadopago" ? "Redirecionando..." : "Processando..."}</>
                   ) : isFreeCourseCheckout ? (
                     <><Gift className="w-5 h-5 mr-2" /> Liberar Acesso Grátis</>
+                  ) : selectedMethod === "mercadopago" ? (
+                    <><ArrowRight className="w-5 h-5 mr-2" /> Pagar via MercadoPago — {formatCurrency(effectiveTotal)}</>
                   ) : (
                     <><ArrowRight className="w-5 h-5 mr-2" /> Pagar {formatCurrency(effectiveTotal)}</>
                   )}

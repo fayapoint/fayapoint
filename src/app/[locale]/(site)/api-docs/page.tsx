@@ -460,7 +460,7 @@ export default function APIDocsPage() {
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-lg border border-zinc-800">
                 <Zap className="w-4 h-4 text-amber-400" />
                 <span className="text-sm">Base URL:</span>
-                <code className="text-sm text-purple-400 font-mono">https://fayai.shop/api</code>
+                <code className="text-sm text-purple-400 font-mono">https://fayai.com.br/api</code>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-lg border border-zinc-800">
                 <Shield className="w-4 h-4 text-emerald-400" />
@@ -482,7 +482,7 @@ export default function APIDocsPage() {
               Para começar, faça login e use o token retornado no header <code className="text-purple-400">Authorization</code>:
             </p>
             <CodeBlock code={`// 1. Fazer login
-const response = await fetch('https://fayai.shop/api/auth/login', {
+const response = await fetch('https://fayai.com.br/api/auth/login', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -494,7 +494,7 @@ const response = await fetch('https://fayai.shop/api/auth/login', {
 const { token } = await response.json();
 
 // 2. Usar o token em requisições autenticadas
-const dashboard = await fetch('https://fayai.shop/api/user/dashboard', {
+const dashboard = await fetch('https://fayai.com.br/api/user/dashboard', {
   headers: {
     'Authorization': \`Bearer \${token}\`
   }

@@ -72,7 +72,7 @@ Mantenha as respostas concisas mas úteis. Use emojis moderadamente para tornar 
       headers: {
         'Content-Type': 'application/json',
         'Authorization': authValue,
-        'HTTP-Referer': 'https://fayai.shop',
+        'HTTP-Referer': 'https://fayai.com.br',
         'X-Title': 'FayAi AI Academy',
       },
       body: JSON.stringify({

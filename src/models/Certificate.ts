@@ -140,7 +140,7 @@ CertificateSchema.index({ status: 1 });
 
 CertificateSchema.pre('save', function(next) {
   if (!this.verificationUrl && this.verificationCode) {
-    this.verificationUrl = `https://fayai.shop/verificar-certificado/${this.verificationCode}`;
+    this.verificationUrl = `https://fayai.com.br/verificar-certificado/${this.verificationCode}`;
   }
   next();
 });

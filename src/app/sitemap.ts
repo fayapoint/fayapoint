@@ -4,7 +4,7 @@ import { allCourses } from "@/data/courses";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
   process.env.SITE_URL ??
-  "https://fayai.shop";
+  "https://fayai.com.br";
 
 const LOCALES = ["pt-BR", "en"] as const;
 

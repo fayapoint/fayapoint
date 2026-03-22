@@ -155,7 +155,7 @@ export async function POST(request: Request) {
                 headers: {
                     Authorization: authHeaderValue,
                     'Content-Type': 'application/json',
-                    'HTTP-Referer': 'https://fayai.shop',
+                    'HTTP-Referer': 'https://fayai.com.br',
                     'X-Title': 'Fayapoint AI',
                 },
                 body: JSON.stringify(requestBody),

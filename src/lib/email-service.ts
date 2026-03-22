@@ -51,7 +51,7 @@ interface EmailData {
 
 // Resend API configuration
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@fayai.shop';
+const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@fayai.com.br';
 const FROM_NAME = 'FayAi';
 
 /**
@@ -175,7 +175,7 @@ function generateEmailContent(
                 ` : ''}
                 
                 <p style="text-align: center;">
-                  <a href="https://fayai.shop/pt-BR/portal?tab=orders" class="button">
+                  <a href="https://fayai.com.br/pt-BR/portal?tab=orders" class="button">
                     Ver Meus Pedidos
                   </a>
                 </p>
@@ -211,7 +211,7 @@ function generateEmailContent(
                     <h4>🔓 Acesso Liberado:</h4>
                     <p>Seu conteúdo digital já está disponível!</p>
                     <p style="text-align: center;">
-                      <a href="${data.digitalDelivery.accessUrl || 'https://fayai.shop/pt-BR/portal'}" class="button">
+                      <a href="${data.digitalDelivery.accessUrl || 'https://fayai.com.br/pt-BR/portal'}" class="button">
                         Acessar Agora
                       </a>
                     </p>
@@ -236,7 +236,7 @@ function generateEmailContent(
                 `).join('')}
                 
                 <p style="text-align: center; margin-top: 20px;">
-                  <a href="https://fayai.shop/pt-BR/portal?tab=orders" class="button">
+                  <a href="https://fayai.com.br/pt-BR/portal?tab=orders" class="button">
                     Ver Detalhes
                   </a>
                 </p>
@@ -321,7 +321,7 @@ function generateEmailContent(
                   <h3>${data.items[0]?.name || 'Seu Curso'}</h3>
                   <p>Clique no botão abaixo para começar a estudar:</p>
                   <p style="text-align: center;">
-                    <a href="${data.digitalDelivery?.accessUrl || 'https://fayai.shop/pt-BR/portal?tab=courses'}" class="button">
+                    <a href="${data.digitalDelivery?.accessUrl || 'https://fayai.com.br/pt-BR/portal?tab=courses'}" class="button">
                       Começar Curso
                     </a>
                   </p>
@@ -375,7 +375,7 @@ function generateEmailContent(
                     <li>Geração de imagens ilimitada</li>
                   </ul>
                   <p style="text-align: center;">
-                    <a href="https://fayai.shop/pt-BR/portal" class="button">
+                    <a href="https://fayai.com.br/pt-BR/portal" class="button">
                       Explorar Recursos
                     </a>
                   </p>
@@ -410,7 +410,7 @@ function generateEmailContent(
                 <p>Nossa equipe já foi notificada e entrará em contato em breve para resolver.</p>
                 
                 <p style="text-align: center;">
-                  <a href="https://fayai.shop/pt-BR/contato" class="button">
+                  <a href="https://fayai.com.br/pt-BR/contato" class="button">
                     Entrar em Contato
                   </a>
                 </p>

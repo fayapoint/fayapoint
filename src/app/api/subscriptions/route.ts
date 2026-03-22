@@ -123,8 +123,9 @@ export async function POST(request: NextRequest) {
       });
     } catch (error) {
       console.error('[Subscription] Error creating customer:', error);
+      const errorMsg = error instanceof Error ? error.message : 'Erro desconhecido';
       return NextResponse.json(
-        { error: 'Erro ao criar cliente no gateway' },
+        { error: `Erro ao criar cliente no gateway: ${errorMsg}` },
         { status: 500 }
       );
     }
@@ -140,7 +141,7 @@ export async function POST(request: NextRequest) {
       description: `Assinatura ${plan.name} - FayAi`,
       externalReference: `sub-${user._id}-${planSlug}`,
       callback: {
-        successUrl: `${process.env.NEXTAUTH_URL || 'https://fayai.shop'}/pt-BR/portal?tab=assinatura&status=success`,
+        successUrl: `${process.env.NEXTAUTH_URL || 'https://fayai.com.br'}/pt-BR/portal?tab=assinatura&status=success`,
         autoRedirect: true,
       },
     };

@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     if (origin) {
       const allowedOrigin =
-        origin.includes('fayai.shop') ||
+        origin.includes('fayai.com.br') ||
         origin.includes('localhost') ||
         origin.includes('127.0.0.1') ||
         origin.includes('.netlify.app');

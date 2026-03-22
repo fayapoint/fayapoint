@@ -35,7 +35,7 @@ async function callOpenRouterForQuiz(
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
-      'HTTP-Referer': 'https://fayai.shop',
+      'HTTP-Referer': 'https://fayai.com.br',
       'X-Title': 'FayAi Quiz Generator',
     },
     body: JSON.stringify({
