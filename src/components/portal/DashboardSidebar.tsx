@@ -51,6 +51,7 @@ interface DashboardSidebarProps {
   onTabChange: (tab: string) => void;
   user: {
     name: string;
+    email?: string;
     image?: string;
     subscription?: { plan: string };
   };
@@ -151,6 +152,9 @@ export function DashboardSidebar({
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
               <p className="font-semibold truncate">{user.name}</p>
+              {user.email && (
+                <p className="text-[11px] text-gray-500 truncate" title={user.email}>{user.email}</p>
+              )}
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="outline" className={cn(
                   "text-[10px] px-1.5 h-5",

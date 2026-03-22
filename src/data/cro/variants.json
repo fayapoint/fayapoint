@@ -1,0 +1,19 @@
+{
+  "currentVariant": 0,
+  "baseline": {
+    "signupRate": null,
+    "measuredAt": null,
+    "note": "Awaiting first measurement after deploy"
+  },
+  "history": [
+    {
+      "iteration": 0,
+      "description": "Initial homepage v2 launch",
+      "dimension": "full_redesign",
+      "change": "Replaced 11-section homepage with neednap-inspired bold hero design",
+      "createdAt": "2026-03-21T21:00:00Z",
+      "result": "BASELINE",
+      "commitHash": null
+    }
+  ]
+}

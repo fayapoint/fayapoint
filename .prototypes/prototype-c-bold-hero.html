@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FayAI - Prototype C: Bold Single-Screen Hero</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#030712;--surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.06);--border-hover:rgba(255,255,255,0.12);
+  --text:#f8fafc;--text-secondary:#94a3b8;--text-muted:#64748b;
+  --purple:#8b5cf6;--pink:#ec4899;--cyan:#06b6d4;--green:#10b981;--amber:#f59e0b;
+  --grad:linear-gradient(135deg,#8b5cf6,#ec4899,#06b6d4);
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,7,18,0.5);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:24px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:var(--grad);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;box-shadow:0 0 30px rgba(139,92,246,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(139,92,246,0.5)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.3s;text-decoration:none}
+.btn-ghost:hover{border-color:var(--border-hover);background:var(--surface)}
+
+/* HERO — FULL VIEWPORT */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 40px;position:relative;overflow:hidden}
+
+/* ANIMATED BACKGROUND */
+.hero-bg{position:absolute;inset:0}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.4;animation:orb-float 20s infinite ease-in-out}
+.orb-1{width:500px;height:500px;background:var(--purple);top:-10%;left:-5%;animation-delay:0s}
+.orb-2{width:400px;height:400px;background:var(--pink);bottom:-5%;right:-5%;animation-delay:5s}
+.orb-3{width:300px;height:300px;background:var(--cyan);top:40%;right:20%;animation-delay:10s;opacity:0.2}
+@keyframes orb-float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.05)}66%{transform:translate(-20px,30px) scale(0.95)}}
+
+/* GRID OVERLAY */
+.grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 60% 50% at 50% 50%,black,transparent)}
+
+/* HERO CONTENT */
+.hero-content{position:relative;z-index:2;text-align:center;max-width:900px}
+.hero h1{font-size:clamp(48px,8vw,96px);font-weight:900;line-height:0.95;letter-spacing:-0.04em;margin-bottom:24px}
+.hero h1 .line1{display:block;color:var(--text)}
+.hero h1 .line2{display:block;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .tagline{font-size:clamp(16px,2vw,22px);color:var(--text-secondary);line-height:1.5;max-width:520px;margin:0 auto 40px;font-weight:400}
+.hero-cta{display:flex;flex-direction:column;align-items:center;gap:16px}
+.hero-cta .btn-primary{padding:18px 48px;font-size:18px;border-radius:14px;font-weight:700;box-shadow:0 0 60px rgba(139,92,246,0.4)}
+.hero-cta .subtext{color:var(--text-muted);font-size:14px}
+
+/* FLOATING STATS */
+.hero-stats{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:48px;z-index:2}
+.hero-stat{text-align:center}
+.hero-stat .num{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;color:var(--text)}
+.hero-stat .lbl{font-size:12px;color:var(--text-muted);margin-top:2px}
+
+/* SECTION 2: BENTO GRID */
+.bento{padding:80px 40px 100px;max-width:1200px;margin:0 auto}
+.bento h2{font-size:clamp(28px,4vw,40px);font-weight:800;text-align:center;margin-bottom:48px;letter-spacing:-0.02em}
+.bento-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:16px}
+.bento-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;transition:all 0.4s;position:relative;overflow:hidden}
+.bento-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.bento-card.wide{grid-column:span 2}
+.bento-card .emoji{font-size:40px;margin-bottom:16px;display:block}
+.bento-card h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.bento-card p{color:var(--text-secondary);font-size:14px;line-height:1.6}
+.bento-card .glow{position:absolute;top:-50%;right:-50%;width:200px;height:200px;border-radius:50%;filter:blur(80px);opacity:0.1;pointer-events:none}
+.bento-card:nth-child(1) .glow{background:var(--purple)}
+.bento-card:nth-child(2) .glow{background:var(--cyan)}
+.bento-card:nth-child(3) .glow{background:var(--pink)}
+.bento-card:nth-child(4) .glow{background:var(--green)}
+
+/* Mini course strip inside bento */
+.course-strip{display:flex;gap:12px;margin-top:20px}
+.strip-item{flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.strip-item .emoji{font-size:24px;display:block;margin-bottom:6px}
+.strip-item .name{font-size:12px;font-weight:600}
+.strip-item .caps{font-size:11px;color:var(--text-muted)}
+
+/* SECTION 3: SOCIAL + CTA */
+.final-section{padding:80px 40px 100px;position:relative}
+.final-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(139,92,246,0.08),transparent);pointer-events:none}
+.final-inner{max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:2}
+.final-inner h2{font-size:clamp(28px,4vw,44px);font-weight:800;margin-bottom:32px}
+.final-inner h2 .grad{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* Testimonial strip */
+.testimonial-strip{display:flex;gap:16px;margin-bottom:48px;overflow-x:auto;padding:4px}
+.t-card{flex:0 0 260px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:left}
+.t-card .stars{color:var(--amber);font-size:12px;margin-bottom:8px}
+.t-card .quote{font-size:13px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px;font-style:italic}
+.t-card .name{font-size:13px;font-weight:600}
+.t-card .role{font-size:11px;color:var(--text-muted)}
+
+/* Signup */
+.signup-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;max-width:500px;margin:0 auto}
+.signup-box h3{font-size:22px;font-weight:700;margin-bottom:8px}
+.signup-box .sub{color:var(--text-secondary);font-size:14px;margin-bottom:24px}
+.form-row{display:flex;gap:12px;margin-bottom:12px}
+.form-row input{flex:1;padding:14px 18px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;outline:none}
+.form-row input:focus{border-color:var(--purple)}
+.form-row input::placeholder{color:var(--text-muted)}
+.signup-box .btn-primary{width:100%;justify-content:center;padding:14px;font-size:16px;border-radius:12px}
+.signup-box .trust{color:var(--text-muted);font-size:12px;margin-top:12px}
+
+footer{padding:40px;border-top:1px solid var(--border);text-align:center}
+footer p{color:var(--text-muted);font-size:13px}
+
+.prototype-label{position:fixed;top:70px;right:20px;z-index:200;background:var(--pink);color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:0.05em;opacity:0.9}
+
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .nav-links{display:none}
+  .hero h1{font-size:48px}
+  .hero-stats{gap:24px;position:relative;bottom:auto;left:auto;transform:none;margin-top:48px}
+  .bento-grid{grid-template-columns:1fr}
+  .bento-card.wide{grid-column:span 1}
+  .course-strip{flex-wrap:wrap}
+  .testimonial-strip{flex-direction:column}
+  .t-card{flex:none}
+  .form-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="prototype-label">PROTOTYPE C — BOLD HERO</div>
+
+<nav>
+  <div class="logo">fay.ai</div>
+  <div class="nav-links">
+    <a href="#">Cursos</a>
+    <a href="#">Ferramentas</a>
+    <a href="#">Precos</a>
+    <a href="#" class="btn-ghost" style="padding:8px 18px">Entrar</a>
+    <a href="#" class="btn-primary" style="padding:8px 18px">Comece Gratis</a>
+  </div>
+</nav>
+
+<!-- HERO — FULL SCREEN -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="grid-overlay"></div>
+
+  <div class="hero-content">
+    <h1>
+      <span class="line1">Domine a IA.</span>
+      <span class="line2">Comece gratis.</span>
+    </h1>
+    <p class="tagline">15 cursos praticos. 256 capitulos. 40+ ferramentas de IA. Um curso gratis todo mes. Certificado incluso.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn-primary">Comecar Agora &rarr;</a>
+      <span class="subtext">Sem cartao &middot; 30 segundos para criar conta</span>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">25+</div><div class="lbl">Cursos</div></div>
+    <div class="hero-stat"><div class="num">256</div><div class="lbl">Capitulos</div></div>
+    <div class="hero-stat"><div class="num">2.4k</div><div class="lbl">Alunos</div></div>
+    <div class="hero-stat"><div class="num">847</div><div class="lbl">Certificados</div></div>
+  </div>
+</section>
+
+<!-- BENTO GRID — 4 FEATURES -->
+<section class="bento">
+  <h2>Tudo que voce precisa em um so lugar</h2>
+  <div class="bento-grid">
+    <div class="bento-card wide">
+      <div class="glow"></div>
+      <span class="emoji">&#128218;</span>
+      <h3>Cursos por ferramenta</h3>
+      <p>Cada curso cobre uma ferramenta de IA do zero ao avancado. Aprenda ChatGPT, Claude, Midjourney, N8N e mais.</p>
+      <div class="course-strip">
+        <div class="strip-item"><span class="emoji">&#129302;</span><span class="name">ChatGPT</span><span class="caps">24 caps</span></div>
+        <div class="strip-item"><span class="emoji">&#128156;</span><span class="name">Claude</span><span class="caps">22 caps</span></div>
+        <div class="strip-item"><span class="emoji">&#127912;</span><span class="name">Midjourney</span><span class="caps">20 caps</span></div>
+        <div class="strip-item"><span class="emoji">&#9889;</span><span class="name">N8N</span><span class="caps">18 caps</span></div>
+      </div>
+    </div>
+    <div class="bento-card">
+      <div class="glow"></div>
+      <span class="emoji">&#127873;</span>
+      <h3>1 curso gratis por mes</h3>
+      <p>Todo mes um curso premium diferente fica disponivel gratuitamente. Sem cartao, sem pegadinha.</p>
+    </div>
+    <div class="bento-card">
+      <div class="glow"></div>
+      <span class="emoji">&#127891;</span>
+      <h3>Certificado verificavel</h3>
+      <p>Complete o curso e receba um certificado com codigo de verificacao unico. Valido e compartilhavel.</p>
+    </div>
+    <div class="bento-card wide">
+      <div class="glow"></div>
+      <span class="emoji">&#9889;</span>
+      <h3>Automacao e ferramentas</h3>
+      <p>Alem de cursos, oferecemos servicos de construcao de sites, automacao com IA, edicao de video e consultoria. Tudo com IA.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF + FINAL CTA -->
+<section class="final-section">
+  <div class="final-inner">
+    <h2>Milhares ja estao aprendendo.<br><span class="grad">So falta voce.</span></h2>
+
+    <div class="testimonial-strip">
+      <div class="t-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="quote">"Em 2 semanas eu ja estava usando ChatGPT pra automatizar metade do meu trabalho."</div>
+        <div class="name">Carlos M.</div><div class="role">Empreendedor, SP</div>
+      </div>
+      <div class="t-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="quote">"O curso de Midjourney mudou meu portfolio inteiro. Qualidade absurda."</div>
+        <div class="name">Ana R.</div><div class="role">Designer, RJ</div>
+      </div>
+      <div class="t-card">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="quote">"O curso gratis me convenceu. Assinei o Pro no dia seguinte."</div>
+        <div class="name">Pedro S.</div><div class="role">Marketing, MG</div>
+      </div>
+    </div>
+
+    <div class="signup-box">
+      <h3>Crie sua conta gratis</h3>
+      <div class="sub">Leva 30 segundos. Sem cartao de credito.</div>
+      <div class="form-row"><input type="text" placeholder="Seu nome"><input type="email" placeholder="Seu email"></div>
+      <div class="form-row"><input type="password" placeholder="Crie uma senha"></div>
+      <a href="#" class="btn-primary">Criar Conta &rarr;</a>
+      <div class="trust">&#128274; Seus dados estao protegidos &middot; Cancele quando quiser</div>
+    </div>
+  </div>
+</section>
+
+<footer><p>&copy; 2026 fay.ai &mdash; Feito com IA no Brasil &#127463;&#127479;</p></footer>
+
+</body>
+</html>

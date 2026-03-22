@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   Award,
@@ -86,6 +86,17 @@ export function CoursesPanel({
   const completedCourses = startedCourses.filter((course) => course.progressPercent >= 100);
   const journeyCourses = [...activeCourses, ...readyToStartCourses];
 
+  // Fetch the real free course slug from the API (reads Mission Control override)
+  const [apiFreeCourseSlug, setApiFreeCourseSlug] = useState<string | null>(null);
+  useEffect(() => {
+    fetch("/api/courses/monthly-offers", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data?.freeCourse?.slug) setApiFreeCourseSlug(data.freeCourse.slug);
+      })
+      .catch(() => {});
+  }, []);
+
   const courseCatalog = useMemo(() => {
     return allCourses.map((course) => {
       const normalizedLevel = getNormalizedLevel(course);
@@ -96,7 +107,10 @@ export function CoursesPanel({
       const slotsForLevel = enrollmentSlots?.[slotCategory as keyof EnrollmentSlots] ?? null;
       const hasAvailableSlot = tierConfig.limits.unlimited || !slotsForLevel || slotsForLevel.available > 0;
       const canAccessThisMonth = canPlanAccessMonthlyOffer(tierConfig.slug, course.slug);
-      const isFreeMonthlyCourse = Boolean(monthlyOffer?.isFreeCourseOfMonth);
+      // Use API slug (Mission Control truth) over sync algorithm
+      const isFreeMonthlyCourse = apiFreeCourseSlug
+        ? course.slug === apiFreeCourseSlug
+        : Boolean(monthlyOffer?.isFreeCourseOfMonth);
 
       return {
         ...course,
@@ -110,7 +124,7 @@ export function CoursesPanel({
         canEnroll: !isEnrolled && (isFreeMonthlyCourse || (canAccessLevel && hasAvailableSlot && canAccessThisMonth)),
       };
     });
-  }, [enrolledSlugs, enrollmentSlots, tierConfig]);
+  }, [enrolledSlugs, enrollmentSlots, tierConfig, apiFreeCourseSlug]);
 
   const freeMonthlyCourse = courseCatalog.find((course) => course.isFreeMonthlyCourse) ?? null;
   const freeMonthlyCourseCanClaim = Boolean(freeMonthlyCourse && freeMonthlyCourse.canEnroll);

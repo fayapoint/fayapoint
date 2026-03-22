@@ -146,7 +146,8 @@ function LoginPageContent() {
         throw new Error("Google OAuth não configurado");
       }
 
-      const redirectUri = `${window.location.origin}/api/auth/google/callback`;
+      // Use flat path to avoid Next.js 16 Turbopack nested route resolution bug
+      const redirectUri = `${window.location.origin}/api/auth/google-callback`;
       const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
       authUrl.searchParams.set("client_id", clientId);
       authUrl.searchParams.set("redirect_uri", redirectUri);

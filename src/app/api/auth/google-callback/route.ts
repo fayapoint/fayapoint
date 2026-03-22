@@ -1,5 +1,10 @@
-// Google OAuth2 Authorization Code Flow callback
-// Handles: GET /api/auth/google/callback?code=xxx
+// Google OAuth2 Authorization Code Flow callback (ALTERNATIVE PATH)
+// Handles: GET /api/auth/google-callback?code=xxx
+//
+// This is a duplicate of /api/auth/google/callback that lives at a
+// non-nested path. In Next.js 16 + Turbopack, the nested route under
+// /api/auth/google/ (which also has its own route.ts) was returning 404.
+// This flat path avoids the parent/child route conflict.
 
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
@@ -49,12 +54,8 @@ function getPublicOrigin(request: NextRequest): string {
 }
 
 function getRedirectUri(request: NextRequest): string {
-  const overridePath = request.nextUrl.searchParams.get('oauth_redirect_path');
-  if (overridePath && overridePath.startsWith('/') && !overridePath.startsWith('//')) {
-    return `${getPublicOrigin(request)}${overridePath}`;
-  }
-
-  return `${getPublicOrigin(request)}/api/auth/google/callback`;
+  // IMPORTANT: Must match the redirect_uri used in the initial OAuth request
+  return `${getPublicOrigin(request)}/api/auth/google-callback`;
 }
 
 function sanitizeRedirectPath(state: string | null): string {
@@ -120,13 +121,13 @@ interface GoogleUserInfo {
 }
 
 export async function GET(request: NextRequest) {
-  console.log('[GOOGLE CALLBACK] Route handler entered — URL:', request.url);
+  console.log('[GOOGLE-CALLBACK] Route handler entered — URL:', request.url);
   try {
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
     const error = searchParams.get('error');
-    const state = searchParams.get('state'); // Contains redirect path
-    console.log('[GOOGLE CALLBACK] code:', code ? `${code.slice(0, 10)}...` : 'null', 'error:', error, 'state:', state);
+    const state = searchParams.get('state');
+    console.log('[GOOGLE-CALLBACK] code:', code ? `${code.slice(0, 10)}...` : 'null', 'error:', error, 'state:', state);
 
     if (error) {
       return NextResponse.redirect(buildLoginRedirectUrl(request, error, state));
@@ -139,13 +140,16 @@ export async function GET(request: NextRequest) {
     }
 
     if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
-      console.error('Google OAuth credentials not configured');
+      console.error('[GOOGLE-CALLBACK] OAuth credentials not configured');
       return NextResponse.redirect(
         buildLoginRedirectUrl(request, 'config', state)
       );
     }
 
     // Exchange authorization code for tokens
+    const redirectUri = getRedirectUri(request);
+    console.log('[GOOGLE-CALLBACK] Token exchange with redirect_uri:', redirectUri);
+
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -154,16 +158,16 @@ export async function GET(request: NextRequest) {
         code,
         client_id: GOOGLE_CLIENT_ID,
         client_secret: GOOGLE_CLIENT_SECRET,
-        redirect_uri: getRedirectUri(request),
+        redirect_uri: redirectUri,
         grant_type: 'authorization_code',
       }),
     });
 
     const tokenData: GoogleTokenResponse = await tokenResponse.json();
-    console.log('[GOOGLE CALLBACK] Token exchange status:', tokenResponse.status, 'error:', tokenData.error || 'none');
+    console.log('[GOOGLE-CALLBACK] Token exchange status:', tokenResponse.status, 'error:', tokenData.error || 'none');
 
     if (tokenData.error) {
-      console.error('Google token exchange error:', tokenData.error_description);
+      console.error('[GOOGLE-CALLBACK] Token exchange error:', tokenData.error_description);
 
       if (tokenData.error === 'invalid_grant') {
         const authUser = await getAuthUser();
@@ -198,6 +202,7 @@ export async function GET(request: NextRequest) {
     }
 
     const googleUser: GoogleUserInfo = await userInfoResponse.json();
+    console.log('[GOOGLE-CALLBACK] Google user:', googleUser.email, googleUser.name);
 
     if (!googleUser.verified_email) {
       return NextResponse.redirect(
@@ -211,11 +216,13 @@ export async function GET(request: NextRequest) {
     let user = await User.findOne({ email: googleUser.email });
 
     if (user) {
+      console.log('[GOOGLE-CALLBACK] Existing user found:', user.email, 'plan:', user.subscription?.plan, 'level:', user.progress?.level);
       user.image = user.image || googleUser.picture;
       user.emailVerified = user.emailVerified || new Date();
       user.lastLoginAt = new Date();
       await user.save();
     } else {
+      console.log('[GOOGLE-CALLBACK] Creating new user:', googleUser.email);
       user = await User.create({
         email: googleUser.email,
         name: googleUser.name,
@@ -235,6 +242,7 @@ export async function GET(request: NextRequest) {
 
     // Redirect to the app with token in cookie
     const redirectPath = sanitizeRedirectPath(state);
+    console.log('[GOOGLE-CALLBACK] Login successful — redirecting to:', redirectPath);
     const response = NextResponse.redirect(
       new URL(redirectPath, getPublicOrigin(request))
     );
@@ -252,7 +260,7 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error('Google callback error:', error);
+    console.error('[GOOGLE-CALLBACK] Error:', error);
     const errorName = error instanceof Error ? error.name : null;
     const errorCode = errorName === 'TimeoutError' ? 'timeout' : 'server';
     return NextResponse.redirect(

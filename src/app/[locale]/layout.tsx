@@ -21,6 +21,7 @@ import Script from "next/script";
 import { AttributionTracker } from "@/components/AttributionTracker";
 import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
+import { PostHogProvider } from "@/components/PostHogProvider";
 import { routing } from "@/i18n/routing";
 
 // Analytics IDs
@@ -177,6 +178,7 @@ export default async function RootLayout({
   return (
     <UserProvider>
       <ServiceCartProvider>
+        <PostHogProvider>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {/* Google Tag Manager */}
           {GTM_ID && (
@@ -236,6 +238,7 @@ export default async function RootLayout({
             }}
           />
         </NextIntlClientProvider>
+        </PostHogProvider>
       </ServiceCartProvider>
     </UserProvider>
   );

@@ -9,6 +9,8 @@ import { calculateEnrollmentSlots, SubscriptionPlan, CourseLevel, resolvePlan } 
 import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
 import { getAuthUser } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 // XP required per level (exponential curve)
 const getXpForLevel = (level: number) => Math.floor(100 * Math.pow(1.5, level - 1));
 
@@ -144,15 +146,29 @@ export async function GET(request: Request) {
 
     const userId = decoded.id;
 
+    // === DEBUG: Trace user resolution (REMOVE AFTER FIXING) ===
+    console.log('[DASHBOARD DEBUG] JWT decoded:', { id: decoded.id, email: decoded.email, role: decoded.role });
+
     // Fetch user details
     const user = await User.findById(userId);
 
     if (!user) {
+      console.log('[DASHBOARD DEBUG] User NOT FOUND for id:', userId);
       return NextResponse.json(
         { error: 'Usuário não encontrado' },
         { status: 404 }
       );
     }
+
+    // === DEBUG: Show what Mongoose actually returned ===
+    console.log('[DASHBOARD DEBUG] User found:', {
+      id: user._id?.toString(),
+      email: user.email,
+      plan: user.subscription?.plan,
+      level: user.progress?.level,
+      xp: user.progress?.xp,
+      weeklyXp: user.progress?.weeklyXp,
+    });
 
     // Fetch course progress
     const progress = (await CourseProgress.find({ userId }).sort({ lastAccessedAt: -1 }).lean()).map(normalizeProgressPercent);

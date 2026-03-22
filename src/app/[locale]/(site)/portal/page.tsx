@@ -232,7 +232,7 @@ export default function PortalPage() {
     // Rescue flow: if Google lands on /portal with OAuth params, forward the
     // full query to the dedicated callback route so cookies/session are created.
     if (code || oauthError) {
-      const callbackUrl = new URL("/api/auth/google/callback", window.location.origin);
+      const callbackUrl = new URL("/api/auth/google-callback", window.location.origin);
       currentUrl.searchParams.forEach((value, key) => {
         callbackUrl.searchParams.set(key, value);
       });
@@ -600,7 +600,7 @@ export default function PortalPage() {
               size="icon"
               onClick={async () => {
                 await logout();
-                window.location.assign("/");
+                window.location.assign("/descobrir");
               }}
             >
               <LogOut size={20} />

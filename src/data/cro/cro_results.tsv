@@ -1,0 +1,2 @@
+iteration	timestamp	variant_description	metric_name	metric_value	baseline	result
+0	2026-03-21T21:00:00Z	Initial homepage v2 launch (neednap-inspired, bold hero, real data)	signup_rate	pending	0	BASELINE

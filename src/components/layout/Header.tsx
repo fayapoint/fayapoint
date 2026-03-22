@@ -324,7 +324,7 @@ export function Header() {
                   size="sm"
                   onClick={async () => {
                     await logout();
-                    window.location.assign("/");
+                    window.location.assign("/descobrir");
                   }}
                   className="text-foreground/80 hover:text-foreground"
                 >
@@ -449,7 +449,7 @@ export function Header() {
                     onClick={async () => {
                       await logout();
                       setMobileMenuOpen(false);
-                      window.location.assign("/");
+                      window.location.assign("/descobrir");
                     }}
                   >
                     <LogOut size={18} className="mr-2" />

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FayAI - Prototype A: Scroll-Driven Storytelling</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#030712;--surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.06);--border-hover:rgba(255,255,255,0.12);
+  --text:#f8fafc;--text-secondary:#94a3b8;--text-muted:#64748b;
+  --purple:#8b5cf6;--pink:#ec4899;--cyan:#06b6d4;--green:#10b981;--red:#ef4444;
+  --grad:linear-gradient(135deg,#8b5cf6,#ec4899,#06b6d4);
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,7,18,0.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:var(--grad);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;box-shadow:0 0 30px rgba(139,92,246,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(139,92,246,0.5)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.3s;text-decoration:none}
+.btn-ghost:hover{border-color:var(--border-hover);background:var(--surface)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 60px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -20%,rgba(139,92,246,0.15),transparent),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(6,182,212,0.08),transparent),radial-gradient(ellipse 40% 50% at 20% 70%,rgba(236,72,153,0.06),transparent)}
+.hero-particles{position:absolute;inset:0;overflow:hidden}
+.particle{position:absolute;width:4px;height:4px;background:rgba(139,92,246,0.4);border-radius:50%;animation:float-particle 15s infinite ease-in-out}
+.particle:nth-child(2){left:20%;top:30%;width:3px;height:3px;background:rgba(236,72,153,0.3);animation-delay:2s;animation-duration:18s}
+.particle:nth-child(3){left:70%;top:20%;width:5px;height:5px;background:rgba(6,182,212,0.3);animation-delay:4s;animation-duration:20s}
+.particle:nth-child(4){left:40%;top:60%;width:3px;height:3px;background:rgba(139,92,246,0.2);animation-delay:6s;animation-duration:22s}
+.particle:nth-child(5){left:85%;top:50%;width:4px;height:4px;background:rgba(236,72,153,0.25);animation-delay:3s;animation-duration:16s}
+.particle:nth-child(6){left:10%;top:70%;width:6px;height:6px;background:rgba(6,182,212,0.2);animation-delay:5s;animation-duration:25s}
+@keyframes float-particle{0%,100%{transform:translate(0,0) scale(1);opacity:0.3}25%{transform:translate(30px,-40px) scale(1.5);opacity:0.7}50%{transform:translate(-20px,-80px) scale(1);opacity:0.4}75%{transform:translate(40px,-30px) scale(1.3);opacity:0.6}}
+.hero-content{position:relative;z-index:2;max-width:800px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--surface);border:1px solid var(--border);border-radius:100px;font-size:13px;color:var(--text-secondary);margin-bottom:32px}
+.hero-badge .dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero h1{font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-0.03em;margin-bottom:24px}
+.hero h1 .grad{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:clamp(16px,2vw,20px);color:var(--text-secondary);line-height:1.6;max-width:600px;margin:0 auto 40px}
+.hero-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.scroll-indicator{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-muted);font-size:12px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+.scroll-indicator .line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text-muted),transparent)}
+
+/* PROBLEM SECTION */
+.problem{min-height:100vh;display:flex;align-items:center;padding:120px 40px;position:relative}
+.problem-inner{max-width:1200px;margin:0 auto;width:100%}
+.problem .label{font-size:13px;text-transform:uppercase;letter-spacing:0.15em;color:var(--purple);font-weight:600;margin-bottom:16px}
+.problem h2{font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.1;letter-spacing:-0.02em;margin-bottom:60px}
+.problem h2 .highlight{color:var(--purple)}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.pain-list,.solution-list{display:flex;flex-direction:column;gap:20px}
+.pain-item,.solution-item{display:flex;gap:16px;align-items:flex-start;padding:20px;border-radius:16px;transition:background 0.3s}
+.pain-item:hover,.solution-item:hover{background:var(--surface)}
+.pain-item .icon{width:40px;height:40px;border-radius:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);display:flex;align-items:center;justify-content:center;color:var(--red);font-size:18px;flex-shrink:0}
+.solution-item .icon{width:40px;height:40px;border-radius:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:18px;flex-shrink:0}
+.pain-item h4,.solution-item h4{font-size:16px;font-weight:600;margin-bottom:4px}
+.pain-item p,.solution-item p{font-size:14px;color:var(--text-secondary);line-height:1.5}
+
+/* SOLUTION/COURSES */
+.solution{padding:120px 40px;position:relative}
+.solution::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent)}
+.solution-inner{max-width:1200px;margin:0 auto}
+.solution .label{font-size:13px;text-transform:uppercase;letter-spacing:0.15em;color:var(--cyan);font-weight:600;margin-bottom:16px;text-align:center}
+.solution h2{font-size:clamp(32px,4vw,48px);font-weight:800;text-align:center;margin-bottom:16px;letter-spacing:-0.02em}
+.solution .subtitle{text-align:center;color:var(--text-secondary);font-size:18px;margin-bottom:60px}
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.course-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;transition:all 0.4s;position:relative;overflow:hidden}
+.course-card:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.course-card .tag{display:inline-block;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px}
+.course-card:nth-child(1) .tag{background:rgba(139,92,246,0.15);color:var(--purple)}
+.course-card:nth-child(2) .tag{background:rgba(236,72,153,0.15);color:var(--pink)}
+.course-card:nth-child(3) .tag{background:rgba(6,182,212,0.15);color:var(--cyan)}
+.course-card .emoji{font-size:48px;margin-bottom:16px;display:block}
+.course-card h3{font-size:22px;font-weight:700;margin-bottom:8px}
+.course-card .desc{color:var(--text-secondary);font-size:14px;line-height:1.6;margin-bottom:20px}
+.course-card .meta{display:flex;gap:16px;color:var(--text-muted);font-size:13px}
+.course-card .meta span{display:flex;align-items:center;gap:4px}
+
+/* PROOF STRIP */
+.proof{padding:80px 40px;position:relative;overflow:hidden}
+.proof::before,.proof::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent)}
+.proof::before{top:0}
+.proof::after{bottom:0}
+.proof-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:center;gap:60px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat .number{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(36px,5vw,56px);font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;line-height:1.1}
+.stat .label{font-size:14px;color:var(--text-secondary);margin-top:4px}
+
+/* FREE COURSE */
+.free-course{padding:120px 40px;position:relative}
+.free-inner{max-width:900px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+.free-inner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(139,92,246,0.08),transparent);pointer-events:none}
+.free-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:100px;font-size:12px;color:var(--green);font-weight:600;margin-bottom:16px}
+.free-badge::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+.free-content h3{font-size:14px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
+.free-content h2{font-size:28px;font-weight:800;margin-bottom:12px}
+.free-content p{color:var(--text-secondary);font-size:15px;line-height:1.6;margin-bottom:24px}
+.free-visual{text-align:center}
+.free-visual .course-icon{font-size:80px;margin-bottom:16px;display:block}
+.free-visual .chapters{color:var(--text-muted);font-size:14px}
+
+/* FINAL CTA */
+.final-cta{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 40px;position:relative}
+.final-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 100%,rgba(139,92,246,0.12),transparent)}
+.final-inner{max-width:600px}
+.final-cta h2{font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.1;letter-spacing:-0.02em;margin-bottom:16px}
+.final-cta p{color:var(--text-secondary);font-size:18px;margin-bottom:40px}
+.signup-form{display:flex;gap:12px;max-width:460px;margin:0 auto 24px}
+.signup-form input{flex:1;padding:14px 20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:15px;outline:none;transition:border-color 0.3s}
+.signup-form input:focus{border-color:var(--purple)}
+.signup-form input::placeholder{color:var(--text-muted)}
+.trust-line{color:var(--text-muted);font-size:13px}
+.trust-line span{margin:0 8px}
+
+/* FOOTER */
+footer{padding:60px 40px 30px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.footer-links{display:flex;gap:24px}
+.footer-links a{color:var(--text-muted);text-decoration:none;font-size:13px;transition:color 0.2s}
+.footer-links a:hover{color:var(--text)}
+.copyright{color:var(--text-muted);font-size:13px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .nav-links{display:none}
+  .hero{padding:100px 24px 60px}
+  .hero h1{font-size:36px}
+  .problem{padding:80px 24px}
+  .problem-grid{grid-template-columns:1fr;gap:40px}
+  .course-grid{grid-template-columns:1fr}
+  .free-inner{grid-template-columns:1fr;padding:32px}
+  .proof-inner{gap:32px}
+  .signup-form{flex-direction:column}
+  .footer-inner{flex-direction:column;gap:20px;text-align:center}
+  .footer-links{flex-wrap:wrap;justify-content:center}
+}
+
+/* Label at top */
+.prototype-label{position:fixed;top:70px;right:20px;z-index:200;background:var(--purple);color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:0.05em;opacity:0.9}
+</style>
+</head>
+<body>
+
+<div class="prototype-label">PROTOTYPE A — SCROLL STORYTELLING</div>
+
+<nav>
+  <div class="logo">fay.ai</div>
+  <div class="nav-links">
+    <a href="#">Cursos</a>
+    <a href="#">Ferramentas</a>
+    <a href="#">Precos</a>
+    <a href="#">Sobre</a>
+    <a href="#" class="btn-ghost" style="padding:8px 18px">Entrar</a>
+    <a href="#" class="btn-primary" style="padding:8px 18px">Comece Gratis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles">
+    <div class="particle" style="left:15%;top:25%"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Novo: Curso de Claude AI disponivel gratuitamente
+    </div>
+    <h1>A IA vai mudar tudo.<br><span class="grad">Quem dominar ela,<br>muda o jogo.</span></h1>
+    <p>Aprenda a usar as ferramentas de IA mais poderosas do mundo com cursos praticos, do basico ao avancado. Sem enrolacao, sem teoria vazia.</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary" style="padding:14px 32px;font-size:16px">Comece Gratis &rarr;</a>
+      <a href="#" class="btn-ghost" style="padding:14px 32px;font-size:16px">&#9654; Ver demonstracao</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Role para descobrir</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-inner">
+    <div class="label">O Problema</div>
+    <h2>Todo mundo fala de IA.<br><span class="highlight">Ninguem ensina voce a USAR.</span></h2>
+    <div class="problem-grid">
+      <div class="pain-list">
+        <div class="pain-item">
+          <div class="icon">&#10005;</div>
+          <div><h4>Conteudo generico</h4><p>Videos de 2 horas que nao ensinam nada pratico. Teoria sem aplicacao real.</p></div>
+        </div>
+        <div class="pain-item">
+          <div class="icon">&#10005;</div>
+          <div><h4>Ferramentas desatualizadas</h4><p>Cursos de 2023 ensinando versoes que nem existem mais.</p></div>
+        </div>
+        <div class="pain-item">
+          <div class="icon">&#10005;</div>
+          <div><h4>Sem caminho claro</h4><p>"Aprenda IA" — mas por onde comecar? ChatGPT? Claude? Midjourney?</p></div>
+        </div>
+      </div>
+      <div class="solution-list">
+        <div class="solution-item">
+          <div class="icon">&#10003;</div>
+          <div><h4>100% pratico, hands-on</h4><p>Cada capitulo termina com voce usando a ferramenta. Sem slides, sem filler.</p></div>
+        </div>
+        <div class="solution-item">
+          <div class="icon">&#10003;</div>
+          <div><h4>Atualizado para Marco 2026</h4><p>Conteudo gerado e revisado com as versoes mais recentes de cada ferramenta.</p></div>
+        </div>
+        <div class="solution-item">
+          <div class="icon">&#10003;</div>
+          <div><h4>Trilha clara por ferramenta</h4><p>15 cursos organizados por ferramenta. Escolha o seu e comece em 2 minutos.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="solution">
+  <div class="solution-inner">
+    <div class="label">A Solucao</div>
+    <h2>Cursos que realmente ensinam</h2>
+    <p class="subtitle">Cada curso cobre uma ferramenta de IA do zero ao avancado</p>
+    <div class="course-grid">
+      <div class="course-card">
+        <span class="tag">Mais Popular</span>
+        <span class="emoji">&#129302;</span>
+        <h3>ChatGPT Dominado</h3>
+        <p class="desc">Do prompt basico a automacoes avancadas. Aprenda a extrair o maximo do ChatGPT para seu trabalho e negocio.</p>
+        <div class="meta"><span>&#128218; 24 capitulos</span><span>&#9201; ~8 horas</span></div>
+      </div>
+      <div class="course-card">
+        <span class="tag">Premium</span>
+        <span class="emoji">&#127912;</span>
+        <h3>Midjourney &amp; DALL-E</h3>
+        <p class="desc">Crie imagens profissionais com IA. Prompts, estilos, workflows de design e integracao com ferramentas.</p>
+        <div class="meta"><span>&#128218; 20 capitulos</span><span>&#9201; ~6 horas</span></div>
+      </div>
+      <div class="course-card">
+        <span class="tag">Novo</span>
+        <span class="emoji">&#9889;</span>
+        <h3>Automacao com N8N</h3>
+        <p class="desc">Conecte qualquer ferramenta e automatize processos inteiros. Do basico ao deploy em producao.</p>
+        <div class="meta"><span>&#128218; 18 capitulos</span><span>&#9201; ~5 horas</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof">
+  <div class="proof-inner">
+    <div class="stat"><span class="number">25+</span><span class="label">Cursos Premium</span></div>
+    <div class="stat"><span class="number">256</span><span class="label">Capitulos</span></div>
+    <div class="stat"><span class="number">1</span><span class="label">Gratis por Mes</span></div>
+    <div class="stat"><span class="number">100%</span><span class="label">Com Certificado</span></div>
+  </div>
+</section>
+
+<!-- FREE COURSE -->
+<section class="free-course">
+  <div class="free-inner">
+    <div class="free-content">
+      <div class="free-badge">Gratis este mes</div>
+      <h3>Curso do Mes &mdash; Marco 2026</h3>
+      <h2>Claude AI: Do Zero ao Avancado</h2>
+      <p>Aprenda a usar o Claude, a IA mais inteligente do mercado. Sem cartao, sem pegadinha. Acesso completo por 30 dias.</p>
+      <a href="#" class="btn-primary">Comecar Agora &rarr;</a>
+    </div>
+    <div class="free-visual">
+      <span class="course-icon">&#129302;</span>
+      <div class="chapters">22 capitulos &middot; ~7 horas &middot; Certificado incluso</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-inner">
+    <h2>Crie sua conta em<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">30 segundos</span></h2>
+    <p>Junte-se a milhares de brasileiros que ja estao usando IA para crescer.</p>
+    <div class="signup-form">
+      <input type="email" placeholder="Seu melhor email">
+      <a href="#" class="btn-primary">Criar Conta &rarr;</a>
+    </div>
+    <div class="trust-line">Sem cartao de credito <span>&middot;</span> Cancele quando quiser <span>&middot;</span> 100% em portugues</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="copyright">&copy; 2026 fay.ai &mdash; Todos os direitos reservados. Feito com IA no Brasil &#127463;&#127479;</div>
+    <div class="footer-links">
+      <a href="#">Termos</a>
+      <a href="#">Privacidade</a>
+      <a href="#">Contato</a>
+      <a href="#">FAQ</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

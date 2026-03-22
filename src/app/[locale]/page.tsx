@@ -1,17 +1,7 @@
 import { cookies } from "next/headers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { HeroSection } from "@/components/home/HeroSection";
-import { WhatWeDoSection } from "@/components/home/WhatWeDoSection";
-import { ServicesCarousel } from "@/components/home/ServicesCarousel";
-import { ChatGPTAllowlistingBanner } from "@/components/home/ChatGPTAllowlistingBanner";
-import { AIToolsMarquee } from "@/components/home/AIToolsMarquee";
-import { FeaturesSection } from "@/components/home/FeaturesSection";
-import { CourseCategoriesSection } from "@/components/home/CourseCategoriesSection";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { CTASection } from "@/components/home/CTASection";
-import { ValuePropositionCTA } from "@/components/home/ValuePropositionCTA";
-import { FreeOfferBanner } from "@/components/home/FreeOfferBanner";
+import { NewHomepage } from "@/components/home-v2/NewHomepage";
 import { StickyCTA } from "@/components/conversion/StickyCTA";
 import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
@@ -33,17 +23,7 @@ export default async function Home() {
     <div className="min-h-screen bg-[#030712] text-foreground">
       <Header />
       <main>
-        <HeroSection />
-        <FreeOfferBanner />
-        <ValuePropositionCTA />
-        <ChatGPTAllowlistingBanner />
-        <WhatWeDoSection />
-        <ServicesCarousel />
-        <AIToolsMarquee />
-        <FeaturesSection />
-        <CourseCategoriesSection />
-        <TestimonialsSection />
-        <CTASection />
+        <NewHomepage />
       </main>
       <Footer />
 

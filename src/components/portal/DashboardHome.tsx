@@ -176,25 +176,53 @@ export function DashboardHome({
       }));
   }, [enrolledSlugs, userCourses]);
 
-  const freeCourseOfMonth = useMemo(
+  // Sync fallback: algorithm-based (may disagree with Mission Control)
+  const algorithmicFreeCourse = useMemo(
     () => availableCatalog.find((course) => course.monthlyOffer?.isFreeCourseOfMonth) || null,
     [availableCatalog]
   );
 
-  // Tier-based course suggestions
+  // Async truth: fetch from API which reads Mission Control override from MongoDB
+  const [apiFreeCourseSlug, setApiFreeCourseSlug] = useState<string | null>(null);
+  useEffect(() => {
+    fetch("/api/courses/monthly-offers", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data?.freeCourse?.slug) {
+          setApiFreeCourseSlug(data.freeCourse.slug);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Use API slug to find the course in the full catalog (not just available/unenrolled)
+  const freeCourseOfMonth = useMemo(() => {
+    if (apiFreeCourseSlug) {
+      // First check available catalog
+      const fromCatalog = availableCatalog.find(c => c.slug === apiFreeCourseSlug);
+      if (fromCatalog) return fromCatalog;
+      // If user is already enrolled, find in allCourses
+      const fromAll = allCourses.find(c => c.slug === apiFreeCourseSlug);
+      if (fromAll) return { ...fromAll, normalizedLevel: getNormalizedLevel(fromAll), monthlyOffer: getCourseMonthlyOfferMeta(fromAll.slug) };
+    }
+    return algorithmicFreeCourse;
+  }, [apiFreeCourseSlug, availableCatalog, algorithmicFreeCourse]);
+
+  // Tier-based course suggestions (exclude free course of month using API-resolved slug)
   const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
+  const freeSlug = apiFreeCourseSlug || algorithmicFreeCourse?.slug;
   const suggestedCourses = useMemo(() => {
     return availableCatalog
-      .filter(c => !c.monthlyOffer?.isFreeCourseOfMonth && canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
+      .filter(c => c.slug !== freeSlug && canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
       .slice(0, 4);
-  }, [availableCatalog, tierConfig]);
+  }, [availableCatalog, tierConfig, freeSlug]);
 
   // Locked courses (need upgrade)
   const lockedCourses = useMemo(() => {
     return availableCatalog
-      .filter(c => c.monthlyOffer?.includedInPool && !c.monthlyOffer?.isFreeCourseOfMonth && !canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
+      .filter(c => c.monthlyOffer?.includedInPool && c.slug !== freeSlug && !canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
       .slice(0, 2);
-  }, [availableCatalog, tierConfig]);
+  }, [availableCatalog, tierConfig, freeSlug]);
 
   // Gallery image for Studio showcase
   const [galleryImage, setGalleryImage] = useState<GalleryImage | null>(null);

@@ -103,6 +103,7 @@ const BOT_DETECTION_BYPASS_PATHS = [
   "/api/health",
   "/api/auth/google",
   "/api/auth/google/callback",
+  "/api/auth/google-callback",
   "/api/webhooks",
   "/api/payments/webhook",
   "/api/pod/webhooks",
@@ -337,7 +338,7 @@ export default async function middleware(request: NextRequest) {
   // Skip bot detection for health checks and webhooks
   const skipBotDetection = shouldBypassBotDetection(pathname);
 
-  if (pathname === "/api/auth/google" || pathname === "/api/auth/google/callback") {
+  if (pathname === "/api/auth/google" || pathname === "/api/auth/google/callback" || pathname === "/api/auth/google-callback") {
     const response = NextResponse.next();
     addSecurityHeaders(response);
     return response;
@@ -610,7 +611,7 @@ export default async function middleware(request: NextRequest) {
     }
 
     const callbackUrl = request.nextUrl.clone();
-    callbackUrl.pathname = "/api/auth/google/callback";
+    callbackUrl.pathname = "/api/auth/google-callback";
     callbackUrl.searchParams.set("oauth_redirect_path", pathname);
     return NextResponse.redirect(callbackUrl);
   }

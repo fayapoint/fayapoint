@@ -18,11 +18,14 @@ async function fetchMonthlyOverride(monthKey: string): Promise<MonthlyCourseOffe
     const uri = process.env.MONGODB_URI;
     if (!uri) return null;
 
-    if (mongoose.connection.readyState !== 1) {
-      await mongoose.connect(uri, { bufferCommands: false });
-    }
+    // CRITICAL: Use dbConnect() instead of direct mongoose.connect()!
+    // Direct mongoose.connect() without dbName connects to "test" database,
+    // which poisons the global Mongoose connection cache. All subsequent
+    // model operations (User.findOne, etc.) would then hit test.users instead
+    // of fayapoint.users — creating ghost documents in the wrong database.
+    const dbConnectModule = await import("@/lib/mongodb");
+    await dbConnectModule.default();
 
-    // Explicitly use the fayapoint database (not the default one from the URI)
     const client = mongoose.connection.getClient();
     const db = client.db("fayapoint");
 
@@ -166,12 +169,30 @@ export async function getMonthlyCourseOfferSetAsync(referenceDate: Date = new Da
   return computeAlgorithmicOfferSet(referenceDate);
 }
 
-// Sync version — algorithm only (for places that can't await)
+// Track whether a background cache warm is in progress to avoid duplicate fetches
+let _warmingPromise: Promise<void> | null = null;
+
+/**
+ * Sync version — returns cached Mission Control override if available,
+ * otherwise returns the algorithmic fallback AND kicks off a background
+ * fetch so the NEXT call will have the real data.
+ */
 export function getMonthlyCourseOfferSet(referenceDate: Date = new Date()): MonthlyCourseOfferSet {
   // If we have a cached override, use it synchronously
   if (_overrideCache && _overrideCache.data && Date.now() - _overrideCache.fetchedAt < CACHE_TTL) {
     return _overrideCache.data;
   }
+
+  // Kick off a background cache warm (fire-and-forget) so subsequent sync
+  // calls will have the Mission Control override. This avoids the scenario
+  // where the sync function permanently returns algorithm results because
+  // nothing ever populated the cache.
+  if (!_warmingPromise) {
+    _warmingPromise = getMonthlyCourseOfferSetAsync(referenceDate)
+      .then(() => { _warmingPromise = null; })
+      .catch(() => { _warmingPromise = null; });
+  }
+
   return computeAlgorithmicOfferSet(referenceDate);
 }
 

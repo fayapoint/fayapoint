@@ -44,11 +44,26 @@ export function useDashboard(): UseDashboardReturn {
     // Check cache first (unless forced refresh)
     const now = Date.now();
     if (!force && dashboardCache.data && (now - dashboardCache.timestamp) < CACHE_DURATION) {
-      if (mountedRef.current) {
-        setData(dashboardCache.data);
-        setIsLoading(false);
+      // SAFEGUARD: Invalidate cache if the localStorage user doesn't match the cached data.
+      // This catches session mismatches (e.g., login with different account).
+      const storedUser = typeof window !== 'undefined' ? localStorage.getItem('fayai_user') : null;
+      const cachedEmail = dashboardCache.data?.user?.email;
+      let storedEmail: string | null = null;
+      try {
+        storedEmail = storedUser ? JSON.parse(storedUser)?.email : null;
+      } catch { /* ignore */ }
+
+      if (cachedEmail && storedEmail && cachedEmail !== storedEmail) {
+        // User changed — force refresh
+        dashboardCache.data = null;
+        dashboardCache.timestamp = 0;
+      } else {
+        if (mountedRef.current) {
+          setData(dashboardCache.data);
+          setIsLoading(false);
+        }
+        return dashboardCache.data;
       }
-      return dashboardCache.data;
     }
 
     // Prevent duplicate fetches
@@ -71,9 +86,15 @@ export function useDashboard(): UseDashboardReturn {
       const res = await fetch('/api/user/dashboard', {
         headers,
         credentials: 'include',
+        cache: 'no-store',
       });
 
       if (res.status === 401) {
+        // Session is invalid — clear stale local data to prevent ghost sessions
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('fayai_token');
+          localStorage.removeItem('fayai_user');
+        }
         if (mountedRef.current) {
           setError(token ? 'Unauthorized' : 'No session');
           setIsLoading(false);
@@ -87,16 +108,22 @@ export function useDashboard(): UseDashboardReturn {
       }
 
       const result = await res.json();
-      
+
       // Update cache
       dashboardCache.data = result;
       dashboardCache.timestamp = now;
-      
+
+      // SAFEGUARD: Sync localStorage user with server truth.
+      // Prevents stale name/plan from showing in the UI.
+      if (result?.user && typeof window !== 'undefined') {
+        localStorage.setItem('fayai_user', JSON.stringify(result.user));
+      }
+
       if (mountedRef.current) {
         setData(result);
         setError(null);
       }
-      
+
       return result;
     } catch (e) {
       if (mountedRef.current) {

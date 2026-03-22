@@ -12,7 +12,7 @@ import {
   resolvePlan,
 } from '@/lib/course-tiers';
 import { getCourseBySlug, allCourses } from '@/data/courses';
-import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from '@/lib/monthly-course-offers';
+import { canPlanAccessMonthlyOffer, getMonthlyCourseOfferSetAsync } from '@/lib/monthly-course-offers';
 
 interface EnrollmentRequest {
   courseSlug: string;
@@ -91,9 +91,11 @@ export async function POST(request: Request) {
       });
     }
 
-    const monthlyOffer = getCourseMonthlyOfferMeta(courseSlug);
+    // Use async version to get Mission Control override from MongoDB
+    const offerSet = await getMonthlyCourseOfferSetAsync();
+    const isFreeByMissionControl = offerSet.freeCourseSlug === courseSlug;
     const isFreeEnrollment =
-      Boolean(monthlyOffer?.isFreeCourseOfMonth) || courseLevel === 'free' || courseData.price === 0;
+      isFreeByMissionControl || courseLevel === 'free' || courseData.price === 0;
 
     // Check if can enroll based on tier limits
     const enrollmentCheck = isFreeEnrollment
@@ -127,7 +129,7 @@ export async function POST(request: Request) {
         error: 'Este curso não faz parte do catálogo liberado neste mês para o seu plano. Você pode aguardar a próxima rotação, fazer upgrade ou comprar individualmente.',
         upgradeRequired: false,
         canPurchase: true,
-        monthlyOffer,
+        monthlyOffer: { isFreeCourseOfMonth: isFreeByMissionControl, freeCourseSlug: offerSet.freeCourseSlug },
         currentSlots: calculateEnrollmentSlots(userPlan, enrolledCourses),
       }, { status: 403 });
     }
@@ -175,7 +177,7 @@ export async function POST(request: Request) {
       enrollment: newEnrollment,
       progress,
       slots: updatedSlots,
-      monthlyOffer
+      monthlyOffer: { isFreeCourseOfMonth: isFreeByMissionControl, freeCourseSlug: offerSet.freeCourseSlug }
     });
 
   } catch (error) {

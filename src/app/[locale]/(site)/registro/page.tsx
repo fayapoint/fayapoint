@@ -22,12 +22,14 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
 import { useUser } from "@/contexts/UserContext";
+import { usePostHog } from "posthog-js/react";
 
 export default function RegisterPage() {
   const t = useTranslations("Register");
   const benefits = t.raw("benefits") as string[];
   const router = useRouter();
   const { setUser } = useUser();
+  const posthog = usePostHog();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -74,6 +76,13 @@ export default function RegisterPage() {
       localStorage.setItem("fayai_token", data.token);
       if (data.user) setUser(data.user);
 
+      // Track signup for CRO measurement
+      posthog?.capture("user_signed_up", {
+        method: "email",
+        source: document.referrer || "direct",
+      });
+      posthog?.identify(data.user?.email, { name: data.user?.name });
+
       toast.success(t("messages.success"));
       router.push("/portal");
     } catch (error) {
@@ -85,9 +94,12 @@ export default function RegisterPage() {
   };
 
   const handleGoogleSignup = () => {
+    // Track Google signup attempt for CRO measurement
+    posthog?.capture("signup_google_clicked");
     // Redirect to Google OAuth flow (same as login — creates account if needed)
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "167078774916-ktdd044k8l528goetmjc7pdqkgrbranc.apps.googleusercontent.com";
-    const redirectUri = `${window.location.origin}/api/auth/google/callback`;
+    // Use flat path to avoid Next.js 16 Turbopack nested route resolution bug
+    const redirectUri = `${window.location.origin}/api/auth/google-callback`;
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&prompt=select_account`;
     window.location.href = authUrl;
   };

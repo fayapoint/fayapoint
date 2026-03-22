@@ -19,7 +19,7 @@ interface User {
     state?: string;
   };
   subscription?: {
-    plan: 'free' | 'starter' | 'pro' | 'business';
+    plan: 'free' | 'starter' | 'pro' | 'business' | 'explorador' | 'profissional' | 'expert';
     status: string;
   };
   profile?: {
@@ -33,6 +33,7 @@ interface User {
   progress?: {
     level: number;
     points: number;
+    xp?: number;
     currentStreak: number;
     coursesCompleted: number;
     coursesInProgress: number;
@@ -55,14 +56,16 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
 
-  // Load user from localStorage on mount, or hydrate from cookie-based session
+  // Load user from localStorage on mount, then ALWAYS revalidate against server.
+  // This prevents stale localStorage from showing wrong user data (e.g., after
+  // Google OAuth which only sets cookies, not localStorage).
   useEffect(() => {
     setMounted(true);
 
     if (typeof window !== 'undefined') {
       const storedUser = localStorage.getItem('fayai_user');
-      const storedToken = localStorage.getItem('fayai_token');
 
+      // Show stored user immediately for fast initial render
       if (storedUser) {
         try {
           setUserState(JSON.parse(storedUser));
@@ -70,25 +73,42 @@ export function UserProvider({ children }: { children: ReactNode }) {
           console.error('Error parsing stored user:', error);
           localStorage.removeItem('fayai_user');
         }
-      } else if (!storedToken) {
-        // No localStorage data — check if there's a cookie-based session
-        // (e.g., from Google OAuth callback which sets httpOnly cookie)
-        fetch('/api/user/profile', { credentials: 'include' })
-          .then(res => {
-            if (res.ok) return res.json();
-            return null;
-          })
-          .then(data => {
-            if (data?.user) {
-              setUserState(data.user);
-              localStorage.setItem('fayai_user', JSON.stringify(data.user));
-              // Note: we can't read the httpOnly token, but the cookie handles auth
-            }
-          })
-          .catch(() => {
-            // No session — user is not logged in, this is fine
-          });
       }
+
+      // ALWAYS revalidate against server to catch session mismatches.
+      // This handles: expired tokens, Google OAuth sessions, different accounts.
+      const token = localStorage.getItem('fayai_token');
+      const headers: HeadersInit = {};
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      fetch('/api/user/profile', { headers, credentials: 'include', cache: 'no-store' })
+        .then(res => {
+          if (res.ok) return res.json();
+          // If 401/404, user session is invalid — clear stale data
+          if (res.status === 401 || res.status === 404) {
+            setUserState(null);
+            localStorage.removeItem('fayai_user');
+            localStorage.removeItem('fayai_token');
+          }
+          return null;
+        })
+        .then(data => {
+          if (data?.user) {
+            // Server is the source of truth — always update from it
+            setUserState(data.user);
+            localStorage.setItem('fayai_user', JSON.stringify(data.user));
+          } else if (data && !data.user && !data.error) {
+            // Server returned 200 but no user — session is gone, clear stale data
+            setUserState(null);
+            localStorage.removeItem('fayai_user');
+            localStorage.removeItem('fayai_token');
+          }
+        })
+        .catch(() => {
+          // Network error — keep existing localStorage data as fallback
+        });
     }
   }, []);
 

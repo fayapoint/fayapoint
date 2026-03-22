@@ -44,8 +44,29 @@ export async function POST(request: Request) {
       );
     }
 
+    // DEBUG: Log what select('+password') actually returned
+    console.log('[LOGIN DEBUG] email:', email);
+    console.log('[LOGIN DEBUG] user found:', !!user);
+    console.log('[LOGIN DEBUG] user.password exists:', !!user.password);
+    console.log('[LOGIN DEBUG] user.password length:', user.password?.length || 0);
+    console.log('[LOGIN DEBUG] user.password type:', typeof user.password);
+    console.log('[LOGIN DEBUG] user.password preview:', user.password ? `${user.password.slice(0, 7)}...${user.password.slice(-3)}` : 'EMPTY');
+
+    // SAFEGUARD: If select('+password') didn't return the password,
+    // try a direct Mongoose findOne with explicit projection as fallback.
+    if (!user.password) {
+      console.warn('[LOGIN DEBUG] select(+password) returned no password — trying raw projection fallback');
+      const rawUser = await User.findOne({ email }, { password: 1 }).lean();
+      console.log('[LOGIN DEBUG] Raw projection result — password exists:', !!rawUser?.password, 'length:', (rawUser?.password as string)?.length || 0);
+      if (rawUser?.password && typeof rawUser.password === 'string') {
+        user.password = rawUser.password;
+        console.log('[LOGIN DEBUG] Password recovered via raw projection');
+      }
+    }
+
     // Check if user has a valid password set
     if (!user.password || user.password.length < 20) {
+      console.error('[LOGIN DEBUG] PASSWORD CHECK FAILED — password is missing or too short even after fallback.');
       return NextResponse.json(
         { error: 'Sua conta não tem senha definida. Por favor, use o link "Esqueci a senha" para criar uma.' },
         { status: 400 }
