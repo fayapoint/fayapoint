@@ -39,9 +39,30 @@ const BYPASS_PATHS = [
   // General webhook paths
   "/api/webhooks",
   "/api/pod/webhooks",
-  
+
   // Fulfillment API (might be called externally)
   "/api/fulfillment",
+
+  // Legal/policy pages (must be accessible for Meta, Google, app stores)
+  "/pt-BR/privacidade",
+  "/pt-BR/termos",
+  "/en/privacidade",
+  "/en/termos",
+];
+
+// Known legitimate bot/crawler user agents that need access (SEO, social, validators)
+const ALLOWED_BOTS = [
+  "facebookexternalhit",   // Meta URL validator
+  "Facebot",               // Facebook crawler
+  "facebookcatalog",       // Facebook catalog
+  "Googlebot",             // Google search crawler
+  "bingbot",               // Bing search crawler
+  "Twitterbot",            // Twitter/X card validator
+  "LinkedInBot",           // LinkedIn preview
+  "WhatsApp",              // WhatsApp link preview
+  "TelegramBot",           // Telegram link preview
+  "Pinterest",             // Pinterest crawler
+  "PostHog",               // PostHog analytics
 ];
 
 const BYPASS_SECRET = Netlify.env.get("GEOBLOCK_BYPASS_SECRET") || "fayapoint-bypass-2024";
@@ -69,6 +90,17 @@ export default async (request: Request, context: Context) => {
     return context.next();
   }
   
+  // =========================================================================
+  // 1.6. KNOWN BOTS/CRAWLERS - Allow SEO & social media validators
+  // =========================================================================
+  const isAllowedBot = ALLOWED_BOTS.some(bot =>
+    userAgent.toLowerCase().includes(bot.toLowerCase())
+  );
+  if (isAllowedBot) {
+    console.log(`[GEOBLOCK_BOT_BYPASS] Allowed bot: UA=${userAgent.slice(0, 80)}, Path=${pathname}`);
+    return context.next();
+  }
+
   // =========================================================================
   // 2. BYPASS SECRET - For admin access from anywhere
   // =========================================================================
