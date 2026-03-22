@@ -106,7 +106,7 @@ export async function createMPPayment(
   const payment = new MPPayment(client);
 
   const webhookUrl = options.notificationUrl ||
-    `${process.env.NEXTAUTH_URL || 'https://fayai.shop'}/api/payments/webhook/mercadopago`;
+    `${process.env.NEXTAUTH_URL || 'https://fayai.com.br'}/api/payments/webhook/mercadopago`;
 
   const nameParts = options.payer.firstName
     ? { first_name: options.payer.firstName, last_name: options.payer.lastName }
@@ -241,7 +241,7 @@ export async function createMPPreference(
   const client = getClient();
   const preference = new Preference(client);
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://fayai.shop';
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://fayai.com.br';
   const webhookUrl = options.notificationUrl ||
     `${baseUrl}/api/payments/webhook/mercadopago`;
 
