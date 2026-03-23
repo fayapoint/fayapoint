@@ -143,6 +143,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Build subscription data
+    // Asaas requires callback URL domain to match the domain in account settings.
+    // Always use the canonical production domain for Asaas callbacks.
+    const siteUrl = 'https://fayai.com.br';
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const subscriptionData: any = {
       customer: asaasCustomer.id!,
@@ -152,8 +156,11 @@ export async function POST(request: NextRequest) {
       cycle: asaasCycle,
       description: `Assinatura ${plan.name} - FayAi`,
       externalReference: `sub-${user._id}-${planSlug}`,
+      // Overdue settings: auto-fine + auto-cancel after 10 days
+      fine: { value: 2, type: 'PERCENTAGE' },      // 2% fine for late payment
+      interest: { value: 1 },                       // 1% monthly interest
       callback: {
-        successUrl: `${process.env.NEXTAUTH_URL || 'https://fayai.com.br'}/pt-BR/portal?tab=assinatura&status=success`,
+        successUrl: `${siteUrl}/pt-BR/portal?tab=assinatura&status=success`,
         autoRedirect: true,
       },
     };
@@ -251,15 +258,21 @@ export async function POST(request: NextRequest) {
 
     await subscription.save();
 
-    // Update user plan and save billing info
+    // IMPORTANT: Do NOT activate the plan here. The plan should only be
+    // activated when payment is CONFIRMED via webhook (PAYMENT_RECEIVED).
+    // For credit card, Asaas may auto-approve, but we still rely on webhook.
+    // For PIX/Boleto, payment is definitely pending at this point.
+    //
+    // What we DO save: billing info (for autofill) and the Asaas customer ID
+    // and subscription ID (for tracking), with status = 'pending'.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userDoc = user as any;
     if (!userDoc.subscription) userDoc.subscription = {};
-    userDoc.subscription.plan = plan.slug;
-    userDoc.subscription.status = 'active';
-    userDoc.subscription.expiresAt = new Date(Date.now() + (cycle === 'yearly' ? 365 : 30) * 24 * 60 * 60 * 1000);
+    userDoc.subscription.plan = 'free'; // Keep as free until payment confirmed
+    userDoc.subscription.status = 'pending';
+    userDoc.subscription.pendingPlan = plan.slug; // What they'll get once paid
     userDoc.subscription.asaasSubscriptionId = asaasSubscription.id;
-    
+
     // Save billing info for autofill
     if (!userDoc.billing) userDoc.billing = {};
     if (cleanedCpfCnpj && !userDoc.billing.cpfCnpj) {
@@ -277,7 +290,7 @@ export async function POST(request: NextRequest) {
     if (asaasCustomer.id) {
       userDoc.billing.asaasCustomerId = asaasCustomer.id;
     }
-    
+
     await userDoc.save();
 
     // For PIX/Boleto subscriptions, get the first payment details
