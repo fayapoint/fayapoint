@@ -42,15 +42,15 @@ const statTone = [
   {
     icon: Gift,
     value: "1",
-    labelPt: "curso grátis completo por mês",
-    labelEn: "fully free course each month",
+    labelPt: "curso completo por R$1/mês",
+    labelEn: "full course for R$1 each month",
     className: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
   },
   {
     icon: Award,
     value: "100%",
-    labelPt: "certificado incluído no curso grátis",
-    labelEn: "certificate included on the free course",
+    labelPt: "certificado incluído na oferta do mês",
+    labelEn: "certificate included in monthly offer",
     className: "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200",
   },
 ];
@@ -86,14 +86,14 @@ export function HeroSection() {
         ? "Aprenda IA com clareza, valor real e uma oferta que converte"
         : "Learn AI with clarity, real value, and an offer that converts";
   const headlineLineTwo = isPtBr
-    ? "entre grátis, prove o resultado e só então avance de plano"
-    : "enter free, prove the result, and only then move up a plan";
+    ? "comece por R$1, prove o resultado e só então avance de plano"
+    : "start for R$1, prove the result, and only then move up a plan";
 
   const monthlySummary = useMemo(() => {
     if (!monthlyOffers) {
       return isPtBr
-        ? "Todo mês, um curso completo fica gratuito e o restante do catálogo roda por faixa de plano."
-        : "Every month one full course becomes free, and the rest of the catalog rotates by plan tier.";
+        ? "Todo mês, um curso completo fica disponível por R$1 e o restante do catálogo roda por faixa de plano."
+        : "Every month one full course is available for R$1, and the rest of the catalog rotates by plan tier.";
     }
 
     return isPtBr
@@ -119,7 +119,7 @@ export function HeroSection() {
             <div className="flex flex-wrap items-center gap-3">
               <Badge className="border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-emerald-200">
                 <Gift size={14} className="mr-2" />
-                {isPtBr ? "Curso grátis do mês + certificado" : "Free monthly course + certificate"}
+                {isPtBr ? "Oferta do mês por R$1 + certificado" : "Monthly offer for R$1 + certificate"}
               </Badge>
               <Badge className="border-cyan-400/15 bg-cyan-500/10 px-3 py-1 text-cyan-100">
                 <CalendarDays size={14} className="mr-2" />
@@ -137,8 +137,8 @@ export function HeroSection() {
 
               <p className="max-w-2xl text-lg leading-8 text-gray-300 md:text-xl">
                 {isPtBr
-                  ? "Descubra o curso gratuito do mês, veja exatamente quais trilhas entram no seu plano agora e transforme a primeira experiência em confiança para continuar aprendendo."
-                  : "Discover the monthly free course, see exactly which paths belong to your plan right now, and turn the first experience into confidence to keep learning."}
+                  ? "Descubra a oferta do mês por R$1, veja quais trilhas entram no seu plano agora e transforme a primeira experiência em confiança para continuar aprendendo."
+                  : "Discover the monthly R$1 offer, see which paths belong to your plan right now, and turn the first experience into confidence to keep learning."}
             </p>
             </div>
 
@@ -170,8 +170,8 @@ export function HeroSection() {
                   <Gift className="mr-2 h-5 w-5" />
                   {freeCourse
                     ? isPtBr
-                      ? "Liberar curso grátis do mês"
-                      : "Unlock this month's free course"
+                      ? "Adquirir oferta do mês — R$1"
+                      : "Get monthly offer — R$1"
                     : isPtBr
                       ? "Assistir aula gratuita"
                       : "Watch free class"}
@@ -194,7 +194,7 @@ export function HeroSection() {
             <div className="flex flex-wrap gap-3 text-sm text-gray-400">
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-emerald-300" />
-                {isPtBr ? "Curso grátis com progresso salvo e acesso imediato" : "Free course with saved progress and instant access"}
+                {isPtBr ? "Curso por R$1 com progresso salvo e acesso vitalício" : "R$1 course with saved progress and lifetime access"}
               </span>
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-emerald-300" />
@@ -217,12 +217,12 @@ export function HeroSection() {
                     {isPtBr ? "Oferta principal do mês" : "Primary offer of the month"}
                   </p>
                   <h2 className="mt-2 text-2xl font-black text-white">
-                    {freeCourse?.name || (isPtBr ? "Um curso completo grátis todo mês" : "A full course free every month")}
+                    {freeCourse?.name || (isPtBr ? "Um curso completo por R$1 todo mês" : "A full course for R$1 every month")}
                   </h2>
                 </div>
                 <div className="rounded-[22px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.2),rgba(16,185,129,0.08))] px-4 py-3 text-right shadow-[0_12px_30px_rgba(16,185,129,0.16)]">
                   <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
-                  <p className="text-3xl font-black text-white">R$ 0</p>
+                  <p className="text-3xl font-black text-white">R$ 1</p>
                 </div>
               </div>
 
@@ -262,7 +262,7 @@ export function HeroSection() {
                   <ul className="mt-3 space-y-2 text-sm text-white/85">
                     <li className="inline-flex items-center gap-2">
                       <Zap size={14} className="text-cyan-300" />
-                      {isPtBr ? "1 curso grátis novo no início de cada mês" : "1 new free course at the start of each month"}
+                      {isPtBr ? "1 curso novo por R$1 no início de cada mês" : "1 new course for R$1 at the start of each month"}
                     </li>
                     <li className="inline-flex items-center gap-2">
                       <Zap size={14} className="text-cyan-300" />
@@ -292,8 +292,8 @@ export function HeroSection() {
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-gray-400">
                   {isPtBr
-                    ? "Curso grátis, catálogo mensal e upgrade aparecem com contexto, sem telas confusas."
-                    : "Free course, monthly catalog, and upgrade appear with context, without confusing screens."}
+                    ? "Oferta por R$1, catálogo mensal e upgrade aparecem com contexto, sem telas confusas."
+                    : "R$1 offer, monthly catalog, and upgrade appear with context, without confusing screens."}
                 </p>
               </div>
 

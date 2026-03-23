@@ -87,13 +87,15 @@ export default function CourseSalesPage() {
   const savings = product.pricing.originalPrice - product.pricing.price;
   const isPtBr = locale === 'pt-BR';
   const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
-  const effectivePrice = isFreeCourseOfMonth ? 0 : product.pricing.price;
+  // Free course of the month costs R$1 (symbolic) to anchor value and generate receipt
+  const FREE_COURSE_PRICE = 1;
+  const effectivePrice = isFreeCourseOfMonth ? FREE_COURSE_PRICE : product.pricing.price;
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
     : product.pricing.originalPrice;
   const effectiveDiscount =
     isFreeCourseOfMonth && product.pricing.price > 0
-      ? 100
+      ? Math.round(((product.pricing.price - FREE_COURSE_PRICE) / product.pricing.price) * 100)
       : discount;
   const verifiedAtLabel = formatEditorialDate(
     product.editorialVerification?.verifiedAt || "2026-03-20",
@@ -159,17 +161,12 @@ export default function CourseSalesPage() {
   };
 
   const handlePrimaryCourseAction = () => {
-    if (isFreeCourseOfMonth) {
-      void handleFreeCourseClaim();
-      return;
-    }
-
     addItem({
       id: `course:${product.slug}`,
       type: 'course',
       name: product.name,
       quantity: 1,
-      price: product.pricing.price,
+      price: isFreeCourseOfMonth ? FREE_COURSE_PRICE : product.pricing.price,
       slug: product.slug
     });
     toast.success(t("toast.addedToCart"));
@@ -181,17 +178,12 @@ export default function CourseSalesPage() {
   };
 
   const handleSecondaryCourseAction = () => {
-    if (isFreeCourseOfMonth) {
-      void handleFreeCourseClaim();
-      return;
-    }
-
     addItem({
       id: `course:${product.slug}`,
       type: 'course',
       name: product.name,
       quantity: 1,
-      price: product.pricing.price,
+      price: isFreeCourseOfMonth ? FREE_COURSE_PRICE : product.pricing.price,
       slug: product.slug
     });
     toast.success(t("toast.added"));
@@ -491,7 +483,7 @@ export default function CourseSalesPage() {
                       >
                         {isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
                         {isFreeCourseOfMonth
-                          ? (isPtBr ? "Liberar grátis agora" : "Unlock for free now")
+                          ? (isPtBr ? "Adquirir por R$1" : "Unlock for free now")
                           : t("sidebar.buyNow")}
                       </Button>
                       

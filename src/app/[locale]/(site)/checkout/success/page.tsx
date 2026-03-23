@@ -6,15 +6,17 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { 
-  CheckCircle2, 
-  Package, 
-  ArrowRight, 
+import {
+  CheckCircle2,
+  Package,
+  ArrowRight,
   Download,
   Sparkles,
   Mail,
   Loader2,
+  FileText,
 } from "lucide-react";
+import { getClientAuthHeaders } from "@/lib/client-auth";
 import confetti from "canvas-confetti";
 
 function CheckoutSuccessContent() {
@@ -23,6 +25,28 @@ function CheckoutSuccessContent() {
   const orderNumber = searchParams.get("order");
   
   const [showConfetti, setShowConfetti] = useState(false);
+  const [receiptId, setReceiptId] = useState<string | null>(null);
+
+  // Try to find the receipt for this order
+  useEffect(() => {
+    async function fetchReceipt() {
+      try {
+        const res = await fetch("/api/receipts?limit=1", {
+          headers: getClientAuthHeaders(),
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.receipts?.length > 0) {
+            setReceiptId(data.receipts[0]._id);
+          }
+        }
+      } catch { /* ignore */ }
+    }
+    // Small delay to allow receipt generation
+    const timer = setTimeout(fetchReceipt, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // Trigger confetti animation
@@ -180,15 +204,26 @@ function CheckoutSuccessContent() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
+            <Button
               className="flex-1 bg-purple-600 hover:bg-purple-700 py-6"
               onClick={() => router.push("/pt-BR/portal")}
             >
               Acessar Meu Portal
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-            
-            <Button 
+
+            {receiptId && (
+              <Button
+                variant="outline"
+                className="flex-1 border-emerald-700/50 text-emerald-300 hover:bg-emerald-900/30 py-6"
+                onClick={() => router.push(`/pt-BR/receipt/${receiptId}`)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Ver Comprovante
+              </Button>
+            )}
+
+            <Button
               variant="outline"
               className="flex-1 border-gray-700 py-6"
               onClick={() => router.push("/pt-BR/portal?tab=carrinho")}

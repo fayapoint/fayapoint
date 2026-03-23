@@ -60,15 +60,15 @@ export function FreeOfferBanner() {
     ? [
         {
           icon: Gift,
-          title: isPtBr ? "Curso grátis do mês" : "Free course of the month",
+          title: isPtBr ? "Oferta do mês — R$1" : "Monthly offer — R$1",
           desc: freeCourse.name,
         },
         {
           icon: Award,
-          title: isPtBr ? "Certificado liberado" : "Certificate included",
+          title: isPtBr ? "Certificado + acesso vitalício" : "Certificate + lifetime access",
           desc: isPtBr
-            ? "O curso grátis do mês também libera o certificado."
-            : "The monthly free course also includes the certificate.",
+            ? "Inclui certificado verificável e acesso permanente ao curso completo."
+            : "Includes verified certificate and permanent access to the full course.",
         },
         {
           icon: BookOpen,
@@ -81,8 +81,8 @@ export function FreeOfferBanner() {
           icon: Sparkles,
           title: isPtBr ? "Experiência completa" : "Full experience",
           desc: isPtBr
-            ? "Aula, progresso, certificado e portal sem custo para o curso do mês."
-            : "Lessons, progress, certificate, and portal access at no cost for the course of the month.",
+            ? "Aula, progresso, certificado e portal — tudo por R$1 no curso do mês."
+            : "Lessons, progress, certificate, and portal — all for R$1 on the course of the month.",
         },
         {
           icon: Zap,
@@ -156,8 +156,8 @@ export function FreeOfferBanner() {
                 <p className="mt-4 max-w-2xl text-lg leading-8 text-gray-300">
                   {freeCourse
                     ? isPtBr
-                      ? `${freeCourse.name} é o curso grátis do mês. Qualquer usuário pode testar a experiência completa da FayAi, com progresso salvo e certificado incluído.`
-                      : `${freeCourse.name} is this month's free course. Any user can try the complete FayAi experience, with saved progress and certificate included.`
+                      ? `${freeCourse.name} é a oferta do mês por apenas R$1. Acesso vitalício + certificado verificável incluído.`
+                      : `${freeCourse.name} is this month's offer for just R$1. Lifetime access + verified certificate included.`
                     : t("subtitle")}
                 </p>
 
@@ -165,7 +165,7 @@ export function FreeOfferBanner() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
-                        {isPtBr ? "Curso grátis do mês" : "Free course of the month"}
+                        {isPtBr ? "Oferta do mês" : "Monthly offer"}
                       </p>
                       <h3 className="mt-2 text-2xl font-bold text-white">
                         {freeCourse?.name || (isPtBr ? "Rotação automática ativa" : "Automatic rotation active")}
@@ -173,7 +173,7 @@ export function FreeOfferBanner() {
                     </div>
                     <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-right">
                       <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
-                      <p className="text-3xl font-black text-white">R$ 0</p>
+                      <p className="text-3xl font-black text-white">R$ 1</p>
                     </div>
                   </div>
 
@@ -186,8 +186,8 @@ export function FreeOfferBanner() {
                         <Gift className="mr-2 h-5 w-5" />
                         {freeCourse
                           ? isLoggedIn
-                            ? (isPtBr ? "Ver curso grátis do mês" : "View free course of the month")
-                            : (isPtBr ? "Criar conta e liberar grátis" : "Create account and unlock free")
+                            ? (isPtBr ? "Ver oferta do mês — R$1" : "View monthly offer — R$1")
+                            : (isPtBr ? "Criar conta e aproveitar" : "Create account and get started")
                           : t("cta")}
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
@@ -195,8 +195,8 @@ export function FreeOfferBanner() {
                     <p className="flex items-center text-sm text-gray-400">
                       {freeCourse
                         ? isPtBr
-                          ? "Sem cartão para o curso do mês. Liberação imediata para quem estiver logado."
-                          : "No card required for the course of the month. Instant unlock for logged-in users."
+                          ? "Apenas R$1 via PIX, cartão ou boleto. Acesso vitalício ao curso completo."
+                          : "Just R$1 via PIX, card or boleto. Lifetime access to the full course."
                         : t("noCreditCard")}
                     </p>
                   </div>

@@ -53,7 +53,8 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   const locale = useLocale();
   const isPtBr = locale === 'pt-BR';
   const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
-  const effectivePrice = isFreeCourseOfMonth ? 0 : product.pricing.price;
+  const FREE_COURSE_PRICE = 1;
+  const effectivePrice = isFreeCourseOfMonth ? FREE_COURSE_PRICE : product.pricing.price;
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
     : product.pricing.originalPrice;
@@ -63,8 +64,8 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   );
   
   const discount = isFreeCourseOfMonth
-    ? 100
-    : product.pricing.originalPrice > product.pricing.price 
+    ? Math.round(((product.pricing.price - FREE_COURSE_PRICE) / product.pricing.price) * 100)
+    : product.pricing.originalPrice > product.pricing.price
       ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
       : 0;
 
@@ -241,7 +242,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                   </div>
                   {isFreeCourseOfMonth ? (
                     <p className="text-xs text-emerald-300 mt-1">
-                      {isPtBr ? 'Liberado para todos os usuários neste mês' : 'Unlocked for all users this month'}
+                      {isPtBr ? 'Oferta do mês — acesso vitalício + certificado' : 'Monthly offer — lifetime access + certificate'}
                     </p>
                   ) : (
                     <p className="text-xs text-gray-500 mt-1">
@@ -256,7 +257,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               >
                 <span>
                   {isFreeCourseOfMonth
-                    ? (isPtBr ? 'Ver e liberar grátis' : 'View and unlock free')
+                    ? (isPtBr ? 'Adquirir por R$1' : 'Get for R$1')
                     : isPtBr ? 'Ver Curso Completo' : 'View Full Course'}
                 </span>
                 <Play size={18} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />

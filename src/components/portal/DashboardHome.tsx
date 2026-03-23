@@ -589,8 +589,8 @@ export function DashboardHome({
                       <Gift size={15} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold">Grátis neste mês</h3>
-                      <p className="text-[10px] text-gray-500">Qualquer conta pode liberar agora</p>
+                      <h3 className="text-sm font-bold">Oferta do Mês</h3>
+                      <p className="text-[10px] text-gray-500">Curso completo por apenas R$1</p>
                     </div>
                   </div>
                   <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[9px]">
@@ -607,7 +607,7 @@ export function DashboardHome({
                       <h4 className="text-sm font-semibold text-white truncate">{freeCourseOfMonth.title}</h4>
                       <p className="mt-1 text-[11px] text-gray-500 line-clamp-2">{freeCourseOfMonth.shortDescription}</p>
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-300 shrink-0">R$ 0</span>
+                    <span className="text-[10px] font-bold text-emerald-300 shrink-0">R$ 1</span>
                   </div>
                   <div className="mt-3 flex items-center justify-between text-[10px] text-gray-500">
                     <span>{freeCourseOfMonth.duration}</span>

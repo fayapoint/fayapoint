@@ -11,6 +11,7 @@ import {
   verifyWebhookToken,
 } from '@/lib/asaas';
 import { processFulfillment } from '@/lib/fulfillment';
+import { generateReceiptFromPayment, generateReceiptFromSubscription } from '@/lib/receipt-generator';
 
 // Disable body parsing for webhook verification
 export const runtime = 'nodejs';
@@ -75,12 +76,34 @@ export async function POST(request: NextRequest) {
       ],
     });
 
+    // If no payment found, check if this is a subscription payment
+    // Subscription payments use externalReference like "sub-{userId}-{planSlug}"
+    if (!payment && asaasPayment.externalReference?.startsWith('sub-')) {
+      console.log(`[Asaas Webhook] Subscription payment detected: ${asaasPayment.externalReference}`);
+
+      // Handle subscription payment confirmation — ACTIVATE the plan
+      if (body.event === 'PAYMENT_CONFIRMED' || body.event === 'PAYMENT_RECEIVED') {
+        await activateSubscriptionFromPayment(asaasPayment);
+      }
+
+      // Handle overdue/deleted subscription payments — DEACTIVATE if never paid
+      if (body.event === 'PAYMENT_OVERDUE' || body.event === 'PAYMENT_DELETED') {
+        await deactivateSubscriptionFromPayment(asaasPayment);
+      }
+
+      return NextResponse.json({
+        received: true,
+        type: 'subscription_payment',
+        externalReference: asaasPayment.externalReference,
+      });
+    }
+
     if (!payment) {
       console.warn(`[Asaas Webhook] Payment not found for: ${asaasPayment.id}`);
       // Return 200 to prevent Asaas from retrying
-      return NextResponse.json({ 
-        received: true, 
-        warning: 'Payment not found in database' 
+      return NextResponse.json({
+        received: true,
+        warning: 'Payment not found in database'
       });
     }
 
@@ -154,6 +177,19 @@ export async function POST(request: NextRequest) {
               error: fulfillmentError instanceof Error ? fulfillmentError.message : 'Unknown error',
             },
           });
+        }
+
+        // Generate receipt for the confirmed payment
+        try {
+          const receipt = await generateReceiptFromPayment(payment._id.toString());
+          console.log(`[Asaas Webhook] Receipt generated: ${receipt.receiptNumber}`);
+          payment.webhookEvents.push({
+            event: 'RECEIPT_GENERATED',
+            receivedAt: new Date(),
+            data: { receiptNumber: receipt.receiptNumber, receiptId: String(receipt._id) },
+          });
+        } catch (receiptError) {
+          console.error(`[Asaas Webhook] Receipt generation error:`, receiptError);
         }
         break;
 
@@ -491,6 +527,128 @@ async function handleInvoiceEvent(body: AsaasInvoiceWebhookEvent) {
       { received: true, error: 'Internal error processing invoice event' },
       { status: 200 }
     );
+  }
+}
+
+// =============================================================================
+// ACTIVATE SUBSCRIPTION FROM PAYMENT
+// =============================================================================
+
+/**
+ * When a subscription payment is confirmed, activate the user's plan.
+ * This is the ONLY place where plan activation happens — never at checkout time.
+ */
+async function activateSubscriptionFromPayment(asaasPayment: AsaasPaymentResponse) {
+  try {
+    const externalRef = asaasPayment.externalReference;
+    if (!externalRef) return;
+
+    // Parse "sub-{userId}-{planSlug}"
+    const parts = externalRef.split('-');
+    if (parts.length < 3) return;
+
+    const planSlug = parts[parts.length - 1]; // Last part is planSlug
+
+    // Find the subscription record
+    const subscription = await Subscription.findOne({
+      externalReference: externalRef,
+    });
+
+    if (subscription) {
+      subscription.status = 'active';
+      subscription.webhookEvents.push({
+        event: 'PAYMENT_CONFIRMED_ACTIVATION',
+        receivedAt: new Date(),
+        data: {
+          asaasPaymentId: asaasPayment.id,
+          value: asaasPayment.value,
+        },
+      });
+      await subscription.save();
+
+      // Activate user plan
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const user = await User.findById(subscription.userId) as any;
+      if (user) {
+        if (!user.subscription) user.subscription = {};
+        user.subscription.plan = planSlug;
+        user.subscription.status = 'active';
+        user.subscription.pendingPlan = undefined;
+        user.subscription.expiresAt = new Date(
+          Date.now() + (subscription.cycle === 'yearly' ? 365 : 30) * 24 * 60 * 60 * 1000
+        );
+        await user.save();
+        console.log(`[Asaas Webhook] Subscription ACTIVATED for user ${user.email}: plan=${planSlug}`);
+
+        // Generate receipt for subscription payment
+        try {
+          const receipt = await generateReceiptFromSubscription({
+            userId: String(user._id),
+            userEmail: user.email,
+            userName: user.name || user.email,
+            subscriptionId: String(subscription._id),
+            asaasPaymentId: asaasPayment.id,
+            planName: subscription.planName || planSlug,
+            planSlug,
+            planCycle: subscription.cycle === 'yearly' ? 'yearly' : 'monthly',
+            value: asaasPayment.value || subscription.value,
+            paymentMethod: (subscription.billingType || 'pix') as 'pix' | 'boleto' | 'credit_card' | 'mercadopago',
+            paidAt: asaasPayment.paymentDate ? new Date(asaasPayment.paymentDate) : new Date(),
+          });
+          console.log(`[Asaas Webhook] Subscription receipt generated: ${receipt.receiptNumber}`);
+        } catch (receiptError) {
+          console.error('[Asaas Webhook] Subscription receipt error:', receiptError);
+        }
+      }
+    } else {
+      // No subscription record, try to find user directly by externalRef pattern
+      console.warn(`[Asaas Webhook] Subscription record not found for: ${externalRef}`);
+    }
+  } catch (error) {
+    console.error('[Asaas Webhook] Error activating subscription:', error);
+  }
+}
+
+// =============================================================================
+// DEACTIVATE SUBSCRIPTION FROM OVERDUE/DELETED PAYMENT
+// =============================================================================
+
+/**
+ * When a subscription payment goes overdue or is deleted, deactivate the plan
+ * if it was never paid (i.e. still pending).
+ */
+async function deactivateSubscriptionFromPayment(asaasPayment: AsaasPaymentResponse) {
+  try {
+    const externalRef = asaasPayment.externalReference;
+    if (!externalRef) return;
+
+    const subscription = await Subscription.findOne({
+      externalReference: externalRef,
+    });
+
+    if (subscription && subscription.status !== 'active') {
+      // Only deactivate if never activated (still pending)
+      subscription.status = 'expired';
+      subscription.webhookEvents.push({
+        event: 'PAYMENT_OVERDUE_DEACTIVATION',
+        receivedAt: new Date(),
+        data: { asaasPaymentId: asaasPayment.id },
+      });
+      await subscription.save();
+
+      // Reset user plan to free
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const user = await User.findById(subscription.userId) as any;
+      if (user?.subscription?.status === 'pending') {
+        user.subscription.plan = 'free';
+        user.subscription.status = 'expired';
+        user.subscription.pendingPlan = undefined;
+        await user.save();
+        console.log(`[Asaas Webhook] Subscription DEACTIVATED for user ${user.email} (payment overdue)`);
+      }
+    }
+  } catch (error) {
+    console.error('[Asaas Webhook] Error deactivating subscription:', error);
   }
 }
 

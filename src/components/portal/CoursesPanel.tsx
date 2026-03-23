@@ -331,16 +331,16 @@ export function CoursesPanel({
             <div className="space-y-3">
               <Badge className="border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
                 <Gift size={13} className="mr-2" />
-                Curso grátis do mês
+                Oferta do Mês — R$1
               </Badge>
               <div>
                 <h3 className="text-2xl font-black text-white">
-                  {freeMonthlyCourse?.title || "Todo mês um curso completo fica gratuito"}
+                  {freeMonthlyCourse?.title || "Todo mês um curso completo por apenas R$1"}
                 </h3>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-50/80">
                   {freeMonthlyCourse
-                    ? "Esse é o curso que qualquer usuário pode liberar agora, sem gateway e com certificado incluído neste mês."
-                    : "A cada mês um curso completo fica livre para qualquer conta experimentar o valor real da academia."}
+                    ? "Curso completo com acesso vitalício + certificado verificável por apenas R$1. Oferta exclusiva deste mês."
+                    : "A cada mês um curso completo fica disponível por R$1 para qualquer conta experimentar o valor real da academia."}
                 </p>
               </div>
             </div>
@@ -381,18 +381,14 @@ export function CoursesPanel({
                     </Button>
                   </Link>
                 ) : (
-                  <Button
-                    className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400"
-                    onClick={() => freeMonthlyCourseCanClaim && onEnroll(freeMonthlyCourse.slug)}
-                    disabled={!freeMonthlyCourseCanClaim || isEnrolling === freeMonthlyCourse.slug}
-                  >
-                    {isEnrolling === freeMonthlyCourse.slug ? (
-                      <Loader2 size={16} className="mr-2 animate-spin" />
-                    ) : (
+                  <Link href={`/curso/${freeMonthlyCourse.slug}`}>
+                    <Button
+                      className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400"
+                    >
                       <Gift size={16} className="mr-2" />
-                    )}
-                    Liberar grátis
-                  </Button>
+                      Adquirir por R$1
+                    </Button>
+                  </Link>
                 )}
               </div>
             </div>
@@ -418,7 +414,7 @@ export function CoursesPanel({
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Incluído agora</p>
               <p className="mt-2 text-2xl font-black text-white">{planMonthlyCourses.length + (freeMonthlyCourseCanClaim ? 1 : 0)}</p>
-              <p className="mt-1 text-xs text-gray-400">Curso grátis do mês + catálogo do seu plano disponível nesta rotação.</p>
+              <p className="mt-1 text-xs text-gray-400">Oferta do mês (R$1) + catálogo do seu plano disponível nesta rotação.</p>
             </div>
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Exige upgrade</p>
@@ -440,7 +436,7 @@ export function CoursesPanel({
             <div>
               <h3 className="text-xl font-bold text-white">Pool mensal completo</h3>
               <p className="mt-1 text-sm text-gray-400">
-                Aqui está a vitrine inteira do mês, com o que é grátis, o que seu plano já libera e o que ainda pede upgrade.
+                Aqui está a vitrine inteira do mês, com a oferta por R$1, o que seu plano já libera e o que ainda pede upgrade.
               </p>
             </div>
             <Badge className="border-white/10 bg-white/[0.04] text-white/80">
@@ -467,7 +463,7 @@ export function CoursesPanel({
                     {courses.length > 0 ? (
                       courses.map((course) => {
                         const statusLabel = course.isFreeMonthlyCourse
-                          ? "Grátis para todos"
+                          ? "R$1 — Oferta do mês"
                           : course.isEnrolled
                             ? "Já no seu acervo"
                             : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
@@ -524,10 +520,10 @@ export function CoursesPanel({
 
           <div className="mt-5 space-y-3">
             <div className="rounded-[22px] border border-emerald-400/15 bg-emerald-500/8 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">Curso grátis do mês</p>
-              <p className="mt-2 text-lg font-bold text-white">Certificado incluso para qualquer conta</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">Oferta do Mês — R$1</p>
+              <p className="mt-2 text-lg font-bold text-white">Acesso vitalício + certificado por R$1</p>
               <p className="mt-1 text-sm leading-6 text-emerald-50/75">
-                O curso gratuito mensal já carrega o certificado como parte da experiência completa.
+                O curso do mês inclui acesso permanente e certificado verificável. Uma aquisição real por um valor simbólico.
               </p>
             </div>
 
@@ -546,7 +542,7 @@ export function CoursesPanel({
             <div className="rounded-[22px] border border-cyan-400/10 bg-cyan-500/[0.04] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-cyan-300">Como aproveitar melhor este mês</p>
               <p className="mt-2 text-sm leading-6 text-cyan-50/75">
-                Comece pelo curso grátis do mês, compare a pool liberada no seu plano e use o upgrade só quando quiser destravar o próximo nível.
+                Comece pela oferta do mês por R$1, compare a pool liberada no seu plano e use o upgrade só quando quiser destravar o próximo nível.
               </p>
             </div>
           </div>
