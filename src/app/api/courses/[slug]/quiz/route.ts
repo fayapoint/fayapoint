@@ -15,13 +15,10 @@ interface QuizQuestion {
   correctAnswer: number;
 }
 
-// Updated 2026-02-20 — current working free models on OpenRouter
+// Updated 2026-03-23 — reduced to 2 models with fast timeout to avoid serverless function timeout
 const QUIZ_MODELS = [
   'openrouter/free',                          // Smart router — auto-selects best available free model
   'stepfun/step-3.5-flash:free',              // 196B MoE (11B active), 256k ctx, strong reasoning
-  'nvidia/nemotron-3-nano-30b-a3b:free',      // 30B, 256k ctx, good general
-  'arcee-ai/trinity-large-preview:free',      // 400B MoE (13B active), 131k ctx
-  'upstage/solar-pro-3:free',                 // 102B MoE (12B active), 128k ctx
 ];
 
 async function callOpenRouterForQuiz(
@@ -30,8 +27,12 @@ async function callOpenRouterForQuiz(
   systemPrompt: string,
   userPrompt: string,
 ): Promise<string> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6000); // 6 second timeout per model
+
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
+    signal: controller.signal,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
@@ -48,6 +49,8 @@ async function callOpenRouterForQuiz(
       max_tokens: 4000,
     }),
   });
+
+  clearTimeout(timeout);
 
   if (!response.ok) {
     const errText = await response.text();
@@ -142,7 +145,32 @@ correctAnswer is the 0-based index of the correct option.`;
     }
   }
 
-  throw new Error(`Todos os modelos de IA falharam ao gerar o quiz. Detalhes: ${errors.join(' | ')}`);
+  // All AI models failed — use static fallback quiz
+  console.warn(`[Quiz] All AI models failed, using static fallback. Errors: ${errors.join(' | ')}`);
+  return getStaticFallbackQuiz(courseTitle);
+}
+
+/**
+ * Static fallback quiz — used when AI generation fails (timeout, API down, etc.)
+ * These are generic but valid questions about AI/course content.
+ */
+function getStaticFallbackQuiz(courseTitle: string): QuizQuestion[] {
+  const allQuestions: QuizQuestion[] = [
+    { question: "Qual é a principal vantagem de usar prompts bem estruturados ao interagir com uma IA?", options: ["Maior velocidade de resposta", "Respostas mais precisas e relevantes", "Menor uso de tokens", "Interface mais bonita"], correctAnswer: 1 },
+    { question: "O que significa 'context window' em modelos de linguagem?", options: ["A janela do navegador", "O limite de texto que o modelo pode processar de uma vez", "O tempo de resposta", "A tela de configurações"], correctAnswer: 1 },
+    { question: "Qual técnica consiste em pedir ao modelo que mostre seu raciocínio passo a passo?", options: ["Few-Shot Learning", "Chain-of-Thought", "Negative Prompting", "Role Prompting"], correctAnswer: 1 },
+    { question: "O que é 'temperature' no contexto de modelos de IA?", options: ["A velocidade de processamento", "Um parâmetro que controla a criatividade/aleatoriedade das respostas", "A temperatura do servidor", "O nível de dificuldade das perguntas"], correctAnswer: 1 },
+    { question: "Qual é a melhor prática ao dar contexto para uma IA?", options: ["Escrever o máximo possível sem filtrar", "Fornecer informações específicas e relevantes para a tarefa", "Não dar contexto nenhum", "Usar apenas emojis"], correctAnswer: 1 },
+    { question: "O que é Few-Shot Learning?", options: ["Aprender com poucos recursos computacionais", "Dar exemplos do resultado esperado antes de pedir a tarefa", "Treinar o modelo do zero", "Usar a IA sem internet"], correctAnswer: 1 },
+    { question: "Qual é o risco principal de confiar cegamente nas respostas de uma IA?", options: ["O custo financeiro", "Alucinações — a IA pode gerar informações falsas com confiança", "A lentidão das respostas", "Problemas de conexão"], correctAnswer: 1 },
+    { question: "O que é um 'system prompt'?", options: ["Uma mensagem de erro do sistema", "Uma instrução inicial que define o comportamento e personalidade da IA", "O prompt que o sistema gera automaticamente", "Uma atualização do software"], correctAnswer: 1 },
+    { question: "Qual a importância da iteração em prompt engineering?", options: ["Nenhuma — o primeiro prompt deve ser perfeito", "Permite refinar progressivamente os resultados até atingir a qualidade desejada", "Serve apenas para testes", "É uma prática obsoleta"], correctAnswer: 1 },
+    { question: "Como a LGPD afeta o uso de IA no Brasil?", options: ["Não tem relação com IA", "Proíbe completamente o uso de IA", "Exige cuidado ao enviar dados pessoais para modelos de IA", "Só afeta empresas de tecnologia"], correctAnswer: 2 },
+  ];
+
+  // Shuffle and return the required number
+  const shuffled = allQuestions.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, QUIZ_CONFIG.TOTAL_QUESTIONS);
 }
 
 /**
