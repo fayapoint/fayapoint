@@ -11,7 +11,6 @@ import { toast } from "react-hot-toast";
 import { getClientAuthHeaders, getClientBearerToken } from "@/lib/client-auth";
 import {
   CreditCard,
-  QrCode,
   FileText,
   Check,
   Copy,
@@ -19,20 +18,15 @@ import {
   ShieldCheck,
   Clock,
   CheckCircle2,
-  AlertCircle,
   Wallet,
   RefreshCw,
   Gift,
   Lock,
   Zap,
   Award,
-  Star,
-  BookOpen,
   ArrowRight,
-  Sparkles,
   Timer,
   BadgeCheck,
-  ChevronDown,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -143,59 +137,43 @@ function MercadoPagoIcon3D({ active = false }: { active?: boolean }) {
   return (
     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200 ${
       active
-        ? "bg-gradient-to-br from-cyan-50 to-sky-100 shadow-lg shadow-sky-200/50 ring-2 ring-cyan-400"
+        ? "bg-gradient-to-br from-[#e8f7fd] to-[#d0effa] shadow-lg shadow-sky-200/50 ring-2 ring-[#00b1ea]"
         : "bg-gradient-to-br from-gray-50 to-gray-100 shadow-md hover:shadow-lg"
     }`}>
-      <svg className="w-7 h-7" viewBox="0 0 64 64" fill="none">
-        <circle cx="32" cy="32" r="22" fill={active ? "#00B1EA" : "#9ca3af"} opacity="0.15"/>
-        <circle cx="32" cy="32" r="22" stroke={active ? "#00B1EA" : "#6b7280"} strokeWidth="2.5"/>
-        <circle cx="32" cy="32" r="12" fill={active ? "#00B1EA" : "#9ca3af"} opacity="0.25"/>
-        <circle cx="32" cy="32" r="5" fill={active ? "#00B1EA" : "#9ca3af"}/>
+      {/* Official MercadoPago "handshake" logo mark */}
+      <svg className="w-8 h-8" viewBox="0 0 48 48" fill="none">
+        <path d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4z" fill={active ? "#00b1ea" : "#9ca3af"} opacity={active ? 0.12 : 0.08}/>
+        <path d="M33.2 19.5c-1.6-2.8-4.6-4.5-8-4.5-3 0-5.7 1.4-7.4 3.5-.3.4-.1.8.3 1 .4.1.8 0 1-.3 1.4-1.8 3.6-2.9 6.1-2.9 2.8 0 5.2 1.4 6.6 3.6.2.3.6.5 1 .3.3-.2.5-.6.4-.9l-.1-.1c.1.1.1.2.1.3z" fill={active ? "#00b1ea" : "#6b7280"}/>
+        <path d="M14.8 28.5c1.6 2.8 4.6 4.5 8 4.5 3 0 5.7-1.4 7.4-3.5.3-.4.1-.8-.3-1-.4-.1-.8 0-1 .3-1.4 1.8-3.6 2.9-6.1 2.9-2.8 0-5.2-1.4-6.6-3.6-.2-.3-.6-.5-1-.3-.3.2-.5.6-.4.9l.1.1c-.1-.1-.1-.2-.1-.3z" fill={active ? "#00b1ea" : "#6b7280"}/>
+        <path d="M16 24c0-1.5.4-2.9 1.1-4.1.2-.4.1-.8-.3-1-.4-.2-.8-.1-1 .3-.9 1.5-1.3 3.1-1.3 4.8 0 1.7.5 3.3 1.3 4.8.2.4.6.5 1 .3.4-.2.5-.6.3-1C16.4 26.9 16 25.5 16 24z" fill={active ? "#009ee3" : "#9ca3af"}/>
+        <path d="M32 24c0 1.5-.4 2.9-1.1 4.1-.2.4-.1.8.3 1 .4.2.8.1 1-.3.9-1.5 1.3-3.1 1.3-4.8 0-1.7-.5-3.3-1.3-4.8-.2-.4-.6-.5-1-.3-.4.2-.5.6-.3 1 .7 1.2 1.1 2.6 1.1 4.1z" fill={active ? "#009ee3" : "#9ca3af"}/>
+        <circle cx="24" cy="24" r="3.5" fill={active ? "#00b1ea" : "#9ca3af"}/>
       </svg>
     </div>
   );
 }
 
-// Card brand logos for the trust strip
-function VisaIcon({ className = "h-6" }: { className?: string }) {
+// Card brand logos — using CDN images for crisp, real logos
+function CardBrandStrip() {
   return (
-    <svg className={className} viewBox="0 0 780 500" fill="none">
-      <rect width="780" height="500" rx="40" fill="#1A1F71"/>
-      <path d="M293.2 348.7l33.4-195.8h53.4l-33.4 195.8h-53.4z" fill="#fff"/>
-      <path d="M524.3 156.3c-10.6-4-27.2-8.3-47.9-8.3-52.8 0-90 26.5-90.2 64.5-.3 28.1 26.5 43.7 46.8 53.1 20.8 9.6 27.8 15.7 27.7 24.3-.1 13.1-16.6 19.1-32 19.1-21.4 0-32.7-3-50.3-10.2l-6.9-3.1-7.5 43.8c12.5 5.5 35.6 10.2 59.6 10.5 56.2 0 92.7-26.2 93.1-66.8.2-22.3-14-39.2-44.8-53.2-18.6-9.1-30-15.1-29.9-24.3 0-8.1 9.7-16.8 30.5-16.8 17.4-.3 30 3.5 39.8 7.5l4.8 2.2 7.2-42.3z" fill="#fff"/>
-      <path d="M612.5 152.9h-41.3c-12.8 0-22.4 3.5-28 16.2l-79.4 179.6h56.2s9.2-24.1 11.3-29.4c6.1 0 60.8.1 68.6.1 1.6 6.9 6.5 29.3 6.5 29.3h49.7l-43.6-195.8zm-60 126.4c4.4-11.3 21.4-54.7 21.4-54.7-.3.5 4.4-11.4 7.1-18.8l3.6 17s10.3 46.9 12.5 56.5h-44.6z" fill="#fff"/>
-      <path d="M232.8 152.9l-52.3 133.5-5.6-27c-9.7-31.2-39.8-65.1-73.5-82l47.9 171.2h56.6l84.2-195.7h-57.3z" fill="#fff"/>
-      <path d="M147.2 152.9H59.3l-.7 3.7c67.2 16.2 111.7 55.4 130.1 102.4l-18.8-90.2c-3.2-12.4-12.7-15.5-22.7-15.9z" fill="#EC982D"/>
-    </svg>
-  );
-}
-
-function MastercardIcon({ className = "h-6" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 780 500" fill="none">
-      <rect width="780" height="500" rx="40" fill="#16366F"/>
-      <circle cx="312" cy="250" r="155" fill="#EB001B"/>
-      <circle cx="468" cy="250" r="155" fill="#F79E1B"/>
-      <path d="M390 128.2c-38.8 31.7-63.6 79.7-63.6 133.8s24.8 102.1 63.6 133.8c38.8-31.7 63.6-79.7 63.6-133.8s-24.8-102.1-63.6-133.8z" fill="#FF5F00"/>
-    </svg>
-  );
-}
-
-function EloIcon({ className = "h-6" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 780 500" fill="none">
-      <rect width="780" height="500" rx="40" fill="#000"/>
-      <text x="390" y="280" textAnchor="middle" fill="#FFCB05" fontSize="180" fontWeight="700" fontFamily="Arial">elo</text>
-    </svg>
-  );
-}
-
-function AmexIcon({ className = "h-6" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 780 500" fill="none">
-      <rect width="780" height="500" rx="40" fill="#2E77BC"/>
-      <text x="390" y="290" textAnchor="middle" fill="#fff" fontSize="120" fontWeight="700" fontFamily="Arial">AMEX</text>
-    </svg>
+    <div className="flex items-center justify-center gap-4 mb-6 py-3 px-5 bg-gray-50/80 rounded-xl border border-gray-100">
+      <span className="text-xs text-gray-400 font-medium whitespace-nowrap">Aceitamos</span>
+      <div className="flex items-center gap-2.5">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/assets@main/img/visa.svg" alt="Visa" className="h-7 rounded" loading="lazy" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/assets@main/img/mastercard.svg" alt="Mastercard" className="h-7 rounded" loading="lazy" />
+        {/* Elo & Amex using high-quality inline SVGs */}
+        <svg className="h-7 w-11 rounded" viewBox="0 0 48 30" fill="none">
+          <rect width="48" height="30" rx="4" fill="#000"/>
+          <text x="24" y="20" textAnchor="middle" fill="#FFCB05" fontSize="14" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">elo</text>
+        </svg>
+        <svg className="h-7 w-11 rounded" viewBox="0 0 48 30" fill="none">
+          <rect width="48" height="30" rx="4" fill="#006FCF"/>
+          <text x="24" y="19" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">AMEX</text>
+        </svg>
+      </div>
+    </div>
   );
 }
 
@@ -766,24 +744,16 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* Card Brands Strip */}
-                    <div className="flex items-center justify-center gap-3 mb-6 py-3 px-4 bg-gray-50 rounded-xl border border-gray-100">
-                      <span className="text-xs text-gray-400 mr-1">Aceitamos:</span>
-                      <VisaIcon className="h-6 rounded opacity-80" />
-                      <MastercardIcon className="h-6 rounded opacity-80" />
-                      <EloIcon className="h-6 rounded opacity-80" />
-                      <AmexIcon className="h-6 rounded opacity-80" />
-                    </div>
+                    <CardBrandStrip />
 
                     {/* MercadoPago Info */}
                     {selectedMethod === "mercadopago" && (
-                      <div className="rounded-xl border border-cyan-200 bg-cyan-50/50 p-4 mb-4">
+                      <div className="rounded-xl border border-[#00b1ea]/20 bg-gradient-to-r from-[#00b1ea]/5 to-[#009ee3]/5 p-4 mb-4">
                         <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center shrink-0">
-                            <MercadoPagoIcon3D active />
-                          </div>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.92/mercadopago/logo__large@2x.png" alt="MercadoPago" className="h-6 mt-0.5 shrink-0" loading="lazy" />
                           <div>
-                            <p className="text-sm font-semibold text-gray-900">Checkout MercadoPago</p>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 mt-0.5">
                               Você será redirecionado para o ambiente seguro do MercadoPago para completar o pagamento com PIX, cartão de crédito, débito ou boleto.
                             </p>
                           </div>
@@ -944,7 +914,7 @@ export default function CheckoutPage() {
 
                 {/* CTA Button */}
                 <Button
-                  className={`w-full py-6 text-lg font-bold rounded-xl transition-all shadow-lg cursor-pointer ${
+                  className={`w-full py-6 text-base font-bold rounded-xl transition-all shadow-lg cursor-pointer ${
                     isFreeCourseCheckout
                       ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200/40"
                       : "bg-gray-900 hover:bg-gray-800 text-white shadow-gray-300/30"
@@ -957,11 +927,17 @@ export default function CheckoutPage() {
                   ) : isFreeCourseCheckout ? (
                     <><Gift className="w-5 h-5 mr-2" /> Liberar Acesso Grátis</>
                   ) : selectedMethod === "mercadopago" ? (
-                    <><ArrowRight className="w-5 h-5 mr-2" /> Pagar via MercadoPago — {formatCurrency(effectiveTotal)}</>
+                    <span className="flex items-center justify-center gap-2">
+                      <ArrowRight className="w-5 h-5 shrink-0" />
+                      <span className="truncate">Pagar {formatCurrency(effectiveTotal)}</span>
+                    </span>
                   ) : (
                     <><Lock className="w-5 h-5 mr-2" /> Pagar {formatCurrency(effectiveTotal)}</>
                   )}
                 </Button>
+                {selectedMethod === "mercadopago" && !isFreeCourseCheckout && (
+                  <p className="text-xs text-center text-gray-400 mt-1.5">via MercadoPago — ambiente seguro</p>
+                )}
 
                 {/* Trust & Security Section */}
                 <div className="mt-6 space-y-4">
@@ -995,23 +971,30 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Social Proof */}
+              {/* Trust & Processing Partners */}
               <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="flex -space-x-2">
-                    {["bg-indigo-500", "bg-emerald-500", "bg-blue-500", "bg-amber-500"].map((bg, i) => (
-                      <div key={i} className={`w-7 h-7 rounded-full ${bg} border-2 border-white flex items-center justify-center text-[10px] font-bold text-white shadow-sm`}>
-                        {["RF", "AS", "MK", "JL"][i]}
-                      </div>
-                    ))}
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Processado com segurança por</p>
+                <div className="flex items-center gap-4 mb-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://www.asaas.com/assets/images/logo/logo-asaas-dark.svg" alt="Asaas" className="h-5 opacity-60" loading="lazy" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.92/mercadopago/logo__large@2x.png" alt="MercadoPago" className="h-4 opacity-60" loading="lazy" />
+                </div>
+                <div className="h-px bg-gray-100 mb-3" />
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <span>Seus dados são protegidos com criptografia de ponta a ponta</span>
                   </div>
-                  <span className="text-xs text-gray-500 font-medium">+230 alunos ativos</span>
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <Lock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <span>Não armazenamos dados do seu cartão</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <RefreshCw className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <span>Cancele quando quiser, sem burocracia</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1 mb-2">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
-                  <span className="text-xs text-gray-500 ml-1 font-medium">4.9/5</span>
-                </div>
-                <p className="text-xs text-gray-500 italic">&quot;Melhor investimento que fiz. O conteúdo é atualizado e prático.&quot;</p>
               </div>
             </div>
           </div>

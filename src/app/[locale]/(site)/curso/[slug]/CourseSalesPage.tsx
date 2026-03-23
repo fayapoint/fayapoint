@@ -42,7 +42,9 @@ export default function CourseSalesPage() {
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
   const locale = useLocale();
-  
+  // Monthly offer costs US$1 converted to BRL at live rate — must be called before any early returns
+  const { monthlyOfferPrice, conversionDisplay } = useExchangeRate();
+
   // Fetch product from MongoDB
   useEffect(() => {
     async function fetchProduct() {
@@ -88,8 +90,6 @@ export default function CourseSalesPage() {
   const savings = product.pricing.originalPrice - product.pricing.price;
   const isPtBr = locale === 'pt-BR';
   const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
-  // Monthly offer costs US$1 converted to BRL at live rate
-  const { monthlyOfferPrice, conversionDisplay } = useExchangeRate();
   const effectivePrice = isFreeCourseOfMonth ? monthlyOfferPrice : product.pricing.price;
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
