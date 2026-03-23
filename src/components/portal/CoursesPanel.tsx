@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import type { EnrollmentSlots, TierConfig } from "@/lib/course-tiers";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface CourseProgressCard {
   _id: string;
@@ -85,6 +86,8 @@ export function CoursesPanel({
   const readyToStartCourses = startedCourses.filter((course) => course.progressPercent === 0);
   const completedCourses = startedCourses.filter((course) => course.progressPercent >= 100);
   const journeyCourses = [...activeCourses, ...readyToStartCourses];
+
+  const { formattedBrl, conversionDisplay } = useExchangeRate();
 
   // Fetch the real free course slug from the API (reads Mission Control override)
   const [apiFreeCourseSlug, setApiFreeCourseSlug] = useState<string | null>(null);
@@ -335,12 +338,12 @@ export function CoursesPanel({
               </Badge>
               <div>
                 <h3 className="text-2xl font-black text-white">
-                  {freeMonthlyCourse?.title || "Todo mês um curso completo por apenas R$1"}
+                  {freeMonthlyCourse?.title || `Todo mês um curso completo por apenas US$1 (${formattedBrl})`}
                 </h3>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-50/80">
                   {freeMonthlyCourse
-                    ? "Curso completo com acesso vitalício + certificado verificável por apenas R$1. Oferta exclusiva deste mês."
-                    : "A cada mês um curso completo fica disponível por R$1 para qualquer conta experimentar o valor real da academia."}
+                    ? `Curso completo com acesso vitalício + certificado verificável por US$1 (${formattedBrl}). Oferta exclusiva deste mês.`
+                    : `A cada mês um curso completo fica disponível por US$1 (${formattedBrl}) para qualquer conta experimentar o valor real da academia.`}
                 </p>
               </div>
             </div>
@@ -386,7 +389,7 @@ export function CoursesPanel({
                       className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400"
                     >
                       <Gift size={16} className="mr-2" />
-                      Adquirir por R$1
+                      Adquirir por US$1
                     </Button>
                   </Link>
                 )}
@@ -414,7 +417,7 @@ export function CoursesPanel({
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Incluído agora</p>
               <p className="mt-2 text-2xl font-black text-white">{planMonthlyCourses.length + (freeMonthlyCourseCanClaim ? 1 : 0)}</p>
-              <p className="mt-1 text-xs text-gray-400">Oferta do mês (R$1) + catálogo do seu plano disponível nesta rotação.</p>
+              <p className="mt-1 text-xs text-gray-400">Oferta do mês (US$1) + catálogo do seu plano disponível nesta rotação.</p>
             </div>
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Exige upgrade</p>
@@ -436,7 +439,7 @@ export function CoursesPanel({
             <div>
               <h3 className="text-xl font-bold text-white">Pool mensal completo</h3>
               <p className="mt-1 text-sm text-gray-400">
-                Aqui está a vitrine inteira do mês, com a oferta por R$1, o que seu plano já libera e o que ainda pede upgrade.
+                Aqui está a vitrine inteira do mês, com a oferta por US$1, o que seu plano já libera e o que ainda pede upgrade.
               </p>
             </div>
             <Badge className="border-white/10 bg-white/[0.04] text-white/80">
@@ -463,7 +466,7 @@ export function CoursesPanel({
                     {courses.length > 0 ? (
                       courses.map((course) => {
                         const statusLabel = course.isFreeMonthlyCourse
-                          ? "R$1 — Oferta do mês"
+                          ? `US$1 (${formattedBrl}) — Oferta do mês`
                           : course.isEnrolled
                             ? "Já no seu acervo"
                             : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
@@ -520,8 +523,8 @@ export function CoursesPanel({
 
           <div className="mt-5 space-y-3">
             <div className="rounded-[22px] border border-emerald-400/15 bg-emerald-500/8 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">Oferta do Mês — R$1</p>
-              <p className="mt-2 text-lg font-bold text-white">Acesso vitalício + certificado por R$1</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">Oferta do Mês — US$1 ({formattedBrl})</p>
+              <p className="mt-2 text-lg font-bold text-white">Acesso vitalício + certificado por US$1</p>
               <p className="mt-1 text-sm leading-6 text-emerald-50/75">
                 O curso do mês inclui acesso permanente e certificado verificável. Uma aquisição real por um valor simbólico.
               </p>
@@ -542,7 +545,7 @@ export function CoursesPanel({
             <div className="rounded-[22px] border border-cyan-400/10 bg-cyan-500/[0.04] p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-cyan-300">Como aproveitar melhor este mês</p>
               <p className="mt-2 text-sm leading-6 text-cyan-50/75">
-                Comece pela oferta do mês por R$1, compare a pool liberada no seu plano e use o upgrade só quando quiser destravar o próximo nível.
+                Comece pela oferta do mês por US$1, compare a pool liberada no seu plano e use o upgrade só quando quiser destravar o próximo nível.
               </p>
             </div>
           </div>

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/products";
 import { useLocale } from "next-intl";
 import { formatEditorialDate } from "@/lib/editorial-verification";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface AttractiveCourseCardProps {
   product: Product;
@@ -53,8 +54,8 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   const locale = useLocale();
   const isPtBr = locale === 'pt-BR';
   const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
-  const FREE_COURSE_PRICE = 1;
-  const effectivePrice = isFreeCourseOfMonth ? FREE_COURSE_PRICE : product.pricing.price;
+  const { monthlyOfferPrice, conversionDisplay } = useExchangeRate();
+  const effectivePrice = isFreeCourseOfMonth ? monthlyOfferPrice : product.pricing.price;
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
     : product.pricing.originalPrice;
@@ -64,7 +65,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   );
   
   const discount = isFreeCourseOfMonth
-    ? Math.round(((product.pricing.price - FREE_COURSE_PRICE) / product.pricing.price) * 100)
+    ? Math.round(((product.pricing.price - monthlyOfferPrice) / product.pricing.price) * 100)
     : product.pricing.originalPrice > product.pricing.price
       ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
       : 0;
@@ -242,7 +243,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                   </div>
                   {isFreeCourseOfMonth ? (
                     <p className="text-xs text-emerald-300 mt-1">
-                      {isPtBr ? 'Oferta do mês — acesso vitalício + certificado' : 'Monthly offer — lifetime access + certificate'}
+                      {isPtBr ? `Oferta do mês — ${conversionDisplay}` : `Monthly offer — ${conversionDisplay}`}
                     </p>
                   ) : (
                     <p className="text-xs text-gray-500 mt-1">
@@ -257,7 +258,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               >
                 <span>
                   {isFreeCourseOfMonth
-                    ? (isPtBr ? 'Adquirir por R$1' : 'Get for R$1')
+                    ? (isPtBr ? `Adquirir por US$1` : `Get for US$1`)
                     : isPtBr ? 'Ver Curso Completo' : 'View Full Course'}
                 </span>
                 <Play size={18} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />

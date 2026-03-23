@@ -37,6 +37,7 @@ import { cn } from "@/lib/utils";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import { TIER_CONFIGS, SubscriptionPlan } from "@/lib/course-tiers";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -155,6 +156,7 @@ export function DashboardHome({
 }: DashboardHomeProps) {
   const greeting = getGreeting();
   const firstName = user.name?.split(" ")[0] || "Aluno";
+  const { formattedBrl } = useExchangeRate();
 
   const hasCreatedImages = stats.imagesGenerated > 0;
   const hasStartedCourses = userCourses.length > 0;
@@ -590,7 +592,7 @@ export function DashboardHome({
                     </div>
                     <div>
                       <h3 className="text-sm font-bold">Oferta do Mês</h3>
-                      <p className="text-[10px] text-gray-500">Curso completo por apenas R$1</p>
+                      <p className="text-[10px] text-gray-500">Curso completo por US$1 ({formattedBrl})</p>
                     </div>
                   </div>
                   <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[9px]">
@@ -607,7 +609,7 @@ export function DashboardHome({
                       <h4 className="text-sm font-semibold text-white truncate">{freeCourseOfMonth.title}</h4>
                       <p className="mt-1 text-[11px] text-gray-500 line-clamp-2">{freeCourseOfMonth.shortDescription}</p>
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-300 shrink-0">R$ 1</span>
+                    <span className="text-[10px] font-bold text-emerald-300 shrink-0">US$ 1</span>
                   </div>
                   <div className="mt-3 flex items-center justify-between text-[10px] text-gray-500">
                     <span>{freeCourseOfMonth.duration}</span>
