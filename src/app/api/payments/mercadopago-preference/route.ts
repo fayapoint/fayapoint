@@ -4,6 +4,29 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { createMPPreference, mpConfig } from '@/lib/mercadopago';
 
+// Plan details for rich MP checkout
+const PLAN_DETAILS: Record<string, {
+  emoji: string;
+  features: string[];
+  pictureUrl: string;
+}> = {
+  explorador: {
+    emoji: '🧭',
+    features: ['3 cursos iniciantes/mês', '100 créditos IA', 'Certificados verificáveis', '10% desconto'],
+    pictureUrl: 'https://fayai.com.br/images/plans/explorador-thumb.png',
+  },
+  profissional: {
+    emoji: '🚀',
+    features: ['8 cursos todos os níveis/mês', '300 créditos IA', 'Suporte prioritário', '20% desconto'],
+    pictureUrl: 'https://fayai.com.br/images/plans/profissional-thumb.png',
+  },
+  expert: {
+    emoji: '👑',
+    features: ['14 cursos todos os níveis/mês', '800 créditos IA', 'Suporte VIP', '50% desconto', 'Consultoria mensal'],
+    pictureUrl: 'https://fayai.com.br/images/plans/expert-thumb.png',
+  },
+};
+
 /**
  * POST /api/payments/mercadopago-preference
  * Creates a MercadoPago Checkout Pro preference and returns the redirect URL.
@@ -43,14 +66,24 @@ export async function POST(request: NextRequest) {
 
     const externalReference = `mp-sub-${user._id}-${planSlug}-${Date.now()}`;
     const cycleLabel = cycle === 'yearly' ? 'Anual' : 'Mensal';
+    const planDetail = PLAN_DETAILS[planSlug];
+
+    // Build a rich description for the MP checkout page
+    const featureList = planDetail?.features.join(' • ') || '';
+    const description = [
+      `Assinatura FayAi Academia de IA — Plano ${planName} (${cycleLabel})`,
+      featureList ? `Inclui: ${featureList}` : '',
+      'Acesso imediato após pagamento. Garantia de 7 dias.',
+    ].filter(Boolean).join('. ');
 
     const preference = await createMPPreference(
       [
         {
-          title: `Plano ${planName} — ${cycleLabel}`,
-          description: `Assinatura FayAi ${planName} (${cycleLabel})`,
+          title: `FayAi ${planName} — ${cycleLabel}`,
+          description,
           quantity: 1,
           unitPrice: price,
+          pictureUrl: planDetail?.pictureUrl || 'https://fayai.com.br/images/fayai-logo-social.png',
         },
       ],
       {

@@ -124,8 +124,20 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error('[Subscription] Error creating customer:', error);
       const errorMsg = error instanceof Error ? error.message : 'Erro desconhecido';
+
+      // Provide user-friendly message for known errors
+      const isApiKeyError = errorMsg.toLowerCase().includes('chave de api') || errorMsg.toLowerCase().includes('api key');
+      const isCpfError = errorMsg.toLowerCase().includes('cpf') || errorMsg.toLowerCase().includes('cnpj');
+
+      let userMessage = `Erro ao criar cliente no gateway: ${errorMsg}`;
+      if (isApiKeyError) {
+        userMessage = 'Pagamento temporariamente indisponível via Asaas. Tente usar MercadoPago como alternativa.';
+      } else if (isCpfError) {
+        userMessage = 'CPF/CNPJ inválido. Verifique se o número informado está correto.';
+      }
+
       return NextResponse.json(
-        { error: `Erro ao criar cliente no gateway: ${errorMsg}` },
+        { error: userMessage },
         { status: 500 }
       );
     }
