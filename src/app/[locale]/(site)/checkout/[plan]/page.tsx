@@ -153,25 +153,83 @@ function MercadoPagoIcon3D({ active = false }: { active?: boolean }) {
   );
 }
 
-// Card brand logos — using CDN images for crisp, real logos
+// ─── Inline Brand Logos (no external CDN — always renders) ───────────────────
+
+function VisaLogo({ className = "h-7" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 48 30" fill="none">
+      <rect width="48" height="30" rx="4" fill="#1A1F71"/>
+      <path d="M19.5 20.5l2.2-11.5h3.5l-2.2 11.5h-3.5z" fill="#fff"/>
+      <path d="M32.2 9.3c-.7-.3-1.8-.5-3.1-.5-3.5 0-5.9 1.7-5.9 4.2 0 1.8 1.7 2.9 3.1 3.5 1.4.6 1.8 1 1.8 1.6 0 .9-1.1 1.3-2.1 1.3-1.4 0-2.1-.2-3.3-.7l-.5-.2-.5 2.9c.8.4 2.3.7 3.9.7 3.7 0 6.1-1.7 6.1-4.4 0-1.5-.9-2.6-2.9-3.5-1.2-.6-2-1-2-1.6s.6-1.1 2-1.1c1.2 0 2 .2 2.6.5l.3.1.5-2.8z" fill="#fff"/>
+      <path d="M37.5 9h-2.7c-.8 0-1.5.2-1.8 1.1l-5.2 11.4h3.7s.6-1.5.7-1.9h4.5c.1.4.4 1.9.4 1.9h3.3L37.5 9zm-4 8.3c.3-.7 1.4-3.6 1.4-3.6l.5-1.2.2 1.1s.7 3.1.8 3.7h-2.9z" fill="#fff"/>
+      <path d="M17.6 9l-3.4 8.8-.4-1.8c-.6-2.1-2.6-4.3-4.8-5.4l3.1 10.9h3.7l5.5-12.5h-3.7z" fill="#fff"/>
+      <path d="M11.9 9H6.1l-.1.2c4.4 1.1 7.3 3.6 8.5 6.7l-1.2-5.9c-.2-.8-.8-1-.8-1l.4.1-.1-.1z" fill="#EC982D"/>
+    </svg>
+  );
+}
+
+function MastercardLogo({ className = "h-7" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 48 30" fill="none">
+      <rect width="48" height="30" rx="4" fill="#252525"/>
+      <circle cx="19" cy="15" r="9" fill="#EB001B"/>
+      <circle cx="29" cy="15" r="9" fill="#F79E1B"/>
+      <path d="M24 8.1A8.96 8.96 0 0 0 20.1 15c0 2.8 1.3 5.4 3.3 6.9a8.96 8.96 0 0 0 3.3-6.9c0-2.8-1.3-5.4-3.3-6.9h.6z" fill="#FF5F00"/>
+    </svg>
+  );
+}
+
+function EloLogo({ className = "h-7" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 48 30" fill="none">
+      <rect width="48" height="30" rx="4" fill="#000"/>
+      <text x="24" y="20" textAnchor="middle" fill="#FFCB05" fontSize="14" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">elo</text>
+    </svg>
+  );
+}
+
+function AmexLogo({ className = "h-7" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 48 30" fill="none">
+      <rect width="48" height="30" rx="4" fill="#006FCF"/>
+      <text x="24" y="19" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">AMEX</text>
+    </svg>
+  );
+}
+
+function MercadoPagoLogo({ className = "h-5", muted = false }: { className?: string; muted?: boolean }) {
+  // Official MercadoPago wordmark — the recognizable light-blue "mercadopago" text
+  const color = muted ? "#94a3b8" : "#00b1ea";
+  return (
+    <svg className={className} viewBox="0 0 180 28" fill="none">
+      <path d="M15.4 7.3c-2.3 0-4.2.8-5.5 2.3C8.8 8.1 7 7.3 4.9 7.3 2 7.3 0 9.5 0 12.8v8.5h3.5v-8.1c0-1.7.9-2.7 2.2-2.7 1.3 0 2.1 1 2.1 2.7v8.1h3.5v-8.1c0-1.7.9-2.7 2.2-2.7 1.3 0 2.1 1 2.1 2.7v8.1h3.5v-8.5c0-3.3-2-5.5-3.7-5.5z" fill={color}/>
+      <path d="M27 17.6c-1.5 0-2.5-1.2-2.5-3.1 0-1.9 1-3.1 2.5-3.1 1.2 0 2 .7 2.3 1.8h3.5c-.4-2.9-2.6-4.9-5.8-4.9-3.6 0-6.1 2.5-6.1 6.2 0 3.7 2.5 6.2 6.1 6.2 3.2 0 5.4-2 5.8-4.9h-3.5c-.3 1.1-1.1 1.8-2.3 1.8z" fill={color}/>
+      <path d="M39.5 7.3c-3.6 0-6.2 2.5-6.2 6.2 0 3.7 2.5 6.2 6.3 6.2 2.8 0 4.8-1.3 5.6-3.5h-3.7c-.4.6-1.1 1-2 1-1.3 0-2.3-.7-2.6-2.1h8.6c.1-.5.1-1 .1-1.5 0-3.8-2.4-6.3-6.1-6.3zm-2.6 4.9c.3-1.3 1.2-2 2.5-2s2.2.7 2.5 2h-5z" fill={color}/>
+      <path d="M50 7.3c-1.6 0-2.8.6-3.5 1.7V7.5h-3.4v13.8h3.5V13c0-1.6.9-2.6 2.2-2.6.5 0 1 .1 1.4.3l.7-3.2c-.3-.1-.6-.2-.9-.2z" fill={color}/>
+      <path d="M56.8 17.6c-1.5 0-2.5-1.2-2.5-3.1 0-1.9 1-3.1 2.5-3.1 1.2 0 2 .7 2.3 1.8h3.5c-.4-2.9-2.6-4.9-5.8-4.9-3.6 0-6.1 2.5-6.1 6.2 0 3.7 2.5 6.2 6.1 6.2 3.2 0 5.4-2 5.8-4.9h-3.5c-.3 1.1-1.1 1.8-2.3 1.8z" fill={color}/>
+      <path d="M69 7.3c-1.5 0-2.7.6-3.4 1.7V7.5h-3.4v13.8h3.5v-7.9c0-1.5.9-2.6 2.2-2.6 1.3 0 2.1 1 2.1 2.6v7.9h3.5v-8.6c0-3.2-1.9-5.4-4.5-5.4z" fill={color}/>
+      <path d="M81.3 7.3c-3.7 0-6.2 2.5-6.2 6.2 0 3.7 2.5 6.2 6.2 6.2s6.2-2.5 6.2-6.2c0-3.7-2.5-6.2-6.2-6.2zm0 9.3c-1.5 0-2.6-1.2-2.6-3.1 0-1.9 1.1-3.1 2.6-3.1 1.5 0 2.6 1.2 2.6 3.1 0 1.9-1.1 3.1-2.6 3.1z" fill={color}/>
+    </svg>
+  );
+}
+
+function AsaasLogo({ className = "h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 100 28" fill="none">
+      <text x="0" y="21" fill="#94a3b8" fontSize="20" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="-0.5">ASAAS</text>
+    </svg>
+  );
+}
+
 function CardBrandStrip() {
   return (
     <div className="flex items-center justify-center gap-4 mb-6 py-3 px-5 bg-gray-50/80 rounded-xl border border-gray-100">
       <span className="text-xs text-gray-400 font-medium whitespace-nowrap">Aceitamos</span>
-      <div className="flex items-center gap-2.5">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/assets@main/img/visa.svg" alt="Visa" className="h-7 rounded" loading="lazy" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/assets@main/img/mastercard.svg" alt="Mastercard" className="h-7 rounded" loading="lazy" />
-        {/* Elo & Amex using high-quality inline SVGs */}
-        <svg className="h-7 w-11 rounded" viewBox="0 0 48 30" fill="none">
-          <rect width="48" height="30" rx="4" fill="#000"/>
-          <text x="24" y="20" textAnchor="middle" fill="#FFCB05" fontSize="14" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">elo</text>
-        </svg>
-        <svg className="h-7 w-11 rounded" viewBox="0 0 48 30" fill="none">
-          <rect width="48" height="30" rx="4" fill="#006FCF"/>
-          <text x="24" y="19" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">AMEX</text>
-        </svg>
+      <div className="flex items-center gap-2">
+        <VisaLogo className="h-7 w-auto rounded" />
+        <MastercardLogo className="h-7 w-auto rounded" />
+        <EloLogo className="h-7 w-11 rounded" />
+        <AmexLogo className="h-7 w-11 rounded" />
       </div>
     </div>
   );
@@ -749,14 +807,11 @@ export default function CheckoutPage() {
                     {/* MercadoPago Info */}
                     {selectedMethod === "mercadopago" && (
                       <div className="rounded-xl border border-[#00b1ea]/20 bg-gradient-to-r from-[#00b1ea]/5 to-[#009ee3]/5 p-4 mb-4">
-                        <div className="flex items-start gap-3">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.92/mercadopago/logo__large@2x.png" alt="MercadoPago" className="h-6 mt-0.5 shrink-0" loading="lazy" />
-                          <div>
-                            <p className="text-xs text-gray-500 mt-0.5">
-                              Você será redirecionado para o ambiente seguro do MercadoPago para completar o pagamento com PIX, cartão de crédito, débito ou boleto.
-                            </p>
-                          </div>
+                        <div className="flex flex-col gap-2">
+                          <MercadoPagoLogo className="h-5" />
+                          <p className="text-xs text-gray-500">
+                            Você será redirecionado para o ambiente seguro do MercadoPago para completar o pagamento com PIX, cartão de crédito, débito ou boleto.
+                          </p>
                         </div>
                       </div>
                     )}
@@ -974,17 +1029,15 @@ export default function CheckoutPage() {
               {/* Trust & Processing Partners */}
               <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Processado com segurança por</p>
-                <div className="flex items-center gap-4 mb-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="https://www.asaas.com/assets/images/logo/logo-asaas-dark.svg" alt="Asaas" className="h-5 opacity-60" loading="lazy" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.92/mercadopago/logo__large@2x.png" alt="MercadoPago" className="h-4 opacity-60" loading="lazy" />
+                <div className="flex items-center gap-5 mb-4">
+                  <AsaasLogo className="h-5" />
+                  <MercadoPagoLogo className="h-4" muted />
                 </div>
                 <div className="h-px bg-gray-100 mb-3" />
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                    <span>Seus dados são protegidos com criptografia de ponta a ponta</span>
+                    <span>Dados protegidos com criptografia de ponta a ponta</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <Lock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
