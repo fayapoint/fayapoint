@@ -4,6 +4,11 @@ import { NextConfig } from "next";
 const withNextIntl = createNextIntlPlugin();
 
 const config: NextConfig = {
+  // Prevent 308 redirects on trailing slashes — critical for Asaas webhooks
+  // Asaas sends POST to /api/payments/webhook/ (with trailing slash) and
+  // Next.js default behavior returns 308, breaking webhook delivery.
+  skipTrailingSlashRedirect: true,
+
   // Enable experimental features for better performance
   experimental: {
     // Optimize package imports
