@@ -1359,8 +1359,9 @@ export default function CourseReaderPage() {
 
       img: ({ className, alt, src, ...props }: ImgProps) => {
         const caption = alt && alt !== "image" && alt !== "img" ? alt : null;
-        const optimizedSrc = optimizeCloudinaryUrl(src || "", 1200);
-        const isCloudinary = src?.includes("res.cloudinary.com");
+        const srcStr = typeof src === "string" ? src : "";
+        const optimizedSrc = optimizeCloudinaryUrl(srcStr, 1200);
+        const isCloudinary = srcStr.includes("res.cloudinary.com");
         return (
           <figure className="my-8 flex flex-col items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1374,7 +1375,7 @@ export default function CourseReaderPage() {
               src={optimizedSrc}
               loading="lazy"
               decoding="async"
-              srcSet={isCloudinary ? `${optimizeCloudinaryUrl(src || "", 640)} 640w, ${optimizeCloudinaryUrl(src || "", 960)} 960w, ${optimizeCloudinaryUrl(src || "", 1200)} 1200w` : undefined}
+              srcSet={isCloudinary ? `${optimizeCloudinaryUrl(srcStr, 640)} 640w, ${optimizeCloudinaryUrl(srcStr, 960)} 960w, ${optimizeCloudinaryUrl(srcStr, 1200)} 1200w` : undefined}
               sizes={isCloudinary ? "(max-width: 640px) 640px, (max-width: 960px) 960px, 1200px" : undefined}
               {...props}
             />
