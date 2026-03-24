@@ -1,29 +1,160 @@
 /**
  * Quiz Configuration
- * Centralized quiz generation settings used by the quiz API route.
- * This file acts as the default configuration. In the future, this can be
- * loaded from Mission Control's quiz-config.json file.
- *
  * Updated: 2026-03-23
+ *
+ * This is the master configuration for the quiz system.
+ * It includes:
+ * - Model catalog (free and premium tiers)
+ * - Active models selection
+ * - Question bank configuration
+ * - Autoresearch evaluator settings
+ * - Quiz parameters
  */
 
+// ═══════════════════════════════════════════════════════════════════════════
+// MODEL CATALOG
+// ═══════════════════════════════════════════════════════════════════════════
+
+export const FREE_MODELS = [
+  'openrouter/free',                                    // Smart router — auto-selects best free model
+  'google/gemini-3-flash-preview-20251217:free',       // Gemini 3 Flash Preview — academic/science
+  'anthropic/claude-4.6-sonnet-20260217:free',         // Claude Sonnet 4.6 — BR Portuguese, balanced
+  'anthropic/claude-4.6-opus-20260205:free',           // Claude Opus 4.6 — adaptive cognition
+  'deepseek/deepseek-v3.2-20251201:free',              // DeepSeek V3.2 — GPT-5 class reasoning
+  'google/gemini-2.5-flash:free',                      // Gemini 2.5 Flash — versatile, 1M context
+  'openai/gpt-oss-120b:free',                          // GPT-OSS 120B — OpenAI open-weight
+  'openai/gpt-4.1-mini-2025-04-14:free',              // GPT-4.1 Mini — efficient, reliable
+  'x-ai/grok-4.1-fast:free',                           // Grok 4.1 Fast — multi-domain, creative
+  'xiaomi/mimo-v2-pro-20260318:free',                  // MiMo V2 Pro — 1T+ params, agentic
+  'xiaomi/mimo-v2-flash-20251210:free',                // MiMo V2 Flash — fast, good quality
+  'stepfun/step-3.5-flash:free',                       // Step 3.5 Flash — MoE, 256K context
+  'google/gemini-2.5-flash-lite:free',                 // Gemini 2.5 Flash Lite — ultra fast
+];
+
+export const PREMIUM_MODELS = [
+  'openai/gpt-5.4',                                    // GPT-5.4 — frontier intelligence (#1 ranked)
+  'google/gemini-3.1-pro-preview',                     // Gemini 3.1 Pro Preview — 2M context
+  'google/gemini-3.1-flash-lite-preview',              // Gemini 3.1 Flash Lite — high efficiency
+  'anthropic/claude-opus-4.6',                         // Claude Opus 4.6 — adaptive cognition
+  'anthropic/claude-sonnet-4.6',                       // Claude Sonnet 4.6 — best value premium
+  'openai/gpt-5.3-codex',                              // GPT-5.3 Codex — code/technical specialist
+  'deepseek/deepseek-v3.2',                            // DeepSeek V3.2 — STEM, math, competition
+  'google/gemini-3-flash-preview',                     // Gemini 3 Flash Preview — fast reasoning
+  'openai/gpt-5.4-mini',                               // GPT-5.4 Mini — near-frontier, cost efficient
+  'anthropic/claude-opus-4.5',                         // Claude Opus 4.5 — extended reasoning
+  'anthropic/claude-sonnet-4.5',                       // Claude Sonnet 4.5 — proven, Portuguese
+  'openai/gpt-5.2',                                    // GPT-5.2 — high capability, consistent
+  'openai/gpt-5',                                      // GPT-5 — core reasoning
+  'x-ai/grok-4.20-beta',                               // Grok 4.20 Beta — creative, unconventional
+  'google/gemini-2.5-pro',                             // Gemini 2.5 Pro — professional, 1M context
+  'qwen/qwen3.5-397b-a17b',                           // Qwen 3.5 397B — massive, analytical
+  'openai/gpt-5.4-nano',                               // GPT-5.4 Nano — cheapest premium
+  'xiaomi/mimo-v2-pro',                                // MiMo V2 Pro — 1T+ params, agentic
+  'deepseek/deepseek-r1',                              // DeepSeek R1 — chain-of-thought reasoning
+  'mistralai/mistral-large-2411',                      // Mistral Large — multilingual, structured
+];
+
+export const MODEL_CATALOG = {
+  free: FREE_MODELS,
+  premium: PREMIUM_MODELS,
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// AUTORESEARCH EVALUATOR RUBRIC
+// ═══════════════════════════════════════════════════════════════════════════
+
+export const EVALUATOR_RUBRIC = `You are a question quality evaluator. Evaluate each question on these criteria (1-10 scale):
+
+1. **Clarity** (1-10): Is the question clear and unambiguous? No confusing wording?
+2. **Difficulty** (1-10): Is it appropriately challenging? (not trivially obvious, not impossible)
+3. **Discrimination** (1-10): Do all options seem plausible? Are wrong answers tempting but incorrect?
+4. **Relevance** (1-10): Does it test real understanding of the course content?
+5. **Language** (1-10): Is the Portuguese natural, correct, and professional?
+
+Return as JSON array:
+[
+  {
+    "questionId": "...",
+    "clarity": 8,
+    "difficulty": 7,
+    "discrimination": 9,
+    "relevance": 8,
+    "language": 9,
+    "overallScore": 8.2,
+    "notes": "Strong question, good discrimination between answer options."
+  }
+]`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// QUIZ CONFIG INTERFACE
+// ═══════════════════════════════════════════════════════════════════════════
+
 export interface QuizConfig {
-  models: string[];
+  // Model selection
+  activeModels: string[];                        // Currently enabled models to use
+  modelCatalog: { free: string[]; premium: string[] };
+
+  // System prompt and generation settings
   systemPrompt: string;
   temperature: number;
   maxTokens: number;
+  evaluatorPrompt: string;
+
+  // Question bank settings
+  preferQuestionBankOverAI: boolean;             // Use bank when available and high quality
+  questionBankMinQualityScore: number;           // Min score (0-10) for questions in bank
+  questionBankMinQuestions: number;              // Min questions in bank before preferring bank
+  qualityThresholds: {
+    activeThreshold: number;                     // Min score to mark as 'active'
+    retireThreshold: number;                     // Score below this auto-retires
+  };
+
+  // Fallback questions (legacy support)
   fallbackQuestions: Array<{
     question: string;
     options: string[];
     correctAnswer: number;
   }>;
+
+  // Quiz parameters
   TOTAL_QUESTIONS: number;
   PASSING_SCORE: number;
   MAX_ATTEMPTS: number;
   MIN_PROGRESS_PERCENT: number;
 }
 
-// Default fallback questions (generic but valid, used when AI fails)
+// ═══════════════════════════════════════════════════════════════════════════
+// DEFAULT SYSTEM PROMPT
+// ═══════════════════════════════════════════════════════════════════════════
+
+const DEFAULT_SYSTEM_PROMPT = `You are an expert academic assessment specialist. Your task is to generate high-quality multiple-choice questions that evaluate students' deep understanding of course content.
+
+REQUIREMENTS:
+- Generate exactly 10 multiple-choice questions
+- Each question must have exactly 4 options (A, B, C, D)
+- Only one correct answer per question
+- Questions must test genuine understanding, not just memorization
+- Questions should cover different topics from the course content
+- Difficulty should range from moderate to challenging
+- All text must be in Portuguese (Brazilian)
+- Wrong answer options must be plausible and tempting (good discrimination)
+- Return ONLY valid JSON, no markdown, no explanations
+
+Return this JSON format:
+[
+  {
+    "question": "Question text here?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correctAnswer": 0
+  }
+]
+
+correctAnswer is the 0-based index (0-3) of the correct option.`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DEFAULT FALLBACK QUESTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
 const DEFAULT_FALLBACK_QUESTIONS = [
   {
     question: "Qual é a principal vantagem de usar prompts bem estruturados ao interagir com uma IA?",
@@ -77,63 +208,37 @@ const DEFAULT_FALLBACK_QUESTIONS = [
   },
 ];
 
-const DEFAULT_SYSTEM_PROMPT = `You are an academic assessment expert. Generate exactly 10 multiple-choice questions to evaluate a student's understanding of the course content provided.
+// ═══════════════════════════════════════════════════════════════════════════
+// DEFAULT CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════
 
-Rules:
-- Questions must test genuine understanding, not just memorization
-- Each question must have exactly 4 options (A, B, C, D)
-- Only one correct answer per question
-- Questions should cover different topics from the content
-- Difficulty should be moderate to challenging
-- Questions should be in Portuguese (Brazilian)
-- Return ONLY valid JSON, no markdown
-
-Return format:
-[
-  {
-    "question": "Question text here?",
-    "options": ["Option A", "Option B", "Option C", "Option D"],
-    "correctAnswer": 0
-  }
-]
-
-correctAnswer is the 0-based index of the correct option.`;
-
-/**
- * Default quiz configuration.
- * These values are used by the quiz generation API route.
- * To update, edit this file or configure via Mission Control's Quiz Configuration page.
- */
 export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
-  // OpenRouter model IDs to try (in order of preference)
-  models: [
-    'openrouter/free',                      // Smart router — auto-selects best available free model
-    'stepfun/step-3.5-flash:free',          // 196B MoE (11B active), 256k ctx, strong reasoning
+  // Use the most reliable free models by default
+  activeModels: [
+    'openrouter/free',
+    'stepfun/step-3.5-flash:free',
   ],
 
-  // System prompt for quiz generation
+  modelCatalog: MODEL_CATALOG,
+
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
-
-  // Temperature: controls creativity/randomness (0-1, where 0 is deterministic, 1 is very random)
   temperature: 0.7,
-
-  // Max tokens per response
   maxTokens: 4000,
+  evaluatorPrompt: EVALUATOR_RUBRIC,
 
-  // Static fallback questions used when AI generation fails
+  preferQuestionBankOverAI: true,
+  questionBankMinQualityScore: 7,
+  questionBankMinQuestions: 15,
+  qualityThresholds: {
+    activeThreshold: 7,
+    retireThreshold: 5,
+  },
+
   fallbackQuestions: DEFAULT_FALLBACK_QUESTIONS,
 
-  // ─── Quiz Configuration Constants ─────────────────────────────────────
-  // Number of questions in each quiz
   TOTAL_QUESTIONS: 10,
-
-  // Minimum score (%) required to pass the quiz
   PASSING_SCORE: 70,
-
-  // Maximum number of attempts allowed per course per user
   MAX_ATTEMPTS: 3,
-
-  // Minimum course completion (%) before user can take quiz
   MIN_PROGRESS_PERCENT: 100,
 };
 

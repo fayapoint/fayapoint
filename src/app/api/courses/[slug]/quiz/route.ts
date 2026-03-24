@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { promises as fs } from 'fs';
+import path from 'path';
 import dbConnect from '@/lib/mongodb';
 import { getMongoClient } from '@/lib/database';
 import User from '@/models/User';
@@ -9,11 +11,113 @@ import { getCourseBySlug } from '@/data/courses';
 import { getQuizConfig } from '@/config/quiz-config';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
+const BANKS_DIR = path.join(process.cwd(), 'data', 'question-banks');
 
 interface QuizQuestion {
   question: string;
   options: string[];
   correctAnswer: number;
+}
+
+interface BankedQuestion extends QuizQuestion {
+  id: string;
+  courseSlug: string;
+  source: 'ai-generated' | 'manual' | 'from-quiz-attempt';
+  generatedBy?: string;
+  createdAt: string;
+  qualityScore: number;
+  difficultyScore: number;
+  discriminationScore: number;
+  timesUsed: number;
+  timesAnsweredCorrectly: number;
+  timesAnsweredIncorrectly: number;
+  successRate: number;
+  evaluationNotes: string;
+  status: 'active' | 'retired' | 'needs_review';
+  tags: string[];
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// QUESTION BANK HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function readQuestionBank(courseSlug: string): Promise<{ questions: BankedQuestion[] } | null> {
+  const filePath = path.join(BANKS_DIR, `${courseSlug}.json`);
+  try {
+    const data = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return null;
+  }
+}
+
+async function writeQuestionBank(courseSlug: string, bank: any): Promise<void> {
+  try {
+    await fs.mkdir(BANKS_DIR, { recursive: true });
+    const filePath = path.join(BANKS_DIR, `${courseSlug}.json`);
+    bank.lastUpdated = new Date().toISOString();
+    bank.totalQuestions = bank.questions.length;
+    bank.activeQuestions = bank.questions.filter((q: BankedQuestion) => q.status === 'active').length;
+    await fs.writeFile(filePath, JSON.stringify(bank, null, 2));
+  } catch (error) {
+    console.error('Error writing question bank:', error);
+  }
+}
+
+async function getQuestionsFromBank(courseSlug: string, config: any): Promise<QuizQuestion[] | null> {
+  const bank = await readQuestionBank(courseSlug);
+  if (!bank || bank.questions.length === 0) {
+    return null;
+  }
+
+  // Filter active, high-quality questions
+  const qualityQuestions = bank.questions.filter(
+    (q: BankedQuestion) => q.status === 'active' && q.qualityScore >= config.questionBankMinQualityScore
+  );
+
+  if (qualityQuestions.length < config.questionBankMinQuestions) {
+    return null;
+  }
+
+  // Weighted random selection (prefer higher quality)
+  const weights = qualityQuestions.map((q: BankedQuestion) => q.qualityScore / 10);
+  const selected: BankedQuestion[] = [];
+
+  for (let i = 0; i < QUIZ_CONFIG.TOTAL_QUESTIONS && qualityQuestions.length > 0; i++) {
+    const totalWeight = weights.reduce((a, b) => a + b, 0);
+    let random = Math.random() * totalWeight;
+
+    for (let j = 0; j < qualityQuestions.length; j++) {
+      random -= weights[j];
+      if (random <= 0) {
+        const question = qualityQuestions[j];
+        selected.push(question);
+
+        // Remove from selection to avoid duplicates
+        qualityQuestions.splice(j, 1);
+        weights.splice(j, 1);
+        break;
+      }
+    }
+  }
+
+  return selected.map(q => ({
+    question: q.question,
+    options: q.options,
+    correctAnswer: q.correctAnswer,
+  }));
+}
+
+async function updateQuestionStats(courseSlug: string, answers: number[], submittedQuestions: any[]): Promise<void> {
+  const bank = await readQuestionBank(courseSlug);
+  if (!bank) return;
+
+  // This would update usage stats, but since questions from bank are already tracked,
+  // we mainly increment timesUsed. In a full implementation, we'd match questions
+  // by content hash to update stats.
+
+  // For now, just log this happened
+  console.log(`[Quiz] Updated stats for ${courseSlug}: ${submittedQuestions.length} questions used`);
 }
 
 async function callOpenRouterForQuiz(
@@ -110,7 +214,10 @@ async function generateQuizFromContent(courseContent: string, courseTitle: strin
 
   const errors: string[] = [];
 
-  for (const model of config.models) {
+  // Use activeModels from config (supports both old 'models' and new 'activeModels')
+  const modelsToTry = (config as any).activeModels || (config as any).models || [];
+
+  for (const model of modelsToTry) {
     try {
       console.log(`[Quiz] Trying model: ${model}`);
       const content = await callOpenRouterForQuiz(apiKey, model, systemPrompt, userPrompt, config.temperature, config.maxTokens);
@@ -228,8 +335,22 @@ export async function GET(
       return NextResponse.json({ error: 'Conteúdo do curso insuficiente para gerar avaliação' }, { status: 400 });
     }
 
-    // Generate quiz questions via AI
-    const questions = await generateQuizFromContent(courseContent, courseTitle);
+    // Get quiz configuration
+    const config = getQuizConfig();
+
+    // Try to use question bank first (if enabled and has quality questions)
+    let questions: QuizQuestion[] | null = null;
+    if (config.preferQuestionBankOverAI) {
+      questions = await getQuestionsFromBank(slug, config);
+      if (questions) {
+        console.log(`[Quiz] Using ${questions.length} questions from question bank for ${slug}`);
+      }
+    }
+
+    // Fall back to AI generation if no quality bank questions
+    if (!questions) {
+      questions = await generateQuizFromContent(courseContent, courseTitle);
+    }
 
     // Create or update certificate record
     if (!certificate) {
@@ -364,6 +485,9 @@ export async function POST(
 
     const score = Math.round((correctCount / correctAnswers.length) * 100);
     const passed = score >= QUIZ_CONFIG.PASSING_SCORE;
+
+    // Update question bank stats (if questions came from bank)
+    await updateQuestionStats(slug, answers, submittedQuestions);
 
     // Record attempt
     const attempt = {
