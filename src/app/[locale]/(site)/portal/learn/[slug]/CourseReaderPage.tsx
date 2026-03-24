@@ -104,6 +104,31 @@ type CourseContentDto = {
   editorialVerification?: EditorialVerification | null;
 };
 
+/* ─── Content Forge Media Types ─── */
+type MediaAsset = {
+  source?: string; // "youtube" | "cloudinary" | "url"
+  url?: string;
+  publicId?: string;
+  videoId?: string;
+  caption?: string;
+};
+
+type ChapterMediaData = {
+  thumbnail?: MediaAsset | null;
+  heroImage?: MediaAsset | null;
+  video?: MediaAsset | null;
+  audio?: MediaAsset | null;
+  gallery?: MediaAsset[];
+  notebooklm?: MediaAsset | null;
+};
+
+type CourseMediaResponse = {
+  success: boolean;
+  mediaByIndex: Record<string, ChapterMediaData>;
+  mediaBySlug: Record<string, ChapterMediaData>;
+  totalChaptersWithMedia: number;
+};
+
 type ReaderSettings = {
   fontSize: number;
   lineHeight: number;
@@ -242,6 +267,120 @@ function optimizeCloudinaryUrl(src: string, width?: number): string {
   }
 
   return src;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Chapter Media Header
+   Renders hero image, video, audio from Content Forge metadata
+   ═══════════════════════════════════════════════════════════ */
+
+function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; chapterTitle: string }) {
+  const videoAsset = media.video;
+  const heroAsset = media.heroImage;
+  const audioAsset = media.audio;
+  const galleryAssets = media.gallery?.filter(g => g.url) || [];
+
+  const hasVideo = videoAsset?.url;
+  const hasHero = heroAsset?.url;
+  const hasAudio = audioAsset?.url;
+  const hasGallery = galleryAssets.length > 0;
+
+  if (!hasVideo && !hasHero && !hasAudio && !hasGallery) return null;
+
+  // Extract YouTube video ID from the video asset
+  const youtubeVideoId = hasVideo
+    ? (videoAsset.videoId || extractYouTubeId(videoAsset.url || ""))
+    : null;
+
+  return (
+    <div className="space-y-6 mb-10">
+      {/* Video player */}
+      {youtubeVideoId && (
+        <YouTubeEmbed videoId={youtubeVideoId} title={chapterTitle} />
+      )}
+
+      {/* Non-YouTube video (direct URL or Cloudinary) */}
+      {hasVideo && !youtubeVideoId && (
+        <div className="my-6">
+          <div className="relative aspect-video rounded-2xl overflow-hidden ring-1 ring-white/[0.08] shadow-2xl shadow-black/40">
+            <video
+              src={videoAsset.url}
+              controls
+              className="absolute inset-0 w-full h-full"
+              poster={media.thumbnail?.url || undefined}
+            >
+              Seu navegador não suporta vídeo.
+            </video>
+          </div>
+        </div>
+      )}
+
+      {/* Hero image (only if no video already shown) */}
+      {hasHero && !hasVideo && (
+        <div className="my-6 relative group">
+          <div className="rounded-2xl overflow-hidden ring-1 ring-white/[0.08] shadow-xl shadow-black/30">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={heroAsset.source === "cloudinary"
+                ? optimizeCloudinaryUrl(heroAsset.url || "", 1200)
+                : heroAsset.url || ""}
+              alt={heroAsset.caption || chapterTitle}
+              className="w-full h-auto object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+          {heroAsset.caption && (
+            <p className="mt-3 text-center text-xs text-white/30 italic">{heroAsset.caption}</p>
+          )}
+        </div>
+      )}
+
+      {/* Audio player */}
+      {hasAudio && (
+        <div className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-white/[0.03] ring-1 ring-white/[0.06] backdrop-blur-sm">
+          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-violet-600/20 flex items-center justify-center">
+            <Volume2 size={18} className="text-violet-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-medium text-white/60 mb-1.5">Audio do capítulo</p>
+            <audio
+              src={audioAsset.url}
+              controls
+              className="w-full h-8 [&::-webkit-media-controls-panel]:bg-white/[0.04]"
+              preload="none"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Gallery */}
+      {hasGallery && (
+        <div className={cn(
+          "grid gap-4",
+          galleryAssets.length === 1 ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"
+        )}>
+          {galleryAssets.map((img, idx) => (
+            <div key={idx} className="rounded-2xl overflow-hidden ring-1 ring-white/[0.06] shadow-lg shadow-black/20">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img.source === "cloudinary"
+                  ? optimizeCloudinaryUrl(img.url || "", 800)
+                  : img.url || ""}
+                alt={img.caption || `Imagem ${idx + 1}`}
+                className="w-full h-auto object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              {img.caption && (
+                <p className="px-4 py-2 text-xs text-white/30 italic bg-black/20">{img.caption}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function slugify(text: string): string {
@@ -600,6 +739,7 @@ export default function CourseReaderPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settings, setSettings] = useState<ReaderSettings>(DEFAULT_SETTINGS);
   const [showQuizModal, setShowQuizModal] = useState(false);
+  const [chapterMediaMap, setChapterMediaMap] = useState<Record<string, ChapterMediaData>>({});
 
   /* ─── Access gating state ─── */
   const [courseAccess, setCourseAccess] = useState<CourseAccessDto | null>(null);
@@ -653,6 +793,7 @@ export default function CourseReaderPage() {
     ? Math.min(settings.maxWidth + 320, 1240)
     : settings.maxWidth + 120;
   const compactFloatingNavigation = isWideReadingMode;
+  const currentChapterMedia = chapterMediaMap[String(currentChapterIndex)] || null;
 
   /* ─── Settings persistence ─── */
   useEffect(() => {
@@ -930,7 +1071,17 @@ export default function CourseReaderPage() {
           });
         }
 
-        // 4. Fetch progress from server when possible, then fall back to local cache
+        // 4. Fetch chapter media from Content Forge (non-blocking)
+        fetch(`/api/courses/${slug}/media`)
+          .then(res => res.ok ? res.json() : null)
+          .then((data: CourseMediaResponse | null) => {
+            if (data?.success && data.mediaByIndex) {
+              setChapterMediaMap(data.mediaByIndex);
+            }
+          })
+          .catch(() => { /* Media fetch is non-critical */ });
+
+        // 5. Fetch progress from server when possible, then fall back to local cache
         try {
           const progressRes = await fetch(`/api/courses/${slug}/progress`, {
             headers: authHeaders,
@@ -1962,6 +2113,14 @@ export default function CourseReaderPage() {
                   className="mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
+                  {/* Content Forge media (video, hero image, audio, gallery) */}
+                  {currentChapterMedia && (
+                    <ChapterMediaHeader
+                      media={currentChapterMedia}
+                      chapterTitle={currentChapter.title}
+                    />
+                  )}
+
                   <div
                     style={{
                       fontSize: `${settings.fontSize}px`,
