@@ -25,6 +25,7 @@ import {
   Lock,
   Menu,
   MousePointerClick,
+  Play,
   Settings2,
   Sparkles,
   Trophy,
@@ -33,6 +34,7 @@ import {
   PanelRightOpen,
   ArrowUp,
   ArrowDown,
+  Volume2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
@@ -145,6 +147,101 @@ function CodeCopyButton({ code }: { code: string }) {
       {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
     </button>
   );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   YouTube Embed Component
+   ═══════════════════════════════════════════════════════════ */
+
+const YOUTUBE_REGEX = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[?&][\w=&]*)?/;
+
+function extractYouTubeId(url: string): string | null {
+  const match = url.match(YOUTUBE_REGEX);
+  return match ? match[1] : null;
+}
+
+function isYouTubeUrl(text: string): boolean {
+  return YOUTUBE_REGEX.test(text.trim());
+}
+
+function YouTubeEmbed({ videoId, title }: { videoId: string; title?: string }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+  if (!isPlaying) {
+    return (
+      <div className="my-8 relative group">
+        <div className="relative aspect-video rounded-2xl overflow-hidden ring-1 ring-white/[0.08] shadow-2xl shadow-black/40 cursor-pointer"
+          onClick={() => setIsPlaying(true)}
+        >
+          {/* Thumbnail */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={thumbnailUrl}
+            alt={title || "Video"}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          {/* Play button */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-violet-600/90 backdrop-blur-sm flex items-center justify-center shadow-2xl shadow-violet-900/50 group-hover:bg-violet-500 group-hover:scale-110 transition-all duration-300">
+              <Play size={32} className="text-white ml-1" fill="white" />
+            </div>
+          </div>
+          {/* Video badge */}
+          <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
+            <Volume2 size={12} className="text-violet-300" />
+            <span className="text-[11px] font-medium text-white/80">Video</span>
+          </div>
+          {title && (
+            <div className="absolute bottom-4 left-4 right-4">
+              <p className="text-sm font-medium text-white/90 line-clamp-2">{title}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="my-8">
+      <div className="relative aspect-video rounded-2xl overflow-hidden ring-1 ring-white/[0.08] shadow-2xl shadow-black/40">
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+          title={title || "Video"}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Cloudinary Image Optimizer
+   ═══════════════════════════════════════════════════════════ */
+
+function optimizeCloudinaryUrl(src: string, width?: number): string {
+  if (!src) return src;
+
+  // Detect Cloudinary URLs and add responsive transforms
+  const cloudinaryMatch = src.match(/^(https?:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(.*)/);
+  if (cloudinaryMatch) {
+    const base = cloudinaryMatch[1];
+    const rest = cloudinaryMatch[2];
+    // Remove any existing transform chain and add optimized one
+    const pathParts = rest.split("/");
+    // Find the part that starts with 'v' followed by digits (version)
+    const versionIdx = pathParts.findIndex(p => /^v\d+$/.test(p));
+    const assetPath = versionIdx >= 0 ? pathParts.slice(versionIdx).join("/") : rest;
+    const w = width || 1200;
+    return `${base}f_auto,q_auto,w_${w},c_limit/${assetPath}`;
+  }
+
+  return src;
 }
 
 function slugify(text: string): string {
@@ -1041,9 +1138,28 @@ export default function CourseReaderPage() {
       h2: createHeading(2),
       h3: createHeading(3),
 
-      p: ({ className, ...props }: ParagraphProps) => (
-        <p className={cn("text-[#c0c0ce] leading-[1.85]", className)} {...props} />
-      ),
+      p: ({ className, children, ...props }: ParagraphProps) => {
+        // Detect standalone YouTube URLs in paragraphs
+        if (children && typeof children === "string") {
+          const trimmed = children.trim();
+          const ytId = extractYouTubeId(trimmed);
+          if (ytId && isYouTubeUrl(trimmed)) {
+            return <YouTubeEmbed videoId={ytId} />;
+          }
+        }
+        // Also check for single child that is a link to YouTube
+        if (children && typeof children === "object" && !Array.isArray(children)) {
+          const child = children as { props?: { href?: string; children?: unknown } };
+          if (child?.props?.href) {
+            const ytId = extractYouTubeId(child.props.href);
+            if (ytId) {
+              const linkText = typeof child.props.children === "string" ? child.props.children : undefined;
+              return <YouTubeEmbed videoId={ytId} title={linkText !== child.props.href ? linkText : undefined} />;
+            }
+          }
+        }
+        return <p className={cn("text-[#c0c0ce] leading-[1.85]", className)} {...props}>{children}</p>;
+      },
 
       /* ── Lists ── */
       ul: ({ className, ...props }: ListProps) => (
@@ -1076,17 +1192,30 @@ export default function CourseReaderPage() {
         </li>
       ),
 
-      a: ({ className, ...props }: AnchorProps) => (
-        <a
-          className={cn(
-            "text-violet-400 hover:text-violet-300 underline underline-offset-[3px] decoration-violet-400/30 hover:decoration-violet-300/60 transition-all duration-200",
-            className
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-          {...props}
-        />
-      ),
+      a: ({ className, href, children, ...props }: AnchorProps) => {
+        // Detect YouTube links and render as embedded video
+        if (href) {
+          const ytId = extractYouTubeId(href);
+          if (ytId) {
+            const linkText = typeof children === "string" ? children : undefined;
+            return <YouTubeEmbed videoId={ytId} title={linkText !== href ? linkText : undefined} />;
+          }
+        }
+        return (
+          <a
+            className={cn(
+              "text-violet-400 hover:text-violet-300 underline underline-offset-[3px] decoration-violet-400/30 hover:decoration-violet-300/60 transition-all duration-200",
+              className
+            )}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...props}
+          >
+            {children}
+          </a>
+        );
+      },
 
       /* ── Blockquote with Dica Pro / Dica callout detection ── */
       blockquote: ({ className, children, ...props }: BlockquoteProps) => {
@@ -1230,6 +1359,8 @@ export default function CourseReaderPage() {
 
       img: ({ className, alt, src, ...props }: ImgProps) => {
         const caption = alt && alt !== "image" && alt !== "img" ? alt : null;
+        const optimizedSrc = optimizeCloudinaryUrl(src || "", 1200);
+        const isCloudinary = src?.includes("res.cloudinary.com");
         return (
           <figure className="my-8 flex flex-col items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1240,9 +1371,11 @@ export default function CourseReaderPage() {
                 className
               )}
               alt={alt || ""}
-              src={src}
+              src={optimizedSrc}
               loading="lazy"
               decoding="async"
+              srcSet={isCloudinary ? `${optimizeCloudinaryUrl(src || "", 640)} 640w, ${optimizeCloudinaryUrl(src || "", 960)} 960w, ${optimizeCloudinaryUrl(src || "", 1200)} 1200w` : undefined}
+              sizes={isCloudinary ? "(max-width: 640px) 640px, (max-width: 960px) 960px, 1200px" : undefined}
               {...props}
             />
             {caption && (
