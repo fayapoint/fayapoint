@@ -6,6 +6,7 @@ import CourseProgress from '@/models/CourseProgress';
 import Certificate, { QUIZ_CONFIG } from '@/models/Certificate';
 import { getAuthUser } from '@/lib/auth';
 import { getCourseBySlug } from '@/data/courses';
+import { getQuizConfig } from '@/config/quiz-config';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 
@@ -15,17 +16,13 @@ interface QuizQuestion {
   correctAnswer: number;
 }
 
-// Updated 2026-03-23 — reduced to 2 models with fast timeout to avoid serverless function timeout
-const QUIZ_MODELS = [
-  'openrouter/free',                          // Smart router — auto-selects best available free model
-  'stepfun/step-3.5-flash:free',              // 196B MoE (11B active), 256k ctx, strong reasoning
-];
-
 async function callOpenRouterForQuiz(
   apiKey: string,
   model: string,
   systemPrompt: string,
   userPrompt: string,
+  temperature: number,
+  maxTokens: number,
 ): Promise<string> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 6000); // 6 second timeout per model
@@ -45,8 +42,8 @@ async function callOpenRouterForQuiz(
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      temperature: 0.7,
-      max_tokens: 4000,
+      temperature,
+      max_tokens: maxTokens,
     }),
   });
 
@@ -101,27 +98,9 @@ async function generateQuizFromContent(courseContent: string, courseTitle: strin
     throw new Error('OPENROUTER_API_KEY não configurada');
   }
 
-  const systemPrompt = `You are an academic assessment expert. Generate exactly ${QUIZ_CONFIG.TOTAL_QUESTIONS} multiple-choice questions to evaluate a student's understanding of the course content provided. 
-
-Rules:
-- Questions must test genuine understanding, not just memorization
-- Each question must have exactly 4 options (A, B, C, D)
-- Only one correct answer per question
-- Questions should cover different topics from the content
-- Difficulty should be moderate to challenging
-- Questions should be in Portuguese (Brazilian)
-- Return ONLY valid JSON, no markdown
-
-Return format:
-[
-  {
-    "question": "Question text here?",
-    "options": ["Option A", "Option B", "Option C", "Option D"],
-    "correctAnswer": 0
-  }
-]
-
-correctAnswer is the 0-based index of the correct option.`;
+  // Load configuration from quiz-config
+  const config = getQuizConfig();
+  const systemPrompt = config.systemPrompt.replace('exactly 10', `exactly ${QUIZ_CONFIG.TOTAL_QUESTIONS}`);
 
   const truncatedContent = courseContent.length > 8000
     ? courseContent.substring(0, 8000) + '\n\n[... conteúdo adicional omitido para brevidade ...]'
@@ -131,10 +110,10 @@ correctAnswer is the 0-based index of the correct option.`;
 
   const errors: string[] = [];
 
-  for (const model of QUIZ_MODELS) {
+  for (const model of config.models) {
     try {
       console.log(`[Quiz] Trying model: ${model}`);
-      const content = await callOpenRouterForQuiz(apiKey, model, systemPrompt, userPrompt);
+      const content = await callOpenRouterForQuiz(apiKey, model, systemPrompt, userPrompt, config.temperature, config.maxTokens);
       const questions = parseQuizResponse(content);
       console.log(`[Quiz] Success with model: ${model}, ${questions.length} questions`);
       return questions;
@@ -152,21 +131,11 @@ correctAnswer is the 0-based index of the correct option.`;
 
 /**
  * Static fallback quiz — used when AI generation fails (timeout, API down, etc.)
- * These are generic but valid questions about AI/course content.
+ * Loads questions from quiz configuration's fallback questions.
  */
 function getStaticFallbackQuiz(courseTitle: string): QuizQuestion[] {
-  const allQuestions: QuizQuestion[] = [
-    { question: "Qual é a principal vantagem de usar prompts bem estruturados ao interagir com uma IA?", options: ["Maior velocidade de resposta", "Respostas mais precisas e relevantes", "Menor uso de tokens", "Interface mais bonita"], correctAnswer: 1 },
-    { question: "O que significa 'context window' em modelos de linguagem?", options: ["A janela do navegador", "O limite de texto que o modelo pode processar de uma vez", "O tempo de resposta", "A tela de configurações"], correctAnswer: 1 },
-    { question: "Qual técnica consiste em pedir ao modelo que mostre seu raciocínio passo a passo?", options: ["Few-Shot Learning", "Chain-of-Thought", "Negative Prompting", "Role Prompting"], correctAnswer: 1 },
-    { question: "O que é 'temperature' no contexto de modelos de IA?", options: ["A velocidade de processamento", "Um parâmetro que controla a criatividade/aleatoriedade das respostas", "A temperatura do servidor", "O nível de dificuldade das perguntas"], correctAnswer: 1 },
-    { question: "Qual é a melhor prática ao dar contexto para uma IA?", options: ["Escrever o máximo possível sem filtrar", "Fornecer informações específicas e relevantes para a tarefa", "Não dar contexto nenhum", "Usar apenas emojis"], correctAnswer: 1 },
-    { question: "O que é Few-Shot Learning?", options: ["Aprender com poucos recursos computacionais", "Dar exemplos do resultado esperado antes de pedir a tarefa", "Treinar o modelo do zero", "Usar a IA sem internet"], correctAnswer: 1 },
-    { question: "Qual é o risco principal de confiar cegamente nas respostas de uma IA?", options: ["O custo financeiro", "Alucinações — a IA pode gerar informações falsas com confiança", "A lentidão das respostas", "Problemas de conexão"], correctAnswer: 1 },
-    { question: "O que é um 'system prompt'?", options: ["Uma mensagem de erro do sistema", "Uma instrução inicial que define o comportamento e personalidade da IA", "O prompt que o sistema gera automaticamente", "Uma atualização do software"], correctAnswer: 1 },
-    { question: "Qual a importância da iteração em prompt engineering?", options: ["Nenhuma — o primeiro prompt deve ser perfeito", "Permite refinar progressivamente os resultados até atingir a qualidade desejada", "Serve apenas para testes", "É uma prática obsoleta"], correctAnswer: 1 },
-    { question: "Como a LGPD afeta o uso de IA no Brasil?", options: ["Não tem relação com IA", "Proíbe completamente o uso de IA", "Exige cuidado ao enviar dados pessoais para modelos de IA", "Só afeta empresas de tecnologia"], correctAnswer: 2 },
-  ];
+  const config = getQuizConfig();
+  const allQuestions = config.fallbackQuestions;
 
   // Shuffle and return the required number
   const shuffled = allQuestions.sort(() => Math.random() - 0.5);
