@@ -216,7 +216,7 @@ function YouTubeEmbed({ videoId, title }: { videoId: string; title?: string }) {
             </div>
           </div>
           {/* Video badge */}
-          <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
+          <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-border">
             <Volume2 size={12} className="text-violet-300" />
             <span className="text-[11px] font-medium text-white/80">Video</span>
           </div>
@@ -1403,7 +1403,7 @@ export default function CourseReaderPage() {
         return (
           <blockquote
             className={cn(
-              "relative my-8 pl-6 pr-5 py-4 rounded-2xl bg-gradient-to-r from-violet-500/[0.06] to-purple-500/[0.02] border-l-[3px] border-violet-400/50",
+              "relative my-8 pl-6 pr-5 py-4 rounded-2xl bg-gradient-to-r from-amber-500/[0.06] to-amber-500/[0.02] border-l-[3px] border-violet-400/50",
               className
             )}
             {...props}
@@ -1617,7 +1617,7 @@ export default function CourseReaderPage() {
       <div className="min-h-screen bg-[#0b0c13] text-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-6">
           <div className="relative">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600/20 to-purple-600/10 border border-violet-500/20 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600/20 to-amber-600/10 border border-amber-500/20 flex items-center justify-center">
               <BookOpen className="text-violet-400" size={28} />
             </div>
             <div className="absolute -inset-4 rounded-3xl bg-violet-500/10 blur-2xl animate-pulse" />
@@ -1651,7 +1651,7 @@ export default function CourseReaderPage() {
             </p>
             <div className="flex flex-col gap-3">
               <Link href={`/${locale}/curso/${slug}`}>
-                <Button className="w-full h-11 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 rounded-xl font-medium shadow-lg shadow-violet-600/20">
+                <Button className="w-full h-11 bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500 rounded-xl font-medium shadow-lg shadow-violet-600/20">
                   Ver Detalhes do Curso
                 </Button>
               </Link>
@@ -1697,7 +1697,7 @@ export default function CourseReaderPage() {
       {/* ═══ HEADER ═══ */}
       <header className="sticky top-0 z-40 flex-shrink-0">
         {/* Accent gradient line */}
-        <div className="h-[2px] bg-gradient-to-r from-violet-600/80 via-purple-500/60 to-violet-600/80" />
+        <div className="h-[2px] bg-gradient-to-r from-violet-600/80 via-amber-500/60 to-yellow-600/80" />
 
         <div className="h-14 border-b border-white/[0.04] bg-[#0b0c13]/80 backdrop-blur-2xl backdrop-saturate-150 flex items-center px-4 gap-3">
           <button
@@ -1723,7 +1723,7 @@ export default function CourseReaderPage() {
             <div className="flex items-center gap-2.5 mt-1">
               <div className="flex-1 h-[3px] bg-white/[0.04] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-violet-500 via-purple-400 to-violet-500 rounded-full transition-all duration-1000 ease-out"
+                  className="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-violet-500 rounded-full transition-all duration-1000 ease-out"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -1907,7 +1907,7 @@ export default function CourseReaderPage() {
             </div>
             <div className="relative h-[5px] bg-white/[0.04] rounded-full overflow-hidden mb-2.5">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-400 transition-all duration-700 ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400 transition-all duration-700 ease-out"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -2022,7 +2022,7 @@ export default function CourseReaderPage() {
             <div className="min-h-full flex flex-col">
               {/* Chapter header (dimmed) */}
               <div className="flex-shrink-0 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.04] via-transparent to-purple-600/[0.02]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.04] via-transparent to-amber-600/[0.02]" />
                 <div
                   className="relative mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
                   style={{ maxWidth: readerContentMaxWidth }}
@@ -2067,7 +2067,7 @@ export default function CourseReaderPage() {
               {/* Chapter header */}
               <div className="flex-shrink-0 relative overflow-hidden">
                 {/* Gradient mesh background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.04] via-transparent to-purple-600/[0.02]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.04] via-transparent to-amber-600/[0.02]" />
                 <div className="absolute top-0 right-0 w-72 h-72 bg-violet-500/[0.03] rounded-full blur-[80px]" />
 
                 <div
@@ -2141,7 +2141,7 @@ export default function CourseReaderPage() {
                       "prose-ul:my-5 prose-ol:my-5",
                       "prose-code:text-violet-300 prose-code:bg-violet-500/[0.08] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:font-normal prose-code:text-[0.88em] prose-code:before:content-[''] prose-code:after:content-['']",
                       "prose-pre:bg-[#07070d] prose-pre:ring-1 prose-pre:ring-white/[0.05] prose-pre:rounded-2xl prose-pre:shadow-lg prose-pre:shadow-black/20",
-                      "prose-blockquote:border-l-[3px] prose-blockquote:border-violet-400/40 prose-blockquote:bg-gradient-to-r prose-blockquote:from-violet-500/[0.05] prose-blockquote:to-transparent prose-blockquote:rounded-r-2xl prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:not-italic prose-blockquote:text-[#a8a8bc]",
+                      "prose-blockquote:border-l-[3px] prose-blockquote:border-violet-400/40 prose-blockquote:bg-gradient-to-r prose-blockquote:from-amber-500/[0.05] prose-blockquote:to-transparent prose-blockquote:rounded-r-2xl prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:not-italic prose-blockquote:text-[#a8a8bc]",
                       "prose-hr:border-0",
                       "prose-img:rounded-2xl prose-img:ring-1 prose-img:ring-white/[0.06] prose-img:shadow-xl prose-img:shadow-black/30 prose-img:mx-auto",
                       "prose-table:rounded-2xl prose-table:overflow-hidden prose-table:ring-1 prose-table:ring-white/[0.06]",
@@ -2159,11 +2159,11 @@ export default function CourseReaderPage() {
                 </div>
               </div>
 
-              {/* Floating navigation widget */}
-              <div className="fixed bottom-5 right-5 z-40 flex flex-col gap-3 md:bottom-6 md:right-6">
+              {/* Floating navigation widget — higher on mobile to clear inline nav */}
+              <div className="fixed bottom-4 right-4 z-40 flex flex-col gap-3 lg:bottom-6 lg:right-6">
                 {compactFloatingNavigation ? (
                   <div className="hidden lg:block w-[220px] rounded-[24px] border border-white/[0.08] bg-[#0d0f18]/84 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.42)] overflow-hidden">
-                    <div className="px-3.5 py-3 border-b border-white/[0.06] bg-gradient-to-r from-violet-500/[0.14] via-fuchsia-500/[0.06] to-cyan-500/[0.08]">
+                    <div className="px-3.5 py-3 border-b border-white/[0.06] bg-gradient-to-r from-amber-500/[0.14] via-fuchsia-500/[0.06] to-cyan-500/[0.08]">
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] flex items-center justify-center flex-shrink-0">
                           <PanelRightOpen size={16} className="text-violet-300" />
@@ -2284,7 +2284,7 @@ export default function CourseReaderPage() {
                   </div>
                 ) : (
                   <div className="hidden lg:block w-[280px] rounded-[26px] border border-white/[0.08] bg-[#0d0f18]/86 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.45)] overflow-hidden">
-                    <div className="px-4 py-3 border-b border-white/[0.06] bg-gradient-to-r from-violet-500/[0.16] via-fuchsia-500/[0.07] to-cyan-500/[0.08]">
+                    <div className="px-4 py-3 border-b border-white/[0.06] bg-gradient-to-r from-amber-500/[0.16] via-fuchsia-500/[0.07] to-cyan-500/[0.08]">
                       <div className="flex items-center justify-between gap-3">
                         <div>
                           <p className="text-[10px] uppercase tracking-[0.22em] text-white/45">Navegação rápida</p>
@@ -2371,13 +2371,56 @@ export default function CourseReaderPage() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-end gap-2">
+                {/* Mobile: compact horizontal bar with all controls */}
+                <div className="flex lg:hidden items-center gap-1.5 p-1.5 rounded-2xl border border-white/[0.08] bg-[#0d0f18]/90 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
+                  <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center text-white/60 hover:text-white hover:bg-white/[0.1] transition-all"
+                    aria-label="Voltar ao topo"
+                  >
+                    <ArrowUp size={16} />
+                  </button>
+                  <button
+                    onClick={() => scrollViewportBy("down")}
+                    className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center text-white/60 hover:text-white hover:bg-white/[0.1] transition-all"
+                    aria-label="Descer página"
+                  >
+                    <ArrowDown size={16} />
+                  </button>
+                  <div className="w-px h-6 bg-white/10" />
+                  <button
+                    onClick={goToPrevChapter}
+                    disabled={currentChapterIndex === 0}
+                    className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center text-white/60 hover:text-white hover:bg-white/[0.1] transition-all disabled:opacity-30"
+                    aria-label="Capítulo anterior"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={goToNextChapter}
+                    disabled={currentChapterIndex >= chapters.length - 1}
+                    className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-violet-500/15 border border-violet-400/15 flex items-center justify-center text-white hover:from-amber-500/30 hover:to-violet-500/25 transition-all disabled:opacity-30"
+                    aria-label="Próximo capítulo"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+
+                {/* Desktop: individual floating buttons */}
+                <div className="hidden lg:flex items-center justify-end gap-2">
                   <button
                     onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     className="w-12 h-12 rounded-2xl border border-white/[0.08] bg-[#0d0f18]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-white/80 hover:text-white hover:bg-white/[0.08] transition-all"
                     aria-label="Voltar ao topo"
                   >
                     <ArrowUp size={18} />
+                  </button>
+                  <button
+                    onClick={() => scrollViewportBy("down")}
+                    className="w-12 h-12 rounded-2xl border border-white/[0.08] bg-[#0d0f18]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-white/80 hover:text-white hover:bg-white/[0.08] transition-all"
+                    aria-label="Descer página"
+                  >
+                    <ArrowDown size={18} />
                   </button>
                   <button
                     onClick={goToPrevChapter}
@@ -2390,7 +2433,7 @@ export default function CourseReaderPage() {
                   <button
                     onClick={goToNextChapter}
                     disabled={currentChapterIndex >= chapters.length - 1}
-                    className="w-12 h-12 rounded-2xl border border-violet-400/20 bg-gradient-to-br from-violet-500/[0.22] to-fuchsia-500/[0.16] backdrop-blur-2xl shadow-[0_12px_40px_rgba(92,55,222,0.28)] flex items-center justify-center text-white hover:from-violet-500/[0.28] hover:to-fuchsia-500/[0.22] transition-all disabled:opacity-35 disabled:shadow-none"
+                    className="w-12 h-12 rounded-2xl border border-violet-400/20 bg-gradient-to-br from-amber-500/[0.22] to-fuchsia-500/[0.16] backdrop-blur-2xl shadow-[0_12px_40px_rgba(92,55,222,0.28)] flex items-center justify-center text-white hover:from-amber-500/[0.28] hover:to-fuchsia-500/[0.22] transition-all disabled:opacity-35 disabled:shadow-none"
                     aria-label="Próximo capítulo"
                   >
                     <ChevronRight size={18} />
@@ -2403,7 +2446,7 @@ export default function CourseReaderPage() {
                 <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
                 <div
-                  className="mx-auto px-8 sm:px-10 lg:px-14 py-8"
+                  className="mx-auto px-8 sm:px-10 lg:px-14 py-8 pb-24 lg:pb-8"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
                   {/* Mark as complete button */}
@@ -2478,7 +2521,7 @@ export default function CourseReaderPage() {
                           "flex items-center justify-end gap-3 p-4 rounded-2xl transition-all duration-200 group text-right",
                           isChapterLocked(currentChapterIndex + 1)
                             ? "bg-amber-500/[0.04] hover:bg-amber-500/[0.08] border border-amber-500/10 hover:border-amber-500/20"
-                            : "bg-violet-500/[0.04] hover:bg-violet-500/[0.08] border border-violet-500/10 hover:border-violet-500/20"
+                            : "bg-violet-500/[0.04] hover:bg-violet-500/[0.08] border border-amber-500/10 hover:border-amber-500/20"
                         )}
                       >
                         <div className="min-w-0">
@@ -2496,7 +2539,7 @@ export default function CourseReaderPage() {
                           "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 border",
                           isChapterLocked(currentChapterIndex + 1)
                             ? "bg-amber-500/10 group-hover:bg-amber-500/15 border-amber-500/15"
-                            : "bg-violet-500/10 group-hover:bg-violet-500/15 border-violet-500/15"
+                            : "bg-violet-500/10 group-hover:bg-violet-500/15 border-amber-500/15"
                         )}>
                           {isChapterLocked(currentChapterIndex + 1) ? (
                             <Lock size={16} className="text-amber-400/50 group-hover:text-amber-400" />

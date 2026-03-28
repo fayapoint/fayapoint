@@ -67,7 +67,7 @@ export function ThemeSwitcher() {
   return (
     <div className="min-w-[140px]">
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="bg-gray-800/50 border-gray-700 text-foreground">
+        <SelectTrigger className="bg-secondary/50 border-border text-foreground">
           <SelectValue placeholder="Tema" />
         </SelectTrigger>
         <SelectContent>

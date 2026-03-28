@@ -99,17 +99,18 @@ export async function POST(request: NextRequest) {
     // Get variant IDs from POD product
     const variantIds = podProduct.variants.map(v => parseInt(v.providerVariantId));
     
-    // Build print areas with proper scaling
+    // Build print areas with user's design settings (or defaults)
+    const designSettings = podProduct.designSettings || {};
     const printAreas = [{
       variant_ids: variantIds,
       placeholders: [{
         position: 'front',
         images: [{
           id: printifyImageId,
-          x: 0.5,
-          y: 0.5,
-          scale: 0.6,
-          angle: 0,
+          x: designSettings.x ?? 0.5,
+          y: designSettings.y ?? 0.5,
+          scale: designSettings.scale ?? 0.6,
+          angle: designSettings.rotation ?? 0,
         }]
       }]
     }];

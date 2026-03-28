@@ -111,14 +111,14 @@ export function Footer() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 z-50 group"
+            className="fixed bottom-24 right-8 z-50 group"
           >
             <div className="relative">
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-lg opacity-60 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full blur-lg opacity-60 group-hover:opacity-100 transition-opacity" />
               
               {/* Button */}
-              <div className="relative w-14 h-14 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-2xl border border-white/20">
+              <div className="relative w-14 h-14 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full flex items-center justify-center shadow-2xl border border-white/20">
                 <motion.div
                   animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -128,9 +128,9 @@ export function Footer() {
               </div>
               
               {/* Tooltip */}
-              <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-gray-700">
+              <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-card text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-border">
                 Voltar ao topo
-                <div className="absolute top-full right-4 w-2 h-2 bg-gray-900 transform rotate-45 -mt-1 border-r border-b border-gray-700" />
+                <div className="absolute top-full right-4 w-2 h-2 bg-card transform rotate-45 -mt-1 border-r border-b border-border" />
               </div>
             </div>
           </motion.button>
@@ -145,7 +145,7 @@ export function Footer() {
             <h3 className="text-2xl font-bold mb-4">
               {t("newsletter.title")}
             </h3>
-            <p className="text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               {t("newsletter.description")}
             </p>
             <form
@@ -163,7 +163,7 @@ export function Footer() {
               <Button
                 type="submit"
                 disabled={!newsletterEmail || newsletterLoading}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
               >
                 {t("newsletter.cta")}
               </Button>
@@ -178,14 +178,14 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 FayAi
               </h2>
             </Link>
-            <p className="text-gray-400 mb-4">
+            <p className="text-muted-foreground mb-4">
               {t("company.tagline")}
             </p>
-            <div className="space-y-2 text-gray-400">
+            <div className="space-y-2 text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 <a href="mailto:ricardofaya@gmail.com" className="hover:text-white">
@@ -213,7 +213,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="block py-2 text-gray-400 hover:text-white transition"
+                    className="block py-2 text-muted-foreground hover:text-white transition"
                   >
                     {t(link.key)}
                   </Link>
@@ -229,7 +229,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="block py-2 text-gray-400 hover:text-white transition"
+                    className="block py-2 text-muted-foreground hover:text-white transition"
                   >
                     {t(link.key)}
                   </Link>
@@ -245,7 +245,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="block py-2 text-gray-400 hover:text-white transition"
+                    className="block py-2 text-muted-foreground hover:text-white transition"
                   >
                     {t(link.key)}
                   </Link>
@@ -258,7 +258,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-gray-400 text-sm">
+            <div className="text-muted-foreground text-sm">
               {t("bottom.rights")}
             </div>
             
@@ -270,7 +270,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-11 h-11 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                  className="flex items-center justify-center w-11 h-11 rounded-lg text-muted-foreground hover:text-white hover:bg-secondary transition-colors"
                   aria-label={social.label}
                 >
                   <social.icon className="w-5 h-5" />
@@ -279,7 +279,7 @@ export function Footer() {
             </div>
 
             {/* Payment Methods */}
-            <div className="flex items-center gap-4 text-gray-400 text-sm">
+            <div className="flex items-center gap-4 text-muted-foreground text-sm">
               <span>{t("bottom.paymentsLabel")}</span>
               <div className="flex gap-2">
                 <span>Visa</span>

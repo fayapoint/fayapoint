@@ -92,6 +92,7 @@ import PODStorePanel from "@/components/portal/PODStorePanel";
 import { MobileBottomNav } from "@/components/portal/MobileBottomNav";
 import { CertificatesPanel } from "@/components/portal/CertificatesPanel";
 import { CoursesPanel } from "@/components/portal/CoursesPanel";
+import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 
 // Types
 interface DashboardCourseProgress {
@@ -448,10 +449,10 @@ export default function PortalPage() {
 
   if (isDashboardLoading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-400">Carregando seu dashboard...</p>
+          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-muted-foreground">Carregando seu dashboard...</p>
         </div>
       </div>
     );
@@ -469,24 +470,24 @@ export default function PortalPage() {
         localStorage.removeItem("fayai_token");
       }
       return (
-        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
           <div className="flex flex-col items-center gap-6 max-w-md text-center px-4">
-            <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center">
-              <Lock className="w-8 h-8 text-purple-400" />
+            <div className="w-16 h-16 rounded-full bg-amber-600/20 flex items-center justify-center">
+              <Lock className="w-8 h-8 text-amber-400" />
             </div>
             <h1 className="text-2xl font-bold">{t("loginRequired") || "Login necessário"}</h1>
-            <p className="text-gray-400">{t("loginRequiredDesc") || "Faça login para acessar seu portal do aluno."}</p>
+            <p className="text-muted-foreground">{t("loginRequiredDesc") || "Faça login para acessar seu portal do aluno."}</p>
             <div className="flex gap-3">
               <Button
                 onClick={() => router.push(`/${locale}/login`)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-8"
+                className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-600 text-white px-8"
               >
                 {t("loginButton") || "Entrar"}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => router.push("/")}
-                className="border-white/20 text-white hover:bg-white/5"
+                className="border-white/20 text-white hover:bg-secondary"
               >
                 {t("homeButton") || "Página Inicial"}
               </Button>
@@ -497,10 +498,10 @@ export default function PortalPage() {
     }
     // Has valid token but no data yet — show loading
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-400">Carregando...</p>
+          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-muted-foreground">Carregando...</p>
         </div>
       </div>
     );
@@ -522,7 +523,7 @@ export default function PortalPage() {
   const activity = dashboardData.activity;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="h-[100dvh] w-full max-w-[100vw] bg-background text-foreground text-sm md:text-base overflow-hidden">
       {/* Sidebar */}
       <DashboardSidebar
         activeTab={activeTab}
@@ -544,16 +545,16 @@ export default function PortalPage() {
       />
 
       {/* Main Content - responsive margin for desktop sidebar */}
-      <main 
+      <main
         className={cn(
-          "min-h-screen pb-20 md:pb-0 transition-[margin] duration-300",
+          "h-full w-full flex flex-col overflow-hidden transition-[margin] duration-300",
           sidebarCollapsed ? "md:ml-20" : "md:ml-[280px]"
         )}
       >
         {/* Top Bar */}
-        <header className="h-14 md:h-16 bg-gray-950/95 backdrop-blur-xl border-b border-gray-800 sticky top-0 z-30 flex items-center justify-between px-4 md:px-6">
+        <header className="h-14 md:h-16 shrink-0 bg-card/95 backdrop-blur-xl border-b border-border z-30 flex items-center justify-between px-4 md:px-6">
           <div>
-            <h1 className="text-lg font-semibold">
+            <h1 className="text-lg font-semibold" style={{ fontFamily: "var(--font-bebas), sans-serif", letterSpacing: "0.08em", fontSize: "1.4rem" }}>
               {activeTab === "dashboard" && "Dashboard"}
               {activeTab === "pod-store" && "Minha Loja POD"}
               {activeTab === "store" && "Loja Tech"}
@@ -578,16 +579,21 @@ export default function PortalPage() {
               <div className="flex items-center gap-2 text-sm">
                 <Flame className="text-orange-400" size={18} />
                 <span className="font-semibold">{stats.streak}</span>
-                <span className="text-gray-500">dias</span>
+                <span className="text-muted-foreground">dias</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Zap className="text-yellow-400" size={18} />
                 <span className="font-semibold">{stats.xp}</span>
-                <span className="text-gray-500">XP</span>
+                <span className="text-muted-foreground">XP</span>
               </div>
             </div>
 
-            <div className="h-6 w-px bg-gray-800" />
+            <div className="h-6 w-px bg-secondary" />
+
+            {/* Theme */}
+            <div className="hidden md:block">
+              <ThemeSwitcher />
+            </div>
 
             {/* Actions */}
             <Button variant="ghost" size="icon" className="relative">
@@ -608,8 +614,8 @@ export default function PortalPage() {
           </div>
         </header>
 
-        {/* Content */}
-        <div className="p-4 md:p-6">
+        {/* Content — scrolls independently from header and bottom nav */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain p-4 md:p-6 pb-32 md:pb-6">
           <AnimatePresence mode="wait">
             {/* Dashboard Tab — New Bento Grid Layout */}
             {activeTab === "dashboard" && (
@@ -743,22 +749,22 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-6"
               >
-                <Card className="bg-white/5 border-white/10 p-6">
-                  <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6 pb-6 border-b border-white/10">
+                <Card className="bg-secondary border-border p-6">
+                  <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6 pb-6 border-b border-border">
                     <div>
-                      <h2 className="text-2xl font-bold flex items-center gap-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                        <Sparkles className="text-purple-400" /> Studio AI Pro
+                      <h2 className="text-2xl font-bold flex items-center gap-2 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-yellow-500">
+                        <Sparkles className="text-amber-400" /> Studio AI Pro
                       </h2>
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         Crie imagens incríveis com inteligência artificial
                       </p>
                     </div>
                     <div className="w-full md:w-64">
                       <Select value={selectedModel} onValueChange={setSelectedModel}>
-                        <SelectTrigger className="bg-black/50 border-gray-700">
+                        <SelectTrigger className="bg-secondary border-border">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                        <SelectContent className="bg-card border-border text-white">
                           {AI_MODELS.map((m) => (
                             <SelectItem
                               key={m.id}
@@ -790,8 +796,8 @@ export default function PortalPage() {
                         className={cn(
                           "flex flex-col items-center gap-2 p-3 rounded-xl border transition-all min-w-[90px]",
                           style === s.id
-                            ? "bg-purple-500/20 border-purple-500 text-purple-300"
-                            : "bg-black/30 border-gray-800 hover:bg-white/5 text-gray-400"
+                            ? "bg-amber-500/20 border-amber-500 text-amber-300"
+                            : "bg-secondary border-border hover:bg-secondary text-muted-foreground"
                         )}
                       >
                         <s.icon size={24} />
@@ -809,8 +815,8 @@ export default function PortalPage() {
                         className={cn(
                           "h-12",
                           aspectRatio === r.id
-                            ? "bg-purple-600 border-purple-600"
-                            : "bg-black/30 border-gray-800"
+                            ? "bg-amber-600 border-amber-600"
+                            : "bg-secondary border-border"
                         )}
                         onClick={() => setAspectRatio(r.id)}
                       >
@@ -824,13 +830,13 @@ export default function PortalPage() {
                   <div className="relative">
                     <Textarea
                       placeholder="Descreva a imagem que você quer criar..."
-                      className="bg-black/50 border-gray-700 min-h-[120px] text-lg p-4 resize-none pr-32"
+                      className="bg-secondary border-border min-h-[120px] text-lg p-4 resize-none pr-32"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                     />
                     <div className="absolute bottom-4 right-4">
                       <Button
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 font-bold px-8"
+                        className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 font-bold px-8"
                         onClick={handleGenerateImage}
                         disabled={isGenerating || !prompt.trim()}
                       >
@@ -849,7 +855,7 @@ export default function PortalPage() {
                 {/* Preview & Gallery */}
                 <div className="grid lg:grid-cols-3 gap-6">
                   <div className="lg:col-span-2">
-                    <Card className="bg-white/5 border-white/10 p-6 min-h-[500px] flex items-center justify-center">
+                    <Card className="bg-secondary border-border p-6 min-h-[500px] flex items-center justify-center">
                       {generatedImage ? (
                         <div className="relative w-full h-full flex flex-col items-center justify-center">
                           <img
@@ -867,8 +873,8 @@ export default function PortalPage() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="text-center text-gray-500">
-                          <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div className="text-center text-muted-foreground">
+                          <div className="w-24 h-24 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
                             {isGenerating ? (
                               <Loader2 className="animate-spin opacity-50" size={40} />
                             ) : (
@@ -888,7 +894,7 @@ export default function PortalPage() {
 
                   <div>
                     {myCreations.length > 0 && (
-                      <Card className="bg-white/5 border-white/10 p-4 max-h-[600px] overflow-hidden">
+                      <Card className="bg-secondary border-border p-4 max-h-[600px] overflow-hidden">
                         <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                           <ImageIcon size={18} /> Minhas Criações
                         </h3>
@@ -897,7 +903,7 @@ export default function PortalPage() {
                           {myCreations.map((creation: any) => (
                             <div
                               key={creation._id}
-                              className="aspect-square rounded-lg overflow-hidden bg-gray-900 cursor-pointer border border-transparent hover:border-purple-500 transition"
+                              className="aspect-square rounded-lg overflow-hidden bg-card cursor-pointer border border-transparent hover:border-amber-500 transition"
                               onClick={() => setGeneratedImage(creation.imageUrl)}
                             >
                               <img
@@ -990,14 +996,14 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-6"
               >
-                <Card className="bg-white/5 border-white/10 p-6">
+                <Card className="bg-secondary border-border p-6">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-semibold">Seus Recursos</h2>
                     <Badge className={cn(
                       "px-3 py-1",
                       isPro 
                         ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-black" 
-                        : "bg-gray-700"
+                        : "bg-muted"
                     )}>
                       Plano {plan.toUpperCase()}
                     </Badge>
@@ -1025,7 +1031,7 @@ export default function PortalPage() {
                           )}
                         </div>
                         <h3 className="font-medium">{resource.name}</h3>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {resource.available ? "Disponível" : "Requer upgrade"}
                         </p>
                       </Card>
@@ -1033,18 +1039,18 @@ export default function PortalPage() {
                   </div>
 
                   {!isPro && (
-                    <Card className="mt-8 p-6 bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-purple-500/30">
+                    <Card className="mt-8 p-6 bg-gradient-to-r from-amber-900/40 to-yellow-900/40 border-amber-500/30">
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-bold text-lg mb-1">
                             Desbloqueie Todos os Recursos
                           </h3>
-                          <p className="text-sm text-gray-400">
+                          <p className="text-sm text-muted-foreground">
                             Upgrade para Pro e tenha acesso ilimitado a todos os recursos!
                           </p>
                         </div>
                         <Link href="/precos">
-                          <Button className="bg-gradient-to-r from-purple-600 to-pink-600">
+                          <Button className="bg-gradient-to-r from-amber-600 to-yellow-700">
                             <Crown size={16} className="mr-2" />
                             Ver Planos
                           </Button>
@@ -1065,7 +1071,7 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-6"
               >
-                <Card className="bg-white/5 border-white/10 p-6">
+                <Card className="bg-secondary border-border p-6">
                   <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                     <ShoppingBag size={20} /> Carrinho Atual
                   </h2>
@@ -1074,15 +1080,15 @@ export default function PortalPage() {
                       Object.values(cartItems).map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between bg-white/5 p-4 rounded-lg"
+                          className="flex items-center justify-between bg-secondary p-4 rounded-lg"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gray-800 rounded flex items-center justify-center">
+                            <div className="w-12 h-12 bg-secondary rounded flex items-center justify-center">
                               <Star size={20} className="text-yellow-500" />
                             </div>
                             <div>
                               <h4 className="font-medium">{item.name}</h4>
-                              <p className="text-sm text-gray-400">
+                              <p className="text-sm text-muted-foreground">
                                 {item.type === "service" ? "Serviço" : "Curso"}
                               </p>
                             </div>
@@ -1091,18 +1097,18 @@ export default function PortalPage() {
                             <p className="font-bold">
                               R$ {item.price.toLocaleString("pt-BR")}
                             </p>
-                            <p className="text-xs text-gray-500">Qtd: {item.quantity}</p>
+                            <p className="text-xs text-muted-foreground">Qtd: {item.quantity}</p>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className="text-gray-400 italic">Carrinho vazio</p>
+                      <p className="text-muted-foreground italic">Carrinho vazio</p>
                     )}
                   </div>
                   {cartTotal > 0 && (
-                    <div className="mt-6 flex justify-end border-t border-gray-800 pt-4">
+                    <div className="mt-6 flex justify-end border-t border-border pt-4">
                       <div className="text-right">
-                        <p className="text-sm text-gray-400">Total Estimado</p>
+                        <p className="text-sm text-muted-foreground">Total Estimado</p>
                         <p className="text-2xl font-bold text-green-400">
                           R$ {cartTotal.toLocaleString("pt-BR")}
                         </p>
@@ -1114,7 +1120,7 @@ export default function PortalPage() {
                   )}
                 </Card>
 
-                <Card className="bg-white/5 border-white/10 p-6">
+                <Card className="bg-secondary border-border p-6">
                   <h2 className="text-xl font-semibold mb-4">Histórico de Pedidos</h2>
                   <div className="space-y-3">
                     {orders.length > 0 ? (
@@ -1123,11 +1129,11 @@ export default function PortalPage() {
                         return (
                           <div
                             key={order._id}
-                            className="border border-gray-800 rounded-lg overflow-hidden"
+                            className="border border-border rounded-lg overflow-hidden"
                           >
                             {/* Order Header - Clickable */}
                             <div
-                              className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors"
+                              className="flex items-center justify-between p-4 cursor-pointer hover:bg-secondary transition-colors"
                               onClick={() => setExpandedOrderId(isExpanded ? null : order._id)}
                             >
                               <div className="flex items-center gap-3">
@@ -1135,13 +1141,13 @@ export default function PortalPage() {
                                   "transition-transform duration-200",
                                   isExpanded && "rotate-90"
                                 )}>
-                                  <ChevronRight size={18} className="text-gray-400" />
+                                  <ChevronRight size={18} className="text-muted-foreground" />
                                 </div>
                                 <div>
                                   <p className="font-medium">
                                     Pedido #{order._id.substring(order._id.length - 6)}
                                   </p>
-                                  <p className="text-sm text-gray-400">
+                                  <p className="text-sm text-muted-foreground">
                                     {new Date(order.createdAt).toLocaleDateString("pt-BR")} • {order.items.length} {order.items.length === 1 ? 'item' : 'itens'}
                                   </p>
                                 </div>
@@ -1153,7 +1159,7 @@ export default function PortalPage() {
                                     order.status === "pending" && "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
                                     order.status === "processing" && "bg-blue-500/20 text-blue-400 border-blue-500/30",
                                     order.status === "completed" && "bg-green-500/20 text-green-400 border-green-500/30",
-                                    order.status === "shipped" && "bg-purple-500/20 text-purple-400 border-purple-500/30",
+                                    order.status === "shipped" && "bg-amber-500/20 text-amber-400 border-amber-500/30",
                                     order.status === "delivered" && "bg-green-500/20 text-green-400 border-green-500/30",
                                   )}
                                 >
@@ -1180,18 +1186,18 @@ export default function PortalPage() {
                                   transition={{ duration: 0.2 }}
                                   className="overflow-hidden"
                                 >
-                                  <div className="border-t border-gray-800 bg-black/30 p-4">
-                                    <p className="text-sm text-gray-400 mb-3">Itens do pedido:</p>
+                                  <div className="border-t border-border bg-secondary p-4">
+                                    <p className="text-sm text-muted-foreground mb-3">Itens do pedido:</p>
                                     <div className="space-y-3">
                                       {order.items.map((item, idx) => (
                                         <div 
                                           key={idx} 
-                                          className="flex items-center justify-between bg-white/5 rounded-lg p-3"
+                                          className="flex items-center justify-between bg-secondary rounded-lg p-3"
                                         >
                                           <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
                                               {item.type === "product" ? (
-                                                <Package size={18} className="text-purple-400" />
+                                                <Package size={18} className="text-amber-400" />
                                               ) : item.type === "course" ? (
                                                 <BookOpen size={18} className="text-blue-400" />
                                               ) : (
@@ -1200,7 +1206,7 @@ export default function PortalPage() {
                                             </div>
                                             <div>
                                               <p className="font-medium text-sm">{item.name}</p>
-                                              <p className="text-xs text-gray-400">
+                                              <p className="text-xs text-muted-foreground">
                                                 {item.type === "product" ? "Produto" : 
                                                  item.type === "course" ? "Curso" : "Serviço"} 
                                                 {item.quantity > 1 && ` × ${item.quantity}`}
@@ -1213,8 +1219,8 @@ export default function PortalPage() {
                                         </div>
                                       ))}
                                     </div>
-                                    <div className="mt-4 pt-3 border-t border-gray-800 flex justify-between items-center">
-                                      <span className="text-sm text-gray-400">Total do pedido</span>
+                                    <div className="mt-4 pt-3 border-t border-border flex justify-between items-center">
+                                      <span className="text-sm text-muted-foreground">Total do pedido</span>
                                       <span className="text-lg font-bold text-green-400">
                                         R$ {order.totalAmount.toLocaleString("pt-BR")}
                                       </span>
@@ -1227,7 +1233,7 @@ export default function PortalPage() {
                         );
                       })
                     ) : (
-                      <p className="text-gray-400 text-center py-4">Nenhum pedido encontrado</p>
+                      <p className="text-muted-foreground text-center py-4">Nenhum pedido encontrado</p>
                     )}
                   </div>
                 </Card>
@@ -1251,12 +1257,12 @@ export default function PortalPage() {
                         </div>
                         <div>
                           <h2 className="text-2xl font-bold">Loja de Recompensas</h2>
-                          <p className="text-gray-400">
+                          <p className="text-muted-foreground">
                             Troque seus pontos por prêmios exclusivos!
                           </p>
                         </div>
                         <div className="ml-auto text-right">
-                          <p className="text-sm text-gray-400">Seu saldo</p>
+                          <p className="text-sm text-muted-foreground">Seu saldo</p>
                           <p className="text-3xl font-bold text-yellow-400">
                             {stats.xp} <span className="text-lg">XP</span>
                           </p>
@@ -1273,7 +1279,7 @@ export default function PortalPage() {
                         { name: "Streak Freeze x3", xp: 500, icon: Flame },
                         { name: "Download Pack Templates", xp: 1000, icon: Download },
                       ].map((reward, idx) => (
-                        <Card key={idx} className="bg-white/5 border-white/10 p-6">
+                        <Card key={idx} className="bg-secondary border-border p-6">
                           <div className="w-14 h-14 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4">
                             <reward.icon size={28} className="text-yellow-400" />
                           </div>
@@ -1289,7 +1295,7 @@ export default function PortalPage() {
                               className={cn(
                                 stats.xp >= reward.xp
                                   ? "bg-yellow-500 hover:bg-yellow-600 text-black"
-                                  : "bg-gray-700"
+                                  : "bg-muted"
                               )}
                             >
                               {stats.xp >= reward.xp ? "Resgatar" : "Insuficiente"}
@@ -1301,7 +1307,7 @@ export default function PortalPage() {
                   </div>
                 ) : (
                   <div className="flex items-center justify-center min-h-[600px]">
-                    <Card className="bg-gray-900/50 border-gray-800 p-8 text-center max-w-md">
+                    <Card className="bg-card/50 border-border p-8 text-center max-w-md">
                       <div className="w-20 h-20 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
                         <Gift size={40} className="text-yellow-400" />
                       </div>
@@ -1310,7 +1316,7 @@ export default function PortalPage() {
                         <Crown size={12} className="mr-1" />
                         Recurso PRO
                       </Badge>
-                      <p className="text-gray-400 mb-6">
+                      <p className="text-muted-foreground mb-6">
                         Upgrade para Pro para acessar a loja de recompensas e trocar seu XP
                         por prêmios exclusivos!
                       </p>

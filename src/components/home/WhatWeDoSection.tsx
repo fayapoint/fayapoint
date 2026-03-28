@@ -30,7 +30,7 @@ const capabilities: Capability[] = [
   {
     id: "webProduct",
     icon: LayoutDashboard,
-    gradient: "from-fuchsia-500 via-purple-500 to-indigo-500",
+    gradient: "from-amber-500 via-amber-500 to-yellow-600",
     accent: "fuchsia",
   },
   {
@@ -61,7 +61,7 @@ const capabilityLinks: Record<Capability["id"], string> = {
 };
 
 const chips = [
-  { key: "web", tone: "from-fuchsia-500 to-purple-500" },
+  { key: "web", tone: "from-amber-500 to-amber-500" },
   { key: "automation", tone: "from-blue-500 to-cyan-400" },
   { key: "content", tone: "from-emerald-400 to-teal-500" },
   { key: "ai", tone: "from-amber-400 to-orange-500" },
@@ -75,11 +75,11 @@ function MetricCard({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
-      <p className="text-xs uppercase tracking-[0.25em] text-white/60">
+    <div className="rounded-2xl border border-border bg-secondary backdrop-blur-md p-4">
+      <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
         {title}
       </p>
-      <p className="text-2xl font-semibold text-white mt-2">{value}</p>
+      <p className="text-2xl font-semibold text-foreground mt-2">{value}</p>
     </div>
   );
 }
@@ -100,7 +100,7 @@ function CapabilityCard({
   return (
     <motion.div
       onMouseEnter={onHover}
-      className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden cursor-pointer"
+      className="relative rounded-3xl border border-border bg-secondary backdrop-blur-xl overflow-hidden cursor-pointer"
       whileHover={{ y: -6, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
     >
@@ -115,24 +115,24 @@ function CapabilityCard({
             <Icon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
               {t("stage.title")}
             </p>
-            <h3 className="text-xl font-semibold text-white">
+            <h3 className="text-xl font-semibold text-foreground">
               {t(`capabilities.${capability.id}.title`)}
             </h3>
           </div>
         </div>
-        <p className="text-sm text-white/70 leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {t(`capabilities.${capability.id}.description`)}
         </p>
         <div className="flex items-center justify-between pt-2">
-          <div className="text-xs text-white/60">
+          <div className="text-xs text-muted-foreground">
             {t(`capabilities.${capability.id}.metric`)}
           </div>
           <Link
             href={href}
-            className="text-sm font-semibold text-white flex items-center gap-2 hover:text-white/80 transition-colors"
+            className="text-sm font-semibold text-foreground flex items-center gap-2 hover:text-foreground/80 transition-colors"
           >
             {t(`capabilities.${capability.id}.cta`)}
             <ArrowRight className="w-4 h-4" />
@@ -176,25 +176,25 @@ export function WhatWeDoSection() {
         <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(240deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:120px_120px]" />
       </div>
 
-      <div className="container relative z-10 mx-auto grid items-center gap-10 px-4 lg:grid-cols-[1.05fr_1.15fr]">
+      <div className="container relative z-10 mx-auto grid items-start gap-10 px-4 lg:grid-cols-[1.05fr_1.15fr]">
         {/* Text Column */}
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4 text-amber-300" />
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white/80">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 backdrop-blur-sm">
+            <Sparkles className="h-4 w-4 text-amber-500 dark:text-amber-300" />
+            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-foreground/80">
               {t("badge")}
             </span>
           </div>
           <h2
             id="design-operating-system"
-            className="text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl"
+            className="text-4xl font-bold leading-tight text-foreground md:text-5xl lg:text-6xl"
           >
-            <span className="block text-white/90">{t("title")}</span>
+            <span className="block text-foreground/90">{t("title")}</span>
             <span className="block bg-gradient-to-r from-fuchsia-400 via-blue-400 to-emerald-300 bg-clip-text text-transparent">
               {t("stage.title")}
             </span>
           </h2>
-          <p className="max-w-2xl text-lg text-white/70">
+          <p className="max-w-2xl text-lg text-muted-foreground">
             {t("subtitle")}
           </p>
 
@@ -227,7 +227,7 @@ export function WhatWeDoSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className="h-12 px-6 text-base border-white/20 bg-white/5 text-white hover:bg-white/10"
+                className="h-12 px-6 text-base border-border bg-secondary text-foreground hover:bg-secondary/80"
               >
                 {t("ctaSecondary")}
               </Button>
@@ -238,7 +238,7 @@ export function WhatWeDoSection() {
         {/* Stage Column */}
         <div className="relative">
           <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-white/10 via-white/5 to-transparent blur-3xl" />
-          <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl shadow-black/30">
+          <div className="relative overflow-hidden rounded-[32px] border border-border bg-secondary backdrop-blur-2xl shadow-2xl shadow-black/30">
             <div className="absolute inset-0">
               <motion.div
                 className="absolute -left-10 top-4 h-24 w-24 rounded-full bg-fuchsia-500/20 blur-3xl"
@@ -253,19 +253,19 @@ export function WhatWeDoSection() {
             </div>
 
             <div className="relative grid gap-4 p-6 lg:grid-cols-2">
-              <div className="lg:col-span-2 flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white/80">
+              <div className="lg:col-span-2 flex items-center justify-between rounded-2xl border border-border bg-secondary/80 dark:bg-black/20 px-4 py-3">
                 <div className="flex items-center gap-3">
-                  <MonitorSmartphone className="h-5 w-5 text-emerald-300" />
+                  <MonitorSmartphone className="h-5 w-5 text-emerald-500 dark:text-emerald-300" />
                   <div>
-                    <p className="text-xs uppercase tracking-[0.25em] text-white/50">
+                    <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
                       {t("stage.subtitle")}
                     </p>
-                    <p className="text-sm font-semibold text-white">
+                    <p className="text-sm font-semibold text-foreground">
                       {t(`capabilities.${active}.title`)}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-white/60">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <div className="h-2 w-12 rounded-full bg-gradient-to-r from-fuchsia-400 via-blue-400 to-emerald-300" />
                   {t(`capabilities.${active}.metric`)}
                 </div>

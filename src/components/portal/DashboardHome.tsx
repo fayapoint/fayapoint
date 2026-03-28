@@ -280,7 +280,7 @@ export function DashboardHome({
     free: 'bg-green-500/20 text-green-400',
     beginner: 'bg-blue-500/20 text-blue-400',
     intermediate: 'bg-yellow-500/20 text-yellow-400',
-    advanced: 'bg-purple-500/20 text-purple-400'
+    advanced: 'bg-amber-500/20 text-amber-400'
   };
 
   return (
@@ -288,18 +288,18 @@ export function DashboardHome({
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-3 max-w-[1400px] mx-auto"
+      className="space-y-4 min-w-0 overflow-hidden"
     >
       {/* ── HERO STRIP — tight, informative ── */}
       <motion.div variants={itemVariants}>
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 via-purple-950/30 to-gray-900 border border-white/[0.06] px-4 py-3 md:px-5 md:py-3.5">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/[0.06] rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-card via-amber-950/30 to-card border border-border px-4 py-3 md:px-5 md:py-3.5">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/[0.06] rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
           <div className="relative flex items-center justify-between gap-3">
             {/* Left: greeting + streak */}
             <div className="min-w-0 flex items-center gap-3">
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-lg md:text-xl font-extrabold tracking-tight">
+                <div className="flex items-center gap-2 min-w-0">
+                  <h1 className="text-xl md:text-2xl font-extrabold tracking-tight truncate">
                     {greeting}, {firstName} 👋
                   </h1>
                   {stats.streak > 0 && (
@@ -309,7 +309,7 @@ export function DashboardHome({
                     </div>
                   )}
                 </div>
-                <p className="text-[11px] text-gray-500 mt-0.5">
+                <p className="text-xs md:text-sm text-muted-foreground mt-0.5">
                   {hasStartedCourses
                     ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} em andamento · Nível ${stats.level}`
                     : `Comece sua jornada em IA · Nível ${stats.level}`}
@@ -327,11 +327,11 @@ export function DashboardHome({
                     <defs><linearGradient id="lvlGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#a855f7" /><stop offset="100%" stopColor="#ec4899" /></linearGradient></defs>
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-sm font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-purple-400 to-pink-400">{stats.level}</span>
+                    <span className="text-sm font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-amber-400 to-yellow-500">{stats.level}</span>
                   </div>
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-xs font-bold"><span className="text-purple-400">{stats.xp}</span><span className="text-gray-600">/{stats.xpToNextLevel} XP</span></p>
+                  <p className="text-xs font-bold"><span className="text-amber-400">{stats.xp}</span><span className="text-muted-foreground/70">/{stats.xpToNextLevel} XP</span></p>
                 </div>
               </div>
               {!isPro && (
@@ -350,25 +350,25 @@ export function DashboardHome({
       <motion.div variants={itemVariants}>
         <div className="flex gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {[
-            { icon: Wand2, label: "Studio AI", tab: "studio", gradient: "from-purple-600 to-pink-500" },
+            { icon: Wand2, label: "Studio AI", tab: "studio", gradient: "from-amber-600 to-yellow-500" },
             { icon: BookOpen, label: "Cursos", tab: "courses", gradient: "from-emerald-600 to-teal-500", count: hasStartedCourses ? userCourses.length : undefined },
             { icon: Palette, label: "Loja POD", tab: "pod-store", gradient: "from-indigo-600 to-violet-500" },
             { icon: Target, label: "Desafios", tab: "challenges", gradient: "from-orange-600 to-amber-500", done: dailyChallenge?.completed },
             { icon: Bot, label: "Assistente", tab: "assistant", gradient: "from-cyan-600 to-blue-500", proOnly: true },
-            { icon: Store, label: "Loja", tab: "store", gradient: "from-blue-600 to-indigo-500" },
+            { icon: Store, label: "Loja", tab: "store", gradient: "from-blue-600 to-yellow-600" },
           ].map((a) => (
             <button
               key={a.tab}
               onClick={() => { if (a.proOnly && !isPro) return; onTabChange(a.tab); }}
               className={cn(
-                "shrink-0 flex items-center gap-2 rounded-full border border-white/[0.06] bg-gray-950 px-3 py-1.5 transition-all hover:border-white/[0.15] hover:bg-gray-900",
+                "shrink-0 flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 transition-all hover:border-border hover:bg-card",
                 a.proOnly && !isPro && "opacity-40 cursor-not-allowed"
               )}
             >
               <div className={cn("w-6 h-6 rounded-full bg-gradient-to-br flex items-center justify-center", a.gradient)}>
                 <a.icon size={12} className="text-white" />
               </div>
-              <span className="text-xs font-semibold text-gray-300 whitespace-nowrap">{a.label}</span>
+              <span className="text-sm font-semibold text-muted-foreground whitespace-nowrap">{a.label}</span>
               {a.count && <Badge className="bg-emerald-500/20 text-emerald-400 border-0 text-[9px] h-4 px-1.5">{a.count}</Badge>}
               {a.done && <Badge className="bg-green-500/20 text-green-400 border-0 text-[9px] h-4 px-1">✓</Badge>}
               {a.proOnly && !isPro && <Lock size={10} className="text-yellow-400 ml-0.5" />}
@@ -380,30 +380,30 @@ export function DashboardHome({
       {/* ═══════════════════════════════════════════════════ */}
       {/*  MAIN GRID — globo.com dense 3-column layout       */}
       {/* ═══════════════════════════════════════════════════ */}
-      <div className="grid lg:grid-cols-3 gap-3">
-        {/* ── COL 1: Studio AI (compact) + Store ── */}
-        <div className="space-y-3">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 min-w-0">
+        {/* ── COL 1: Studio AI + Store — on mobile, appears second ── */}
+        <div className="space-y-4 order-2 md:order-1 min-w-0">
           {/* Studio AI — compact horizontal card */}
           <motion.div variants={itemVariants}>
             <Card
-              className="relative overflow-hidden border-purple-500/20 bg-gray-950 p-0 cursor-pointer group hover:border-purple-500/40 transition-all"
+              className="relative overflow-hidden border-amber-500/20 bg-card p-0 cursor-pointer group hover:border-amber-500/40 transition-all"
               onClick={() => onTabChange("studio")}
             >
               <div className="flex">
                 {/* Small thumbnail */}
-                <div className="relative w-28 md:w-32 shrink-0 bg-gradient-to-br from-purple-950 to-gray-900 overflow-hidden">
+                <div className="relative w-20 sm:w-28 md:w-32 shrink-0 bg-gradient-to-br from-amber-950 to-card overflow-hidden">
                   {galleryImage ? (
                     <>
                       <img src={galleryImage.imageUrl} alt="" className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-950/60" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/60" />
                     </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center min-h-[100px]">
-                      <Sparkles size={24} className="text-purple-500/40" />
+                      <Sparkles size={24} className="text-amber-500/40" />
                     </div>
                   )}
                   <div className="absolute top-2 left-2">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg">
                       <Sparkles size={13} className="text-white" />
                     </div>
                   </div>
@@ -412,23 +412,23 @@ export function DashboardHome({
                 <div className="flex-1 p-3 flex flex-col justify-between min-h-[100px]">
                   <div>
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-bold text-white">Studio AI</h3>
+                      <h3 className="text-base font-bold text-white">Studio AI</h3>
                       {!hasCreatedImages && (
                         <Badge className="bg-green-500/90 text-white border-0 text-[8px] font-bold px-1.5 animate-pulse">NOVO</Badge>
                       )}
                     </div>
-                    <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">
                       {hasCreatedImages
                         ? `${stats.imagesGenerated} imagens criadas. Gemini, Flux e mais modelos.`
                         : "Transforme ideias em imagens com IA. Fotorealista, Anime, 3D e mais."}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mt-2">
-                    <Button size="sm" className="bg-gradient-to-r from-purple-600 to-pink-600 gap-1 font-bold h-7 text-xs px-3">
+                    <Button size="sm" className="bg-gradient-to-r from-amber-600 to-yellow-700 gap-1 font-bold h-7 text-xs px-3">
                       <Wand2 size={12} />
                       {hasCreatedImages ? "Criar" : "Começar"}
                     </Button>
-                    <ChevronRight size={14} className="text-gray-700 group-hover:text-purple-400 transition" />
+                    <ChevronRight size={14} className="text-muted-foreground group-hover:text-amber-400 transition" />
                   </div>
                 </div>
               </div>
@@ -441,8 +441,8 @@ export function DashboardHome({
               className={cn(
                 "relative overflow-hidden p-3.5 cursor-pointer group hover:scale-[1.01] transition-all",
                 dailyChallenge?.completed
-                  ? "border-green-500/20 bg-gray-950"
-                  : "border-orange-500/15 bg-gray-950"
+                  ? "border-green-500/20 bg-card"
+                  : "border-orange-500/15 bg-card"
               )}
               onClick={() => onTabChange("challenges")}
             >
@@ -452,15 +452,15 @@ export function DashboardHome({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="text-xs font-bold">Desafio Diário</h4>
+                    <h4 className="text-sm font-bold">Desafio Diário</h4>
                     <span className="text-[9px] font-bold text-yellow-400 flex items-center gap-0.5"><Zap size={9} />+{dailyChallenge?.reward || 50} XP</span>
                   </div>
-                  <p className="text-[10px] text-gray-500 truncate">{dailyChallenge?.description || "Complete uma lição hoje"}</p>
+                  <p className="text-xs text-muted-foreground truncate">{dailyChallenge?.description || "Complete uma lição hoje"}</p>
                 </div>
                 {dailyChallenge?.completed ? (
                   <Badge className="bg-green-500/15 text-green-400 border-green-500/30 text-[9px] shrink-0">✓</Badge>
                 ) : (
-                  <ChevronRight size={14} className="text-gray-700 shrink-0" />
+                  <ChevronRight size={14} className="text-muted-foreground shrink-0" />
                 )}
               </div>
             </Card>
@@ -468,30 +468,30 @@ export function DashboardHome({
 
           {/* Streak + Level — compact */}
           <motion.div variants={itemVariants}>
-            <Card className="border-white/[0.04] bg-gray-950 p-3.5">
+            <Card className="border-border bg-card p-3.5">
               <div className="flex items-center gap-2.5 mb-2.5">
                 <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
                   <Flame size={15} className="text-orange-400" fill="currentColor" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-xs font-bold">Streak · {stats.streak} dias</h4>
-                  <p className="text-[10px] text-gray-600">{stats.streak >= 7 ? `Recorde: ${stats.longestStreak}` : "Continue aprendendo!"}</p>
+                  <h4 className="text-sm font-bold">Streak · {stats.streak} dias</h4>
+                  <p className="text-xs text-muted-foreground/70">{stats.streak >= 7 ? `Recorde: ${stats.longestStreak}` : "Continue aprendendo!"}</p>
                 </div>
               </div>
               <div className="flex gap-1 mb-2.5">
                 {Array.from({ length: 7 }).map((_, i) => {
                   const cal = streakCalendar[i];
                   return (
-                    <div key={i} className={cn("w-4 h-4 rounded flex items-center justify-center", cal?.active ? "bg-orange-500 shadow-sm shadow-orange-500/40" : "bg-gray-800/80")}>
+                    <div key={i} className={cn("w-4 h-4 rounded flex items-center justify-center", cal?.active ? "bg-orange-500 shadow-sm shadow-orange-500/40" : "bg-secondary/80")}>
                       {cal?.active && <Flame size={8} className="text-white" />}
                     </div>
                   );
                 })}
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-purple-400">Nv {stats.level}</span>
-                <div className="flex-1"><Progress value={stats.levelProgress} className="h-1 bg-gray-800" /></div>
-                <span className="text-[10px] text-gray-600 tabular-nums">{stats.xp} XP</span>
+                <span className="text-[10px] font-bold text-amber-400">Nv {stats.level}</span>
+                <div className="flex-1"><Progress value={stats.levelProgress} className="h-1 bg-secondary" /></div>
+                <span className="text-[10px] text-muted-foreground/70 tabular-nums">{stats.xp} XP</span>
               </div>
             </Card>
           </motion.div>
@@ -502,37 +502,37 @@ export function DashboardHome({
               {[
                 { icon: Palette, label: "Loja POD", tab: "pod-store", color: "text-indigo-400", bg: "bg-indigo-500/10", badge: "NOVO" },
                 { icon: Award, label: "Certificados", tab: "certificates", color: "text-teal-400", bg: "bg-teal-500/10" },
-                { icon: Star, label: "Conquistas", tab: "achievements", color: "text-pink-400", bg: "bg-pink-500/10", count: `${gamification?.totalAchievements || 0}/${gamification?.achievements?.length || 0}` },
+                { icon: Star, label: "Conquistas", tab: "achievements", color: "text-yellow-400", bg: "bg-yellow-500/10", count: `${gamification?.totalAchievements || 0}/${gamification?.achievements?.length || 0}` },
               ].map((item) => (
                 <button
                   key={item.tab}
                   onClick={() => onTabChange(item.tab)}
-                  className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl bg-gray-950 border border-white/[0.04] hover:border-white/[0.1] transition-all group"
+                  className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl bg-card border border-border hover:border-border transition-all group"
                 >
                   <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", item.bg)}>
                     <item.icon size={14} className={item.color} />
                   </div>
-                  <span className="text-[10px] text-gray-500 group-hover:text-white transition-colors font-medium">{item.label}</span>
-                  {item.badge && <Badge className="bg-indigo-500/10 text-indigo-400 border-0 text-[8px] h-3.5 px-1">{item.badge}</Badge>}
-                  {item.count && <span className="text-[9px] text-gray-600">{item.count}</span>}
+                  <span className="text-xs text-muted-foreground group-hover:text-white transition-colors font-medium">{item.label}</span>
+                  {item.badge && <Badge className="bg-indigo-500/10 text-indigo-400 border-0 text-[9px] h-4 px-1.5">{item.badge}</Badge>}
+                  {item.count && <span className="text-[10px] text-muted-foreground/70">{item.count}</span>}
                 </button>
               ))}
             </div>
           </motion.div>
         </div>
 
-        {/* ── COL 2: Sua Jornada — ALL courses + suggestions ── */}
-        <div className="space-y-3">
+        {/* ── COL 2: Sua Jornada — appears FIRST on mobile ── */}
+        <div className="space-y-4 order-1 md:order-2 min-w-0">
           <motion.div variants={itemVariants}>
-            <Card className="border-emerald-500/15 bg-gray-950 p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+            <Card className="border-emerald-500/15 bg-card p-4 min-w-0 overflow-hidden">
+              <div className="flex items-center justify-between mb-3 min-w-0">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shrink-0">
                     <BookOpen size={15} className="text-white" />
                   </div>
-                  <div>
-                    <h3 className="text-sm font-bold">Sua Jornada</h3>
-                    <p className="text-[10px] text-gray-500">{hasStartedCourses ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} na sua jornada` : "Comece a aprender"}</p>
+                  <div className="min-w-0">
+                    <h3 className="text-base font-bold truncate">Sua Jornada</h3>
+                    <p className="text-xs text-muted-foreground truncate">{hasStartedCourses ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} na sua jornada` : "Comece a aprender"}</p>
                   </div>
                 </div>
                 <button onClick={() => onTabChange("courses")} className="text-[10px] text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-0.5">
@@ -545,25 +545,25 @@ export function DashboardHome({
                 <div className="space-y-2">
                   {userCourses.map((course) => (
                     <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
-                      <div className="bg-black/40 rounded-lg p-3 border border-white/[0.04] hover:border-emerald-500/30 transition-all cursor-pointer group/course">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <h4 className="text-xs font-semibold text-gray-200 truncate flex-1 group-hover/course:text-emerald-400 transition-colors">
+                      <div className="bg-secondary rounded-lg p-3 border border-border hover:border-emerald-500/30 transition-all cursor-pointer group/course overflow-hidden">
+                        <div className="flex items-center justify-between mb-1.5 gap-2 min-w-0">
+                          <h4 className="text-sm font-semibold text-foreground truncate min-w-0 flex-1 group-hover/course:text-emerald-400 transition-colors">
                             {course.details?.title || course.courseId}
                           </h4>
                           <span className={cn(
-                            "text-xs font-extrabold ml-2 tabular-nums",
+                            "text-sm font-extrabold ml-2 tabular-nums",
                             course.progressPercent === 100 ? "text-green-400" : "text-emerald-400"
                           )}>
                             {course.progressPercent}%
                           </span>
                         </div>
-                        <Progress value={course.progressPercent} className="h-1 bg-gray-800" />
+                        <Progress value={course.progressPercent} className="h-1 bg-secondary" />
                         <div className="flex items-center justify-between mt-1.5">
-                          <p className="text-[10px] text-gray-600 flex items-center gap-1">
-                            {course.details?.tool && <span className="text-gray-500">{course.details.tool}</span>}
+                          <p className="text-xs text-muted-foreground/70 flex items-center gap-1">
+                            {course.details?.tool && <span className="text-muted-foreground">{course.details.tool}</span>}
                           </p>
-                          <p className="text-[10px] text-emerald-400/70 flex items-center gap-0.5">
-                            <PlayCircle size={9} /> {course.progressPercent > 0 ? "Continuar" : "Começar"}
+                          <p className="text-xs text-emerald-400/70 flex items-center gap-0.5">
+                            <PlayCircle size={10} /> {course.progressPercent > 0 ? "Continuar" : "Começar"}
                           </p>
                         </div>
                       </div>
@@ -572,8 +572,8 @@ export function DashboardHome({
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <BookOpen size={24} className="text-gray-700 mx-auto mb-2" />
-                  <p className="text-xs text-gray-500 mb-2">Nenhum curso iniciado</p>
+                  <BookOpen size={24} className="text-muted-foreground mx-auto mb-2" />
+                  <p className="text-xs text-muted-foreground mb-2">Nenhum curso iniciado</p>
                   <Button size="sm" onClick={() => onTabChange("courses")} className="bg-emerald-600 hover:bg-emerald-500 gap-1 text-xs h-7">
                     <Rocket size={12} /> Explorar Cursos
                   </Button>
@@ -584,15 +584,15 @@ export function DashboardHome({
 
           {freeCourseOfMonth && (
             <motion.div variants={itemVariants}>
-              <Card className="border-emerald-500/15 bg-gray-950 p-4">
+              <Card className="border-emerald-500/15 bg-card p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
                       <Gift size={15} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold">Oferta do Mês</h3>
-                      <p className="text-[10px] text-gray-500">Curso completo por US$1 ({formattedBrl})</p>
+                      <h3 className="text-base font-bold">Oferta do Mês</h3>
+                      <p className="text-xs text-muted-foreground">Curso completo por US$1 ({formattedBrl})</p>
                     </div>
                   </div>
                   <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[9px]">
@@ -602,16 +602,16 @@ export function DashboardHome({
 
                 <button
                   onClick={() => onTabChange("courses")}
-                  className="w-full text-left rounded-xl border border-white/[0.05] bg-black/30 p-3 hover:border-emerald-500/30 transition-all"
+                  className="w-full text-left rounded-xl border border-border bg-secondary p-3 hover:border-emerald-500/30 transition-all"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <h4 className="text-sm font-semibold text-white truncate">{freeCourseOfMonth.title}</h4>
-                      <p className="mt-1 text-[11px] text-gray-500 line-clamp-2">{freeCourseOfMonth.shortDescription}</p>
+                      <p className="mt-1 text-[11px] text-muted-foreground line-clamp-2">{freeCourseOfMonth.shortDescription}</p>
                     </div>
                     <span className="text-[10px] font-bold text-emerald-300 shrink-0">US$ 1</span>
                   </div>
-                  <div className="mt-3 flex items-center justify-between text-[10px] text-gray-500">
+                  <div className="mt-3 flex items-center justify-between text-[10px] text-muted-foreground">
                     <span>{freeCourseOfMonth.duration}</span>
                     <span>{freeCourseOfMonth.totalLessons} aulas</span>
                   </div>
@@ -623,15 +623,15 @@ export function DashboardHome({
           {/* ── COURSE SUGGESTIONS (tier-based) ── */}
           {suggestedCourses.length > 0 && (
             <motion.div variants={itemVariants}>
-              <Card className="border-purple-500/10 bg-gray-950 p-4">
+              <Card className="border-amber-500/10 bg-card p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center">
                       <Sparkles size={15} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold">Catálogo do seu plano neste mês</h3>
-                      <p className="text-[10px] text-gray-500">O que já está incluído agora no plano {tierConfig.displayName}</p>
+                      <h3 className="text-base font-bold">Catálogo do seu plano neste mês</h3>
+                      <p className="text-xs text-muted-foreground">O que já está incluído agora no plano {tierConfig.displayName}</p>
                     </div>
                   </div>
                 </div>
@@ -640,23 +640,23 @@ export function DashboardHome({
                     <button
                       key={course.slug}
                       onClick={() => onTabChange("courses")}
-                      className="w-full text-left bg-black/30 rounded-lg p-2.5 border border-white/[0.04] hover:border-purple-500/30 transition-all group/sug"
+                      className="w-full text-left bg-secondary rounded-lg p-2.5 border border-border hover:border-amber-500/30 transition-all group/sug"
                     >
                       <div className="flex items-start gap-2">
-                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center shrink-0 border border-white/[0.05]">
-                          <BookOpen size={14} className="text-gray-500 group-hover/sug:text-purple-400 transition-colors" />
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-secondary to-card flex items-center justify-center shrink-0 border border-border">
+                          <BookOpen size={14} className="text-muted-foreground group-hover/sug:text-amber-400 transition-colors" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <h4 className="text-[11px] font-semibold text-gray-300 truncate group-hover/sug:text-white transition-colors">{course.title}</h4>
+                            <h4 className="text-sm font-semibold text-muted-foreground truncate group-hover/sug:text-white transition-colors">{course.title}</h4>
                             <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", levelColors[course.normalizedLevel])}>
                               {levelLabels[course.normalizedLevel]}
                             </Badge>
                           </div>
-                          <p className="text-[10px] text-gray-600 truncate mt-0.5">{course.shortDescription}</p>
+                          <p className="text-xs text-muted-foreground/70 truncate mt-0.5">{course.shortDescription}</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-[9px] text-gray-600 flex items-center gap-0.5"><Clock size={8} />{course.duration}</span>
-                            <span className="text-[9px] text-gray-600 flex items-center gap-0.5"><BarChart2 size={8} />{course.totalLessons} aulas</span>
+                            <span className="text-[10px] text-muted-foreground/70 flex items-center gap-0.5"><Clock size={9} />{course.duration}</span>
+                            <span className="text-[10px] text-muted-foreground/70 flex items-center gap-0.5"><BarChart2 size={9} />{course.totalLessons} aulas</span>
                           </div>
                         </div>
                       </div>
@@ -670,16 +670,16 @@ export function DashboardHome({
           {/* Locked courses — upsell */}
           {lockedCourses.length > 0 && !isPro && (
             <motion.div variants={itemVariants}>
-              <Card className="border-yellow-500/10 bg-gray-950 p-3.5">
+              <Card className="border-yellow-500/10 bg-card p-3.5">
                 <div className="flex items-center gap-2 mb-2">
                   <Lock size={13} className="text-yellow-400" />
-                  <h4 className="text-xs font-bold text-gray-400">Exigem upgrade neste mês</h4>
+                  <h4 className="text-xs font-bold text-muted-foreground">Exigem upgrade neste mês</h4>
                 </div>
                 <div className="space-y-1.5">
                   {lockedCourses.map((course) => (
-                    <div key={course.slug} className="flex items-center gap-2 p-2 rounded-lg bg-black/30 opacity-60">
-                      <Lock size={10} className="text-gray-600 shrink-0" />
-                      <span className="text-[10px] text-gray-500 truncate flex-1">{course.title}</span>
+                    <div key={course.slug} className="flex items-center gap-2 p-2 rounded-lg bg-secondary opacity-60">
+                      <Lock size={10} className="text-muted-foreground/70 shrink-0" />
+                      <span className="text-[10px] text-muted-foreground truncate flex-1">{course.title}</span>
                       <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", levelColors[course.normalizedLevel])}>
                         {levelLabels[course.normalizedLevel]}
                       </Badge>
@@ -696,12 +696,12 @@ export function DashboardHome({
           )}
         </div>
 
-        {/* ── COL 3: Ranking + Assistant + Rewards + Store ── */}
-        <div className="space-y-3">
+        {/* ── COL 3: Ranking + Assistant + Rewards + Store — last on mobile ── */}
+        <div className="space-y-4 order-3 min-w-0">
           {/* Ranking — compact */}
           <motion.div variants={itemVariants}>
             <Card
-              className="border-yellow-500/10 bg-gray-950 p-3.5 cursor-pointer group hover:border-yellow-500/25 transition-all"
+              className="border-yellow-500/10 bg-card p-3.5 cursor-pointer group hover:border-yellow-500/25 transition-all"
               onClick={() => onTabChange("leaderboard")}
             >
               <div className="flex items-center justify-between mb-2.5">
@@ -710,22 +710,22 @@ export function DashboardHome({
                     <Trophy size={15} className="text-white" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold">Ranking</h4>
-                    <p className="text-[10px] text-gray-500">#{leaderboard?.userRank || "-"} posição</p>
+                    <h4 className="text-sm font-bold">Ranking</h4>
+                    <p className="text-xs text-muted-foreground">#{leaderboard?.userRank || "-"} posição</p>
                   </div>
                 </div>
-                <ChevronRight size={14} className="text-gray-700 group-hover:text-yellow-400 transition" />
+                <ChevronRight size={14} className="text-muted-foreground group-hover:text-yellow-400 transition" />
               </div>
               <div className="space-y-1">
                 {leaderboard?.users?.slice(0, 3).map((u, idx) => (
                   <div key={u.id || idx} className="flex items-center gap-1.5">
                     <span className={cn("w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold shrink-0",
-                      idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-gray-400 text-black" : "bg-amber-700 text-white"
+                      idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-amber-200 text-black" : "bg-amber-700 text-white"
                     )}>{idx + 1}</span>
-                    <span className="text-[10px] text-gray-400 truncate flex-1">
-                      {u.name}{u.isCurrentUser && <span className="text-purple-400 ml-1">(você)</span>}
+                    <span className="text-[10px] text-muted-foreground truncate flex-1">
+                      {u.name}{u.isCurrentUser && <span className="text-amber-400 ml-1">(você)</span>}
                     </span>
-                    <span className="text-[9px] text-gray-600 tabular-nums">{u.weeklyXp} XP</span>
+                    <span className="text-[9px] text-muted-foreground/70 tabular-nums">{u.weeklyXp} XP</span>
                   </div>
                 ))}
               </div>
@@ -735,7 +735,7 @@ export function DashboardHome({
           {/* AI Assistant — compact */}
           <motion.div variants={itemVariants}>
             <Card
-              className={cn("border-cyan-500/15 bg-gray-950 p-3.5 cursor-pointer group hover:border-cyan-500/30 transition-all", !isPro && "opacity-60")}
+              className={cn("border-cyan-500/15 bg-card p-3.5 cursor-pointer group hover:border-cyan-500/30 transition-all", !isPro && "opacity-60")}
               onClick={() => isPro && onTabChange("assistant")}
             >
               <div className="flex items-center gap-2.5">
@@ -744,14 +744,14 @@ export function DashboardHome({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs font-bold">Assistente IA</h4>
+                    <h4 className="text-sm font-bold">Assistente IA</h4>
                     {!isPro && <Badge className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-[8px] gap-0.5"><Crown size={8} /> PRO</Badge>}
                   </div>
-                  <p className="text-[10px] text-gray-500 truncate">
+                  <p className="text-xs text-muted-foreground truncate">
                     {isPro ? (hasUsedAssistant ? `${stats.aiChats} conversas` : "Tire dúvidas com seu tutor IA") : "Desbloqueie com plano Pro"}
                   </p>
                 </div>
-                <ChevronRight size={14} className="text-gray-700 group-hover:text-cyan-400 transition shrink-0" />
+                <ChevronRight size={14} className="text-muted-foreground group-hover:text-cyan-400 transition shrink-0" />
               </div>
             </Card>
           </motion.div>
@@ -759,7 +759,7 @@ export function DashboardHome({
           {/* Rewards — compact */}
           <motion.div variants={itemVariants}>
             <Card
-              className={cn("border-amber-500/10 bg-gray-950 p-3.5 cursor-pointer group hover:border-amber-500/25 transition-all", !isPro && "opacity-60")}
+              className={cn("border-amber-500/10 bg-card p-3.5 cursor-pointer group hover:border-amber-500/25 transition-all", !isPro && "opacity-60")}
               onClick={() => onTabChange("rewards")}
             >
               <div className="flex items-center gap-2.5">
@@ -767,17 +767,17 @@ export function DashboardHome({
                   <Gift size={15} className="text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-xs font-bold">Recompensas</h4>
+                  <h4 className="text-sm font-bold">Recompensas</h4>
                   <div className="flex items-center gap-1">
                     <Zap size={10} className="text-yellow-400" />
                     <span className="text-xs font-bold text-yellow-400">{stats.xp} XP</span>
-                    <span className="text-[9px] text-gray-600">disponíveis</span>
+                    <span className="text-[9px] text-muted-foreground/70">disponíveis</span>
                   </div>
                 </div>
                 {!isPro ? (
                   <Badge className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-[8px] gap-0.5 shrink-0"><Crown size={8} /> PRO</Badge>
                 ) : (
-                  <ChevronRight size={14} className="text-gray-700 group-hover:text-amber-400 transition shrink-0" />
+                  <ChevronRight size={14} className="text-muted-foreground group-hover:text-amber-400 transition shrink-0" />
                 )}
               </div>
             </Card>
@@ -785,13 +785,13 @@ export function DashboardHome({
 
           {/* Store — compact product row */}
           <motion.div variants={itemVariants}>
-            <Card className="border-blue-500/10 bg-gray-950 p-3.5">
+            <Card className="border-blue-500/10 bg-card p-3.5">
               <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                     <ShoppingBag size={15} className="text-white" />
                   </div>
-                  <h4 className="text-xs font-bold">Loja</h4>
+                  <h4 className="text-sm font-bold">Loja</h4>
                 </div>
                 <button onClick={() => onTabChange("store")} className="text-[10px] text-blue-400 hover:text-blue-300 font-medium flex items-center gap-0.5">
                   Ver tudo <ChevronRight size={12} />
@@ -803,27 +803,27 @@ export function DashboardHome({
                     <div
                       key={product._id}
                       onClick={() => onTabChange("store")}
-                      className="shrink-0 w-[110px] rounded-lg bg-gray-900/80 border border-white/[0.05] overflow-hidden cursor-pointer group/prod hover:border-blue-500/30 transition-all"
+                      className="shrink-0 w-[110px] rounded-lg bg-card/80 border border-border overflow-hidden cursor-pointer group/prod hover:border-blue-500/30 transition-all"
                     >
-                      <div className="relative w-full aspect-square bg-gray-800/50 overflow-hidden">
+                      <div className="relative w-full aspect-square bg-secondary/50 overflow-hidden">
                         {product.thumbnail ? (
                           <img src={product.thumbnail} alt={product.name} className="w-full h-full object-cover group-hover/prod:scale-110 transition-transform duration-500" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center"><ShoppingBag size={20} className="text-gray-700" /></div>
+                          <div className="w-full h-full flex items-center justify-center"><ShoppingBag size={20} className="text-muted-foreground" /></div>
                         )}
                         {product.discount > 0 && (
                           <Badge className="absolute top-1 left-1 bg-red-500 text-white border-0 text-[8px] font-bold px-1 py-0 h-4">-{product.discount}%</Badge>
                         )}
                       </div>
                       <div className="p-2">
-                        <h5 className="text-[10px] font-medium text-gray-300 line-clamp-1">{product.name}</h5>
+                        <h5 className="text-[10px] font-medium text-muted-foreground line-clamp-1">{product.name}</h5>
                         <span className="text-[11px] font-bold text-blue-400">{formatPrice(product.price)}</span>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-[10px] text-gray-600 text-center py-3">Produtos em breve!</p>
+                <p className="text-[10px] text-muted-foreground/70 text-center py-3">Produtos em breve!</p>
               )}
             </Card>
           </motion.div>
@@ -833,17 +833,17 @@ export function DashboardHome({
             <div className="grid grid-cols-2 gap-2">
               {[
                 { icon: Download, label: "Recursos", tab: "resources", color: "text-green-400", bg: "bg-green-500/10" },
-                { icon: Users, label: "Meu Perfil", tab: "profile", color: "text-pink-400", bg: "bg-pink-500/10" },
+                { icon: Users, label: "Meu Perfil", tab: "profile", color: "text-yellow-400", bg: "bg-yellow-500/10" },
               ].map((item) => (
                 <button
                   key={item.tab}
                   onClick={() => onTabChange(item.tab)}
-                  className="flex items-center gap-2 p-2 rounded-lg bg-gray-950 border border-white/[0.04] hover:border-white/[0.1] transition-all group"
+                  className="flex items-center gap-2 p-2 rounded-lg bg-card border border-border hover:border-border transition-all group"
                 >
                   <div className={cn("w-6 h-6 rounded-md flex items-center justify-center shrink-0", item.bg)}>
                     <item.icon size={11} className={item.color} />
                   </div>
-                  <span className="text-[10px] text-gray-500 group-hover:text-white transition-colors font-medium">{item.label}</span>
+                  <span className="text-xs text-muted-foreground group-hover:text-white transition-colors font-medium">{item.label}</span>
                 </button>
               ))}
             </div>
@@ -854,7 +854,7 @@ export function DashboardHome({
       {/* ── UPGRADE CTA — compact, only for free users ── */}
       {!isPro && (
         <motion.div variants={itemVariants}>
-          <Card className="relative overflow-hidden border-purple-500/20 bg-gradient-to-r from-purple-950/60 via-gray-900 to-pink-950/60 p-4">
+          <Card className="relative overflow-hidden border-amber-500/20 bg-gradient-to-r from-amber-950/60 via-card to-amber-950/60 p-4">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.1),transparent_70%)] pointer-events-none" />
             <div className="relative flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -863,7 +863,7 @@ export function DashboardHome({
                 </div>
                 <div>
                   <h3 className="font-bold text-sm">Desbloqueie Todo o Potencial</h3>
-                  <p className="text-[11px] text-gray-400">AI Assistant, modelos premium, cursos avançados e mais.</p>
+                  <p className="text-[11px] text-muted-foreground">AI Assistant, modelos premium, cursos avançados e mais.</p>
                 </div>
               </div>
               <Link href="/precos">

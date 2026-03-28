@@ -16,11 +16,11 @@ import dynamic from "next/dynamic";
 // Lazy load components
 const DesignEditor = dynamic(() => import("./DesignEditor"), { 
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-purple-500" size={32} /></div>
+  loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-amber-500" size={32} /></div>
 });
 const PODDesignEditor = dynamic(() => import("./PODDesignEditor"), { 
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-purple-500" size={32} /></div>
+  loading: () => <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-amber-500" size={32} /></div>
 });
 const ProdigiStorePanel = dynamic(() => import("./ProdigiStorePanel"), {
   ssr: false,
@@ -119,15 +119,24 @@ function detectProductType(title: string): string {
   return 'default';
 }
 
-// Enhanced Mockup Preview Component
-function MockupPreview({ 
-  productImage, 
-  designImage, 
+/**
+ * Enhanced Mockup Preview — realistic fabric simulation.
+ *
+ * Layers (bottom-to-top):
+ * 1. Product photo (base)
+ * 2. Design drawn with `multiply` blend (ink-on-fabric look)
+ * 3. Fabric shadow map extracted from the product's print area luminosity
+ *    drawn on top with `multiply` to simulate wrinkles/folds
+ * 4. Subtle highlight pass with `soft-light` for depth
+ */
+function MockupPreview({
+  productImage,
+  designImage,
   productTitle = '',
-  className 
-}: { 
-  productImage: string; 
-  designImage: string | null; 
+  className
+}: {
+  productImage: string;
+  designImage: string | null;
   productTitle?: string;
   className?: string;
 }) {
@@ -136,84 +145,130 @@ function MockupPreview({
 
   useEffect(() => {
     if (!canvasRef.current || !productImage) return;
-    
+
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
     setIsLoading(true);
 
     const productImg = new Image();
     productImg.crossOrigin = 'anonymous';
-    
+
     productImg.onload = () => {
-      // Determine canvas size based on image aspect ratio
+      const RES = 600; // Higher resolution for quality
       const aspectRatio = productImg.width / productImg.height;
-      let canvasWidth = 400;
-      let canvasHeight = 400;
-      
-      if (aspectRatio > 1) {
-        canvasHeight = 400 / aspectRatio;
-      } else if (aspectRatio < 1) {
-        canvasWidth = 400 * aspectRatio;
-      }
-      
+      const canvasWidth = aspectRatio >= 1 ? RES : Math.round(RES * aspectRatio);
+      const canvasHeight = aspectRatio >= 1 ? Math.round(RES / aspectRatio) : RES;
+
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
-      
-      // Draw product image to fill canvas
+
+      // Layer 1: Draw product base
       ctx.drawImage(productImg, 0, 0, canvasWidth, canvasHeight);
-      
+
       if (designImage) {
         const designImg = new Image();
         designImg.crossOrigin = 'anonymous';
-        
+
         designImg.onload = () => {
-          // Get print area based on product type
           const productType = detectProductType(productTitle);
           const printArea = PRINT_AREAS[productType] || PRINT_AREAS.default;
-          
-          // Calculate actual pixel positions from percentages
+          const isApparel = printArea.blend === 'multiply';
+
           const printX = (printArea.x / 100) * canvasWidth;
           const printY = (printArea.y / 100) * canvasHeight;
-          const printWidth = (printArea.width / 100) * canvasWidth;
-          const printHeight = (printArea.height / 100) * canvasHeight;
-          
-          // Calculate design dimensions maintaining aspect ratio
-          const designAspect = designImg.width / designImg.height;
-          const printAspect = printWidth / printHeight;
-          
-          let drawWidth: number;
-          let drawHeight: number;
-          
-          if (designAspect > printAspect) {
-            // Design is wider than print area
-            drawWidth = printWidth;
-            drawHeight = printWidth / designAspect;
+          const printW = (printArea.width / 100) * canvasWidth;
+          const printH = (printArea.height / 100) * canvasHeight;
+
+          // Fit design within print area maintaining ratio
+          const dAspect = designImg.width / designImg.height;
+          const pAspect = printW / printH;
+          let drawW: number, drawH: number;
+          if (dAspect > pAspect) {
+            drawW = printW;
+            drawH = printW / dAspect;
           } else {
-            // Design is taller than print area
-            drawHeight = printHeight;
-            drawWidth = printHeight * designAspect;
+            drawH = printH;
+            drawW = printH * dAspect;
           }
-          
-          // Center the design within the print area
-          const drawX = printX + (printWidth - drawWidth) / 2;
-          const drawY = printY + (printHeight - drawHeight) / 2;
-          
-          // Apply blend mode based on product type
-          ctx.globalCompositeOperation = printArea.blend as GlobalCompositeOperation;
-          ctx.drawImage(designImg, drawX, drawY, drawWidth, drawHeight);
-          
-          // Reset and add subtle shadow for depth on non-frame products
-          ctx.globalCompositeOperation = 'source-over';
-          if (printArea.blend === 'multiply') {
-            ctx.fillStyle = 'rgba(0,0,0,0.03)';
-            ctx.fillRect(drawX, drawY, drawWidth, drawHeight);
+          const drawX = printX + (printW - drawW) / 2;
+          const drawY = printY + (printH - drawH) / 2;
+
+          if (isApparel) {
+            // ── FABRIC SIMULATION ──
+
+            // A) Extract the fabric luminosity from the product image (print area only)
+            //    This captures wrinkles, folds, and shadows in the garment
+            const fabricData = ctx.getImageData(
+              Math.round(drawX), Math.round(drawY),
+              Math.round(drawW), Math.round(drawH)
+            );
+
+            // B) Draw design with multiply blend — inks into the fabric
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.drawImage(designImg, drawX, drawY, drawW, drawH);
+
+            // C) Re-apply fabric shadows on top of the design
+            //    Convert fabric luminosity to a shadow-only layer
+            const shadowCanvas = document.createElement('canvas');
+            shadowCanvas.width = Math.round(drawW);
+            shadowCanvas.height = Math.round(drawH);
+            const sCtx = shadowCanvas.getContext('2d');
+            if (sCtx) {
+              const shadowData = sCtx.createImageData(shadowCanvas.width, shadowCanvas.height);
+              const src = fabricData.data;
+              const dst = shadowData.data;
+              for (let i = 0; i < src.length; i += 4) {
+                // Luminosity from fabric
+                const lum = (src[i] * 0.299 + src[i + 1] * 0.587 + src[i + 2] * 0.114);
+                // Convert to shadow intensity: darker areas = more shadow
+                // Normalize: 128 = neutral, <128 = shadow, >128 = highlight
+                const shadow = Math.max(0, 128 - lum) * 2; // Amplify shadows
+                const highlight = Math.max(0, lum - 128) * 0.5; // Subtle highlights
+                dst[i] = 0;     // R
+                dst[i + 1] = 0; // G
+                dst[i + 2] = 0; // B
+                dst[i + 3] = Math.min(255, Math.round(shadow * 0.35)); // Alpha = shadow intensity
+              }
+              sCtx.putImageData(shadowData, 0, 0);
+
+              // Apply shadow layer with multiply for realistic wrinkle shadows
+              ctx.globalCompositeOperation = 'multiply';
+              ctx.drawImage(shadowCanvas, drawX, drawY, drawW, drawH);
+
+              // D) Add subtle highlight pass for fabric sheen
+              const highlightCanvas = document.createElement('canvas');
+              highlightCanvas.width = shadowCanvas.width;
+              highlightCanvas.height = shadowCanvas.height;
+              const hCtx = highlightCanvas.getContext('2d');
+              if (hCtx) {
+                const hlData = hCtx.createImageData(highlightCanvas.width, highlightCanvas.height);
+                const hlDst = hlData.data;
+                for (let i = 0; i < src.length; i += 4) {
+                  const lum = (src[i] * 0.299 + src[i + 1] * 0.587 + src[i + 2] * 0.114);
+                  const highlight = Math.max(0, lum - 140);
+                  hlDst[i] = 255;
+                  hlDst[i + 1] = 255;
+                  hlDst[i + 2] = 255;
+                  hlDst[i + 3] = Math.min(255, Math.round(highlight * 0.2));
+                }
+                hCtx.putImageData(hlData, 0, 0);
+                ctx.globalCompositeOperation = 'screen';
+                ctx.drawImage(highlightCanvas, drawX, drawY, drawW, drawH);
+              }
+            }
+
+            ctx.globalCompositeOperation = 'source-over';
+          } else {
+            // Non-apparel (posters, canvases, phone cases): just overlay
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.drawImage(designImg, drawX, drawY, drawW, drawH);
           }
-          
+
           setIsLoading(false);
         };
-        
+
         designImg.onerror = () => {
           console.error('Failed to load design image');
           setIsLoading(false);
@@ -223,7 +278,7 @@ function MockupPreview({
         setIsLoading(false);
       }
     };
-    
+
     productImg.onerror = () => {
       console.error('Failed to load product image');
       setIsLoading(false);
@@ -232,15 +287,15 @@ function MockupPreview({
   }, [productImage, designImage, productTitle]);
 
   return (
-    <div className={cn("relative bg-gray-800 rounded-lg overflow-hidden flex items-center justify-center", className)}>
+    <div className={cn("relative bg-secondary rounded-2xl overflow-hidden flex items-center justify-center", className)}>
       <canvas ref={canvasRef} className="max-w-full max-h-full object-contain" />
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
-          <Loader2 className="animate-spin text-purple-500" size={32} />
+        <div className="absolute inset-0 flex items-center justify-center bg-secondary">
+          <Loader2 className="animate-spin text-amber-500" size={32} />
         </div>
       )}
       {designImage && !isLoading && (
-        <div className="absolute bottom-2 right-2 px-2 py-1 bg-green-500/80 rounded text-xs font-medium text-white flex items-center gap-1">
+        <div className="absolute bottom-2 right-2 px-2 py-1 bg-green-500/80 rounded-lg text-xs font-medium text-white flex items-center gap-1">
           <CheckCircle size={12} /> Mockup
         </div>
       )}
@@ -301,10 +356,10 @@ function MockupGallery({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 bg-gray-800 rounded-xl">
-        <Loader2 className="animate-spin text-purple-500 mb-3" size={48} />
-        <p className="text-purple-400 font-medium">Gerando mockups profissionais...</p>
-        <p className="text-xs text-gray-500 mt-1">Printify está processando seu design</p>
+      <div className="flex flex-col items-center justify-center h-64 bg-secondary rounded-xl">
+        <Loader2 className="animate-spin text-amber-500 mb-3" size={48} />
+        <p className="text-amber-400 font-medium">Gerando mockups profissionais...</p>
+        <p className="text-xs text-muted-foreground mt-1">Printify está processando seu design</p>
       </div>
     );
   }
@@ -333,19 +388,19 @@ function MockupGallery({
                   onClick={handlePrev}
                   className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  <ChevronLeft size={24} className="text-gray-700" />
+                  <ChevronLeft size={24} className="text-muted-foreground" />
                 </button>
                 <button
                   onClick={handleNext}
                   className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  <ChevronRight size={24} className="text-gray-700" />
+                  <ChevronRight size={24} className="text-muted-foreground" />
                 </button>
               </>
             )}
 
             {/* Counter Badge */}
-            <div className="absolute bottom-3 left-3 px-2 py-1 bg-black/50 rounded text-xs text-white">
+            <div className="absolute bottom-3 left-3 px-2 py-1 bg-secondary rounded text-xs text-white">
               {selectedIndex + 1} / {mockups.length}
             </div>
 
@@ -353,7 +408,7 @@ function MockupGallery({
             {onClose && (
               <button
                 onClick={onClose}
-                className="absolute top-3 right-3 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center"
+                className="absolute top-3 right-3 w-8 h-8 bg-secondary hover:bg-black/70 rounded-full flex items-center justify-center"
               >
                 <X size={18} className="text-white" />
               </button>
@@ -361,7 +416,7 @@ function MockupGallery({
           </div>
 
           {/* Current Mockup Label */}
-          <p className="text-center text-sm text-gray-400 mt-2">
+          <p className="text-center text-sm text-muted-foreground mt-2">
             {getMockupLabel(mockups[selectedIndex], selectedIndex)}
           </p>
         </div>
@@ -379,8 +434,8 @@ function MockupGallery({
                   className={cn(
                     "cursor-pointer rounded-lg overflow-hidden border-2 transition-all",
                     selectedIndex === idx 
-                      ? "border-purple-500 ring-2 ring-purple-500/30" 
-                      : "border-gray-700 hover:border-gray-500"
+                      ? "border-amber-500 ring-2 ring-amber-500/30" 
+                      : "border-border hover:border-gray-500"
                   )}
                 >
                   <div className="aspect-square bg-white">
@@ -391,7 +446,7 @@ function MockupGallery({
                       loading="lazy"
                     />
                   </div>
-                  <div className="px-2 py-1.5 bg-gray-800 text-xs text-gray-300 truncate">
+                  <div className="px-2 py-1.5 bg-secondary text-xs text-muted-foreground truncate">
                     {getMockupLabel(mockup, idx)}
                   </div>
                 </motion.div>
@@ -407,7 +462,7 @@ function MockupGallery({
           <CheckCircle size={16} />
           <span>{mockups.length} mockups profissionais gerados</span>
         </div>
-        <Badge className="bg-purple-600">Printify</Badge>
+        <Badge className="bg-amber-600">Printify</Badge>
       </div>
     </div>
   );
@@ -537,7 +592,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   const [mockupShopId, setMockupShopId] = useState<number | null>(null);
   const [showMockupGalleryModal, setShowMockupGalleryModal] = useState(false);
   // Design placement options
-  const [designScale, setDesignScale] = useState<'small' | 'medium' | 'large' | 'fill'>('medium');
+  const [designScale, setDesignScale] = useState<'small' | 'medium' | 'large' | 'fill'>('fill');
   const [designPosition, setDesignPosition] = useState<'top' | 'center' | 'bottom'>('center');
   const [productTitle, setProductTitle] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -756,7 +811,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     const placeholderHeight = placeholder?.height || 5100;
     
     // Calculate scale factor based on user selection
-    const scaleFactors = { small: 0.4, medium: 0.6, large: 0.8, fill: 1.0 };
+    const scaleFactors = { small: 0.6, medium: 0.8, large: 0.95, fill: 1.0 };
     const scaleFactor = scaleFactors[designScale];
     
     // Calculate Y position based on user selection
@@ -803,6 +858,50 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       setIsGeneratingMockups(false);
     }
   }, [selectedBlueprint, selectedProvider, selectedVariants, variants, designScale, designPosition]);
+
+  // ── AUTO-MOCKUP: Generate Printify mockups when design + variants are ready ──
+  // Refs to avoid stale closures in the effect
+  const autoMockupTriggered = useRef(false);
+  const uploadDesignRef = useRef(uploadDesign);
+  const generateMockupsRef = useRef(generatePrintifyMockups);
+  useEffect(() => { uploadDesignRef.current = uploadDesign; }, [uploadDesign]);
+  useEffect(() => { generateMockupsRef.current = generatePrintifyMockups; }, [generatePrintifyMockups]);
+
+  useEffect(() => {
+    if (
+      !designPreview ||
+      !selectedBlueprint ||
+      !selectedProvider ||
+      selectedVariants.length === 0 ||
+      isGeneratingMockups ||
+      printifyMockups.length > 0 ||
+      autoMockupTriggered.current
+    ) return;
+
+    autoMockupTriggered.current = true;
+
+    const autoGenerate = async () => {
+      let url = uploadedDesignUrl;
+      if (!url && designFile) {
+        toast.loading("Preparando mockup profissional...", { id: "auto-mockup" });
+        url = await uploadDesignRef.current();
+        if (url) setUploadedDesignUrl(url);
+        toast.dismiss("auto-mockup");
+      }
+      if (url) {
+        generateMockupsRef.current(url);
+      }
+    };
+
+    const timer = setTimeout(autoGenerate, 600);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [designPreview, selectedBlueprint, selectedProvider, selectedVariants.length, isGeneratingMockups, printifyMockups.length, uploadedDesignUrl, designFile]);
+
+  // Reset auto-trigger when design changes
+  useEffect(() => {
+    autoMockupTriggered.current = false;
+  }, [designPreview]);
 
   const inferCategory = (title: string): string => {
     const l = title.toLowerCase();
@@ -948,8 +1047,8 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   return (
     <div className="min-h-full space-y-6">
       {/* POD Provider Selector */}
-      <div className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl border border-gray-800">
-        <span className="text-sm text-gray-400 font-medium">Fornecedor:</span>
+      <div className="flex items-center gap-4 p-4 bg-card/50 rounded-xl border border-border">
+        <span className="text-sm text-muted-foreground font-medium">Fornecedor:</span>
         <div className="flex gap-2">
           <button
             onClick={() => setPodProvider("printify")}
@@ -957,7 +1056,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
               "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
               podProvider === "printify"
                 ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                : "bg-secondary text-muted-foreground hover:bg-gray-700"
             )}
           >
             <Shirt size={18} />
@@ -969,8 +1068,8 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
               podProvider === "prodigi"
-                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                ? "bg-gradient-to-r from-blue-600 to-amber-600 text-white"
+                : "bg-secondary text-muted-foreground hover:bg-gray-700"
             )}
           >
             <Frame size={18} />
@@ -979,7 +1078,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
           </button>
         </div>
         <div className="flex-1" />
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-muted-foreground">
           {podProvider === "printify" ? (
             <span>Camisetas, canecas, almofadas e 900+ produtos</span>
           ) : (
@@ -1073,32 +1172,32 @@ function PODPanelContent(props: {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2"><Store className="text-purple-400" />Minha Loja POD</h1>
-          <p className="text-gray-400 text-sm">Crie produtos personalizados com Printify</p>
+          <h1 className="text-2xl font-bold flex items-center gap-2"><Store className="text-amber-400" />Minha Loja POD</h1>
+          <p className="text-muted-foreground text-sm">Crie produtos personalizados com Printify</p>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="outline" className={cn("border-gray-700", canPublish ? "text-green-400" : "text-yellow-400")}>
+          <Badge variant="outline" className={cn("border-border", canPublish ? "text-green-400" : "text-yellow-400")}>
             <Trophy size={14} className="mr-1" />{userXP} XP {!canPublish && `/ ${MIN_XP_TO_PUBLISH}`}
           </Badge>
-          <Button className="bg-purple-600 hover:bg-purple-700" onClick={() => { setActiveTab("create"); resetCreateWizard(); }}>
+          <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setActiveTab("create"); resetCreateWizard(); }}>
             <Plus size={16} className="mr-2" />Criar Produto
           </Button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 border-b border-gray-800 pb-2 overflow-x-auto">
-        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "products" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => setActiveTab("products")}>
+      <div className="flex gap-2 mb-6 border-b border-border pb-2 overflow-x-auto">
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "products" ? "border-amber-500 text-amber-400" : "border-transparent text-muted-foreground")} onClick={() => setActiveTab("products")}>
           <Package size={16} className="mr-2" />Produtos
         </Button>
-        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "create" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => { setActiveTab("create"); if (blueprints.length === 0) fetchBlueprints(); }}>
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "create" ? "border-amber-500 text-amber-400" : "border-transparent text-muted-foreground")} onClick={() => { setActiveTab("create"); if (blueprints.length === 0) fetchBlueprints(); }}>
           <Sparkles size={16} className="mr-2" />Criar
         </Button>
-        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "orders" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => setActiveTab("orders")}>
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "orders" ? "border-amber-500 text-amber-400" : "border-transparent text-muted-foreground")} onClick={() => setActiveTab("orders")}>
           <Receipt size={16} className="mr-2" />Pedidos
           {orderStats && orderStats.pending > 0 && <Badge className="ml-1.5 h-5 bg-orange-500">{orderStats.pending}</Badge>}
         </Button>
-        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "earnings" ? "border-purple-500 text-purple-400" : "border-transparent text-gray-400")} onClick={() => setActiveTab("earnings")}>
+        <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "earnings" ? "border-amber-500 text-amber-400" : "border-transparent text-muted-foreground")} onClick={() => setActiveTab("earnings")}>
           <Wallet size={16} className="mr-2" />Ganhos
         </Button>
       </div>
@@ -1108,33 +1207,33 @@ function PODPanelContent(props: {
           <motion.div key="products" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30 p-4">
-                <div className="flex items-center gap-3"><Package className="text-purple-400" size={24} /><div><p className="text-2xl font-bold">{stats?.total || 0}</p><p className="text-xs text-gray-400">Produtos</p></div></div>
+              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-4">
+                <div className="flex items-center gap-3"><Package className="text-amber-400" size={24} /><div><p className="text-2xl font-bold">{stats?.total || 0}</p><p className="text-xs text-muted-foreground">Produtos</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
-                <div className="flex items-center gap-3"><CheckCircle className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{stats?.active || 0}</p><p className="text-xs text-gray-400">Ativos</p></div></div>
+                <div className="flex items-center gap-3"><CheckCircle className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{stats?.active || 0}</p><p className="text-xs text-muted-foreground">Ativos</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
-                <div className="flex items-center gap-3"><ShoppingBag className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{stats?.totalSales || 0}</p><p className="text-xs text-gray-400">Vendas</p></div></div>
+                <div className="flex items-center gap-3"><ShoppingBag className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{stats?.totalSales || 0}</p><p className="text-xs text-muted-foreground">Vendas</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-4">
-                <div className="flex items-center gap-3"><DollarSign className="text-yellow-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(stats?.totalRevenue || 0)}</p><p className="text-xs text-gray-400">Receita</p></div></div>
+                <div className="flex items-center gap-3"><DollarSign className="text-yellow-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(stats?.totalRevenue || 0)}</p><p className="text-xs text-muted-foreground">Receita</p></div></div>
               </Card>
             </div>
 
             {/* Filters */}
             <div className="flex flex-col md:flex-row gap-4 mb-6">
-              <div className="relative flex-1"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} /><Input placeholder="Buscar..." className="pl-10 bg-white/5 border-gray-700" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
+              <div className="relative flex-1"><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} /><Input placeholder="Buscar..." className="pl-10 bg-secondary border-border" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-40 bg-white/5 border-gray-700"><Filter size={16} className="mr-2" /><SelectValue placeholder="Status" /></SelectTrigger>
-                <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                <SelectTrigger className="w-40 bg-secondary border-border"><Filter size={16} className="mr-2" /><SelectValue placeholder="Status" /></SelectTrigger>
+                <SelectContent className="bg-card border-border text-white">
                   <SelectItem value="all">Todos</SelectItem><SelectItem value="draft">Rascunhos</SelectItem><SelectItem value="active">Ativos</SelectItem><SelectItem value="paused">Pausados</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             {/* Products */}
-            {isLoading ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-purple-500" size={40} /></div>
+            {isLoading ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
             : products.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.filter(p => !searchQuery || p.title.toLowerCase().includes(searchQuery.toLowerCase())).map((product) => (
@@ -1142,9 +1241,9 @@ function PODPanelContent(props: {
                 ))}
               </div>
             ) : (
-              <Card className="bg-white/5 border-white/10 p-12 text-center">
-                <Package size={64} className="mx-auto mb-4 text-gray-600" /><h3 className="text-xl font-semibold mb-2">Nenhum produto</h3><p className="text-gray-400 mb-6">Crie seu primeiro produto!</p>
-                <Button className="bg-purple-600 hover:bg-purple-700" onClick={() => { setActiveTab("create"); fetchBlueprints(); }}><Plus size={16} className="mr-2" />Criar Produto</Button>
+              <Card className="bg-secondary border-border p-12 text-center">
+                <Package size={64} className="mx-auto mb-4 text-gray-600" /><h3 className="text-xl font-semibold mb-2">Nenhum produto</h3><p className="text-muted-foreground mb-6">Crie seu primeiro produto!</p>
+                <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setActiveTab("create"); fetchBlueprints(); }}><Plus size={16} className="mr-2" />Criar Produto</Button>
               </Card>
             )}
           </motion.div>
@@ -1176,47 +1275,47 @@ function PODPanelContent(props: {
             {/* Order Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <Card className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 border-orange-500/30 p-4">
-                <div className="flex items-center gap-3"><Clock className="text-orange-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.pending || 0}</p><p className="text-xs text-gray-400">Pendentes</p></div></div>
+                <div className="flex items-center gap-3"><Clock className="text-orange-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.pending || 0}</p><p className="text-xs text-muted-foreground">Pendentes</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
-                <div className="flex items-center gap-3"><Package className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.inProduction || 0}</p><p className="text-xs text-gray-400">Produção</p></div></div>
+                <div className="flex items-center gap-3"><Package className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.inProduction || 0}</p><p className="text-xs text-muted-foreground">Produção</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30 p-4">
-                <div className="flex items-center gap-3"><Truck className="text-purple-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.shipped || 0}</p><p className="text-xs text-gray-400">Enviados</p></div></div>
+              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-4">
+                <div className="flex items-center gap-3"><Truck className="text-amber-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.shipped || 0}</p><p className="text-xs text-muted-foreground">Enviados</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
-                <div className="flex items-center gap-3"><CheckCircle className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.delivered || 0}</p><p className="text-xs text-gray-400">Entregues</p></div></div>
+                <div className="flex items-center gap-3"><CheckCircle className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.delivered || 0}</p><p className="text-xs text-muted-foreground">Entregues</p></div></div>
               </Card>
             </div>
 
             {/* Orders List */}
             {isLoadingOrders ? (
-              <div className="flex justify-center py-12"><Loader2 className="animate-spin text-purple-500" size={40} /></div>
+              <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
             ) : orders.length > 0 ? (
               <div className="space-y-4">
                 {orders.map((order) => (
-                  <Card key={order._id} className="bg-white/5 border-white/10 p-4">
+                  <Card key={order._id} className="bg-secondary border-border p-4">
                     <div className="flex flex-col md:flex-row md:items-center gap-4">
                       <div className="flex items-center gap-3 flex-1">
                         {order.items[0]?.mockupImage ? (
-                          <img src={order.items[0].mockupImage} alt="" className="w-16 h-16 rounded-lg object-cover bg-gray-800" />
+                          <img src={order.items[0].mockupImage} alt="" className="w-16 h-16 rounded-lg object-cover bg-secondary" />
                         ) : (
-                          <div className="w-16 h-16 rounded-lg bg-gray-800 flex items-center justify-center"><Package className="text-gray-600" /></div>
+                          <div className="w-16 h-16 rounded-lg bg-secondary flex items-center justify-center"><Package className="text-gray-600" /></div>
                         )}
                         <div>
                           <p className="font-semibold">#{order.orderNumber}</p>
-                          <p className="text-sm text-gray-400">{order.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</p>
-                          <p className="text-xs text-gray-500">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</p>
+                          <p className="text-sm text-muted-foreground">{order.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</p>
+                          <p className="text-xs text-muted-foreground">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
                           <p className="font-bold text-green-400">{formatCurrency(order.totalCreatorCommission)}</p>
-                          <p className="text-xs text-gray-400">Comissão</p>
+                          <p className="text-xs text-muted-foreground">Comissão</p>
                         </div>
                         <Badge className={cn(
                           order.status === 'delivered' && 'bg-green-600',
-                          order.status === 'shipped' && 'bg-purple-600',
+                          order.status === 'shipped' && 'bg-amber-600',
                           order.status === 'in_production' && 'bg-blue-600',
                           ['pending', 'confirmed', 'processing'].includes(order.status) && 'bg-orange-600',
                           ['cancelled', 'refunded'].includes(order.status) && 'bg-red-600',
@@ -1233,15 +1332,15 @@ function PODPanelContent(props: {
                 ))}
               </div>
             ) : (
-              <Card className="bg-white/5 border-white/10 p-12 text-center">
+              <Card className="bg-secondary border-border p-12 text-center">
                 <Receipt size={64} className="mx-auto mb-4 text-gray-600" />
                 <h3 className="text-xl font-semibold mb-2">Nenhum pedido ainda</h3>
-                <p className="text-gray-400 mb-6">Quando seus produtos forem vendidos, os pedidos aparecerão aqui</p>
+                <p className="text-muted-foreground mb-6">Quando seus produtos forem vendidos, os pedidos aparecerão aqui</p>
               </Card>
             )}
 
             <div className="flex justify-center mt-6">
-              <Button variant="outline" className="border-gray-700" onClick={fetchOrders}>
+              <Button variant="outline" className="border-border" onClick={fetchOrders}>
                 <RefreshCw size={16} className="mr-2" />Atualizar
               </Button>
             </div>
@@ -1253,78 +1352,78 @@ function PODPanelContent(props: {
             {/* Earnings Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
-                <div className="flex items-center gap-3"><DollarSign className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.totalEarnings || 0)}</p><p className="text-xs text-gray-400">Total Ganho</p></div></div>
+                <div className="flex items-center gap-3"><DollarSign className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.totalEarnings || 0)}</p><p className="text-xs text-muted-foreground">Total Ganho</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-4">
-                <div className="flex items-center gap-3"><Clock className="text-yellow-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.pendingEarnings || 0)}</p><p className="text-xs text-gray-400">Pendente</p></div></div>
+                <div className="flex items-center gap-3"><Clock className="text-yellow-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.pendingEarnings || 0)}</p><p className="text-xs text-muted-foreground">Pendente</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
-                <div className="flex items-center gap-3"><CreditCard className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.paidEarnings || 0)}</p><p className="text-xs text-gray-400">Já Sacado</p></div></div>
+                <div className="flex items-center gap-3"><CreditCard className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.paidEarnings || 0)}</p><p className="text-xs text-muted-foreground">Já Sacado</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30 p-4">
-                <div className="flex items-center gap-3"><Wallet className="text-purple-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p><p className="text-xs text-gray-400">Disponível</p></div></div>
+              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-4">
+                <div className="flex items-center gap-3"><Wallet className="text-amber-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p><p className="text-xs text-muted-foreground">Disponível</p></div></div>
               </Card>
             </div>
 
             {isLoadingEarnings ? (
-              <div className="flex justify-center py-12"><Loader2 className="animate-spin text-purple-500" size={40} /></div>
+              <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
             ) : (
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Commission Info */}
-                <Card className="bg-white/5 border-white/10 p-6">
+                <Card className="bg-secondary border-border p-6">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><TrendingUp className="text-green-400" />Sua Comissão</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-green-500/10 rounded-lg">
                       <div>
-                        <p className="text-sm text-gray-400">Taxa de Comissão</p>
+                        <p className="text-sm text-muted-foreground">Taxa de Comissão</p>
                         <p className="text-3xl font-bold text-green-400">{earningsData?.summary.commissionRate || 70}%</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-400">do lucro</p>
-                        <p className="text-xs text-gray-500">(Preço - Custo)</p>
+                        <p className="text-sm text-muted-foreground">do lucro</p>
+                        <p className="text-xs text-muted-foreground">(Preço - Custo)</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-center">
-                      <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="p-3 bg-secondary rounded-lg">
                         <p className="text-2xl font-bold">{earningsData?.summary.totalOrders || 0}</p>
-                        <p className="text-xs text-gray-400">Pedidos</p>
+                        <p className="text-xs text-muted-foreground">Pedidos</p>
                       </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="p-3 bg-secondary rounded-lg">
                         <p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.totalSales || 0)}</p>
-                        <p className="text-xs text-gray-400">Vendas Totais</p>
+                        <p className="text-xs text-muted-foreground">Vendas Totais</p>
                       </div>
                     </div>
                   </div>
                 </Card>
 
                 {/* Payout Card */}
-                <Card className="bg-white/5 border-white/10 p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><Wallet className="text-purple-400" />Saque</h3>
+                <Card className="bg-secondary border-border p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><Wallet className="text-amber-400" />Saque</h3>
                   <div className="space-y-4">
-                    <div className="p-4 bg-purple-500/10 rounded-lg text-center">
-                      <p className="text-sm text-gray-400 mb-1">Disponível para Saque</p>
-                      <p className="text-4xl font-bold text-purple-400">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p>
-                      <p className="text-xs text-gray-500 mt-2">Mínimo: {formatCurrency(earningsData?.summary.minPayoutAmount || 50)}</p>
+                    <div className="p-4 bg-amber-500/10 rounded-lg text-center">
+                      <p className="text-sm text-muted-foreground mb-1">Disponível para Saque</p>
+                      <p className="text-4xl font-bold text-amber-400">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p>
+                      <p className="text-xs text-muted-foreground mt-2">Mínimo: {formatCurrency(earningsData?.summary.minPayoutAmount || 50)}</p>
                     </div>
                     <Button 
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                      className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
                       disabled={!earningsData?.summary.canRequestPayout}
                     >
                       <CreditCard size={16} className="mr-2" />
                       {earningsData?.summary.canRequestPayout ? 'Solicitar Saque' : `Mínimo R$ ${earningsData?.summary.minPayoutAmount || 50}`}
                     </Button>
-                    <p className="text-xs text-gray-500 text-center">Saques processados em até 5 dias úteis via PIX</p>
+                    <p className="text-xs text-muted-foreground text-center">Saques processados em até 5 dias úteis via PIX</p>
                   </div>
                 </Card>
 
                 {/* Monthly Breakdown */}
                 {earningsData?.monthlyBreakdown && earningsData.monthlyBreakdown.length > 0 && (
-                  <Card className="bg-white/5 border-white/10 p-6 md:col-span-2">
+                  <Card className="bg-secondary border-border p-6 md:col-span-2">
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><TrendingUp className="text-green-400" />Ganhos Mensais</h3>
                     <div className="flex gap-2 overflow-x-auto pb-2">
                       {earningsData.monthlyBreakdown.map((m) => (
-                        <div key={m.month} className="flex-1 min-w-[80px] text-center p-3 bg-white/5 rounded-lg">
-                          <p className="text-xs text-gray-400">{m.month}</p>
+                        <div key={m.month} className="flex-1 min-w-[80px] text-center p-3 bg-secondary rounded-lg">
+                          <p className="text-xs text-muted-foreground">{m.month}</p>
                           <p className="font-bold text-green-400">{formatCurrency(m.commission)}</p>
                         </div>
                       ))}
@@ -1335,7 +1434,7 @@ function PODPanelContent(props: {
             )}
 
             <div className="flex justify-center mt-6">
-              <Button variant="outline" className="border-gray-700" onClick={fetchEarnings}>
+              <Button variant="outline" className="border-border" onClick={fetchEarnings}>
                 <RefreshCw size={16} className="mr-2" />Atualizar
               </Button>
             </div>
@@ -1367,18 +1466,18 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="group relative">
-      <Card className="bg-white/5 border-white/10 overflow-hidden hover:border-purple-500/50 transition-all">
-        <div className="relative aspect-square bg-gradient-to-br from-gray-800 to-gray-900">
+      <Card className="bg-secondary border-border overflow-hidden hover:border-amber-500/50 transition-all">
+        <div className="relative aspect-square bg-gradient-to-br from-gray-800 to-card">
           {product.primaryMockup ? <img src={product.primaryMockup} alt={product.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><CategoryIcon size={48} className="text-gray-600" /></div>}
           <Badge className={cn("absolute top-2 left-2", statusInfo.color, "text-white")}><StatusIcon size={12} className="mr-1" />{statusInfo.label}</Badge>
           {isInStore && <Badge className="absolute top-2 left-24 bg-green-600 text-white"><Store size={12} className="mr-1" />Na Loja</Badge>}
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <DropdownMenu>
               <DropdownMenuTrigger asChild><Button size="icon" variant="secondary" className="h-8 w-8"><MoreVertical size={16} /></Button></DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-gray-900 border-gray-800 text-white">
+              <DropdownMenuContent className="bg-card border-border text-white">
                 <DropdownMenuItem onClick={() => setSelectedProduct(product)}><Eye size={14} className="mr-2" />Ver</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setEditingProduct(product)}><Edit size={14} className="mr-2" />Editar</DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-800" />
+                <DropdownMenuSeparator className="bg-secondary" />
                 {product.status === "draft" && <DropdownMenuItem onClick={() => publishProduct(product._id)} className={!canPublish ? "opacity-50" : ""}><Send size={14} className="mr-2" />{canPublish ? "Publicar" : `${MIN_XP_TO_PUBLISH} XP`}</DropdownMenuItem>}
                 {product.status === "active" && !isInStore && publishToStore && (
                   <DropdownMenuItem onClick={() => publishToStore(product._id)} disabled={isPublishingThis}>
@@ -1393,7 +1492,7 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
                 )}
                 {product.status === "active" && <DropdownMenuItem onClick={() => updateProduct(product._id, { status: "paused" })}><Pause size={14} className="mr-2" />Pausar</DropdownMenuItem>}
                 {product.status === "paused" && <DropdownMenuItem onClick={() => updateProduct(product._id, { status: "active" })}><Play size={14} className="mr-2" />Reativar</DropdownMenuItem>}
-                <DropdownMenuSeparator className="bg-gray-800" />
+                <DropdownMenuSeparator className="bg-secondary" />
                 <DropdownMenuItem onClick={() => deleteProduct(product._id)} className="text-red-400"><Trash2 size={14} className="mr-2" />Excluir</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -1403,9 +1502,9 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
           <h3 className="font-semibold truncate">{product.title}</h3>
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold text-green-400">{formatCurrency(product.suggestedPrice)}</span>
-            <span className="text-xs text-gray-500">Custo: {formatCurrency(product.baseCost)}</span>
+            <span className="text-xs text-muted-foreground">Custo: {formatCurrency(product.baseCost)}</span>
           </div>
-          <div className="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-gray-800">
+          <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border">
             <span><Eye size={12} className="inline mr-1" />{product.views}</span>
             <span><ShoppingBag size={12} className="inline mr-1" />{product.sales}</span>
             <span><Star size={12} className="inline mr-1" />{product.rating.toFixed(1)}</span>
@@ -1507,22 +1606,22 @@ function CreateWizard(props: {
         {/* Header */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold mb-2">Escolha o Produto Base</h2>
-          <p className="text-gray-400">Selecione o tipo de produto que deseja criar</p>
+          <p className="text-muted-foreground">Selecione o tipo de produto que deseja criar</p>
         </div>
 
         {/* Search */}
         <div className="flex flex-wrap gap-3 justify-center mb-4">
           <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
             <Input 
               placeholder="Buscar produtos..." 
-              className="pl-10 bg-white/5 border-gray-700" 
+              className="pl-10 bg-secondary border-border" 
               value={blueprintSearch} 
               onChange={(e) => setBlueprintSearch(e.target.value)} 
               onKeyDown={(e) => e.key === "Enter" && fetchBlueprints(selectedCategory || undefined, blueprintSearch)} 
             />
           </div>
-          <Button variant="outline" className="border-gray-700" onClick={() => fetchBlueprints(selectedCategory || undefined, blueprintSearch)}>
+          <Button variant="outline" className="border-border" onClick={() => fetchBlueprints(selectedCategory || undefined, blueprintSearch)}>
             <Search size={16} className="mr-2" />Buscar
           </Button>
         </div>
@@ -1536,7 +1635,7 @@ function CreateWizard(props: {
               size="sm" 
               className={cn(
                 "shrink-0",
-                selectedCategory === cat.key ? "bg-purple-600" : "border-gray-700"
+                selectedCategory === cat.key ? "bg-amber-600" : "border-border"
               )} 
               onClick={() => { 
                 setSelectedCategory(selectedCategory === cat.key ? null : cat.key); 
@@ -1551,18 +1650,18 @@ function CreateWizard(props: {
         {/* Blueprints Grid with Pagination */}
         {isFetchingBlueprints ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="animate-spin text-purple-500" size={40} />
+            <Loader2 className="animate-spin text-amber-500" size={40} />
           </div>
         ) : blueprints.length > 0 ? (
           <>
             {/* Pagination Info */}
-            <div className="flex items-center justify-between mb-4 text-sm text-gray-400">
+            <div className="flex items-center justify-between mb-4 text-sm text-muted-foreground">
               <span>Mostrando {currentPage * ITEMS_PER_PAGE + 1}-{Math.min((currentPage + 1) * ITEMS_PER_PAGE, blueprints.length)} de {blueprints.length}</span>
               <div className="flex items-center gap-2">
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="border-gray-700 h-8 w-8 p-0" 
+                  className="border-border h-8 w-8 p-0" 
                   onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
                   disabled={currentPage === 0}
                 >
@@ -1572,7 +1671,7 @@ function CreateWizard(props: {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="border-gray-700 h-8 w-8 p-0" 
+                  className="border-border h-8 w-8 p-0" 
                   onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
                   disabled={currentPage >= totalPages - 1}
                 >
@@ -1592,8 +1691,8 @@ function CreateWizard(props: {
                 >
                   <Card 
                     className={cn(
-                      "bg-white/5 border-white/10 overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-purple-500/50", 
-                      selectedBlueprint?.id === bp.id && "ring-2 ring-purple-500 border-purple-500"
+                      "bg-secondary border-border overflow-hidden cursor-pointer transition-all hover:scale-[1.02] hover:border-amber-500/50", 
+                      selectedBlueprint?.id === bp.id && "ring-2 ring-amber-500 border-amber-500"
                     )} 
                     onClick={() => { 
                       setSelectedBlueprint(bp); 
@@ -1601,7 +1700,7 @@ function CreateWizard(props: {
                       setProductDescription(bp.description); 
                     }}
                   >
-                    <div className="aspect-square bg-gray-800 relative overflow-hidden">
+                    <div className="aspect-square bg-secondary relative overflow-hidden">
                       {bp.images?.[0] ? (
                         <img 
                           src={bp.images[0]} 
@@ -1615,14 +1714,14 @@ function CreateWizard(props: {
                         </div>
                       )}
                       {selectedBlueprint?.id === bp.id && (
-                        <div className="absolute top-2 right-2 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                        <div className="absolute top-2 right-2 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
                           <CheckCircle size={14} className="text-white" />
                         </div>
                       )}
                     </div>
                     <div className="p-3">
                       <h4 className="font-medium text-sm truncate">{bp.title}</h4>
-                      <p className="text-xs text-gray-400 truncate">{bp.brand}</p>
+                      <p className="text-xs text-muted-foreground truncate">{bp.brand}</p>
                     </div>
                   </Card>
                 </motion.div>
@@ -1638,7 +1737,7 @@ function CreateWizard(props: {
                     onClick={() => setCurrentPage(i)}
                     className={cn(
                       "w-2.5 h-2.5 rounded-full transition-all",
-                      currentPage === i ? "bg-purple-500 w-6" : "bg-gray-600 hover:bg-gray-500"
+                      currentPage === i ? "bg-amber-500 w-6" : "bg-gray-600 hover:bg-gray-500"
                     )}
                   />
                 ))}
@@ -1646,10 +1745,10 @@ function CreateWizard(props: {
             )}
           </>
         ) : (
-          <Card className="bg-white/5 border-white/10 p-12 text-center">
+          <Card className="bg-secondary border-border p-12 text-center">
             <Package size={48} className="mx-auto mb-4 text-gray-600" />
             <h3 className="text-lg font-semibold mb-2">Nenhum produto encontrado</h3>
-            <p className="text-gray-400 mb-4">Tente outra categoria ou termo de busca</p>
+            <p className="text-muted-foreground mb-4">Tente outra categoria ou termo de busca</p>
             <Button onClick={() => fetchBlueprints()}>Carregar Catálogo</Button>
           </Card>
         )}
@@ -1661,22 +1760,22 @@ function CreateWizard(props: {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
-              className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-gray-900/95 backdrop-blur-lg border-t border-gray-800 p-4 z-30"
+              className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-card/95 backdrop-blur-lg border-t border-border p-4 z-30"
             >
               <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-12 h-12 rounded-lg bg-gray-800 overflow-hidden shrink-0">
+                  <div className="w-12 h-12 rounded-lg bg-secondary overflow-hidden shrink-0">
                     {selectedBlueprint.images?.[0] && (
                       <img src={selectedBlueprint.images[0]} alt="" className="w-full h-full object-cover" />
                     )}
                   </div>
                   <div className="min-w-0">
                     <p className="font-medium truncate">{selectedBlueprint.title}</p>
-                    <p className="text-xs text-gray-400">{selectedBlueprint.brand}</p>
+                    <p className="text-xs text-muted-foreground">{selectedBlueprint.brand}</p>
                   </div>
                 </div>
                 <Button 
-                  className="bg-purple-600 hover:bg-purple-700 shrink-0" 
+                  className="bg-amber-600 hover:bg-amber-700 shrink-0" 
                   onClick={() => { setStep(2); fetchProviders(selectedBlueprint.id); }}
                 >
                   Próximo: Fornecedor
@@ -1694,14 +1793,14 @@ function CreateWizard(props: {
     return (
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => setStep(1)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
-        <div className="text-center"><h2 className="text-2xl font-bold mb-2">Escolha o Fornecedor</h2><p className="text-gray-400">Quem produzirá seu {selectedBlueprint?.title}</p></div>
-        {isFetchingProviders ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-purple-500" size={40} /></div>
+        <div className="text-center"><h2 className="text-2xl font-bold mb-2">Escolha o Fornecedor</h2><p className="text-muted-foreground">Quem produzirá seu {selectedBlueprint?.title}</p></div>
+        {isFetchingProviders ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
         : providers.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            {providers.map((p) => (<Card key={p.id} className={cn("bg-white/5 border-white/10 p-4 cursor-pointer transition-all hover:border-purple-500/50", selectedProvider?.id === p.id && "ring-2 ring-purple-500")} onClick={() => setSelectedProvider(p)}><h4 className="font-semibold mb-2">{p.title}</h4><p className="text-sm text-gray-400 flex items-center gap-1"><Globe size={14} />{p.location?.country || "Global"}</p></Card>))}
+            {providers.map((p) => (<Card key={p.id} className={cn("bg-secondary border-border p-4 cursor-pointer transition-all hover:border-amber-500/50", selectedProvider?.id === p.id && "ring-2 ring-amber-500")} onClick={() => setSelectedProvider(p)}><h4 className="font-semibold mb-2">{p.title}</h4><p className="text-sm text-muted-foreground flex items-center gap-1"><Globe size={14} />{p.location?.country || "Global"}</p></Card>))}
           </div>
-        ) : <Card className="bg-white/5 border-white/10 p-12 text-center"><AlertCircle size={48} className="mx-auto mb-4 text-yellow-500" /><h3 className="text-lg font-semibold">Nenhum fornecedor</h3></Card>}
-        {selectedProvider && <div className="flex justify-center"><Button className="bg-purple-600 hover:bg-purple-700" onClick={() => { setStep(3); fetchVariants(selectedBlueprint!.id, selectedProvider.id); }}>Próximo: Upload<ArrowRight size={16} className="ml-2" /></Button></div>}
+        ) : <Card className="bg-secondary border-border p-12 text-center"><AlertCircle size={48} className="mx-auto mb-4 text-yellow-500" /><h3 className="text-lg font-semibold">Nenhum fornecedor</h3></Card>}
+        {selectedProvider && <div className="flex justify-center"><Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setStep(3); fetchVariants(selectedBlueprint!.id, selectedProvider.id); }}>Próximo: Upload<ArrowRight size={16} className="ml-2" /></Button></div>}
       </div>
     );
   }
@@ -1747,7 +1846,8 @@ function CreateWizard(props: {
         <Button variant="ghost" onClick={() => setStep(2)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-2">Escolha seu Design</h2>
-          <p className="text-gray-400">Faça upload, use suas criações ou escolha da galeria pública</p>
+          <p className="text-muted-foreground">Faça upload, use suas criações ou escolha da galeria pública</p>
+          <p className="text-xs text-amber-400/80 mt-1">💡 Para melhor resultado, use PNG com fundo transparente (sem fundo preto/branco)</p>
         </div>
         
         <div className="max-w-5xl mx-auto">
@@ -1755,7 +1855,7 @@ function CreateWizard(props: {
             {/* Left: Design Selection */}
             <div className="space-y-4">
               {/* Tabs */}
-              <div className="flex gap-1 p-1 bg-white/5 rounded-lg">
+              <div className="flex gap-1 p-1 bg-secondary rounded-lg">
                 {[
                   { id: 'upload', label: 'Upload', icon: Upload },
                   { id: 'creations', label: 'Minhas Criações', icon: Sparkles },
@@ -1768,8 +1868,8 @@ function CreateWizard(props: {
                     className={cn(
                       "flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-all",
                       designTab === tab.id 
-                        ? "bg-purple-600 text-white" 
-                        : "text-gray-400 hover:text-white hover:bg-white/5"
+                        ? "bg-amber-600 text-white" 
+                        : "text-muted-foreground hover:text-white hover:bg-secondary"
                     )}
                   >
                     <tab.icon size={14} />
@@ -1782,7 +1882,7 @@ function CreateWizard(props: {
               {designTab === 'upload' && (
                 <Card 
                   className={cn(
-                    "bg-white/5 border-white/10 border-dashed p-8 text-center cursor-pointer transition-all hover:border-purple-500/50", 
+                    "bg-secondary border-border border-dashed p-8 text-center cursor-pointer transition-all hover:border-amber-500/50", 
                     designPreview && "border-green-500/50 border-solid"
                   )} 
                   onClick={() => fileInputRef.current?.click()}
@@ -1794,16 +1894,16 @@ function CreateWizard(props: {
                       <p className="text-green-400 flex items-center justify-center gap-2">
                         <CheckCircle size={16} />Design carregado!
                       </p>
-                      <Button variant="outline" size="sm" className="border-gray-600">
+                      <Button variant="outline" size="sm" className="border-border">
                         <ImageIcon size={14} className="mr-2" />Trocar imagem
                       </Button>
                     </div>
                   ) : (
                     <>
-                      <Upload size={48} className="mx-auto mb-4 text-purple-400" />
+                      <Upload size={48} className="mx-auto mb-4 text-amber-400" />
                       <h3 className="font-semibold mb-2">Arraste seu design aqui</h3>
-                      <p className="text-sm text-gray-400 mb-4">PNG, JPG, SVG até 50MB</p>
-                      <Button className="bg-purple-600 hover:bg-purple-700">
+                      <p className="text-sm text-muted-foreground mb-4">PNG, JPG, SVG até 50MB</p>
+                      <Button className="bg-amber-600 hover:bg-amber-700">
                         <ImageIcon size={16} className="mr-2" />Escolher Arquivo
                       </Button>
                     </>
@@ -1815,7 +1915,7 @@ function CreateWizard(props: {
               {designPreview && selectedBlueprint && (
                 <Button 
                   variant="outline" 
-                  className="w-full border-purple-500/50 hover:bg-purple-600/20 text-purple-400"
+                  className="w-full border-amber-500/50 hover:bg-amber-600/20 text-amber-400"
                   onClick={() => setShowAdvancedEditor(true)}
                 >
                   <Wand2 size={16} className="mr-2" />
@@ -1828,7 +1928,7 @@ function CreateWizard(props: {
                 <div className="space-y-3">
                   {isLoadingGallery ? (
                     <div className="flex justify-center py-12">
-                      <Loader2 className="animate-spin text-purple-500" size={32} />
+                      <Loader2 className="animate-spin text-amber-500" size={32} />
                     </div>
                   ) : galleryImages.length > 0 ? (
                     <div className="grid grid-cols-3 gap-2 max-h-[400px] overflow-y-auto p-1">
@@ -1840,8 +1940,8 @@ function CreateWizard(props: {
                           className={cn(
                             "aspect-square rounded-lg overflow-hidden cursor-pointer relative group border-2 transition-all",
                             designPreview === img.imageUrl 
-                              ? "border-purple-500 ring-2 ring-purple-500/50" 
-                              : "border-transparent hover:border-purple-500/50"
+                              ? "border-amber-500 ring-2 ring-amber-500/50" 
+                              : "border-transparent hover:border-amber-500/50"
                           )}
                           onClick={() => selectGalleryImage(img.imageUrl)}
                         >
@@ -1855,12 +1955,12 @@ function CreateWizard(props: {
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
                             <p className="text-xs text-white line-clamp-2">{img.prompt}</p>
                             {designTab === 'public' && img.userName && (
-                              <p className="text-xs text-gray-400 mt-1">por {img.userName}</p>
+                              <p className="text-xs text-muted-foreground mt-1">por {img.userName}</p>
                             )}
                           </div>
                           {/* Selection indicator */}
                           {designPreview === img.imageUrl && (
-                            <div className="absolute top-1 right-1 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+                            <div className="absolute top-1 right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
                               <CheckCircle size={12} className="text-white" />
                             </div>
                           )}
@@ -1868,15 +1968,15 @@ function CreateWizard(props: {
                       ))}
                     </div>
                   ) : (
-                    <Card className="bg-white/5 border-white/10 p-8 text-center">
+                    <Card className="bg-secondary border-border p-8 text-center">
                       <ImageIcon size={40} className="mx-auto mb-3 text-gray-600" />
-                      <p className="text-gray-400 mb-2">
+                      <p className="text-muted-foreground mb-2">
                         {designTab === 'creations' && "Nenhuma criação encontrada"}
                         {designTab === 'uploads' && "Nenhum upload encontrado"}
                         {designTab === 'public' && "Galeria vazia"}
                       </p>
                       {designTab === 'creations' && (
-                        <p className="text-sm text-gray-500">Crie imagens no Studio AI para usar aqui</p>
+                        <p className="text-sm text-muted-foreground">Crie imagens no Studio AI para usar aqui</p>
                       )}
                     </Card>
                   )}
@@ -1886,18 +1986,18 @@ function CreateWizard(props: {
               {/* Variants & Pricing */}
               <div className="mt-4 space-y-4">
                 <h4 className="font-semibold flex items-center gap-2">
-                  <Package size={18} className="text-purple-400" />
+                  <Package size={18} className="text-amber-400" />
                   Variantes Disponíveis
                 </h4>
-                <div className="space-y-2 max-h-40 overflow-y-auto bg-white/5 rounded-lg p-3">
+                <div className="space-y-2 max-h-40 overflow-y-auto bg-secondary rounded-lg p-3">
                   {isFetchingVariants ? (
                     <div className="flex justify-center py-4">
-                      <Loader2 className="animate-spin text-purple-500" />
+                      <Loader2 className="animate-spin text-amber-500" />
                     </div>
                   ) : variants.filter(v => v.is_available !== false).slice(0, 10).map((v) => (
                     <label key={v.id} className={cn(
                       "flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors",
-                      selectedVariants.includes(v.id) ? "bg-purple-500/20 border border-purple-500/50" : "bg-white/5 hover:bg-white/10"
+                      selectedVariants.includes(v.id) ? "bg-amber-500/20 border border-amber-500/50" : "bg-secondary hover:bg-white/10"
                     )}>
                       <div className="flex items-center gap-2">
                         <input 
@@ -1910,7 +2010,7 @@ function CreateWizard(props: {
                               setSelectedVariants(selectedVariants.filter(id => id !== v.id));
                             }
                           }} 
-                          className="rounded border-gray-600 text-purple-500" 
+                          className="rounded border-border text-amber-500" 
                         />
                         <span className="text-sm">{v.title}</span>
                       </div>
@@ -1920,21 +2020,21 @@ function CreateWizard(props: {
 
                 {/* Pricing Summary Card */}
                 {selectedVariants.length > 0 && (
-                  <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30 p-4">
+                  <Card className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 border-amber-500/30 p-4">
                     <h5 className="font-semibold text-sm mb-3 flex items-center gap-2">
                       <DollarSign size={16} className="text-green-400" />
                       Resumo do Preço
                     </h5>
                     <div className="space-y-2 text-sm">
-                      <div className="flex justify-between text-gray-400">
+                      <div className="flex justify-between text-muted-foreground">
                         <span>Custo base (Printify)</span>
                         <span>{formatCurrency(baseCost)}</span>
                       </div>
-                      <div className="flex justify-between text-gray-400">
+                      <div className="flex justify-between text-muted-foreground">
                         <span>Frete estimado (Brasil)</span>
                         <span>Incluso</span>
                       </div>
-                      <div className="flex justify-between text-gray-400">
+                      <div className="flex justify-between text-muted-foreground">
                         <span>Sua margem ({MARGIN_PERCENTAGE}%)</span>
                         <span className="text-green-400">+{formatCurrency(sellingPrice - baseCost)}</span>
                       </div>
@@ -1946,14 +2046,14 @@ function CreateWizard(props: {
                     </div>
                     
                     {/* Delivery Info */}
-                    <div className="mt-3 pt-3 border-t border-gray-700 flex items-center gap-2 text-xs text-gray-400">
+                    <div className="mt-3 pt-3 border-t border-border flex items-center gap-2 text-xs text-muted-foreground">
                       <Truck size={14} />
                       <span>Entrega: {BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias úteis para o Brasil</span>
                     </div>
                     
                     {/* Profit Highlight */}
                     <div className="mt-3 p-2 bg-green-500/10 rounded-lg text-center">
-                      <p className="text-xs text-gray-400">Seu lucro por venda</p>
+                      <p className="text-xs text-muted-foreground">Seu lucro por venda</p>
                       <p className="text-xl font-bold text-green-400">{formatCurrency(sellingPrice - baseCost)}</p>
                     </div>
                   </Card>
@@ -1965,7 +2065,7 @@ function CreateWizard(props: {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-semibold flex items-center gap-2">
-                  <Sparkles size={18} className="text-purple-400" />
+                  <Sparkles size={18} className="text-amber-400" />
                   Preview do Produto
                 </h4>
                 {printifyMockups.length > 0 && (
@@ -1973,7 +2073,7 @@ function CreateWizard(props: {
                     variant="ghost" 
                     size="sm" 
                     onClick={() => setShowMockupGalleryModal(true)}
-                    className="text-purple-400 hover:text-purple-300"
+                    className="text-amber-400 hover:text-amber-300"
                   >
                     <Maximize2 size={14} className="mr-1" />
                     Expandir
@@ -1990,15 +2090,32 @@ function CreateWizard(props: {
                       onSelectIndex={setSelectedProductImageIndex}
                     />
                   ) : isGeneratingMockups ? (
-                    <MockupGallery 
-                      mockups={[]}
-                      selectedIndex={0}
-                      onSelectIndex={() => {}}
-                      isLoading={true}
-                    />
+                    <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-secondary border border-border">
+                      {/* Show product image faded in background */}
+                      <img
+                        src={selectedBlueprint.images[0]}
+                        alt=""
+                        className="w-full h-full object-contain opacity-30"
+                      />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                        <div className="relative">
+                          <div className="w-16 h-16 rounded-full border-4 border-amber-500/30 border-t-amber-500 animate-spin" />
+                          <Sparkles size={20} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-amber-400" />
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm font-semibold text-white">Gerando mockups profissionais...</p>
+                          <p className="text-xs text-muted-foreground mt-1">Printify está renderizando seu produto</p>
+                        </div>
+                        <div className="flex gap-1.5">
+                          {[0, 1, 2, 3].map(i => (
+                            <div key={i} className="w-12 h-12 rounded-lg bg-white/5 animate-pulse" style={{ animationDelay: `${i * 200}ms` }} />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   ) : (
-                    <MockupPreview 
-                      productImage={selectedBlueprint.images[selectedProductImageIndex] || selectedBlueprint.images[0]} 
+                    <MockupPreview
+                      productImage={selectedBlueprint.images[selectedProductImageIndex] || selectedBlueprint.images[0]}
                       designImage={designPreview}
                       productTitle={selectedBlueprint.title}
                       className="aspect-square w-full"
@@ -2011,7 +2128,7 @@ function CreateWizard(props: {
                       {/* Edit Position Button - Opens new editor */}
                       <Button 
                         variant="outline" 
-                        className="w-full border-purple-500/50 hover:bg-purple-600/20 text-purple-400"
+                        className="w-full border-amber-500/50 hover:bg-amber-600/20 text-amber-400"
                         onClick={() => setShowDesignEditor(true)}
                       >
                         <Settings size={16} className="mr-2" />
@@ -2026,9 +2143,9 @@ function CreateWizard(props: {
                       {/* Quick Scale Buttons */}
                       <div className="flex gap-2">
                         {[
-                          { id: 'small', label: 'P', value: 0.4 },
-                          { id: 'medium', label: 'M', value: 0.6 },
-                          { id: 'large', label: 'G', value: 0.8 },
+                          { id: 'small', label: 'P', value: 0.6 },
+                          { id: 'medium', label: 'M', value: 0.8 },
+                          { id: 'large', label: 'G', value: 0.95 },
                           { id: 'fill', label: 'XG', value: 1.0 },
                         ].map((opt) => (
                           <button
@@ -2040,8 +2157,8 @@ function CreateWizard(props: {
                             className={cn(
                               "flex-1 py-2 rounded-lg text-xs font-medium transition-all",
                               designScale === opt.id 
-                                ? "bg-purple-600 text-white" 
-                                : "bg-white/5 text-gray-400 hover:bg-white/10"
+                                ? "bg-amber-600 text-white" 
+                                : "bg-secondary text-muted-foreground hover:bg-white/10"
                             )}
                           >
                             {opt.label}
@@ -2055,9 +2172,10 @@ function CreateWizard(props: {
                   {designPreview && selectedVariants.length > 0 && !isGeneratingMockups && (
                     <>
                       {printifyMockups.length === 0 ? (
-                        <Button 
-                          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                        <Button
+                          className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
                           onClick={async () => {
+                            autoMockupTriggered.current = false; // Allow re-trigger
                             let url = uploadedDesignUrl;
                             if (!url) {
                               toast.loading("Fazendo upload...");
@@ -2098,17 +2216,17 @@ function CreateWizard(props: {
                   
                   {/* Info Card - only show when no mockups (MockupGallery has its own info) */}
                   {printifyMockups.length === 0 && (
-                    <Card className="bg-white/5 border-white/10 p-4">
+                    <Card className="bg-secondary border-border p-4">
                       <h5 className="font-semibold mb-1">{selectedBlueprint.title}</h5>
-                      <p className="text-sm text-gray-400 mb-3">{selectedBlueprint.brand}</p>
+                      <p className="text-sm text-muted-foreground mb-3">{selectedBlueprint.brand}</p>
                       
                       {designPreview ? (
-                        <div className="flex items-center gap-2 text-yellow-400 text-sm">
-                          <AlertCircle size={16} />
-                          <span>Clique em &quot;Gerar Mockups&quot; para ver resultado real</span>
+                        <div className="flex items-center gap-2 text-emerald-400 text-sm">
+                          <Sparkles size={16} />
+                          <span>Mockup profissional será gerado automaticamente</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-2 text-gray-400 text-sm">
+                        <div className="flex items-center gap-2 text-muted-foreground text-sm">
                           <AlertCircle size={16} />
                           <span>Faça upload do seu design para começar</span>
                         </div>
@@ -2119,7 +2237,7 @@ function CreateWizard(props: {
                   {/* Fallback to product images if no printify mockups */}
                   {printifyMockups.length === 0 && selectedBlueprint.images.length > 1 && (
                     <div className="space-y-2">
-                      <p className="text-xs text-gray-400">Imagens do produto:</p>
+                      <p className="text-xs text-muted-foreground">Imagens do produto:</p>
                       <div className="grid grid-cols-4 gap-2">
                         {selectedBlueprint.images.slice(0, 4).map((img, idx) => (
                           <motion.div 
@@ -2128,9 +2246,9 @@ function CreateWizard(props: {
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setSelectedProductImageIndex(idx)}
                             className={cn(
-                              "aspect-square bg-gray-800 rounded-lg overflow-hidden cursor-pointer transition-all border-2",
+                              "aspect-square bg-secondary rounded-lg overflow-hidden cursor-pointer transition-all border-2",
                               selectedProductImageIndex === idx 
-                                ? "border-purple-500 opacity-100 ring-2 ring-purple-500/50" 
+                                ? "border-amber-500 opacity-100 ring-2 ring-amber-500/50" 
                                 : "border-transparent opacity-70 hover:opacity-100"
                             )}
                           >
@@ -2196,22 +2314,22 @@ function CreateWizard(props: {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h2 className="text-2xl font-bold flex items-center gap-2">
-                      <Layers size={24} className="text-purple-400" />
+                      <Layers size={24} className="text-amber-400" />
                       Editor Avançado
                     </h2>
-                    <p className="text-gray-400">Adicione texto, camadas e posicione com precisão</p>
+                    <p className="text-muted-foreground">Adicione texto, camadas e posicione com precisão</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button 
                       variant="outline" 
-                      className="border-gray-700"
+                      className="border-border"
                       onClick={() => setShowAdvancedEditor(false)}
                     >
                       <X size={16} className="mr-2" />
                       Cancelar
                     </Button>
                     <Button 
-                      className="bg-purple-600 hover:bg-purple-700"
+                      className="bg-amber-600 hover:bg-amber-700"
                       onClick={() => {
                         // Mark mockups as outdated since design may have changed
                         if (printifyMockups.length > 0) {
@@ -2257,7 +2375,7 @@ function CreateWizard(props: {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
-              className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-gray-900/95 backdrop-blur-lg border-t border-gray-800 p-4 z-30"
+              className="fixed bottom-0 left-0 right-0 md:left-[280px] bg-card/95 backdrop-blur-lg border-t border-border p-4 z-30"
             >
               <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -2270,10 +2388,10 @@ function CreateWizard(props: {
                   </div>
                   <div>
                     <p className="font-medium">{selectedVariants.length} variante(s)</p>
-                    <p className="text-xs text-gray-400">{printifyMockups.length > 0 ? 'Mockups prontos!' : 'Pronto para configurar preços'}</p>
+                    <p className="text-xs text-muted-foreground">{printifyMockups.length > 0 ? 'Mockups prontos!' : 'Pronto para configurar preços'}</p>
                   </div>
                 </div>
-                <Button className="bg-purple-600 hover:bg-purple-700" onClick={() => setStep(4)}>
+                <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => setStep(4)}>
                   Próximo: Preços
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
@@ -2291,7 +2409,7 @@ function CreateWizard(props: {
       <Button variant="ghost" onClick={() => setStep(3)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-2">Finalize Seu Produto</h2>
-        <p className="text-gray-400">Configure título, descrição e preço de venda</p>
+        <p className="text-muted-foreground">Configure título, descrição e preço de venda</p>
       </div>
       
       <div className="max-w-5xl mx-auto">
@@ -2299,7 +2417,7 @@ function CreateWizard(props: {
           {/* Left: Mockup Preview (2 cols) */}
           <div className="md:col-span-2 space-y-4">
             <h4 className="font-semibold flex items-center gap-2">
-              <Sparkles size={18} className="text-purple-400" />
+              <Sparkles size={18} className="text-amber-400" />
               Seu Produto Final
             </h4>
             
@@ -2328,20 +2446,20 @@ function CreateWizard(props: {
             )}
             
             {/* Product Summary */}
-            <Card className="bg-white/5 border-white/10 p-4 space-y-2">
+            <Card className="bg-secondary border-border p-4 space-y-2">
               <div className="flex items-center gap-2 text-sm">
-                <Package size={14} className="text-gray-400" />
-                <span className="text-gray-400">Produto:</span>
+                <Package size={14} className="text-muted-foreground" />
+                <span className="text-muted-foreground">Produto:</span>
                 <span className="font-medium">{selectedBlueprint?.title}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <Globe size={14} className="text-gray-400" />
-                <span className="text-gray-400">Fornecedor:</span>
+                <Globe size={14} className="text-muted-foreground" />
+                <span className="text-muted-foreground">Fornecedor:</span>
                 <span className="font-medium">{selectedProvider?.title}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <Shirt size={14} className="text-gray-400" />
-                <span className="text-gray-400">Variantes:</span>
+                <Shirt size={14} className="text-muted-foreground" />
+                <span className="text-muted-foreground">Variantes:</span>
                 <span className="font-medium">{selectedVariants.length} selecionada(s)</span>
               </div>
             </Card>
@@ -2350,28 +2468,28 @@ function CreateWizard(props: {
           {/* Right: Form (3 cols) */}
           <div className="md:col-span-3 space-y-6">
             {/* Product Highlights */}
-            <Card className="bg-white/5 border-white/10 p-4">
+            <Card className="bg-secondary border-border p-4">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Star size={18} className="text-purple-400" />
+                  <div className="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Star size={18} className="text-amber-400" />
                   </div>
                   <p className="text-sm font-medium">Qualidade Premium</p>
-                  <p className="text-xs text-gray-500">Material de alta qualidade</p>
+                  <p className="text-xs text-muted-foreground">Material de alta qualidade</p>
                 </div>
                 <div>
                   <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
                     <Truck size={18} className="text-green-400" />
                   </div>
                   <p className="text-sm font-medium">{BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias</p>
-                  <p className="text-xs text-gray-500">Entrega para Brasil</p>
+                  <p className="text-xs text-muted-foreground">Entrega para Brasil</p>
                 </div>
                 <div>
                   <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
                     <CheckCircle size={18} className="text-blue-400" />
                   </div>
                   <p className="text-sm font-medium">Sob Demanda</p>
-                  <p className="text-xs text-gray-500">Feito quando vendido</p>
+                  <p className="text-xs text-muted-foreground">Feito quando vendido</p>
                 </div>
               </div>
             </Card>
@@ -2383,7 +2501,7 @@ function CreateWizard(props: {
                 <Input 
                   value={productTitle} 
                   onChange={(e) => setProductTitle(e.target.value)} 
-                  className="bg-white/5 border-gray-700 h-12 text-lg" 
+                  className="bg-secondary border-border h-12 text-lg" 
                   placeholder="Ex: Camiseta Design Exclusivo" 
                 />
               </div>
@@ -2392,7 +2510,7 @@ function CreateWizard(props: {
                 <Textarea 
                   value={productDescription} 
                   onChange={(e) => setProductDescription(e.target.value)} 
-                  className="bg-white/5 border-gray-700" 
+                  className="bg-secondary border-border" 
                   rows={4} 
                   placeholder="Descreva seu produto..."
                 />
@@ -2400,31 +2518,31 @@ function CreateWizard(props: {
             </div>
             
             {/* Pricing Card */}
-            <Card className="bg-gradient-to-br from-purple-900/30 to-pink-900/20 border-purple-500/30 p-6 space-y-4">
+            <Card className="bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30 p-6 space-y-4">
               <h3 className="font-semibold flex items-center gap-2 text-lg">
                 <DollarSign size={20} className="text-green-400" />
                 Definir Preços
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-gray-400 text-sm">Custo Base (R$)</Label>
+                  <Label className="text-muted-foreground text-sm">Custo Base (R$)</Label>
                   <Input 
                     type="number" 
                     value={baseCost} 
                     onChange={(e) => setBaseCost(parseFloat(e.target.value) || 0)} 
-                    className="bg-white/5 border-gray-700 h-12 text-lg font-semibold" 
+                    className="bg-secondary border-border h-12 text-lg font-semibold" 
                   />
-                  <p className="text-xs text-gray-500 mt-1">Custo de produção</p>
+                  <p className="text-xs text-muted-foreground mt-1">Custo de produção</p>
                 </div>
                 <div>
-                  <Label className="text-gray-400 text-sm">Preço Venda (R$)</Label>
+                  <Label className="text-muted-foreground text-sm">Preço Venda (R$)</Label>
                   <Input 
                     type="number" 
                     value={sellingPrice} 
                     onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)} 
-                    className="bg-white/5 border-gray-700 h-12 text-lg font-semibold" 
+                    className="bg-secondary border-border h-12 text-lg font-semibold" 
                   />
-                  <p className="text-xs text-gray-500 mt-1">Preço para cliente</p>
+                  <p className="text-xs text-muted-foreground mt-1">Preço para cliente</p>
                 </div>
               </div>
               
@@ -2460,7 +2578,7 @@ function CreateWizard(props: {
               </div>
               <div className="flex-1">
                 <h4 className="font-semibold">{canPublish ? "Você pode publicar!" : "XP Necessário para Publicar"}</h4>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   {canPublish 
                     ? `Você tem ${userXP} XP (mínimo: ${MIN_XP_TO_PUBLISH})`
                     : `Seu XP: ${userXP} / ${MIN_XP_TO_PUBLISH} necessário`
@@ -2470,7 +2588,7 @@ function CreateWizard(props: {
               {!canPublish && (
                 <div className="text-right">
                   <p className="text-yellow-400 font-bold">{MIN_XP_TO_PUBLISH - userXP}</p>
-                  <p className="text-xs text-gray-400">XP faltando</p>
+                  <p className="text-xs text-muted-foreground">XP faltando</p>
                 </div>
               )}
             </Card>
@@ -2479,7 +2597,7 @@ function CreateWizard(props: {
             <div className="flex gap-4 pt-4">
               <Button 
                 variant="outline" 
-                className="flex-1 h-12 border-gray-700" 
+                className="flex-1 h-12 border-border" 
                 onClick={() => createProduct(false)} 
                 disabled={isCreating || !productTitle}
               >
@@ -2488,7 +2606,7 @@ function CreateWizard(props: {
               </Button>
               <Button 
                 className={cn(
-                  "flex-1 h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700", 
+                  "flex-1 h-12 bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800", 
                   !canPublish && "opacity-50 cursor-not-allowed"
                 )} 
                 onClick={() => createProduct(true)} 
@@ -2555,11 +2673,11 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={onClose}>
-      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-4xl max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-card rounded-xl border border-border w-full max-w-4xl max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
         <div className="grid md:grid-cols-2 gap-6 p-6">
           {/* Left: Product Image */}
           <div className="space-y-4">
-            <div className="aspect-square bg-gray-800 rounded-xl overflow-hidden relative group">
+            <div className="aspect-square bg-secondary rounded-xl overflow-hidden relative group">
               {product.primaryMockup ? (
                 <img src={product.primaryMockup} alt="" className="w-full h-full object-cover" />
               ) : (
@@ -2568,10 +2686,10 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
             </div>
             
             {/* QR Code Section */}
-            <Card className="bg-white/5 border-gray-800 p-4">
+            <Card className="bg-secondary border-border p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <QrCode size={20} className="text-purple-400" />
+                  <QrCode size={20} className="text-amber-400" />
                   <span className="font-medium">Compartilhar Produto</span>
                 </div>
                 <Button variant="ghost" size="sm" onClick={() => setShowQR(!showQR)}>
@@ -2605,7 +2723,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
                           }}
                         />
                       </div>
-                      <Button variant="outline" size="sm" onClick={downloadQRCode} className="border-gray-700">
+                      <Button variant="outline" size="sm" onClick={downloadQRCode} className="border-border">
                         <Download size={16} className="mr-2" />
                         Baixar QR Code
                       </Button>
@@ -2618,9 +2736,9 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
                 <Input 
                   value={shareUrl} 
                   readOnly 
-                  className="bg-white/5 border-gray-700 text-sm flex-1 text-gray-400" 
+                  className="bg-secondary border-border text-sm flex-1 text-muted-foreground" 
                 />
-                <Button variant="outline" size="icon" onClick={copyUrl} className="border-gray-700 shrink-0">
+                <Button variant="outline" size="icon" onClick={copyUrl} className="border-border shrink-0">
                   {copied ? <CheckCircle size={18} className="text-green-400" /> : <Copy size={18} />}
                 </Button>
               </div>
@@ -2635,14 +2753,14 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
             </div>
             
             <h2 className="text-2xl font-bold">{product.title}</h2>
-            {product.shortDescription && <p className="text-gray-400 text-sm">{product.shortDescription}</p>}
-            <p className="text-gray-400">{product.description}</p>
+            {product.shortDescription && <p className="text-muted-foreground text-sm">{product.shortDescription}</p>}
+            <p className="text-muted-foreground">{product.description}</p>
             
             {/* Tags */}
             {product.tags && product.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {product.tags.map((tag, i) => (
-                  <Badge key={i} variant="outline" className="border-gray-700 text-gray-400">
+                  <Badge key={i} variant="outline" className="border-border text-muted-foreground">
                     <Hash size={12} className="mr-1" />{tag}
                   </Badge>
                 ))}
@@ -2650,40 +2768,40 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
             )}
 
             {/* Pricing */}
-            <div className="bg-white/5 rounded-lg p-4 space-y-2">
+            <div className="bg-secondary rounded-lg p-4 space-y-2">
               <div className="flex justify-between">
-                <span className="text-gray-400">Preço de Venda</span>
+                <span className="text-muted-foreground">Preço de Venda</span>
                 <span className="text-xl font-bold text-green-400">{formatCurrency(product.suggestedPrice)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Custo Base</span>
+                <span className="text-muted-foreground">Custo Base</span>
                 <span>{formatCurrency(product.baseCost)}</span>
               </div>
-              <div className="flex justify-between text-sm border-t border-gray-700 pt-2 mt-2">
-                <span className="text-gray-400 font-medium">Lucro por venda</span>
-                <span className="text-purple-400 font-bold">{formatCurrency(product.suggestedPrice - product.baseCost)}</span>
+              <div className="flex justify-between text-sm border-t border-border pt-2 mt-2">
+                <span className="text-muted-foreground font-medium">Lucro por venda</span>
+                <span className="text-amber-400 font-bold">{formatCurrency(product.suggestedPrice - product.baseCost)}</span>
               </div>
-              <div className="text-xs text-gray-500 text-right">
+              <div className="text-xs text-muted-foreground text-right">
                 Margem: {(((product.suggestedPrice - product.baseCost) / product.suggestedPrice) * 100).toFixed(0)}%
               </div>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-3 text-center">
-              <Card className="bg-white/5 p-3 border-gray-800">
+              <Card className="bg-secondary p-3 border-border">
                 <Eye size={20} className="mx-auto mb-1 text-blue-400" />
                 <p className="font-bold">{product.views}</p>
-                <p className="text-xs text-gray-500">Visualizações</p>
+                <p className="text-xs text-muted-foreground">Visualizações</p>
               </Card>
-              <Card className="bg-white/5 p-3 border-gray-800">
+              <Card className="bg-secondary p-3 border-border">
                 <ShoppingBag size={20} className="mx-auto mb-1 text-green-400" />
                 <p className="font-bold">{product.sales}</p>
-                <p className="text-xs text-gray-500">Vendas</p>
+                <p className="text-xs text-muted-foreground">Vendas</p>
               </Card>
-              <Card className="bg-white/5 p-3 border-gray-800">
+              <Card className="bg-secondary p-3 border-border">
                 <DollarSign size={20} className="mx-auto mb-1 text-yellow-400" />
                 <p className="font-bold">{formatCurrency(product.revenue)}</p>
-                <p className="text-xs text-gray-500">Receita</p>
+                <p className="text-xs text-muted-foreground">Receita</p>
               </Card>
             </div>
 
@@ -2693,23 +2811,23 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
                 {product.showInUserStore ? (
                   <ToggleRight size={18} className="text-green-400" />
                 ) : (
-                  <ToggleLeft size={18} className="text-gray-500" />
+                  <ToggleLeft size={18} className="text-muted-foreground" />
                 )}
-                <span className="text-gray-400">Minha Loja</span>
+                <span className="text-muted-foreground">Minha Loja</span>
               </div>
               <div className="flex items-center gap-2">
                 {product.showInMarketplace ? (
                   <ToggleRight size={18} className="text-green-400" />
                 ) : (
-                  <ToggleLeft size={18} className="text-gray-500" />
+                  <ToggleLeft size={18} className="text-muted-foreground" />
                 )}
-                <span className="text-gray-400">Marketplace</span>
+                <span className="text-muted-foreground">Marketplace</span>
               </div>
             </div>
 
             {/* Actions */}
             <div className="flex gap-3 pt-2">
-              <Button className="flex-1 bg-purple-600 hover:bg-purple-700" onClick={() => { setEditingProduct(product); onClose(); }}>
+              <Button className="flex-1 bg-amber-600 hover:bg-amber-700" onClick={() => { setEditingProduct(product); onClose(); }}>
                 <Edit size={16} className="mr-2" />Editar
               </Button>
               {product.status === "draft" && canPublish && (
@@ -2717,7 +2835,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
                   <Send size={16} className="mr-2" />Publicar
                 </Button>
               )}
-              <Button variant="outline" className="border-gray-700" onClick={() => window.open(shareUrl, '_blank')}>
+              <Button variant="outline" className="border-border" onClick={() => window.open(shareUrl, '_blank')}>
                 <ExternalLink size={16} />
               </Button>
             </div>
@@ -2821,23 +2939,23 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={onClose}>
-      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-card rounded-xl border border-border w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-800">
+        <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center gap-3">
             {product.primaryMockup && (
               <img src={product.primaryMockup} alt="" className="w-10 h-10 rounded-lg object-cover" />
             )}
             <div>
               <h2 className="text-lg font-bold">Editar Produto</h2>
-              <p className="text-xs text-gray-500">{product.templateName}</p>
+              <p className="text-xs text-muted-foreground">{product.templateName}</p>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-800">
+        <div className="flex border-b border-border">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -2845,8 +2963,8 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors",
                 activeTab === tab.id 
-                  ? "text-purple-400 border-b-2 border-purple-400 bg-purple-500/10" 
-                  : "text-gray-400 hover:text-white hover:bg-white/5"
+                  ? "text-amber-400 border-b-2 border-amber-400 bg-amber-500/10" 
+                  : "text-muted-foreground hover:text-white hover:bg-secondary"
               )}
             >
               <tab.icon size={16} />
@@ -2860,63 +2978,63 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
           {activeTab === 'info' && (
             <div className="space-y-5">
               <div>
-                <Label className="text-gray-300">Título do Produto</Label>
+                <Label className="text-muted-foreground">Título do Produto</Label>
                 <Input 
                   value={title} 
                   onChange={(e) => setTitle(e.target.value)} 
-                  className="bg-white/5 border-gray-700 mt-1.5" 
+                  className="bg-secondary border-border mt-1.5" 
                   placeholder="Ex: Camiseta Arte Digital Minimalista"
                 />
               </div>
               
               <div>
-                <Label className="text-gray-300">Descrição Curta</Label>
+                <Label className="text-muted-foreground">Descrição Curta</Label>
                 <Input 
                   value={shortDescription} 
                   onChange={(e) => setShortDescription(e.target.value)} 
-                  className="bg-white/5 border-gray-700 mt-1.5" 
+                  className="bg-secondary border-border mt-1.5" 
                   placeholder="Uma linha de destaque sobre o produto"
                   maxLength={150}
                 />
-                <p className="text-xs text-gray-500 mt-1">{shortDescription.length}/150 caracteres</p>
+                <p className="text-xs text-muted-foreground mt-1">{shortDescription.length}/150 caracteres</p>
               </div>
               
               <div>
-                <Label className="text-gray-300">Descrição Completa</Label>
+                <Label className="text-muted-foreground">Descrição Completa</Label>
                 <Textarea 
                   value={description} 
                   onChange={(e) => setDescription(e.target.value)} 
-                  className="bg-white/5 border-gray-700 mt-1.5" 
+                  className="bg-secondary border-border mt-1.5" 
                   rows={4}
                   placeholder="Descreva seu produto em detalhes..."
                 />
               </div>
               
               <div>
-                <Label className="text-gray-300">Tags</Label>
-                <p className="text-xs text-gray-500 mb-2">Adicione até 10 tags para ajudar na busca</p>
+                <Label className="text-muted-foreground">Tags</Label>
+                <p className="text-xs text-muted-foreground mb-2">Adicione até 10 tags para ajudar na busca</p>
                 <div className="flex gap-2 mb-2">
                   <Input 
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                    className="bg-white/5 border-gray-700 flex-1" 
+                    className="bg-secondary border-border flex-1" 
                     placeholder="Digite uma tag e pressione Enter"
                   />
-                  <Button variant="outline" onClick={addTag} className="border-gray-700">
+                  <Button variant="outline" onClick={addTag} className="border-border">
                     <Plus size={16} />
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag, i) => (
-                    <Badge key={i} variant="secondary" className="bg-purple-500/20 text-purple-300 pr-1">
+                    <Badge key={i} variant="secondary" className="bg-amber-500/20 text-amber-300 pr-1">
                       <Hash size={12} className="mr-1" />{tag}
                       <button onClick={() => removeTag(tag)} className="ml-2 hover:text-red-400">
                         <X size={14} />
                       </button>
                     </Badge>
                   ))}
-                  {tags.length === 0 && <span className="text-gray-500 text-sm">Nenhuma tag adicionada</span>}
+                  {tags.length === 0 && <span className="text-muted-foreground text-sm">Nenhuma tag adicionada</span>}
                 </div>
               </div>
             </div>
@@ -2924,7 +3042,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
 
           {activeTab === 'pricing' && (
             <div className="space-y-5">
-              <Card className="bg-white/5 border-gray-800 p-4">
+              <Card className="bg-secondary border-border p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <DollarSign size={20} className="text-green-400" />
                   <span className="font-medium">Definir Preço de Venda</span>
@@ -2932,34 +3050,34 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                 
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-gray-300">Preço de Venda (R$)</Label>
+                    <Label className="text-muted-foreground">Preço de Venda (R$)</Label>
                     <Input 
                       type="number" 
                       value={price} 
                       onChange={(e) => setPrice(parseFloat(e.target.value) || 0)} 
-                      className="bg-white/5 border-gray-700 mt-1.5 text-xl font-bold"
+                      className="bg-secondary border-border mt-1.5 text-xl font-bold"
                       step="0.01"
                       min={product.baseCost}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Preço mínimo: {(product.baseCost).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    <p className="text-xs text-muted-foreground mt-1">Preço mínimo: {(product.baseCost).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-700">
+                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                     <div>
-                      <span className="text-gray-500 text-sm">Custo Base</span>
+                      <span className="text-muted-foreground text-sm">Custo Base</span>
                       <p className="text-lg font-medium">{product.baseCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     </div>
                     <div>
-                      <span className="text-gray-500 text-sm">Seu Lucro</span>
+                      <span className="text-muted-foreground text-sm">Seu Lucro</span>
                       <p className={cn("text-lg font-bold", profit >= 0 ? "text-green-400" : "text-red-400")}>
                         {profit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                       </p>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg p-4">
+                  <div className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-lg p-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Margem de Lucro</span>
+                      <span className="text-muted-foreground">Margem de Lucro</span>
                       <span className={cn("text-2xl font-bold", parseFloat(margin) >= 30 ? "text-green-400" : parseFloat(margin) >= 15 ? "text-yellow-400" : "text-red-400")}>
                         {margin}%
                       </span>
@@ -2970,7 +3088,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                         style={{ width: `${Math.min(parseFloat(margin), 100)}%` }}
                       />
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       {parseFloat(margin) >= 30 ? "✓ Excelente margem!" : parseFloat(margin) >= 15 ? "Margem adequada" : "⚠ Margem baixa"}
                     </p>
                   </div>
@@ -2981,17 +3099,17 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
 
           {activeTab === 'visibility' && (
             <div className="space-y-5">
-              <Card className="bg-white/5 border-gray-800 p-4">
+              <Card className="bg-secondary border-border p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Settings size={20} className="text-blue-400" />
                   <span className="font-medium">Status do Produto</span>
                 </div>
                 
                 <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
-                  <SelectTrigger className="bg-white/5 border-gray-700">
+                  <SelectTrigger className="bg-secondary border-border">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-gray-700">
+                  <SelectContent className="bg-card border-border">
                     <SelectItem value="draft">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-gray-500" />
@@ -3020,19 +3138,19 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                 </Select>
               </Card>
 
-              <Card className="bg-white/5 border-gray-800 p-4">
+              <Card className="bg-secondary border-border p-4">
                 <div className="flex items-center gap-2 mb-4">
-                  <Globe size={20} className="text-purple-400" />
+                  <Globe size={20} className="text-amber-400" />
                   <span className="font-medium">Onde exibir seu produto</span>
                 </div>
                 
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
                     <div className="flex items-center gap-3">
                       <Store size={20} className="text-blue-400" />
                       <div>
                         <p className="font-medium">Minha Loja</p>
-                        <p className="text-xs text-gray-500">Visível na sua loja pessoal</p>
+                        <p className="text-xs text-muted-foreground">Visível na sua loja pessoal</p>
                       </div>
                     </div>
                     <button
@@ -3043,12 +3161,12 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
                     <div className="flex items-center gap-3">
-                      <Globe size={20} className="text-purple-400" />
+                      <Globe size={20} className="text-amber-400" />
                       <div>
                         <p className="font-medium">Marketplace FayAi</p>
-                        <p className="text-xs text-gray-500">Visível para todos os usuários</p>
+                        <p className="text-xs text-muted-foreground">Visível para todos os usuários</p>
                       </div>
                     </div>
                     <button
@@ -3065,9 +3183,9 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
 
           {activeTab === 'share' && (
             <div className="space-y-5">
-              <Card className="bg-white/5 border-gray-800 p-4">
+              <Card className="bg-secondary border-border p-4">
                 <div className="flex items-center gap-2 mb-4">
-                  <QrCode size={20} className="text-purple-400" />
+                  <QrCode size={20} className="text-amber-400" />
                   <span className="font-medium">QR Code do Produto</span>
                 </div>
                 
@@ -3089,17 +3207,17 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                       }}
                     />
                   </div>
-                  <p className="text-sm text-gray-400 text-center">
+                  <p className="text-sm text-muted-foreground text-center">
                     Escaneie o QR Code para acessar a página do produto
                   </p>
-                  <Button variant="outline" onClick={downloadQRCode} className="border-gray-700">
+                  <Button variant="outline" onClick={downloadQRCode} className="border-border">
                     <Download size={16} className="mr-2" />
                     Baixar QR Code PNG
                   </Button>
                 </div>
               </Card>
 
-              <Card className="bg-white/5 border-gray-800 p-4">
+              <Card className="bg-secondary border-border p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Share2 size={20} className="text-blue-400" />
                   <span className="font-medium">Link de Compartilhamento</span>
@@ -3109,9 +3227,9 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                   <Input 
                     value={shareUrl} 
                     readOnly 
-                    className="bg-white/5 border-gray-700 text-sm flex-1 text-gray-400 font-mono" 
+                    className="bg-secondary border-border text-sm flex-1 text-muted-foreground font-mono" 
                   />
-                  <Button variant="outline" onClick={copyUrl} className="border-gray-700">
+                  <Button variant="outline" onClick={copyUrl} className="border-border">
                     {copied ? <CheckCircle size={18} className="text-green-400" /> : <Copy size={18} />}
                   </Button>
                 </div>
@@ -3119,21 +3237,21 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                 <div className="flex gap-2 mt-4">
                   <Button 
                     variant="outline" 
-                    className="flex-1 border-gray-700"
+                    className="flex-1 border-border"
                     onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Confira meu produto: ${title} - ${shareUrl}`)}`, '_blank')}
                   >
                     WhatsApp
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="flex-1 border-gray-700"
+                    className="flex-1 border-border"
                     onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Confira meu produto: ${title}`)}&url=${encodeURIComponent(shareUrl)}`, '_blank')}
                   >
                     Twitter
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="flex-1 border-gray-700"
+                    className="flex-1 border-border"
                     onClick={() => window.open(shareUrl, '_blank')}
                   >
                     <ExternalLink size={16} />
@@ -3145,12 +3263,12 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 p-4 border-t border-gray-800 bg-gray-900/50">
-          <Button variant="outline" className="flex-1 border-gray-700" onClick={onClose}>
+        <div className="flex gap-3 p-4 border-t border-border bg-card/50">
+          <Button variant="outline" className="flex-1 border-border" onClick={onClose}>
             Cancelar
           </Button>
           <Button 
-            className="flex-1 bg-purple-600 hover:bg-purple-700" 
+            className="flex-1 bg-amber-600 hover:bg-amber-700" 
             onClick={handleSave}
             disabled={isSaving}
           >

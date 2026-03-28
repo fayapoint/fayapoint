@@ -111,10 +111,10 @@ export function DashboardSidebar({
     <motion.aside
       initial={false}
       animate={{ width: isCollapsed ? 80 : 280 }}
-      className="hidden md:flex fixed left-0 top-0 h-screen bg-gray-950 border-r border-gray-800 z-40 flex-col"
+      className="hidden md:flex fixed left-0 top-0 h-screen bg-card border-r border-border z-40 flex-col"
     >
       {/* Logo */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-gray-800">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-border">
         <AnimatePresence mode="wait">
           {!isCollapsed && (
             <motion.div
@@ -123,23 +123,23 @@ export function DashboardSidebar({
               exit={{ opacity: 0 }}
               className="flex items-center gap-2"
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-lg flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg">FayAi</span>
+              <span className="font-bold text-lg" style={{ fontFamily: "var(--font-bebas), sans-serif", letterSpacing: "0.1em" }}>FAY<span className="text-amber-400">AI</span></span>
             </motion.div>
           )}
         </AnimatePresence>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+          className="p-2 hover:bg-secondary rounded-lg transition-colors"
         >
           {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
       </div>
 
       {/* User Profile Card */}
-      <div className={cn("p-4 border-b border-gray-800", isCollapsed && "px-2")}>
+      <div className={cn("p-4 border-b border-border", isCollapsed && "px-2")}>
         <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
           <UserAvatarWithBadges
             user={user}
@@ -153,12 +153,12 @@ export function DashboardSidebar({
             <div className="flex-1 min-w-0">
               <p className="font-semibold truncate">{user.name}</p>
               {user.email && (
-                <p className="text-[11px] text-gray-500 truncate" title={user.email}>{user.email}</p>
+                <p className="text-[11px] text-muted-foreground truncate" title={user.email}>{user.email}</p>
               )}
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="outline" className={cn(
                   "text-[10px] px-1.5 h-5",
-                  isPro ? "border-yellow-500/50 text-yellow-400" : "border-gray-600 text-gray-400"
+                  isPro ? "border-yellow-500/50 text-yellow-400" : "border-border text-muted-foreground"
                 )}>
                   {plan.toUpperCase()}
                 </Badge>
@@ -176,14 +176,14 @@ export function DashboardSidebar({
           <div className="mt-4 space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold text-purple-400">{stats.level}</span>
+                <div className="w-6 h-6 bg-amber-500/20 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-bold text-amber-400">{stats.level}</span>
                 </div>
-                <span className="text-gray-400">Nível {stats.level}</span>
+                <span className="text-muted-foreground">Nível {stats.level}</span>
               </div>
-              <span className="text-xs text-gray-500">{stats.xp}/{stats.xpToNextLevel} XP</span>
+              <span className="text-xs text-muted-foreground">{stats.xp}/{stats.xpToNextLevel} XP</span>
             </div>
-            <Progress value={stats.levelProgress} className="h-2 bg-gray-800" />
+            <Progress value={stats.levelProgress} className="h-2 bg-secondary" />
           </div>
         )}
       </div>
@@ -191,9 +191,9 @@ export function DashboardSidebar({
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-2">
         {/* Home Link */}
-        <Link href="/">
+        <Link href="/descobrir">
           <button className={cn(
-            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition mb-2 group",
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary hover:text-white transition mb-2 group",
             isCollapsed && "justify-center px-2"
           )}>
             <Home size={20} className="shrink-0" />
@@ -206,7 +206,7 @@ export function DashboardSidebar({
           </button>
         </Link>
         
-        <div className="h-px bg-gray-800 mx-2 mb-2" />
+        <div className="h-px bg-secondary mx-2 mb-2" />
         
         <div className="space-y-1">
           {MENU_ITEMS.map((item) => {
@@ -221,8 +221,8 @@ export function DashboardSidebar({
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative",
                   isActive 
-                    ? "bg-purple-500/20 text-purple-400" 
-                    : "hover:bg-white/5 text-gray-400 hover:text-white",
+                    ? "bg-amber-500/20 text-amber-400" 
+                    : "hover:bg-secondary text-muted-foreground hover:text-white",
                   isLocked && "opacity-50 cursor-not-allowed",
                   isCollapsed && "justify-center px-2"
                 )}
@@ -242,7 +242,7 @@ export function DashboardSidebar({
                           "text-[10px] px-1.5 h-4",
                           item.badge === "PRO" 
                             ? "border-yellow-500/50 text-yellow-500" 
-                            : "border-purple-500/50 text-purple-400"
+                            : "border-amber-500/50 text-amber-400"
                         )}
                       >
                         {item.badge}
@@ -258,7 +258,7 @@ export function DashboardSidebar({
                 {isActive && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-purple-500 rounded-r-full"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-amber-500 rounded-r-full"
                   />
                 )}
               </button>
@@ -269,17 +269,17 @@ export function DashboardSidebar({
 
       {/* Upgrade CTA for free users */}
       {!isPro && !isCollapsed && (
-        <div className="p-4 border-t border-gray-800">
-          <div className="p-4 bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/30">
+        <div className="p-4 border-t border-border">
+          <div className="p-4 bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-xl border border-amber-500/30">
             <div className="flex items-center gap-2 mb-2">
               <Crown className="text-yellow-400" size={18} />
               <span className="font-semibold text-sm">Upgrade para Pro</span>
             </div>
-            <p className="text-xs text-gray-400 mb-3">
+            <p className="text-xs text-muted-foreground mb-3">
               Desbloqueie recursos exclusivos, IA ilimitada e muito mais!
             </p>
             <Link href="/precos">
-              <button className="w-full py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-sm font-semibold hover:from-purple-700 hover:to-pink-700 transition">
+              <button className="w-full py-2 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-lg text-sm font-semibold hover:from-amber-700 hover:to-yellow-800 transition">
                 Ver Planos
               </button>
             </Link>
@@ -288,10 +288,10 @@ export function DashboardSidebar({
       )}
 
       {/* Account & Settings Links */}
-      <div className="p-2 border-t border-gray-800 space-y-1">
+      <div className="p-2 border-t border-border space-y-1">
         <Link href="/portal/conta">
           <button className={cn(
-            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition",
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary hover:text-white transition",
             isCollapsed && "justify-center"
           )}>
             <UserCog size={20} />
@@ -300,7 +300,7 @@ export function DashboardSidebar({
         </Link>
         <Link href="/configuracoes">
           <button className={cn(
-            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-white/5 hover:text-white transition",
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary hover:text-white transition",
             isCollapsed && "justify-center"
           )}>
             <Settings size={20} />

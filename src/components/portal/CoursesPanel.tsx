@@ -7,17 +7,26 @@ import {
   Award,
   BarChart3,
   BookOpen,
+  Bot,
+  Brain,
   CalendarDays,
   CheckCircle2,
   Clock,
+  Code2,
   Crown,
   Gift,
+  Layers,
   Loader2,
   Lock,
+  Palette,
   PlayCircle,
   Rocket,
+  Search,
   Sparkles,
   TrendingUp,
+  Wand2,
+  Workflow,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -65,6 +74,109 @@ const courseLevelBadgeStyles: Record<string, string> = {
   intermediate: "border-amber-400/30 bg-amber-500/10 text-amber-300",
   advanced: "border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-300",
 };
+
+/**
+ * Course thumbnail configuration.
+ * `logo` = external URL for the tool's official icon.
+ * `icon` = Lucide fallback when no logo is available.
+ * `gradient` = card background.
+ */
+const COURSE_THUMBNAILS: Record<string, {
+  logo?: string;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+  gradient: string;
+}> = {
+  "chatgpt-masterclass": {
+    logo: "https://cdn.oaistatic.com/_next/static/media/apple-touch-icon.82af6fe1.png",
+    gradient: "from-emerald-600 to-teal-800",
+  },
+  "chatgpt-allowlisting": {
+    logo: "https://cdn.oaistatic.com/_next/static/media/apple-touch-icon.82af6fe1.png",
+    icon: Lock,
+    gradient: "from-emerald-700 to-cyan-900",
+  },
+  "claude-ia-segura": {
+    logo: "https://claude.ai/images/claude_app_icon.png",
+    gradient: "from-amber-700 to-orange-900",
+  },
+  "claude-cowork-colaboracao": {
+    logo: "https://claude.ai/images/claude_app_icon.png",
+    gradient: "from-orange-600 to-amber-800",
+  },
+  "ia-sem-filtro-por-claude": {
+    logo: "https://claude.ai/images/claude_app_icon.png",
+    icon: BookOpen,
+    gradient: "from-violet-700 to-purple-900",
+  },
+  "gemini-ia-google": {
+    logo: "https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg",
+    gradient: "from-blue-600 to-indigo-800",
+  },
+  "midjourney-arte-profissional": {
+    logo: "https://cdn.midjourney.com/logo/logo-midjourney.svg",
+    gradient: "from-slate-700 to-zinc-900",
+  },
+  "leonardo-ai-criacao-visual": {
+    icon: Palette,
+    gradient: "from-purple-600 to-fuchsia-800",
+  },
+  "n8n-automacao-avancada": {
+    logo: "https://n8n.io/favicon.ico",
+    icon: Workflow,
+    gradient: "from-red-600 to-rose-800",
+  },
+  "make-integracao-total": {
+    logo: "https://images.ctfassets.net/qqlj6g4ee76j/2gVFLHkiaBamIi4C2qy8ks/e51e2d6a67e1a7d7bd7dd8dbd6f4e4f9/make-favicon.png",
+    icon: Layers,
+    gradient: "from-violet-600 to-indigo-800",
+  },
+  "perplexity-pesquisa-inteligente": {
+    logo: "https://www.perplexity.ai/favicon.svg",
+    icon: Search,
+    gradient: "from-cyan-600 to-blue-800",
+  },
+  "banana-dev-deploy-ia": {
+    icon: Zap,
+    gradient: "from-yellow-600 to-amber-800",
+  },
+  "prompt-engineering": {
+    icon: Wand2,
+    gradient: "from-pink-600 to-rose-800",
+  },
+  "crie-agentes-de-ia-autonomos": {
+    icon: Bot,
+    gradient: "from-sky-600 to-blue-800",
+  },
+  "openclaw-ia-open-source": {
+    icon: Code2,
+    gradient: "from-green-600 to-emerald-800",
+  },
+  "autoresearch-singularity": {
+    icon: Brain,
+    gradient: "from-fuchsia-600 to-purple-900",
+  },
+};
+
+function CourseToolIcon({ logo, name, className }: { logo?: string; name: string; className?: string }) {
+  const [error, setError] = useState(false);
+
+  if (!logo || error) {
+    return (
+      <div className={cn("flex items-center justify-center rounded-xl bg-white/10", className)}>
+        <span className="text-lg font-bold text-white/80">{name.charAt(0)}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={logo}
+      alt={`${name} logo`}
+      className={cn("object-contain", className)}
+      onError={() => setError(true)}
+    />
+  );
+}
 
 export function CoursesPanel({
   tierConfig,
@@ -231,20 +343,20 @@ export function CoursesPanel({
 
   return (
     <div className="space-y-6">
-      <Card className="relative overflow-hidden border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(147,51,234,0.22),transparent_35%),radial-gradient(circle_at_top_right,rgba(16,185,129,0.16),transparent_32%),linear-gradient(135deg,rgba(10,10,20,0.98),rgba(15,23,42,0.95))] p-6">
+      <Card className="relative overflow-hidden border-border bg-[radial-gradient(circle_at_top_left,rgba(147,51,234,0.22),transparent_35%),radial-gradient(circle_at_top_right,rgba(16,185,129,0.16),transparent_32%),linear-gradient(135deg,rgba(10,10,20,0.98),rgba(15,23,42,0.95))] p-6">
         <div className="absolute -top-16 right-0 h-40 w-40 rounded-full bg-fuchsia-500/10 blur-3xl" />
         <div className="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-cyan-500/10 blur-3xl" />
         <div className="relative grid gap-6 xl:grid-cols-[1.4fr,0.9fr]">
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge className="border-purple-400/30 bg-purple-500/10 text-purple-200">
+              <Badge className="border-amber-400/30 bg-amber-500/10 text-amber-200">
                 Plano {tierConfig.displayName}
               </Badge>
               <Badge className="border-emerald-400/30 bg-emerald-500/10 text-emerald-200">
                 {userCourses.length} curso{userCourses.length === 1 ? "" : "s"} no seu acervo
               </Badge>
               {!tierConfig.limits.unlimited && enrollmentSlots && (
-                <Badge className="border-white/10 bg-white/5 text-white/80">
+                <Badge className="border-border bg-secondary text-white/80">
                   {totalSlotsAvailable} vaga{totalSlotsAvailable === 1 ? "" : "s"} livre{totalSlotsAvailable === 1 ? "" : "s"} este mês
                 </Badge>
               )}
@@ -254,39 +366,39 @@ export function CoursesPanel({
               <h2 className="text-3xl font-black tracking-tight text-white md:text-4xl">
                 Seu próximo passo em IA precisa estar claro.
               </h2>
-              <p className="max-w-2xl text-sm leading-6 text-gray-300 md:text-base">
+              <p className="max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">
                 Retome seu próximo capítulo, enxergue o que cabe no seu plano agora e descubra quais cursos desbloqueiam mais valor sem sair da jornada.
               </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Em andamento</p>
+              <div className="rounded-2xl border border-border bg-black/25 p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Em andamento</p>
                 <p className="mt-2 text-3xl font-black text-white">{activeCourses.length}</p>
-                <p className="mt-1 text-xs text-gray-400">Cursos que realmente pedem retomada agora.</p>
+                <p className="mt-1 text-xs text-muted-foreground">Cursos que realmente pedem retomada agora.</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Disponíveis agora</p>
+              <div className="rounded-2xl border border-border bg-black/25 p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Disponíveis agora</p>
                 <p className="mt-2 text-3xl font-black text-emerald-300">{coursesAvailableNow}</p>
-                <p className="mt-1 text-xs text-gray-400">Entre cursos liberados, grátis do mês e catálogo atual do plano.</p>
+                <p className="mt-1 text-xs text-muted-foreground">Entre cursos liberados, grátis do mês e catálogo atual do plano.</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Concluídos</p>
+              <div className="rounded-2xl border border-border bg-black/25 p-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Concluídos</p>
                 <p className="mt-2 text-3xl font-black text-fuchsia-300">{completedCourses.length}</p>
-                <p className="mt-1 text-xs text-gray-400">Cursos já fechados e prontos para certificação ou revisão.</p>
+                <p className="mt-1 text-xs text-muted-foreground">Cursos já fechados e prontos para certificação ou revisão.</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-black/30 p-5 backdrop-blur-sm">
+          <div className="rounded-3xl border border-border bg-secondary p-5 backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Capacidade do plano</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Capacidade do plano</p>
                 <h3 className="mt-2 text-xl font-bold text-white">Mapa de vagas</h3>
               </div>
               {!tierConfig.limits.unlimited && (
                 <Link href="/precos">
-                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+                  <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 text-white">
                     <Crown size={16} className="mr-2" />
                     Upgrade
                   </Button>
@@ -309,7 +421,7 @@ export function CoursesPanel({
                     <div className="flex items-center justify-between gap-4">
                       <div>
                         <p className={cn("text-sm font-semibold", tone)}>{label}</p>
-                        <p className="mt-1 text-xs text-gray-400">
+                        <p className="mt-1 text-xs text-muted-foreground">
                           {slot ? `${slot.available} ${slot.available === 1 ? "vaga disponível" : "vagas disponíveis"}` : "Carregando vagas..."}
                         </p>
                       </div>
@@ -327,6 +439,104 @@ export function CoursesPanel({
           </div>
         </div>
       </Card>
+
+      {/* ── COURSE THUMBNAILS GALLERY ── */}
+      {startedCourses.length > 0 && (
+        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(3,7,18,0.97))] p-6">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                <BookOpen size={18} className="text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">Seus Cursos</h3>
+                <p className="text-sm text-muted-foreground">{startedCourses.length} curso{startedCourses.length === 1 ? "" : "s"} no seu acervo</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {startedCourses.map((course) => {
+              const thumb = COURSE_THUMBNAILS[course.courseId];
+              const FallbackIcon = thumb?.icon || Sparkles;
+              const gradient = thumb?.gradient || "from-slate-600 to-slate-800";
+              const isCompleted = course.progressPercent >= 100;
+
+              return (
+                <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
+                  <div className="group relative flex flex-col rounded-2xl border border-border bg-card overflow-hidden transition-all hover:border-amber-500/40 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/5">
+                    {/* Thumbnail area */}
+                    <div className={cn(
+                      "relative aspect-square flex items-center justify-center bg-gradient-to-br p-4",
+                      gradient
+                    )}>
+                      {thumb?.logo ? (
+                        <CourseToolIcon
+                          logo={thumb.logo}
+                          name={course.details?.tool || course.courseId}
+                          className="w-12 h-12 rounded-xl"
+                        />
+                      ) : (
+                        <FallbackIcon size={36} className="text-white/90" />
+                      )}
+
+                      {/* Progress ring overlay */}
+                      <div className="absolute bottom-2 right-2">
+                        <div className="relative w-8 h-8">
+                          <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="14" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
+                            <circle
+                              cx="18" cy="18" r="14"
+                              fill="none"
+                              stroke={isCompleted ? "#10b981" : "#f59e0b"}
+                              strokeWidth="3"
+                              strokeDasharray={`${course.progressPercent * 0.88} ${88 - course.progressPercent * 0.88}`}
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-[8px] font-bold text-white">{course.progressPercent}%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Completed checkmark */}
+                      {isCompleted && (
+                        <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
+                          <CheckCircle2 size={14} className="text-white" />
+                        </div>
+                      )}
+
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                        <PlayCircle size={28} className="text-white/0 group-hover:text-white/90 transition-all scale-75 group-hover:scale-100" />
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <div className="p-2.5 flex-1 flex flex-col justify-between">
+                      <h4 className="text-xs font-semibold text-white line-clamp-2 leading-snug group-hover:text-amber-300 transition-colors">
+                        {course.details?.title || course.courseId}
+                      </h4>
+                      <p className="text-[10px] text-muted-foreground mt-1.5">
+                        {course.details?.tool || "IA"}
+                      </p>
+                    </div>
+
+                    {/* Progress bar */}
+                    <div className="h-1 w-full bg-white/5">
+                      <div
+                        className={cn("h-full transition-all", isCompleted ? "bg-emerald-500" : "bg-amber-500")}
+                        style={{ width: `${course.progressPercent}%` }}
+                      />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </Card>
+      )}
 
       <div className="grid gap-4 xl:grid-cols-[1.1fr,0.9fr]">
         <Card className="overflow-hidden border-emerald-500/20 bg-[linear-gradient(135deg,rgba(6,95,70,0.18),rgba(3,7,18,0.98))] p-6">
@@ -357,22 +567,22 @@ export function CoursesPanel({
           {freeMonthlyCourse ? (
             <div className="mt-6 grid gap-4 md:grid-cols-[1fr,auto]">
               <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Ferramenta</p>
+                <div className="rounded-2xl border border-border bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Ferramenta</p>
                   <p className="mt-2 text-lg font-bold text-white">{freeMonthlyCourse.tool}</p>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Duração</p>
+                <div className="rounded-2xl border border-border bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Duração</p>
                   <p className="mt-2 text-lg font-bold text-white">{freeMonthlyCourse.duration}</p>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Certificado</p>
+                <div className="rounded-2xl border border-border bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Certificado</p>
                   <p className="mt-2 text-lg font-bold text-white">Incluído</p>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
                 <Link href={`/curso/${freeMonthlyCourse.slug}`}>
-                  <Button variant="outline" className="w-full border-white/15 bg-white/5 text-white hover:bg-white/10">
+                  <Button variant="outline" className="w-full border-white/15 bg-secondary text-white hover:bg-white/10">
                     Ver detalhes
                   </Button>
                 </Link>
@@ -396,18 +606,18 @@ export function CoursesPanel({
               </div>
             </div>
           ) : (
-            <div className="mt-5 rounded-2xl border border-dashed border-white/10 bg-black/20 p-5 text-sm text-gray-400">
+            <div className="mt-5 rounded-2xl border border-dashed border-border bg-black/20 p-5 text-sm text-muted-foreground">
               A rotação mensal não encontrou um curso gratuito válido. Vale revisar o catálogo ativo deste mês.
             </div>
           )}
         </Card>
 
-        <Card className="border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.96))] p-6">
+        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.96))] p-6">
           <div className="flex items-start gap-3">
             <CalendarDays className="mt-1 text-cyan-300" size={20} />
             <div>
               <h3 className="text-xl font-bold text-white">Seu plano neste mês</h3>
-              <p className="mt-1 text-sm text-gray-400">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Clareza total sobre o que já está incluído, o que entra na rotação e o que depende de upgrade.
               </p>
             </div>
@@ -415,34 +625,34 @@ export function CoursesPanel({
 
           <div className="mt-5 space-y-3">
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Incluído agora</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Incluído agora</p>
               <p className="mt-2 text-2xl font-black text-white">{planMonthlyCourses.length + (freeMonthlyCourseCanClaim ? 1 : 0)}</p>
-              <p className="mt-1 text-xs text-gray-400">Oferta do mês (US$1) + catálogo do seu plano disponível nesta rotação.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Oferta do mês (US$1) + catálogo do seu plano disponível nesta rotação.</p>
             </div>
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Exige upgrade</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Exige upgrade</p>
               <p className="mt-2 text-2xl font-black text-fuchsia-300">{lockedByPlanCourses.length}</p>
-              <p className="mt-1 text-xs text-gray-400">Cursos do mês atual fora da faixa desbloqueada pelo seu plano.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Cursos do mês atual fora da faixa desbloqueada pelo seu plano.</p>
             </div>
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Próxima rotação</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Próxima rotação</p>
               <p className="mt-2 text-2xl font-black text-cyan-300">{rotationPreviewCourses.length}</p>
-              <p className="mt-1 text-xs text-gray-400">Cursos que podem aparecer em outro mês, mantendo a vitrine sempre fresca.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Cursos que podem aparecer em outro mês, mantendo a vitrine sempre fresca.</p>
             </div>
           </div>
         </Card>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[1.15fr,0.85fr]">
-        <Card className="border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)_10%,rgba(3,7,18,0.96)_100%)] p-6 backdrop-blur-2xl">
+        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)_10%,rgba(3,7,18,0.96)_100%)] p-6 backdrop-blur-2xl">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h3 className="text-xl font-bold text-white">Pool mensal completo</h3>
-              <p className="mt-1 text-sm text-gray-400">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Aqui está a vitrine inteira do mês, com a oferta por US$1, o que seu plano já libera e o que ainda pede upgrade.
               </p>
             </div>
-            <Badge className="border-white/10 bg-white/[0.04] text-white/80">
+            <Badge className="border-border bg-white/[0.04] text-white/80">
               {currentMonthlyPool.length} curso{currentMonthlyPool.length === 1 ? "" : "s"} na rotação
             </Badge>
           </div>
@@ -459,7 +669,7 @@ export function CoursesPanel({
                 <div key={key} className="rounded-[24px] border border-white/8 bg-black/20 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <h4 className={cn("text-sm font-semibold", tone)}>{title}</h4>
-                    <span className="text-xs text-gray-500">{courses.length}</span>
+                    <span className="text-xs text-muted-foreground">{courses.length}</span>
                   </div>
 
                   <div className="mt-4 space-y-2">
@@ -479,7 +689,7 @@ export function CoursesPanel({
                           : course.isEnrolled
                             ? "border-cyan-400/20 bg-cyan-500/10 text-cyan-200"
                             : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
-                              ? "border-white/10 bg-white/[0.05] text-white/80"
+                              ? "border-border bg-white/[0.05] text-white/80"
                               : course.canAccessLevel && course.canAccessThisMonth && !course.hasAvailableSlot
                                 ? "border-amber-400/20 bg-amber-500/10 text-amber-200"
                                 : "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200";
@@ -489,7 +699,7 @@ export function CoursesPanel({
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0">
                                 <p className="truncate text-sm font-semibold text-white">{course.title}</p>
-                                <p className="mt-1 text-xs text-gray-500">{course.duration} · {course.tool}</p>
+                                <p className="mt-1 text-xs text-muted-foreground">{course.duration} · {course.tool}</p>
                               </div>
                               <Badge className={cn("border text-[10px]", statusClass)}>
                                 {statusLabel}
@@ -499,7 +709,7 @@ export function CoursesPanel({
                         );
                       })
                     ) : (
-                      <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-3 text-sm text-gray-500">
+                      <div className="rounded-2xl border border-dashed border-border bg-white/[0.02] p-3 text-sm text-muted-foreground">
                         Nenhum curso nessa faixa nesta rotação.
                       </div>
                     )}
@@ -510,12 +720,12 @@ export function CoursesPanel({
           </div>
         </Card>
 
-        <Card className="border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(3,7,18,0.96))] p-6 backdrop-blur-2xl">
+        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(3,7,18,0.96))] p-6 backdrop-blur-2xl">
           <div className="flex items-start gap-3">
             <Award className="mt-1 text-emerald-300" size={20} />
             <div>
               <h3 className="text-xl font-bold text-white">Certificação neste mês</h3>
-              <p className="mt-1 text-sm text-gray-400">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Entenda em quais cursos o certificado já está incluído e onde o seu plano entra como vantagem.
               </p>
             </div>
@@ -530,14 +740,14 @@ export function CoursesPanel({
               </p>
             </div>
 
-            <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Cursos do plano neste mês</p>
+            <div className="rounded-[22px] border border-border bg-white/[0.03] p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Cursos do plano neste mês</p>
               <p className="mt-2 text-lg font-bold text-white">
                 {certificateDiscountPercent > 0
                   ? `Certificação com ${certificateDiscountPercent}% de desconto no seu plano`
                   : "Certificação disponível conforme a trilha escolhida"}
               </p>
-              <p className="mt-1 text-sm leading-6 text-gray-400">
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
                 Ao concluir qualquer curso da sua pool mensal, você decide em qual deles quer avançar com a certificação usando o benefício do seu plano.
               </p>
             </div>
@@ -576,16 +786,16 @@ export function CoursesPanel({
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Progresso</p>
+                  <div className="rounded-2xl border border-border bg-black/20 p-4">
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Progresso</p>
                     <p className="mt-2 text-3xl font-black text-white">{featuredCourse.progressPercent}%</p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Ferramenta</p>
+                  <div className="rounded-2xl border border-border bg-black/20 p-4">
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Ferramenta</p>
                     <p className="mt-2 text-lg font-bold text-white">{featuredCourse.details?.tool || "IA"}</p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-gray-400">Duração</p>
+                  <div className="rounded-2xl border border-border bg-black/20 p-4">
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Duração</p>
                     <p className="mt-2 text-lg font-bold text-white">{featuredCourse.details?.duration || "Curso completo"}</p>
                   </div>
                 </div>
@@ -616,14 +826,14 @@ export function CoursesPanel({
 
                 return (
                 <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
-                  <Card className="group border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-400/30 hover:bg-white/[0.05]">
+                  <Card className="group border-border bg-white/[0.03] p-4 transition hover:border-cyan-400/30 hover:bg-white/[0.05]">
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-2">
                         <Badge className={badgeClassName}>{badgeLabel}</Badge>
                         <h4 className="line-clamp-2 text-base font-bold text-white group-hover:text-cyan-200">
                           {course.details?.title || course.courseId}
                         </h4>
-                        <div className="flex flex-wrap gap-3 text-xs text-gray-400">
+                        <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
                           <span className="inline-flex items-center gap-1"><Clock size={12} />{course.details?.duration || "Curso completo"}</span>
                           <span className="inline-flex items-center gap-1"><BarChart3 size={12} />{progressCopy}</span>
                         </div>
@@ -636,12 +846,12 @@ export function CoursesPanel({
                 );
               })
             ) : (
-              <Card className="border-dashed border-white/10 bg-white/[0.03] p-5">
+              <Card className="border-dashed border-border bg-white/[0.03] p-5">
                 <div className="flex items-start gap-3">
-                  <Rocket className="mt-0.5 text-purple-300" size={20} />
+                  <Rocket className="mt-0.5 text-amber-300" size={20} />
                   <div>
                     <h4 className="font-semibold text-white">Pronto para acelerar?</h4>
-                    <p className="mt-1 text-sm text-gray-400">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       Assim que você começar novas trilhas, elas aparecem aqui como atalhos de retomada.
                     </p>
                   </div>
@@ -657,11 +867,11 @@ export function CoursesPanel({
           <div className="flex items-end justify-between gap-4">
             <div>
               <h3 className="text-xl font-bold text-white">Cursos concluídos</h3>
-              <p className="mt-1 text-sm text-gray-400">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Revise o que já concluiu, escolha onde emitir certificado e mantenha sua evolução visível.
               </p>
             </div>
-            <div className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-semibold text-gray-300">
+            <div className="rounded-full border border-border bg-white/[0.03] px-3 py-1 text-xs font-semibold text-muted-foreground">
               {completedCourses.length} concluído{completedCourses.length === 1 ? "" : "s"}
             </div>
           </div>
@@ -669,7 +879,7 @@ export function CoursesPanel({
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {completedCourses.slice(0, 6).map((course) => (
               <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
-                <Card className="group border-white/10 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(3,7,18,0.96))] p-5 transition hover:border-emerald-400/30 hover:bg-[linear-gradient(180deg,rgba(16,185,129,0.12),rgba(3,7,18,0.98))]">
+                <Card className="group border-border bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(3,7,18,0.96))] p-5 transition hover:border-emerald-400/30 hover:bg-[linear-gradient(180deg,rgba(16,185,129,0.12),rgba(3,7,18,0.98))]">
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-3">
                       <Badge className="border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
@@ -678,7 +888,7 @@ export function CoursesPanel({
                       <h4 className="line-clamp-2 text-lg font-bold text-white group-hover:text-emerald-200">
                         {course.details?.title || course.courseId}
                       </h4>
-                      <div className="flex flex-wrap gap-3 text-xs text-gray-400">
+                      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
                         <span className="inline-flex items-center gap-1"><Clock size={12} />{course.details?.duration || "Curso completo"}</span>
                         <span className="inline-flex items-center gap-1"><BarChart3 size={12} />100% concluído</span>
                       </div>
@@ -707,43 +917,43 @@ export function CoursesPanel({
         <div className="space-y-4">
           <div>
             <h3 className="text-xl font-bold text-white">Catálogo do seu plano neste mês</h3>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-muted-foreground">
               Estes cursos já fazem parte da vitrine mensal do seu plano e podem ser liberados agora, sem adivinhação.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {planMonthlyCourses.map((course) => (
-              <Card key={course.slug} className="group overflow-hidden border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.95))] transition hover:-translate-y-0.5 hover:border-emerald-400/30">
+              <Card key={course.slug} className="group overflow-hidden border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.95))] transition hover:-translate-y-0.5 hover:border-emerald-400/30">
                 <div className="relative overflow-hidden border-b border-white/5 bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.14),transparent_28%),linear-gradient(135deg,rgba(15,23,42,1),rgba(3,7,18,1))] p-5">
                   <div className="flex items-center justify-between gap-3">
                     <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
                       {courseLevelLabels[course.normalizedLevel]}
                     </Badge>
                     <div className="text-right">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Oferta</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Oferta</p>
                       <p className="text-sm font-semibold text-white">Incluído no mês</p>
                     </div>
                   </div>
                   <h4 className="mt-5 text-xl font-bold leading-tight text-white group-hover:text-emerald-200">
                     {course.title}
                   </h4>
-                  <p className="mt-3 line-clamp-2 text-sm leading-6 text-gray-400">
+                  <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted-foreground">
                     {course.shortDescription}
                   </p>
                 </div>
                 <div className="space-y-4 p-5">
                   <div className="grid grid-cols-3 gap-3">
                     <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Aulas</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Aulas</p>
                       <p className="mt-2 text-lg font-bold text-white">{course.totalLessons}</p>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Duração</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Duração</p>
                       <p className="mt-2 text-lg font-bold text-white">{course.duration}</p>
                     </div>
                     <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Ferramenta</p>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Ferramenta</p>
                       <p className="mt-2 text-lg font-bold text-white">{course.tool}</p>
                     </div>
                   </div>
@@ -772,7 +982,7 @@ export function CoursesPanel({
           <div className="flex items-end justify-between gap-4">
             <div>
               <h3 className="text-xl font-bold text-white">O que exige upgrade neste mês</h3>
-              <p className="mt-1 text-sm text-gray-400">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Aqui fica explícito o que está na vitrine mensal, mas pede um plano acima para ser liberado.
               </p>
             </div>
@@ -797,12 +1007,12 @@ export function CoursesPanel({
                   <h4 className="mt-4 line-clamp-2 text-lg font-bold text-white">{course.title}</h4>
                 </div>
                 <div className="space-y-4 p-4">
-                  <p className="line-clamp-3 text-sm leading-6 text-gray-400">{course.shortDescription}</p>
+                  <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">{course.shortDescription}</p>
                   <div className="rounded-2xl border border-fuchsia-400/15 bg-fuchsia-500/5 p-3 text-sm text-fuchsia-100">
                     Esse curso faz parte da vitrine mensal, mas está fora da faixa desbloqueada pelo seu plano atual.
                   </div>
                   <Link href="/precos">
-                    <Button className="w-full bg-white/5 text-white hover:bg-white/10">
+                    <Button className="w-full bg-secondary text-white hover:bg-white/10">
                       <Crown size={15} className="mr-2" />
                       Fazer upgrade
                     </Button>
@@ -818,7 +1028,7 @@ export function CoursesPanel({
         <div className="space-y-4">
           <div>
             <h3 className="text-xl font-bold text-white">Seu plano já permite, mas faltam vagas</h3>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-muted-foreground">
               Esses cursos já combinam com seu plano, porém as vagas mensais dessa faixa foram consumidas.
             </p>
           </div>
@@ -836,12 +1046,12 @@ export function CoursesPanel({
                   <h4 className="mt-4 line-clamp-2 text-lg font-bold text-white">{course.title}</h4>
                 </div>
                 <div className="space-y-4 p-4">
-                  <p className="line-clamp-3 text-sm leading-6 text-gray-400">{course.shortDescription}</p>
+                  <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">{course.shortDescription}</p>
                   <div className="rounded-2xl border border-amber-400/15 bg-amber-500/5 p-3 text-sm text-amber-100">
                     Aguarde a próxima virada mensal ou faça upgrade para ganhar mais capacidade nesta faixa.
                   </div>
                   <Link href="/precos">
-                    <Button className="w-full bg-white/5 text-white hover:bg-white/10">
+                    <Button className="w-full bg-secondary text-white hover:bg-white/10">
                       <Crown size={15} className="mr-2" />
                       Ver opções
                     </Button>
@@ -857,23 +1067,23 @@ export function CoursesPanel({
         <div className="space-y-4">
           <div>
             <h3 className="text-xl font-bold text-white">Mais cursos entram na próxima rotação</h3>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-muted-foreground">
               Transparência total: estes ainda não estão no pool deste mês, mas podem aparecer em ciclos seguintes.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
             {rotationPreviewCourses.map((course) => (
-              <Card key={course.slug} className="border-white/10 bg-white/[0.03] p-5">
+              <Card key={course.slug} className="border-border bg-white/[0.03] p-5">
                 <div className="flex items-center justify-between gap-3">
                   <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
                     {courseLevelLabels[course.normalizedLevel]}
                   </Badge>
-                  <span className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Outro mês</span>
+                  <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Outro mês</span>
                 </div>
                 <h4 className="mt-4 text-lg font-bold text-white">{course.title}</h4>
-                <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-400">{course.shortDescription}</p>
-                <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">{course.shortDescription}</p>
+                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
                   <span>{course.duration}</span>
                   <span>{course.totalLessons} aulas</span>
                 </div>

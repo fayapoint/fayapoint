@@ -22,17 +22,17 @@ const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      designUrl, 
-      blueprintId, 
-      printProviderId, 
+    const {
+      designUrl,
+      blueprintId,
+      printProviderId,
       variantIds,
       productTitle = 'Mockup Preview',
       // Optional: placeholder dimensions for proper scaling
       placeholderWidth = 4500, // Default print area width
       placeholderHeight = 5100, // Default print area height
-      // User-selected placement options
-      scaleFactor = 0.6, // 0.4=small, 0.6=medium, 0.8=large, 1.0=fill
+      // User-selected placement options — default to filling the area
+      scaleFactor = 1.0, // 1.0 = fill the print area (best quality default)
       yPosition = 0.5 // 0.3=top, 0.5=center, 0.7=bottom
     } = body;
 
@@ -121,20 +121,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 5: Poll for mockups (Printify generates them asynchronously)
-    // Try up to 5 times with increasing delays
+    // Wait longer to get ALL mockup variants including lifestyle/model shots
     let mockups: { src: string; variantIds?: number[]; position?: string; isDefault?: boolean }[] = [];
-    const maxAttempts = 5;
-    const delays = [1500, 2000, 2500, 3000, 3500];
-    
+    const maxAttempts = 6;
+    const delays = [2000, 2500, 3000, 3000, 3500, 4000];
+
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       await wait(delays[attempt]);
-      
+
       try {
         const updatedProduct = await getProduct(shopId, product.id);
         const images = updatedProduct.images || [];
-        
-        console.log('[Mockup API] Attempt', attempt + 1, '- found', images.length, 'images');
-        
+
+        console.log('[Mockup API] Attempt', attempt + 1, '- found', images.length, 'images, positions:', images.map((i: { position?: string }) => i.position));
+
         if (images.length > 0) {
           mockups = images.map((img: { src: string; variant_ids?: number[]; position?: string; is_default?: boolean }) => ({
             src: img.src,
@@ -142,9 +142,9 @@ export async function POST(request: NextRequest) {
             position: img.position,
             isDefault: img.is_default
           }));
-          
-          // If we have multiple mockups, we're done
-          if (mockups.length >= 2 || attempt >= 2) {
+
+          // Wait for at least 3 mockups or 3 attempts to get diverse angles
+          if (mockups.length >= 3 || attempt >= 3) {
             break;
           }
         }
