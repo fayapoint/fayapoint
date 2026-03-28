@@ -2175,7 +2175,6 @@ function CreateWizard(props: {
                         <Button
                           className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
                           onClick={async () => {
-                            autoMockupTriggered.current = false; // Allow re-trigger
                             let url = uploadedDesignUrl;
                             if (!url) {
                               toast.loading("Fazendo upload...");
