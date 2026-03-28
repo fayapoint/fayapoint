@@ -523,7 +523,7 @@ export default function PortalPage() {
   const activity = dashboardData.activity;
 
   return (
-    <div className="h-[100dvh] w-full max-w-[100vw] bg-background text-foreground text-sm md:text-base overflow-hidden">
+    <div className="h-[100dvh] bg-background text-foreground text-sm md:text-base overflow-hidden">
       {/* Sidebar */}
       <DashboardSidebar
         activeTab={activeTab}
@@ -547,7 +547,7 @@ export default function PortalPage() {
       {/* Main Content - responsive margin for desktop sidebar */}
       <main
         className={cn(
-          "h-full w-full flex flex-col overflow-hidden transition-[margin] duration-300",
+          "h-full flex flex-col overflow-hidden transition-[margin] duration-300",
           sidebarCollapsed ? "md:ml-20" : "md:ml-[280px]"
         )}
       >
