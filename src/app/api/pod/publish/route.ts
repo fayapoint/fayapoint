@@ -100,7 +100,8 @@ export async function POST(request: NextRequest) {
     const variantIds = podProduct.variants.map(v => parseInt(v.providerVariantId));
     
     // Build print areas with user's design settings (or defaults)
-    const designSettings = podProduct.designSettings || {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const designSettings = (podProduct as any).designSettings || {};
     const printAreas = [{
       variant_ids: variantIds,
       placeholders: [{
