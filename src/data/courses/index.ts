@@ -14,6 +14,7 @@ import { promptEngineeringCourse } from './prompt-engineering-course';
 import { agentesIACourse } from './agentes-ia-course';
 import { iaSemFiltroCourse } from './ia-sem-filtro-course';
 import { autoresearchCourse } from './autoresearch-course';
+import { primeirasAutomacoesCourse } from './primeiras-automacoes-course';
 import { normalizeCourseLevel, CourseLevel } from '@/lib/course-tiers';
 
 export interface CourseModule {
@@ -96,7 +97,8 @@ export const allCourses: CourseData[] = [
   promptEngineeringCourse,
   agentesIACourse,
   iaSemFiltroCourse,
-  autoresearchCourse
+  autoresearchCourse,
+  primeirasAutomacoesCourse
 ];
 
 // Helper function to get course by slug with normalized level

@@ -117,37 +117,45 @@ const originalTools: AITool[] = [
   },
 ];
 
-// New tools to expand the list (Main Players & Popular Tools)
+// New tools with internal pages
 const additionalTools: AITool[] = [
-  { key: "meta", logo: "https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico", name: "Meta AI", category: "LLM Open Source", url: "https://ai.meta.com/", description: "Llama e tecnologias open source da Meta." },
-  { key: "mistral", logo: "https://mistral.ai/favicon.ico", name: "Mistral AI", category: "LLM Open Source", url: "https://mistral.ai/", description: "Modelos de IA eficientes e poderosos da Europa." },
-  { key: "cohere", logo: "https://cohere.com/favicon.ico", name: "Cohere", category: "LLM Enterprise", url: "https://cohere.com/", description: "IA focada em empresas e desenvolvedores." },
-  { key: "huggingface", logo: "https://huggingface.co/favicon.ico", name: "Hugging Face", category: "Hub de Modelos", url: "https://huggingface.co/", description: "A comunidade de IA e open source." },
-  { key: "langchain", logo: "https://logowik.com/content/uploads/images/langchain9692.logowik.com.webp", name: "LangChain", category: "Framework", url: "https://langchain.com/", description: "Construa aplicações com LLMs facilmente." },
-  { key: "pinecone", logo: "https://www.pinecone.io/favicon.ico", name: "Pinecone", category: "Vector DB", url: "https://pinecone.io/", description: "Banco de dados vetorial para IA." },
-  { key: "jasper", logo: "https://www.jasper.ai/favicon.ico", name: "Jasper", category: "Marketing", url: "https://jasper.ai/", description: "Crie conteúdo de marketing com IA." },
-  { key: "copyai", logo: "https://www.copy.ai/favicon.ico", name: "Copy.ai", category: "Marketing", url: "https://copy.ai/", description: "Escrita automatizada para vendas e marketing." },
-  { key: "descript", logo: "https://www.descript.com/favicon.ico", name: "Descript", category: "Edição de Vídeo", url: "https://descript.com/", description: "Edição de áudio e vídeo como texto." },
-  { key: "synthesia", logo: "https://www.synthesia.io/favicon.ico", name: "Synthesia", category: "Avatar AI", url: "https://synthesia.io/", description: "Vídeos com avatares de IA em minutos." },
-  { key: "heygen", logo: "https://www.heygen.com/favicon.ico", name: "HeyGen", category: "Avatar AI", url: "https://heygen.com/", description: "Geração de vídeo com avatares realistas." },
-  { key: "canva", logo: "https://static.canva.com/static/images/favicon.ico", name: "Canva", category: "Design", url: "https://canva.com/", description: "Design simples com ferramentas mágicas de IA." },
-  { key: "notion", logo: "https://www.notion.so/images/favicon.ico", name: "Notion AI", category: "Produtividade", url: "https://notion.so/", description: "Seu workspace conectado com IA." },
-  { key: "linear", logo: "https://linear.app/favicon.ico", name: "Linear", category: "Gestão", url: "https://linear.app/", description: "Gestão de projetos moderna e rápida." },
-  { key: "vercel", logo: "https://vercel.com/favicon.ico", name: "Vercel", category: "Deploy", url: "https://vercel.com/", description: "Infraestrutura frontend e edge AI." },
-  { key: "replit", logo: "https://replit.com/public/icons/favicon-196.png", name: "Replit", category: "Coding", url: "https://replit.com/", description: "IDE colaborativo e deploy instantâneo." },
-  { key: "docker", logo: "https://www.docker.com/favicon.ico", name: "Docker", category: "DevOps", url: "https://docker.com/", description: "Containers para desenvolvimento moderno." },
-  { key: "postman", logo: "https://www.postman.com/favicon.ico", name: "Postman", category: "API", url: "https://postman.com/", description: "Plataforma para construção de APIs." },
-  { key: "figma", logo: "https://static.figma.com/app/icon/1/favicon.ico", name: "Figma", category: "Design", url: "https://figma.com/", description: "Design de interface colaborativo." },
-  { key: "slack", logo: "https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png", name: "Slack", category: "Comunicação", url: "https://slack.com/", description: "Onde o trabalho acontece." },
-  { key: "discord", logo: "https://discord.com/assets/847541504914fd33810e70a0ea73177e.ico", name: "Discord", category: "Comunidade", url: "https://discord.com/", description: "Lugar para conversar e interagir." },
-  { key: "zoom", logo: "https://zoom.us/favicon.ico", name: "Zoom", category: "Reuniões", url: "https://zoom.us/", description: "Videoconferências com IA integrada." },
-  { key: "microsoft", logo: "https://www.microsoft.com/favicon.ico", name: "Microsoft", category: "Produtividade", url: "https://microsoft.com/", description: "Copilot para Microsoft 365." },
-  { key: "google", logo: "https://www.google.com/favicon.ico", name: "Google", category: "Tech Giant", url: "https://google.com/", description: "Gemini e ecossistema Google AI." },
-  { key: "supabase", logo: "https://supabase.com/favicon.ico", name: "Supabase", category: "Backend", url: "https://supabase.com/", description: "A alternativa Open Source ao Firebase." },
-  { key: "stripe", logo: "https://stripe.com/favicon.ico", name: "Stripe", category: "Pagamentos", url: "https://stripe.com/", description: "Infraestrutura financeira para internet." },
-  { key: "gamma", logo: "https://gamma.app/favicon.ico", name: "Gamma", category: "Apresentações", url: "https://gamma.app/", description: "Apresentações bonitas geradas por IA." },
-  { key: "tome", logo: "https://tome.app/favicon.ico", name: "Tome", category: "Storytelling", url: "https://tome.app/", description: "Formato de storytelling generativo." },
-  { key: "beautifulai", logo: "https://www.beautiful.ai/favicon.ico", name: "Beautiful.ai", category: "Apresentações", url: "https://beautiful.ai/", description: "Slides de design profissional com IA." },
+  { key: "meta-ai", logo: "https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico", slug: "meta-ai", name: "Meta AI", category: "IA Conversacional", description: "Modelos Llama open source da Meta" },
+  { key: "mistral", logo: "https://mistral.ai/favicon.ico", slug: "mistral", name: "Mistral AI", category: "IA Conversacional", description: "Modelos eficientes e poderosos da Europa" },
+  { key: "grok", logo: "https://x.ai/favicon.ico", slug: "grok", name: "Grok", category: "IA Conversacional", description: "IA da xAI com acesso ao X/Twitter" },
+  { key: "deepseek", logo: "https://www.deepseek.com/favicon.ico", slug: "deepseek", name: "DeepSeek", category: "IA Conversacional", description: "IA open source com raciocínio avançado" },
+  { key: "cohere", logo: "https://cohere.com/favicon.ico", slug: "cohere", name: "Cohere", category: "IA Enterprise", description: "IA para empresas com RAG e embeddings" },
+  { key: "hugging-face", logo: "https://huggingface.co/favicon.ico", slug: "hugging-face", name: "Hugging Face", category: "Infraestrutura IA", description: "O GitHub dos modelos de IA" },
+  { key: "langchain", logo: "https://python.langchain.com/img/favicon.ico", slug: "langchain", name: "LangChain", category: "Framework", description: "Framework para apps com LLMs" },
+  { key: "pinecone", logo: "https://www.pinecone.io/favicon.ico", slug: "pinecone", name: "Pinecone", category: "Banco de Dados", description: "Banco de dados vetorial para IA" },
+  { key: "jasper", logo: "https://www.jasper.ai/favicon.ico", slug: "jasper", name: "Jasper", category: "Marketing", description: "Plataforma de marketing com IA" },
+  { key: "copy-ai", logo: "https://www.copy.ai/favicon.ico", slug: "copy-ai", name: "Copy.ai", category: "Marketing", description: "Automação de vendas e marketing" },
+  { key: "grammarly", logo: "https://www.grammarly.com/favicon.ico", slug: "grammarly", name: "Grammarly", category: "Escrita", description: "Assistente de escrita com IA" },
+  { key: "descript", logo: "https://www.descript.com/favicon.ico", slug: "descript", name: "Descript", category: "Edição de Vídeo", description: "Edição de áudio e vídeo como texto" },
+  { key: "synthesia", logo: "https://www.synthesia.io/favicon.ico", slug: "synthesia", name: "Synthesia", category: "Vídeo IA", description: "Vídeos com avatares de IA" },
+  { key: "heygen", logo: "https://www.heygen.com/favicon.ico", slug: "heygen", name: "HeyGen", category: "Vídeo IA", description: "Avatares realistas com IA" },
+  { key: "canva", logo: "https://static.canva.com/static/images/favicon.ico", slug: "canva", name: "Canva", category: "Design", description: "Design com ferramentas mágicas de IA" },
+  { key: "notion-ai", logo: "https://www.notion.so/images/favicon.ico", slug: "notion-ai", name: "Notion AI", category: "Produtividade", description: "Workspace conectado com IA" },
+  { key: "vercel-ai", logo: "https://vercel.com/favicon.ico", slug: "vercel-ai", name: "Vercel", category: "Infraestrutura", description: "Frontend cloud com AI SDK" },
+  { key: "replit", logo: "https://replit.com/public/icons/favicon-196.png", slug: "replit", name: "Replit", category: "Código", description: "IDE com IA e deploy instantâneo" },
+  { key: "figma", logo: "https://static.figma.com/app/icon/1/favicon.ico", slug: "figma", name: "Figma", category: "Design", description: "Design de interface colaborativo" },
+  { key: "slack-ai", logo: "https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png", slug: "slack-ai", name: "Slack", category: "Comunicação", description: "Comunicação de equipe com IA" },
+  { key: "discord", logo: "https://discord.com/assets/847541504914fd33810e70a0ea73177e.ico", slug: "discord", name: "Discord", category: "Comunidade", description: "Comunidade para devs e IA" },
+  { key: "microsoft-copilot", logo: "https://www.microsoft.com/favicon.ico", slug: "microsoft-copilot", name: "Microsoft Copilot", category: "Produtividade", description: "IA no Word, Excel e Teams" },
+  { key: "google-workspace-ai", logo: "https://www.google.com/favicon.ico", slug: "google-workspace-ai", name: "Google Workspace AI", category: "Produtividade", description: "Gemini no Docs, Sheets e Gmail" },
+  { key: "supabase", logo: "https://supabase.com/favicon.ico", slug: "supabase", name: "Supabase", category: "Infraestrutura", description: "Backend open source com pgvector" },
+  { key: "gamma", logo: "https://gamma.app/favicon.ico", slug: "gamma", name: "Gamma", category: "Apresentações", description: "Apresentações geradas por IA" },
+  { key: "tome", logo: "https://tome.app/favicon.ico", slug: "tome", name: "Tome", category: "Apresentações", description: "Storytelling com IA" },
+  { key: "beautiful-ai", logo: "https://www.beautiful.ai/favicon.ico", slug: "beautiful-ai", name: "Beautiful.ai", category: "Apresentações", description: "Slides profissionais com IA" },
+  { key: "kling", logo: "https://klingai.com/favicon.ico", slug: "kling", name: "Kling AI", category: "Vídeo IA", description: "Geração de vídeo de alta qualidade" },
+  { key: "luma", logo: "https://lumalabs.ai/favicon.ico", slug: "luma", name: "Luma Dream Machine", category: "Vídeo IA", description: "Geração de vídeo e 3D com IA" },
+  { key: "v0", logo: "https://v0.dev/favicon.ico", slug: "v0", name: "v0", category: "Código", description: "Gerador de UI com IA da Vercel" },
+  { key: "lovable", logo: "https://lovable.dev/favicon.ico", slug: "lovable", name: "Lovable", category: "Código", description: "Geração de apps full-stack com IA" },
+  { key: "bolt", logo: "https://bolt.new/favicon.ico", slug: "bolt", name: "Bolt.new", category: "Código", description: "Apps web completos no navegador" },
+  { key: "windsurf", logo: "https://windsurf.com/favicon.ico", slug: "windsurf", name: "Windsurf", category: "Código", description: "IDE com IA integrada" },
+  { key: "adobe-firefly", logo: "https://www.adobe.com/favicon.ico", slug: "adobe-firefly", name: "Adobe Firefly", category: "Design", description: "IA generativa no Creative Cloud" },
+  { key: "ideogram", logo: "https://ideogram.ai/favicon.ico", slug: "ideogram", name: "Ideogram", category: "Criação Visual", description: "Geração de imagens com texto perfeito" },
+  { key: "napkin-ai", logo: "https://www.napkin.ai/favicon.ico", slug: "napkin-ai", name: "Napkin AI", category: "Visualização", description: "Texto em diagramas e infográficos" },
+  { key: "claude-code", logo: "https://claude.ai/images/claude_app_icon.png", slug: "claude-code", name: "Claude Code", category: "Código", description: "Agente de código IA no terminal" },
 ];
 
 const allTools = [...originalTools, ...additionalTools];
@@ -220,7 +228,7 @@ const PortalTooltip = ({
           <div className="flex items-center gap-1.5 text-xs font-semibold text-primary relative z-10">
               {content.isInternal ? (
                 <>
-                  Ver curso 
+                  Ver detalhes
                   <motion.span
                     animate={{ x: [0, 3, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}
@@ -302,7 +310,7 @@ const MarqueeRow = ({
           
           if (!name) name = tool.key;
 
-          const isInternal = !!tool.slug && originalTools.some(t => t.key === tool.key);
+          const isInternal = !!tool.slug;
           const linkUrl = isInternal ? `/ferramentas/${tool.slug}` : (tool.url || "#");
 
           return (

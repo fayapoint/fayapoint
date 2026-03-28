@@ -66,6 +66,15 @@ export default function CoursesPage() {
   const [monthlyOffers, setMonthlyOffers] = useState<MonthlyOfferPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Read search param from URL on mount (e.g. from tools page "Cursos relacionados" link)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get("search");
+    if (search) {
+      setSearchTerm(search);
+    }
+  }, []);
   const allCategoriesLabel = t("filters.allCategoriesLabel");
   const [selectedCategory, setSelectedCategory] = useState(allCategoriesLabel);
   const levelOptions = t.raw("filters.levelOptions") as LevelOption[];
@@ -103,15 +112,15 @@ export default function CoursesPage() {
 
   const categories = useMemo(() => [
     allCategoriesLabel,
-    ...Array.from(new Set(products.map(p => p.categoryPrimary)))
+    ...Array.from(new Set(products.map(p => p.categoryPrimary).filter(Boolean)))
   ], [products, allCategoriesLabel]);
 
   const filteredCourses = useMemo(() => {
     let filtered = products.filter(product => {
-      const matchesSearch = searchTerm === "" || 
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.tool.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.copy.shortDescription.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = searchTerm === "" ||
+        (product.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.tool || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (product.copy?.shortDescription || "").toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesCategory = selectedCategory === allCategoriesLabel || product.categoryPrimary === selectedCategory;
       const matchesLevel =
@@ -220,6 +229,55 @@ export default function CoursesPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Active Search Results Banner - shown when filtering via URL param */}
+      {searchTerm && !loading && (
+        <section className="py-8 bg-gradient-to-r from-amber-900/30 via-card to-amber-900/30 border-b border-amber-500/30">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">
+                  {isPtBr ? "Resultados para" : "Results for"}
+                </p>
+                <h2 className="text-2xl md:text-3xl font-bold">
+                  {isPtBr
+                    ? `${filteredCourses.length} curso${filteredCourses.length !== 1 ? "s" : ""} sobre "${searchTerm}"`
+                    : `${filteredCourses.length} course${filteredCourses.length !== 1 ? "s" : ""} about "${searchTerm}"`}
+                </h2>
+              </div>
+              <Button
+                variant="outline"
+                className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                onClick={() => setSearchTerm("")}
+              >
+                {isPtBr ? "Limpar filtro" : "Clear filter"}
+              </Button>
+            </div>
+
+            {filteredCourses.length > 0 && (
+              <div className={`mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6`}>
+                {filteredCourses.map((product, index) => (
+                  <AttractiveCourseCard
+                    key={product.slug}
+                    product={product}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
+
+            {filteredCourses.length === 0 && (
+              <div className="mt-6 text-center py-8">
+                <p className="text-lg text-muted-foreground">
+                  {isPtBr
+                    ? `Nenhum curso encontrado para "${searchTerm}". Explore nosso catálogo completo abaixo.`
+                    : `No courses found for "${searchTerm}". Explore our full catalog below.`}
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Trust Banner */}
       <section className="py-6 bg-gradient-to-r from-amber-900/50 via-yellow-900/50 to-amber-900/50 border-y border-amber-500/30">

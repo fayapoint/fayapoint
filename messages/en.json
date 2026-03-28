@@ -403,150 +403,190 @@
           "description": "AI-generated videos",
           "category": "Visual Creation"
         },
-        "meta": {
+        "meta-ai": {
           "name": "Meta AI",
-          "description": "Llama and open source technologies from Meta",
-          "category": "LLM Open Source"
+          "description": "Open source Llama models and free AI assistant",
+          "category": "Conversational AI"
         },
         "mistral": {
           "name": "Mistral AI",
           "description": "Efficient and powerful AI models from Europe",
-          "category": "LLM Open Source"
+          "category": "Conversational AI"
+        },
+        "grok": {
+          "name": "Grok",
+          "description": "xAI's assistant with real-time X/Twitter access",
+          "category": "Conversational AI"
+        },
+        "deepseek": {
+          "name": "DeepSeek",
+          "description": "Open source Chinese AI with advanced reasoning",
+          "category": "Conversational AI"
         },
         "cohere": {
           "name": "Cohere",
-          "description": "AI focused on enterprise and developers",
-          "category": "LLM Enterprise"
+          "description": "Enterprise AI with RAG and embeddings",
+          "category": "Enterprise AI"
         },
-        "huggingface": {
+        "hugging-face": {
           "name": "Hugging Face",
-          "description": "The AI community and open source hub",
-          "category": "Model Hub"
+          "description": "The GitHub for AI and ML models",
+          "category": "AI Infrastructure"
         },
         "langchain": {
           "name": "LangChain",
-          "description": "Build LLM applications easily",
+          "description": "Framework for building LLM applications",
           "category": "Framework"
         },
         "pinecone": {
           "name": "Pinecone",
-          "description": "Vector database for AI",
-          "category": "Vector DB"
+          "description": "Vector database for AI applications",
+          "category": "Database"
         },
         "jasper": {
           "name": "Jasper",
-          "description": "Create marketing content with AI",
+          "description": "AI marketing content platform",
           "category": "Marketing"
         },
-        "copyai": {
+        "copy-ai": {
           "name": "Copy.ai",
-          "description": "Automated writing for sales and marketing",
+          "description": "AI-powered sales and marketing automation",
           "category": "Marketing"
+        },
+        "grammarly": {
+          "name": "Grammarly",
+          "description": "Writing assistant for grammar and tone",
+          "category": "Writing"
         },
         "descript": {
           "name": "Descript",
-          "description": "Audio and video editing as text",
+          "description": "Edit audio and video as easily as text",
           "category": "Video Editing"
         },
         "synthesia": {
           "name": "Synthesia",
-          "description": "AI avatar videos in minutes",
-          "category": "Avatar AI"
+          "description": "AI avatar videos in 150+ languages",
+          "category": "AI Video"
         },
         "heygen": {
           "name": "HeyGen",
           "description": "Realistic AI avatar video generation",
-          "category": "Avatar AI"
+          "category": "AI Video"
         },
         "canva": {
           "name": "Canva",
-          "description": "Simple design with magic AI tools",
+          "description": "Design with magic AI tools",
           "category": "Design"
         },
-        "notion": {
+        "notion-ai": {
           "name": "Notion AI",
-          "description": "Your connected workspace with AI",
+          "description": "Connected workspace with built-in AI",
           "category": "Productivity"
         },
-        "linear": {
-          "name": "Linear",
-          "description": "Modern and fast project management",
-          "category": "Management"
-        },
-        "vercel": {
+        "vercel-ai": {
           "name": "Vercel",
-          "description": "Frontend infrastructure and edge AI",
-          "category": "Deploy"
+          "description": "Frontend cloud with AI SDK for developers",
+          "category": "Infrastructure"
         },
         "replit": {
           "name": "Replit",
-          "description": "Collaborative IDE and instant deploy",
-          "category": "Coding"
-        },
-        "docker": {
-          "name": "Docker",
-          "description": "Containers for modern development",
-          "category": "DevOps"
-        },
-        "postman": {
-          "name": "Postman",
-          "description": "Platform for building APIs",
-          "category": "API"
+          "description": "AI-powered IDE with instant deploy",
+          "category": "Code"
         },
         "figma": {
           "name": "Figma",
-          "description": "Collaborative interface design",
+          "description": "Collaborative interface design with AI",
           "category": "Design"
         },
-        "slack": {
+        "slack-ai": {
           "name": "Slack",
-          "description": "Where work happens",
+          "description": "Team communication with built-in AI",
           "category": "Communication"
         },
         "discord": {
           "name": "Discord",
-          "description": "Place to chat and interact",
+          "description": "Community platform for devs and AI",
           "category": "Community"
         },
-        "zoom": {
-          "name": "Zoom",
-          "description": "Video conferencing with integrated AI",
-          "category": "Meetings"
-        },
-        "microsoft": {
-          "name": "Microsoft",
-          "description": "Copilot for Microsoft 365",
+        "microsoft-copilot": {
+          "name": "Microsoft Copilot",
+          "description": "AI in Word, Excel, PowerPoint and Teams",
           "category": "Productivity"
         },
-        "google": {
-          "name": "Google",
-          "description": "Gemini and Google AI ecosystem",
-          "category": "Tech Giant"
+        "google-workspace-ai": {
+          "name": "Google Workspace AI",
+          "description": "Gemini in Docs, Sheets and Gmail",
+          "category": "Productivity"
         },
         "supabase": {
           "name": "Supabase",
-          "description": "The Open Source Firebase alternative",
-          "category": "Backend"
-        },
-        "stripe": {
-          "name": "Stripe",
-          "description": "Financial infrastructure for the internet",
-          "category": "Payments"
+          "description": "Open source backend with pgvector for AI",
+          "category": "Infrastructure"
         },
         "gamma": {
           "name": "Gamma",
-          "description": "Beautiful AI-generated presentations",
+          "description": "Professional AI-generated presentations",
           "category": "Presentations"
         },
         "tome": {
           "name": "Tome",
-          "description": "Generative storytelling format",
-          "category": "Storytelling"
+          "description": "AI storytelling and presentations",
+          "category": "Presentations"
         },
-        "beautifulai": {
+        "beautiful-ai": {
           "name": "Beautiful.ai",
           "description": "Professional design slides with AI",
           "category": "Presentations"
+        },
+        "kling": {
+          "name": "Kling AI",
+          "description": "High-quality AI video generation",
+          "category": "AI Video"
+        },
+        "luma": {
+          "name": "Luma Dream Machine",
+          "description": "AI video and 3D generation",
+          "category": "AI Video"
+        },
+        "v0": {
+          "name": "v0",
+          "description": "AI UI component generator by Vercel",
+          "category": "Code"
+        },
+        "lovable": {
+          "name": "Lovable",
+          "description": "Full-stack app generation with AI",
+          "category": "Code"
+        },
+        "bolt": {
+          "name": "Bolt.new",
+          "description": "Build full-stack web apps in the browser with AI",
+          "category": "Code"
+        },
+        "windsurf": {
+          "name": "Windsurf",
+          "description": "AI-first IDE, Cursor alternative",
+          "category": "Code"
+        },
+        "adobe-firefly": {
+          "name": "Adobe Firefly",
+          "description": "Generative AI for Creative Cloud",
+          "category": "Design"
+        },
+        "ideogram": {
+          "name": "Ideogram",
+          "description": "AI image generation with perfect text",
+          "category": "Visual Creation"
+        },
+        "napkin-ai": {
+          "name": "Napkin AI",
+          "description": "Turn text into diagrams and infographics",
+          "category": "Visualization"
+        },
+        "claude-code": {
+          "name": "Claude Code",
+          "description": "AI coding agent in your terminal by Anthropic",
+          "category": "Code"
         }
       }
     },

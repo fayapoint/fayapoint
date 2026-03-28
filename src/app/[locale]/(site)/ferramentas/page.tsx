@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search, SlidersHorizontal, Filter, Star, Tag, Layers, ArrowRight } from "lucide-react";
+import { Search, Star, Tag, Layers, ArrowRight } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Card } from "@/components/ui/card";
@@ -11,56 +11,59 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toolsData } from "@/data/tools-complete";
 
+// Build tools list from static data
+type ToolEntry = {
+  slug: string;
+  name: string;
+  category: string;
+  vendor: string;
+  pricing: string;
+  rating: number;
+  description: string;
+  tags: string[];
+};
 
-import type { Product } from "@/lib/products";
+const staticTools: ToolEntry[] = Object.entries(toolsData).map(([slug, tool]) => ({
+  slug,
+  name: (tool as { title?: string }).title || slug,
+  category: (tool as { category?: string }).category || "IA",
+  vendor: (tool as { vendor?: string }).vendor || "",
+  pricing: (tool as { pricing?: string }).pricing || "Freemium",
+  rating: (tool as { rating?: number }).rating || 4.5,
+  description: (tool as { description?: string }).description || "",
+  tags: ((tool as { features?: string[] }).features || []).slice(0, 3),
+}));
 
 export default function ToolsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("Todas");
   const [pricing, setPricing] = useState<string>("Todos");
-  const [sortBy, setSortBy] = useState<string>("popular");
+  const [sortBy, setSortBy] = useState<string>("az");
 
-  useEffect(() => {
-    async function fetchTools() {
-      try {
-        const response = await fetch('/api/products?type=tool');
-        const data = await response.json();
-        setProducts(data.products || []);
-      } catch (error) {
-        console.error('Error fetching tools:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchTools();
-  }, []);
-
-  const categories = useMemo(() => ["Todas", ...Array.from(new Set(products.map(p => p.categoryPrimary)))], [products]);
+  const categories = useMemo(() => ["Todas", ...Array.from(new Set(staticTools.map(t => t.category)))], []);
   const pricingOptions = ["Todos", "Gratuito", "Freemium", "Open Source", "Pago"];
 
   const filtered = useMemo(() => {
-    const filtered = products.filter(product => {
-      const matchesSearch = search === "" || 
-        product.name.toLowerCase().includes(search.toLowerCase()) ||
-        product.tool.toLowerCase().includes(search.toLowerCase()) ||
-        product.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
-      
-      const matchesCategory = category === "Todas" || product.categoryPrimary === category;
-      const matchesPricing = pricing === "Todos" || product.pricing.price === 0 && pricing === "Gratuito" || product.pricing.price > 0 && pricing === "Pago";
-      
+    const result = staticTools.filter(tool => {
+      const matchesSearch = search === "" ||
+        tool.name.toLowerCase().includes(search.toLowerCase()) ||
+        tool.vendor.toLowerCase().includes(search.toLowerCase()) ||
+        tool.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
+
+      const matchesCategory = category === "Todas" || tool.category === category;
+      const matchesPricing = pricing === "Todos" || tool.pricing === pricing;
+
       return matchesSearch && matchesCategory && matchesPricing;
     });
 
-    return [...filtered].sort((a, b) => {
-      if (sortBy === "popular") return b.metrics.students - a.metrics.students;
-      if (sortBy === "rating") return b.metrics.rating - a.metrics.rating;
+    return [...result].sort((a, b) => {
+      if (sortBy === "rating") return b.rating - a.rating;
       if (sortBy === "az") return a.name.localeCompare(b.name, "pt-BR");
       return 0;
     });
-  }, [products, search, category, pricing, sortBy]);
+  }, [search, category, pricing, sortBy]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -132,14 +135,14 @@ export default function ToolsPage() {
               <motion.div key={t.slug} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
                 <Card className="p-6 border-border hover:bg-card/80 transition group h-full">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge variant="outline" className="text-xs">{t.categoryPrimary}</Badge>
-                    <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/40 text-xs">{t.pricing.price > 0 ? 'Pago' : 'Gratuito'}</Badge>
+                    <Badge variant="outline" className="text-xs">{t.category}</Badge>
+                    <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/40 text-xs">{t.pricing}</Badge>
                   </div>
                   <h3 className="text-xl font-semibold mb-1 group-hover:text-amber-400 transition">{t.name}</h3>
-                  <p className="text-muted-foreground text-sm mb-3">{t.copy.shortDescription}</p>
+                  <p className="text-muted-foreground text-sm mb-3">{t.description}</p>
                   <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
-                    <span className="flex items-center gap-1"><Star className="text-yellow-400" size={16} /> {t.metrics.rating}</span>
-                    <span className="text-muted-foreground">Fornecedor: <span className="text-muted-foreground">{t.tool}</span></span>
+                    <span className="flex items-center gap-1"><Star className="text-yellow-400" size={16} /> {t.rating}</span>
+                    <span className="text-muted-foreground">Fornecedor: <span className="text-muted-foreground">{t.vendor}</span></span>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {t.tags.map(tag => (
