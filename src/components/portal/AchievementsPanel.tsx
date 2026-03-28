@@ -49,7 +49,7 @@ const TIER_COLORS = {
   silver: "from-gray-300 to-gray-500",
   gold: "from-yellow-400 to-yellow-600",
   platinum: "from-cyan-300 to-cyan-500",
-  diamond: "from-purple-400 to-pink-400",
+  diamond: "from-amber-400 to-yellow-500",
 };
 
 const TIER_BORDER = {
@@ -57,7 +57,7 @@ const TIER_BORDER = {
   silver: "border-gray-400/50",
   gold: "border-yellow-500/50",
   platinum: "border-cyan-400/50",
-  diamond: "border-purple-400/50",
+  diamond: "border-amber-400/50",
 };
 
 interface Achievement {
@@ -123,37 +123,37 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-white/5 border-white/10 p-6">
+        <Card className="bg-secondary border-border p-6">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
               <Trophy size={28} className="text-white" />
             </div>
             <div>
               <p className="text-3xl font-bold">{totalUnlocked}</p>
-              <p className="text-sm text-gray-400">Conquistas Desbloqueadas</p>
+              <p className="text-sm text-muted-foreground">Conquistas Desbloqueadas</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-white/5 border-white/10 p-6">
+        <Card className="bg-secondary border-border p-6">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full flex items-center justify-center">
               <Star size={28} className="text-white" />
             </div>
             <div>
               <p className="text-3xl font-bold">{totalAchievements}</p>
-              <p className="text-sm text-gray-400">Total de Conquistas</p>
+              <p className="text-sm text-muted-foreground">Total de Conquistas</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-white/5 border-white/10 p-6">
+        <Card className="bg-secondary border-border p-6">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-400">Progresso Geral</p>
+              <p className="text-sm text-muted-foreground">Progresso Geral</p>
               <span className="text-lg font-bold">{completionPercent}%</span>
             </div>
-            <Progress value={completionPercent} className="h-3 bg-gray-800" />
+            <Progress value={completionPercent} className="h-3 bg-secondary" />
           </div>
         </Card>
       </div>
@@ -191,7 +191,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
                       "p-4 transition-all group relative overflow-hidden",
                       achievement.unlocked 
                         ? `bg-gradient-to-br ${TIER_COLORS[achievement.tier]}/10 ${TIER_BORDER[achievement.tier]} hover:scale-105`
-                        : "bg-gray-900/50 border-gray-800 opacity-60"
+                        : "bg-card/50 border-border opacity-60"
                     )}>
                       {/* Tier Badge */}
                       <Badge 
@@ -208,19 +208,19 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
                           "w-16 h-16 rounded-full flex items-center justify-center mb-3",
                           achievement.unlocked 
                             ? `bg-gradient-to-br ${TIER_COLORS[achievement.tier]}`
-                            : "bg-gray-800"
+                            : "bg-secondary"
                         )}>
                           {isSecret ? (
-                            <Lock size={24} className="text-gray-500" />
+                            <Lock size={24} className="text-muted-foreground" />
                           ) : (
-                            <Icon size={24} className={achievement.unlocked ? "text-white" : "text-gray-500"} />
+                            <Icon size={24} className={achievement.unlocked ? "text-white" : "text-muted-foreground"} />
                           )}
                         </div>
 
                         <h4 className="font-semibold text-sm mb-1">
                           {isSecret ? "???" : info.name}
                         </h4>
-                        <p className="text-xs text-gray-400 mb-2 line-clamp-2">
+                        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
                           {isSecret ? "Continue explorando para descobrir!" : info.description}
                         </p>
 
@@ -236,7 +236,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
                               value={(achievement.progress / achievement.requirement.value) * 100} 
                               className="h-1.5 bg-gray-700" 
                             />
-                            <p className="text-[10px] text-gray-500 mt-1">
+                            <p className="text-[10px] text-muted-foreground mt-1">
                               {achievement.progress}/{achievement.requirement.value}
                             </p>
                           </div>
@@ -244,7 +244,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
 
                         {/* Unlock date */}
                         {achievement.unlocked && achievement.unlockedAt && (
-                          <p className="text-[10px] text-gray-500 mt-2">
+                          <p className="text-[10px] text-muted-foreground mt-2">
                             Desbloqueado em {new Date(achievement.unlockedAt).toLocaleDateString('pt-BR')}
                           </p>
                         )}

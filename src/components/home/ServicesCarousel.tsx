@@ -16,16 +16,16 @@ const colorStyles = {
     glow: "from-blue-500/40 via-sky-400/10 to-transparent",
   },
   pink: {
-    tileBg: "bg-pink-500/10",
-    tileBorder: "border-pink-500/20",
+    tileBg: "bg-yellow-500/10",
+    tileBorder: "border-amber-500/20",
     icon: "text-pink-500",
-    glow: "from-pink-500/40 via-fuchsia-400/10 to-transparent",
+    glow: "from-yellow-500/40 via-fuchsia-400/10 to-transparent",
   },
   purple: {
-    tileBg: "bg-purple-500/10",
-    tileBorder: "border-purple-500/20",
-    icon: "text-purple-500",
-    glow: "from-purple-500/40 via-indigo-500/10 to-transparent",
+    tileBg: "bg-amber-500/10",
+    tileBorder: "border-amber-500/20",
+    icon: "text-amber-500",
+    glow: "from-amber-500/40 via-indigo-500/10 to-transparent",
   },
   orange: {
     tileBg: "bg-orange-500/10",

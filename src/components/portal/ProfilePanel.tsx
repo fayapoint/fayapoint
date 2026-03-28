@@ -74,10 +74,10 @@ interface ProfilePanelProps {
 
 const TIER_COLORS = {
   bronze: "from-amber-600 to-amber-800 border-amber-500 text-amber-400",
-  silver: "from-gray-300 to-gray-500 border-gray-400 text-gray-300",
+  silver: "from-gray-300 to-gray-500 border-gray-400 text-muted-foreground",
   gold: "from-yellow-400 to-amber-500 border-yellow-400 text-yellow-400",
   platinum: "from-cyan-300 to-blue-400 border-cyan-400 text-cyan-400",
-  diamond: "from-purple-400 to-pink-500 border-purple-400 text-purple-400",
+  diamond: "from-amber-400 to-yellow-500 border-amber-400 text-amber-400",
 };
 
 export function ProfilePanel({
@@ -162,9 +162,9 @@ export function ProfilePanel({
   return (
     <div className="space-y-8 pb-8">
       {/* Profile Header */}
-      <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-gray-800 overflow-hidden">
+      <Card className="bg-gradient-to-br from-gray-900 to-card border-border overflow-hidden">
         {/* Banner */}
-        <div className="h-32 bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-blue-600/30 relative">
+        <div className="h-32 bg-gradient-to-r from-amber-600/30 via-pink-600/30 to-blue-600/30 relative">
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
           {isPro && (
             <div className="absolute top-4 right-4">
@@ -195,16 +195,16 @@ export function ProfilePanel({
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsEditing(true)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-muted-foreground hover:text-white"
                   >
                     <Edit2 size={16} />
                   </Button>
                 )}
               </div>
-              <p className="text-gray-400 mb-3">{user.email}</p>
+              <p className="text-muted-foreground mb-3">{user.email}</p>
               
               {user.profile?.bio && !isEditing && (
-                <p className="text-gray-300 text-sm max-w-xl mb-4">
+                <p className="text-muted-foreground text-sm max-w-xl mb-4">
                   {user.profile.bio}
                 </p>
               )}
@@ -212,19 +212,19 @@ export function ProfilePanel({
               {/* Quick Stats */}
               <div className="flex flex-wrap gap-4 text-sm">
                 {user.profile?.company && (
-                  <div className="flex items-center gap-2 text-gray-400">
+                  <div className="flex items-center gap-2 text-muted-foreground">
                     <Building2 size={14} />
                     <span>{user.profile.company}</span>
                   </div>
                 )}
                 {user.profile?.position && (
-                  <div className="flex items-center gap-2 text-gray-400">
+                  <div className="flex items-center gap-2 text-muted-foreground">
                     <Briefcase size={14} />
                     <span>{user.profile.position}</span>
                   </div>
                 )}
                 {user.profile?.location && (
-                  <div className="flex items-center gap-2 text-gray-400">
+                  <div className="flex items-center gap-2 text-muted-foreground">
                     <MapPin size={14} />
                     <span>{user.profile.location}</span>
                   </div>
@@ -233,18 +233,18 @@ export function ProfilePanel({
             </div>
 
             {/* Level Card */}
-            <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700 min-w-[180px]">
+            <div className="bg-secondary/50 rounded-xl p-4 border border-border min-w-[180px]">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                  <span className="text-xl font-bold text-purple-400">{stats.level}</span>
+                <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
+                  <span className="text-xl font-bold text-amber-400">{stats.level}</span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wider">Nível</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Nível</p>
                   <p className="font-semibold">{stats.xp} XP</p>
                 </div>
               </div>
               <Progress value={stats.levelProgress} className="h-2 bg-gray-700" />
-              <p className="text-xs text-gray-500 mt-2 text-right">
+              <p className="text-xs text-muted-foreground mt-2 text-right">
                 {stats.xpToNextLevel - stats.xp} XP para o próximo nível
               </p>
             </div>
@@ -258,7 +258,7 @@ export function ProfilePanel({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="bg-gray-900 border-gray-800 p-6">
+          <Card className="bg-card border-border p-6">
             <h3 className="text-lg font-semibold mb-6">Editar Perfil</h3>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -269,7 +269,7 @@ export function ProfilePanel({
                     id="name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-secondary border-border"
                   />
                 </div>
                 
@@ -279,7 +279,7 @@ export function ProfilePanel({
                     id="bio"
                     value={formData.bio}
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                    className="bg-gray-800 border-gray-700 min-h-[100px]"
+                    className="bg-secondary border-border min-h-[100px]"
                     placeholder="Conte um pouco sobre você..."
                   />
                 </div>
@@ -291,7 +291,7 @@ export function ProfilePanel({
                       id="company"
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="bg-gray-800 border-gray-700"
+                      className="bg-secondary border-border"
                       placeholder="Sua empresa"
                     />
                   </div>
@@ -301,7 +301,7 @@ export function ProfilePanel({
                       id="position"
                       value={formData.position}
                       onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                      className="bg-gray-800 border-gray-700"
+                      className="bg-secondary border-border"
                       placeholder="Seu cargo"
                     />
                   </div>
@@ -315,7 +315,7 @@ export function ProfilePanel({
                     id="location"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-secondary border-border"
                     placeholder="Cidade, País"
                   />
                 </div>
@@ -326,7 +326,7 @@ export function ProfilePanel({
                     id="website"
                     value={formData.website}
                     onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-secondary border-border"
                     placeholder="https://seu-site.com"
                   />
                 </div>
@@ -337,7 +337,7 @@ export function ProfilePanel({
                     id="linkedin"
                     value={formData.linkedin}
                     onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                    className="bg-gray-800 border-gray-700"
+                    className="bg-secondary border-border"
                     placeholder="https://linkedin.com/in/seu-perfil"
                   />
                 </div>
@@ -355,7 +355,7 @@ export function ProfilePanel({
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="bg-gradient-to-r from-purple-600 to-pink-600"
+                className="bg-gradient-to-r from-amber-600 to-yellow-700"
               >
                 {isSaving ? (
                   <>
@@ -376,63 +376,63 @@ export function ProfilePanel({
 
       {/* Stats Grid */}
       <div className="grid md:grid-cols-4 gap-4">
-        <Card className="bg-gray-900 border-gray-800 p-6">
+        <Card className="bg-card border-border p-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
               <Flame size={24} className="text-orange-400" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.streak}</p>
-              <p className="text-xs text-gray-400 uppercase">Dias seguidos</p>
+              <p className="text-xs text-muted-foreground uppercase">Dias seguidos</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-800 p-6">
+        <Card className="bg-card border-border p-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
               <Zap size={24} className="text-yellow-400" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.xp.toLocaleString()}</p>
-              <p className="text-xs text-gray-400 uppercase">XP Total</p>
+              <p className="text-xs text-muted-foreground uppercase">XP Total</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-800 p-6">
+        <Card className="bg-card border-border p-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-              <Trophy size={24} className="text-purple-400" />
+            <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
+              <Trophy size={24} className="text-amber-400" />
             </div>
             <div>
               <p className="text-2xl font-bold">{totalAchievements}</p>
-              <p className="text-xs text-gray-400 uppercase">Conquistas</p>
+              <p className="text-xs text-muted-foreground uppercase">Conquistas</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-800 p-6">
+        <Card className="bg-card border-border p-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
               <Star size={24} className="text-blue-400" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.longestStreak || stats.streak}</p>
-              <p className="text-xs text-gray-400 uppercase">Maior streak</p>
+              <p className="text-xs text-muted-foreground uppercase">Maior streak</p>
             </div>
           </div>
         </Card>
       </div>
 
       {/* Achievements Summary */}
-      <Card className="bg-gray-900 border-gray-800 p-6">
+      <Card className="bg-card border-border p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Trophy className="text-yellow-400" />
             Conquistas por Nível
           </h3>
-          <span className="text-sm text-gray-400">
+          <span className="text-sm text-muted-foreground">
             {totalAchievements} de {achievements.length} desbloqueadas
           </span>
         </div>
@@ -447,7 +447,7 @@ export function ProfilePanel({
                 key={tier}
                 className={cn(
                   "rounded-xl p-4 text-center border",
-                  count > 0 ? `bg-gradient-to-br ${tierConfig}` : "bg-gray-800/50 border-gray-700"
+                  count > 0 ? `bg-gradient-to-br ${tierConfig}` : "bg-secondary/50 border-border"
                 )}
               >
                 <Award
@@ -468,9 +468,9 @@ export function ProfilePanel({
 
       {/* Recent Achievements */}
       {unlockedAchievements.length > 0 && (
-        <Card className="bg-gray-900 border-gray-800 p-6">
+        <Card className="bg-card border-border p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Award className="text-purple-400" />
+            <Award className="text-amber-400" />
             Conquistas Recentes
           </h3>
 

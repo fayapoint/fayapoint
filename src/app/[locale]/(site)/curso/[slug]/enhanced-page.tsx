@@ -28,13 +28,13 @@ export default function EnhancedCoursePage() {
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen bg-background text-foreground">
         <Header />
         <main className="pt-24 pb-12">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl font-bold mb-4">Curso não encontrado</h1>
             <Link href="/cursos">
-              <Button className="bg-purple-600 hover:bg-purple-700">
+              <Button className="bg-amber-600 hover:bg-amber-700">
                 Ver todos os cursos
               </Button>
             </Link>
@@ -53,11 +53,11 @@ export default function EnhancedCoursePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16 bg-gradient-to-b from-purple-900/20 to-black">
+      <section className="relative pt-24 pb-16 bg-gradient-to-b from-amber-900/30 to-black">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div 
@@ -66,7 +66,7 @@ export default function EnhancedCoursePage() {
               className="space-y-6"
             >
               <div className="flex items-center gap-3">
-                <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/50">
+                <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/50">
                   {course.category}
                 </Badge>
                 <Badge variant="outline">
@@ -83,7 +83,7 @@ export default function EnhancedCoursePage() {
                 {course.title}
               </h1>
               
-              <p className="text-xl text-gray-300">
+              <p className="text-xl text-muted-foreground">
                 {course.subtitle}
               </p>
               
@@ -106,7 +106,7 @@ export default function EnhancedCoursePage() {
                 </span>
               </div>
               
-              <p className="text-gray-300">
+              <p className="text-muted-foreground">
                 {course.shortDescription}
               </p>
             </motion.div>
@@ -116,26 +116,26 @@ export default function EnhancedCoursePage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:sticky lg:top-24"
             >
-              <Card className="p-8 bg-gray-900 border-purple-500/20">
+              <Card className="p-8 bg-card border-amber-500/20">
                 <div className="space-y-6">
                   {/* Price */}
                   <div>
                     {discount > 0 && (
-                      <p className="text-gray-400 line-through text-lg">
+                      <p className="text-muted-foreground line-through text-lg">
                         R$ {course.originalPrice.toLocaleString('pt-BR')}
                       </p>
                     )}
                     <p className="text-4xl font-bold">
                       R$ {course.price.toLocaleString('pt-BR')}
                     </p>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       ou 12x de R$ {(course.price / 12).toFixed(2)}
                     </p>
                   </div>
                   
                   <Button 
                     onClick={handleEnroll}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg py-6"
+                    className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-lg py-6"
                   >
                     <ShoppingCart className="mr-2" />
                     Comprar Agora
@@ -162,7 +162,7 @@ export default function EnhancedCoursePage() {
                   
                   <Separator className="bg-gray-700" />
                   
-                  <div className="text-center text-sm text-gray-400">
+                  <div className="text-center text-sm text-muted-foreground">
                     <p>🔒 Compra 100% segura</p>
                     <p className="mt-2">✅ Satisfação garantida ou seu dinheiro de volta</p>
                   </div>
@@ -174,49 +174,49 @@ export default function EnhancedCoursePage() {
       </section>
       
       {/* Impact Section */}
-      <section className="py-16 bg-gradient-to-b from-black to-purple-900/10">
+      <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
             Impacto Transformador do {course.tool}
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-6 bg-gray-900/50 border-purple-500/20">
+            <Card className="p-6 bg-card/50 border-amber-500/20">
               <div className="flex items-center gap-3 mb-4">
-                <User className="text-purple-400" size={24} />
+                <User className="text-amber-400" size={24} />
                 <h3 className="text-xl font-semibold">Para Você</h3>
               </div>
               <ul className="space-y-3">
                 {course.impactForIndividuals.slice(0, 6).map((impact, i) => (
-                  <li key={i} className="text-sm text-gray-300">
+                  <li key={i} className="text-sm text-muted-foreground">
                     {impact}
                   </li>
                 ))}
               </ul>
             </Card>
             
-            <Card className="p-6 bg-gray-900/50 border-purple-500/20">
+            <Card className="p-6 bg-card/50 border-amber-500/20">
               <div className="flex items-center gap-3 mb-4">
-                <Rocket className="text-purple-400" size={24} />
+                <Rocket className="text-amber-400" size={24} />
                 <h3 className="text-xl font-semibold">Para Empreendedores</h3>
               </div>
               <ul className="space-y-3">
                 {course.impactForEntrepreneurs.slice(0, 6).map((impact, i) => (
-                  <li key={i} className="text-sm text-gray-300">
+                  <li key={i} className="text-sm text-muted-foreground">
                     {impact}
                   </li>
                 ))}
               </ul>
             </Card>
             
-            <Card className="p-6 bg-gray-900/50 border-purple-500/20">
+            <Card className="p-6 bg-card/50 border-amber-500/20">
               <div className="flex items-center gap-3 mb-4">
-                <Building2 className="text-purple-400" size={24} />
+                <Building2 className="text-amber-400" size={24} />
                 <h3 className="text-xl font-semibold">Para Empresas</h3>
               </div>
               <ul className="space-y-3">
                 {course.impactForCompanies.slice(0, 6).map((impact, i) => (
-                  <li key={i} className="text-sm text-gray-300">
+                  <li key={i} className="text-sm text-muted-foreground">
                     {impact}
                   </li>
                 ))}
@@ -229,11 +229,11 @@ export default function EnhancedCoursePage() {
       {/* Full Description */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <Card className="p-8 bg-gray-900/50 border-purple-500/20">
+          <Card className="p-8 bg-card/50 border-amber-500/20">
             <h2 className="text-2xl font-bold mb-6">Sobre o Curso</h2>
             <div className="prose prose-invert max-w-none">
               {course.fullDescription.split('\n\n').map((paragraph, i) => (
-                <p key={i} className="text-gray-300 mb-4">
+                <p key={i} className="text-muted-foreground mb-4">
                   {paragraph}
                 </p>
               ))}
@@ -243,7 +243,7 @@ export default function EnhancedCoursePage() {
       </section>
       
       {/* What You'll Learn */}
-      <section className="py-16 bg-gradient-to-b from-black to-purple-900/10">
+      <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
             O Que Você Vai Aprender
@@ -259,7 +259,7 @@ export default function EnhancedCoursePage() {
                 className="flex items-start gap-3"
               >
                 <CheckCircle className="text-green-400 mt-1 flex-shrink-0" size={20} />
-                <span className="text-gray-300">{item}</span>
+                <span className="text-muted-foreground">{item}</span>
               </motion.div>
             ))}
           </div>
@@ -275,7 +275,7 @@ export default function EnhancedCoursePage() {
           
           <div className="space-y-4 max-w-4xl mx-auto">
             {course.modules.map((module) => (
-              <Card key={module.id} className="p-6 bg-gray-900/50 border-purple-500/20">
+              <Card key={module.id} className="p-6 bg-card/50 border-amber-500/20">
                 <button
                   onClick={() => setExpandedModule(expandedModule === module.id ? null : module.id)}
                   className="w-full"
@@ -285,18 +285,18 @@ export default function EnhancedCoursePage() {
                       <h3 className="text-lg font-semibold">
                         Módulo {module.id}: {module.title}
                       </h3>
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {module.description}
                       </p>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-400">
+                      <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                         <span>{module.duration}</span>
                         <span>{module.lessons} aulas</span>
                       </div>
                     </div>
                     {expandedModule === module.id ? (
-                      <ChevronUp className="text-purple-400" />
+                      <ChevronUp className="text-amber-400" />
                     ) : (
-                      <ChevronDown className="text-purple-400" />
+                      <ChevronDown className="text-amber-400" />
                     )}
                   </div>
                 </button>
@@ -305,12 +305,12 @@ export default function EnhancedCoursePage() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className="mt-4 pt-4 border-t border-gray-700"
+                    className="mt-4 pt-4 border-t border-border"
                   >
                     <ul className="space-y-2">
                       {module.topics.map((topic, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                          <PlayCircle size={16} className="text-purple-400" />
+                        <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <PlayCircle size={16} className="text-amber-400" />
                           {topic}
                         </li>
                       ))}
@@ -324,7 +324,7 @@ export default function EnhancedCoursePage() {
       </section>
       
       {/* Testimonials */}
-      <section className="py-16 bg-gradient-to-b from-black to-purple-900/10">
+      <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
             O Que Nossos Alunos Dizem
@@ -338,7 +338,7 @@ export default function EnhancedCoursePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
               >
-                <Card className="p-6 bg-gray-900/50 border-purple-500/20 h-full">
+                <Card className="p-6 bg-card/50 border-amber-500/20 h-full">
                   <div className="flex items-center gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
                       <Star 
@@ -349,7 +349,7 @@ export default function EnhancedCoursePage() {
                     ))}
                   </div>
                   
-                  <p className="text-gray-300 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     &ldquo;{testimonial.comment}&rdquo;
                   </p>
                   
@@ -361,7 +361,7 @@ export default function EnhancedCoursePage() {
                   
                   <div className="mt-auto">
                     <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       {testimonial.role}
                       {testimonial.company && ` - ${testimonial.company}`}
                     </p>
@@ -383,11 +383,11 @@ export default function EnhancedCoursePage() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {course.bonuses.map((bonus, i) => (
-                <Card key={i} className="p-6 bg-gradient-to-br from-purple-900/20 to-pink-900/20 border-purple-500/30">
-                  <Gift className="text-purple-400 mb-3" size={24} />
+                <Card key={i} className="p-6 bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30">
+                  <Gift className="text-amber-400 mb-3" size={24} />
                   <h3 className="font-semibold mb-2">{bonus.title}</h3>
-                  <p className="text-sm text-gray-400 mb-3">{bonus.description}</p>
-                  <p className="text-lg font-bold text-purple-400">
+                  <p className="text-sm text-muted-foreground mb-3">{bonus.description}</p>
+                  <p className="text-lg font-bold text-amber-400">
                     Valor: R$ {bonus.value}
                   </p>
                 </Card>
@@ -395,7 +395,7 @@ export default function EnhancedCoursePage() {
             </div>
             
             <div className="text-center mt-8">
-              <p className="text-2xl font-bold text-purple-400">
+              <p className="text-2xl font-bold text-amber-400">
                 Total em Bônus: R$ {course.bonuses.reduce((sum, b) => sum + b.value, 0).toLocaleString('pt-BR')}
               </p>
             </div>
@@ -404,7 +404,7 @@ export default function EnhancedCoursePage() {
       )}
       
       {/* FAQs */}
-      <section className="py-16 bg-gradient-to-b from-black to-purple-900/10">
+      <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
             Perguntas Frequentes
@@ -412,16 +412,16 @@ export default function EnhancedCoursePage() {
           
           <div className="max-w-3xl mx-auto space-y-4">
             {course.faqs.map((faq, i) => (
-              <Card key={i} className="p-6 bg-gray-900/50 border-purple-500/20">
+              <Card key={i} className="p-6 bg-card/50 border-amber-500/20">
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
                   className="w-full flex items-center justify-between text-left"
                 >
                   <h3 className="font-semibold pr-4">{faq.question}</h3>
                   {expandedFaq === i ? (
-                    <ChevronUp className="text-purple-400 flex-shrink-0" />
+                    <ChevronUp className="text-amber-400 flex-shrink-0" />
                   ) : (
-                    <ChevronDown className="text-purple-400 flex-shrink-0" />
+                    <ChevronDown className="text-amber-400 flex-shrink-0" />
                   )}
                 </button>
                 
@@ -429,7 +429,7 @@ export default function EnhancedCoursePage() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className="mt-4 text-gray-300"
+                    className="mt-4 text-muted-foreground"
                   >
                     {faq.answer}
                   </motion.div>
@@ -441,7 +441,7 @@ export default function EnhancedCoursePage() {
       </section>
       
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-900 to-pink-900">
+      <section className="py-20 bg-gradient-to-r from-amber-900 to-yellow-900">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6">
             Pronto para Transformar Sua Vida?
@@ -454,7 +454,7 @@ export default function EnhancedCoursePage() {
             <Button 
               onClick={handleEnroll}
               size="lg"
-              className="bg-white text-purple-900 hover:bg-gray-100 text-lg px-8 py-6"
+              className="bg-white text-amber-900 hover:bg-gray-100 text-lg px-8 py-6"
             >
               <ShoppingCart className="mr-2" />
               Garantir Minha Vaga Agora
@@ -464,7 +464,7 @@ export default function EnhancedCoursePage() {
                 R$ {course.price.toLocaleString('pt-BR')}
               </p>
               {discount > 0 && (
-                <p className="text-gray-300 line-through">
+                <p className="text-muted-foreground line-through">
                   R$ {course.originalPrice.toLocaleString('pt-BR')}
                 </p>
               )}
@@ -485,7 +485,7 @@ export default function EnhancedCoursePage() {
               Comunidade exclusiva
             </span>
             <span className="flex items-center gap-2">
-              <Zap className="text-purple-400" />
+              <Zap className="text-amber-400" />
               Acesso imediato
             </span>
           </div>

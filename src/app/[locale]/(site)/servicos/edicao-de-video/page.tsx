@@ -234,7 +234,7 @@ export default function VideoEditingPage({
       </Script>
       <main>
         <section className="relative pt-32 pb-20 px-4 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-amber-500/10 pointer-events-none" />
           <div className="container mx-auto max-w-6xl relative">
             <div className="text-center max-w-4xl mx-auto">
               <Badge className="mb-6 px-4 py-2 text-sm font-medium" variant="secondary">

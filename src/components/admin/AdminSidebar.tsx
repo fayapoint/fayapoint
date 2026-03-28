@@ -98,7 +98,7 @@ export function AdminMobileNav({ onOpenMenu }: { onOpenMenu: () => void }) {
   const locale = pathname?.split("/")[1] || "pt-BR";
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-[#0a0a1a]/95 backdrop-blur-xl border-t border-white/10 safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-[#0a0a1a]/95 backdrop-blur-xl border-t border-border safe-area-bottom">
       <div className="flex items-center justify-around h-16 px-2">
         {MOBILE_NAV_ITEMS.map((item) => {
           const fullPath = item.path ? `/${locale}${item.path}` : "";
@@ -110,7 +110,7 @@ export function AdminMobileNav({ onOpenMenu }: { onOpenMenu: () => void }) {
               <button
                 key={item.id}
                 onClick={onOpenMenu}
-                className="flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl text-gray-400 hover:text-white transition-colors"
+                className="flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl text-muted-foreground hover:text-white transition-colors"
               >
                 <item.icon size={22} />
                 <span className="text-[10px] font-medium">{item.label}</span>
@@ -124,7 +124,7 @@ export function AdminMobileNav({ onOpenMenu }: { onOpenMenu: () => void }) {
                 "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-colors min-w-[60px]",
                 isActive 
                   ? "text-violet-400" 
-                  : "text-gray-400 hover:text-white"
+                  : "text-muted-foreground hover:text-white"
               )}>
                 <div className={cn(
                   "relative",
@@ -188,19 +188,19 @@ export function AdminMobileDrawer({
             }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-white/10">
+            <div className="flex items-center justify-between p-4 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <span className="font-bold text-lg text-white">Admin</span>
-                  <p className="text-[10px] text-gray-500">FayAi</p>
+                  <p className="text-[10px] text-muted-foreground">FayAi</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white"
+                className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white"
               >
                 <X size={24} />
               </button>
@@ -208,7 +208,7 @@ export function AdminMobileDrawer({
 
             {/* Admin Profile */}
             {admin && (
-              <div className="p-4 border-b border-white/10">
+              <div className="p-4 border-b border-border">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-white font-bold text-lg">
@@ -218,8 +218,8 @@ export function AdminMobileDrawer({
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-white truncate">{admin.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{admin.email}</p>
-                    <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10px] bg-violet-500/20 text-violet-400 border border-violet-500/30">
+                    <p className="text-xs text-muted-foreground truncate">{admin.email}</p>
+                    <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10px] bg-violet-500/20 text-violet-400 border border-amber-500/30">
                       <Shield size={10} />
                       Administrador
                     </span>
@@ -232,7 +232,7 @@ export function AdminMobileDrawer({
             <nav className="flex-1 overflow-y-auto py-4">
               {MENU_SECTIONS.map((section, sectionIndex) => (
                 <div key={section.title} className={cn(sectionIndex > 0 && "mt-4")}>
-                  <p className="px-4 mb-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+                  <p className="px-4 mb-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
                     {section.title}
                   </p>
                   <div className="px-2 space-y-0.5">
@@ -247,7 +247,7 @@ export function AdminMobileDrawer({
                             "flex items-center gap-3 px-3 py-3 rounded-xl transition-all",
                             isActive
                               ? "bg-violet-500/20 text-white"
-                              : "text-gray-400 hover:bg-white/5 hover:text-white"
+                              : "text-muted-foreground hover:bg-secondary hover:text-white"
                           )}>
                             <item.icon size={20} className={isActive ? "text-violet-400" : ""} />
                             <span className="flex-1 text-sm font-medium">{item.label}</span>
@@ -266,9 +266,9 @@ export function AdminMobileDrawer({
             </nav>
 
             {/* Quick Actions */}
-            <div className="p-4 border-t border-white/10 space-y-2">
+            <div className="p-4 border-t border-border space-y-2">
               <Link href={`/${locale}/admin/settings`} onClick={onClose}>
-                <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition">
+                <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground hover:bg-secondary hover:text-white transition">
                   <HelpCircle size={20} />
                   <span className="text-sm font-medium">Ajuda</span>
                 </div>
@@ -314,21 +314,21 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
               exit={{ opacity: 0 }}
               className="flex items-center gap-3"
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
                 <Shield className="w-4 h-4 text-white" />
               </div>
               <div>
                 <span className="font-bold text-base bg-gradient-to-r from-violet-200 to-purple-300 bg-clip-text text-transparent">
                   Admin
                 </span>
-                <p className="text-[9px] text-gray-500 -mt-0.5">FayAi</p>
+                <p className="text-[9px] text-muted-foreground -mt-0.5">FayAi</p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
         <button
           onClick={onToggle}
-          className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors"
+          className="p-2 rounded-lg hover:bg-secondary text-muted-foreground hover:text-white transition-colors"
         >
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
@@ -347,7 +347,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-xs text-white truncate">{admin.name}</p>
-                <p className="text-[10px] text-gray-500 truncate">{admin.email}</p>
+                <p className="text-[10px] text-muted-foreground truncate">{admin.email}</p>
               </div>
             )}
           </div>
@@ -359,7 +359,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
         {MENU_SECTIONS.map((section, sectionIndex) => (
           <div key={section.title} className={cn(sectionIndex > 0 && "mt-4")}>
             {!isCollapsed && (
-              <p className="px-3 mb-1.5 text-[9px] font-semibold text-gray-500 uppercase tracking-wider">
+              <p className="px-3 mb-1.5 text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">
                 {section.title}
               </p>
             )}
@@ -376,7 +376,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
                         "relative flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all group",
                         isActive
                           ? "bg-violet-500/15 text-white"
-                          : "text-gray-400 hover:bg-white/5 hover:text-white",
+                          : "text-muted-foreground hover:bg-secondary hover:text-white",
                         isCollapsed && "justify-center px-2"
                       )}
                     >
@@ -407,7 +407,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
 
                       {/* Tooltip for collapsed */}
                       {isCollapsed && (
-                        <div className="absolute left-full ml-2 px-2.5 py-1.5 bg-gray-900 border border-white/10 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-xl">
+                        <div className="absolute left-full ml-2 px-2.5 py-1.5 bg-card border border-border rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-xl">
                           <span className="text-xs text-white font-medium">{item.label}</span>
                           {"badge" in item && item.badge && (
                             <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold rounded bg-gradient-to-r from-emerald-500 to-cyan-500 text-white">
@@ -431,13 +431,13 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
           <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
             <div className="flex items-center gap-2 mb-2">
               <Zap className="w-3.5 h-3.5 text-violet-400" />
-              <span className="text-[10px] font-medium text-gray-400">Sistema</span>
+              <span className="text-[10px] font-medium text-muted-foreground">Sistema</span>
               <span className="ml-auto flex items-center gap-1 text-[10px] text-emerald-400">
                 <Activity size={10} />
                 Online
               </span>
             </div>
-            <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
+            <div className="h-1 bg-secondary rounded-full overflow-hidden">
               <div className="h-full w-[95%] bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full" />
             </div>
           </div>
@@ -449,14 +449,14 @@ export function AdminSidebar({ isCollapsed, onToggle }: { isCollapsed: boolean; 
         <button
           onClick={logout}
           className={cn(
-            "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors group",
+            "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-red-500/10 hover:text-red-400 transition-colors group",
             isCollapsed && "justify-center"
           )}
         >
           <LogOut size={18} />
           {!isCollapsed && <span className="text-[13px] font-medium">Sair</span>}
           {isCollapsed && (
-            <div className="absolute left-full ml-2 px-2.5 py-1.5 bg-gray-900 border border-white/10 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50">
+            <div className="absolute left-full ml-2 px-2.5 py-1.5 bg-card border border-border rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50">
               <span className="text-xs text-red-400 font-medium">Sair</span>
             </div>
           )}

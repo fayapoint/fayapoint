@@ -206,7 +206,7 @@ export function ProfileAvatarEditor({
 
       {/* Upload Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-md bg-gray-900 border-gray-800">
+        <DialogContent className="sm:max-w-md bg-card border-border">
           <DialogHeader>
             <DialogTitle className="text-xl">Editar Avatar</DialogTitle>
             <DialogDescription>
@@ -250,8 +250,8 @@ export function ProfileAvatarEditor({
               className={cn(
                 "border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all",
                 dragActive 
-                  ? "border-purple-500 bg-purple-500/10" 
-                  : "border-gray-700 hover:border-gray-600 hover:bg-gray-800/50"
+                  ? "border-amber-500 bg-amber-500/10" 
+                  : "border-border hover:border-gray-600 hover:bg-secondary/50"
               )}
             >
               <input
@@ -271,8 +271,8 @@ export function ProfileAvatarEditor({
                     exit={{ opacity: 0, scale: 0.9 }}
                     className="space-y-2"
                   >
-                    <Upload className="w-12 h-12 mx-auto text-purple-400" />
-                    <p className="text-purple-400 font-medium">Solte aqui!</p>
+                    <Upload className="w-12 h-12 mx-auto text-amber-400" />
+                    <p className="text-amber-400 font-medium">Solte aqui!</p>
                   </motion.div>
                 ) : (
                   <motion.div
@@ -282,9 +282,9 @@ export function ProfileAvatarEditor({
                     exit={{ opacity: 0 }}
                     className="space-y-2"
                   >
-                    <Upload className="w-10 h-10 mx-auto text-gray-500" />
-                    <p className="text-gray-400">
-                      Arraste uma imagem ou <span className="text-purple-400 font-medium">clique para selecionar</span>
+                    <Upload className="w-10 h-10 mx-auto text-muted-foreground" />
+                    <p className="text-muted-foreground">
+                      Arraste uma imagem ou <span className="text-amber-400 font-medium">clique para selecionar</span>
                     </p>
                     <p className="text-xs text-gray-600">
                       JPG, PNG, WebP ou GIF • Máximo 5MB
@@ -299,17 +299,17 @@ export function ProfileAvatarEditor({
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center justify-between bg-gray-800 rounded-lg p-3"
+                className="flex items-center justify-between bg-secondary rounded-lg p-3"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <Camera className="w-5 h-5 text-purple-400" />
+                  <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                    <Camera className="w-5 h-5 text-amber-400" />
                   </div>
                   <div>
                     <p className="text-sm font-medium truncate max-w-[200px]">
                       {selectedFile.name}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -360,7 +360,7 @@ export function ProfileAvatarEditor({
                   <Button
                     onClick={handleUpload}
                     disabled={isUploading}
-                    className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600"
+                    className="flex-1 bg-gradient-to-r from-amber-600 to-yellow-700"
                   >
                     {isUploading ? (
                       <>
@@ -379,7 +379,7 @@ export function ProfileAvatarEditor({
             </div>
 
             {/* Tips */}
-            <div className="flex items-start gap-2 text-xs text-gray-500 bg-gray-800/50 rounded-lg p-3">
+            <div className="flex items-start gap-2 text-xs text-muted-foreground bg-secondary/50 rounded-lg p-3">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
               <p>
                 Para melhores resultados, use uma imagem quadrada com seu rosto centralizado.

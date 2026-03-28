@@ -25,7 +25,7 @@ export default function StatusPage() {
   const allOperational = services.every(s => s.status === "operational");
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-32 pb-20">
@@ -35,12 +35,12 @@ export default function StatusPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
-              <Activity size={16} className="text-purple-400" />
-              <span className="text-sm text-purple-300">{t("badge")}</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
+              <Activity size={16} className="text-amber-400" />
+              <span className="text-sm text-amber-300">{t("badge")}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
-            <p className="text-gray-400">{t("description")}</p>
+            <p className="text-muted-foreground">{t("description")}</p>
           </motion.div>
         </section>
 
@@ -79,11 +79,11 @@ export default function StatusPage() {
                     <Icon className={config.color} size={24} />
                     <div>
                       <h3 className="font-semibold">{service.name}</h3>
-                      <p className="text-sm text-gray-400">{config.label}</p>
+                      <p className="text-sm text-muted-foreground">{config.label}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-400 flex items-center gap-1">
+                    <div className="text-sm text-muted-foreground flex items-center gap-1">
                       <Clock size={14} />
                       {t("uptime")}: {service.uptime}
                     </div>
@@ -96,7 +96,7 @@ export default function StatusPage() {
 
         {/* Last Updated */}
         <section className="container mx-auto px-4 max-w-3xl mt-12 text-center">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             {t("lastUpdated")}: {new Date().toLocaleString()}
           </p>
         </section>

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"c:\\\\Users\\\\ricar\\\\WORKSMAIN\\\\autoresearch\\\\fayapoint-ai/src/app/[locale]/\\(site\\)/portal\" -type f \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\))",
+      "Bash(find \"c:\\\\Users\\\\ricar\\\\WORKSMAIN\\\\autoresearch\\\\fayapoint-ai/src/app/[locale]/\\(site\\)\" -maxdepth 1 -name \"layout.tsx\")",
+      "Bash(ls -la \"c:\\\\Users\\\\ricar\\\\WORKSMAIN\\\\autoresearch\\\\fayapoint-ai/src/app/[locale]/\\(site\\)/\")",
+      "Bash(wc -l \"c:/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\(site\\)/portal/page.tsx\")",
+      "Bash(npx tsc:*)",
+      "Bash(node_modules/.bin/tsc --noEmit --pretty)",
+      "Bash(where node:*)",
+      "Bash(where npm:*)",
+      "Bash(cmd.exe /c \"where node\")",
+      "Bash(cmd.exe /c \"node --version && npx tsc --noEmit --pretty 2>&1\")",
+      "Bash(grep -E \"\\\\.\\(json|ts\\)$\")",
+      "Bash(find /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai -type f \\\\\\(-name *blog* -o -name *post* \\\\\\))",
+      "Bash(cat /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\\\\\(site\\\\\\)/blog/[slug]/page.tsx)",
+      "WebSearch",
+      "Bash(node -e \"const m = require\\(''./messages/pt-BR.json''\\); console.log\\(JSON.stringify\\(m.Blog.posts[0], null, 2\\)\\)\")",
+      "WebFetch(domain:developers.printify.com)",
+      "Bash(find c:/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app -path */learn* -type f)",
+      "Bash(head -30 \"c:/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\(site\\)/portal/learn/[slug]/CourseReaderPage.tsx\")",
+      "Bash(find \"c:/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\(site\\)/portal\" -name \"layout.tsx\" -type f)",
+      "Bash(ls -la \"c:/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\(site\\)/portal/learn/[slug]/\")"
+    ]
+  }
+}

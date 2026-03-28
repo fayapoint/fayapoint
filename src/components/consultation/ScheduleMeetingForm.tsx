@@ -201,10 +201,10 @@ export function ScheduleMeetingForm({
 
       {/* Cart summary card */}
       {itemCount > 0 && (
-        <div className="p-4 bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-lg">
+        <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
           <div className="flex items-center gap-2 mb-3">
             <ShoppingCart className="w-5 h-5 text-purple-600" />
-            <span className="font-semibold text-purple-700 dark:text-purple-300">
+            <span className="font-semibold text-amber-700 dark:text-amber-300">
               {itemCount} {itemCount === 1 ? 'item' : 'itens'} no carrinho
             </span>
           </div>
@@ -220,9 +220,9 @@ export function ScheduleMeetingForm({
                 </span>
               </div>
             ))}
-            <div className="pt-2 border-t border-purple-200 dark:border-purple-700 flex justify-between items-center font-semibold">
+            <div className="pt-2 border-t border-amber-200 dark:border-amber-700 flex justify-between items-center font-semibold">
               <span>Total</span>
-              <span className="text-purple-700 dark:text-purple-300">
+              <span className="text-amber-700 dark:text-amber-300">
                 {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cartTotal)}
               </span>
             </div>
@@ -272,7 +272,7 @@ export function ScheduleMeetingForm({
 
       <Button
         type="submit"
-        className="h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+        className="h-12 text-base font-semibold bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
         disabled={isLoading}
       >
         {isLoading ? t("submitting") : copy.submit}

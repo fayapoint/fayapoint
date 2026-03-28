@@ -260,7 +260,7 @@ return (
                 animate={{ opacity: 1, y: 0 }}
               >
                 {/* Breadcrumb */}
-                <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                   <Link href="/" className="hover:text-white">Home</Link>
                   <span>/</span>
                   <Link href="/cursos" className="hover:text-white">Cursos</Link>
@@ -272,7 +272,7 @@ return (
                   {courseData.title}
                 </h1>
                 
-                <p className="text-xl text-gray-300 mb-6">
+                <p className="text-xl text-muted-foreground mb-6">
                   {courseData.subtitle}
                 </p>
 
@@ -281,10 +281,10 @@ return (
                   <div className="flex items-center gap-1">
                     <Star className="text-yellow-400 fill-yellow-400" size={18} />
                     <span className="font-semibold">{courseData.rating}</span>
-                    <span className="text-gray-400">{testimonialsCount.toLocaleString("pt-BR")} avaliações</span>
+                    <span className="text-muted-foreground">{testimonialsCount.toLocaleString("pt-BR")} avaliações</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Users size={18} className="text-gray-400" />
+                    <Users size={18} className="text-muted-foreground" />
                     <span>{courseData.students.toLocaleString("pt-BR")} alunos</span>
                   </div>
                 </div>
@@ -305,14 +305,14 @@ return (
                 </div>
 
                 {/* Instructor */}
-                <div className="flex items-center gap-4 mt-8 p-4 bg-gray-900/50 rounded-lg">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                <div className="flex items-center gap-4 mt-8 p-4 bg-card/50 rounded-lg">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center">
                     <span className="text-2xl font-bold">RF</span>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400">Instrutor</p>
+                    <p className="text-sm text-muted-foreground">Instrutor</p>
                     <p className="font-semibold">Ricardo Faya</p>
-                    <p className="text-sm text-gray-400">50.000+ alunos • 20+ cursos</p>
+                    <p className="text-sm text-muted-foreground">50.000+ alunos • 20+ cursos</p>
                   </div>
                 </div>
               </motion.div>
@@ -326,7 +326,7 @@ return (
               >
                 <Card className="backdrop-blur border-border p-6 sticky top-24">
                   {/* Video Preview */}
-                  <div className="aspect-video bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg mb-6 relative group cursor-pointer">
+                  <div className="aspect-video bg-gradient-to-br from-amber-600 to-yellow-700 rounded-lg mb-6 relative group cursor-pointer">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <PlayCircle size={64} className="text-white/80 group-hover:scale-110 transition" />
                     </div>
@@ -339,10 +339,10 @@ return (
                   <div className="mb-6">
                     <div className="flex items-baseline gap-2 mb-2">
                       <span className="text-3xl font-bold">R$ {courseData.price}</span>
-                      <span className="text-gray-500 line-through">R$ {courseData.originalPrice}</span>
+                      <span className="text-muted-foreground line-through">R$ {courseData.originalPrice}</span>
                       <Badge className="bg-green-500 text-black">{Math.max(0, Math.round(((courseData.originalPrice - courseData.price) / courseData.originalPrice) * 100))}% OFF</Badge>
                     </div>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       ou 12x de R$ {(courseData.price / 12).toFixed(2)}
                     </p>
                   </div>
@@ -350,7 +350,7 @@ return (
                   {/* Actions */}
                   <div className="space-y-3">
                     <Button
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                      className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
                       size="lg"
                       onClick={handleEnroll}
                     >
@@ -358,7 +358,7 @@ return (
                     </Button>
                     <Button
                       variant="outline"
-                      className="w-full border-gray-700"
+                      className="w-full border-border"
                       onClick={handleAddToCart}
                     >
                       <ShoppingCart className="mr-2" size={18} />
@@ -429,7 +429,7 @@ return (
                 <ul className="space-y-2">
                   {(courseData.requirements || []).map((req: string, i: number) => (
                     <li key={i} className="flex items-center gap-2">
-                      <Target className="text-purple-400" size={16} />
+                      <Target className="text-amber-400" size={16} />
                       <span>{req}</span>
                     </li>
                   ))}
@@ -454,7 +454,7 @@ return (
               <Card className="backdrop-blur border-border p-6">
                 <div className="mb-6">
                   <h2 className="text-2xl font-bold mb-2">Conteúdo do Curso</h2>
-                  <p className="text-gray-400">
+                  <p className="text-muted-foreground">
                     {(courseData.modules || []).length} módulos • {(courseData.totalLessons || 0)} aulas • {(courseData.duration || '')} total
                   </p>
                 </div>
@@ -473,7 +473,7 @@ return (
                           </Badge>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm text-gray-400">{module.duration}</span>
+                          <span className="text-sm text-muted-foreground">{module.duration}</span>
                           {expandedModules.includes(module.id) ? (
                             <ChevronUp size={20} />
                           ) : (
@@ -493,7 +493,7 @@ return (
                                 {lesson.isFree ? (
                                   <PlayCircle className="text-green-400" size={18} />
                                 ) : (
-                                  <Lock className="text-gray-500" size={18} />
+                                  <Lock className="text-muted-foreground" size={18} />
                                 )}
                                 <span>{lesson.title}</span>
                                 {lesson.isFree && (
@@ -502,7 +502,7 @@ return (
                                   </Badge>
                                 )}
                               </div>
-                              <span className="text-sm text-gray-400">{lesson.duration}</span>
+                              <span className="text-sm text-muted-foreground">{lesson.duration}</span>
                             </div>
                           ))}
                         </div>
@@ -525,7 +525,7 @@ return (
                         <Star key={i} className="text-yellow-400 fill-yellow-400" size={20} />
                       ))}
                     </div>
-                    <p className="text-gray-400">{testimonialsCount} avaliações</p>
+                    <p className="text-muted-foreground">{testimonialsCount} avaliações</p>
                   </div>
                 </div>
 
@@ -533,7 +533,7 @@ return (
                   {testimonialsList.map((review: ReviewLike, i: number) => (
                     <div key={i} className="border-b border-border pb-6">
                       <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center">
                           <span className="font-bold">
                             {review.name.split(' ').map((n: string) => n[0]).join('')}
                           </span>
@@ -546,16 +546,16 @@ return (
                                 <Star key={j} className="text-yellow-400 fill-yellow-400" size={16} />
                               ))}
                             </div>
-                            <span className="text-sm text-gray-400">{review.role || review.date || ""}</span>
+                            <span className="text-sm text-muted-foreground">{review.role || review.date || ""}</span>
                           </div>
-                          <p className="text-gray-300">{review.comment}</p>
+                          <p className="text-muted-foreground">{review.comment}</p>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <Button variant="outline" className="w-full mt-6 border-gray-700">
+                <Button variant="outline" className="w-full mt-6 border-border">
                   Ver Mais Avaliações
                 </Button>
               </Card>
@@ -565,34 +565,34 @@ return (
             <TabsContent value="instructor">
               <Card className="backdrop-blur border-border p-6">
                 <div className="flex items-start gap-6">
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center">
                     <span className="text-4xl font-bold">RF</span>
                   </div>
                   <div className="flex-1">
                     <h2 className="text-2xl font-bold mb-2">Ricardo Faya</h2>
-                    <p className="text-gray-400 mb-4">Especialista em IA e Automação</p>
+                    <p className="text-muted-foreground mb-4">Especialista em IA e Automação</p>
                     
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       <div>
                         <div className="text-2xl font-bold">4.9</div>
-                        <div className="text-sm text-gray-400">Avaliação</div>
+                        <div className="text-sm text-muted-foreground">Avaliação</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold">50.000+</div>
-                        <div className="text-sm text-gray-400">Alunos</div>
+                        <div className="text-sm text-muted-foreground">Alunos</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold">20+</div>
-                        <div className="text-sm text-gray-400">Cursos</div>
+                        <div className="text-sm text-muted-foreground">Cursos</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold">28+</div>
-                        <div className="text-sm text-gray-400">Anos de Experiência</div>
+                        <div className="text-sm text-muted-foreground">Anos de Experiência</div>
                       </div>
                     </div>
 
                     <Link href="/sobre">
-                      <Button variant="outline" className="border-purple-500 text-purple-400 hover:bg-purple-500/10">
+                      <Button variant="outline" className="border-amber-500 text-amber-400 hover:bg-amber-500/10">
                         Ver Perfil Completo
                       </Button>
                     </Link>

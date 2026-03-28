@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Inter, Plus_Jakarta_Sans, Fira_Code } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Fira_Code, Bebas_Neue, DM_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -19,6 +19,18 @@ const firaCode = Fira_Code({
   subsets: ["latin"],
 });
 
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const dmMono = DM_Mono({
+  variable: "--font-dm-mono",
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+});
+
 type RootLayoutProps = {
   children: ReactNode;
 };
@@ -27,10 +39,10 @@ const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="pt-BR" className="scroll-smooth theme-dark dark" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="pt-BR" className="dark" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${plusJakarta.variable} ${firaCode.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
+        className={`${inter.variable} ${plusJakarta.variable} ${firaCode.variable} ${bebasNeue.variable} ${dmMono.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
       >
         {/* Google Tag Manager (noscript) */}
         {GTM_ID && (

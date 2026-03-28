@@ -18,7 +18,7 @@ import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 
 export default async function DescobrirPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
         <div id="hero"><HeroSection /></div>

@@ -14,6 +14,11 @@ const config: NextConfig = {
     // Optimize package imports
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
+
+  // Fix turbopack root detection for monorepo-like workspace
+  turbopack: {
+    root: '.',
+  },
   
   async headers() {
     return [

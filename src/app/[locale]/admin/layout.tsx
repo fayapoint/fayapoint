@@ -13,11 +13,11 @@ function AdminMobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
   const { admin } = useAdmin();
   
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 lg:hidden bg-[#0a0a1a]/95 backdrop-blur-xl border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-40 lg:hidden bg-[#0a0a1a]/95 backdrop-blur-xl border-b border-border">
       <div className="flex items-center justify-between h-14 px-4">
         <button
           onClick={onOpenMenu}
-          className="p-2 -ml-2 rounded-lg hover:bg-white/10 text-gray-400"
+          className="p-2 -ml-2 rounded-lg hover:bg-white/10 text-muted-foreground"
         >
           <Menu size={22} />
         </button>
@@ -25,7 +25,7 @@ function AdminMobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
         <span className="font-bold text-white">Admin</span>
         
         <div className="flex items-center gap-2">
-          <button className="p-2 rounded-lg hover:bg-white/10 text-gray-400 relative">
+          <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground relative">
             <Bell size={20} />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-violet-500 rounded-full" />
           </button>
@@ -81,25 +81,25 @@ function AdminDesktopHeader({ isCollapsed }: { isCollapsed: boolean }) {
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Buscar..."
-            className="w-64 pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-violet-500/50"
+            className="w-64 pl-10 pr-4 py-2 rounded-lg bg-secondary border border-border text-white text-sm placeholder-gray-500 focus:outline-none focus:border-amber-500/50"
           />
         </div>
         
         {/* Notifications */}
-        <button className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white relative transition">
+        <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white relative transition">
           <Bell size={20} />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-violet-500 rounded-full" />
         </button>
         
         {/* Profile Quick Access */}
-        <div className="flex items-center gap-2 pl-3 border-l border-white/10">
+        <div className="flex items-center gap-2 pl-3 border-l border-border">
           <div className="text-right hidden xl:block">
             <p className="text-sm font-medium text-white">{admin?.name}</p>
-            <p className="text-[10px] text-gray-500">Administrador</p>
+            <p className="text-[10px] text-muted-foreground">Administrador</p>
           </div>
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
             {admin?.name?.[0]?.toUpperCase() || "A"}
@@ -141,8 +141,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           animate={{ opacity: 1, scale: 1 }}
           className="flex flex-col items-center gap-4"
         >
-          <div className="w-12 h-12 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
-          <p className="text-gray-400 text-sm">Carregando...</p>
+          <div className="w-12 h-12 border-4 border-amber-500/30 border-t-violet-500 rounded-full animate-spin" />
+          <p className="text-muted-foreground text-sm">Carregando...</p>
         </motion.div>
       </div>
     );

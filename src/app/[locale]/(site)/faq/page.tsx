@@ -28,7 +28,7 @@ export default function FAQPage() {
   const categories = t.raw("categories") as FAQCategory[];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-32 pb-20">
@@ -38,12 +38,12 @@ export default function FAQPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
-              <HelpCircle size={16} className="text-purple-400" />
-              <span className="text-sm text-purple-300">{t("badge")}</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
+              <HelpCircle size={16} className="text-amber-400" />
+              <span className="text-sm text-amber-300">{t("badge")}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">{t("description")}</p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
           </motion.div>
         </section>
 
@@ -58,18 +58,18 @@ export default function FAQPage() {
                 viewport={{ once: true }}
                 transition={{ delay: catIdx * 0.1 }}
               >
-                <h2 className="text-2xl font-bold mb-6 text-purple-400">{category.title}</h2>
+                <h2 className="text-2xl font-bold mb-6 text-amber-400">{category.title}</h2>
                 <Accordion type="single" collapsible className="space-y-3">
                   {category.items.map((item, idx) => (
                     <AccordionItem 
                       key={idx} 
                       value={`${catIdx}-${idx}`}
-                      className="bg-white/5 border border-white/10 rounded-xl px-6 data-[state=open]:bg-white/10"
+                      className="bg-secondary border border-border rounded-xl px-6 data-[state=open]:bg-white/10"
                     >
                       <AccordionTrigger className="text-left hover:no-underline py-5">
                         <span className="font-medium">{item.question}</span>
                       </AccordionTrigger>
-                      <AccordionContent className="text-gray-400 pb-5">
+                      <AccordionContent className="text-muted-foreground pb-5">
                         {item.answer}
                       </AccordionContent>
                     </AccordionItem>
@@ -86,14 +86,14 @@ export default function FAQPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-white/10 rounded-2xl p-10"
+            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10"
           >
-            <MessageCircle className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+            <MessageCircle className="w-12 h-12 text-amber-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
-            <p className="text-gray-400 mb-6">{t("cta.description")}</p>
+            <p className="text-muted-foreground mb-6">{t("cta.description")}</p>
             <Link
               href="/contato"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors font-medium"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors font-medium"
             >
               {t("cta.button")}
             </Link>

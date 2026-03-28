@@ -30,20 +30,20 @@ export default function WaitingListPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Header />
       <main className="flex-grow flex items-center justify-center text-center px-4 pt-28 pb-16">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-2xl p-8 space-y-8 bg-gray-900/50 backdrop-blur-xl border border-green-500/50 rounded-2xl shadow-2xl shadow-green-500/20"
+          className="w-full max-w-2xl p-8 space-y-8 bg-card/50 backdrop-blur-xl border border-green-500/50 rounded-2xl shadow-2xl shadow-green-500/20"
         >
           <CheckCircle className="mx-auto h-16 w-16 text-green-400" />
           <h1 className="text-4xl font-bold tracking-tight text-white">Parabéns! Você está na lista!</h1>
-          <p className="mt-4 text-xl text-gray-300">Você garantiu seu lugar na vanguarda da revolução da IA. Em breve, você receberá um e-mail com mais informações e um presente especial de boas-vindas.</p>
+          <p className="mt-4 text-xl text-muted-foreground">Você garantiu seu lugar na vanguarda da revolução da IA. Em breve, você receberá um e-mail com mais informações e um presente especial de boas-vindas.</p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button onClick={() => router.push('/cursos')} className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold">
+            <Button onClick={() => router.push('/cursos')} className="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-yellow-700 text-white font-bold">
               <Sparkles className="mr-2 h-5 w-5" />
               Explorar Cursos
             </Button>

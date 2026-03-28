@@ -92,7 +92,7 @@ const PLATFORM_ICONS: Record<string, LucideIcon> = {
 };
 
 const PLATFORM_COLORS: Record<string, string> = {
-  instagram: "from-pink-500 to-purple-600",
+  instagram: "from-yellow-500 to-amber-600",
   facebook: "from-blue-600 to-blue-700",
   twitter: "from-sky-400 to-sky-600",
   linkedin: "from-blue-700 to-blue-800",
@@ -223,19 +223,19 @@ export default function SocialPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-pink-500 to-violet-600 rounded-xl">
+            <div className="p-2 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl">
               <Share2 size={22} className="text-white" />
             </div>
             Social Media
           </h1>
-          <p className="text-gray-400 mt-1 text-sm">
+          <p className="text-muted-foreground mt-1 text-sm">
             Gerencie suas redes sociais com IA
           </p>
         </div>
         <button
           onClick={fetchAll}
           disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition text-sm"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition text-sm"
         >
           <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           Atualizar
@@ -243,7 +243,7 @@ export default function SocialPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-white/5 rounded-xl border border-white/10 w-fit">
+      <div className="flex gap-1 p-1 bg-secondary rounded-xl border border-border w-fit">
         {tabs.map((t) => {
           const Icon = t.icon;
           return (
@@ -253,7 +253,7 @@ export default function SocialPage() {
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
                 tab === t.id
                   ? "bg-violet-600 text-white shadow-lg shadow-violet-600/20"
-                  : "text-gray-400 hover:text-white hover:bg-white/5"
+                  : "text-muted-foreground hover:text-white hover:bg-secondary"
               }`}
             >
               <Icon size={16} />
@@ -291,7 +291,7 @@ export default function SocialPage() {
                     label: "Engajamento",
                     value: `${(totals?.avgEngagement || 0).toFixed(1)}%`,
                     icon: Heart,
-                    color: "text-pink-400",
+                    color: "text-yellow-400",
                   },
                   {
                     label: "Alcance",
@@ -307,11 +307,11 @@ export default function SocialPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition"
+                      className="p-4 rounded-xl bg-white/[0.03] border border-border hover:border-white/20 transition"
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <Icon size={18} className={kpi.color} />
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-muted-foreground">
                           {kpi.label}
                         </span>
                       </div>
@@ -334,7 +334,7 @@ export default function SocialPage() {
                       key={acc._id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/10"
+                      className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.03] border border-border"
                     >
                       <div
                         className={`p-3 rounded-xl bg-gradient-to-br ${colors}`}
@@ -345,7 +345,7 @@ export default function SocialPage() {
                         <p className="text-white font-medium truncate">
                           @{acc.username}
                         </p>
-                        <p className="text-xs text-gray-400 capitalize">
+                        <p className="text-xs text-muted-foreground capitalize">
                           {acc.platform}
                         </p>
                       </div>
@@ -353,7 +353,7 @@ export default function SocialPage() {
                         <p className="text-white font-bold">
                           {formatNumber(acc.metadata?.followerCount || 0)}
                         </p>
-                        <p className="text-xs text-gray-400">seguidores</p>
+                        <p className="text-xs text-muted-foreground">seguidores</p>
                       </div>
                       <div
                         className={`w-2 h-2 rounded-full ${
@@ -369,7 +369,7 @@ export default function SocialPage() {
                 })}
 
                 {accounts.length === 0 && (
-                  <div className="col-span-2 text-center py-12 text-gray-500">
+                  <div className="col-span-2 text-center py-12 text-muted-foreground">
                     <Share2 size={48} className="mx-auto mb-3 opacity-30" />
                     <p>Nenhuma conta conectada</p>
                     <button
@@ -395,14 +395,14 @@ export default function SocialPage() {
                       return (
                         <div
                           key={post._id}
-                          className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.03] border border-white/10"
+                          className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.03] border border-border"
                         >
-                          <Icon size={16} className="text-gray-400 mt-1 shrink-0" />
+                          <Icon size={16} className="text-muted-foreground mt-1 shrink-0" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm text-gray-200 line-clamp-2">
                               {post.content}
                             </p>
-                            <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                            <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                               <span
                                 className={`px-2 py-0.5 rounded-full ${
                                   post.status === "published"
@@ -410,7 +410,7 @@ export default function SocialPage() {
                                     : post.status === "scheduled"
                                     ? "bg-blue-500/10 text-blue-400"
                                     : post.status === "draft"
-                                    ? "bg-gray-500/10 text-gray-400"
+                                    ? "bg-gray-500/10 text-muted-foreground"
                                     : "bg-yellow-500/10 text-yellow-400"
                                 }`}
                               >
@@ -457,7 +457,7 @@ export default function SocialPage() {
               </div>
 
               {posts.length === 0 ? (
-                <div className="text-center py-16 text-gray-500">
+                <div className="text-center py-16 text-muted-foreground">
                   <Send size={48} className="mx-auto mb-3 opacity-30" />
                   <p>Nenhum post ainda</p>
                   <p className="text-sm mt-1">
@@ -473,13 +473,13 @@ export default function SocialPage() {
                         key={post._id}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition"
+                        className="p-4 rounded-xl bg-white/[0.03] border border-border hover:border-white/20 transition"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-start gap-3 flex-1">
                             <Icon
                               size={16}
-                              className="text-gray-400 mt-1 shrink-0"
+                              className="text-muted-foreground mt-1 shrink-0"
                             />
                             <div className="flex-1">
                               <p className="text-sm text-gray-200">
@@ -490,14 +490,14 @@ export default function SocialPage() {
                                   {post.hashtags.map((h) => `#${h}`).join(" ")}
                                 </p>
                               )}
-                              <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                              <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                                 <span
                                   className={`px-2 py-0.5 rounded-full ${
                                     post.status === "published"
                                       ? "bg-green-500/10 text-green-400"
                                       : post.status === "scheduled"
                                       ? "bg-blue-500/10 text-blue-400"
-                                      : "bg-gray-500/10 text-gray-400"
+                                      : "bg-gray-500/10 text-muted-foreground"
                                   }`}
                                 >
                                   {post.status}
@@ -519,7 +519,7 @@ export default function SocialPage() {
                             </div>
                           </div>
                           {post.status === "published" && (
-                            <div className="text-right text-xs text-gray-400 shrink-0">
+                            <div className="text-right text-xs text-muted-foreground shrink-0">
                               <div className="flex items-center gap-1">
                                 <Heart size={12} />
                                 {post.analytics?.likes || 0}
@@ -542,7 +542,7 @@ export default function SocialPage() {
           {/* Generate Tab */}
           {tab === "generate" && (
             <div className="space-y-6">
-              <div className="p-6 rounded-xl bg-white/[0.03] border border-white/10">
+              <div className="p-6 rounded-xl bg-white/[0.03] border border-border">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                   <Sparkles size={20} className="text-violet-400" />
                   Gerar Conteúdo com IA
@@ -551,7 +551,7 @@ export default function SocialPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Topic */}
                   <div className="md:col-span-2">
-                    <label className="block text-sm text-gray-400 mb-1">
+                    <label className="block text-sm text-muted-foreground mb-1">
                       Tema / Assunto
                     </label>
                     <input
@@ -559,19 +559,19 @@ export default function SocialPage() {
                       value={genTopic}
                       onChange={(e) => setGenTopic(e.target.value)}
                       placeholder="Ex: Dicas de marketing digital para pequenas empresas"
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50"
                     />
                   </div>
 
                   {/* Platform */}
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">
+                    <label className="block text-sm text-muted-foreground mb-1">
                       Plataforma
                     </label>
                     <select
                       value={genPlatform}
                       onChange={(e) => setGenPlatform(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
                     >
                       <option value="instagram">Instagram</option>
                       <option value="facebook">Facebook</option>
@@ -584,13 +584,13 @@ export default function SocialPage() {
 
                   {/* Tone */}
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">
+                    <label className="block text-sm text-muted-foreground mb-1">
                       Tom
                     </label>
                     <select
                       value={genTone}
                       onChange={(e) => setGenTone(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
                     >
                       <option value="professional">Profissional</option>
                       <option value="casual">Casual</option>
@@ -603,13 +603,13 @@ export default function SocialPage() {
 
                   {/* Count */}
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">
+                    <label className="block text-sm text-muted-foreground mb-1">
                       Quantidade
                     </label>
                     <select
                       value={genCount}
                       onChange={(e) => setGenCount(Number(e.target.value))}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
                     >
                       {[1, 3, 5, 7, 10].map((n) => (
                         <option key={n} value={n}>
@@ -623,7 +623,7 @@ export default function SocialPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={genLoading || !genTopic.trim()}
-                  className="mt-4 flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium hover:from-violet-500 hover:to-purple-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="mt-4 flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-amber-600 text-white font-medium hover:from-amber-500 hover:to-amber-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {genLoading ? (
                     <Loader2 size={18} className="animate-spin" />
@@ -652,7 +652,7 @@ export default function SocialPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className="p-4 rounded-xl bg-white/[0.03] border border-white/10"
+                        className="p-4 rounded-xl bg-white/[0.03] border border-border"
                       >
                         <p className="text-sm text-gray-200 whitespace-pre-wrap">
                           {result.content}
@@ -683,12 +683,12 @@ export default function SocialPage() {
                             onClick={() =>
                               navigator.clipboard.writeText(result.content)
                             }
-                            className="px-3 py-1.5 rounded-lg bg-white/5 text-gray-400 text-xs hover:bg-white/10 transition"
+                            className="px-3 py-1.5 rounded-lg bg-secondary text-muted-foreground text-xs hover:bg-white/10 transition"
                           >
                             Copiar
                           </button>
                           {result.bestTimeToPost && (
-                            <span className="text-xs text-gray-500 flex items-center gap-1">
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
                               <Clock size={10} />
                               Melhor horário: {result.bestTimeToPost}
                             </span>
@@ -721,7 +721,7 @@ export default function SocialPage() {
                       key={acc._id}
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="p-5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition"
+                      className="p-5 rounded-xl bg-white/[0.03] border border-border hover:border-white/20 transition"
                     >
                       <div className="flex items-center gap-4 mb-4">
                         <div
@@ -733,7 +733,7 @@ export default function SocialPage() {
                           <p className="text-white font-semibold">
                             @{acc.username}
                           </p>
-                          <p className="text-xs text-gray-400 capitalize">
+                          <p className="text-xs text-muted-foreground capitalize">
                             {acc.platform} &middot;{" "}
                             <span
                               className={
@@ -752,7 +752,7 @@ export default function SocialPage() {
                           <p className="text-lg font-bold text-white">
                             {formatNumber(acc.metadata?.followerCount || 0)}
                           </p>
-                          <p className="text-[10px] text-gray-500">
+                          <p className="text-[10px] text-muted-foreground">
                             Seguidores
                           </p>
                         </div>
@@ -760,13 +760,13 @@ export default function SocialPage() {
                           <p className="text-lg font-bold text-white">
                             {formatNumber(acc.metadata?.postCount || 0)}
                           </p>
-                          <p className="text-[10px] text-gray-500">Posts</p>
+                          <p className="text-[10px] text-muted-foreground">Posts</p>
                         </div>
                         <div>
                           <p className="text-lg font-bold text-white">
                             {(acc.metadata?.averageEngagement || 0).toFixed(1)}%
                           </p>
-                          <p className="text-[10px] text-gray-500">Eng.</p>
+                          <p className="text-[10px] text-muted-foreground">Eng.</p>
                         </div>
                       </div>
                       {acc.lastSync && (
@@ -783,18 +783,18 @@ export default function SocialPage() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="p-5 rounded-xl border-2 border-dashed border-white/10 hover:border-violet-500/30 transition flex flex-col items-center justify-center gap-3 min-h-[200px] cursor-pointer group"
+                  className="p-5 rounded-xl border-2 border-dashed border-border hover:border-amber-500/30 transition flex flex-col items-center justify-center gap-3 min-h-[200px] cursor-pointer group"
                   onClick={() => {
                     // TODO: OAuth flow
                   }}
                 >
-                  <div className="p-4 rounded-full bg-white/5 group-hover:bg-violet-500/10 transition">
+                  <div className="p-4 rounded-full bg-secondary group-hover:bg-violet-500/10 transition">
                     <Plus
                       size={24}
-                      className="text-gray-500 group-hover:text-violet-400 transition"
+                      className="text-muted-foreground group-hover:text-violet-400 transition"
                     />
                   </div>
-                  <p className="text-sm text-gray-500 group-hover:text-gray-300 transition">
+                  <p className="text-sm text-muted-foreground group-hover:text-muted-foreground transition">
                     Conectar nova conta
                   </p>
                   <p className="text-xs text-gray-600">

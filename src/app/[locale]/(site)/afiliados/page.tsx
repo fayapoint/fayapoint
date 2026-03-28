@@ -33,7 +33,7 @@ export default function AffiliatesPage() {
   const steps = t.raw("steps") as Step[];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-32 pb-20">
@@ -49,13 +49,13 @@ export default function AffiliatesPage() {
               <span className="text-sm text-green-300">{t("badge")}</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("title")}</h1>
-            <p className="text-xl text-gray-400 mb-8">{t("description")}</p>
+            <p className="text-xl text-muted-foreground mb-8">{t("description")}</p>
             
             {/* Commission Highlight */}
             <div className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl">
               <TrendingUp className="text-green-400" size={28} />
               <span className="text-2xl font-bold text-green-400">{t("commissionRate")}</span>
-              <span className="text-gray-300">{t("commissionLabel")}</span>
+              <span className="text-muted-foreground">{t("commissionLabel")}</span>
             </div>
           </motion.div>
         </section>
@@ -77,7 +77,7 @@ export default function AffiliatesPage() {
                   {idx + 1}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                <p className="text-gray-400">{step.description}</p>
+                <p className="text-muted-foreground">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -96,11 +96,11 @@ export default function AffiliatesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="bg-white/5 border border-white/10 rounded-xl p-6"
+                  className="bg-secondary border border-border rounded-xl p-6"
                 >
                   <Icon className="w-10 h-10 text-green-400 mb-4" />
                   <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
-                  <p className="text-gray-400 text-sm">{benefit.description}</p>
+                  <p className="text-muted-foreground text-sm">{benefit.description}</p>
                 </motion.div>
               );
             })}
@@ -116,7 +116,7 @@ export default function AffiliatesPage() {
             className="max-w-3xl mx-auto text-center bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-500/30 rounded-2xl p-10"
           >
             <h2 className="text-3xl font-bold mb-4">{t("cta.title")}</h2>
-            <p className="text-gray-400 mb-8">{t("cta.description")}</p>
+            <p className="text-muted-foreground mb-8">{t("cta.description")}</p>
             <Link
               href="/contato"
               className="inline-flex items-center gap-2 px-8 py-4 bg-green-600 hover:bg-green-700 rounded-lg transition-colors font-semibold"

@@ -162,10 +162,10 @@ export function Header() {
                     {t("nav.courses")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="grid grid-cols-3 gap-4 p-6 w-[600px] bg-gray-900/95 backdrop-blur-xl">
+                    <div className="grid grid-cols-3 gap-4 p-6 w-[600px] bg-card/95 backdrop-blur-xl">
                       {coursesMenu.map((section) => (
                         <div key={section.titleKey}>
-                          <h3 className="font-semibold text-purple-400 mb-3">
+                          <h3 className="font-semibold text-amber-400 mb-3">
                             {t(section.titleKey)}
                           </h3>
                           <ul className="space-y-2">
@@ -173,7 +173,7 @@ export function Header() {
                               <li key={item.href}>
                                 <Link
                                   href={item.href}
-                                  className="text-sm text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 block"
+                                  className="text-sm text-muted-foreground hover:text-white hover:translate-x-1 transition-all duration-200 block"
                                 >
                                   {t(item.labelKey)}
                                 </Link>
@@ -182,10 +182,10 @@ export function Header() {
                           </ul>
                         </div>
                       ))}
-                      <div className="col-span-3 mt-4 pt-4 border-t border-gray-800">
+                      <div className="col-span-3 mt-4 pt-4 border-t border-border">
                         <Link
                           href="/cursos"
-                          className="text-purple-400 hover:text-purple-300 font-medium flex items-center gap-2"
+                          className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-2"
                         >
                           {t("menus.courses.viewAll")}
                           <ChevronDown className="w-4 h-4 -rotate-90" />
@@ -201,10 +201,10 @@ export function Header() {
                     {t("nav.tools")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="grid grid-cols-3 gap-4 p-6 w-[600px] bg-gray-900/95 backdrop-blur-xl">
+                    <div className="grid grid-cols-3 gap-4 p-6 w-[600px] bg-card/95 backdrop-blur-xl">
                       {toolsMenu.map((section) => (
                         <div key={section.titleKey}>
-                          <h3 className="font-semibold text-purple-400 mb-3">
+                          <h3 className="font-semibold text-amber-400 mb-3">
                             {t(section.titleKey)}
                           </h3>
                           <ul className="space-y-2">
@@ -212,7 +212,7 @@ export function Header() {
                               <li key={item.href}>
                                 <Link
                                   href={item.href}
-                                  className="text-sm text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 block"
+                                  className="text-sm text-muted-foreground hover:text-white hover:translate-x-1 transition-all duration-200 block"
                                 >
                                   {t(item.labelKey)}
                                 </Link>
@@ -221,10 +221,10 @@ export function Header() {
                           </ul>
                         </div>
                       ))}
-                      <div className="col-span-3 mt-4 pt-4 border-t border-gray-800">
+                      <div className="col-span-3 mt-4 pt-4 border-t border-border">
                         <Link
                           href="/ferramentas"
-                          className="text-purple-400 hover:text-purple-300 font-medium flex items-center gap-2"
+                          className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-2"
                         >
                           {t("menus.tools.viewAll")}
                           <ChevronDown className="w-4 h-4 -rotate-90" />

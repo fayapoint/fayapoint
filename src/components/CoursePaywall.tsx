@@ -62,11 +62,11 @@ export function CoursePaywall({
       )}
     >
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-900/40 via-[#12131c] to-purple-900/30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-900/40 via-[#12131c] to-amber-900/30" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-violet-600/10 via-transparent to-transparent" />
 
       {/* Accent border glow */}
-      <div className="absolute -inset-px rounded-3xl bg-gradient-to-b from-violet-500/30 via-purple-500/10 to-transparent pointer-events-none" />
+      <div className="absolute -inset-px rounded-3xl bg-gradient-to-b from-amber-500/30 via-amber-500/10 to-transparent pointer-events-none" />
 
       <div className="relative p-8 sm:p-10">
         {/* Badge */}
@@ -102,7 +102,7 @@ export function CoursePaywall({
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <Link href={`/${locale}/portal/planos`} className="flex-1">
-            <Button className="w-full h-12 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 rounded-xl font-semibold shadow-lg shadow-violet-600/25 text-sm transition-all duration-300 hover:shadow-violet-500/30 hover:scale-[1.01]">
+            <Button className="w-full h-12 bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500 rounded-xl font-semibold shadow-lg shadow-violet-600/25 text-sm transition-all duration-300 hover:shadow-amber-500/30 hover:scale-[1.01]">
               Assine por R$19,90/mes
               <ChevronRight size={16} className="ml-1" />
             </Button>

@@ -1,11 +1,7 @@
 import { cookies } from "next/headers";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { NewHomepage } from "@/components/home-v2/NewHomepage";
-import { StickyCTA } from "@/components/conversion/StickyCTA";
-import { ExitIntentPopup } from "@/components/conversion/ExitIntentPopup";
-import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 import { GateLandingPage } from "@/components/gate/GateLandingPage";
+import { CubeHomepage } from "@/components/cube/CubeHomepage";
+import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -20,17 +16,9 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030712] text-foreground">
-      <Header />
-      <main>
-        <NewHomepage />
-      </main>
-      <Footer />
-
-      {/* Conversion optimization */}
-      <StickyCTA />
-      <ExitIntentPopup />
+    <>
+      <CubeHomepage />
       <WhatsAppButton />
-    </div>
+    </>
   );
 }

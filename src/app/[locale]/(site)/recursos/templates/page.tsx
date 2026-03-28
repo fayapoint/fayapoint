@@ -28,7 +28,7 @@ export default function TemplatesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-32 pb-20">
@@ -43,7 +43,7 @@ export default function TemplatesPage() {
               <span className="text-sm text-orange-300">{t("badge")}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">{t("description")}</p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
           </motion.div>
         </section>
 
@@ -57,7 +57,7 @@ export default function TemplatesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="bg-white/5 border border-white/10 rounded-xl overflow-hidden"
+                className="bg-secondary border border-border rounded-xl overflow-hidden"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
@@ -65,12 +65,12 @@ export default function TemplatesPage() {
                     <span className="text-xs px-2 py-1 bg-white/10 rounded-full">{template.tool}</span>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{template.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4">{template.description}</p>
+                  <p className="text-muted-foreground text-sm mb-4">{template.description}</p>
                 </div>
                 
                 {/* Prompt Preview */}
-                <div className="bg-black/50 border-t border-white/10 p-4">
-                  <pre className="text-sm text-gray-300 whitespace-pre-wrap line-clamp-3 mb-3 font-mono">
+                <div className="bg-black/50 border-t border-border p-4">
+                  <pre className="text-sm text-muted-foreground whitespace-pre-wrap line-clamp-3 mb-3 font-mono">
                     {template.prompt}
                   </pre>
                   <button
@@ -101,11 +101,11 @@ export default function TemplatesPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-orange-900/20 to-red-900/20 border border-white/10 rounded-2xl p-10"
+            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-orange-900/20 to-red-900/20 border border-border rounded-2xl p-10"
           >
             <Zap className="w-12 h-12 text-orange-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
-            <p className="text-gray-400 mb-6">{t("cta.description")}</p>
+            <p className="text-muted-foreground mb-6">{t("cta.description")}</p>
             <Link
               href="/cursos"
               className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-lg transition-colors font-medium"

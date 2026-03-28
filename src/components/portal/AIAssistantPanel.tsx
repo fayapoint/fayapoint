@@ -162,20 +162,20 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
   if (!isPro) {
     return (
       <div className="flex items-center justify-center min-h-[600px]">
-        <Card className="bg-gray-900/50 border-gray-800 p-8 text-center max-w-md">
-          <div className="w-20 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Bot size={40} className="text-purple-400" />
+        <Card className="bg-card/50 border-border p-8 text-center max-w-md">
+          <div className="w-20 h-20 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Bot size={40} className="text-amber-400" />
           </div>
           <h2 className="text-2xl font-bold mb-2">Assistente IA</h2>
           <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 mb-4">
             <Crown size={12} className="mr-1" />
             Recurso PRO
           </Badge>
-          <p className="text-gray-400 mb-6">
+          <p className="text-muted-foreground mb-6">
             Upgrade para Pro para ter acesso ao assistente de IA personalizado. 
             Tire dúvidas, receba dicas e acelere seu aprendizado!
           </p>
-          <Button className="bg-gradient-to-r from-purple-600 to-pink-600">
+          <Button className="bg-gradient-to-r from-amber-600 to-yellow-700">
             <Crown size={16} className="mr-2" />
             Fazer Upgrade
           </Button>
@@ -189,7 +189,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center">
             <Bot size={24} className="text-white" />
           </div>
           <div>
@@ -197,11 +197,11 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
               Assistente IA
               <Badge className="bg-green-500/20 text-green-400 text-xs">Online</Badge>
             </h2>
-            <p className="text-sm text-gray-400">Seu tutor pessoal de IA</p>
+            <p className="text-sm text-muted-foreground">Seu tutor pessoal de IA</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="border-purple-500/50 text-purple-400">
+          <Badge variant="outline" className="border-amber-500/50 text-amber-400">
             <MessageSquare size={12} className="mr-1" />
             {aiChats} conversas
           </Badge>
@@ -212,7 +212,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
       </div>
 
       {/* Chat Area */}
-      <Card className="flex-1 bg-gray-900/30 border-gray-800 overflow-hidden flex flex-col">
+      <Card className="flex-1 bg-card/30 border-border overflow-hidden flex flex-col">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           <AnimatePresence mode="popLayout">
@@ -231,7 +231,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
                   className={cn(
                     "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
                     message.role === "assistant"
-                      ? "bg-gradient-to-br from-purple-500 to-pink-500"
+                      ? "bg-gradient-to-br from-amber-500 to-yellow-600"
                       : "bg-gray-700"
                   )}
                 >
@@ -248,12 +248,12 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
                   className={cn(
                     "max-w-[80%] rounded-2xl px-4 py-3 relative group",
                     message.role === "assistant"
-                      ? "bg-gray-800 rounded-tl-sm"
-                      : "bg-purple-600 rounded-tr-sm"
+                      ? "bg-secondary rounded-tl-sm"
+                      : "bg-amber-600 rounded-tr-sm"
                   )}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  <p className="text-[10px] text-gray-500 mt-1">
+                  <p className="text-[10px] text-muted-foreground mt-1">
                     {message.timestamp.toLocaleTimeString("pt-BR", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -268,7 +268,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
                       {copiedId === message.id ? (
                         <Check size={14} className="text-green-400" />
                       ) : (
-                        <Copy size={14} className="text-gray-400" />
+                        <Copy size={14} className="text-muted-foreground" />
                       )}
                     </button>
                   )}
@@ -283,13 +283,13 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
               animate={{ opacity: 1 }}
               className="flex gap-3"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center">
                 <Sparkles size={16} className="text-white" />
               </div>
-              <div className="bg-gray-800 rounded-2xl rounded-tl-sm px-4 py-3">
+              <div className="bg-secondary rounded-2xl rounded-tl-sm px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <Loader2 size={16} className="animate-spin text-purple-400" />
-                  <span className="text-sm text-gray-400">Pensando...</span>
+                  <Loader2 size={16} className="animate-spin text-amber-400" />
+                  <span className="text-sm text-muted-foreground">Pensando...</span>
                 </div>
               </div>
             </motion.div>
@@ -301,19 +301,19 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
         {/* Suggested Prompts */}
         {messages.length <= 1 && (
           <div className="px-4 pb-4">
-            <p className="text-xs text-gray-500 mb-2">Sugestões:</p>
+            <p className="text-xs text-muted-foreground mb-2">Sugestões:</p>
             <div className="grid grid-cols-2 gap-2">
               {SUGGESTED_PROMPTS.map((prompt, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSuggestedPrompt(prompt.text)}
-                  className="flex items-center gap-2 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition text-left group"
+                  className="flex items-center gap-2 p-3 bg-secondary rounded-lg hover:bg-white/10 transition text-left group"
                 >
                   <prompt.icon
                     size={16}
-                    className="text-purple-400 shrink-0 group-hover:scale-110 transition"
+                    className="text-amber-400 shrink-0 group-hover:scale-110 transition"
                   />
-                  <span className="text-xs text-gray-300 line-clamp-2">{prompt.text}</span>
+                  <span className="text-xs text-muted-foreground line-clamp-2">{prompt.text}</span>
                 </button>
               ))}
             </div>
@@ -321,7 +321,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
         )}
 
         {/* Input Area */}
-        <div className="p-4 border-t border-gray-800">
+        <div className="p-4 border-t border-border">
           <div className="flex items-end gap-2">
             <div className="flex-1 relative">
               <Textarea
@@ -330,22 +330,22 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Digite sua pergunta..."
-                className="bg-gray-800 border-gray-700 min-h-[48px] max-h-[120px] resize-none pr-12"
+                className="bg-secondary border-border min-h-[48px] max-h-[120px] resize-none pr-12"
                 rows={1}
               />
               <div className="absolute bottom-2 right-2 flex items-center gap-1">
                 <button className="p-1.5 hover:bg-white/10 rounded-lg transition opacity-50 hover:opacity-100">
-                  <Paperclip size={16} className="text-gray-400" />
+                  <Paperclip size={16} className="text-muted-foreground" />
                 </button>
                 <button className="p-1.5 hover:bg-white/10 rounded-lg transition opacity-50 hover:opacity-100">
-                  <Mic size={16} className="text-gray-400" />
+                  <Mic size={16} className="text-muted-foreground" />
                 </button>
               </div>
             </div>
             <Button
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
-              className="bg-purple-600 hover:bg-purple-700 h-12 px-4"
+              className="bg-amber-600 hover:bg-amber-700 h-12 px-4"
             >
               {isLoading ? (
                 <Loader2 size={18} className="animate-spin" />
@@ -354,7 +354,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
               )}
             </Button>
           </div>
-          <p className="text-[10px] text-gray-500 mt-2 text-center">
+          <p className="text-[10px] text-muted-foreground mt-2 text-center">
             Pressione Enter para enviar • Shift + Enter para nova linha
           </p>
         </div>

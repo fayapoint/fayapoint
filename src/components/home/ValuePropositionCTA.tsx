@@ -25,8 +25,8 @@ export function ValuePropositionCTA() {
     {
       icon: Sparkles,
       emoji: "✨",
-      gradient: "from-purple-500 to-pink-500",
-      bg: "bg-purple-500/10",
+      gradient: "from-amber-500 to-yellow-600",
+      bg: "bg-amber-500/10",
     },
     {
       icon: Palette,
@@ -58,7 +58,7 @@ export function ValuePropositionCTA() {
     <section className="py-16 md:py-24 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background pointer-events-none" />
-      <div className="absolute top-0 -left-20 md:left-1/4 w-64 md:w-96 h-64 md:h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 -left-20 md:left-1/4 w-64 md:w-96 h-64 md:h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 -right-20 md:right-1/4 w-64 md:w-96 h-64 md:h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none" />
       
       <div className="container mx-auto px-4 relative z-10">
@@ -92,7 +92,7 @@ export function ValuePropositionCTA() {
           >
             <span className="text-foreground">{t("title1")}</span>
             <br />
-            <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-500 via-pink-500 to-orange-500 bg-clip-text text-transparent">
               {t("title2")}
             </span>
           </motion.h2>
@@ -127,7 +127,7 @@ export function ValuePropositionCTA() {
               >
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 5 }}
-                  className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl ${step.bg} border border-white/10 flex items-center justify-center shadow-lg`}
+                  className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl ${step.bg} border border-border flex items-center justify-center shadow-lg`}
                 >
                   <span className="text-2xl md:text-3xl">{step.emoji}</span>
                 </motion.div>
@@ -186,7 +186,7 @@ export function ValuePropositionCTA() {
             <Link href="/portal">
               <Button 
                 size="lg" 
-                className="px-8 py-6 text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-xl shadow-purple-500/30"
+                className="px-8 py-6 text-lg bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 shadow-xl shadow-amber-500/30"
               >
                 <Play className="w-5 h-5 mr-2" />
                 {t("ctaPrimary")}
@@ -197,7 +197,7 @@ export function ValuePropositionCTA() {
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="px-8 py-6 text-lg border-white/20 hover:bg-white/5"
+                className="px-8 py-6 text-lg border-white/20 hover:bg-secondary"
               >
                 {t("ctaSecondary")}
               </Button>

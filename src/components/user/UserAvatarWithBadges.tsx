@@ -56,7 +56,7 @@ const TIER_COLORS = {
   silver: "from-gray-300 to-gray-500 border-gray-400",
   gold: "from-yellow-400 to-amber-500 border-yellow-400",
   platinum: "from-cyan-300 to-blue-400 border-cyan-400",
-  diamond: "from-purple-400 to-pink-500 border-purple-400",
+  diamond: "from-amber-400 to-yellow-500 border-amber-400",
 };
 
 const TIER_GLOW = {
@@ -64,7 +64,7 @@ const TIER_GLOW = {
   silver: "shadow-gray-400/30",
   gold: "shadow-yellow-400/50",
   platinum: "shadow-cyan-400/50",
-  diamond: "shadow-purple-500/50",
+  diamond: "shadow-amber-500/50",
 };
 
 interface Achievement {
@@ -150,17 +150,17 @@ export function UserAvatarWithBadges({
           className={cn(
             "relative rounded-full",
             onClick && "cursor-pointer",
-            editable && isHovered && "ring-2 ring-purple-500 ring-offset-2 ring-offset-background"
+            editable && isHovered && "ring-2 ring-amber-500 ring-offset-2 ring-offset-background"
           )}
           onClick={onClick}
           whileHover={onClick ? { scale: 1.05 } : undefined}
           whileTap={onClick ? { scale: 0.95 } : undefined}
         >
-          <Avatar className={cn(sizeConfig.avatar, "border-2 border-gray-700")}>
+          <Avatar className={cn(sizeConfig.avatar, "border-2 border-border")}>
             {user.image ? (
               <AvatarImage src={user.image} alt={user.name} className="object-cover" />
             ) : null}
-            <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold">
+            <AvatarFallback className="bg-gradient-to-br from-amber-500 to-yellow-600 text-white font-bold">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -230,13 +230,13 @@ export function UserAvatarWithBadges({
                   </TooltipTrigger>
                   <TooltipContent 
                     side="top" 
-                    className="bg-gray-900 border-gray-700 px-3 py-2"
+                    className="bg-card border-border px-3 py-2"
                   >
                     <div className="text-center">
                       <p className="font-semibold text-sm capitalize">
                         {achievement.id.replace(/_/g, " ")}
                       </p>
-                      <p className="text-xs text-gray-400 capitalize">
+                      <p className="text-xs text-muted-foreground capitalize">
                         {achievement.tier} • +{achievement.xpReward} XP
                       </p>
                     </div>
@@ -276,11 +276,11 @@ export function UserAvatarSimple({
 
   return (
     <div className={cn("relative inline-flex", className)}>
-      <Avatar className={cn(sizeConfig.avatar, "border-2 border-gray-700")}>
+      <Avatar className={cn(sizeConfig.avatar, "border-2 border-border")}>
         {user.image ? (
           <AvatarImage src={user.image} alt={user.name} className="object-cover" />
         ) : null}
-        <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold text-xs">
+        <AvatarFallback className="bg-gradient-to-br from-amber-500 to-yellow-600 text-white font-bold text-xs">
           {initials}
         </AvatarFallback>
       </Avatar>

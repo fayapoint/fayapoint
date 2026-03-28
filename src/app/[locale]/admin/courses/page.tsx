@@ -79,7 +79,7 @@ function StatCard({ label, value, icon: Icon, color, trend }: {
   trend?: { value: number; up: boolean };
 }) {
   const colorClasses: Record<string, string> = {
-    violet: "from-violet-500/20 to-purple-600/10 border-violet-500/20 text-violet-400",
+    violet: "from-amber-500/20 to-amber-600/10 border-amber-500/20 text-violet-400",
     cyan: "from-cyan-500/20 to-blue-600/10 border-cyan-500/20 text-cyan-400",
     emerald: "from-emerald-500/20 to-green-600/10 border-emerald-500/20 text-emerald-400",
     amber: "from-amber-500/20 to-yellow-600/10 border-amber-500/20 text-amber-400",
@@ -97,7 +97,7 @@ function StatCard({ label, value, icon: Icon, color, trend }: {
         )}
       </div>
       <p className="text-2xl font-bold text-white">{value}</p>
-      <p className="text-xs text-gray-500">{label}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
     </div>
   );
 }
@@ -114,7 +114,7 @@ function CourseCard({ course, onEdit, onDelete, onView }: {
   const statusColors = {
     published: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
     draft: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-    archived: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+    archived: "bg-gray-500/20 text-muted-foreground border-gray-500/30",
   };
 
   const levelColors: Record<string, string> = {
@@ -127,11 +127,11 @@ function CourseCard({ course, onEdit, onDelete, onView }: {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10"
+      className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border"
     >
       <div className="flex gap-3">
         {/* Thumbnail */}
-        <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-600/20 flex items-center justify-center shrink-0 overflow-hidden">
+        <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/20 flex items-center justify-center shrink-0 overflow-hidden">
           {course.thumbnail ? (
             <img src={course.thumbnail} alt="" className="w-full h-full object-cover" />
           ) : (
@@ -144,13 +144,13 @@ function CourseCard({ course, onEdit, onDelete, onView }: {
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <h3 className="font-medium text-white text-sm truncate">{course.title}</h3>
-              <p className="text-xs text-gray-500 truncate">{course.tool}</p>
+              <p className="text-xs text-muted-foreground truncate">{course.tool}</p>
             </div>
             
             <div className="relative shrink-0">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground"
               >
                 <MoreVertical size={16} />
               </button>
@@ -163,12 +163,12 @@ function CourseCard({ course, onEdit, onDelete, onView }: {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="absolute right-0 top-full mt-1 w-32 rounded-xl bg-gray-900 border border-white/10 shadow-xl z-50 overflow-hidden"
+                      className="absolute right-0 top-full mt-1 w-32 rounded-xl bg-card border border-border shadow-xl z-50 overflow-hidden"
                     >
-                      <button onClick={() => { onView(); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-white/5">
+                      <button onClick={() => { onView(); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-secondary">
                         <Eye size={12} /> Ver
                       </button>
-                      <button onClick={() => { onEdit(); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-white/5">
+                      <button onClick={() => { onEdit(); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-secondary">
                         <Edit2 size={12} /> Editar
                       </button>
                       <button onClick={() => { onDelete(); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10">
@@ -190,12 +190,12 @@ function CourseCard({ course, onEdit, onDelete, onView }: {
                 GRÁTIS
               </span>
             )}
-            <span className={cn("px-2 py-0.5 rounded text-[10px]", levelColors[course.level.toLowerCase()] || "bg-gray-500/20 text-gray-400")}>
+            <span className={cn("px-2 py-0.5 rounded text-[10px]", levelColors[course.level.toLowerCase()] || "bg-gray-500/20 text-muted-foreground")}>
               {course.level}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-500">
+          <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground">
             <span className="flex items-center gap-1">
               <Users size={10} /> {course.students}
             </span>
@@ -217,12 +217,12 @@ function CourseCard({ course, onEdit, onDelete, onView }: {
             <>
               <span className="text-white font-bold">R$ {course.price}</span>
               {course.originalPrice > course.price && (
-                <span className="text-xs text-gray-500 line-through ml-2">R$ {course.originalPrice}</span>
+                <span className="text-xs text-muted-foreground line-through ml-2">R$ {course.originalPrice}</span>
               )}
             </>
           )}
         </div>
-        <span className="text-[10px] text-gray-500">
+        <span className="text-[10px] text-muted-foreground">
           {course.modules?.length || 0} módulos
         </span>
       </div>
@@ -293,21 +293,21 @@ function CourseModal({ course, onClose, onSave, mode }: {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative w-full max-w-2xl max-h-[90vh] rounded-2xl bg-gray-900 border border-white/10 shadow-2xl overflow-hidden flex flex-col"
+        className="relative w-full max-w-2xl max-h-[90vh] rounded-2xl bg-card border border-border shadow-2xl overflow-hidden flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+        <div className="flex items-center justify-between p-4 border-b border-border">
           <h3 className="text-lg font-semibold text-white flex items-center gap-2">
             <BookOpen size={20} className="text-violet-400" />
             {mode === "create" ? "Novo Curso" : "Editar Curso"}
           </h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
+          <button onClick={onClose} className="text-muted-foreground hover:text-white">
             <X size={20} />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 px-4 py-2 border-b border-white/10 overflow-x-auto">
+        <div className="flex gap-1 px-4 py-2 border-b border-border overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -316,7 +316,7 @@ function CourseModal({ course, onClose, onSave, mode }: {
                 "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition",
                 activeTab === tab.id
                   ? "bg-violet-500/20 text-violet-400"
-                  : "text-gray-400 hover:bg-white/5"
+                  : "text-muted-foreground hover:bg-secondary"
               )}
             >
               <tab.icon size={14} />
@@ -338,49 +338,49 @@ function CourseModal({ course, onClose, onSave, mode }: {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="text-xs text-gray-400 mb-1 block">Título</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Título</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                     required
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="text-xs text-gray-400 mb-1 block">Subtítulo</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Subtítulo</label>
                   <input
                     type="text"
                     value={formData.subtitle}
                     onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Slug</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Slug</label>
                   <input
                     type="text"
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                     required
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Ferramenta</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Ferramenta</label>
                   <input
                     type="text"
                     value={formData.tool}
                     onChange={(e) => setFormData({ ...formData, tool: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Categoria</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Categoria</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                   >
                     <option value="AI & Automação">AI & Automação</option>
                     <option value="Marketing Digital">Marketing Digital</option>
@@ -390,11 +390,11 @@ function CourseModal({ course, onClose, onSave, mode }: {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Nível</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Nível</label>
                   <select
                     value={formData.level}
                     onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                   >
                     <option value="Iniciante">Iniciante</option>
                     <option value="Intermediário">Intermediário</option>
@@ -403,21 +403,21 @@ function CourseModal({ course, onClose, onSave, mode }: {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Duração</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Duração</label>
                   <input
                     type="text"
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                     placeholder="Ex: 12h"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-400 mb-1 block">Status</label>
+                  <label className="text-xs text-muted-foreground mb-1 block">Status</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as Course["status"] })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                   >
                     <option value="draft">Rascunho</option>
                     <option value="published">Publicado</option>
@@ -426,12 +426,12 @@ function CourseModal({ course, onClose, onSave, mode }: {
                 </div>
               </div>
               <div>
-                <label className="text-xs text-gray-400 mb-1 block">Descrição Curta</label>
+                <label className="text-xs text-muted-foreground mb-1 block">Descrição Curta</label>
                 <textarea
                   value={formData.shortDescription}
                   onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
                   rows={2}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50 resize-none"
+                  className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50 resize-none"
                 />
               </div>
             </>
@@ -461,9 +461,9 @@ function CourseModal({ course, onClose, onSave, mode }: {
               </div>
 
               {formData.modules?.map((module, index) => (
-                <div key={index} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                <div key={index} className="p-4 rounded-xl bg-secondary border border-border space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">Módulo {index + 1}</span>
+                    <span className="text-xs text-muted-foreground">Módulo {index + 1}</span>
                     <button
                       type="button"
                       onClick={() => {
@@ -484,7 +484,7 @@ function CourseModal({ course, onClose, onSave, mode }: {
                       setFormData({ ...formData, modules: newModules });
                     }}
                     placeholder="Título do módulo"
-                    className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                    className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                   />
                   <div className="grid grid-cols-2 gap-3">
                     <input
@@ -496,7 +496,7 @@ function CourseModal({ course, onClose, onSave, mode }: {
                         setFormData({ ...formData, modules: newModules });
                       }}
                       placeholder="Duração"
-                      className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                     />
                     <input
                       type="number"
@@ -507,14 +507,14 @@ function CourseModal({ course, onClose, onSave, mode }: {
                         setFormData({ ...formData, modules: newModules });
                       }}
                       placeholder="Aulas"
-                      className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                     />
                   </div>
                 </div>
               ))}
 
               {(!formData.modules || formData.modules.length === 0) && (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <Layers size={32} className="mx-auto mb-2 opacity-50" />
                   <p className="text-sm">Nenhum módulo adicionado</p>
                 </div>
@@ -524,13 +524,13 @@ function CourseModal({ course, onClose, onSave, mode }: {
 
           {activeTab === "pricing" && (
             <div className="space-y-4">
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border">
                 <input
                   type="checkbox"
                   id="isFree"
                   checked={formData.isFree}
                   onChange={(e) => setFormData({ ...formData, isFree: e.target.checked })}
-                  className="w-4 h-4 rounded border-white/20 bg-white/5"
+                  className="w-4 h-4 rounded border-white/20 bg-secondary"
                 />
                 <label htmlFor="isFree" className="text-sm text-white">Curso Gratuito</label>
               </div>
@@ -538,33 +538,33 @@ function CourseModal({ course, onClose, onSave, mode }: {
               {!formData.isFree && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Preço (R$)</label>
+                    <label className="text-xs text-muted-foreground mb-1 block">Preço (R$)</label>
                     <input
                       type="number"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-400 mb-1 block">Preço Original (R$)</label>
+                    <label className="text-xs text-muted-foreground mb-1 block">Preço Original (R$)</label>
                     <input
                       type="number"
                       value={formData.originalPrice}
                       onChange={(e) => setFormData({ ...formData, originalPrice: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                      className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                     />
                   </div>
                 </div>
               )}
 
               <div>
-                <label className="text-xs text-gray-400 mb-1 block">Total de Aulas</label>
+                <label className="text-xs text-muted-foreground mb-1 block">Total de Aulas</label>
                 <input
                   type="number"
                   value={formData.totalLessons}
                   onChange={(e) => setFormData({ ...formData, totalLessons: Number(e.target.value) })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                  className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                 />
               </div>
             </div>
@@ -572,19 +572,19 @@ function CourseModal({ course, onClose, onSave, mode }: {
 
           {activeTab === "media" && (
             <div className="space-y-4">
-              <div className="p-8 rounded-xl border-2 border-dashed border-white/10 text-center">
-                <ImageIcon size={32} className="mx-auto mb-2 text-gray-500" />
-                <p className="text-sm text-gray-400">Arraste uma imagem ou clique para upload</p>
-                <p className="text-xs text-gray-500 mt-1">PNG, JPG até 2MB</p>
+              <div className="p-8 rounded-xl border-2 border-dashed border-border text-center">
+                <ImageIcon size={32} className="mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">Arraste uma imagem ou clique para upload</p>
+                <p className="text-xs text-muted-foreground mt-1">PNG, JPG até 2MB</p>
               </div>
               <div>
-                <label className="text-xs text-gray-400 mb-1 block">URL da Thumbnail</label>
+                <label className="text-xs text-muted-foreground mb-1 block">URL da Thumbnail</label>
                 <input
                   type="text"
                   value={formData.thumbnail || ""}
                   onChange={(e) => setFormData({ ...formData, thumbnail: e.target.value })}
                   placeholder="https://..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-violet-500/50"
+                  className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm focus:outline-none focus:border-amber-500/50"
                 />
               </div>
             </div>
@@ -592,11 +592,11 @@ function CourseModal({ course, onClose, onSave, mode }: {
         </form>
 
         {/* Footer */}
-        <div className="flex gap-3 p-4 border-t border-white/10">
+        <div className="flex gap-3 p-4 border-t border-border">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+            className="flex-1 px-4 py-2.5 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
           >
             Cancelar
           </button>
@@ -686,14 +686,14 @@ export default function AdminCoursesPage() {
             <GraduationCap className="w-6 h-6 text-violet-400" />
             Cursos
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Gerencie todos os cursos da plataforma
           </p>
         </div>
         
         <button
           onClick={() => { setSelectedCourse(null); setModalMode("create"); }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition shadow-lg shadow-violet-500/20"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition shadow-lg shadow-amber-500/20"
         >
           <Plus size={18} />
           <span>Novo Curso</span>
@@ -711,13 +711,13 @@ export default function AdminCoursesPage() {
       {/* Filters */}
       <div className="space-y-3">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Buscar cursos..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-violet-500/50"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm placeholder-gray-500 focus:outline-none focus:border-amber-500/50"
           />
         </div>
         
@@ -725,7 +725,7 @@ export default function AdminCoursesPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-violet-500/50 min-w-[100px]"
+            className="px-3 py-2 rounded-xl bg-secondary border border-border text-white text-xs focus:outline-none focus:border-amber-500/50 min-w-[100px]"
           >
             <option value="">Status</option>
             <option value="published">Publicado</option>
@@ -736,7 +736,7 @@ export default function AdminCoursesPage() {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-violet-500/50 min-w-[120px]"
+            className="px-3 py-2 rounded-xl bg-secondary border border-border text-white text-xs focus:outline-none focus:border-amber-500/50 min-w-[120px]"
           >
             <option value="">Categoria</option>
             {categories.map(cat => (
@@ -746,7 +746,7 @@ export default function AdminCoursesPage() {
 
           <button
             onClick={fetchCourses}
-            className="p-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition shrink-0"
+            className="p-2 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition shrink-0"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
@@ -756,13 +756,13 @@ export default function AdminCoursesPage() {
       {/* Courses List */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <div className="w-8 h-8 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-amber-500/30 border-t-violet-500 rounded-full animate-spin" />
         </div>
       ) : filteredCourses.length === 0 ? (
         <div className="text-center py-12">
           <BookOpen className="w-12 h-12 text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">Nenhum curso encontrado</h3>
-          <p className="text-sm text-gray-500">Tente ajustar os filtros de busca</p>
+          <p className="text-sm text-muted-foreground">Tente ajustar os filtros de busca</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -811,19 +811,19 @@ export default function AdminCoursesPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-sm rounded-2xl bg-gray-900 border border-white/10 p-6 text-center"
+              className="relative w-full max-w-sm rounded-2xl bg-card border border-border p-6 text-center"
             >
               <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-500/20 flex items-center justify-center">
                 <Trash2 className="w-6 h-6 text-red-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Excluir Curso?</h3>
-              <p className="text-sm text-gray-400 mb-6">
+              <p className="text-sm text-muted-foreground mb-6">
                 Esta ação não pode ser desfeita.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
                 >
                   Cancelar
                 </button>

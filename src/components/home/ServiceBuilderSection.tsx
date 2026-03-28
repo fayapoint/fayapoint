@@ -35,7 +35,7 @@ const serviceLabels: Record<
   "social-management": {
     name: "Social media & growth",
     description: "Conteúdo, mídia e comunidade com consistência e insights.",
-    color: "from-pink-500/30 via-fuchsia-500/10 to-transparent",
+    color: "from-yellow-500/30 via-fuchsia-500/10 to-transparent",
   },
   "local-seo": {
     name: "Google Maps & Local SEO",
@@ -45,7 +45,7 @@ const serviceLabels: Record<
   "video-production": {
     name: "Vídeo & conteúdo audiovisual",
     description: "Pré-produção, filmagem e pós completas em um só lugar.",
-    color: "from-purple-500/30 via-purple-500/10 to-transparent",
+    color: "from-amber-500/30 via-amber-500/10 to-transparent",
   },
   "automation-ai": {
     name: "Automação & IA aplicada",

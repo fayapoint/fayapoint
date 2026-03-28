@@ -68,10 +68,10 @@ export default function ContactPage() {
             sizes="100vw"
             className="object-cover opacity-40"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-black/80 to-pink-900/60" />
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-900/70 via-black/80 to-yellow-900/60" />
 
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
-            <p className="text-sm uppercase tracking-[0.3em] text-purple-200/80 mb-4">
+            <p className="text-sm uppercase tracking-[0.3em] text-amber-200/80 mb-4">
               {hero.badge}
             </p>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
@@ -86,7 +86,7 @@ export default function ContactPage() {
         {/* Form + Info */}
         <section className="container mx-auto px-4 mt-[-80px] relative z-10">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
-            <div className="bg-card/90 border border-border rounded-3xl shadow-2xl shadow-purple-900/20 p-8 backdrop-blur">
+            <div className="bg-card/90 border border-border rounded-3xl shadow-2xl shadow-amber-900/20 p-8 backdrop-blur">
               <ScheduleMeetingForm
                 copy={{
                   badge: form.badge,
@@ -106,7 +106,7 @@ export default function ContactPage() {
             </div>
 
             <div className="space-y-8">
-              <div className="relative rounded-3xl overflow-hidden border border-white/10">
+              <div className="relative rounded-3xl overflow-hidden border border-border">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                 <Image
                   src="/rwx6.jpg"
@@ -117,7 +117,7 @@ export default function ContactPage() {
                   sizes="(min-width: 1024px) 40vw, 90vw"
                 />
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <p className="text-sm uppercase tracking-[0.4em] text-purple-200">{highlight.badge}</p>
+                  <p className="text-sm uppercase tracking-[0.4em] text-amber-200">{highlight.badge}</p>
                   <p className="text-xl font-semibold">{highlight.title}</p>
                 </div>
               </div>

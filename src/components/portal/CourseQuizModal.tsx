@@ -252,7 +252,7 @@ export function CourseQuizModal({
         {phase === "intro" && config && (
           <div className="p-8">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-600/10 border border-violet-500/20 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/20 flex items-center justify-center">
                 <Award className="w-8 h-8 text-violet-400" />
               </div>
               <h2 className="text-xl font-bold text-white mb-2">Avaliação Final</h2>
@@ -299,7 +299,7 @@ export function CourseQuizModal({
               </Button>
               <Button
                 onClick={() => setPhase("quiz")}
-                className="flex-1 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
+                className="flex-1 bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500"
               >
                 Iniciar Avaliação
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -321,7 +321,7 @@ export function CourseQuizModal({
               </div>
               <div className="h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-violet-500 to-purple-400 rounded-full"
+                  className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full"
                   animate={{ width: `${progress}%` }}
                   transition={{ duration: 0.3 }}
                 />
@@ -356,7 +356,7 @@ export function CourseQuizModal({
                         className={cn(
                           "w-full text-left p-4 rounded-xl border transition-all duration-200 flex items-start gap-3",
                           isSelected
-                            ? "bg-violet-500/10 border-violet-500/30 text-white"
+                            ? "bg-violet-500/10 border-amber-500/30 text-white"
                             : "bg-white/[0.02] border-white/[0.06] text-white/60 hover:bg-white/[0.04] hover:border-white/[0.1]"
                         )}
                       >
@@ -426,7 +426,7 @@ export function CourseQuizModal({
                   className={cn(
                     allAnswered
                       ? "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500"
-                      : "bg-gray-700 text-gray-400"
+                      : "bg-gray-700 text-muted-foreground"
                   )}
                 >
                   Enviar
@@ -512,7 +512,7 @@ export function CourseQuizModal({
               {results.remainingAttempts && results.remainingAttempts > 0 && (
                 <Button
                   onClick={loadQuiz}
-                  className="flex-1 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
+                  className="flex-1 bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500"
                 >
                   Tentar Novamente
                 </Button>
@@ -650,7 +650,7 @@ export function CourseQuizModal({
             <div className="flex gap-3 justify-center">
               <Button
                 onClick={() => { setErrorMsg(""); loadQuiz(); }}
-                className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500"
+                className="bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500"
               >
                 Tentar Novamente
               </Button>

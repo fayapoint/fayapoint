@@ -158,8 +158,8 @@ const ToolIcon = ({ logo, name, className }: { logo: string, name: string, class
 
   if (error) {
     return (
-      <div className={`${className} flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full`}>
-        <span className="text-lg font-bold text-gray-500">{name.charAt(0)}</span>
+      <div className={`${className} flex items-center justify-center bg-gray-100 dark:bg-secondary rounded-full`}>
+        <span className="text-lg font-bold text-muted-foreground">{name.charAt(0)}</span>
       </div>
     );
   }
@@ -200,9 +200,9 @@ const PortalTooltip = ({
           transform: 'translate(-50%, 0)' 
         }}
       >
-        <div className="p-4 bg-white/95 backdrop-blur-xl dark:bg-gray-900/95 border border-gray-200/50 dark:border-gray-800/50 shadow-2xl rounded-xl text-left w-64 relative mt-4">
+        <div className="p-4 bg-white/95 backdrop-blur-xl dark:bg-card/95 border border-gray-200/50 dark:border-border/50 shadow-2xl rounded-xl text-left w-64 relative mt-4">
            {/* Little arrow pointing up */}
-           <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-gray-900 border-t border-l border-gray-200/50 dark:border-gray-800/50 transform rotate-45" />
+           <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-card border-t border-l border-gray-200/50 dark:border-border/50 transform rotate-45" />
 
           <div className="flex items-center gap-2 mb-2 relative z-10">
             <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{content.name}</h4>
@@ -213,7 +213,7 @@ const PortalTooltip = ({
             )}
           </div>
           {content.description && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2 mb-3 relative z-10">
+            <p className="text-xs text-muted-foreground dark:text-muted-foreground leading-relaxed line-clamp-2 mb-3 relative z-10">
               {content.description}
             </p>
           )}
@@ -379,7 +379,7 @@ export function AIToolsMarquee() {
           viewport={{ once: true }}
         >
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-amber-400">
               {t("badge")}
             </span>
           </h2>

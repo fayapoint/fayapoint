@@ -224,15 +224,15 @@ export default function DesignEditor({
       {/* Left Panel - Tools & Layers */}
       <div className="w-full lg:w-72 space-y-4">
         {/* Add Elements */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="bg-secondary border-border p-4">
           <h4 className="font-semibold mb-3 flex items-center gap-2">
-            <Plus size={16} className="text-purple-400" />
+            <Plus size={16} className="text-amber-400" />
             Adicionar Elemento
           </h4>
           <div className="grid grid-cols-2 gap-2">
             <Button
               variant="outline"
-              className="border-gray-700 hover:bg-purple-600/20 hover:border-purple-500"
+              className="border-border hover:bg-amber-600/20 hover:border-amber-500"
               onClick={addTextLayer}
             >
               <Type size={16} className="mr-2" />
@@ -240,7 +240,7 @@ export default function DesignEditor({
             </Button>
             <Button
               variant="outline"
-              className="border-gray-700 hover:bg-purple-600/20 hover:border-purple-500"
+              className="border-border hover:bg-amber-600/20 hover:border-amber-500"
               onClick={() => fileInputRef.current?.click()}
             >
               <ImageIcon size={16} className="mr-2" />
@@ -258,7 +258,7 @@ export default function DesignEditor({
 
         {/* Print Positions */}
         {availablePositions.length > 1 && (
-          <Card className="bg-white/5 border-white/10 p-4">
+          <Card className="bg-secondary border-border p-4">
             <h4 className="font-semibold mb-3">Posição de Impressão</h4>
             <div className="flex flex-wrap gap-2">
               {availablePositions.map(pos => (
@@ -268,8 +268,8 @@ export default function DesignEditor({
                   variant={activePosition === pos ? "default" : "outline"}
                   className={cn(
                     activePosition === pos 
-                      ? "bg-purple-600" 
-                      : "border-gray-700"
+                      ? "bg-amber-600" 
+                      : "border-border"
                   )}
                   onClick={() => setActivePosition(pos)}
                 >
@@ -281,14 +281,14 @@ export default function DesignEditor({
         )}
 
         {/* Layers List */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="bg-secondary border-border p-4">
           <h4 className="font-semibold mb-3 flex items-center gap-2">
-            <Layers size={16} className="text-purple-400" />
+            <Layers size={16} className="text-amber-400" />
             Camadas ({layers.length}/20)
           </h4>
           
           {layers.length === 0 ? (
-            <p className="text-sm text-gray-500 text-center py-4">
+            <p className="text-sm text-muted-foreground text-center py-4">
               Nenhuma camada ainda.<br />Adicione texto ou imagem.
             </p>
           ) : (
@@ -301,13 +301,13 @@ export default function DesignEditor({
                   className={cn(
                     "flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all",
                     selectedLayerId === layer.id 
-                      ? "bg-purple-600/30 border border-purple-500" 
-                      : "bg-white/5 hover:bg-white/10"
+                      ? "bg-amber-600/30 border border-amber-500" 
+                      : "bg-secondary hover:bg-white/10"
                   )}
                   onClick={() => setSelectedLayerId(layer.id)}
                 >
                   {layer.type === "text" ? (
-                    <Type size={14} className="text-purple-400" />
+                    <Type size={14} className="text-amber-400" />
                   ) : (
                     <ImageIcon size={14} className="text-blue-400" />
                   )}
@@ -356,7 +356,7 @@ export default function DesignEditor({
       <div className="flex-1 flex flex-col">
         {/* Toolbar */}
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
+          <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
             <Button size="icon" variant="ghost" onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}>
               <ZoomOut size={16} />
             </Button>
@@ -368,7 +368,7 @@ export default function DesignEditor({
           <Button 
             size="sm" 
             variant={showGrid ? "default" : "outline"}
-            className={showGrid ? "bg-purple-600" : "border-gray-700"}
+            className={showGrid ? "bg-amber-600" : "border-border"}
             onClick={() => setShowGrid(!showGrid)}
           >
             <Grid size={14} className="mr-1" />
@@ -379,7 +379,7 @@ export default function DesignEditor({
         {/* Canvas */}
         <div 
           ref={containerRef}
-          className="relative flex-1 bg-gray-900 rounded-xl overflow-hidden border border-gray-800"
+          className="relative flex-1 bg-card rounded-xl overflow-hidden border border-border"
           style={{ minHeight: "400px" }}
           onMouseDown={handleCanvasMouseDown}
           onMouseMove={handleCanvasMouseMove}
@@ -403,7 +403,7 @@ export default function DesignEditor({
               <div 
                 className={cn(
                   "absolute border-2 border-dashed",
-                  showGrid ? "border-purple-500/50" : "border-transparent"
+                  showGrid ? "border-amber-500/50" : "border-transparent"
                 )}
                 style={{
                   left: `${(printAreaX - printAreaScale / 2) * 100}%`,
@@ -415,12 +415,12 @@ export default function DesignEditor({
                 {/* Grid Lines */}
                 {showGrid && (
                   <>
-                    <div className="absolute left-1/2 top-0 bottom-0 border-l border-purple-500/30" />
-                    <div className="absolute top-1/2 left-0 right-0 border-t border-purple-500/30" />
-                    <div className="absolute left-1/4 top-0 bottom-0 border-l border-purple-500/20" />
-                    <div className="absolute left-3/4 top-0 bottom-0 border-l border-purple-500/20" />
-                    <div className="absolute top-1/4 left-0 right-0 border-t border-purple-500/20" />
-                    <div className="absolute top-3/4 left-0 right-0 border-t border-purple-500/20" />
+                    <div className="absolute left-1/2 top-0 bottom-0 border-l border-amber-500/30" />
+                    <div className="absolute top-1/2 left-0 right-0 border-t border-amber-500/30" />
+                    <div className="absolute left-1/4 top-0 bottom-0 border-l border-amber-500/20" />
+                    <div className="absolute left-3/4 top-0 bottom-0 border-l border-amber-500/20" />
+                    <div className="absolute top-1/4 left-0 right-0 border-t border-amber-500/20" />
+                    <div className="absolute top-3/4 left-0 right-0 border-t border-amber-500/20" />
                   </>
                 )}
 
@@ -430,7 +430,7 @@ export default function DesignEditor({
                     key={layer.id}
                     className={cn(
                       "absolute cursor-move transition-shadow",
-                      selectedLayerId === layer.id && "ring-2 ring-purple-500 ring-offset-2 ring-offset-transparent"
+                      selectedLayerId === layer.id && "ring-2 ring-amber-500 ring-offset-2 ring-offset-transparent"
                     )}
                     style={{
                       left: `${layer.x * 100}%`,
@@ -505,9 +505,9 @@ export default function DesignEditor({
               {selectedLayer.type === "text" && (
                 <>
                   {/* Text Content */}
-                  <Card className="bg-white/5 border-white/10 p-4">
+                  <Card className="bg-secondary border-border p-4">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <Type size={16} className="text-purple-400" />
+                      <Type size={16} className="text-amber-400" />
                       Texto
                     </h4>
                     <Textarea
@@ -520,13 +520,13 @@ export default function DesignEditor({
                         }
                       }}
                       onBlur={editingText === selectedLayerId ? saveTextEdit : undefined}
-                      className="bg-white/5 border-gray-700 min-h-[80px]"
+                      className="bg-secondary border-border min-h-[80px]"
                       placeholder="Digite seu texto..."
                     />
                   </Card>
 
                   {/* Font Settings */}
-                  <Card className="bg-white/5 border-white/10 p-4">
+                  <Card className="bg-secondary border-border p-4">
                     <h4 className="font-semibold mb-3">Fonte</h4>
                     <div className="space-y-3">
                       <Select
@@ -536,10 +536,10 @@ export default function DesignEditor({
                           if (font) updateLayer(selectedLayerId!, { fontFamily: font.family } as Partial<TextLayer>);
                         }}
                       >
-                        <SelectTrigger className="bg-white/5 border-gray-700">
+                        <SelectTrigger className="bg-secondary border-border">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-900 border-gray-700">
+                        <SelectContent className="bg-card border-border">
                           {AVAILABLE_FONTS.map(font => (
                             <SelectItem key={font.id} value={font.id}>
                               <span style={{ fontFamily: font.family }}>{font.name}</span>
@@ -550,15 +550,15 @@ export default function DesignEditor({
 
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <Label className="text-xs text-gray-400">Peso</Label>
+                          <Label className="text-xs text-muted-foreground">Peso</Label>
                           <Select
                             value={String((selectedLayer as TextLayer).fontWeight)}
                             onValueChange={(v) => updateLayer(selectedLayerId!, { fontWeight: parseInt(v) } as Partial<TextLayer>)}
                           >
-                            <SelectTrigger className="bg-white/5 border-gray-700">
+                            <SelectTrigger className="bg-secondary border-border">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-gray-900 border-gray-700">
+                            <SelectContent className="bg-card border-border">
                               {[400, 500, 600, 700, 800, 900].map(w => (
                                 <SelectItem key={w} value={String(w)}>
                                   {w === 400 ? "Normal" : w === 700 ? "Bold" : w}
@@ -568,15 +568,15 @@ export default function DesignEditor({
                           </Select>
                         </div>
                         <div>
-                          <Label className="text-xs text-gray-400">Tamanho</Label>
+                          <Label className="text-xs text-muted-foreground">Tamanho</Label>
                           <Select
                             value={String((selectedLayer as TextLayer).fontSize)}
                             onValueChange={(v) => updateLayer(selectedLayerId!, { fontSize: parseInt(v) } as Partial<TextLayer>)}
                           >
-                            <SelectTrigger className="bg-white/5 border-gray-700">
+                            <SelectTrigger className="bg-secondary border-border">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-gray-900 border-gray-700">
+                            <SelectContent className="bg-card border-border">
                               {FONT_SIZE_PRESETS.map(s => (
                                 <SelectItem key={s.value} value={String(s.value)}>
                                   {s.name} ({s.label})
@@ -589,7 +589,7 @@ export default function DesignEditor({
 
                       {/* Text Alignment */}
                       <div>
-                        <Label className="text-xs text-gray-400">Alinhamento</Label>
+                        <Label className="text-xs text-muted-foreground">Alinhamento</Label>
                         <div className="flex gap-1 mt-1">
                           {([
                             { value: "left", icon: AlignLeft },
@@ -602,8 +602,8 @@ export default function DesignEditor({
                               variant={(selectedLayer as TextLayer).textAlign === value ? "default" : "outline"}
                               className={cn(
                                 (selectedLayer as TextLayer).textAlign === value 
-                                  ? "bg-purple-600" 
-                                  : "border-gray-700"
+                                  ? "bg-amber-600" 
+                                  : "border-border"
                               )}
                               onClick={() => updateLayer(selectedLayerId!, { textAlign: value } as Partial<TextLayer>)}
                             >
@@ -616,14 +616,14 @@ export default function DesignEditor({
                   </Card>
 
                   {/* Colors */}
-                  <Card className="bg-white/5 border-white/10 p-4">
+                  <Card className="bg-secondary border-border p-4">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <Palette size={16} className="text-purple-400" />
+                      <Palette size={16} className="text-amber-400" />
                       Cores
                     </h4>
                     <div className="space-y-3">
                       <div>
-                        <Label className="text-xs text-gray-400">Cor do Texto</Label>
+                        <Label className="text-xs text-muted-foreground">Cor do Texto</Label>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {COLOR_PALETTE.slice(0, 15).map(color => (
                             <button
@@ -643,18 +643,18 @@ export default function DesignEditor({
                           type="color"
                           value={(selectedLayer as TextLayer).color}
                           onChange={(e) => updateLayer(selectedLayerId!, { color: e.target.value } as Partial<TextLayer>)}
-                          className="w-full h-8 mt-2 bg-white/5 border-gray-700"
+                          className="w-full h-8 mt-2 bg-secondary border-border"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-xs text-gray-400">Contorno</Label>
+                        <Label className="text-xs text-muted-foreground">Contorno</Label>
                         <div className="flex gap-2 mt-1">
                           <Input
                             type="color"
                             value={(selectedLayer as TextLayer).strokeColor || "#000000"}
                             onChange={(e) => updateLayer(selectedLayerId!, { strokeColor: e.target.value } as Partial<TextLayer>)}
-                            className="w-12 h-8 bg-white/5 border-gray-700"
+                            className="w-12 h-8 bg-secondary border-border"
                           />
                           <Input
                             type="number"
@@ -662,7 +662,7 @@ export default function DesignEditor({
                             max={20}
                             value={(selectedLayer as TextLayer).strokeWidth || 0}
                             onChange={(e) => updateLayer(selectedLayerId!, { strokeWidth: parseInt(e.target.value) || 0 } as Partial<TextLayer>)}
-                            className="flex-1 bg-white/5 border-gray-700"
+                            className="flex-1 bg-secondary border-border"
                             placeholder="Espessura"
                           />
                         </div>
@@ -671,9 +671,9 @@ export default function DesignEditor({
                   </Card>
 
                   {/* Effects */}
-                  <Card className="bg-white/5 border-white/10 p-4">
+                  <Card className="bg-secondary border-border p-4">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
-                      <Sparkles size={16} className="text-purple-400" />
+                      <Sparkles size={16} className="text-amber-400" />
                       Efeitos
                     </h4>
                     <div className="flex flex-wrap gap-2">
@@ -682,7 +682,7 @@ export default function DesignEditor({
                           key={key}
                           size="sm"
                           variant="outline"
-                          className="border-gray-700 hover:bg-purple-600/20"
+                          className="border-border hover:bg-amber-600/20"
                           onClick={() => {
                             const updates = effect.apply(selectedLayer as TextLayer);
                             updateLayer(selectedLayerId!, updates as Partial<TextLayer>);
@@ -698,22 +698,22 @@ export default function DesignEditor({
               )}
 
               {/* Position & Transform */}
-              <Card className="bg-white/5 border-white/10 p-4">
+              <Card className="bg-secondary border-border p-4">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Move size={16} className="text-purple-400" />
+                  <Move size={16} className="text-amber-400" />
                   Posição & Transformação
                 </h4>
                 <div className="space-y-4">
                   {/* Quick Positions */}
                   <div>
-                    <Label className="text-xs text-gray-400">Posição Rápida</Label>
+                    <Label className="text-xs text-muted-foreground">Posição Rápida</Label>
                     <div className="grid grid-cols-3 gap-1 mt-1">
                       {Object.entries(POSITION_PRESETS).slice(0, 9).map(([key, preset]) => (
                         <Button
                           key={key}
                           size="sm"
                           variant="outline"
-                          className="border-gray-700 text-xs px-2"
+                          className="border-border text-xs px-2"
                           onClick={() => updateLayer(selectedLayerId!, { x: preset.x, y: preset.y })}
                         >
                           {preset.name.split(" ")[0]}
@@ -724,7 +724,7 @@ export default function DesignEditor({
 
                   {/* X Position */}
                   <div>
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
                       <span>Horizontal (X)</span>
                       <span>{Math.round(selectedLayer.x * 100)}%</span>
                     </div>
@@ -740,7 +740,7 @@ export default function DesignEditor({
 
                   {/* Y Position */}
                   <div>
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
                       <span>Vertical (Y)</span>
                       <span>{Math.round(selectedLayer.y * 100)}%</span>
                     </div>
@@ -756,7 +756,7 @@ export default function DesignEditor({
 
                   {/* Scale */}
                   <div>
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
                       <span>Escala</span>
                       <span>{Math.round(selectedLayer.scale * 100)}%</span>
                     </div>
@@ -774,7 +774,7 @@ export default function DesignEditor({
                           key={s.value}
                           size="sm"
                           variant="outline"
-                          className="flex-1 border-gray-700 text-xs px-1"
+                          className="flex-1 border-border text-xs px-1"
                           onClick={() => updateLayer(selectedLayerId!, { scale: s.value })}
                         >
                           {s.label}
@@ -785,7 +785,7 @@ export default function DesignEditor({
 
                   {/* Rotation */}
                   <div>
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
                       <span>Rotação</span>
                       <span>{selectedLayer.angle}°</span>
                     </div>
@@ -803,7 +803,7 @@ export default function DesignEditor({
                           key={a.value}
                           size="sm"
                           variant="outline"
-                          className="flex-1 border-gray-700 text-xs px-1"
+                          className="flex-1 border-border text-xs px-1"
                           onClick={() => updateLayer(selectedLayerId!, { angle: a.value })}
                         >
                           {a.label}
@@ -818,7 +818,7 @@ export default function DesignEditor({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center h-64 text-gray-500"
+              className="flex flex-col items-center justify-center h-64 text-muted-foreground"
             >
               <Layers size={48} className="mb-4 opacity-50" />
               <p className="text-center">

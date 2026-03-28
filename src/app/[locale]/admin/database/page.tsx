@@ -95,7 +95,7 @@ function DatabaseCard({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 overflow-hidden"
+      className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border overflow-hidden"
     >
       {/* Header */}
       <button
@@ -108,7 +108,7 @@ function DatabaseCard({
           </div>
           <div className="text-left">
             <h3 className="font-semibold text-white">{db.name}</h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               {db.collections.length} coleções • {formatBytes(db.sizeOnDisk)}
             </p>
           </div>
@@ -117,12 +117,12 @@ function DatabaseCard({
         <div className="flex items-center gap-3">
           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs ${
             db.empty 
-              ? "bg-gray-500/20 text-gray-400 border border-gray-500/30"
+              ? "bg-gray-500/20 text-muted-foreground border border-gray-500/30"
               : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
           }`}>
             {db.empty ? "Vazio" : "Ativo"}
           </span>
-          {expanded ? <ChevronDown size={18} className="text-gray-400" /> : <ChevronRight size={18} className="text-gray-400" />}
+          {expanded ? <ChevronDown size={18} className="text-muted-foreground" /> : <ChevronRight size={18} className="text-muted-foreground" />}
         </div>
       </button>
 
@@ -133,11 +133,11 @@ function DatabaseCard({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="border-t border-white/10"
+            className="border-t border-border"
           >
             <div className="p-4 space-y-2">
               {db.collections.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-4">Nenhuma coleção encontrada</p>
+                <p className="text-sm text-muted-foreground text-center py-4">Nenhuma coleção encontrada</p>
               ) : (
                 db.collections.map((col) => (
                   <div
@@ -145,17 +145,17 @@ function DatabaseCard({
                     className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <Table size={16} className="text-gray-500" />
+                      <Table size={16} className="text-muted-foreground" />
                       <div>
                         <p className="text-sm font-medium text-white">{col.name}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           {col.count.toLocaleString()} documentos
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => fetchCollectionStats(col.name)}
-                      className="px-3 py-1.5 rounded-lg bg-white/5 text-xs text-gray-300 hover:bg-white/10 transition flex items-center gap-1"
+                      className="px-3 py-1.5 rounded-lg bg-secondary text-xs text-muted-foreground hover:bg-white/10 transition flex items-center gap-1"
                     >
                       {loadingStats === col.name ? (
                         <RefreshCcw size={12} className="animate-spin" />
@@ -243,14 +243,14 @@ export default function AdminDatabasePage() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Banco de Dados
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Monitore e gerencie suas conexões MongoDB
           </p>
         </div>
         
         <button
           onClick={() => { fetchDatabases(); testConnection(); }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
         >
           <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
           Atualizar
@@ -275,7 +275,7 @@ export default function AdminDatabasePage() {
                 : "bg-red-500/20"
             }`}>
               {testing ? (
-                <RefreshCcw size={24} className="text-gray-400 animate-spin" />
+                <RefreshCcw size={24} className="text-muted-foreground animate-spin" />
               ) : connectionStatus?.connected ? (
                 <Check size={24} className="text-emerald-400" />
               ) : (
@@ -297,7 +297,7 @@ export default function AdminDatabasePage() {
                 }
               </p>
               {connectionStatus?.connectionString && (
-                <p className="text-xs text-gray-500 mt-1 font-mono">
+                <p className="text-xs text-muted-foreground mt-1 font-mono">
                   {connectionStatus.connectionString}
                 </p>
               )}
@@ -305,7 +305,7 @@ export default function AdminDatabasePage() {
           </div>
           
           {connectionStatus?.latency && (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-secondary">
               <Zap size={14} className="text-amber-400" />
               <span className="text-sm text-white">{connectionStatus.latency}ms</span>
             </div>
@@ -319,7 +319,7 @@ export default function AdminDatabasePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="p-5 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/30"
+          className="p-5 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-500/10 border border-amber-500/30"
         >
           <div className="flex items-center gap-2 text-violet-400 mb-2">
             <Database size={18} />
@@ -380,7 +380,7 @@ export default function AdminDatabasePage() {
             <div className="w-8 h-8 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
           </div>
         ) : databases.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
             <Database size={48} className="mb-4 opacity-50" />
             <p>Nenhum database encontrado</p>
           </div>
@@ -403,7 +403,7 @@ export default function AdminDatabasePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/5 border border-violet-500/20"
+        className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20"
       >
         <h3 className="text-lg font-semibold text-white mb-4">Informações Úteis</h3>
         <div className="grid md:grid-cols-2 gap-4 text-sm">
@@ -413,7 +413,7 @@ export default function AdminDatabasePage() {
             </div>
             <div>
               <p className="font-medium text-white">Banco Principal</p>
-              <p className="text-gray-400">O banco <code className="text-violet-400">fayapoint</code> contém usuários, progresso de cursos e pedidos.</p>
+              <p className="text-muted-foreground">O banco <code className="text-violet-400">fayapoint</code> contém usuários, progresso de cursos e pedidos.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -422,7 +422,7 @@ export default function AdminDatabasePage() {
             </div>
             <div>
               <p className="font-medium text-white">Banco de Produtos</p>
-              <p className="text-gray-400">O banco <code className="text-cyan-400">fayapointProdutos</code> contém produtos, preços e conteúdo de cursos.</p>
+              <p className="text-muted-foreground">O banco <code className="text-cyan-400">fayapointProdutos</code> contém produtos, preços e conteúdo de cursos.</p>
             </div>
           </div>
         </div>

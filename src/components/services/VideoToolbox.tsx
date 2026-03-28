@@ -329,7 +329,7 @@ export function VideoToolbox({ locale }: { locale: Locale }) {
               } finally {
                 setSending(false);
               }
-            }} disabled={!leadEmail || sending} className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600">
+            }} disabled={!leadEmail || sending} className="bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-purple-700 hover:to-yellow-600">
               {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : "Salvar + enviar")}
             </Button>
             <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(report)}>

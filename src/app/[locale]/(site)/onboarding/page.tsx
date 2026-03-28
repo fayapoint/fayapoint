@@ -187,14 +187,14 @@ export default function OnboardingPage() {
   // Show loading while checking auth state
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Header />
       <main className="flex-grow flex items-center justify-center p-4 pt-28 pb-16">
         <div className="w-full max-w-2xl">
@@ -202,7 +202,7 @@ export default function OnboardingPage() {
             <Progress value={progress} className="w-full" />
             <div className="flex justify-between mt-2">
               {steps.map((s) => (
-                <div key={s.id} className={`flex items-center gap-2 ${s.id <= step ? 'text-white' : 'text-gray-500'}`}>
+                <div key={s.id} className={`flex items-center gap-2 ${s.id <= step ? 'text-white' : 'text-muted-foreground'}`}>
                   <s.icon className="w-5 h-5" />
                   <span>{t(`steps.${s.key}`)}</span>
                 </div>
@@ -217,7 +217,7 @@ export default function OnboardingPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.3 }}
-              className="w-full p-8 bg-gray-900/50 backdrop-blur-xl border border-purple-500/50 rounded-2xl shadow-2xl shadow-purple-500/20"
+              className="w-full p-8 bg-card/50 backdrop-blur-xl border border-amber-500/50 rounded-2xl shadow-2xl shadow-amber-500/20"
             >
               {/* Honeypot for bot detection */}
               <HoneypotField onBotDetected={() => setIsBotDetected(true)} />
@@ -241,7 +241,7 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
       animate={{ scale: 1, rotate: 0 }}
       transition={{ type: "spring", duration: 0.8 }}
     >
-      <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 mb-6">
+      <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 mb-6">
         <Sparkles className="w-12 h-12 text-white" />
       </div>
     </motion.div>
@@ -250,7 +250,7 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600 bg-clip-text text-transparent"
+      className="text-4xl font-bold tracking-tight bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-600 bg-clip-text text-transparent"
     >
       {t("step1.title")}
     </motion.h1>
@@ -259,10 +259,10 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="text-lg text-gray-300 max-w-md mx-auto"
+      className="text-lg text-muted-foreground max-w-md mx-auto"
     >
       {t.rich("step1.description", {
-          bold: (chunks: ReactNode) => <span className="font-bold text-purple-400">{chunks}</span>
+          bold: (chunks: ReactNode) => <span className="font-bold text-amber-400">{chunks}</span>
       })}
     </motion.p>
     
@@ -272,10 +272,10 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
       transition={{ delay: 0.7 }}
       className="flex flex-col gap-3 items-center"
     >
-      <div className="flex items-center gap-2 text-sm text-gray-400">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <div className="flex -space-x-2">
           {['🎨', '💻', '🚀', '⚡'].map((emoji, i) => (
-            <div key={i} className="w-8 h-8 rounded-full bg-gray-800 border-2 border-gray-700 flex items-center justify-center text-xs">
+            <div key={i} className="w-8 h-8 rounded-full bg-secondary border-2 border-border flex items-center justify-center text-xs">
               {emoji}
             </div>
           ))}
@@ -289,12 +289,12 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
       <Button 
         onClick={next} 
         size="lg"
-        className="mt-4 h-14 px-8 text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+        className="mt-4 h-14 px-8 text-lg bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
       >
         {t("step1.button")} <ArrowRight className="ml-2" />
       </Button>
       
-      <p className="text-xs text-gray-500 mt-2">{t("step1.timeEstimate")}</p>
+      <p className="text-xs text-muted-foreground mt-2">{t("step1.timeEstimate")}</p>
     </motion.div>
   </div>
 );
@@ -315,11 +315,11 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-2">{t("step2.new.title")}</h2>
-        <p className="text-sm text-gray-400">{t("step2.new.description")}</p>
+        <p className="text-sm text-muted-foreground">{t("step2.new.description")}</p>
       </div>
       
       <div className="relative">
-        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input 
           name="email" 
           type="email" 
@@ -327,7 +327,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
           value={data.email} 
           onChange={onChange}
           onBlur={(e) => onEmailBlur(e.target.value)}
-          className={`pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors ${emailExists ? 'border-yellow-500' : ''}`}
+          className={`pl-10 h-12 text-lg bg-secondary/50 border-border focus:border-amber-500 transition-colors ${emailExists ? 'border-yellow-500' : ''}`}
           required 
         />
         {checkingUser && (
@@ -370,33 +370,33 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
       )}
       
       <div className="relative">
-        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input 
           name="name" 
           placeholder={t("step2.new.fields.name")} 
           value={data.name} 
           onChange={onChange} 
-          className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors" 
+          className="pl-10 h-12 text-lg bg-secondary/50 border-border focus:border-amber-500 transition-colors" 
           required 
         />
       </div>
 
       <div className="relative">
-        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input 
           name="password" 
           type={showPassword ? "text" : "password"} 
           placeholder={t("step2.new.fields.password")} 
           value={data.password} 
           onChange={onChange} 
-          className="pl-10 h-12 text-lg bg-gray-800/50 border-gray-700 focus:border-purple-500 transition-colors pr-10" 
+          className="pl-10 h-12 text-lg bg-secondary/50 border-border focus:border-amber-500 transition-colors pr-10" 
           required 
           minLength={6}
         />
         <button 
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white transition-colors"
         >
           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
         </button>
@@ -412,8 +412,8 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
         </Button>
       </div>
       
-      <p className="text-xs text-center text-gray-500">
-        Já tem uma conta? <Link href="/login" className="text-purple-400 hover:text-purple-300 underline">Fazer login</Link>
+      <p className="text-xs text-center text-muted-foreground">
+        Já tem uma conta? <Link href="/login" className="text-amber-400 hover:text-amber-300 underline">Fazer login</Link>
       </p>
     </div>
   );
@@ -448,22 +448,22 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
   return (
     <form onSubmit={submit} className="space-y-8">
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-yellow-600 bg-clip-text text-transparent">
           {t("step3.title")}
         </h2>
-        <p className="text-gray-400">
+        <p className="text-muted-foreground">
           {t("step3.description")}
         </p>
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full text-sm">
           <Star className="w-4 h-4 text-yellow-400" />
-          <span className="text-purple-300">{t("step3.priorityHint")}</span>
+          <span className="text-amber-300">{t("step3.priorityHint")}</span>
         </div>
       </div>
 
       {/* Role Selection */}
       <div className="space-y-4">
         <label className="text-lg font-semibold flex items-center gap-2">
-          <Briefcase className="w-5 h-5 text-purple-400" />
+          <Briefcase className="w-5 h-5 text-amber-400" />
           {t("step3.roleLabel")}
         </label>
         <div className="grid grid-cols-2 gap-3">
@@ -476,8 +476,8 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
               whileTap={{ scale: 0.98 }}
               className={`p-4 rounded-xl border-2 transition-all text-left ${
                 selectedRoles.includes(option.value)
-                  ? 'border-purple-500 bg-purple-500/20 shadow-lg shadow-purple-500/20'
-                  : 'border-gray-700 hover:border-gray-600 bg-gray-800/50'
+                  ? 'border-amber-500 bg-amber-500/20 shadow-lg shadow-amber-500/20'
+                  : 'border-border hover:border-gray-600 bg-secondary/50'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -492,7 +492,7 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
       {/* Interest Selection */}
       <div className="space-y-4">
         <label className="text-lg font-semibold flex items-center gap-2">
-          <BrainCircuit className="w-5 h-5 text-pink-400" />
+          <BrainCircuit className="w-5 h-5 text-yellow-400" />
           {t("step3.interestLabel")}
         </label>
         <div className="grid grid-cols-2 gap-3">
@@ -505,8 +505,8 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
               whileTap={{ scale: 0.98 }}
               className={`p-4 rounded-xl border-2 transition-all text-left ${
                 selectedInterests.includes(option.value)
-                  ? 'border-pink-500 bg-pink-500/20 shadow-lg shadow-pink-500/20'
-                  : 'border-gray-700 hover:border-gray-600 bg-gray-800/50'
+                  ? 'border-amber-500 bg-yellow-500/20 shadow-lg shadow-amber-500/20'
+                  : 'border-border hover:border-gray-600 bg-secondary/50'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -527,7 +527,7 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
         <Button 
           type="submit" 
           disabled={loading || selectedRoles.length === 0 || selectedInterests.length === 0}
-          className="w-full h-14 text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 relative overflow-hidden group"
+          className="w-full h-14 text-lg bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 relative overflow-hidden group"
         >
           {loading ? (
             <div className="flex items-center gap-2">
@@ -540,7 +540,7 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
                 {t("step3.submitNew")}
               </span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400"
+                className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-500"
                 initial={{ x: '-100%' }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.3 }}
@@ -550,7 +550,7 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
         </Button>
         
         {(selectedRoles.length === 0 || selectedInterests.length === 0) && (
-          <p className="text-xs text-center text-gray-500 mt-2">
+          <p className="text-xs text-center text-muted-foreground mt-2">
             {t("step3.selectionHint")}
           </p>
         )}

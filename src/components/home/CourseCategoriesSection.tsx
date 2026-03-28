@@ -28,7 +28,7 @@ const categories = [
     key: "generativeAI",
     icon: <Brain className="w-6 h-6" />,
     courses: 25,
-    color: "from-purple-500 to-pink-500",
+    color: "from-amber-500 to-yellow-600",
     href: "/cursos/categoria/ia-generativa",
   },
   {
@@ -56,7 +56,7 @@ const categories = [
     key: "data",
     icon: <BarChart3 className="w-6 h-6" />,
     courses: 12,
-    color: "from-indigo-500 to-purple-500",
+    color: "from-indigo-500 to-amber-500",
     href: "/cursos/categoria/analise-dados",
   },
   {
@@ -105,7 +105,7 @@ export function CourseCategoriesSection() {
           viewport={{ once: true }}
           className="grid gap-3 md:grid-cols-3 max-w-6xl mx-auto mb-10"
         >
-          <Card className="border-white/10 bg-card/60 p-4">
+          <Card className="border-border bg-card/60 p-4">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
                 <ShieldCheck className="w-5 h-5" />
@@ -121,7 +121,7 @@ export function CourseCategoriesSection() {
             </div>
           </Card>
 
-          <Card className="border-white/10 bg-card/60 p-4">
+          <Card className="border-border bg-card/60 p-4">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
                 <Sparkles className="w-5 h-5" />
@@ -137,7 +137,7 @@ export function CourseCategoriesSection() {
             </div>
           </Card>
 
-          <Card className="border-white/10 bg-card/60 p-4">
+          <Card className="border-border bg-card/60 p-4">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
                 <BookOpen className="w-5 h-5" />

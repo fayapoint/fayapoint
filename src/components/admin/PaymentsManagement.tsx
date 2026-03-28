@@ -184,7 +184,7 @@ export function PaymentsManagement() {
       case "refunded":
         return "text-red-400";
       default:
-        return "text-gray-400";
+        return "text-muted-foreground";
     }
   };
 
@@ -199,7 +199,7 @@ export function PaymentsManagement() {
       case "expired":
         return <XCircle className="w-4 h-4 text-red-400" />;
       default:
-        return <AlertCircle className="w-4 h-4 text-gray-400" />;
+        return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -210,16 +210,16 @@ export function PaymentsManagement() {
       case "boleto":
         return <FileText className="w-4 h-4 text-blue-400" />;
       case "credit_card":
-        return <CreditCard className="w-4 h-4 text-purple-400" />;
+        return <CreditCard className="w-4 h-4 text-amber-400" />;
       default:
-        return <DollarSign className="w-4 h-4 text-gray-400" />;
+        return <DollarSign className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
   if (loading && !data) {
     return (
       <div className="flex items-center justify-center p-12">
-        <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
       </div>
     );
   }
@@ -233,7 +233,7 @@ export function PaymentsManagement() {
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm"
+            className="bg-secondary border border-border rounded px-3 py-2 text-sm"
           >
             <option value="day">Hoje</option>
             <option value="week">Última Semana</option>
@@ -255,81 +255,81 @@ export function PaymentsManagement() {
       {data && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {/* Total Revenue */}
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
+          <Card className="p-4 bg-card/50 border-border">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 bg-green-500/20 rounded">
                 <DollarSign className="w-4 h-4 text-green-400" />
               </div>
-              <span className="text-sm text-gray-400">Receita Total</span>
+              <span className="text-sm text-muted-foreground">Receita Total</span>
             </div>
             <p className="text-2xl font-bold text-green-400">
               {formatCurrency(data.summary.totalRevenue)}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               {data.summary.paidPayments} pagamentos
             </p>
           </Card>
 
           {/* Pending */}
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
+          <Card className="p-4 bg-card/50 border-border">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 bg-yellow-500/20 rounded">
                 <Clock className="w-4 h-4 text-yellow-400" />
               </div>
-              <span className="text-sm text-gray-400">Pendente</span>
+              <span className="text-sm text-muted-foreground">Pendente</span>
             </div>
             <p className="text-2xl font-bold text-yellow-400">
               {formatCurrency(data.summary.pendingRevenue)}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               {data.summary.pendingPayments} pagamentos
             </p>
           </Card>
 
           {/* Subscriptions */}
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
+          <Card className="p-4 bg-card/50 border-border">
             <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 bg-purple-500/20 rounded">
-                <RefreshCw className="w-4 h-4 text-purple-400" />
+              <div className="p-2 bg-amber-500/20 rounded">
+                <RefreshCw className="w-4 h-4 text-amber-400" />
               </div>
-              <span className="text-sm text-gray-400">Assinaturas</span>
+              <span className="text-sm text-muted-foreground">Assinaturas</span>
             </div>
             <p className="text-2xl font-bold">
               {data.summary.activeSubscriptions}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               de {data.summary.totalSubscriptions} total
             </p>
           </Card>
 
           {/* Average Ticket */}
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
+          <Card className="p-4 bg-card/50 border-border">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 bg-blue-500/20 rounded">
                 <TrendingUp className="w-4 h-4 text-blue-400" />
               </div>
-              <span className="text-sm text-gray-400">Ticket Médio</span>
+              <span className="text-sm text-muted-foreground">Ticket Médio</span>
             </div>
             <p className="text-2xl font-bold">
               {formatCurrency(data.summary.averageTicket)}
             </p>
-            <p className="text-xs text-gray-500">por transação</p>
+            <p className="text-xs text-muted-foreground">por transação</p>
           </Card>
         </div>
       )}
 
       {/* Asaas Balance */}
       {data?.asaas && (
-        <Card className="p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-500/30">
+        <Card className="p-4 bg-gradient-to-r from-amber-900/30 to-blue-900/30 border-amber-500/30">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400 mb-1">Saldo Asaas Disponível</p>
+              <p className="text-sm text-muted-foreground mb-1">Saldo Asaas Disponível</p>
               <p className="text-3xl font-bold text-white">
                 {formatCurrency(data.asaas.balance)}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-400 mb-1">Saldo Bloqueado</p>
+              <p className="text-sm text-muted-foreground mb-1">Saldo Bloqueado</p>
               <p className="text-xl font-semibold text-yellow-400">
                 {formatCurrency(data.asaas.blockedBalance)}
               </p>
@@ -349,42 +349,42 @@ export function PaymentsManagement() {
       {/* By Method Stats */}
       {data && (
         <div className="grid grid-cols-3 gap-4">
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
+          <Card className="p-4 bg-card/50 border-border">
             <div className="flex items-center gap-2 mb-2">
               <QrCode className="w-5 h-5 text-green-400" />
               <span className="font-medium">PIX</span>
             </div>
             <p className="text-xl font-bold">{formatCurrency(data.byMethod.pix.total)}</p>
-            <p className="text-xs text-gray-500">{data.byMethod.pix.count} transações</p>
+            <p className="text-xs text-muted-foreground">{data.byMethod.pix.count} transações</p>
           </Card>
 
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
+          <Card className="p-4 bg-card/50 border-border">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-5 h-5 text-blue-400" />
               <span className="font-medium">Boleto</span>
             </div>
             <p className="text-xl font-bold">{formatCurrency(data.byMethod.boleto.total)}</p>
-            <p className="text-xs text-gray-500">{data.byMethod.boleto.count} transações</p>
+            <p className="text-xs text-muted-foreground">{data.byMethod.boleto.count} transações</p>
           </Card>
 
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
+          <Card className="p-4 bg-card/50 border-border">
             <div className="flex items-center gap-2 mb-2">
-              <CreditCard className="w-5 h-5 text-purple-400" />
+              <CreditCard className="w-5 h-5 text-amber-400" />
               <span className="font-medium">Cartão</span>
             </div>
             <p className="text-xl font-bold">{formatCurrency(data.byMethod.credit_card.total)}</p>
-            <p className="text-xs text-gray-500">{data.byMethod.credit_card.count} transações</p>
+            <p className="text-xs text-muted-foreground">{data.byMethod.credit_card.count} transações</p>
           </Card>
         </div>
       )}
 
-      <Separator className="bg-gray-800" />
+      <Separator className="bg-secondary" />
 
       {/* Payment Links Section */}
       <div>
         <button
           onClick={() => setShowPaymentLinks(!showPaymentLinks)}
-          className="flex items-center gap-2 text-lg font-semibold mb-4 hover:text-purple-400 transition"
+          className="flex items-center gap-2 text-lg font-semibold mb-4 hover:text-amber-400 transition"
         >
           <LinkIcon className="w-5 h-5" />
           Links de Pagamento
@@ -396,22 +396,22 @@ export function PaymentsManagement() {
         </button>
 
         {showPaymentLinks && (
-          <Card className="p-4 bg-gray-900/50 border-gray-800">
-            <h4 className="text-sm font-medium text-gray-400 mb-4">Criar Novo Link</h4>
+          <Card className="p-4 bg-card/50 border-border">
+            <h4 className="text-sm font-medium text-muted-foreground mb-4">Criar Novo Link</h4>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Nome *</label>
+                <label className="block text-xs text-muted-foreground mb-1">Nome *</label>
                 <input
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm"
+                  className="w-full bg-secondary border border-border rounded px-3 py-2 text-sm"
                   value={linkForm.name}
                   onChange={(e) => setLinkForm({ ...linkForm, name: e.target.value })}
                   placeholder="Ex: Curso Completo de IA"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Valor (opcional)</label>
+                <label className="block text-xs text-muted-foreground mb-1">Valor (opcional)</label>
                 <input
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm"
+                  className="w-full bg-secondary border border-border rounded px-3 py-2 text-sm"
                   value={linkForm.value}
                   onChange={(e) => setLinkForm({ ...linkForm, value: e.target.value })}
                   placeholder="Deixe vazio para valor livre"
@@ -420,9 +420,9 @@ export function PaymentsManagement() {
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Tipo de Cobrança</label>
+                <label className="block text-xs text-muted-foreground mb-1">Tipo de Cobrança</label>
                 <select
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm"
+                  className="w-full bg-secondary border border-border rounded px-3 py-2 text-sm"
                   value={linkForm.chargeType}
                   onChange={(e) => setLinkForm({ ...linkForm, chargeType: e.target.value })}
                 >
@@ -432,9 +432,9 @@ export function PaymentsManagement() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Método de Pagamento</label>
+                <label className="block text-xs text-muted-foreground mb-1">Método de Pagamento</label>
                 <select
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm"
+                  className="w-full bg-secondary border border-border rounded px-3 py-2 text-sm"
                   value={linkForm.billingType}
                   onChange={(e) => setLinkForm({ ...linkForm, billingType: e.target.value })}
                 >
@@ -445,9 +445,9 @@ export function PaymentsManagement() {
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-xs text-gray-500 mb-1">Descrição</label>
+                <label className="block text-xs text-muted-foreground mb-1">Descrição</label>
                 <input
-                  className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm"
+                  className="w-full bg-secondary border border-border rounded px-3 py-2 text-sm"
                   value={linkForm.description}
                   onChange={(e) => setLinkForm({ ...linkForm, description: e.target.value })}
                   placeholder="Descrição opcional do produto/serviço"
@@ -475,27 +475,27 @@ export function PaymentsManagement() {
         )}
       </div>
 
-      <Separator className="bg-gray-800" />
+      <Separator className="bg-secondary" />
 
       {/* Recent Transactions */}
       <div>
         <h3 className="text-lg font-semibold mb-4">Transações Recentes</h3>
-        <Card className="bg-gray-900/50 border-gray-800 overflow-hidden">
+        <Card className="bg-card/50 border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-800/50">
+              <thead className="bg-secondary/50">
                 <tr>
-                  <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Pedido</th>
-                  <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Cliente</th>
-                  <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Método</th>
-                  <th className="text-left px-4 py-3 text-xs text-gray-400 font-medium">Status</th>
-                  <th className="text-right px-4 py-3 text-xs text-gray-400 font-medium">Valor</th>
-                  <th className="text-right px-4 py-3 text-xs text-gray-400 font-medium">Data</th>
+                  <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Pedido</th>
+                  <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Cliente</th>
+                  <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Método</th>
+                  <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Status</th>
+                  <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">Valor</th>
+                  <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">Data</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
                 {data?.recentTransactions.map((tx) => (
-                  <tr key={tx.orderNumber} className="hover:bg-gray-800/30 transition">
+                  <tr key={tx.orderNumber} className="hover:bg-secondary/30 transition">
                     <td className="px-4 py-3">
                       <span className="font-mono text-sm">{tx.orderNumber}</span>
                     </td>
@@ -517,7 +517,7 @@ export function PaymentsManagement() {
                     <td className="px-4 py-3 text-right font-medium">
                       {formatCurrency(tx.total)}
                     </td>
-                    <td className="px-4 py-3 text-right text-sm text-gray-400">
+                    <td className="px-4 py-3 text-right text-sm text-muted-foreground">
                       {new Date(tx.createdAt).toLocaleDateString("pt-BR")}
                     </td>
                   </tr>

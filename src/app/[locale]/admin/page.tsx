@@ -95,11 +95,11 @@ function StatCard({
   href?: string;
 }) {
   const colors = {
-    violet: { bg: "from-violet-500/20 to-violet-600/10", icon: "text-violet-400", border: "border-violet-500/20" },
+    violet: { bg: "from-amber-500/20 to-yellow-600/10", icon: "text-violet-400", border: "border-amber-500/20" },
     emerald: { bg: "from-emerald-500/20 to-green-600/10", icon: "text-emerald-400", border: "border-emerald-500/20" },
     amber: { bg: "from-amber-500/20 to-yellow-600/10", icon: "text-amber-400", border: "border-amber-500/20" },
     cyan: { bg: "from-cyan-500/20 to-blue-600/10", icon: "text-cyan-400", border: "border-cyan-500/20" },
-    pink: { bg: "from-pink-500/20 to-rose-600/10", icon: "text-pink-400", border: "border-pink-500/20" },
+    pink: { bg: "from-yellow-500/20 to-rose-600/10", icon: "text-yellow-400", border: "border-amber-500/20" },
     orange: { bg: "from-orange-500/20 to-red-600/10", icon: "text-orange-400", border: "border-orange-500/20" },
   };
 
@@ -118,7 +118,7 @@ function StatCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-gray-400 text-xs lg:text-sm mb-0.5 truncate">{title}</p>
+          <p className="text-muted-foreground text-xs lg:text-sm mb-0.5 truncate">{title}</p>
           <p className="text-2xl lg:text-3xl font-bold text-white">{value}</p>
           {change !== undefined && (
             <div className="flex items-center gap-1 mt-1.5">
@@ -133,12 +133,12 @@ function StatCard({
               )}>
                 {change >= 0 ? "+" : ""}{change}%
               </span>
-              {changeLabel && <span className="text-gray-500 text-[10px] ml-0.5">{changeLabel}</span>}
+              {changeLabel && <span className="text-muted-foreground text-[10px] ml-0.5">{changeLabel}</span>}
             </div>
           )}
         </div>
         <div className={cn(
-          "p-2.5 lg:p-3 rounded-xl bg-white/5 shrink-0",
+          "p-2.5 lg:p-3 rounded-xl bg-secondary shrink-0",
           colorSet.icon
         )}>
           <Icon size={20} className="lg:w-6 lg:h-6" />
@@ -146,7 +146,7 @@ function StatCard({
       </div>
       {href && (
         <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <ChevronRight size={16} className="text-gray-500" />
+          <ChevronRight size={16} className="text-muted-foreground" />
         </div>
       )}
     </motion.div>
@@ -173,11 +173,11 @@ function QuickAction({
   badge?: string;
 }) {
   const colorClasses: Record<string, string> = {
-    violet: "from-violet-500/20 to-purple-600/10 border-violet-500/20 hover:border-violet-500/40 text-violet-400",
+    violet: "from-amber-500/20 to-amber-600/10 border-amber-500/20 hover:border-amber-500/40 text-violet-400",
     emerald: "from-emerald-500/20 to-green-600/10 border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400",
     amber: "from-amber-500/20 to-yellow-600/10 border-amber-500/20 hover:border-amber-500/40 text-amber-400",
     cyan: "from-cyan-500/20 to-blue-600/10 border-cyan-500/20 hover:border-cyan-500/40 text-cyan-400",
-    pink: "from-pink-500/20 to-rose-600/10 border-pink-500/20 hover:border-pink-500/40 text-pink-400",
+    pink: "from-yellow-500/20 to-rose-600/10 border-amber-500/20 hover:border-amber-500/40 text-yellow-400",
   };
 
   return (
@@ -209,8 +209,8 @@ function ActivityItem({ activity }: { activity: Stats["recentActivity"][0] }) {
       case "user": return { color: "text-cyan-400 bg-cyan-500/20", icon: Users };
       case "product": return { color: "text-amber-400 bg-amber-500/20", icon: Package };
       case "order": return { color: "text-emerald-400 bg-emerald-500/20", icon: ShoppingCart };
-      case "database": return { color: "text-pink-400 bg-pink-500/20", icon: Database };
-      default: return { color: "text-gray-400 bg-gray-500/20", icon: Activity };
+      case "database": return { color: "text-yellow-400 bg-yellow-500/20", icon: Database };
+      default: return { color: "text-muted-foreground bg-gray-500/20", icon: Activity };
     }
   };
 
@@ -218,15 +218,15 @@ function ActivityItem({ activity }: { activity: Stats["recentActivity"][0] }) {
   const IconComponent = config.icon;
 
   return (
-    <div className="flex items-center gap-3 p-2.5 lg:p-3 rounded-xl hover:bg-white/5 transition-colors">
+    <div className="flex items-center gap-3 p-2.5 lg:p-3 rounded-xl hover:bg-secondary transition-colors">
       <div className={cn("p-2 rounded-lg shrink-0", config.color)}>
         <IconComponent size={14} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-xs lg:text-sm text-white truncate">{activity.action}</p>
-        <p className="text-[10px] lg:text-xs text-gray-500 truncate">{activity.adminEmail}</p>
+        <p className="text-[10px] lg:text-xs text-muted-foreground truncate">{activity.adminEmail}</p>
       </div>
-      <div className="text-[10px] lg:text-xs text-gray-500 shrink-0">
+      <div className="text-[10px] lg:text-xs text-muted-foreground shrink-0">
         {new Date(activity.createdAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
       </div>
     </div>
@@ -310,8 +310,8 @@ export default function AdminDashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
-          <p className="text-gray-400">Carregando dashboard...</p>
+          <div className="w-12 h-12 border-4 border-amber-500/30 border-t-violet-500 rounded-full animate-spin" />
+          <p className="text-muted-foreground">Carregando dashboard...</p>
         </div>
       </div>
     );
@@ -343,7 +343,7 @@ export default function AdminDashboardPage() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative p-4 lg:p-6 rounded-2xl bg-gradient-to-br from-violet-600/30 via-purple-600/20 to-pink-600/20 border border-violet-500/20 overflow-hidden"
+        className="relative p-4 lg:p-6 rounded-2xl bg-gradient-to-br from-violet-600/30 via-purple-600/20 to-yellow-600/20 border border-amber-500/20 overflow-hidden"
       >
         <div className="relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -351,7 +351,7 @@ export default function AdminDashboardPage() {
               <h1 className="text-xl lg:text-2xl font-bold text-white mb-1">
                 Olá, {admin?.name?.split(" ")[0]}! 👋
               </h1>
-              <p className="text-gray-400 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Aqui está um resumo do seu negócio hoje
               </p>
             </div>
@@ -382,7 +382,7 @@ export default function AdminDashboardPage() {
               
               <button
                 onClick={() => { fetchStats(); testDbConnection(); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 border border-white/10 text-gray-300 hover:bg-white/15 transition text-xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 border border-border text-muted-foreground hover:bg-white/15 transition text-xs"
               >
                 <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
                 <span className="hidden sm:inline">Atualizar</span>
@@ -393,7 +393,7 @@ export default function AdminDashboardPage() {
         
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-violet-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl" />
       </motion.div>
 
       {/* Main Stats Grid - 2x2 on mobile, 4 cols on desktop */}
@@ -436,7 +436,7 @@ export default function AdminDashboardPage() {
             <Zap className="w-4 h-4 text-amber-400" />
             Ações Rápidas
           </h2>
-          <Link href={`/${locale}/admin/settings`} className="text-xs text-gray-400 hover:text-white flex items-center gap-1">
+          <Link href={`/${locale}/admin/settings`} className="text-xs text-muted-foreground hover:text-white flex items-center gap-1">
             Ver todas <ArrowRight size={12} />
           </Link>
         </div>
@@ -462,7 +462,7 @@ export default function AdminDashboardPage() {
           className="p-3 lg:p-4 rounded-xl bg-gradient-to-br from-emerald-500/15 to-green-600/10 border border-emerald-500/20"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] lg:text-xs text-gray-400">Hoje</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground">Hoje</span>
             <TrendingUp size={12} className="text-emerald-400" />
           </div>
           <p className="text-lg lg:text-xl font-bold text-white">{stats?.users.newToday || 0}</p>
@@ -476,7 +476,7 @@ export default function AdminDashboardPage() {
           className="p-3 lg:p-4 rounded-xl bg-gradient-to-br from-cyan-500/15 to-blue-600/10 border border-cyan-500/20"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] lg:text-xs text-gray-400">Semana</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground">Semana</span>
             <Clock size={12} className="text-cyan-400" />
           </div>
           <p className="text-lg lg:text-xl font-bold text-white">{stats?.users.newThisWeek || 0}</p>
@@ -487,14 +487,14 @@ export default function AdminDashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-3 lg:p-4 rounded-xl bg-gradient-to-br from-pink-500/15 to-rose-600/10 border border-pink-500/20"
+          className="p-3 lg:p-4 rounded-xl bg-gradient-to-br from-yellow-500/15 to-rose-600/10 border border-amber-500/20"
         >
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] lg:text-xs text-gray-400">Mês</span>
-            <Calendar size={12} className="text-pink-400" />
+            <span className="text-[10px] lg:text-xs text-muted-foreground">Mês</span>
+            <Calendar size={12} className="text-yellow-400" />
           </div>
           <p className="text-lg lg:text-xl font-bold text-white">{stats?.users.newThisMonth || 0}</p>
-          <p className="text-[10px] text-pink-400">total</p>
+          <p className="text-[10px] text-yellow-400">total</p>
         </motion.div>
       </div>
 
@@ -505,14 +505,14 @@ export default function AdminDashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10"
+          className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border"
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm lg:text-base font-semibold text-white flex items-center gap-2">
               <PieChart className="w-4 h-4 text-violet-400" />
               Usuários por Plano
             </h3>
-            <Link href={`/${locale}/admin/users`} className="text-[10px] text-gray-400 hover:text-white">
+            <Link href={`/${locale}/admin/users`} className="text-[10px] text-muted-foreground hover:text-white">
               Ver todos
             </Link>
           </div>
@@ -521,9 +521,9 @@ export default function AdminDashboardPage() {
               const total = stats?.users.total || 1;
               const percentage = Math.round((count / total) * 100);
               const colors: Record<string, { bar: string; text: string }> = {
-                free: { bar: "from-gray-500 to-gray-600", text: "text-gray-400" },
+                free: { bar: "from-gray-500 to-gray-600", text: "text-muted-foreground" },
                 starter: { bar: "from-cyan-500 to-blue-500", text: "text-cyan-400" },
-                pro: { bar: "from-violet-500 to-purple-500", text: "text-violet-400" },
+                pro: { bar: "from-amber-500 to-amber-500", text: "text-violet-400" },
                 business: { bar: "from-amber-500 to-orange-500", text: "text-amber-400" },
               };
               const colorSet = colors[plan] || colors.free;
@@ -532,9 +532,9 @@ export default function AdminDashboardPage() {
                 <div key={plan}>
                   <div className="flex justify-between text-xs mb-1">
                     <span className={cn("capitalize font-medium", colorSet.text)}>{plan}</span>
-                    <span className="text-white">{count} <span className="text-gray-500">({percentage}%)</span></span>
+                    <span className="text-white">{count} <span className="text-muted-foreground">({percentage}%)</span></span>
                   </div>
-                  <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: `${percentage}%` }}
@@ -553,14 +553,14 @@ export default function AdminDashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10"
+          className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border"
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm lg:text-base font-semibold text-white flex items-center gap-2">
               <Activity className="w-4 h-4 text-emerald-400" />
               Atividade Recente
             </h3>
-            <Link href={`/${locale}/admin/logs`} className="text-[10px] text-gray-400 hover:text-white">
+            <Link href={`/${locale}/admin/logs`} className="text-[10px] text-muted-foreground hover:text-white">
               Ver logs
             </Link>
           </div>
@@ -572,7 +572,7 @@ export default function AdminDashboardPage() {
             ) : (
               <div className="text-center py-8">
                 <Activity className="w-8 h-8 text-gray-600 mx-auto mb-2" />
-                <p className="text-gray-500 text-xs">Nenhuma atividade recente</p>
+                <p className="text-muted-foreground text-xs">Nenhuma atividade recente</p>
               </div>
             )}
           </div>
@@ -584,7 +584,7 @@ export default function AdminDashboardPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-600/5 border border-violet-500/20"
+        className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20"
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm lg:text-base font-semibold text-white flex items-center gap-2">
@@ -603,15 +603,15 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-7 gap-1 lg:gap-2">
           {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((day, i) => (
             <div key={day} className="text-center">
-              <div className="h-16 lg:h-24 bg-white/5 rounded-lg flex items-end justify-center p-1 mb-1">
+              <div className="h-16 lg:h-24 bg-secondary rounded-lg flex items-end justify-center p-1 mb-1">
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: `${(weeklyData[i] / Math.max(...weeklyData)) * 100}%` }}
                   transition={{ duration: 0.5, delay: 0.3 + i * 0.05 }}
-                  className="w-full bg-gradient-to-t from-violet-500 to-purple-400 rounded"
+                  className="w-full bg-gradient-to-t from-amber-500 to-amber-400 rounded"
                 />
               </div>
-              <span className="text-[9px] lg:text-[10px] text-gray-500">{day}</span>
+              <span className="text-[9px] lg:text-[10px] text-muted-foreground">{day}</span>
             </div>
           ))}
         </div>
@@ -627,44 +627,44 @@ export default function AdminDashboardPage() {
         <div className="p-3 lg:p-4 rounded-xl bg-white/[0.03] border border-white/5">
           <div className="flex items-center gap-2 mb-2">
             <Database size={14} className="text-emerald-400" />
-            <span className="text-[10px] lg:text-xs text-gray-400">Database</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground">Database</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-emerald-400">99.9%</span>
-            <span className="text-[10px] text-gray-500">uptime</span>
+            <span className="text-[10px] text-muted-foreground">uptime</span>
           </div>
         </div>
         
         <div className="p-3 lg:p-4 rounded-xl bg-white/[0.03] border border-white/5">
           <div className="flex items-center gap-2 mb-2">
             <Zap size={14} className="text-amber-400" />
-            <span className="text-[10px] lg:text-xs text-gray-400">API</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground">API</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-amber-400">~45ms</span>
-            <span className="text-[10px] text-gray-500">latência</span>
+            <span className="text-[10px] text-muted-foreground">latência</span>
           </div>
         </div>
         
         <div className="p-3 lg:p-4 rounded-xl bg-white/[0.03] border border-white/5">
           <div className="flex items-center gap-2 mb-2">
             <Bot size={14} className="text-violet-400" />
-            <span className="text-[10px] lg:text-xs text-gray-400">AI Models</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground">AI Models</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-violet-400">5</span>
-            <span className="text-[10px] text-gray-500">ativos</span>
+            <span className="text-[10px] text-muted-foreground">ativos</span>
           </div>
         </div>
         
         <div className="p-3 lg:p-4 rounded-xl bg-white/[0.03] border border-white/5">
           <div className="flex items-center gap-2 mb-2">
             <Workflow size={14} className="text-cyan-400" />
-            <span className="text-[10px] lg:text-xs text-gray-400">Automações</span>
+            <span className="text-[10px] lg:text-xs text-muted-foreground">Automações</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-cyan-400">3</span>
-            <span className="text-[10px] text-gray-500">rodando</span>
+            <span className="text-[10px] text-muted-foreground">rodando</span>
           </div>
         </div>
       </motion.div>

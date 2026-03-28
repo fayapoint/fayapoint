@@ -22,7 +22,7 @@ export default function ConsultPage() {
             sizes="100vw"
             className="object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-black/80 to-pink-900/60" />
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-900/70 via-black/80 to-yellow-900/60" />
           <div className="relative z-10 container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center text-white">
               <Badge variant="secondary" className="mb-6 text-sm tracking-[0.3em] uppercase">
@@ -30,14 +30,14 @@ export default function ConsultPage() {
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
               <p className="text-lg md:text-xl text-gray-100 mb-6">{t("description")}</p>
-              <p className="text-sm text-gray-300">Reservamos blocos de 30 minutos entre 9h e 18h (BRT). Após enviar, você será redirecionado para a agenda do Google com o próximo horário disponível.</p>
+              <p className="text-sm text-muted-foreground">Reservamos blocos de 30 minutos entre 9h e 18h (BRT). Após enviar, você será redirecionado para a agenda do Google com o próximo horário disponível.</p>
             </div>
           </div>
         </section>
 
         <section className="container mx-auto px-4 -mt-16 pb-20 relative z-10">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
-            <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl shadow-purple-900/15">
+            <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl shadow-amber-900/15">
               <ScheduleMeetingForm
                 copy={{
                   badge: t("badge", { default: "" }) as string,

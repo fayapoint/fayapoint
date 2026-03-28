@@ -223,6 +223,28 @@ export default async function RootLayout({
           >
             {JSON.stringify(websiteLd)}
           </Script>
+          {/* Warm palette override — injected inline to bypass turbopack CSS cache */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            .dark, .theme-dark {
+              --background: oklch(0.16 0.012 65) !important;
+              --foreground: oklch(0.93 0.01 80) !important;
+              --card: oklch(0.21 0.016 60) !important;
+              --card-foreground: oklch(0.93 0.01 80) !important;
+              --popover: oklch(0.21 0.016 60) !important;
+              --popover-foreground: oklch(0.93 0.01 80) !important;
+              --primary: oklch(0.78 0.12 75) !important;
+              --primary-foreground: oklch(0.16 0.012 65) !important;
+              --secondary: oklch(0.28 0.02 60) !important;
+              --secondary-foreground: oklch(0.93 0.01 80) !important;
+              --muted: oklch(0.28 0.02 60) !important;
+              --muted-foreground: oklch(0.75 0.02 70) !important;
+              --accent: oklch(0.78 0.12 75) !important;
+              --accent-foreground: oklch(0.16 0.012 65) !important;
+              --border: oklch(0.93 0.01 80 / 18%) !important;
+              --input: oklch(0.93 0.01 80 / 22%) !important;
+              --ring: oklch(0.78 0.12 75) !important;
+            }
+          `}} />
           {children}
           <Toaster
             position="top-center"

@@ -32,7 +32,7 @@ export function WhatsAppButton() {
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
       {isOpen && (
-        <div className="w-[320px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,16,28,0.94),rgba(3,7,18,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+        <div className="w-[320px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[28px] border border-border bg-[linear-gradient(180deg,rgba(10,16,28,0.94),rgba(3,7,18,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
           <div className="border-b border-white/8 bg-[linear-gradient(135deg,rgba(16,185,129,0.22),rgba(6,95,70,0.08))] p-5">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3">
@@ -50,7 +50,7 @@ export function WhatsAppButton() {
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="rounded-full border border-white/10 bg-white/5 p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
+                className="rounded-full border border-border bg-secondary p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
                 aria-label="Fechar WhatsApp"
               >
                 <X className="h-4 w-4" />
@@ -61,12 +61,12 @@ export function WhatsAppButton() {
           <div className="space-y-3 p-4">
             <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-white/5">
+                <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl bg-secondary">
                   <UserRound className="h-4 w-4 text-white/80" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-white">Atendimento humano</p>
-                  <p className="mt-1 text-xs leading-5 text-gray-400">
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">
                     Abra uma conversa já com o contexto certo para continuar no WhatsApp sem atrito.
                   </p>
                 </div>

@@ -13,10 +13,10 @@ export default function ResourcesIndexPage() {
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
-          <ul className="list-disc list-inside text-gray-400 space-y-2">
+          <ul className="list-disc list-inside text-muted-foreground space-y-2">
             {links.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-purple-400">
+                <Link href={link.href} className="text-amber-400">
                   {link.label}
                 </Link>
               </li>

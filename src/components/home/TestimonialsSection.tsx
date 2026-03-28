@@ -42,11 +42,11 @@ export function TestimonialsSection() {
       <div className="absolute inset-0">
         <motion.div
           style={{ y }}
-          className="absolute top-0 -left-20 md:left-1/4 w-64 md:w-96 h-64 md:h-96 bg-purple-500/10 rounded-full blur-[120px]"
+          className="absolute top-0 -left-20 md:left-1/4 w-64 md:w-96 h-64 md:h-96 bg-amber-500/10 rounded-full blur-[120px]"
         />
         <motion.div
           style={{ y: useTransform(y, v => v * -1.5) }}
-          className="absolute bottom-0 -right-20 md:right-1/4 w-64 md:w-96 h-64 md:h-96 bg-pink-500/10 rounded-full blur-[120px]"
+          className="absolute bottom-0 -right-20 md:right-1/4 w-64 md:w-96 h-64 md:h-96 bg-yellow-500/10 rounded-full blur-[120px]"
         />
         
         {/* Floating quotes */}
@@ -56,7 +56,7 @@ export function TestimonialsSection() {
             rotate: [0, 15, 0]
           }}
           transition={{ duration: 8, repeat: Infinity }}
-          className="absolute top-20 right-10 text-purple-400/10"
+          className="absolute top-20 right-10 text-amber-400/10"
         >
           <Quote size={80} />
         </motion.div>
@@ -67,7 +67,7 @@ export function TestimonialsSection() {
             rotate: [0, -15, 0]
           }}
           transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-          className="absolute bottom-20 left-10 text-pink-400/10"
+          className="absolute bottom-20 left-10 text-yellow-400/10"
         >
           <Quote size={60} />
         </motion.div>
@@ -89,8 +89,8 @@ export function TestimonialsSection() {
             className="inline-block mb-6"
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 blur-2xl" />
-              <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-6 py-3 flex items-center gap-3">
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600/30 to-yellow-600/30 blur-2xl" />
+              <div className="relative backdrop-blur-xl bg-secondary border border-border rounded-full px-6 py-3 flex items-center gap-3">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -111,11 +111,11 @@ export function TestimonialsSection() {
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
               {t("title")}
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             {t("description")}
           </p>
         </motion.div>
@@ -147,7 +147,7 @@ export function TestimonialsSection() {
               >
                 {/* Glow effect on hover */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl blur-xl"
+                  className="absolute inset-0 bg-gradient-to-r from-amber-600/20 to-yellow-600/20 rounded-2xl blur-xl"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: hoveredIndex === i ? 1 : 0 }}
                   transition={{ duration: 0.3 }}
@@ -163,7 +163,7 @@ export function TestimonialsSection() {
                     className="absolute -top-3 -right-3"
                   >
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 blur-md" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-500 blur-md" />
                       <div className="relative bg-black rounded-full p-2">
                         <Quote className="w-4 h-4 text-white" />
                       </div>
@@ -204,8 +204,8 @@ export function TestimonialsSection() {
                       transition={{ duration: 0.6 }}
                       className="relative"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-md opacity-60" />
-                      <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                      <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full blur-md opacity-60" />
+                      <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-white font-bold">
                         {testimonial.name.split(' ').map(n => n[0]).join('')}
                       </div>
                     </motion.div>
@@ -237,16 +237,16 @@ export function TestimonialsSection() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <p className="text-gray-400 mb-4">{t("ctaLabel")}</p>
+          <p className="text-muted-foreground mb-4">{t("ctaLabel")}</p>
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="relative group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-md group-hover:blur-lg transition-all duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full blur-md group-hover:blur-lg transition-all duration-300" />
             <Link 
               href="/cursos"
-              className="relative inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-white font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300"
+              className="relative inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full text-white font-semibold hover:from-amber-700 hover:to-yellow-800 transition-all duration-300"
             >
               {t("ctaButton")}
               <motion.div

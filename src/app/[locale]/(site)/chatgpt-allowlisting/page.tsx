@@ -98,7 +98,7 @@ export default function ChatGPTAllowlistingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-background text-foreground font-sans">
       <Header />
       
       <main className="pt-20">
@@ -158,7 +158,7 @@ export default function ChatGPTAllowlistingPage() {
                 </h1>
 
                 {/* Compelling Subheadline */}
-                <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-xl">
+                <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-xl">
                   200 milhões de pessoas perguntam ao ChatGPT todos os dias. Quando alguém pergunta sobre <strong className="text-white">seu nicho</strong>, você é citado ou ignorado?
                 </p>
 
@@ -172,14 +172,14 @@ export default function ChatGPTAllowlistingPage() {
                     Quero Aparecer na IA
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                   </Button>
-                  <div className="flex items-center gap-2 text-gray-400 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm">
                     <Shield size={16} className="text-green-500" />
                     Garantia de 30 dias
                   </div>
                 </div>
 
                 {/* Social Proof Mini */}
-                <div className="flex items-center gap-6 pt-4 border-t border-white/10">
+                <div className="flex items-center gap-6 pt-4 border-t border-border">
                   <div className="flex -space-x-3">
                     {[...Array(5)].map((_, i) => (
                       <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-blue-500 border-2 border-black flex items-center justify-center text-xs font-bold">
@@ -193,7 +193,7 @@ export default function ChatGPTAllowlistingPage() {
                         <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
-                    <p className="text-sm text-gray-400">+{course.students} profissionais já configuraram</p>
+                    <p className="text-sm text-muted-foreground">+{course.students} profissionais já configuraram</p>
                   </div>
                 </div>
               </div>
@@ -201,10 +201,10 @@ export default function ChatGPTAllowlistingPage() {
               {/* Interactive Demo Card */}
               <div className="relative">
                 <div className="absolute -inset-2 bg-gradient-to-b from-green-500/30 to-blue-600/30 rounded-3xl blur-xl"></div>
-                <Card className="relative bg-gray-900/95 backdrop-blur border-gray-700 p-0 shadow-2xl overflow-hidden">
+                <Card className="relative bg-card/95 backdrop-blur border-border p-0 shadow-2xl overflow-hidden">
                   {/* Simulated ChatGPT Interface */}
-                  <div className="bg-[#343541] p-4 border-b border-gray-700">
-                    <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <div className="bg-[#343541] p-4 border-b border-border">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Bot className="text-green-400" size={18} />
                       <span className="font-medium">ChatGPT</span>
                     </div>
@@ -236,7 +236,7 @@ export default function ChatGPTAllowlistingPage() {
                   </div>
 
                   {/* Scenario Tabs */}
-                  <div className="flex border-t border-gray-700">
+                  <div className="flex border-t border-border">
                     {realScenarios.map((scenario, i) => (
                       <button
                         key={i}
@@ -244,7 +244,7 @@ export default function ChatGPTAllowlistingPage() {
                         className={`flex-1 py-3 px-2 text-xs font-medium transition-all flex items-center justify-center gap-1 ${
                           activeScenario === i 
                             ? 'bg-green-500/20 text-green-400 border-b-2 border-green-500' 
-                            : 'text-gray-500 hover:text-gray-300'
+                            : 'text-muted-foreground hover:text-muted-foreground'
                         }`}
                       >
                         <scenario.icon size={14} />
@@ -254,11 +254,11 @@ export default function ChatGPTAllowlistingPage() {
                   </div>
 
                   {/* Price Section */}
-                  <div className="p-5 bg-gray-900 space-y-4">
+                  <div className="p-5 bg-card space-y-4">
                     <div className="flex items-baseline justify-between">
                       <div>
                         <span className="text-3xl font-bold text-white">R$ {course.price}</span>
-                        <span className="text-gray-500 line-through ml-2">R$ {course.originalPrice}</span>
+                        <span className="text-muted-foreground line-through ml-2">R$ {course.originalPrice}</span>
                       </div>
                       <Badge className="bg-red-500/20 text-red-400 border-red-500/30">-{discount}%</Badge>
                     </div>
@@ -271,16 +271,16 @@ export default function ChatGPTAllowlistingPage() {
                       <ArrowRight className="ml-2" size={20} />
                     </Button>
 
-                    <div className="grid grid-cols-3 gap-2 text-center text-xs text-gray-400">
-                      <div className="p-2 bg-gray-800/50 rounded">
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs text-muted-foreground">
+                      <div className="p-2 bg-secondary/50 rounded">
                         <Lock size={14} className="mx-auto mb-1 text-green-500" />
                         Seguro
                       </div>
-                      <div className="p-2 bg-gray-800/50 rounded">
+                      <div className="p-2 bg-secondary/50 rounded">
                         <Zap size={14} className="mx-auto mb-1 text-green-500" />
                         Vitalício
                       </div>
-                      <div className="p-2 bg-gray-800/50 rounded">
+                      <div className="p-2 bg-secondary/50 rounded">
                         <Shield size={14} className="mx-auto mb-1 text-green-500" />
                         Garantia
                       </div>
@@ -310,11 +310,11 @@ export default function ChatGPTAllowlistingPage() {
                 </Badge>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
                   Bem-vindo à era do{" "}
-                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-blue-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
                     AEO
                   </span>
                 </h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   <strong className="text-white">Answer Engine Optimization</strong> é a evolução natural do SEO. 
                   Enquanto o SEO tradicional te coloca nos resultados de busca, o AEO te coloca <em>dentro da resposta</em>.
                 </p>
@@ -330,33 +330,33 @@ export default function ChatGPTAllowlistingPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="relative group"
               >
-                <div className="absolute inset-0 bg-gray-800/50 rounded-2xl transform group-hover:scale-[1.02] transition-transform" />
-                <div className="relative p-8 border border-gray-700 rounded-2xl">
+                <div className="absolute inset-0 bg-secondary/50 rounded-2xl transform group-hover:scale-[1.02] transition-transform" />
+                <div className="relative p-8 border border-border rounded-2xl">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-14 h-14 rounded-xl bg-gray-700 flex items-center justify-center">
-                      <Search className="text-gray-400" size={28} />
+                      <Search className="text-muted-foreground" size={28} />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-gray-400">SEO Tradicional</h3>
-                      <p className="text-sm text-gray-500">O que você já conhece</p>
+                      <h3 className="text-2xl font-bold text-muted-foreground">SEO Tradicional</h3>
+                      <p className="text-sm text-muted-foreground">O que você já conhece</p>
                     </div>
                   </div>
                   <ul className="space-y-4">
-                    <li className="flex items-start gap-3 text-gray-400">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Você aparece em uma <strong className="text-gray-300">lista de 10 links</strong></span>
+                      <span>Você aparece em uma <strong className="text-muted-foreground">lista de 10 links</strong></span>
                     </li>
-                    <li className="flex items-start gap-3 text-gray-400">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Usuário precisa <strong className="text-gray-300">clicar e navegar</strong></span>
+                      <span>Usuário precisa <strong className="text-muted-foreground">clicar e navegar</strong></span>
                     </li>
-                    <li className="flex items-start gap-3 text-gray-400">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Competição por <strong className="text-gray-300">posição no ranking</strong></span>
+                      <span>Competição por <strong className="text-muted-foreground">posição no ranking</strong></span>
                     </li>
-                    <li className="flex items-start gap-3 text-gray-400">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Resultados genéricos e <strong className="text-gray-300">impessoais</strong></span>
+                      <span>Resultados genéricos e <strong className="text-muted-foreground">impessoais</strong></span>
                     </li>
                   </ul>
                 </div>
@@ -370,7 +370,7 @@ export default function ChatGPTAllowlistingPage() {
                 className="relative group"
               >
                 <div className="absolute -inset-1 bg-gradient-to-r from-green-500/30 to-blue-500/30 rounded-2xl blur-sm group-hover:blur-md transition-all" />
-                <div className="relative p-8 bg-gray-900 border border-green-500/30 rounded-2xl">
+                <div className="relative p-8 bg-card border border-green-500/30 rounded-2xl">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center">
                       <Brain className="text-white" size={28} />
@@ -381,19 +381,19 @@ export default function ChatGPTAllowlistingPage() {
                     </div>
                   </div>
                   <ul className="space-y-4">
-                    <li className="flex items-start gap-3 text-gray-300">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
                       <span>Você é <strong className="text-white">A resposta direta</strong>, não um link</span>
                     </li>
-                    <li className="flex items-start gap-3 text-gray-300">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
                       <span>IA <strong className="text-white">recomenda e cita</strong> você automaticamente</span>
                     </li>
-                    <li className="flex items-start gap-3 text-gray-300">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
                       <span>Competição por <strong className="text-white">ser a fonte confiável</strong></span>
                     </li>
-                    <li className="flex items-start gap-3 text-gray-300">
+                    <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
                       <span>Respostas <strong className="text-white">personalizadas que vendem</strong></span>
                     </li>
@@ -409,21 +409,21 @@ export default function ChatGPTAllowlistingPage() {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto"
             >
-              <div className="text-center p-6 bg-gray-900/50 border border-gray-800 rounded-xl">
+              <div className="text-center p-6 bg-card/50 border border-border rounded-xl">
                 <div className="text-4xl font-bold text-green-400 mb-2">40%</div>
-                <div className="text-sm text-gray-400">da Gen Z prefere IA ao Google</div>
+                <div className="text-sm text-muted-foreground">da Gen Z prefere IA ao Google</div>
               </div>
-              <div className="text-center p-6 bg-gray-900/50 border border-gray-800 rounded-xl">
+              <div className="text-center p-6 bg-card/50 border border-border rounded-xl">
                 <div className="text-4xl font-bold text-blue-400 mb-2">200M+</div>
-                <div className="text-sm text-gray-400">usuários ativos no ChatGPT</div>
+                <div className="text-sm text-muted-foreground">usuários ativos no ChatGPT</div>
               </div>
-              <div className="text-center p-6 bg-gray-900/50 border border-gray-800 rounded-xl">
-                <div className="text-4xl font-bold text-purple-400 mb-2">95%</div>
-                <div className="text-sm text-gray-400">dos sites bloqueiam IA sem saber</div>
+              <div className="text-center p-6 bg-card/50 border border-border rounded-xl">
+                <div className="text-4xl font-bold text-amber-400 mb-2">95%</div>
+                <div className="text-sm text-muted-foreground">dos sites bloqueiam IA sem saber</div>
               </div>
-              <div className="text-center p-6 bg-gray-900/50 border border-gray-800 rounded-xl">
+              <div className="text-center p-6 bg-card/50 border border-border rounded-xl">
                 <div className="text-4xl font-bold text-yellow-400 mb-2">0%</div>
-                <div className="text-sm text-gray-400">custo por clique via AEO</div>
+                <div className="text-sm text-muted-foreground">custo por clique via AEO</div>
               </div>
             </motion.div>
           </div>
@@ -433,7 +433,7 @@ export default function ChatGPTAllowlistingPage() {
         <section className="py-24 bg-black">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center mb-16">
-              <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-6 px-4 py-2">
+              <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-6 px-4 py-2">
                 <Target className="mr-2" size={16} />
                 Cenários Reais de Mercado
               </Badge>
@@ -441,7 +441,7 @@ export default function ChatGPTAllowlistingPage() {
                 O que muda quando você está{" "}
                 <span className="text-green-400">visível</span>?
               </h2>
-              <p className="text-xl text-gray-400">
+              <p className="text-xl text-muted-foreground">
                 Veja como profissionais de diferentes áreas transformaram suas conversões com AEO
               </p>
             </div>
@@ -456,9 +456,9 @@ export default function ChatGPTAllowlistingPage() {
                   transition={{ delay: idx * 0.2 }}
                   className="relative"
                 >
-                  <div className="grid md:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-gray-800">
+                  <div className="grid md:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-border">
                     {/* Before */}
-                    <div className="p-8 bg-gray-900/80 relative">
+                    <div className="p-8 bg-card/80 relative">
                       <div className="absolute top-4 left-4">
                         <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
                           <EyeOff size={12} className="mr-1" /> SEM Allowlisting
@@ -466,22 +466,22 @@ export default function ChatGPTAllowlistingPage() {
                       </div>
                       <div className="pt-8">
                         <div className="flex items-center gap-3 mb-4">
-                          <scenario.icon className="text-gray-500" size={24} />
-                          <span className="font-bold text-gray-400">{scenario.persona}</span>
+                          <scenario.icon className="text-muted-foreground" size={24} />
+                          <span className="font-bold text-muted-foreground">{scenario.persona}</span>
                         </div>
-                        <div className="mb-4 p-3 bg-gray-800 rounded-lg text-sm text-gray-300">
-                          <span className="text-gray-500">Usuário pergunta:</span><br/>
+                        <div className="mb-4 p-3 bg-secondary rounded-lg text-sm text-muted-foreground">
+                          <span className="text-muted-foreground">Usuário pergunta:</span><br/>
                           &quot;{scenario.question}&quot;
                         </div>
                         <div className="flex items-start gap-2">
                           <X className="text-red-500 flex-shrink-0 mt-0.5" size={18} />
-                          <p className="text-gray-400">{scenario.without}</p>
+                          <p className="text-muted-foreground">{scenario.without}</p>
                         </div>
                       </div>
                     </div>
 
                     {/* After */}
-                    <div className="p-8 bg-gradient-to-br from-green-900/20 to-black relative border-l border-gray-800">
+                    <div className="p-8 bg-gradient-to-br from-green-900/20 to-black relative border-l border-border">
                       <div className="absolute top-4 left-4">
                         <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                           <Eye size={12} className="mr-1" /> COM AEO
@@ -492,7 +492,7 @@ export default function ChatGPTAllowlistingPage() {
                           <scenario.icon className="text-green-500" size={24} />
                           <span className="font-bold text-white">{scenario.persona}</span>
                         </div>
-                        <div className="mb-4 p-3 bg-black/50 rounded-lg text-sm text-gray-300 border border-green-500/20">
+                        <div className="mb-4 p-3 bg-black/50 rounded-lg text-sm text-muted-foreground border border-green-500/20">
                           <span className="text-green-500">ChatGPT responde:</span><br/>
                           &quot;{scenario.with}&quot;
                         </div>
@@ -522,14 +522,14 @@ export default function ChatGPTAllowlistingPage() {
         </section>
 
         {/* SOLUTION / CURRICULUM */}
-        <section className="py-24 bg-gray-900/50 border-y border-white/5">
+        <section className="py-24 bg-card/50 border-y border-white/5">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   O que você vai dominar
                 </h2>
-                <p className="text-gray-400 mb-8 text-lg">
+                <p className="text-muted-foreground mb-8 text-lg">
                   Um passo a passo técnico e estratégico para colocar seu site dentro do cérebro das IAs mais avançadas do mundo.
                 </p>
                 
@@ -538,22 +538,22 @@ export default function ChatGPTAllowlistingPage() {
                     <div key={module.id} className="group">
                       <button
                         onClick={() => toggleModule(module.id)}
-                        className="w-full flex items-center justify-between p-4 bg-black border border-gray-800 rounded-lg hover:border-green-500/50 transition-all"
+                        className="w-full flex items-center justify-between p-4 bg-black border border-border rounded-lg hover:border-green-500/50 transition-all"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-sm font-bold text-gray-400 group-hover:bg-green-900 group-hover:text-green-400 transition-colors">
+                          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-muted-foreground group-hover:bg-green-900 group-hover:text-green-400 transition-colors">
                             {module.id}
                           </div>
                           <span className="font-semibold text-left">{module.title}</span>
                         </div>
                         {expandedModules.includes(module.id) ? (
-                          <ChevronUp className="text-gray-500" />
+                          <ChevronUp className="text-muted-foreground" />
                         ) : (
-                          <ChevronDown className="text-gray-500" />
+                          <ChevronDown className="text-muted-foreground" />
                         )}
                       </button>
                       {expandedModules.includes(module.id) && (
-                        <div className="p-4 pl-16 text-gray-400 bg-black/50 border-x border-b border-gray-800 rounded-b-lg text-sm">
+                        <div className="p-4 pl-16 text-muted-foreground bg-black/50 border-x border-b border-border rounded-b-lg text-sm">
                           <ul className="space-y-2 list-disc pl-4">
                             {module.topics.map((topic, idx) => (
                               <li key={idx}>{topic}</li>
@@ -567,7 +567,7 @@ export default function ChatGPTAllowlistingPage() {
               </div>
 
               <div className="sticky top-24">
-                <div className="bg-gradient-to-br from-green-900/20 to-blue-900/20 border border-white/10 rounded-2xl p-8">
+                <div className="bg-gradient-to-br from-green-900/20 to-blue-900/20 border border-border rounded-2xl p-8">
                   <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
                     <Gift className="text-green-400" />
                     Bônus Inclusos
@@ -580,7 +580,7 @@ export default function ChatGPTAllowlistingPage() {
                         </div>
                         <div>
                           <h4 className="font-bold text-white">{bonus.title}</h4>
-                          <p className="text-sm text-gray-400">{bonus.description}</p>
+                          <p className="text-sm text-muted-foreground">{bonus.description}</p>
                           <div className="text-xs text-green-400 mt-1 font-mono">
                             Valor: R$ {bonus.value}
                           </div>
@@ -588,12 +588,12 @@ export default function ChatGPTAllowlistingPage() {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-8 pt-6 border-t border-white/10 text-center">
-                    <div className="text-sm text-gray-400 mb-1">Valor Total dos Bônus</div>
+                  <div className="mt-8 pt-6 border-t border-border text-center">
+                    <div className="text-sm text-muted-foreground mb-1">Valor Total dos Bônus</div>
                     <div className="text-3xl font-bold text-green-400">
                       R$ {totalBonusValue}
                     </div>
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">
+                    <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
                       GRÁTIS COM O CURSO
                     </div>
                   </div>
@@ -615,7 +615,7 @@ export default function ChatGPTAllowlistingPage() {
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 Curso <span className="text-green-400">único no Brasil</span> sobre AEO
               </h2>
-              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 O primeiro curso em português que ensina como posicionar seu site nas respostas de IAs como ChatGPT, Perplexity e Gemini.
               </p>
             </div>
@@ -626,10 +626,10 @@ export default function ChatGPTAllowlistingPage() {
                 { title: "Estratégia Completa", desc: "Da otimização técnica à criação de conteúdo que IAs priorizam — cobrimos todo o funil.", icon: "📊" },
                 { title: "Garantia de 30 dias", desc: "Se o curso não entregar o que promete, devolvemos 100% do valor. Sem perguntas.", icon: "🛡️" },
               ].map((item, i) => (
-                <Card key={i} className="bg-gray-900/80 border-gray-800 p-6 hover:border-green-500/30 transition-all">
+                <Card key={i} className="bg-card/80 border-border p-6 hover:border-green-500/30 transition-all">
                   <div className="text-3xl mb-4">{item.icon}</div>
                   <h3 className="font-bold text-white text-lg mb-2">{item.title}</h3>
-                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                  <p className="text-muted-foreground text-sm">{item.desc}</p>
                 </Card>
               ))}
             </div>
@@ -653,50 +653,50 @@ export default function ChatGPTAllowlistingPage() {
               </div>
 
               <div className="grid md:grid-cols-2 gap-4 mb-12">
-                <div className="flex items-center gap-3 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+                <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-gray-300">Curso completo de AEO (8+ horas)</span>
-                  <span className="ml-auto text-gray-500 line-through text-sm">R$ 997</span>
+                  <span className="text-muted-foreground">Curso completo de AEO (8+ horas)</span>
+                  <span className="ml-auto text-muted-foreground line-through text-sm">R$ 997</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+                <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-gray-300">Templates robots.txt (20+)</span>
-                  <span className="ml-auto text-gray-500 line-through text-sm">R$ 197</span>
+                  <span className="text-muted-foreground">Templates robots.txt (20+)</span>
+                  <span className="ml-auto text-muted-foreground line-through text-sm">R$ 197</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+                <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-gray-300">Regras Cloudflare prontas</span>
-                  <span className="ml-auto text-gray-500 line-through text-sm">R$ 297</span>
+                  <span className="text-muted-foreground">Regras Cloudflare prontas</span>
+                  <span className="ml-auto text-muted-foreground line-through text-sm">R$ 297</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+                <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-gray-300">Dashboard de monitoramento</span>
-                  <span className="ml-auto text-gray-500 line-through text-sm">R$ 497</span>
+                  <span className="text-muted-foreground">Dashboard de monitoramento</span>
+                  <span className="ml-auto text-muted-foreground line-through text-sm">R$ 497</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+                <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-gray-300">Acesso comunidade VIP</span>
-                  <span className="ml-auto text-gray-500 line-through text-sm">R$ 297</span>
+                  <span className="text-muted-foreground">Acesso comunidade VIP</span>
+                  <span className="ml-auto text-muted-foreground line-through text-sm">R$ 297</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-gray-900/50 border border-gray-800 rounded-lg">
+                <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-gray-300">Atualizações vitalícias</span>
-                  <span className="ml-auto text-gray-500 line-through text-sm">∞</span>
+                  <span className="text-muted-foreground">Atualizações vitalícias</span>
+                  <span className="ml-auto text-muted-foreground line-through text-sm">∞</span>
                 </div>
               </div>
 
               {/* Price Box */}
               <div className="max-w-lg mx-auto">
-                <Card className="bg-gray-900 border-green-500/30 p-8 text-center relative overflow-hidden">
+                <Card className="bg-card border-green-500/30 p-8 text-center relative overflow-hidden">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-400" />
                   
                   <div className="mb-4">
-                    <span className="text-gray-400 text-lg">Valor total:</span>
-                    <span className="text-gray-500 line-through ml-2 text-lg">R$ 2.285</span>
+                    <span className="text-muted-foreground text-lg">Valor total:</span>
+                    <span className="text-muted-foreground line-through ml-2 text-lg">R$ 2.285</span>
                   </div>
                   
                   <div className="mb-6">
-                    <span className="text-gray-400 text-lg">Hoje apenas:</span>
+                    <span className="text-muted-foreground text-lg">Hoje apenas:</span>
                     <div className="flex items-center justify-center gap-3 mt-2">
                       <span className="text-5xl md:text-6xl font-bold text-white">R$ {course.price}</span>
                       <Badge className="bg-red-500 text-white border-0 text-lg px-3 py-1">-{discount}%</Badge>
@@ -712,14 +712,14 @@ export default function ChatGPTAllowlistingPage() {
                     <ArrowRight className="ml-2 w-6 h-6" />
                   </Button>
 
-                  <div className="mt-6 flex items-center justify-center gap-6 text-sm text-gray-400 flex-wrap">
+                  <div className="mt-6 flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
                     <span className="flex items-center gap-2"><Shield size={16} className="text-green-500" /> 30 dias de garantia</span>
                     <span className="flex items-center gap-2"><Lock size={16} className="text-green-500" /> Pagamento seguro</span>
                   </div>
                 </Card>
 
                 {/* Final Trust */}
-                <p className="text-center text-gray-500 text-sm mt-8 max-w-md mx-auto">
+                <p className="text-center text-muted-foreground text-sm mt-8 max-w-md mx-auto">
                   Seu site pode continuar invisível para milhões de usuários de IA, ou você pode agir agora e ser encontrado. A escolha é sua.
                 </p>
               </div>

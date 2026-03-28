@@ -61,7 +61,7 @@ export default function CoursesByCategoryPage() {
         <div className="container mx-auto px-4">
           <div className="mb-8 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-3">{pageTitle}</h1>
-            <p className="text-gray-400">Cursos organizados por categoria</p>
+            <p className="text-muted-foreground">Cursos organizados por categoria</p>
           </div>
 
           <div className="bg-popover/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-border">
@@ -106,28 +106,28 @@ export default function CoursesByCategoryPage() {
             {filtered.map((course, i) => (
               <motion.div key={course.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                 <Link href={`/curso/${course.slug}`}>
-                  <Card className={`bg-white/5 backdrop-blur border-white/10 hover:bg-white/10 transition overflow-hidden group cursor-pointer ${viewMode === "list" ? "flex" : ""}`}>
+                  <Card className={`bg-secondary backdrop-blur border-border hover:bg-white/10 transition overflow-hidden group cursor-pointer ${viewMode === "list" ? "flex" : ""}`}>
                     <div className={`${viewMode === "list" ? "w-64" : ""} relative`}>
-                      <div className="aspect-video bg-gradient-to-br from-purple-600 to-pink-600 relative">
+                      <div className="aspect-video bg-gradient-to-br from-amber-600 to-yellow-700 relative">
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Badge className="bg-black/40">{pageTitle}</Badge>
                         </div>
                       </div>
                     </div>
                     <div className="p-6 flex-1">
-                      <h3 className="text-lg font-semibold mb-2 group-hover:text-purple-400 transition">{course.title}</h3>
-                      <p className="text-gray-400 text-sm mb-4 line-clamp-2">{course.description}</p>
-                      <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
+                      <h3 className="text-lg font-semibold mb-2 group-hover:text-amber-400 transition">{course.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{course.description}</p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
                         <span className="flex items-center gap-1"><Clock size={16} />{course.duration}</span>
                         <span className="flex items-center gap-1"><Users size={16} />{course.students.toLocaleString("pt-BR")}</span>
                         <span className="flex items-center gap-1"><Star size={16} className="text-yellow-400" />{course.rating}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <div>
-                          {course.oldPrice && <span className="text-gray-500 line-through text-sm">R$ {course.oldPrice.toLocaleString("pt-BR")}</span>}
+                          {course.oldPrice && <span className="text-muted-foreground line-through text-sm">R$ {course.oldPrice.toLocaleString("pt-BR")}</span>}
                           <span className="text-2xl font-bold ml-2">R$ {course.price.toLocaleString("pt-BR")}</span>
                         </div>
-                        <ChevronRight className="text-gray-400 group-hover:text-purple-400 transition" />
+                        <ChevronRight className="text-muted-foreground group-hover:text-amber-400 transition" />
                       </div>
                     </div>
                   </Card>

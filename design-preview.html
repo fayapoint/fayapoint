@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FayAI — 3D Cube Homepage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+@layer reset, tokens, base, layout, cube, ui, cards, reveal, theme, responsive;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+}
+
+@layer tokens {
+  :root {
+    color-scheme: dark;
+    --dark-bg: #1c1814;
+    --dark-fg: #ede8df;
+    --dark-muted: #8a7b6e;
+    --light-bg: #f0ece3;
+    --light-fg: #0d0d14;
+    --light-muted: #9a9aaa;
+    --accent-dark: #d4a84b;
+    --accent-light: #3a6e00;
+    --bg: var(--dark-bg);
+    --fg: var(--dark-fg);
+    --muted: var(--dark-muted);
+    --accent: var(--accent-dark);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+    --hairline: 0.0625rem;
+    --ui-inset: 2rem;
+    --card-bg: rgba(22, 18, 14, 0.88);
+    --card-border: rgba(212, 168, 75, 0.2);
+    --card-solid: #1a1610;
+    --reveal-offset: 0.625rem;
+    --reveal-duration: 0.5s;
+    --z-ui: 10;
+  }
+}
+
+@layer base {
+  html { color-scheme: dark; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: var(--font-mono);
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+}
+
+@layer layout {
+  #scene {
+    position: fixed; inset: 0; z-index: 0;
+    display: flex; align-items: center; justify-content: center;
+    perspective: 1100px; pointer-events: none;
+  }
+  #scroll_container { position: relative; z-index: 1; }
+  section {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 6rem calc(5rem + var(--ui-inset)) 6rem 5rem;
+  }
+}
+
+@layer cube {
+  #cube {
+    --s: min(74vw, 74vh, 560px);
+    width: var(--s); height: var(--s);
+    position: relative; transform-style: preserve-3d;
+    transform: rotateX(90deg) rotateY(0deg);
+    will-change: transform;
+  }
+  .face {
+    position: absolute; inset: 0; overflow: hidden;
+    backface-visibility: hidden;
+    background: #0a0c14;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  /* 3D perspective grid room — visible uniform grid */
+  .face::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      repeating-linear-gradient(0deg,   transparent, transparent 39px, rgba(255,255,255,0.07) 39px, rgba(255,255,255,0.07) 40px),
+      repeating-linear-gradient(90deg,  transparent, transparent 39px, rgba(255,255,255,0.07) 39px, rgba(255,255,255,0.07) 40px);
+  }
+  .face::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    /* Vignette darkening toward edges = depth illusion */
+    background: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 20%, rgba(0,0,0,0.6) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.5);
+  }
+  .face-ph {
+    position: absolute; bottom: 1.5rem; left: 1.75rem;
+    font-family: var(--font-display); font-size: clamp(2rem, 8vw, 5rem);
+    letter-spacing: 0.04em; color: rgba(255,255,255,0.06);
+    pointer-events: none; user-select: none;
+  }
+  .face[data-face="front"]  { transform: translateZ(calc(var(--s)/2)); }
+  .face[data-face="back"]   { transform: rotateY(180deg) translateZ(calc(var(--s)/2)); }
+  .face[data-face="right"]  { transform: rotateY(90deg) translateZ(calc(var(--s)/2)); }
+  .face[data-face="left"]   { transform: rotateY(-90deg) translateZ(calc(var(--s)/2)); }
+  .face[data-face="top"]    { transform: rotateX(-90deg) translateZ(calc(var(--s)/2)); }
+  .face[data-face="bottom"] { transform: rotateX(90deg) translateZ(calc(var(--s)/2)); }
+
+  /* Face content styling */
+  .face-content {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: 1rem; padding: 2rem;
+    position: relative; z-index: 1;
+  }
+  .face-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+  .face-title {
+    font-family: var(--font-display); font-size: 2.2rem;
+    letter-spacing: 0.08em; color: var(--accent);
+  }
+  .face-subtitle { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+  .face-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+    width: 100%; margin-top: 0.5rem;
+  }
+  .face-grid-item {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    padding: 0.75rem; text-align: left;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 8px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .face-grid-item .num { font-family: var(--font-display); font-size: 1.4rem; color: var(--accent); }
+  .face-grid-item .label { font-size: 0.55rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.15em; }
+  .face-cert-name { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 0.04em; }
+  .face-cert-course { font-size: 0.7rem; font-style: italic; color: var(--accent); }
+  .face-cert-score { font-family: var(--font-display); font-size: 2.5rem; color: var(--accent); }
+  .face-cert-code { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; }
+  .face-service-list { text-align: left; width: 100%; }
+  .face-service-item {
+    padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.7rem; color: rgba(237,232,223,0.7); display: flex; gap: 0.5rem;
+  }
+  .face-service-item .arrow { color: var(--accent); }
+</style>
+
+<style>
+@layer ui {
+  #hud {
+    position: fixed; top: var(--ui-inset); right: var(--ui-inset);
+    z-index: var(--z-ui); text-align: right;
+    font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase;
+  }
+  .progress-bar {
+    width: 7.5rem; height: var(--hairline); background: var(--muted);
+    margin-top: 0.5rem; margin-left: auto; position: relative; overflow: hidden;
+  }
+  .progress-fill {
+    position: absolute; inset-block: 0; left: 0;
+    width: 0%; background: var(--accent); transition: width 0.1s linear;
+  }
+  .scene-label { font-size: 0.6rem; color: var(--accent); margin-top: 0.4rem; }
+
+  #scene_strip {
+    position: fixed; left: calc(var(--ui-inset) + 0.125rem); top: 50%;
+    translate: -50% -50%; z-index: var(--z-ui);
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .scene-dot {
+    display: block; width: 0.25rem; height: 0.25rem; border-radius: 50%;
+    background: var(--muted); transition: background 0.3s, scale 0.3s; cursor: pointer;
+    border: none; padding: 0; position: relative;
+  }
+  .scene-dot::before { content: ''; position: absolute; inset: -0.3rem; }
+  .scene-dot.active { background: var(--accent); scale: 1.8; }
+
+  #theme_toggle {
+    position: fixed; bottom: var(--ui-inset); left: calc(var(--ui-inset) + 0.125rem);
+    translate: -50% 0; z-index: var(--z-ui);
+    width: 2rem; height: 2rem; border: none;
+    background: color-mix(in srgb, var(--muted) 35%, transparent);
+    border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; color: var(--accent); transition: background 0.3s;
+  }
+  #theme_toggle:hover { background: color-mix(in srgb, var(--muted) 55%, transparent); }
+
+  #face_caption {
+    position: fixed; bottom: var(--ui-inset); left: 50%;
+    translate: -50% 0; z-index: var(--z-ui); text-align: center;
+    pointer-events: none; user-select: none;
+  }
+  #face_caption_num {
+    font-size: 0.58rem; letter-spacing: 0.28em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 0.15rem;
+  }
+  #face_caption_name {
+    font-family: var(--font-display); font-size: clamp(1.8rem, 5vw, 3.5rem);
+    letter-spacing: 0.08em; color: var(--muted); opacity: 0.5; line-height: 1;
+  }
+}
+</style>
+
+<style>
+@layer cards {
+  .text-card {
+    max-width: 20rem; padding: 1.75rem 1.5rem;
+    background: var(--card-solid);
+    background: var(--card-bg);
+    border-left: var(--hairline) solid var(--card-border);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    overflow: hidden; transition: background 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .text-card.right {
+    margin-inline-start: auto; border-left: none;
+    border-right: var(--hairline) solid var(--card-border); text-align: right;
+  }
+  .text-card.right .h-line { transform-origin: right; margin-inline-start: auto; }
+  .text-card.right .cta-row { justify-content: flex-end; }
+  .text-card.center {
+    margin-inline: auto; border-left: none;
+    border-top: var(--hairline) solid var(--card-border); text-align: center;
+    max-width: 28.75rem;
+  }
+  .text-card.center .h-line { transform-origin: center; margin-inline: auto; }
+  .text-card.center .cta-row { justify-content: center; }
+
+  .tag { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.1rem; }
+  :where(h1, h2) { font-family: var(--font-display); font-weight: 400; letter-spacing: 0.03em; line-height: 0.92; }
+  h1 { font-size: clamp(1.8rem, 4.5vw, 3.2rem); }
+  h2 { font-size: clamp(2.2rem, 5vw, 4rem); }
+  .body-text { font-size: 0.78rem; line-height: 1.8; color: color-mix(in srgb, var(--fg) 55%, transparent); margin-top: 1.25rem; }
+  .stat-row { display: flex; gap: 2.5rem; margin-top: 2rem; flex-wrap: wrap; }
+  .stat { display: flex; flex-direction: column; gap: 0.15rem; }
+  .stat-num { font-family: var(--font-display); font-size: 2.2rem; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .h-line { width: 3.125rem; height: var(--hairline); background: var(--accent); margin-bottom: 1.2rem; }
+  .cta-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 1.75rem; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.6rem 1.25rem; border: var(--hairline) solid var(--accent);
+    color: var(--accent); font-family: var(--font-mono);
+    font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; transition: background 0.2s, color 0.2s;
+    background: transparent;
+  }
+  .cta:hover { background: var(--accent); color: var(--bg); }
+  .cta-back {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.6rem 1.25rem;
+    border: var(--hairline) solid color-mix(in srgb, var(--muted) 45%, transparent);
+    color: var(--muted); font-family: var(--font-mono);
+    font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    background: transparent;
+  }
+  .cta-back:hover { background: color-mix(in srgb, var(--muted) 12%, transparent); border-color: var(--muted); color: var(--fg); }
+  .cert-features { list-style: none; margin-top: 1rem; }
+  .cert-features li { padding: 0.4rem 0; font-size: 0.72rem; color: color-mix(in srgb, var(--fg) 55%, transparent); display: flex; gap: 0.5rem; }
+  .cert-features .ck { color: var(--accent); }
+}
+</style>
+
+<style>
+@layer reveal {
+  :is(.tag, h1, h2, .body-text, .stat-row, .cta, .cta-back) {
+    opacity: 0; translate: 0 var(--reveal-offset);
+  }
+  :is(h1, h2) { translate: 0 1.125rem; transition: opacity var(--reveal-duration) ease 0.08s, translate var(--reveal-duration) ease 0.08s; }
+  .tag { transition: opacity var(--reveal-duration) ease, translate var(--reveal-duration) ease; }
+  .body-text { transition: opacity var(--reveal-duration) ease 0.2s, translate var(--reveal-duration) ease 0.2s; }
+  .stat-row { transition: opacity var(--reveal-duration) ease 0.3s, translate var(--reveal-duration) ease 0.3s; }
+  :is(.cta, .cta-back) { transition: opacity var(--reveal-duration) ease 0.35s, translate var(--reveal-duration) ease 0.35s, background 0.2s, color 0.2s, border-color 0.2s; }
+  .h-line { opacity: 0; scale: 0 1; transition: opacity 0.4s ease, scale 0.4s ease; }
+  :is(.tag, h1, h2, .body-text, .stat-row, .cta, .cta-back).visible { opacity: 1; translate: 0 0; }
+  .h-line.visible { opacity: 1; scale: 1 1; }
+}
+
+@layer theme {
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: var(--light-bg); --fg: var(--light-fg); --muted: var(--light-muted);
+    --accent: var(--accent-light);
+    --card-bg: rgba(240,236,227,0.85); --card-border: rgba(58,110,0,0.14);
+    --card-solid: #e8e3da;
+  }
+  :root[data-theme="light"] .face {
+    background: #e8e4dc;
+  }
+  :root[data-theme="light"] .face::before {
+    background:
+      repeating-linear-gradient(0deg,   transparent, transparent 39px, rgba(0,0,0,0.08) 39px, rgba(0,0,0,0.08) 40px),
+      repeating-linear-gradient(90deg,  transparent, transparent 39px, rgba(0,0,0,0.08) 39px, rgba(0,0,0,0.08) 40px);
+  }
+  :root[data-theme="light"] .face::after {
+    background: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 20%, rgba(0,0,0,0.15) 100%);
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.08);
+  }
+  :root[data-theme="light"] .face-ph { color: rgba(0,0,0,0.05); }
+  :root[data-theme="light"] #face_caption_name { opacity: 0.25; }
+  :root[data-theme="light"] #main_nav { background: rgba(240,236,227,0.9); }
+  :root[data-theme="light"] .text-card { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  /* Face content readability in light mode */
+  :root[data-theme="light"] .face-content { color: #2a2a2a; }
+  :root[data-theme="light"] .face-title { color: #2d5200; }
+  :root[data-theme="light"] .face-subtitle { color: #555; }
+  :root[data-theme="light"] .face-grid-item {
+    background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.12);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  :root[data-theme="light"] .face-grid-item .num { color: #2d5200; }
+  :root[data-theme="light"] .face-grid-item .label { color: #444; }
+  :root[data-theme="light"] .face-cert-name { color: #1a1a1a; }
+  :root[data-theme="light"] .face-cert-course { color: #2d5200; }
+  :root[data-theme="light"] .face-cert-score { color: #2d5200; }
+  :root[data-theme="light"] .face-cert-code { color: #666; }
+  :root[data-theme="light"] .face-service-item {
+    border-color: rgba(0,0,0,0.1); color: #333;
+  }
+  :root[data-theme="light"] .face-service-item .arrow { color: #2d5200; }
+}
+
+@layer responsive {
+  @media (width <= 56.25em) {
+    #hud { top: 1rem; right: 1rem; }
+    #scene_strip { display: none; }
+    #theme_toggle { bottom: 1rem; left: 1.25rem; translate: 0 0; }
+    #face_caption { bottom: auto; top: 0.5rem; font-size: 0.5rem; }
+
+    /* Cube fills mobile viewport width */
+    #cube { --s: min(85vw, 50vh, 340px); }
+
+    /* Center cube in upper portion of screen */
+    #scene { align-items: flex-start; padding-top: 15vh; }
+
+    /* Each section: short top spacer (cube shows through) + text card at bottom */
+    section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: stretch;
+      padding: 0 1rem 2rem;
+    }
+    /* Hero: center the card vertically */
+    #s0 {
+      min-height: 100vh;
+      justify-content: flex-end;
+      padding: 0 1rem 2rem;
+    }
+
+    /* Text cards: full width, clean bottom-aligned cards */
+    :is(.text-card, .text-card.right, .text-card.center) {
+      max-width: 100%;
+      padding: 1.5rem 1.25rem;
+      border-left: none;
+      border-right: none;
+      border-top: var(--hairline) solid var(--card-border);
+      text-align: left;
+      margin-inline: 0;
+    }
+    .text-card.right { text-align: left; }
+    .text-card.right .h-line { transform-origin: left; margin-inline-start: 0; }
+    .text-card.right .cta-row { justify-content: flex-start; }
+
+    h1 { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+    .face-title { font-size: 1.6rem; }
+    .face-grid-item .num { font-size: 1.1rem; }
+    .face-grid-item .label { font-size: 0.5rem; }
+    .face-subtitle { font-size: 0.6rem; }
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- 3D CUBE SCENE -->
+<div id="scene">
+  <div id="cube">
+    <div class="face" data-face="top" data-i="0">
+      <div class="face-content">
+        <div class="face-icon">🎓</div>
+        <div class="face-title">FAYAI</div>
+        <div class="face-subtitle">Domine Inteligencia Artificial</div>
+        <div class="face-grid">
+          <div class="face-grid-item"><div class="num">18+</div><div class="label">Cursos</div></div>
+          <div class="face-grid-item"><div class="num">247</div><div class="label">Certificados</div></div>
+          <div class="face-grid-item"><div class="num">92%</div><div class="label">Aprovacao</div></div>
+          <div class="face-grid-item"><div class="num">100+</div><div class="label">Ferramentas</div></div>
+        </div>
+      </div>
+      <span class="face-ph">HERO</span>
+    </div>
+    <div class="face" data-face="front" data-i="1">
+      <div class="face-content">
+        <div class="face-icon">🤖</div>
+        <div class="face-title">CURSOS</div>
+        <div class="face-subtitle">ChatGPT / Claude / Midjourney / n8n</div>
+        <div class="face-grid">
+          <div class="face-grid-item"><div class="num">01</div><div class="label">ChatGPT Masterclass</div></div>
+          <div class="face-grid-item"><div class="num">02</div><div class="label">Claude AI Pro</div></div>
+          <div class="face-grid-item"><div class="num">03</div><div class="label">Gemini & AI Studio</div></div>
+          <div class="face-grid-item"><div class="num">04</div><div class="label">Prompt Engineering</div></div>
+        </div>
+      </div>
+      <span class="face-ph">CURSOS</span>
+    </div>
+    <div class="face" data-face="right" data-i="2">
+      <div class="face-content">
+        <div class="face-icon">📋</div>
+        <div class="face-title">CERTIFICACAO</div>
+        <div class="face-subtitle">Verificavel por qualquer empregador</div>
+        <div class="face-cert-name">JOAO SILVA</div>
+        <div class="face-cert-course">ChatGPT Masterclass</div>
+        <div class="face-cert-score">90%</div>
+        <div class="face-cert-code">FP-2026-A1B2C3D4</div>
+      </div>
+      <span class="face-ph">CERT</span>
+    </div>
+    <div class="face" data-face="back" data-i="3">
+      <div class="face-content">
+        <div class="face-icon">⚡</div>
+        <div class="face-title">POR QUE FAYAI</div>
+        <div class="face-subtitle">Manifesto</div>
+        <div class="face-service-list">
+          <div class="face-service-item"><span class="arrow">→</span> Certificacao real com quiz avaliativo</div>
+          <div class="face-service-item"><span class="arrow">→</span> Conteudo atualizado semanalmente</div>
+          <div class="face-service-item"><span class="arrow">→</span> 100% em portugues brasileiro</div>
+          <div class="face-service-item"><span class="arrow">→</span> Pagamento via Pix, boleto, cartao</div>
+        </div>
+      </div>
+      <span class="face-ph">MANIFESTO</span>
+    </div>
+    <div class="face" data-face="left" data-i="4">
+      <div class="face-content">
+        <div class="face-icon">🛠</div>
+        <div class="face-title">SERVICOS</div>
+        <div class="face-subtitle">Consultoria e Desenvolvimento</div>
+        <div class="face-service-list">
+          <div class="face-service-item"><span class="arrow">→</span> Construcao de sites</div>
+          <div class="face-service-item"><span class="arrow">→</span> Automacao com n8n e IA</div>
+          <div class="face-service-item"><span class="arrow">→</span> Consultoria em IA</div>
+          <div class="face-service-item"><span class="arrow">→</span> Treinamento corporativo</div>
+        </div>
+      </div>
+      <span class="face-ph">SERVICOS</span>
+    </div>
+    <div class="face" data-face="bottom" data-i="5">
+      <div class="face-content">
+        <div class="face-icon">🇧🇷</div>
+        <div class="face-title">COMECE AGORA</div>
+        <div class="face-subtitle">Curso gratuito disponivel este mes</div>
+        <div class="face-grid" style="grid-template-columns:1fr;">
+          <div class="face-grid-item" style="text-align:center;padding:1rem;">
+            <div class="label">fayai.com.br</div>
+            <div class="num" style="font-size:1.2rem;">GRATIS</div>
+          </div>
+        </div>
+      </div>
+      <span class="face-ph">INICIO</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV MENU -->
+<nav id="main_nav" style="
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  background: rgba(22,18,14,0.9); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: var(--hairline) solid var(--card-border);
+  padding: 0 var(--ui-inset);
+  font-family: var(--font-mono);
+  transition: background 0.3s;
+">
+  <div style="max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:3rem;">
+    <a href="/" style="font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.15em;color:var(--fg);text-decoration:none;">FAY<span style='color:var(--accent)'>AI</span></a>
+    <div style="display:flex;gap:1.5rem;align-items:center;">
+      <a href="/cursos" style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--muted)'">Cursos</a>
+      <a href="/certificados" style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--muted)'">Certificados</a>
+      <a href="/servicos" style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--muted)'">Servicos</a>
+      <a href="/precos" style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--muted)'">Precos</a>
+      <a href="/blog" style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--muted)'">Blog</a>
+      <a href="/portal" style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--muted)'">Portal</a>
+      <a href="/registro" style="
+        font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;
+        padding:0.4rem 0.9rem;border:var(--hairline) solid var(--accent);
+        color:var(--accent);text-decoration:none;transition:all 0.2s;
+      " onmouseover="this.style.background='var(--accent)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">Comece Gratis</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HUD -->
+<div id="hud">
+  <div id="hud_pct">000%</div>
+  <div class="progress-bar"><div class="progress-fill" id="prog_fill"></div></div>
+  <div class="scene-label" id="scene_name">HERO</div>
+</div>
+
+<!-- THEME TOGGLE -->
+<button id="theme_toggle" aria-label="Toggle theme">☀</button>
+
+<!-- NAV DOTS -->
+<div id="scene_strip"></div>
+
+<!-- FACE CAPTION -->
+<div id="face_caption">
+  <div id="face_caption_num">01</div>
+  <div id="face_caption_name">HERO</div>
+</div>
+
+<!-- SCROLL SECTIONS WITH TEXT CARDS -->
+<div id="scroll_container">
+
+  <!-- S0: HERO -->
+  <section id="s0">
+    <div class="text-card">
+      <div class="tag">FayAI — Educacao em IA</div>
+      <h1>DOMINE<br>INTELIGENCIA<br>ARTIFICIAL</h1>
+      <p class="body-text">
+        18+ cursos praticos em portugues.<br>
+        Aprenda ChatGPT, Claude, Midjourney, n8n<br>
+        e 100+ ferramentas. Certifique-se.
+      </p>
+      <div class="stat-row">
+        <div class="stat"><span class="stat-num">18+</span><span class="stat-label">Cursos</span></div>
+        <div class="stat"><span class="stat-num">247</span><span class="stat-label">Certs</span></div>
+        <div class="stat"><span class="stat-num">92%</span><span class="stat-label">Aprovacao</span></div>
+      </div>
+      <div class="cta-row">
+        <a class="cta" href="#s1">Explorar Cursos →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S1: CURSOS -->
+  <section id="s1">
+    <div class="text-card right">
+      <div class="h-line"></div>
+      <div class="tag">01 — Cursos em Destaque</div>
+      <h2>APRENDA<br>COM<br>PRATICA</h2>
+      <p class="body-text">
+        Cada curso cobre uma ferramenta de IA<br>
+        do zero ao avancado. Exemplos reais.<br>
+        Exercicios praticos. Certificacao ao final.
+      </p>
+      <div class="cta-row">
+        <a class="cta-back" href="#s0">← Voltar</a>
+        <a class="cta" href="#s2">Certificacao →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S2: CERTIFICACAO -->
+  <section id="s2">
+    <div class="text-card">
+      <div class="h-line"></div>
+      <div class="tag">02 — Certificacao Verificavel</div>
+      <h2>PROVE<br>QUE VOCE<br>SABE</h2>
+      <p class="body-text">
+        Nao e um PDF decorativo.<br>
+        Quiz com 10 questoes, 70% de aprovacao.<br>
+        Codigo de verificacao unico.<br>
+        Qualquer empregador pode confirmar.
+      </p>
+      <ul class="cert-features">
+        <li><span class="ck">→</span> 10 questoes por curso</li>
+        <li><span class="ck">→</span> 70% de nota minima</li>
+        <li><span class="ck">→</span> Ate 3 tentativas</li>
+        <li><span class="ck">→</span> Verificacao publica</li>
+        <li><span class="ck">→</span> LinkedIn shareable</li>
+      </ul>
+      <div class="cta-row">
+        <a class="cta-back" href="#s1">← Voltar</a>
+        <a class="cta" href="#s3">Manifesto →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3: POR QUE FAYAI -->
+  <section id="s3">
+    <div class="text-card right">
+      <div class="h-line"></div>
+      <div class="tag">03 — Manifesto</div>
+      <h2>POR QUE<br>FAYAI</h2>
+      <p class="body-text">
+        Conteudo de IA que foi lancado semanas atras.<br>
+        Nao meses. Nao anos. Semanas.<br>
+        Autoresearch, Claude 4, Gemini 2.5.<br>
+        100% em portugues. Feito para o Brasil.
+      </p>
+      <div class="stat-row" style="justify-content:flex-end">
+        <div class="stat"><span class="stat-num">100+</span><span class="stat-label">Ferramentas</span></div>
+        <div class="stat"><span class="stat-num">BR</span><span class="stat-label">Portugues</span></div>
+      </div>
+      <div class="cta-row">
+        <a class="cta-back" href="#s2">← Voltar</a>
+        <a class="cta" href="#s4">Servicos →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4: SERVICOS -->
+  <section id="s4">
+    <div class="text-card">
+      <div class="h-line"></div>
+      <div class="tag">04 — Servicos Profissionais</div>
+      <h2>ALEM<br>DOS<br>CURSOS</h2>
+      <p class="body-text">
+        Construcao de sites. Automacao com n8n.<br>
+        Consultoria em inteligencia artificial.<br>
+        Treinamento corporativo.<br>
+        Edicao de video e SEO local.
+      </p>
+      <div class="cta-row">
+        <a class="cta-back" href="#s3">← Voltar</a>
+        <a class="cta" href="#s5">Comece →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5: CTA -->
+  <section id="s5">
+    <div class="text-card center">
+      <div class="h-line"></div>
+      <div class="tag">05 — Comece Agora</div>
+      <h2>PRONTO<br>PARA<br>DOMINAR IA</h2>
+      <p class="body-text">
+        Comece pelo curso gratuito do mes.<br>
+        Sem cartao. Sem compromisso.<br>
+        Certificado incluso.
+      </p>
+      <div class="cta-row">
+        <a class="cta" href="#s0">Comece Gratis →</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const FACE_NAMES = ["HERO", "CURSOS", "CERTIFICACAO", "MANIFESTO", "SERVICOS", "COMECE"];
+const N = 6;
+const STOPS = [
+  { rx: 90, ry: 0 },
+  { rx: 0, ry: 0 },
+  { rx: 0, ry: -90 },
+  { rx: 0, ry: -180 },
+  { rx: 0, ry: -270 },
+  { rx: -90, ry: -360 }
+];
+
+const dom = {
+  cube: document.getElementById("cube"),
+  faces: [...document.querySelectorAll(".face")],
+  hudPct: document.getElementById("hud_pct"),
+  progFill: document.getElementById("prog_fill"),
+  sceneName: document.getElementById("scene_name"),
+  captionNum: document.getElementById("face_caption_num"),
+  captionName: document.getElementById("face_caption_name"),
+  themeToggle: document.getElementById("theme_toggle"),
+  strip: document.getElementById("scene_strip")
+};
+
+// Build nav dots
+dom.strip.innerHTML = "";
+for (let i = 0; i < N; i++) {
+  const a = document.createElement("a");
+  a.href = `#s${i}`;
+  a.className = "scene-dot" + (i === 0 ? " active" : "");
+  dom.strip.appendChild(a);
+}
+const sceneDots = [...document.querySelectorAll(".scene-dot")];
+
+// Build scroll sections
+const sections = [...document.querySelectorAll("#scroll_container section")];
+
+let currentStop = -1;
+let lastFaceIdx = -1;
+
+const stopIndex = (s) => Math.min(N - 1, Math.floor(s * (N - 1)));
+const easeIO = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+const updateHUD = (s) => {
+  const p = Math.round(s * 100);
+  const si = sectionIndexFromScroll(scrollY);
+  currentStop = si;
+  dom.hudPct.textContent = String(p).padStart(3, "0") + "%";
+  dom.progFill.style.width = `${p}%`;
+  if (si !== lastFaceIdx) {
+    lastFaceIdx = si;
+    const name = FACE_NAMES[si] || "";
+    dom.sceneName.textContent = name;
+    dom.captionNum.textContent = String(si + 1).padStart(2, "0");
+    dom.captionName.textContent = name;
+    sceneDots.forEach((d, i) => d.classList.toggle("active", i === si));
+  }
+};
+
+const setCubeTransform = (s) => {
+  if (N < 2) return;
+  const t = s * (N - 1);
+  const i = Math.min(Math.floor(t), N - 2);
+  const f = easeIO(t - i);
+  const a = STOPS[i], b = STOPS[i + 1];
+  const rx = a.rx + (b.rx - a.rx) * f;
+  const ry = a.ry + (b.ry - a.ry) * f;
+  dom.cube.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+};
+
+let sectionTops = [];
+const buildSectionTops = () => {
+  sectionTops = sections.map(s => s.getBoundingClientRect().top + window.scrollY);
+};
+const sectionIndexFromScroll = (y) => {
+  const mid = y + innerHeight * 0.5;
+  let idx = 0;
+  for (let i = 0; i < sectionTops.length; i++) { if (mid >= sectionTops[i]) idx = i; }
+  return Math.min(idx, N - 1);
+};
+
+// Theme
+const getSystemTheme = () => window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+const applyTheme = (theme) => {
+  document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.style.colorScheme = theme;
+  dom.themeToggle.textContent = theme === "dark" ? "☀" : "☾";
+};
+applyTheme("dark");
+dom.themeToggle.addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme") || "dark";
+  applyTheme(cur === "dark" ? "light" : "dark");
+});
+
+// Scroll physics
+let maxScroll = 1, tgt = 0, smooth = 0, velocity = 0;
+const ease = 0.1;
+
+const resize = () => {
+  maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  buildSectionTops();
+};
+resize();
+window.addEventListener("resize", () => { resize(); tgt = scrollY / maxScroll; smooth = tgt; });
+new ResizeObserver(() => { resize(); tgt = scrollY / maxScroll; smooth = tgt; }).observe(document.documentElement);
+
+window.addEventListener("scroll", () => {
+  tgt = Math.max(0, Math.min(1, scrollY / maxScroll));
+}, { passive: true });
+
+window.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * innerHeight * 0.9 : e.deltaY;
+  if (Math.abs(delta) < 5) return;
+  stopAnchorAnim();
+  velocity += delta;
+  velocity = Math.max(-600, Math.min(600, velocity));
+}, { passive: false });
+
+// Reveal
+const revealEls = [...document.querySelectorAll(".tag, h1, h2, .body-text, .stat-row, .cta, .cta-back, .h-line")];
+const io = new IntersectionObserver((entries) => entries.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); }
+}), { threshold: 0.1 });
+revealEls.forEach(el => io.observe(el));
+
+// Animation loop
+let lastNow = performance.now();
+const frame = (now) => {
+  requestAnimationFrame(frame);
+  if (document.hidden) { lastNow = now; return; }
+  const dt = Math.min((now - lastNow) / 1000, 0.05);
+  lastNow = now;
+  velocity *= Math.pow(Math.abs(velocity) > 200 ? 0.8 : 0.9, dt * 60);
+  if (Math.abs(velocity) < 0.01) velocity = 0;
+  if (Math.abs(velocity) > 0.2) {
+    const next = Math.max(0, Math.min(scrollY + velocity * ease, maxScroll));
+    window.scrollTo(0, next);
+    tgt = next / maxScroll;
+  }
+  smooth += (tgt - smooth) * (1 - Math.exp(-dt * 8));
+  smooth = Math.max(0, Math.min(1, smooth));
+  updateHUD(smooth);
+  setCubeTransform(smooth);
+};
+requestAnimationFrame(frame);
+
+// Smooth anchor scroll
+let anchorAnim = null, isAnchorScrolling = false;
+const stopAnchorAnim = () => { if (anchorAnim) { cancelAnimationFrame(anchorAnim); anchorAnim = null; } isAnchorScrolling = false; };
+const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const smoothScrollToY = (targetY, duration = 900) => {
+  stopAnchorAnim(); velocity = 0; isAnchorScrolling = true;
+  const startY = scrollY, diff = targetY - startY, start = performance.now();
+  const tick = (now) => {
+    const p = Math.min(1, (now - start) / duration);
+    const y = startY + diff * easeInOutCubic(p);
+    window.scrollTo(0, y); tgt = y / maxScroll; smooth = tgt;
+    if (p < 1) anchorAnim = requestAnimationFrame(tick);
+    else { anchorAnim = null; isAnchorScrolling = false; }
+  };
+  anchorAnim = requestAnimationFrame(tick);
+};
+window.addEventListener("touchstart", stopAnchorAnim, { passive: true });
+window.addEventListener("mousedown", stopAnchorAnim, { passive: true });
+
+// Anchor clicks
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href^="#s"]');
+  if (!a) return;
+  const target = document.querySelector(a.getAttribute("href"));
+  if (!target) return;
+  e.preventDefault();
+  const idx = sections.indexOf(target);
+  const baseY = idx >= 0 ? sectionTops[idx] : target.getBoundingClientRect().top + scrollY;
+  smoothScrollToY(Math.max(0, baseY));
+});
+</script>
+</body>
+</html>

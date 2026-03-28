@@ -94,7 +94,7 @@ export default function TurnstileWidget({
 
   if (!siteKey && process.env.NODE_ENV === "development") {
     return (
-      <div className={`text-xs text-gray-500 ${className}`}>
+      <div className={`text-xs text-muted-foreground ${className}`}>
         [CAPTCHA disabled in dev mode]
       </div>
     );

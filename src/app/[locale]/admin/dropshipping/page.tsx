@@ -118,7 +118,7 @@ const TREND_SOURCES = [
   { name: "AliExpress Hot", icon: "🔥", color: "red", active: true },
   { name: "TikTok Trending", icon: "🎵", color: "pink", active: true },
   { name: "Pinterest Trends", icon: "📌", color: "red", active: true },
-  { name: "Polymarket", icon: "📊", color: "purple", active: false },
+  { name: "Polymarket", icon: "📊", color: "amber", active: false },
   { name: "Etsy Trending", icon: "🎨", color: "orange", active: false },
   { name: "eBay Trending", icon: "🛒", color: "blue", active: false },
 ];
@@ -328,14 +328,14 @@ export default function DropshippingPage() {
             <Globe className="text-emerald-400" />
             Dropshipping AI
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Busca inteligente de produtos para dropshipping com análise de preços e afiliados
           </p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={fetchSources}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
           >
             <RefreshCcw size={16} />
             Atualizar
@@ -344,7 +344,7 @@ export default function DropshippingPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-hide">
+      <div className="flex gap-2 border-b border-border pb-4 overflow-x-auto scrollbar-hide">
         {[
           { id: "search", label: "Buscar", icon: Search },
           { id: "trends", label: "Tendências", icon: TrendingUp },
@@ -356,8 +356,8 @@ export default function DropshippingPage() {
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition whitespace-nowrap text-sm ${
               activeTab === tab.id
-                ? "bg-violet-500/20 text-violet-400 border border-violet-500/30"
-                : "text-gray-400 hover:bg-white/5 hover:text-white"
+                ? "bg-violet-500/20 text-violet-400 border border-amber-500/30"
+                : "text-muted-foreground hover:bg-secondary hover:text-white"
             }`}
           >
             <tab.icon size={16} />
@@ -372,22 +372,22 @@ export default function DropshippingPage() {
           {/* Search Bar */}
           <div className="flex gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <input
                 type="text"
                 placeholder="Buscar produtos (ex: fone bluetooth, smartwatch, ring light)..."
                 value={filters.query}
                 onChange={(e) => setFilters({ ...filters, query: e.target.value })}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20"
+                className="w-full pl-12 pr-4 py-4 rounded-xl bg-secondary border border-border text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-violet-500/20"
               />
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className={`px-4 py-2 rounded-xl border transition ${
                 showFilters
-                  ? "bg-violet-500/20 border-violet-500/30 text-violet-400"
-                  : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10"
+                  ? "bg-violet-500/20 border-amber-500/30 text-violet-400"
+                  : "bg-secondary border-border text-muted-foreground hover:bg-white/10"
               }`}
             >
               <Filter size={20} />
@@ -395,7 +395,7 @@ export default function DropshippingPage() {
             <button
               onClick={handleSearch}
               disabled={isSearching || !filters.query.trim()}
-              className="px-6 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-violet-500/30 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-6 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-amber-600 text-white font-medium hover:shadow-lg hover:shadow-amber-500/30 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isSearching ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -415,7 +415,7 @@ export default function DropshippingPage() {
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden"
               >
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4">
+                <div className="p-6 rounded-2xl bg-secondary border border-border space-y-4">
                   <h3 className="font-medium text-white flex items-center gap-2">
                     <Filter size={16} />
                     Filtros Avançados
@@ -424,33 +424,33 @@ export default function DropshippingPage() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {/* Price Range */}
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Preço Mínimo (BRL)</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Preço Mínimo (BRL)</label>
                       <input
                         type="number"
                         placeholder="0"
                         value={filters.minPrice || ""}
                         onChange={(e) => setFilters({ ...filters, minPrice: Number(e.target.value) || undefined })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm"
+                        className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Preço Máximo (BRL)</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Preço Máximo (BRL)</label>
                       <input
                         type="number"
                         placeholder="1000"
                         value={filters.maxPrice || ""}
                         onChange={(e) => setFilters({ ...filters, maxPrice: Number(e.target.value) || undefined })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm"
+                        className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm"
                       />
                     </div>
 
                     {/* Rating */}
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Avaliação Mínima</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Avaliação Mínima</label>
                       <select
                         value={filters.minRating || ""}
                         onChange={(e) => setFilters({ ...filters, minRating: Number(e.target.value) || undefined })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm"
+                        className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm"
                       >
                         <option value="">Qualquer</option>
                         <option value="3">3+ estrelas</option>
@@ -461,11 +461,11 @@ export default function DropshippingPage() {
 
                     {/* Delivery */}
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Entrega Máxima (dias)</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Entrega Máxima (dias)</label>
                       <select
                         value={filters.maxDeliveryDays || ""}
                         onChange={(e) => setFilters({ ...filters, maxDeliveryDays: Number(e.target.value) || undefined })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm"
+                        className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm"
                       >
                         <option value="">Qualquer</option>
                         <option value="15">Até 15 dias</option>
@@ -476,11 +476,11 @@ export default function DropshippingPage() {
 
                     {/* Commission */}
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Comissão Mínima (%)</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Comissão Mínima (%)</label>
                       <select
                         value={filters.minCommission || ""}
                         onChange={(e) => setFilters({ ...filters, minCommission: Number(e.target.value) || undefined })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm"
+                        className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm"
                       >
                         <option value="">Qualquer</option>
                         <option value="5">5%+</option>
@@ -491,11 +491,11 @@ export default function DropshippingPage() {
 
                     {/* Sort By */}
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Ordenar Por</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Ordenar Por</label>
                       <select
                         value={filters.sortBy}
                         onChange={(e) => setFilters({ ...filters, sortBy: e.target.value as SearchFilters["sortBy"] })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm"
+                        className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm"
                       >
                         <option value="trending">Tendência</option>
                         <option value="price">Preço</option>
@@ -507,11 +507,11 @@ export default function DropshippingPage() {
 
                     {/* Sort Order */}
                     <div>
-                      <label className="text-xs text-gray-500 mb-1 block">Ordem</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Ordem</label>
                       <select
                         value={filters.sortOrder}
                         onChange={(e) => setFilters({ ...filters, sortOrder: e.target.value as "asc" | "desc" })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm"
+                        className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-white text-sm"
                       >
                         <option value="desc">Maior → Menor</option>
                         <option value="asc">Menor → Maior</option>
@@ -521,7 +521,7 @@ export default function DropshippingPage() {
 
                   {/* Sources Filter */}
                   <div>
-                    <label className="text-xs text-gray-500 mb-2 block">Fontes</label>
+                    <label className="text-xs text-muted-foreground mb-2 block">Fontes</label>
                     <div className="flex flex-wrap gap-2">
                       {sources.filter(s => s.isActive).map((source) => (
                         <button
@@ -534,8 +534,8 @@ export default function DropshippingPage() {
                           }}
                           className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-2 transition ${
                             filters.sources.includes(source.slug)
-                              ? "bg-violet-500/20 border border-violet-500/30 text-violet-400"
-                              : "bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10"
+                              ? "bg-violet-500/20 border border-amber-500/30 text-violet-400"
+                              : "bg-secondary border border-border text-muted-foreground hover:bg-white/10"
                           }`}
                         >
                           {source.logo && (
@@ -555,7 +555,7 @@ export default function DropshippingPage() {
           {/* Suggestions */}
           {suggestions.length > 0 && (
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs text-gray-500">Sugestões:</span>
+              <span className="text-xs text-muted-foreground">Sugestões:</span>
               {suggestions.map((suggestion, i) => (
                 <button
                   key={i}
@@ -563,7 +563,7 @@ export default function DropshippingPage() {
                     setFilters({ ...filters, query: suggestion });
                     handleSearch();
                   }}
-                  className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs hover:bg-violet-500/20 hover:text-violet-400 hover:border-violet-500/30 transition"
+                  className="px-3 py-1 rounded-full bg-secondary border border-border text-muted-foreground text-xs hover:bg-violet-500/20 hover:text-violet-400 hover:border-amber-500/30 transition"
                 >
                   {suggestion}
                 </button>
@@ -607,13 +607,13 @@ export default function DropshippingPage() {
           {/* Empty State */}
           {!isSearching && searchResults.length === 0 && !searchError && (
             <div className="text-center py-16">
-              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 flex items-center justify-center mb-6">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-500/10 flex items-center justify-center mb-6">
                 <Search size={32} className="text-violet-400" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
                 Buscar Produtos para Dropshipping
               </h3>
-              <p className="text-gray-500 max-w-md mx-auto">
+              <p className="text-muted-foreground max-w-md mx-auto">
                 Use a busca com AI para encontrar os melhores produtos de AliExpress, Amazon, 
                 Shopee e outras plataformas com envio para o Brasil.
               </p>
@@ -626,7 +626,7 @@ export default function DropshippingPage() {
       {activeTab === "trends" && (
         <div className="space-y-6">
           {/* Trend Sources */}
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div className="p-4 rounded-xl bg-secondary border border-border">
             <h3 className="text-sm font-medium text-white mb-3 flex items-center gap-2">
               <Globe size={16} className="text-cyan-400" />
               Fontes de Tendências
@@ -638,7 +638,7 @@ export default function DropshippingPage() {
                   className={`px-3 py-1.5 rounded-lg text-xs flex items-center gap-2 ${
                     source.active 
                       ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                      : "bg-gray-500/20 text-gray-500 border border-gray-500/30"
+                      : "bg-gray-500/20 text-muted-foreground border border-gray-500/30"
                   }`}
                 >
                   <span>{source.icon}</span>
@@ -656,7 +656,7 @@ export default function DropshippingPage() {
                 <Sparkles size={20} className="text-orange-400" />
                 Produtos em Alta
               </h3>
-              <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 text-gray-400 text-xs hover:bg-white/10 transition">
+              <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary text-muted-foreground text-xs hover:bg-white/10 transition">
                 <RefreshCcw size={14} />
                 Atualizar
               </button>
@@ -669,7 +669,7 @@ export default function DropshippingPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 hover:border-violet-500/30 transition-all cursor-pointer group"
+                  className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border hover:border-amber-500/30 transition-all cursor-pointer group"
                   onClick={() => {
                     setFilters({ ...filters, query: trend.keyword });
                     setActiveTab("search");
@@ -687,12 +687,12 @@ export default function DropshippingPage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-[10px] text-gray-500 mt-0.5">{trend.source}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{trend.source}</p>
                     </div>
                     <span className={`flex items-center gap-0.5 px-2 py-1 rounded text-xs font-medium ${
                       trend.growth > 30 ? "bg-emerald-500/20 text-emerald-400" :
                       trend.growth > 15 ? "bg-amber-500/20 text-amber-400" :
-                      "bg-gray-500/20 text-gray-400"
+                      "bg-gray-500/20 text-muted-foreground"
                     }`}>
                       <ArrowUpRight size={12} />
                       {trend.growth}%
@@ -700,11 +700,11 @@ export default function DropshippingPage() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <BarChart3 size={12} />
                       {(trend.volume / 1000).toFixed(0)}K buscas/mês
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-white/5 text-[10px] text-gray-400 capitalize">
+                    <span className="px-2 py-0.5 rounded bg-secondary text-[10px] text-muted-foreground capitalize">
                       {trend.category}
                     </span>
                   </div>
@@ -714,12 +714,12 @@ export default function DropshippingPage() {
           </div>
 
           {/* Quick Search Suggestions */}
-          <div className="p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
+          <div className="p-4 rounded-xl bg-violet-500/10 border border-amber-500/20">
             <h4 className="text-sm font-medium text-violet-400 mb-3 flex items-center gap-2">
               <Sparkles size={14} />
               Dicas para Encontrar Produtos Vencedores
             </h4>
-            <ul className="text-xs text-gray-400 space-y-2">
+            <ul className="text-xs text-muted-foreground space-y-2">
               <li className="flex items-start gap-2">
                 <Check size={12} className="text-emerald-400 mt-0.5 shrink-0" />
                 Busque produtos com crescimento acima de 20% - indicam demanda em alta
@@ -740,7 +740,7 @@ export default function DropshippingPage() {
           </div>
 
           {/* Category Distribution */}
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div className="p-4 rounded-xl bg-secondary border border-border">
             <h4 className="text-sm font-medium text-white mb-4">Categorias em Alta</h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
@@ -753,7 +753,7 @@ export default function DropshippingPage() {
                   key={cat.name}
                   className={`p-3 rounded-lg border cursor-pointer hover:scale-105 transition-transform ${
                     cat.color === "cyan" ? "bg-cyan-500/10 border-cyan-500/30" :
-                    cat.color === "violet" ? "bg-violet-500/10 border-violet-500/30" :
+                    cat.color === "violet" ? "bg-violet-500/10 border-amber-500/30" :
                     cat.color === "amber" ? "bg-amber-500/10 border-amber-500/30" :
                     "bg-emerald-500/10 border-emerald-500/30"
                   }`}
@@ -763,7 +763,7 @@ export default function DropshippingPage() {
                   }}
                 >
                   <p className="font-medium text-white text-sm">{cat.name}</p>
-                  <p className="text-xs text-gray-500">{cat.count} produtos</p>
+                  <p className="text-xs text-muted-foreground">{cat.count} produtos</p>
                 </div>
               ))}
             </div>
@@ -828,7 +828,7 @@ export default function DropshippingPage() {
               <h3 className="text-lg font-medium text-white mb-2">
                 Nenhum produto salvo
               </h3>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 Faça uma busca e salve produtos para revisão
               </p>
             </div>
@@ -843,7 +843,7 @@ export default function DropshippingPage() {
             <h3 className="font-medium text-white">Fontes de Produtos</h3>
             <button
               onClick={handleInitializeSources}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500/20 border border-violet-500/30 text-violet-400 hover:bg-violet-500/30 transition"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500/20 border border-amber-500/30 text-violet-400 hover:bg-violet-500/30 transition"
             >
               <Plus size={16} />
               Inicializar Padrão
@@ -859,7 +859,7 @@ export default function DropshippingPage() {
               {sources.map((source) => (
                 <div
                   key={source._id}
-                  className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition"
+                  className="p-4 rounded-xl bg-secondary border border-border hover:bg-white/[0.07] transition"
                 >
                   <div className="flex items-center gap-4">
                     {source.logo && (
@@ -874,12 +874,12 @@ export default function DropshippingPage() {
                           </span>
                         )}
                         {!source.isActive && (
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-gray-500/20 text-gray-400 border border-gray-500/30">
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-gray-500/20 text-muted-foreground border border-gray-500/30">
                             INATIVO
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                      <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
                         {source.affiliate?.available && (
                           <span className="flex items-center gap-1 text-emerald-400">
                             <Percent size={12} />
@@ -907,7 +907,7 @@ export default function DropshippingPage() {
               <h3 className="text-lg font-medium text-white mb-2">
                 Nenhuma fonte configurada
               </h3>
-              <p className="text-gray-500 mb-4">
+              <p className="text-muted-foreground mb-4">
                 Clique em &quot;Inicializar Padrão&quot; para adicionar as principais plataformas
               </p>
             </div>
@@ -952,7 +952,7 @@ function ProductCard({
   const statusColors: Record<string, string> = {
     pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
     approved: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-    imported: "bg-violet-500/20 text-violet-400 border-violet-500/30",
+    imported: "bg-violet-500/20 text-violet-400 border-amber-500/30",
     rejected: "bg-red-500/20 text-red-400 border-red-500/30",
   };
 
@@ -960,11 +960,11 @@ function ProductCard({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition"
+      className="p-4 rounded-xl bg-secondary border border-border hover:bg-white/[0.07] transition"
     >
       <div className="flex gap-4">
         {/* Thumbnail */}
-        <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-gray-800 shrink-0">
+        <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-secondary shrink-0">
           <img
             src={product.thumbnail || "/placeholder.png"}
             alt={product.name}
@@ -983,7 +983,7 @@ function ProductCard({
             <div>
               <h4 className="font-medium text-white line-clamp-1">{product.name}</h4>
               <div className="flex items-center gap-2 mt-1">
-                <span className="px-2 py-0.5 rounded text-xs bg-white/10 text-gray-400">
+                <span className="px-2 py-0.5 rounded text-xs bg-white/10 text-muted-foreground">
                   {product.sourceName}
                 </span>
                 {showStatus && product.status && (
@@ -998,7 +998,7 @@ function ProductCard({
             <div className="flex items-center gap-2">
               <button
                 onClick={onView}
-                className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition"
+                className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition"
                 title="Ver detalhes"
               >
                 <Eye size={18} />
@@ -1007,7 +1007,7 @@ function ProductCard({
                 <button
                   onClick={onSave}
                   disabled={isSaving}
-                  className="p-2 rounded-lg hover:bg-violet-500/20 text-gray-400 hover:text-violet-400 transition disabled:opacity-50"
+                  className="p-2 rounded-lg hover:bg-violet-500/20 text-muted-foreground hover:text-violet-400 transition disabled:opacity-50"
                   title="Salvar produto"
                 >
                   {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
@@ -1021,7 +1021,7 @@ function ProductCard({
               {onImport && product.status !== "imported" && (
                 <button
                   onClick={onImport}
-                  className="p-2 rounded-lg hover:bg-emerald-500/20 text-gray-400 hover:text-emerald-400 transition"
+                  className="p-2 rounded-lg hover:bg-emerald-500/20 text-muted-foreground hover:text-emerald-400 transition"
                   title="Importar para loja"
                 >
                   <Import size={18} />
@@ -1031,7 +1031,7 @@ function ProductCard({
                 href={product.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition"
+                className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition"
                 title="Ver no site"
               >
                 <ExternalLink size={18} />
@@ -1043,13 +1043,13 @@ function ProductCard({
           <div className="flex items-center gap-4 mt-3 text-sm">
             {/* Price */}
             <div>
-              <span className="text-gray-500">Venda:</span>
+              <span className="text-muted-foreground">Venda:</span>
               <span className="ml-1 font-semibold text-emerald-400">{formatPrice(product.sellingPrice)}</span>
             </div>
 
             {/* Profit */}
             <div>
-              <span className="text-gray-500">Lucro:</span>
+              <span className="text-muted-foreground">Lucro:</span>
               <span className="ml-1 text-violet-400">{formatPrice(product.profitAmount)}</span>
               <span className="text-gray-600 text-xs ml-1">({product.profitMargin}%)</span>
             </div>
@@ -1063,8 +1063,8 @@ function ProductCard({
 
             {/* Delivery */}
             <div className="flex items-center gap-1">
-              <Truck size={14} className="text-gray-400" />
-              <span className="text-gray-400">
+              <Truck size={14} className="text-muted-foreground" />
+              <span className="text-muted-foreground">
                 {product.estimatedDeliveryDays.min}-{product.estimatedDeliveryDays.max}d
               </span>
             </div>
@@ -1104,7 +1104,7 @@ function StatCard({
   const colors = {
     emerald: "from-emerald-500/20 to-emerald-500/5 border-emerald-500/30 text-emerald-400",
     amber: "from-amber-500/20 to-amber-500/5 border-amber-500/30 text-amber-400",
-    violet: "from-violet-500/20 to-violet-500/5 border-violet-500/30 text-violet-400",
+    violet: "from-amber-500/20 to-violet-500/5 border-amber-500/30 text-violet-400",
     cyan: "from-cyan-500/20 to-cyan-500/5 border-cyan-500/30 text-cyan-400",
   };
 
@@ -1113,7 +1113,7 @@ function StatCard({
       <div className="flex items-center gap-3">
         <Icon size={20} />
         <div>
-          <p className="text-xs text-gray-500">{label}</p>
+          <p className="text-xs text-muted-foreground">{label}</p>
           <p className="text-lg font-bold text-white">{value}</p>
         </div>
       </div>
@@ -1144,14 +1144,14 @@ function ProductDetailModal({
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-gray-900 border border-white/10"
+        className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card border border-border"
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 p-4 bg-gray-900 border-b border-white/10 flex items-center justify-between">
+        <div className="sticky top-0 z-10 p-4 bg-card border-b border-border flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">Detalhes do Produto</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition"
+            className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition"
           >
             <X size={20} />
           </button>
@@ -1164,15 +1164,15 @@ function ProductDetailModal({
             <img
               src={product.thumbnail}
               alt={product.name}
-              className="w-40 h-40 rounded-xl object-cover bg-gray-800"
+              className="w-40 h-40 rounded-xl object-cover bg-secondary"
             />
             <div className="flex-1">
               <h3 className="text-xl font-semibold text-white mb-2">{product.name}</h3>
               <div className="flex items-center gap-2 mb-4">
-                <span className="px-2 py-1 rounded bg-white/10 text-gray-400 text-sm">
+                <span className="px-2 py-1 rounded bg-white/10 text-muted-foreground text-sm">
                   {product.sourceName}
                 </span>
-                <span className="px-2 py-1 rounded bg-white/10 text-gray-400 text-sm">
+                <span className="px-2 py-1 rounded bg-white/10 text-muted-foreground text-sm">
                   {product.category}
                 </span>
               </div>
@@ -1189,31 +1189,31 @@ function ProductDetailModal({
           </div>
 
           {/* Pricing */}
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="text-sm font-medium text-gray-400 mb-3">Precificação</h4>
+          <div className="p-4 rounded-xl bg-secondary border border-border">
+            <h4 className="text-sm font-medium text-muted-foreground mb-3">Precificação</h4>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <p className="text-xs text-gray-500">Custo Original</p>
+                <p className="text-xs text-muted-foreground">Custo Original</p>
                 <p className="text-lg font-bold text-white">
                   {product.originalCurrency} {product.currentPrice.toFixed(2)}
                 </p>
-                <p className="text-sm text-gray-500">{formatPrice(product.priceBRL)}</p>
+                <p className="text-sm text-muted-foreground">{formatPrice(product.priceBRL)}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Preço de Venda</p>
+                <p className="text-xs text-muted-foreground">Preço de Venda</p>
                 <p className="text-lg font-bold text-emerald-400">{formatPrice(product.sellingPrice)}</p>
-                <p className="text-sm text-gray-500">c/ {product.profitMargin}% margem</p>
+                <p className="text-sm text-muted-foreground">c/ {product.profitMargin}% margem</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Lucro por Unidade</p>
+                <p className="text-xs text-muted-foreground">Lucro por Unidade</p>
                 <p className="text-lg font-bold text-violet-400">{formatPrice(product.profitAmount)}</p>
               </div>
             </div>
           </div>
 
           {/* Shipping & Delivery */}
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="text-sm font-medium text-gray-400 mb-3">Entrega</h4>
+          <div className="p-4 rounded-xl bg-secondary border border-border">
+            <h4 className="text-sm font-medium text-muted-foreground mb-3">Entrega</h4>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Truck size={20} className="text-cyan-400" />
@@ -1221,13 +1221,13 @@ function ProductDetailModal({
                   <p className="text-white font-medium">
                     {product.estimatedDeliveryDays.min}-{product.estimatedDeliveryDays.max} dias
                   </p>
-                  <p className="text-xs text-gray-500">Prazo estimado para Brasil</p>
+                  <p className="text-xs text-muted-foreground">Prazo estimado para Brasil</p>
                 </div>
               </div>
               {product.bestShippingOption && (
                 <div>
                   <p className="text-white font-medium">{product.bestShippingOption.method}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Frete: {formatPrice(product.bestShippingOption.cost)}
                   </p>
                 </div>
@@ -1236,27 +1236,27 @@ function ProductDetailModal({
           </div>
 
           {/* Supplier */}
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="text-sm font-medium text-gray-400 mb-3">Fornecedor</h4>
+          <div className="p-4 rounded-xl bg-secondary border border-border">
+            <h4 className="text-sm font-medium text-muted-foreground mb-3">Fornecedor</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-gray-500">Nome</p>
+                <p className="text-xs text-muted-foreground">Nome</p>
                 <p className="text-white">{product.supplier?.name || "N/A"}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Avaliação</p>
+                <p className="text-xs text-muted-foreground">Avaliação</p>
                 <div className="flex items-center gap-1">
                   <Star size={14} className="text-amber-400 fill-amber-400" />
                   <span className="text-white">{product.rating.toFixed(1)}</span>
-                  <span className="text-gray-500">({product.reviewCount} avaliações)</span>
+                  <span className="text-muted-foreground">({product.reviewCount} avaliações)</span>
                 </div>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Vendas</p>
+                <p className="text-xs text-muted-foreground">Vendas</p>
                 <p className="text-white">{product.soldCount.toLocaleString()}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Score de Tendência</p>
+                <p className="text-xs text-muted-foreground">Score de Tendência</p>
                 <p className="text-orange-400 font-bold">{product.trendingScore}/100</p>
               </div>
             </div>
@@ -1271,11 +1271,11 @@ function ProductDetailModal({
               </h4>
               <div className="flex items-center gap-4">
                 <div>
-                  <p className="text-xs text-gray-500">Comissão</p>
+                  <p className="text-xs text-muted-foreground">Comissão</p>
                   <p className="text-lg font-bold text-white">{product.affiliate.commissionRate}%</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Ganho por Venda</p>
+                  <p className="text-xs text-muted-foreground">Ganho por Venda</p>
                   <p className="text-lg font-bold text-emerald-400">
                     {formatPrice((product.sellingPrice * product.affiliate.commissionRate) / 100)}
                   </p>
@@ -1286,11 +1286,11 @@ function ProductDetailModal({
 
           {/* Features */}
           {product.extractedDetails?.features && product.extractedDetails.features.length > 0 && (
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-              <h4 className="text-sm font-medium text-gray-400 mb-3">Características</h4>
+            <div className="p-4 rounded-xl bg-secondary border border-border">
+              <h4 className="text-sm font-medium text-muted-foreground mb-3">Características</h4>
               <ul className="space-y-1">
                 {product.extractedDetails.features.map((feature, i) => (
-                  <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
                     <Check size={14} className="text-emerald-400 mt-0.5 shrink-0" />
                     {feature}
                   </li>
@@ -1300,9 +1300,9 @@ function ProductDetailModal({
           )}
 
           {/* Description */}
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <h4 className="text-sm font-medium text-gray-400 mb-3">Descrição</h4>
-            <p className="text-sm text-gray-300 whitespace-pre-wrap">{product.description}</p>
+          <div className="p-4 rounded-xl bg-secondary border border-border">
+            <h4 className="text-sm font-medium text-muted-foreground mb-3">Descrição</h4>
+            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{product.description}</p>
           </div>
         </div>
       </motion.div>

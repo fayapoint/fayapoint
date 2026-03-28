@@ -56,7 +56,7 @@ export function FeaturesSection() {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-red-500/30 to-green-500/30 blur-xl" />
-              <div className="relative backdrop-blur-sm bg-white/5 border border-white/10 rounded-full px-5 py-2 flex items-center gap-2">
+              <div className="relative backdrop-blur-sm bg-secondary border border-border rounded-full px-5 py-2 flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-yellow-400" />
                 <span className="text-sm font-medium bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
                   {badge}
@@ -70,7 +70,7 @@ export function FeaturesSection() {
               {title}
             </span>
           </h2>
-          <p className="text-xl text-gray-300">
+          <p className="text-xl text-muted-foreground">
             {description}
           </p>
         </motion.div>

@@ -26,7 +26,7 @@ export default function PartnershipsPage() {
   const partnerTypes = t.raw("types") as PartnerType[];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-32 pb-20">
@@ -42,7 +42,7 @@ export default function PartnershipsPage() {
               <span className="text-sm text-blue-300">{t("badge")}</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("title")}</h1>
-            <p className="text-xl text-gray-400">{t("description")}</p>
+            <p className="text-xl text-muted-foreground">{t("description")}</p>
           </motion.div>
         </section>
 
@@ -58,16 +58,16 @@ export default function PartnershipsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="bg-white/5 border border-white/10 rounded-2xl p-8"
+                  className="bg-secondary border border-border rounded-2xl p-8"
                 >
                   <Icon className="w-12 h-12 text-blue-400 mb-4" />
                   <h3 className="text-2xl font-bold mb-3">{type.title}</h3>
-                  <p className="text-gray-400 mb-6">{type.description}</p>
+                  <p className="text-muted-foreground mb-6">{type.description}</p>
                   <ul className="space-y-3">
                     {type.benefits.map((benefit, bidx) => (
                       <li key={bidx} className="flex items-start gap-2 text-sm">
                         <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-300">{benefit}</span>
+                        <span className="text-muted-foreground">{benefit}</span>
                       </li>
                     ))}
                   </ul>
@@ -83,10 +83,10 @@ export default function PartnershipsPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-white/10 rounded-2xl p-10"
+            className="max-w-3xl mx-auto text-center bg-gradient-to-r from-blue-900/20 to-amber-900/20 border border-border rounded-2xl p-10"
           >
             <h2 className="text-3xl font-bold mb-4">{t("cta.title")}</h2>
-            <p className="text-gray-400 mb-8">{t("cta.description")}</p>
+            <p className="text-muted-foreground mb-8">{t("cta.description")}</p>
             <Link
               href="/contato"
               className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors font-semibold"

@@ -191,7 +191,7 @@ function getInitials(name: string): string {
 const PLAN_COLORS: Record<string, string> = {
   free: "bg-gray-600 text-gray-100",
   starter: "bg-blue-600 text-blue-100",
-  pro: "bg-purple-600 text-purple-100",
+  pro: "bg-amber-600 text-amber-100",
   business: "bg-yellow-600 text-yellow-100",
 };
 
@@ -531,14 +531,14 @@ export default function AccountPage() {
       <div className="min-h-screen bg-gray-950 text-white">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center gap-4 mb-8">
-            <Skeleton className="h-10 w-10 rounded-lg bg-gray-800" />
-            <Skeleton className="h-8 w-48 bg-gray-800" />
+            <Skeleton className="h-10 w-10 rounded-lg bg-secondary" />
+            <Skeleton className="h-8 w-48 bg-secondary" />
           </div>
-          <Skeleton className="h-12 w-full mb-6 bg-gray-800" />
+          <Skeleton className="h-12 w-full mb-6 bg-secondary" />
           <div className="space-y-4">
-            <Skeleton className="h-32 w-full bg-gray-800" />
-            <Skeleton className="h-48 w-full bg-gray-800" />
-            <Skeleton className="h-24 w-full bg-gray-800" />
+            <Skeleton className="h-32 w-full bg-secondary" />
+            <Skeleton className="h-48 w-full bg-secondary" />
+            <Skeleton className="h-24 w-full bg-secondary" />
           </div>
         </div>
       </div>
@@ -549,7 +549,7 @@ export default function AccountPage() {
     return (
       <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-400 mb-4">Erro ao carregar conta</p>
+          <p className="text-muted-foreground mb-4">Erro ao carregar conta</p>
           <Button onClick={() => router.push("/portal")} variant="outline">
             Voltar ao Portal
           </Button>
@@ -571,8 +571,8 @@ export default function AccountPage() {
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
           <Link href="/portal">
-            <button className="p-2 hover:bg-white/5 rounded-lg transition-colors">
-              <ArrowLeft size={20} className="text-gray-400" />
+            <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
+              <ArrowLeft size={20} className="text-muted-foreground" />
             </button>
           </Link>
           <div className="flex items-center gap-3">
@@ -580,17 +580,17 @@ export default function AccountPage() {
               <img
                 src={account.image}
                 alt={account.name}
-                className="w-12 h-12 rounded-full object-cover border-2 border-gray-700"
+                className="w-12 h-12 rounded-full object-cover border-2 border-border"
               />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-lg font-bold">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center text-lg font-bold">
                 {getInitials(account.name)}
               </div>
             )}
             <div>
               <h1 className="text-xl font-bold">{account.name}</h1>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-400">{account.email}</span>
+                <span className="text-sm text-muted-foreground">{account.email}</span>
                 <Badge className={cn("text-xs", PLAN_COLORS[currentPlan])}>
                   <PlanIcon size={12} className="mr-1" />
                   {currentPlan.toUpperCase()}
@@ -602,38 +602,38 @@ export default function AccountPage() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full bg-gray-900 border border-gray-800 h-auto flex-wrap gap-1 p-1">
+          <TabsList className="w-full bg-card border border-border h-auto flex-wrap gap-1 p-1">
             <TabsTrigger
               value="perfil"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-400 text-gray-400"
+              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <User size={16} className="mr-1.5" />
               <span className="hidden sm:inline">Perfil</span>
             </TabsTrigger>
             <TabsTrigger
               value="assinatura"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-400 text-gray-400"
+              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <CreditCard size={16} className="mr-1.5" />
               <span className="hidden sm:inline">Assinatura</span>
             </TabsTrigger>
             <TabsTrigger
               value="seguranca"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-400 text-gray-400"
+              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <Shield size={16} className="mr-1.5" />
               <span className="hidden sm:inline">Seguran&ccedil;a</span>
             </TabsTrigger>
             <TabsTrigger
               value="certificados"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-400 text-gray-400"
+              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <Award size={16} className="mr-1.5" />
               <span className="hidden sm:inline">Certificados</span>
             </TabsTrigger>
             <TabsTrigger
               value="preferencias"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-400 text-gray-400"
+              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <Settings size={16} className="mr-1.5" />
               <span className="hidden sm:inline">Prefer&ecirc;ncias</span>
@@ -652,23 +652,23 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Avatar Section */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <div className="flex items-center gap-4">
                     {account.image ? (
                       <img
                         src={account.image}
                         alt={account.name}
-                        className="w-20 h-20 rounded-full object-cover border-2 border-gray-700"
+                        className="w-20 h-20 rounded-full object-cover border-2 border-border"
                       />
                     ) : (
-                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-2xl font-bold">
+                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center text-2xl font-bold">
                         {getInitials(account.name)}
                       </div>
                     )}
                     <div>
                       <h3 className="font-semibold text-lg">{account.name}</h3>
-                      <p className="text-sm text-gray-400">{account.email}</p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-sm text-muted-foreground">{account.email}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
                         Membro desde {formatDate(account.createdAt)}
                       </p>
                     </div>
@@ -676,121 +676,121 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Profile Form */}
-                <Card className="p-6 bg-gray-900 border-gray-800 space-y-5">
+                <Card className="p-6 bg-card border-border space-y-5">
                   <h3 className="text-lg font-semibold mb-2">Informações Pessoais</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Nome</Label>
+                      <Label className="text-muted-foreground">Nome</Label>
                       <Input
                         value={profileForm.name}
                         onChange={(e) =>
                           setProfileForm({ ...profileForm, name: e.target.value })
                         }
-                        className="bg-gray-800 border-gray-700 text-white"
+                        className="bg-secondary border-border text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Email</Label>
+                      <Label className="text-muted-foreground">Email</Label>
                       <Input
                         value={account.email}
                         disabled
-                        className="bg-gray-800/50 border-gray-700 text-gray-500 cursor-not-allowed"
+                        className="bg-secondary/50 border-border text-muted-foreground cursor-not-allowed"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-gray-300">Bio</Label>
+                    <Label className="text-muted-foreground">Bio</Label>
                     <Textarea
                       value={profileForm.bio}
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, bio: e.target.value })
                       }
                       placeholder="Conte um pouco sobre você..."
-                      className="bg-gray-800 border-gray-700 text-white min-h-[100px] resize-none"
+                      className="bg-secondary border-border text-white min-h-[100px] resize-none"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-gray-300">LinkedIn</Label>
+                      <Label className="text-muted-foreground">LinkedIn</Label>
                       <Input
                         value={profileForm.linkedin}
                         onChange={(e) =>
                           setProfileForm({ ...profileForm, linkedin: e.target.value })
                         }
                         placeholder="https://linkedin.com/in/..."
-                        className="bg-gray-800 border-gray-700 text-white"
+                        className="bg-secondary border-border text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Website</Label>
+                      <Label className="text-muted-foreground">Website</Label>
                       <Input
                         value={profileForm.website}
                         onChange={(e) =>
                           setProfileForm({ ...profileForm, website: e.target.value })
                         }
                         placeholder="https://..."
-                        className="bg-gray-800 border-gray-700 text-white"
+                        className="bg-secondary border-border text-white"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Empresa</Label>
+                      <Label className="text-muted-foreground">Empresa</Label>
                       <Input
                         value={profileForm.company}
                         onChange={(e) =>
                           setProfileForm({ ...profileForm, company: e.target.value })
                         }
                         placeholder="Nome da empresa"
-                        className="bg-gray-800 border-gray-700 text-white"
+                        className="bg-secondary border-border text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Cargo</Label>
+                      <Label className="text-muted-foreground">Cargo</Label>
                       <Input
                         value={profileForm.position}
                         onChange={(e) =>
                           setProfileForm({ ...profileForm, position: e.target.value })
                         }
                         placeholder="Seu cargo atual"
-                        className="bg-gray-800 border-gray-700 text-white"
+                        className="bg-secondary border-border text-white"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-gray-300">Localização</Label>
+                    <Label className="text-muted-foreground">Localização</Label>
                     <Input
                       value={profileForm.location}
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, location: e.target.value })
                       }
                       placeholder="Cidade, Estado"
-                      className="bg-gray-800 border-gray-700 text-white"
+                      className="bg-secondary border-border text-white"
                     />
                   </div>
                 </Card>
 
                 {/* Skills & Interests */}
-                <Card className="p-6 bg-gray-900 border-gray-800 space-y-5">
+                <Card className="p-6 bg-card border-border space-y-5">
                   <div className="space-y-3">
-                    <Label className="text-gray-300">Habilidades</Label>
+                    <Label className="text-muted-foreground">Habilidades</Label>
                     <div className="flex gap-2">
                       <Input
                         value={skillsInput}
                         onChange={(e) => setSkillsInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag("skills"))}
                         placeholder="Adicionar habilidade..."
-                        className="bg-gray-800 border-gray-700 text-white flex-1"
+                        className="bg-secondary border-border text-white flex-1"
                       />
                       <Button
                         onClick={() => handleAddTag("skills")}
                         size="sm"
-                        className="bg-purple-600 hover:bg-purple-700"
+                        className="bg-amber-600 hover:bg-amber-700"
                       >
                         <Plus size={16} />
                       </Button>
@@ -799,7 +799,7 @@ export default function AccountPage() {
                       {skills.map((skill) => (
                         <Badge
                           key={skill}
-                          className="bg-purple-500/20 text-purple-300 border-purple-500/30 px-3 py-1 cursor-pointer hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 transition-colors"
+                          className="bg-amber-500/20 text-amber-300 border-amber-500/30 px-3 py-1 cursor-pointer hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 transition-colors"
                           onClick={() => handleRemoveTag("skills", skill)}
                         >
                           {skill}
@@ -810,19 +810,19 @@ export default function AccountPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-gray-300">Interesses</Label>
+                    <Label className="text-muted-foreground">Interesses</Label>
                     <div className="flex gap-2">
                       <Input
                         value={interestsInput}
                         onChange={(e) => setInterestsInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag("interests"))}
                         placeholder="Adicionar interesse..."
-                        className="bg-gray-800 border-gray-700 text-white flex-1"
+                        className="bg-secondary border-border text-white flex-1"
                       />
                       <Button
                         onClick={() => handleAddTag("interests")}
                         size="sm"
-                        className="bg-purple-600 hover:bg-purple-700"
+                        className="bg-amber-600 hover:bg-amber-700"
                       >
                         <Plus size={16} />
                       </Button>
@@ -846,7 +846,7 @@ export default function AccountPage() {
                 <Button
                   onClick={handleSaveProfile}
                   disabled={savingProfile}
-                  className="w-full bg-purple-600 hover:bg-purple-700 h-12 text-base font-semibold"
+                  className="w-full bg-amber-600 hover:bg-amber-700 h-12 text-base font-semibold"
                 >
                   {savingProfile ? (
                     <Loader2 size={20} className="mr-2 animate-spin" />
@@ -869,7 +869,7 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Current Plan */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold">Plano Atual</h3>
                     <Badge className={cn("text-sm px-3 py-1", PLAN_COLORS[currentPlan])}>
@@ -881,13 +881,13 @@ export default function AccountPage() {
                   {subscriptionData?.subscription ? (
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Valor</span>
+                        <span className="text-muted-foreground">Valor</span>
                         <span className="font-medium">
                           {formatCurrency(subscriptionData.subscription.value)}/{subscriptionData.subscription.cycle === "monthly" ? "mês" : subscriptionData.subscription.cycle === "yearly" ? "ano" : subscriptionData.subscription.cycle}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Status</span>
+                        <span className="text-muted-foreground">Status</span>
                         <Badge
                           className={cn(
                             "text-xs",
@@ -901,15 +901,15 @@ export default function AccountPage() {
                       </div>
                       {subscriptionData.subscription.nextDueDate && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Próxima cobrança</span>
+                          <span className="text-muted-foreground">Próxima cobrança</span>
                           <span>{formatDate(subscriptionData.subscription.nextDueDate)}</span>
                         </div>
                       )}
                       {subscriptionData.subscription.billingType && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Forma de pagamento</span>
+                          <span className="text-muted-foreground">Forma de pagamento</span>
                           <span className="flex items-center gap-1.5">
-                            <CreditCard size={14} className="text-gray-500" />
+                            <CreditCard size={14} className="text-muted-foreground" />
                             {subscriptionData.subscription.billingType === "credit_card" && subscriptionData.subscription.creditCardLastFour
                               ? `${subscriptionData.subscription.creditCardBrand || "Cartão"} **** ${subscriptionData.subscription.creditCardLastFour}`
                               : subscriptionData.subscription.billingType === "pix"
@@ -922,7 +922,7 @@ export default function AccountPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       {currentPlan === "free"
                         ? "Você está no plano gratuito. Faça upgrade para desbloquear mais recursos!"
                         : "Nenhuma assinatura ativa encontrada."}
@@ -947,7 +947,7 @@ export default function AccountPage() {
 
                 {/* Plan Comparison */}
                 {subscriptionData?.plans && (
-                  <Card className="p-6 bg-gray-900 border-gray-800">
+                  <Card className="p-6 bg-card border-border">
                     <h3 className="text-lg font-semibold mb-4">Comparar Planos</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                       {subscriptionData.plans.map((plan) => {
@@ -959,12 +959,12 @@ export default function AccountPage() {
                             className={cn(
                               "p-4 rounded-xl border transition-all",
                               isCurrentPlan
-                                ? "border-purple-500 bg-purple-500/10"
-                                : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                                ? "border-amber-500 bg-amber-500/10"
+                                : "border-border bg-secondary/50 hover:border-gray-600"
                             )}
                           >
                             <div className="flex items-center gap-2 mb-2">
-                              <PIcon size={18} className={isCurrentPlan ? "text-purple-400" : "text-gray-400"} />
+                              <PIcon size={18} className={isCurrentPlan ? "text-amber-400" : "text-muted-foreground"} />
                               <span className="font-semibold">{plan.name}</span>
                             </div>
                             <div className="mb-3">
@@ -972,25 +972,25 @@ export default function AccountPage() {
                                 {plan.monthlyPrice === 0 ? "Grátis" : formatCurrency(plan.monthlyPrice)}
                               </span>
                               {plan.monthlyPrice > 0 && (
-                                <span className="text-sm text-gray-400">/mês</span>
+                                <span className="text-sm text-muted-foreground">/mês</span>
                               )}
                             </div>
                             <ul className="space-y-2 mb-4">
                               {plan.features.map((feature, i) => (
-                                <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                                <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                                   <Check size={14} className="text-green-400 mt-0.5 shrink-0" />
                                   {feature}
                                 </li>
                               ))}
                             </ul>
                             {isCurrentPlan ? (
-                              <div className="text-center py-2 bg-purple-500/20 rounded-lg text-purple-400 text-sm font-medium">
+                              <div className="text-center py-2 bg-amber-500/20 rounded-lg text-amber-400 text-sm font-medium">
                                 Seu plano atual
                               </div>
                             ) : plan.id !== "free" ? (
                               <Button
                                 onClick={() => handleUpgrade(plan.id)}
-                                className="w-full bg-purple-600 hover:bg-purple-700"
+                                className="w-full bg-amber-600 hover:bg-amber-700"
                                 size="sm"
                               >
                                 {currentPlan === "free" ||
@@ -1020,11 +1020,11 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Change Password */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <h3 className="text-lg font-semibold mb-4">Alterar Senha</h3>
                   <div className="space-y-4 max-w-md">
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Senha atual</Label>
+                      <Label className="text-muted-foreground">Senha atual</Label>
                       <div className="relative">
                         <Input
                           type={showPasswords.current ? "text" : "password"}
@@ -1033,14 +1033,14 @@ export default function AccountPage() {
                             setPasswordForm({ ...passwordForm, current: e.target.value })
                           }
                           placeholder="Digite sua senha atual"
-                          className="bg-gray-800 border-gray-700 text-white pr-10"
+                          className="bg-secondary border-border text-white pr-10"
                         />
                         <button
                           type="button"
                           onClick={() =>
                             setShowPasswords({ ...showPasswords, current: !showPasswords.current })
                           }
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
                         >
                           {showPasswords.current ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
@@ -1048,7 +1048,7 @@ export default function AccountPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Nova senha</Label>
+                      <Label className="text-muted-foreground">Nova senha</Label>
                       <div className="relative">
                         <Input
                           type={showPasswords.new ? "text" : "password"}
@@ -1057,14 +1057,14 @@ export default function AccountPage() {
                             setPasswordForm({ ...passwordForm, new: e.target.value })
                           }
                           placeholder="Mínimo 6 caracteres"
-                          className="bg-gray-800 border-gray-700 text-white pr-10"
+                          className="bg-secondary border-border text-white pr-10"
                         />
                         <button
                           type="button"
                           onClick={() =>
                             setShowPasswords({ ...showPasswords, new: !showPasswords.new })
                           }
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
                         >
                           {showPasswords.new ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
@@ -1072,7 +1072,7 @@ export default function AccountPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-gray-300">Confirmar nova senha</Label>
+                      <Label className="text-muted-foreground">Confirmar nova senha</Label>
                       <div className="relative">
                         <Input
                           type={showPasswords.confirm ? "text" : "password"}
@@ -1081,14 +1081,14 @@ export default function AccountPage() {
                             setPasswordForm({ ...passwordForm, confirm: e.target.value })
                           }
                           placeholder="Repita a nova senha"
-                          className="bg-gray-800 border-gray-700 text-white pr-10"
+                          className="bg-secondary border-border text-white pr-10"
                         />
                         <button
                           type="button"
                           onClick={() =>
                             setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })
                           }
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
                         >
                           {showPasswords.confirm ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
@@ -1101,7 +1101,7 @@ export default function AccountPage() {
                     <Button
                       onClick={handleChangePassword}
                       disabled={savingPassword || !passwordForm.new || !passwordForm.confirm}
-                      className="bg-purple-600 hover:bg-purple-700"
+                      className="bg-amber-600 hover:bg-amber-700"
                     >
                       {savingPassword ? (
                         <Loader2 size={16} className="mr-2 animate-spin" />
@@ -1114,9 +1114,9 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Connected Accounts */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <h3 className="text-lg font-semibold mb-4">Contas Conectadas</h3>
-                  <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+                  <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                         <svg viewBox="0 0 24 24" className="w-5 h-5">
@@ -1140,7 +1140,7 @@ export default function AccountPage() {
                       </div>
                       <div>
                         <p className="font-medium">Google</p>
-                        <p className="text-sm text-gray-400">Login com Google</p>
+                        <p className="text-sm text-muted-foreground">Login com Google</p>
                       </div>
                     </div>
                     <Badge variant="outline" className="border-green-500/50 text-green-400">
@@ -1150,24 +1150,24 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Active Sessions */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <h3 className="text-lg font-semibold mb-2">Sessões Ativas</h3>
-                  <p className="text-sm text-gray-400 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Gerencie os dispositivos onde sua conta está conectada.
                   </p>
-                  <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700/50 text-center">
-                    <Monitor size={32} className="mx-auto text-gray-500 mb-2" />
-                    <p className="text-gray-400 text-sm">Recurso em breve</p>
-                    <p className="text-gray-500 text-xs mt-1">
+                  <div className="p-4 bg-secondary/30 rounded-lg border border-border/50 text-center">
+                    <Monitor size={32} className="mx-auto text-muted-foreground mb-2" />
+                    <p className="text-muted-foreground text-sm">Recurso em breve</p>
+                    <p className="text-muted-foreground text-xs mt-1">
                       O gerenciamento de sessões estará disponível em uma atualização futura.
                     </p>
                   </div>
                 </Card>
 
                 {/* Delete Account */}
-                <Card className="p-6 bg-gray-900 border-red-900/50">
+                <Card className="p-6 bg-card border-red-900/50">
                   <h3 className="text-lg font-semibold text-red-400 mb-2">Zona de Perigo</h3>
-                  <p className="text-sm text-gray-400 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.
                   </p>
                   <Button
@@ -1197,18 +1197,18 @@ export default function AccountPage() {
                     {certificates.map((cert) => (
                       <Card
                         key={cert._id}
-                        className="p-5 bg-gray-900 border-gray-800 hover:border-purple-500/30 transition-colors"
+                        className="p-5 bg-card border-border hover:border-amber-500/30 transition-colors"
                       >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                              <Award size={20} className="text-purple-400" />
+                            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                              <Award size={20} className="text-amber-400" />
                             </div>
                             <div>
                               <h4 className="font-semibold text-sm line-clamp-1">
                                 {cert.courseTitle}
                               </h4>
-                              <p className="text-xs text-gray-400">
+                              <p className="text-xs text-muted-foreground">
                                 {cert.courseCategory} - {cert.courseLevel}
                               </p>
                             </div>
@@ -1217,18 +1217,18 @@ export default function AccountPage() {
 
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between">
-                            <span className="text-gray-400">Emitido em</span>
+                            <span className="text-muted-foreground">Emitido em</span>
                             <span>{formatDate(cert.issuedAt)}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-400">Certificado</span>
-                            <span className="font-mono text-xs text-purple-400">
+                            <span className="text-muted-foreground">Certificado</span>
+                            <span className="font-mono text-xs text-amber-400">
                               {cert.certificateNumber}
                             </span>
                           </div>
                           {cert.quizScore > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-gray-400">Nota</span>
+                              <span className="text-muted-foreground">Nota</span>
                               <span className="text-green-400">{cert.quizScore}%</span>
                             </div>
                           )}
@@ -1244,7 +1244,7 @@ export default function AccountPage() {
                             >
                               <Button
                                 size="sm"
-                                className="w-full bg-purple-600 hover:bg-purple-700 text-xs"
+                                className="w-full bg-amber-600 hover:bg-amber-700 text-xs"
                               >
                                 <Download size={14} className="mr-1.5" />
                                 Download PDF
@@ -1260,7 +1260,7 @@ export default function AccountPage() {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="w-full border-gray-700 text-gray-300 hover:bg-gray-800 text-xs"
+                              className="w-full border-border text-muted-foreground hover:bg-secondary text-xs"
                             >
                               <ExternalLink size={14} className="mr-1.5" />
                               Verificar
@@ -1271,16 +1271,16 @@ export default function AccountPage() {
                     ))}
                   </div>
                 ) : (
-                  <Card className="p-8 bg-gray-900 border-gray-800 text-center">
-                    <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Award size={32} className="text-purple-400" />
+                  <Card className="p-8 bg-card border-border text-center">
+                    <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Award size={32} className="text-amber-400" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">Nenhum certificado ainda</h3>
-                    <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto">
+                    <p className="text-muted-foreground text-sm mb-4 max-w-md mx-auto">
                       Complete um curso e passe no quiz final para ganhar seu certificado digital verificável!
                     </p>
                     <Link href="/portal">
-                      <Button className="bg-purple-600 hover:bg-purple-700">
+                      <Button className="bg-amber-600 hover:bg-amber-700">
                         <BookOpen size={16} className="mr-2" />
                         Explorar Cursos
                       </Button>
@@ -1301,7 +1301,7 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Theme */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <h3 className="text-lg font-semibold mb-4">Aparência</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
@@ -1315,8 +1315,8 @@ export default function AccountPage() {
                         className={cn(
                           "flex flex-col items-center gap-2 p-4 rounded-xl border transition-all",
                           prefsForm.theme === id
-                            ? "border-purple-500 bg-purple-500/10 text-purple-400"
-                            : "border-gray-700 bg-gray-800/50 text-gray-400 hover:border-gray-600"
+                            ? "border-amber-500 bg-amber-500/10 text-amber-400"
+                            : "border-border bg-secondary/50 text-muted-foreground hover:border-gray-600"
                         )}
                       >
                         <Icon size={24} />
@@ -1327,7 +1327,7 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Language */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <h3 className="text-lg font-semibold mb-4">Idioma</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
@@ -1341,8 +1341,8 @@ export default function AccountPage() {
                         className={cn(
                           "flex items-center gap-2 p-3 rounded-xl border transition-all",
                           prefsForm.language === id
-                            ? "border-purple-500 bg-purple-500/10 text-purple-400"
-                            : "border-gray-700 bg-gray-800/50 text-gray-400 hover:border-gray-600"
+                            ? "border-amber-500 bg-amber-500/10 text-amber-400"
+                            : "border-border bg-secondary/50 text-muted-foreground hover:border-gray-600"
                         )}
                       >
                         <span className="text-lg">{flag}</span>
@@ -1353,7 +1353,7 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Notifications */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <h3 className="text-lg font-semibold mb-4">Notificações</h3>
                   <div className="space-y-4">
                     {[
@@ -1390,13 +1390,13 @@ export default function AccountPage() {
                     ].map(({ key, label, description, icon: Icon }) => (
                       <div
                         key={key}
-                        className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg"
                       >
                         <div className="flex items-center gap-3">
-                          <Icon size={18} className="text-gray-400" />
+                          <Icon size={18} className="text-muted-foreground" />
                           <div>
                             <p className="text-sm font-medium">{label}</p>
-                            <p className="text-xs text-gray-500">{description}</p>
+                            <p className="text-xs text-muted-foreground">{description}</p>
                           </div>
                         </div>
                         <Switch
@@ -1414,15 +1414,15 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Playback Speed */}
-                <Card className="p-6 bg-gray-900 border-gray-800">
+                <Card className="p-6 bg-card border-border">
                   <h3 className="text-lg font-semibold mb-4">Reprodução</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Play size={18} className="text-gray-400" />
+                        <Play size={18} className="text-muted-foreground" />
                         <span className="text-sm">Velocidade padrão</span>
                       </div>
-                      <Badge variant="outline" className="border-purple-500/50 text-purple-400 font-mono">
+                      <Badge variant="outline" className="border-amber-500/50 text-amber-400 font-mono">
                         {prefsForm.playbackSpeed}x
                       </Badge>
                     </div>
@@ -1433,7 +1433,7 @@ export default function AccountPage() {
                       max={2}
                       step={0.25}
                     />
-                    <div className="flex justify-between text-xs text-gray-500">
+                    <div className="flex justify-between text-xs text-muted-foreground">
                       <span>0.5x</span>
                       <span>1x</span>
                       <span>1.5x</span>
@@ -1446,7 +1446,7 @@ export default function AccountPage() {
                 <Button
                   onClick={handleSavePreferences}
                   disabled={savingPrefs}
-                  className="w-full bg-purple-600 hover:bg-purple-700 h-12 text-base font-semibold"
+                  className="w-full bg-amber-600 hover:bg-amber-700 h-12 text-base font-semibold"
                 >
                   {savingPrefs ? (
                     <Loader2 size={20} className="mr-2 animate-spin" />
@@ -1463,25 +1463,25 @@ export default function AccountPage() {
 
       {/* Delete Account Dialog */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent className="bg-gray-900 border-gray-800 text-white">
+        <DialogContent className="bg-card border-border text-white">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-400">
               <AlertTriangle size={20} />
               Excluir Conta
             </DialogTitle>
-            <DialogDescription className="text-gray-400">
+            <DialogDescription className="text-muted-foreground">
               Esta ação é irreversível. Todos os seus dados, cursos, certificados e progresso serão permanentemente excluídos.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-2">
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-muted-foreground">
               Digite <strong className="text-red-400">EXCLUIR</strong> para confirmar:
             </p>
             <Input
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
               placeholder="EXCLUIR"
-              className="bg-gray-800 border-gray-700 text-white"
+              className="bg-secondary border-border text-white"
             />
           </div>
           <DialogFooter>
@@ -1491,7 +1491,7 @@ export default function AccountPage() {
                 setShowDeleteDialog(false);
                 setDeleteConfirmText("");
               }}
-              className="border-gray-700"
+              className="border-border"
             >
               Cancelar
             </Button>

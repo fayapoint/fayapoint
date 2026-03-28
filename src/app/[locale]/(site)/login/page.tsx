@@ -26,7 +26,7 @@ import { HoneypotField } from "@/components/security/HoneypotField";
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full" /></div>}>
       <LoginPageContent />
     </Suspense>
   );
@@ -173,7 +173,7 @@ function LoginPageContent() {
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-900/30 via-black to-yellow-900/20" />
         <motion.div
           animate={{
             scale: [1, 1.2, 1],
@@ -184,7 +184,7 @@ function LoginPageContent() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-72 h-72 bg-amber-500/30 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -197,7 +197,7 @@ function LoginPageContent() {
             ease: "easeInOut",
             delay: 1,
           }}
-          className="absolute bottom-20 right-10 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl"
+          className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-500/30 rounded-full blur-3xl"
         />
       </div>
 
@@ -210,11 +210,11 @@ function LoginPageContent() {
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-block">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent mb-2">
                 {t("title")}
               </h1>
             </Link>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               {t("subtitle")}
             </p>
           </div>
@@ -278,7 +278,7 @@ function LoginPageContent() {
                 </label>
                 <Link 
                   href="/recuperar-senha" 
-                  className="text-sm text-purple-400 hover:text-purple-300"
+                  className="text-sm text-amber-400 hover:text-amber-300"
                 >
                   {t("forgotPassword")}
                 </Link>
@@ -287,7 +287,7 @@ function LoginPageContent() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
                 size="lg"
                 disabled={isLoading}
               >
@@ -335,11 +335,11 @@ function LoginPageContent() {
             </div>
 
             {/* Sign Up Link */}
-            <p className="text-center mt-6 text-gray-400">
+            <p className="text-center mt-6 text-muted-foreground">
               {t("noAccount")}{" "}
               <Link 
                 href="/onboarding" 
-                className="text-purple-400 hover:text-purple-300 font-medium"
+                className="text-amber-400 hover:text-amber-300 font-medium"
               >
                 {t("createAccount")}
               </Link>
@@ -347,14 +347,14 @@ function LoginPageContent() {
           </div>
 
           {/* Features */}
-          <div className="mt-8 text-center text-sm text-gray-400">
+          <div className="mt-8 text-center text-sm text-muted-foreground">
             <div className="flex items-center justify-center gap-4">
               <span className="flex items-center gap-1">
-                <Sparkles className="w-4 h-4 text-purple-400" />
+                <Sparkles className="w-4 h-4 text-amber-400" />
                 {t("features.instantAccess")}
               </span>
               <span className="flex items-center gap-1">
-                <Sparkles className="w-4 h-4 text-purple-400" />
+                <Sparkles className="w-4 h-4 text-amber-400" />
                 {t("features.freeCertificates")}
               </span>
             </div>

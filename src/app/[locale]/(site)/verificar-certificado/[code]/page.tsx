@@ -224,7 +224,7 @@ export default function VerifyCertificatePage() {
             <input
               name="verifyCode"
               placeholder="Código de verificação"
-              className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500/30"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/30"
             />
             <Button type="submit" size="sm" className="bg-violet-600 hover:bg-violet-500 rounded-xl px-4">
               Verificar

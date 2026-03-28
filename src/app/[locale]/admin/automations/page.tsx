@@ -153,7 +153,7 @@ function AutomationCard({ automation, onToggle, onEdit, onDelete }: {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 hover:border-white/20 transition-all"
+      className="p-4 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border hover:border-white/20 transition-all"
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -161,13 +161,13 @@ function AutomationCard({ automation, onToggle, onEdit, onDelete }: {
             "p-2.5 rounded-xl shrink-0",
             automation.status === "active" ? "bg-violet-500/20 text-violet-400" :
             automation.status === "error" ? "bg-red-500/20 text-red-400" :
-            "bg-gray-500/20 text-gray-400"
+            "bg-gray-500/20 text-muted-foreground"
           )}>
             <Workflow size={20} />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-white text-sm lg:text-base truncate">{automation.name}</h3>
-            <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{automation.description}</p>
+            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{automation.description}</p>
           </div>
         </div>
 
@@ -179,7 +179,7 @@ function AutomationCard({ automation, onToggle, onEdit, onDelete }: {
           <div className="relative">
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400"
+              className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground"
             >
               <MoreVertical size={16} />
             </button>
@@ -192,18 +192,18 @@ function AutomationCard({ automation, onToggle, onEdit, onDelete }: {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="absolute right-0 top-full mt-1 w-36 rounded-xl bg-gray-900 border border-white/10 shadow-xl z-50 overflow-hidden"
+                    className="absolute right-0 top-full mt-1 w-36 rounded-xl bg-card border border-border shadow-xl z-50 overflow-hidden"
                   >
                     <button
                       onClick={() => { onToggle(); setShowMenu(false); }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-white/5"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-secondary"
                     >
                       {automation.status === "active" ? <Pause size={14} /> : <Play size={14} />}
                       {automation.status === "active" ? "Pausar" : "Ativar"}
                     </button>
                     <button
                       onClick={() => { onEdit(); setShowMenu(false); }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-white/5"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-secondary"
                     >
                       <Edit2 size={14} />
                       Editar
@@ -225,16 +225,16 @@ function AutomationCard({ automation, onToggle, onEdit, onDelete }: {
 
       {/* Trigger & Stats */}
       <div className="flex items-center gap-4 text-xs">
-        <div className="flex items-center gap-1.5 text-gray-400">
+        <div className="flex items-center gap-1.5 text-muted-foreground">
           <TriggerIcon size={12} />
           <span className="capitalize">{automation.trigger.type}</span>
         </div>
-        <div className="flex items-center gap-1.5 text-gray-400">
+        <div className="flex items-center gap-1.5 text-muted-foreground">
           <Activity size={12} />
           <span>{automation.runCount} execuções</span>
         </div>
         {automation.lastRun && (
-          <div className="flex items-center gap-1.5 text-gray-500 hidden sm:flex">
+          <div className="flex items-center gap-1.5 text-muted-foreground hidden sm:flex">
             <Clock size={12} />
             <span>
               {new Date(automation.lastRun).toLocaleString("pt-BR", { 
@@ -253,13 +253,13 @@ function AutomationCard({ automation, onToggle, onEdit, onDelete }: {
         {automation.actions.slice(0, 3).map((action, i) => (
           <span
             key={i}
-            className="px-2 py-1 rounded-lg bg-white/5 text-[10px] text-gray-400"
+            className="px-2 py-1 rounded-lg bg-secondary text-[10px] text-muted-foreground"
           >
             {action.replace(/_/g, " ")}
           </span>
         ))}
         {automation.actions.length > 3 && (
-          <span className="px-2 py-1 rounded-lg bg-white/5 text-[10px] text-gray-500">
+          <span className="px-2 py-1 rounded-lg bg-secondary text-[10px] text-muted-foreground">
             +{automation.actions.length - 3}
           </span>
         )}
@@ -302,14 +302,14 @@ export default function AdminAutomationsPage() {
             <Workflow className="w-6 h-6 text-violet-400" />
             Automações
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Configure fluxos automáticos para seu negócio
           </p>
         </div>
         
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition shadow-lg shadow-violet-500/20"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition shadow-lg shadow-amber-500/20"
         >
           <Plus size={18} />
           <span>Nova Automação</span>
@@ -321,11 +321,11 @@ export default function AdminAutomationsPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/10 border border-violet-500/20"
+          className="p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/20"
         >
           <div className="flex items-center gap-2 mb-2">
             <Workflow size={16} className="text-violet-400" />
-            <span className="text-xs text-gray-400">Total</span>
+            <span className="text-xs text-muted-foreground">Total</span>
           </div>
           <p className="text-2xl font-bold text-white">{stats.total}</p>
         </motion.div>
@@ -338,7 +338,7 @@ export default function AdminAutomationsPage() {
         >
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle size={16} className="text-emerald-400" />
-            <span className="text-xs text-gray-400">Ativas</span>
+            <span className="text-xs text-muted-foreground">Ativas</span>
           </div>
           <p className="text-2xl font-bold text-white">{stats.active}</p>
         </motion.div>
@@ -351,7 +351,7 @@ export default function AdminAutomationsPage() {
         >
           <div className="flex items-center gap-2 mb-2">
             <Pause size={16} className="text-amber-400" />
-            <span className="text-xs text-gray-400">Pausadas</span>
+            <span className="text-xs text-muted-foreground">Pausadas</span>
           </div>
           <p className="text-2xl font-bold text-white">{stats.paused}</p>
         </motion.div>
@@ -364,7 +364,7 @@ export default function AdminAutomationsPage() {
         >
           <div className="flex items-center gap-2 mb-2">
             <AlertCircle size={16} className="text-red-400" />
-            <span className="text-xs text-gray-400">Erros</span>
+            <span className="text-xs text-muted-foreground">Erros</span>
           </div>
           <p className="text-2xl font-bold text-white">{stats.errors}</p>
         </motion.div>
@@ -384,8 +384,8 @@ export default function AdminAutomationsPage() {
             className={cn(
               "px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all",
               filter === tab.value
-                ? "bg-violet-500/20 text-violet-400 border border-violet-500/30"
-                : "bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10"
+                ? "bg-violet-500/20 text-violet-400 border border-amber-500/30"
+                : "bg-secondary text-muted-foreground border border-border hover:bg-white/10"
             )}
           >
             {tab.label}
@@ -416,7 +416,7 @@ export default function AdminAutomationsPage() {
         <div className="text-center py-12">
           <Workflow className="w-12 h-12 text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">Nenhuma automação encontrada</h3>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             {filter === "all" 
               ? "Crie sua primeira automação para começar"
               : "Não há automações com este status"}
@@ -437,7 +437,7 @@ export default function AdminAutomationsPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="p-4 lg:p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-600/5 border border-violet-500/20"
+        className="p-4 lg:p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20"
       >
         <h3 className="text-base lg:text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Zap className="w-5 h-5 text-violet-400" />
@@ -448,7 +448,7 @@ export default function AdminAutomationsPage() {
           {TRIGGER_TEMPLATES.map((template) => (
             <button
               key={template.type}
-              className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-left group"
+              className="p-4 rounded-xl bg-secondary border border-border hover:bg-white/10 hover:border-white/20 transition-all text-left group"
             >
               <template.icon size={24} className={cn(
                 "mb-2 group-hover:scale-110 transition-transform",
@@ -458,7 +458,7 @@ export default function AdminAutomationsPage() {
                 "text-emerald-400"
               )} />
               <p className="text-sm font-medium text-white">{template.label}</p>
-              <p className="text-[10px] text-gray-500 mt-0.5">{template.description}</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">{template.description}</p>
             </button>
           ))}
         </div>
@@ -477,7 +477,7 @@ export default function AdminAutomationsPage() {
           </div>
           <div>
             <h4 className="font-medium text-white text-sm">Integração com n8n</h4>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Para automações mais complexas, recomendamos usar o n8n. 
               Configure webhooks para conectar suas automações externas.
             </p>

@@ -78,7 +78,7 @@ export function PricingSection() {
             >
               <div
                 className={`absolute inset-0 rounded-lg blur-2xl opacity-0 transition-all duration-500 group-hover:opacity-70 ${
-                  i === 0 ? "bg-blue-500/40" : i === 1 ? "bg-purple-500/50" : "bg-orange-500/40"
+                  i === 0 ? "bg-blue-500/40" : i === 1 ? "bg-amber-500/50" : "bg-orange-500/40"
                 }`}
                 style={{ transform: "translateY(10px)" }}
               />

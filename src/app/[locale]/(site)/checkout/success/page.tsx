@@ -89,7 +89,7 @@ function CheckoutSuccessContent() {
   }, [showConfetti]);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-2xl">
@@ -103,28 +103,28 @@ function CheckoutSuccessContent() {
             </div>
             
             <h1 className="text-4xl font-bold mb-2">Pagamento Confirmado!</h1>
-            <p className="text-gray-400 text-lg">
+            <p className="text-muted-foreground text-lg">
               Obrigado pela sua compra. Seu pedido foi processado com sucesso.
             </p>
           </div>
 
           {/* Order Details */}
-          <Card className="p-6 bg-gray-900/50 border-gray-800 mb-6">
+          <Card className="p-6 bg-card/50 border-border mb-6">
             <div className="flex items-center gap-3 mb-4">
-              <Package className="w-5 h-5 text-purple-400" />
+              <Package className="w-5 h-5 text-amber-400" />
               <h2 className="text-xl font-semibold">Detalhes do Pedido</h2>
             </div>
 
             <div className="space-y-3">
               {orderNumber && (
-                <div className="flex justify-between items-center py-2 border-b border-gray-800">
-                  <span className="text-gray-400">Número do Pedido</span>
-                  <span className="font-mono font-bold text-purple-400">{orderNumber}</span>
+                <div className="flex justify-between items-center py-2 border-b border-border">
+                  <span className="text-muted-foreground">Número do Pedido</span>
+                  <span className="font-mono font-bold text-amber-400">{orderNumber}</span>
                 </div>
               )}
               
-              <div className="flex justify-between items-center py-2 border-b border-gray-800">
-                <span className="text-gray-400">Status</span>
+              <div className="flex justify-between items-center py-2 border-b border-border">
+                <span className="text-muted-foreground">Status</span>
                 <span className="flex items-center gap-2 text-green-400">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                   Pago
@@ -132,7 +132,7 @@ function CheckoutSuccessContent() {
               </div>
               
               <div className="flex justify-between items-center py-2">
-                <span className="text-gray-400">Data</span>
+                <span className="text-muted-foreground">Data</span>
                 <span>{new Date().toLocaleDateString('pt-BR', { 
                   day: '2-digit', 
                   month: 'long', 
@@ -145,14 +145,14 @@ function CheckoutSuccessContent() {
           </Card>
 
           {/* Email Confirmation */}
-          <Card className="p-6 bg-purple-900/20 border-purple-800/50 mb-6">
+          <Card className="p-6 bg-amber-900/20 border-amber-800/50 mb-6">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <Mail className="w-5 h-5 text-purple-400" />
+              <div className="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <Mail className="w-5 h-5 text-amber-400" />
               </div>
               <div>
                 <h3 className="font-semibold mb-1">Confirmação enviada por email</h3>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Enviamos um email com os detalhes do seu pedido e instruções de acesso. 
                   Verifique também sua caixa de spam.
                 </p>
@@ -161,40 +161,40 @@ function CheckoutSuccessContent() {
           </Card>
 
           {/* Next Steps */}
-          <Card className="p-6 bg-gray-900/50 border-gray-800 mb-6">
+          <Card className="p-6 bg-card/50 border-border mb-6">
             <h3 className="font-semibold mb-4">Próximos Passos</h3>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-xs font-bold text-purple-400">1</span>
+                <div className="w-6 h-6 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-bold text-amber-400">1</span>
                 </div>
                 <div>
                   <p className="font-medium">Acesse seu Dashboard</p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     Seus cursos e recursos já estão disponíveis no seu portal.
                   </p>
                 </div>
               </div>
               
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-xs font-bold text-purple-400">2</span>
+                <div className="w-6 h-6 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-bold text-amber-400">2</span>
                 </div>
                 <div>
                   <p className="font-medium">Comece a aprender</p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     Explore os conteúdos e comece sua jornada de aprendizado.
                   </p>
                 </div>
               </div>
               
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-xs font-bold text-purple-400">3</span>
+                <div className="w-6 h-6 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-bold text-amber-400">3</span>
                 </div>
                 <div>
                   <p className="font-medium">Ganhe XP</p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     Complete lições e desafios para subir de nível e ganhar recompensas.
                   </p>
                 </div>
@@ -205,7 +205,7 @@ function CheckoutSuccessContent() {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
-              className="flex-1 bg-purple-600 hover:bg-purple-700 py-6"
+              className="flex-1 bg-amber-600 hover:bg-amber-700 py-6"
               onClick={() => router.push("/pt-BR/portal")}
             >
               Acessar Meu Portal
@@ -225,7 +225,7 @@ function CheckoutSuccessContent() {
 
             <Button
               variant="outline"
-              className="flex-1 border-gray-700 py-6"
+              className="flex-1 border-border py-6"
               onClick={() => router.push("/pt-BR/portal?tab=carrinho")}
             >
               <Download className="w-4 h-4 mr-2" />
@@ -234,9 +234,9 @@ function CheckoutSuccessContent() {
           </div>
 
           {/* Support */}
-          <p className="text-center text-sm text-gray-500 mt-8">
+          <p className="text-center text-sm text-muted-foreground mt-8">
             Precisa de ajuda? Entre em contato pelo email{" "}
-            <a href="mailto:suporte@fayai.com.br" className="text-purple-400 hover:underline">
+            <a href="mailto:suporte@fayai.com.br" className="text-amber-400 hover:underline">
               suporte@fayai.com.br
             </a>
           </p>
@@ -250,13 +250,13 @@ function CheckoutSuccessContent() {
 // Loading fallback component
 function LoadingFallback() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-2xl flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <Loader2 className="w-12 h-12 text-purple-400 animate-spin mx-auto mb-4" />
-            <p className="text-gray-400">Carregando...</p>
+            <Loader2 className="w-12 h-12 text-amber-400 animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Carregando...</p>
           </div>
         </div>
       </main>

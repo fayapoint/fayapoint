@@ -258,7 +258,7 @@ export default function FreeClassPage() {
   const [expandedLesson, setExpandedLesson] = useState<number>(1);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="pt-24 pb-16">
         {/* Hero */}
@@ -269,28 +269,28 @@ export default function FreeClassPage() {
               {isPtBr ? "100% Gratuito — Sem Cadastro" : "100% Free — No Signup Required"}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
                 {isPtBr 
                   ? "Mini-Curso Grátis: IA na Prática" 
                   : "Free Mini-Course: AI in Practice"}
               </span>
             </h1>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               {isPtBr
                 ? "3 aulas práticas com conteúdo real para você começar a usar Inteligência Artificial hoje. Leia, aplique e veja resultados imediatos."
                 : "3 practical lessons with real content to start using Artificial Intelligence today. Read, apply, and see immediate results."}
             </p>
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Clock size={16} className="text-purple-400" />
+                <Clock size={16} className="text-amber-400" />
                 <span>~37 {isPtBr ? "minutos de leitura" : "minutes reading"}</span>
               </div>
               <div className="flex items-center gap-2">
-                <BookOpen size={16} className="text-purple-400" />
+                <BookOpen size={16} className="text-amber-400" />
                 <span>3 {isPtBr ? "aulas completas" : "complete lessons"}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Copy size={16} className="text-purple-400" />
+                <Copy size={16} className="text-amber-400" />
                 <span>{isPtBr ? "Templates inclusos" : "Templates included"}</span>
               </div>
             </div>
@@ -310,10 +310,10 @@ export default function FreeClassPage() {
               return (
                 <Card 
                   key={lesson.id}
-                  className={`bg-gray-900/50 border transition-all ${
+                  className={`bg-card/50 border transition-all ${
                     isExpanded 
-                      ? "border-purple-500/50 shadow-lg shadow-purple-500/10" 
-                      : "border-gray-800 hover:border-gray-700"
+                      ? "border-amber-500/50 shadow-lg shadow-amber-500/10" 
+                      : "border-border hover:border-border"
                   }`}
                 >
                   <button
@@ -323,8 +323,8 @@ export default function FreeClassPage() {
                     <div className="flex items-start gap-4">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
                         isExpanded 
-                          ? "bg-gradient-to-br from-purple-500 to-pink-500" 
-                          : "bg-gray-800"
+                          ? "bg-gradient-to-br from-amber-500 to-yellow-600" 
+                          : "bg-secondary"
                       }`}>
                         {isExpanded ? <BookOpen size={24} className="text-white" /> : <PlayCircle size={24} className="text-white" />}
                       </div>
@@ -333,24 +333,24 @@ export default function FreeClassPage() {
                           <Badge variant="secondary" className="text-xs">
                             {isPtBr ? `Aula ${lesson.id}` : `Lesson ${lesson.id}`}
                           </Badge>
-                          <span className="text-xs text-gray-500">{duration}</span>
+                          <span className="text-xs text-muted-foreground">{duration}</span>
                         </div>
                         <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
-                        <p className="text-sm text-gray-400">{desc}</p>
+                        <p className="text-sm text-muted-foreground">{desc}</p>
                       </div>
-                      <div className="flex-shrink-0 text-gray-500">
+                      <div className="flex-shrink-0 text-muted-foreground">
                         {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                       </div>
                     </div>
                   </button>
                   
                   {isExpanded && (
-                    <div className="px-6 pb-6 border-t border-gray-800 pt-4">
+                    <div className="px-6 pb-6 border-t border-border pt-4">
                       {/* Real lesson content */}
                       <div className="prose prose-invert prose-sm max-w-none mb-6">
                         {content.split('\n\n').map((paragraph, i) => {
                           if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                            return <h3 key={i} className="text-lg font-bold text-purple-400 mt-6 mb-3">{paragraph.replace(/\*\*/g, '')}</h3>;
+                            return <h3 key={i} className="text-lg font-bold text-amber-400 mt-6 mb-3">{paragraph.replace(/\*\*/g, '')}</h3>;
                           }
                           if (paragraph.startsWith('**')) {
                             const parts = paragraph.split('**');
@@ -359,7 +359,7 @@ export default function FreeClassPage() {
                                 {parts.map((part, j) => (
                                   j % 2 === 1 
                                     ? <strong key={j} className="text-white">{part}</strong>
-                                    : <span key={j} className="text-gray-300">{part}</span>
+                                    : <span key={j} className="text-muted-foreground">{part}</span>
                                 ))}
                               </div>
                             );
@@ -368,7 +368,7 @@ export default function FreeClassPage() {
                             return (
                               <ul key={i} className="space-y-2 mb-4 ml-4">
                                 {paragraph.split('\n').map((line, j) => (
-                                  <li key={j} className="flex items-start gap-2 text-gray-300">
+                                  <li key={j} className="flex items-start gap-2 text-muted-foreground">
                                     <CheckCircle size={14} className="text-green-400 mt-0.5 flex-shrink-0" />
                                     <span>{line.replace(/^- /, '').replace(/\*\*/g, '')}</span>
                                   </li>
@@ -378,28 +378,28 @@ export default function FreeClassPage() {
                           }
                           if (paragraph.startsWith('1. ') || paragraph.startsWith('❌') || paragraph.startsWith('✅')) {
                             return (
-                              <div key={i} className="mb-4 p-4 bg-gray-800/50 rounded-lg">
+                              <div key={i} className="mb-4 p-4 bg-secondary/50 rounded-lg">
                                 {paragraph.split('\n').map((line, j) => (
-                                  <p key={j} className={`text-sm mb-1 ${line.startsWith('❌') ? 'text-red-400' : line.startsWith('✅') ? 'text-green-400' : 'text-gray-300'}`}>
+                                  <p key={j} className={`text-sm mb-1 ${line.startsWith('❌') ? 'text-red-400' : line.startsWith('✅') ? 'text-green-400' : 'text-muted-foreground'}`}>
                                     {line.replace(/\*\*/g, '')}
                                   </p>
                                 ))}
                               </div>
                             );
                           }
-                          return <p key={i} className="text-gray-300 mb-4 leading-relaxed">{paragraph.replace(/\*\*/g, '')}</p>;
+                          return <p key={i} className="text-muted-foreground mb-4 leading-relaxed">{paragraph.replace(/\*\*/g, '')}</p>;
                         })}
                       </div>
 
                       {/* Summary of topics */}
-                      <div className="p-4 bg-purple-900/20 rounded-lg border border-purple-500/20">
-                        <h4 className="text-sm font-semibold text-purple-400 mb-3 flex items-center gap-2">
+                      <div className="p-4 bg-amber-900/20 rounded-lg border border-amber-500/20">
+                        <h4 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-2">
                           <Lightbulb size={16} />
                           {isPtBr ? "Pontos-chave desta aula:" : "Key takeaways:"}
                         </h4>
                         <ul className="space-y-2">
                           {(isPtBr ? lesson.topics : lesson.topicsEn).map((topic, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                            <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                               <CheckCircle size={14} className="text-green-400 mt-0.5 flex-shrink-0" />
                               {topic}
                             </li>
@@ -417,7 +417,7 @@ export default function FreeClassPage() {
         {/* What you'll be able to do */}
         <section className="container mx-auto px-4 mb-16">
           <div className="max-w-4xl mx-auto">
-            <Card className="bg-gradient-to-br from-purple-900/30 to-pink-900/20 border-purple-500/30 p-8">
+            <Card className="bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30 p-8">
               <h2 className="text-2xl font-bold mb-6 text-center">
                 {isPtBr 
                   ? "Depois dessas 3 aulas, você vai saber:" 
@@ -431,7 +431,7 @@ export default function FreeClassPage() {
                   { icon: FileText, text: isPtBr ? "Usar templates prontos para email, conteúdo e análise" : "Use ready-made templates for email, content and analysis" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 p-3 bg-black/30 rounded-lg">
-                    <item.icon className="text-purple-400 flex-shrink-0" size={20} />
+                    <item.icon className="text-amber-400 flex-shrink-0" size={20} />
                     <span className="text-gray-200 text-sm">{item.text}</span>
                   </div>
                 ))}
@@ -443,20 +443,20 @@ export default function FreeClassPage() {
         {/* CTA - Go to full course */}
         <section className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <Card className="bg-gray-900/50 border-gray-800 p-8 md:p-12">
+            <Card className="bg-card/50 border-border p-8 md:p-12">
               <h2 className="text-3xl font-bold mb-4">
                 {isPtBr 
                   ? "Quer ir além dos fundamentos?" 
                   : "Want to go beyond the fundamentals?"}
               </h2>
-              <p className="text-gray-400 mb-6 max-w-xl mx-auto">
+              <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
                 {isPtBr
                   ? "Este mini-curso cobre o essencial. Nos cursos completos, você domina técnicas avançadas de prompt engineering, automação com n8n e Make, criação de conteúdo com IA e muito mais — tudo com projetos práticos."
                   : "This mini-course covers the essentials. In the full courses, you master advanced prompt engineering, automation with n8n and Make, AI content creation and more — all with practical projects."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/cursos">
-                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-8 py-6 text-lg">
+                  <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-8 py-6 text-lg">
                     {isPtBr ? "Ver Cursos Completos" : "See Full Courses"}
                     <ArrowRight className="ml-2" size={20} />
                   </Button>

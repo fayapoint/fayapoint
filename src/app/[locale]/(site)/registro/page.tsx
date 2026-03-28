@@ -112,7 +112,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-900/30 via-black to-yellow-900/20" />
         <motion.div
           animate={{
             scale: [1, 1.2, 1],
@@ -123,7 +123,7 @@ export default function RegisterPage() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-72 h-72 bg-amber-500/30 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -136,7 +136,7 @@ export default function RegisterPage() {
             ease: "easeInOut",
             delay: 1,
           }}
-          className="absolute bottom-20 right-10 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl"
+          className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-500/30 rounded-full blur-3xl"
         />
       </div>
 
@@ -150,11 +150,11 @@ export default function RegisterPage() {
         >
           <h2 className="text-4xl font-bold mb-6">
             {t("heroTitle")}{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
               {t("heroHighlight")}
             </span>
           </h2>
-          <p className="text-xl text-gray-300 mb-8">
+          <p className="text-xl text-muted-foreground mb-8">
             {t("heroDescription")}
           </p>
           
@@ -174,14 +174,14 @@ export default function RegisterPage() {
           </div>
 
           <div className="bg-popover/50 backdrop-blur-sm rounded-lg p-6 border border-border">
-            <p className="text-gray-300 italic">
+            <p className="text-muted-foreground italic">
               &ldquo;{t("testimonial.quote")}&rdquo;
             </p>
             <div className="flex items-center gap-4 mt-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600" />
               <div>
                 <p className="font-semibold">{t("testimonial.name")}</p>
-                <p className="text-sm text-gray-400">{t("testimonial.role")}</p>
+                <p className="text-sm text-muted-foreground">{t("testimonial.role")}</p>
               </div>
             </div>
           </div>
@@ -196,11 +196,11 @@ export default function RegisterPage() {
           {/* Logo */}
           <div className="text-center mb-8 lg:text-left">
             <Link href="/" className="inline-block">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent mb-2">
                 {t("title")}
               </h1>
             </Link>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               {t("subtitle")}
             </p>
           </div>
@@ -295,11 +295,11 @@ export default function RegisterPage() {
                 />
                 <label htmlFor="terms" className="text-sm text-muted-foreground">
                   {t("terms.accept")}{" "}
-                  <Link href="/termos" className="text-purple-400 hover:text-purple-300">
+                  <Link href="/termos" className="text-amber-400 hover:text-amber-300">
                     {t("terms.termsOfUse")}
                   </Link>{" "}
                   {t("terms.and")}{" "}
-                  <Link href="/privacidade" className="text-purple-400 hover:text-purple-300">
+                  <Link href="/privacidade" className="text-amber-400 hover:text-amber-300">
                     {t("terms.privacyPolicy")}
                   </Link>
                 </label>
@@ -308,7 +308,7 @@ export default function RegisterPage() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
                 size="lg"
                 disabled={isLoading}
               >
@@ -356,11 +356,11 @@ export default function RegisterPage() {
             </div>
 
             {/* Login Link */}
-            <p className="text-center mt-6 text-gray-400">
+            <p className="text-center mt-6 text-muted-foreground">
               {t("hasAccount")}{" "}
               <Link 
                 href="/login" 
-                className="text-purple-400 hover:text-purple-300 font-medium"
+                className="text-amber-400 hover:text-amber-300 font-medium"
               >
                 {t("login")}
               </Link>

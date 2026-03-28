@@ -125,7 +125,7 @@ export function FreeOfferBanner() {
           transition={{ duration: 0.6 }}
           className="max-w-5xl mx-auto"
         >
-          <div className="overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(3,7,18,0.96))] p-6 md:p-8">
+          <div className="overflow-hidden rounded-[32px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(3,7,18,0.96))] p-6 md:p-8">
             <div className="grid gap-8 lg:grid-cols-[0.95fr,1.05fr] lg:items-start">
               <div>
                 <motion.div
@@ -155,7 +155,7 @@ export function FreeOfferBanner() {
                   </span>
                 </h2>
 
-                <p className="mt-4 max-w-2xl text-lg leading-8 text-gray-300">
+                <p className="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground">
                   {freeCourse
                     ? isPtBr
                       ? `${freeCourse.name} é a oferta do mês por apenas US$1 (${formattedBrl}). Acesso vitalício + certificado verificável incluído.`
@@ -163,10 +163,10 @@ export function FreeOfferBanner() {
                     : t("subtitle")}
                 </p>
 
-                <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="mt-6 rounded-2xl border border-border bg-black/20 p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                      <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                         {isPtBr ? "Oferta do mês" : "Monthly offer"}
                       </p>
                       <h3 className="mt-2 text-2xl font-bold text-white">
@@ -195,7 +195,7 @@ export function FreeOfferBanner() {
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
                     </Link>
-                    <p className="flex items-center text-sm text-gray-400">
+                    <p className="flex items-center text-sm text-muted-foreground">
                       {freeCourse
                         ? isPtBr
                           ? `Apenas US$1 (${formattedBrl}) via PIX, cartão ou boleto. Acesso vitalício ao curso completo.`

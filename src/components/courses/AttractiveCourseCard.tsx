@@ -22,9 +22,9 @@ interface AttractiveCourseCardProps {
 // Course-specific gradients and icons
 const courseStyles: Record<string, { gradient: string; icon: React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>; accentColor: string }> = {
   'prompt-engineering-fundamentos': {
-    gradient: 'from-purple-500 via-purple-600 to-blue-600',
+    gradient: 'from-amber-500 via-purple-600 to-blue-600',
     icon: Sparkles,
-    accentColor: 'purple'
+    accentColor: 'amber'
   },
   'chatgpt-essentials': {
     gradient: 'from-teal-500 via-green-500 to-emerald-600',
@@ -32,19 +32,19 @@ const courseStyles: Record<string, { gradient: string; icon: React.ComponentType
     accentColor: 'teal'
   },
   'chatgpt-advanced-apis': {
-    gradient: 'from-purple-900 via-purple-700 to-pink-600',
+    gradient: 'from-amber-900 via-purple-700 to-yellow-600',
     icon: Code,
     accentColor: 'pink'
   },
   'midjourney-arte-profissional': {
-    gradient: 'from-pink-500 via-purple-500 to-indigo-600',
+    gradient: 'from-yellow-500 via-amber-500 to-indigo-600',
     icon: Sparkles,
     accentColor: 'pink'
   },
   'default': {
-    gradient: 'from-purple-600 to-pink-600',
+    gradient: 'from-amber-600 to-yellow-700',
     icon: BookOpen,
-    accentColor: 'purple'
+    accentColor: 'amber'
   }
 };
 
@@ -82,7 +82,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
       className="h-full"
     >
       <Link href={`/curso/${product.slug}`}>
-        <Card className="h-full overflow-hidden border-2 border-transparent hover:border-purple-500/50 transition-all duration-300 group hover:shadow-2xl hover:shadow-purple-500/20 bg-gray-900/50 backdrop-blur">
+        <Card className="h-full overflow-hidden border-2 border-transparent hover:border-amber-500/50 transition-all duration-300 group hover:shadow-2xl hover:shadow-amber-500/20 bg-card/50 backdrop-blur">
           {/* Gradient Header with Icon */}
           <div className={`relative bg-gradient-to-br ${style.gradient} p-8 overflow-hidden`}>
             {/* Animated Background Pattern */}
@@ -124,7 +124,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 </Badge>
               )}
               {isAdvanced && (
-                <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 shadow-lg">
+                <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
                   <Award size={14} className="mr-1" />
                   <span className="font-bold">{isPtBr ? 'Avançado' : 'Advanced'}</span>
                 </Badge>
@@ -145,21 +145,21 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
           <div className="p-6 space-y-4">
             {/* Category & Tool */}
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-purple-400 border-purple-400/50 bg-purple-400/10">
+              <Badge variant="outline" className="text-amber-400 border-amber-400/50 bg-amber-400/10">
                 {product.categoryPrimary}
               </Badge>
-              <Badge variant="outline" className="text-gray-400">
+              <Badge variant="outline" className="text-muted-foreground">
                 {product.tool}
               </Badge>
             </div>
 
             {/* Title */}
-            <h3 className="text-xl font-bold leading-tight group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 group-hover:bg-clip-text transition-all duration-300">
+            <h3 className="text-xl font-bold leading-tight group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-amber-400 group-hover:to-yellow-400 group-hover:bg-clip-text transition-all duration-300">
               {product.name}
             </h3>
 
             {/* Description */}
-            <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed">
+            <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
               {product.copy.shortDescription}
             </p>
 
@@ -168,7 +168,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 <ShieldCheck size={15} className="text-emerald-400" />
                 <span>{isPtBr ? "Conteúdo verificado" : "Verified content"}</span>
               </div>
-              <p className="mt-1 text-xs leading-relaxed text-gray-400">
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 {isPtBr
                   ? `Revisado em ${verifiedAtLabel} com ${product.editorialVerification?.canonModels?.join(" / ")} e ${product.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real por aula.`
                   : `Reviewed on ${verifiedAtLabel} with ${product.editorialVerification?.canonModels?.join(" / ")} and ${product.lessonContentCoverage?.coveragePercent ?? 0}% real lesson coverage.`}
@@ -176,7 +176,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-4 text-sm text-gray-400 py-3 border-y border-gray-800">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground py-3 border-y border-border">
               {product.metrics.rating > 0 && (
                 <div className="flex items-center gap-1.5">
                   <Star className="text-yellow-400 fill-yellow-400" size={16} />
@@ -184,7 +184,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 </div>
               )}
               <div className="flex items-center gap-1.5">
-                <Play className="text-purple-400" size={16} />
+                <Play className="text-amber-400" size={16} />
                 <span className="font-semibold text-white">
                   {product.metrics.lessons} {isPtBr ? 'aulas' : 'lessons'}
                 </span>
@@ -197,23 +197,23 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
 
             {/* What's Included */}
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 {isPtBr ? 'Este curso inclui:' : 'This course includes:'}
               </p>
               <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="flex items-center gap-2 text-gray-300">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
                   <span>{product.metrics.lessons} {isPtBr ? 'aulas' : 'lessons'}</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-300">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
                   <span>{isPtBr ? 'Certificado' : 'Certificate'}</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-300">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
                   <span>{isPtBr ? 'Acesso vitalício' : 'Lifetime access'}</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-300">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
                   <span>{isPtBr ? 'Suporte' : 'Support'}</span>
                 </div>
@@ -225,12 +225,12 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-end justify-between">
                 <div>
                   {effectiveOriginalPrice > effectivePrice && (
-                    <p className="text-gray-500 line-through text-sm">
+                    <p className="text-muted-foreground line-through text-sm">
                       R$ {effectiveOriginalPrice}
                     </p>
                   )}
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    <span className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                       R$ {effectivePrice}
                     </span>
                     {discount > 0 && (
@@ -246,7 +246,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                       {isPtBr ? `Oferta do mês — ${conversionDisplay}` : `Monthly offer — ${conversionDisplay}`}
                     </p>
                   ) : (
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       ou 12x de R$ {(product.pricing.price / 12).toFixed(2)}
                     </p>
                   )}
@@ -265,7 +265,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               </Button>
 
               {/* Trust Badges */}
-              <div className="flex items-center justify-center gap-4 text-xs text-gray-500 pt-2">
+              <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground pt-2">
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />
                   <span>{isPtBr ? '7 dias garantia' : '7-day guarantee'}</span>

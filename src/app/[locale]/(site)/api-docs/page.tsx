@@ -318,7 +318,7 @@ const methodColors: Record<string, string> = {
   POST: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   PUT: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   DELETE: "bg-red-500/20 text-red-400 border-red-500/30",
-  PATCH: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+  PATCH: "bg-amber-500/20 text-amber-400 border-amber-500/30",
 };
 
 function CodeBlock({ code, language = "json" }: { code: string; language?: string }) {
@@ -407,7 +407,7 @@ function CategorySection({ category }: { category: APICategory }) {
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center gap-4 p-4 bg-zinc-900/50 rounded-lg hover:bg-zinc-900 transition-colors mb-4"
       >
-        <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-purple-400">
+        <div className="p-2 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/20 text-amber-400">
           {category.icon}
         </div>
         <div className="flex-1 text-left">
@@ -460,7 +460,7 @@ export default function APIDocsPage() {
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-lg border border-zinc-800">
                 <Zap className="w-4 h-4 text-amber-400" />
                 <span className="text-sm">Base URL:</span>
-                <code className="text-sm text-purple-400 font-mono">https://fayai.com.br/api</code>
+                <code className="text-sm text-amber-400 font-mono">https://fayai.com.br/api</code>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-lg border border-zinc-800">
                 <Shield className="w-4 h-4 text-emerald-400" />
@@ -473,13 +473,13 @@ export default function APIDocsPage() {
 
         {/* Quick Start */}
         <section className="container mx-auto px-4 mb-16">
-          <div className="max-w-4xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-2xl p-6">
+          <div className="max-w-4xl bg-gradient-to-br from-amber-500/10 to-yellow-500/10 border border-amber-500/20 rounded-2xl p-6">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-purple-400" />
+              <BookOpen className="w-5 h-5 text-amber-400" />
               Quick Start
             </h2>
             <p className="text-muted-foreground mb-4">
-              Para começar, faça login e use o token retornado no header <code className="text-purple-400">Authorization</code>:
+              Para começar, faça login e use o token retornado no header <code className="text-amber-400">Authorization</code>:
             </p>
             <CodeBlock code={`// 1. Fazer login
 const response = await fetch('https://fayai.com.br/api/auth/login', {
@@ -542,8 +542,8 @@ const dashboard = await fetch('https://fayai.com.br/api/user/dashboard', {
                   <li>100 req/hora</li>
                 </ul>
               </div>
-              <div className="p-4 bg-zinc-900 rounded-lg border border-purple-500/30">
-                <h3 className="font-medium text-purple-400 mb-2">Starter</h3>
+              <div className="p-4 bg-zinc-900 rounded-lg border border-amber-500/30">
+                <h3 className="font-medium text-amber-400 mb-2">Starter</h3>
                 <ul className="text-sm text-zinc-500 space-y-1">
                   <li>50 imagens/mês</li>
                   <li>3 cursos</li>
@@ -575,7 +575,7 @@ const dashboard = await fetch('https://fayai.com.br/api/user/dashboard', {
                   Falar com o time
                 </Link>
               </Button>
-              <Button asChild className="bg-gradient-to-r from-purple-600 to-pink-600">
+              <Button asChild className="bg-gradient-to-r from-amber-600 to-yellow-700">
                 <Link href="/agendar-consultoria">
                   Agendar consultoria
                   <ExternalLink className="w-4 h-4 ml-2" />

@@ -31,7 +31,7 @@ const RANK_STYLES: Record<number, { bg: string; icon: React.ReactNode; glow: str
   },
   2: { 
     bg: "bg-gradient-to-r from-gray-400/20 to-gray-500/20 border-gray-400/50", 
-    icon: <Medal className="text-gray-300" size={22} />,
+    icon: <Medal className="text-muted-foreground" size={22} />,
     glow: "shadow-[0_0_20px_rgba(156,163,175,0.2)]"
   },
   3: { 
@@ -48,17 +48,17 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center">
               <Trophy size={22} className="text-white" />
             </div>
             Ranking Semanal
           </h2>
-          <p className="text-gray-400 text-sm mt-1">Compete com outros alunos e ganhe XP extra!</p>
+          <p className="text-muted-foreground text-sm mt-1">Compete com outros alunos e ganhe XP extra!</p>
         </div>
         
-        <Card className="bg-purple-500/10 border-purple-500/30 px-4 py-2">
-          <p className="text-xs text-gray-400">Sua posição</p>
-          <p className="text-2xl font-bold text-purple-400">#{userRank}</p>
+        <Card className="bg-amber-500/10 border-amber-500/30 px-4 py-2">
+          <p className="text-xs text-muted-foreground">Sua posição</p>
+          <p className="text-2xl font-bold text-amber-400">#{userRank}</p>
         </Card>
       </div>
 
@@ -80,7 +80,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
             >
               <Card className={cn(
                 "w-full p-6 text-center relative overflow-hidden transition-all hover:scale-105",
-                RANK_STYLES[user.rank]?.bg || "bg-white/5 border-white/10",
+                RANK_STYLES[user.rank]?.bg || "bg-secondary border-border",
                 RANK_STYLES[user.rank]?.glow,
                 isFirst && "pt-10"
               )}>
@@ -97,14 +97,14 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                   isFirst ? "w-20 h-20" : "w-16 h-16"
                 )}>
                   <div className={cn(
-                    "w-full h-full rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl font-bold",
-                    user.isCurrentUser && "ring-4 ring-purple-500 ring-offset-2 ring-offset-gray-900"
+                    "w-full h-full rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-xl font-bold",
+                    user.isCurrentUser && "ring-4 ring-amber-500 ring-offset-2 ring-offset-gray-900"
                   )}>
                     {user.name?.substring(0, 2).toUpperCase() || "??"}
                   </div>
                   
                   {!isFirst && (
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-card rounded-full flex items-center justify-center">
                       {RANK_STYLES[user.rank]?.icon}
                     </div>
                   )}
@@ -112,18 +112,18 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
 
                 <h3 className={cn("font-bold truncate", isFirst ? "text-lg" : "text-sm")}>
                   {user.name}
-                  {user.isCurrentUser && <span className="text-purple-400 ml-1">(você)</span>}
+                  {user.isCurrentUser && <span className="text-amber-400 ml-1">(você)</span>}
                 </h3>
 
                 <div className="flex items-center justify-center gap-2 mt-2">
                   <Badge variant="outline" className={cn(
                     "text-[10px]",
-                    user.plan !== 'free' ? "border-yellow-500/50 text-yellow-400" : "border-gray-600 text-gray-400"
+                    user.plan !== 'free' ? "border-yellow-500/50 text-yellow-400" : "border-border text-muted-foreground"
                   )}>
                     {user.plan.toUpperCase()}
                   </Badge>
-                  <div className="flex items-center gap-1 text-xs text-gray-400">
-                    <Flame size={12} className="text-purple-400" />
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Flame size={12} className="text-amber-400" />
                     <span>Lvl {user.level}</span>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                   <span className={cn("font-bold", isFirst ? "text-2xl" : "text-xl")}>
                     {user.weeklyXp.toLocaleString()}
                   </span>
-                  <span className="text-xs text-gray-400">XP</span>
+                  <span className="text-xs text-muted-foreground">XP</span>
                 </div>
               </Card>
               
@@ -152,7 +152,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
       </div>
 
       {/* Rest of Rankings */}
-      <Card className="bg-white/5 border-white/10 overflow-hidden">
+      <Card className="bg-secondary border-border overflow-hidden">
         <div className="divide-y divide-gray-800">
           {users.slice(3).map((user, idx) => (
             <motion.div
@@ -161,30 +161,30 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 + idx * 0.05 }}
               className={cn(
-                "flex items-center gap-4 p-4 transition-colors hover:bg-white/5",
-                user.isCurrentUser && "bg-purple-500/10"
+                "flex items-center gap-4 p-4 transition-colors hover:bg-secondary",
+                user.isCurrentUser && "bg-amber-500/10"
               )}
             >
               <div className={cn(
                 "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm",
-                user.isCurrentUser ? "bg-purple-500 text-white" : "bg-gray-800 text-gray-400"
+                user.isCurrentUser ? "bg-amber-500 text-white" : "bg-secondary text-muted-foreground"
               )}>
                 {user.rank}
               </div>
 
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/50 to-pink-500/50 flex items-center justify-center font-semibold">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500/50 to-yellow-500/50 flex items-center justify-center font-semibold">
                 {user.name?.substring(0, 2).toUpperCase() || "??"}
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold truncate">{user.name}</span>
-                  {user.isCurrentUser && <Badge className="bg-purple-500 text-xs">Você</Badge>}
+                  {user.isCurrentUser && <Badge className="bg-amber-500 text-xs">Você</Badge>}
                   {user.plan !== 'free' && (
                     <Crown size={14} className="text-yellow-400" />
                   )}
                 </div>
-                <p className="text-xs text-gray-400">Nível {user.level}</p>
+                <p className="text-xs text-muted-foreground">Nível {user.level}</p>
               </div>
 
               <div className="text-right">
@@ -192,7 +192,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                   <Zap className="text-yellow-400" size={16} />
                   <span className="font-bold">{user.weeklyXp.toLocaleString()}</span>
                 </div>
-                <p className="text-xs text-gray-500">XP esta semana</p>
+                <p className="text-xs text-muted-foreground">XP esta semana</p>
               </div>
             </motion.div>
           ))}
@@ -200,21 +200,21 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
       </Card>
 
       {/* Weekly Rewards Info */}
-      <Card className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border-purple-500/30 p-6">
+      <Card className="bg-gradient-to-r from-amber-900/30 to-yellow-900/30 border-amber-500/30 p-6">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shrink-0">
-            <TrendingUp className="text-purple-400" size={24} />
+          <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center shrink-0">
+            <TrendingUp className="text-amber-400" size={24} />
           </div>
           <div>
             <h3 className="font-bold text-lg mb-1">Recompensas Semanais</h3>
-            <p className="text-sm text-gray-400 mb-3">
+            <p className="text-sm text-muted-foreground mb-3">
               Os top 3 do ranking semanal ganham bônus exclusivos:
             </p>
             <div className="flex flex-wrap gap-3">
               <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50">
                 🥇 1º: +500 XP + Badge Exclusivo
               </Badge>
-              <Badge className="bg-gray-400/20 text-gray-300 border-gray-400/50">
+              <Badge className="bg-gray-400/20 text-muted-foreground border-gray-400/50">
                 🥈 2º: +300 XP
               </Badge>
               <Badge className="bg-amber-700/20 text-amber-500 border-amber-700/50">

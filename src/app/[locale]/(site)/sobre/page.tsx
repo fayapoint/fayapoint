@@ -76,7 +76,7 @@ export default function AboutPage() {
               sizes="100vw"
               className="object-cover opacity-40"
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-900/60 via-black/80 to-pink-900/50" />
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-900/60 via-black/80 to-yellow-900/50" />
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
@@ -85,7 +85,7 @@ export default function AboutPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center max-w-4xl mx-auto"
             >
-              <Badge className="mb-4 bg-purple-600/20 text-purple-400 border-purple-500/50">
+              <Badge className="mb-4 bg-amber-600/20 text-amber-400 border-amber-500/50">
                 {t("hero.badge")}
               </Badge>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -108,7 +108,7 @@ export default function AboutPage() {
         </section>
 
         {/* Stats */}
-        <section className="py-12 border-y border-gray-800">
+        <section className="py-12 border-y border-border">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, i) => {
@@ -121,9 +121,9 @@ export default function AboutPage() {
                     transition={{ delay: i * 0.1 }}
                     className="text-center"
                   >
-                    <Icon className="w-8 h-8 mx-auto mb-2 text-purple-400" />
+                    <Icon className="w-8 h-8 mx-auto mb-2 text-amber-400" />
                     <div className="text-3xl font-bold mb-1">{stat.number}</div>
-                    <div className="text-gray-400">{stat.label}</div>
+                    <div className="text-muted-foreground">{stat.label}</div>
                   </motion.div>
                 );
               })}
@@ -141,7 +141,7 @@ export default function AboutPage() {
                 viewport={{ once: true }}
               >
                 <div className="relative">
-                  <div className="absolute -bottom-10 -left-12 hidden lg:block w-40 h-40 bg-purple-600/20 blur-3xl rounded-full" />
+                  <div className="absolute -bottom-10 -left-12 hidden lg:block w-40 h-40 bg-amber-600/20 blur-3xl rounded-full" />
                   <div className="relative aspect-[3/4] rounded-3xl overflow-hidden ring-1 ring-white/15 shadow-2xl">
                     <Image
                       src="/rwx2.jpg"
@@ -155,22 +155,22 @@ export default function AboutPage() {
                   {/* Social Links */}
                   <div className="flex justify-center gap-4 mt-6">
                     <a href="https://linkedin.com/in/ricardofaya" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="icon" className="border-gray-700">
+                      <Button variant="outline" size="icon" className="border-border">
                         <Linkedin className="w-5 h-5" />
                       </Button>
                     </a>
                     <a href="https://youtube.com/@ricardofaya" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="icon" className="border-gray-700">
+                      <Button variant="outline" size="icon" className="border-border">
                         <Youtube className="w-5 h-5" />
                       </Button>
                     </a>
                     <a href="https://instagram.com/ricardofaya" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="icon" className="border-gray-700">
+                      <Button variant="outline" size="icon" className="border-border">
                         <Instagram className="w-5 h-5" />
                       </Button>
                     </a>
                     <a href="https://twitter.com/ricardofaya" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="icon" className="border-gray-700">
+                      <Button variant="outline" size="icon" className="border-border">
                         <Twitter className="w-5 h-5" />
                       </Button>
                     </a>
@@ -184,7 +184,7 @@ export default function AboutPage() {
                 viewport={{ once: true }}
               >
                 <h2 className="text-3xl font-bold mb-6">{t("aboutRicardo.title")}</h2>
-                <div className="space-y-4 text-gray-300">
+                <div className="space-y-4 text-muted-foreground">
                   {aboutParagraphs.map((paragraph, index) => (
                     <p key={index}>{paragraph}</p>
                   ))}
@@ -195,7 +195,7 @@ export default function AboutPage() {
                   <h3 className="text-xl font-semibold mb-4">{t("aboutRicardo.certificationsTitle")}</h3>
                   <div className="flex flex-wrap gap-2">
                     {certifications.map((cert) => (
-                      <Badge key={cert} variant="outline" className="border-purple-500/50">
+                      <Badge key={cert} variant="outline" className="border-amber-500/50">
                         {cert}
                       </Badge>
                     ))}
@@ -210,11 +210,11 @@ export default function AboutPage() {
         <section className="py-20 bg-gradient-to-b from-black/20 via-transparent to-black/20">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <Badge className="bg-purple-600/20 text-purple-300 border-purple-500/40 mb-4">
+              <Badge className="bg-amber-600/20 text-amber-300 border-amber-500/40 mb-4">
                 {t("gallery.badge")}
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("gallery.title")}</h2>
-              <p className="text-lg text-gray-400">{t("gallery.description")}</p>
+              <p className="text-lg text-muted-foreground">{t("gallery.description")}</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -225,7 +225,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5"
+                  className="group relative overflow-hidden rounded-3xl border border-border bg-secondary"
                 >
                   <div className="relative aspect-[4/3]">
                     <Image
@@ -237,7 +237,7 @@ export default function AboutPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-6 left-6 right-6">
-                      <p className="text-sm uppercase tracking-wide text-purple-300 mb-1">{image.title}</p>
+                      <p className="text-sm uppercase tracking-wide text-amber-300 mb-1">{image.title}</p>
                       <p className="text-lg font-semibold text-white">{image.description}</p>
                     </div>
                   </div>
@@ -248,7 +248,7 @@ export default function AboutPage() {
         </section>
 
         {/* Quote */}
-        <section className="py-20 bg-gradient-to-r from-purple-900/20 to-pink-900/20">
+        <section className="py-20 bg-gradient-to-r from-amber-900/30 to-yellow-900/20">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -256,9 +256,9 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="max-w-4xl mx-auto text-center"
             >
-              <Quote className="w-12 h-12 mx-auto mb-6 text-purple-400" />
+              <Quote className="w-12 h-12 mx-auto mb-6 text-amber-400" />
               <blockquote className="text-2xl md:text-3xl font-medium mb-6">{t("quote.text")}</blockquote>
-              <cite className="text-gray-400">{t("quote.cite")}</cite>
+              <cite className="text-muted-foreground">{t("quote.cite")}</cite>
             </motion.div>
           </div>
         </section>
@@ -268,7 +268,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("timeline.title")}</h2>
-              <p className="text-xl text-gray-400">{t("timeline.subtitle")}</p>
+              <p className="text-xl text-muted-foreground">{t("timeline.subtitle")}</p>
             </div>
 
             <div className="max-w-4xl mx-auto">
@@ -282,21 +282,21 @@ export default function AboutPage() {
                 >
                   {/* Line */}
                   {i < timeline.length - 1 && (
-                    <div className="absolute left-[88px] top-12 w-0.5 h-full bg-gradient-to-b from-purple-500 to-transparent" />
+                    <div className="absolute left-[88px] top-12 w-0.5 h-full bg-gradient-to-b from-amber-500 to-transparent" />
                   )}
                   
                   {/* Year */}
                   <div className="flex-shrink-0 w-20 text-right">
-                    <span className="text-purple-400 font-bold">{item.year}</span>
+                    <span className="text-amber-400 font-bold">{item.year}</span>
                   </div>
                   
                   {/* Dot */}
-                  <div className="flex-shrink-0 w-4 h-4 bg-purple-500 rounded-full mt-1 ring-4 ring-purple-500/20" />
+                  <div className="flex-shrink-0 w-4 h-4 bg-amber-500 rounded-full mt-1 ring-4 ring-amber-500/20" />
                   
                   {/* Content */}
                   <div className="flex-grow pb-8">
                     <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    <p className="text-gray-400">{item.description}</p>
+                    <p className="text-muted-foreground">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -305,11 +305,11 @@ export default function AboutPage() {
         </section>
 
         {/* Values */}
-        <section className="py-20 bg-gray-900/30">
+        <section className="py-20 bg-card/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("values.title")}</h2>
-              <p className="text-xl text-gray-400">{t("values.subtitle")}</p>
+              <p className="text-xl text-muted-foreground">{t("values.subtitle")}</p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
@@ -323,12 +323,12 @@ export default function AboutPage() {
                     transition={{ delay: i * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <Card className="bg-white/5 backdrop-blur border-white/10 p-6 h-full">
-                      <div className="text-purple-400 mb-4">
+                    <Card className="bg-secondary backdrop-blur border-border p-6 h-full">
+                      <div className="text-amber-400 mb-4">
                         <Icon className="w-8 h-8" />
                       </div>
                       <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-                      <p className="text-gray-400">{value.description}</p>
+                      <p className="text-muted-foreground">{value.description}</p>
                     </Card>
                   </motion.div>
                 );
@@ -347,12 +347,12 @@ export default function AboutPage() {
               className="text-center max-w-3xl mx-auto"
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("cta.title")}</h2>
-              <p className="text-xl text-gray-300 mb-8">{t("cta.description")}</p>
+              <p className="text-xl text-muted-foreground mb-8">{t("cta.description")}</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/registro">
                   <Button 
                     size="lg" 
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
                   >
                     {t("cta.primaryButton")}
                   </Button>
@@ -361,7 +361,7 @@ export default function AboutPage() {
                   <Button 
                     size="lg" 
                     variant="outline" 
-                    className="border-purple-500 text-purple-400 hover:bg-purple-500/10"
+                    className="border-amber-500 text-amber-400 hover:bg-amber-500/10"
                   >
                     {t("cta.secondaryButton")}
                   </Button>

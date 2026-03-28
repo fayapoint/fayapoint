@@ -50,7 +50,7 @@ const PLAN_DATA: Record<string, {
   },
   profissional: {
     name: "Profissional", slug: "profissional", monthlyPrice: 97, yearlyPrice: 970,
-    monthlyCredits: 300, emoji: "🚀", color: "purple", gradient: "from-purple-500 to-violet-600",
+    monthlyCredits: 300, emoji: "🚀", color: "amber", gradient: "from-amber-500 to-yellow-600",
     badge: "Mais Popular",
     features: [
       "8 cursos por mês (todos os níveis)",
@@ -73,7 +73,7 @@ const PLAN_DATA: Record<string, {
   },
   // Legacy aliases
   starter: { name: "Explorador", slug: "explorador", monthlyPrice: 57, yearlyPrice: 570, monthlyCredits: 100, emoji: "🧭", color: "emerald", gradient: "from-emerald-500 to-teal-600", features: [] },
-  pro: { name: "Profissional", slug: "profissional", monthlyPrice: 97, yearlyPrice: 970, monthlyCredits: 300, emoji: "🚀", color: "purple", gradient: "from-purple-500 to-violet-600", features: [] },
+  pro: { name: "Profissional", slug: "profissional", monthlyPrice: 97, yearlyPrice: 970, monthlyCredits: 300, emoji: "🚀", color: "amber", gradient: "from-amber-500 to-yellow-600", features: [] },
   business: { name: "Expert", slug: "expert", monthlyPrice: 167, yearlyPrice: 1670, monthlyCredits: 800, emoji: "👑", color: "amber", gradient: "from-amber-500 to-orange-600", features: [] },
 };
 
@@ -99,7 +99,7 @@ function CardIcon3D({ active = false }: { active?: boolean }) {
   return (
     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200 ${
       active
-        ? "bg-gradient-to-br from-indigo-50 to-purple-100 shadow-lg shadow-purple-200/50 ring-2 ring-indigo-400"
+        ? "bg-gradient-to-br from-amber-50 to-yellow-100 shadow-lg shadow-amber-200/50 ring-2 ring-amber-400"
         : "bg-gradient-to-br from-gray-50 to-gray-100 shadow-md hover:shadow-lg"
     }`}>
       <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none">
@@ -224,7 +224,7 @@ function AsaasLogo({ className = "h-4" }: { className?: string }) {
 function CardBrandStrip() {
   return (
     <div className="flex items-center justify-center gap-4 mb-6 py-3 px-5 bg-gray-50/80 rounded-xl border border-gray-100">
-      <span className="text-xs text-gray-400 font-medium whitespace-nowrap">Aceitamos</span>
+      <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Aceitamos</span>
       <div className="flex items-center gap-2">
         <VisaLogo className="h-7 w-auto rounded" />
         <MastercardLogo className="h-7 w-auto rounded" />
@@ -540,7 +540,7 @@ export default function CheckoutPage() {
 
   // ─── Shared Input Style ─────────────────────────────────────────────
 
-  const inputClass = "w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all disabled:bg-gray-50 disabled:text-gray-500";
+  const inputClass = "w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all disabled:bg-gray-50 disabled:text-muted-foreground";
   const labelClass = "block text-sm font-medium text-gray-600 mb-1.5";
 
   // ─── Payment Result Screen (Light Theme) ────────────────────────────
@@ -557,7 +557,7 @@ export default function CheckoutPage() {
                 <Clock className="w-10 h-10 text-amber-600" />
               </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Aguardando Pagamento</h1>
-              <p className="text-gray-500">Pedido #{paymentResult.orderNumber}</p>
+              <p className="text-muted-foreground">Pedido #{paymentResult.orderNumber}</p>
             </div>
 
             <div className="rounded-2xl border border-gray-200 bg-white shadow-xl shadow-gray-100/50 p-8">
@@ -578,7 +578,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <p className="text-sm text-gray-500">PIX Copia e Cola:</p>
+                    <p className="text-sm text-muted-foreground">PIX Copia e Cola:</p>
                     <div className="flex gap-2">
                       <input readOnly value={paymentResult.pixData.qrCodePayload} className="flex-1 bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-700 text-sm truncate" />
                       <Button onClick={() => copyToClipboard(paymentResult.pixData!.qrCodePayload)} className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 shadow-md">
@@ -587,7 +587,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-center gap-2 text-sm text-gray-500 bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground bg-emerald-50 rounded-xl p-3 border border-emerald-100">
                     {checkingStatus ? (
                       <><Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> Verificando pagamento...</>
                     ) : (
@@ -610,7 +610,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <p className="text-sm text-gray-500">Linha Digitável:</p>
+                    <p className="text-sm text-muted-foreground">Linha Digitável:</p>
                     <div className="flex gap-2">
                       <input readOnly value={paymentResult.boletoData.digitableLine} className="flex-1 bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-700 text-sm font-mono" />
                       <Button onClick={() => copyToClipboard(paymentResult.boletoData!.digitableLine)} className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-4 shadow-md">
@@ -619,7 +619,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-500">Vencimento: {new Date(paymentResult.boletoData.dueDate).toLocaleDateString("pt-BR")}</p>
+                  <p className="text-sm text-muted-foreground">Vencimento: {new Date(paymentResult.boletoData.dueDate).toLocaleDateString("pt-BR")}</p>
 
                   <Button onClick={() => window.open(paymentResult.boletoData?.bankSlipUrl, "_blank")} className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-4 shadow-md">
                     <FileText className="w-4 h-4 mr-2" /> Abrir Boleto PDF
@@ -657,7 +657,7 @@ export default function CheckoutPage() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {isFreeCourseCheckout ? "Liberar Acesso Gratuito" : "Finalizar Compra"}
             </h1>
-            <p className="text-gray-500 text-lg">
+            <p className="text-muted-foreground text-lg">
               {isCartCheckout ? "Revise seus itens e finalize com segurança." : `Plano ${planInfo?.name || planName} — comece a aprender hoje.`}
             </p>
           </div>
@@ -680,7 +680,7 @@ export default function CheckoutPage() {
                       }`}>
                       {subscriptionCycle === "monthly" && <div className="absolute top-3 right-3"><CheckCircle2 className="w-5 h-5 text-indigo-500" /></div>}
                       <span className="text-lg font-bold text-gray-900 block">{formatCurrency(planInfo.monthlyPrice)}</span>
-                      <span className="text-sm text-gray-500">por mês</span>
+                      <span className="text-sm text-muted-foreground">por mês</span>
                     </button>
                     <button type="button" onClick={() => setSubscriptionCycle("yearly")}
                       className={`relative p-4 rounded-xl border-2 transition-all text-left ${
@@ -689,7 +689,7 @@ export default function CheckoutPage() {
                       {subscriptionCycle === "yearly" && <div className="absolute top-3 right-3"><CheckCircle2 className="w-5 h-5 text-emerald-500" /></div>}
                       <div className="absolute -top-2.5 right-3 px-2 py-0.5 bg-emerald-500 text-white text-xs font-bold rounded-full shadow-sm">Economize 17%</div>
                       <span className="text-lg font-bold text-gray-900 block">{formatCurrency(planInfo.yearlyPrice)}</span>
-                      <span className="text-sm text-gray-500">por ano ({formatCurrency(planInfo.yearlyPrice / 12)}/mês)</span>
+                      <span className="text-sm text-muted-foreground">por ano ({formatCurrency(planInfo.yearlyPrice / 12)}/mês)</span>
                     </button>
                   </div>
                 </div>
@@ -703,7 +703,7 @@ export default function CheckoutPage() {
                   </div>
                   Seus Dados
                 </h3>
-                <p className="text-sm text-gray-400 mb-5">Informações protegidas e não compartilhadas.</p>
+                <p className="text-sm text-muted-foreground mb-5">Informações protegidas e não compartilhadas.</p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className={labelClass}>Nome completo *</label>
@@ -732,7 +732,7 @@ export default function CheckoutPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
                   {isFreeCourseCheckout ? "Liberação do Acesso" : "Forma de Pagamento"}
                 </h3>
-                {!isFreeCourseCheckout && <p className="text-sm text-gray-400 mb-5">Escolha como prefere pagar.</p>}
+                {!isFreeCourseCheckout && <p className="text-sm text-muted-foreground mb-5">Escolha como prefere pagar.</p>}
 
                 {isFreeCourseCheckout ? (
                   <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5 mt-4">
@@ -740,7 +740,7 @@ export default function CheckoutPage() {
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600"><Gift className="h-5 w-5" /></div>
                       <div>
                         <p className="text-base font-semibold text-gray-900">Curso grátis do mês com certificado incluso</p>
-                        <p className="mt-1 text-sm text-gray-500">Sem pagamento. Ao confirmar, o curso é liberado imediatamente.</p>
+                        <p className="mt-1 text-sm text-muted-foreground">Sem pagamento. Ao confirmar, o curso é liberado imediatamente.</p>
                       </div>
                     </div>
                   </div>
@@ -809,7 +809,7 @@ export default function CheckoutPage() {
                       <div className="rounded-xl border border-[#00b1ea]/20 bg-gradient-to-r from-[#00b1ea]/5 to-[#009ee3]/5 p-4 mb-4">
                         <div className="flex flex-col gap-2">
                           <MercadoPagoLogo className="h-5" />
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             Você será redirecionado para o ambiente seguro do MercadoPago para completar o pagamento com PIX, cartão de crédito, débito ou boleto.
                           </p>
                         </div>
@@ -828,16 +828,16 @@ export default function CheckoutPage() {
                                 <button key={card.id} type="button" onClick={() => { setSelectedCard(selectedCard === card.id ? null : card.id); if (selectedCard !== card.id) { setCardNumber(""); setCardHolder(""); setCardExpiry(""); setCardCvv(""); } }}
                                   className={`w-full p-3 rounded-xl border-2 transition-all flex items-center justify-between ${selectedCard === card.id ? "border-indigo-400 bg-indigo-50/50 shadow-sm" : "border-gray-200 hover:border-gray-300"}`}>
                                   <div className="flex items-center gap-3">
-                                    <CreditCard className="w-5 h-5 text-gray-400" />
+                                    <CreditCard className="w-5 h-5 text-muted-foreground" />
                                     <span className="font-mono text-gray-900">•••• {card.lastFour}</span>
-                                    <span className="text-xs text-gray-500 capitalize">{card.brand}</span>
+                                    <span className="text-xs text-muted-foreground capitalize">{card.brand}</span>
                                   </div>
-                                  <span className="text-xs text-gray-400">{card.expiryMonth}/{card.expiryYear}</span>
+                                  <span className="text-xs text-muted-foreground">{card.expiryMonth}/{card.expiryYear}</span>
                                 </button>
                               ))}
                               <button type="button" onClick={() => setSelectedCard(null)}
                                 className={`w-full p-3 rounded-xl border-2 transition-all text-center ${!selectedCard ? "border-indigo-400 bg-indigo-50/50 shadow-sm" : "border-gray-200 hover:border-gray-300"}`}>
-                                <CreditCard className="w-4 h-4 inline mr-2 text-gray-500" /> <span className="text-gray-700">Usar outro cartão</span>
+                                <CreditCard className="w-4 h-4 inline mr-2 text-muted-foreground" /> <span className="text-gray-700">Usar outro cartão</span>
                               </button>
                             </div>
                           </div>
@@ -926,7 +926,7 @@ export default function CheckoutPage() {
                       <div key={item.id} className="flex justify-between items-start py-2">
                         <div>
                           <p className="font-medium text-sm text-gray-900">{item.name}</p>
-                          <p className="text-xs text-gray-400">{item.type === "course" ? "Curso" : "Serviço"} x {item.quantity}</p>
+                          <p className="text-xs text-muted-foreground">{item.type === "course" ? "Curso" : "Serviço"} x {item.quantity}</p>
                         </div>
                         <span className="font-semibold text-sm text-gray-900">{formatCurrency(item.price * item.quantity)}</span>
                       </div>
@@ -939,7 +939,7 @@ export default function CheckoutPage() {
                 {/* Price Breakdown */}
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500">Subtotal</span>
+                    <span className="text-muted-foreground">Subtotal</span>
                     <span className="text-gray-700">{formatCurrency(total)}</span>
                   </div>
                   {!isFreeCourseCheckout && selectedMethod === "boleto" && (
@@ -956,7 +956,7 @@ export default function CheckoutPage() {
                     </span>
                   </div>
                   {!isFreeCourseCheckout && selectedMethod === "credit_card" && installments > 1 && (
-                    <p className="text-sm text-gray-500 text-center">ou {installments}x de {formatCurrency(total / installments)} sem juros</p>
+                    <p className="text-sm text-muted-foreground text-center">ou {installments}x de {formatCurrency(total / installments)} sem juros</p>
                   )}
                   {isSubscription && subscriptionCycle === "yearly" && planInfo && (
                     <div className="text-center">
@@ -972,7 +972,7 @@ export default function CheckoutPage() {
                   className={`w-full py-6 text-base font-bold rounded-xl transition-all shadow-lg cursor-pointer ${
                     isFreeCourseCheckout
                       ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200/40"
-                      : "bg-gray-900 hover:bg-gray-800 text-white shadow-gray-300/30"
+                      : "bg-card hover:bg-secondary text-white shadow-gray-300/30"
                   }`}
                   onClick={handlePayment}
                   disabled={loading || (isCartCheckout && cartItems.length === 0)}
@@ -991,13 +991,13 @@ export default function CheckoutPage() {
                   )}
                 </Button>
                 {selectedMethod === "mercadopago" && !isFreeCourseCheckout && (
-                  <p className="text-xs text-center text-gray-400 mt-1.5">via MercadoPago — ambiente seguro</p>
+                  <p className="text-xs text-center text-muted-foreground mt-1.5">via MercadoPago — ambiente seguro</p>
                 )}
 
                 {/* Trust & Security Section */}
                 <div className="mt-6 space-y-4">
                   {/* Security line */}
-                  <div className="flex items-center justify-center gap-2 text-xs text-gray-400 font-medium">
+                  <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground font-medium">
                     <Lock className="w-3.5 h-3.5 text-emerald-500" />
                     Pagamento 100% seguro — dados criptografados
                   </div>
@@ -1008,19 +1008,19 @@ export default function CheckoutPage() {
                       <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
                         <ShieldCheck className="w-4 h-4 text-emerald-600" />
                       </div>
-                      <span className="text-[11px] text-gray-500 text-center leading-tight font-medium">Garantia 7 dias</span>
+                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">Garantia 7 dias</span>
                     </div>
                     <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 border border-gray-100">
                       <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
                         <Zap className="w-4 h-4 text-amber-600" />
                       </div>
-                      <span className="text-[11px] text-gray-500 text-center leading-tight font-medium">Acesso imediato</span>
+                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">Acesso imediato</span>
                     </div>
                     <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 border border-gray-100">
                       <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
                         <Award className="w-4 h-4 text-indigo-600" />
                       </div>
-                      <span className="text-[11px] text-gray-500 text-center leading-tight font-medium">Certificado incluso</span>
+                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">Certificado incluso</span>
                     </div>
                   </div>
                 </div>
@@ -1028,22 +1028,22 @@ export default function CheckoutPage() {
 
               {/* Trust & Processing Partners */}
               <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Processado com segurança por</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Processado com segurança por</p>
                 <div className="flex items-center gap-5 mb-4">
                   <AsaasLogo className="h-5" />
                   <MercadoPagoLogo className="h-4" muted />
                 </div>
                 <div className="h-px bg-gray-100 mb-3" />
                 <div className="space-y-2.5">
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span>Dados protegidos com criptografia de ponta a ponta</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Lock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span>Não armazenamos dados do seu cartão</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <RefreshCw className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span>Cancele quando quiser, sem burocracia</span>
                   </div>

@@ -63,7 +63,7 @@ const services = [
   {
     icon: Code, title: "Construção de Sites",
     desc: "Sites modernos com Next.js, React e IA integrada. Do design ao deploy.",
-    href: "/servicos/construcao-de-sites", color: "from-purple-500/20 to-purple-500/5",
+    href: "/servicos/construcao-de-sites", color: "from-amber-500/20 to-amber-500/5",
   },
   {
     icon: Zap, title: "Automação com IA",
@@ -73,7 +73,7 @@ const services = [
   {
     icon: Sparkles, title: "Consultoria IA",
     desc: "Diagnóstico e implementação de IA personalizada para seu negócio.",
-    href: "/servicos/consultoria-ai", color: "from-pink-500/20 to-pink-500/5",
+    href: "/servicos/consultoria-ai", color: "from-yellow-500/20 to-yellow-500/5",
   },
   {
     icon: Play, title: "Edição de Vídeo",
@@ -129,8 +129,8 @@ export function NewHomepage() {
       >
         {/* Animated orbs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px] animate-[float_20s_ease-in-out_infinite]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-pink-600/15 rounded-full blur-[120px] animate-[float_25s_ease-in-out_infinite_5s]" />
+          <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-amber-600/20 rounded-full blur-[120px] animate-[float_20s_ease-in-out_infinite]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-yellow-600/15 rounded-full blur-[120px] animate-[float_25s_ease-in-out_infinite_5s]" />
           <div className="absolute top-[30%] right-[10%] w-[300px] h-[300px] bg-cyan-600/10 rounded-full blur-[100px] animate-[float_18s_ease-in-out_infinite_10s]" />
         </div>
 
@@ -151,7 +151,7 @@ export function NewHomepage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-white/5 border border-white/10 text-sm text-slate-300"
+              className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-secondary border border-border text-sm text-slate-300"
             >
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               Grátis este mês: {freeCourse.title}
@@ -166,7 +166,7 @@ export function NewHomepage() {
             className="text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.95]"
           >
             <span className="block text-white">Domine a IA.</span>
-            <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
               Comece grátis.
             </span>
           </motion.h1>
@@ -192,14 +192,14 @@ export function NewHomepage() {
           >
             <Link
               href={user ? "/portal" : "/registro"}
-              className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold text-lg shadow-[0_0_40px_rgba(139,92,246,0.3)] hover:shadow-[0_0_60px_rgba(139,92,246,0.5)] transition-all hover:-translate-y-0.5"
+              className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-700 text-white font-semibold text-lg shadow-[0_0_40px_rgba(139,92,246,0.3)] hover:shadow-[0_0_60px_rgba(139,92,246,0.5)] transition-all hover:-translate-y-0.5"
             >
               {user ? "Ir para o Portal" : "Começar Grátis"}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="/cursos"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-white/10 text-white font-medium text-lg hover:bg-white/5 transition-all"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-border text-white font-medium text-lg hover:bg-secondary transition-all"
             >
               <BookOpen className="w-5 h-5" />
               Explorar cursos
@@ -222,7 +222,7 @@ export function NewHomepage() {
           >
             <Link
               href="/descobrir#proposta"
-              className="mt-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-purple-400 transition-colors"
+              className="mt-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-amber-400 transition-colors"
             >
               Conheça nossa proposta <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -270,9 +270,9 @@ export function NewHomepage() {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-sm p-8 md:p-12 overflow-hidden"
+              className="relative rounded-2xl border border-border bg-white/[0.02] backdrop-blur-sm p-8 md:p-12 overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-amber-500/5 pointer-events-none" />
               <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
                 <div className="flex-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-semibold mb-4">
@@ -340,11 +340,11 @@ export function NewHomepage() {
                   className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-lg">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center text-lg">
                       {course.tool === "ChatGPT" ? "🤖" : course.tool === "Claude" ? "💜" : course.tool === "Midjourney" ? "🎨" : course.tool === "N8N" ? "⚡" : course.tool === "Make" ? "🚀" : "✨"}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white group-hover:text-purple-300 transition-colors">{course.title}</h3>
+                      <h3 className="font-semibold text-white group-hover:text-amber-300 transition-colors">{course.title}</h3>
                       <p className="text-xs text-slate-500">{course.tool} · {course.level}</p>
                     </div>
                   </div>
@@ -367,7 +367,7 @@ export function NewHomepage() {
           <div className="text-center mt-10 flex flex-col items-center gap-3">
             <Link
               href="/cursos"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-white font-medium hover:bg-secondary transition-all"
             >
               Ver todos os {allCourses.length} cursos
               <ArrowRight className="w-4 h-4" />
@@ -391,7 +391,7 @@ export function NewHomepage() {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <p className="text-sm font-semibold uppercase tracking-widest text-pink-400 mb-3">Serviços</p>
+            <p className="text-sm font-semibold uppercase tracking-widest text-yellow-400 mb-3">Serviços</p>
             <h2 className="text-4xl md:text-5xl font-bold">Além dos cursos</h2>
             <p className="mt-4 text-slate-400 text-lg max-w-lg mx-auto">
               Construímos, automatizamos e consultamos — tudo com IA
@@ -424,7 +424,7 @@ export function NewHomepage() {
           <div className="text-center mt-8">
             <Link
               href="/descobrir#servicos"
-              className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-pink-400 transition-colors"
+              className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-yellow-400 transition-colors"
             >
               Conheça todos os nossos serviços <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -435,7 +435,7 @@ export function NewHomepage() {
       {/* ═══ AI TOOLS MARQUEE ═══ */}
       <section className="py-16 overflow-hidden">
         <div className="text-center mb-10">
-          <p className="text-sm font-semibold uppercase tracking-widest text-purple-400 mb-3">Ferramentas</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-3">Ferramentas</p>
           <h2 className="text-3xl md:text-4xl font-bold">40+ ferramentas de IA</h2>
         </div>
         <div className="relative">
@@ -453,7 +453,7 @@ export function NewHomepage() {
         <div className="text-center mt-8">
           <Link
             href="/descobrir#ferramentas"
-            className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-purple-400 transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-amber-400 transition-colors"
           >
             Explore todas as ferramentas <ArrowRight className="w-3.5 h-3.5" />
           </Link>
@@ -462,7 +462,7 @@ export function NewHomepage() {
 
       {/* ═══ FINAL CTA ═══ */}
       <section className="py-24 px-6 md:px-12 relative">
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-600/5 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-amber-600/5 via-transparent to-transparent pointer-events-none" />
         <div className="max-w-2xl mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -471,7 +471,7 @@ export function NewHomepage() {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Pronto para{" "}
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
                 dominar a IA?
               </span>
             </h2>
@@ -480,7 +480,7 @@ export function NewHomepage() {
             </p>
             <Link
               href={user ? "/portal" : "/registro"}
-              className="inline-flex items-center gap-2 px-10 py-5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-lg shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:shadow-[0_0_80px_rgba(139,92,246,0.5)] transition-all hover:-translate-y-1"
+              className="inline-flex items-center gap-2 px-10 py-5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-700 text-white font-bold text-lg shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:shadow-[0_0_80px_rgba(139,92,246,0.5)] transition-all hover:-translate-y-1"
             >
               {user ? "Ir para o Portal" : "Criar Conta Grátis"}
               <ArrowRight className="w-5 h-5" />

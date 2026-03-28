@@ -49,18 +49,18 @@ export function StickyCTA() {
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
-        className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-r from-purple-900/95 via-purple-800/95 to-pink-900/95 backdrop-blur-xl border-t border-purple-500/30 shadow-2xl"
+        className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-r from-amber-900/95 via-purple-800/95 to-yellow-900/95 backdrop-blur-xl border-t border-amber-500/30 shadow-2xl"
       >
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-center sm:text-left">
-            <div className="hidden sm:flex w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 items-center justify-center">
+            <div className="hidden sm:flex w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 items-center justify-center">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div>
               <p className="text-white font-semibold text-lg">
                 {t("title")}
               </p>
-              <p className="text-purple-200 text-sm">
+              <p className="text-amber-200 text-sm">
                 {t("subtitle")}
               </p>
             </div>
@@ -69,14 +69,14 @@ export function StickyCTA() {
           <div className="flex items-center gap-3">
             <Link
               href="/cursos"
-              className="px-6 py-3 bg-white text-purple-900 font-semibold rounded-full hover:bg-purple-100 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
+              className="px-6 py-3 bg-white text-amber-900 font-semibold rounded-full hover:bg-amber-100 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
             >
               {t("cta")}
               <ArrowRight className="w-4 h-4" />
             </Link>
             <button
               onClick={handleDismiss}
-              className="p-2 text-purple-300 hover:text-white transition-colors"
+              className="p-2 text-amber-300 hover:text-white transition-colors"
               aria-label="Fechar"
             >
               <X className="w-5 h-5" />

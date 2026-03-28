@@ -12,7 +12,7 @@ export default function CoursesBySectorPage() {
   const formatSlug = (value: string) => value.toLowerCase().replace(/\s+/g, "-");
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
@@ -20,9 +20,9 @@ export default function CoursesBySectorPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sectors.map((sector) => (
               <Link key={sector} href={`/cursos/${formatSlug(sector)}`}>
-                <Card className="p-6 bg-white/5 border-white/10 hover:bg-white/10 transition cursor-pointer">
+                <Card className="p-6 bg-secondary border-border hover:bg-white/10 transition cursor-pointer">
                   <h3 className="text-xl font-semibold">{sector}</h3>
-                  <p className="text-gray-400 text-sm">{t("cta", { sector })}</p>
+                  <p className="text-muted-foreground text-sm">{t("cta", { sector })}</p>
                 </Card>
               </Link>
             ))}

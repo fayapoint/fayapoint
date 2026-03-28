@@ -51,16 +51,16 @@ interface Pagination {
 const getPlanBadgeColor = (plan?: string) => {
   switch (plan) {
     case "business": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-    case "pro": return "bg-violet-500/20 text-violet-400 border-violet-500/30";
+    case "pro": return "bg-violet-500/20 text-violet-400 border-amber-500/30";
     case "starter": return "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
-    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    default: return "bg-gray-500/20 text-muted-foreground border-gray-500/30";
   }
 };
 
 const getRoleBadgeColor = (role: string) => {
   switch (role) {
     case "admin": return "bg-red-500/20 text-red-400 border-red-500/30";
-    case "instructor": return "bg-purple-500/20 text-purple-400 border-purple-500/30";
+    case "instructor": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
     default: return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
   }
 };
@@ -73,23 +73,23 @@ function UserCard({ user, onEdit, onDelete }: { user: User; onEdit: () => void; 
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10"
+      className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border"
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white font-semibold">
             {user.name?.[0]?.toUpperCase() || "?"}
           </div>
           <div className="min-w-0">
             <p className="font-medium text-white truncate">{user.name}</p>
-            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
           </div>
         </div>
         
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400"
+            className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground"
           >
             <MoreVertical size={16} />
           </button>
@@ -102,11 +102,11 @@ function UserCard({ user, onEdit, onDelete }: { user: User; onEdit: () => void; 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="absolute right-0 top-full mt-1 w-32 rounded-xl bg-gray-900 border border-white/10 shadow-xl z-50 overflow-hidden"
+                  className="absolute right-0 top-full mt-1 w-32 rounded-xl bg-card border border-border shadow-xl z-50 overflow-hidden"
                 >
                   <button
                     onClick={() => { onEdit(); setShowMenu(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-white/5"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-secondary"
                   >
                     <Edit2 size={12} />
                     Editar
@@ -136,7 +136,7 @@ function UserCard({ user, onEdit, onDelete }: { user: User; onEdit: () => void; 
         </span>
       </div>
 
-      <div className="flex items-center justify-between text-[10px] text-gray-500">
+      <div className="flex items-center justify-between text-[10px] text-muted-foreground">
         <span className="flex items-center gap-1">
           <Calendar size={10} />
           {new Date(user.createdAt).toLocaleDateString("pt-BR")}
@@ -158,12 +158,12 @@ function UserRow({ user, onEdit, onDelete }: { user: User; onEdit: () => void; o
     <tr className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
       <td className="py-3 px-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-medium text-sm">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white font-medium text-sm">
             {user.name?.[0]?.toUpperCase() || "?"}
           </div>
           <div className="min-w-0">
             <p className="font-medium text-white text-sm truncate">{user.name}</p>
-            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
           </div>
         </div>
       </td>
@@ -179,17 +179,17 @@ function UserRow({ user, onEdit, onDelete }: { user: User; onEdit: () => void; o
           {user.subscription?.plan || "free"}
         </span>
       </td>
-      <td className="py-3 px-4 text-gray-400 text-xs">
+      <td className="py-3 px-4 text-muted-foreground text-xs">
         {new Date(user.createdAt).toLocaleDateString("pt-BR")}
       </td>
-      <td className="py-3 px-4 text-gray-400 text-xs">
+      <td className="py-3 px-4 text-muted-foreground text-xs">
         {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString("pt-BR") : "Nunca"}
       </td>
       <td className="py-3 px-4">
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+            className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
           >
             <MoreVertical size={14} />
           </button>
@@ -202,11 +202,11 @@ function UserRow({ user, onEdit, onDelete }: { user: User; onEdit: () => void; o
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="absolute right-0 top-full mt-1 w-32 rounded-xl bg-gray-900 border border-white/10 shadow-xl z-50 overflow-hidden"
+                  className="absolute right-0 top-full mt-1 w-32 rounded-xl bg-card border border-border shadow-xl z-50 overflow-hidden"
                 >
                   <button
                     onClick={() => { onEdit(); setShowMenu(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-white/5 transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground hover:bg-secondary transition-colors"
                   >
                     <Edit2 size={12} />
                     Editar
@@ -281,13 +281,13 @@ function UserModal({
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="relative w-full max-w-md rounded-2xl bg-gray-900 border border-white/10 p-6 shadow-2xl"
+        className="relative w-full max-w-md rounded-2xl bg-card border border-border p-6 shadow-2xl"
       >
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-semibold text-white">
             {mode === "create" ? "Novo Usuário" : "Editar Usuário"}
           </h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
+          <button onClick={onClose} className="text-muted-foreground hover:text-white">
             <X size={20} />
           </button>
         </div>
@@ -301,47 +301,47 @@ function UserModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Nome</label>
+            <label className="text-sm text-muted-foreground mb-1 block">Nome</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+              className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
               required
             />
           </div>
 
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">Email</label>
+            <label className="text-sm text-muted-foreground mb-1 block">Email</label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+              className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
               required
             />
           </div>
 
           <div>
-            <label className="text-sm text-gray-400 mb-1 block">
+            <label className="text-sm text-muted-foreground mb-1 block">
               {mode === "create" ? "Senha" : "Nova Senha (deixe em branco para manter)"}
             </label>
             <input
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+              className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
               {...(mode === "create" ? { required: true, minLength: 6 } : {})}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Função</label>
+              <label className="text-sm text-muted-foreground mb-1 block">Função</label>
               <select
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+                className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
               >
                 <option value="student">Estudante</option>
                 <option value="instructor">Instrutor</option>
@@ -350,11 +350,11 @@ function UserModal({
             </div>
 
             <div>
-              <label className="text-sm text-gray-400 mb-1 block">Plano</label>
+              <label className="text-sm text-muted-foreground mb-1 block">Plano</label>
               <select
                 value={formData.plan}
                 onChange={(e) => setFormData({ ...formData, plan: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+                className="w-full px-4 py-2.5 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
               >
                 <option value="free">Free</option>
                 <option value="starter">Starter</option>
@@ -368,7 +368,7 @@ function UserModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
             >
               Cancelar
             </button>
@@ -494,14 +494,14 @@ export default function AdminUsersPage() {
             <Users className="w-6 h-6 text-violet-400" />
             Usuários
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {pagination.total} usuários na plataforma
           </p>
         </div>
         
         <button
           onClick={() => { setSelectedUser(null); setModalMode("create"); }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition shadow-lg shadow-violet-500/20"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition shadow-lg shadow-amber-500/20"
         >
           <UserPlus size={18} />
           <span>Novo Usuário</span>
@@ -511,13 +511,13 @@ export default function AdminUsersPage() {
       {/* Filters - Mobile optimized */}
       <div className="space-y-3">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Buscar por nome ou email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-violet-500/50"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-secondary border border-border text-white text-sm placeholder-gray-500 focus:outline-none focus:border-amber-500/50"
           />
         </div>
         
@@ -525,7 +525,7 @@ export default function AdminUsersPage() {
           <select
             value={planFilter}
             onChange={(e) => setPlanFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-violet-500/50 min-w-[120px]"
+            className="px-3 py-2 rounded-xl bg-secondary border border-border text-white text-xs focus:outline-none focus:border-amber-500/50 min-w-[120px]"
           >
             <option value="">Plano</option>
             <option value="free">Free</option>
@@ -537,7 +537,7 @@ export default function AdminUsersPage() {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-violet-500/50 min-w-[120px]"
+            className="px-3 py-2 rounded-xl bg-secondary border border-border text-white text-xs focus:outline-none focus:border-amber-500/50 min-w-[120px]"
           >
             <option value="">Função</option>
             <option value="student">Estudante</option>
@@ -547,7 +547,7 @@ export default function AdminUsersPage() {
 
           <button
             onClick={fetchUsers}
-            className="p-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition shrink-0"
+            className="p-2 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition shrink-0"
           >
             <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
           </button>
@@ -557,13 +557,13 @@ export default function AdminUsersPage() {
       {/* Users List/Table */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <div className="w-8 h-8 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-amber-500/30 border-t-violet-500 rounded-full animate-spin" />
         </div>
       ) : users.length === 0 ? (
         <div className="text-center py-12">
           <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">Nenhum usuário encontrado</h3>
-          <p className="text-sm text-gray-500">Tente ajustar os filtros de busca</p>
+          <p className="text-sm text-muted-foreground">Tente ajustar os filtros de busca</p>
         </div>
       ) : (
         <>
@@ -589,18 +589,18 @@ export default function AdminUsersPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="hidden lg:block rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 overflow-hidden"
+            className="hidden lg:block rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border overflow-hidden"
           >
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-400">Usuário</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-400">Função</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-400">Plano</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-400">Criado</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-400">Último Login</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-400">Ações</th>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground">Usuário</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground">Função</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground">Plano</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground">Criado</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground">Último Login</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -619,24 +619,24 @@ export default function AdminUsersPage() {
 
           {/* Pagination */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-            <p className="text-xs text-gray-500 order-2 sm:order-1">
+            <p className="text-xs text-muted-foreground order-2 sm:order-1">
               {users.length} de {pagination.total} usuários
             </p>
             <div className="flex items-center gap-2 order-1 sm:order-2">
               <button
                 onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
                 disabled={pagination.page === 1}
-                className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ChevronLeft size={16} />
               </button>
-              <span className="text-xs text-gray-400 min-w-[80px] text-center">
+              <span className="text-xs text-muted-foreground min-w-[80px] text-center">
                 {pagination.page} / {pagination.pages || 1}
               </span>
               <button
                 onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
                 disabled={pagination.page === pagination.pages || pagination.pages === 0}
-                className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ChevronRight size={16} />
               </button>
@@ -672,19 +672,19 @@ export default function AdminUsersPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-sm rounded-2xl bg-gray-900 border border-white/10 p-6 text-center"
+              className="relative w-full max-w-sm rounded-2xl bg-card border border-border p-6 text-center"
             >
               <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-500/20 flex items-center justify-center">
                 <Trash2 className="w-6 h-6 text-red-400" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Excluir Usuário?</h3>
-              <p className="text-sm text-gray-400 mb-6">
+              <p className="text-sm text-muted-foreground mb-6">
                 Esta ação não pode ser desfeita. O usuário será permanentemente removido.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
                 >
                   Cancelar
                 </button>

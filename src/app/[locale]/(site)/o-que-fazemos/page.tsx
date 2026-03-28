@@ -50,9 +50,9 @@ function HeroSection() {
     <section ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-background to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-900/30 via-background to-background" />
         <motion.div
-          className="absolute top-20 left-10 w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[150px]"
+          className="absolute top-20 left-10 w-[500px] h-[500px] bg-amber-500/20 rounded-full blur-[150px]"
           animate={{ scale: [1, 1.2, 1], x: [0, 30, 0] }}
           transition={{ duration: 15, repeat: Infinity }}
         />
@@ -62,7 +62,7 @@ function HeroSection() {
           transition={{ duration: 12, repeat: Infinity, delay: 3 }}
         />
         <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-[180px]"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-yellow-500/10 rounded-full blur-[180px]"
           style={{ y }}
         />
       </div>
@@ -78,12 +78,12 @@ function HeroSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 mb-8"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary border border-border mb-8"
           >
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
               <Sparkles className="w-5 h-5 text-yellow-400" />
             </motion.div>
-            <span className="text-sm font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="text-sm font-semibold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
               {t("badge")}
             </span>
           </motion.div>
@@ -102,7 +102,7 @@ function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="block bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400 bg-clip-text text-transparent"
+              className="block bg-gradient-to-r from-amber-400 via-blue-400 to-yellow-400 bg-clip-text text-transparent"
             >
               {t("title.line2")}
             </motion.span>
@@ -113,7 +113,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
-            className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed"
+            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed"
           >
             {t("subtitle")}
           </motion.p>
@@ -147,7 +147,7 @@ function HeroSection() {
           transition={{ delay: 1.2 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >
-          <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="text-gray-500">
+          <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="text-muted-foreground">
             <ChevronRight className="w-8 h-8 rotate-90" />
           </motion.div>
         </motion.div>
@@ -179,26 +179,26 @@ function MissionSection() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
-              <Target className="w-4 h-4 text-purple-400" />
-              <span className="text-sm font-medium text-purple-400">{t("badge")}</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
+              <Target className="w-4 h-4 text-amber-400" />
+              <span className="text-sm font-medium text-amber-400">{t("badge")}</span>
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="text-white">{t("title.part1")} </span>
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 {t("title.part2")}
               </span>
             </h2>
             
-            <p className="text-xl text-gray-400 mb-8 leading-relaxed">
+            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
               {t("description")}
             </p>
             
             {/* Quote */}
-            <div className="relative p-6 bg-white/5 border-l-4 border-purple-500 rounded-r-xl">
-              <p className="text-lg text-gray-300 italic">&quot;{t("quote")}&quot;</p>
-              <p className="text-sm text-gray-500 mt-2">— Ricardo Faya, Fundador</p>
+            <div className="relative p-6 bg-secondary border-l-4 border-amber-500 rounded-r-xl">
+              <p className="text-lg text-muted-foreground italic">&quot;{t("quote")}&quot;</p>
+              <p className="text-sm text-muted-foreground mt-2">— Ricardo Faya, Fundador</p>
             </div>
           </motion.div>
 
@@ -211,13 +211,13 @@ function MissionSection() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
                 whileHover={{ scale: 1.03, y: -5 }}
-                className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all duration-300"
+                className="p-6 bg-secondary border border-border rounded-2xl hover:border-amber-500/30 transition-all duration-300"
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center mb-4">
                   <value.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">{value.title}</h3>
-                <p className="text-sm text-gray-400">{value.description}</p>
+                <p className="text-sm text-muted-foreground">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -235,7 +235,7 @@ function PipelineSection() {
   return (
     <section ref={ref} className="py-24 relative bg-white/[0.02] overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -left-10 top-20 w-72 h-72 bg-purple-500/10 blur-[140px]" />
+        <div className="absolute -left-10 top-20 w-72 h-72 bg-amber-500/10 blur-[140px]" />
         <div className="absolute right-0 bottom-0 w-80 h-80 bg-blue-500/10 blur-[160px]" />
       </div>
       <div className="container mx-auto px-4 relative z-10">
@@ -250,7 +250,7 @@ function PipelineSection() {
             <span className="text-sm font-medium text-primary">{t("badge")}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t("title")}</h2>
-          <p className="text-lg text-gray-400">{t("subtitle")}</p>
+          <p className="text-lg text-muted-foreground">{t("subtitle")}</p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -260,18 +260,18 @@ function PipelineSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: Number(idx) * 0.08 }}
-              className="rounded-2xl border border-white/10 bg-white/5 p-5 flex flex-col gap-4"
+              className="rounded-2xl border border-border bg-secondary p-5 flex flex-col gap-4"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-white/60">
                     {t(`items.${idx}.title`)}
                   </p>
-                  <p className="text-sm text-gray-300 mt-2 leading-relaxed">
+                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
                     {t(`items.${idx}.description`)}
                   </p>
                 </div>
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center text-white/90 font-semibold">
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-amber-500 flex items-center justify-center text-white/90 font-semibold">
                   {Number(idx) + 1}
                 </div>
               </div>
@@ -279,7 +279,7 @@ function PipelineSection() {
                 {t.raw(`items.${idx}.metrics`).map((metric: string) => (
                   <span
                     key={metric}
-                    className="text-xs px-3 py-1 rounded-full bg-white/10 text-white/80 border border-white/10"
+                    className="text-xs px-3 py-1 rounded-full bg-white/10 text-white/80 border border-border"
                   >
                     {metric}
                   </span>
@@ -326,11 +326,11 @@ function OutcomesSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: idx * 0.08 }}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-3 hover:border-emerald-500/30 transition-colors"
+                className="rounded-2xl border border-border bg-secondary p-6 flex flex-col gap-3 hover:border-emerald-500/30 transition-colors"
               >
                 <div className="text-xs uppercase tracking-[0.2em] text-emerald-400/80">{card.title}</div>
                 <div className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{card.value}</div>
-                <p className="text-sm text-gray-400 leading-relaxed">{card.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
               </motion.div>
             )
           )}
@@ -368,7 +368,7 @@ function StacksSection() {
             <span className="text-sm font-medium text-white/80">{t("badge")}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t("title")}</h2>
-          <p className="text-lg text-gray-400">{t("subtitle")}</p>
+          <p className="text-lg text-muted-foreground">{t("subtitle")}</p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -378,17 +378,17 @@ function StacksSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-4"
+              className="rounded-2xl border border-border bg-secondary p-6 flex flex-col gap-4"
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-amber-500 flex items-center justify-center">
                   <col.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white">{t(`columns.${col.key}.title`)}</h3>
               </div>
               <div className="space-y-2">
                 {t.raw(`columns.${col.key}.items`).map((item: string) => (
-                  <div key={item} className="flex items-start gap-2 text-sm text-gray-300">
+                  <div key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-1" />
                     <span>{item}</span>
                   </div>
@@ -440,7 +440,7 @@ function PillarDetailSection({
             </motion.div>
 
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">{t("title")}</h2>
-            <p className="text-xl text-gray-400 mb-8 leading-relaxed">{t("description")}</p>
+            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">{t("description")}</p>
 
             {/* Features list */}
             <div className="space-y-4">
@@ -450,14 +450,14 @@ function PillarDetailSection({
                   initial={{ opacity: 0, x: -20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                  className="flex items-start gap-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors"
+                  className="flex items-start gap-4 p-4 bg-secondary rounded-xl hover:bg-white/10 transition-colors"
                 >
                   <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${pillar.gradient} flex items-center justify-center flex-shrink-0`}>
                     <feature.icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white mb-1">{feature.title}</h4>
-                    <p className="text-sm text-gray-400">{feature.description}</p>
+                    <p className="text-sm text-muted-foreground">{feature.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -479,7 +479,7 @@ function PillarDetailSection({
                 transition={{ duration: 5, repeat: Infinity }}
               />
               <motion.div
-                className="absolute inset-8 rounded-full border-2 border-dashed border-white/10"
+                className="absolute inset-8 rounded-full border-2 border-dashed border-border"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
               />
@@ -559,7 +559,7 @@ function ProcessSection() {
   ];
 
   return (
-    <section ref={ref} className="py-24 relative bg-gradient-to-b from-transparent via-purple-900/5 to-transparent">
+    <section ref={ref} className="py-24 relative bg-gradient-to-b from-transparent via-amber-900/5 to-transparent">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -572,12 +572,12 @@ function ProcessSection() {
             <span className="text-sm font-medium text-blue-400">{t("badge")}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">{t("title")}</h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">{t("subtitle")}</p>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("subtitle")}</p>
         </motion.div>
 
         <div className="grid md:grid-cols-4 gap-8 relative">
           {/* Connection line */}
-          <div className="hidden md:block absolute top-24 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 opacity-30" />
+          <div className="hidden md:block absolute top-24 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-amber-500 via-blue-500 to-yellow-500 opacity-30" />
 
           {steps.map((step, i) => (
             <motion.div
@@ -589,7 +589,7 @@ function ProcessSection() {
             >
               {/* Step circle */}
               <motion.div
-                className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 via-blue-500 to-pink-500 flex items-center justify-center relative z-10"
+                className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-amber-500 via-blue-500 to-yellow-500 flex items-center justify-center relative z-10"
                 whileHover={{ scale: 1.1 }}
               >
                 <step.icon className="w-8 h-8 text-white" />
@@ -601,7 +601,7 @@ function ProcessSection() {
               </div>
 
               <h3 className="text-xl font-semibold text-white mb-2">{t(`steps.${i}.title`)}</h3>
-              <p className="text-gray-400">{t(`steps.${i}.description`)}</p>
+              <p className="text-muted-foreground">{t(`steps.${i}.description`)}</p>
             </motion.div>
           ))}
         </div>
@@ -616,15 +616,15 @@ function CTASection() {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/20 to-purple-900/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-900/20 to-amber-900/30" />
 
       <motion.div
-        className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-[150px]"
+        className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/30 rounded-full blur-[150px]"
         animate={{ scale: [1, 1.2, 1] }}
         transition={{ duration: 10, repeat: Infinity }}
       />
       <motion.div
-        className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-[150px]"
+        className="absolute bottom-0 right-1/4 w-96 h-96 bg-yellow-500/20 rounded-full blur-[150px]"
         animate={{ scale: [1, 1.3, 1] }}
         transition={{ duration: 12, repeat: Infinity, delay: 3 }}
       />
@@ -642,15 +642,15 @@ function CTASection() {
             transition={{ duration: 3, repeat: Infinity }}
             className="inline-block mb-6"
           >
-            <Rocket className="w-16 h-16 text-purple-400" />
+            <Rocket className="w-16 h-16 text-amber-400" />
           </motion.div>
 
           <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">{t("title")}</h2>
-          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">{t("subtitle")}</p>
+          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">{t("subtitle")}</p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/onboarding">
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-lg px-10 py-7">
+              <Button size="lg" className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-500 text-lg px-10 py-7">
                 {t("cta.primary")}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
@@ -675,7 +675,7 @@ export default function WhatWeDoPage() {
     {
       id: "webProduct",
       icon: LayoutDashboard,
-      gradient: "from-fuchsia-500 via-purple-500 to-indigo-500",
+      gradient: "from-amber-500 via-amber-500 to-yellow-600",
       features: [
         { icon: Monitor, title: t("webProduct.features.performance.title"), description: t("webProduct.features.performance.description") },
         { icon: CheckCircle2, title: t("webProduct.features.seo.title"), description: t("webProduct.features.seo.description") },

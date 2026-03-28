@@ -159,11 +159,11 @@ export default function CoursesPage() {
   const totalLessons = products.reduce((sum, p) => sum + p.metrics.lessons, 0).toLocaleString(locale);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-purple-900/20 to-black">
+      <section className="relative py-20 bg-gradient-to-b from-amber-900/30 to-black">
         <div className="container mx-auto px-4 text-center">
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
@@ -176,7 +176,7 @@ export default function CoursesPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-xl text-gray-300 mb-8"
+            className="text-xl text-muted-foreground mb-8"
           >
             {heroSubtitle}
           </motion.p>
@@ -189,14 +189,14 @@ export default function CoursesPage() {
             className="flex flex-wrap justify-center gap-8 mb-8"
           >
             <div>
-              <p className="text-3xl font-bold text-purple-400">{loading ? '...' : totalCourses}</p>
-              <p className="text-gray-400">{statsLabels.courses}</p>
+              <p className="text-3xl font-bold text-amber-400">{loading ? '...' : totalCourses}</p>
+              <p className="text-muted-foreground">{statsLabels.courses}</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-purple-400">
+              <p className="text-3xl font-bold text-amber-400">
                 {loading ? "..." : `${totalLessons}+`}
               </p>
-              <p className="text-gray-400">{statsLabels.lessons}</p>
+              <p className="text-muted-foreground">{statsLabels.lessons}</p>
             </div>
           </motion.div>
           
@@ -208,13 +208,13 @@ export default function CoursesPage() {
             className="max-w-2xl mx-auto"
           >
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <Input
                 type="text"
                 placeholder={searchPlaceholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 pr-4 py-3 bg-gray-900 border-gray-700 text-white"
+                className="pl-12 pr-4 py-3 bg-card border-border text-white"
               />
             </div>
           </motion.div>
@@ -222,18 +222,18 @@ export default function CoursesPage() {
       </section>
 
       {/* Trust Banner */}
-      <section className="py-6 bg-gradient-to-r from-purple-900/50 via-pink-900/50 to-purple-900/50 border-y border-purple-500/30">
+      <section className="py-6 bg-gradient-to-r from-amber-900/50 via-yellow-900/50 to-amber-900/50 border-y border-amber-500/30">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <div className="flex items-center gap-2 text-gray-300">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <Shield className="text-green-400" size={18} />
               <span>{t("promo.guarantee")}</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-300">
-              <Sparkles className="text-purple-400" size={18} />
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Sparkles className="text-amber-400" size={18} />
               <span>{t("promo.lifetimeAccess")}</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-300">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="text-blue-400" size={18} />
               <span>
                 {isPtBr
@@ -248,7 +248,7 @@ export default function CoursesPage() {
       {monthlyOffers?.freeCourse && (
         <section className="py-10 bg-gradient-to-b from-black to-emerald-950/10">
           <div className="container mx-auto px-4">
-            <Card className="overflow-hidden border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-black to-purple-900/30 p-6 md:p-8">
+            <Card className="overflow-hidden border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-black to-amber-900/30 p-6 md:p-8">
               <div className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr] lg:items-center">
                 <div>
                   <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
@@ -258,19 +258,19 @@ export default function CoursesPage() {
                   <h2 className="text-3xl font-bold text-white">
                     {monthlyOffers.freeCourse.name}
                   </h2>
-                  <p className="mt-3 max-w-3xl text-gray-300">
+                  <p className="mt-3 max-w-3xl text-muted-foreground">
                     {isPtBr
                       ? "Todo usuário pode testar a experiência completa da academia neste curso, incluindo progresso salvo e certificado liberado."
                       : "Every user can test the full academy experience on this course, including saved progress and certificate access."}
                   </p>
-                  <div className="mt-5 flex flex-wrap gap-2 text-sm text-gray-300">
+                  <div className="mt-5 flex flex-wrap gap-2 text-sm text-muted-foreground">
                     <Badge className="bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
                       {isPtBr ? "Certificado incluso" : "Certificate included"}
                     </Badge>
-                    <Badge className="bg-white/5 text-gray-200 border-white/10">
+                    <Badge className="bg-secondary text-gray-200 border-border">
                       {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? "aulas" : "lessons"}
                     </Badge>
-                    <Badge className="bg-white/5 text-gray-200 border-white/10">
+                    <Badge className="bg-secondary text-gray-200 border-border">
                       {monthlyOffers.freeCourse.metrics.duration}
                     </Badge>
                   </div>
@@ -281,7 +281,7 @@ export default function CoursesPage() {
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       {isPtBr
                         ? `${monthlyOffers.pools.beginner.length} iniciantes, ${monthlyOffers.pools.intermediate.length} intermediários e ${monthlyOffers.pools.advanced.length} avançados no catálogo deste mês.`
                         : `${monthlyOffers.pools.beginner.length} beginner, ${monthlyOffers.pools.intermediate.length} intermediate, and ${monthlyOffers.pools.advanced.length} advanced courses in this month’s catalog.`}
@@ -290,30 +290,30 @@ export default function CoursesPage() {
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                  <div className="rounded-2xl border border-border bg-secondary p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       {isPtBr ? "Explorador" : "Explorer"}
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.beginner.length}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       {isPtBr ? "cursos iniciantes liberados neste mês" : "beginner courses unlocked this month"}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                  <div className="rounded-2xl border border-border bg-secondary p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       {isPtBr ? "Profissional" : "Professional"}
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.intermediate.length}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       {isPtBr ? "intermediários no catálogo rotativo" : "intermediate courses in the rotating catalog"}
                     </p>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500">
+                  <div className="rounded-2xl border border-border bg-secondary p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       {isPtBr ? "Expert" : "Expert"}
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.advanced.length}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-muted-foreground">
                       {isPtBr ? "avançados disponíveis para planos altos" : "advanced courses available for upper tiers"}
                     </p>
                   </div>
@@ -353,7 +353,7 @@ export default function CoursesPage() {
                   <Card className="overflow-hidden border-2 border-yellow-500/50 hover:border-yellow-400 transition-all bg-gradient-to-br from-gray-900 via-gray-900 to-yellow-900/20 hover:shadow-2xl hover:shadow-yellow-500/20">
                     <div className="grid md:grid-cols-3 gap-0">
                       {/* Image/Visual Section */}
-                      <div className="relative bg-gradient-to-br from-purple-600 to-pink-600 p-12 flex items-center justify-center">
+                      <div className="relative bg-gradient-to-br from-amber-600 to-yellow-700 p-12 flex items-center justify-center">
                         <div className="text-center">
                           <Trophy className="mx-auto mb-4 text-yellow-400" size={64} />
                           <Badge className="bg-yellow-400 text-black font-bold">
@@ -380,7 +380,7 @@ export default function CoursesPage() {
                           </span>
                         </div>
                         <div className="flex flex-wrap gap-2 mb-4">
-                          <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/50">
+                          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/50">
                             {featured.categoryPrimary}
                           </Badge>
                           <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
@@ -392,7 +392,7 @@ export default function CoursesPage() {
                           {featured.name}
                         </h3>
 
-                        <p className="text-gray-400 mb-6 text-lg leading-relaxed">
+                        <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
                           {featured.copy.shortDescription}
                         </p>
 
@@ -400,13 +400,13 @@ export default function CoursesPage() {
                           <div className="flex items-center gap-2">
                             <Star className="text-yellow-400 fill-yellow-400" size={20} />
                             <span className="font-bold text-lg">{featured.metrics.rating}</span>
-                            <span className="text-gray-400">({featured.metrics.reviewCount} {t("featured.reviews")})</span>
+                            <span className="text-muted-foreground">({featured.metrics.reviewCount} {t("featured.reviews")})</span>
                           </div>
-                          <div className="flex items-center gap-2 text-gray-300">
+                          <div className="flex items-center gap-2 text-muted-foreground">
                             <Clock size={18} />
                             <span>{featured.metrics.duration}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-gray-300">
+                          <div className="flex items-center gap-2 text-muted-foreground">
                             <Users size={18} />
                             <span>{featured.metrics.lessons} {t("featured.lessons")}</span>
                           </div>
@@ -415,15 +415,15 @@ export default function CoursesPage() {
                         <div className="flex flex-wrap items-center gap-6">
                           <div>
                             {featured.pricing.originalPrice > featured.pricing.price && (
-                              <span className="text-gray-500 line-through text-lg mr-3">
+                              <span className="text-muted-foreground line-through text-lg mr-3">
                                 R$ {featured.pricing.originalPrice.toLocaleString()}
                               </span>
                             )}
-                            <span className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                            <span className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                               R$ {featured.pricing.price.toLocaleString()}
                             </span>
                           </div>
-                          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-8 py-6 text-lg">
+                          <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-8 py-6 text-lg">
                             {t("featured.viewCourse")}
                             <ArrowRight className="ml-2" size={20} />
                           </Button>
@@ -439,12 +439,12 @@ export default function CoursesPage() {
       )}
 
       {/* Filters */}
-      <section className="py-8 border-b border-gray-800">
+      <section className="py-8 border-b border-border">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap gap-3">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-[150px] bg-gray-900 border-gray-700">
+                <SelectTrigger className="w-[150px] bg-card border-border">
                   <SelectValue placeholder={filtersLabels.categoryPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -455,7 +455,7 @@ export default function CoursesPage() {
               </Select>
               
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                <SelectTrigger className="w-[150px] bg-gray-900 border-gray-700">
+                <SelectTrigger className="w-[150px] bg-card border-border">
                   <SelectValue placeholder={filtersLabels.levelPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -468,7 +468,7 @@ export default function CoursesPage() {
               </Select>
               
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[150px] bg-gray-900 border-gray-700">
+                <SelectTrigger className="w-[150px] bg-card border-border">
                   <SelectValue placeholder={filtersLabels.sortPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -482,7 +482,7 @@ export default function CoursesPage() {
             </div>
             
             <div className="flex items-center gap-2">
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 {t("filters.results", { count: filteredCourses.length })}
               </p>
               <div className="flex gap-1">
@@ -515,7 +515,7 @@ export default function CoursesPage() {
           }>
             {loading ? (
               <div className="col-span-full text-center py-20">
-                <p className="text-gray-400 text-lg">{loadingLabel}</p>
+                <p className="text-muted-foreground text-lg">{loadingLabel}</p>
               </div>
             ) : (
               filteredCourses.map((product, index) => (
@@ -530,8 +530,8 @@ export default function CoursesPage() {
           
           {!loading && filteredCourses.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-400">{emptyStateTitle}</p>
-              <p className="text-gray-500 mt-2">{emptyStateDescription}</p>
+              <p className="text-xl text-muted-foreground">{emptyStateTitle}</p>
+              <p className="text-muted-foreground mt-2">{emptyStateDescription}</p>
             </div>
           )}
         </div>

@@ -98,10 +98,10 @@ function EnvCard({ env }: { env: EnvVariable }) {
   };
 
   return (
-    <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-colors">
+    <div className="p-4 rounded-xl bg-secondary border border-border hover:bg-white/[0.07] transition-colors">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center border border-violet-500/30">
+          <div className="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center border border-amber-500/30">
             <env.icon size={18} className="text-violet-400" />
           </div>
           <div>
@@ -116,13 +116,13 @@ function EnvCard({ env }: { env: EnvVariable }) {
                 <Lock size={12} className="text-amber-400" />
               )}
             </div>
-            <p className="text-xs text-gray-500 mt-0.5">{env.description}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{env.description}</p>
             <code className="text-xs text-violet-400 mt-2 block">{env.key}</code>
           </div>
         </div>
         <button
           onClick={handleCopy}
-          className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition"
+          className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition"
         >
           {copied ? <Check size={16} /> : <Copy size={16} />}
         </button>
@@ -139,7 +139,7 @@ export default function AdminSettingsPage() {
         <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
           Configurações
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-muted-foreground mt-1">
           Configurações do sistema e variáveis de ambiente
         </p>
       </div>
@@ -159,7 +159,7 @@ export default function AdminSettingsPage() {
             <ExternalLink size={16} className="text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
           <h3 className="font-semibold text-white">MongoDB Atlas</h3>
-          <p className="text-sm text-gray-400 mt-1">Gerenciar database</p>
+          <p className="text-sm text-muted-foreground mt-1">Gerenciar database</p>
         </motion.a>
 
         <motion.a
@@ -176,7 +176,7 @@ export default function AdminSettingsPage() {
             <ExternalLink size={16} className="text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
           <h3 className="font-semibold text-white">Cloudinary</h3>
-          <p className="text-sm text-gray-400 mt-1">Gerenciar mídia</p>
+          <p className="text-sm text-muted-foreground mt-1">Gerenciar mídia</p>
         </motion.a>
 
         <motion.a
@@ -186,14 +186,14 @@ export default function AdminSettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-5 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/30 hover:from-violet-500/30 hover:to-purple-500/20 transition-colors group"
+          className="p-5 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-500/10 border border-amber-500/30 hover:from-amber-500/30 hover:to-amber-500/20 transition-colors group"
         >
           <div className="flex items-center justify-between mb-3">
             <Zap size={24} className="text-violet-400" />
             <ExternalLink size={16} className="text-violet-400 opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
           <h3 className="font-semibold text-white">OpenRouter</h3>
-          <p className="text-sm text-gray-400 mt-1">Gerenciar AI API</p>
+          <p className="text-sm text-muted-foreground mt-1">Gerenciar AI API</p>
         </motion.a>
       </div>
 
@@ -202,7 +202,7 @@ export default function AdminSettingsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 p-6"
+        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border p-6"
       >
         <div className="flex items-center gap-2 mb-6">
           <Key className="text-violet-400" size={20} />
@@ -232,7 +232,7 @@ export default function AdminSettingsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 p-6"
+        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border p-6"
       >
         <div className="flex items-center gap-2 mb-6">
           <Settings className="text-cyan-400" size={20} />
@@ -240,28 +240,28 @@ export default function AdminSettingsPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-white/5">
-            <p className="text-xs text-gray-500 mb-1">Framework</p>
+          <div className="p-4 rounded-xl bg-secondary">
+            <p className="text-xs text-muted-foreground mb-1">Framework</p>
             <p className="text-white font-medium">Next.js 15</p>
           </div>
-          <div className="p-4 rounded-xl bg-white/5">
-            <p className="text-xs text-gray-500 mb-1">Database</p>
+          <div className="p-4 rounded-xl bg-secondary">
+            <p className="text-xs text-muted-foreground mb-1">Database</p>
             <p className="text-white font-medium">MongoDB Atlas</p>
           </div>
-          <div className="p-4 rounded-xl bg-white/5">
-            <p className="text-xs text-gray-500 mb-1">Auth</p>
+          <div className="p-4 rounded-xl bg-secondary">
+            <p className="text-xs text-muted-foreground mb-1">Auth</p>
             <p className="text-white font-medium">JWT + bcryptjs</p>
           </div>
-          <div className="p-4 rounded-xl bg-white/5">
-            <p className="text-xs text-gray-500 mb-1">Storage</p>
+          <div className="p-4 rounded-xl bg-secondary">
+            <p className="text-xs text-muted-foreground mb-1">Storage</p>
             <p className="text-white font-medium">Cloudinary</p>
           </div>
-          <div className="p-4 rounded-xl bg-white/5">
-            <p className="text-xs text-gray-500 mb-1">AI Provider</p>
+          <div className="p-4 rounded-xl bg-secondary">
+            <p className="text-xs text-muted-foreground mb-1">AI Provider</p>
             <p className="text-white font-medium">OpenRouter</p>
           </div>
-          <div className="p-4 rounded-xl bg-white/5">
-            <p className="text-xs text-gray-500 mb-1">Styling</p>
+          <div className="p-4 rounded-xl bg-secondary">
+            <p className="text-xs text-muted-foreground mb-1">Styling</p>
             <p className="text-white font-medium">Tailwind CSS + Framer Motion</p>
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function AdminSettingsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/5 border border-violet-500/20"
+        className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20"
       >
         <div className="flex items-center gap-2 mb-4">
           <Shield className="text-violet-400" size={20} />
@@ -286,7 +286,7 @@ export default function AdminSettingsPage() {
             </div>
             <div>
               <p className="font-medium text-white">Criação de Admins</p>
-              <p className="text-gray-400">
+              <p className="text-muted-foreground">
                 Para criar um novo admin, execute o script <code className="text-violet-400">npm run seed:admin</code> ou defina o campo <code className="text-violet-400">role: &quot;admin&quot;</code> diretamente no MongoDB.
               </p>
             </div>
@@ -298,7 +298,7 @@ export default function AdminSettingsPage() {
             </div>
             <div>
               <p className="font-medium text-white">Tokens de Admin</p>
-              <p className="text-gray-400">
+              <p className="text-muted-foreground">
                 Tokens de admin expiram em 24 horas por segurança. Faça login novamente se necessário.
               </p>
             </div>

@@ -51,8 +51,8 @@ export default function CourseSalesPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Carregando curso...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Carregando curso...</p>
         </div>
       </div>
     );
@@ -91,12 +91,12 @@ export default function CourseSalesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-20">
         {/* HERO SECTION - Above the Fold */}
-        <section className="relative bg-gradient-to-b from-purple-900/20 via-black to-black py-12 overflow-hidden">
+        <section className="relative bg-gradient-to-b from-amber-900/30 via-black to-black py-12 overflow-hidden">
           {/* Background Animation */}
           <div className="absolute inset-0 opacity-30">
             <div className="absolute inset-0" style={{
@@ -110,12 +110,12 @@ export default function CourseSalesPage() {
               {/* Main Content */}
               <div className="lg:col-span-2">
                 {/* Breadcrumb */}
-                <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
                   <Link href="/" className="hover:text-white">Home</Link>
                   <ChevronRight size={14} />
                   <Link href="/cursos" className="hover:text-white">Cursos</Link>
                   <ChevronRight size={14} />
-                  <span className="text-purple-400">{product.categoryPrimary}</span>
+                  <span className="text-amber-400">{product.categoryPrimary}</span>
                 </div>
 
                 {/* Badges */}
@@ -130,7 +130,7 @@ export default function CourseSalesPage() {
                     <Trophy className="mr-1" size={14} />
                     Mais Vendido {new Date().getFullYear()}
                     </Badge>
-                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0">
                     <Shield className="mr-1" size={14} />
                     Garantia 7 dias
                   </Badge>
@@ -138,51 +138,51 @@ export default function CourseSalesPage() {
 
                 {/* Headline - Outcome Focused */}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
                     {product.name}
                   </span>
                 </h1>
 
                 {/* Subheadline - Mechanism */}
-                <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
                   {product.copy.subheadline}
                 </p>
 
                 {/* Social Proof Bar */}
-                <div className="flex flex-wrap items-center gap-6 mb-8 p-4 bg-gray-900/50 rounded-lg border border-gray-800">
+                <div className="flex flex-wrap items-center gap-6 mb-8 p-4 bg-card/50 rounded-lg border border-border">
                   <div className="flex items-center gap-2">
                     <Star className="text-yellow-400 fill-yellow-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.rating}</div>
-                      <div className="text-xs text-gray-400">{product.metrics.reviewCount} avaliações</div>
+                      <div className="text-xs text-muted-foreground">{product.metrics.reviewCount} avaliações</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
-                    <Users className="text-purple-400" size={20} />
+                    <Users className="text-amber-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.students.toLocaleString()}</div>
-                      <div className="text-xs text-gray-400">alunos matriculados</div>
+                      <div className="text-xs text-muted-foreground">alunos matriculados</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
                     <BookOpen className="text-green-400" size={20} />
-                    <div className="text-sm text-gray-300">
+                    <div className="text-sm text-muted-foreground">
                       <span className="font-bold text-green-400">{product.metrics.lessons}</span> aulas práticas
                     </div>
                   </div>
                 </div>
 
                 {/* Instructor Quick Info */}
-                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-lg border border-purple-500/30">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl font-bold">
+                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-amber-900/30 to-yellow-900/30 rounded-lg border border-amber-500/30">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-2xl font-bold">
                     RF
                   </div>
                   <div>
-                    <div className="text-sm text-gray-400">Criado por</div>
+                    <div className="text-sm text-muted-foreground">Criado por</div>
                     <div className="font-bold text-lg">Ricardo Faya</div>
-                    <div className="text-sm text-gray-400">18 cursos de IA • 28 anos experiência em mídia e tech</div>
+                    <div className="text-sm text-muted-foreground">18 cursos de IA • 28 anos experiência em mídia e tech</div>
                   </div>
                 </div>
               </div>
@@ -190,9 +190,9 @@ export default function CourseSalesPage() {
               {/* STICKY SIDEBAR - Purchase Card */}
               <div className="lg:col-span-1">
                 <div className="sticky top-24">
-                  <Card className="bg-gray-900/50 backdrop-blur border-2 border-purple-500/50 p-6 shadow-2xl shadow-purple-500/20">
+                  <Card className="bg-card/50 backdrop-blur border-2 border-amber-500/50 p-6 shadow-2xl shadow-amber-500/20">
                     {/* Video Preview */}
-                    <div className="relative aspect-video bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg mb-6 group cursor-pointer overflow-hidden">
+                    <div className="relative aspect-video bg-gradient-to-br from-amber-600 to-yellow-700 rounded-lg mb-6 group cursor-pointer overflow-hidden">
                       <div className="absolute inset-0 flex items-center justify-center">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
@@ -216,7 +216,7 @@ export default function CourseSalesPage() {
                         <Shield className="text-green-400" size={20} />
                         <span className="font-bold text-green-400">COMPRA SEGURA</span>
                       </div>
-                      <div className="space-y-2 text-sm text-gray-300">
+                      <div className="space-y-2 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
                           <Check className="text-green-400" size={14} />
                           <span>7 dias de garantia incondicional</span>
@@ -235,7 +235,7 @@ export default function CourseSalesPage() {
                     {/* Price */}
                     <div className="mb-6">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="text-gray-500 line-through text-2xl">
+                        <span className="text-muted-foreground line-through text-2xl">
                           R$ {product.pricing.originalPrice.toLocaleString()}
                         </span>
                         <Badge className="bg-red-500 text-white text-lg px-3 py-1">
@@ -243,11 +243,11 @@ export default function CourseSalesPage() {
                         </Badge>
                       </div>
                       <div className="flex items-baseline gap-2 mb-2">
-                        <span className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <span className="text-5xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                           R$ {product.pricing.price.toLocaleString()}
                         </span>
                       </div>
-                      <p className="text-gray-400">
+                      <p className="text-muted-foreground">
                         ou <span className="font-semibold text-white">12x de R$ {(product.pricing.price / 12).toFixed(2)}</span> sem juros
                       </p>
                       <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
@@ -260,7 +260,7 @@ export default function CourseSalesPage() {
                     {/* CTAs */}
                     <div className="space-y-3 mb-6">
                       <Button
-                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-6 text-lg shadow-lg shadow-purple-500/50"
+                        className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold py-6 text-lg shadow-lg shadow-amber-500/50"
                         size="lg"
                       >
                         <ShoppingCart className="mr-2" size={20} />
@@ -268,7 +268,7 @@ export default function CourseSalesPage() {
                       </Button>
                       <Button
                         variant="outline"
-                        className="w-full border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10"
+                        className="w-full border-2 border-amber-500 text-amber-400 hover:bg-amber-500/10"
                         size="lg"
                       >
                         Adicionar ao Carrinho
@@ -277,7 +277,7 @@ export default function CourseSalesPage() {
 
                     {/* What's Included */}
                     <div className="space-y-3 mb-6">
-                      <h3 className="font-bold text-sm uppercase text-gray-400 mb-3">
+                      <h3 className="font-bold text-sm uppercase text-muted-foreground mb-3">
                         Este curso inclui:
                       </h3>
                       {[
@@ -303,13 +303,13 @@ export default function CourseSalesPage() {
                       <div className="font-bold text-green-400 mb-1">
                         Garantia de 30 Dias
                       </div>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-muted-foreground">
                         100% do seu dinheiro de volta, sem perguntas
                       </p>
                     </div>
 
                     {/* Trust Badges */}
-                    <div className="flex items-center justify-center gap-4 mt-6 text-xs text-gray-500">
+                    <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <BadgeCheck size={14} />
                         <span>Compra Segura</span>
@@ -351,16 +351,16 @@ export default function CourseSalesPage() {
                     className="flex items-start gap-3 p-4 bg-red-900/10 border border-red-500/30 rounded-lg"
                   >
                     <X className="text-red-400 flex-shrink-0 mt-1" size={20} />
-                    <p className="text-gray-300">{problem}</p>
+                    <p className="text-muted-foreground">{problem}</p>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="mt-12 p-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-2xl border-2 border-purple-500/50 text-center">
+              <div className="mt-12 p-8 bg-gradient-to-r from-amber-900/30 to-yellow-900/30 rounded-2xl border-2 border-amber-500/50 text-center">
                 <p className="text-2xl font-bold mb-4">
                   Se você se identificou com pelo menos 2 desses problemas...
                 </p>
-                <p className="text-xl text-purple-400">
+                <p className="text-xl text-amber-400">
                   Este curso foi feito especificamente para você! 👇
                 </p>
               </div>
@@ -369,18 +369,18 @@ export default function CourseSalesPage() {
         </section>
 
         {/* TRANSFORMATION SECTION */}
-        <section className="py-16 bg-gray-900">
+        <section className="py-16 bg-card">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Imagine transformar <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">sua vida profissional</span> em apenas 30 dias
+                Imagine transformar <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">sua vida profissional</span> em apenas 30 dias
               </h2>
             </div>
 
             <div className="max-w-5xl mx-auto">
               <div className="grid md:grid-cols-2 gap-8">
                 {/* Before */}
-                <div className="p-8 bg-gray-800/50 border-2 border-gray-700 rounded-2xl">
+                <div className="p-8 bg-secondary/50 border-2 border-border rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
                       ANTES
@@ -396,14 +396,14 @@ export default function CourseSalesPage() {
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <X className="text-red-400 flex-shrink-0 mt-1" size={20} />
-                        <span className="text-gray-400">{item}</span>
+                        <span className="text-muted-foreground">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* After */}
-                <div className="p-8 bg-gradient-to-br from-purple-900/30 to-pink-900/30 border-2 border-purple-500 rounded-2xl">
+                <div className="p-8 bg-gradient-to-br from-amber-900/30 to-yellow-900/30 border-2 border-amber-500 rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
                       DEPOIS
@@ -434,11 +434,11 @@ export default function CourseSalesPage() {
                   { value: "90%", label: "taxa de satisfação" },
                   { value: "30 dias", label: "para primeiros resultados" }
                 ].map((stat, i) => (
-                  <div key={i} className="text-center p-6 bg-black/50 rounded-lg border border-purple-500/30">
-                    <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2">
+                  <div key={i} className="text-center p-6 bg-black/50 rounded-lg border border-amber-500/30">
+                    <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">
                       {stat.value}
                     </div>
-                    <div className="text-sm text-gray-400">{stat.label}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -451,9 +451,9 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                O que você vai <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">dominar</span>
+                O que você vai <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">dominar</span>
               </h2>
-              <p className="text-xl text-gray-400 text-center mb-12">
+              <p className="text-xl text-muted-foreground text-center mb-12">
                 Resultados concretos que você alcançará ao concluir este curso
               </p>
 
@@ -464,9 +464,9 @@ export default function CourseSalesPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-lg border border-purple-500/30 hover:border-purple-500 transition-all"
+                    className="flex items-start gap-4 p-6 bg-gradient-to-r from-amber-900/30 to-yellow-900/20 rounded-lg border border-amber-500/30 hover:border-amber-500 transition-all"
                   >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="text-white" size={20} />
                     </div>
                     <div>
@@ -479,13 +479,13 @@ export default function CourseSalesPage() {
               {/* CTA */}
               <div className="mt-12 text-center">
                 <Button
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg"
+                  className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-12 py-6 text-lg"
                   size="lg"
                 >
                   Sim, Quero Dominar Tudo Isso Agora
                   <ArrowRight className="ml-2" size={20} />
                 </Button>
-                <p className="text-sm text-gray-400 mt-4">
+                <p className="text-sm text-muted-foreground mt-4">
                   ✓ Acesso imediato ✓ Garantia de 30 dias ✓ Certificado incluído
                 </p>
               </div>
@@ -496,9 +496,9 @@ export default function CourseSalesPage() {
         {/* Continue with more sections in next part... */}
         
         {/* Placeholder for remaining sections */}
-        <div className="py-16 bg-gray-900">
+        <div className="py-16 bg-card">
           <div className="container mx-auto px-4 text-center">
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               [Continuação da página com: Curriculum, Bonuses, Testimonials, FAQ, Guarantee, Final CTA...]
             </p>
           </div>

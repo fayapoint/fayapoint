@@ -101,7 +101,7 @@ function ModelCard({ model }: { model: AIModel }) {
   const usagePercent = (model.usage / model.limit) * 100;
 
   return (
-    <div className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 hover:border-white/20 transition-all">
+    <div className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border hover:border-white/20 transition-all">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-3">
           <div className={cn(
@@ -114,7 +114,7 @@ function ModelCard({ model }: { model: AIModel }) {
           </div>
           <div>
             <h4 className="font-semibold text-white text-sm">{model.name}</h4>
-            <p className="text-xs text-gray-500">{model.provider}</p>
+            <p className="text-xs text-muted-foreground">{model.provider}</p>
           </div>
         </div>
         
@@ -122,7 +122,7 @@ function ModelCard({ model }: { model: AIModel }) {
           "px-2 py-1 rounded-full text-[10px] font-medium border",
           model.status === "active" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" :
           model.status === "error" ? "bg-red-500/20 text-red-400 border-red-500/30" :
-          "bg-gray-500/20 text-gray-400 border-gray-500/30"
+          "bg-gray-500/20 text-muted-foreground border-gray-500/30"
         )}>
           {model.status === "active" ? "Ativo" : model.status === "error" ? "Erro" : "Inativo"}
         </span>
@@ -130,10 +130,10 @@ function ModelCard({ model }: { model: AIModel }) {
 
       <div className="space-y-2">
         <div className="flex justify-between text-xs">
-          <span className="text-gray-500">Uso</span>
+          <span className="text-muted-foreground">Uso</span>
           <span className="text-white">{model.usage.toLocaleString()} / {model.limit.toLocaleString()}</span>
         </div>
-        <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
           <div 
             className={cn(
               "h-full rounded-full transition-all",
@@ -145,8 +145,8 @@ function ModelCard({ model }: { model: AIModel }) {
           />
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-gray-500">Custo</span>
-          <span className={model.cost === "Free" ? "text-emerald-400" : "text-gray-400"}>{model.cost}</span>
+          <span className="text-muted-foreground">Custo</span>
+          <span className={model.cost === "Free" ? "text-emerald-400" : "text-muted-foreground"}>{model.cost}</span>
         </div>
       </div>
     </div>
@@ -175,7 +175,7 @@ export default function AdminAISettingsPage() {
             <Bot className="w-6 h-6 text-violet-400" />
             Configurações de IA
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Gerencie modelos e APIs de inteligência artificial
           </p>
         </div>
@@ -184,7 +184,7 @@ export default function AdminAISettingsPage() {
           href="https://openrouter.ai"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 text-sm hover:bg-white/10 transition"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary border border-border text-muted-foreground text-sm hover:bg-white/10 transition"
         >
           <ExternalLink size={16} />
           OpenRouter Dashboard
@@ -196,14 +196,14 @@ export default function AdminAISettingsPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/10 border border-violet-500/20"
+          className="p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/20"
         >
           <div className="flex items-center gap-2 mb-2">
             <Bot size={16} className="text-violet-400" />
-            <span className="text-xs text-gray-400">Modelos</span>
+            <span className="text-xs text-muted-foreground">Modelos</span>
           </div>
           <p className="text-2xl font-bold text-white">{AI_MODELS.length}</p>
-          <p className="text-[10px] text-gray-500">{activeModels} ativos</p>
+          <p className="text-[10px] text-muted-foreground">{activeModels} ativos</p>
         </motion.div>
 
         <motion.div
@@ -214,10 +214,10 @@ export default function AdminAISettingsPage() {
         >
           <div className="flex items-center gap-2 mb-2">
             <Activity size={16} className="text-cyan-400" />
-            <span className="text-xs text-gray-400">Requisições</span>
+            <span className="text-xs text-muted-foreground">Requisições</span>
           </div>
           <p className="text-2xl font-bold text-white">{totalUsage.toLocaleString()}</p>
-          <p className="text-[10px] text-gray-500">este mês</p>
+          <p className="text-[10px] text-muted-foreground">este mês</p>
         </motion.div>
 
         <motion.div
@@ -228,10 +228,10 @@ export default function AdminAISettingsPage() {
         >
           <div className="flex items-center gap-2 mb-2">
             <ImageIcon size={16} className="text-emerald-400" />
-            <span className="text-xs text-gray-400">Imagens</span>
+            <span className="text-xs text-muted-foreground">Imagens</span>
           </div>
           <p className="text-2xl font-bold text-white">1,801</p>
-          <p className="text-[10px] text-gray-500">geradas</p>
+          <p className="text-[10px] text-muted-foreground">geradas</p>
         </motion.div>
 
         <motion.div
@@ -242,10 +242,10 @@ export default function AdminAISettingsPage() {
         >
           <div className="flex items-center gap-2 mb-2">
             <DollarSign size={16} className="text-amber-400" />
-            <span className="text-xs text-gray-400">Custo</span>
+            <span className="text-xs text-muted-foreground">Custo</span>
           </div>
           <p className="text-2xl font-bold text-white">$12.45</p>
-          <p className="text-[10px] text-gray-500">este mês</p>
+          <p className="text-[10px] text-muted-foreground">este mês</p>
         </motion.div>
       </div>
 
@@ -254,7 +254,7 @@ export default function AdminAISettingsPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-600/5 border border-violet-500/20"
+        className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20"
       >
         <div className="flex items-center gap-2 mb-4">
           <Key className="w-5 h-5 text-violet-400" />
@@ -267,18 +267,18 @@ export default function AdminAISettingsPage() {
               type={showApiKey ? "text" : "password"}
               value="sk-or-v1-****************************"
               readOnly
-              className="w-full px-4 py-2.5 pr-20 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-mono"
+              className="w-full px-4 py-2.5 pr-20 rounded-xl bg-secondary border border-border text-white text-sm font-mono"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
               <button
                 onClick={() => setShowApiKey(!showApiKey)}
-                className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground"
               >
                 {showApiKey ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
               <button
                 onClick={handleCopy}
-                className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground"
               >
                 {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
               </button>
@@ -289,7 +289,7 @@ export default function AdminAISettingsPage() {
           </button>
         </div>
         
-        <p className="text-xs text-gray-500 mt-3 flex items-center gap-1.5">
+        <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
           <Shield size={12} className="text-emerald-400" />
           A API key é armazenada de forma segura e nunca é exposta publicamente
         </p>
@@ -323,7 +323,7 @@ export default function AdminAISettingsPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10"
+        className="p-4 lg:p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border"
       >
         <h3 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
           <Shield className="w-5 h-5 text-cyan-400" />
@@ -341,18 +341,18 @@ export default function AdminAISettingsPage() {
               "p-3 rounded-xl border",
               tier.color === "gray" ? "bg-gray-500/10 border-gray-500/20" :
               tier.color === "cyan" ? "bg-cyan-500/10 border-cyan-500/20" :
-              tier.color === "violet" ? "bg-violet-500/10 border-violet-500/20" :
+              tier.color === "violet" ? "bg-violet-500/10 border-amber-500/20" :
               "bg-amber-500/10 border-amber-500/20"
             )}>
               <p className={cn(
                 "text-xs font-medium mb-1",
-                tier.color === "gray" ? "text-gray-400" :
+                tier.color === "gray" ? "text-muted-foreground" :
                 tier.color === "cyan" ? "text-cyan-400" :
                 tier.color === "violet" ? "text-violet-400" :
                 "text-amber-400"
               )}>{tier.plan}</p>
               <p className="text-lg font-bold text-white">{tier.images}</p>
-              <p className="text-[10px] text-gray-500">imagens/mês</p>
+              <p className="text-[10px] text-muted-foreground">imagens/mês</p>
             </div>
           ))}
         </div>
@@ -371,7 +371,7 @@ export default function AdminAISettingsPage() {
           </div>
           <div>
             <h4 className="font-medium text-white text-sm">Sobre o OpenRouter</h4>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Usamos o OpenRouter como gateway para múltiplos provedores de IA. 
               Isso permite acesso a diversos modelos com uma única API key, incluindo 
               GPT-5.4, Claude Opus 4.6, Gemini, Flux, e muitos outros.

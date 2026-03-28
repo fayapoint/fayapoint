@@ -69,7 +69,7 @@ const INTEGRATIONS: Integration[] = [
     status: "disconnected",
     url: "https://dashboard.stripe.com",
     envKeys: ["STRIPE_SECRET_KEY", "STRIPE_PUBLISHABLE_KEY", "STRIPE_WEBHOOK_SECRET"],
-    color: "purple",
+    color: "amber",
   },
   {
     id: "resend",
@@ -100,7 +100,7 @@ function getStatusBadge(status: Integration["status"]) {
     case "partial":
       return { bg: "bg-amber-500/20 border-amber-500/30", text: "text-amber-400", label: "Parcial" };
     case "disconnected":
-      return { bg: "bg-gray-500/20 border-gray-500/30", text: "text-gray-400", label: "Desconectado" };
+      return { bg: "bg-gray-500/20 border-gray-500/30", text: "text-muted-foreground", label: "Desconectado" };
   }
 }
 
@@ -109,9 +109,9 @@ function IntegrationCard({ integration }: { integration: Integration }) {
   const colors: Record<string, string> = {
     emerald: "from-emerald-500/20 to-green-500/10 border-emerald-500/30",
     cyan: "from-cyan-500/20 to-blue-500/10 border-cyan-500/30",
-    violet: "from-violet-500/20 to-purple-500/10 border-violet-500/30",
-    purple: "from-purple-500/20 to-pink-500/10 border-purple-500/30",
-    pink: "from-pink-500/20 to-rose-500/10 border-pink-500/30",
+    violet: "from-amber-500/20 to-amber-500/10 border-amber-500/30",
+    purple: "from-amber-500/20 to-yellow-500/10 border-amber-500/30",
+    pink: "from-yellow-500/20 to-rose-500/10 border-amber-500/30",
     gray: "from-gray-500/20 to-gray-600/10 border-gray-500/30",
   };
 
@@ -144,13 +144,13 @@ function IntegrationCard({ integration }: { integration: Integration }) {
         </a>
       </div>
       
-      <p className="text-sm text-gray-400 mb-4">{integration.description}</p>
+      <p className="text-sm text-muted-foreground mb-4">{integration.description}</p>
       
       <div className="space-y-1.5">
-        <p className="text-xs text-gray-500">Variáveis necessárias:</p>
+        <p className="text-xs text-muted-foreground">Variáveis necessárias:</p>
         <div className="flex flex-wrap gap-1.5">
           {integration.envKeys.map((key) => (
-            <code key={key} className="px-2 py-0.5 rounded bg-white/10 text-[10px] text-gray-300">
+            <code key={key} className="px-2 py-0.5 rounded bg-white/10 text-[10px] text-muted-foreground">
               {key}
             </code>
           ))}
@@ -171,13 +171,13 @@ export default function AdminIntegrationsPage() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Integrações
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Gerencie as conexões com serviços externos
           </p>
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-muted-foreground">
             <span className="text-emerald-400 font-semibold">{connectedCount}</span>/{INTEGRATIONS.length} conectadas
           </div>
         </div>
@@ -187,7 +187,7 @@ export default function AdminIntegrationsPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/5 border border-violet-500/20"
+        className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20"
       >
         <div className="flex items-center gap-3 mb-4">
           <div className="w-12 h-12 rounded-xl bg-violet-500/20 flex items-center justify-center">
@@ -195,26 +195,26 @@ export default function AdminIntegrationsPage() {
           </div>
           <div>
             <h2 className="text-lg font-semibold text-white">Status das Integrações</h2>
-            <p className="text-sm text-gray-400">Visão geral das conexões ativas</p>
+            <p className="text-sm text-muted-foreground">Visão geral das conexões ativas</p>
           </div>
         </div>
         
         <div className="grid grid-cols-3 gap-4">
           <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center">
             <p className="text-2xl font-bold text-emerald-400">{connectedCount}</p>
-            <p className="text-xs text-gray-400">Conectadas</p>
+            <p className="text-xs text-muted-foreground">Conectadas</p>
           </div>
           <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center">
             <p className="text-2xl font-bold text-amber-400">
               {INTEGRATIONS.filter(i => i.status === "partial").length}
             </p>
-            <p className="text-xs text-gray-400">Parciais</p>
+            <p className="text-xs text-muted-foreground">Parciais</p>
           </div>
           <div className="p-4 rounded-xl bg-gray-500/10 border border-gray-500/30 text-center">
-            <p className="text-2xl font-bold text-gray-400">
+            <p className="text-2xl font-bold text-muted-foreground">
               {INTEGRATIONS.filter(i => i.status === "disconnected").length}
             </p>
-            <p className="text-xs text-gray-400">Desconectadas</p>
+            <p className="text-xs text-muted-foreground">Desconectadas</p>
           </div>
         </div>
       </motion.div>
@@ -245,14 +245,14 @@ export default function AdminIntegrationsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10"
+        className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border"
       >
         <div className="flex items-center gap-2 mb-4">
-          <Settings className="text-gray-400" size={20} />
+          <Settings className="text-muted-foreground" size={20} />
           <h2 className="text-lg font-semibold text-white">Como Configurar</h2>
         </div>
         
-        <div className="space-y-4 text-sm text-gray-400">
+        <div className="space-y-4 text-sm text-muted-foreground">
           <div className="flex items-start gap-3">
             <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center shrink-0">
               <span className="text-xs text-violet-400 font-bold">1</span>

@@ -137,7 +137,7 @@ export function HeroSection() {
                 </span>
               </h1>
 
-              <p className="max-w-2xl text-lg leading-8 text-gray-300 md:text-xl">
+              <p className="max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
                 {isPtBr
                   ? `Descubra a oferta do mês por US$1 (${formattedBrl}), veja quais trilhas entram no seu plano agora e transforme a primeira experiência em confiança para continuar aprendendo.`
                   : `Discover the monthly US$1 offer (${formattedBrl}), see which paths belong to your plan right now, and turn the first experience into confidence to keep learning.`}
@@ -193,7 +193,7 @@ export function HeroSection() {
               </Link>
             </div>
 
-            <div className="flex flex-wrap gap-3 text-sm text-gray-400">
+            <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-emerald-300" />
                 {isPtBr ? `Curso por US$1 (${formattedBrl}) com progresso salvo e acesso vitalício` : `US$1 course (${formattedBrl}) with saved progress and lifetime access`}
@@ -229,7 +229,7 @@ export function HeroSection() {
                 </div>
               </div>
 
-              <p className="mt-4 text-sm leading-6 text-gray-300">
+              <p className="mt-4 text-sm leading-6 text-muted-foreground">
                 {freeCourse
                   ? freeCourse.copy?.shortDescription || freeCourse.copy?.subheadline || freeCourse.name
                   : isPtBr
@@ -238,8 +238,8 @@ export function HeroSection() {
               </p>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                <div className="rounded-[22px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     {isPtBr ? "O que está incluso" : "What is included"}
                   </p>
                   <ul className="mt-3 space-y-2 text-sm text-white/85">
@@ -258,8 +258,8 @@ export function HeroSection() {
                   </ul>
                 </div>
 
-                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
-                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+                <div className="rounded-[22px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     {isPtBr ? "Como o modelo funciona" : "How the model works"}
                   </p>
                   <ul className="mt-3 space-y-2 text-sm text-white/85">
@@ -279,35 +279,35 @@ export function HeroSection() {
                 </div>
               </div>
 
-              <div className="mt-5 rounded-[22px] border border-white/10 bg-black/20 p-4 text-sm text-gray-300 backdrop-blur-xl">
+              <div className="mt-5 rounded-[22px] border border-border bg-black/20 p-4 text-sm text-muted-foreground backdrop-blur-xl">
                 <p className="font-semibold text-white">{isPtBr ? "Catálogo atual do mês" : "Current monthly catalog"}</p>
                 <p className="mt-1 leading-6">{monthlySummary}</p>
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
-                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+              <div className="rounded-[28px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
+                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   {isPtBr ? "Entrada sem fricção" : "Frictionless entry"}
                 </p>
                 <h3 className="mt-2 text-xl font-bold text-white">
                   {isPtBr ? "O usuário novo entende o valor antes de pagar" : "New users understand the value before paying"}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-gray-400">
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {isPtBr
                     ? "Oferta por US$1, catálogo mensal e upgrade aparecem com contexto, sem telas confusas."
                     : "US$1 offer, monthly catalog, and upgrade appear with context, without confusing screens."}
                 </p>
               </div>
 
-              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
-                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">
+              <div className="rounded-[28px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
+                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                   {isPtBr ? "Posicionamento" : "Positioning"}
                 </p>
                 <h3 className="mt-2 text-xl font-bold text-white">
                   {isPtBr ? "Oferta clara, moderna e pronta para vender" : "Clear, modern offer ready to sell"}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-gray-400">
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {isPtBr
                     ? "A página abre com contexto, confiança e caminho de compra, sem ruído desnecessário."
                     : "The page opens with context, trust, and a buying path, without unnecessary noise."}

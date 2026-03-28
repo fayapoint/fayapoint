@@ -120,7 +120,7 @@ export default function ReceiptPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-pulse text-gray-400">Carregando recibo...</div>
+        <div className="animate-pulse text-muted-foreground">Carregando recibo...</div>
       </div>
     );
   }
@@ -173,7 +173,7 @@ export default function ReceiptPage() {
         <div className="no-print max-w-3xl mx-auto mb-6 flex items-center justify-between">
           <Button
             variant="ghost"
-            className="text-gray-400 hover:text-white"
+            className="text-muted-foreground hover:text-white"
             onClick={() => router.push("/pt-BR/portal")}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -196,7 +196,7 @@ export default function ReceiptPage() {
           className="receipt-container max-w-3xl mx-auto"
         >
           {/* Main Receipt Card */}
-          <div className="receipt-card rounded-3xl border border-white/10 bg-gray-950 overflow-hidden shadow-2xl">
+          <div className="receipt-card rounded-3xl border border-border bg-gray-950 overflow-hidden shadow-2xl">
             {/* Header Gradient */}
             <div className="receipt-gradient bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 p-8 relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
@@ -229,36 +229,36 @@ export default function ReceiptPage() {
             {/* Receipt Details */}
             <div className="p-8 space-y-8">
               {/* Receipt Number & Date */}
-              <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+              <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-border">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-1">Comprovante</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">Comprovante</p>
                   <p className="text-xl font-bold text-white">{receipt.receiptNumber}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-1">Data do pagamento</p>
-                  <p className="text-sm text-gray-300">{formatDate(receipt.paidAt)}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">Data do pagamento</p>
+                  <p className="text-sm text-muted-foreground">{formatDate(receipt.paidAt)}</p>
                 </div>
               </div>
 
               {/* Buyer Info */}
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-2">Adquirido por</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Adquirido por</p>
                   <p className="text-lg font-semibold text-white">{receipt.userName}</p>
-                  <p className="text-sm text-gray-400">{receipt.userEmail}</p>
+                  <p className="text-sm text-muted-foreground">{receipt.userEmail}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-2">Forma de pagamento</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Forma de pagamento</p>
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{PAYMENT_ICONS[receipt.paymentMethod] || "💰"}</span>
-                    <p className="text-sm text-gray-300">{receipt.paymentMethodLabel}</p>
+                    <p className="text-sm text-muted-foreground">{receipt.paymentMethodLabel}</p>
                   </div>
                 </div>
               </div>
 
               {/* Items Table */}
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-4">Itens adquiridos</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4">Itens adquiridos</p>
                 <div className="space-y-4">
                   {receipt.items.map((item, idx) => (
                     <div
@@ -269,7 +269,7 @@ export default function ReceiptPage() {
                         <div className="flex-1 min-w-0">
                           <h3 className="text-base font-bold text-white">{item.name}</h3>
                           {item.description && (
-                            <p className="text-sm text-gray-400 mt-1">{item.description}</p>
+                            <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
                           )}
 
                           {/* Badges */}
@@ -287,7 +287,7 @@ export default function ReceiptPage() {
                               </span>
                             )}
                             {item.type === "subscription" && (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-medium">
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium">
                                 <Star className="w-3 h-3" />
                                 Assinatura {receipt.planCycle === "yearly" ? "anual" : "mensal"}
                               </span>
@@ -299,7 +299,7 @@ export default function ReceiptPage() {
                             {formatCurrency(item.totalPrice)}
                           </p>
                           {item.quantity > 1 && (
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-muted-foreground">
                               {item.quantity}x {formatCurrency(item.unitPrice)}
                             </p>
                           )}
@@ -315,18 +315,18 @@ export default function ReceiptPage() {
                 {receipt.discount > 0 && (
                   <>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Subtotal</span>
-                      <span className="text-gray-300">{formatCurrency(receipt.subtotal)}</span>
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="text-muted-foreground">{formatCurrency(receipt.subtotal)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-emerald-400">Desconto aplicado</span>
                       <span className="text-emerald-400">- {formatCurrency(receipt.discount)}</span>
                     </div>
-                    <div className="border-t border-white/10 pt-3" />
+                    <div className="border-t border-border pt-3" />
                   </>
                 )}
                 <div className="flex justify-between items-baseline">
-                  <span className="text-sm font-medium text-gray-300">Total pago</span>
+                  <span className="text-sm font-medium text-muted-foreground">Total pago</span>
                   <span className="text-3xl font-black bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
                     {formatCurrency(receipt.total)}
                   </span>
@@ -347,7 +347,7 @@ export default function ReceiptPage() {
                         </div>
                         <div>
                           <p className="text-sm font-semibold text-white">Acesso vitalício</p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-0.5">
                             O conteúdo é seu para sempre. Sem prazo de expiração.
                           </p>
                         </div>
@@ -360,7 +360,7 @@ export default function ReceiptPage() {
                         </div>
                         <div>
                           <p className="text-sm font-semibold text-white">Certificado verificável</p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-0.5">
                             Ao completar, emita seu certificado com verificação pública.
                           </p>
                         </div>
@@ -373,19 +373,19 @@ export default function ReceiptPage() {
                         </div>
                         <div>
                           <p className="text-sm font-semibold text-white">Atualizações incluídas</p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-0.5">
                             Todas as melhorias futuras do curso são suas automaticamente.
                           </p>
                         </div>
                       </div>
                     )}
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center shrink-0 mt-0.5">
-                        <Shield className="w-4 h-4 text-purple-400" />
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                        <Shield className="w-4 h-4 text-amber-400" />
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-white">Garantia de 7 dias</p>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           Não ficou satisfeito? Reembolso integral em até 7 dias.
                         </p>
                       </div>
@@ -396,23 +396,23 @@ export default function ReceiptPage() {
 
               {/* Subscription details */}
               {isSubscription && receipt.planName && (
-                <div className="rounded-2xl border border-purple-500/15 bg-purple-500/[0.04] p-6">
-                  <h4 className="text-sm font-bold text-purple-300 uppercase tracking-wider mb-3">
+                <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-6">
+                  <h4 className="text-sm font-bold text-amber-300 uppercase tracking-wider mb-3">
                     Detalhes da assinatura
                   </h4>
                   <div className="grid sm:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wider">Plano</p>
+                      <p className="text-muted-foreground text-xs uppercase tracking-wider">Plano</p>
                       <p className="text-white font-semibold mt-1">{receipt.planName}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wider">Ciclo</p>
+                      <p className="text-muted-foreground text-xs uppercase tracking-wider">Ciclo</p>
                       <p className="text-white font-semibold mt-1">
                         {receipt.planCycle === "yearly" ? "Anual" : "Mensal"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wider">Valor</p>
+                      <p className="text-muted-foreground text-xs uppercase tracking-wider">Valor</p>
                       <p className="text-white font-semibold mt-1">
                         {formatCurrency(receipt.total)}/{receipt.planCycle === "yearly" ? "ano" : "mês"}
                       </p>
@@ -425,12 +425,12 @@ export default function ReceiptPage() {
               <div className="pt-6 border-t border-white/8 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-gray-500" />
-                    <span className="text-xs text-gray-500">Pagamento processado com segurança</span>
+                    <Shield className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">Pagamento processado com segurança</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CreditCard className="w-4 h-4 text-gray-500" />
-                    <span className="text-xs text-gray-500">{receipt.paymentMethodLabel}</span>
+                    <CreditCard className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">{receipt.paymentMethodLabel}</span>
                   </div>
                 </div>
 

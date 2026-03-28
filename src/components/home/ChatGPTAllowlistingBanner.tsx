@@ -22,14 +22,14 @@ export const ChatGPTAllowlistingBanner = () => {
                 <span className="px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded text-xs font-bold text-green-400 uppercase tracking-wider">
                   {t("badge")}
                 </span>
-                <span className="text-sm text-gray-400 flex items-center gap-1">
+                <span className="text-sm text-muted-foreground flex items-center gap-1">
                   <Search size={12} /> {t("category")}
                 </span>
               </div>
               <h3 className="text-lg md:text-xl font-bold text-white">
                 {t("title")}
               </h3>
-              <p className="text-sm text-gray-400 max-w-xl">
+              <p className="text-sm text-muted-foreground max-w-xl">
                 {t("description")}
               </p>
             </div>

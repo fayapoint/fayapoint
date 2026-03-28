@@ -212,11 +212,11 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
       onClick={() => setSelectedProduct(product)}
     >
       {/* Glass Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/10 rounded-2xl transition-all duration-300 group-hover:border-purple-500/50 group-hover:shadow-xl group-hover:shadow-purple-500/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-border rounded-2xl transition-all duration-300 group-hover:border-amber-500/50 group-hover:shadow-xl group-hover:shadow-amber-500/10" />
       
       <div className={cn("relative p-3", compact ? "flex flex-row gap-3" : "")}>
         <div className={cn(
-          "relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800/50 to-gray-900/50",
+          "relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800/50 to-card/50",
           compact ? "w-24 h-24 flex-shrink-0" : "aspect-square mb-3"
         )}>
           {product.thumbnail ? (
@@ -244,7 +244,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               </Badge>
             )}
             {product.isFeatured && (
-              <Badge className="bg-purple-500/90 backdrop-blur text-white text-xs">
+              <Badge className="bg-amber-500/90 backdrop-blur text-white text-xs">
                 Destaque
               </Badge>
             )}
@@ -259,7 +259,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   "rounded-full",
                   isInCart(product._id) 
                     ? "bg-green-500 hover:bg-green-600" 
-                    : "bg-purple-600 hover:bg-purple-700"
+                    : "bg-amber-600 hover:bg-amber-700"
                 )}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -278,11 +278,11 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
 
         {/* Info Section */}
         <div className={cn(compact ? "flex-1" : "")}>
-          <p className="text-xs text-purple-400 font-medium mb-1">
+          <p className="text-xs text-amber-400 font-medium mb-1">
             {product.brand}
           </p>
           <h3 className={cn(
-            "font-semibold group-hover:text-purple-400 transition line-clamp-2",
+            "font-semibold group-hover:text-amber-400 transition line-clamp-2",
             compact ? "text-sm" : ""
           )}>
             {product.name}
@@ -290,7 +290,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           
           {!compact && (
             <>
-              <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+              <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                 {product.shortDescription}
               </p>
               
@@ -308,7 +308,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       )}
                     />
                   ))}
-                  <span className="text-xs text-gray-400 ml-1">
+                  <span className="text-xs text-muted-foreground ml-1">
                     ({product.reviewCount})
                   </span>
                 </div>
@@ -325,7 +325,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               {formatPrice(product.price)}
             </span>
             {product.originalPrice > product.price && (
-              <span className="text-xs text-gray-500 line-through">
+              <span className="text-xs text-muted-foreground line-through">
                 {formatPrice(product.originalPrice)}
               </span>
             )}
@@ -394,21 +394,21 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
     const Icon = CATEGORY_ICONS[id] || Package;
     return (
       <Card
-        className="bg-white/5 border-white/10 p-4 hover:border-purple-500/50 transition cursor-pointer group"
+        className="bg-secondary border-border p-4 hover:border-amber-500/50 transition cursor-pointer group"
         onClick={() => {
           setSelectedCategory(id);
           setCurrentSection("products");
         }}
       >
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-purple-500/20 rounded-xl group-hover:bg-purple-500/30 transition">
-            <Icon size={24} className="text-purple-400" />
+          <div className="p-3 bg-amber-500/20 rounded-xl group-hover:bg-amber-500/30 transition">
+            <Icon size={24} className="text-amber-400" />
           </div>
           <div>
-            <h3 className="font-semibold group-hover:text-purple-400 transition">
+            <h3 className="font-semibold group-hover:text-amber-400 transition">
               {name}
             </h3>
-            <p className="text-xs text-gray-400">{count} produtos</p>
+            <p className="text-xs text-muted-foreground">{count} produtos</p>
           </div>
         </div>
       </Card>
@@ -436,7 +436,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Glass Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-gray-900/90 to-purple-900/30 backdrop-blur-2xl border border-white/10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-gray-900/90 to-amber-900/30 backdrop-blur-2xl border border-border" />
             
             <div className="relative p-8 overflow-y-auto max-h-[90vh]">
               {/* Close Button */}
@@ -450,7 +450,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               <div className="grid lg:grid-cols-2 gap-8">
                 {/* Image Section */}
                 <div>
-                  <div className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 mb-4">
+                  <div className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-card mb-4">
                     {selectedProduct.thumbnail ? (
                       <img
                         src={selectedProduct.thumbnail}
@@ -476,7 +476,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                         </Badge>
                       )}
                       {selectedProduct.isFeatured && (
-                        <Badge className="bg-purple-500/90 backdrop-blur text-white text-sm">
+                        <Badge className="bg-amber-500/90 backdrop-blur text-white text-sm">
                           Destaque
                         </Badge>
                       )}
@@ -489,11 +489,11 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   {/* Header */}
                   <div>
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="outline" className="border-purple-500/50 text-purple-400">
+                      <Badge variant="outline" className="border-amber-500/50 text-amber-400">
                         {selectedProduct.brand}
                       </Badge>
                       {selectedProduct.sku && (
-                        <Badge variant="outline" className="border-gray-600 text-gray-400 text-xs">
+                        <Badge variant="outline" className="border-border text-muted-foreground text-xs">
                           SKU: {selectedProduct.sku}
                         </Badge>
                       )}
@@ -514,24 +514,24 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                             )}
                           />
                         ))}
-                        <span className="ml-2 text-gray-400">({selectedProduct.reviewCount} avaliações)</span>
+                        <span className="ml-2 text-muted-foreground">({selectedProduct.reviewCount} avaliações)</span>
                       </div>
-                      <span className="text-gray-500">|</span>
-                      <span className="text-gray-400">{selectedProduct.soldCount} vendidos</span>
+                      <span className="text-muted-foreground">|</span>
+                      <span className="text-muted-foreground">{selectedProduct.soldCount} vendidos</span>
                     </div>
                   </div>
 
                   {/* Price Card */}
                   <div className="p-6 rounded-2xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
                     {selectedProduct.originalPrice > selectedProduct.price && (
-                      <p className="text-lg text-gray-500 line-through">
+                      <p className="text-lg text-muted-foreground line-through">
                         De: {formatPrice(selectedProduct.originalPrice)}
                       </p>
                     )}
                     <p className="text-4xl font-bold text-green-400">
                       {formatPrice(selectedProduct.price)}
                     </p>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       Em até 12x de {formatPrice(selectedProduct.price / 12)} sem juros
                     </p>
                   </div>
@@ -539,7 +539,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   {/* Description */}
                   <div>
                     <h3 className="text-lg font-semibold mb-2">Descrição</h3>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       {selectedProduct.fullDescription || selectedProduct.shortDescription}
                     </p>
                   </div>
@@ -548,16 +548,16 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   {selectedProduct.specifications?.length > 0 && (
                     <div>
                       <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                        <Info size={18} className="text-purple-400" />
+                        <Info size={18} className="text-amber-400" />
                         Especificações Técnicas
                       </h3>
                       <div className="grid gap-2">
                         {selectedProduct.specifications.map((spec, idx) => (
                           <div
                             key={idx}
-                            className="flex justify-between p-3 rounded-xl bg-white/5 border border-white/10"
+                            className="flex justify-between p-3 rounded-xl bg-secondary border border-border"
                           >
-                            <span className="text-gray-400">{spec.key}</span>
+                            <span className="text-muted-foreground">{spec.key}</span>
                             <span className="text-white font-medium">{spec.value}</span>
                           </div>
                         ))}
@@ -569,7 +569,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   {selectedProduct.tags?.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {selectedProduct.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="border-gray-700 text-gray-400">
+                        <Badge key={tag} variant="outline" className="border-border text-muted-foreground">
                           #{tag}
                         </Badge>
                       ))}
@@ -578,32 +578,32 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
 
                   {/* Trust Badges */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
                       <Truck size={20} className="text-green-400" />
                       <div>
                         <p className="text-sm font-medium">Frete Grátis</p>
-                        <p className="text-xs text-gray-400">Para todo Brasil</p>
+                        <p className="text-xs text-muted-foreground">Para todo Brasil</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
                       <Shield size={20} className="text-blue-400" />
                       <div>
                         <p className="text-sm font-medium">Garantia</p>
-                        <p className="text-xs text-gray-400">{selectedProduct.warranty || 'Consulte'}</p>
+                        <p className="text-xs text-muted-foreground">{selectedProduct.warranty || 'Consulte'}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
                       <Award size={20} className="text-yellow-400" />
                       <div>
                         <p className="text-sm font-medium">Qualidade</p>
-                        <p className="text-xs text-gray-400">Produto original</p>
+                        <p className="text-xs text-muted-foreground">Produto original</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
-                      <Clock size={20} className="text-purple-400" />
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
+                      <Clock size={20} className="text-amber-400" />
                       <div>
                         <p className="text-sm font-medium">Envio Rápido</p>
-                        <p className="text-xs text-gray-400">Em até 24h</p>
+                        <p className="text-xs text-muted-foreground">Em até 24h</p>
                       </div>
                     </div>
                   </div>
@@ -624,7 +624,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   <div className="flex gap-3 pt-4">
                     <Button
                       size="lg"
-                      className="flex-1 h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg font-bold rounded-xl"
+                      className="flex-1 h-14 bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-lg font-bold rounded-xl"
                       onClick={() => {
                         handleAddToCart(selectedProduct);
                         setSelectedProduct(null);
@@ -638,7 +638,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       <Button
                         size="lg"
                         variant="outline"
-                        className="h-14 border-gray-700 rounded-xl"
+                        className="h-14 border-border rounded-xl"
                         asChild
                       >
                         <a href={selectedProduct.externalUrl} target="_blank" rel="noopener noreferrer">
@@ -660,12 +660,12 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
   const HomeSection = () => (
     <div className="space-y-8">
       {/* Hero Banner */}
-      <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-500/30 p-8 relative overflow-hidden">
+      <Card className="bg-gradient-to-r from-amber-900/50 to-yellow-900/50 border-amber-500/30 p-8 relative overflow-hidden">
         <div className="relative z-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
             Loja FayAi 🛒
           </h1>
-          <p className="text-gray-300 text-lg mb-6 max-w-xl">
+          <p className="text-muted-foreground text-lg mb-6 max-w-xl">
             Equipamentos premium para criadores de conteúdo, desenvolvedores e entusiastas de IA
           </p>
           <div className="flex gap-4">
@@ -759,10 +759,10 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           {/* Search and Controls Row */}
           <div className="flex items-center gap-3 mb-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
               <Input
                 placeholder="Buscar..."
-                className="pl-10 h-10 bg-black/30 border-white/10 rounded-xl text-sm"
+                className="pl-10 h-10 bg-secondary border-border rounded-xl text-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -770,10 +770,10 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             
             {/* Sort Dropdown - Compact */}
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-10 h-10 p-0 bg-black/30 border-white/10 rounded-xl [&>span]:hidden">
+              <SelectTrigger className="w-10 h-10 p-0 bg-secondary border-border rounded-xl [&>span]:hidden">
                 <ArrowUpDown size={16} />
               </SelectTrigger>
-              <SelectContent className="bg-gray-900/95 backdrop-blur-xl border-white/10 text-white">
+              <SelectContent className="bg-card/95 backdrop-blur-xl border-border text-white">
                 <SelectItem value="createdAt">Mais Recentes</SelectItem>
                 <SelectItem value="price-asc">Menor Preço</SelectItem>
                 <SelectItem value="price-desc">Maior Preço</SelectItem>
@@ -783,11 +783,11 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             </Select>
             
             {/* View Mode */}
-            <div className="flex bg-black/30 rounded-xl overflow-hidden border border-white/10">
+            <div className="flex bg-secondary rounded-xl overflow-hidden border border-border">
               <button
                 className={cn(
                   "w-10 h-10 flex items-center justify-center transition-all",
-                  viewMode === "grid" ? "bg-purple-500/30 text-purple-400" : "text-gray-400 hover:text-white"
+                  viewMode === "grid" ? "bg-amber-500/30 text-amber-400" : "text-muted-foreground hover:text-white"
                 )}
                 onClick={() => setViewMode("grid")}
               >
@@ -796,7 +796,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               <button
                 className={cn(
                   "w-10 h-10 flex items-center justify-center transition-all",
-                  viewMode === "list" ? "bg-purple-500/30 text-purple-400" : "text-gray-400 hover:text-white"
+                  viewMode === "list" ? "bg-amber-500/30 text-amber-400" : "text-muted-foreground hover:text-white"
                 )}
                 onClick={() => setViewMode("list")}
               >
@@ -814,8 +814,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               className={cn(
                 "flex flex-col items-center gap-1 p-3 rounded-xl transition-all min-w-[60px]",
                 !selectedCategory 
-                  ? "bg-purple-500/30 text-purple-400 border border-purple-500/50" 
-                  : "bg-black/20 text-gray-400 hover:bg-white/10 hover:text-white border border-transparent"
+                  ? "bg-amber-500/30 text-amber-400 border border-amber-500/50" 
+                  : "bg-black/20 text-muted-foreground hover:bg-white/10 hover:text-white border border-transparent"
               )}
               onClick={() => {
                 setSelectedCategory(null);
@@ -837,8 +837,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   className={cn(
                     "flex flex-col items-center gap-1 p-3 rounded-xl transition-all min-w-[60px] relative",
                     selectedCategory === id 
-                      ? "bg-purple-500/30 text-purple-400 border border-purple-500/50" 
-                      : "bg-black/20 text-gray-400 hover:bg-white/10 hover:text-white border border-transparent"
+                      ? "bg-amber-500/30 text-amber-400 border border-amber-500/50" 
+                      : "bg-black/20 text-muted-foreground hover:bg-white/10 hover:text-white border border-transparent"
                   )}
                   onClick={() => {
                     setSelectedCategory(id);
@@ -850,7 +850,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                     {cat.name.split(' ')[0]}
                   </span>
                   {/* Count Badge */}
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-500 text-white text-[9px] rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[9px] rounded-full flex items-center justify-center">
                     {filters.categoryCounts[id] || 0}
                   </span>
                 </motion.button>
@@ -897,7 +897,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="flex-shrink-0 space-y-6 hidden lg:block overflow-hidden"
           >
-            <Card className="bg-white/5 border-white/10 p-4">
+            <Card className="bg-secondary border-border p-4">
               <h3 className="font-semibold mb-4 flex items-center gap-2">
                 <Filter size={18} />
                 Filtros
@@ -905,14 +905,14 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
 
               {/* Categories */}
               <div className="mb-6">
-                <p className="text-sm font-medium text-gray-400 mb-2">Categoria</p>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Categoria</p>
                 <div className="space-y-1">
                   <button
                     className={cn(
                       "w-full text-left px-3 py-2 rounded-lg text-sm transition",
                       !selectedCategory
-                        ? "bg-purple-500/20 text-purple-400"
-                        : "hover:bg-white/5 text-gray-300"
+                        ? "bg-amber-500/20 text-amber-400"
+                        : "hover:bg-secondary text-muted-foreground"
                     )}
                     onClick={() => {
                       setSelectedCategory(null);
@@ -927,8 +927,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       className={cn(
                         "w-full text-left px-3 py-2 rounded-lg text-sm transition flex justify-between",
                         selectedCategory === id
-                          ? "bg-purple-500/20 text-purple-400"
-                          : "hover:bg-white/5 text-gray-300"
+                          ? "bg-amber-500/20 text-amber-400"
+                          : "hover:bg-secondary text-muted-foreground"
                       )}
                       onClick={() => {
                         setSelectedCategory(id);
@@ -936,7 +936,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       }}
                     >
                       <span>{cat.name}</span>
-                      <span className="text-gray-500">{filters.categoryCounts[id] || 0}</span>
+                      <span className="text-muted-foreground">{filters.categoryCounts[id] || 0}</span>
                     </button>
                   ))}
                 </div>
@@ -945,14 +945,14 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               {/* Subcategories */}
               {selectedCategory && filters?.categories[selectedCategory] && (
                 <div className="mb-6">
-                  <p className="text-sm font-medium text-gray-400 mb-2">Subcategoria</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Subcategoria</p>
                   <div className="space-y-1">
                     <button
                       className={cn(
                         "w-full text-left px-3 py-2 rounded-lg text-sm transition",
                         !selectedSubcategory
-                          ? "bg-purple-500/20 text-purple-400"
-                          : "hover:bg-white/5 text-gray-300"
+                          ? "bg-amber-500/20 text-amber-400"
+                          : "hover:bg-secondary text-muted-foreground"
                       )}
                       onClick={() => setSelectedSubcategory(null)}
                     >
@@ -964,8 +964,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                         className={cn(
                           "w-full text-left px-3 py-2 rounded-lg text-sm transition",
                           selectedSubcategory === sub
-                            ? "bg-purple-500/20 text-purple-400"
-                            : "hover:bg-white/5 text-gray-300"
+                            ? "bg-amber-500/20 text-amber-400"
+                            : "hover:bg-secondary text-muted-foreground"
                         )}
                         onClick={() => setSelectedSubcategory(sub)}
                       >
@@ -979,12 +979,12 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               {/* Brands */}
               {filters?.brands && filters.brands.length > 0 && (
                 <div className="mb-6">
-                  <p className="text-sm font-medium text-gray-400 mb-2">Marca</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Marca</p>
                   <Select value={selectedBrand || "__all__"} onValueChange={(v) => setSelectedBrand(v === "__all__" ? null : v)}>
-                    <SelectTrigger className="bg-black/30 border-gray-700">
+                    <SelectTrigger className="bg-secondary border-border">
                       <SelectValue placeholder="Todas as marcas" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                    <SelectContent className="bg-card border-border text-white">
                       <SelectItem value="__all__">Todas</SelectItem>
                       {filters.brands.map((brand) => (
                         <SelectItem key={brand} value={brand}>
@@ -1000,7 +1000,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               {(selectedCategory || selectedBrand || selectedSubcategory) && (
                 <Button
                   variant="outline"
-                  className="w-full border-gray-700"
+                  className="w-full border-border"
                   onClick={() => {
                     setSelectedCategory(null);
                     setSelectedSubcategory(null);
@@ -1023,10 +1023,10 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             {/* Search */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <Input
                 placeholder="Buscar produtos..."
-                className="pl-10 bg-white/5 border-gray-700"
+                className="pl-10 bg-secondary border-border"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -1035,11 +1035,11 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             <div className="flex gap-2">
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48 bg-white/5 border-gray-700">
+                <SelectTrigger className="w-48 bg-secondary border-border">
                   <ArrowUpDown size={16} className="mr-2" />
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                <SelectContent className="bg-card border-border text-white">
                   <SelectItem value="createdAt">Mais Recentes</SelectItem>
                   <SelectItem value="price-asc">Menor Preço</SelectItem>
                   <SelectItem value="price-desc">Maior Preço</SelectItem>
@@ -1049,13 +1049,13 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               </Select>
 
               {/* View Mode */}
-              <div className="flex border border-gray-700 rounded-md overflow-hidden">
+              <div className="flex border border-border rounded-md overflow-hidden">
                 <Button
                   variant="ghost"
                   size="icon"
                   className={cn(
                     "rounded-none",
-                    viewMode === "grid" && "bg-purple-500/20 text-purple-400"
+                    viewMode === "grid" && "bg-amber-500/20 text-amber-400"
                   )}
                   onClick={() => setViewMode("grid")}
                 >
@@ -1066,7 +1066,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   size="icon"
                   className={cn(
                     "rounded-none",
-                    viewMode === "list" && "bg-purple-500/20 text-purple-400"
+                    viewMode === "list" && "bg-amber-500/20 text-amber-400"
                   )}
                   onClick={() => setViewMode("list")}
                 >
@@ -1078,7 +1078,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               <Button
                 variant="outline"
                 size="icon"
-                className="lg:hidden border-gray-700"
+                className="lg:hidden border-border"
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <SlidersHorizontal size={18} />
@@ -1103,7 +1103,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             ← Voltar à Loja
           </Button>
           {selectedCategory && filters?.categories[selectedCategory] && (
-            <div className="flex items-center gap-2 text-sm text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>{filters.categories[selectedCategory].name}</span>
               {selectedSubcategory && (
                 <>
@@ -1116,14 +1116,14 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
         </div>
 
         {/* Results Count */}
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {products.length} produto{products.length !== 1 ? "s" : ""} encontrado{products.length !== 1 ? "s" : ""}
         </p>
 
         {/* Products */}
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
-            <Loader2 className="animate-spin text-purple-500" size={40} />
+            <Loader2 className="animate-spin text-amber-500" size={40} />
           </div>
         ) : products.length > 0 ? (
           <div className={cn(
@@ -1143,7 +1143,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           <div className="text-center py-16">
             <Package size={64} className="mx-auto mb-4 text-gray-600" />
             <h3 className="text-xl font-semibold mb-2">Nenhum produto encontrado</h3>
-            <p className="text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               Tente ajustar os filtros ou buscar por outros termos
             </p>
             <Button

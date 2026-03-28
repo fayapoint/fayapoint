@@ -153,9 +153,9 @@ function ImageLightbox({
         </div>
         
         {/* Image info */}
-        <div className="mt-4 p-4 bg-white/5 rounded-xl backdrop-blur-sm">
+        <div className="mt-4 p-4 bg-secondary rounded-xl backdrop-blur-sm">
           <p className="text-white font-medium line-clamp-2 mb-2">{image.prompt}</p>
-          <div className="flex items-center justify-between text-sm text-gray-400">
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <User size={14} />
               <span>{image.userName}</span>
@@ -163,11 +163,11 @@ function ImageLightbox({
             <div className="flex items-center gap-4">
               {image.likes !== undefined && (
                 <div className="flex items-center gap-1">
-                  <Heart size={14} className="text-pink-400" />
+                  <Heart size={14} className="text-yellow-400" />
                   <span>{image.likes}</span>
                 </div>
               )}
-              <span className="text-gray-500">{currentIndex + 1} / {images.length}</span>
+              <span className="text-muted-foreground">{currentIndex + 1} / {images.length}</span>
             </div>
           </div>
         </div>
@@ -179,7 +179,7 @@ function ImageLightbox({
               key={img._id}
               onClick={() => onNavigate(idx)}
               className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${
-                idx === currentIndex ? 'border-purple-500 ring-2 ring-purple-500/30' : 'border-transparent opacity-60 hover:opacity-100'
+                idx === currentIndex ? 'border-amber-500 ring-2 ring-amber-500/30' : 'border-transparent opacity-60 hover:opacity-100'
               }`}
             >
               <img src={img.imageUrl} alt="" className="w-full h-full object-cover" />
@@ -232,7 +232,7 @@ export function CommunityGallery() {
   return (
     <section className="py-12 md:py-16 relative overflow-hidden bg-black" ref={ref}>
       {/* Background Glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-amber-950/10 to-black pointer-events-none" />
       
       <div className="relative z-10">
         {/* Header */}
@@ -241,10 +241,10 @@ export function CommunityGallery() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-4"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border mb-4"
           >
-            <Sparkles size={16} className="text-purple-400" />
-            <span className="text-sm text-purple-200">{t("badge")}</span>
+            <Sparkles size={16} className="text-amber-400" />
+            <span className="text-sm text-amber-200">{t("badge")}</span>
           </motion.div>
           
           <motion.h2 
@@ -260,7 +260,7 @@ export function CommunityGallery() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-400 max-w-xl mx-auto text-sm md:text-base"
+            className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base"
           >
             {t("description")}
           </motion.p>
@@ -269,10 +269,10 @@ export function CommunityGallery() {
         {/* Gallery Content */}
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="animate-spin text-purple-500" size={36} />
+            <Loader2 className="animate-spin text-amber-500" size={36} />
           </div>
         ) : creations.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-muted-foreground">
             <p>{t("empty")}</p>
           </div>
         ) : (
@@ -305,13 +305,13 @@ export function CommunityGallery() {
           >
             <Link 
               href="/portal"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-full transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-medium rounded-full transition-all shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
             >
               <Sparkles size={18} />
               {t("cta") || "Criar Minha Arte"}
               <ExternalLink size={16} />
             </Link>
-            <p className="text-gray-500 text-xs mt-3">
+            <p className="text-muted-foreground text-xs mt-3">
               {creations.length}+ {t("imagesCreated") || "imagens criadas pela comunidade"}
             </p>
           </motion.div>

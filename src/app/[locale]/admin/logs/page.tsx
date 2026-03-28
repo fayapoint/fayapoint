@@ -72,13 +72,13 @@ const CATEGORY_ICON_MAP: Record<string, typeof Activity> = {
 
 function getCategoryColor(category: string) {
   switch (category) {
-    case "auth": return "text-violet-400 bg-violet-500/20 border-violet-500/30";
+    case "auth": return "text-violet-400 bg-violet-500/20 border-amber-500/30";
     case "user": return "text-cyan-400 bg-cyan-500/20 border-cyan-500/30";
     case "product": return "text-amber-400 bg-amber-500/20 border-amber-500/30";
     case "order": return "text-emerald-400 bg-emerald-500/20 border-emerald-500/30";
-    case "database": return "text-pink-400 bg-pink-500/20 border-pink-500/30";
+    case "database": return "text-yellow-400 bg-yellow-500/20 border-amber-500/30";
     case "system": return "text-blue-400 bg-blue-500/20 border-blue-500/30";
-    default: return "text-gray-400 bg-gray-500/20 border-gray-500/30";
+    default: return "text-muted-foreground bg-gray-500/20 border-gray-500/30";
   }
 }
 
@@ -99,17 +99,17 @@ function LogRow({ log }: { log: LogEntry }) {
         
         <div className="flex-1 min-w-0">
           <p className="font-medium text-white truncate">{log.action}</p>
-          <p className="text-xs text-gray-500">{log.adminEmail}</p>
+          <p className="text-xs text-muted-foreground">{log.adminEmail}</p>
         </div>
 
         <span className={`px-2 py-1 rounded-full text-xs border ${colorClass}`}>
           {log.category}
         </span>
 
-        <div className="text-sm text-gray-400 text-right w-32">
+        <div className="text-sm text-muted-foreground text-right w-32">
           {new Date(log.createdAt).toLocaleDateString("pt-BR")}
           <br />
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-muted-foreground">
             {new Date(log.createdAt).toLocaleTimeString("pt-BR")}
           </span>
         </div>
@@ -117,11 +117,11 @@ function LogRow({ log }: { log: LogEntry }) {
 
       {expanded && log.details && Object.keys(log.details).length > 0 && (
         <div className="px-4 pb-4">
-          <div className="p-3 rounded-lg bg-white/5 font-mono text-xs text-gray-400">
+          <div className="p-3 rounded-lg bg-secondary font-mono text-xs text-muted-foreground">
             <pre>{JSON.stringify(log.details, null, 2)}</pre>
           </div>
           {log.ip && (
-            <p className="text-xs text-gray-500 mt-2">IP: {log.ip}</p>
+            <p className="text-xs text-muted-foreground mt-2">IP: {log.ip}</p>
           )}
         </div>
       )}
@@ -209,7 +209,7 @@ export default function AdminLogsPage() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             Logs de Atividade
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Histórico de todas as ações administrativas
           </p>
         </div>
@@ -217,7 +217,7 @@ export default function AdminLogsPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={handleExportLogs}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
           >
             <Download size={16} />
             Exportar
@@ -238,7 +238,7 @@ export default function AdminLogsPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/30"
+            className="p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/10 border border-amber-500/30"
           >
             <div className="flex items-center gap-2 text-violet-400 mb-1">
               <Activity size={16} />
@@ -293,7 +293,7 @@ export default function AdminLogsPage() {
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-500/50"
+          className="px-4 py-3 rounded-xl bg-secondary border border-border text-white focus:outline-none focus:border-amber-500/50"
         >
           <option value="">Todas as Categorias</option>
           <option value="auth">Autenticação</option>
@@ -305,19 +305,19 @@ export default function AdminLogsPage() {
         </select>
 
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
             placeholder="Filtrar por ação..."
             value={actionFilter}
             onChange={(e) => setActionFilter(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50"
+            className="w-full pl-12 pr-4 py-3 rounded-xl bg-secondary border border-border text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50"
           />
         </div>
 
         <button
           onClick={fetchLogs}
-          className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition"
+          className="px-4 py-3 rounded-xl bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition"
         >
           <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
         </button>
@@ -327,14 +327,14 @@ export default function AdminLogsPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 overflow-hidden"
+        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-border overflow-hidden"
       >
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-amber-500/30 border-t-violet-500 rounded-full animate-spin" />
           </div>
         ) : logs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
             <FileText size={48} className="mb-4 opacity-50" />
             <p>Nenhum log encontrado</p>
           </div>
@@ -347,25 +347,25 @@ export default function AdminLogsPage() {
             </div>
 
             {/* Pagination */}
-            <div className="flex items-center justify-between px-4 py-4 border-t border-white/10">
-              <p className="text-sm text-gray-500">
+            <div className="flex items-center justify-between px-4 py-4 border-t border-border">
+              <p className="text-sm text-muted-foreground">
                 Mostrando {logs.length} de {pagination.total} logs
               </p>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
                   disabled={pagination.page === 1}
-                  className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 rounded-lg bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ChevronLeft size={16} />
                 </button>
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-muted-foreground">
                   Página {pagination.page} de {pagination.pages || 1}
                 </span>
                 <button
                   onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
                   disabled={pagination.page >= pagination.pages}
-                  className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 rounded-lg bg-secondary border border-border text-muted-foreground hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -383,7 +383,7 @@ export default function AdminLogsPage() {
         className="p-4 rounded-xl bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border border-blue-500/20 flex items-start gap-3"
       >
         <AlertCircle size={20} className="text-blue-400 shrink-0 mt-0.5" />
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-muted-foreground">
           <p className="font-medium text-white mb-1">Sobre os Logs</p>
           <p>Todos os logs são registrados automaticamente quando ações administrativas são realizadas. Clique em qualquer log para ver mais detalhes. Os logs mais antigos que 30 dias podem ser excluídos para economizar espaço.</p>
         </div>

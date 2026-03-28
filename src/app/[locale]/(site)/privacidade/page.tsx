@@ -16,7 +16,7 @@ export default function PrivacyPage() {
   const sections = t.raw("sections") as Section[];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-32 pb-20">
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
               <span className="text-sm text-green-300">{t("badge")}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
-            <p className="text-gray-400">{t("lastUpdated")}</p>
+            <p className="text-muted-foreground">{t("lastUpdated")}</p>
           </motion.div>
         </section>
 
@@ -49,17 +49,17 @@ export default function PrivacyPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12"
+            className="bg-secondary border border-border rounded-2xl p-8 md:p-12"
           >
             <div className="prose prose-invert prose-lg max-w-none">
-              <p className="text-gray-300 mb-8">{t("intro")}</p>
+              <p className="text-muted-foreground mb-8">{t("intro")}</p>
               
               {sections.map((section, idx) => (
                 <div key={idx} className="mb-8">
                   <h2 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
                     <span className="text-green-400">{idx + 1}.</span> {section.title}
                   </h2>
-                  <p className="text-gray-400 whitespace-pre-line">{section.content}</p>
+                  <p className="text-muted-foreground whitespace-pre-line">{section.content}</p>
                 </div>
               ))}
             </div>

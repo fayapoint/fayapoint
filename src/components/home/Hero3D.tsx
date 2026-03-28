@@ -80,7 +80,7 @@ export function Hero3D() {
         });
 
   const stats = [
-    { icon: BookOpen, color: "purple", value: coursesCount, label: t("stats.courses"), suffix: "" },
+    { icon: BookOpen, color: "amber", value: coursesCount, label: t("stats.courses"), suffix: "" },
     { icon: Brain, color: "pink", value: studentsCount, label: locale === "pt-BR" ? "Aulas Praticas" : "Practical Lessons", suffix: "+" },
     { icon: Cpu, color: "yellow", value: completionRate, label: locale === "pt-BR" ? "Ferramentas de IA" : "AI Tools", suffix: "+" },
   ];
@@ -173,15 +173,15 @@ export function Hero3D() {
           {/* Badge */}
           <div ref={badgeRef} className="inline-block mb-8 opacity-0">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-xl" />
-              <div className="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-6 py-3 flex items-center gap-2">
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600/20 to-yellow-600/20 blur-xl" />
+              <div className="relative backdrop-blur-xl bg-secondary border border-border rounded-full px-6 py-3 flex items-center gap-2">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                 >
-                  <Sparkles className="w-5 h-5 text-purple-400" />
+                  <Sparkles className="w-5 h-5 text-amber-400" />
                 </motion.div>
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent font-semibold">
+                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent font-semibold">
                   {t("badge")}
                 </span>
                 <motion.div
@@ -203,9 +203,9 @@ export function Hero3D() {
               {headlinePrefix}{" "}
             </span>
             <span className="relative inline-block">
-              <span className="absolute inset-0 -z-10 blur-2xl opacity-60 bg-gradient-to-r from-purple-500/40 via-pink-500/40 to-cyan-500/40" />
+              <span className="absolute inset-0 -z-10 blur-2xl opacity-60 bg-gradient-to-r from-amber-500/40 via-pink-500/40 to-cyan-500/40" />
               <span
-                className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 animate-gradient-x"
+                className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 animate-gradient-x"
                 style={{
                   backgroundSize: "200% 100%",
                   animation: "gradient-x 4s linear infinite",
@@ -223,7 +223,7 @@ export function Hero3D() {
           {/* Subheading */}
           <div ref={subRef} className="mb-10 max-w-3xl mx-auto opacity-0">
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 blur-xl group-hover:blur-2xl transition-all duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600/10 to-yellow-600/10 blur-xl group-hover:blur-2xl transition-all duration-300" />
               <div className="relative backdrop-blur-md bg-white/[0.03] border border-white/[0.08] rounded-2xl p-6">
                 <p className="text-xl text-white/80 font-medium leading-relaxed">
                   {subheadingContent}
@@ -238,7 +238,7 @@ export function Hero3D() {
               <Link href="/aula-gratis">
                 <Button
                   size="lg"
-                  className="relative bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-lg px-10 py-7 group overflow-hidden border-0 shadow-[0_0_30px_rgba(168,85,247,0.3)]"
+                  className="relative bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-500 text-white text-lg px-10 py-7 group overflow-hidden border-0 shadow-[0_0_30px_rgba(168,85,247,0.3)]"
                 >
                   <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   <span className="relative flex items-center">
@@ -254,11 +254,11 @@ export function Hero3D() {
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
               <Link href="/cursos">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600/50 to-cyan-600/50 rounded-lg blur opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-600/50 to-cyan-600/50 rounded-lg blur opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
                   <Button
                     size="lg"
                     variant="outline"
-                    className="text-lg px-10 py-7 border-2 border-white/20 hover:border-white/40 hover:bg-white/5 text-white"
+                    className="text-lg px-10 py-7 border-2 border-white/20 hover:border-white/40 hover:bg-secondary text-white"
                   >
                     {t("cta.viewCourses")}
                     <motion.div animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
@@ -278,14 +278,14 @@ export function Hero3D() {
                 whileHover={{ scale: 1.05, y: -5 }}
                 className="group relative"
               >
-                <div className="absolute inset-0 bg-purple-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                <div className="absolute inset-0 bg-amber-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
                 <div className="relative backdrop-blur-lg bg-white/[0.03] border border-white/[0.08] rounded-2xl p-4 hover:border-white/20 transition-all duration-300">
                   <div className="flex items-center gap-3">
                     <motion.div
                       animate={{ rotate: [0, 10, -10, 0] }}
                       transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
                     >
-                      <stat.icon size={24} className="text-purple-400" />
+                      <stat.icon size={24} className="text-amber-400" />
                     </motion.div>
                     <div>
                       <div className="text-2xl font-bold text-white">

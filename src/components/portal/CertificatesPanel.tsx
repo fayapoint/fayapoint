@@ -265,7 +265,7 @@ export function CertificatesPanel() {
                           </code>
                           <button
                             onClick={() => copyVerificationCode(cert.verificationCode)}
-                            className="p-1 hover:bg-white/5 rounded transition-colors"
+                            className="p-1 hover:bg-secondary rounded transition-colors"
                           >
                             {copiedCode === cert.verificationCode ? (
                               <Check className="w-3 h-3 text-emerald-400" />

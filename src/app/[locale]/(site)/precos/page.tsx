@@ -114,7 +114,7 @@ const PLANS = [
     href: "/checkout/profissional",
     highlighted: true,
     badge: "Mais Popular",
-    gradient: "from-purple-500 to-violet-600",
+    gradient: "from-amber-500 to-yellow-600",
     features: {
       "Oferta do mês (US$1)": true,
       "Certificado na oferta do mês": true,
@@ -210,31 +210,31 @@ export default function PricingPage() {
         <section className="relative pt-28 pb-16 px-4 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.08),transparent_60%)] pointer-events-none" />
           <div className="container mx-auto max-w-4xl relative text-center">
-            <Badge className="mb-5 px-4 py-2 bg-purple-500/10 border-purple-500/20 text-purple-300" variant="outline">
+            <Badge className="mb-5 px-4 py-2 bg-amber-500/10 border-amber-500/20 text-amber-300" variant="outline">
               <Sparkles className="w-4 h-4 mr-2" />
               {isPt ? "Preços transparentes" : "Transparent pricing"}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-5 tracking-tight">
               {isPt ? (
-                <>Comece grátis.{" "}<span className="bg-gradient-to-r from-purple-400 to-violet-300 bg-clip-text text-transparent">Escale quando quiser.</span></>
+                <>Comece grátis.{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">Escale quando quiser.</span></>
               ) : (
-                <>Start free.{" "}<span className="bg-gradient-to-r from-purple-400 to-violet-300 bg-clip-text text-transparent">Scale when ready.</span></>
+                <>Start free.{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">Scale when ready.</span></>
               )}
             </h1>
-            <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               {isPt
                 ? "Todo mês um curso completo fica aberto para qualquer conta — com certificado incluso. Assine para desbloquear mais cursos, créditos de IA e descontos."
                 : "Every month one full course opens for any account — certificate included. Subscribe to unlock more courses, AI credits and discounts."}
             </p>
 
             {/* Cycle Toggle */}
-            <div className="inline-flex items-center gap-1 p-1 rounded-full border border-gray-700/50 bg-gray-900/50 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-1 p-1 rounded-full border border-border/50 bg-card/50 backdrop-blur-sm">
               <button
                 onClick={() => setCycle("monthly")}
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
                   cycle === "monthly"
                     ? "bg-white text-black shadow-md"
-                    : "text-gray-400 hover:text-white"
+                    : "text-muted-foreground hover:text-white"
                 }`}
               >
                 {isPt ? "Mensal" : "Monthly"}
@@ -244,7 +244,7 @@ export default function PricingPage() {
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
                   cycle === "yearly"
                     ? "bg-white text-black shadow-md"
-                    : "text-gray-400 hover:text-white"
+                    : "text-muted-foreground hover:text-white"
                 }`}
               >
                 {isPt ? "Anual" : "Yearly"}
@@ -255,7 +255,7 @@ export default function PricingPage() {
             </div>
 
             {/* Trust Bar */}
-            <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-gray-400">
+            <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 {isPt ? "Garantia 7 dias" : "7-day guarantee"}
@@ -293,7 +293,7 @@ export default function PricingPage() {
                       </span>
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold mb-2">{monthlyOffers.freeCourse.name}</h2>
-                    <p className="text-gray-400 mb-4">
+                    <p className="text-muted-foreground mb-4">
                       {isPt
                         ? "Curso completo com certificado incluso. Sem cadastrar cartão. Sem pegadinha."
                         : "Full course with certificate included. No card required. No catch."}
@@ -302,10 +302,10 @@ export default function PricingPage() {
                       <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20">
                         <Award className="w-3 h-3 mr-1" /> {isPt ? "Certificado grátis" : "Free certificate"}
                       </Badge>
-                      <Badge variant="secondary" className="bg-gray-800 text-gray-300 border-gray-700">
+                      <Badge variant="secondary" className="bg-secondary text-muted-foreground border-border">
                         <BookOpen className="w-3 h-3 mr-1" /> {monthlyOffers.freeCourse.metrics.lessons} {isPt ? "aulas" : "lessons"}
                       </Badge>
-                      <Badge variant="secondary" className="bg-gray-800 text-gray-300 border-gray-700">
+                      <Badge variant="secondary" className="bg-secondary text-muted-foreground border-border">
                         <Clock className="w-3 h-3 mr-1" /> {monthlyOffers.freeCourse.metrics.duration}
                       </Badge>
                     </div>
@@ -346,12 +346,12 @@ export default function PricingPage() {
                   >
                     <div className={`rounded-2xl border p-6 h-full flex flex-col backdrop-blur-sm transition-all ${
                       plan.highlighted
-                        ? "border-purple-500/40 bg-purple-500/5 shadow-2xl shadow-purple-500/10 ring-1 ring-purple-500/20"
-                        : "border-gray-800/50 bg-gray-900/30 hover:border-gray-700/50"
+                        ? "border-amber-500/40 bg-amber-500/5 shadow-2xl shadow-amber-500/10 ring-1 ring-amber-500/20"
+                        : "border-border/50 bg-card/30 hover:border-border/50"
                     }`}>
                       {plan.badge && (
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                          <span className="bg-gradient-to-r from-purple-500 to-violet-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
+                          <span className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
                             <Star className="w-3 h-3 inline mr-1" />
                             {plan.badge}
                           </span>
@@ -360,7 +360,7 @@ export default function PricingPage() {
 
                       {/* Plan Name */}
                       <h3 className="text-xl font-bold mb-1">{isPt ? plan.name : plan.nameEn}</h3>
-                      <p className="text-sm text-gray-400 mb-5 min-h-[40px]">
+                      <p className="text-sm text-muted-foreground mb-5 min-h-[40px]">
                         {isPt ? plan.description : plan.descriptionEn}
                       </p>
 
@@ -369,12 +369,12 @@ export default function PricingPage() {
                         {price === 0 ? (
                           <div>
                             <span className="text-4xl font-bold">R$0</span>
-                            <span className="text-gray-400 ml-1">{isPt ? "/sempre" : "/forever"}</span>
+                            <span className="text-muted-foreground ml-1">{isPt ? "/sempre" : "/forever"}</span>
                           </div>
                         ) : (
                           <div>
                             <span className="text-4xl font-bold">{formatBRL(price)}</span>
-                            <span className="text-gray-400 ml-1">
+                            <span className="text-muted-foreground ml-1">
                               /{cycle === "yearly" ? (isPt ? "ano" : "year") : (isPt ? "mês" : "month")}
                             </span>
                             {monthlyEquivalent && (
@@ -434,10 +434,10 @@ export default function PricingPage() {
                           size="lg"
                           className={`w-full text-base font-bold rounded-xl transition-all ${
                             plan.highlighted
-                              ? "bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white shadow-lg shadow-purple-500/20"
+                              ? "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-violet-700 text-white shadow-lg shadow-amber-500/20"
                               : plan.slug === "free"
                               ? "bg-white text-black hover:bg-gray-100"
-                              : "bg-gray-800 text-white hover:bg-gray-700 border border-gray-700"
+                              : "bg-secondary text-white hover:bg-gray-700 border border-border"
                           }`}
                         >
                           {isPt ? plan.cta : plan.ctaEn}
@@ -459,7 +459,7 @@ export default function PricingPage() {
               <h2 className="text-3xl font-bold mb-3">
                 {isPt ? "Compare os planos em detalhe" : "Compare plans in detail"}
               </h2>
-              <p className="text-gray-400">
+              <p className="text-muted-foreground">
                 {isPt ? "Tudo o que cada plano inclui, sem letra miúda." : "Everything each plan includes, no fine print."}
               </p>
             </div>
@@ -468,16 +468,16 @@ export default function PricingPage() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th className="text-left p-4 text-sm text-gray-400 font-normal border-b border-gray-800/50 min-w-[200px]">
+                    <th className="text-left p-4 text-sm text-muted-foreground font-normal border-b border-border/50 min-w-[200px]">
                       {isPt ? "Recurso" : "Feature"}
                     </th>
                     {PLANS.map((plan) => (
                       <th key={plan.slug} className={`p-4 text-center border-b min-w-[140px] ${
-                        plan.highlighted ? "border-purple-500/30 bg-purple-500/5" : "border-gray-800/50"
+                        plan.highlighted ? "border-amber-500/30 bg-amber-500/5" : "border-border/50"
                       }`}>
                         <span className="text-sm font-bold">{isPt ? plan.name : plan.nameEn}</span>
                         <br />
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-muted-foreground">
                           {plan.monthlyPrice === 0 ? "R$0" : formatBRL(cycle === "yearly" ? plan.yearlyPrice : plan.monthlyPrice)}
                           /{cycle === "yearly" ? (isPt ? "ano" : "yr") : (isPt ? "mês" : "mo")}
                         </span>
@@ -487,13 +487,13 @@ export default function PricingPage() {
                 </thead>
                 <tbody>
                   {FEATURE_KEYS.map((feature, idx) => (
-                    <tr key={feature} className={idx % 2 === 0 ? "bg-gray-900/20" : ""}>
-                      <td className="p-4 text-sm text-gray-300 border-b border-gray-800/30">{feature}</td>
+                    <tr key={feature} className={idx % 2 === 0 ? "bg-card/20" : ""}>
+                      <td className="p-4 text-sm text-muted-foreground border-b border-border/30">{feature}</td>
                       {PLANS.map((plan) => {
                         const val = plan.features[feature];
                         return (
                           <td key={plan.slug} className={`p-4 text-center border-b ${
-                            plan.highlighted ? "border-purple-500/10 bg-purple-500/5" : "border-gray-800/30"
+                            plan.highlighted ? "border-amber-500/10 bg-amber-500/5" : "border-border/30"
                           }`}>
                             {val === true ? (
                               <CheckCircle2 className="w-5 h-5 text-emerald-400 mx-auto" />
@@ -514,13 +514,13 @@ export default function PricingPage() {
         </section>
 
         {/* ━━━ Monthly Pool Info ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section className="py-16 px-4 border-t border-gray-800/30">
+        <section className="py-16 px-4 border-t border-border/30">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-3">
                 {isPt ? "Como funciona o catálogo mensal" : "How the monthly catalog works"}
               </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 {isPt
                   ? "Todo dia 1 o catálogo atualiza. Você escolhe quais cursos da vitrine quer ocupar nas vagas do seu plano."
                   : "On the 1st of every month the catalog refreshes. You pick which showcase courses fill your plan slots."}
@@ -530,7 +530,7 @@ export default function PricingPage() {
               {[
                 { icon: Gift, color: "emerald", title: isPt ? "Curso grátis" : "Free course", desc: isPt ? "1 curso completo aberto para qualquer conta, com certificado." : "1 full course open to any account, with certificate." },
                 { icon: BookOpen, color: "blue", title: isPt ? "10 iniciantes" : "10 beginner", desc: isPt ? "Disponíveis na rotação mensal para Explorador, Profissional e Expert." : "Available in the monthly rotation for Explorer, Professional, Expert." },
-                { icon: Zap, color: "purple", title: isPt ? "8 intermediários" : "8 intermediate", desc: isPt ? "Acessíveis para Profissional e Expert. Explorador pode comprar avulso." : "Accessible for Professional and Expert. Explorer can buy individually." },
+                { icon: Zap, color: "amber", title: isPt ? "8 intermediários" : "8 intermediate", desc: isPt ? "Acessíveis para Profissional e Expert. Explorador pode comprar avulso." : "Accessible for Professional and Expert. Explorer can buy individually." },
                 { icon: Award, color: "amber", title: isPt ? "5 avançados" : "5 advanced", desc: isPt ? "Reservados para Profissional (1 vaga) e Expert (3 vagas)." : "Reserved for Professional (1 slot) and Expert (3 slots)." },
               ].map((item, i) => (
                 <motion.div
@@ -539,13 +539,13 @@ export default function PricingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
-                  className="rounded-2xl border border-gray-800/50 bg-gray-900/30 p-6"
+                  className="rounded-2xl border border-border/50 bg-card/30 p-6"
                 >
                   <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/10 flex items-center justify-center mb-4`}>
                     <item.icon className={`w-5 h-5 text-${item.color}-400`} />
                   </div>
                   <h3 className="font-bold mb-2">{item.title}</h3>
-                  <p className="text-sm text-gray-400">{item.desc}</p>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -553,13 +553,13 @@ export default function PricingPage() {
         </section>
 
         {/* ━━━ Payment Methods & Security ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section className="py-16 px-4 border-t border-gray-800/30">
+        <section className="py-16 px-4 border-t border-border/30">
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-3">
                 {isPt ? "Pagamento simples e seguro" : "Simple and secure payment"}
               </h2>
-              <p className="text-gray-400">
+              <p className="text-muted-foreground">
                 {isPt
                   ? "Escolha como pagar. Todas as opções com proteção completa dos seus dados."
                   : "Choose how to pay. All options with complete data protection."}
@@ -568,20 +568,20 @@ export default function PricingPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { icon: QrCode, name: "PIX", desc: isPt ? "Aprovação imediata" : "Instant approval", color: "emerald" },
-                { icon: CreditCard, name: isPt ? "Cartão de Crédito" : "Credit Card", desc: isPt ? "Até 12x sem juros" : "Up to 12x interest-free", color: "purple" },
+                { icon: CreditCard, name: isPt ? "Cartão de Crédito" : "Credit Card", desc: isPt ? "Até 12x sem juros" : "Up to 12x interest-free", color: "amber" },
                 { icon: FileText, name: "Boleto", desc: isPt ? "5% de desconto" : "5% discount", color: "blue" },
                 { icon: ShieldCheck, name: "MercadoPago", desc: isPt ? "Checkout seguro" : "Secure checkout", color: "cyan" },
               ].map((method) => (
-                <div key={method.name} className="rounded-2xl border border-gray-800/50 bg-gray-900/30 p-5 text-center">
+                <div key={method.name} className="rounded-2xl border border-border/50 bg-card/30 p-5 text-center">
                   <div className={`w-12 h-12 rounded-xl bg-${method.color}-500/10 flex items-center justify-center mx-auto mb-3`}>
                     <method.icon className={`w-6 h-6 text-${method.color}-400`} />
                   </div>
                   <h4 className="font-semibold mb-1">{method.name}</h4>
-                  <p className="text-xs text-gray-400">{method.desc}</p>
+                  <p className="text-xs text-muted-foreground">{method.desc}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 {isPt ? "Dados criptografados" : "Encrypted data"}
@@ -599,11 +599,11 @@ export default function PricingPage() {
         </section>
 
         {/* ━━━ Social Proof ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section className="py-16 px-4 border-t border-gray-800/30">
+        <section className="py-16 px-4 border-t border-border/30">
           <div className="container mx-auto max-w-4xl text-center">
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="flex -space-x-2">
-                {["bg-purple-500", "bg-emerald-500", "bg-blue-500", "bg-amber-500", "bg-pink-500"].map((bg, i) => (
+                {["bg-amber-500", "bg-emerald-500", "bg-blue-500", "bg-amber-500", "bg-yellow-500"].map((bg, i) => (
                   <div key={i} className={`w-10 h-10 rounded-full ${bg} border-2 border-gray-900 flex items-center justify-center text-xs font-bold text-white`}>
                     {["RF", "AS", "MK", "JL", "PT"][i]}
                   </div>
@@ -612,12 +612,12 @@ export default function PricingPage() {
               <div className="text-left">
                 <div className="flex items-center gap-1">
                   {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
-                  <span className="text-sm text-gray-400 ml-1">4.9/5</span>
+                  <span className="text-sm text-muted-foreground ml-1">4.9/5</span>
                 </div>
-                <p className="text-sm text-gray-400">+230 {isPt ? "alunos ativos" : "active students"}</p>
+                <p className="text-sm text-muted-foreground">+230 {isPt ? "alunos ativos" : "active students"}</p>
               </div>
             </div>
-            <p className="text-lg text-gray-300 italic max-w-xl mx-auto">
+            <p className="text-lg text-muted-foreground italic max-w-xl mx-auto">
               {isPt
                 ? "&ldquo;Comecei pelo curso grátis do mês e em uma semana já tinha assinado o Profissional. O conteúdo é prático e atualizado.&rdquo;"
                 : "&ldquo;I started with the free monthly course and within a week I subscribed to Professional. The content is practical and up-to-date.&rdquo;"}
@@ -626,7 +626,7 @@ export default function PricingPage() {
         </section>
 
         {/* ━━━ FAQ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section className="py-16 px-4 border-t border-gray-800/30" id="faq">
+        <section className="py-16 px-4 border-t border-border/30" id="faq">
           <div className="container mx-auto max-w-3xl">
             <h2 className="text-3xl font-bold text-center mb-10">
               {isPt ? "Perguntas frequentes" : "Frequently asked questions"}
@@ -636,11 +636,11 @@ export default function PricingPage() {
                 <button
                   key={i}
                   onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
-                  className="w-full text-left rounded-2xl border border-gray-800/50 bg-gray-900/30 p-5 transition-all hover:border-gray-700/50"
+                  className="w-full text-left rounded-2xl border border-border/50 bg-card/30 p-5 transition-all hover:border-border/50"
                 >
                   <div className="flex items-center justify-between gap-4">
                     <h3 className="font-semibold">{item.q}</h3>
-                    <ChevronDown className={`w-5 h-5 text-gray-400 shrink-0 transition-transform ${expandedFaq === i ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform ${expandedFaq === i ? "rotate-180" : ""}`} />
                   </div>
                   <AnimatePresence>
                     {expandedFaq === i && (
@@ -648,7 +648,7 @@ export default function PricingPage() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="text-sm text-gray-400 mt-3 overflow-hidden"
+                        className="text-sm text-muted-foreground mt-3 overflow-hidden"
                       >
                         {item.a}
                       </motion.p>
@@ -661,26 +661,26 @@ export default function PricingPage() {
         </section>
 
         {/* ━━━ Final CTA ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section className="py-20 px-4 border-t border-gray-800/30">
+        <section className="py-20 px-4 border-t border-border/30">
           <div className="container mx-auto max-w-3xl text-center">
-            <div className="rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-500/5 via-gray-900/80 to-violet-500/5 p-10 md:p-14 backdrop-blur-sm">
+            <div className="rounded-3xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 via-gray-900/80 to-violet-500/5 p-10 md:p-14 backdrop-blur-sm">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 {isPt ? "Pronto para dominar IA?" : "Ready to master AI?"}
               </h2>
-              <p className="text-gray-400 mb-8 max-w-lg mx-auto">
+              <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 {isPt
                   ? "Comece pelo curso grátis do mês. Se gostar, assine. Se não gostar, não pague nada."
                   : "Start with the free course of the month. If you like it, subscribe. If not, pay nothing."}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href={monthlyOffers?.freeCourse ? `/curso/${monthlyOffers.freeCourse.slug}` : "/registro"}>
-                  <Button size="lg" className="bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white font-bold px-8 shadow-lg shadow-purple-500/20">
+                  <Button size="lg" className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-violet-700 text-white font-bold px-8 shadow-lg shadow-amber-500/20">
                     {isPt ? "Começar grátis" : "Start free"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="#planos">
-                  <Button size="lg" variant="outline" className="border-gray-700 text-gray-300 hover:bg-gray-800 px-8">
+                  <Button size="lg" variant="outline" className="border-border text-muted-foreground hover:bg-secondary px-8">
                     {isPt ? "Ver planos" : "See plans"}
                   </Button>
                 </Link>
@@ -700,8 +700,8 @@ export default function PricingPage() {
 function Feature({ text, highlight }: { text: string; highlight?: boolean }) {
   return (
     <li className="flex items-start gap-2.5 text-sm">
-      <CheckCircle2 className={`w-4 h-4 mt-0.5 shrink-0 ${highlight ? "text-emerald-400" : "text-gray-500"}`} />
-      <span className={highlight ? "text-white font-medium" : "text-gray-300"}>{text}</span>
+      <CheckCircle2 className={`w-4 h-4 mt-0.5 shrink-0 ${highlight ? "text-emerald-400" : "text-muted-foreground"}`} />
+      <span className={highlight ? "text-white font-medium" : "text-muted-foreground"}>{text}</span>
     </li>
   );
 }

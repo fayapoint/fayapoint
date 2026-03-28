@@ -177,17 +177,17 @@ export function GateLandingPage() {
 
   // Features the user gets for free
   const freeFeatures = [
-    { icon: BookOpen, color: "from-purple-500 to-violet-600" },
+    { icon: BookOpen, color: "from-amber-500 to-yellow-600" },
     { icon: Sparkles, color: "from-cyan-500 to-blue-600" },
-    { icon: Palette, color: "from-pink-500 to-rose-600" },
+    { icon: Palette, color: "from-yellow-500 to-rose-600" },
     { icon: Award, color: "from-amber-500 to-orange-600" },
     { icon: Zap, color: "from-green-500 to-emerald-600" },
-    { icon: Globe, color: "from-indigo-500 to-purple-600" },
+    { icon: Globe, color: "from-indigo-500 to-amber-600" },
   ];
 
   // Blurred teaser cards
   const teaserCards = [
-    { icon: Brain, gradient: "from-purple-600/30 to-pink-600/30" },
+    { icon: Brain, gradient: "from-amber-600/30 to-yellow-600/30" },
     { icon: Code, gradient: "from-blue-600/30 to-cyan-600/30" },
     { icon: Cpu, gradient: "from-green-600/30 to-emerald-600/30" },
     { icon: TrendingUp, gradient: "from-orange-600/30 to-amber-600/30" },
@@ -210,7 +210,7 @@ export function GateLandingPage() {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="w-16 h-16 mx-auto mb-4 border-4 border-purple-500/30 border-t-purple-500 rounded-full"
+              className="w-16 h-16 mx-auto mb-4 border-4 border-amber-500/30 border-t-purple-500 rounded-full"
             />
             <p className="text-white text-xl font-medium">{t("entering")}</p>
           </motion.div>
@@ -218,7 +218,7 @@ export function GateLandingPage() {
       )}
 
       <div
-        className="min-h-screen bg-[#030108] text-white overflow-x-hidden selection:bg-purple-500/30"
+        className="min-h-screen bg-[#030108] text-white overflow-x-hidden selection:bg-amber-500/30"
         onMouseMove={handleMouseMove}
       >
         {/* ================================================================ */}
@@ -236,13 +236,13 @@ export function GateLandingPage() {
               style={{ x: bgX, y: bgY }}
               animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
               transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-[10%] left-[15%] w-[400px] h-[400px] rounded-full bg-purple-600/20 blur-[120px]"
+              className="absolute top-[10%] left-[15%] w-[400px] h-[400px] rounded-full bg-amber-600/20 blur-[120px]"
             />
             <motion.div
               style={{ x: useTransform(bgX, v => -v * 0.5), y: useTransform(bgY, v => -v * 0.5) }}
               animate={{ scale: [1, 1.5, 1], opacity: [0.15, 0.3, 0.15] }}
               transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-              className="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] rounded-full bg-pink-600/15 blur-[150px]"
+              className="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] rounded-full bg-yellow-600/15 blur-[150px]"
             />
 
             {/* Grid overlay */}
@@ -286,7 +286,7 @@ export function GateLandingPage() {
 
           {/* Floating tech icons */}
           <motion.div
-            className="absolute top-24 left-[8%] text-purple-500/15"
+            className="absolute top-24 left-[8%] text-amber-500/15"
             animate={{ y: [0, -20, 0], rotate: [0, 15, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -316,7 +316,7 @@ export function GateLandingPage() {
               transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-2 mb-8"
             >
-              <div className="relative flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl">
+              <div className="relative flex items-center gap-2 px-5 py-2.5 rounded-full border border-border bg-secondary backdrop-blur-xl">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
@@ -340,7 +340,7 @@ export function GateLandingPage() {
               className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] mb-6 tracking-tight"
             >
               <span className="block text-white/90">{t("hero.line1")}</span>
-              <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
                 {t("hero.line2")}
               </span>
             </motion.h1>
@@ -373,9 +373,9 @@ export function GateLandingPage() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 + i * 0.08 }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-secondary backdrop-blur-sm"
                 >
-                  <stat.icon className="w-4 h-4 text-purple-400" />
+                  <stat.icon className="w-4 h-4 text-amber-400" />
                   <span className="font-bold text-white">{stat.value}</span>
                   <span className="text-white/50 text-sm">{stat.label}</span>
                 </motion.div>
@@ -394,7 +394,7 @@ export function GateLandingPage() {
                 whileTap={{ scale: 0.98 }}
                 className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-bold text-lg text-white overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-[length:200%_100%] animate-[shimmer_3s_ease-in-out_infinite]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-600 via-pink-600 to-amber-600 bg-[length:200%_100%] animate-[shimmer_3s_ease-in-out_infinite]" />
                 <div className="absolute inset-[1px] rounded-2xl bg-[#0a0515] group-hover:bg-transparent transition-all duration-300" />
                 <span className="relative flex items-center gap-3">
                   <Lock className="w-5 h-5" />
@@ -422,7 +422,7 @@ export function GateLandingPage() {
         {/* SECTION 2: BLURRED PREVIEW - What's behind the gate */}
         {/* ================================================================ */}
         <section className="relative py-20 sm:py-28 px-4 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-950/10 to-transparent" />
 
           <div className="relative z-10 max-w-6xl mx-auto">
             <motion.div
@@ -432,13 +432,13 @@ export function GateLandingPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-16"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-500/20 bg-purple-500/10 mb-6">
-                <Eye className="w-4 h-4 text-purple-400" />
-                <span className="text-sm font-medium text-purple-300">{t("preview.badge")}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/20 bg-amber-500/10 mb-6">
+                <Eye className="w-4 h-4 text-amber-400" />
+                <span className="text-sm font-medium text-amber-300">{t("preview.badge")}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
                 <span className="text-white">{t("preview.title1")}</span>{" "}
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                   {t("preview.title2")}
                 </span>
               </h2>
@@ -484,7 +484,7 @@ export function GateLandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="relative rounded-2xl overflow-hidden border border-white/10 max-w-4xl mx-auto"
+              className="relative rounded-2xl overflow-hidden border border-border max-w-4xl mx-auto"
             >
               <img
                 src="/ainxecond1.png"
@@ -498,7 +498,7 @@ export function GateLandingPage() {
                   onClick={scrollToGate}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 rounded-full bg-purple-600/80 hover:bg-purple-600 text-white font-medium text-sm transition-all"
+                  className="px-6 py-3 rounded-full bg-amber-600/80 hover:bg-amber-600 text-white font-medium text-sm transition-all"
                 >
                   {t("preview.unlockCta")}
                 </motion.button>
@@ -580,7 +580,7 @@ export function GateLandingPage() {
                   ].map((unit, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="flex flex-col items-center">
-                        <div className="text-3xl sm:text-4xl font-mono font-bold text-white bg-white/5 border border-white/10 rounded-xl px-4 py-2 min-w-[70px]">
+                        <div className="text-3xl sm:text-4xl font-mono font-bold text-white bg-secondary border border-border rounded-xl px-4 py-2 min-w-[70px]">
                           {mounted ? unit.val : "--"}
                         </div>
                         <span className="text-xs text-white/40 mt-1">{unit.label}</span>
@@ -593,17 +593,17 @@ export function GateLandingPage() {
 
               {/* Social proof */}
               <div className="flex flex-wrap justify-center gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5">
-                  <Users className="w-4 h-4 text-purple-400" />
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-secondary">
+                  <Users className="w-4 h-4 text-amber-400" />
                   <span className="text-sm text-white/70">
                     <strong className="text-white">{mounted ? todayCount.toLocaleString() : "---"}</strong> {t("fomo.verifiedToday")}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-secondary">
                   <TrendingUp className="w-4 h-4 text-green-400" />
                   <span className="text-sm text-white/70">{t("fomo.growing")}</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-secondary">
                   <Star className="w-4 h-4 text-amber-400" />
                   <span className="text-sm text-white/70">{t("fomo.rating")}</span>
                 </div>
@@ -616,7 +616,7 @@ export function GateLandingPage() {
         {/* SECTION 5: THE GATE - Captcha + Enter */}
         {/* ================================================================ */}
         <section ref={gateRef} className="relative py-20 sm:py-28 px-4">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/10 to-[#030108]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-950/10 to-[#030108]" />
 
           <div className="relative z-10 max-w-lg mx-auto">
             <motion.div
@@ -626,9 +626,9 @@ export function GateLandingPage() {
               className="relative"
             >
               {/* Glow effect behind card */}
-              <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-purple-600/20 rounded-3xl blur-2xl" />
+              <div className="absolute -inset-4 bg-gradient-to-r from-amber-600/20 via-pink-600/20 to-amber-600/20 rounded-3xl blur-2xl" />
 
-              <div className="relative bg-[#0a0818]/90 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 text-center">
+              <div className="relative bg-[#0a0818]/90 backdrop-blur-xl border border-border rounded-3xl p-8 sm:p-10 text-center">
                 {/* Lock icon with animation */}
                 <motion.div
                   animate={turnstileToken ? { rotate: [0, -10, 10, 0] } : {}}
@@ -646,7 +646,7 @@ export function GateLandingPage() {
                   {turnstileToken ? (
                     <Unlock className="w-10 h-10 text-green-400" />
                   ) : (
-                    <Shield className="w-10 h-10 text-purple-400" />
+                    <Shield className="w-10 h-10 text-amber-400" />
                   )}
                 </motion.div>
 
@@ -670,8 +670,8 @@ export function GateLandingPage() {
                   whileTap={turnstileToken ? { scale: 0.98 } : {}}
                   className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
                     turnstileToken
-                      ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl shadow-purple-600/25 hover:shadow-purple-600/40 cursor-pointer"
-                      : "bg-white/5 text-white/30 border border-white/10 cursor-not-allowed"
+                      ? "bg-gradient-to-r from-amber-600 to-yellow-700 text-white shadow-xl shadow-purple-600/25 hover:shadow-purple-600/40 cursor-pointer"
+                      : "bg-secondary text-white/30 border border-border cursor-not-allowed"
                   }`}
                 >
                   {isVerifying ? (

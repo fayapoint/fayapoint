@@ -66,8 +66,8 @@ export default function CourseSalesPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">{t("loading")}</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">{t("loading")}</p>
         </div>
       </div>
     );
@@ -191,12 +191,12 @@ export default function CourseSalesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       
       <main className="pt-20">
         {/* HERO SECTION - Above the Fold */}
-        <section className="relative bg-gradient-to-b from-purple-900/20 via-black to-black py-12 overflow-hidden">
+        <section className="relative bg-gradient-to-b from-amber-900/30 via-black to-black py-12 overflow-hidden">
           {/* Background Animation */}
           <div className="absolute inset-0 opacity-30">
             <div className="absolute inset-0" style={{
@@ -210,12 +210,12 @@ export default function CourseSalesPage() {
               {/* Main Content */}
               <div className="lg:col-span-2">
                 {/* Breadcrumb */}
-                <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
                   <Link href="/" className="hover:text-white">{t("breadcrumb.home")}</Link>
                   <ChevronRight size={14} />
                   <Link href="/cursos" className="hover:text-white">{t("breadcrumb.courses")}</Link>
                   <ChevronRight size={14} />
-                  <span className="text-purple-400">{product.categoryPrimary}</span>
+                  <span className="text-amber-400">{product.categoryPrimary}</span>
                 </div>
 
                 {/* Badges */}
@@ -232,48 +232,48 @@ export default function CourseSalesPage() {
                       {locale === 'pt-BR' ? 'Popular' : 'Popular'}
                     </Badge>
                   )}
-                  <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0">
                     <Timer className="mr-1" size={14} />
                     {isFreeCourseOfMonth
                       ? (isPtBr ? 'Acesso aberto no mês' : 'Monthly open access')
                       : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
                   </Badge>
-                  <Badge className="bg-gray-700 text-gray-300 border-0">
+                  <Badge className="bg-gray-700 text-muted-foreground border-0">
                     {product.level}
                   </Badge>
                 </div>
 
                 {/* Headline - Outcome Focused */}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                  <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
                     {product.name}
                   </span>
                 </h1>
 
                 {/* Subheadline - Mechanism */}
-                <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+                <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
                   {product.copy.subheadline}
                 </p>
 
                 {/* Course Info Bar */}
-                <div className="flex flex-wrap items-center gap-6 mb-8 p-4 bg-gray-900/50 rounded-lg border border-gray-800">
+                <div className="flex flex-wrap items-center gap-6 mb-8 p-4 bg-card/50 rounded-lg border border-border">
                   {product.metrics.rating > 0 && (
                     <>
                       <div className="flex items-center gap-2">
                         <Star className="text-yellow-400 fill-yellow-400" size={20} />
                         <div>
                           <div className="font-bold text-lg">{product.metrics.rating}</div>
-                          <div className="text-xs text-gray-400">{product.metrics.reviewCount} {t("stats.reviews")}</div>
+                          <div className="text-xs text-muted-foreground">{product.metrics.reviewCount} {t("stats.reviews")}</div>
                         </div>
                       </div>
                       <Separator orientation="vertical" className="h-12 hidden md:block" />
                     </>
                   )}
                   <div className="flex items-center gap-2">
-                    <PlayCircle className="text-purple-400" size={20} />
+                    <PlayCircle className="text-amber-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.lessons}</div>
-                      <div className="text-xs text-gray-400">{locale === 'pt-BR' ? 'Aulas' : 'Lessons'}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? 'Aulas' : 'Lessons'}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
@@ -281,7 +281,7 @@ export default function CourseSalesPage() {
                     <Clock className="text-blue-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.duration}</div>
-                      <div className="text-xs text-gray-400">{locale === 'pt-BR' ? 'de conteúdo' : 'of content'}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? 'de conteúdo' : 'of content'}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
@@ -289,7 +289,7 @@ export default function CourseSalesPage() {
                     <Award className="text-green-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{locale === 'pt-BR' ? 'Certificado' : 'Certificate'}</div>
-                      <div className="text-xs text-gray-400">{locale === 'pt-BR' ? 'Incluso' : 'Included'}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? 'Incluso' : 'Included'}</div>
                     </div>
                   </div>
                 </div>
@@ -301,17 +301,17 @@ export default function CourseSalesPage() {
                         <BadgeCheck size={16} />
                         <span>{isPtBr ? 'Conteúdo verificado editorialmente' : 'Editorially verified content'}</span>
                       </div>
-                      <p className="mt-1 text-sm text-gray-300">
+                      <p className="mt-1 text-sm text-muted-foreground">
                         {isPtBr
                           ? `Revisado em ${verifiedAtLabel} com ${product.editorialVerification?.canonModels?.join(" / ")} e ${product.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real por aula.`
                           : `Reviewed on ${verifiedAtLabel} with ${product.editorialVerification?.canonModels?.join(" / ")} and ${product.lessonContentCoverage?.coveragePercent ?? 0}% real lesson coverage.`}
                       </p>
                     </div>
-                    <div className="flex flex-wrap gap-2 text-xs text-gray-300">
-                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                      <span className="rounded-full border border-border bg-secondary px-3 py-1">
                         {isPtBr ? `${product.contentChapters || 0} capítulos-base` : `${product.contentChapters || 0} base chapters`}
                       </span>
-                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                      <span className="rounded-full border border-border bg-secondary px-3 py-1">
                         {product.editorialVerification?.canonModels?.join(" / ")}
                       </span>
                     </div>
@@ -319,14 +319,14 @@ export default function CourseSalesPage() {
                 </div>
 
                 {/* Instructor Quick Info */}
-                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-lg border border-purple-500/30">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl font-bold">
+                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-amber-900/30 to-yellow-900/30 rounded-lg border border-amber-500/30">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-2xl font-bold">
                     RF
                   </div>
                   <div>
-                    <div className="text-sm text-gray-400">{t("instructor.createdBy")}</div>
+                    <div className="text-sm text-muted-foreground">{t("instructor.createdBy")}</div>
                     <div className="font-bold text-lg">Ricardo Faya</div>
-                    <div className="text-sm text-gray-400">{locale === 'pt-BR' ? 'Especialista em IA e Automação' : 'AI & Automation Specialist'} • {locale === 'pt-BR' ? 'Instrutor Principal' : 'Lead Instructor'}</div>
+                    <div className="text-sm text-muted-foreground">{locale === 'pt-BR' ? 'Especialista em IA e Automação' : 'AI & Automation Specialist'} • {locale === 'pt-BR' ? 'Instrutor Principal' : 'Lead Instructor'}</div>
                   </div>
                 </div>
 
@@ -338,10 +338,10 @@ export default function CourseSalesPage() {
                     { icon: BookOpen, value: `${product.curriculum?.moduleCount || '10'}`, label: locale === 'pt-BR' ? 'Módulos' : 'Modules' },
                     { icon: Award, value: t("stats.certificate"), label: t("stats.ofCompletion") }
                   ].map((item, i) => (
-                    <div key={i} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 text-center">
-                      <item.icon className="mx-auto mb-2 text-purple-400" size={24} />
+                    <div key={i} className="p-4 bg-secondary/50 rounded-lg border border-border text-center">
+                      <item.icon className="mx-auto mb-2 text-amber-400" size={24} />
                       <div className="font-bold text-lg">{item.value}</div>
-                      <div className="text-xs text-gray-400">{item.label}</div>
+                      <div className="text-xs text-muted-foreground">{item.label}</div>
                     </div>
                   ))}
                 </div>
@@ -363,16 +363,16 @@ export default function CourseSalesPage() {
                         <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
                           <Check className="text-green-400" size={14} />
                         </div>
-                        <span className="text-gray-300 text-sm">{benefit}</span>
+                        <span className="text-muted-foreground text-sm">{benefit}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Who Is This For */}
-                <div className="mt-8 p-6 bg-gray-800/50 rounded-xl border border-gray-700">
+                <div className="mt-8 p-6 bg-secondary/50 rounded-xl border border-border">
                   <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                    <Users className="text-purple-400" size={20} />
+                    <Users className="text-amber-400" size={20} />
                     {t("audience.title")}
                   </h3>
                   <div className="space-y-3">
@@ -383,8 +383,8 @@ export default function CourseSalesPage() {
                       { icon: Brain, text: t("audience.curious") }
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
-                        <item.icon className="text-purple-400 flex-shrink-0" size={18} />
-                        <span className="text-gray-300 text-sm">{item.text}</span>
+                        <item.icon className="text-amber-400 flex-shrink-0" size={18} />
+                        <span className="text-muted-foreground text-sm">{item.text}</span>
                       </div>
                     ))}
                   </div>
@@ -395,9 +395,9 @@ export default function CourseSalesPage() {
               {/* STICKY SIDEBAR - Purchase Card */}
               <div className="lg:col-span-1">
                 <div className="sticky top-24">
-                  <Card className="bg-gray-900/50 backdrop-blur border-2 border-purple-500/50 p-6 shadow-2xl shadow-purple-500/20">
+                  <Card className="bg-card/50 backdrop-blur border-2 border-amber-500/50 p-6 shadow-2xl shadow-amber-500/20">
                     {/* Video Preview */}
-                    <div className="relative aspect-video bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg mb-6 group cursor-pointer overflow-hidden">
+                    <div className="relative aspect-video bg-gradient-to-br from-amber-600 to-yellow-700 rounded-lg mb-6 group cursor-pointer overflow-hidden">
                       <div className="absolute inset-0 flex items-center justify-center">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
@@ -426,7 +426,7 @@ export default function CourseSalesPage() {
                               : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-muted-foreground">
                           {isFreeCourseOfMonth
                             ? (isPtBr
                                 ? 'Oferta mensal liberada para qualquer usuário logado, com certificado incluso.'
@@ -442,7 +442,7 @@ export default function CourseSalesPage() {
                     <div className="mb-6">
                       {effectiveOriginalPrice > effectivePrice && (
                         <div className="flex items-center gap-3 mb-2">
-                          <span className="text-gray-500 line-through text-2xl">
+                          <span className="text-muted-foreground line-through text-2xl">
                             R$ {effectiveOriginalPrice.toLocaleString()}
                           </span>
                           <Badge className="bg-red-500 text-white text-lg px-3 py-1">
@@ -451,19 +451,19 @@ export default function CourseSalesPage() {
                         </div>
                       )}
                       <div className="flex items-baseline gap-2 mb-2">
-                        <span className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <span className="text-5xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                           R$ {effectivePrice.toLocaleString()}
                         </span>
                       </div>
                       {isFreeCourseOfMonth ? (
-                        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-gray-300">
+                        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-muted-foreground">
                           {isPtBr
                             ? "Acesso completo liberado neste mês para qualquer usuário logado, com certificado incluído."
                             : "Full access is unlocked this month for any logged-in user, including the certificate."}
                         </div>
                       ) : (
                         <>
-                          <p className="text-gray-400">
+                          <p className="text-muted-foreground">
                             {t("sidebar.orInstallments", { installments: 12, value: `R$ ${(product.pricing.price / 12).toFixed(2)}` })}
                           </p>
                           <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
@@ -478,7 +478,7 @@ export default function CourseSalesPage() {
                     {/* CTAs */}
                     <div className="space-y-3 mb-6">
                       <Button
-                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-6 text-lg shadow-lg shadow-purple-500/50"
+                        className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold py-6 text-lg shadow-lg shadow-amber-500/50"
                         size="lg"
                         onClick={handlePrimaryCourseAction}
                       >
@@ -491,7 +491,7 @@ export default function CourseSalesPage() {
                       {!isFreeCourseOfMonth && (
                         <Button
                           variant="outline"
-                          className="w-full border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10"
+                          className="w-full border-2 border-amber-500 text-amber-400 hover:bg-amber-500/10"
                           size="lg"
                           onClick={handleSecondaryCourseAction}
                         >
@@ -507,14 +507,14 @@ export default function CourseSalesPage() {
                           <BadgeCheck size={15} />
                           <span>{isPtBr ? 'Atualizado para o cenário atual' : 'Updated for the current landscape'}</span>
                         </div>
-                        <p className="mt-1 text-xs leading-relaxed text-gray-400">
+                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                           {isPtBr
                             ? `Fontes oficiais recentes. Canon editorial: ${product.editorialVerification?.canonModels?.join(" / ")}.`
                             : `Recent official sources. Editorial canon: ${product.editorialVerification?.canonModels?.join(" / ")}.`}
                         </p>
                       </div>
 
-                      <h3 className="font-bold text-sm uppercase text-gray-400 mb-3">
+                      <h3 className="font-bold text-sm uppercase text-muted-foreground mb-3">
                         {t("sidebar.courseIncludes")}
                       </h3>
                       {[
@@ -540,13 +540,13 @@ export default function CourseSalesPage() {
                       <div className="font-bold text-green-400 mb-1">
                         {t("sidebar.guarantee", { days: 7 })}
                       </div>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-muted-foreground">
                         {t("sidebar.guaranteeText")}
                       </p>
                     </div>
 
                     {/* Trust Badges */}
-                    <div className="flex items-center justify-center gap-4 mt-6 text-xs text-gray-500">
+                    <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <BadgeCheck size={14} />
                         <span>{t("sidebar.securePurchase")}</span>
@@ -583,16 +583,16 @@ export default function CourseSalesPage() {
                     className="flex items-start gap-3 p-4 bg-red-900/10 border border-red-500/30 rounded-lg"
                   >
                     <X className="text-red-400 flex-shrink-0 mt-1" size={20} />
-                    <p className="text-gray-300">{problem}</p>
+                    <p className="text-muted-foreground">{problem}</p>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="mt-12 p-8 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-2xl border-2 border-purple-500/50 text-center">
+              <div className="mt-12 p-8 bg-gradient-to-r from-amber-900/30 to-yellow-900/30 rounded-2xl border-2 border-amber-500/50 text-center">
                 <p className="text-2xl font-bold mb-4">
                   {t("problems.identify")}
                 </p>
-                <p className="text-xl text-purple-400">
+                <p className="text-xl text-amber-400">
                   {t("problems.madeForYou")}
                 </p>
               </div>
@@ -601,12 +601,12 @@ export default function CourseSalesPage() {
         </section>
 
         {/* TRANSFORMATION SECTION */}
-        <section className="py-16 bg-gray-900">
+        <section className="py-16 bg-card">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 {t.rich("transformation.title", {
-                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{chunks}</span>,
                 })}
               </h2>
             </div>
@@ -614,7 +614,7 @@ export default function CourseSalesPage() {
             <div className="max-w-5xl mx-auto">
               <div className="grid md:grid-cols-2 gap-8">
                 {/* Before */}
-                <div className="p-8 bg-gray-800/50 border-2 border-gray-700 rounded-2xl">
+                <div className="p-8 bg-secondary/50 border-2 border-border rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
                       {t("transformation.before")}
@@ -624,14 +624,14 @@ export default function CourseSalesPage() {
                     {(t.raw("transformation.beforeItems") as string[]).map((item: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <X className="text-red-400 flex-shrink-0 mt-1" size={20} />
-                        <span className="text-gray-400">{item}</span>
+                        <span className="text-muted-foreground">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* After */}
-                <div className="p-8 bg-gradient-to-br from-purple-900/30 to-pink-900/30 border-2 border-purple-500 rounded-2xl">
+                <div className="p-8 bg-gradient-to-br from-amber-900/30 to-yellow-900/30 border-2 border-amber-500 rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
                       {t("transformation.after")}
@@ -656,11 +656,11 @@ export default function CourseSalesPage() {
                   { value: `${product.curriculum?.moduleCount || 10}`, label: locale === 'pt-BR' ? 'Módulos Completos' : 'Complete Modules' },
                   { value: locale === 'pt-BR' ? '7 dias' : '7 days', label: locale === 'pt-BR' ? 'Garantia Total' : 'Full Guarantee' }
                 ].map((stat, i) => (
-                  <div key={i} className="text-center p-6 bg-black/50 rounded-lg border border-purple-500/30">
-                    <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2">
+                  <div key={i} className="text-center p-6 bg-black/50 rounded-lg border border-amber-500/30">
+                    <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">
                       {stat.value}
                     </div>
-                    <div className="text-sm text-gray-400">{stat.label}</div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -674,10 +674,10 @@ export default function CourseSalesPage() {
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
                 {t.rich("whatYouLearn.title", {
-                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{chunks}</span>,
                 })}
               </h2>
-              <p className="text-xl text-gray-400 text-center mb-12">
+              <p className="text-xl text-muted-foreground text-center mb-12">
                 {t("whatYouLearn.subtitle")}
               </p>
 
@@ -688,9 +688,9 @@ export default function CourseSalesPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-lg border border-purple-500/30 hover:border-purple-500 transition-all"
+                    className="flex items-start gap-4 p-6 bg-gradient-to-r from-amber-900/30 to-yellow-900/20 rounded-lg border border-amber-500/30 hover:border-amber-500 transition-all"
                   >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="text-white" size={20} />
                     </div>
                     <div>
@@ -703,14 +703,14 @@ export default function CourseSalesPage() {
               {/* CTA */}
               <div className="mt-12 text-center">
                 <Button
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg"
+                  className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-12 py-6 text-lg"
                   size="lg"
                   onClick={handlePrimaryCourseAction}
                 >
                   {t("whatYouLearn.cta")}
                   <ArrowRight className="ml-2" size={20} />
                 </Button>
-                <p className="text-sm text-gray-400 mt-4">
+                <p className="text-sm text-muted-foreground mt-4">
                   {t("whatYouLearn.ctaSubtext")}
                 </p>
               </div>
@@ -719,68 +719,68 @@ export default function CourseSalesPage() {
         </section>
 
         {/* CURRICULUM SECTION */}
-        <section className="py-16 bg-gray-900/50">
+        <section className="py-16 bg-card/50">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
                 {t.rich("curriculum.title", {
-                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{chunks}</span>,
                 })}
               </h2>
-              <p className="text-xl text-gray-400 text-center mb-12">
+              <p className="text-xl text-muted-foreground text-center mb-12">
                 {t("curriculum.subtitle")}
               </p>
 
               <div className="space-y-6">
                 {product.curriculum.modules.map((module) => (
-                  <div key={module.id} className="border border-purple-500/30 rounded-lg overflow-hidden bg-gray-900/80">
+                  <div key={module.id} className="border border-amber-500/30 rounded-lg overflow-hidden bg-card/80">
                     <button
                       onClick={() => toggleModule(module.id)}
-                      className="w-full flex items-center justify-between p-6 hover:bg-purple-500/10 transition"
+                      className="w-full flex items-center justify-between p-6 hover:bg-amber-500/10 transition"
                     >
                       <div className="flex items-center gap-3 text-left">
                         <span className="text-xl font-semibold">{module.title}</span>
-                        <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-400">
+                        <Badge variant="outline" className="text-xs border-amber-500/50 text-amber-400">
                           {module.lessons} {t("curriculum.lessons")}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm text-gray-400">{module.duration}</span>
+                        <span className="text-sm text-muted-foreground">{module.duration}</span>
                         {expandedModules.includes(module.id) ? (
-                          <ChevronUp size={20} className="text-purple-400" />
+                          <ChevronUp size={20} className="text-amber-400" />
                         ) : (
-                          <ChevronDown size={20} className="text-purple-400" />
+                          <ChevronDown size={20} className="text-amber-400" />
                         )}
                       </div>
                     </button>
 
                     {expandedModules.includes(module.id) && (
-                      <div className="border-t border-purple-500/20 p-6 text-left">
-                        <p className="text-gray-300 mb-4">{module.description}</p>
+                      <div className="border-t border-amber-500/20 p-6 text-left">
+                        <p className="text-muted-foreground mb-4">{module.description}</p>
                       </div>
                     )}
                   </div>
                 ))}
               </div>
 
-              <div className="mt-12 text-center p-6 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-2xl border-2 border-purple-500/50">
-                <h3 className="text-2xl font-bold mb-4 text-purple-400">{t("curriculum.modules", { count: product.curriculum.moduleCount, lessons: product.metrics.lessons })}</h3>
-                <p className="text-gray-300">{t("curriculum.stepByStep")}</p>
+              <div className="mt-12 text-center p-6 bg-gradient-to-r from-amber-900/30 to-yellow-900/30 rounded-2xl border-2 border-amber-500/50">
+                <h3 className="text-2xl font-bold mb-4 text-amber-400">{t("curriculum.modules", { count: product.curriculum.moduleCount, lessons: product.metrics.lessons })}</h3>
+                <p className="text-muted-foreground">{t("curriculum.stepByStep")}</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* BONUSES SECTION */}
-        <section className="py-16 bg-gradient-to-b from-black to-purple-900/20">
+        <section className="py-16 bg-gradient-to-b from-black to-amber-900/20">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
                 {t.rich("bonuses.title", {
-                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{chunks}</span>,
                 })}
               </h2>
-              <p className="text-xl text-gray-400 text-center mb-12">
+              <p className="text-xl text-muted-foreground text-center mb-12">
                 {t("bonuses.subtitle")}
               </p>
 
@@ -791,23 +791,23 @@ export default function CourseSalesPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-lg border border-purple-500/30 hover:border-purple-500 transition-all"
+                    className="flex items-start gap-4 p-6 bg-gradient-to-r from-amber-900/30 to-yellow-900/20 rounded-lg border border-amber-500/30 hover:border-amber-500 transition-all"
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center flex-shrink-0">
                       <Gift className="text-white" size={24} />
                     </div>
                     <div>
                       <p className="text-lg font-semibold mb-1">{bonus.title}</p>
-                      <p className="text-gray-400 mb-2">{t("bonuses.value", { currency: "R$", amount: bonus.value.toLocaleString() })}</p>
-                      <p className="text-gray-300 text-sm">{bonus.description}</p>
+                      <p className="text-muted-foreground mb-2">{t("bonuses.value", { currency: "R$", amount: bonus.value.toLocaleString() })}</p>
+                      <p className="text-muted-foreground text-sm">{bonus.description}</p>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="mt-12 text-center p-8 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-2xl border-2 border-purple-500/60">
-                <h3 className="text-3xl font-bold mb-2 text-purple-400">{t("bonuses.totalValue", { currency: "R$", amount: totalBonusValue.toLocaleString() })}</h3>
-                <p className="text-gray-300">{t("bonuses.includedFree")}</p>
+              <div className="mt-12 text-center p-8 bg-gradient-to-r from-amber-900/40 to-yellow-900/40 rounded-2xl border-2 border-amber-500/60">
+                <h3 className="text-3xl font-bold mb-2 text-amber-400">{t("bonuses.totalValue", { currency: "R$", amount: totalBonusValue.toLocaleString() })}</h3>
+                <p className="text-muted-foreground">{t("bonuses.includedFree")}</p>
               </div>
             </div>
           </div>
@@ -815,15 +815,15 @@ export default function CourseSalesPage() {
 
         {/* TESTIMONIALS SECTION - Only show if testimonials exist */}
         {product.testimonials && product.testimonials.length > 0 && (
-        <section className="py-16 bg-gray-900">
+        <section className="py-16 bg-card">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
                 {t.rich("testimonials.title", {
-                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{chunks}</span>,
                 })}
               </h2>
-              <p className="text-xl text-gray-400 text-center mb-12">
+              <p className="text-xl text-muted-foreground text-center mb-12">
                 {t("testimonials.subtitle")}
               </p>
 
@@ -834,15 +834,15 @@ export default function CourseSalesPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="p-6 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-purple-500 transition-all"
+                    className="p-6 bg-secondary/50 rounded-lg border border-border hover:border-amber-500 transition-all"
                   >
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mr-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center mr-3">
                         <span className="font-bold text-white">{testimonial.name.split(' ').map(n => n[0]).join('')}</span>
                       </div>
                       <div>
                         <h4 className="font-semibold">{testimonial.name}</h4>
-                        <p className="text-sm text-gray-400">{testimonial.role}{testimonial.company && `, ${testimonial.company}`}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}{testimonial.company && `, ${testimonial.company}`}</p>
                       </div>
                     </div>
                     <div className="flex mb-3">
@@ -850,8 +850,8 @@ export default function CourseSalesPage() {
                         <Star key={j} className="text-yellow-400 fill-yellow-400 mr-1" size={16} />
                       ))}
                     </div>
-                    <p className="text-gray-300 mb-3 italic">&ldquo;{testimonial.comment}&rdquo;</p>
-                    <p className="text-purple-400 text-sm font-semibold">{testimonial.impact}</p>
+                    <p className="text-muted-foreground mb-3 italic">&ldquo;{testimonial.comment}&rdquo;</p>
+                    <p className="text-amber-400 text-sm font-semibold">{testimonial.impact}</p>
                   </motion.div>
                 ))}
               </div>
@@ -866,25 +866,25 @@ export default function CourseSalesPage() {
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
                 {t.rich("faq.title", {
-                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{chunks}</span>,
                 })}
               </h2>
-              <p className="text-xl text-gray-400 text-center mb-12">
+              <p className="text-xl text-muted-foreground text-center mb-12">
                 {t("faq.subtitle")}
               </p>
 
               <div className="space-y-4">
                 {(t.raw("faq.items") as Array<{question: string; answer: string}>).map((faq, i) => (
-                  <div key={i} className="border border-purple-500/30 rounded-lg overflow-hidden bg-gray-900/50">
+                  <div key={i} className="border border-amber-500/30 rounded-lg overflow-hidden bg-card/50">
                     <button
                       onClick={() => toggleFaq(i)}
-                      className="w-full flex items-center justify-between p-6 hover:bg-purple-500/10 transition text-left"
+                      className="w-full flex items-center justify-between p-6 hover:bg-amber-500/10 transition text-left"
                     >
                       <span className="font-semibold text-lg pr-4">{faq.question}</span>
                       {expandedFaqs.includes(i) ? (
-                        <ChevronUp size={20} className="text-purple-400 flex-shrink-0" />
+                        <ChevronUp size={20} className="text-amber-400 flex-shrink-0" />
                       ) : (
-                        <ChevronDown size={20} className="text-purple-400 flex-shrink-0" />
+                        <ChevronDown size={20} className="text-amber-400 flex-shrink-0" />
                       )}
                     </button>
                     <AnimatePresence>
@@ -893,9 +893,9 @@ export default function CourseSalesPage() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          className="border-t border-purple-500/20"
+                          className="border-t border-amber-500/20"
                         >
-                          <p className="p-6 text-gray-300">{faq.answer}</p>
+                          <p className="p-6 text-muted-foreground">{faq.answer}</p>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -907,7 +907,7 @@ export default function CourseSalesPage() {
         </section>
 
         {/* FINAL CTA SECTION */}
-        <section className="py-20 bg-gradient-to-b from-purple-900/30 to-black">
+        <section className="py-20 bg-gradient-to-b from-amber-900/30 to-black">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black mb-6 text-lg px-6 py-2">
@@ -917,17 +917,17 @@ export default function CourseSalesPage() {
               
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 {t.rich("finalCta.title", {
-                  highlight: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{chunks}</span>,
+                  highlight: (chunks) => <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{chunks}</span>,
                 })}
               </h2>
               
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 {t("finalCta.subtitle", { students: product.metrics.students.toLocaleString() })}
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
                 <Button
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-12 py-6 text-lg shadow-lg shadow-purple-500/50"
+                  className="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-12 py-6 text-lg shadow-lg shadow-amber-500/50"
                   size="lg"
                   onClick={handlePrimaryCourseAction}
                 >
@@ -938,13 +938,13 @@ export default function CourseSalesPage() {
                 </Button>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Shield className="text-green-400" size={18} />
                   <span>{t("finalCta.guarantee", { days: 30 })}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Lock className="text-purple-400" size={18} />
+                  <Lock className="text-amber-400" size={18} />
                   <span>{t("finalCta.securePayment")}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -958,19 +958,19 @@ export default function CourseSalesPage() {
       </main>
 
       {/* FLOATING MOBILE CTA BAR */}
-      <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-gray-900/95 backdrop-blur border-t border-purple-500/50 p-4 z-50">
+      <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-card/95 backdrop-blur border-t border-amber-500/50 p-4 z-50">
         <div className="flex items-center justify-between gap-4">
           <div>
             {effectiveOriginalPrice > effectivePrice && (
               <div className="flex items-center gap-2">
-                <span className="text-gray-500 line-through text-sm">R$ {effectiveOriginalPrice.toLocaleString()}</span>
+                <span className="text-muted-foreground line-through text-sm">R$ {effectiveOriginalPrice.toLocaleString()}</span>
                 <Badge className="bg-red-500 text-white text-xs">-{effectiveDiscount}%</Badge>
               </div>
             )}
-            <div className="text-xl font-bold text-purple-400">R$ {effectivePrice.toLocaleString()}</div>
+            <div className="text-xl font-bold text-amber-400">R$ {effectivePrice.toLocaleString()}</div>
           </div>
           <Button
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-6"
+            className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-6"
             onClick={handlePrimaryCourseAction}
           >
             {isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}

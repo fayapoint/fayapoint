@@ -211,19 +211,19 @@ export default function SettingsPage() {
 
   if (!mounted || !user) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <Loader2 className="animate-spin" size={32} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Back to Portal */}
-          <Link href="/portal" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition">
+          <Link href="/portal" className="inline-flex items-center gap-2 text-muted-foreground hover:text-white mb-6 transition">
             <ArrowLeft size={16} />
             Voltar ao Dashboard
           </Link>
@@ -231,26 +231,26 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-3xl font-bold">Configurações</h1>
-              <p className="text-gray-400 mt-1">Gerencie seu perfil, segurança e preferências</p>
+              <p className="text-muted-foreground mt-1">Gerencie seu perfil, segurança e preferências</p>
             </div>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-gray-900/50 border border-gray-800 p-1 gap-1">
-              <TabsTrigger value="profile" className="data-[state=active]:bg-purple-600">
+            <TabsList className="bg-card/50 border border-border p-1 gap-1">
+              <TabsTrigger value="profile" className="data-[state=active]:bg-amber-600">
                 <User size={16} className="mr-2" /> Perfil
               </TabsTrigger>
-              <TabsTrigger value="security" className="data-[state=active]:bg-purple-600">
+              <TabsTrigger value="security" className="data-[state=active]:bg-amber-600">
                 <Shield size={16} className="mr-2" /> Segurança
               </TabsTrigger>
-              <TabsTrigger value="notifications" className="data-[state=active]:bg-purple-600">
+              <TabsTrigger value="notifications" className="data-[state=active]:bg-amber-600">
                 <Bell size={16} className="mr-2" /> Notificações
               </TabsTrigger>
             </TabsList>
 
             {/* Profile Tab */}
             <TabsContent value="profile" className="space-y-6">
-              <Card className="bg-gray-900/50 border-gray-800 p-6">
+              <Card className="bg-card/50 border-border p-6">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
                   <User size={20} /> Informações Pessoais
                 </h2>
@@ -262,7 +262,7 @@ export default function SettingsPage() {
                       <Input 
                         value={profileForm.name}
                         onChange={e => setProfileForm({...profileForm, name: e.target.value})}
-                        className="bg-black/50 border-gray-700"
+                        className="bg-black/50 border-border"
                         placeholder="Seu nome"
                       />
                     </div>
@@ -271,9 +271,9 @@ export default function SettingsPage() {
                       <Input 
                         value={user.email}
                         disabled
-                        className="bg-black/50 border-gray-700 opacity-50"
+                        className="bg-black/50 border-border opacity-50"
                       />
-                      <p className="text-xs text-gray-500">O email não pode ser alterado</p>
+                      <p className="text-xs text-muted-foreground">O email não pode ser alterado</p>
                     </div>
                   </div>
 
@@ -282,7 +282,7 @@ export default function SettingsPage() {
                     <textarea 
                       value={profileForm.bio}
                       onChange={e => setProfileForm({...profileForm, bio: e.target.value})}
-                      className="w-full bg-black/50 border border-gray-700 rounded-md p-3 min-h-[100px] text-white resize-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                      className="w-full bg-black/50 border border-border rounded-md p-3 min-h-[100px] text-white resize-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                       placeholder="Conte um pouco sobre você..."
                     />
                   </div>
@@ -293,7 +293,7 @@ export default function SettingsPage() {
                       <Input 
                         value={profileForm.position}
                         onChange={e => setProfileForm({...profileForm, position: e.target.value})}
-                        className="bg-black/50 border-gray-700"
+                        className="bg-black/50 border-border"
                         placeholder="Ex: Product Manager"
                       />
                     </div>
@@ -302,7 +302,7 @@ export default function SettingsPage() {
                       <Input 
                         value={profileForm.company}
                         onChange={e => setProfileForm({...profileForm, company: e.target.value})}
-                        className="bg-black/50 border-gray-700"
+                        className="bg-black/50 border-border"
                         placeholder="Nome da empresa"
                       />
                     </div>
@@ -314,7 +314,7 @@ export default function SettingsPage() {
                       <Input 
                         value={profileForm.location}
                         onChange={e => setProfileForm({...profileForm, location: e.target.value})}
-                        className="bg-black/50 border-gray-700"
+                        className="bg-black/50 border-border"
                         placeholder="São Paulo, Brasil"
                       />
                     </div>
@@ -323,7 +323,7 @@ export default function SettingsPage() {
                       <Input 
                         value={profileForm.website}
                         onChange={e => setProfileForm({...profileForm, website: e.target.value})}
-                        className="bg-black/50 border-gray-700"
+                        className="bg-black/50 border-border"
                         placeholder="https://seusite.com"
                       />
                     </div>
@@ -334,13 +334,13 @@ export default function SettingsPage() {
                     <Input 
                       value={profileForm.linkedin}
                       onChange={e => setProfileForm({...profileForm, linkedin: e.target.value})}
-                      className="bg-black/50 border-gray-700"
+                      className="bg-black/50 border-border"
                       placeholder="https://linkedin.com/in/seuperfil"
                     />
                   </div>
 
                   <div className="flex justify-end">
-                    <Button onClick={handleSaveProfile} disabled={isLoading} className="bg-purple-600 hover:bg-purple-700">
+                    <Button onClick={handleSaveProfile} disabled={isLoading} className="bg-amber-600 hover:bg-amber-700">
                       {isLoading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save className="mr-2" size={16} />}
                       Salvar Alterações
                     </Button>
@@ -351,7 +351,7 @@ export default function SettingsPage() {
 
             {/* Security Tab */}
             <TabsContent value="security" className="space-y-6">
-              <Card className="bg-gray-900/50 border-gray-800 p-6">
+              <Card className="bg-card/50 border-border p-6">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
                   <Lock size={20} /> Alterar Senha
                 </h2>
@@ -364,13 +364,13 @@ export default function SettingsPage() {
                         type={showCurrentPassword ? "text" : "password"}
                         value={passwordForm.currentPassword}
                         onChange={e => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
-                        className="bg-black/50 border-gray-700 pr-10"
+                        className="bg-black/50 border-border pr-10"
                         placeholder="Digite sua senha atual"
                       />
                       <button
                         type="button"
                         onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
                       >
                         {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -384,18 +384,18 @@ export default function SettingsPage() {
                         type={showNewPassword ? "text" : "password"}
                         value={passwordForm.newPassword}
                         onChange={e => setPasswordForm({...passwordForm, newPassword: e.target.value})}
-                        className="bg-black/50 border-gray-700 pr-10"
+                        className="bg-black/50 border-border pr-10"
                         placeholder="Digite a nova senha"
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
                       >
                         {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
-                    <p className="text-xs text-gray-500">Mínimo 6 caracteres</p>
+                    <p className="text-xs text-muted-foreground">Mínimo 6 caracteres</p>
                   </div>
 
                   <div className="space-y-2">
@@ -404,7 +404,7 @@ export default function SettingsPage() {
                       type="password"
                       value={passwordForm.confirmPassword}
                       onChange={e => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
-                      className="bg-black/50 border-gray-700"
+                      className="bg-black/50 border-border"
                       placeholder="Confirme a nova senha"
                     />
                   </div>
@@ -412,7 +412,7 @@ export default function SettingsPage() {
                   <Button 
                     onClick={handleChangePassword} 
                     disabled={isLoading || !passwordForm.currentPassword || !passwordForm.newPassword}
-                    className="bg-purple-600 hover:bg-purple-700"
+                    className="bg-amber-600 hover:bg-amber-700"
                   >
                     {isLoading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Lock className="mr-2" size={16} />}
                     Alterar Senha
@@ -420,14 +420,14 @@ export default function SettingsPage() {
                 </div>
               </Card>
 
-              <Card className="bg-gray-900/50 border-gray-800 p-6">
+              <Card className="bg-card/50 border-border p-6">
                 <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <Shield size={20} /> Plano Atual
                 </h2>
                 <div className="flex items-center justify-between p-4 bg-black/30 rounded-lg">
                   <div>
                     <p className="font-medium capitalize">{user.subscription?.plan || 'Free'}</p>
-                    <p className="text-sm text-gray-400">Status: {user.subscription?.status || 'Ativo'}</p>
+                    <p className="text-sm text-muted-foreground">Status: {user.subscription?.status || 'Ativo'}</p>
                   </div>
                   <Link href="/planos">
                     <Button variant="outline" size="sm">
@@ -440,16 +440,16 @@ export default function SettingsPage() {
 
             {/* Notifications Tab */}
             <TabsContent value="notifications" className="space-y-6">
-              <Card className="bg-gray-900/50 border-gray-800 p-6">
+              <Card className="bg-card/50 border-border p-6">
                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
                   <Bell size={20} /> Preferências de Notificação
                 </h2>
                 
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between py-3 border-b border-gray-800">
+                  <div className="flex items-center justify-between py-3 border-b border-border">
                     <div>
                       <p className="font-medium">Notificações por Email</p>
-                      <p className="text-sm text-gray-400">Receba atualizações importantes por email</p>
+                      <p className="text-sm text-muted-foreground">Receba atualizações importantes por email</p>
                     </div>
                     <Switch 
                       checked={notifications.email}
@@ -457,10 +457,10 @@ export default function SettingsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between py-3 border-b border-gray-800">
+                  <div className="flex items-center justify-between py-3 border-b border-border">
                     <div>
                       <p className="font-medium">Notificações Push</p>
-                      <p className="text-sm text-gray-400">Receba notificações no navegador</p>
+                      <p className="text-sm text-muted-foreground">Receba notificações no navegador</p>
                     </div>
                     <Switch 
                       checked={notifications.push}
@@ -468,10 +468,10 @@ export default function SettingsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between py-3 border-b border-gray-800">
+                  <div className="flex items-center justify-between py-3 border-b border-border">
                     <div>
                       <p className="font-medium">Atualizações de Cursos</p>
-                      <p className="text-sm text-gray-400">Novos conteúdos e atualizações dos seus cursos</p>
+                      <p className="text-sm text-muted-foreground">Novos conteúdos e atualizações dos seus cursos</p>
                     </div>
                     <Switch 
                       checked={notifications.courseUpdates}
@@ -479,10 +479,10 @@ export default function SettingsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between py-3 border-b border-gray-800">
+                  <div className="flex items-center justify-between py-3 border-b border-border">
                     <div>
                       <p className="font-medium">Atividade da Comunidade</p>
-                      <p className="text-sm text-gray-400">Respostas e menções nos fóruns</p>
+                      <p className="text-sm text-muted-foreground">Respostas e menções nos fóruns</p>
                     </div>
                     <Switch 
                       checked={notifications.communityActivity}
@@ -493,7 +493,7 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between py-3">
                     <div>
                       <p className="font-medium">Marketing e Promoções</p>
-                      <p className="text-sm text-gray-400">Ofertas especiais e novidades</p>
+                      <p className="text-sm text-muted-foreground">Ofertas especiais e novidades</p>
                     </div>
                     <Switch 
                       checked={notifications.marketing}
@@ -502,7 +502,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="flex justify-end pt-4">
-                    <Button onClick={handleSaveNotifications} disabled={isLoading} className="bg-purple-600 hover:bg-purple-700">
+                    <Button onClick={handleSaveNotifications} disabled={isLoading} className="bg-amber-600 hover:bg-amber-700">
                       {isLoading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save className="mr-2" size={16} />}
                       Salvar Preferências
                     </Button>

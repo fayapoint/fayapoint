@@ -69,7 +69,7 @@ export default function ToolsPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-3">Diretório de Ferramentas de IA</h1>
-            <p className="text-gray-400">Descubra, compare e aprenda as principais ferramentas de IA do mercado</p>
+            <p className="text-muted-foreground">Descubra, compare e aprenda as principais ferramentas de IA do mercado</p>
           </div>
 
           {/* Controls */}
@@ -78,19 +78,19 @@ export default function ToolsPage() {
               {/* Search */}
               <div className="lg:col-span-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
                   <Input
                     placeholder="Buscar por nome, fornecedor ou tag..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="pl-10 bg-gray-800 border-gray-700"
+                    className="pl-10 bg-secondary border-border"
                   />
                 </div>
               </div>
 
               {/* Category */}
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="bg-gray-800 border-gray-700">
+                <SelectTrigger className="bg-secondary border-border">
                   <SelectValue placeholder="Categoria" />
                 </SelectTrigger>
                 <SelectContent>
@@ -100,7 +100,7 @@ export default function ToolsPage() {
 
               {/* Pricing */}
               <Select value={pricing} onValueChange={setPricing}>
-                <SelectTrigger className="bg-gray-800 border-gray-700">
+                <SelectTrigger className="bg-secondary border-border">
                   <SelectValue placeholder="Preço" />
                 </SelectTrigger>
                 <SelectContent>
@@ -110,7 +110,7 @@ export default function ToolsPage() {
 
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="bg-gray-800 border-gray-700">
+                <SelectTrigger className="bg-secondary border-border">
                   <SelectValue placeholder="Ordenar" />
                 </SelectTrigger>
                 <SelectContent>
@@ -121,7 +121,7 @@ export default function ToolsPage() {
               </Select>
             </div>
 
-            <div className="mt-4 text-sm text-gray-400 flex items-center gap-2">
+            <div className="mt-4 text-sm text-muted-foreground flex items-center gap-2">
               <Layers size={16} /> {filtered.length} ferramentas encontradas
             </div>
           </div>
@@ -133,27 +133,27 @@ export default function ToolsPage() {
                 <Card className="p-6 border-border hover:bg-card/80 transition group h-full">
                   <div className="flex items-center justify-between mb-3">
                     <Badge variant="outline" className="text-xs">{t.categoryPrimary}</Badge>
-                    <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/40 text-xs">{t.pricing.price > 0 ? 'Pago' : 'Gratuito'}</Badge>
+                    <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/40 text-xs">{t.pricing.price > 0 ? 'Pago' : 'Gratuito'}</Badge>
                   </div>
-                  <h3 className="text-xl font-semibold mb-1 group-hover:text-purple-400 transition">{t.name}</h3>
-                  <p className="text-gray-400 text-sm mb-3">{t.copy.shortDescription}</p>
-                  <div className="flex items-center gap-3 text-sm text-gray-400 mb-4">
+                  <h3 className="text-xl font-semibold mb-1 group-hover:text-amber-400 transition">{t.name}</h3>
+                  <p className="text-muted-foreground text-sm mb-3">{t.copy.shortDescription}</p>
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
                     <span className="flex items-center gap-1"><Star className="text-yellow-400" size={16} /> {t.metrics.rating}</span>
-                    <span className="text-gray-500">Fornecedor: <span className="text-gray-300">{t.tool}</span></span>
+                    <span className="text-muted-foreground">Fornecedor: <span className="text-muted-foreground">{t.tool}</span></span>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {t.tags.map(tag => (
-                      <Badge key={tag} variant="outline" className="text-xs border-purple-500/30 text-gray-300"><Tag size={12} className="mr-1" /> {tag}</Badge>
+                      <Badge key={tag} variant="outline" className="text-xs border-amber-500/30 text-muted-foreground"><Tag size={12} className="mr-1" /> {tag}</Badge>
                     ))}
                   </div>
                   <div className="flex gap-2">
                     <Link href={`/ferramentas/${t.slug}`} className="flex-1">
-                      <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                      <Button className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800">
                         Ver detalhes <ArrowRight className="ml-2 w-4 h-4" />
                       </Button>
                     </Link>
                     <Link href={`/cursos?search=${encodeURIComponent(t.name)}`} className="flex-1">
-                      <Button variant="outline" className="w-full border-purple-500 text-purple-400 hover:bg-purple-500/10">
+                      <Button variant="outline" className="w-full border-amber-500 text-amber-400 hover:bg-amber-500/10">
                         Cursos relacionados
                       </Button>
                     </Link>
