@@ -77,13 +77,11 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
       // ALWAYS revalidate against server to catch session mismatches.
       // This handles: expired tokens, Google OAuth sessions, different accounts.
-      const token = localStorage.getItem('fayai_token');
-      const headers: HeadersInit = {};
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-
-      fetch('/api/user/profile', { headers, credentials: 'include', cache: 'no-store' })
+      // IMPORTANT: Do NOT send localStorage token here. Use only httpOnly cookies
+      // (via credentials: 'include') so the server sees the freshest session.
+      // Google OAuth only sets cookies (not localStorage), so sending a stale
+      // localStorage token would override the correct cookie-based session.
+      fetch('/api/user/profile', { credentials: 'include', cache: 'no-store' })
         .then(res => {
           if (res.ok) return res.json();
           // If 401/404, user session is invalid — clear stale data
@@ -96,6 +94,23 @@ export function UserProvider({ children }: { children: ReactNode }) {
         })
         .then(data => {
           if (data?.user) {
+            // Check if the server returned a DIFFERENT user than localStorage.
+            // This happens after Google OAuth login when localStorage still has
+            // a token from a previous email/password session as another user.
+            const prevStored = localStorage.getItem('fayai_user');
+            let prevId: string | null = null;
+            try {
+              const prev = prevStored ? JSON.parse(prevStored) : null;
+              prevId = prev?._id || prev?.id || null;
+            } catch { /* ignore */ }
+
+            const serverId = data.user._id || data.user.id;
+            if (prevId && prevId !== serverId) {
+              // Session changed (e.g., Google OAuth replaced a stale session).
+              // Remove the old Bearer token so other API calls use cookies.
+              localStorage.removeItem('fayai_token');
+            }
+
             // Server is the source of truth — always update from it
             setUserState(data.user);
             localStorage.setItem('fayai_user', JSON.stringify(data.user));

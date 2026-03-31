@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import type { FaceConfig } from "./cube-data";
 import s from "./cube.module.css";
 
@@ -12,23 +13,105 @@ const FACE_CLASS: Record<string, string> = {
   bottom: s.faceBottom,
 };
 
-export function CubeFace({ config }: { config: FaceConfig }) {
-  const { face, icon, title, subtitle, phantom, content } = config;
+interface CubeFaceProps {
+  config: FaceConfig;
+  isActive: boolean;
+  onFaceClick?: (face: string, route: string) => void;
+}
 
-  // Image type: full-bleed image on the face, no icon/title/subtitle
+export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
+  const { face, icon, title, subtitle, phantom, route, routeLabel, content } = config;
+  const [hovered, setHovered] = useState(false);
+
+  const handleClick = useCallback(() => {
+    if (route && onFaceClick) {
+      onFaceClick(face, route);
+    }
+  }, [face, route, onFaceClick]);
+
+  const faceClasses = [
+    s.face,
+    FACE_CLASS[face],
+    isActive ? s.faceActive : "",
+    hovered ? s.faceHovered : "",
+    route ? s.faceClickable : "",
+  ].filter(Boolean).join(" ");
+
+  // Inline styles to force interactivity (turbopack CSS cache workaround)
+  const interactiveStyle: React.CSSProperties = route ? {
+    pointerEvents: "all",
+    cursor: "pointer",
+  } : {};
+
+  const glowStyle: React.CSSProperties = hovered && isActive ? {
+    position: "absolute" as const,
+    inset: "-4px",
+    border: "2px solid rgba(212, 168, 75, 0.4)",
+    pointerEvents: "none" as const,
+    zIndex: 3,
+    opacity: 1,
+    boxShadow: "0 0 20px rgba(212, 168, 75, 0.3), 0 0 40px rgba(212, 168, 75, 0.15), inset 0 0 20px rgba(212, 168, 75, 0.1)",
+    transition: "opacity 0.4s ease",
+  } : {
+    position: "absolute" as const,
+    inset: "-4px",
+    border: "2px solid transparent",
+    pointerEvents: "none" as const,
+    zIndex: 3,
+    opacity: 0,
+    transition: "opacity 0.4s ease",
+  };
+
+  const tooltipStyle: React.CSSProperties = {
+    position: "absolute",
+    bottom: "2rem",
+    left: "50%",
+    transform: `translateX(-50%) translateY(${hovered && isActive ? "0" : "8px"})`,
+    zIndex: 4,
+    fontFamily: "var(--cube-font-mono, monospace)",
+    fontSize: "0.6rem",
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    color: "var(--cube-accent)",
+    background: "rgba(0, 0, 0, 0.7)",
+    backdropFilter: "blur(8px)",
+    padding: "0.4rem 0.8rem",
+    whiteSpace: "nowrap",
+    opacity: hovered && isActive ? 1 : 0,
+    transition: "opacity 0.3s ease, transform 0.3s ease",
+    pointerEvents: "none",
+  };
+
+  // Image type: full-bleed image on the face
   if (content.type === "image") {
     return (
-      <div className={`${s.face} ${FACE_CLASS[face]}`}>
+      <div
+        className={faceClasses}
+        style={interactiveStyle}
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
+        onClick={handleClick}
+      >
         <div className={s.faceImageContent}>
           <img src={content.src} alt={content.alt} className={s.faceImage} />
         </div>
+        {/* Hover tooltip */}
+        {route && <div style={tooltipStyle}>↗ {routeLabel || "Entrar"}</div>}
+        {/* Glow ring on hover */}
+        <div style={glowStyle} />
         <span className={s.facePhantom}>{phantom}</span>
       </div>
     );
   }
 
   return (
-    <div className={`${s.face} ${FACE_CLASS[face]}`}>
+    <div
+      className={faceClasses}
+      style={interactiveStyle}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
+      onClick={handleClick}
+    >
       <div className={s.faceContent}>
         <div className={s.faceIcon}>{icon}</div>
         <div className={s.faceTitle}>{title}</div>
@@ -77,14 +160,17 @@ export function CubeFace({ config }: { config: FaceConfig }) {
         )}
 
         {content.type === "cta" && (
-          <div className={s.faceGrid} style={{ gridTemplateColumns: "1fr" }}>
-            <div className={s.faceGridItem} style={{ textAlign: "center", padding: "1rem" }}>
-              <div className={s.faceGridItemLabel}>{content.url}</div>
-              <div className={s.faceGridItemNum} style={{ fontSize: "1.2rem" }}>{content.label}</div>
-            </div>
+          <div className={s.faceCtaContent}>
+            <div className={s.faceCtaLabel}>{content.label}</div>
+            <div className={s.faceCtaUrl}>{content.url}</div>
           </div>
         )}
       </div>
+
+      {/* Hover tooltip */}
+      {route && <div style={tooltipStyle}>↗ {routeLabel || "Entrar"}</div>}
+      {/* Glow ring on hover */}
+      <div style={glowStyle} />
       <span className={s.facePhantom}>{phantom}</span>
     </div>
   );

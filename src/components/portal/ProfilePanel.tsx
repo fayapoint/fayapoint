@@ -114,17 +114,13 @@ export function ProfilePanel({
     
     try {
       const token = localStorage.getItem('fayai_token');
-      if (!token) {
-        toast.error('Você precisa estar logado.');
-        return;
-      }
+      const headers: HeadersInit = { 'Content-Type': 'application/json' };
+      if (token) headers.Authorization = `Bearer ${token}`;
 
       const response = await fetch('/api/user/profile', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify({
           name: formData.name,
           profile: {

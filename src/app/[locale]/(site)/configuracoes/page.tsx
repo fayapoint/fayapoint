@@ -103,12 +103,12 @@ export default function SettingsPage() {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('fayai_token');
+      const headers: HeadersInit = { 'Content-Type': 'application/json' };
+      if (token) headers.Authorization = `Bearer ${token}`;
       const res = await fetch('/api/user/profile', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers,
+        credentials: 'include',
         body: JSON.stringify({
           name: profileForm.name,
           profile: {
@@ -151,12 +151,12 @@ export default function SettingsPage() {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('fayai_token');
+      const chgHeaders: HeadersInit = { 'Content-Type': 'application/json' };
+      if (token) chgHeaders.Authorization = `Bearer ${token}`;
       const res = await fetch('/api/auth/change-password', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers: chgHeaders,
+        credentials: 'include',
         body: JSON.stringify({
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword
@@ -183,12 +183,12 @@ export default function SettingsPage() {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('fayai_token');
+      const notifHeaders: HeadersInit = { 'Content-Type': 'application/json' };
+      if (token) notifHeaders.Authorization = `Bearer ${token}`;
       const res = await fetch('/api/user/profile', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers: notifHeaders,
+        credentials: 'include',
         body: JSON.stringify({
           preferences: {
             notifications

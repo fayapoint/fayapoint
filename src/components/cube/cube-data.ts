@@ -19,6 +19,8 @@ export interface FaceConfig {
   title: string;
   subtitle: string;
   phantom: string;
+  route?: string;        // clickable route to navigate into
+  routeLabel?: string;   // hover tooltip text
   content: FaceContent;
 }
 
@@ -48,6 +50,7 @@ export interface SectionConfig {
 export const FACES: FaceConfig[] = [
   {
     face: "top", icon: "🎓", title: "FAYAI", subtitle: "Domine Inteligencia Artificial", phantom: "HERO",
+    route: "/descobrir", routeLabel: "Explorar plataforma",
     content: { type: "grid", items: [
       { num: "18+", label: "Cursos" }, { num: "247", label: "Certificados" },
       { num: "92%", label: "Aprovacao" }, { num: "100+", label: "Ferramentas" },
@@ -55,6 +58,7 @@ export const FACES: FaceConfig[] = [
   },
   {
     face: "front", icon: "🤖", title: "CURSOS", subtitle: "ChatGPT / Claude / Midjourney / n8n", phantom: "CURSOS",
+    route: "/cursos", routeLabel: "Ver todos os cursos",
     content: { type: "grid", items: [
       { num: "01", label: "ChatGPT Masterclass" }, { num: "02", label: "Claude AI Pro" },
       { num: "03", label: "Gemini & AI Studio" }, { num: "04", label: "Prompt Engineering" },
@@ -62,10 +66,12 @@ export const FACES: FaceConfig[] = [
   },
   {
     face: "right", icon: "📋", title: "CERTIFICACAO", subtitle: "Verificavel por qualquer empregador", phantom: "CERT",
+    route: "/certificacoes", routeLabel: "Ver certificacoes",
     content: { type: "image", src: "/certificado.svg", alt: "Certificado FayAI - ChatGPT Masterclass" },
   },
   {
     face: "back", icon: "⚡", title: "POR QUE FAYAI", subtitle: "Manifesto", phantom: "MANIFESTO",
+    route: "/blog", routeLabel: "Ler manifesto",
     content: { type: "services", items: [
       "Certificacao real com quiz avaliativo",
       "Conteudo atualizado semanalmente",
@@ -75,6 +81,7 @@ export const FACES: FaceConfig[] = [
   },
   {
     face: "left", icon: "🛠", title: "SERVICOS", subtitle: "Consultoria e Desenvolvimento", phantom: "SERVICOS",
+    route: "/servicos", routeLabel: "Ver servicos",
     content: { type: "services", items: [
       "Construcao de sites",
       "Automacao com n8n e IA",
@@ -84,6 +91,7 @@ export const FACES: FaceConfig[] = [
   },
   {
     face: "bottom", icon: "🇧🇷", title: "COMECE AGORA", subtitle: "Curso gratuito disponivel este mes", phantom: "INICIO",
+    route: "/registro", routeLabel: "Registre-se gratis",
     content: { type: "cta", url: "/registro", label: "GRATIS" },
   },
 ];

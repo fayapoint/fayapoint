@@ -26,9 +26,13 @@ export function verifyToken(token: string): AuthUser | null {
 /**
  * Get the authenticated user from the request.
  * Checks (in order):
- *   1. Authorization: Bearer <token> header
- *   2. `token` httpOnly cookie
- *   3. `fayai_token` httpOnly cookie
+ *   1. `token` or `fayai_token` httpOnly cookie (set by the most recent login)
+ *   2. Authorization: Bearer <token> header (fallback for API clients)
+ *
+ * Cookies take priority because they are always set by the server during login
+ * (email/password, Google OAuth, register). The Authorization header may contain
+ * a stale localStorage token from a previous session as a different user —
+ * especially after Google OAuth which only sets cookies, not localStorage.
  *
  * Returns the decoded JWT payload, or null if not authenticated.
  * Works for all auth flows: login, register, Google OAuth.
@@ -36,26 +40,26 @@ export function verifyToken(token: string): AuthUser | null {
 export async function getAuthUser(): Promise<AuthUser | null> {
   let token: string | null = null;
 
-  // 1. Try Authorization header
+  // 1. Prefer httpOnly cookies (always set by the most recent server-side login)
   try {
-    const headersList = await headers();
-    const authHeader = headersList.get('authorization');
-    if (authHeader?.startsWith('Bearer ')) {
-      token = authHeader.slice(7);
-    }
+    const cookieStore = await cookies();
+    token = cookieStore.get('token')?.value
+      || cookieStore.get('fayai_token')?.value
+      || null;
   } catch {
-    // headers() may fail in some contexts
+    // cookies() may fail in some contexts
   }
 
-  // 2. Fall back to httpOnly cookies
+  // 2. Fall back to Authorization header (for API clients without cookies)
   if (!token) {
     try {
-      const cookieStore = await cookies();
-      token = cookieStore.get('token')?.value
-        || cookieStore.get('fayai_token')?.value
-        || null;
+      const headersList = await headers();
+      const authHeader = headersList.get('authorization');
+      if (authHeader?.startsWith('Bearer ')) {
+        token = authHeader.slice(7);
+      }
     } catch {
-      // cookies() may fail in some contexts
+      // headers() may fail in some contexts
     }
   }
 

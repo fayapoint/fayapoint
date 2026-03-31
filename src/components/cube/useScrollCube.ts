@@ -43,9 +43,19 @@ export function useScrollCube() {
   }, []);
 
   useEffect(() => {
+    // Cache cube DOM element for direct transform updates
+    let cubeEl: HTMLElement | null = null;
+    const findCube = () => {
+      const els = document.querySelectorAll('[class*="cube"]');
+      for (let i = 0; i < els.length; i++) {
+        if (els[i].children.length === 6) { cubeEl = els[i] as HTMLElement; break; }
+      }
+    };
+
     const resize = () => {
       maxScrollRef.current = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       buildSectionTops();
+      if (!cubeEl) findCube();
     };
 
     // Animation loop: reads native scroll position, smoothly interpolates cube rotation
@@ -66,6 +76,13 @@ export function useScrollCube() {
       const activeSection = sectionIndexFromScroll(window.scrollY);
 
       setState({ rx, ry, scrollNorm: smoothRef.current, activeSection });
+
+      // Also update cube DOM directly — React setState may not trigger
+      // re-renders after hydration mismatches on turbopack/Windows
+      if (!cubeEl) findCube();
+      if (cubeEl) {
+        cubeEl.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+      }
     };
 
     resize();

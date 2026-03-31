@@ -105,19 +105,17 @@ export function ProfileAvatarEditor({
     
     try {
       const token = localStorage.getItem('fayai_token');
-      if (!token) {
-        toast.error('Você precisa estar logado.');
-        return;
-      }
 
       const formData = new FormData();
       formData.append('avatar', selectedFile);
 
+      const headers: HeadersInit = {};
+      if (token) headers.Authorization = `Bearer ${token}`;
+
       const response = await fetch('/api/user/avatar', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers,
+        credentials: 'include',
         body: formData,
       });
 
@@ -143,16 +141,13 @@ export function ProfileAvatarEditor({
     
     try {
       const token = localStorage.getItem('fayai_token');
-      if (!token) {
-        toast.error('Você precisa estar logado.');
-        return;
-      }
+      const headers: HeadersInit = {};
+      if (token) headers.Authorization = `Bearer ${token}`;
 
       const response = await fetch('/api/user/avatar', {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers,
+        credentials: 'include',
       });
 
       const data = await response.json();

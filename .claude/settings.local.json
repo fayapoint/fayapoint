@@ -53,7 +53,12 @@
       "Bash(ls /c/Users/ricar/.nvm/versions/*/bin/node)",
       "Bash(export PATH=\"/c/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation:$PATH\")",
       "Bash(grep -r \"isFreeCourseCheckout\\\\|freeCourseCheckout\" /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\\\\\(site\\\\\\)/checkout --include=\"*.tsx\" -B 2 -A 2)",
-      "Bash(where.exe npm:*)"
+      "Bash(where.exe npm:*)",
+      "Bash(find /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src -type f \\\\\\(-name *auth* -o -name *login* -o -name *session* -o -name *callback* -o -name *user* \\\\\\))",
+      "Bash(find /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src -type f -name *middleware* -o -name *route*)",
+      "Bash(grep -r \"supabase\\\\|Supabase\" /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src --include=*.ts --include=*.tsx)",
+      "Bash(cmd.exe /c \"npx tsc --noEmit 2>&1\")",
+      "Bash(cmd.exe /c \"npx tsc --noEmit --pretty 2>&1\")"
     ]
   }
 }

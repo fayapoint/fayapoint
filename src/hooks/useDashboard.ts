@@ -73,18 +73,10 @@ export function useDashboard(): UseDashboardReturn {
     fetchingRef.current = true;
 
     try {
-      const token =
-        typeof window !== 'undefined'
-          ? localStorage.getItem('fayai_token')
-          : null;
-
-      const headers: HeadersInit = {};
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-
+      // Use httpOnly cookies (via credentials: 'include') as the primary auth.
+      // Do NOT send localStorage token in Authorization header — it may be
+      // stale after Google OAuth login and point to a different user.
       const res = await fetch('/api/user/dashboard', {
-        headers,
         credentials: 'include',
         cache: 'no-store',
       });
