@@ -361,10 +361,10 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
     showViewAll?: boolean;
     onViewAll?: () => void;
   }) => (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          <Icon className={`text-${color}-400`} size={24} />
+    <div className="mb-6 md:mb-8">
+      <div className="flex items-center justify-between mb-3 md:mb-4">
+        <h2 className="text-lg md:text-xl font-bold flex items-center gap-2 min-w-0 truncate">
+          <Icon className={`text-${color}-400 shrink-0`} size={20} />
           {title}
         </h2>
         {showViewAll && onViewAll && (
@@ -373,7 +373,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           </Button>
         )}
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         {products.slice(0, 4).map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
@@ -394,18 +394,18 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
     const Icon = CATEGORY_ICONS[id] || Package;
     return (
       <Card
-        className="bg-secondary border-border p-4 hover:border-amber-500/50 transition cursor-pointer group"
+        className="bg-secondary border-border p-3 md:p-4 hover:border-amber-500/50 transition cursor-pointer group overflow-hidden"
         onClick={() => {
           setSelectedCategory(id);
           setCurrentSection("products");
         }}
       >
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-amber-500/20 rounded-xl group-hover:bg-amber-500/30 transition">
-            <Icon size={24} className="text-amber-400" />
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <div className="p-2 md:p-3 bg-amber-500/20 rounded-xl group-hover:bg-amber-500/30 transition shrink-0">
+            <Icon size={20} className="text-amber-400" />
           </div>
-          <div>
-            <h3 className="font-semibold group-hover:text-amber-400 transition">
+          <div className="min-w-0">
+            <h3 className="font-semibold text-sm md:text-base group-hover:text-amber-400 transition truncate">
               {name}
             </h3>
             <p className="text-xs text-muted-foreground">{count} produtos</p>
@@ -438,7 +438,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             {/* Glass Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-gray-900/90 to-amber-900/30 backdrop-blur-2xl border border-border" />
             
-            <div className="relative p-8 overflow-y-auto max-h-[90vh]">
+            <div className="relative p-4 md:p-8 overflow-y-auto max-h-[90vh]">
               {/* Close Button */}
               <button
                 onClick={() => setSelectedProduct(null)}
@@ -447,7 +447,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                 <X size={20} />
               </button>
 
-              <div className="grid lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
                 {/* Image Section */}
                 <div>
                   <div className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-card mb-4">
@@ -498,15 +498,15 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                         </Badge>
                       )}
                     </div>
-                    <h2 className="text-3xl font-bold text-white mb-2">{selectedProduct.name}</h2>
+                    <h2 className="text-xl md:text-3xl font-bold text-white mb-2 line-clamp-2">{selectedProduct.name}</h2>
                     
                     {/* Rating */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-2 md:gap-4">
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            size={18}
+                            size={14}
                             className={cn(
                               i < Math.round(selectedProduct.rating)
                                 ? "text-yellow-400 fill-yellow-400"
@@ -514,21 +514,21 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                             )}
                           />
                         ))}
-                        <span className="ml-2 text-muted-foreground">({selectedProduct.reviewCount} avaliações)</span>
+                        <span className="ml-1 text-sm text-muted-foreground">({selectedProduct.reviewCount})</span>
                       </div>
-                      <span className="text-muted-foreground">|</span>
-                      <span className="text-muted-foreground">{selectedProduct.soldCount} vendidos</span>
+                      <span className="text-muted-foreground hidden sm:inline">|</span>
+                      <span className="text-sm text-muted-foreground">{selectedProduct.soldCount} vendidos</span>
                     </div>
                   </div>
 
                   {/* Price Card */}
-                  <div className="p-6 rounded-2xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
+                  <div className="p-4 md:p-6 rounded-2xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
                     {selectedProduct.originalPrice > selectedProduct.price && (
-                      <p className="text-lg text-muted-foreground line-through">
+                      <p className="text-base md:text-lg text-muted-foreground line-through">
                         De: {formatPrice(selectedProduct.originalPrice)}
                       </p>
                     )}
-                    <p className="text-4xl font-bold text-green-400">
+                    <p className="text-2xl md:text-4xl font-bold text-green-400">
                       {formatPrice(selectedProduct.price)}
                     </p>
                     <p className="text-sm text-muted-foreground mt-1">
@@ -555,10 +555,10 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                         {selectedProduct.specifications.map((spec, idx) => (
                           <div
                             key={idx}
-                            className="flex justify-between p-3 rounded-xl bg-secondary border border-border"
+                            className="flex justify-between gap-2 p-3 rounded-xl bg-secondary border border-border min-w-0"
                           >
-                            <span className="text-muted-foreground">{spec.key}</span>
-                            <span className="text-white font-medium">{spec.value}</span>
+                            <span className="text-muted-foreground text-sm shrink-0">{spec.key}</span>
+                            <span className="text-white font-medium text-sm truncate text-right">{spec.value}</span>
                           </div>
                         ))}
                       </div>
@@ -577,33 +577,33 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   )}
 
                   {/* Trust Badges */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
-                      <Truck size={20} className="text-green-400" />
-                      <div>
-                        <p className="text-sm font-medium">Frete Grátis</p>
-                        <p className="text-xs text-muted-foreground">Para todo Brasil</p>
+                  <div className="grid grid-cols-2 gap-2 md:gap-3">
+                    <div className="flex items-center gap-2 p-2 md:p-3 rounded-xl bg-secondary border border-border overflow-hidden">
+                      <Truck size={18} className="text-green-400 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-xs md:text-sm font-medium truncate">Frete Grátis</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">Para todo Brasil</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
-                      <Shield size={20} className="text-blue-400" />
-                      <div>
-                        <p className="text-sm font-medium">Garantia</p>
-                        <p className="text-xs text-muted-foreground">{selectedProduct.warranty || 'Consulte'}</p>
+                    <div className="flex items-center gap-2 p-2 md:p-3 rounded-xl bg-secondary border border-border overflow-hidden">
+                      <Shield size={18} className="text-blue-400 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-xs md:text-sm font-medium truncate">Garantia</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">{selectedProduct.warranty || 'Consulte'}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
-                      <Award size={20} className="text-yellow-400" />
-                      <div>
-                        <p className="text-sm font-medium">Qualidade</p>
-                        <p className="text-xs text-muted-foreground">Produto original</p>
+                    <div className="flex items-center gap-2 p-2 md:p-3 rounded-xl bg-secondary border border-border overflow-hidden">
+                      <Award size={18} className="text-yellow-400 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-xs md:text-sm font-medium truncate">Qualidade</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">Produto original</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary border border-border">
-                      <Clock size={20} className="text-amber-400" />
-                      <div>
-                        <p className="text-sm font-medium">Envio Rápido</p>
-                        <p className="text-xs text-muted-foreground">Em até 24h</p>
+                    <div className="flex items-center gap-2 p-2 md:p-3 rounded-xl bg-secondary border border-border overflow-hidden">
+                      <Clock size={18} className="text-amber-400 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-xs md:text-sm font-medium truncate">Envio Rápido</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">Em até 24h</p>
                       </div>
                     </div>
                   </div>
@@ -621,10 +621,10 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-3 pt-4">
+                  <div className="flex gap-2 md:gap-3 pt-4">
                     <Button
                       size="lg"
-                      className="flex-1 h-14 bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-lg font-bold rounded-xl"
+                      className="flex-1 h-12 md:h-14 bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-sm md:text-lg font-bold rounded-xl"
                       onClick={() => {
                         handleAddToCart(selectedProduct);
                         setSelectedProduct(null);
@@ -658,17 +658,17 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
 
   // Home Section (Featured, Categories, etc.)
   const HomeSection = () => (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       {/* Hero Banner */}
-      <Card className="bg-gradient-to-r from-amber-900/50 to-yellow-900/50 border-amber-500/30 p-8 relative overflow-hidden">
+      <Card className="bg-gradient-to-r from-amber-900/50 to-yellow-900/50 border-amber-500/30 p-4 md:p-8 relative overflow-hidden">
         <div className="relative z-10">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            Loja FayAi 🛒
+          <h1 className="text-xl md:text-4xl font-bold mb-2">
+            Loja FayAi
           </h1>
-          <p className="text-muted-foreground text-lg mb-6 max-w-xl">
+          <p className="text-muted-foreground text-sm md:text-lg mb-4 md:mb-6 max-w-xl line-clamp-2">
             Equipamentos premium para criadores de conteúdo, desenvolvedores e entusiastas de IA
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-3 md:gap-4">
             <Button 
               size="lg"
               className="bg-white text-black hover:bg-gray-200"
@@ -806,7 +806,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           </div>
           
           {/* Category Icons Row */}
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1">
+          <div className="flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-1">
             {/* All Categories */}
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -883,7 +883,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
 
   // Products List Section
   const ProductsSection = () => (
-    <div className={cn("flex gap-6", isCompact && "flex-col")}>
+    <div className={cn("flex gap-4 md:gap-6", isCompact && "flex-col")}>
       {/* Compact Mode: Icon Filter Bar */}
       {isCompact && <CompactFilterBar />}
       
@@ -1035,7 +1035,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             <div className="flex gap-2">
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48 bg-secondary border-border">
+                <SelectTrigger className="w-36 md:w-48 bg-secondary border-border">
                   <ArrowUpDown size={16} className="mr-2" />
                   <SelectValue />
                 </SelectTrigger>
@@ -1128,7 +1128,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
         ) : products.length > 0 ? (
           <div className={cn(
             viewMode === "grid"
-              ? "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4"
+              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4"
               : "space-y-3"
           )}>
             {products.map((product) => (
@@ -1142,8 +1142,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
         ) : (
           <div className="text-center py-16">
             <Package size={64} className="mx-auto mb-4 text-gray-600" />
-            <h3 className="text-xl font-semibold mb-2">Nenhum produto encontrado</h3>
-            <p className="text-muted-foreground mb-6">
+            <h3 className="text-lg md:text-xl font-semibold mb-2">Nenhum produto encontrado</h3>
+            <p className="text-muted-foreground text-sm mb-6">
               Tente ajustar os filtros ou buscar por outros termos
             </p>
             <Button

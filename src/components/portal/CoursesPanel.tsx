@@ -5,15 +5,14 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   Award,
-  BarChart3,
   BookOpen,
   Bot,
   Brain,
-  CalendarDays,
   CheckCircle2,
   Clock,
   Code2,
   Crown,
+  Filter,
   Gift,
   Layers,
   Loader2,
@@ -27,6 +26,7 @@ import {
   Wand2,
   Workflow,
   Zap,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -75,12 +75,6 @@ const courseLevelBadgeStyles: Record<string, string> = {
   advanced: "border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-300",
 };
 
-/**
- * Course thumbnail configuration.
- * `logo` = external URL for the tool's official icon.
- * `icon` = Lucide fallback when no logo is available.
- * `gradient` = card background.
- */
 const COURSE_THUMBNAILS: Record<string, {
   logo?: string;
   icon?: React.ComponentType<{ size?: number; className?: string }>;
@@ -178,6 +172,8 @@ function CourseToolIcon({ logo, name, className }: { logo?: string; name: string
   );
 }
 
+type LibraryFilter = "all" | "beginner" | "intermediate" | "advanced";
+
 export function CoursesPanel({
   tierConfig,
   enrollmentSlots,
@@ -199,9 +195,8 @@ export function CoursesPanel({
   const completedCourses = startedCourses.filter((course) => course.progressPercent >= 100);
   const journeyCourses = [...activeCourses, ...readyToStartCourses];
 
-  const { formattedBrl, conversionDisplay } = useExchangeRate();
+  const { formattedBrl } = useExchangeRate();
 
-  // Fetch the real free course slug from the API (reads Mission Control override)
   const [apiFreeCourseSlug, setApiFreeCourseSlug] = useState<string | null>(null);
   useEffect(() => {
     fetch("/api/courses/monthly-offers", { cache: "no-store" })
@@ -222,7 +217,6 @@ export function CoursesPanel({
       const slotsForLevel = enrollmentSlots?.[slotCategory as keyof EnrollmentSlots] ?? null;
       const hasAvailableSlot = tierConfig.limits.unlimited || !slotsForLevel || slotsForLevel.available > 0;
       const canAccessThisMonth = canPlanAccessMonthlyOffer(tierConfig.slug, course.slug);
-      // Use API slug (Mission Control truth) over sync algorithm
       const isFreeMonthlyCourse = apiFreeCourseSlug
         ? course.slug === apiFreeCourseSlug
         : Boolean(monthlyOffer?.isFreeCourseOfMonth);
@@ -255,15 +249,6 @@ export function CoursesPanel({
         course.hasAvailableSlot
     )
     .slice(0, 6);
-  const rotationPreviewCourses = courseCatalog
-    .filter(
-      (course) =>
-        !course.isEnrolled &&
-        !course.isFreeMonthlyCourse &&
-        !course.monthlyOffer?.includedInPool &&
-        course.canAccessLevel
-    )
-    .slice(0, 3);
   const lockedByPlanCourses = courseCatalog
     .filter(
       (course) =>
@@ -271,17 +256,6 @@ export function CoursesPanel({
         !course.isFreeMonthlyCourse &&
         Boolean(course.monthlyOffer?.includedInPool) &&
         (!course.canAccessLevel || !course.canAccessThisMonth)
-    )
-    .slice(0, 4);
-  const slotLockedCourses = courseCatalog
-    .filter(
-      (course) =>
-        !course.isEnrolled &&
-        !course.isFreeMonthlyCourse &&
-        Boolean(course.monthlyOffer?.includedInPool) &&
-        course.canAccessLevel &&
-        course.canAccessThisMonth &&
-        !course.hasAvailableSlot
     )
     .slice(0, 4);
   const currentMonthlyPool = courseCatalog
@@ -295,167 +269,85 @@ export function CoursesPanel({
       }
       return left.title.localeCompare(right.title);
     });
-  const monthlyPoolByLevel = {
-    beginner: currentMonthlyPool.filter((course) => course.monthlyOffer?.poolLevel === "beginner"),
-    intermediate: currentMonthlyPool.filter((course) => course.monthlyOffer?.poolLevel === "intermediate"),
-    advanced: currentMonthlyPool.filter((course) => course.monthlyOffer?.poolLevel === "advanced"),
-  };
-  const featuredCourse = journeyCourses[0] ?? completedCourses[0] ?? null;
-  const featuredCourseState = featuredCourse
-    ? activeCourses.some((course) => course._id === featuredCourse._id)
-      ? "active"
-      : readyToStartCourses.some((course) => course._id === featuredCourse._id)
-        ? "ready"
-        : "completed"
-    : null;
-  const secondaryJourneyCourses = journeyCourses
-    .filter((course) => course._id !== featuredCourse?._id)
-    .slice(0, 6);
   const totalSlotsAvailable = enrollmentSlots
     ? enrollmentSlots.beginner.available + enrollmentSlots.intermediate.available + enrollmentSlots.advanced.available
     : 0;
   const coursesAvailableNow = readyToStartCourses.length + planMonthlyCourses.length + (freeMonthlyCourseCanClaim ? 1 : 0);
   const certificateDiscountPercent = Math.round((tierConfig.quizDiscount || 0) * 100);
-  const featuredBadgeLabel =
-    featuredCourseState === "active"
-      ? "Continue agora"
-      : featuredCourseState === "ready"
-        ? "Pronto para começar"
-        : "Concluído";
-  const featuredEyebrow =
-    featuredCourseState === "active"
-      ? "Curso em destaque da sua jornada"
-      : featuredCourseState === "ready"
-        ? "Próximo curso pronto para destravar"
-        : "Conquista já concluída";
-  const featuredDescription =
-    featuredCourseState === "active"
-      ? featuredCourse?.details?.shortDescription || "Retome exatamente de onde você parou, com progresso salvo e continuidade imediata."
-      : featuredCourseState === "ready"
-        ? featuredCourse?.details?.shortDescription || "Esse curso já está liberado para você começar agora, sem atrito e sem perder ritmo."
-        : featuredCourse?.details?.shortDescription || "Curso concluído com sucesso. Você pode revisar pontos-chave ou seguir para a próxima trilha."
-  const featuredNextStepCopy =
-    featuredCourseState === "active"
-      ? "Seu próximo passo já está pronto para continuar."
-      : featuredCourseState === "ready"
-        ? "Tudo pronto para começar essa trilha agora."
-        : "Essa trilha já foi concluída. Hora de puxar a próxima."
+
+  // Library filter state
+  const [libraryFilter, setLibraryFilter] = useState<LibraryFilter>("all");
+  const filteredLibraryCourses = useMemo(() => {
+    if (libraryFilter === "all") return currentMonthlyPool;
+    return currentMonthlyPool.filter(c => c.monthlyOffer?.poolLevel === libraryFilter);
+  }, [currentMonthlyPool, libraryFilter]);
+
+  const filterCounts = useMemo(() => ({
+    all: currentMonthlyPool.length,
+    beginner: currentMonthlyPool.filter(c => c.monthlyOffer?.poolLevel === "beginner").length,
+    intermediate: currentMonthlyPool.filter(c => c.monthlyOffer?.poolLevel === "intermediate").length,
+    advanced: currentMonthlyPool.filter(c => c.monthlyOffer?.poolLevel === "advanced").length,
+  }), [currentMonthlyPool]);
 
   return (
-    <div className="space-y-6">
-      <Card className="relative overflow-hidden border-border bg-[radial-gradient(circle_at_top_left,rgba(147,51,234,0.22),transparent_35%),radial-gradient(circle_at_top_right,rgba(16,185,129,0.16),transparent_32%),linear-gradient(135deg,rgba(10,10,20,0.98),rgba(15,23,42,0.95))] p-6">
-        <div className="absolute -top-16 right-0 h-40 w-40 rounded-full bg-fuchsia-500/10 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-cyan-500/10 blur-3xl" />
-        <div className="relative grid gap-6 xl:grid-cols-[1.4fr,0.9fr]">
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge className="border-amber-400/30 bg-amber-500/10 text-amber-200">
-                Plano {tierConfig.displayName}
+    <div className="space-y-4 min-w-0 overflow-hidden">
+      {/* ── COMPACT HERO STRIP ── */}
+      <Card className="relative overflow-hidden border-border bg-gradient-to-br from-card via-emerald-950/20 to-card p-4 md:p-5">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/[0.06] rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="relative">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <Badge className="border-amber-400/30 bg-amber-500/10 text-amber-200 text-[10px]">
+              Plano {tierConfig.displayName}
+            </Badge>
+            <Badge className="border-emerald-400/30 bg-emerald-500/10 text-emerald-200 text-[10px]">
+              {userCourses.length} curso{userCourses.length === 1 ? "" : "s"}
+            </Badge>
+            {!tierConfig.limits.unlimited && enrollmentSlots && (
+              <Badge className="border-border bg-secondary text-white/80 text-[10px]">
+                {totalSlotsAvailable} vaga{totalSlotsAvailable === 1 ? "" : "s"} livre{totalSlotsAvailable === 1 ? "" : "s"}
               </Badge>
-              <Badge className="border-emerald-400/30 bg-emerald-500/10 text-emerald-200">
-                {userCourses.length} curso{userCourses.length === 1 ? "" : "s"} no seu acervo
-              </Badge>
-              {!tierConfig.limits.unlimited && enrollmentSlots && (
-                <Badge className="border-border bg-secondary text-white/80">
-                  {totalSlotsAvailable} vaga{totalSlotsAvailable === 1 ? "" : "s"} livre{totalSlotsAvailable === 1 ? "" : "s"} este mês
-                </Badge>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-3xl font-black tracking-tight text-white md:text-4xl">
-                Seu próximo passo em IA precisa estar claro.
-              </h2>
-              <p className="max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">
-                Retome seu próximo capítulo, enxergue o que cabe no seu plano agora e descubra quais cursos desbloqueiam mais valor sem sair da jornada.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-border bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Em andamento</p>
-                <p className="mt-2 text-3xl font-black text-white">{activeCourses.length}</p>
-                <p className="mt-1 text-xs text-muted-foreground">Cursos que realmente pedem retomada agora.</p>
-              </div>
-              <div className="rounded-2xl border border-border bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Disponíveis agora</p>
-                <p className="mt-2 text-3xl font-black text-emerald-300">{coursesAvailableNow}</p>
-                <p className="mt-1 text-xs text-muted-foreground">Entre cursos liberados, grátis do mês e catálogo atual do plano.</p>
-              </div>
-              <div className="rounded-2xl border border-border bg-black/25 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Concluídos</p>
-                <p className="mt-2 text-3xl font-black text-fuchsia-300">{completedCourses.length}</p>
-                <p className="mt-1 text-xs text-muted-foreground">Cursos já fechados e prontos para certificação ou revisão.</p>
-              </div>
-            </div>
+            )}
           </div>
 
-          <div className="rounded-3xl border border-border bg-secondary p-5 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Capacidade do plano</p>
-                <h3 className="mt-2 text-xl font-bold text-white">Mapa de vagas</h3>
-              </div>
-              {!tierConfig.limits.unlimited && (
-                <Link href="/precos">
-                  <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 text-white">
-                    <Crown size={16} className="mr-2" />
-                    Upgrade
-                  </Button>
-                </Link>
-              )}
-            </div>
+          <h2 className="text-lg md:text-2xl font-extrabold tracking-tight text-white">
+            Sua biblioteca de cursos
+          </h2>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1 line-clamp-2">
+            Retome de onde parou, explore o catálogo do seu plano e descubra novos cursos.
+          </p>
 
-            <div className="mt-5 space-y-4">
-              {[
-                { key: "beginner", label: "Iniciantes", accent: "bg-cyan-400", tone: "text-cyan-300" },
-                { key: "intermediate", label: "Intermediários", accent: "bg-amber-400", tone: "text-amber-300" },
-                { key: "advanced", label: "Avançados", accent: "bg-fuchsia-400", tone: "text-fuchsia-300" },
-              ].map(({ key, label, accent, tone }) => {
-                const slot = enrollmentSlots?.[key as keyof EnrollmentSlots];
-                const used = slot?.used ?? 0;
-                const limit = slot?.limit ?? 0;
-                const width = limit && limit !== Infinity ? Math.min(100, (used / limit) * 100) : 0;
-                return (
-                  <div key={key} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className={cn("text-sm font-semibold", tone)}>{label}</p>
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {slot ? `${slot.available} ${slot.available === 1 ? "vaga disponível" : "vagas disponíveis"}` : "Carregando vagas..."}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-black text-white">{used}/{limit === Infinity ? "∞" : limit}</p>
-                      </div>
-                    </div>
-                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                      <div className={cn("h-full rounded-full", accent)} style={{ width: `${width}%` }} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          {/* Quick stats row */}
+          <div className="flex gap-2 mt-3 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {[
+              { label: "Em andamento", value: activeCourses.length, color: "text-white" },
+              { label: "Disponíveis", value: coursesAvailableNow, color: "text-emerald-300" },
+              { label: "Concluídos", value: completedCourses.length, color: "text-fuchsia-300" },
+            ].map((stat) => (
+              <div key={stat.label} className="shrink-0 rounded-xl border border-border bg-black/25 px-3 py-2 min-w-[90px]">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{stat.label}</p>
+                <p className={cn("text-xl font-black mt-0.5", stat.color)}>{stat.value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </Card>
 
-      {/* ── COURSE THUMBNAILS GALLERY ── */}
+      {/* ── ENROLLED COURSES — thumbnail gallery ── */}
       {startedCourses.length > 0 && (
-        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(3,7,18,0.97))] p-6">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-                <BookOpen size={18} className="text-white" />
+        <Card className="border-border bg-card p-4 md:p-5 overflow-hidden">
+          <div className="flex items-center justify-between mb-3 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0">
+                <BookOpen size={15} className="text-white" />
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">Seus Cursos</h3>
-                <p className="text-sm text-muted-foreground">{startedCourses.length} curso{startedCourses.length === 1 ? "" : "s"} no seu acervo</p>
+              <div className="min-w-0">
+                <h3 className="text-base font-bold truncate">Seus Cursos</h3>
+                <p className="text-xs text-muted-foreground">{startedCourses.length} no acervo</p>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3">
             {startedCourses.map((course) => {
               const thumb = COURSE_THUMBNAILS[course.courseId];
               const FallbackIcon = thumb?.icon || Sparkles;
@@ -464,25 +356,23 @@ export function CoursesPanel({
 
               return (
                 <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
-                  <div className="group relative flex flex-col rounded-2xl border border-border bg-card overflow-hidden transition-all hover:border-amber-500/40 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/5">
-                    {/* Thumbnail area */}
+                  <div className="group relative flex flex-col rounded-xl border border-border bg-card overflow-hidden transition-all hover:border-amber-500/40">
                     <div className={cn(
-                      "relative aspect-square flex items-center justify-center bg-gradient-to-br p-4",
+                      "relative aspect-square flex items-center justify-center bg-gradient-to-br p-3",
                       gradient
                     )}>
                       {thumb?.logo ? (
                         <CourseToolIcon
                           logo={thumb.logo}
                           name={course.details?.tool || course.courseId}
-                          className="w-12 h-12 rounded-xl"
+                          className="w-10 h-10 rounded-lg"
                         />
                       ) : (
-                        <FallbackIcon size={36} className="text-white/90" />
+                        <FallbackIcon size={28} className="text-white/90" />
                       )}
 
-                      {/* Progress ring overlay */}
-                      <div className="absolute bottom-2 right-2">
-                        <div className="relative w-8 h-8">
+                      <div className="absolute bottom-1.5 right-1.5">
+                        <div className="relative w-7 h-7">
                           <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                             <circle cx="18" cy="18" r="14" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.15)" strokeWidth="3" />
                             <circle
@@ -495,35 +385,31 @@ export function CoursesPanel({
                             />
                           </svg>
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-[8px] font-bold text-white">{course.progressPercent}%</span>
+                            <span className="text-[7px] font-bold text-white">{course.progressPercent}%</span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Completed checkmark */}
                       {isCompleted && (
-                        <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
-                          <CheckCircle2 size={14} className="text-white" />
+                        <div className="absolute top-1.5 left-1.5 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                          <CheckCircle2 size={12} className="text-white" />
                         </div>
                       )}
 
-                      {/* Hover overlay */}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                        <PlayCircle size={28} className="text-white/0 group-hover:text-white/90 transition-all scale-75 group-hover:scale-100" />
+                        <PlayCircle size={22} className="text-white/0 group-hover:text-white/90 transition-all scale-75 group-hover:scale-100" />
                       </div>
                     </div>
 
-                    {/* Title */}
-                    <div className="p-2.5 flex-1 flex flex-col justify-between">
-                      <h4 className="text-xs font-semibold text-white line-clamp-2 leading-snug group-hover:text-amber-300 transition-colors">
+                    <div className="p-2 flex-1 min-w-0">
+                      <h4 className="text-[10px] md:text-xs font-semibold text-white line-clamp-2 leading-snug group-hover:text-amber-300 transition-colors">
                         {course.details?.title || course.courseId}
                       </h4>
-                      <p className="text-[10px] text-muted-foreground mt-1.5">
+                      <p className="text-[9px] text-muted-foreground mt-1 truncate">
                         {course.details?.tool || "IA"}
                       </p>
                     </div>
 
-                    {/* Progress bar */}
                     <div className="h-1 w-full bg-white/5">
                       <div
                         className={cn("h-full transition-all", isCompleted ? "bg-emerald-500" : "bg-amber-500")}
@@ -538,559 +424,514 @@ export function CoursesPanel({
         </Card>
       )}
 
-      <div className="grid gap-4 xl:grid-cols-[1.1fr,0.9fr]">
-        <Card className="overflow-hidden border-emerald-500/20 bg-[linear-gradient(135deg,rgba(6,95,70,0.18),rgba(3,7,18,0.98))] p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-3">
-              <Badge className="border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
-                <Gift size={13} className="mr-2" />
-                Oferta do Mês — R$1
-              </Badge>
-              <div>
-                <h3 className="text-2xl font-black text-white">
-                  {freeMonthlyCourse?.title || `Todo mês um curso completo por apenas US$1 (${formattedBrl})`}
-                </h3>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-50/80">
-                  {freeMonthlyCourse
-                    ? `Curso completo com acesso vitalício + certificado verificável por US$1 (${formattedBrl}). Oferta exclusiva deste mês.`
-                    : `A cada mês um curso completo fica disponível por US$1 (${formattedBrl}) para qualquer conta experimentar o valor real da academia.`}
-                </p>
+      {/* ── MONTHLY OFFER — compact card ── */}
+      {freeMonthlyCourse && (
+        <Card className="border-emerald-500/20 bg-card overflow-hidden">
+          <div className="p-4 md:p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center shrink-0">
+                <Gift size={15} className="text-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold truncate">Oferta do Mês</h3>
+                  <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[9px] shrink-0">
+                    US$1 ({formattedBrl})
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground">Curso completo + certificado</p>
               </div>
             </div>
-            {freeMonthlyCourse && (
-              <Badge className={cn("border text-xs", courseLevelBadgeStyles[freeMonthlyCourse.normalizedLevel])}>
-                {courseLevelLabels[freeMonthlyCourse.normalizedLevel]}
-              </Badge>
-            )}
-          </div>
 
-          {freeMonthlyCourse ? (
-            <div className="mt-6 grid gap-4 md:grid-cols-[1fr,auto]">
-              <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-border bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Ferramenta</p>
-                  <p className="mt-2 text-lg font-bold text-white">{freeMonthlyCourse.tool}</p>
-                </div>
-                <div className="rounded-2xl border border-border bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Duração</p>
-                  <p className="mt-2 text-lg font-bold text-white">{freeMonthlyCourse.duration}</p>
-                </div>
-                <div className="rounded-2xl border border-border bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Certificado</p>
-                  <p className="mt-2 text-lg font-bold text-white">Incluído</p>
+            <div className="bg-secondary rounded-lg p-3 border border-border">
+              <div className="flex gap-3 min-w-0">
+                {/* Course thumbnail */}
+                {(() => {
+                  const thumb = COURSE_THUMBNAILS[freeMonthlyCourse.slug];
+                  const FallbackIcon = thumb?.icon || Sparkles;
+                  const gradient = thumb?.gradient || "from-emerald-600 to-teal-800";
+                  return (
+                    <div className={cn("w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0", gradient)}>
+                      {thumb?.logo ? (
+                        <CourseToolIcon logo={thumb.logo} name={freeMonthlyCourse.tool} className="w-8 h-8 rounded-lg" />
+                      ) : (
+                        <FallbackIcon size={22} className="text-white/90" />
+                      )}
+                    </div>
+                  );
+                })()}
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-semibold text-white truncate">{freeMonthlyCourse.title}</h4>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{freeMonthlyCourse.shortDescription}</p>
+                  <div className="flex items-center gap-3 mt-1.5">
+                    <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><Clock size={9} />{freeMonthlyCourse.duration}</span>
+                    <span className="text-[10px] text-muted-foreground">{freeMonthlyCourse.totalLessons} aulas</span>
+                    <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", courseLevelBadgeStyles[freeMonthlyCourse.normalizedLevel])}>
+                      {courseLevelLabels[freeMonthlyCourse.normalizedLevel]}
+                    </Badge>
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <Link href={`/curso/${freeMonthlyCourse.slug}`}>
-                  <Button variant="outline" className="w-full border-white/15 bg-secondary text-white hover:bg-white/10">
+
+              <div className="flex gap-2 mt-3">
+                <Link href={`/curso/${freeMonthlyCourse.slug}`} className="flex-1">
+                  <Button variant="outline" size="sm" className="w-full border-border bg-card text-white hover:bg-white/10 text-xs h-8">
                     Ver detalhes
                   </Button>
                 </Link>
                 {freeMonthlyCourseIsEnrolled ? (
-                  <Link href={`/portal/learn/${freeMonthlyCourse.slug}`}>
-                    <Button className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400">
-                      <CheckCircle2 size={16} className="mr-2" />
-                      Já liberado
+                  <Link href={`/portal/learn/${freeMonthlyCourse.slug}`} className="flex-1">
+                    <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-500 text-xs h-8 gap-1">
+                      <CheckCircle2 size={12} /> Já liberado
                     </Button>
                   </Link>
                 ) : (
-                  <Link href={`/curso/${freeMonthlyCourse.slug}`}>
-                    <Button
-                      className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400"
-                    >
-                      <Gift size={16} className="mr-2" />
-                      Adquirir por US$1
+                  <Link href={`/curso/${freeMonthlyCourse.slug}`} className="flex-1">
+                    <Button size="sm" className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black text-xs h-8 gap-1">
+                      <Gift size={12} /> Adquirir US$1
                     </Button>
                   </Link>
                 )}
               </div>
             </div>
-          ) : (
-            <div className="mt-5 rounded-2xl border border-dashed border-border bg-black/20 p-5 text-sm text-muted-foreground">
-              A rotação mensal não encontrou um curso gratuito válido. Vale revisar o catálogo ativo deste mês.
-            </div>
-          )}
-        </Card>
-
-        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.96))] p-6">
-          <div className="flex items-start gap-3">
-            <CalendarDays className="mt-1 text-cyan-300" size={20} />
-            <div>
-              <h3 className="text-xl font-bold text-white">Seu plano neste mês</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Clareza total sobre o que já está incluído, o que entra na rotação e o que depende de upgrade.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-5 space-y-3">
-            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Incluído agora</p>
-              <p className="mt-2 text-2xl font-black text-white">{planMonthlyCourses.length + (freeMonthlyCourseCanClaim ? 1 : 0)}</p>
-              <p className="mt-1 text-xs text-muted-foreground">Oferta do mês (US$1) + catálogo do seu plano disponível nesta rotação.</p>
-            </div>
-            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Exige upgrade</p>
-              <p className="mt-2 text-2xl font-black text-fuchsia-300">{lockedByPlanCourses.length}</p>
-              <p className="mt-1 text-xs text-muted-foreground">Cursos do mês atual fora da faixa desbloqueada pelo seu plano.</p>
-            </div>
-            <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Próxima rotação</p>
-              <p className="mt-2 text-2xl font-black text-cyan-300">{rotationPreviewCourses.length}</p>
-              <p className="mt-1 text-xs text-muted-foreground">Cursos que podem aparecer em outro mês, mantendo a vitrine sempre fresca.</p>
-            </div>
           </div>
         </Card>
-      </div>
+      )}
 
-      <div className="grid gap-4 xl:grid-cols-[1.15fr,0.85fr]">
-        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02)_10%,rgba(3,7,18,0.96)_100%)] p-6 backdrop-blur-2xl">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-bold text-white">Pool mensal completo</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Aqui está a vitrine inteira do mês, com a oferta por US$1, o que seu plano já libera e o que ainda pede upgrade.
-              </p>
+      {/* ── COURSE LIBRARY — the main catalog view ── */}
+      <Card className="border-border bg-card p-4 md:p-5 overflow-hidden">
+        <div className="flex items-center justify-between mb-3 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shrink-0">
+              <Sparkles size={15} className="text-white" />
             </div>
-            <Badge className="border-border bg-white/[0.04] text-white/80">
-              {currentMonthlyPool.length} curso{currentMonthlyPool.length === 1 ? "" : "s"} na rotação
-            </Badge>
+            <div className="min-w-0">
+              <h3 className="text-base font-bold truncate">Biblioteca</h3>
+              <p className="text-xs text-muted-foreground">{currentMonthlyPool.length} cursos na rotação deste mês</p>
+            </div>
           </div>
+        </div>
 
-          <div className="mt-5 grid gap-4 lg:grid-cols-3">
-            {[
-              { key: "beginner", title: "Iniciantes", tone: "text-cyan-300" },
-              { key: "intermediate", title: "Intermediários", tone: "text-amber-300" },
-              { key: "advanced", title: "Avançados", tone: "text-fuchsia-300" },
-            ].map(({ key, title, tone }) => {
-              const courses = monthlyPoolByLevel[key as keyof typeof monthlyPoolByLevel];
+        {/* Filter tabs */}
+        <div className="flex gap-1.5 mb-4 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {([
+            { key: "all" as const, label: "Todos" },
+            { key: "beginner" as const, label: "Iniciantes" },
+            { key: "intermediate" as const, label: "Intermediários" },
+            { key: "advanced" as const, label: "Avançados" },
+          ]).map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setLibraryFilter(key)}
+              className={cn(
+                "shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all",
+                libraryFilter === key
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                  : "bg-secondary text-muted-foreground border border-border hover:text-white"
+              )}
+            >
+              {label}
+              {filterCounts[key] > 0 && (
+                <span className="ml-1.5 text-[9px] opacity-70">{filterCounts[key]}</span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Library cards */}
+        <div className="space-y-2">
+          {filteredLibraryCourses.length > 0 ? (
+            filteredLibraryCourses.map((course) => {
+              const thumb = COURSE_THUMBNAILS[course.slug];
+              const FallbackIcon = thumb?.icon || Sparkles;
+              const gradient = thumb?.gradient || "from-slate-600 to-slate-800";
+
+              const statusLabel = course.isFreeMonthlyCourse
+                ? `US$1 (${formattedBrl})`
+                : course.isEnrolled
+                  ? "No acervo"
+                  : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
+                    ? "Disponível"
+                    : course.canAccessLevel && course.canAccessThisMonth && !course.hasAvailableSlot
+                      ? "Sem vaga"
+                      : "Upgrade";
+              const statusClass = course.isFreeMonthlyCourse
+                ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
+                : course.isEnrolled
+                  ? "bg-cyan-500/10 text-cyan-300 border-cyan-500/20"
+                  : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
+                    ? "bg-white/5 text-white/70 border-border"
+                    : course.canAccessLevel && course.canAccessThisMonth && !course.hasAvailableSlot
+                      ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
+                      : "bg-fuchsia-500/10 text-fuchsia-300 border-fuchsia-500/20";
+              const isLocked = !course.isEnrolled && !course.canEnroll && !course.isFreeMonthlyCourse;
 
               return (
-                <div key={key} className="rounded-[24px] border border-white/8 bg-black/20 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <h4 className={cn("text-sm font-semibold", tone)}>{title}</h4>
-                    <span className="text-xs text-muted-foreground">{courses.length}</span>
-                  </div>
+                <div
+                  key={course.slug}
+                  className={cn(
+                    "bg-secondary rounded-lg p-3 border border-border transition-all overflow-hidden",
+                    course.isEnrolled && "hover:border-emerald-500/30 cursor-pointer",
+                    course.canEnroll && "hover:border-amber-500/30 cursor-pointer",
+                    isLocked && "opacity-60"
+                  )}
+                  onClick={() => {
+                    if (course.isEnrolled) {
+                      window.location.href = `/portal/learn/${course.slug}`;
+                    }
+                  }}
+                >
+                  <div className="flex gap-3 min-w-0">
+                    {/* Thumbnail */}
+                    <div className={cn("w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0", gradient)}>
+                      {thumb?.logo ? (
+                        <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-7 h-7 rounded-lg" />
+                      ) : (
+                        <FallbackIcon size={18} className="text-white/90" />
+                      )}
+                    </div>
 
-                  <div className="mt-4 space-y-2">
-                    {courses.length > 0 ? (
-                      courses.map((course) => {
-                        const statusLabel = course.isFreeMonthlyCourse
-                          ? `US$1 (${formattedBrl}) — Oferta do mês`
-                          : course.isEnrolled
-                            ? "Já no seu acervo"
-                            : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
-                              ? "Disponível no seu plano"
-                              : course.canAccessLevel && course.canAccessThisMonth && !course.hasAvailableSlot
-                                ? "Sem vaga neste ciclo"
-                                : "Upgrade necessário";
-                        const statusClass = course.isFreeMonthlyCourse
-                          ? "border-emerald-400/20 bg-emerald-500/10 text-emerald-200"
-                          : course.isEnrolled
-                            ? "border-cyan-400/20 bg-cyan-500/10 text-cyan-200"
-                            : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot
-                              ? "border-border bg-white/[0.05] text-white/80"
-                              : course.canAccessLevel && course.canAccessThisMonth && !course.hasAvailableSlot
-                                ? "border-amber-400/20 bg-amber-500/10 text-amber-200"
-                                : "border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200";
-
-                        return (
-                          <div key={course.slug} className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0">
-                                <p className="truncate text-sm font-semibold text-white">{course.title}</p>
-                                <p className="mt-1 text-xs text-muted-foreground">{course.duration} · {course.tool}</p>
-                              </div>
-                              <Badge className={cn("border text-[10px]", statusClass)}>
-                                {statusLabel}
-                              </Badge>
-                            </div>
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <div className="rounded-2xl border border-dashed border-border bg-white/[0.02] p-3 text-sm text-muted-foreground">
-                        Nenhum curso nessa faixa nesta rotação.
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 min-w-0">
+                        <h4 className="text-sm font-semibold text-white truncate flex-1 min-w-0">{course.title}</h4>
+                        <Badge className={cn("text-[9px] h-4 px-1.5 border shrink-0", statusClass)}>
+                          {statusLabel}
+                        </Badge>
                       </div>
-                    )}
+
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><Clock size={9} />{course.duration}</span>
+                        <span className="text-[10px] text-muted-foreground">{course.tool}</span>
+                        <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", courseLevelBadgeStyles[course.normalizedLevel])}>
+                          {courseLevelLabels[course.normalizedLevel]}
+                        </Badge>
+                      </div>
+
+                      {/* Action row */}
+                      <div className="flex items-center justify-between mt-2">
+                        <p className="text-[10px] text-muted-foreground/70 truncate flex-1 min-w-0 mr-2">
+                          {course.totalLessons} aulas
+                        </p>
+                        {course.isEnrolled ? (
+                          <Link href={`/portal/learn/${course.slug}`} className="shrink-0">
+                            <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-0.5">
+                              <PlayCircle size={10} /> Continuar
+                            </span>
+                          </Link>
+                        ) : course.canEnroll ? (
+                          <Button
+                            size="sm"
+                            className="h-6 text-[10px] px-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-black font-semibold gap-1"
+                            onClick={(e) => { e.stopPropagation(); onEnroll(course.slug); }}
+                            disabled={isEnrolling === course.slug}
+                          >
+                            {isEnrolling === course.slug ? (
+                              <Loader2 size={10} className="animate-spin" />
+                            ) : course.isFreeMonthlyCourse ? (
+                              <><Gift size={10} /> US$1</>
+                            ) : (
+                              <><Sparkles size={10} /> Liberar</>
+                            )}
+                          </Button>
+                        ) : (
+                          <span className="text-[10px] text-muted-foreground/50 shrink-0 flex items-center gap-0.5">
+                            {isLocked && <Lock size={9} />}
+                            {course.hasAvailableSlot ? "Upgrade" : "Próximo ciclo"}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-6">
+              <Filter size={20} className="text-muted-foreground mx-auto mb-2" />
+              <p className="text-xs text-muted-foreground">Nenhum curso nessa faixa neste mês</p>
+            </div>
+          )}
+        </div>
+      </Card>
+
+      {/* ── PLAN CATALOG — available courses to enroll ── */}
+      {planMonthlyCourses.length > 0 && (
+        <Card className="border-border bg-card p-4 md:p-5 overflow-hidden">
+          <div className="flex items-center justify-between mb-3 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shrink-0">
+                <Rocket size={15} className="text-white" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-base font-bold truncate">Catálogo do plano</h3>
+                <p className="text-xs text-muted-foreground">Incluído no plano {tierConfig.displayName} este mês</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            {planMonthlyCourses.map((course) => {
+              const thumb = COURSE_THUMBNAILS[course.slug];
+              const FallbackIcon = thumb?.icon || Sparkles;
+              const gradient = thumb?.gradient || "from-slate-600 to-slate-800";
+
+              return (
+                <div key={course.slug} className="bg-secondary rounded-lg p-3 border border-border hover:border-emerald-500/30 transition-all overflow-hidden">
+                  <div className="flex gap-3 min-w-0">
+                    <div className={cn("w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0", gradient)}>
+                      {thumb?.logo ? (
+                        <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-7 h-7 rounded-lg" />
+                      ) : (
+                        <FallbackIcon size={18} className="text-white/90" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-white truncate">{course.title}</h4>
+                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{course.shortDescription}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><Clock size={9} />{course.duration}</span>
+                        <span className="text-[10px] text-muted-foreground">{course.totalLessons} aulas</span>
+                        <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", courseLevelBadgeStyles[course.normalizedLevel])}>
+                          {courseLevelLabels[course.normalizedLevel]}
+                        </Badge>
+                      </div>
+                      <div className="mt-2">
+                        <Button
+                          size="sm"
+                          className="h-7 text-xs px-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-black font-bold gap-1"
+                          onClick={() => onEnroll(course.slug)}
+                          disabled={isEnrolling === course.slug}
+                        >
+                          {isEnrolling === course.slug ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : (
+                            <><Sparkles size={12} /> Liberar no plano</>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
         </Card>
+      )}
 
-        <Card className="border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(3,7,18,0.96))] p-6 backdrop-blur-2xl">
-          <div className="flex items-start gap-3">
-            <Award className="mt-1 text-emerald-300" size={20} />
-            <div>
-              <h3 className="text-xl font-bold text-white">Certificação neste mês</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Entenda em quais cursos o certificado já está incluído e onde o seu plano entra como vantagem.
-              </p>
-            </div>
-          </div>
+      {/* ── FEATURED COURSE — compact ── */}
+      {journeyCourses.length > 0 && journeyCourses[0] && (() => {
+        const featured = journeyCourses[0];
+        const isActive = featured.progressPercent > 0 && featured.progressPercent < 100;
 
-          <div className="mt-5 space-y-3">
-            <div className="rounded-[22px] border border-emerald-400/15 bg-emerald-500/8 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">Oferta do Mês — US$1 ({formattedBrl})</p>
-              <p className="mt-2 text-lg font-bold text-white">Acesso vitalício + certificado por US$1</p>
-              <p className="mt-1 text-sm leading-6 text-emerald-50/75">
-                O curso do mês inclui acesso permanente e certificado verificável. Uma aquisição real por um valor simbólico.
-              </p>
-            </div>
-
-            <div className="rounded-[22px] border border-border bg-white/[0.03] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Cursos do plano neste mês</p>
-              <p className="mt-2 text-lg font-bold text-white">
-                {certificateDiscountPercent > 0
-                  ? `Certificação com ${certificateDiscountPercent}% de desconto no seu plano`
-                  : "Certificação disponível conforme a trilha escolhida"}
-              </p>
-              <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                Ao concluir qualquer curso da sua pool mensal, você decide em qual deles quer avançar com a certificação usando o benefício do seu plano.
-              </p>
-            </div>
-
-            <div className="rounded-[22px] border border-cyan-400/10 bg-cyan-500/[0.04] p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-cyan-300">Como aproveitar melhor este mês</p>
-              <p className="mt-2 text-sm leading-6 text-cyan-50/75">
-                Comece pela oferta do mês por US$1, compare a pool liberada no seu plano e use o upgrade só quando quiser destravar o próximo nível.
-              </p>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {featuredCourse && (
-        <div className="grid gap-4 xl:grid-cols-[1.3fr,0.7fr]">
-          <Link href={`/portal/learn/${featuredCourse.courseId}`}>
-            <Card className="group relative overflow-hidden border-emerald-500/20 bg-[linear-gradient(135deg,rgba(6,78,59,0.24),rgba(3,7,18,0.98))] p-6 transition hover:-translate-y-0.5 hover:border-emerald-400/40">
-              <div className="absolute right-4 top-4 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200">
-                {featuredBadgeLabel}
-              </div>
-              <div className="flex h-full flex-col justify-between gap-8">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-emerald-200/80">
-                    <TrendingUp size={14} />
-                    {featuredEyebrow}
-                  </div>
-                  <div>
-                    <h3 className="max-w-2xl text-2xl font-black leading-tight text-white md:text-3xl">
-                      {featuredCourse.details?.title || featuredCourse.courseId}
-                    </h3>
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-emerald-50/80">
-                      {featuredDescription}
-                    </p>
-                  </div>
+        return (
+          <Link href={`/portal/learn/${featured.courseId}`}>
+            <Card className="group relative overflow-hidden border-emerald-500/20 bg-card p-4 md:p-5 transition hover:border-emerald-400/40">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-600 flex items-center justify-center shrink-0">
+                  <TrendingUp size={18} className="text-white" />
                 </div>
-
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-border bg-black/20 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Progresso</p>
-                    <p className="mt-2 text-3xl font-black text-white">{featuredCourse.progressPercent}%</p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Badge className="border-emerald-400/20 bg-emerald-500/10 text-emerald-200 text-[9px]">
+                      {isActive ? "Continue agora" : "Pronto para começar"}
+                    </Badge>
                   </div>
-                  <div className="rounded-2xl border border-border bg-black/20 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Ferramenta</p>
-                    <p className="mt-2 text-lg font-bold text-white">{featuredCourse.details?.tool || "IA"}</p>
-                  </div>
-                  <div className="rounded-2xl border border-border bg-black/20 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Duração</p>
-                    <p className="mt-2 text-lg font-bold text-white">{featuredCourse.details?.duration || "Curso completo"}</p>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <Progress value={featuredCourse.progressPercent} className="h-2.5 bg-white/10" />
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-emerald-100/80">{featuredNextStepCopy}</p>
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-200">
-                      Abrir curso
-                      <ArrowRight size={16} className="transition group-hover:translate-x-1" />
+                  <h3 className="text-base md:text-lg font-bold text-white truncate group-hover:text-emerald-200 transition-colors">
+                    {featured.details?.title || featured.courseId}
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {featured.details?.shortDescription || "Retome de onde parou com progresso salvo."}
+                  </p>
+                  <div className="mt-3">
+                    <Progress value={featured.progressPercent} className="h-1.5 bg-white/10" />
+                    <div className="flex items-center justify-between mt-1.5">
+                      <span className="text-[10px] text-muted-foreground">{featured.progressPercent}% concluído</span>
+                      <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-0.5">
+                        Abrir <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             </Card>
           </Link>
+        );
+      })()}
 
-          <div className="space-y-4">
-            {secondaryJourneyCourses.length > 0 ? (
-              secondaryJourneyCourses.map((course) => {
-                const isActive = course.progressPercent > 0 && course.progressPercent < 100;
-                const badgeLabel = isActive ? "Em andamento" : "Pronto para começar";
-                const badgeClassName = isActive
-                  ? "border-cyan-400/20 bg-cyan-500/10 text-cyan-200"
-                  : "border-emerald-400/20 bg-emerald-500/10 text-emerald-200";
-                const progressCopy = isActive ? `${course.progressPercent}% concluído` : "Ainda não iniciado";
+      {/* ── OTHER JOURNEY COURSES ── */}
+      {journeyCourses.length > 1 && (
+        <div className="space-y-2">
+          {journeyCourses.slice(1, 5).map((course) => {
+            const isActive = course.progressPercent > 0 && course.progressPercent < 100;
 
-                return (
-                <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
-                  <Card className="group border-border bg-white/[0.03] p-4 transition hover:border-cyan-400/30 hover:bg-white/[0.05]">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="space-y-2">
-                        <Badge className={badgeClassName}>{badgeLabel}</Badge>
-                        <h4 className="line-clamp-2 text-base font-bold text-white group-hover:text-cyan-200">
-                          {course.details?.title || course.courseId}
-                        </h4>
-                        <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                          <span className="inline-flex items-center gap-1"><Clock size={12} />{course.details?.duration || "Curso completo"}</span>
-                          <span className="inline-flex items-center gap-1"><BarChart3 size={12} />{progressCopy}</span>
-                        </div>
-                      </div>
-                      <PlayCircle className="mt-1 text-cyan-300 transition group-hover:scale-105" size={22} />
-                    </div>
-                    <Progress value={course.progressPercent} className="mt-4 h-2 bg-white/10" />
-                  </Card>
-                </Link>
-                );
-              })
-            ) : (
-              <Card className="border-dashed border-border bg-white/[0.03] p-5">
-                <div className="flex items-start gap-3">
-                  <Rocket className="mt-0.5 text-amber-300" size={20} />
-                  <div>
-                    <h4 className="font-semibold text-white">Pronto para acelerar?</h4>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Assim que você começar novas trilhas, elas aparecem aqui como atalhos de retomada.
+            return (
+              <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
+                <div className="bg-secondary rounded-lg p-3 border border-border hover:border-emerald-500/30 transition-all cursor-pointer group overflow-hidden">
+                  <div className="flex items-center justify-between mb-1.5 gap-2 min-w-0">
+                    <h4 className="text-sm font-semibold text-foreground truncate min-w-0 flex-1 group-hover:text-emerald-400 transition-colors">
+                      {course.details?.title || course.courseId}
+                    </h4>
+                    <span className={cn(
+                      "text-sm font-extrabold ml-2 tabular-nums shrink-0",
+                      course.progressPercent === 100 ? "text-green-400" : "text-emerald-400"
+                    )}>
+                      {course.progressPercent}%
+                    </span>
+                  </div>
+                  <Progress value={course.progressPercent} className="h-1 bg-secondary" />
+                  <div className="flex items-center justify-between mt-1.5">
+                    <p className="text-xs text-muted-foreground/70 flex items-center gap-1">
+                      {course.details?.tool && <span>{course.details.tool}</span>}
+                      {course.details?.duration && <span>· {course.details.duration}</span>}
+                    </p>
+                    <p className="text-xs text-emerald-400/70 flex items-center gap-0.5">
+                      <PlayCircle size={10} /> {isActive ? "Continuar" : "Começar"}
                     </p>
                   </div>
                 </div>
-              </Card>
-            )}
-          </div>
+              </Link>
+            );
+          })}
         </div>
       )}
 
+      {/* ── COMPLETED COURSES ── */}
       {completedCourses.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-bold text-white">Cursos concluídos</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Revise o que já concluiu, escolha onde emitir certificado e mantenha sua evolução visível.
-              </p>
-            </div>
-            <div className="rounded-full border border-border bg-white/[0.03] px-3 py-1 text-xs font-semibold text-muted-foreground">
-              {completedCourses.length} concluído{completedCourses.length === 1 ? "" : "s"}
+        <Card className="border-border bg-card p-4 md:p-5 overflow-hidden">
+          <div className="flex items-center justify-between mb-3 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shrink-0">
+                <Award size={15} className="text-white" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-base font-bold truncate">Concluídos</h3>
+                <p className="text-xs text-muted-foreground">{completedCourses.length} curso{completedCourses.length === 1 ? "" : "s"}</p>
+              </div>
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="space-y-2">
             {completedCourses.slice(0, 6).map((course) => (
               <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
-                <Card className="group border-border bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(3,7,18,0.96))] p-5 transition hover:border-emerald-400/30 hover:bg-[linear-gradient(180deg,rgba(16,185,129,0.12),rgba(3,7,18,0.98))]">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="space-y-3">
-                      <Badge className="border-emerald-400/20 bg-emerald-500/10 text-emerald-200">
-                        Concluído
-                      </Badge>
-                      <h4 className="line-clamp-2 text-lg font-bold text-white group-hover:text-emerald-200">
+                <div className="bg-secondary rounded-lg p-3 border border-border hover:border-emerald-500/30 transition-all cursor-pointer group overflow-hidden">
+                  <div className="flex items-center justify-between gap-2 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <h4 className="text-sm font-semibold text-foreground truncate min-w-0 group-hover:text-emerald-400 transition-colors">
                         {course.details?.title || course.courseId}
                       </h4>
-                      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                        <span className="inline-flex items-center gap-1"><Clock size={12} />{course.details?.duration || "Curso completo"}</span>
-                        <span className="inline-flex items-center gap-1"><BarChart3 size={12} />100% concluído</span>
-                      </div>
                     </div>
-                    <BookOpen className="mt-1 text-emerald-300 transition group-hover:scale-105" size={22} />
+                    <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-0.5 shrink-0">
+                      Revisar <ChevronRight size={10} />
+                    </span>
                   </div>
-
-                  <div className="mt-5 space-y-3">
-                    <Progress value={100} className="h-2 bg-white/10" />
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-emerald-100/80">Pronto para revisar ou emitir certificado.</span>
-                      <span className="inline-flex items-center gap-2 font-semibold text-emerald-200">
-                        Abrir
-                        <ArrowRight size={15} className="transition group-hover:translate-x-1" />
-                      </span>
-                    </div>
-                  </div>
-                </Card>
+                </div>
               </Link>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
-      {planMonthlyCourses.length > 0 && (
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-xl font-bold text-white">Catálogo do seu plano neste mês</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Estes cursos já fazem parte da vitrine mensal do seu plano e podem ser liberados agora, sem adivinhação.
+      {/* ── LOCKED COURSES — upgrade upsell ── */}
+      {lockedByPlanCourses.length > 0 && (
+        <Card className="border-yellow-500/10 bg-card p-4 md:p-5 overflow-hidden">
+          <div className="flex items-center gap-2 mb-3 min-w-0">
+            <Lock size={14} className="text-yellow-400 shrink-0" />
+            <div className="min-w-0">
+              <h3 className="text-base font-bold truncate">Exigem upgrade</h3>
+              <p className="text-xs text-muted-foreground">Cursos fora da faixa do plano {tierConfig.displayName}</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            {lockedByPlanCourses.map((course) => {
+              const thumb = COURSE_THUMBNAILS[course.slug];
+              const FallbackIcon = thumb?.icon || Sparkles;
+              const gradient = thumb?.gradient || "from-slate-600 to-slate-800";
+
+              return (
+                <div key={course.slug} className="bg-secondary rounded-lg p-3 border border-border opacity-60 overflow-hidden">
+                  <div className="flex gap-3 min-w-0">
+                    <div className={cn("w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0", gradient)}>
+                      {thumb?.logo ? (
+                        <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-6 h-6 rounded-md" />
+                      ) : (
+                        <FallbackIcon size={16} className="text-white/70" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-white truncate">{course.title}</h4>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[10px] text-muted-foreground">{course.duration}</span>
+                        <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", courseLevelBadgeStyles[course.normalizedLevel])}>
+                          {courseLevelLabels[course.normalizedLevel]}
+                        </Badge>
+                      </div>
+                    </div>
+                    <Lock size={12} className="text-fuchsia-300/50 shrink-0 mt-1" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <Link href="/precos">
+            <Button size="sm" className="w-full mt-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold gap-1 text-xs h-8">
+              <Crown size={12} /> Ver Planos
+            </Button>
+          </Link>
+        </Card>
+      )}
+
+      {/* ── CERTIFICATION INFO — compact ── */}
+      <Card className="border-border bg-card p-4 md:p-5 overflow-hidden">
+        <div className="flex items-center gap-2 mb-3 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0">
+            <Award size={15} className="text-white" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-base font-bold truncate">Certificação</h3>
+            <p className="text-xs text-muted-foreground">Como funciona no seu plano</p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <div className="bg-secondary rounded-lg p-3 border border-emerald-500/15">
+            <p className="text-xs font-semibold text-emerald-300">Oferta do Mês — US$1</p>
+            <p className="text-xs text-muted-foreground mt-1">Acesso vitalício + certificado verificável incluído.</p>
+          </div>
+          <div className="bg-secondary rounded-lg p-3 border border-border">
+            <p className="text-xs font-semibold text-white">Cursos do plano</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {certificateDiscountPercent > 0
+                ? `Certificação com ${certificateDiscountPercent}% de desconto no plano ${tierConfig.displayName}.`
+                : "Certificação disponível ao concluir qualquer curso."}
             </p>
           </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {planMonthlyCourses.map((course) => (
-              <Card key={course.slug} className="group overflow-hidden border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(3,7,18,0.95))] transition hover:-translate-y-0.5 hover:border-emerald-400/30">
-                <div className="relative overflow-hidden border-b border-white/5 bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.14),transparent_28%),linear-gradient(135deg,rgba(15,23,42,1),rgba(3,7,18,1))] p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
-                      {courseLevelLabels[course.normalizedLevel]}
-                    </Badge>
-                    <div className="text-right">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Oferta</p>
-                      <p className="text-sm font-semibold text-white">Incluído no mês</p>
-                    </div>
-                  </div>
-                  <h4 className="mt-5 text-xl font-bold leading-tight text-white group-hover:text-emerald-200">
-                    {course.title}
-                  </h4>
-                  <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted-foreground">
-                    {course.shortDescription}
-                  </p>
-                </div>
-                <div className="space-y-4 p-5">
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Aulas</p>
-                      <p className="mt-2 text-lg font-bold text-white">{course.totalLessons}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Duração</p>
-                      <p className="mt-2 text-lg font-bold text-white">{course.duration}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Ferramenta</p>
-                      <p className="mt-2 text-lg font-bold text-white">{course.tool}</p>
-                    </div>
-                  </div>
-
-                  <Button
-                    className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black hover:from-emerald-400 hover:to-cyan-400"
-                    onClick={() => onEnroll(course.slug)}
-                    disabled={isEnrolling === course.slug}
-                  >
-                    {isEnrolling === course.slug ? (
-                      <Loader2 size={16} className="mr-2 animate-spin" />
-                    ) : (
-                      <Sparkles size={16} className="mr-2" />
-                    )}
-                    Liberar no plano
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
         </div>
-      )}
+      </Card>
 
-      {lockedByPlanCourses.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-bold text-white">O que exige upgrade neste mês</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Aqui fica explícito o que está na vitrine mensal, mas pede um plano acima para ser liberado.
-              </p>
+      {/* ── UPGRADE CTA ── */}
+      {!tierConfig.limits.unlimited && (
+        <Card className="relative overflow-hidden border-amber-500/20 bg-gradient-to-r from-amber-950/60 via-card to-amber-950/60 p-4">
+          <div className="relative flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/25 shrink-0">
+                <Crown size={20} className="text-white" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-bold text-sm truncate">Mais cursos e mais vagas</h3>
+                <p className="text-[11px] text-muted-foreground truncate">Desbloqueie todos os níveis com upgrade.</p>
+              </div>
             </div>
-            <Link href="/precos">
-              <Button variant="outline" className="border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-200 hover:bg-fuchsia-500/20">
-                <Crown size={16} className="mr-2" />
-                Ver planos
+            <Link href="/precos" className="shrink-0">
+              <Button size="sm" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold gap-1 text-xs h-8 px-3 shadow-lg shadow-orange-500/20">
+                <TrendingUp size={12} /> Upgrade
               </Button>
             </Link>
           </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {lockedByPlanCourses.map((course) => (
-              <Card key={course.slug} className="overflow-hidden border-fuchsia-500/15 bg-[linear-gradient(180deg,rgba(120,40,200,0.08),rgba(3,7,18,0.96))]">
-                <div className="border-b border-white/5 bg-black/20 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
-                      {courseLevelLabels[course.normalizedLevel]}
-                    </Badge>
-                    <Lock size={16} className="text-fuchsia-300" />
-                  </div>
-                  <h4 className="mt-4 line-clamp-2 text-lg font-bold text-white">{course.title}</h4>
-                </div>
-                <div className="space-y-4 p-4">
-                  <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">{course.shortDescription}</p>
-                  <div className="rounded-2xl border border-fuchsia-400/15 bg-fuchsia-500/5 p-3 text-sm text-fuchsia-100">
-                    Esse curso faz parte da vitrine mensal, mas está fora da faixa desbloqueada pelo seu plano atual.
-                  </div>
-                  <Link href="/precos">
-                    <Button className="w-full bg-secondary text-white hover:bg-white/10">
-                      <Crown size={15} className="mr-2" />
-                      Fazer upgrade
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {slotLockedCourses.length > 0 && (
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-xl font-bold text-white">Seu plano já permite, mas faltam vagas</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Esses cursos já combinam com seu plano, porém as vagas mensais dessa faixa foram consumidas.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {slotLockedCourses.map((course) => (
-              <Card key={course.slug} className="overflow-hidden border-amber-500/15 bg-[linear-gradient(180deg,rgba(245,158,11,0.08),rgba(3,7,18,0.96))]">
-                <div className="border-b border-white/5 bg-black/20 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
-                      {courseLevelLabels[course.normalizedLevel]}
-                    </Badge>
-                    <CalendarDays size={16} className="text-amber-300" />
-                  </div>
-                  <h4 className="mt-4 line-clamp-2 text-lg font-bold text-white">{course.title}</h4>
-                </div>
-                <div className="space-y-4 p-4">
-                  <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">{course.shortDescription}</p>
-                  <div className="rounded-2xl border border-amber-400/15 bg-amber-500/5 p-3 text-sm text-amber-100">
-                    Aguarde a próxima virada mensal ou faça upgrade para ganhar mais capacidade nesta faixa.
-                  </div>
-                  <Link href="/precos">
-                    <Button className="w-full bg-secondary text-white hover:bg-white/10">
-                      <Crown size={15} className="mr-2" />
-                      Ver opções
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {rotationPreviewCourses.length > 0 && (
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-xl font-bold text-white">Mais cursos entram na próxima rotação</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Transparência total: estes ainda não estão no pool deste mês, mas podem aparecer em ciclos seguintes.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {rotationPreviewCourses.map((course) => (
-              <Card key={course.slug} className="border-border bg-white/[0.03] p-5">
-                <div className="flex items-center justify-between gap-3">
-                  <Badge className={cn("border text-xs", courseLevelBadgeStyles[course.normalizedLevel])}>
-                    {courseLevelLabels[course.normalizedLevel]}
-                  </Badge>
-                  <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Outro mês</span>
-                </div>
-                <h4 className="mt-4 text-lg font-bold text-white">{course.title}</h4>
-                <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">{course.shortDescription}</p>
-                <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{course.duration}</span>
-                  <span>{course.totalLessons} aulas</span>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
+        </Card>
       )}
     </div>
   );

@@ -120,40 +120,42 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
   const completionPercent = Math.round((totalUnlocked / totalAchievements) * 100);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6 min-w-0 overflow-hidden">
       {/* Header Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-secondary border-border p-6">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
-              <Trophy size={28} className="text-white" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+        <Card className="bg-secondary border-border p-3 md:p-6">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-14 md:h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center shrink-0">
+              <Trophy size={20} className="text-white md:hidden" />
+              <Trophy size={28} className="text-white hidden md:block" />
             </div>
-            <div>
-              <p className="text-3xl font-bold">{totalUnlocked}</p>
-              <p className="text-sm text-muted-foreground">Conquistas Desbloqueadas</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="bg-secondary border-border p-6">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full flex items-center justify-center">
-              <Star size={28} className="text-white" />
-            </div>
-            <div>
-              <p className="text-3xl font-bold">{totalAchievements}</p>
-              <p className="text-sm text-muted-foreground">Total de Conquistas</p>
+            <div className="min-w-0">
+              <p className="text-2xl md:text-3xl font-bold">{totalUnlocked}</p>
+              <p className="text-xs md:text-sm text-muted-foreground truncate">Conquistas Desbloqueadas</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-secondary border-border p-6">
-          <div className="space-y-3">
+        <Card className="bg-secondary border-border p-3 md:p-6">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-14 md:h-14 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-full flex items-center justify-center shrink-0">
+              <Star size={20} className="text-white md:hidden" />
+              <Star size={28} className="text-white hidden md:block" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-2xl md:text-3xl font-bold">{totalAchievements}</p>
+              <p className="text-xs md:text-sm text-muted-foreground truncate">Total de Conquistas</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="bg-secondary border-border p-3 md:p-6">
+          <div className="space-y-2 md:space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">Progresso Geral</p>
-              <span className="text-lg font-bold">{completionPercent}%</span>
+              <p className="text-xs md:text-sm text-muted-foreground">Progresso Geral</p>
+              <span className="text-base md:text-lg font-bold">{completionPercent}%</span>
             </div>
-            <Progress value={completionPercent} className="h-3 bg-secondary" />
+            <Progress value={completionPercent} className="h-2 md:h-3 bg-secondary" />
           </div>
         </Card>
       </div>
@@ -164,17 +166,17 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
         const unlockedInCategory = categoryAchievements.filter(a => a.unlocked).length;
 
         return (
-          <div key={category} className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                {CATEGORY_LABELS[category] || category}
-                <Badge variant="outline" className="text-xs">
+          <div key={category} className="space-y-3 md:space-y-4 min-w-0">
+            <div className="flex items-center justify-between min-w-0">
+              <h3 className="text-base md:text-lg font-semibold flex items-center gap-2 min-w-0">
+                <span className="truncate">{CATEGORY_LABELS[category] || category}</span>
+                <Badge variant="outline" className="text-xs shrink-0">
                   {unlockedInCategory}/{categoryAchievements.length}
                 </Badge>
               </h3>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4">
               {categoryAchievements.map((achievement, idx) => {
                 const Icon = ICON_MAP[achievement.icon] || Star;
                 const info = ACHIEVEMENT_NAMES[achievement.id] || { name: achievement.id, description: "" };
@@ -188,55 +190,61 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
                     transition={{ delay: idx * 0.05 }}
                   >
                     <Card className={cn(
-                      "p-4 transition-all group relative overflow-hidden",
-                      achievement.unlocked 
+                      "p-2 md:p-4 transition-all group relative overflow-hidden",
+                      achievement.unlocked
                         ? `bg-gradient-to-br ${TIER_COLORS[achievement.tier]}/10 ${TIER_BORDER[achievement.tier]} hover:scale-105`
                         : "bg-card/50 border-border opacity-60"
                     )}>
                       {/* Tier Badge */}
-                      <Badge 
+                      <Badge
                         className={cn(
-                          "absolute top-2 right-2 text-[10px] capitalize",
+                          "absolute top-1 right-1 md:top-2 md:right-2 text-[9px] md:text-[10px] capitalize",
                           `bg-gradient-to-r ${TIER_COLORS[achievement.tier]} text-white border-0`
                         )}
                       >
                         {achievement.tier}
                       </Badge>
 
-                      <div className="flex flex-col items-center text-center">
+                      <div className="flex flex-col items-center text-center min-w-0">
                         <div className={cn(
-                          "w-16 h-16 rounded-full flex items-center justify-center mb-3",
-                          achievement.unlocked 
+                          "w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mb-2 md:mb-3 shrink-0",
+                          achievement.unlocked
                             ? `bg-gradient-to-br ${TIER_COLORS[achievement.tier]}`
                             : "bg-secondary"
                         )}>
                           {isSecret ? (
-                            <Lock size={24} className="text-muted-foreground" />
+                            <Lock size={18} className="text-muted-foreground md:hidden" />
                           ) : (
-                            <Icon size={24} className={achievement.unlocked ? "text-white" : "text-muted-foreground"} />
+                            <Icon size={18} className={cn("md:hidden", achievement.unlocked ? "text-white" : "text-muted-foreground")} />
+                          )}
+                          {isSecret ? (
+                            <Lock size={24} className="text-muted-foreground hidden md:block" />
+                          ) : (
+                            <Icon size={24} className={cn("hidden md:block", achievement.unlocked ? "text-white" : "text-muted-foreground")} />
                           )}
                         </div>
 
-                        <h4 className="font-semibold text-sm mb-1">
+                        <h4 className="font-semibold text-xs md:text-sm mb-1 truncate w-full">
                           {isSecret ? "???" : info.name}
                         </h4>
-                        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
+                        <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">
                           {isSecret ? "Continue explorando para descobrir!" : info.description}
                         </p>
 
-                        <div className="flex items-center gap-1 text-xs">
-                          <Zap size={12} className="text-yellow-400" />
+                        <div className="flex items-center gap-1 text-[10px] md:text-xs">
+                          <Zap size={10} className="text-yellow-400 md:hidden" />
+                          <Zap size={12} className="text-yellow-400 hidden md:block" />
                           <span className="text-yellow-400 font-semibold">+{achievement.xpReward} XP</span>
                         </div>
 
                         {/* Progress for locked achievements */}
                         {!achievement.unlocked && achievement.progress > 0 && (
-                          <div className="w-full mt-3">
-                            <Progress 
-                              value={(achievement.progress / achievement.requirement.value) * 100} 
-                              className="h-1.5 bg-gray-700" 
+                          <div className="w-full mt-2 md:mt-3">
+                            <Progress
+                              value={(achievement.progress / achievement.requirement.value) * 100}
+                              className="h-1 md:h-1.5 bg-gray-700"
                             />
-                            <p className="text-[10px] text-muted-foreground mt-1">
+                            <p className="text-[9px] md:text-[10px] text-muted-foreground mt-1">
                               {achievement.progress}/{achievement.requirement.value}
                             </p>
                           </div>
@@ -244,7 +252,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
 
                         {/* Unlock date */}
                         {achievement.unlocked && achievement.unlockedAt && (
-                          <p className="text-[10px] text-muted-foreground mt-2">
+                          <p className="text-[9px] md:text-[10px] text-muted-foreground mt-1 md:mt-2 truncate w-full">
                             Desbloqueado em {new Date(achievement.unlockedAt).toLocaleDateString('pt-BR')}
                           </p>
                         )}

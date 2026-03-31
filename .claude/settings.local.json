@@ -58,7 +58,25 @@
       "Bash(find /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src -type f -name *middleware* -o -name *route*)",
       "Bash(grep -r \"supabase\\\\|Supabase\" /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src --include=*.ts --include=*.tsx)",
       "Bash(cmd.exe /c \"npx tsc --noEmit 2>&1\")",
-      "Bash(cmd.exe /c \"npx tsc --noEmit --pretty 2>&1\")"
+      "Bash(cmd.exe /c \"npx tsc --noEmit --pretty 2>&1\")",
+      "Bash(find /c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale] -type d)",
+      "Bash(find \"/c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\(site\\)/portal\" -type f)",
+      "Bash(wc -l \"/c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\(site\\)/portal/page.tsx\" \"/c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/components/portal/CoursesPanel.tsx\" \"/c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/components/portal/DashboardHome.tsx\")",
+      "Bash(ls -la \"/c/Users/ricar/WORKSMAIN/autoresearch/fayapoint-ai/src/app/[locale]/\\(site\\)/portal/\")",
+      "Bash(cmd.exe /c \"npx next build --turbopack 2>&1\")",
+      "Bash(cmd.exe /c \"npx next build --turbopack\")",
+      "Bash(cmd.exe /c \"set PATH=%PATH%;C:\\\\Program Files\\\\nodejs && npx next build --turbopack 2>&1\")",
+      "Bash(cmd.exe /c \"npx next build --turbopack > build_output.txt 2>&1\")",
+      "Bash(/c/Program Files/nodejs/npx.cmd next build --turbopack)",
+      "Bash(ls /c/Users/ricar/AppData/Roaming/npm/npx*)",
+      "Read(//c//**)",
+      "Bash(cmd.exe /c \"where npx 2>&1\")",
+      "Bash(cmd.exe /c \"where node && where npx && echo FOUND\")",
+      "Bash(cmd.exe /c \"where node > C:\\\\Users\\\\ricar\\\\WORKSMAIN\\\\autoresearch\\\\fayapoint-ai\\\\node_path.txt 2>&1\")",
+      "Bash(ls /c/Users/ricar/scoop/apps/nodejs*/current/node.exe)",
+      "Bash(ls /c/Users/ricar/AppData/Local/fnm_multishells/*/node.exe)",
+      "Bash(ls /c/Users/ricar/AppData/Roaming/fnm/node-versions/*/installation/node.exe)",
+      "Bash(export PATH=\"/c/Users/ricar/AppData/Local/fnm_multishells/12744_1774977609953:$PATH\")"
     ]
   }
 }

@@ -1388,9 +1388,9 @@ export default function CourseReaderPage() {
             >
               {/* Top accent bar */}
               <div className="h-[3px] bg-gradient-to-r from-amber-400/60 via-yellow-400/40 to-amber-400/20" />
-              <div className="flex gap-4 px-6 py-5">
-                <span className="flex items-center justify-center shrink-0 w-10 h-10 rounded-xl bg-amber-400/15 border border-amber-400/20 mt-0.5">
-                  <Lightbulb size={20} className="text-amber-400" />
+              <div className="flex gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-5">
+                <span className="flex items-center justify-center shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-400/15 border border-amber-400/20 mt-0.5">
+                  <Lightbulb size={18} className="text-amber-400 sm:w-5 sm:h-5" />
                 </span>
                 <div className="flex-1 min-w-0 text-amber-100/90 [&>p]:text-amber-100/90 [&>p]:leading-[1.75] [&>p:first-child>strong:first-child]:text-amber-300 [&>p:first-child>strong:first-child]:font-semibold">
                   {children}
@@ -1644,7 +1644,7 @@ export default function CourseReaderPage() {
             <div className="w-20 h-20 bg-red-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-500/15">
               <Lock className="text-red-400/80" size={34} />
             </div>
-            <h1 className="text-2xl font-bold mb-3 tracking-tight">Acesso Restrito</h1>
+            <h1 className="text-xl sm:text-2xl font-bold mb-3 tracking-tight">Acesso Restrito</h1>
             <p className="text-white/35 mb-8 text-sm leading-relaxed">
               Você precisa adquirir este curso ou fazer upgrade do seu plano para
               acessar este conteúdo.
@@ -1819,14 +1819,14 @@ export default function CourseReaderPage() {
         </div>
       </header>
 
-      <div className="border-b border-white/[0.04] bg-[#0e1018]/90 backdrop-blur-xl">
+      <div className="border-b border-white/[0.04] bg-[#0e1018]/90 backdrop-blur-xl min-w-0 overflow-hidden">
         <div className="mx-auto flex max-w-[1600px] flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10">
+          <div className="flex items-start gap-3 min-w-0">
+            <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 shrink-0">
               <Award size={16} className="text-emerald-400" />
             </div>
-            <div>
-              <p className="text-sm font-semibold text-white/90">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs sm:text-sm font-semibold text-white/90">
                 {isPtBr ? "Conteúdo verificado editorialmente" : "Editorially verified course content"}
               </p>
               <p className="text-xs text-white/45">
@@ -2024,24 +2024,24 @@ export default function CourseReaderPage() {
               <div className="flex-shrink-0 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-600/[0.04] via-transparent to-amber-600/[0.02]" />
                 <div
-                  className="relative mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
+                  className="relative mx-auto px-4 sm:px-10 lg:px-14 py-8 sm:py-14"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
-                  <div className="flex items-baseline gap-5 mb-6">
-                    <span className="text-6xl sm:text-7xl font-black bg-gradient-to-b from-white/10 to-white/[0.02] bg-clip-text text-transparent select-none leading-none tabular-nums">
+                  <div className="flex items-baseline gap-3 sm:gap-5 mb-6">
+                    <span className="text-4xl sm:text-6xl md:text-7xl font-black bg-gradient-to-b from-white/10 to-white/[0.02] bg-clip-text text-transparent select-none leading-none tabular-nums shrink-0">
                       {String(currentChapterIndex + 1).padStart(2, "0")}
                     </span>
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-1.5 min-w-0">
                       <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-400/50">
                         Capitulo {currentChapterIndex + 1} de {chapters.length}
                       </span>
                       <span className="inline-flex items-center gap-1.5 text-[11px] text-amber-400/60">
-                        <Lock size={10} />
+                        <Lock size={10} className="shrink-0" />
                         Conteudo Premium
                       </span>
                     </div>
                   </div>
-                  <h1 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-bold text-white/40 tracking-tight leading-[1.2]">
+                  <h1 className="text-xl sm:text-3xl lg:text-[2.25rem] font-bold text-white/40 tracking-tight leading-[1.2]">
                     {currentChapter.title}
                   </h1>
                 </div>
@@ -2049,7 +2049,7 @@ export default function CourseReaderPage() {
               </div>
 
               {/* Paywall */}
-              <div className="flex-1 flex items-start justify-center p-6 sm:p-10">
+              <div className="flex-1 flex items-start justify-center p-4 sm:p-10">
                 <div className="w-full" style={{ maxWidth: readerContentMaxWidth }}>
                   <CoursePaywall
                     courseName={courseAccess?.courseTitle || title}
@@ -2071,15 +2071,15 @@ export default function CourseReaderPage() {
                 <div className="absolute top-0 right-0 w-72 h-72 bg-violet-500/[0.03] rounded-full blur-[80px]" />
 
                 <div
-                  className="relative mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
+                  className="relative mx-auto px-4 sm:px-10 lg:px-14 py-8 sm:py-14"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
                   {/* Decorative chapter number */}
-                  <div className="flex items-baseline gap-5 mb-6">
-                    <span className="text-6xl sm:text-7xl font-black bg-gradient-to-b from-violet-400/20 to-violet-400/[0.03] bg-clip-text text-transparent select-none leading-none tabular-nums">
+                  <div className="flex items-baseline gap-3 sm:gap-5 mb-6">
+                    <span className="text-4xl sm:text-6xl md:text-7xl font-black bg-gradient-to-b from-violet-400/20 to-violet-400/[0.03] bg-clip-text text-transparent select-none leading-none tabular-nums shrink-0">
                       {String(currentChapterIndex + 1).padStart(2, "0")}
                     </span>
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-1.5 min-w-0">
                       <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-400/40">
                         Capitulo {currentChapterIndex + 1} de {chapters.length}
                       </span>
@@ -2098,7 +2098,7 @@ export default function CourseReaderPage() {
                     </div>
                   </div>
 
-                  <h1 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-bold text-white/95 tracking-tight leading-[1.2]">
+                  <h1 className="text-xl sm:text-3xl lg:text-[2.25rem] font-bold text-white/95 tracking-tight leading-[1.2]">
                     {currentChapter.title}
                   </h1>
                 </div>
@@ -2108,9 +2108,9 @@ export default function CourseReaderPage() {
               </div>
 
               {/* Chapter content */}
-              <div className="flex-1">
+              <div className="flex-1 min-w-0 overflow-hidden">
                 <div
-                  className="mx-auto px-8 sm:px-10 lg:px-14 py-10 sm:py-14"
+                  className="mx-auto px-4 sm:px-10 lg:px-14 py-8 sm:py-14"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
                   {/* Content Forge media (video, hero image, audio, gallery) */}
@@ -2446,7 +2446,7 @@ export default function CourseReaderPage() {
                 <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
                 <div
-                  className="mx-auto px-8 sm:px-10 lg:px-14 py-8 pb-24 lg:pb-8"
+                  className="mx-auto px-4 sm:px-10 lg:px-14 py-8 pb-24 lg:pb-8"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
                   {/* Mark as complete button */}
@@ -2462,12 +2462,12 @@ export default function CourseReaderPage() {
 
                   {/* Congratulations + Certificate CTA */}
                   {allDone && (
-                    <div className="mb-6 rounded-2xl bg-gradient-to-r from-emerald-500/[0.06] via-amber-500/[0.04] to-violet-500/[0.06] border border-emerald-500/15 overflow-hidden">
-                      <div className="py-5 px-6 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center flex-shrink-0">
-                          <Trophy size={22} className="text-yellow-400" />
+                    <div className="mb-6 rounded-2xl bg-gradient-to-r from-emerald-500/[0.06] via-amber-500/[0.04] to-violet-500/[0.06] border border-emerald-500/15 overflow-hidden min-w-0">
+                      <div className="py-4 px-4 sm:py-5 sm:px-6 flex items-center gap-3 sm:gap-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                          <Trophy size={20} className="text-yellow-400 sm:w-[22px] sm:h-[22px]" />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-white">
                             Parabéns! Curso concluído!
                           </p>
@@ -2476,7 +2476,7 @@ export default function CourseReaderPage() {
                           </p>
                         </div>
                       </div>
-                      <div className="px-6 pb-5">
+                      <div className="px-4 pb-4 sm:px-6 sm:pb-5">
                         <button
                           onClick={() => setShowQuizModal(true)}
                           className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2.5 shadow-lg shadow-amber-600/20"
@@ -2492,20 +2492,20 @@ export default function CourseReaderPage() {
                   )}
 
                   {/* Navigation buttons */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     {currentChapterIndex > 0 ? (
                       <button
                         onClick={goToPrevChapter}
-                        className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.04] hover:border-white/[0.08] transition-all duration-200 group text-left"
+                        className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-2xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.04] hover:border-white/[0.08] transition-all duration-200 group text-left min-w-0 overflow-hidden"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-white/[0.03] group-hover:bg-white/[0.06] flex items-center justify-center flex-shrink-0 transition-colors duration-200 border border-white/[0.04]">
-                          <ChevronLeft size={18} className="text-white/25 group-hover:text-white/50" />
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/[0.03] group-hover:bg-white/[0.06] flex items-center justify-center flex-shrink-0 transition-colors duration-200 border border-white/[0.04]">
+                          <ChevronLeft size={16} className="text-white/25 group-hover:text-white/50 sm:w-[18px] sm:h-[18px]" />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <span className="text-[10px] uppercase tracking-wider text-white/18 block">
                             Anterior
                           </span>
-                          <span className="text-sm text-white/45 group-hover:text-white/65 truncate block mt-0.5 transition-colors">
+                          <span className="text-xs sm:text-sm text-white/45 group-hover:text-white/65 truncate block mt-0.5 transition-colors">
                             {chapters[currentChapterIndex - 1]?.title}
                           </span>
                         </div>
@@ -2518,25 +2518,25 @@ export default function CourseReaderPage() {
                       <button
                         onClick={goToNextChapter}
                         className={cn(
-                          "flex items-center justify-end gap-3 p-4 rounded-2xl transition-all duration-200 group text-right",
+                          "flex items-center justify-end gap-2 sm:gap-3 p-3 sm:p-4 rounded-2xl transition-all duration-200 group text-right min-w-0 overflow-hidden",
                           isChapterLocked(currentChapterIndex + 1)
                             ? "bg-amber-500/[0.04] hover:bg-amber-500/[0.08] border border-amber-500/10 hover:border-amber-500/20"
                             : "bg-violet-500/[0.04] hover:bg-violet-500/[0.08] border border-amber-500/10 hover:border-amber-500/20"
                         )}
                       >
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <span className={cn(
                             "text-[10px] uppercase tracking-wider block",
                             isChapterLocked(currentChapterIndex + 1) ? "text-amber-400/35" : "text-violet-400/35"
                           )}>
                             {isChapterLocked(currentChapterIndex + 1) ? "Premium" : "Proximo"}
                           </span>
-                          <span className="text-sm text-white/55 group-hover:text-white/85 truncate block mt-0.5 transition-colors">
+                          <span className="text-xs sm:text-sm text-white/55 group-hover:text-white/85 truncate block mt-0.5 transition-colors">
                             {chapters[currentChapterIndex + 1]?.title}
                           </span>
                         </div>
                         <div className={cn(
-                          "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 border",
+                          "w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 border",
                           isChapterLocked(currentChapterIndex + 1)
                             ? "bg-amber-500/10 group-hover:bg-amber-500/15 border-amber-500/15"
                             : "bg-violet-500/10 group-hover:bg-violet-500/15 border-amber-500/15"

@@ -161,18 +161,19 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
 
   if (!isPro) {
     return (
-      <div className="flex items-center justify-center min-h-[600px]">
-        <Card className="bg-card/50 border-border p-8 text-center max-w-md">
-          <div className="w-20 h-20 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Bot size={40} className="text-amber-400" />
+      <div className="flex items-center justify-center min-h-[400px] md:min-h-[600px] px-4">
+        <Card className="bg-card/50 border-border p-4 md:p-8 text-center max-w-md w-full">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+            <Bot size={32} className="text-amber-400 md:hidden" />
+            <Bot size={40} className="text-amber-400 hidden md:block" />
           </div>
-          <h2 className="text-2xl font-bold mb-2">Assistente IA</h2>
+          <h2 className="text-xl md:text-2xl font-bold mb-2">Assistente IA</h2>
           <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 mb-4">
             <Crown size={12} className="mr-1" />
             Recurso PRO
           </Badge>
-          <p className="text-muted-foreground mb-6">
-            Upgrade para Pro para ter acesso ao assistente de IA personalizado. 
+          <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
+            Upgrade para Pro para ter acesso ao assistente de IA personalizado.
             Tire dúvidas, receba dicas e acelere seu aprendizado!
           </p>
           <Button className="bg-gradient-to-r from-amber-600 to-yellow-700">
@@ -185,28 +186,30 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-200px)] max-h-[800px]">
+    <div className="flex flex-col h-[calc(100vh-160px)] md:h-[calc(100vh-200px)] max-h-[800px] min-w-0 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center">
-            <Bot size={24} className="text-white" />
+      <div className="flex items-center justify-between mb-3 md:mb-4 gap-2 min-w-0">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center shrink-0">
+            <Bot size={20} className="text-white md:hidden" />
+            <Bot size={24} className="text-white hidden md:block" />
           </div>
-          <div>
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              Assistente IA
-              <Badge className="bg-green-500/20 text-green-400 text-xs">Online</Badge>
+          <div className="min-w-0">
+            <h2 className="text-base md:text-xl font-bold flex items-center gap-2">
+              <span className="truncate">Assistente IA</span>
+              <Badge className="bg-green-500/20 text-green-400 text-[10px] md:text-xs shrink-0">Online</Badge>
             </h2>
-            <p className="text-sm text-muted-foreground">Seu tutor pessoal de IA</p>
+            <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">Seu tutor pessoal de IA</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="border-amber-500/50 text-amber-400">
+        <div className="flex items-center gap-1 md:gap-2 shrink-0">
+          <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px] md:text-xs hidden sm:flex">
             <MessageSquare size={12} className="mr-1" />
             {aiChats} conversas
           </Badge>
-          <Button variant="ghost" size="icon" onClick={handleReset} title="Reiniciar conversa">
-            <RotateCcw size={18} />
+          <Button variant="ghost" size="icon" onClick={handleReset} title="Reiniciar conversa" className="h-8 w-8 md:h-10 md:w-10">
+            <RotateCcw size={16} className="md:hidden" />
+            <RotateCcw size={18} className="hidden md:block" />
           </Button>
         </div>
       </div>
@@ -214,7 +217,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
       {/* Chat Area */}
       <Card className="flex-1 bg-card/30 border-border overflow-hidden flex flex-col">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4">
           <AnimatePresence mode="popLayout">
             {messages.map((message) => (
               <motion.div
@@ -300,14 +303,14 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
 
         {/* Suggested Prompts */}
         {messages.length <= 1 && (
-          <div className="px-4 pb-4">
+          <div className="px-3 md:px-4 pb-3 md:pb-4">
             <p className="text-xs text-muted-foreground mb-2">Sugestões:</p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {SUGGESTED_PROMPTS.map((prompt, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSuggestedPrompt(prompt.text)}
-                  className="flex items-center gap-2 p-3 bg-secondary rounded-lg hover:bg-white/10 transition text-left group"
+                  className="flex items-center gap-2 p-2 md:p-3 bg-secondary rounded-lg hover:bg-white/10 transition text-left group min-w-0"
                 >
                   <prompt.icon
                     size={16}
@@ -321,9 +324,9 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
         )}
 
         {/* Input Area */}
-        <div className="p-4 border-t border-border">
-          <div className="flex items-end gap-2">
-            <div className="flex-1 relative">
+        <div className="p-3 md:p-4 border-t border-border">
+          <div className="flex items-end gap-2 min-w-0">
+            <div className="flex-1 min-w-0 relative">
               <Textarea
                 ref={textareaRef}
                 value={input}

@@ -132,16 +132,16 @@ export function CertificatesPanel() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6 min-w-0 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-yellow-600/10 border border-amber-500/20 flex items-center justify-center">
-            <Award className="w-5 h-5 text-amber-400" />
+      <div className="flex items-center justify-between min-w-0">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-yellow-600/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+            <Award className="w-4 h-4 md:w-5 md:h-5 text-amber-400" />
           </div>
-          <div>
-            <h2 className="text-lg font-bold text-white">Meus Certificados</h2>
-            <p className="text-xs text-white/40">
+          <div className="min-w-0">
+            <h2 className="text-base md:text-lg font-bold text-white truncate">Meus Certificados</h2>
+            <p className="text-[10px] md:text-xs text-white/40">
               {certificates.length} certificado{certificates.length !== 1 ? "s" : ""} emitido{certificates.length !== 1 ? "s" : ""}
             </p>
           </div>
@@ -150,38 +150,38 @@ export function CertificatesPanel() {
 
       {/* Stats Summary */}
       {certificates.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <Card className="bg-white/[0.02] border-white/[0.06] p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span className="text-xs text-white/40">Certificados</span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
+          <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
+            <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+              <Trophy className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-400 shrink-0" />
+              <span className="text-[10px] md:text-xs text-white/40 truncate">Certificados</span>
             </div>
-            <p className="text-xl font-bold text-white">{certificates.length}</p>
+            <p className="text-lg md:text-xl font-bold text-white">{certificates.length}</p>
           </Card>
-          <Card className="bg-white/[0.02] border-white/[0.06] p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Star className="w-4 h-4 text-violet-400" />
-              <span className="text-xs text-white/40">Média Quiz</span>
+          <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
+            <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+              <Star className="w-3.5 h-3.5 md:w-4 md:h-4 text-violet-400 shrink-0" />
+              <span className="text-[10px] md:text-xs text-white/40 truncate">Média Quiz</span>
             </div>
-            <p className="text-xl font-bold text-white">
+            <p className="text-lg md:text-xl font-bold text-white">
               {Math.round(certificates.reduce((acc, c) => acc + c.quizScore, 0) / certificates.length)}%
             </p>
           </Card>
-          <Card className="bg-white/[0.02] border-white/[0.06] p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Clock className="w-4 h-4 text-emerald-400" />
-              <span className="text-xs text-white/40">Horas de Estudo</span>
+          <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
+            <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+              <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-400 shrink-0" />
+              <span className="text-[10px] md:text-xs text-white/40 truncate">Horas de Estudo</span>
             </div>
-            <p className="text-xl font-bold text-white">
+            <p className="text-lg md:text-xl font-bold text-white">
               {certificates.reduce((acc, c) => acc + (c.totalStudyHours || 0), 0)}h
             </p>
           </Card>
-          <Card className="bg-white/[0.02] border-white/[0.06] p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <BookOpen className="w-4 h-4 text-blue-400" />
-              <span className="text-xs text-white/40">Capítulos</span>
+          <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
+            <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+              <BookOpen className="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-400 shrink-0" />
+              <span className="text-[10px] md:text-xs text-white/40 truncate">Capítulos</span>
             </div>
-            <p className="text-xl font-bold text-white">
+            <p className="text-lg md:text-xl font-bold text-white">
               {certificates.reduce((acc, c) => acc + (c.chaptersCompleted || 0), 0)}
             </p>
           </Card>
@@ -190,17 +190,17 @@ export function CertificatesPanel() {
 
       {/* Certificates Grid */}
       {certificates.length === 0 ? (
-        <Card className="bg-white/[0.02] border-white/[0.06] p-12 text-center">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-yellow-600/5 border border-amber-500/15 flex items-center justify-center">
-            <Award className="w-10 h-10 text-amber-400/40" />
+        <Card className="bg-white/[0.02] border-white/[0.06] p-6 md:p-12 text-center">
+          <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-yellow-600/5 border border-amber-500/15 flex items-center justify-center">
+            <Award className="w-8 h-8 md:w-10 md:h-10 text-amber-400/40" />
           </div>
-          <h3 className="text-lg font-semibold text-white/70 mb-2">Nenhum certificado ainda</h3>
-          <p className="text-sm text-white/30 max-w-md mx-auto">
+          <h3 className="text-base md:text-lg font-semibold text-white/70 mb-2">Nenhum certificado ainda</h3>
+          <p className="text-xs md:text-sm text-white/30 max-w-md mx-auto">
             Complete a leitura de um curso e passe na avaliação final para receber seu certificado de conclusão.
           </p>
         </Card>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-3 md:gap-4">
           <AnimatePresence>
             {certificates.map((cert, idx) => (
               <motion.div
@@ -213,12 +213,12 @@ export function CertificatesPanel() {
                   {/* Gold top accent */}
                   <div className="h-1 bg-gradient-to-r from-amber-500/60 via-yellow-400/40 to-amber-500/60" />
 
-                  <div className="p-5 sm:p-6">
-                    <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                       {/* Certificate Icon */}
                       <div className="flex-shrink-0">
-                        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500/15 to-yellow-600/10 border border-amber-500/20 flex items-center justify-center relative">
-                          <Award className="w-8 h-8 text-amber-400" />
+                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-amber-500/15 to-yellow-600/10 border border-amber-500/20 flex items-center justify-center relative">
+                          <Award className="w-6 h-6 md:w-8 md:h-8 text-amber-400" />
                           <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center border-2 border-gray-950">
                             <CheckCircle2 className="w-3 h-3 text-white" />
                           </div>
@@ -227,40 +227,40 @@ export function CertificatesPanel() {
 
                       {/* Certificate Info */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <h3 className="text-base font-bold text-white leading-tight line-clamp-2">
+                        <div className="flex items-start justify-between gap-2 mb-2 min-w-0">
+                          <h3 className="text-sm md:text-base font-bold text-white leading-tight line-clamp-2 min-w-0">
                             {cert.courseTitle}
                           </h3>
-                          <Badge className={cn("text-[10px] px-2 py-0.5 border flex-shrink-0", getLevelColor(cert.courseLevel))}>
+                          <Badge className={cn("text-[9px] md:text-[10px] px-1.5 md:px-2 py-0.5 border flex-shrink-0", getLevelColor(cert.courseLevel))}>
                             {cert.courseLevel}
                           </Badge>
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/35 mb-3">
-                          <span className="flex items-center gap-1">
-                            <Shield className="w-3 h-3" />
-                            {cert.certificateNumber}
+                        <div className="flex flex-wrap items-center gap-x-3 md:gap-x-4 gap-y-1 text-[10px] md:text-xs text-white/35 mb-2 md:mb-3">
+                          <span className="flex items-center gap-1 shrink-0">
+                            <Shield className="w-3 h-3 shrink-0" />
+                            <span className="truncate max-w-[100px] sm:max-w-none">{cert.certificateNumber}</span>
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
+                          <span className="flex items-center gap-1 shrink-0">
+                            <Clock className="w-3 h-3 shrink-0" />
                             {formatDate(cert.issuedAt)}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Star className="w-3 h-3" />
+                          <span className="flex items-center gap-1 shrink-0">
+                            <Star className="w-3 h-3 shrink-0" />
                             Quiz: {cert.quizScore}%
                           </span>
                           {cert.totalStudyHours > 0 && (
-                            <span className="flex items-center gap-1">
-                              <BookOpen className="w-3 h-3" />
+                            <span className="flex items-center gap-1 shrink-0">
+                              <BookOpen className="w-3 h-3 shrink-0" />
                               {cert.totalStudyHours}h de estudo
                             </span>
                           )}
                         </div>
 
                         {/* Verification Code */}
-                        <div className="flex items-center gap-2 mb-4">
-                          <span className="text-[10px] text-white/25 uppercase tracking-wider">Verificação:</span>
-                          <code className="text-xs font-mono text-amber-400/70 bg-amber-500/5 px-2 py-0.5 rounded">
+                        <div className="flex items-center gap-2 mb-3 md:mb-4 min-w-0 flex-wrap">
+                          <span className="text-[10px] text-white/25 uppercase tracking-wider shrink-0">Verificação:</span>
+                          <code className="text-[10px] md:text-xs font-mono text-amber-400/70 bg-amber-500/5 px-2 py-0.5 rounded truncate max-w-[160px] sm:max-w-none">
                             {cert.verificationCode}
                           </code>
                           <button
@@ -281,12 +281,12 @@ export function CertificatesPanel() {
                             size="sm"
                             onClick={() => handleDownload(cert)}
                             disabled={downloading === cert.verificationCode}
-                            className="h-8 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-xs rounded-lg shadow-lg shadow-amber-600/20"
+                            className="h-7 md:h-8 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-[10px] md:text-xs rounded-lg shadow-lg shadow-amber-600/20 px-2 md:px-3"
                           >
                             {downloading === cert.verificationCode ? (
-                              <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                              <Loader2 className="w-3 h-3 mr-1 md:mr-1.5 animate-spin" />
                             ) : (
-                              <Download className="w-3 h-3 mr-1.5" />
+                              <Download className="w-3 h-3 mr-1 md:mr-1.5" />
                             )}
                             Baixar PDF
                           </Button>
@@ -294,10 +294,11 @@ export function CertificatesPanel() {
                             size="sm"
                             variant="outline"
                             onClick={() => window.open(cert.verificationUrl, "_blank")}
-                            className="h-8 border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50 text-xs rounded-lg"
+                            className="h-7 md:h-8 border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50 text-[10px] md:text-xs rounded-lg px-2 md:px-3"
                           >
-                            <ExternalLink className="w-3 h-3 mr-1.5" />
-                            Verificar Online
+                            <ExternalLink className="w-3 h-3 mr-1 md:mr-1.5" />
+                            <span className="hidden sm:inline">Verificar Online</span>
+                            <span className="sm:hidden">Verificar</span>
                           </Button>
                         </div>
                       </div>

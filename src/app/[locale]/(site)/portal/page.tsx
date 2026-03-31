@@ -715,7 +715,7 @@ export default function PortalPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="space-y-6"
+                className="space-y-4 min-w-0 overflow-hidden"
               >
                 <CoursesPanel
                   tierConfig={tierConfig}
@@ -749,11 +749,11 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-6"
               >
-                <Card className="bg-secondary border-border p-6">
+                <Card className="bg-secondary border-border p-4 md:p-6 min-w-0 overflow-hidden">
                   <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6 pb-6 border-b border-border">
-                    <div>
-                      <h2 className="text-2xl font-bold flex items-center gap-2 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-yellow-500">
-                        <Sparkles className="text-amber-400" /> Studio AI Pro
+                    <div className="min-w-0">
+                      <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-yellow-500">
+                        <Sparkles className="text-amber-400 shrink-0" /> Studio AI Pro
                       </h2>
                       <p className="text-sm text-muted-foreground mt-1">
                         Crie imagens incríveis com inteligência artificial
@@ -807,13 +807,13 @@ export default function PortalPage() {
                   </div>
 
                   {/* Ratio Selection */}
-                  <div className="flex gap-2 mb-6">
+                  <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
                     {RATIOS.map((r) => (
                       <Button
                         key={r.id}
                         variant={aspectRatio === r.id ? "default" : "outline"}
                         className={cn(
-                          "h-12",
+                          "h-12 shrink-0",
                           aspectRatio === r.id
                             ? "bg-amber-600 border-amber-600"
                             : "bg-secondary border-border"
@@ -830,13 +830,13 @@ export default function PortalPage() {
                   <div className="relative">
                     <Textarea
                       placeholder="Descreva a imagem que você quer criar..."
-                      className="bg-secondary border-border min-h-[120px] text-lg p-4 resize-none pr-32"
+                      className="bg-secondary border-border min-h-[120px] text-base md:text-lg p-3 md:p-4 resize-none pb-16 md:pb-4 md:pr-32"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                     />
-                    <div className="absolute bottom-4 right-4">
+                    <div className="absolute bottom-3 right-3 md:bottom-4 md:right-4">
                       <Button
-                        className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 font-bold px-8"
+                        className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 font-bold px-4 md:px-8"
                         onClick={handleGenerateImage}
                         disabled={isGenerating || !prompt.trim()}
                       >
@@ -853,9 +853,9 @@ export default function PortalPage() {
                 </Card>
 
                 {/* Preview & Gallery */}
-                <div className="grid lg:grid-cols-3 gap-6">
+                <div className="grid lg:grid-cols-3 gap-4 md:gap-6">
                   <div className="lg:col-span-2">
-                    <Card className="bg-secondary border-border p-6 min-h-[500px] flex items-center justify-center">
+                    <Card className="bg-secondary border-border p-4 md:p-6 min-h-[300px] md:min-h-[500px] flex items-center justify-center">
                       {generatedImage ? (
                         <div className="relative w-full h-full flex flex-col items-center justify-center">
                           <img
@@ -881,7 +881,7 @@ export default function PortalPage() {
                               <ImageIcon size={40} className="opacity-50" />
                             )}
                           </div>
-                          <p className="text-xl font-medium mb-2">
+                          <p className="text-base md:text-xl font-medium mb-2">
                             {isGenerating ? "Criando sua imagem..." : "Prévia da Imagem"}
                           </p>
                           <p className="text-sm opacity-60">
@@ -996,9 +996,9 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-6"
               >
-                <Card className="bg-secondary border-border p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-semibold">Seus Recursos</h2>
+                <Card className="bg-secondary border-border p-4 md:p-6 min-w-0 overflow-hidden">
+                  <div className="flex items-center justify-between mb-4 md:mb-6 gap-3">
+                    <h2 className="text-lg md:text-xl font-semibold truncate">Seus Recursos</h2>
                     <Badge className={cn(
                       "px-3 py-1",
                       isPro 
@@ -1009,12 +1009,12 @@ export default function PortalPage() {
                     </Badge>
                   </div>
 
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                     {resources.map((resource, idx) => (
                       <Card
                         key={idx}
                         className={cn(
-                          "p-4",
+                          "p-3 md:p-4 min-w-0",
                           resource.available
                             ? "bg-green-500/5 border-green-500/20"
                             : "bg-red-500/5 border-red-500/20 opacity-60"
@@ -1039,17 +1039,17 @@ export default function PortalPage() {
                   </div>
 
                   {!isPro && (
-                    <Card className="mt-8 p-6 bg-gradient-to-r from-amber-900/40 to-yellow-900/40 border-amber-500/30">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-bold text-lg mb-1">
+                    <Card className="mt-6 md:mt-8 p-4 md:p-6 bg-gradient-to-r from-amber-900/40 to-yellow-900/40 border-amber-500/30">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-base md:text-lg mb-1">
                             Desbloqueie Todos os Recursos
                           </h3>
                           <p className="text-sm text-muted-foreground">
                             Upgrade para Pro e tenha acesso ilimitado a todos os recursos!
                           </p>
                         </div>
-                        <Link href="/precos">
+                        <Link href="/precos" className="shrink-0">
                           <Button className="bg-gradient-to-r from-amber-600 to-yellow-700">
                             <Crown size={16} className="mr-2" />
                             Ver Planos
@@ -1071,30 +1071,30 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-6"
               >
-                <Card className="bg-secondary border-border p-6">
-                  <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                    <ShoppingBag size={20} /> Carrinho Atual
+                <Card className="bg-secondary border-border p-4 md:p-6 min-w-0 overflow-hidden">
+                  <h2 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
+                    <ShoppingBag size={20} className="shrink-0" /> Carrinho Atual
                   </h2>
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4">
                     {Object.keys(cartItems).length > 0 ? (
                       Object.values(cartItems).map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between bg-secondary p-4 rounded-lg"
+                          className="flex items-center justify-between bg-secondary p-3 md:p-4 rounded-lg gap-3 min-w-0"
                         >
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-secondary rounded flex items-center justify-center">
+                          <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-secondary rounded flex items-center justify-center shrink-0">
                               <Star size={20} className="text-yellow-500" />
                             </div>
-                            <div>
-                              <h4 className="font-medium">{item.name}</h4>
+                            <div className="min-w-0">
+                              <h4 className="font-medium text-sm md:text-base truncate">{item.name}</h4>
                               <p className="text-sm text-muted-foreground">
                                 {item.type === "service" ? "Serviço" : "Curso"}
                               </p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-bold">
+                          <div className="text-right shrink-0">
+                            <p className="font-bold text-sm md:text-base">
                               R$ {item.price.toLocaleString("pt-BR")}
                             </p>
                             <p className="text-xs text-muted-foreground">Qtd: {item.quantity}</p>
@@ -1109,7 +1109,7 @@ export default function PortalPage() {
                     <div className="mt-6 flex justify-end border-t border-border pt-4">
                       <div className="text-right">
                         <p className="text-sm text-muted-foreground">Total Estimado</p>
-                        <p className="text-2xl font-bold text-green-400">
+                        <p className="text-xl md:text-2xl font-bold text-green-400">
                           R$ {cartTotal.toLocaleString("pt-BR")}
                         </p>
                         <Link href="/carrinho">
@@ -1120,8 +1120,8 @@ export default function PortalPage() {
                   )}
                 </Card>
 
-                <Card className="bg-secondary border-border p-6">
-                  <h2 className="text-xl font-semibold mb-4">Histórico de Pedidos</h2>
+                <Card className="bg-secondary border-border p-4 md:p-6 min-w-0 overflow-hidden">
+                  <h2 className="text-lg md:text-xl font-semibold mb-4">Histórico de Pedidos</h2>
                   <div className="space-y-3">
                     {orders.length > 0 ? (
                       orders.map((order) => {
@@ -1133,26 +1133,26 @@ export default function PortalPage() {
                           >
                             {/* Order Header - Clickable */}
                             <div
-                              className="flex items-center justify-between p-4 cursor-pointer hover:bg-secondary transition-colors"
+                              className="flex items-center justify-between p-3 md:p-4 cursor-pointer hover:bg-secondary transition-colors gap-2 min-w-0"
                               onClick={() => setExpandedOrderId(isExpanded ? null : order._id)}
                             >
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
                                 <div className={cn(
-                                  "transition-transform duration-200",
+                                  "transition-transform duration-200 shrink-0",
                                   isExpanded && "rotate-90"
                                 )}>
                                   <ChevronRight size={18} className="text-muted-foreground" />
                                 </div>
-                                <div>
-                                  <p className="font-medium">
+                                <div className="min-w-0">
+                                  <p className="font-medium text-sm md:text-base truncate">
                                     Pedido #{order._id.substring(order._id.length - 6)}
                                   </p>
-                                  <p className="text-sm text-muted-foreground">
+                                  <p className="text-xs md:text-sm text-muted-foreground truncate">
                                     {new Date(order.createdAt).toLocaleDateString("pt-BR")} • {order.items.length} {order.items.length === 1 ? 'item' : 'itens'}
                                   </p>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-2 md:gap-4 shrink-0">
                                 <Badge
                                   variant={order.status === "completed" ? "default" : "outline"}
                                   className={cn(
@@ -1170,7 +1170,7 @@ export default function PortalPage() {
                                    order.status === "delivered" ? "Entregue" :
                                    order.status}
                                 </Badge>
-                                <p className="font-bold text-green-400">
+                                <p className="font-bold text-green-400 text-sm md:text-base whitespace-nowrap">
                                   R$ {order.totalAmount.toLocaleString("pt-BR")}
                                 </p>
                               </div>
@@ -1186,16 +1186,16 @@ export default function PortalPage() {
                                   transition={{ duration: 0.2 }}
                                   className="overflow-hidden"
                                 >
-                                  <div className="border-t border-border bg-secondary p-4">
+                                  <div className="border-t border-border bg-secondary p-3 md:p-4">
                                     <p className="text-sm text-muted-foreground mb-3">Itens do pedido:</p>
                                     <div className="space-y-3">
                                       {order.items.map((item, idx) => (
-                                        <div 
-                                          key={idx} 
-                                          className="flex items-center justify-between bg-secondary rounded-lg p-3"
+                                        <div
+                                          key={idx}
+                                          className="flex items-center justify-between bg-secondary rounded-lg p-3 gap-2 min-w-0"
                                         >
-                                          <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                                          <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+                                            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center shrink-0">
                                               {item.type === "product" ? (
                                                 <Package size={18} className="text-amber-400" />
                                               ) : item.type === "course" ? (
@@ -1204,16 +1204,16 @@ export default function PortalPage() {
                                                 <Settings size={18} className="text-green-400" />
                                               )}
                                             </div>
-                                            <div>
-                                              <p className="font-medium text-sm">{item.name}</p>
+                                            <div className="min-w-0">
+                                              <p className="font-medium text-sm truncate">{item.name}</p>
                                               <p className="text-xs text-muted-foreground">
-                                                {item.type === "product" ? "Produto" : 
-                                                 item.type === "course" ? "Curso" : "Serviço"} 
+                                                {item.type === "product" ? "Produto" :
+                                                 item.type === "course" ? "Curso" : "Serviço"}
                                                 {item.quantity > 1 && ` × ${item.quantity}`}
                                               </p>
                                             </div>
                                           </div>
-                                          <p className="font-medium">
+                                          <p className="font-medium text-sm shrink-0 whitespace-nowrap">
                                             R$ {(item.price * item.quantity).toLocaleString("pt-BR")}
                                           </p>
                                         </div>
@@ -1250,27 +1250,30 @@ export default function PortalPage() {
               >
                 {isPro ? (
                   <div className="space-y-6">
-                    <Card className="bg-gradient-to-r from-yellow-900/30 to-orange-900/30 border-yellow-500/30 p-6">
-                      <div className="flex items-center gap-4 mb-6">
-                        <div className="w-16 h-16 bg-yellow-500/20 rounded-2xl flex items-center justify-center">
-                          <Gift size={32} className="text-yellow-400" />
+                    <Card className="bg-gradient-to-r from-yellow-900/30 to-orange-900/30 border-yellow-500/30 p-4 md:p-6 min-w-0 overflow-hidden">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4 md:mb-6">
+                        <div className="flex items-center gap-3 md:gap-4 min-w-0">
+                          <div className="w-12 h-12 md:w-16 md:h-16 bg-yellow-500/20 rounded-2xl flex items-center justify-center shrink-0">
+                            <Gift size={28} className="text-yellow-400 md:hidden" />
+                            <Gift size={32} className="text-yellow-400 hidden md:block" />
+                          </div>
+                          <div className="min-w-0">
+                            <h2 className="text-xl md:text-2xl font-bold">Loja de Recompensas</h2>
+                            <p className="text-sm text-muted-foreground">
+                              Troque seus pontos por prêmios exclusivos!
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h2 className="text-2xl font-bold">Loja de Recompensas</h2>
-                          <p className="text-muted-foreground">
-                            Troque seus pontos por prêmios exclusivos!
-                          </p>
-                        </div>
-                        <div className="ml-auto text-right">
+                        <div className="sm:ml-auto text-left sm:text-right shrink-0">
                           <p className="text-sm text-muted-foreground">Seu saldo</p>
-                          <p className="text-3xl font-bold text-yellow-400">
-                            {stats.xp} <span className="text-lg">XP</span>
+                          <p className="text-2xl md:text-3xl font-bold text-yellow-400">
+                            {stats.xp} <span className="text-base md:text-lg">XP</span>
                           </p>
                         </div>
                       </div>
                     </Card>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                       {[
                         { name: "1 Mês Extra Pro", xp: 5000, icon: Crown },
                         { name: "Mentoria 1:1 (30min)", xp: 10000, icon: MessageSquare },
@@ -1279,11 +1282,11 @@ export default function PortalPage() {
                         { name: "Streak Freeze x3", xp: 500, icon: Flame },
                         { name: "Download Pack Templates", xp: 1000, icon: Download },
                       ].map((reward, idx) => (
-                        <Card key={idx} className="bg-secondary border-border p-6">
+                        <Card key={idx} className="bg-secondary border-border p-4 md:p-6 min-w-0">
                           <div className="w-14 h-14 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4">
                             <reward.icon size={28} className="text-yellow-400" />
                           </div>
-                          <h3 className="font-bold text-lg mb-2">{reward.name}</h3>
+                          <h3 className="font-bold text-base md:text-lg mb-2 truncate">{reward.name}</h3>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1 text-yellow-400">
                               <Zap size={16} />
@@ -1306,12 +1309,13 @@ export default function PortalPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center min-h-[600px]">
-                    <Card className="bg-card/50 border-border p-8 text-center max-w-md">
-                      <div className="w-20 h-20 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Gift size={40} className="text-yellow-400" />
+                  <div className="flex items-center justify-center min-h-[300px] md:min-h-[600px]">
+                    <Card className="bg-card/50 border-border p-6 md:p-8 text-center max-w-md mx-4">
+                      <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+                        <Gift size={32} className="text-yellow-400 md:hidden" />
+                        <Gift size={40} className="text-yellow-400 hidden md:block" />
                       </div>
-                      <h2 className="text-2xl font-bold mb-2">Loja de Recompensas</h2>
+                      <h2 className="text-xl md:text-2xl font-bold mb-2">Loja de Recompensas</h2>
                       <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 mb-4">
                         <Crown size={12} className="mr-1" />
                         Recurso PRO

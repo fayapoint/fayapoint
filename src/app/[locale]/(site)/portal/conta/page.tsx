@@ -575,23 +575,23 @@ export default function AccountPage() {
               <ArrowLeft size={20} className="text-muted-foreground" />
             </button>
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             {account.image ? (
               <img
                 src={account.image}
                 alt={account.name}
-                className="w-12 h-12 rounded-full object-cover border-2 border-border"
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-border shrink-0"
               />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center text-lg font-bold">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center text-base md:text-lg font-bold shrink-0">
                 {getInitials(account.name)}
               </div>
             )}
-            <div>
-              <h1 className="text-xl font-bold">{account.name}</h1>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">{account.email}</span>
-                <Badge className={cn("text-xs", PLAN_COLORS[currentPlan])}>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-lg md:text-xl font-bold truncate">{account.name}</h1>
+              <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                <span className="text-xs md:text-sm text-muted-foreground truncate">{account.email}</span>
+                <Badge className={cn("text-xs shrink-0", PLAN_COLORS[currentPlan])}>
                   <PlanIcon size={12} className="mr-1" />
                   {currentPlan.toUpperCase()}
                 </Badge>
@@ -602,41 +602,41 @@ export default function AccountPage() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full bg-card border border-border h-auto flex-wrap gap-1 p-1">
+          <TabsList className="w-full bg-card border border-border h-auto flex-wrap gap-1 p-1 min-w-0 overflow-hidden">
             <TabsTrigger
               value="perfil"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
+              className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
-              <User size={16} className="mr-1.5" />
-              <span className="hidden sm:inline">Perfil</span>
+              <User size={16} className="mr-1.5 shrink-0" />
+              <span className="hidden sm:inline truncate">Perfil</span>
             </TabsTrigger>
             <TabsTrigger
               value="assinatura"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
+              className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
-              <CreditCard size={16} className="mr-1.5" />
-              <span className="hidden sm:inline">Assinatura</span>
+              <CreditCard size={16} className="mr-1.5 shrink-0" />
+              <span className="hidden sm:inline truncate">Assinatura</span>
             </TabsTrigger>
             <TabsTrigger
               value="seguranca"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
+              className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
-              <Shield size={16} className="mr-1.5" />
-              <span className="hidden sm:inline">Seguran&ccedil;a</span>
+              <Shield size={16} className="mr-1.5 shrink-0" />
+              <span className="hidden sm:inline truncate">Seguran&ccedil;a</span>
             </TabsTrigger>
             <TabsTrigger
               value="certificados"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
+              className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
-              <Award size={16} className="mr-1.5" />
-              <span className="hidden sm:inline">Certificados</span>
+              <Award size={16} className="mr-1.5 shrink-0" />
+              <span className="hidden sm:inline truncate">Certificados</span>
             </TabsTrigger>
             <TabsTrigger
               value="preferencias"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
+              className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
-              <Settings size={16} className="mr-1.5" />
-              <span className="hidden sm:inline">Prefer&ecirc;ncias</span>
+              <Settings size={16} className="mr-1.5 shrink-0" />
+              <span className="hidden sm:inline truncate">Prefer&ecirc;ncias</span>
             </TabsTrigger>
           </TabsList>
 
@@ -652,22 +652,22 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Avatar Section */}
-                <Card className="p-6 bg-card border-border">
-                  <div className="flex items-center gap-4">
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <div className="flex items-center gap-3 md:gap-4">
                     {account.image ? (
                       <img
                         src={account.image}
                         alt={account.name}
-                        className="w-20 h-20 rounded-full object-cover border-2 border-border"
+                        className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-border shrink-0"
                       />
                     ) : (
-                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center text-2xl font-bold">
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center text-xl md:text-2xl font-bold shrink-0">
                         {getInitials(account.name)}
                       </div>
                     )}
-                    <div>
-                      <h3 className="font-semibold text-lg">{account.name}</h3>
-                      <p className="text-sm text-muted-foreground">{account.email}</p>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-base md:text-lg truncate">{account.name}</h3>
+                      <p className="text-sm text-muted-foreground truncate">{account.email}</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Membro desde {formatDate(account.createdAt)}
                       </p>
@@ -676,8 +676,8 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Profile Form */}
-                <Card className="p-6 bg-card border-border space-y-5">
-                  <h3 className="text-lg font-semibold mb-2">Informações Pessoais</h3>
+                <Card className="p-4 md:p-6 bg-card border-border space-y-4 md:space-y-5 min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-2">Informações Pessoais</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -776,7 +776,7 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Skills & Interests */}
-                <Card className="p-6 bg-card border-border space-y-5">
+                <Card className="p-4 md:p-6 bg-card border-border space-y-4 md:space-y-5 min-w-0 overflow-hidden">
                   <div className="space-y-3">
                     <Label className="text-muted-foreground">Habilidades</Label>
                     <div className="flex gap-2">
@@ -869,9 +869,9 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Current Plan */}
-                <Card className="p-6 bg-card border-border">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">Plano Atual</h3>
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <div className="flex items-center justify-between mb-4 gap-2">
+                    <h3 className="text-base md:text-lg font-semibold">Plano Atual</h3>
                     <Badge className={cn("text-sm px-3 py-1", PLAN_COLORS[currentPlan])}>
                       <PlanIcon size={14} className="mr-1.5" />
                       {currentPlan.toUpperCase()}
@@ -880,14 +880,14 @@ export default function AccountPage() {
 
                   {subscriptionData?.subscription ? (
                     <div className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Valor</span>
-                        <span className="font-medium">
+                      <div className="flex justify-between text-sm gap-2">
+                        <span className="text-muted-foreground shrink-0">Valor</span>
+                        <span className="font-medium text-right truncate">
                           {formatCurrency(subscriptionData.subscription.value)}/{subscriptionData.subscription.cycle === "monthly" ? "mês" : subscriptionData.subscription.cycle === "yearly" ? "ano" : subscriptionData.subscription.cycle}
                         </span>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Status</span>
+                      <div className="flex justify-between text-sm gap-2">
+                        <span className="text-muted-foreground shrink-0">Status</span>
                         <Badge
                           className={cn(
                             "text-xs",
@@ -900,16 +900,16 @@ export default function AccountPage() {
                         </Badge>
                       </div>
                       {subscriptionData.subscription.nextDueDate && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Próxima cobrança</span>
-                          <span>{formatDate(subscriptionData.subscription.nextDueDate)}</span>
+                        <div className="flex justify-between text-sm gap-2">
+                          <span className="text-muted-foreground shrink-0">Próxima cobrança</span>
+                          <span className="text-right truncate">{formatDate(subscriptionData.subscription.nextDueDate)}</span>
                         </div>
                       )}
                       {subscriptionData.subscription.billingType && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Forma de pagamento</span>
-                          <span className="flex items-center gap-1.5">
-                            <CreditCard size={14} className="text-muted-foreground" />
+                        <div className="flex justify-between text-sm gap-2">
+                          <span className="text-muted-foreground shrink-0">Forma de pagamento</span>
+                          <span className="flex items-center gap-1.5 min-w-0 justify-end">
+                            <CreditCard size={14} className="text-muted-foreground shrink-0" />
                             {subscriptionData.subscription.billingType === "credit_card" && subscriptionData.subscription.creditCardLastFour
                               ? `${subscriptionData.subscription.creditCardBrand || "Cartão"} **** ${subscriptionData.subscription.creditCardLastFour}`
                               : subscriptionData.subscription.billingType === "pix"
@@ -947,9 +947,9 @@ export default function AccountPage() {
 
                 {/* Plan Comparison */}
                 {subscriptionData?.plans && (
-                  <Card className="p-6 bg-card border-border">
-                    <h3 className="text-lg font-semibold mb-4">Comparar Planos</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                    <h3 className="text-base md:text-lg font-semibold mb-4">Comparar Planos</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                       {subscriptionData.plans.map((plan) => {
                         const isCurrentPlan = plan.id === currentPlan;
                         const PIcon = PLAN_ICONS[plan.id] || Star;
@@ -968,7 +968,7 @@ export default function AccountPage() {
                               <span className="font-semibold">{plan.name}</span>
                             </div>
                             <div className="mb-3">
-                              <span className="text-2xl font-bold">
+                              <span className="text-xl md:text-2xl font-bold">
                                 {plan.monthlyPrice === 0 ? "Grátis" : formatCurrency(plan.monthlyPrice)}
                               </span>
                               {plan.monthlyPrice > 0 && (
@@ -1020,8 +1020,8 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Change Password */}
-                <Card className="p-6 bg-card border-border">
-                  <h3 className="text-lg font-semibold mb-4">Alterar Senha</h3>
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-4">Alterar Senha</h3>
                   <div className="space-y-4 max-w-md">
                     <div className="space-y-2">
                       <Label className="text-muted-foreground">Senha atual</Label>
@@ -1114,11 +1114,11 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Connected Accounts */}
-                <Card className="p-6 bg-card border-border">
-                  <h3 className="text-lg font-semibold mb-4">Contas Conectadas</h3>
-                  <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg border border-border">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-4">Contas Conectadas</h3>
+                  <div className="flex items-center justify-between p-3 md:p-4 bg-secondary/50 rounded-lg border border-border gap-2 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0">
                         <svg viewBox="0 0 24 24" className="w-5 h-5">
                           <path
                             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
@@ -1150,8 +1150,8 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Active Sessions */}
-                <Card className="p-6 bg-card border-border">
-                  <h3 className="text-lg font-semibold mb-2">Sessões Ativas</h3>
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-2">Sessões Ativas</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Gerencie os dispositivos onde sua conta está conectada.
                   </p>
@@ -1165,8 +1165,8 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Delete Account */}
-                <Card className="p-6 bg-card border-red-900/50">
-                  <h3 className="text-lg font-semibold text-red-400 mb-2">Zona de Perigo</h3>
+                <Card className="p-4 md:p-6 bg-card border-red-900/50 min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold text-red-400 mb-2">Zona de Perigo</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.
                   </p>
@@ -1197,15 +1197,15 @@ export default function AccountPage() {
                     {certificates.map((cert) => (
                       <Card
                         key={cert._id}
-                        className="p-5 bg-card border-border hover:border-amber-500/30 transition-colors"
+                        className="p-4 md:p-5 bg-card border-border hover:border-amber-500/30 transition-colors min-w-0 overflow-hidden"
                       >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                        <div className="flex items-start justify-between mb-3 gap-2">
+                          <div className="flex items-center gap-2 min-w-0 flex-1">
+                            <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center shrink-0">
                               <Award size={20} className="text-amber-400" />
                             </div>
-                            <div>
-                              <h4 className="font-semibold text-sm line-clamp-1">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-semibold text-sm line-clamp-1 truncate">
                                 {cert.courseTitle}
                               </h4>
                               <p className="text-xs text-muted-foreground">
@@ -1216,13 +1216,13 @@ export default function AccountPage() {
                         </div>
 
                         <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Emitido em</span>
-                            <span>{formatDate(cert.issuedAt)}</span>
+                          <div className="flex justify-between gap-2">
+                            <span className="text-muted-foreground shrink-0">Emitido em</span>
+                            <span className="text-right truncate">{formatDate(cert.issuedAt)}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Certificado</span>
-                            <span className="font-mono text-xs text-amber-400">
+                          <div className="flex justify-between gap-2">
+                            <span className="text-muted-foreground shrink-0">Certificado</span>
+                            <span className="font-mono text-xs text-amber-400 truncate min-w-0">
                               {cert.certificateNumber}
                             </span>
                           </div>
@@ -1271,7 +1271,7 @@ export default function AccountPage() {
                     ))}
                   </div>
                 ) : (
-                  <Card className="p-8 bg-card border-border text-center">
+                  <Card className="p-6 md:p-8 bg-card border-border text-center min-w-0 overflow-hidden">
                     <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Award size={32} className="text-amber-400" />
                     </div>
@@ -1301,8 +1301,8 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Theme */}
-                <Card className="p-6 bg-card border-border">
-                  <h3 className="text-lg font-semibold mb-4">Aparência</h3>
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-4">Aparência</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       { id: "light", label: "Claro", icon: Sun },
@@ -1327,8 +1327,8 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Language */}
-                <Card className="p-6 bg-card border-border">
-                  <h3 className="text-lg font-semibold mb-4">Idioma</h3>
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-4">Idioma</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       { id: "pt-BR", label: "Português", flag: "🇧🇷" },
@@ -1353,8 +1353,8 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Notifications */}
-                <Card className="p-6 bg-card border-border">
-                  <h3 className="text-lg font-semibold mb-4">Notificações</h3>
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-4">Notificações</h3>
                   <div className="space-y-4">
                     {[
                       {
@@ -1390,13 +1390,13 @@ export default function AccountPage() {
                     ].map(({ key, label, description, icon: Icon }) => (
                       <div
                         key={key}
-                        className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-secondary/30 rounded-lg gap-3 min-w-0"
                       >
-                        <div className="flex items-center gap-3">
-                          <Icon size={18} className="text-muted-foreground" />
-                          <div>
-                            <p className="text-sm font-medium">{label}</p>
-                            <p className="text-xs text-muted-foreground">{description}</p>
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <Icon size={18} className="text-muted-foreground shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium truncate">{label}</p>
+                            <p className="text-xs text-muted-foreground truncate">{description}</p>
                           </div>
                         </div>
                         <Switch
@@ -1414,8 +1414,8 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Playback Speed */}
-                <Card className="p-6 bg-card border-border">
-                  <h3 className="text-lg font-semibold mb-4">Reprodução</h3>
+                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-4">Reprodução</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">

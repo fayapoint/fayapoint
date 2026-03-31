@@ -218,46 +218,46 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground min-w-0 overflow-hidden">
       <Header />
       <main className="pt-24 pb-12">
-        <div className="container mx-auto px-4 max-w-4xl">
+        <div className="container mx-auto px-3 md:px-4 max-w-4xl min-w-0">
           {/* Back to Portal */}
-          <Link href="/portal" className="inline-flex items-center gap-2 text-muted-foreground hover:text-white mb-6 transition">
-            <ArrowLeft size={16} />
-            Voltar ao Dashboard
+          <Link href="/portal" className="inline-flex items-center gap-2 text-sm md:text-base text-muted-foreground hover:text-white mb-4 md:mb-6 transition">
+            <ArrowLeft size={16} className="shrink-0" />
+            <span className="truncate">Voltar ao Dashboard</span>
           </Link>
 
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl font-bold">Configurações</h1>
-              <p className="text-muted-foreground mt-1">Gerencie seu perfil, segurança e preferências</p>
+          <div className="flex items-center justify-between mb-6 md:mb-8 min-w-0">
+            <div className="min-w-0">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold truncate">Configurações</h1>
+              <p className="text-sm md:text-base text-muted-foreground mt-1 truncate">Gerencie seu perfil, segurança e preferências</p>
             </div>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-card/50 border border-border p-1 gap-1">
-              <TabsTrigger value="profile" className="data-[state=active]:bg-amber-600">
-                <User size={16} className="mr-2" /> Perfil
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
+            <TabsList className="bg-card/50 border border-border p-1 gap-1 w-full flex">
+              <TabsTrigger value="profile" className="data-[state=active]:bg-amber-600 flex-1 text-xs md:text-sm px-2 md:px-3">
+                <User size={14} className="mr-1 md:mr-2 shrink-0" /> <span className="truncate">Perfil</span>
               </TabsTrigger>
-              <TabsTrigger value="security" className="data-[state=active]:bg-amber-600">
-                <Shield size={16} className="mr-2" /> Segurança
+              <TabsTrigger value="security" className="data-[state=active]:bg-amber-600 flex-1 text-xs md:text-sm px-2 md:px-3">
+                <Shield size={14} className="mr-1 md:mr-2 shrink-0" /> <span className="truncate">Segurança</span>
               </TabsTrigger>
-              <TabsTrigger value="notifications" className="data-[state=active]:bg-amber-600">
-                <Bell size={16} className="mr-2" /> Notificações
+              <TabsTrigger value="notifications" className="data-[state=active]:bg-amber-600 flex-1 text-xs md:text-sm px-2 md:px-3">
+                <Bell size={14} className="mr-1 md:mr-2 shrink-0" /> <span className="truncate">Notificações</span>
               </TabsTrigger>
             </TabsList>
 
             {/* Profile Tab */}
-            <TabsContent value="profile" className="space-y-6">
-              <Card className="bg-card/50 border-border p-6">
-                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <User size={20} /> Informações Pessoais
+            <TabsContent value="profile" className="space-y-4 md:space-y-6">
+              <Card className="bg-card/50 border-border p-4 md:p-6 min-w-0 overflow-hidden">
+                <h2 className="text-base md:text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+                  <User size={18} className="shrink-0" /> <span className="truncate">Informações Pessoais</span>
                 </h2>
-                
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
+
+                <div className="space-y-4 md:space-y-6">
+                  <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                    <div className="space-y-2 min-w-0">
                       <Label>Nome Completo</Label>
                       <Input 
                         value={profileForm.name}
@@ -266,12 +266,12 @@ export default function SettingsPage() {
                         placeholder="Seu nome"
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 min-w-0">
                       <Label>Email</Label>
-                      <Input 
+                      <Input
                         value={user.email}
                         disabled
-                        className="bg-black/50 border-border opacity-50"
+                        className="bg-black/50 border-border opacity-50 truncate"
                       />
                       <p className="text-xs text-muted-foreground">O email não pode ser alterado</p>
                     </div>
@@ -282,14 +282,14 @@ export default function SettingsPage() {
                     <textarea 
                       value={profileForm.bio}
                       onChange={e => setProfileForm({...profileForm, bio: e.target.value})}
-                      className="w-full bg-black/50 border border-border rounded-md p-3 min-h-[100px] text-white resize-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                      className="w-full bg-black/50 border border-border rounded-md p-2 md:p-3 min-h-[80px] md:min-h-[100px] text-sm md:text-base text-white resize-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                       placeholder="Conte um pouco sobre você..."
                     />
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2"><Briefcase size={14} /> Cargo</Label>
+                  <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                    <div className="space-y-2 min-w-0">
+                      <Label className="flex items-center gap-2"><Briefcase size={14} className="shrink-0" /> Cargo</Label>
                       <Input 
                         value={profileForm.position}
                         onChange={e => setProfileForm({...profileForm, position: e.target.value})}
@@ -297,8 +297,8 @@ export default function SettingsPage() {
                         placeholder="Ex: Product Manager"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2"><Building size={14} /> Empresa</Label>
+                    <div className="space-y-2 min-w-0">
+                      <Label className="flex items-center gap-2"><Building size={14} className="shrink-0" /> Empresa</Label>
                       <Input 
                         value={profileForm.company}
                         onChange={e => setProfileForm({...profileForm, company: e.target.value})}
@@ -308,9 +308,9 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2"><MapPin size={14} /> Localização</Label>
+                  <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+                    <div className="space-y-2 min-w-0">
+                      <Label className="flex items-center gap-2"><MapPin size={14} className="shrink-0" /> Localização</Label>
                       <Input 
                         value={profileForm.location}
                         onChange={e => setProfileForm({...profileForm, location: e.target.value})}
@@ -318,8 +318,8 @@ export default function SettingsPage() {
                         placeholder="São Paulo, Brasil"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label className="flex items-center gap-2"><LinkIcon size={14} /> Website</Label>
+                    <div className="space-y-2 min-w-0">
+                      <Label className="flex items-center gap-2"><LinkIcon size={14} className="shrink-0" /> Website</Label>
                       <Input 
                         value={profileForm.website}
                         onChange={e => setProfileForm({...profileForm, website: e.target.value})}
@@ -330,7 +330,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="flex items-center gap-2"><Linkedin size={14} /> LinkedIn</Label>
+                    <Label className="flex items-center gap-2"><Linkedin size={14} className="shrink-0" /> LinkedIn</Label>
                     <Input 
                       value={profileForm.linkedin}
                       onChange={e => setProfileForm({...profileForm, linkedin: e.target.value})}
@@ -340,8 +340,8 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    <Button onClick={handleSaveProfile} disabled={isLoading} className="bg-amber-600 hover:bg-amber-700">
-                      {isLoading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save className="mr-2" size={16} />}
+                    <Button onClick={handleSaveProfile} disabled={isLoading} className="bg-amber-600 hover:bg-amber-700 text-xs md:text-sm">
+                      {isLoading ? <Loader2 className="animate-spin mr-1 md:mr-2 shrink-0" size={16} /> : <Save className="mr-1 md:mr-2 shrink-0" size={16} />}
                       Salvar Alterações
                     </Button>
                   </div>
@@ -350,13 +350,13 @@ export default function SettingsPage() {
             </TabsContent>
 
             {/* Security Tab */}
-            <TabsContent value="security" className="space-y-6">
-              <Card className="bg-card/50 border-border p-6">
-                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <Lock size={20} /> Alterar Senha
+            <TabsContent value="security" className="space-y-4 md:space-y-6">
+              <Card className="bg-card/50 border-border p-4 md:p-6 min-w-0 overflow-hidden">
+                <h2 className="text-base md:text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+                  <Lock size={18} className="shrink-0" /> <span className="truncate">Alterar Senha</span>
                 </h2>
-                
-                <div className="space-y-4 max-w-md">
+
+                <div className="space-y-4 max-w-md min-w-0">
                   <div className="space-y-2">
                     <Label>Senha Atual</Label>
                     <div className="relative">
@@ -409,28 +409,28 @@ export default function SettingsPage() {
                     />
                   </div>
 
-                  <Button 
-                    onClick={handleChangePassword} 
+                  <Button
+                    onClick={handleChangePassword}
                     disabled={isLoading || !passwordForm.currentPassword || !passwordForm.newPassword}
-                    className="bg-amber-600 hover:bg-amber-700"
+                    className="bg-amber-600 hover:bg-amber-700 text-xs md:text-sm"
                   >
-                    {isLoading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Lock className="mr-2" size={16} />}
+                    {isLoading ? <Loader2 className="animate-spin mr-1 md:mr-2 shrink-0" size={16} /> : <Lock className="mr-1 md:mr-2 shrink-0" size={16} />}
                     Alterar Senha
                   </Button>
                 </div>
               </Card>
 
-              <Card className="bg-card/50 border-border p-6">
-                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                  <Shield size={20} /> Plano Atual
+              <Card className="bg-card/50 border-border p-4 md:p-6 min-w-0 overflow-hidden">
+                <h2 className="text-base md:text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Shield size={18} className="shrink-0" /> <span className="truncate">Plano Atual</span>
                 </h2>
-                <div className="flex items-center justify-between p-4 bg-black/30 rounded-lg">
-                  <div>
-                    <p className="font-medium capitalize">{user.subscription?.plan || 'Free'}</p>
-                    <p className="text-sm text-muted-foreground">Status: {user.subscription?.status || 'Ativo'}</p>
+                <div className="flex items-center justify-between gap-3 p-3 md:p-4 bg-black/30 rounded-lg min-w-0">
+                  <div className="min-w-0">
+                    <p className="font-medium capitalize text-sm md:text-base truncate">{user.subscription?.plan || 'Free'}</p>
+                    <p className="text-xs md:text-sm text-muted-foreground truncate">Status: {user.subscription?.status || 'Ativo'}</p>
                   </div>
-                  <Link href="/planos">
-                    <Button variant="outline" size="sm">
+                  <Link href="/planos" className="shrink-0">
+                    <Button variant="outline" size="sm" className="text-xs md:text-sm">
                       Gerenciar Plano
                     </Button>
                   </Link>
@@ -439,71 +439,76 @@ export default function SettingsPage() {
             </TabsContent>
 
             {/* Notifications Tab */}
-            <TabsContent value="notifications" className="space-y-6">
-              <Card className="bg-card/50 border-border p-6">
-                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <Bell size={20} /> Preferências de Notificação
+            <TabsContent value="notifications" className="space-y-4 md:space-y-6">
+              <Card className="bg-card/50 border-border p-4 md:p-6 min-w-0 overflow-hidden">
+                <h2 className="text-base md:text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+                  <Bell size={18} className="shrink-0" /> <span className="truncate">Preferências de Notificação</span>
                 </h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between py-3 border-b border-border">
-                    <div>
-                      <p className="font-medium">Notificações por Email</p>
-                      <p className="text-sm text-muted-foreground">Receba atualizações importantes por email</p>
+
+                <div className="space-y-4 md:space-y-6">
+                  <div className="flex items-center justify-between gap-3 py-3 border-b border-border">
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm md:text-base truncate">Notificações por Email</p>
+                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">Receba atualizações importantes por email</p>
                     </div>
-                    <Switch 
+                    <Switch
+                      className="shrink-0"
                       checked={notifications.email}
                       onCheckedChange={(checked: boolean) => setNotifications({...notifications, email: checked})}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between py-3 border-b border-border">
-                    <div>
-                      <p className="font-medium">Notificações Push</p>
-                      <p className="text-sm text-muted-foreground">Receba notificações no navegador</p>
+                  <div className="flex items-center justify-between gap-3 py-3 border-b border-border">
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm md:text-base truncate">Notificações Push</p>
+                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">Receba notificações no navegador</p>
                     </div>
-                    <Switch 
+                    <Switch
+                      className="shrink-0"
                       checked={notifications.push}
                       onCheckedChange={(checked: boolean) => setNotifications({...notifications, push: checked})}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between py-3 border-b border-border">
-                    <div>
-                      <p className="font-medium">Atualizações de Cursos</p>
-                      <p className="text-sm text-muted-foreground">Novos conteúdos e atualizações dos seus cursos</p>
+                  <div className="flex items-center justify-between gap-3 py-3 border-b border-border">
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm md:text-base truncate">Atualizações de Cursos</p>
+                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">Novos conteúdos e atualizações dos seus cursos</p>
                     </div>
-                    <Switch 
+                    <Switch
+                      className="shrink-0"
                       checked={notifications.courseUpdates}
                       onCheckedChange={(checked: boolean) => setNotifications({...notifications, courseUpdates: checked})}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between py-3 border-b border-border">
-                    <div>
-                      <p className="font-medium">Atividade da Comunidade</p>
-                      <p className="text-sm text-muted-foreground">Respostas e menções nos fóruns</p>
+                  <div className="flex items-center justify-between gap-3 py-3 border-b border-border">
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm md:text-base truncate">Atividade da Comunidade</p>
+                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">Respostas e menções nos fóruns</p>
                     </div>
-                    <Switch 
+                    <Switch
+                      className="shrink-0"
                       checked={notifications.communityActivity}
                       onCheckedChange={(checked: boolean) => setNotifications({...notifications, communityActivity: checked})}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between py-3">
-                    <div>
-                      <p className="font-medium">Marketing e Promoções</p>
-                      <p className="text-sm text-muted-foreground">Ofertas especiais e novidades</p>
+                  <div className="flex items-center justify-between gap-3 py-3">
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm md:text-base truncate">Marketing e Promoções</p>
+                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">Ofertas especiais e novidades</p>
                     </div>
-                    <Switch 
+                    <Switch
+                      className="shrink-0"
                       checked={notifications.marketing}
                       onCheckedChange={(checked: boolean) => setNotifications({...notifications, marketing: checked})}
                     />
                   </div>
 
                   <div className="flex justify-end pt-4">
-                    <Button onClick={handleSaveNotifications} disabled={isLoading} className="bg-amber-600 hover:bg-amber-700">
-                      {isLoading ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save className="mr-2" size={16} />}
+                    <Button onClick={handleSaveNotifications} disabled={isLoading} className="bg-amber-600 hover:bg-amber-700 text-xs md:text-sm">
+                      {isLoading ? <Loader2 className="animate-spin mr-1 md:mr-2 shrink-0" size={16} /> : <Save className="mr-1 md:mr-2 shrink-0" size={16} />}
                       Salvar Preferências
                     </Button>
                   </div>

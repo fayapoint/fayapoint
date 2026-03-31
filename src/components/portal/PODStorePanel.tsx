@@ -371,9 +371,9 @@ function MockupGallery({
   return (
     <div className="space-y-3">
       {/* Gallery Layout */}
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
         {/* Main Preview with Navigation */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative min-w-0">
           <div className="aspect-square w-full rounded-xl overflow-hidden bg-white relative group">
             <img 
               src={mockups[selectedIndex]?.src} 
@@ -423,8 +423,8 @@ function MockupGallery({
 
         {/* Thumbnails Grid - Scrollable */}
         {mockups.length > 1 && (
-          <div className="w-48 shrink-0">
-            <div className="max-h-[400px] overflow-y-auto pr-1 space-y-2 custom-scrollbar">
+          <div className="sm:w-36 md:w-48 shrink-0">
+            <div className="flex sm:flex-col gap-2 overflow-x-auto sm:overflow-x-hidden sm:overflow-y-auto sm:max-h-[400px] pr-0 sm:pr-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {mockups.map((mockup, idx) => (
                 <motion.div
                   key={idx}
@@ -1047,38 +1047,38 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   return (
     <div className="min-h-full space-y-6">
       {/* POD Provider Selector */}
-      <div className="flex items-center gap-4 p-4 bg-card/50 rounded-xl border border-border">
-        <span className="text-sm text-muted-foreground font-medium">Fornecedor:</span>
-        <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 md:p-4 bg-card/50 rounded-xl border border-border overflow-hidden">
+        <span className="text-sm text-muted-foreground font-medium shrink-0 hidden sm:inline">Fornecedor:</span>
+        <div className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <button
             onClick={() => setPodProvider("printify")}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
+              "flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg transition-all shrink-0",
               podProvider === "printify"
                 ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white"
                 : "bg-secondary text-muted-foreground hover:bg-gray-700"
             )}
           >
-            <Shirt size={18} />
-            <span className="font-medium">Printify</span>
-            <Badge className="bg-green-500/20 text-green-300 text-xs">900+</Badge>
+            <Shirt size={16} />
+            <span className="font-medium text-sm">Printify</span>
+            <Badge className="bg-green-500/20 text-green-300 text-[10px]">900+</Badge>
           </button>
           <button
             onClick={() => setPodProvider("prodigi")}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
+              "flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg transition-all shrink-0",
               podProvider === "prodigi"
                 ? "bg-gradient-to-r from-blue-600 to-amber-600 text-white"
                 : "bg-secondary text-muted-foreground hover:bg-gray-700"
             )}
           >
-            <Frame size={18} />
-            <span className="font-medium">Prodigi</span>
-            <Badge className="bg-blue-500/20 text-blue-300 text-xs">PREMIUM</Badge>
+            <Frame size={16} />
+            <span className="font-medium text-sm">Prodigi</span>
+            <Badge className="bg-blue-500/20 text-blue-300 text-[10px]">PREMIUM</Badge>
           </button>
         </div>
-        <div className="flex-1" />
-        <div className="text-xs text-muted-foreground">
+        <div className="hidden md:block flex-1" />
+        <div className="text-xs text-muted-foreground hidden md:block">
           {podProvider === "printify" ? (
             <span>Camisetas, canecas, almofadas e 900+ produtos</span>
           ) : (
@@ -1170,23 +1170,23 @@ function PODPanelContent(props: {
   return (
     <>
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2"><Store className="text-amber-400" />Minha Loja POD</h1>
-          <p className="text-muted-foreground text-sm">Crie produtos personalizados com Printify</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 mb-4 md:mb-6">
+        <div className="min-w-0">
+          <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2"><Store className="text-amber-400 shrink-0" /><span className="truncate">Minha Loja POD</span></h1>
+          <p className="text-muted-foreground text-xs md:text-sm">Crie produtos personalizados com Printify</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Badge variant="outline" className={cn("border-border", canPublish ? "text-green-400" : "text-yellow-400")}>
+        <div className="flex items-center gap-2 md:gap-3">
+          <Badge variant="outline" className={cn("border-border text-xs shrink-0", canPublish ? "text-green-400" : "text-yellow-400")}>
             <Trophy size={14} className="mr-1" />{userXP} XP {!canPublish && `/ ${MIN_XP_TO_PUBLISH}`}
           </Badge>
-          <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setActiveTab("create"); resetCreateWizard(); }}>
-            <Plus size={16} className="mr-2" />Criar Produto
+          <Button size="sm" className="bg-amber-600 hover:bg-amber-700 shrink-0" onClick={() => { setActiveTab("create"); resetCreateWizard(); }}>
+            <Plus size={16} className="mr-1 md:mr-2" /><span className="hidden sm:inline">Criar </span>Produto
           </Button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 border-b border-border pb-2 overflow-x-auto">
+      <div className="flex gap-2 mb-4 md:mb-6 border-b border-border pb-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "products" ? "border-amber-500 text-amber-400" : "border-transparent text-muted-foreground")} onClick={() => setActiveTab("products")}>
           <Package size={16} className="mr-2" />Produtos
         </Button>
@@ -1206,18 +1206,18 @@ function PODPanelContent(props: {
         {activeTab === "products" && (
           <motion.div key="products" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-4">
-                <div className="flex items-center gap-3"><Package className="text-amber-400" size={24} /><div><p className="text-2xl font-bold">{stats?.total || 0}</p><p className="text-xs text-muted-foreground">Produtos</p></div></div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><Package className="text-amber-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{stats?.total || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Produtos</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
-                <div className="flex items-center gap-3"><CheckCircle className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{stats?.active || 0}</p><p className="text-xs text-muted-foreground">Ativos</p></div></div>
+              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><CheckCircle className="text-green-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{stats?.active || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Ativos</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
-                <div className="flex items-center gap-3"><ShoppingBag className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{stats?.totalSales || 0}</p><p className="text-xs text-muted-foreground">Vendas</p></div></div>
+              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><ShoppingBag className="text-blue-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{stats?.totalSales || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Vendas</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-4">
-                <div className="flex items-center gap-3"><DollarSign className="text-yellow-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(stats?.totalRevenue || 0)}</p><p className="text-xs text-muted-foreground">Receita</p></div></div>
+              <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><DollarSign className="text-yellow-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold truncate">{formatCurrency(stats?.totalRevenue || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Receita</p></div></div>
               </Card>
             </div>
 
@@ -1235,14 +1235,14 @@ function PODPanelContent(props: {
             {/* Products */}
             {isLoading ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
             : products.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                 {products.filter(p => !searchQuery || p.title.toLowerCase().includes(searchQuery.toLowerCase())).map((product) => (
                   <ProductCard key={product._id} product={product} setSelectedProduct={setSelectedProduct} setEditingProduct={setEditingProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} publishProduct={publishProduct} canPublish={canPublish} formatCurrency={formatCurrency} publishToStore={publishToStore} isPublishing={isPublishing} />
                 ))}
               </div>
             ) : (
-              <Card className="bg-secondary border-border p-12 text-center">
-                <Package size={64} className="mx-auto mb-4 text-gray-600" /><h3 className="text-xl font-semibold mb-2">Nenhum produto</h3><p className="text-muted-foreground mb-6">Crie seu primeiro produto!</p>
+              <Card className="bg-secondary border-border p-6 md:p-12 text-center">
+                <Package size={48} className="mx-auto mb-4 text-gray-600" /><h3 className="text-lg md:text-xl font-semibold mb-2">Nenhum produto</h3><p className="text-muted-foreground text-sm mb-6">Crie seu primeiro produto!</p>
                 <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setActiveTab("create"); fetchBlueprints(); }}><Plus size={16} className="mr-2" />Criar Produto</Button>
               </Card>
             )}
@@ -1273,18 +1273,18 @@ function PODPanelContent(props: {
         {activeTab === "orders" && (
           <motion.div key="orders" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {/* Order Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <Card className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 border-orange-500/30 p-4">
-                <div className="flex items-center gap-3"><Clock className="text-orange-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.pending || 0}</p><p className="text-xs text-muted-foreground">Pendentes</p></div></div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+              <Card className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 border-orange-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><Clock className="text-orange-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.pending || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Pendentes</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
-                <div className="flex items-center gap-3"><Package className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.inProduction || 0}</p><p className="text-xs text-muted-foreground">Produção</p></div></div>
+              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><Package className="text-blue-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.inProduction || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Produção</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-4">
-                <div className="flex items-center gap-3"><Truck className="text-amber-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.shipped || 0}</p><p className="text-xs text-muted-foreground">Enviados</p></div></div>
+              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><Truck className="text-amber-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.shipped || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Enviados</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
-                <div className="flex items-center gap-3"><CheckCircle className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{orderStats?.delivered || 0}</p><p className="text-xs text-muted-foreground">Entregues</p></div></div>
+              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><CheckCircle className="text-green-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.delivered || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Entregues</p></div></div>
               </Card>
             </div>
 
@@ -1294,17 +1294,17 @@ function PODPanelContent(props: {
             ) : orders.length > 0 ? (
               <div className="space-y-4">
                 {orders.map((order) => (
-                  <Card key={order._id} className="bg-secondary border-border p-4">
-                    <div className="flex flex-col md:flex-row md:items-center gap-4">
-                      <div className="flex items-center gap-3 flex-1">
+                  <Card key={order._id} className="bg-secondary border-border p-3 md:p-4 overflow-hidden">
+                    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
                         {order.items[0]?.mockupImage ? (
-                          <img src={order.items[0].mockupImage} alt="" className="w-16 h-16 rounded-lg object-cover bg-secondary" />
+                          <img src={order.items[0].mockupImage} alt="" className="w-12 h-12 md:w-16 md:h-16 rounded-lg object-cover bg-secondary shrink-0" />
                         ) : (
-                          <div className="w-16 h-16 rounded-lg bg-secondary flex items-center justify-center"><Package className="text-gray-600" /></div>
+                          <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg bg-secondary flex items-center justify-center shrink-0"><Package className="text-gray-600" /></div>
                         )}
-                        <div>
-                          <p className="font-semibold">#{order.orderNumber}</p>
-                          <p className="text-sm text-muted-foreground">{order.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</p>
+                        <div className="min-w-0">
+                          <p className="font-semibold text-sm">#{order.orderNumber}</p>
+                          <p className="text-xs md:text-sm text-muted-foreground truncate">{order.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</p>
                           <p className="text-xs text-muted-foreground">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</p>
                         </div>
                       </div>
@@ -1332,10 +1332,10 @@ function PODPanelContent(props: {
                 ))}
               </div>
             ) : (
-              <Card className="bg-secondary border-border p-12 text-center">
-                <Receipt size={64} className="mx-auto mb-4 text-gray-600" />
-                <h3 className="text-xl font-semibold mb-2">Nenhum pedido ainda</h3>
-                <p className="text-muted-foreground mb-6">Quando seus produtos forem vendidos, os pedidos aparecerão aqui</p>
+              <Card className="bg-secondary border-border p-6 md:p-12 text-center">
+                <Receipt size={48} className="mx-auto mb-4 text-gray-600" />
+                <h3 className="text-lg md:text-xl font-semibold mb-2">Nenhum pedido ainda</h3>
+                <p className="text-muted-foreground text-sm mb-6">Quando seus produtos forem vendidos, os pedidos aparecerão aqui</p>
               </Card>
             )}
 
@@ -1350,60 +1350,60 @@ function PODPanelContent(props: {
         {activeTab === "earnings" && (
           <motion.div key="earnings" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {/* Earnings Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-4">
-                <div className="flex items-center gap-3"><DollarSign className="text-green-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.totalEarnings || 0)}</p><p className="text-xs text-muted-foreground">Total Ganho</p></div></div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><DollarSign className="text-green-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.totalEarnings || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Total Ganho</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-4">
-                <div className="flex items-center gap-3"><Clock className="text-yellow-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.pendingEarnings || 0)}</p><p className="text-xs text-muted-foreground">Pendente</p></div></div>
+              <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><Clock className="text-yellow-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.pendingEarnings || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Pendente</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-4">
-                <div className="flex items-center gap-3"><CreditCard className="text-blue-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.paidEarnings || 0)}</p><p className="text-xs text-muted-foreground">Já Sacado</p></div></div>
+              <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><CreditCard className="text-blue-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.paidEarnings || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Já Sacado</p></div></div>
               </Card>
-              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-4">
-                <div className="flex items-center gap-3"><Wallet className="text-amber-400" size={24} /><div><p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p><p className="text-xs text-muted-foreground">Disponível</p></div></div>
+              <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-3 md:p-4 overflow-hidden">
+                <div className="flex items-center gap-2 md:gap-3"><Wallet className="text-amber-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Disponível</p></div></div>
               </Card>
             </div>
 
             {isLoadingEarnings ? (
               <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
             ) : (
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {/* Commission Info */}
-                <Card className="bg-secondary border-border p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><TrendingUp className="text-green-400" />Sua Comissão</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-green-500/10 rounded-lg">
+                <Card className="bg-secondary border-border p-4 md:p-6 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2"><TrendingUp className="text-green-400 shrink-0" />Sua Comissão</h3>
+                  <div className="space-y-3 md:space-y-4">
+                    <div className="flex items-center justify-between p-3 md:p-4 bg-green-500/10 rounded-lg">
                       <div>
-                        <p className="text-sm text-muted-foreground">Taxa de Comissão</p>
-                        <p className="text-3xl font-bold text-green-400">{earningsData?.summary.commissionRate || 70}%</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">Taxa de Comissão</p>
+                        <p className="text-2xl md:text-3xl font-bold text-green-400">{earningsData?.summary.commissionRate || 70}%</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-muted-foreground">do lucro</p>
-                        <p className="text-xs text-muted-foreground">(Preço - Custo)</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">do lucro</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground">(Preço - Custo)</p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div className="p-3 bg-secondary rounded-lg">
-                        <p className="text-2xl font-bold">{earningsData?.summary.totalOrders || 0}</p>
-                        <p className="text-xs text-muted-foreground">Pedidos</p>
+                    <div className="grid grid-cols-2 gap-3 md:gap-4 text-center">
+                      <div className="p-3 bg-secondary rounded-lg overflow-hidden">
+                        <p className="text-lg md:text-2xl font-bold">{earningsData?.summary.totalOrders || 0}</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground">Pedidos</p>
                       </div>
-                      <div className="p-3 bg-secondary rounded-lg">
-                        <p className="text-2xl font-bold">{formatCurrency(earningsData?.summary.totalSales || 0)}</p>
-                        <p className="text-xs text-muted-foreground">Vendas Totais</p>
+                      <div className="p-3 bg-secondary rounded-lg overflow-hidden">
+                        <p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.totalSales || 0)}</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground">Vendas Totais</p>
                       </div>
                     </div>
                   </div>
                 </Card>
 
                 {/* Payout Card */}
-                <Card className="bg-secondary border-border p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><Wallet className="text-amber-400" />Saque</h3>
-                  <div className="space-y-4">
-                    <div className="p-4 bg-amber-500/10 rounded-lg text-center">
-                      <p className="text-sm text-muted-foreground mb-1">Disponível para Saque</p>
-                      <p className="text-4xl font-bold text-amber-400">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p>
-                      <p className="text-xs text-muted-foreground mt-2">Mínimo: {formatCurrency(earningsData?.summary.minPayoutAmount || 50)}</p>
+                <Card className="bg-secondary border-border p-4 md:p-6 overflow-hidden">
+                  <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2"><Wallet className="text-amber-400 shrink-0" />Saque</h3>
+                  <div className="space-y-3 md:space-y-4">
+                    <div className="p-3 md:p-4 bg-amber-500/10 rounded-lg text-center">
+                      <p className="text-xs md:text-sm text-muted-foreground mb-1">Disponível para Saque</p>
+                      <p className="text-2xl md:text-4xl font-bold text-amber-400 truncate">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p>
+                      <p className="text-[10px] md:text-xs text-muted-foreground mt-2">Mínimo: {formatCurrency(earningsData?.summary.minPayoutAmount || 50)}</p>
                     </div>
                     <Button 
                       className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
@@ -1418,9 +1418,9 @@ function PODPanelContent(props: {
 
                 {/* Monthly Breakdown */}
                 {earningsData?.monthlyBreakdown && earningsData.monthlyBreakdown.length > 0 && (
-                  <Card className="bg-secondary border-border p-6 md:col-span-2">
-                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2"><TrendingUp className="text-green-400" />Ganhos Mensais</h3>
-                    <div className="flex gap-2 overflow-x-auto pb-2">
+                  <Card className="bg-secondary border-border p-4 md:p-6 md:col-span-2 overflow-hidden">
+                    <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2"><TrendingUp className="text-green-400 shrink-0" />Ganhos Mensais</h3>
+                    <div className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-2">
                       {earningsData.monthlyBreakdown.map((m) => (
                         <div key={m.month} className="flex-1 min-w-[80px] text-center p-3 bg-secondary rounded-lg">
                           <p className="text-xs text-muted-foreground">{m.month}</p>
@@ -1469,8 +1469,8 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
       <Card className="bg-secondary border-border overflow-hidden hover:border-amber-500/50 transition-all">
         <div className="relative aspect-square bg-gradient-to-br from-gray-800 to-card">
           {product.primaryMockup ? <img src={product.primaryMockup} alt={product.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><CategoryIcon size={48} className="text-gray-600" /></div>}
-          <Badge className={cn("absolute top-2 left-2", statusInfo.color, "text-white")}><StatusIcon size={12} className="mr-1" />{statusInfo.label}</Badge>
-          {isInStore && <Badge className="absolute top-2 left-24 bg-green-600 text-white"><Store size={12} className="mr-1" />Na Loja</Badge>}
+          <Badge className={cn("absolute top-2 left-2 text-[10px]", statusInfo.color, "text-white")}><StatusIcon size={10} className="mr-1" />{statusInfo.label}</Badge>
+          {isInStore && <Badge className="absolute top-9 left-2 bg-green-600 text-white text-[10px]"><Store size={10} className="mr-1" />Na Loja</Badge>}
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <DropdownMenu>
               <DropdownMenuTrigger asChild><Button size="icon" variant="secondary" className="h-8 w-8"><MoreVertical size={16} /></Button></DropdownMenuTrigger>
@@ -1498,11 +1498,11 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
             </DropdownMenu>
           </div>
         </div>
-        <div className="p-4 space-y-2">
-          <h3 className="font-semibold truncate">{product.title}</h3>
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-green-400">{formatCurrency(product.suggestedPrice)}</span>
-            <span className="text-xs text-muted-foreground">Custo: {formatCurrency(product.baseCost)}</span>
+        <div className="p-3 md:p-4 space-y-2 min-w-0">
+          <h3 className="font-semibold text-sm truncate">{product.title}</h3>
+          <div className="flex items-center justify-between gap-1 min-w-0">
+            <span className="text-sm md:text-lg font-bold text-green-400 truncate">{formatCurrency(product.suggestedPrice)}</span>
+            <span className="text-[10px] md:text-xs text-muted-foreground shrink-0">Custo: {formatCurrency(product.baseCost)}</span>
           </div>
           <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border">
             <span><Eye size={12} className="inline mr-1" />{product.views}</span>
@@ -1604,9 +1604,9 @@ function CreateWizard(props: {
     return (
       <div className="relative pb-24">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold mb-2">Escolha o Produto Base</h2>
-          <p className="text-muted-foreground">Selecione o tipo de produto que deseja criar</p>
+        <div className="text-center mb-4 md:mb-6">
+          <h2 className="text-xl md:text-2xl font-bold mb-2">Escolha o Produto Base</h2>
+          <p className="text-muted-foreground text-sm">Selecione o tipo de produto que deseja criar</p>
         </div>
 
         {/* Search */}
@@ -1627,7 +1627,7 @@ function CreateWizard(props: {
         </div>
 
         {/* Categories - Horizontal scroll on mobile */}
-        <div className="flex gap-2 justify-start overflow-x-auto pb-2 mb-6 scrollbar-hide">
+        <div className="flex gap-2 justify-start overflow-x-auto pb-2 mb-4 md:mb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {BLUEPRINT_CATEGORIES.map((cat) => (
             <Button 
               key={cat.key} 
@@ -1681,7 +1681,7 @@ function CreateWizard(props: {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
               {paginatedBlueprints.map((bp) => (
                 <motion.div
                   key={bp.id}
@@ -1745,7 +1745,7 @@ function CreateWizard(props: {
             )}
           </>
         ) : (
-          <Card className="bg-secondary border-border p-12 text-center">
+          <Card className="bg-secondary border-border p-6 md:p-12 text-center">
             <Package size={48} className="mx-auto mb-4 text-gray-600" />
             <h3 className="text-lg font-semibold mb-2">Nenhum produto encontrado</h3>
             <p className="text-muted-foreground mb-4">Tente outra categoria ou termo de busca</p>
@@ -1793,13 +1793,13 @@ function CreateWizard(props: {
     return (
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => setStep(1)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
-        <div className="text-center"><h2 className="text-2xl font-bold mb-2">Escolha o Fornecedor</h2><p className="text-muted-foreground">Quem produzirá seu {selectedBlueprint?.title}</p></div>
+        <div className="text-center"><h2 className="text-xl md:text-2xl font-bold mb-2">Escolha o Fornecedor</h2><p className="text-muted-foreground text-sm truncate">Quem produzirá seu {selectedBlueprint?.title}</p></div>
         {isFetchingProviders ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
         : providers.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 max-w-4xl mx-auto">
             {providers.map((p) => (<Card key={p.id} className={cn("bg-secondary border-border p-4 cursor-pointer transition-all hover:border-amber-500/50", selectedProvider?.id === p.id && "ring-2 ring-amber-500")} onClick={() => setSelectedProvider(p)}><h4 className="font-semibold mb-2">{p.title}</h4><p className="text-sm text-muted-foreground flex items-center gap-1"><Globe size={14} />{p.location?.country || "Global"}</p></Card>))}
           </div>
-        ) : <Card className="bg-secondary border-border p-12 text-center"><AlertCircle size={48} className="mx-auto mb-4 text-yellow-500" /><h3 className="text-lg font-semibold">Nenhum fornecedor</h3></Card>}
+        ) : <Card className="bg-secondary border-border p-6 md:p-12 text-center"><AlertCircle size={48} className="mx-auto mb-4 text-yellow-500" /><h3 className="text-lg font-semibold">Nenhum fornecedor</h3></Card>}
         {selectedProvider && <div className="flex justify-center"><Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setStep(3); fetchVariants(selectedBlueprint!.id, selectedProvider.id); }}>Próximo: Upload<ArrowRight size={16} className="ml-2" /></Button></div>}
       </div>
     );
@@ -1845,13 +1845,13 @@ function CreateWizard(props: {
       <div className="space-y-6 pb-24">
         <Button variant="ghost" onClick={() => setStep(2)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Escolha seu Design</h2>
-          <p className="text-muted-foreground">Faça upload, use suas criações ou escolha da galeria pública</p>
+          <h2 className="text-xl md:text-2xl font-bold mb-2">Escolha seu Design</h2>
+          <p className="text-muted-foreground text-sm">Faça upload, use suas criações ou escolha da galeria pública</p>
           <p className="text-xs text-amber-400/80 mt-1">💡 Para melhor resultado, use PNG com fundo transparente (sem fundo preto/branco)</p>
         </div>
         
         <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             {/* Left: Design Selection */}
             <div className="space-y-4">
               {/* Tabs */}
@@ -2054,7 +2054,7 @@ function CreateWizard(props: {
                     {/* Profit Highlight */}
                     <div className="mt-3 p-2 bg-green-500/10 rounded-lg text-center">
                       <p className="text-xs text-muted-foreground">Seu lucro por venda</p>
-                      <p className="text-xl font-bold text-green-400">{formatCurrency(sellingPrice - baseCost)}</p>
+                      <p className="text-lg md:text-xl font-bold text-green-400 truncate">{formatCurrency(sellingPrice - baseCost)}</p>
                     </div>
                   </Card>
                 )}
@@ -2308,15 +2308,15 @@ function CreateWizard(props: {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-50 bg-black/95 overflow-auto"
             >
-              <div className="min-h-screen p-4 md:p-8">
+              <div className="min-h-screen p-3 md:p-8">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-2xl font-bold flex items-center gap-2">
-                      <Layers size={24} className="text-amber-400" />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 md:mb-6">
+                  <div className="min-w-0">
+                    <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                      <Layers size={20} className="text-amber-400 shrink-0" />
                       Editor Avançado
                     </h2>
-                    <p className="text-muted-foreground">Adicione texto, camadas e posicione com precisão</p>
+                    <p className="text-muted-foreground text-sm">Adicione texto, camadas e posicione com precisão</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button 
@@ -2407,12 +2407,12 @@ function CreateWizard(props: {
     <div className="space-y-6 pb-24">
       <Button variant="ghost" onClick={() => setStep(3)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-2">Finalize Seu Produto</h2>
-        <p className="text-muted-foreground">Configure título, descrição e preço de venda</p>
+        <h2 className="text-xl md:text-2xl font-bold mb-2">Finalize Seu Produto</h2>
+        <p className="text-muted-foreground text-sm">Configure título, descrição e preço de venda</p>
       </div>
       
       <div className="max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-8">
           {/* Left: Mockup Preview (2 cols) */}
           <div className="md:col-span-2 space-y-4">
             <h4 className="font-semibold flex items-center gap-2">
@@ -2468,27 +2468,27 @@ function CreateWizard(props: {
           <div className="md:col-span-3 space-y-6">
             {/* Product Highlights */}
             <Card className="bg-secondary border-border p-4">
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Star size={18} className="text-amber-400" />
+              <div className="grid grid-cols-3 gap-2 md:gap-4 text-center">
+                <div className="overflow-hidden">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-1 md:mb-2">
+                    <Star size={14} className="text-amber-400" />
                   </div>
-                  <p className="text-sm font-medium">Qualidade Premium</p>
-                  <p className="text-xs text-muted-foreground">Material de alta qualidade</p>
+                  <p className="text-xs md:text-sm font-medium truncate">Qualidade Premium</p>
+                  <p className="text-[10px] md:text-xs text-muted-foreground truncate">Material de alta qualidade</p>
                 </div>
-                <div>
-                  <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Truck size={18} className="text-green-400" />
+                <div className="overflow-hidden">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-1 md:mb-2">
+                    <Truck size={14} className="text-green-400" />
                   </div>
-                  <p className="text-sm font-medium">{BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias</p>
-                  <p className="text-xs text-muted-foreground">Entrega para Brasil</p>
+                  <p className="text-xs md:text-sm font-medium truncate">{BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias</p>
+                  <p className="text-[10px] md:text-xs text-muted-foreground truncate">Entrega para Brasil</p>
                 </div>
-                <div>
-                  <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <CheckCircle size={18} className="text-blue-400" />
+                <div className="overflow-hidden">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-1 md:mb-2">
+                    <CheckCircle size={14} className="text-blue-400" />
                   </div>
-                  <p className="text-sm font-medium">Sob Demanda</p>
-                  <p className="text-xs text-muted-foreground">Feito quando vendido</p>
+                  <p className="text-xs md:text-sm font-medium truncate">Sob Demanda</p>
+                  <p className="text-[10px] md:text-xs text-muted-foreground truncate">Feito quando vendido</p>
                 </div>
               </div>
             </Card>
@@ -2517,12 +2517,12 @@ function CreateWizard(props: {
             </div>
             
             {/* Pricing Card */}
-            <Card className="bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30 p-6 space-y-4">
-              <h3 className="font-semibold flex items-center gap-2 text-lg">
-                <DollarSign size={20} className="text-green-400" />
+            <Card className="bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30 p-4 md:p-6 space-y-4 overflow-hidden">
+              <h3 className="font-semibold flex items-center gap-2 text-base md:text-lg">
+                <DollarSign size={20} className="text-green-400 shrink-0" />
                 Definir Preços
               </h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
                 <div>
                   <Label className="text-muted-foreground text-sm">Custo Base (R$)</Label>
                   <Input 
@@ -2552,13 +2552,13 @@ function CreateWizard(props: {
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-green-500/20 border border-green-500/40 rounded-xl p-4 flex items-center justify-between"
                 >
-                  <div>
-                    <p className="text-green-400 font-bold text-2xl">{formatCurrency(sellingPrice - baseCost)}</p>
-                    <p className="text-green-400/80 text-sm">Lucro por venda</p>
+                  <div className="min-w-0">
+                    <p className="text-green-400 font-bold text-xl md:text-2xl truncate">{formatCurrency(sellingPrice - baseCost)}</p>
+                    <p className="text-green-400/80 text-xs md:text-sm">Lucro por venda</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-green-400 font-bold text-xl">{((sellingPrice - baseCost) / sellingPrice * 100).toFixed(0)}%</p>
-                    <p className="text-green-400/80 text-sm">Margem</p>
+                  <div className="text-right shrink-0">
+                    <p className="text-green-400 font-bold text-lg md:text-xl">{((sellingPrice - baseCost) / sellingPrice * 100).toFixed(0)}%</p>
+                    <p className="text-green-400/80 text-xs md:text-sm">Margem</p>
                   </div>
                 </motion.div>
               )}
@@ -2671,9 +2671,9 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={onClose}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-2 md:p-4" onClick={onClose}>
       <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-card rounded-xl border border-border w-full max-w-4xl max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="grid md:grid-cols-2 gap-6 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-4 md:p-6">
           {/* Left: Product Image */}
           <div className="space-y-4">
             <div className="aspect-square bg-secondary rounded-xl overflow-hidden relative group">
@@ -2751,9 +2751,9 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
               <Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button>
             </div>
             
-            <h2 className="text-2xl font-bold">{product.title}</h2>
-            {product.shortDescription && <p className="text-muted-foreground text-sm">{product.shortDescription}</p>}
-            <p className="text-muted-foreground">{product.description}</p>
+            <h2 className="text-xl md:text-2xl font-bold line-clamp-2">{product.title}</h2>
+            {product.shortDescription && <p className="text-muted-foreground text-sm line-clamp-2">{product.shortDescription}</p>}
+            <p className="text-muted-foreground text-sm line-clamp-4">{product.description}</p>
             
             {/* Tags */}
             {product.tags && product.tags.length > 0 && (
@@ -2767,10 +2767,10 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
             )}
 
             {/* Pricing */}
-            <div className="bg-secondary rounded-lg p-4 space-y-2">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Preço de Venda</span>
-                <span className="text-xl font-bold text-green-400">{formatCurrency(product.suggestedPrice)}</span>
+            <div className="bg-secondary rounded-lg p-3 md:p-4 space-y-2 overflow-hidden">
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground text-sm">Preço de Venda</span>
+                <span className="text-lg md:text-xl font-bold text-green-400 truncate">{formatCurrency(product.suggestedPrice)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Custo Base</span>
@@ -2786,21 +2786,21 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <Card className="bg-secondary p-3 border-border">
-                <Eye size={20} className="mx-auto mb-1 text-blue-400" />
-                <p className="font-bold">{product.views}</p>
-                <p className="text-xs text-muted-foreground">Visualizações</p>
+            <div className="grid grid-cols-3 gap-2 md:gap-3 text-center">
+              <Card className="bg-secondary p-2 md:p-3 border-border overflow-hidden">
+                <Eye size={18} className="mx-auto mb-1 text-blue-400" />
+                <p className="font-bold text-sm md:text-base">{product.views}</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">Visualizações</p>
               </Card>
-              <Card className="bg-secondary p-3 border-border">
-                <ShoppingBag size={20} className="mx-auto mb-1 text-green-400" />
-                <p className="font-bold">{product.sales}</p>
-                <p className="text-xs text-muted-foreground">Vendas</p>
+              <Card className="bg-secondary p-2 md:p-3 border-border overflow-hidden">
+                <ShoppingBag size={18} className="mx-auto mb-1 text-green-400" />
+                <p className="font-bold text-sm md:text-base">{product.sales}</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">Vendas</p>
               </Card>
-              <Card className="bg-secondary p-3 border-border">
-                <DollarSign size={20} className="mx-auto mb-1 text-yellow-400" />
-                <p className="font-bold">{formatCurrency(product.revenue)}</p>
-                <p className="text-xs text-muted-foreground">Receita</p>
+              <Card className="bg-secondary p-2 md:p-3 border-border overflow-hidden">
+                <DollarSign size={18} className="mx-auto mb-1 text-yellow-400" />
+                <p className="font-bold text-sm md:text-base truncate">{formatCurrency(product.revenue)}</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">Receita</p>
               </Card>
             </div>
 
@@ -2937,17 +2937,17 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
   ] as const;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={onClose}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-2 md:p-4" onClick={onClose}>
       <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-card rounded-xl border border-border w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between p-3 md:p-4 border-b border-border min-w-0">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
             {product.primaryMockup && (
               <img src={product.primaryMockup} alt="" className="w-10 h-10 rounded-lg object-cover" />
             )}
-            <div>
-              <h2 className="text-lg font-bold">Editar Produto</h2>
-              <p className="text-xs text-muted-foreground">{product.templateName}</p>
+            <div className="min-w-0">
+              <h2 className="text-base md:text-lg font-bold">Editar Produto</h2>
+              <p className="text-xs text-muted-foreground truncate">{product.templateName}</p>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button>
@@ -2973,7 +2973,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-4 md:p-6">
           {activeTab === 'info' && (
             <div className="space-y-5">
               <div>
@@ -3054,21 +3054,21 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                       type="number" 
                       value={price} 
                       onChange={(e) => setPrice(parseFloat(e.target.value) || 0)} 
-                      className="bg-secondary border-border mt-1.5 text-xl font-bold"
+                      className="bg-secondary border-border mt-1.5 text-base md:text-xl font-bold"
                       step="0.01"
                       min={product.baseCost}
                     />
                     <p className="text-xs text-muted-foreground mt-1">Preço mínimo: {(product.baseCost).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
-                    <div>
-                      <span className="text-muted-foreground text-sm">Custo Base</span>
-                      <p className="text-lg font-medium">{product.baseCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                  <div className="grid grid-cols-2 gap-3 md:gap-4 pt-4 border-t border-border">
+                    <div className="overflow-hidden">
+                      <span className="text-muted-foreground text-xs md:text-sm">Custo Base</span>
+                      <p className="text-base md:text-lg font-medium truncate">{product.baseCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     </div>
-                    <div>
-                      <span className="text-muted-foreground text-sm">Seu Lucro</span>
-                      <p className={cn("text-lg font-bold", profit >= 0 ? "text-green-400" : "text-red-400")}>
+                    <div className="overflow-hidden">
+                      <span className="text-muted-foreground text-xs md:text-sm">Seu Lucro</span>
+                      <p className={cn("text-base md:text-lg font-bold truncate", profit >= 0 ? "text-green-400" : "text-red-400")}>
                         {profit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                       </p>
                     </div>
@@ -3077,7 +3077,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                   <div className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Margem de Lucro</span>
-                      <span className={cn("text-2xl font-bold", parseFloat(margin) >= 30 ? "text-green-400" : parseFloat(margin) >= 15 ? "text-yellow-400" : "text-red-400")}>
+                      <span className={cn("text-xl md:text-2xl font-bold", parseFloat(margin) >= 30 ? "text-green-400" : parseFloat(margin) >= 15 ? "text-yellow-400" : "text-red-400")}>
                         {margin}%
                       </span>
                     </div>

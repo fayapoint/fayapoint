@@ -156,7 +156,7 @@ export function ProfilePanel({
   };
 
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-4 md:space-y-8 pb-8">
       {/* Profile Header */}
       <Card className="bg-gradient-to-br from-gray-900 to-card border-border overflow-hidden">
         {/* Banner */}
@@ -172,8 +172,8 @@ export function ProfilePanel({
         </div>
 
         {/* Profile Info */}
-        <div className="px-6 pb-6 -mt-12 relative">
-          <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
+        <div className="px-4 md:px-6 pb-4 md:pb-6 -mt-12 relative">
+          <div className="flex flex-col md:flex-row items-start md:items-end gap-4 md:gap-6">
             {/* Avatar Editor */}
             <ProfileAvatarEditor
               user={user}
@@ -183,9 +183,9 @@ export function ProfilePanel({
             />
 
             {/* User Info */}
-            <div className="flex-1 pt-4">
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold">{user.name}</h2>
+            <div className="flex-1 min-w-0 pt-4">
+              <div className="flex items-center gap-2 md:gap-3 mb-2 min-w-0">
+                <h2 className="text-xl md:text-2xl font-bold truncate">{user.name}</h2>
                 {!isEditing && (
                   <Button
                     variant="ghost"
@@ -197,7 +197,7 @@ export function ProfilePanel({
                   </Button>
                 )}
               </div>
-              <p className="text-muted-foreground mb-3">{user.email}</p>
+              <p className="text-muted-foreground mb-3 text-sm md:text-base truncate">{user.email}</p>
               
               {user.profile?.bio && !isEditing && (
                 <p className="text-muted-foreground text-sm max-w-xl mb-4">
@@ -206,30 +206,30 @@ export function ProfilePanel({
               )}
 
               {/* Quick Stats */}
-              <div className="flex flex-wrap gap-4 text-sm">
+              <div className="flex flex-wrap gap-2 md:gap-4 text-sm">
                 {user.profile?.company && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Building2 size={14} />
-                    <span>{user.profile.company}</span>
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Building2 size={14} className="shrink-0" />
+                    <span className="truncate">{user.profile.company}</span>
                   </div>
                 )}
                 {user.profile?.position && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Briefcase size={14} />
-                    <span>{user.profile.position}</span>
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Briefcase size={14} className="shrink-0" />
+                    <span className="truncate">{user.profile.position}</span>
                   </div>
                 )}
                 {user.profile?.location && (
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin size={14} />
-                    <span>{user.profile.location}</span>
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <MapPin size={14} className="shrink-0" />
+                    <span className="truncate">{user.profile.location}</span>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Level Card */}
-            <div className="bg-secondary/50 rounded-xl p-4 border border-border min-w-[180px]">
+            <div className="bg-secondary/50 rounded-xl p-3 md:p-4 border border-border w-full md:min-w-[180px] md:w-auto">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
                   <span className="text-xl font-bold text-amber-400">{stats.level}</span>
@@ -254,10 +254,10 @@ export function ProfilePanel({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="bg-card border-border p-6">
-            <h3 className="text-lg font-semibold mb-6">Editar Perfil</h3>
-            
-            <div className="grid md:grid-cols-2 gap-6">
+          <Card className="bg-card border-border p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6">Editar Perfil</h3>
+
+            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="name">Nome</Label>
@@ -280,7 +280,7 @@ export function ProfilePanel({
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="company">Empresa</Label>
                     <Input
@@ -340,7 +340,7 @@ export function ProfilePanel({
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="flex justify-end gap-3 mt-4 md:mt-6">
               <Button
                 variant="outline"
                 onClick={() => setIsEditing(false)}
@@ -371,69 +371,73 @@ export function ProfilePanel({
       )}
 
       {/* Stats Grid */}
-      <div className="grid md:grid-cols-4 gap-4">
-        <Card className="bg-card border-border p-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
-              <Flame size={24} className="text-orange-400" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+        <Card className="bg-card border-border p-3 md:p-6 overflow-hidden">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-500/20 rounded-xl flex items-center justify-center shrink-0">
+              <Flame size={20} className="text-orange-400 md:hidden" />
+              <Flame size={24} className="text-orange-400 hidden md:block" />
             </div>
-            <div>
-              <p className="text-2xl font-bold">{stats.streak}</p>
-              <p className="text-xs text-muted-foreground uppercase">Dias seguidos</p>
-            </div>
-          </div>
-        </Card>
-
-        <Card className="bg-card border-border p-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
-              <Zap size={24} className="text-yellow-400" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{stats.xp.toLocaleString()}</p>
-              <p className="text-xs text-muted-foreground uppercase">XP Total</p>
+            <div className="min-w-0">
+              <p className="text-xl md:text-2xl font-bold">{stats.streak}</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">Dias seguidos</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-card border-border p-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
-              <Trophy size={24} className="text-amber-400" />
+        <Card className="bg-card border-border p-3 md:p-6 overflow-hidden">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center shrink-0">
+              <Zap size={20} className="text-yellow-400 md:hidden" />
+              <Zap size={24} className="text-yellow-400 hidden md:block" />
             </div>
-            <div>
-              <p className="text-2xl font-bold">{totalAchievements}</p>
-              <p className="text-xs text-muted-foreground uppercase">Conquistas</p>
+            <div className="min-w-0">
+              <p className="text-xl md:text-2xl font-bold truncate">{stats.xp.toLocaleString()}</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">XP Total</p>
             </div>
           </div>
         </Card>
 
-        <Card className="bg-card border-border p-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-              <Star size={24} className="text-blue-400" />
+        <Card className="bg-card border-border p-3 md:p-6 overflow-hidden">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/20 rounded-xl flex items-center justify-center shrink-0">
+              <Trophy size={20} className="text-amber-400 md:hidden" />
+              <Trophy size={24} className="text-amber-400 hidden md:block" />
             </div>
-            <div>
-              <p className="text-2xl font-bold">{stats.longestStreak || stats.streak}</p>
-              <p className="text-xs text-muted-foreground uppercase">Maior streak</p>
+            <div className="min-w-0">
+              <p className="text-xl md:text-2xl font-bold">{totalAchievements}</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">Conquistas</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="bg-card border-border p-3 md:p-6 overflow-hidden">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0">
+              <Star size={20} className="text-blue-400 md:hidden" />
+              <Star size={24} className="text-blue-400 hidden md:block" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xl md:text-2xl font-bold">{stats.longestStreak || stats.streak}</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">Maior streak</p>
             </div>
           </div>
         </Card>
       </div>
 
       {/* Achievements Summary */}
-      <Card className="bg-card border-border p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Trophy className="text-yellow-400" />
-            Conquistas por Nível
+      <Card className="bg-card border-border p-4 md:p-6 overflow-hidden">
+        <div className="flex items-center justify-between mb-4 md:mb-6 gap-2">
+          <h3 className="text-base md:text-lg font-semibold flex items-center gap-2">
+            <Trophy className="text-yellow-400 shrink-0" />
+            <span className="truncate">Conquistas por Nível</span>
           </h3>
-          <span className="text-sm text-muted-foreground">
-            {totalAchievements} de {achievements.length} desbloqueadas
+          <span className="text-xs md:text-sm text-muted-foreground whitespace-nowrap shrink-0">
+            {totalAchievements}/{achievements.length}
           </span>
         </div>
 
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 md:gap-4">
           {(['bronze', 'silver', 'gold', 'platinum', 'diamond'] as const).map((tier) => {
             const count = achievementsByTier[tier] || 0;
             const tierConfig = TIER_COLORS[tier];
@@ -442,18 +446,17 @@ export function ProfilePanel({
               <div
                 key={tier}
                 className={cn(
-                  "rounded-xl p-4 text-center border",
+                  "rounded-xl p-2 md:p-4 text-center border",
                   count > 0 ? `bg-gradient-to-br ${tierConfig}` : "bg-secondary/50 border-border"
                 )}
               >
                 <Award
-                  size={32}
-                  className={cn("mx-auto mb-2", count > 0 ? "text-white" : "text-gray-600")}
+                  className={cn("mx-auto mb-1 md:mb-2 w-5 h-5 md:w-8 md:h-8", count > 0 ? "text-white" : "text-gray-600")}
                 />
-                <p className={cn("text-2xl font-bold", count > 0 ? "text-white" : "text-gray-600")}>
+                <p className={cn("text-lg md:text-2xl font-bold", count > 0 ? "text-white" : "text-gray-600")}>
                   {count}
                 </p>
-                <p className={cn("text-xs uppercase tracking-wider", count > 0 ? "text-white/80" : "text-gray-600")}>
+                <p className={cn("text-[9px] md:text-xs uppercase tracking-wider", count > 0 ? "text-white/80" : "text-gray-600")}>
                   {tier}
                 </p>
               </div>
@@ -464,30 +467,31 @@ export function ProfilePanel({
 
       {/* Recent Achievements */}
       {unlockedAchievements.length > 0 && (
-        <Card className="bg-card border-border p-6">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Award className="text-amber-400" />
+        <Card className="bg-card border-border p-4 md:p-6 overflow-hidden">
+          <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2">
+            <Award className="text-amber-400 shrink-0" />
             Conquistas Recentes
           </h3>
 
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
             {unlockedAchievements.slice(0, 8).map((achievement) => (
               <div
                 key={achievement.id}
                 className={cn(
-                  "rounded-xl p-4 bg-gradient-to-br border",
+                  "rounded-xl p-3 md:p-4 bg-gradient-to-br border overflow-hidden",
                   TIER_COLORS[achievement.tier]
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <Trophy size={20} className="text-white" />
+                <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
+                    <Trophy size={16} className="text-white md:hidden" />
+                    <Trophy size={20} className="text-white hidden md:block" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-white text-sm capitalize">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-white text-xs md:text-sm capitalize truncate">
                       {achievement.id.replace(/_/g, " ")}
                     </p>
-                    <p className="text-xs text-white/70">
+                    <p className="text-[10px] md:text-xs text-white/70">
                       +{achievement.xpReward} XP
                     </p>
                   </div>
