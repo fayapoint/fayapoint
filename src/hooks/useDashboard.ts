@@ -88,7 +88,7 @@ export function useDashboard(): UseDashboardReturn {
           localStorage.removeItem('fayai_user');
         }
         if (mountedRef.current) {
-          setError(token ? 'Unauthorized' : 'No session');
+          setError('Unauthorized');
           setIsLoading(false);
         }
         fetchingRef.current = false;
