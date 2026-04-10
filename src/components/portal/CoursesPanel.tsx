@@ -75,81 +75,37 @@ const courseLevelBadgeStyles: Record<string, string> = {
   advanced: "border-fuchsia-400/30 bg-fuchsia-500/10 text-fuchsia-300",
 };
 
+const CLOUDINARY_BASE = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dfd7iigzq"}/image/upload`;
+
 const COURSE_THUMBNAILS: Record<string, {
   logo?: string;
-  thumbnail?: string;
+  thumbnailPath?: string;
   icon?: React.ComponentType<{ size?: number; className?: string }>;
   gradient: string;
 }> = {
-  "chatgpt-masterclass": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815944/fayai/courses/chatgpt-masterclass/pw1gxfwkn4ideutfbalt.png",
-    gradient: "from-emerald-600 to-teal-800",
-  },
-  "chatgpt-allowlisting": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815942/fayai/courses/chatgpt-allowlisting/bimrdbspupb5ph1qzch5.png",
-    gradient: "from-emerald-700 to-cyan-900",
-  },
-  "claude-ia-segura": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815946/fayai/courses/claude-ia-segura/dodtsfgf3ucgi8nne9y4.png",
-    gradient: "from-amber-700 to-orange-900",
-  },
-  "claude-cowork-colaboracao": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815945/fayai/courses/claude-cowork-colaboracao/yfw6jjm90lzss2qrwjkc.png",
-    gradient: "from-orange-600 to-amber-800",
-  },
-  "ia-sem-filtro-por-claude": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815950/fayai/courses/ia-sem-filtro-por-claude/yk7p49jwv1zbrrkxiqyf.png",
-    gradient: "from-violet-700 to-purple-900",
-  },
-  "gemini-ia-google": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815949/fayai/courses/gemini-ia-google/gxbns4pibwmjai9wy4yk.png",
-    gradient: "from-blue-600 to-indigo-800",
-  },
-  "midjourney-arte-profissional": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815954/fayai/courses/midjourney-arte-profissional/esvtyrxyt2b7gk6qk1tr.png",
-    gradient: "from-slate-700 to-zinc-900",
-  },
-  "leonardo-ai-criacao-visual": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815952/fayai/courses/leonardo-ai-criacao-visual/uz5xwksrh2c9e1i4tnae.png",
-    gradient: "from-purple-600 to-fuchsia-800",
-  },
-  "n8n-automacao-avancada": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815956/fayai/courses/n8n-automacao-avancada/tse6ycz18sqcb7bdsg7z.png",
-    gradient: "from-red-600 to-rose-800",
-  },
-  "make-integracao-total": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815953/fayai/courses/make-integracao-total/gkhavewcp1idon2a9nvq.png",
-    gradient: "from-violet-600 to-indigo-800",
-  },
-  "perplexity-pesquisa-inteligente": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815958/fayai/courses/perplexity-pesquisa-inteligente/q52ftbf6hvhaspnxwo6i.png",
-    gradient: "from-cyan-600 to-blue-800",
-  },
-  "banana-dev-deploy-ia": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815941/fayai/courses/banana-dev-deploy-ia/dsmelccwvukkfjkeskcy.png",
-    gradient: "from-yellow-600 to-amber-800",
-  },
-  "prompt-engineering": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815961/fayai/courses/prompt-engineering/o8magdivbliteczkkxo9.png",
-    gradient: "from-pink-600 to-rose-800",
-  },
-  "crie-agentes-de-ia-autonomos": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815947/fayai/courses/crie-agentes-de-ia-autonomos/ipjpkznojjcbl1sc0se5.png",
-    gradient: "from-sky-600 to-blue-800",
-  },
-  "openclaw-ia-open-source": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815957/fayai/courses/openclaw-ia-open-source/t896tqfqy72zjt2jdhu8.png",
-    gradient: "from-green-600 to-emerald-800",
-  },
-  "autoresearch-singularity": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815935/fayai/courses/autoresearch-singularity/bs1ybi8ww339u1j6gavy.png",
-    gradient: "from-fuchsia-600 to-purple-900",
-  },
-  "primeiras-automacoes": {
-    thumbnail: "https://res.cloudinary.com/dfd7iigzq/image/upload/v1775815959/fayai/courses/primeiras-automacoes/jkqklclcchprjq8d7qo8.png",
-    gradient: "from-amber-600 to-yellow-800",
-  },
+  "chatgpt-masterclass": { thumbnailPath: "fayai/courses/chatgpt-masterclass/pw1gxfwkn4ideutfbalt.png", gradient: "from-emerald-600 to-teal-800" },
+  "chatgpt-allowlisting": { thumbnailPath: "fayai/courses/chatgpt-allowlisting/bimrdbspupb5ph1qzch5.png", gradient: "from-emerald-700 to-cyan-900" },
+  "claude-ia-segura": { thumbnailPath: "fayai/courses/claude-ia-segura/dodtsfgf3ucgi8nne9y4.png", gradient: "from-amber-700 to-orange-900" },
+  "claude-cowork-colaboracao": { thumbnailPath: "fayai/courses/claude-cowork-colaboracao/yfw6jjm90lzss2qrwjkc.png", gradient: "from-orange-600 to-amber-800" },
+  "ia-sem-filtro-por-claude": { thumbnailPath: "fayai/courses/ia-sem-filtro-por-claude/yk7p49jwv1zbrrkxiqyf.png", gradient: "from-violet-700 to-purple-900" },
+  "gemini-ia-google": { thumbnailPath: "fayai/courses/gemini-ia-google/gxbns4pibwmjai9wy4yk.png", gradient: "from-blue-600 to-indigo-800" },
+  "midjourney-arte-profissional": { thumbnailPath: "fayai/courses/midjourney-arte-profissional/esvtyrxyt2b7gk6qk1tr.png", gradient: "from-slate-700 to-zinc-900" },
+  "leonardo-ai-criacao-visual": { thumbnailPath: "fayai/courses/leonardo-ai-criacao-visual/uz5xwksrh2c9e1i4tnae.png", gradient: "from-purple-600 to-fuchsia-800" },
+  "n8n-automacao-avancada": { thumbnailPath: "fayai/courses/n8n-automacao-avancada/tse6ycz18sqcb7bdsg7z.png", gradient: "from-red-600 to-rose-800" },
+  "make-integracao-total": { thumbnailPath: "fayai/courses/make-integracao-total/gkhavewcp1idon2a9nvq.png", gradient: "from-violet-600 to-indigo-800" },
+  "perplexity-pesquisa-inteligente": { thumbnailPath: "fayai/courses/perplexity-pesquisa-inteligente/q52ftbf6hvhaspnxwo6i.png", gradient: "from-cyan-600 to-blue-800" },
+  "banana-dev-deploy-ia": { thumbnailPath: "fayai/courses/banana-dev-deploy-ia/dsmelccwvukkfjkeskcy.png", gradient: "from-yellow-600 to-amber-800" },
+  "prompt-engineering": { thumbnailPath: "fayai/courses/prompt-engineering/o8magdivbliteczkkxo9.png", gradient: "from-pink-600 to-rose-800" },
+  "crie-agentes-de-ia-autonomos": { thumbnailPath: "fayai/courses/crie-agentes-de-ia-autonomos/ipjpkznojjcbl1sc0se5.png", gradient: "from-sky-600 to-blue-800" },
+  "openclaw-ia-open-source": { thumbnailPath: "fayai/courses/openclaw-ia-open-source/t896tqfqy72zjt2jdhu8.png", gradient: "from-green-600 to-emerald-800" },
+  "autoresearch-singularity": { thumbnailPath: "fayai/courses/autoresearch-singularity/bs1ybi8ww339u1j6gavy.png", gradient: "from-fuchsia-600 to-purple-900" },
+  "primeiras-automacoes": { thumbnailPath: "fayai/courses/primeiras-automacoes/jkqklclcchprjq8d7qo8.png", gradient: "from-amber-600 to-yellow-800" },
 };
+
+function getCourseThumbnailUrl(slug: string): string | undefined {
+  const entry = COURSE_THUMBNAILS[slug];
+  return entry?.thumbnailPath ? `${CLOUDINARY_BASE}/${entry.thumbnailPath}` : undefined;
+}
 
 function CourseToolIcon({ logo, name, className }: { logo?: string; name: string; className?: string }) {
   const [error, setError] = useState(false);
@@ -359,11 +315,11 @@ export function CoursesPanel({
                   <div className="group relative flex flex-col rounded-xl border border-border bg-card overflow-hidden transition-all hover:border-amber-500/40">
                     <div className={cn(
                       "relative aspect-square flex items-center justify-center bg-gradient-to-br overflow-hidden",
-                      !thumb?.thumbnail && "p-3",
+                      !getCourseThumbnailUrl(course.courseId) && "p-3",
                       gradient
                     )}>
-                      {thumb?.thumbnail ? (
-                        <img src={thumb.thumbnail} alt={course.courseId} className="w-full h-full object-cover" loading="lazy" />
+                      {getCourseThumbnailUrl(course.courseId) ? (
+                        <img src={getCourseThumbnailUrl(course.courseId)} alt={course.courseId} className="w-full h-full object-cover" loading="lazy" />
                       ) : thumb?.logo ? (
                         <CourseToolIcon
                           logo={thumb.logo}
@@ -455,8 +411,8 @@ export function CoursesPanel({
                   const gradient = thumb?.gradient || "from-emerald-600 to-teal-800";
                   return (
                     <div className={cn("w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
-                      {thumb?.thumbnail ? (
-                        <img src={thumb.thumbnail} alt={freeMonthlyCourse.slug} className="w-full h-full object-cover" loading="lazy" />
+                      {getCourseThumbnailUrl(freeMonthlyCourse.slug) ? (
+                        <img src={getCourseThumbnailUrl(freeMonthlyCourse.slug)} alt={freeMonthlyCourse.slug} className="w-full h-full object-cover" loading="lazy" />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={freeMonthlyCourse.tool} className="w-8 h-8 rounded-lg" />
                       ) : (
@@ -589,8 +545,8 @@ export function CoursesPanel({
                   <div className="flex gap-3 min-w-0">
                     {/* Thumbnail */}
                     <div className={cn("w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
-                      {thumb?.thumbnail ? (
-                        <img src={thumb.thumbnail} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
+                      {getCourseThumbnailUrl((course as any).slug || (course as any).courseId) ? (
+                        <img src={getCourseThumbnailUrl((course as any).slug || (course as any).courseId)} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-7 h-7 rounded-lg" />
                       ) : (
@@ -687,8 +643,8 @@ export function CoursesPanel({
                 <div key={course.slug} className="bg-secondary rounded-lg p-3 border border-border hover:border-emerald-500/30 transition-all overflow-hidden">
                   <div className="flex gap-3 min-w-0">
                     <div className={cn("w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
-                      {thumb?.thumbnail ? (
-                        <img src={thumb.thumbnail} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
+                      {getCourseThumbnailUrl((course as any).slug || (course as any).courseId) ? (
+                        <img src={getCourseThumbnailUrl((course as any).slug || (course as any).courseId)} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-7 h-7 rounded-lg" />
                       ) : (
@@ -863,8 +819,8 @@ export function CoursesPanel({
                 <div key={course.slug} className="bg-secondary rounded-lg p-3 border border-border opacity-60 overflow-hidden">
                   <div className="flex gap-3 min-w-0">
                     <div className={cn("w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
-                      {thumb?.thumbnail ? (
-                        <img src={thumb.thumbnail} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
+                      {getCourseThumbnailUrl((course as any).slug || (course as any).courseId) ? (
+                        <img src={getCourseThumbnailUrl((course as any).slug || (course as any).courseId)} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-6 h-6 rounded-md" />
                       ) : (
