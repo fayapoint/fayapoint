@@ -306,9 +306,20 @@ export default function CoursesPage() {
       {monthlyOffers?.freeCourse && (
         <section className="py-10 bg-gradient-to-b from-black to-emerald-950/10">
           <div className="container mx-auto px-4">
-            <Card className="overflow-hidden border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-black to-amber-900/30 p-6 md:p-8">
-              <div className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr] lg:items-center">
-                <div>
+            <Card className="overflow-hidden border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-black to-amber-900/30 p-0">
+              <div className="grid gap-0 lg:grid-cols-[auto_1.3fr_0.9fr] lg:items-center">
+                {/* Course Cover Thumbnail */}
+                {monthlyOffers.freeCourse.thumbnail && (
+                  <div className="hidden lg:block w-48 h-full overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={monthlyOffers.freeCourse.thumbnail}
+                      alt={monthlyOffers.freeCourse.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="p-6 md:p-8">
                   <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
                     <Sparkles className="h-3.5 w-3.5" />
                     <span>{isPtBr ? "Curso grátis do mês" : "Free course of the month"}</span>
@@ -347,7 +358,7 @@ export default function CoursesPage() {
                   </div>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 p-6 md:p-8 lg:p-4">
                   <div className="rounded-2xl border border-border bg-secondary p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                       {isPtBr ? "Explorador" : "Explorer"}
@@ -411,13 +422,25 @@ export default function CoursesPage() {
                   <Card className="overflow-hidden border-2 border-yellow-500/50 hover:border-yellow-400 transition-all bg-gradient-to-br from-gray-900 via-gray-900 to-yellow-900/20 hover:shadow-2xl hover:shadow-yellow-500/20">
                     <div className="grid md:grid-cols-3 gap-0">
                       {/* Image/Visual Section */}
-                      <div className="relative bg-gradient-to-br from-amber-600 to-yellow-700 p-12 flex items-center justify-center">
-                        <div className="text-center">
-                          <Trophy className="mx-auto mb-4 text-yellow-400" size={64} />
-                          <Badge className="bg-yellow-400 text-black font-bold">
-                            {t("featured.bestseller")}
-                          </Badge>
-                        </div>
+                      <div className="relative bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center overflow-hidden">
+                        {featured.thumbnail ? (
+                          <>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={featured.thumbnail} alt={featured.name} className="w-full h-full object-cover" />
+                            <div className="absolute bottom-4 left-4">
+                              <Badge className="bg-yellow-400 text-black font-bold">
+                                {t("featured.bestseller")}
+                              </Badge>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="text-center p-12">
+                            <Trophy className="mx-auto mb-4 text-yellow-400" size={64} />
+                            <Badge className="bg-yellow-400 text-black font-bold">
+                              {t("featured.bestseller")}
+                            </Badge>
+                          </div>
+                        )}
                         {discount > 0 && (
                           <div className="absolute top-4 right-4">
                             <Badge className="bg-red-500 text-white text-xl font-bold px-4 py-2">
