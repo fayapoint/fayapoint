@@ -10,7 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { AutomationToolbox } from "@/components/services/AutomationToolbox";
 import { ArrowRight, CheckCircle2, CircuitBoard, Gauge, Link2, Workflow, BadgeCheck } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Script from "next/script";
 
 const highlights = [
@@ -143,15 +143,16 @@ const automations = [
   },
 ];
 
-export default function AutomationIntegrationPage({
+export default async function AutomationIntegrationPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const t = useTranslations("Home.Services.automation");
-  const isEn = params.locale === "en";
+  const { locale } = await params;
+  const t = await getTranslations("Home.Services.automation");
+  const isEn = locale === "en";
 
-  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/automacao-e-integracao`;
+  const serviceUrl = `${SITE_URL}/${locale}/servicos/automacao-e-integracao`;
 
   const serviceLd = {
     "@context": "https://schema.org",
@@ -233,7 +234,7 @@ export default function AutomationIntegrationPage({
         </div>
 
         <div id="toolbox" className="scroll-mt-28 mb-20">
-          <AutomationToolbox locale={params.locale} />
+          <AutomationToolbox locale={locale} />
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-16">

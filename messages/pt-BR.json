@@ -2289,7 +2289,7 @@
   "Terms": {
     "badge": "Documento Legal",
     "title": "Termos de Uso",
-    "lastUpdated": "Última atualização: Dezembro 2024",
+    "lastUpdated": "Última atualização: Abril 2026",
     "intro": "Ao acessar e usar a plataforma FayAi, você concorda com os termos e condições descritos neste documento. Leia atentamente antes de utilizar nossos serviços.",
     "sections": [
       { "title": "Aceitação dos Termos", "content": "Ao criar uma conta ou usar nossos serviços, você confirma que leu, entendeu e concorda com estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não deve usar nossa plataforma." },
@@ -2297,15 +2297,17 @@
       { "title": "Conta do Usuário", "content": "Você é responsável por manter a confidencialidade de sua senha e conta. Todas as atividades realizadas sob sua conta são de sua responsabilidade. Notifique-nos imediatamente sobre qualquer uso não autorizado." },
       { "title": "Propriedade Intelectual", "content": "Todo o conteúdo da plataforma, incluindo cursos, vídeos, textos e materiais, é propriedade da FayAi ou seus licenciadores. É proibida a reprodução, distribuição ou modificação sem autorização expressa." },
       { "title": "Uso Aceitável", "content": "Você concorda em usar a plataforma apenas para fins legais e de acordo com estes termos. É proibido compartilhar credenciais, baixar conteúdo para redistribuição, usar automações para acessar a plataforma ou violar direitos de terceiros." },
-      { "title": "Pagamentos e Reembolsos", "content": "Os preços são exibidos em Reais (BRL). Oferecemos garantia de 7 dias para reembolso integral. Após esse período, não há reembolso para cursos acessados. Assinaturas podem ser canceladas a qualquer momento." },
+      { "title": "Pagamentos e Reembolsos", "content": "Os preços são exibidos em Reais (BRL). A plataforma oferece os seguintes planos de assinatura: Explorador (R$57/mês), Profissional (R$97/mês) e Expert (R$167/mês). Oferecemos garantia de 7 dias para reembolso integral em qualquer plano. Após esse período, não há reembolso para cursos já acessados. Assinaturas podem ser canceladas a qualquer momento sem cobrança adicional, com acesso mantido até o final do período pago." },
       { "title": "Limitação de Responsabilidade", "content": "A FayAi não se responsabiliza por danos indiretos, incidentais ou consequenciais. Nossa responsabilidade máxima é limitada ao valor pago pelo usuário nos últimos 12 meses." },
-      { "title": "Modificações", "content": "Podemos atualizar estes termos periodicamente. Notificaremos sobre mudanças significativas por email ou através da plataforma. O uso continuado após as alterações constitui aceitação dos novos termos." }
+      { "title": "Modificações", "content": "Podemos atualizar estes termos periodicamente. Notificaremos sobre mudanças significativas por email ou através da plataforma. O uso continuado após as alterações constitui aceitação dos novos termos." },
+      { "title": "Lei Aplicável e Foro", "content": "Estes termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da Comarca do Rio de Janeiro, RJ, para dirimir quaisquer controvérsias decorrentes destes termos, com renúncia expressa a qualquer outro, por mais privilegiado que seja." },
+      { "title": "Contato", "content": "Para dúvidas sobre estes termos, entre em contato:\n\nEmail: fayai.com.br@gmail.com\nEmpresa: FayAI (fayai.com.br)\nLocalização: Rio de Janeiro, Brasil" }
     ]
   },
   "Privacy": {
     "badge": "Privacidade & LGPD",
     "title": "Política de Privacidade",
-    "lastUpdated": "Última atualização: Dezembro 2024",
+    "lastUpdated": "Última atualização: Abril 2026",
     "lgpdCompliance": "Em conformidade com a Lei Geral de Proteção de Dados (LGPD)",
     "intro": "A FayAi valoriza sua privacidade. Esta política descreve como coletamos, usamos e protegemos seus dados pessoais em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).",
     "sections": [
@@ -2316,7 +2318,9 @@
       { "title": "Seus Direitos (LGPD)", "content": "Você tem direito a: acessar seus dados, corrigir dados incompletos, solicitar anonimização ou exclusão, revogar consentimento, solicitar portabilidade e obter informações sobre compartilhamento. Para exercer esses direitos, contate-nos." },
       { "title": "Segurança", "content": "Implementamos medidas técnicas e organizacionais para proteger seus dados, incluindo criptografia, controles de acesso, monitoramento e backups regulares." },
       { "title": "Retenção de Dados", "content": "Mantemos seus dados enquanto sua conta estiver ativa ou conforme necessário para cumprir obrigações legais. Após exclusão da conta, dados são removidos em até 30 dias, exceto quando exigido por lei." },
-      { "title": "Contato do DPO", "content": "Para questões sobre privacidade ou exercício de direitos LGPD, entre em contato com nosso Encarregado de Proteção de Dados através do email: privacidade@fayai.shop" }
+      { "title": "Cookies e Tecnologias de Rastreamento", "content": "Utilizamos cookies e tecnologias similares para melhorar sua experiência na plataforma, lembrar suas preferências, analisar o tráfego do site e personalizar conteúdo. Você pode gerenciar suas preferências de cookies através das configurações do seu navegador. Ao continuar usando nosso site, você consente com o uso de cookies conforme descrito nesta política." },
+      { "title": "Acesso a Dados de Redes Sociais (Facebook/Instagram)", "content": "Nosso recurso Ultimate Social Suite (USS) permite que você conecte suas contas do Facebook e Instagram à plataforma FayAi para gerenciamento de mídias sociais. Ao autorizar essa conexão, podemos acessar informações do seu perfil público, páginas que você administra, métricas de publicações e dados de engajamento. Esses dados são utilizados exclusivamente para fornecer funcionalidades de gerenciamento e análise de mídias sociais dentro da plataforma. Você pode revogar esse acesso a qualquer momento desconectando sua conta nas configurações da plataforma ou removendo o aplicativo FayAi nas configurações do Facebook/Instagram. Quando você revoga o acesso, seus dados de redes sociais são excluídos de nossos servidores em até 30 dias." },
+      { "title": "Contato do Encarregado (DPO)", "content": "Para questões sobre privacidade, exercício de direitos LGPD ou solicitações relacionadas a dados de redes sociais, entre em contato com nosso Encarregado de Proteção de Dados:\n\nEmail: fayai.com.br@gmail.com\nEmpresa: FayAI (fayai.com.br)\nLocalização: Rio de Janeiro, Brasil\n\nPara exclusão de dados relacionados ao Facebook/Instagram, você também pode solicitar diretamente através das configurações do aplicativo no Facebook, e receberá uma confirmação da exclusão." }
     ]
   },
   "DataDeletion": {

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
-export default async function CourseRedirectPage({ params }: { params: { slug: string } }) {
-  await redirect(`/curso/${params.slug}`);
+export default async function CourseRedirectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  redirect(`/curso/${slug}`);
 }

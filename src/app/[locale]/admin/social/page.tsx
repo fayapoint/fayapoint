@@ -89,6 +89,9 @@ const PLATFORM_ICONS: Record<string, LucideIcon> = {
   linkedin: Linkedin,
   youtube: Youtube,
   tiktok: Share2,
+  whatsapp: MessageCircle,
+  pinterest: Share2,
+  google: Eye,
 };
 
 const PLATFORM_COLORS: Record<string, string> = {
@@ -98,7 +101,28 @@ const PLATFORM_COLORS: Record<string, string> = {
   linkedin: "from-blue-700 to-blue-800",
   youtube: "from-red-500 to-red-700",
   tiktok: "from-gray-900 to-gray-800",
+  whatsapp: "from-green-500 to-green-600",
+  pinterest: "from-red-600 to-red-700",
+  google: "from-blue-500 to-green-500",
 };
+
+interface ConnectablePlatform {
+  id: string;
+  name: string;
+  description: string;
+  available: boolean;
+  oauthUrl: string;
+}
+
+const CONNECTABLE_PLATFORMS: ConnectablePlatform[] = [
+  { id: "facebook", name: "Facebook + Instagram", description: "Conecta sua Page e conta Instagram Business automaticamente", available: true, oauthUrl: "/api/social/connect/facebook" },
+  { id: "google", name: "Google + YouTube", description: "Conecta seu canal YouTube e conta Google", available: true, oauthUrl: "/api/social/connect/google" },
+  { id: "twitter", name: "X (Twitter)", description: "Requer Twitter Developer App (configure depois)", available: false, oauthUrl: "/api/social/connect/twitter" },
+  { id: "pinterest", name: "Pinterest", description: "Requer Pinterest Developer App (configure depois)", available: false, oauthUrl: "/api/social/connect/pinterest" },
+  { id: "whatsapp", name: "WhatsApp Business", description: "Integra WhatsApp Business API (requer conta Business)", available: false, oauthUrl: "" },
+  { id: "linkedin", name: "LinkedIn", description: "Conecta seu perfil ou Company Page", available: false, oauthUrl: "" },
+  { id: "tiktok", name: "TikTok", description: "Conecta sua conta TikTok for Business", available: false, oauthUrl: "" },
+];
 
 function formatNumber(n: number): string {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
@@ -127,6 +151,7 @@ export default function SocialPage() {
   const [genCount, setGenCount] = useState(3);
   const [genLoading, setGenLoading] = useState(false);
   const [genResults, setGenResults] = useState<any[] | null>(null);
+  const [showConnectModal, setShowConnectModal] = useState(false);
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -784,9 +809,7 @@ export default function SocialPage() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="p-5 rounded-xl border-2 border-dashed border-border hover:border-amber-500/30 transition flex flex-col items-center justify-center gap-3 min-h-[200px] cursor-pointer group"
-                  onClick={() => {
-                    // TODO: OAuth flow
-                  }}
+                  onClick={() => setShowConnectModal(true)}
                 >
                   <div className="p-4 rounded-full bg-secondary group-hover:bg-violet-500/10 transition">
                     <Plus
@@ -794,11 +817,11 @@ export default function SocialPage() {
                       className="text-muted-foreground group-hover:text-violet-400 transition"
                     />
                   </div>
-                  <p className="text-sm text-muted-foreground group-hover:text-muted-foreground transition">
+                  <p className="text-sm text-muted-foreground group-hover:text-white transition">
                     Conectar nova conta
                   </p>
                   <p className="text-xs text-gray-600">
-                    Instagram, Facebook, Twitter, LinkedIn, YouTube, TikTok
+                    Facebook, Instagram, YouTube, X, Pinterest e mais
                   </p>
                 </motion.div>
               </div>
@@ -806,6 +829,98 @@ export default function SocialPage() {
           )}
         </>
       )}
+
+      {/* Connect Account Modal */}
+      <AnimatePresence>
+        {showConnectModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowConnectModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-[#0f0f17] border border-border rounded-2xl p-6 w-full max-w-lg mx-4 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Plus size={20} className="text-violet-400" />
+                  Conectar Conta Social
+                </h3>
+                <button
+                  onClick={() => setShowConnectModal(false)}
+                  className="text-muted-foreground hover:text-white transition"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <p className="text-sm text-muted-foreground mb-4">
+                Escolha uma plataforma para conectar. Voce sera redirecionado para autorizar o acesso.
+              </p>
+
+              <div className="space-y-3">
+                {CONNECTABLE_PLATFORMS.map((platform) => {
+                  const Icon = PLATFORM_ICONS[platform.id] || Share2;
+                  const colors = PLATFORM_COLORS[platform.id] || "from-gray-600 to-gray-700";
+                  const isConnected = accounts.some((a) => a.platform === platform.id);
+
+                  return (
+                    <button
+                      key={platform.id}
+                      disabled={!platform.available || isConnected}
+                      onClick={() => {
+                        if (platform.available && !isConnected) {
+                          window.location.href = platform.oauthUrl;
+                        }
+                      }}
+                      className={`w-full flex items-center gap-4 p-4 rounded-xl border transition text-left ${
+                        isConnected
+                          ? "border-green-500/30 bg-green-500/5 cursor-default"
+                          : platform.available
+                          ? "border-border hover:border-violet-500/50 hover:bg-violet-500/5 cursor-pointer"
+                          : "border-border/50 opacity-50 cursor-not-allowed"
+                      }`}
+                    >
+                      <div className={`p-2.5 rounded-xl bg-gradient-to-br ${colors}`}>
+                        <Icon size={20} className="text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-medium text-sm">
+                          {platform.name}
+                          {isConnected && (
+                            <span className="ml-2 text-xs text-green-400">Conectado</span>
+                          )}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {platform.description}
+                        </p>
+                      </div>
+                      {platform.available && !isConnected && (
+                        <ChevronDown size={16} className="text-muted-foreground -rotate-90" />
+                      )}
+                      {!platform.available && (
+                        <span className="text-[10px] text-muted-foreground px-2 py-0.5 rounded bg-secondary">
+                          Em breve
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <p className="text-[11px] text-gray-600 mt-4">
+                Ao conectar, voce autoriza a FayAI a acessar informacoes publicas da conta para analytics e publicacao de conteudo.
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

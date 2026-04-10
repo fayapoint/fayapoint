@@ -10,7 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { LocalSEOToolbox } from "@/components/services/LocalSEOToolbox";
 import { ArrowRight, MapPin, Star, TrendingUp, Users, Search, CheckCircle2, BadgeCheck, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Script from "next/script";
 
 const highlights = [
@@ -120,15 +120,16 @@ const SITE_URL =
   process.env.SITE_URL ??
   "https://fayai.com.br";
 
-export default function LocalSEOPage({
+export default async function LocalSEOPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const t = useTranslations("Home.Services.local-seo");
-  const isEn = params.locale === "en";
+  const { locale } = await params;
+  const t = await getTranslations("Home.Services.local-seo");
+  const isEn = locale === "en";
 
-  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/seo-local`;
+  const serviceUrl = `${SITE_URL}/${locale}/servicos/seo-local`;
 
   const serviceLd = {
     "@context": "https://schema.org",
@@ -288,7 +289,7 @@ export default function LocalSEOPage({
           </div>
 
           <div id="toolbox" className="scroll-mt-28 mb-20">
-            <LocalSEOToolbox locale={params.locale} />
+            <LocalSEOToolbox locale={locale} />
           </div>
 
           <div className="max-w-6xl mx-auto mb-20">

@@ -26,7 +26,7 @@ import {
   Wand2,
 } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import Script from "next/script";
@@ -186,15 +186,16 @@ const packages = [
   },
 ];
 
-export default function VideoEditingPage({
+export default async function VideoEditingPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const t = useTranslations("Home.Services.video-editing");
-  const isEn = params.locale === "en";
+  const { locale } = await params;
+  const t = await getTranslations("Home.Services.video-editing");
+  const isEn = locale === "en";
 
-  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/edicao-de-video`;
+  const serviceUrl = `${SITE_URL}/${locale}/servicos/edicao-de-video`;
 
   const serviceLd = {
     "@context": "https://schema.org",
@@ -281,7 +282,7 @@ export default function VideoEditingPage({
 
         <section id="toolbox" className="py-20 px-4 bg-muted/30 scroll-mt-28">
           <div className="container mx-auto max-w-6xl">
-            <VideoToolbox locale={params.locale} />
+            <VideoToolbox locale={locale} />
           </div>
         </section>
 

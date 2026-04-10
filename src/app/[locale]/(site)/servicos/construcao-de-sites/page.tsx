@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -202,15 +202,16 @@ const packages = [
   },
 ];
 
-export default function WebsiteBuildingPage({
+export default async function WebsiteBuildingPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const t = useTranslations("Home.Services.website-building");
-  const isEn = params.locale === "en";
+  const { locale } = await params;
+  const t = await getTranslations("Home.Services.website-building");
+  const isEn = locale === "en";
 
-  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/construcao-de-sites`;
+  const serviceUrl = `${SITE_URL}/${locale}/servicos/construcao-de-sites`;
 
   const serviceLd = {
     "@context": "https://schema.org",
@@ -312,7 +313,7 @@ export default function WebsiteBuildingPage({
 
         <section id="toolbox" className="py-20 px-4 bg-muted/30 scroll-mt-28">
           <div className="container mx-auto max-w-6xl">
-            <WebsiteToolbox locale={params.locale} />
+            <WebsiteToolbox locale={locale} />
           </div>
         </section>
 

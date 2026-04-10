@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Bot, ArrowRight, Sparkles, TrendingUp, Users, Zap, Target, Brain, Rocket, Shield, Clock, DollarSign, Star } from 'lucide-react';
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -36,16 +36,17 @@ const SITE_URL =
   process.env.SITE_URL ??
   "https://fayai.com.br";
 
-export default function AIConsultingPage({
+export default async function AIConsultingPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const t = useTranslations("Home.Services.ai-consulting");
-  const p = useTranslations("AIConsultingPage");
+  const { locale } = await params;
+  const t = await getTranslations("Home.Services.ai-consulting");
+  const p = await getTranslations("AIConsultingPage");
 
-  const isEn = params.locale === "en";
-  const serviceUrl = `${SITE_URL}/${params.locale}/servicos/consultoria-ai`;
+  const isEn = locale === "en";
+  const serviceUrl = `${SITE_URL}/${locale}/servicos/consultoria-ai`;
 
   const serviceLd = {
     "@context": "https://schema.org",
@@ -162,7 +163,7 @@ export default function AIConsultingPage({
 
       <section id="toolbox" className="py-20 px-4 bg-muted/30 scroll-mt-28">
         <div className="container mx-auto max-w-6xl">
-          <AIConsultingToolbox locale={params.locale} />
+          <AIConsultingToolbox locale={locale} />
         </div>
       </section>
 

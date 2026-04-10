@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-export type SocialPlatform = 'instagram' | 'facebook' | 'twitter' | 'linkedin' | 'youtube' | 'tiktok';
+export type SocialPlatform = 'instagram' | 'facebook' | 'twitter' | 'linkedin' | 'youtube' | 'tiktok' | 'whatsapp' | 'pinterest' | 'google';
 
 export interface ISocialAccount extends Document {
   userId: mongoose.Types.ObjectId;
@@ -39,7 +39,7 @@ const SocialAccountSchema = new Schema<ISocialAccount>(
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     platform: {
       type: String,
-      enum: ['instagram', 'facebook', 'twitter', 'linkedin', 'youtube', 'tiktok'],
+      enum: ['instagram', 'facebook', 'twitter', 'linkedin', 'youtube', 'tiktok', 'whatsapp', 'pinterest', 'google'],
       required: true,
     },
     platformUserId: { type: String, required: true },
