@@ -1,5 +1,18 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
+/** Reusable media asset with generation provenance */
+export interface IImageAsset {
+  url?: string;
+  publicId?: string;          // Cloudinary public ID
+  prompt?: string;            // AI generation prompt used to create this image
+  provider?: string;          // e.g. 'flux-1-schnell', 'dall-e-3', 'comfyui'
+  width?: number;
+  height?: number;
+  format?: string;            // 'webp', 'png', 'jpg'
+  generatedAt?: Date;
+  reverseEngineered?: boolean; // true if prompt was extracted via ComfyUI image reader
+}
+
 export interface ILesson {
   _id: mongoose.Types.ObjectId;
   title: string;
@@ -24,6 +37,8 @@ export interface ILesson {
   };
   order: number;
   isFree: boolean;
+  /** Lesson-specific thumbnail/hero image with prompt provenance */
+  lessonImage?: IImageAsset;
 }
 
 export interface IModule {
@@ -55,6 +70,10 @@ export interface ICourse extends Document {
   };
   thumbnail: string;
   trailer?: string;
+  /** Structured cover image with generation provenance */
+  coverImage?: IImageAsset;
+  /** Per-module/chapter images with prompts */
+  mediaAssets?: IImageAsset[];
   modules: IModule[];
   requirements: string[];
   objectives: string[];
@@ -95,6 +114,18 @@ export interface ICourse extends Document {
   publishedAt?: Date;
 }
 
+const ImageAssetSchema = new Schema({
+  url: String,
+  publicId: String,
+  prompt: String,
+  provider: String,
+  width: Number,
+  height: Number,
+  format: String,
+  generatedAt: Date,
+  reverseEngineered: { type: Boolean, default: false },
+}, { _id: false });
+
 const LessonSchema = new Schema({
   title: { type: String, required: true },
   description: String,
@@ -125,6 +156,7 @@ const LessonSchema = new Schema({
   },
   order: { type: Number, required: true },
   isFree: { type: Boolean, default: false },
+  lessonImage: ImageAssetSchema,
 });
 
 const ModuleSchema = new Schema({
@@ -187,6 +219,8 @@ const CourseSchema = new Schema<ICourse>({
     required: true,
   },
   trailer: String,
+  coverImage: ImageAssetSchema,
+  mediaAssets: [ImageAssetSchema],
   modules: [ModuleSchema],
   requirements: [String],
   objectives: [String],

@@ -669,6 +669,145 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   COURSE READER — Theme tokens (4 reading themes)
+   Used by CourseReaderPage via data-reader-theme attribute.
+   --reader-tint is an RGB triplet used for overlay/border opacity.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* DARK — flagship FayAI reader (current default) */
+[data-reader-theme="dark"] {
+  --reader-bg: #0b0c13;
+  --reader-surface: #0d0e16;
+  --reader-surface-alt: #0e1018;
+  --reader-float: #0d0f18;
+  --reader-popover: #12131c;
+  --reader-code: #07070d;
+  --reader-fg: #ffffff;
+  --reader-tint: 255, 255, 255;
+  --reader-prose: #c0c0ce;
+  --reader-em: #c0b8d8;
+  --reader-muted: #a8a8bb;
+  --reader-caption: #7a7a8e;
+  --reader-scrollbar-track: #0b0c13;
+  --reader-scrollbar-thumb: #2a2a3a;
+  --reader-scrollbar-hover: #3a3a4e;
+  color-scheme: dark;
+}
+
+/* LIGHT — clean, bright, airy (reduces eye strain on mobile) */
+[data-reader-theme="light"] {
+  --reader-bg: #fafaf8;
+  --reader-surface: #ffffff;
+  --reader-surface-alt: #f5f5f0;
+  --reader-float: #ffffff;
+  --reader-popover: #ffffff;
+  --reader-code: #f5f3ef;
+  --reader-fg: #1a1a2e;
+  --reader-tint: 0, 0, 0;
+  --reader-prose: #374151;
+  --reader-em: #5b21b6;
+  --reader-muted: #6b7280;
+  --reader-caption: #9ca3af;
+  --reader-scrollbar-track: #f5f5f0;
+  --reader-scrollbar-thumb: #c8c8d0;
+  --reader-scrollbar-hover: #a0a0b0;
+  color-scheme: light;
+}
+
+/* SEPIA — warm parchment, gentle on eyes for extended reading */
+[data-reader-theme="sepia"] {
+  --reader-bg: #f4ecd8;
+  --reader-surface: #ebe3cc;
+  --reader-surface-alt: #e8e0c8;
+  --reader-float: #ebe3cc;
+  --reader-popover: #e8dfc6;
+  --reader-code: #e0d8be;
+  --reader-fg: #3d3022;
+  --reader-tint: 61, 48, 34;
+  --reader-prose: #5a4d3a;
+  --reader-em: #7c3f00;
+  --reader-muted: #8a7b6e;
+  --reader-caption: #a89888;
+  --reader-scrollbar-track: #ebe3cc;
+  --reader-scrollbar-thumb: #c4b896;
+  --reader-scrollbar-hover: #a89878;
+  color-scheme: light;
+}
+
+/* HIGH-CONTRAST — maximum readability & accessibility */
+[data-reader-theme="high-contrast"] {
+  --reader-bg: #ffffff;
+  --reader-surface: #f0f0f0;
+  --reader-surface-alt: #e8e8e8;
+  --reader-float: #f0f0f0;
+  --reader-popover: #f5f5f5;
+  --reader-code: #e8e8e8;
+  --reader-fg: #000000;
+  --reader-tint: 0, 0, 0;
+  --reader-prose: #111111;
+  --reader-em: #4a0080;
+  --reader-muted: #333333;
+  --reader-caption: #555555;
+  --reader-scrollbar-track: #f0f0f0;
+  --reader-scrollbar-thumb: #888888;
+  --reader-scrollbar-hover: #666666;
+  color-scheme: light;
+}
+
+/* Accent color adjustments for light reader themes */
+[data-reader-theme="light"] .text-violet-400,
+[data-reader-theme="sepia"] .text-violet-400,
+[data-reader-theme="high-contrast"] .text-violet-400 {
+  color: #7c3aed;
+}
+[data-reader-theme="light"] .text-violet-300,
+[data-reader-theme="sepia"] .text-violet-300,
+[data-reader-theme="high-contrast"] .text-violet-300 {
+  color: #6d28d9;
+}
+[data-reader-theme="light"] .text-emerald-400,
+[data-reader-theme="sepia"] .text-emerald-400,
+[data-reader-theme="high-contrast"] .text-emerald-400 {
+  color: #059669;
+}
+[data-reader-theme="light"] .text-violet-400\/70,
+[data-reader-theme="sepia"] .text-violet-400\/70,
+[data-reader-theme="high-contrast"] .text-violet-400\/70 {
+  color: #6d28d9;
+}
+
+/* Prose inversion for light reader themes — override prose-invert */
+[data-reader-theme="light"] .prose-invert,
+[data-reader-theme="sepia"] .prose-invert,
+[data-reader-theme="high-contrast"] .prose-invert {
+  --tw-prose-body: var(--reader-prose);
+  --tw-prose-headings: var(--reader-fg);
+  --tw-prose-links: #7c3aed;
+  --tw-prose-bold: var(--reader-fg);
+  --tw-prose-code: var(--reader-fg);
+  --tw-prose-quotes: var(--reader-muted);
+}
+
+/* Reader-scoped scrollbar */
+[data-reader-theme] ::-webkit-scrollbar-track {
+  background: var(--reader-scrollbar-track);
+}
+[data-reader-theme] ::-webkit-scrollbar-thumb {
+  background-color: var(--reader-scrollbar-thumb);
+  border-color: var(--reader-scrollbar-track);
+}
+[data-reader-theme] ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--reader-scrollbar-hover);
+}
+
+/* Syntax highlighting theme swap for light reader */
+[data-reader-theme="light"] .react-syntax-highlighter-line-number,
+[data-reader-theme="sepia"] .react-syntax-highlighter-line-number,
+[data-reader-theme="high-contrast"] .react-syntax-highlighter-line-number {
+  color: #9ca3af !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    CUBE HOMEPAGE — Design tokens & utilities
    ═══════════════════════════════════════════════════════════════ */
 
