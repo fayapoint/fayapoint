@@ -41,6 +41,7 @@ export default function CourseSalesPage() {
   const [loading, setLoading] = useState(true);
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
+  const [showTrailer, setShowTrailer] = useState(false);
   const locale = useLocale();
   // Monthly offer costs US$1 converted to BRL at live rate — must be called before any early returns
   const { monthlyOfferPrice, conversionDisplay } = useExchangeRate();
@@ -397,7 +398,10 @@ export default function CourseSalesPage() {
                 <div className="sticky top-24">
                   <Card className="bg-card/50 backdrop-blur border-2 border-amber-500/50 p-6 shadow-2xl shadow-amber-500/20">
                     {/* Video Preview */}
-                    <div className="relative aspect-video rounded-lg mb-6 group cursor-pointer overflow-hidden">
+                    <div
+                      className="relative aspect-video rounded-lg mb-6 group cursor-pointer overflow-hidden"
+                      onClick={() => product.trailer && setShowTrailer(true)}
+                    >
                       {/* Thumbnail background or gradient fallback */}
                       {(product.thumbnail || product.seo?.ogImage) ? (
                         <>
@@ -413,14 +417,16 @@ export default function CourseSalesPage() {
                       ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-amber-600 to-yellow-700" />
                       )}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <motion.div
-                          whileHover={{ scale: 1.1 }}
-                          className="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center shadow-2xl shadow-black/30"
-                        >
-                          <Play className="text-white ml-1" size={32} />
-                        </motion.div>
-                      </div>
+                      {product.trailer && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <motion.div
+                            whileHover={{ scale: 1.1 }}
+                            className="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center shadow-2xl shadow-black/30"
+                          >
+                            <Play className="text-white ml-1" size={32} />
+                          </motion.div>
+                        </div>
+                      )}
                       <div className="absolute top-3 right-3 bg-black/70 px-3 py-1 rounded-full text-sm font-semibold">
                         {t("sidebar.freePreview")}
                       </div>
@@ -429,6 +435,42 @@ export default function CourseSalesPage() {
                         {product.metrics.duration}
                       </div>
                     </div>
+
+                    {/* Video Trailer Modal */}
+                    <AnimatePresence>
+                      {showTrailer && product.trailer && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                          onClick={() => setShowTrailer(false)}
+                        >
+                          <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="relative w-full max-w-4xl aspect-video rounded-xl overflow-hidden shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <video
+                              src={product.trailer}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover"
+                            />
+                            <button
+                              onClick={() => setShowTrailer(false)}
+                              className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 flex items-center justify-center hover:bg-black/80 transition-colors"
+                            >
+                              <X className="text-white" size={20} />
+                            </button>
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
                     {/* Launch Price Banner */}
                     {effectiveDiscount > 0 && (
