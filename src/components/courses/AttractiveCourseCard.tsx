@@ -83,63 +83,105 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
     >
       <Link href={`/curso/${product.slug}`}>
         <Card className="h-full overflow-hidden border-2 border-transparent hover:border-amber-500/50 transition-all duration-300 group hover:shadow-2xl hover:shadow-amber-500/20 bg-card/50 backdrop-blur">
-          {/* Gradient Header with Icon */}
-          <div className={`relative bg-gradient-to-br ${style.gradient} p-8 overflow-hidden`}>
-            {/* Animated Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
-                backgroundSize: '20px 20px'
-              }} />
-            </div>
-            
-            {/* Icon */}
-            <motion.div
-              className="relative z-10 flex justify-center"
-              animate={{ 
-                rotate: [0, 5, -5, 0],
-                scale: [1, 1.05, 1]
-              }}
-              transition={{ 
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              <Icon size={64} className="text-white drop-shadow-lg" strokeWidth={1.5} />
-            </motion.div>
+          {/* Cover Image or Gradient Header */}
+          {product.thumbnail ? (
+            <div className="relative overflow-hidden aspect-square">
+              <img
+                src={product.thumbnail}
+                alt={product.name}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
 
-            {/* Badges */}
-            <div className="absolute top-3 left-3 flex flex-col gap-2">
-              {isNew && (
-                <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
-                  <Zap size={14} className="mr-1" />
-                  <span className="font-bold">{isPtBr ? 'Novo' : 'New'}</span>
-                </Badge>
-              )}
-              {isFreeCourseOfMonth && (
-                <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
-                  <Sparkles size={14} className="mr-1" />
-                  <span className="font-bold">{isPtBr ? 'Grátis no mês' : 'Free this month'}</span>
-                </Badge>
-              )}
-              {isAdvanced && (
-                <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
-                  <Award size={14} className="mr-1" />
-                  <span className="font-bold">{isPtBr ? 'Avançado' : 'Advanced'}</span>
-                </Badge>
-              )}
-            </div>
-
-            {/* Discount Badge */}
-            {discount > 0 && (
-              <div className="absolute top-3 right-3">
-                <Badge className="bg-red-500 text-white text-lg font-bold px-3 py-1 shadow-lg">
-                  -{discount}%
-                </Badge>
+              {/* Badges */}
+              <div className="absolute top-3 left-3 flex flex-col gap-2">
+                {isNew && (
+                  <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
+                    <Zap size={14} className="mr-1" />
+                    <span className="font-bold">{isPtBr ? 'Novo' : 'New'}</span>
+                  </Badge>
+                )}
+                {isFreeCourseOfMonth && (
+                  <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
+                    <Sparkles size={14} className="mr-1" />
+                    <span className="font-bold">{isPtBr ? 'Grátis no mês' : 'Free this month'}</span>
+                  </Badge>
+                )}
+                {isAdvanced && (
+                  <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
+                    <Award size={14} className="mr-1" />
+                    <span className="font-bold">{isPtBr ? 'Avançado' : 'Advanced'}</span>
+                  </Badge>
+                )}
               </div>
-            )}
-          </div>
+
+              {/* Discount Badge */}
+              {discount > 0 && (
+                <div className="absolute top-3 right-3">
+                  <Badge className="bg-red-500 text-white text-lg font-bold px-3 py-1 shadow-lg">
+                    -{discount}%
+                  </Badge>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className={`relative bg-gradient-to-br ${style.gradient} p-8 overflow-hidden`}>
+              {/* Animated Background Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+                  backgroundSize: '20px 20px'
+                }} />
+              </div>
+
+              {/* Icon */}
+              <motion.div
+                className="relative z-10 flex justify-center"
+                animate={{
+                  rotate: [0, 5, -5, 0],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+              >
+                <Icon size={64} className="text-white drop-shadow-lg" strokeWidth={1.5} />
+              </motion.div>
+
+              {/* Badges */}
+              <div className="absolute top-3 left-3 flex flex-col gap-2">
+                {isNew && (
+                  <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
+                    <Zap size={14} className="mr-1" />
+                    <span className="font-bold">{isPtBr ? 'Novo' : 'New'}</span>
+                  </Badge>
+                )}
+                {isFreeCourseOfMonth && (
+                  <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
+                    <Sparkles size={14} className="mr-1" />
+                    <span className="font-bold">{isPtBr ? 'Grátis no mês' : 'Free this month'}</span>
+                  </Badge>
+                )}
+                {isAdvanced && (
+                  <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
+                    <Award size={14} className="mr-1" />
+                    <span className="font-bold">{isPtBr ? 'Avançado' : 'Advanced'}</span>
+                  </Badge>
+                )}
+              </div>
+
+              {/* Discount Badge */}
+              {discount > 0 && (
+                <div className="absolute top-3 right-3">
+                  <Badge className="bg-red-500 text-white text-lg font-bold px-3 py-1 shadow-lg">
+                    -{discount}%
+                  </Badge>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Content */}
           <div className="p-6 space-y-4">

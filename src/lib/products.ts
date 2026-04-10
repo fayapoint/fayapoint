@@ -165,6 +165,7 @@ export interface Product {
   }>;
   editorialVerification?: EditorialVerification;
   lessonContentCoverage?: LessonContentCoverage;
+  thumbnail?: string;
   monthlyOffer?: CourseMonthlyOfferMeta | null;
   createdAt: string;
   updatedAt: string;
