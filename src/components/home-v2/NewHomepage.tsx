@@ -119,6 +119,28 @@ export function NewHomepage() {
 
   const featured = getFeaturedCourses().slice(0, 6);
 
+  // Course cover thumbnails from Cloudinary (generated via ComfyUI)
+  const CLD = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dfd7iigzq"}/image/upload`;
+  const courseThumbnails: Record<string, string> = {
+    "chatgpt-masterclass": `${CLD}/fayai/courses/chatgpt-masterclass/pw1gxfwkn4ideutfbalt.png`,
+    "claude-ia-segura": `${CLD}/fayai/courses/claude-ia-segura/pv6pscsvsendmet5lnnz.png`,
+    "prompt-engineering": `${CLD}/fayai/courses/prompt-engineering/o8magdivbliteczkkxo9.png`,
+    "n8n-automacao-avancada": `${CLD}/fayai/courses/n8n-automacao-avancada/fkie1njbtmdswmjspiik.png`,
+    "midjourney-arte-profissional": `${CLD}/fayai/courses/midjourney-arte-profissional/esvtyrxyt2b7gk6qk1tr.png`,
+    "gemini-ia-google": `${CLD}/fayai/courses/gemini-ia-google/gxbns4pibwmjai9wy4yk.png`,
+    "make-integracao-total": `${CLD}/fayai/courses/make-integracao-total/gkhavewcp1idon2a9nvq.png`,
+    "leonardo-ai-criacao-visual": `${CLD}/fayai/courses/leonardo-ai-criacao-visual/uz5xwksrh2c9e1i4tnae.png`,
+    "openclaw-ia-open-source": `${CLD}/fayai/courses/openclaw-ia-open-source/t896tqfqy72zjt2jdhu8.png`,
+    "perplexity-pesquisa-inteligente": `${CLD}/fayai/courses/perplexity-pesquisa-inteligente/dygscggrvoidytquwabx.png`,
+    "ia-sem-filtro-por-claude": `${CLD}/fayai/courses/ia-sem-filtro-por-claude/yk7p49jwv1zbrrkxiqyf.png`,
+    "claude-cowork-colaboracao": `${CLD}/fayai/courses/claude-cowork-colaboracao/yfw6jjm90lzss2qrwjkc.png`,
+    "autoresearch-singularity": `${CLD}/fayai/courses/autoresearch-singularity/bs1ybi8ww339u1j6gavy.png`,
+    "banana-dev-deploy-ia": `${CLD}/fayai/courses/banana-dev-deploy-ia/dsmelccwvukkfjkeskcy.png`,
+    "crie-agentes-de-ia-autonomos": `${CLD}/fayai/courses/crie-agentes-de-ia-autonomos/ipjpkznojjcbl1sc0se5.png`,
+    "primeiras-automacoes": `${CLD}/fayai/courses/primeiras-automacoes/gvwifdbewzjmlsvairix.png`,
+    "chatgpt-allowlisting": `${CLD}/fayai/courses/chatgpt-allowlisting/wgibx0i8n5vu3f3gr5gt.png`,
+  };
+
   return (
     <div className="relative bg-[#030712] text-white overflow-hidden">
       {/* ═══ HERO ═══ */}
@@ -327,41 +349,56 @@ export function NewHomepage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featured.map((course, i) => (
-              <motion.div
-                key={course.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Link
-                  href={`/curso/${course.slug}`}
-                  className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 hover:-translate-y-1"
+            {featured.map((course, i) => {
+              const thumbUrl = courseThumbnails[course.slug];
+              return (
+                <motion.div
+                  key={course.slug}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
                 >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center text-lg">
-                      {course.tool === "ChatGPT" ? "🤖" : course.tool === "Claude" ? "💜" : course.tool === "Midjourney" ? "🎨" : course.tool === "N8N" ? "⚡" : course.tool === "Make" ? "🚀" : "✨"}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-white group-hover:text-amber-300 transition-colors">{course.title}</h3>
-                      <p className="text-xs text-slate-500">{course.tool} · {course.level}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-400 line-clamp-2 mb-4">{course.shortDescription}</p>
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span>{course.totalLessons} capítulos</span>
-                    <span>{course.duration}</span>
-                    {course.rating > 0 && (
-                      <span className="flex items-center gap-1">
-                        <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                        {course.rating}
-                      </span>
+                  <Link
+                    href={`/curso/${course.slug}`}
+                    className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 hover:-translate-y-1"
+                  >
+                    {thumbUrl ? (
+                      <div className="aspect-[4/3] overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={thumbUrl}
+                          alt={course.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-12" />
                     )}
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                    <div className="p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div>
+                          <h3 className="font-semibold text-white group-hover:text-amber-300 transition-colors">{course.title}</h3>
+                          <p className="text-xs text-slate-500">{course.tool} · {course.level}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-slate-400 line-clamp-2 mb-4">{course.shortDescription}</p>
+                      <div className="flex items-center justify-between text-xs text-slate-500">
+                        <span>{course.totalLessons} capítulos</span>
+                        <span>{course.duration}</span>
+                        {course.rating > 0 && (
+                          <span className="flex items-center gap-1">
+                            <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                            {course.rating}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
 
           <div className="text-center mt-10 flex flex-col items-center gap-3">
