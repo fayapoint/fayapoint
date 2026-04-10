@@ -397,11 +397,26 @@ export default function CourseSalesPage() {
                 <div className="sticky top-24">
                   <Card className="bg-card/50 backdrop-blur border-2 border-amber-500/50 p-6 shadow-2xl shadow-amber-500/20">
                     {/* Video Preview */}
-                    <div className="relative aspect-video bg-gradient-to-br from-amber-600 to-yellow-700 rounded-lg mb-6 group cursor-pointer overflow-hidden">
+                    <div className="relative aspect-video rounded-lg mb-6 group cursor-pointer overflow-hidden">
+                      {/* Thumbnail background or gradient fallback */}
+                      {(product.thumbnail || product.seo?.ogImage) ? (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={product.thumbnail || product.seo?.ogImage}
+                            alt={product.name}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            loading="eager"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                        </>
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-600 to-yellow-700" />
+                      )}
                       <div className="absolute inset-0 flex items-center justify-center">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
-                          className="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center"
+                          className="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center shadow-2xl shadow-black/30"
                         >
                           <Play className="text-white ml-1" size={32} />
                         </motion.div>
