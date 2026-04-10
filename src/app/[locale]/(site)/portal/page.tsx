@@ -89,6 +89,7 @@ import { ProfilePanel } from "@/components/portal/ProfilePanel";
 import { StorePanel } from "@/components/portal/StorePanel";
 import { CartPanel } from "@/components/portal/CartPanel";
 import PODStorePanel from "@/components/portal/PODStorePanel";
+import SocialProfilePanel from "@/components/portal/SocialProfilePanel";
 import { MobileBottomNav } from "@/components/portal/MobileBottomNav";
 import { CertificatesPanel } from "@/components/portal/CertificatesPanel";
 import { CoursesPanel } from "@/components/portal/CoursesPanel";
@@ -562,6 +563,7 @@ export default function PortalPage() {
               {activeTab === "profile" && "Meu Perfil"}
               {activeTab === "courses" && "Meus Cursos"}
               {activeTab === "certificates" && "Certificados"}
+              {activeTab === "social" && "Perfil Social"}
               {activeTab === "studio" && "Studio AI"}
               {activeTab === "assistant" && "Assistente IA"}
               {activeTab === "achievements" && "Conquistas"}
@@ -737,6 +739,18 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
               >
                 <CertificatesPanel />
+              </motion.div>
+            )}
+
+            {/* Social Profile Tab (USS) */}
+            {activeTab === "social" && (
+              <motion.div
+                key="social"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <SocialProfilePanel user={user} />
               </motion.div>
             )}
 

@@ -30,6 +30,7 @@ import {
   ExternalLink,
   Award,
   UserCog,
+  Share2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -73,6 +74,7 @@ const MENU_ITEMS = [
   { id: "pod-store", icon: Palette, label: "Minha Loja POD", proOnly: false, badge: "NOVO" },
   { id: "store", icon: Store, label: "Loja Tech", proOnly: false },
   { id: "cart", icon: ShoppingCart, label: "Carrinho", proOnly: false },
+  { id: "social", icon: Share2, label: "Perfil Social", proOnly: false, badge: "USS" },
   { id: "profile", icon: Crown, label: "Meu Perfil", proOnly: false },
   { id: "courses", icon: BookOpen, label: "Meus Cursos", proOnly: false },
   { id: "certificates", icon: Award, label: "Certificados", proOnly: false },

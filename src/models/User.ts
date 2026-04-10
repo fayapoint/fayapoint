@@ -147,6 +147,30 @@ export interface IUser extends Document {
     theme: 'light' | 'dark' | 'system';
     playbackSpeed: number;
   };
+  // Social Persona (USS integration — gamified onboarding + RAG)
+  socialPersona: {
+    // Visual selections (from persona builder — zero-typing)
+    industry: string[];
+    toneOfVoice: string[];
+    marketingGoals: string[];
+    contentTypes: string[];
+    experienceLevel: string;
+    // AI-extracted from social accounts
+    topHashtags: string[];
+    contentThemes: string[];
+    audienceInsights: string;
+    writingStyle: string;
+    postingFrequency: string;
+    // Aggregated intelligence
+    primaryInterests: string[];
+    recommendedCourses: string[];
+    recommendationReasoning: string[];
+    // Metadata
+    personaVersion: number;
+    weights: { profile: number; social: number; custom: number };
+    lastAnalyzed?: Date;
+    completionPercent: number;
+  };
   // Helper methods for course access
   getActiveEnrollments(): IEnrolledCourse[];
   isEnrolledIn(courseSlug: string): boolean;
@@ -331,6 +355,29 @@ const UserSchema = new Schema<IUser>({
       default: 'system' 
     },
     playbackSpeed: { type: Number, default: 1 },
+  },
+  socialPersona: {
+    industry: [{ type: String }],
+    toneOfVoice: [{ type: String }],
+    marketingGoals: [{ type: String }],
+    contentTypes: [{ type: String }],
+    experienceLevel: { type: String, default: '' },
+    topHashtags: [{ type: String }],
+    contentThemes: [{ type: String }],
+    audienceInsights: { type: String, default: '' },
+    writingStyle: { type: String, default: '' },
+    postingFrequency: { type: String, default: '' },
+    primaryInterests: [{ type: String }],
+    recommendedCourses: [{ type: String }],
+    recommendationReasoning: [{ type: String }],
+    personaVersion: { type: Number, default: 0 },
+    weights: {
+      profile: { type: Number, default: 34 },
+      social: { type: Number, default: 33 },
+      custom: { type: Number, default: 33 },
+    },
+    lastAnalyzed: { type: Date },
+    completionPercent: { type: Number, default: 0 },
   },
   lastLoginAt: Date,
 }, {
