@@ -10,6 +10,13 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Cloudinary image optimization
+[[plugins]]
+  package = "netlify-plugin-cloudinary"
+  [plugins.inputs]
+    cloudName = "dfd7iigzq"
+    deliveryType = "fetch"
+
 # =============================================================================
 # HEADERS - Security & Caching
 # =============================================================================
