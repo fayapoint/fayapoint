@@ -98,13 +98,16 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
         {route && (
           <button
             type="button"
-            className={s.faceAction}
+            className={s.facePortal}
             onClick={(event) => {
               event.stopPropagation();
               handleClick();
             }}
+            aria-label={routeLabel || "Entrar"}
           >
-            {routeLabel || "Entrar"}
+            <span className={s.facePortalCore} />
+            <span className={s.facePortalOrbit} />
+            <span className={s.facePortalText}>{routeLabel || "Entrar"}</span>
           </button>
         )}
         {/* Hover tooltip */}
@@ -182,13 +185,16 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
       {route && (
         <button
           type="button"
-          className={s.faceAction}
+          className={s.facePortal}
           onClick={(event) => {
             event.stopPropagation();
             handleClick();
           }}
+          aria-label={routeLabel || "Entrar"}
         >
-          {routeLabel || "Entrar"}
+          <span className={s.facePortalCore} />
+          <span className={s.facePortalOrbit} />
+          <span className={s.facePortalText}>{routeLabel || "Entrar"}</span>
         </button>
       )}
 

@@ -59,6 +59,7 @@ export function CubeHomepage() {
   const [cubeTheme, setCubeTheme] = useState<"dark" | "light">("dark");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [entered, setEntered] = useState(false);
+  const [cubeHovering, setCubeHovering] = useState(false);
   const [zooming, setZooming] = useState(false);
   const [zoomFace, setZoomFace] = useState<string | null>(null);
   const [dashboardSnapshot, setDashboardSnapshot] = useState<{
@@ -224,14 +225,10 @@ export function CubeHomepage() {
     });
   }, [firstName, hasLearningHistory, isLoggedIn, journeyLabel]);
   const activeSectionConfig = personalizedSections[activeSection];
-  const portalRoute = activeSectionConfig?.nextRoute || activeFace?.route;
-  const portalLabel = (activeSectionConfig?.nextLabel || activeFace?.routeLabel || "Entrar")
-    .replace(/<-|->/g, "")
-    .trim();
-
+  const hitRoute = activeSectionConfig?.nextRoute || activeFace?.route;
   return (
     <div
-      className={`cube-homepage ${entered ? s.entered : s.entering}`}
+      className={`cube-homepage ${entered ? s.entered : s.entering} ${cubeHovering ? s.cubeHovering : ""}`}
       data-cube-theme={cubeTheme}
       data-version="v3-interactive"
     >
@@ -345,19 +342,15 @@ export function CubeHomepage() {
         <div className={s.faceCaptionName}>{faceName}</div>
       </div>
 
-      {activeFace && portalRoute && (
+      {activeFace && hitRoute && (
         <button
           type="button"
-          className={s.cubePortalHotspot}
-          onClick={() => handleFaceClick(activeFace.face, portalRoute)}
+          className={s.cubeHitLayer}
+          onPointerEnter={() => setCubeHovering(true)}
+          onPointerLeave={() => setCubeHovering(false)}
+          onClick={() => handleFaceClick(activeFace.face, hitRoute)}
           aria-label={`Entrar em ${faceName}`}
-        >
-          <span className={s.cubePortalRing} />
-          <span className={s.cubePortalContent}>
-            <span className={s.cubePortalLabel}>Entrar no cubo</span>
-            <span className={s.cubePortalTitle}>{portalLabel}</span>
-          </span>
-        </button>
+        />
       )}
 
       {/* Keyboard hint */}

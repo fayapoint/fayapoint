@@ -30,6 +30,7 @@
   justify-content: center;
   perspective: 1100px;
   overflow: hidden;
+  pointer-events: none;
 }
 
 /* Ambient particle canvas */
@@ -69,6 +70,7 @@
   transform-style: preserve-3d;
   will-change: transform;
   z-index: 1;
+  pointer-events: auto;
 }
 
 /* ─── Individual face ─── */
@@ -456,41 +458,138 @@
   transform: scale(1.03);
 }
 
-.faceAction {
+.facePortal {
   position: absolute;
   left: 50%;
-  bottom: 1.35rem;
+  bottom: 2.65rem;
   z-index: 5;
-  transform: translateX(-50%) translateY(6px);
-  min-height: 2.15rem;
-  padding: 0.55rem 0.9rem;
-  border: 1px solid color-mix(in srgb, var(--cube-accent) 70%, transparent);
-  background: color-mix(in srgb, var(--cube-bg) 72%, transparent);
+  width: 10rem;
+  height: 3.55rem;
+  transform: translateX(-50%) translateY(0.5rem) translateZ(2rem);
+  border: 0;
+  background: transparent;
   color: var(--cube-accent);
-  font-family: var(--cube-font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   cursor: pointer;
-  opacity: 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  opacity: 0.18;
+  perspective: 420px;
   transition:
-    opacity 0.28s ease,
-    transform 0.28s cubic-bezier(0.2, 0.85, 0.2, 1),
-    background 0.28s ease,
-    color 0.28s ease;
+    opacity 0.36s ease,
+    transform 0.36s cubic-bezier(0.2, 0.85, 0.2, 1),
+    filter 0.36s ease;
 }
 
-.faceActive .faceAction,
-.faceHovered .faceAction {
+.facePortal::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid color-mix(in srgb, var(--cube-accent) 46%, transparent);
+  transform: translate(-50%, -50%) rotate(45deg);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--cube-accent) 15%, transparent), transparent 55%),
+    color-mix(in srgb, var(--cube-bg) 24%, transparent);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--cube-accent) 18%, transparent),
+    inset 0 0 16px color-mix(in srgb, var(--cube-accent) 12%, transparent);
+  transition:
+    width 0.38s cubic-bezier(0.2, 0.85, 0.2, 1),
+    height 0.38s cubic-bezier(0.2, 0.85, 0.2, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.facePortalCore {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: currentColor;
+  box-shadow: 0 0 16px currentColor;
+  pointer-events: none;
+}
+
+.facePortalOrbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4.65rem;
+  height: 1.7rem;
+  border: 1px solid color-mix(in srgb, var(--cube-accent) 24%, transparent);
+  border-radius: 999px;
+  transform: translate(-50%, -50%) rotateX(68deg) rotateZ(-18deg);
+  pointer-events: none;
+  transition: transform 0.38s cubic-bezier(0.2, 0.85, 0.2, 1), border-color 0.3s ease;
+}
+
+.facePortalText {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max-content;
+  max-width: 7.6rem;
+  transform: translate(-50%, 1.16rem);
+  font-family: var(--cube-font-mono);
+  font-size: 0.52rem;
+  line-height: 1.05;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.3s ease;
+}
+
+.faceActive .facePortal,
+.faceHovered .facePortal {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(0) translateZ(2.5rem);
 }
 
-.faceAction:hover {
-  background: var(--cube-accent);
-  color: var(--cube-bg);
+.cubeHovering .facePortal {
+  filter: brightness(1.16);
+}
+
+.faceActive .facePortalText {
+  opacity: 0.72;
+}
+
+.faceActive .facePortal::before {
+  border-color: color-mix(in srgb, var(--cube-accent) 58%, transparent);
+}
+
+.facePortal:hover,
+.faceHovered .facePortal {
+  filter: brightness(1.16);
+}
+
+.facePortal:hover::before,
+.faceHovered .facePortal::before,
+.cubeHovering .facePortal::before {
+  width: 3.45rem;
+  height: 3.45rem;
+  border-color: color-mix(in srgb, var(--cube-accent) 78%, transparent);
+  box-shadow:
+    0 0 26px color-mix(in srgb, var(--cube-accent) 28%, transparent),
+    inset 0 0 22px color-mix(in srgb, var(--cube-accent) 18%, transparent);
+}
+
+.facePortal:hover .facePortalOrbit,
+.faceHovered .facePortalOrbit,
+.cubeHovering .facePortalOrbit {
+  border-color: color-mix(in srgb, var(--cube-accent) 48%, transparent);
+  transform: translate(-50%, -50%) rotateX(68deg) rotateZ(18deg) scale(1.08);
+}
+
+.facePortal:hover .facePortalText,
+.faceHovered .facePortalText,
+.cubeHovering .facePortalText {
+  opacity: 0.86;
+  transform: translate(-50%, 1.28rem);
 }
 
 /* Phantom text */
@@ -547,7 +646,11 @@
    SCROLL SECTIONS & TEXT CARDS
    ═══════════════════════════════════════════════════════════════ */
 
-.scrollContainer { position: relative; z-index: 1; }
+.scrollContainer {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
 
 .section {
   min-height: 100vh;
@@ -565,6 +668,7 @@
   backdrop-filter: blur(12px) saturate(130%);
   -webkit-backdrop-filter: blur(12px) saturate(130%);
   overflow: hidden;
+  pointer-events: auto;
   transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
@@ -975,6 +1079,7 @@
   z-index: 5;
   text-align: center;
   pointer-events: none;
+  display: none;
 }
 
 .faceCaptionNum {
@@ -992,107 +1097,18 @@
   opacity: 0.3;
 }
 
-.cubePortalHotspot {
+.cubeHitLayer {
   position: fixed;
   left: 50%;
   top: 50%;
-  z-index: 14;
-  width: min(16rem, 48vw);
-  min-height: 4.75rem;
-  transform: translate(-50%, -50%);
-  display: grid;
-  place-items: center;
+  z-index: 6;
+  width: min(62vw, 62vh, 520px);
+  height: min(66vw, 66vh, 540px);
+  transform: translate(-50%, -47%);
   border: 0;
+  padding: 0;
   background: transparent;
-  color: var(--cube-accent);
   cursor: pointer;
-  perspective: 900px;
-  isolation: isolate;
-}
-
-.cubePortalRing {
-  position: absolute;
-  inset: 0;
-  border: 1px solid color-mix(in srgb, var(--cube-accent) 42%, transparent);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--cube-accent) 16%, transparent), transparent 48%),
-    color-mix(in srgb, var(--cube-bg) 46%, transparent);
-  box-shadow:
-    0 0 32px color-mix(in srgb, var(--cube-accent) 16%, transparent),
-    inset 0 0 26px color-mix(in srgb, var(--cube-accent) 10%, transparent);
-  backdrop-filter: blur(10px) saturate(135%);
-  -webkit-backdrop-filter: blur(10px) saturate(135%);
-  transform: rotateX(0deg) rotateY(0deg) translateZ(0);
-  transition:
-    transform 0.42s cubic-bezier(0.2, 0.85, 0.2, 1),
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.cubePortalHotspot::before,
-.cubePortalHotspot::after {
-  content: '';
-  position: absolute;
-  inset: 0.65rem;
-  border: 1px solid color-mix(in srgb, var(--cube-accent) 26%, transparent);
-  pointer-events: none;
-  transition: transform 0.42s cubic-bezier(0.2, 0.85, 0.2, 1), opacity 0.3s ease;
-}
-
-.cubePortalHotspot::before {
-  transform: translate3d(-0.38rem, -0.32rem, -1rem);
-  opacity: 0.45;
-}
-
-.cubePortalHotspot::after {
-  transform: translate3d(0.38rem, 0.32rem, 1rem);
-  opacity: 0.65;
-}
-
-.cubePortalContent {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 0.26rem;
-  justify-items: center;
-  transform: translateZ(2rem);
-  text-align: center;
-  pointer-events: none;
-}
-
-.cubePortalLabel {
-  font-family: var(--cube-font-mono);
-  font-size: 0.54rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  opacity: 0.72;
-}
-
-.cubePortalTitle {
-  max-width: 13rem;
-  font-family: var(--cube-font-display);
-  font-size: clamp(1.25rem, 3vw, 1.85rem);
-  line-height: 0.94;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.cubePortalHotspot:hover .cubePortalRing {
-  border-color: color-mix(in srgb, var(--cube-accent) 85%, transparent);
-  box-shadow:
-    0 0 46px color-mix(in srgb, var(--cube-accent) 28%, transparent),
-    inset 0 0 34px color-mix(in srgb, var(--cube-accent) 16%, transparent);
-  transform: rotateX(10deg) rotateY(-12deg) translateZ(1.2rem) scale(1.03);
-}
-
-.cubePortalHotspot:hover::before {
-  transform: translate3d(-0.58rem, -0.48rem, -1.4rem) rotateX(10deg) rotateY(-12deg);
-  opacity: 0.7;
-}
-
-.cubePortalHotspot:hover::after {
-  transform: translate3d(0.58rem, 0.48rem, 1.4rem) rotateX(10deg) rotateY(-12deg);
-  opacity: 0.9;
 }
 
 /* Keyboard hint (bottom right, above theme toggle) */
@@ -1265,20 +1281,25 @@
   .navDots { display: none; }
   .themeToggle { bottom: 5.25rem; left: 1rem; translate: 0 0; width: 2.35rem; height: 2.35rem; }
   .themeToggle:hover { transform: scale(1.1); }
-  .faceCaption { bottom: auto; top: 3.45rem; left: 1rem; translate: 0 0; text-align: left; }
+  .faceCaption { display: block; bottom: auto; top: 3.45rem; left: 1rem; translate: 0 0; text-align: left; }
   .keyboardHint { display: none; }
-  .cubePortalHotspot {
-    top: 32vh;
-    width: min(13rem, 58vw);
-    min-height: 3.9rem;
+  .facePortal {
+    bottom: 1.6rem;
+    width: 7.2rem;
+    height: 2.65rem;
   }
-  .cubePortalLabel { font-size: 0.48rem; }
-  .cubePortalTitle { font-size: clamp(1.05rem, 6vw, 1.45rem); max-width: 10rem; }
-  .faceAction {
-    bottom: 0.8rem;
-    min-height: 1.9rem;
-    padding: 0.45rem 0.65rem;
-    font-size: 0.48rem;
+  .facePortal::before {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+  .facePortalOrbit {
+    width: 3.35rem;
+    height: 1.2rem;
+  }
+  .facePortalText {
+    font-size: 0.42rem;
+    max-width: 6rem;
+    opacity: 0.68;
   }
 
   .cube { --s: min(82vw, 46vh, 350px); }
