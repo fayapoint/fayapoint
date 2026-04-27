@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -99,6 +100,10 @@ export function DashboardSidebar({
   onCollapsedChange
 }: DashboardSidebarProps) {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const pathname = usePathname();
+  const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en");
+  const cubeHref = locale ? `/${locale}` : "/";
+  const discoverHref = locale ? `/${locale}/descobrir` : "/descobrir";
   
   // Support both controlled and uncontrolled mode
   const isCollapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
@@ -192,8 +197,8 @@ export function DashboardSidebar({
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-2">
-        {/* Home Link */}
-        <Link href="/descobrir">
+        {/* Main site links */}
+        <Link href={cubeHref}>
           <button className={cn(
             "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary hover:text-white transition mb-2 group",
             isCollapsed && "justify-center px-2"
@@ -201,12 +206,21 @@ export function DashboardSidebar({
             <Home size={20} className="shrink-0" />
             {!isCollapsed && (
               <>
-                <span className="flex-1 text-left text-sm font-medium">Página Inicial</span>
+                <span className="flex-1 text-left text-sm font-medium">Cubo FayAI</span>
                 <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
               </>
             )}
           </button>
         </Link>
+        {!isCollapsed && (
+          <Link href={discoverHref}>
+            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary hover:text-white transition mb-2 group">
+              <Sparkles size={20} className="shrink-0" />
+              <span className="flex-1 text-left text-sm font-medium">Descobrir FayAI</span>
+              <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
+          </Link>
+        )}
         
         <div className="h-px bg-secondary mx-2 mb-2" />
         

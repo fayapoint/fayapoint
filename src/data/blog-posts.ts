@@ -24,25 +24,25 @@ const img = (id: string, w = 1200) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 export const blogPostContents: BlogPostContent[] = [
-  // ── 1. GPT-5.4 ──
+  // ── 1. GPT-5.5 ──
   {
     slug: "gpt-5-4-openai-tres-variantes",
     heroImage: img("1677442136019-21780ecad995"),
     sections: [
-      { type: "paragraph", content: "A OpenAI lançou em 5 de março de 2026 o GPT-5.4, seu modelo mais poderoso até o momento, disponível em três variantes: Standard, Thinking e Pro. O modelo marca um salto significativo em capacidade, eficiência e especialização — e redefine o que é possível com IA generativa em escala comercial." },
-      { type: "heading", content: "Três variantes para três necessidades" },
+      { type: "paragraph", content: "A OpenAI já posiciona o GPT-5.5 como o modelo de fronteira para raciocínio complexo, código e fluxos profissionais com ferramentas. Para quem cria produtos com IA, a mudança mais importante não é decorar um nome novo: é revisar prompts, custos, limites e arquitetura para aproveitar melhor modelos de raciocínio em produção." },
+      { type: "heading", content: "A família GPT-5 atual" },
       { type: "list", items: [
-        "GPT-5.4 Standard: o modelo de uso geral, otimizado para velocidade e custo. Ideal para chatbots, geração de texto e tarefas do dia a dia.",
-        "GPT-5.4 Thinking: focado em raciocínio lógico e resolução de problemas complexos. Usa cadeia de pensamento (chain-of-thought) aprimorada para tarefas analíticas, código e matemática.",
-        "GPT-5.4 Pro: o modelo de capacidade máxima, com janela de contexto de até 1,05 milhão de tokens. Projetado para tarefas empresariais de alta complexidade."
+        "GPT-5.5: indicado para tarefas complexas, agentes, código, análise multimodal e fluxos profissionais com alta exigência de qualidade.",
+        "GPT-5.4 mini: opção mais rápida e econômica para produtos que precisam equilibrar qualidade, latência e custo.",
+        "GPT-5.4 nano: alternativa de alto volume para classificação, respostas curtas e rotinas simples."
       ]},
-      { type: "image", src: img("1620712943543-bcc4688e7485"), alt: "Interface de IA mostrando código e análise de dados", caption: "O GPT-5.4 Pro suporta janelas de contexto de até 1,05 milhão de tokens" },
+      { type: "image", src: img("1620712943543-bcc4688e7485"), alt: "Interface de IA mostrando código e análise de dados", caption: "Modelos de fronteira exigem prompt engineering, avaliação e controle de custo" },
       { type: "heading", content: "O que muda na prática?" },
-      { type: "paragraph", content: "Para desenvolvedores, a maior mudança é a API unificada que permite alternar entre as três variantes com um único parâmetro. Empresas podem usar o Standard para atendimento ao cliente de alto volume, o Thinking para análise financeira, e o Pro para processar documentos jurídicos inteiros de uma vez." },
-      { type: "paragraph", content: "Benchmarks iniciais mostram que o GPT-5.4 Thinking supera o o3-pro em tarefas de raciocínio matemático por uma margem de 12%, enquanto o Standard é 40% mais rápido que seu predecessor para geração de texto." },
+      { type: "paragraph", content: "Para desenvolvedores e empresas, a prioridade agora é separar tarefas por nível de dificuldade. Use GPT-5.5 nos fluxos que realmente exigem inteligência máxima, ferramentas e contexto longo; reserve modelos menores para triagem, extração, suporte repetitivo e automações de baixo risco." },
+      { type: "paragraph", content: "Também vale refazer avaliações internas. Prompts que funcionavam bem em modelos anteriores podem ficar longos demais, rígidos demais ou caros demais. O caminho profissional é medir qualidade, latência e custo em exemplos reais antes de migrar tudo." },
       { type: "heading", content: "Impacto para profissionais de IA no Brasil" },
-      { type: "paragraph", content: "Com a API disponível globalmente, profissionais brasileiros já podem integrar o GPT-5.4 em seus projetos. O custo por token do Standard caiu 30% em relação ao GPT-4o, tornando projetos de IA mais acessíveis para startups e pequenas empresas." },
-      { type: "quote", content: "Março de 2026 produziu mais lançamentos significativos de IA do que trimestres inteiros em 2024. Estamos vivendo uma aceleração sem precedentes." },
+      { type: "paragraph", content: "A oportunidade para o Brasil é prática: vender automações, agentes, treinamento e sistemas internos que usam o modelo certo no lugar certo. Quem souber combinar GPT-5.5, Claude Opus 4.7, Gemini 3.1 e modelos econômicos em uma arquitetura estável vai entregar mais valor com menos improviso." },
+      { type: "quote", content: "A vantagem competitiva não é usar o modelo mais novo em tudo. É saber quando ele é necessário e quando um modelo menor resolve melhor." },
     ],
   },
 

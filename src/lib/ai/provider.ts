@@ -55,14 +55,14 @@ export interface BudgetStatus {
 }
 
 // =============================================================================
-// DEFAULT MODELS (March 2026)
+// DEFAULT MODELS (April 2026)
 // =============================================================================
 
 const DEFAULT_MODELS: ModelConfig[] = [
   // Free tier
   {
-    id: 'google/gemini-2.0-flash-exp:free',
-    name: 'Gemini 2.0 Flash (Free)',
+    id: 'google/gemini-3-flash-preview:free',
+    name: 'Gemini 3 Flash Preview (Free)',
     provider: 'openrouter',
     costPer1MInput: 0,
     costPer1MOutput: 0,
@@ -113,11 +113,11 @@ const DEFAULT_MODELS: ModelConfig[] = [
     enabled: true,
   },
   {
-    id: 'openai/gpt-4.1',
-    name: 'GPT-4.1',
+    id: 'openai/gpt-5.5',
+    name: 'GPT-5.5',
     provider: 'openrouter',
-    costPer1MInput: 2,
-    costPer1MOutput: 8,
+    costPer1MInput: 5,
+    costPer1MOutput: 30,
     tier: 'premium',
     maxTokens: 8192,
     enabled: true,

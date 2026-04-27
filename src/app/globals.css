@@ -420,6 +420,122 @@ body {
   --chart-5: oklch(0.68 0.28 155);
 }
 
+/* Dashboard theme bridge
+   The portal used many fixed amber/yellow utility classes. These scoped
+   overrides let each selected theme visibly reshape the dashboard without
+   rewriting every panel. */
+[data-dashboard-shell] {
+  --dashboard-accent: var(--primary);
+  --dashboard-accent-soft: color-mix(in oklch, var(--primary) 18%, transparent);
+  --dashboard-accent-border: color-mix(in oklch, var(--primary) 36%, transparent);
+  --dashboard-accent-strong: var(--accent);
+  background:
+    radial-gradient(circle at 12% 0%, var(--dashboard-accent-soft), transparent 34rem),
+    radial-gradient(circle at 88% 8%, color-mix(in oklch, var(--accent) 12%, transparent), transparent 30rem),
+    var(--background);
+  font-size: clamp(15px, 0.95rem + 0.08vw, 16.5px);
+  line-height: 1.55;
+}
+
+[data-dashboard-shell] .text-\[9px\] {
+  font-size: 0.66rem !important;
+}
+
+[data-dashboard-shell] .text-\[10px\] {
+  font-size: 0.72rem !important;
+}
+
+[data-dashboard-shell] .text-\[11px\] {
+  font-size: 0.76rem !important;
+}
+
+[data-dashboard-shell] .text-xs {
+  font-size: 0.82rem !important;
+  line-height: 1.35rem !important;
+}
+
+[data-dashboard-shell] .text-sm {
+  font-size: 0.94rem !important;
+  line-height: 1.45rem !important;
+}
+
+[data-dashboard-shell] header,
+[data-dashboard-shell] aside,
+[data-dashboard-shell] [role="dialog"],
+[data-dashboard-shell] .bg-card {
+  box-shadow: 0 1px 0 color-mix(in oklch, var(--dashboard-accent) 12%, transparent);
+}
+
+[data-dashboard-shell] .text-amber-400,
+[data-dashboard-shell] .text-yellow-400,
+[data-dashboard-shell] .text-orange-400 {
+  color: var(--dashboard-accent) !important;
+}
+
+[data-dashboard-shell] .border-amber-500\/20,
+[data-dashboard-shell] .border-amber-500\/30,
+[data-dashboard-shell] .border-yellow-500\/20,
+[data-dashboard-shell] .border-yellow-500\/30,
+[data-dashboard-shell] .border-orange-500\/20 {
+  border-color: var(--dashboard-accent-border) !important;
+}
+
+[data-dashboard-shell] .bg-amber-500\/20,
+[data-dashboard-shell] .bg-yellow-500\/20,
+[data-dashboard-shell] .bg-orange-500\/10,
+[data-dashboard-shell] .bg-amber-900\/40,
+[data-dashboard-shell] .bg-yellow-900\/40 {
+  background-color: var(--dashboard-accent-soft) !important;
+}
+
+[data-dashboard-shell] .from-amber-500,
+[data-dashboard-shell] .from-amber-600,
+[data-dashboard-shell] .from-yellow-500,
+[data-dashboard-shell] .from-yellow-600,
+[data-dashboard-shell] .from-orange-500 {
+  --tw-gradient-from: var(--dashboard-accent) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: color-mix(in oklch, var(--dashboard-accent) 0%, transparent) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+[data-dashboard-shell] .to-yellow-500,
+[data-dashboard-shell] .to-yellow-600,
+[data-dashboard-shell] .to-yellow-700,
+[data-dashboard-shell] .to-orange-500,
+[data-dashboard-shell] .to-orange-600 {
+  --tw-gradient-to: var(--dashboard-accent-strong) var(--tw-gradient-to-position) !important;
+}
+
+.theme-default [data-dashboard-shell] {
+  --dashboard-accent: oklch(0.50 0.18 250);
+  --dashboard-accent-strong: oklch(0.58 0.20 200);
+}
+
+.theme-light [data-dashboard-shell] {
+  --dashboard-accent: oklch(0.62 0.20 240);
+  --dashboard-accent-strong: oklch(0.68 0.18 220);
+}
+
+.theme-dark [data-dashboard-shell] {
+  --dashboard-accent: oklch(0.78 0.12 75);
+  --dashboard-accent-strong: oklch(0.65 0.15 55);
+}
+
+.theme-aurora [data-dashboard-shell] {
+  --dashboard-accent: oklch(0.78 0.28 200);
+  --dashboard-accent-strong: oklch(0.70 0.32 290);
+}
+
+.theme-sunset [data-dashboard-shell] {
+  --dashboard-accent: oklch(0.68 0.32 340);
+  --dashboard-accent-strong: oklch(0.65 0.30 290);
+}
+
+.theme-emerald [data-dashboard-shell] {
+  --dashboard-accent: oklch(0.65 0.28 150);
+  --dashboard-accent-strong: oklch(0.72 0.30 140);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

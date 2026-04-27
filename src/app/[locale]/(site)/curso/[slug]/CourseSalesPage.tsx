@@ -100,7 +100,7 @@ export default function CourseSalesPage() {
       ? Math.round(((product.pricing.price - monthlyOfferPrice) / product.pricing.price) * 100)
       : discount;
   const verifiedAtLabel = formatEditorialDate(
-    product.editorialVerification?.verifiedAt || "2026-03-20",
+    product.editorialVerification?.verifiedAt || "2026-04-27",
     isPtBr ? "pt-BR" : "en-US"
   );
   

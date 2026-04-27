@@ -1,13 +1,14 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRef, useState, useCallback, useEffect, useMemo } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useScrollCube } from "./useScrollCube";
 import { CubeScene } from "./CubeScene";
 import { CubeTextCard } from "./CubeTextCard";
 import { navigateWithZoom } from "./cube-transitions";
-import { SECTIONS, FACE_NAMES, N, STOPS } from "./cube-data";
+import { SECTIONS, FACES, FACE_NAMES, N } from "./cube-data";
 import { CubeInteractive } from "./CubeInteractive";
+import { useUser } from "@/contexts/UserContext";
 import s from "./cube.module.css";
 import Link from "next/link";
 
@@ -51,6 +52,8 @@ function NavDot({ index, active, label, onClick }: { index: number; active: bool
 
 export function CubeHomepage() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { user, isLoggedIn, mounted } = useUser();
   const { rx, ry, scrollNorm, activeSection, scrollToSection } = useScrollCube();
   const overlayRef = useRef<HTMLDivElement>(null);
   const [cubeTheme, setCubeTheme] = useState<"dark" | "light">("dark");
@@ -58,12 +61,31 @@ export function CubeHomepage() {
   const [entered, setEntered] = useState(false);
   const [zooming, setZooming] = useState(false);
   const [zoomFace, setZoomFace] = useState<string | null>(null);
+  const [dashboardSnapshot, setDashboardSnapshot] = useState<{
+    courses?: { courseId: string; progressPercent: number; details?: { title?: string; slug?: string } }[];
+    stats?: { level?: number; xp?: number; streak?: number; imagesGenerated?: number; aiChats?: number };
+    plan?: string;
+  } | null>(null);
 
   // Entrance animation
   useEffect(() => {
     const timer = setTimeout(() => setEntered(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!mounted || !isLoggedIn) return;
+    let alive = true;
+    fetch("/api/user/dashboard", { credentials: "include", cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (alive && data) setDashboardSnapshot(data);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [mounted, isLoggedIn]);
 
   // Force disable smooth scroll — native scroll + cube lerp handles smoothness
   useEffect(() => {
@@ -74,6 +96,23 @@ export function CubeHomepage() {
       html.style.removeProperty("scroll-behavior");
     };
   }, []);
+
+  const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en") || "pt-BR";
+  const localizeRoute = useCallback((href: string) => {
+    if (!href.startsWith("/") || href.startsWith(`/${locale}`) || href.startsWith("/api")) return href;
+    return `/${locale}${href}`;
+  }, [locale]);
+
+  // Face click -> zoom into face -> navigate
+  const handleFaceClick = useCallback((face: string, route: string) => {
+    setZooming(true);
+    setZoomFace(face);
+
+    // After zoom animation, navigate
+    setTimeout(() => {
+      navigateWithZoom(router, localizeRoute(route), overlayRef);
+    }, 600);
+  }, [localizeRoute, router]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -111,22 +150,11 @@ export function CubeHomepage() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeSection, scrollToSection]);
+  }, [activeSection, scrollToSection, handleFaceClick]);
 
   const toggleTheme = useCallback(() => {
     setCubeTheme((t) => (t === "dark" ? "light" : "dark"));
   }, []);
-
-  // Face click → zoom into face → navigate
-  const handleFaceClick = useCallback((face: string, route: string) => {
-    setZooming(true);
-    setZoomFace(face);
-
-    // After zoom animation, navigate
-    setTimeout(() => {
-      navigateWithZoom(router, route, overlayRef);
-    }, 600);
-  }, [router]);
 
   const handleNavigate = useCallback((href: string) => {
     if (href.startsWith("#")) {
@@ -135,12 +163,71 @@ export function CubeHomepage() {
     } else {
       // Use face zoom for route navigation
       const face = ["top", "front", "right", "back", "left", "bottom"][activeSection] || "front";
-      handleFaceClick(face, href);
+      handleFaceClick(face, localizeRoute(href));
     }
-  }, [scrollToSection, activeSection, handleFaceClick]);
+  }, [scrollToSection, activeSection, handleFaceClick, localizeRoute]);
 
   const pct = Math.round(scrollNorm * 100);
   const faceName = FACE_NAMES[activeSection] || "HERO";
+  const activeFace = FACES[activeSection];
+  const firstName = user?.name?.split(" ")[0] || "Aluno";
+  const stats = dashboardSnapshot?.stats || user?.progress;
+  const courses = dashboardSnapshot?.courses || [];
+  const nextCourse = courses
+    .filter((course) => (course.progressPercent || 0) < 100)
+    .sort((a, b) => (b.progressPercent || 0) - (a.progressPercent || 0))[0];
+  const hasLearningHistory = Boolean(nextCourse || (stats?.level && stats.level > 1) || (stats?.xp && stats.xp > 0));
+  const journeyLabel = nextCourse
+    ? `${Math.round(nextCourse.progressPercent || 0)}% em ${nextCourse.details?.title || nextCourse.courseId}`
+    : hasLearningHistory
+      ? `Nível ${stats?.level || 1} · ${stats?.xp || 0} XP`
+      : "Sua jornada está pronta para começar";
+  const personalizedSections = useMemo(() => {
+    if (!isLoggedIn) return SECTIONS;
+    return SECTIONS.map((section) => {
+      if (section.id === "s0") {
+        return {
+          ...section,
+          tag: `Bem-vindo de volta, ${firstName}`,
+          heading: hasLearningHistory ? ["CONTINUE", "SUA", "JORNADA"] : ["COMECE", "COM", "INTENÇÃO"],
+          body: hasLearningHistory
+            ? [
+                "O cubo reconhece seu progresso.",
+                journeyLabel,
+                "Entre no painel ou explore novas trilhas quando quiser.",
+              ]
+            : [
+                "Você já está logado.",
+                "Escolha uma trilha, crie no Studio AI ou veja sua área do aluno.",
+                "A FayAI agora acompanha seu próximo passo.",
+              ],
+          nextLabel: hasLearningHistory ? "Abrir Dashboard ->" : "Ver Minha Jornada ->",
+          nextRoute: "/portal",
+          nextHref: "/portal",
+        };
+      }
+      if (section.id === "s5") {
+        return {
+          ...section,
+          tag: "05 — Próximo Passo",
+          heading: ["VOLTE", "AO SEU", "PAINEL"],
+          body: [
+            "Continue cursos, use o Studio AI, veja ranking e recompensas.",
+            "O cubo é a porta de entrada; o dashboard é sua central de ação.",
+          ],
+          nextLabel: "Entrar no Dashboard ->",
+          nextRoute: "/portal",
+          nextHref: "/portal",
+        };
+      }
+      return section;
+    });
+  }, [firstName, hasLearningHistory, isLoggedIn, journeyLabel]);
+  const activeSectionConfig = personalizedSections[activeSection];
+  const portalRoute = activeSectionConfig?.nextRoute || activeFace?.route;
+  const portalLabel = (activeSectionConfig?.nextLabel || activeFace?.routeLabel || "Entrar")
+    .replace(/<-|->/g, "")
+    .trim();
 
   return (
     <div
@@ -168,13 +255,17 @@ export function CubeHomepage() {
             FAY<span className={s.navLogoAccent}>AI</span>
           </Link>
           <div className={s.navLinks}>
+            <button type="button" className={s.navLinkButton} onClick={() => scrollToSection(0)}>Cubo</button>
+            <Link href="/descobrir" className={s.navLink}>Descobrir</Link>
             <Link href="/cursos" className={s.navLink}>Cursos</Link>
             <Link href="/certificacoes" className={s.navLink}>Certificados</Link>
-            <Link href="/servicos" className={s.navLink}>Servicos</Link>
-            <Link href="/precos" className={s.navLink}>Precos</Link>
+            <Link href="/servicos" className={s.navLink}>Serviços</Link>
+            <Link href="/precos" className={s.navLink}>Preços</Link>
             <Link href="/blog" className={s.navLink}>Blog</Link>
-            <Link href="/portal" className={s.navLink}>Portal</Link>
-            <Link href="/registro" className={s.navCta}>Comece Gratis</Link>
+            <Link href="/portal" className={s.navLink}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
+            <Link href={isLoggedIn ? "/portal" : "/registro"} className={s.navCta}>
+              {isLoggedIn ? "Continuar" : "Comece Grátis"}
+            </Link>
           </div>
           <button
             className={s.mobileMenuBtn}
@@ -189,12 +280,32 @@ export function CubeHomepage() {
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div className={s.mobileMenu}>
+          <Link href="/descobrir" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Descobrir</Link>
           <Link href="/cursos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Cursos</Link>
           <Link href="/certificacoes" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Certificados</Link>
-          <Link href="/servicos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Servicos</Link>
-          <Link href="/precos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Precos</Link>
-          <Link href="/portal" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Portal</Link>
-          <Link href="/registro" className={s.navCta} onClick={() => setMobileMenuOpen(false)} style={{ marginTop: "0.5rem", textAlign: "center" }}>Comece Gratis</Link>
+          <Link href="/servicos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
+          <Link href="/precos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Preços</Link>
+          <Link href="/portal" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
+          <Link href={isLoggedIn ? "/portal" : "/registro"} className={s.navCta} onClick={() => setMobileMenuOpen(false)} style={{ marginTop: "0.5rem", textAlign: "center" }}>
+            {isLoggedIn ? "Continuar" : "Comece Grátis"}
+          </Link>
+        </div>
+      )}
+
+      {/* Logged-in journey panel */}
+      {mounted && isLoggedIn && (
+        <div className={s.userDock}>
+          <div className={s.userDockEyebrow}>Sua jornada FayAI</div>
+          <div className={s.userDockTitle}>{firstName}, pronto para continuar?</div>
+          <div className={s.userDockMeta}>{journeyLabel}</div>
+          <div className={s.userDockActions}>
+            <button type="button" onClick={() => handleNavigate("/portal")} className={s.userDockPrimary}>
+              Dashboard
+            </button>
+            <button type="button" onClick={() => scrollToSection(nextCourse ? 1 : 5)} className={s.userDockSecondary}>
+              Girar cubo
+            </button>
+          </div>
         </div>
       )}
 
@@ -234,15 +345,39 @@ export function CubeHomepage() {
         <div className={s.faceCaptionName}>{faceName}</div>
       </div>
 
+      {activeFace && portalRoute && (
+        <button
+          type="button"
+          className={s.cubePortalHotspot}
+          onClick={() => handleFaceClick(activeFace.face, portalRoute)}
+          aria-label={`Entrar em ${faceName}`}
+        >
+          <span className={s.cubePortalRing} />
+          <span className={s.cubePortalContent}>
+            <span className={s.cubePortalLabel}>Entrar no cubo</span>
+            <span className={s.cubePortalTitle}>{portalLabel}</span>
+          </span>
+        </button>
+      )}
+
       {/* Keyboard hint */}
       <div className={s.keyboardHint}>
         <span>←→ navegar</span>
         <span>↵ entrar</span>
       </div>
 
+      <div className={s.mobileActionRail}>
+        <button type="button" onClick={() => handleNavigate(isLoggedIn ? "/portal" : "/descobrir")}>
+          {isLoggedIn ? "Minha Jornada" : "Descobrir"}
+        </button>
+        <button type="button" onClick={() => scrollToSection(Math.min(activeSection + 1, N - 1))}>
+          Girar Cubo
+        </button>
+      </div>
+
       {/* Scroll sections with text cards */}
       <div id="cube-scroll-container" className={s.scrollContainer}>
-        {SECTIONS.map((section) => (
+        {personalizedSections.map((section) => (
           <section key={section.id} id={section.id} className={s.section}>
             <CubeTextCard section={section} onNavigate={handleNavigate} />
           </section>
@@ -251,80 +386,6 @@ export function CubeHomepage() {
 
       {/* Zoom transition overlay */}
       <div ref={overlayRef} className={`${s.zoomOverlay} ${zooming ? s.zoomOverlayActive : ""}`} />
-
-      {/* Cube sizing + centering + rotation — vanilla JS, completely outside React.
-          Turbopack on Windows caches stale CSS modules AND stale React hooks,
-          so we bypass React entirely for the critical cube behavior. */}
-      <script dangerouslySetInnerHTML={{ __html: `
-        (function() {
-          var cubeEl = null;
-          var smooth = 0;
-          var lastNow = performance.now();
-          var N = 6;
-          var STOPS = [
-            {rx:90,ry:0},{rx:0,ry:0},{rx:0,ry:-90},
-            {rx:0,ry:-180},{rx:0,ry:-270},{rx:-90,ry:-360}
-          ];
-
-          function easeIO(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
-          function getRotation(sn) {
-            var t = sn * (N-1);
-            var i = Math.min(Math.floor(t), N-2);
-            var f = easeIO(t - i);
-            var a = STOPS[i], b = STOPS[i+1];
-            return { rx: a.rx+(b.rx-a.rx)*f, ry: a.ry+(b.ry-a.ry)*f };
-          }
-
-          function findCube() {
-            var els = document.querySelectorAll('[class*="cube"]');
-            for (var i = 0; i < els.length; i++) {
-              if (els[i].children.length === 6) { cubeEl = els[i]; break; }
-            }
-          }
-
-          function fixCube() {
-            if (!cubeEl) { findCube(); }
-            if (!cubeEl) { setTimeout(fixCube, 50); return; }
-            cubeEl.style.width = 'min(74vw, 74vh, 560px)';
-            cubeEl.style.height = 'min(74vw, 74vh, 560px)';
-            cubeEl.style.flexShrink = '0';
-            cubeEl.style.position = 'relative';
-            cubeEl.style.transformStyle = 'preserve-3d';
-            cubeEl.style.willChange = 'transform';
-            cubeEl.style.zIndex = '1';
-            var scene = cubeEl.parentElement;
-            if (scene) {
-              for (var j = 0; j < scene.children.length; j++) {
-                var child = scene.children[j];
-                if (child !== cubeEl) {
-                  child.style.position = 'absolute';
-                  child.style.pointerEvents = 'none';
-                }
-              }
-            }
-          }
-
-          function frame(now) {
-            requestAnimationFrame(frame);
-            if (document.hidden) { lastNow = now; return; }
-            if (!cubeEl) { findCube(); fixCube(); lastNow = now; return; }
-
-            var dt = Math.min((now - lastNow) / 1000, 0.05);
-            lastNow = now;
-
-            var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-            var tgt = Math.max(0, Math.min(1, window.scrollY / maxScroll));
-            smooth += (tgt - smooth) * (1 - Math.exp(-dt * 10));
-            smooth = Math.max(0, Math.min(1, smooth));
-
-            var rot = getRotation(smooth);
-            cubeEl.style.transform = 'rotateX('+rot.rx+'deg) rotateY('+rot.ry+'deg)';
-          }
-
-          fixCube();
-          requestAnimationFrame(frame);
-        })();
-      `}} />
     </div>
   );
 }

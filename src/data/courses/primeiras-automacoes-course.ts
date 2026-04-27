@@ -13,7 +13,7 @@ export const primeirasAutomacoesCourse = {
   originalPrice: 147,
   rating: 4.9,
   students: 0,
-  lastUpdated: "Março 2026",
+  lastUpdated: "Abril 2026",
 
   shortDescription: "Aprenda a automatizar tarefas do dia a dia usando ferramentas 100% gratuitas. Sem programação, sem custos escondidos — só resultados reais em poucas horas.",
 

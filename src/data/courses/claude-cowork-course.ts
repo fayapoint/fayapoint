@@ -12,7 +12,7 @@ export const claudeCoworkCourse = {
   originalPrice: 497,
   rating: 4.9,
   students: 412,
-  lastUpdated: "2026-03-20",
+  lastUpdated: "2026-04-27",
   shortDescription: "Aprenda a usar Claude AI como um verdadeiro colega de trabalho. Domine Artifacts, Projects, análise de documentos complexos, MCP (Model Context Protocol) e workflows colaborativos para equipes.",
   fullDescription: "O curso definitivo para profissionais que querem usar Claude como parceiro de trabalho. Aprenda a criar Artifacts reutilizáveis, organizar Projects complexos, analisar documentos de centenas de páginas, usar MCP para integrar com suas ferramentas, e construir workflows colaborativos que multiplicam a produtividade de equipes inteiras.",
   impactForIndividuals: [
@@ -47,7 +47,7 @@ export const claudeCoworkCourse = {
     "Integrar Claude com suas ferramentas de trabalho"
   ],
   modules: [
-    { id: 1, title: "Fundamentos do Claude", description: "Anthropic, Claude Opus 4.6, interface e capacidades únicas", duration: "4 horas", lessons: 20, topics: ["Anthropic", "Claude Opus 4.6", "Interface", "Planos", "Comparativo"] },
+    { id: 1, title: "Fundamentos do Claude", description: "Anthropic, Claude Opus 4.7, interface e capacidades únicas", duration: "4 horas", lessons: 20, topics: ["Anthropic", "Claude Opus 4.7", "Interface", "Planos", "Comparativo"] },
     { id: 2, title: "Artifacts e Criação", description: "Documentos interativos, código, visualizações e SVGs", duration: "5 horas", lessons: 25, topics: ["Artifacts", "Código", "SVG", "React", "Mermaid"] },
     { id: 3, title: "Projects e Contexto", description: "Organização de projetos, knowledge base e instruções", duration: "5 horas", lessons: 25, topics: ["Projects", "Knowledge", "System Prompts", "Contexto"] },
     { id: 4, title: "Análise de Documentos", description: "PDFs, contratos, relatórios e pesquisa acadêmica", duration: "5 horas", lessons: 30, topics: ["PDFs", "Contratos", "Relatórios", "Pesquisa", "Extração"] },

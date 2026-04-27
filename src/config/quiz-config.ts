@@ -1,6 +1,6 @@
 /**
  * Quiz Configuration
- * Updated: 2026-03-23
+ * Updated: 2026-04-27
  *
  * This is the master configuration for the quiz system.
  * It includes:
@@ -18,8 +18,8 @@
 export const FREE_MODELS = [
   'openrouter/free',                                    // Smart router — auto-selects best free model
   'google/gemini-3-flash-preview-20251217:free',       // Gemini 3 Flash Preview — academic/science
-  'anthropic/claude-4.6-sonnet-20260217:free',         // Claude Sonnet 4.6 — BR Portuguese, balanced
-  'anthropic/claude-4.6-opus-20260205:free',           // Claude Opus 4.6 — adaptive cognition
+  'anthropic/claude-sonnet-4-6:free',                  // Claude Sonnet 4.6 — BR Portuguese, balanced
+  'anthropic/claude-opus-4-7:free',                    // Claude Opus 4.7 — adaptive cognition
   'deepseek/deepseek-v3.2-20251201:free',              // DeepSeek V3.2 — GPT-5 class reasoning
   'google/gemini-2.5-flash:free',                      // Gemini 2.5 Flash — versatile, 1M context
   'openai/gpt-oss-120b:free',                          // GPT-OSS 120B — OpenAI open-weight
@@ -32,18 +32,18 @@ export const FREE_MODELS = [
 ];
 
 export const PREMIUM_MODELS = [
-  'openai/gpt-5.4',                                    // GPT-5.4 — frontier intelligence (#1 ranked)
+  'openai/gpt-5.5',                                    // GPT-5.5 — frontier intelligence
   'google/gemini-3.1-pro-preview',                     // Gemini 3.1 Pro Preview — 2M context
   'google/gemini-3.1-flash-lite-preview',              // Gemini 3.1 Flash Lite — high efficiency
-  'anthropic/claude-opus-4.6',                         // Claude Opus 4.6 — adaptive cognition
+  'anthropic/claude-opus-4-7',                         // Claude Opus 4.7 — adaptive cognition
   'anthropic/claude-sonnet-4.6',                       // Claude Sonnet 4.6 — best value premium
-  'openai/gpt-5.3-codex',                              // GPT-5.3 Codex — code/technical specialist
+  'openai/gpt-5.4',                                    // GPT-5.4 — affordable frontier fallback
   'deepseek/deepseek-v3.2',                            // DeepSeek V3.2 — STEM, math, competition
   'google/gemini-3-flash-preview',                     // Gemini 3 Flash Preview — fast reasoning
   'openai/gpt-5.4-mini',                               // GPT-5.4 Mini — near-frontier, cost efficient
-  'anthropic/claude-opus-4.5',                         // Claude Opus 4.5 — extended reasoning
+  'anthropic/claude-opus-4.5',                         // Claude Opus 4.5 — legacy fallback
   'anthropic/claude-sonnet-4.5',                       // Claude Sonnet 4.5 — proven, Portuguese
-  'openai/gpt-5.2',                                    // GPT-5.2 — high capability, consistent
+  'openai/gpt-5.2',                                    // GPT-5.2 — legacy fallback, consistent
   'openai/gpt-5',                                      // GPT-5 — core reasoning
   'x-ai/grok-4.20-beta',                               // Grok 4.20 Beta — creative, unconventional
   'google/gemini-2.5-pro',                             // Gemini 2.5 Pro — professional, 1M context

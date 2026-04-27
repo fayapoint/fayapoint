@@ -60,7 +60,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
     ? product.pricing.price
     : product.pricing.originalPrice;
   const verifiedAtLabel = formatEditorialDate(
-    product.editorialVerification?.verifiedAt || "2026-03-20",
+    product.editorialVerification?.verifiedAt || "2026-04-27",
     isPtBr ? "pt-BR" : "en-US"
   );
   

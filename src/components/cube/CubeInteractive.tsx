@@ -14,13 +14,13 @@ export function CubeInteractive({ onFaceClick, activeSection }: {
   onFaceClick: (face: string, route: string) => void;
   activeSection: number;
 }) {
-  // Fix cube sizing + centering — backup for the inline script
+  // Fix cube sizing + centering after mount.
   useEffect(() => {
     const fixCube = () => {
       const allCubeEls = Array.from(document.querySelectorAll('[class*="cube"]'));
       const cube = allCubeEls.find(el => el.children.length === 6) as HTMLElement | undefined;
       if (!cube) return false;
-      if (cube.style.flexShrink === "0") return true; // Already fixed by inline script
+      if (cube.style.flexShrink === "0") return true;
       cube.style.width = "min(74vw, 74vh, 560px)";
       cube.style.height = "min(74vw, 74vh, 560px)";
       cube.style.flexShrink = "0";
@@ -124,8 +124,7 @@ export function CubeInteractive({ onFaceClick, activeSection }: {
           target.closest('nav') ||
           target.closest('a') ||
           target.closest('button') ||
-          target.closest('[class*="textCard"]') ||
-          target.closest('[class*="scrollContainer"]')
+          target.closest('[class*="textCard"]')
         ) {
           return;
         }

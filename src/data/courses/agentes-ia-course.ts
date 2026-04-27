@@ -12,7 +12,7 @@ export const agentesIACourse = {
   originalPrice: 197,
   rating: 0,
   students: 0,
-  lastUpdated: "Março 2026",
+  lastUpdated: "Abril 2026",
   shortDescription: "Curso completo sobre agentes de IA autônomos: conceitos, frameworks (LangChain, CrewAI, Claude Agent SDK) e projetos práticos.",
   fullDescription: `Aprenda a construir agentes de IA autônomos usando os frameworks mais modernos. De chatbots simples a sistemas multi-agente complexos, domine a tecnologia que está redefinindo a automação.
 

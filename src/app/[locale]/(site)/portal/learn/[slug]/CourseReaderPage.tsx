@@ -654,7 +654,7 @@ function sanitizeCourseMarkdown(markdown: string): string {
     const lower = line.toLowerCase();
 
     if (
-      lower.includes("canon editorial de fronteira: gpt-5.4 e claude opus 4.6") ||
+      lower.includes("canon editorial de fronteira: gpt-5.5 e claude opus 4.7") ||
       lower.includes("quando a aula precisa de uma referência de fronteira para comparar padrão de qualidade") ||
       lower.includes("a base editorial desta atualização foi verificada em fontes oficiais") ||
       lower.includes("isso nos ajuda a evitar conteúdo congelado no tempo") ||

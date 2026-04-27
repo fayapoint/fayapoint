@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const THEME_CLASSES = [
@@ -29,16 +30,28 @@ function applyTheme(next: string) {
 }
 
 export function ThemeSwitcher() {
+  const pathname = usePathname();
+  const isEnglish = pathname?.split("/").includes("en");
   const options = useMemo(
-    () => [
-      { value: "default", label: "Padrão" },
-      { value: "light", label: "Claro" },
-      { value: "dark", label: "Escuro" },
-      { value: "aurora", label: "Aurora" },
-      { value: "sunset", label: "Pôr do Sol" },
-      { value: "emerald", label: "Esmeralda" },
-    ],
-    []
+    () =>
+      isEnglish
+        ? [
+            { value: "default", label: "Default" },
+            { value: "light", label: "Light" },
+            { value: "dark", label: "Dark" },
+            { value: "aurora", label: "Aurora" },
+            { value: "sunset", label: "Sunset" },
+            { value: "emerald", label: "Emerald" },
+          ]
+        : [
+            { value: "default", label: "Padrão" },
+            { value: "light", label: "Claro" },
+            { value: "dark", label: "Escuro" },
+            { value: "aurora", label: "Aurora" },
+            { value: "sunset", label: "Pôr do Sol" },
+            { value: "emerald", label: "Esmeralda" },
+          ],
+    [isEnglish]
   );
 
   const [value, setValue] = useState<string>(DEFAULT_THEME);
@@ -68,7 +81,7 @@ export function ThemeSwitcher() {
     <div className="min-w-[140px]">
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="bg-secondary/50 border-border text-foreground">
-          <SelectValue placeholder="Tema" />
+          <SelectValue placeholder={isEnglish ? "Theme" : "Tema"} />
         </SelectTrigger>
         <SelectContent>
           {options.map((opt) => (

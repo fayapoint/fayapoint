@@ -2,7 +2,7 @@ export const promptEngineeringCourse = {
   id: 13,
   slug: "prompt-engineering",
   title: "Prompt Engineering: Domine a Arte de Conversar com IAs",
-  subtitle: "De iniciante a especialista: técnicas comprovadas para GPT-5.4, Claude Opus 4.6, Gemini e mais",
+  subtitle: "De iniciante a especialista: técnicas comprovadas para GPT-5.5, Claude Opus 4.7, Gemini e mais",
   tool: "Multi-tool",
   category: "IA Generativa",
   level: "Intermediário",
@@ -12,8 +12,8 @@ export const promptEngineeringCourse = {
   originalPrice: 147,
   rating: 0,
   students: 0,
-  lastUpdated: "Março 2026",
-  shortDescription: "Curso completo de prompt engineering com técnicas avançadas, frameworks profissionais e casos de uso reais para GPT-5.4, Claude Opus 4.6 e Gemini.",
+  lastUpdated: "Abril 2026",
+  shortDescription: "Curso completo de prompt engineering com técnicas avançadas, frameworks profissionais e casos de uso reais para GPT-5.5, Claude Opus 4.7 e Gemini.",
   fullDescription: `Aprenda as técnicas mais avançadas de prompt engineering para extrair resultados extraordinários de qualquer modelo de IA. Do básico ao avançado com casos de uso reais.
 
 Este curso cobre desde os fundamentos de como LLMs processam prompts até técnicas avançadas como Chain-of-Thought, Tree-of-Thought, ReAct e meta-prompting. Você vai construir um kit profissional de prompts e aprender a automatizar com APIs.`,
@@ -21,7 +21,7 @@ Este curso cobre desde os fundamentos de como LLMs processam prompts até técni
     "🚀 Extraia 10x mais valor de qualquer IA com prompts profissionais",
     "📝 Domine frameworks como CoT, ToT e ReAct",
     "💼 Aplique prompt engineering no seu trabalho diário",
-    "🤖 Compare e use GPT-5.4, Claude Opus 4.6 e Gemini estrategicamente",
+    "🤖 Compare e use GPT-5.5, Claude Opus 4.7 e Gemini estrategicamente",
   ],
   impactForEntrepreneurs: [
     "📈 Automatize tarefas com APIs e prompt templates",
@@ -36,7 +36,7 @@ Este curso cobre desde os fundamentos de como LLMs processam prompts até técni
   whatYouLearn: [
     "Fundamentos e técnicas avançadas de prompt engineering",
     "Frameworks: Chain-of-Thought, Tree-of-Thought, ReAct",
-    "Comparação prática de GPT-5.4, Claude Opus 4.6 e Gemini",
+    "Comparação prática de GPT-5.5, Claude Opus 4.7 e Gemini",
     "Automação com APIs e prompt templates",
     "Projeto final: Kit Profissional de Prompts",
   ],

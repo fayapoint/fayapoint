@@ -95,6 +95,18 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
         <div className={s.faceImageContent}>
           <img src={content.src} alt={content.alt} className={s.faceImage} />
         </div>
+        {route && (
+          <button
+            type="button"
+            className={s.faceAction}
+            onClick={(event) => {
+              event.stopPropagation();
+              handleClick();
+            }}
+          >
+            {routeLabel || "Entrar"}
+          </button>
+        )}
         {/* Hover tooltip */}
         {route && <div style={tooltipStyle}>↗ {routeLabel || "Entrar"}</div>}
         {/* Glow ring on hover */}
@@ -166,6 +178,19 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
           </div>
         )}
       </div>
+
+      {route && (
+        <button
+          type="button"
+          className={s.faceAction}
+          onClick={(event) => {
+            event.stopPropagation();
+            handleClick();
+          }}
+        >
+          {routeLabel || "Entrar"}
+        </button>
+      )}
 
       {/* Hover tooltip */}
       {route && <div style={tooltipStyle}>↗ {routeLabel || "Entrar"}</div>}

@@ -76,7 +76,25 @@
       "Bash(ls /c/Users/ricar/scoop/apps/nodejs*/current/node.exe)",
       "Bash(ls /c/Users/ricar/AppData/Local/fnm_multishells/*/node.exe)",
       "Bash(ls /c/Users/ricar/AppData/Roaming/fnm/node-versions/*/installation/node.exe)",
-      "Bash(export PATH=\"/c/Users/ricar/AppData/Local/fnm_multishells/12744_1774977609953:$PATH\")"
+      "Bash(export PATH=\"/c/Users/ricar/AppData/Local/fnm_multishells/12744_1774977609953:$PATH\")",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); course=[c for c in data if c.get\\('slug'\\)=='chatgpt-masterclass']; print\\(json.dumps\\(course[0], indent=2, ensure_ascii=False\\) if course else 'Not found'\\)\")",
+      "Bash(python -c \"import json,sys; data=json.load\\(sys.stdin\\); course=[c for c in data if c.get\\('slug'\\)=='chatgpt-masterclass']; print\\(json.dumps\\(course[0], indent=2, ensure_ascii=False\\) if course else 'Not found'\\)\")",
+      "Bash(python -c ':*)",
+      "Bash(ffprobe -v quiet -print_format json -show_format -show_streams \"c:/Users/ricar/WORKSMAIN/autoresearch/cover-gen/video_30s/chatgpt-masterclass/reel_v7_final.mp4\")",
+      "Bash(npx playwright:*)",
+      "Bash(\"C:/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation/node.exe\" --version)",
+      "Bash(\"C:/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation/npx.cmd\" playwright:*)",
+      "Bash(\"C:/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation/node.exe\" -e \"const pw = require\\('playwright-core'\\); console.log\\('playwright-core:', pw\\);\")",
+      "Bash(\"C:/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation/node.exe\" squads/fayai-instagram-courses/output/2026-04-13-090429/slides/convert.mjs)",
+      "Bash(start \"\" \"c:/Users/ricar/WORKSMAIN/autoresearch/squads/fayai-instagram-courses/output/2026-04-13-090429/slides/jpeg/slide-01.jpg\")",
+      "Bash(start \"\" \"c:/Users/ricar/WORKSMAIN/autoresearch/squads/fayai-instagram-courses/output/2026-04-13-090429/slides/jpeg/slide-02.jpg\")",
+      "Bash(start \"\" \"c:/Users/ricar/WORKSMAIN/autoresearch/squads/fayai-instagram-courses/output/2026-04-13-090429/slides/jpeg/slide-03.jpg\")",
+      "Bash(start \"\" \"c:/Users/ricar/WORKSMAIN/autoresearch/squads/fayai-instagram-courses/output/2026-04-13-090429/slides/jpeg/slide-04.jpg\")",
+      "Bash(start \"\" \"c:/Users/ricar/WORKSMAIN/autoresearch/squads/fayai-instagram-courses/output/2026-04-13-090429/slides/jpeg/slide-05.jpg\")",
+      "Bash(\"C:/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation/node.exe\" --env-file=.env squads/fayai-instagram-courses/output/2026-04-13-090429/dry-run.mjs)",
+      "mcp__claude_ai_Cloudinary__upload-asset",
+      "Bash(\"C:/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation/node.exe\" --env-file=.env squads/fayai-instagram-courses/output/2026-04-13-090429/upload-and-publish.mjs --dry-run)",
+      "Bash(\"C:/Users/ricar/AppData/Roaming/fnm/node-versions/v24.14.1/installation/node.exe\" --env-file=.env squads/fayai-instagram-courses/output/2026-04-13-090429/upload-and-publish.mjs)"
     ]
   }
 }

@@ -21,15 +21,16 @@ type CourseModuleLike = {
 };
 
 export const DEFAULT_EDITORIAL_VERIFICATION: EditorialVerification = {
-  verifiedAt: "2026-03-20",
-  canonModels: ["GPT-5.4", "Claude Opus 4.6"],
+  verifiedAt: "2026-04-27",
+  canonModels: ["GPT-5.5", "Claude Opus 4.7", "Gemini 3.1"],
   rule: "Conteúdo revisado com fontes oficiais recentes e cobertura real por aula.",
   sourceGroup: "official-current",
   toolLabel: "Mission Control Editorial Engine",
   sourceLinks: [
-    "https://openai.com/fi-FI/index/introducing-gpt-5-4/",
-    "https://developers.openai.com/api/docs/models/gpt-5.4",
-    "https://www.anthropic.com/system-cards/",
+    "https://developers.openai.com/api/docs/models",
+    "https://developers.openai.com/api/docs/guides/latest-model",
+    "https://platform.claude.com/docs/en/about-claude/models/overview",
+    "https://ai.google.dev/gemini-api/docs/models",
   ],
 };
 

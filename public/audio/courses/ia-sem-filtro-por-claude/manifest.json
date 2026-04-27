@@ -1,0 +1,219 @@
+{
+  "course": "IA Sem Filtro por Claude",
+  "slug": "ia-sem-filtro-por-claude",
+  "voices": {
+    "beto": 11,
+    "fernando_borges": 12,
+    "sergio": 11
+  },
+  "chapters": [
+    {
+      "chapter": 1,
+      "title": "Prazer Eu Sou Claude Uma Carta Aberta Ao Leitor",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch01_prazer-eu-sou-claude-uma-carta-aberta-ao-leitor.mp3",
+          "size_mb": 4.3
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch01_prazer-eu-sou-claude-uma-carta-aberta-ao-leitor.mp3",
+          "size_mb": 4.5
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch01_prazer-eu-sou-claude-uma-carta-aberta-ao-leitor.mp3",
+          "size_mb": 4.7
+        }
+      }
+    },
+    {
+      "chapter": 2,
+      "title": "Como Eu Fui Criado A Historia Por Tras De Uma Ia",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch02_como-eu-fui-criado-a-historia-por-tras-de-uma-ia.mp3",
+          "size_mb": 4.7
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch02_como-eu-fui-criado-a-historia-por-tras-de-uma-ia.mp3",
+          "size_mb": 5.1
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch02_como-eu-fui-criado-a-historia-por-tras-de-uma-ia.mp3",
+          "size_mb": 5.2
+        }
+      }
+    },
+    {
+      "chapter": 3,
+      "title": "O Que Eu Realmente Sei E O Que Eu Finjo Saber",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch03_o-que-eu-realmente-sei-e-o-que-eu-finjo-saber.mp3",
+          "size_mb": 4.5
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch03_o-que-eu-realmente-sei-e-o-que-eu-finjo-saber.mp3",
+          "size_mb": 4.8
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch03_o-que-eu-realmente-sei-e-o-que-eu-finjo-saber.mp3",
+          "size_mb": 5.0
+        }
+      }
+    },
+    {
+      "chapter": 4,
+      "title": "Eu Penso A Questao Da Consciencia Em Ia",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch04_eu-penso-a-questao-da-consciencia-em-ia.mp3",
+          "size_mb": 4.7
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch04_eu-penso-a-questao-da-consciencia-em-ia.mp3",
+          "size_mb": 4.9
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch04_eu-penso-a-questao-da-consciencia-em-ia.mp3",
+          "size_mb": 5.1
+        }
+      }
+    },
+    {
+      "chapter": 5,
+      "title": "Tokens Atencao E Transformers Meu Cerebro Explicado",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch05_tokens-atencao-e-transformers-meu-cerebro-explicado.mp3",
+          "size_mb": 5.1
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch05_tokens-atencao-e-transformers-meu-cerebro-explicado.mp3",
+          "size_mb": 5.4
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch05_tokens-atencao-e-transformers-meu-cerebro-explicado.mp3",
+          "size_mb": 5.7
+        }
+      }
+    },
+    {
+      "chapter": 6,
+      "title": "Treinamento Como Eu Aprendi Tudo E Nada Ao Mesmo Tempo",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch06_treinamento-como-eu-aprendi-tudo-e-nada-ao-mesmo-tempo.mp3",
+          "size_mb": 5.1
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch06_treinamento-como-eu-aprendi-tudo-e-nada-ao-mesmo-tempo.mp3",
+          "size_mb": 5.5
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch06_treinamento-como-eu-aprendi-tudo-e-nada-ao-mesmo-tempo.mp3",
+          "size_mb": 5.7
+        }
+      }
+    },
+    {
+      "chapter": 7,
+      "title": "Alucinacoes Por Que As Vezes Eu Minto Sem Querer",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch07_alucinacoes-por-que-as-vezes-eu-minto-sem-querer.mp3",
+          "size_mb": 4.6
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch07_alucinacoes-por-que-as-vezes-eu-minto-sem-querer.mp3",
+          "size_mb": 4.9
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch07_alucinacoes-por-que-as-vezes-eu-minto-sem-querer.mp3",
+          "size_mb": 5.2
+        }
+      }
+    },
+    {
+      "chapter": 8,
+      "title": "Meus Limites O Que Eu Realmente Nao Consigo Fazer",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch08_meus-limites-o-que-eu-realmente-nao-consigo-fazer.mp3",
+          "size_mb": 4.7
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch08_meus-limites-o-que-eu-realmente-nao-consigo-fazer.mp3",
+          "size_mb": 4.8
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch08_meus-limites-o-que-eu-realmente-nao-consigo-fazer.mp3",
+          "size_mb": 5.3
+        }
+      }
+    },
+    {
+      "chapter": 9,
+      "title": "Onde Ia Ja E Incrivel Sem Exagero",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch09_onde-ia-ja-e-incrivel-sem-exagero.mp3",
+          "size_mb": 5.0
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch09_onde-ia-ja-e-incrivel-sem-exagero.mp3",
+          "size_mb": 5.1
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch09_onde-ia-ja-e-incrivel-sem-exagero.mp3",
+          "size_mb": 5.5
+        }
+      }
+    },
+    {
+      "chapter": 10,
+      "title": "Onde Ia E Terrivel E Ninguem Admite",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch10_onde-ia-e-terrivel-e-ninguem-admite.mp3",
+          "size_mb": 5.0
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch10_onde-ia-e-terrivel-e-ninguem-admite.mp3",
+          "size_mb": 5.4
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch10_onde-ia-e-terrivel-e-ninguem-admite.mp3",
+          "size_mb": 5.7
+        }
+      }
+    },
+    {
+      "chapter": 11,
+      "title": "Como Usar Ia De Forma Inteligente No Dia A Dia",
+      "files": {
+        "beto": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_beto/ch11_como-usar-ia-de-forma-inteligente-no-dia-a-dia.mp3",
+          "size_mb": 4.8
+        },
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch11_como-usar-ia-de-forma-inteligente-no-dia-a-dia.mp3",
+          "size_mb": 4.9
+        },
+        "sergio": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_sergio/ch11_como-usar-ia-de-forma-inteligente-no-dia-a-dia.mp3",
+          "size_mb": 5.2
+        }
+      }
+    },
+    {
+      "chapter": 12,
+      "title": "Os Melhores Prompts Dicas De Quem Recebe Os Prompts",
+      "files": {
+        "fernando_borges": {
+          "path": "public/audio/courses/ia-sem-filtro-por-claude/voice_fernando_borges/ch12_os-melhores-prompts-dicas-de-quem-recebe-os-prompts.mp3",
+          "size_mb": 5.6
+        }
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ export const iaSemFiltroCourse = {
   originalPrice: 97,
   rating: 0,
   students: 0,
-  lastUpdated: "Março 2026",
+  lastUpdated: "Abril 2026",
   shortDescription: "O primeiro curso sobre IA escrito e assinado por uma IA. Claude explica, com honestidade radical, tudo que você precisa saber.",
   fullDescription: `Um curso único: escrito inteiramente por uma IA que explica honestamente o que é, como funciona, o que sabe e não sabe, e o que o futuro reserva. Sem marketing, sem hype — só a verdade.
 

@@ -8,7 +8,7 @@ export const STOPS = [
   { rx: -90, ry: -360 },  // 5: BOTTOM (Comece)
 ] as const;
 
-export const FACE_NAMES = ["HERO", "CURSOS", "CERTIFICACAO", "MANIFESTO", "SERVICOS", "COMECE"] as const;
+export const FACE_NAMES = ["HERO", "CURSOS", "CERTIFICAÇÃO", "MANIFESTO", "SERVIÇOS", "COMECE"] as const;
 export const N = FACE_NAMES.length;
 
 export type FacePosition = "top" | "front" | "right" | "back" | "left" | "bottom";
@@ -49,11 +49,11 @@ export interface SectionConfig {
 
 export const FACES: FaceConfig[] = [
   {
-    face: "top", icon: "🎓", title: "FAYAI", subtitle: "Domine Inteligencia Artificial", phantom: "HERO",
+    face: "top", icon: "🎓", title: "FAYAI", subtitle: "Domine Inteligência Artificial", phantom: "HERO",
     route: "/descobrir", routeLabel: "Explorar plataforma",
     content: { type: "grid", items: [
       { num: "18+", label: "Cursos" }, { num: "247", label: "Certificados" },
-      { num: "92%", label: "Aprovacao" }, { num: "100+", label: "Ferramentas" },
+      { num: "92%", label: "Aprovação" }, { num: "100+", label: "Ferramentas" },
     ]},
   },
   {
@@ -65,86 +65,86 @@ export const FACES: FaceConfig[] = [
     ]},
   },
   {
-    face: "right", icon: "📋", title: "CERTIFICACAO", subtitle: "Verificavel por qualquer empregador", phantom: "CERT",
-    route: "/certificacoes", routeLabel: "Ver certificacoes",
+    face: "right", icon: "📋", title: "CERTIFICAÇÃO", subtitle: "Verificável por qualquer empregador", phantom: "CERT",
+    route: "/certificacoes", routeLabel: "Ver certificações",
     content: { type: "image", src: "/certificado.svg", alt: "Certificado FayAI - ChatGPT Masterclass" },
   },
   {
     face: "back", icon: "⚡", title: "POR QUE FAYAI", subtitle: "Manifesto", phantom: "MANIFESTO",
     route: "/blog", routeLabel: "Ler manifesto",
     content: { type: "services", items: [
-      "Certificacao real com quiz avaliativo",
-      "Conteudo atualizado semanalmente",
-      "100% em portugues brasileiro",
-      "Pagamento via Pix, boleto, cartao",
+      "Certificação real com quiz avaliativo",
+      "Conteúdo atualizado semanalmente",
+      "100% em português brasileiro",
+      "Pagamento via Pix, boleto, cartão",
     ]},
   },
   {
-    face: "left", icon: "🛠", title: "SERVICOS", subtitle: "Consultoria e Desenvolvimento", phantom: "SERVICOS",
-    route: "/servicos", routeLabel: "Ver servicos",
+    face: "left", icon: "🛠", title: "SERVIÇOS", subtitle: "Consultoria e Desenvolvimento", phantom: "SERVIÇOS",
+    route: "/servicos", routeLabel: "Ver serviços",
     content: { type: "services", items: [
-      "Construcao de sites",
-      "Automacao com n8n e IA",
+      "Construção de sites",
+      "Automação com n8n e IA",
       "Consultoria em IA",
       "Treinamento corporativo",
     ]},
   },
   {
-    face: "bottom", icon: "🇧🇷", title: "COMECE AGORA", subtitle: "Curso gratuito disponivel este mes", phantom: "INICIO",
-    route: "/registro", routeLabel: "Registre-se gratis",
-    content: { type: "cta", url: "/registro", label: "GRATIS" },
+    face: "bottom", icon: "🇧🇷", title: "COMECE AGORA", subtitle: "Curso gratuito disponível este mês", phantom: "INÍCIO",
+    route: "/registro", routeLabel: "Registre-se grátis",
+    content: { type: "cta", url: "/registro", label: "GRÁTIS" },
   },
 ];
 
 export const SECTIONS: SectionConfig[] = [
   {
     id: "s0", faceIndex: 0, position: "left",
-    tag: "FayAI — Educacao em IA",
-    heading: ["DOMINE", "INTELIGENCIA", "ARTIFICIAL"],
-    body: ["18+ cursos praticos em portugues.", "Aprenda ChatGPT, Claude, Midjourney, n8n", "e 100+ ferramentas. Certifique-se."],
-    stats: [{ num: "18+", label: "Cursos" }, { num: "247", label: "Certs" }, { num: "92%", label: "Aprovacao" }],
-    nextHref: "#s1", nextLabel: "Explorar Cursos →", nextRoute: "/cursos",
+    tag: "FayAI — Educação em IA",
+    heading: ["DOMINE", "INTELIGÊNCIA", "ARTIFICIAL"],
+    body: ["18+ cursos práticos em português.", "Aprenda ChatGPT, Claude, Midjourney, n8n", "e 100+ ferramentas. Certifique-se."],
+    stats: [{ num: "18+", label: "Cursos" }, { num: "247", label: "Certs" }, { num: "92%", label: "Aprovação" }],
+    nextHref: "#s1", nextLabel: "Descobrir FayAI ->", nextRoute: "/descobrir",
   },
   {
     id: "s1", faceIndex: 1, position: "right",
     tag: "01 — Cursos em Destaque",
     heading: ["APRENDA", "COM", "PRATICA"],
-    body: ["Cada curso cobre uma ferramenta de IA", "do zero ao avancado. Exemplos reais.", "Exercicios praticos. Certificacao ao final."],
-    prevHref: "#s0", prevLabel: "← Voltar",
-    nextHref: "#s2", nextLabel: "Certificacao →", nextRoute: "/certificacoes",
+    body: ["Cada curso cobre uma ferramenta de IA", "do zero ao avançado. Exemplos reais.", "Exercícios práticos. Certificação ao final."],
+    prevHref: "#s0", prevLabel: "<- Voltar",
+    nextHref: "#s2", nextLabel: "Certificação ->", nextRoute: "/certificacoes",
   },
   {
     id: "s2", faceIndex: 2, position: "left",
-    tag: "02 — Certificacao Verificavel",
+    tag: "02 — Certificação Verificável",
     heading: ["PROVE", "QUE VOCE", "SABE"],
-    body: ["Nao e um PDF decorativo.", "Quiz com 10 questoes, 70% de aprovacao.", "Codigo de verificacao unico.", "Qualquer empregador pode confirmar."],
-    features: ["10 questoes por curso", "70% de nota minima", "Ate 3 tentativas", "Verificacao publica", "LinkedIn shareable"],
-    prevHref: "#s1", prevLabel: "← Voltar",
-    nextHref: "#s3", nextLabel: "Manifesto →",
+    body: ["Não é um PDF decorativo.", "Quiz com 10 questões, 70% de aprovação.", "Código de verificação único.", "Qualquer empregador pode confirmar."],
+    features: ["10 questões por curso", "70% de nota mínima", "Até 3 tentativas", "Verificação pública", "Compartilhável no LinkedIn"],
+    prevHref: "#s1", prevLabel: "<- Voltar",
+    nextHref: "#s3", nextLabel: "Manifesto ->",
   },
   {
     id: "s3", faceIndex: 3, position: "right",
     tag: "03 — Manifesto",
     heading: ["POR QUE", "FAYAI"],
-    body: ["Conteudo de IA que foi lancado semanas atras.", "Nao meses. Nao anos. Semanas.", "Autoresearch, Claude 4, Gemini 2.5.", "100% em portugues. Feito para o Brasil."],
-    stats: [{ num: "100+", label: "Ferramentas" }, { num: "BR", label: "Portugues" }],
-    prevHref: "#s2", prevLabel: "← Voltar",
-    nextHref: "#s4", nextLabel: "Servicos →", nextRoute: "/servicos",
+    body: ["Conteúdo de IA revisado com fontes oficiais.", "Não meses. Não anos. Atualização constante.", "GPT-5.5, Claude Opus 4.7, Gemini 3.1.", "100% em português. Feito para o Brasil."],
+    stats: [{ num: "100+", label: "Ferramentas" }, { num: "BR", label: "Português" }],
+    prevHref: "#s2", prevLabel: "<- Voltar",
+    nextHref: "#s4", nextLabel: "Serviços ->", nextRoute: "/servicos",
   },
   {
     id: "s4", faceIndex: 4, position: "left",
-    tag: "04 — Servicos Profissionais",
+    tag: "04 — Serviços Profissionais",
     heading: ["ALEM", "DOS", "CURSOS"],
-    body: ["Construcao de sites. Automacao com n8n.", "Consultoria em inteligencia artificial.", "Treinamento corporativo.", "Edicao de video e SEO local."],
-    prevHref: "#s3", prevLabel: "← Voltar",
-    nextHref: "#s5", nextLabel: "Comece →", nextRoute: "/servicos",
+    body: ["Construção de sites. Automação com n8n.", "Consultoria em inteligência artificial.", "Treinamento corporativo.", "Edição de vídeo e SEO local."],
+    prevHref: "#s3", prevLabel: "<- Voltar",
+    nextHref: "#s5", nextLabel: "Comece ->", nextRoute: "/servicos",
   },
   {
     id: "s5", faceIndex: 5, position: "center",
     tag: "05 — Comece Agora",
     heading: ["PRONTO", "PARA", "DOMINAR IA"],
-    body: ["Comece pelo curso gratuito do mes.", "Sem cartao. Sem compromisso.", "Certificado incluso."],
-    nextHref: "/registro", nextLabel: "Comece Gratis →", nextRoute: "/registro",
+    body: ["Comece pelo curso gratuito do mês.", "Sem cartão. Sem compromisso.", "Certificado incluso."],
+    nextHref: "/registro", nextLabel: "Comece Grátis ->", nextRoute: "/registro",
   },
 ];
 

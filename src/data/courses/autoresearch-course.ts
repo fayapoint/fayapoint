@@ -12,7 +12,7 @@ export const autoresearchCourse = {
   originalPrice: 247,
   rating: 0,
   students: 0,
-  lastUpdated: "Março 2026",
+  lastUpdated: "Abril 2026",
   shortDescription: "IA que melhora a si mesma: o padrão autoresearch, loops de auto-aperfeiçoamento e o caminho para a singularidade tecnológica.",
   fullDescription: `Explore o conceito revolucionário de autoresearch: sistemas de IA que iterativamente melhoram seus próprios outputs sem intervenção humana. Entenda a teoria, implemente na prática e reflita sobre as implicações para a singularidade tecnológica.
 

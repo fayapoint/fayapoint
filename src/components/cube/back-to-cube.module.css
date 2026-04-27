@@ -1,0 +1,165 @@
+.exitOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--background, #1c1814);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.46s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exitOverlayActive {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.logoBack {
+  position: fixed;
+  z-index: 42;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.65rem;
+  padding: 0.42rem 0.66rem 0.42rem 0.46rem;
+  color: color-mix(in oklch, var(--primary, #d4a84b) 82%, white);
+  text-decoration: none;
+  border: 1px solid color-mix(in oklch, var(--primary, #d4a84b) 24%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in oklch, var(--primary, #d4a84b) 15%, transparent), transparent 60%),
+    color-mix(in oklch, var(--card, #1c1814) 88%, transparent);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(14px) saturate(145%);
+  -webkit-backdrop-filter: blur(14px) saturate(145%);
+  transition:
+    border-color 0.26s ease,
+    box-shadow 0.26s ease,
+    color 0.26s ease,
+    transform 0.26s cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+
+.logoBackPortal {
+  top: 4.75rem;
+  right: 1rem;
+}
+
+.logoBackInner {
+  right: 1.5rem;
+  bottom: 1.5rem;
+}
+
+.logoBack:hover {
+  color: var(--primary, #d4a84b);
+  border-color: color-mix(in oklch, var(--primary, #d4a84b) 56%, transparent);
+  box-shadow:
+    0 16px 44px rgba(0, 0, 0, 0.32),
+    0 0 26px color-mix(in oklch, var(--primary, #d4a84b) 18%, transparent);
+  transform: translateY(-1px);
+}
+
+.logoStage {
+  position: relative;
+  width: 1.55rem;
+  height: 1.55rem;
+  display: grid;
+  place-items: center;
+  perspective: 520px;
+}
+
+.logoCube {
+  position: relative;
+  width: 1.05rem;
+  height: 1.05rem;
+  transform-style: preserve-3d;
+  transform: rotateZ(45deg) rotateX(0deg) rotateY(0deg);
+  transition: transform 0.42s cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+
+.logoFace {
+  position: absolute;
+  inset: 0;
+  border: 1px solid currentColor;
+  background: color-mix(in oklch, var(--primary, #d4a84b) 18%, transparent);
+  box-shadow: inset 0 0 10px color-mix(in oklch, var(--primary, #d4a84b) 20%, transparent);
+}
+
+.logoFaceFront {
+  transform: translateZ(0.42rem);
+}
+
+.logoFaceRight {
+  transform: rotateY(90deg) translateZ(0.42rem);
+  opacity: 0;
+}
+
+.logoFaceTop {
+  transform: rotateX(90deg) translateZ(0.42rem);
+  opacity: 0;
+}
+
+.logoSpark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--background, #17120d);
+  font-family: var(--font-bebas), sans-serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  transform: translateZ(1.2rem);
+  pointer-events: none;
+  transition: opacity 0.24s ease, transform 0.3s ease;
+}
+
+.logoText {
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  white-space: nowrap;
+  font-family: var(--font-bebas), sans-serif;
+  font-size: 1.05rem;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  transition: max-width 0.28s ease, opacity 0.22s ease;
+}
+
+.logoBack:hover .logoCube {
+  transform: rotateX(-24deg) rotateY(38deg) rotateZ(0deg);
+}
+
+.logoBack:hover .logoFaceRight,
+.logoBack:hover .logoFaceTop {
+  opacity: 0.82;
+}
+
+.logoBack:hover .logoSpark {
+  opacity: 0;
+  transform: translateZ(0.2rem) scale(0.72);
+}
+
+.logoBack:hover .logoText {
+  max-width: 4rem;
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .logoBackPortal {
+    top: auto;
+    right: 1rem;
+    bottom: 5rem;
+  }
+
+  .logoBackInner {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .logoBack {
+    min-height: 2.5rem;
+    padding: 0.42rem;
+  }
+
+  .logoBack:hover .logoText {
+    max-width: 0;
+    opacity: 0;
+  }
+}

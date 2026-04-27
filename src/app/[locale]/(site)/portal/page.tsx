@@ -524,7 +524,7 @@ export default function PortalPage() {
   const activity = dashboardData.activity;
 
   return (
-    <div className="h-[100dvh] bg-background text-foreground text-sm md:text-base overflow-hidden">
+    <div data-dashboard-shell className="h-[100dvh] bg-background text-foreground text-[15px] md:text-[16px] overflow-hidden">
       {/* Sidebar */}
       <DashboardSidebar
         activeTab={activeTab}
@@ -575,7 +575,13 @@ export default function PortalPage() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            <Link href={`/${locale}`} className="hidden sm:inline-flex">
+              <Button variant="outline" size="sm" className="gap-2 bg-secondary/60 border-border">
+                <Box size={15} />
+                Cubo
+              </Button>
+            </Link>
             {/* Quick Stats */}
             <div className="hidden md:flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm">
@@ -1355,4 +1361,3 @@ export default function PortalPage() {
     </div>
   );
 }
-

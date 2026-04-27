@@ -39,8 +39,8 @@ interface AIModel {
 
 const AI_MODELS: AIModel[] = [
   {
-    id: "gemini-2.0-flash",
-    name: "Gemini 2.0 Flash",
+    id: "nano-banana-2",
+    name: "Nano Banana 2",
     provider: "Google",
     type: "image",
     status: "active",
@@ -59,8 +59,8 @@ const AI_MODELS: AIModel[] = [
     cost: "$0.003/img",
   },
   {
-    id: "gpt-5.4",
-    name: "GPT-5.4",
+    id: "gpt-5.5",
+    name: "GPT-5.5",
     provider: "OpenAI",
     type: "chat",
     status: "active",
@@ -69,8 +69,8 @@ const AI_MODELS: AIModel[] = [
     cost: "$0.01/1K tokens",
   },
   {
-    id: "claude-opus-4.6",
-    name: "Claude Opus 4.6",
+    id: "claude-opus-4-7",
+    name: "Claude Opus 4.7",
     provider: "Anthropic",
     type: "chat",
     status: "inactive",
@@ -374,7 +374,7 @@ export default function AdminAISettingsPage() {
             <p className="text-xs text-muted-foreground mt-1">
               Usamos o OpenRouter como gateway para múltiplos provedores de IA. 
               Isso permite acesso a diversos modelos com uma única API key, incluindo 
-              GPT-5.4, Claude Opus 4.6, Gemini, Flux, e muitos outros.
+              GPT-5.5, Claude Opus 4.7, Gemini, Flux, e muitos outros.
             </p>
             <a 
               href="https://openrouter.ai/docs" 

@@ -456,6 +456,43 @@
   transform: scale(1.03);
 }
 
+.faceAction {
+  position: absolute;
+  left: 50%;
+  bottom: 1.35rem;
+  z-index: 5;
+  transform: translateX(-50%) translateY(6px);
+  min-height: 2.15rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--cube-accent) 70%, transparent);
+  background: color-mix(in srgb, var(--cube-bg) 72%, transparent);
+  color: var(--cube-accent);
+  font-family: var(--cube-font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s cubic-bezier(0.2, 0.85, 0.2, 1),
+    background 0.28s ease,
+    color 0.28s ease;
+}
+
+.faceActive .faceAction,
+.faceHovered .faceAction {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.faceAction:hover {
+  background: var(--cube-accent);
+  color: var(--cube-bg);
+}
+
 /* Phantom text */
 .facePhantom {
   position: absolute;
@@ -737,7 +774,8 @@
   align-items: center;
 }
 
-.navLink {
+.navLink,
+.navLinkButton {
   font-size: 0.58rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -747,7 +785,16 @@
   position: relative;
 }
 
-.navLink::after {
+.navLinkButton {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.navLink::after,
+.navLinkButton::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -760,8 +807,10 @@
   transition: transform 0.3s ease;
 }
 
-.navLink:hover::after { transform: scaleX(1); }
-.navLink:hover { color: var(--cube-fg); }
+.navLink:hover::after,
+.navLinkButton:hover::after { transform: scaleX(1); }
+.navLink:hover,
+.navLinkButton:hover { color: var(--cube-fg); }
 
 .navCta {
   font-size: 0.55rem;
@@ -943,6 +992,109 @@
   opacity: 0.3;
 }
 
+.cubePortalHotspot {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 14;
+  width: min(16rem, 48vw);
+  min-height: 4.75rem;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--cube-accent);
+  cursor: pointer;
+  perspective: 900px;
+  isolation: isolate;
+}
+
+.cubePortalRing {
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--cube-accent) 42%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--cube-accent) 16%, transparent), transparent 48%),
+    color-mix(in srgb, var(--cube-bg) 46%, transparent);
+  box-shadow:
+    0 0 32px color-mix(in srgb, var(--cube-accent) 16%, transparent),
+    inset 0 0 26px color-mix(in srgb, var(--cube-accent) 10%, transparent);
+  backdrop-filter: blur(10px) saturate(135%);
+  -webkit-backdrop-filter: blur(10px) saturate(135%);
+  transform: rotateX(0deg) rotateY(0deg) translateZ(0);
+  transition:
+    transform 0.42s cubic-bezier(0.2, 0.85, 0.2, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.cubePortalHotspot::before,
+.cubePortalHotspot::after {
+  content: '';
+  position: absolute;
+  inset: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--cube-accent) 26%, transparent);
+  pointer-events: none;
+  transition: transform 0.42s cubic-bezier(0.2, 0.85, 0.2, 1), opacity 0.3s ease;
+}
+
+.cubePortalHotspot::before {
+  transform: translate3d(-0.38rem, -0.32rem, -1rem);
+  opacity: 0.45;
+}
+
+.cubePortalHotspot::after {
+  transform: translate3d(0.38rem, 0.32rem, 1rem);
+  opacity: 0.65;
+}
+
+.cubePortalContent {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.26rem;
+  justify-items: center;
+  transform: translateZ(2rem);
+  text-align: center;
+  pointer-events: none;
+}
+
+.cubePortalLabel {
+  font-family: var(--cube-font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.cubePortalTitle {
+  max-width: 13rem;
+  font-family: var(--cube-font-display);
+  font-size: clamp(1.25rem, 3vw, 1.85rem);
+  line-height: 0.94;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cubePortalHotspot:hover .cubePortalRing {
+  border-color: color-mix(in srgb, var(--cube-accent) 85%, transparent);
+  box-shadow:
+    0 0 46px color-mix(in srgb, var(--cube-accent) 28%, transparent),
+    inset 0 0 34px color-mix(in srgb, var(--cube-accent) 16%, transparent);
+  transform: rotateX(10deg) rotateY(-12deg) translateZ(1.2rem) scale(1.03);
+}
+
+.cubePortalHotspot:hover::before {
+  transform: translate3d(-0.58rem, -0.48rem, -1.4rem) rotateX(10deg) rotateY(-12deg);
+  opacity: 0.7;
+}
+
+.cubePortalHotspot:hover::after {
+  transform: translate3d(0.58rem, 0.48rem, 1.4rem) rotateX(10deg) rotateY(-12deg);
+  opacity: 0.9;
+}
+
 /* Keyboard hint (bottom right, above theme toggle) */
 .keyboardHint {
   position: fixed;
@@ -957,6 +1109,86 @@
   text-transform: uppercase;
   color: var(--cube-muted);
   opacity: 0.3;
+}
+
+.userDock {
+  position: fixed;
+  top: 4rem;
+  left: 2rem;
+  z-index: 12;
+  width: min(20rem, calc(100vw - 4rem));
+  padding: 1rem;
+  background:
+    linear-gradient(135deg, rgba(212, 168, 75, 0.12), transparent 55%),
+    var(--cube-card-bg);
+  border: 1px solid var(--cube-card-border);
+  backdrop-filter: blur(14px) saturate(135%);
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+}
+
+.userDockEyebrow {
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cube-accent);
+}
+
+.userDockTitle {
+  margin-top: 0.4rem;
+  font-family: var(--cube-font-display);
+  font-size: 1.55rem;
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  color: var(--cube-fg);
+}
+
+.userDockMeta {
+  margin-top: 0.35rem;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: var(--cube-muted);
+}
+
+.userDockActions {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.userDockPrimary,
+.userDockSecondary,
+.mobileActionRail button {
+  border: 1px solid var(--cube-card-border);
+  font-family: var(--cube-font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.userDockPrimary {
+  background: var(--cube-accent);
+  color: var(--cube-bg);
+  padding: 0.55rem 0.8rem;
+}
+
+.userDockSecondary {
+  background: transparent;
+  color: var(--cube-accent);
+  padding: 0.55rem 0.8rem;
+}
+
+.userDockPrimary:hover,
+.userDockSecondary:hover,
+.mobileActionRail button:hover {
+  transform: translateY(-1px);
+  border-color: var(--cube-accent);
+}
+
+.mobileActionRail {
+  display: none;
 }
 
 /* Mobile hamburger button — hidden on desktop */
@@ -1029,15 +1261,28 @@
    ═══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 56.25em) {
-  .hud { top: 4rem; right: 1rem; }
+  .hud { top: 4rem; right: 1rem; display: none; }
   .navDots { display: none; }
-  .themeToggle { bottom: 1rem; left: 1.25rem; translate: 0 0; }
+  .themeToggle { bottom: 5.25rem; left: 1rem; translate: 0 0; width: 2.35rem; height: 2.35rem; }
   .themeToggle:hover { transform: scale(1.1); }
-  .faceCaption { bottom: auto; top: 3.5rem; left: 1rem; translate: 0 0; text-align: left; }
+  .faceCaption { bottom: auto; top: 3.45rem; left: 1rem; translate: 0 0; text-align: left; }
   .keyboardHint { display: none; }
+  .cubePortalHotspot {
+    top: 32vh;
+    width: min(13rem, 58vw);
+    min-height: 3.9rem;
+  }
+  .cubePortalLabel { font-size: 0.48rem; }
+  .cubePortalTitle { font-size: clamp(1.05rem, 6vw, 1.45rem); max-width: 10rem; }
+  .faceAction {
+    bottom: 0.8rem;
+    min-height: 1.9rem;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.48rem;
+  }
 
-  .cube { --s: min(85vw, 50vh, 340px); }
-  .scene { align-items: flex-start; padding-top: 15vh; }
+  .cube { --s: min(82vw, 46vh, 350px); }
+  .scene { align-items: flex-start; padding-top: 12vh; }
 
   .section {
     min-height: 100vh;
@@ -1045,7 +1290,7 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: stretch;
-    padding: 0 1rem 2rem;
+    padding: 0 1rem 6.5rem;
   }
 
   .textCard,
@@ -1073,6 +1318,43 @@
   .navLinks { display: none; }
 
   .mobileMenuBtn { display: flex !important; }
+
+  .userDock {
+    top: auto;
+    left: 1rem;
+    right: 1rem;
+    bottom: 9.25rem;
+    width: auto;
+    padding: 0.8rem;
+  }
+
+  .userDockTitle {
+    font-size: 1.25rem;
+  }
+
+  .userDockActions {
+    display: none;
+  }
+
+  .mobileActionRail {
+    position: fixed;
+    left: 4.1rem;
+    right: 1rem;
+    bottom: 5.25rem;
+    z-index: 13;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .mobileActionRail button {
+    min-height: 2.35rem;
+    padding: 0.4rem 0.5rem;
+    color: var(--cube-accent);
+    background: var(--cube-card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 }
 
 /* Hide mobile overlay on desktop */
