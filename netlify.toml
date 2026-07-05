@@ -207,11 +207,8 @@
   status = 403
   force = true
 
-[[redirects]]
-  from = "/sitemap.xml"
-  to = "/"
-  status = 404
-  force = true
+# NOTE: /sitemap.xml must stay accessible — Google needs it for indexing.
+# (A forced 404 here was blocking all SEO. Removed 2026-07-05.)
 
 [[redirects]]
   from = "/feed"
@@ -284,6 +281,4 @@
 # =============================================================================
 
 [dev]
-  framework = "next"
-  targetPort = 3000
-  autoLaunch = false
+  frame
