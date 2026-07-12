@@ -103,21 +103,21 @@ function ipToBigInt(ip: string): { value: bigint; bits: number } | null {
     const missing = 8 - head.length - tail.length;
     if (missing < 0 || (sections.length === 1 && missing !== 0)) return null;
     const groups = [...head, ...Array(missing).fill("0"), ...tail];
-    let value = 0n;
+    let value = BigInt(0);
     for (const g of groups) {
       const n = parseInt(g || "0", 16);
       if (Number.isNaN(n) || n < 0 || n > 0xffff) return null;
-      value = (value << 16n) | BigInt(n);
+      value = (value << BigInt(16)) | BigInt(n);
     }
     return { value, bits: 128 };
   }
   const parts = ip.split(".");
   if (parts.length !== 4) return null;
-  let value = 0n;
+  let value = BigInt(0);
   for (const p of parts) {
     const n = Number(p);
     if (!Number.isInteger(n) || n < 0 || n > 255) return null;
-    value = (value << 8n) | BigInt(n);
+    value = (value << BigInt(8)) | BigInt(n);
   }
   return { value, bits: 32 };
 }
@@ -130,7 +130,7 @@ function cidrToRange(cidr: string): { start: bigint; end: bigint; bits: number }
   if (!Number.isInteger(prefix) || prefix < 0 || prefix > parsed.bits) return null;
   const hostBits = BigInt(parsed.bits - prefix);
   const start = (parsed.value >> hostBits) << hostBits;
-  const end = start + ((1n << hostBits) - 1n);
+  const end = start + ((BigInt(1) << hostBits) - BigInt(1));
   return { start, end, bits: parsed.bits };
 }
 
