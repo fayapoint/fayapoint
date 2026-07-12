@@ -8,6 +8,9 @@ export interface AiNewsItem {
   tag: string;
   title: string;
   summary: string;
+  url?: string; // link da matéria (externo) ou rota interna
+  source?: string; // veículo/origem, ex. "The Verge", "FayAI Explica"
+  image?: string; // caminho da imagem ilustrativa
   date?: string; // ISO — vazio nas seeds (evergreen)
 }
 
@@ -18,6 +21,9 @@ export const SEED_NEWS: AiNewsItem[] = [
     title: "A IA que você já usa lê imagens, PDFs e planilhas",
     summary:
       "A maioria das pessoas ainda só pede texto ao ChatGPT — mas os modelos atuais analisam fotos, contratos e tabelas inteiras. Envie o arquivo em vez de digitar.",
+    url: "/blog",
+    source: "FayAI Explica",
+    image: "/landing/news-leitura.png",
   },
   {
     slug: "agentes-executam",
@@ -25,6 +31,9 @@ export const SEED_NEWS: AiNewsItem[] = [
     title: "Agentes de IA já executam tarefas sozinhos",
     summary:
       "A nova geração de IA não só responde: pesquisa, compara preços, preenche planilhas e monitora páginas para você. É o assunto mais quente de 2026.",
+    url: "/blog",
+    source: "FayAI Explica",
+    image: "/landing/news-agentes.png",
   },
   {
     slug: "video-barato",
@@ -32,5 +41,8 @@ export const SEED_NEWS: AiNewsItem[] = [
     title: "Criar vídeo com IA ficou acessível para qualquer um",
     summary:
       "O que custava um estúdio hoje sai por centavos: roteiro, narração e imagem gerados em minutos. Pequenos negócios estão publicando vídeo diário assim.",
+    url: "/blog",
+    source: "FayAI Explica",
+    image: "/landing/news-video.png",
   },
 ];

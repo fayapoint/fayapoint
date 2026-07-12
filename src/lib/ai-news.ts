@@ -30,6 +30,9 @@ export async function getAiNews(limit = 3): Promise<{ items: AiNewsItem[]; live:
         tag: String(d.tag ?? "IA HOJE"),
         title: String(d.title ?? ""),
         summary: String(d.summary ?? ""),
+        url: d.url ? String(d.url) : undefined,
+        source: d.source ? String(d.source) : undefined,
+        image: d.image ? String(d.image) : undefined,
         date: d.publishedAt ? new Date(d.publishedAt).toISOString() : undefined,
       })),
     };
