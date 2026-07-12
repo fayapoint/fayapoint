@@ -56,24 +56,119 @@ const BYPASS_PATHS = [
   "/en/exclusao-de-dados",
 ];
 
-// Known legitimate bot/crawler user agents that need access (SEO, social, validators)
-const ALLOWED_BOTS = [
-  "facebookexternalhit",   // Meta URL validator
-  "Facebot",               // Facebook crawler
-  "facebookcatalog",       // Facebook catalog
-  "Googlebot",             // Google search crawler
+// Search crawlers whose UA claim MUST be verified against the official IP
+// ranges published by Google/Microsoft. UA-only allowlisting let scrapers with
+// fake "Googlebot" UAs drain 78GB of bandwidth in Jan/2026.
+const VERIFIED_CRAWLER_UAS = [
+  "googlebot",             // Google search crawler (also matches Googlebot-Image)
+  "google-inspectiontool", // Search Console URL inspection / live test
+  "google-site-verification", // Search Console ownership verification
+  "storebot-google",       // Google Shopping crawler
   "bingbot",               // Bing search crawler
-  "Twitterbot",            // Twitter/X card validator
-  "LinkedInBot",           // LinkedIn preview
-  "WhatsApp",              // WhatsApp link preview
-  "TelegramBot",           // Telegram link preview
-  "Pinterest",             // Pinterest crawler
-  "PostHog",               // PostHog analytics
-  "Google-Site-Verification", // Search Console ownership verification
-  "Google-InspectionTool", // Search Console URL inspection / live test
-  "Googlebot-Image",       // Google Images crawler
-  "Storebot-Google",       // Google Shopping crawler
 ];
+
+// Preview/validator bots allowed by UA alone — they fetch single pages for
+// link previews, so spoofing them has little scraping value.
+const SOCIAL_BOT_UAS = [
+  "facebookexternalhit",   // Meta URL validator
+  "facebot",               // Facebook crawler
+  "facebookcatalog",       // Facebook catalog
+  "twitterbot",            // Twitter/X card validator
+  "linkedinbot",           // LinkedIn preview
+  "whatsapp",              // WhatsApp link preview
+  "telegrambot",           // Telegram link preview
+  "pinterest",             // Pinterest crawler
+  "posthog",               // PostHog analytics
+];
+
+// Official crawler IP range feeds (Google + Bing publish these as JSON)
+const CRAWLER_RANGE_SOURCES = [
+  "https://developers.google.com/static/search/apis/ipranges/googlebot.json",
+  "https://developers.google.com/static/search/apis/ipranges/special-crawlers.json",
+  "https://developers.google.com/static/search/apis/ipranges/user-triggered-fetchers.json",
+  "https://developers.google.com/static/search/apis/ipranges/user-triggered-fetchers-google.json",
+  "https://www.bing.com/toolbox/bingbot.json",
+];
+
+const RANGES_TTL_MS = 24 * 60 * 60 * 1000;
+let crawlerRanges: { v4: Array<[bigint, bigint]>; v6: Array<[bigint, bigint]> } | null = null;
+let rangesFetchedAt = 0;
+
+function ipToBigInt(ip: string): { value: bigint; bits: number } | null {
+  if (ip.includes(":")) {
+    const sections = ip.split("::");
+    if (sections.length > 2) return null;
+    const head = sections[0] ? sections[0].split(":") : [];
+    const tail = sections.length === 2 && sections[1] ? sections[1].split(":") : [];
+    const missing = 8 - head.length - tail.length;
+    if (missing < 0 || (sections.length === 1 && missing !== 0)) return null;
+    const groups = [...head, ...Array(missing).fill("0"), ...tail];
+    let value = 0n;
+    for (const g of groups) {
+      const n = parseInt(g || "0", 16);
+      if (Number.isNaN(n) || n < 0 || n > 0xffff) return null;
+      value = (value << 16n) | BigInt(n);
+    }
+    return { value, bits: 128 };
+  }
+  const parts = ip.split(".");
+  if (parts.length !== 4) return null;
+  let value = 0n;
+  for (const p of parts) {
+    const n = Number(p);
+    if (!Number.isInteger(n) || n < 0 || n > 255) return null;
+    value = (value << 8n) | BigInt(n);
+  }
+  return { value, bits: 32 };
+}
+
+function cidrToRange(cidr: string): { start: bigint; end: bigint; bits: number } | null {
+  const [ip, prefixStr] = cidr.split("/");
+  const parsed = ipToBigInt(ip);
+  if (!parsed) return null;
+  const prefix = prefixStr === undefined ? parsed.bits : Number(prefixStr);
+  if (!Number.isInteger(prefix) || prefix < 0 || prefix > parsed.bits) return null;
+  const hostBits = BigInt(parsed.bits - prefix);
+  const start = (parsed.value >> hostBits) << hostBits;
+  const end = start + ((1n << hostBits) - 1n);
+  return { start, end, bits: parsed.bits };
+}
+
+async function loadCrawlerRanges() {
+  if (crawlerRanges && Date.now() - rangesFetchedAt < RANGES_TTL_MS) return crawlerRanges;
+  const v4: Array<[bigint, bigint]> = [];
+  const v6: Array<[bigint, bigint]> = [];
+  const results = await Promise.allSettled(
+    CRAWLER_RANGE_SOURCES.map((u) => fetch(u).then((r) => r.json()))
+  );
+  for (const res of results) {
+    if (res.status !== "fulfilled") continue;
+    for (const p of res.value?.prefixes ?? []) {
+      const cidr = p.ipv4Prefix || p.ipv6Prefix;
+      if (!cidr) continue;
+      const parsed = cidrToRange(cidr);
+      if (!parsed) continue;
+      (parsed.bits === 32 ? v4 : v6).push([parsed.start, parsed.end]);
+    }
+  }
+  if (v4.length || v6.length) {
+    crawlerRanges = { v4, v6 };
+    rangesFetchedAt = Date.now();
+  }
+  return crawlerRanges;
+}
+
+// true = IP is in the official ranges; false = definitely not; null = feeds
+// unreachable (caller must fail open — never block a real Googlebot by accident)
+async function isVerifiedCrawlerIp(ip: string | undefined): Promise<boolean | null> {
+  if (!ip) return false;
+  const parsed = ipToBigInt(ip);
+  if (!parsed) return false;
+  const ranges = await loadCrawlerRanges();
+  if (!ranges) return null;
+  const list = parsed.bits === 32 ? ranges.v4 : ranges.v6;
+  return list.some(([start, end]) => parsed.value >= start && parsed.value <= end);
+}
 
 const BYPASS_SECRET = Netlify.env.get("GEOBLOCK_BYPASS_SECRET") || "fayapoint-bypass-2024";
 
@@ -101,13 +196,26 @@ export default async (request: Request, context: Context) => {
   }
 
   // =========================================================================
-  // 1.6. KNOWN BOTS/CRAWLERS - Allow SEO & social media validators
+  // 1.6. CRAWLERS - Search bots verified by official IP ranges, social by UA
   // =========================================================================
-  const isAllowedBot = ALLOWED_BOTS.some(bot =>
-    userAgent.toLowerCase().includes(bot.toLowerCase())
-  );
-  if (isAllowedBot) {
-    console.log(`[GEOBLOCK_BOT_BYPASS] Allowed bot: UA=${userAgent.slice(0, 80)}, Path=${pathname}`);
+  const uaLower = userAgent.toLowerCase();
+
+  const claimsSearchCrawler = VERIFIED_CRAWLER_UAS.some((bot) => uaLower.includes(bot));
+  if (claimsSearchCrawler) {
+    const verified = await isVerifiedCrawlerIp(context.ip);
+    if (verified === false) {
+      // UA claims Googlebot/bingbot but the IP is outside the published ranges
+      return blockRequest("SPOOFED_BOT", pathname, context.ip || "unknown", userAgent);
+    }
+    // true = IP verified; null = range feeds unreachable, fail open so a real
+    // Googlebot is never blocked by our own outage
+    console.log(`[GEOBLOCK_BOT] Search crawler allowed (${verified === null ? "failopen" : "ip-verified"}): UA=${userAgent.slice(0, 80)}, Path=${pathname}`);
+    return context.next();
+  }
+
+  const isSocialBot = SOCIAL_BOT_UAS.some((bot) => uaLower.includes(bot));
+  if (isSocialBot) {
+    console.log(`[GEOBLOCK_BOT_BYPASS] Social bot: UA=${userAgent.slice(0, 80)}, Path=${pathname}`);
     return context.next();
   }
 
