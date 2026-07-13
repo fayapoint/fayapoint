@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { getAuthUser } from '@/lib/auth';
-import { FREE_EXAMPLES_LIMIT, XP_PER_EXAMPLE, CATEGORIES } from '@/data/landing/examples';
+import { MAX_LANDING_XP, CATEGORIES } from '@/data/landing/examples';
 
-const MAX_LANDING_XP = FREE_EXAMPLES_LIMIT * XP_PER_EXAMPLE;
 const VALID_CATEGORIES = new Set(CATEGORIES.map((c) => c.id as string));
 
 // Mesma curva de nível do /api/user/checkin

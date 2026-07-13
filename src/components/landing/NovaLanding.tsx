@@ -8,7 +8,9 @@ import {
   MAGIC_EXAMPLES,
   CATEGORIES,
   XP_PER_EXAMPLE,
+  XP_BONUS_ACERTO,
   FREE_EXAMPLES_LIMIT,
+  MAX_LANDING_XP,
   type ExampleCategory,
   type MagicExample,
 } from "@/data/landing/examples";
@@ -39,6 +41,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
   const [revealed, setRevealed] = useState(false);
   const [copied, setCopied] = useState(false);
   const [xpPop, setXpPop] = useState(false);
+  const [xp, setXp] = useState(0);
+  const [guess, setGuess] = useState<number | null>(null);
+  const [combo, setCombo] = useState(0);
+  const [burst, setBurst] = useState(0); // chave do confete
   const cardRef = useRef<HTMLElement | null>(null);
   const [artVariants, setArtVariants] = useState<Record<ExampleCategory, number>>({
     "trabalho": 1, "estudos": 1, "criar": 1, "dia-a-dia": 1,
@@ -54,7 +60,6 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
     });
   }, []);
 
-  const xp = seenIds.length * XP_PER_EXAMPLE;
   const limitReached = seenIds.length >= FREE_EXAMPLES_LIMIT;
   const accent = current ? CATEGORY_STYLE[current.category].color : GOLD;
 
@@ -73,10 +78,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
       if (category) cats.add(category);
       localStorage.setItem(
         "fayai_landing",
-        JSON.stringify({ xp: seenIds.length * XP_PER_EXAMPLE, seenIds, cats: [...cats], claimed: !!prev.claimed })
+        JSON.stringify({ xp, seenIds, cats: [...cats], claimed: !!prev.claimed })
       );
     } catch { /* storage indisponível — sem drama */ }
-  }, [seenIds, category]);
+  }, [seenIds, category, xp]);
 
   // Esc fecha o card — sair tem que ser tão fácil quanto entrar
   useEffect(() => {
@@ -97,13 +102,19 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
     setCurrent(ex);
     setRevealed(false);
     setCopied(false);
+    setGuess(null);
     setStage("reveal");
   };
 
-  const revealResult = () => {
+  const answerQuiz = (idx: number) => {
     if (!current || revealed) return;
+    const acertou = idx === current.quiz.answer;
+    setGuess(idx);
     setRevealed(true);
     setSeenIds((ids) => (ids.includes(current.id) ? ids : [...ids, current.id]));
+    setXp((v) => v + XP_PER_EXAMPLE + (acertou ? XP_BONUS_ACERTO : 0));
+    setCombo((c) => (acertou ? c + 1 : 0));
+    setBurst((b) => b + 1);
     setXpPop(true);
     setTimeout(() => setXpPop(false), 1600);
   };
@@ -128,11 +139,29 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
   const collage = useMemo(() => {
     if (!current) return [] as { src: string; tilt: number }[];
     const tilts = [-2, 1.5, -1.2, 2];
-    return ["v1", "p1", "v2", "p2"]
+    const pick2 = (prefix: string) =>
+      [1, 2, 3, 4, 5]
+        .map((n) => ({ n, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .slice(0, 2)
+        .map((x) => `${prefix}${x.n}`);
+    return [...pick2("v"), ...pick2("p")]
       .map((t) => ({ src: `/landing/magic/${current.id}-${t}.webp`, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map((x, i) => ({ src: x.src, tilt: tilts[i % tilts.length] }));
   }, [current]);
+
+  const confetti = useMemo(() => {
+    if (burst === 0) return [] as { dx: string; dy: string; left: string; color: string; delay: string }[];
+    const cores = ["#f5c04e", "#38bdf8", "#a78bfa", "#f472b6", "#a3e635", "#fff"];
+    return Array.from({ length: 26 }, (_, i) => ({
+      dx: `${(Math.random() - 0.5) * 320}px`,
+      dy: `${-40 - Math.random() * 240}px`,
+      left: `${8 + Math.random() * 84}%`,
+      color: cores[i % cores.length],
+      delay: `${Math.random() * 0.15}s`,
+    }));
+  }, [burst]);
 
   const progressDots = useMemo(
     () => Array.from({ length: FREE_EXAMPLES_LIMIT }, (_, i) => i < seenIds.length),
@@ -200,6 +229,15 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
           animation: fx-sweep 5.2s ease-in-out infinite;
         }
         .fx-orb { position: absolute; border-radius: 9999px; filter: blur(46px); pointer-events: none; }
+        @keyframes fx-conf {
+          0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+          100% { transform: translate(var(--dx), var(--dy)) rotate(720deg) scale(.6); opacity: 0; }
+        }
+        .fx-conf { position: absolute; width: 9px; height: 13px; border-radius: 2px;
+                   animation: fx-conf .9s ease-out forwards; pointer-events: none; z-index: 30; }
+        @keyframes fx-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+        .fx-quiz { transition: border-color .2s ease, background .2s ease, transform .15s ease; }
+        .fx-quiz:hover { transform: translateX(4px); }
       ` }} />
       {/* ============================== HEADER ============================== */}
       <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 shrink-0">
@@ -370,21 +408,60 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                 </div>
               )}
 
+              {revealed && confetti.length > 0 && (
+                <span key={burst} aria-hidden className="absolute inset-x-0 top-1/3 block">
+                  {confetti.map((c, i) => (
+                    <span
+                      key={i}
+                      className="fx-conf"
+                      style={{ left: c.left, background: c.color, animationDelay: c.delay,
+                               ["--dx" as string]: c.dx, ["--dy" as string]: c.dy } as import("react").CSSProperties}
+                    />
+                  ))}
+                </span>
+              )}
+
               {!revealed ? (
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={revealResult}
-                  className="fx-magic fx-shine mt-6 w-full rounded-2xl py-4 text-lg font-extrabold flex items-center justify-center gap-2 cursor-pointer text-[#1a1405]"
-                  style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
-                >
-                  <Sparkles size={20} /> MOSTRAR A MÁGICA
-                </motion.button>
+                <div className="mt-6">
+                  <p className="text-sm font-extrabold uppercase tracking-wider" style={{ color: accent }}>
+                    🎯 Seu palpite vale +{XP_BONUS_ACERTO} XP
+                  </p>
+                  <p className="mt-1 text-base sm:text-lg font-bold">{current.quiz.question}</p>
+                  <div className="mt-3 space-y-2">
+                    {current.quiz.options.map((op, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => answerQuiz(idx)}
+                        className="fx-quiz w-full text-left rounded-2xl border-2 border-white/15 bg-white/5 px-4 py-3 text-sm sm:text-base font-semibold hover:border-white/40 cursor-pointer"
+                      >
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full mr-2 text-[12px] font-extrabold"
+                              style={{ background: `${accent}22`, color: accent }}>
+                          {String.fromCharCode(65 + idx)}
+                        </span>
+                        {op}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ) : (
                 <motion.div
                   initial={false}
                   className="mt-6 space-y-4"
                 >
+                  {guess !== null && (
+                    <div
+                      className="rounded-2xl px-4 py-3 text-sm font-bold flex items-center gap-2"
+                      style={
+                        guess === current.quiz.answer
+                          ? { background: "rgba(163,230,53,.14)", color: "#a3e635", border: "2px solid rgba(163,230,53,.4)" }
+                          : { background: "rgba(245,192,78,.12)", color: GOLD, border: "2px solid rgba(245,192,78,.35)" }
+                      }
+                    >
+                      {guess === current.quiz.answer
+                        ? `🎯 ACERTOU! +${XP_PER_EXAMPLE + XP_BONUS_ACERTO} XP${combo > 1 ? ` · combo x${combo}` : ""}`
+                        : `✨ Quase! A resposta era: ${current.quiz.options[current.quiz.answer]} · +${XP_PER_EXAMPLE} XP`}
+                    </div>
+                  )}
                   <div className="rounded-2xl p-4" style={{ border: `2px solid ${accent}77`, background: "#0c0e1d" }}>
                     <p className="text-xs font-extrabold uppercase tracking-wider mb-1.5" style={{ color: accent }}>
                       ✨ O resultado

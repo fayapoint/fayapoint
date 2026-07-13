@@ -14,6 +14,8 @@ export interface MagicExample {
   prompt: string;
   result: string;
   apply: string;
+  /** O palpite — a mecânica de jogo: adivinhe o que a IA consegue fazer */
+  quiz: { question: string; options: [string, string, string]; answer: 0 | 1 | 2 };
 }
 
 export const CATEGORIES: { id: ExampleCategory; emoji: string; label: string }[] = [
@@ -35,6 +37,11 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "“Olá, Marcos! Obrigado pela mensagem — você tem razão em cobrar. Tivemos um imprevisto técnico e o prazo passa para sexta-feira. Para compensar, já adiantei a primeira parte, que segue anexa. Fico à disposição hoje para qualquer ajuste.”",
     apply: "Funciona para cobranças, desculpas, negociações e feedbacks difíceis. Cole a situação, receba o texto pronto — e edite só o tom final.",
+    quiz: {
+      question: "Quanto tempo a IA leva para escrever esse e-mail diplomático?",
+      options: ["Uns 5 minutos, pensando bem", "Menos de 10 segundos", "Ela não consegue, e-mail é coisa de humano"],
+      answer: 1,
+    },
   },
   {
     id: "reuniao-resumida",
@@ -47,6 +54,11 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "Decisões: campanha aprovada com orçamento de R$ 5 mil. Pendências: Ana envia as artes até quarta; Léo fecha o fornecedor até sexta. Resumo: a campanha de agosto está aprovada e começa dia 1º.",
     apply: "Use com o gravador do celular + transcrição automática. Nunca mais saia de reunião sem saber o que ficou combinado.",
+    quiz: {
+      question: "O que a IA extrai de 1 hora de reunião bagunçada?",
+      options: ["Só um resumão genérico", "Nada, ela se perde no áudio", "Decisões, pendências E quem faz o quê"],
+      answer: 2,
+    },
   },
   {
     id: "professor-24h",
@@ -59,6 +71,11 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "“Juros compostos são como um time que joga cada rodada com os pontos da rodada anterior somados ao elenco: o que você ganhou passa a jogar junto. R$ 100 a 10% viram 110, e no mês seguinte os 110 inteiros entram em campo...”",
     apply: "Troque a analogia pelo que você ama (culinária, música, novela). O mini-teste é o que faz o conteúdo grudar.",
+    quiz: {
+      question: "A IA consegue explicar juros compostos usando... futebol?",
+      options: ["Consegue — com analogia E mini-teste no final", "Só se você pagar a versão premium", "Consegue, mas fica confuso"],
+      answer: 0,
+    },
   },
   {
     id: "flashcards",
@@ -71,6 +88,11 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "Cartão 1 — P: Qual órgão produz a insulina? R: O pâncreas. | Cartão 2 — P: Qual a diferença entre diabetes tipo 1 e 2? R: No tipo 1 o corpo não produz insulina; no tipo 2 ele resiste a ela...",
     apply: "Perfeito para concursos, provas e certificações. A IA vira seu parceiro de revisão ativa — o método que a ciência diz que funciona.",
+    quiz: {
+      question: "Você cola um capítulo inteiro. O que a IA devolve?",
+      options: ["Um resumo comum", "10 flashcards prontos — e ainda te toma a lição", "Uma lista de links para estudar"],
+      answer: 1,
+    },
   },
   {
     id: "post-30s",
@@ -83,6 +105,11 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "Gancho: “O bolo que acaba antes do café esfriar ☕🍫” — Legenda: “Camadas de brigadeiro de verdade, feito hoje de manhã. Entrego em Niterói até as 18h...” + hashtags e sugestão de foto com luz natural.",
     apply: "Repita para cada produto. Em 10 minutos você monta a semana inteira de conteúdo — e nossos cursos mostram como automatizar isso.",
+    quiz: {
+      question: "Uma frase sobre seu bolo de pote. O que sai do outro lado?",
+      options: ["Gancho + legenda + hashtags + ideia de foto", "Só uma legenda simples", "Um texto formal de propaganda"],
+      answer: 0,
+    },
   },
   {
     id: "imagem-sem-designer",
@@ -95,6 +122,11 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "Uma imagem coerente com sua marca — porque você descreveu assunto, estilo, cor, fundo e luz em vez de só “faz um logo bonito”. Essa estrutura de 5 ingredientes funciona em qualquer gerador.",
     apply: "Use no gerador de imagens do ChatGPT, no Gemini ou no nosso Studio. A receita do prompt vale mais que a ferramenta.",
+    quiz: {
+      question: "Qual o segredo de uma imagem de IA profissional?",
+      options: ["Sorte no clique", "Pagar o gerador mais caro", "A receita: assunto + estilo + cor + fundo + luz"],
+      answer: 2,
+    },
   },
   {
     id: "cardapio-semana",
@@ -107,6 +139,11 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "Seg: macarrão cremoso de frango. Ter: omelete recheada + salada de tomate. Qua: arroz de forno com queijo... Lista de compras: cebola, creme de leite, brócolis (3 itens).",
     apply: "Cinco minutos no domingo e a semana está resolvida. Funciona também para marmitas, dieta e orçamento apertado.",
+    quiz: {
+      question: "Você lista o que tem na geladeira. A IA monta...",
+      options: ["Uma receita só", "O cardápio da semana + lista de compras do que falta", "Uma dieta genérica de internet"],
+      answer: 1,
+    },
   },
   {
     id: "conta-explicada",
@@ -119,8 +156,15 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     result:
       "“Essa cláusula diz que a mensalidade sobe automaticamente pela inflação a cada 12 meses. Atenção: o índice usado é o IGP-M, que costuma subir mais que o IPCA. Pergunte se é possível trocar o índice...”",
     apply: "Planos de saúde, aluguel, financiamento, fatura de celular. Nunca mais assine sem entender — a IA lê as letras miúdas com você.",
+    quiz: {
+      question: "Cole aquela cláusula confusa do contrato. A IA te diz...",
+      options: ["O que significa + o que perguntar antes de assinar", "Que você precisa de um advogado", "Só repete em outras palavras"],
+      answer: 0,
+    },
   },
 ];
 
 export const XP_PER_EXAMPLE = 50;
+export const XP_BONUS_ACERTO = 25;
 export const FREE_EXAMPLES_LIMIT = 3;
+export const MAX_LANDING_XP = FREE_EXAMPLES_LIMIT * (XP_PER_EXAMPLE + XP_BONUS_ACERTO);

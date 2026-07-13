@@ -36,15 +36,22 @@ export function extraArtsFor(slug: string): string[] {
   return [ARTICLE_POOL[a], ARTICLE_POOL[b === a ? (a + 1) % ARTICLE_POOL.length : b]];
 }
 
-export function artForTag(tag: string, seedIndex = 0): string {
+const TAG_VARIANTS = 5;
+
+/** Arte da tag com 5 variantes — estável por artigo (hash do seed/slug). */
+export function artForTag(tag: string, seedIndex = 0, seedKey = ""): string {
   const key = tag
     .toLowerCase()
     .normalize("NFD")
     // eslint-disable-next-line no-misleading-character-class
     .replace(/[̀-ͯ]/g, "");
-  if (TAG_ART[key]) return TAG_ART[key];
-  let h = seedIndex;
-  for (const c of key) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  let h = seedIndex + 11;
+  for (const c of seedKey || key) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const variant = 1 + (h % TAG_VARIANTS);
+  const base = TAG_ART[key];
+  if (base) {
+    return variant === 1 ? base : base.replace(".webp", `-v${variant}.webp`);
+  }
   return TAG_ART_POOL[h % TAG_ART_POOL.length];
 }
 
@@ -58,7 +65,7 @@ function mapDoc(d: any, i: number): AiNewsArticle {
     summary: String(d.summary ?? ""),
     url: d.url ? String(d.url) : undefined,
     source: d.source ? String(d.source) : undefined,
-    image: d.image ? String(d.image) : artForTag(tag, i),
+    image: d.image ? String(d.image) : artForTag(tag, i, String(d.slug ?? '')),
     date: d.publishedAt ? new Date(d.publishedAt).toISOString() : undefined,
     body: Array.isArray(d.body) ? d.body.map(String) : undefined,
     sourceImage: d.sourceImage ? String(d.sourceImage) : undefined,
