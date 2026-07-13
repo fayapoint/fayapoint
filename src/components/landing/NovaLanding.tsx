@@ -19,10 +19,10 @@ const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 // Paleta própria da landing — viva, "cartoon premium", independente do marrom do site
 const GOLD = "#f5c04e";
 const CATEGORY_STYLE: Record<ExampleCategory, { color: string; art: string }> = {
-  "trabalho": { color: "#38bdf8", art: "/landing/cat-trabalho.png" },
-  "estudos": { color: "#a78bfa", art: "/landing/cat-estudos.png" },
-  "criar": { color: "#f472b6", art: "/landing/cat-criar.png" },
-  "dia-a-dia": { color: "#a3e635", art: "/landing/cat-diaadia.png" },
+  "trabalho": { color: "#38bdf8", art: "/landing/cat-trabalho.webp" },
+  "estudos": { color: "#a78bfa", art: "/landing/cat-estudos.webp" },
+  "criar": { color: "#f472b6", art: "/landing/cat-criar.webp" },
+  "dia-a-dia": { color: "#a3e635", art: "/landing/cat-diaadia.webp" },
 };
 
 type Stage = "pick" | "reveal";

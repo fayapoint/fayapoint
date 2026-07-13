@@ -23,7 +23,7 @@ export const SEED_NEWS: AiNewsItem[] = [
       "A maioria das pessoas ainda só pede texto ao ChatGPT — mas os modelos atuais analisam fotos, contratos e tabelas inteiras. Envie o arquivo em vez de digitar.",
     url: "/blog",
     source: "FayAI Explica",
-    image: "/landing/news-leitura.png",
+    image: "/landing/news-leitura.webp",
   },
   {
     slug: "agentes-executam",
@@ -33,7 +33,7 @@ export const SEED_NEWS: AiNewsItem[] = [
       "A nova geração de IA não só responde: pesquisa, compara preços, preenche planilhas e monitora páginas para você. É o assunto mais quente de 2026.",
     url: "/blog",
     source: "FayAI Explica",
-    image: "/landing/news-agentes.png",
+    image: "/landing/news-agentes.webp",
   },
   {
     slug: "video-barato",
@@ -43,6 +43,6 @@ export const SEED_NEWS: AiNewsItem[] = [
       "O que custava um estúdio hoje sai por centavos: roteiro, narração e imagem gerados em minutos. Pequenos negócios estão publicando vídeo diário assim.",
     url: "/blog",
     source: "FayAI Explica",
-    image: "/landing/news-video.png",
+    image: "/landing/news-video.webp",
   },
 ];
