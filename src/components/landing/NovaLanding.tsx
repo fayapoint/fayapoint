@@ -120,14 +120,30 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
         @keyframes fx-rotate { to { --fx-angle: 360deg; } }
         @keyframes fx-sweep { 0% { left: -60%; } 55% { left: 130%; } 100% { left: 130%; } }
         .glass {
-          background: rgba(22, 26, 54, 0.42);
-          backdrop-filter: blur(16px) saturate(1.6);
-          -webkit-backdrop-filter: blur(16px) saturate(1.6);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 12px 40px -14px rgba(0,0,0,.55);
+          position: relative;
+          background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,0) 38%), rgba(22, 26, 54, 0.42);
+          backdrop-filter: blur(18px) saturate(1.7);
+          -webkit-backdrop-filter: blur(18px) saturate(1.7);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 1px 0 0 rgba(255,255,255,.08), 0 12px 40px -14px rgba(0,0,0,.55);
         }
-        .glass-hover { transition: border-color .25s ease, background .25s ease, transform .25s ease; }
-        .glass-hover:hover { border-color: rgba(255,255,255,.30); background: rgba(30, 35, 72, 0.55); transform: translateY(-3px); }
+        .glass::before {
+          content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+          border-radius: inherit;
+          background: radial-gradient(420px 140px at 18% -8%, rgba(255,255,255,.16), transparent 60%);
+        }
+        .glass-hover { transition: border-color .3s ease, background .3s ease, transform .3s ease, box-shadow .3s ease; transform-style: preserve-3d; }
+        .glass-hover:hover {
+          border-color: rgba(255,255,255,.32);
+          background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,0) 40%), rgba(30, 35, 72, 0.55);
+          transform: perspective(900px) rotateX(2.2deg) translateY(-4px);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 22px 50px -16px rgba(0,0,0,.6);
+        }
+        @keyframes fx-drift-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(34px,-22px) scale(1.12); } }
+        @keyframes fx-drift-b { 0%,100% { transform: translate(0,0) scale(1.05); } 50% { transform: translate(-28px,18px) scale(.94); } }
+        @media (prefers-reduced-motion: reduce) {
+          .fx-orb, .fx-shine::after, .fx-magic::before { animation: none !important; }
+        }
         .fx-magic { position: relative; z-index: 0; }
         .fx-magic::before {
           content: ""; position: absolute; inset: -3px; border-radius: 1.15rem; z-index: -1;
@@ -380,9 +396,9 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
 
       {/* ============================== IA HOJE ============================== */}
       <section className="relative px-4 sm:px-8 pb-3 shrink-0">
-        <div aria-hidden className="fx-orb" style={{ width: 300, height: 300, left: "6%", top: -60, background: "radial-gradient(circle, rgba(56,189,248,.4), transparent 65%)" }} />
-        <div aria-hidden className="fx-orb" style={{ width: 260, height: 260, right: "10%", top: 30, background: "radial-gradient(circle, rgba(244,114,182,.35), transparent 65%)" }} />
-        <div aria-hidden className="fx-orb" style={{ width: 240, height: 240, left: "44%", top: 60, background: "radial-gradient(circle, rgba(167,139,250,.35), transparent 65%)" }} />
+        <div aria-hidden className="fx-orb" style={{ width: 300, height: 300, left: "6%", top: -60, background: "radial-gradient(circle, rgba(56,189,248,.4), transparent 65%)", animation: "fx-drift-a 11s ease-in-out infinite" }} />
+        <div aria-hidden className="fx-orb" style={{ width: 260, height: 260, right: "10%", top: 30, background: "radial-gradient(circle, rgba(244,114,182,.35), transparent 65%)", animation: "fx-drift-b 13s ease-in-out infinite" }} />
+        <div aria-hidden className="fx-orb" style={{ width: 240, height: 240, left: "44%", top: 60, background: "radial-gradient(circle, rgba(167,139,250,.35), transparent 65%)", animation: "fx-drift-a 15s ease-in-out infinite reverse" }} />
         <div className="relative max-w-5xl mx-auto">
           <div className="flex items-baseline gap-3 mb-2.5">
             <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
