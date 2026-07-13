@@ -2,12 +2,59 @@ import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
 import { SEED_NEWS, type AiNewsItem } from "@/data/landing/seed-news";
 
+export interface AiNewsArticle extends AiNewsItem {
+  body?: string[]; // parágrafos da análise FayAI
+  sourceImage?: string; // og:image da matéria original (exibida com crédito)
+}
+
+// Arte da casa por categoria — "geradas por nós" (IDENTIDADE_VISUAL.md §4a)
+const TAG_ART: Record<string, string> = {
+  "tendencia": "/landing/tags/tendencia.webp",
+  "ferramentas": "/landing/tags/ferramentas.webp",
+  "modelos": "/landing/tags/modelos.webp",
+  "negocios": "/landing/tags/negocios.webp",
+  "pesquisa": "/landing/tags/pesquisa.webp",
+  "voce sabia?": "/landing/tags/voce-sabia.webp",
+  "voce sabia": "/landing/tags/voce-sabia.webp",
+  "custo": "/landing/tags/custo.webp",
+  "infraestrutura": "/landing/tags/infraestrutura.webp",
+};
+const TAG_ART_POOL = Object.values(TAG_ART);
+
+export function artForTag(tag: string, seedIndex = 0): string {
+  const key = tag
+    .toLowerCase()
+    .normalize("NFD")
+    // eslint-disable-next-line no-misleading-character-class
+    .replace(/[̀-ͯ]/g, "");
+  if (TAG_ART[key]) return TAG_ART[key];
+  let h = seedIndex;
+  for (const c of key) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return TAG_ART_POOL[h % TAG_ART_POOL.length];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapDoc(d: any, i: number): AiNewsArticle {
+  const tag = String(d.tag ?? "IA HOJE");
+  return {
+    slug: String(d.slug ?? d._id),
+    tag,
+    title: String(d.title ?? ""),
+    summary: String(d.summary ?? ""),
+    url: d.url ? String(d.url) : undefined,
+    source: d.source ? String(d.source) : undefined,
+    image: d.image ? String(d.image) : artForTag(tag, i),
+    date: d.publishedAt ? new Date(d.publishedAt).toISOString() : undefined,
+    body: Array.isArray(d.body) ? d.body.map(String) : undefined,
+    sourceImage: d.sourceImage ? String(d.sourceImage) : undefined,
+  };
+}
+
 /**
- * Notícias do dia para a landing. O agente autônomo (OpenClaw/Hermes) publica
- * documentos na collection `ainews`: { slug, tag, title, summary, date,
- * publishedAt }. Sem documentos das últimas 48h (ou sem banco), cai nas seeds.
+ * Notícias do dia para a landing (últimas 48h, fallback nas seeds).
+ * Cards da home linkam para /noticias/[slug] quando o item veio do agente.
  */
-export async function getAiNews(limit = 3): Promise<{ items: AiNewsItem[]; live: boolean }> {
+export async function getAiNews(limit = 3): Promise<{ items: AiNewsArticle[]; live: boolean }> {
   try {
     await dbConnect();
     const db = mongoose.connection.db;
@@ -22,23 +69,38 @@ export async function getAiNews(limit = 3): Promise<{ items: AiNewsItem[]; live:
       .toArray();
 
     if (docs.length === 0) return { items: SEED_NEWS.slice(0, limit), live: false };
-
-    // Itens do agente não trazem imagem — reveza as artes da casa para manter o card rico
-    const fallbackArt = ["/landing/news-leitura.webp", "/landing/news-agentes.webp", "/landing/news-video.webp"];
-    return {
-      live: true,
-      items: docs.map((d, i) => ({
-        slug: String(d.slug ?? d._id),
-        tag: String(d.tag ?? "IA HOJE"),
-        title: String(d.title ?? ""),
-        summary: String(d.summary ?? ""),
-        url: d.url ? String(d.url) : undefined,
-        source: d.source ? String(d.source) : undefined,
-        image: d.image ? String(d.image) : fallbackArt[i % fallbackArt.length],
-        date: d.publishedAt ? new Date(d.publishedAt).toISOString() : undefined,
-      })),
-    };
+    return { live: true, items: docs.map((d, i) => ({ ...mapDoc(d, i), url: `/noticias/${d.slug}` })) };
   } catch {
     return { items: SEED_NEWS.slice(0, limit), live: false };
+  }
+}
+
+/** Hub /noticias — últimos 30 dias. */
+export async function getAllNews(limit = 30): Promise<AiNewsArticle[]> {
+  try {
+    await dbConnect();
+    const db = mongoose.connection.db;
+    if (!db) return [];
+    const docs = await db
+      .collection("ainews")
+      .find({})
+      .sort({ publishedAt: -1 })
+      .limit(limit)
+      .toArray();
+    return docs.map(mapDoc);
+  } catch {
+    return [];
+  }
+}
+
+export async function getNewsBySlug(slug: string): Promise<AiNewsArticle | null> {
+  try {
+    await dbConnect();
+    const db = mongoose.connection.db;
+    if (!db) return null;
+    const doc = await db.collection("ainews").findOne({ slug });
+    return doc ? mapDoc(doc, 0) : null;
+  } catch {
+    return null;
   }
 }

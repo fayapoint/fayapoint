@@ -511,7 +511,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
               { href: "/cursos", icon: GraduationCap, label: "Cursos", desc: "18 cursos com certificado", color: "#38bdf8" },
               { href: "/ferramentas", icon: Wrench, label: "Ferramentas", desc: "100+ ferramentas de IA", color: "#a78bfa" },
               { href: "/projetos", icon: Rocket, label: "Projetos", desc: "O ecossistema FayAI e a história por trás", color: "#f472b6" },
-              { href: "/blog", icon: BookOpen, label: "Blog", desc: "Guias práticos de IA", color: "#a3e635" },
+              { href: "/noticias", icon: BookOpen, label: "IA Hoje", desc: "Notícias de IA explicadas todo dia", color: "#a3e635" },
             ].map(({ href, icon: Icon, label, desc, color }) => (
               <Link
                 key={href}

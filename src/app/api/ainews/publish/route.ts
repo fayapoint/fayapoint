@@ -34,6 +34,11 @@ export async function POST(request: Request) {
         summary: String(i.summary ?? '').slice(0, 300),
         url: typeof i.url === 'string' && /^https?:\/\//.test(i.url) ? i.url.slice(0, 500) : undefined,
         source: i.source ? String(i.source).slice(0, 60) : undefined,
+        body: Array.isArray(i.body) ? (i.body as unknown[]).slice(0, 8).map((p) => String(p).slice(0, 900)) : undefined,
+        sourceImage:
+          typeof i.sourceImage === 'string' && /^https?:\/\//.test(i.sourceImage)
+            ? i.sourceImage.slice(0, 600)
+            : undefined,
         publishedAt: new Date(),
       }))
       .filter((i: { slug: string; title: string; summary: string }) => i.slug && i.title && i.summary);
@@ -44,10 +49,12 @@ export async function POST(request: Request) {
 
     const col = db.collection('ainews');
     for (const item of clean) {
-      await col.updateOne({ slug: item.slug }, { $set: item }, { upsert: true });
+      // Dedup por URL: o LLM pode gerar slugs diferentes para a mesma matéria
+      const filter = item.url ? { $or: [{ slug: item.slug }, { url: item.url }] } : { slug: item.slug };
+      await col.updateOne(filter, { $set: item }, { upsert: true });
     }
-    // Higiene: mantém só a última semana
-    await col.deleteMany({ publishedAt: { $lt: new Date(Date.now() - 7 * 24 * 3600 * 1000) } });
+    // Higiene: o hub /noticias mostra 30 dias
+    await col.deleteMany({ publishedAt: { $lt: new Date(Date.now() - 30 * 24 * 3600 * 1000) } });
 
     return NextResponse.json({ published: clean.length, slugs: clean.map((i: { slug: string }) => i.slug) });
   } catch (error) {
