@@ -526,6 +526,47 @@ export default function PortalPage() {
 
   return (
     <div data-dashboard-shell className="h-[100dvh] bg-background text-foreground text-[15px] md:text-[16px] overflow-hidden">
+      <style dangerouslySetInnerHTML={{ __html: `
+        /* ===== Identidade FayAI no portal (IDENTIDADE_VISUAL.md) =====
+           Escuro: navy vivo (menos pesado que o marrom-preto antigo).
+           Claro: off-white azulado coerente, sem verde/creme legado. */
+        .dark [data-dashboard-shell] {
+          --background: oklch(0.19 0.032 277) !important;
+          --card: oklch(0.235 0.038 277) !important;
+          --popover: oklch(0.235 0.038 277) !important;
+          --secondary: oklch(0.28 0.04 277) !important;
+          --muted: oklch(0.28 0.04 277) !important;
+          --foreground: oklch(0.96 0.008 300) !important;
+          --card-foreground: oklch(0.96 0.008 300) !important;
+          --popover-foreground: oklch(0.96 0.008 300) !important;
+          --muted-foreground: oklch(0.74 0.018 285) !important;
+          --primary: oklch(0.8 0.12 85) !important;
+          --primary-foreground: oklch(0.22 0.04 80) !important;
+          --accent: oklch(0.72 0.11 295) !important;
+          --accent-foreground: oklch(0.97 0.01 300) !important;
+          --border: oklch(0.96 0.008 300 / 13%) !important;
+          --input: oklch(0.96 0.008 300 / 20%) !important;
+          --ring: oklch(0.8 0.12 85) !important;
+        }
+        html:not(.dark) [data-dashboard-shell] {
+          --background: oklch(0.972 0.006 270) !important;
+          --card: oklch(1 0 0) !important;
+          --popover: oklch(1 0 0) !important;
+          --secondary: oklch(0.94 0.008 270) !important;
+          --muted: oklch(0.94 0.008 270) !important;
+          --foreground: oklch(0.23 0.03 275) !important;
+          --card-foreground: oklch(0.23 0.03 275) !important;
+          --popover-foreground: oklch(0.23 0.03 275) !important;
+          --muted-foreground: oklch(0.47 0.02 275) !important;
+          --primary: oklch(0.56 0.13 80) !important;
+          --primary-foreground: oklch(0.99 0 0) !important;
+          --accent: oklch(0.5 0.15 285) !important;
+          --accent-foreground: oklch(0.99 0 0) !important;
+          --border: oklch(0.88 0.008 270) !important;
+          --input: oklch(0.85 0.01 270) !important;
+          --ring: oklch(0.56 0.13 80) !important;
+        }
+      ` }} />
       <ClaimLandingXp />
       {/* Sidebar */}
       <DashboardSidebar
