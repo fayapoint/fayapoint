@@ -425,7 +425,8 @@ export function DashboardHome({
           {FAY_PROJECTS.map((proj) => (
             <Link
               key={proj.id}
-              href={`/projetos/${proj.id}`}
+              href={proj.appUrl ?? `/projetos/${proj.id}`}
+              target={proj.appUrl?.startsWith("http") ? "_blank" : undefined}
               className="group shrink-0 w-[150px] rounded-xl border border-border bg-background/60 overflow-hidden hover:border-[var(--primary)] transition-colors"
             >
               <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>

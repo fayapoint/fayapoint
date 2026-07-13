@@ -13,6 +13,11 @@ export interface FayProject {
   accent: string;
   tags: string[];
   href?: string;
+  /** URL do produto em si (interna ou externa) — o "Usar agora" */
+  appUrl?: string;
+  /** Curso que ensina a dominar este projeto — o "Aprender a usar" */
+  learnHref?: string;
+  learnLabel?: string;
 }
 
 export const STATUS_LABEL: Record<ProjectStatus, string> = {
@@ -34,6 +39,7 @@ export const FAY_PROJECTS: FayProject[] = [
     accent: "#f5c04e",
     tags: ["Educação", "IA", "Certificação"],
     href: "/cursos",
+    appUrl: "/cursos",
   },
   {
     id: "livros",
@@ -46,6 +52,9 @@ export const FAY_PROJECTS: FayProject[] = [
     accent: "#a78bfa",
     tags: ["Conteúdo", "TTS", "Publicação"],
     href: "/cursos",
+    appUrl: "/cursos",
+    learnHref: "/curso/ia-sem-filtro",
+    learnLabel: "Ler o IA Sem Filtro",
   },
   {
     id: "uss",
@@ -57,6 +66,9 @@ export const FAY_PROJECTS: FayProject[] = [
     status: "construindo",
     accent: "#38bdf8",
     tags: ["Social Media", "Automação", "SaaS"],
+    appUrl: "/portal",
+    learnHref: "/curso/primeiras-automacoes",
+    learnLabel: "Aprender automação",
   },
   {
     id: "worldforge",
@@ -68,6 +80,9 @@ export const FAY_PROJECTS: FayProject[] = [
     status: "beta",
     accent: "#f472b6",
     tags: ["Storytelling", "IA generativa", "Cinema"],
+    appUrl: "https://worldtch.netlify.app",
+    learnHref: "/curso/prompt-engineering",
+    learnLabel: "Aprender a criar prompts",
   },
   {
     id: "music",
@@ -79,6 +94,8 @@ export const FAY_PROJECTS: FayProject[] = [
     status: "construindo",
     accent: "#22d3ee",
     tags: ["Android & iOS", "Áudio", "Social"],
+    learnHref: "/curso/agentes-ia",
+    learnLabel: "Aprender IA de áudio e agentes",
   },
   {
     id: "futebol",
@@ -90,6 +107,8 @@ export const FAY_PROJECTS: FayProject[] = [
     status: "pesquisa",
     accent: "#a3e635",
     tags: ["Visão computacional", "Esporte", "SAM 3"],
+    learnHref: "/curso/agentes-ia",
+    learnLabel: "Aprender visão computacional",
   },
   {
     id: "games",
@@ -101,6 +120,8 @@ export const FAY_PROJECTS: FayProject[] = [
     status: "pesquisa",
     accent: "#fb923c",
     tags: ["Gaming", "Copiloto IA", "EAFC"],
+    learnHref: "/curso/agentes-ia",
+    learnLabel: "Aprender a criar copilotos",
   },
 ];
 

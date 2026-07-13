@@ -148,21 +148,42 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
       <section className="px-4 sm:px-8 pb-16">
         <div className="max-w-3xl mx-auto glass rounded-3xl p-7 sm:p-10 text-center" style={{ borderColor: `${project.accent}44` }}>
           <h2 className="text-3xl sm:text-4xl tracking-wide" style={bebas}>
-            {project.status === "no-ar" ? "DISPONÍVEL AGORA" : "QUER ACOMPANHAR DE PERTO?"}
+            {project.appUrl ? "ENTRE NO PROJETO" : "QUER ACOMPANHAR DE PERTO?"}
           </h2>
           <p className="mt-2 text-sm sm:text-base text-white/65">
-            {project.status === "no-ar"
-              ? "Este projeto está no ar e esperando por você."
+            {project.appUrl
+              ? "Use agora — e aprenda a dominar a ferramenta com o curso que combina com ela."
               : "Crie sua conta grátis e seja avisado de cada novidade deste projeto — antes de todo mundo."}
           </p>
           <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href={detail.cta?.href ?? "/registro"}
-              className="inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold hover:opacity-90 transition-opacity"
-              style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, color: "#241a05", boxShadow: "0 10px 30px rgba(245,192,78,.35)" }}
-            >
-              {detail.cta?.label ?? "Criar conta grátis"} <ArrowRight size={18} />
-            </Link>
+            {project.appUrl ? (
+              <a
+                href={project.appUrl}
+                target={project.appUrl.startsWith("http") ? "_blank" : undefined}
+                rel={project.appUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold hover:opacity-90 transition-opacity"
+                style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, color: "#241a05", boxShadow: "0 10px 30px rgba(245,192,78,.35)" }}
+              >
+                Usar agora <ArrowRight size={18} />
+              </a>
+            ) : (
+              <Link
+                href="/registro"
+                className="inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold hover:opacity-90 transition-opacity"
+                style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, color: "#241a05", boxShadow: "0 10px 30px rgba(245,192,78,.35)" }}
+              >
+                Quero ser avisado <ArrowRight size={18} />
+              </Link>
+            )}
+            {project.learnHref && (
+              <Link
+                href={project.learnHref}
+                className="inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 font-bold transition-colors"
+                style={{ border: `2px solid ${project.accent}66`, color: project.accent }}
+              >
+                {project.learnLabel ?? "Aprender a usar"} <ArrowUpRight size={16} />
+              </Link>
+            )}
             <Link
               href="/projetos"
               className="inline-flex items-center gap-1.5 rounded-2xl border-2 border-white/15 px-6 py-3.5 font-semibold text-white/70 hover:text-white hover:border-white/35 transition-colors"
