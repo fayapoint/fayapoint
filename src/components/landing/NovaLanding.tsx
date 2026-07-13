@@ -47,6 +47,20 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
     setRevealed(false);
   };
 
+  // Persiste a jornada — o XP é resgatado na conta após o cadastro
+  useEffect(() => {
+    if (seenIds.length === 0) return;
+    try {
+      const prev = JSON.parse(localStorage.getItem("fayai_landing") || "{}");
+      const cats = new Set<string>(Array.isArray(prev.cats) ? prev.cats : []);
+      if (category) cats.add(category);
+      localStorage.setItem(
+        "fayai_landing",
+        JSON.stringify({ xp: seenIds.length * XP_PER_EXAMPLE, seenIds, cats: [...cats], claimed: !!prev.claimed })
+      );
+    } catch { /* storage indisponível — sem drama */ }
+  }, [seenIds, category]);
+
   // Esc fecha o card — sair tem que ser tão fácil quanto entrar
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -92,6 +106,16 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
       /* clipboard indisponível — sem drama */
     }
   };
+
+  // Micro-galeria do exemplo: 2 vetores + 2 fotos, embaralhados a cada abertura
+  const collage = useMemo(() => {
+    if (!current) return [] as { src: string; tilt: number }[];
+    const tilts = [-2, 1.5, -1.2, 2];
+    return ["v1", "p1", "v2", "p2"]
+      .map((t) => ({ src: `/landing/magic/${current.id}-${t}.webp`, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map((x, i) => ({ src: x.src, tilt: tilts[i % tilts.length] }));
+  }, [current]);
 
   const progressDots = useMemo(
     () => Array.from({ length: FREE_EXAMPLES_LIMIT }, (_, i) => i < seenIds.length),
@@ -303,6 +327,31 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                   ))}
                 </div>
               </div>
+
+              {collage.length > 0 && (
+                <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {collage.map(({ src, tilt }) => (
+                    <span
+                      key={src}
+                      className="block relative overflow-hidden rounded-xl"
+                      style={{
+                        aspectRatio: "4 / 3",
+                        transform: `rotate(${tilt}deg)`,
+                        border: `1.5px solid ${accent}55`,
+                        boxShadow: "0 10px 26px -10px rgba(0,0,0,.65)",
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={src}
+                        alt=""
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                      />
+                    </span>
+                  ))}
+                </div>
+              )}
 
               {!revealed ? (
                 <motion.button
