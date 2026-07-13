@@ -18,12 +18,16 @@ const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 
 // Paleta própria da landing — viva, "cartoon premium", independente do marrom do site
 const GOLD = "#f5c04e";
-const CATEGORY_STYLE: Record<ExampleCategory, { color: string; art: string }> = {
-  "trabalho": { color: "#38bdf8", art: "/landing/cat-trabalho.webp" },
-  "estudos": { color: "#a78bfa", art: "/landing/cat-estudos.webp" },
-  "criar": { color: "#f472b6", art: "/landing/cat-criar.webp" },
-  "dia-a-dia": { color: "#a3e635", art: "/landing/cat-diaadia.webp" },
+// Cada categoria tem 5 artes monocromáticas na SUA cor — a cor é a navegação.
+// A variação é sorteada a cada visita (pós-montagem, para não divergir do SSR).
+const CAT_VARIANTS = 5;
+const CATEGORY_STYLE: Record<ExampleCategory, { color: string }> = {
+  "trabalho": { color: "#38bdf8" },
+  "estudos": { color: "#a78bfa" },
+  "criar": { color: "#f472b6" },
+  "dia-a-dia": { color: "#a3e635" },
 };
+const catArt = (id: ExampleCategory, v: number) => `/landing/cats/${id}-v${v}.webp`;
 
 type Stage = "pick" | "reveal";
 
@@ -36,6 +40,19 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
   const [copied, setCopied] = useState(false);
   const [xpPop, setXpPop] = useState(false);
   const cardRef = useRef<HTMLElement | null>(null);
+  const [artVariants, setArtVariants] = useState<Record<ExampleCategory, number>>({
+    "trabalho": 1, "estudos": 1, "criar": 1, "dia-a-dia": 1,
+  });
+
+  // Sorteia a arte de cada categoria a cada visita
+  useEffect(() => {
+    setArtVariants({
+      "trabalho": 1 + Math.floor(Math.random() * CAT_VARIANTS),
+      "estudos": 1 + Math.floor(Math.random() * CAT_VARIANTS),
+      "criar": 1 + Math.floor(Math.random() * CAT_VARIANTS),
+      "dia-a-dia": 1 + Math.floor(Math.random() * CAT_VARIANTS),
+    });
+  }, []);
 
   const xp = seenIds.length * XP_PER_EXAMPLE;
   const limitReached = seenIds.length >= FREE_EXAMPLES_LIMIT;
@@ -266,7 +283,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                       <span className="block relative overflow-hidden" style={{ aspectRatio: "1 / 1" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
                         <img
-                          src={st.art}
+                          src={catArt(cat.id, artVariants[cat.id])}
                           alt={cat.label}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
