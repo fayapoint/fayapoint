@@ -24,6 +24,7 @@ import {
   Home,
   UserCog,
 
+  Gamepad2,
 } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -51,6 +52,7 @@ const MAIN_NAV_ITEMS = [
 ];
 
 const MORE_NAV_ITEMS = [
+  { id: "games", icon: Gamepad2, label: "Minigames", badge: "NOVO" },
   { id: "pod-store", icon: Palette, label: "Loja POD", badge: "NOVO" },
   { id: "cart", icon: ShoppingCart, label: "Carrinho" },
   { id: "profile", icon: Crown, label: "Meu Perfil" },

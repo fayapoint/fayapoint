@@ -32,6 +32,7 @@ import {
   Award,
   UserCog,
   Share2,
+  Gamepad2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -72,6 +73,7 @@ interface DashboardSidebarProps {
 
 const MENU_ITEMS = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", proOnly: false },
+  { id: "games", icon: Gamepad2, label: "Minigames", proOnly: false, badge: "NOVO" },
   { id: "pod-store", icon: Palette, label: "Minha Loja POD", proOnly: false, badge: "NOVO" },
   { id: "store", icon: Store, label: "Loja Tech", proOnly: false },
   { id: "cart", icon: ShoppingCart, label: "Carrinho", proOnly: false },

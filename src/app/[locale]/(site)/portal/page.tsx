@@ -85,6 +85,7 @@ import { DashboardHome } from "@/components/portal/DashboardHome";
 import { AchievementsPanel } from "@/components/portal/AchievementsPanel";
 import { LeaderboardPanel } from "@/components/portal/LeaderboardPanel";
 import { ChallengesPanel } from "@/components/portal/ChallengesPanel";
+import { MinigamesPanel } from "@/components/portal/MinigamesPanel";
 import { AIAssistantPanel } from "@/components/portal/AIAssistantPanel";
 import { ProfilePanel } from "@/components/portal/ProfilePanel";
 import { StorePanel } from "@/components/portal/StorePanel";
@@ -622,6 +623,7 @@ export default function PortalPage() {
               {activeTab === "achievements" && "Conquistas"}
               {activeTab === "leaderboard" && "Ranking"}
               {activeTab === "challenges" && "Desafios"}
+              {activeTab === "games" && "Arcade da IA"}
               {activeTab === "resources" && "Recursos"}
               {activeTab === "history" && "Histórico"}
               {activeTab === "rewards" && "Recompensas"}
@@ -1035,6 +1037,7 @@ export default function PortalPage() {
             )}
 
             {/* Challenges Tab */}
+            {activeTab === "games" && <MinigamesPanel />}
             {activeTab === "challenges" && (
               <motion.div
                 key="challenges"

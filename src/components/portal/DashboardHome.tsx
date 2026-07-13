@@ -36,6 +36,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { TrailMap } from "@/components/portal/TrailMap";
 import { PortalTour } from "@/components/portal/PortalTour";
+import { ArcadeBanner } from "@/components/portal/MinigamesPanel";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import { TIER_CONFIGS, SubscriptionPlan } from "@/lib/course-tiers";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
@@ -398,6 +399,9 @@ export function DashboardHome({
         userCourses={userCourses}
         onTabChange={onTabChange}
       />
+
+      {/* ARCADE — destaque animado (F4) */}
+      <ArcadeBanner onOpen={() => onTabChange("games")} />
 
       {/* ═══════════════════════════════════════════════════ */}
       {/*  ECOSSISTEMA — projetos FayAI                       */}
