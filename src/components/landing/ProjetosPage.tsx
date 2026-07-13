@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Sparkles, Wrench } from "lucide-react";
 import { FAY_PROJECTS, SERVICES, STATUS_LABEL, type ProjectStatus } from "@/data/landing/projects";
 
@@ -120,7 +119,7 @@ export function ProjetosPage() {
       <section className="px-4 sm:px-8 pb-14">
         <div className="max-w-5xl mx-auto">
           <div className="grid sm:grid-cols-2 gap-5">
-            {FAY_PROJECTS.map((p, i) => {
+            {FAY_PROJECTS.map((p) => {
               const inner = (
                 <>
                   <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>
@@ -154,24 +153,18 @@ export function ProjetosPage() {
                         </span>
                       ))}
                     </span>
-                    {p.href && (
-                      <span className="inline-flex items-center gap-1 mt-3 text-sm font-bold" style={{ color: GOLD }}>
-                        Conhecer <ArrowUpRight size={15} />
-                      </span>
-                    )}
+                    <span className="inline-flex items-center gap-1 mt-3 text-sm font-bold" style={{ color: GOLD }}>
+                      Conhecer o projeto <ArrowUpRight size={15} />
+                    </span>
                   </span>
                 </>
               );
               const cls = "glass glass-hover group rounded-3xl overflow-hidden block";
               const styleBorder = { borderColor: `${p.accent}44` };
               return (
-                <motion.div key={p.id} initial={false} whileHover={{}} className="contents">
-                  {p.href ? (
-                    <Link href={p.href} className={cls} style={styleBorder}>{inner}</Link>
-                  ) : (
-                    <div className={cls} style={styleBorder}>{inner}</div>
-                  )}
-                </motion.div>
+                <Link key={p.id} href={`/projetos/${p.id}`} className={cls} style={styleBorder}>
+                  {inner}
+                </Link>
               );
             })}
           </div>
