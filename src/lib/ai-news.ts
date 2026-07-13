@@ -23,16 +23,18 @@ export async function getAiNews(limit = 3): Promise<{ items: AiNewsItem[]; live:
 
     if (docs.length === 0) return { items: SEED_NEWS.slice(0, limit), live: false };
 
+    // Itens do agente não trazem imagem — reveza as artes da casa para manter o card rico
+    const fallbackArt = ["/landing/news-leitura.webp", "/landing/news-agentes.webp", "/landing/news-video.webp"];
     return {
       live: true,
-      items: docs.map((d) => ({
+      items: docs.map((d, i) => ({
         slug: String(d.slug ?? d._id),
         tag: String(d.tag ?? "IA HOJE"),
         title: String(d.title ?? ""),
         summary: String(d.summary ?? ""),
         url: d.url ? String(d.url) : undefined,
         source: d.source ? String(d.source) : undefined,
-        image: d.image ? String(d.image) : undefined,
+        image: d.image ? String(d.image) : fallbackArt[i % fallbackArt.length],
         date: d.publishedAt ? new Date(d.publishedAt).toISOString() : undefined,
       })),
     };
