@@ -112,6 +112,7 @@ export interface IUser extends Document {
       type: 'lessons' | 'hours' | 'xp';
     };
     streakFreeze: number;
+    landingXpClaimed?: boolean;
     totalImagesGenerated: number;
     totalAiChats: number;
     referrals: number;
@@ -318,6 +319,7 @@ const UserSchema = new Schema<IUser>({
       type: { type: String, enum: ['lessons', 'hours', 'xp'], default: 'lessons' },
     },
     streakFreeze: { type: Number, default: 0 },
+    landingXpClaimed: { type: Boolean, default: false },
     totalImagesGenerated: { type: Number, default: 0 },
     totalAiChats: { type: Number, default: 0 },
     referrals: { type: Number, default: 0 },

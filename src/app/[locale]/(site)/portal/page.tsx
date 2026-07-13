@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { ClaimLandingXp } from "@/components/landing/ClaimLandingXp";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -525,6 +526,7 @@ export default function PortalPage() {
 
   return (
     <div data-dashboard-shell className="h-[100dvh] bg-background text-foreground text-[15px] md:text-[16px] overflow-hidden">
+      <ClaimLandingXp />
       {/* Sidebar */}
       <DashboardSidebar
         activeTab={activeTab}
