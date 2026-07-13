@@ -115,6 +115,35 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
         }
       }}
     >
+      <style dangerouslySetInnerHTML={{ __html: `
+        @property --fx-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+        @keyframes fx-rotate { to { --fx-angle: 360deg; } }
+        @keyframes fx-sweep { 0% { left: -60%; } 55% { left: 130%; } 100% { left: 130%; } }
+        .glass {
+          background: rgba(22, 26, 54, 0.42);
+          backdrop-filter: blur(16px) saturate(1.6);
+          -webkit-backdrop-filter: blur(16px) saturate(1.6);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 12px 40px -14px rgba(0,0,0,.55);
+        }
+        .glass-hover { transition: border-color .25s ease, background .25s ease, transform .25s ease; }
+        .glass-hover:hover { border-color: rgba(255,255,255,.30); background: rgba(30, 35, 72, 0.55); transform: translateY(-3px); }
+        .fx-magic { position: relative; z-index: 0; }
+        .fx-magic::before {
+          content: ""; position: absolute; inset: -3px; border-radius: 1.15rem; z-index: -1;
+          background: conic-gradient(from var(--fx-angle), #38bdf8, #a78bfa, #f472b6, #f5c04e, #38bdf8);
+          animation: fx-rotate 4s linear infinite;
+          filter: blur(7px); opacity: .75;
+        }
+        .fx-shine { position: relative; overflow: hidden; }
+        .fx-shine::after {
+          content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+          transform: skewX(-20deg); pointer-events: none;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+          animation: fx-sweep 5.2s ease-in-out infinite;
+        }
+        .fx-orb { position: absolute; border-radius: 9999px; filter: blur(46px); pointer-events: none; }
+      ` }} />
       {/* ============================== HEADER ============================== */}
       <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 shrink-0">
         <span className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
@@ -220,11 +249,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
               key={current.id}
               ref={cardRef}
               initial={false}
-              className="relative rounded-3xl p-5 sm:p-8"
+              className="glass relative rounded-3xl p-5 sm:p-8"
               style={{
-                border: `2.5px solid ${accent}66`,
-                background: "#141731",
-                boxShadow: `0 18px 50px -12px ${accent}55`,
+                borderColor: `${accent}66`,
+                boxShadow: `inset 0 1px 0 rgba(255,255,255,.10), 0 18px 50px -12px ${accent}55`,
               }}
             >
               {/* fechar */}
@@ -265,8 +293,8 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={revealResult}
-                  className="mt-6 w-full rounded-2xl py-4 text-lg font-extrabold flex items-center justify-center gap-2 cursor-pointer text-[#1a1405]"
-                  style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)" }}
+                  className="fx-magic fx-shine mt-6 w-full rounded-2xl py-4 text-lg font-extrabold flex items-center justify-center gap-2 cursor-pointer text-[#1a1405]"
+                  style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
                 >
                   <Sparkles size={20} /> MOSTRAR A MÁGICA
                 </motion.button>
@@ -309,8 +337,8 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={nextExample}
-                        className="flex-1 rounded-2xl py-3.5 font-extrabold flex items-center justify-center gap-2 cursor-pointer text-[#1a1405]"
-                        style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.3)" }}
+                        className="fx-shine flex-1 rounded-2xl py-3.5 font-extrabold flex items-center justify-center gap-2 cursor-pointer text-[#1a1405]"
+                        style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.3)", color: "#241a05" }}
                       >
                         Próxima mágica <ArrowRight size={18} />
                       </motion.button>
@@ -336,8 +364,8 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                       </p>
                       <Link
                         href="/registro"
-                        className="mt-4 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
-                        style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)" }}
+                        className="fx-magic fx-shine mt-4 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
+                        style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
                       >
                         Continuar grátis <ArrowRight size={18} />
                       </Link>
@@ -351,8 +379,11 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
       </main>
 
       {/* ============================== IA HOJE ============================== */}
-      <section className="px-4 sm:px-8 pb-3 shrink-0">
-        <div className="max-w-5xl mx-auto">
+      <section className="relative px-4 sm:px-8 pb-3 shrink-0">
+        <div aria-hidden className="fx-orb" style={{ width: 300, height: 300, left: "6%", top: -60, background: "radial-gradient(circle, rgba(56,189,248,.4), transparent 65%)" }} />
+        <div aria-hidden className="fx-orb" style={{ width: 260, height: 260, right: "10%", top: 30, background: "radial-gradient(circle, rgba(244,114,182,.35), transparent 65%)" }} />
+        <div aria-hidden className="fx-orb" style={{ width: 240, height: 240, left: "44%", top: 60, background: "radial-gradient(circle, rgba(167,139,250,.35), transparent 65%)" }} />
+        <div className="relative max-w-5xl mx-auto">
           <div className="flex items-baseline gap-3 mb-2.5">
             <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
               IA <span style={{ color: GOLD }}>HOJE</span>
@@ -370,8 +401,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                   href={item.url || "/blog"}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
-                  className="group rounded-2xl overflow-hidden border-2 border-white/10 hover:border-white/30 transition-colors"
-                  style={{ background: "#141731" }}
+                  className="glass glass-hover group rounded-2xl overflow-hidden"
                 >
                   {item.image && (
                     <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>
@@ -421,8 +451,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
               <Link
                 key={href}
                 href={href}
-                className="group rounded-2xl px-4 py-3 flex items-center gap-3 border-2 border-white/10 hover:border-white/25 transition-colors"
-                style={{ background: "#141731" }}
+                className="glass glass-hover group rounded-2xl px-4 py-3 flex items-center gap-3"
               >
                 <span
                   className="flex items-center justify-center rounded-xl p-2 shrink-0"
