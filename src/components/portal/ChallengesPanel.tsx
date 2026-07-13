@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { PromptBuilderGame } from "@/components/portal/PromptBuilderGame";
 
 interface DailyChallenge {
   id: string;
@@ -95,6 +96,9 @@ export function ChallengesPanel({
 
   return (
     <div className="space-y-4 md:space-y-6 min-w-0 overflow-hidden">
+      {/* Minigame da trilha — Monte o Prompt (F4) */}
+      <PromptBuilderGame />
+
       {/* Streak Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6">
         {/* Current Streak */}
