@@ -137,21 +137,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
     }
   };
 
-  // Micro-galeria do exemplo: 2 vetores + 2 fotos, embaralhados a cada abertura
-  const collage = useMemo(() => {
-    if (!current) return [] as { src: string; tilt: number }[];
-    const tilts = [-2, 1.5, -1.2, 2];
-    const pick2 = (prefix: string) =>
-      [1, 2, 3, 4, 5]
-        .map((n) => ({ n, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .slice(0, 2)
-        .map((x) => `${prefix}${x.n}`);
-    return [...pick2("v"), ...pick2("p")]
-      .map((t) => ({ src: `/landing/magic/${current.id}-${t}.webp`, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map((x, i) => ({ src: x.src, tilt: tilts[i % tilts.length] }));
-  }, [current]);
+  // Cena-espelho do exemplo (IDENTIDADE_VISUAL §9): uma ilustração que ENCENA
+  // exatamente a ação descrita — substituiu a colagem genérica de pool em
+  // 13/07/2026 ("humanizar": a imagem conta a mesma história que o texto).
+  // As pools /landing/magic/ continuam no repo para usos futuros.
 
   const confetti = useMemo(() => {
     if (burst === 0) return [] as { dx: string; dy: string; left: string; color: string; delay: string }[];
@@ -213,8 +202,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
         }
         @keyframes fx-drift-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(34px,-22px) scale(1.12); } }
         @keyframes fx-drift-b { 0%,100% { transform: translate(0,0) scale(1.05); } 50% { transform: translate(-28px,18px) scale(.94); } }
+        @keyframes fx-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .fx-float { animation: fx-float 7s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
-          .fx-orb, .fx-shine::after, .fx-magic::before { animation: none !important; }
+          .fx-orb, .fx-shine::after, .fx-magic::before, .fx-float { animation: none !important; }
         }
         .fx-magic { position: relative; z-index: 0; }
         .fx-magic::before {
@@ -397,28 +388,22 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                 </div>
               </div>
 
-              {collage.length > 0 && (
-                <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  {collage.map(({ src, tilt }) => (
-                    <span
-                      key={src}
-                      className="block relative overflow-hidden rounded-xl"
-                      style={{
-                        aspectRatio: "4 / 3",
-                        transform: `rotate(${tilt}deg)`,
-                        border: `1.5px solid ${accent}55`,
-                        boxShadow: "0 10px 26px -10px rgba(0,0,0,.65)",
-                      }}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={src}
-                        alt=""
-                        loading="lazy"
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                      />
-                    </span>
-                  ))}
+              {current && (
+                <div
+                  className="fx-float mt-5 relative overflow-hidden rounded-2xl"
+                  style={{
+                    aspectRatio: "3 / 2",
+                    border: `1.5px solid ${accent}55`,
+                    boxShadow: `0 16px 40px -14px ${accent}44, 0 10px 26px -10px rgba(0,0,0,.65)`,
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/landing/scenes/${current.id}.webp`}
+                    alt={current.title}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
                 </div>
               )}
 
