@@ -1,6 +1,6 @@
 # Identidade Visual FayAI — Guia Definitivo
 
-*Versão 1.0 — 13/07/2026. Fonte de verdade para todo design do fayai.com.br e materiais da marca.*
+*Versão 1.1 — 13/07/2026. Fonte de verdade para todo design do fayai.com.br e materiais da marca. (v1.1 adiciona §9 imagem contextual, §10 animação por camadas, §11 método de produção de páginas.)*
 
 ---
 
@@ -132,3 +132,50 @@ Micro-galerias que intercalam 2 fotos + 2 vetores do mesmo tema (minigame). Tile
 - Texto dentro de imagens geradas.
 - Ouro em elementos sem significado de recompensa/marca.
 - Animação segurando conteúdo (ver §5, regras de robustez).
+
+---
+
+## 9. Imagem contextual — a regra do espelho (v1.1)
+
+**Toda imagem deve MOSTRAR exatamente o que o texto ao lado diz.** Imagem genérica de categoria é proibida onde o conteúdo descreve uma ação concreta.
+
+> Exemplo canônico: se o texto fala "use o gravador do celular e a IA transcreve", a imagem é **um celular em primeiro plano com o app de gravador aberto na telinha**, ondas de áudio virando texto — não "uma pessoa com celular".
+
+### Receita de composição (ComfyUI)
+O prompt nomeia **(1) o objeto-palco, (2) o que aparece NELE, (3) o resultado da mágica**:
+```
+[objeto-palco: smartphone screen / laptop screen / caderno / geladeira...],
+showing [interface/conteúdo específico: voice recorder app with red record button
+and audio waveform], [resultado: waveform transforming into flowing text lines],
+[mundo: vetor mágico §4a OU foto cinematográfica §4b], [cor da categoria]
+```
+Padrões que funcionam:
+- **Telinha de dispositivo**: app desenhado DENTRO da tela do celular/laptop (o palco dá contexto instantâneo).
+- **Antes → depois no mesmo quadro**: metade esquerda o problema, metade direita a mágica (seta ou sparkles douradas no meio).
+- **Objeto cotidiano + resultado saindo dele**: panela soltando receita escrita, envelope soltando resposta pronta.
+- Elementos de UI dentro da imagem podem ser sugeridos com formas (barras, botões, bolhas) — **texto legível continua proibido** (§8); o texto real vai em HTML por cima ou ao lado.
+
+### Onde se aplica
+Minigames (cada exemplo = 1 cena espelho), trilha do portal (cada passo/módulo = 1 cena), cards de curso e ferramenta, notícias (og:image da fonte é a exceção documentada). Em TUDO: se o texto descreve uma ação, a arte encena essa ação.
+
+---
+
+## 10. Animação por camadas (v1.1)
+
+Meta: **cada minigame/momento-herói tem a sua animação**. Duas ligas, escolhidas pelo custo de banda (nunca repetir o trauma dos 78GB):
+
+- **Liga A — camadas + Framer Motion (padrão)**: gerar a cena em 2–4 camadas separadas no ComfyUI (fundo / objeto-palco / elemento mágico / sparkles, cada uma WebP ≤40KB com fundo transparente quando camada superior) e animar por código: parallax sutil, float 6–8s, pop-in do resultado, sweep de brilho. Peso ≈ 3 imagens; qualidade de motion design.
+- **Liga B — vídeo-loop real (só herói)**: I2V do pipeline comfy-fayai (LTX ping-pong, §comfy-fayai) exportado como WebM/MP4 mudo ≤400KB, `loop muted playsinline`, lazy, 1 por página no máximo. Usar quando a Liga A não conta a história (transformações complexas).
+
+Regras herdadas do §5: `prefers-reduced-motion` desliga tudo; conteúdo nunca depende da animação; autoplay só quando visível (IntersectionObserver).
+
+---
+
+## 11. Método de produção de páginas (v1.1 — destilado dos estudos 13/07)
+
+1. **Referência antes de código**: coletar 3+ referências visuais do estilo-alvo (godly.io, land-book, awwwards, mobbin, 21st.dev) e extrair um **blueprint** (tipografia, paleta, ritmo de espaçamento, regras de motion) — construir a partir do blueprint, nunca copiar.
+2. **Uma direção de arte por página de projeto**: cada projeto do ecossistema tem página com estilo FUNDAMENTALMENTE diferente (demonstra alcance do estúdio). O blueprint de cada uma fica documentado no topo do arquivo da página.
+3. **Assets contextuais programáticos**: imagens/vídeos gerados sob medida para o conteúdo (§9/§10), nunca placeholder.
+4. **3 passes de iteração obrigatórios**: após "pronto", revisar procurando (a) problemas de design, (b) oportunidades de sofisticar, (c) performance/robustez — com a página aberta no browser, não de memória.
+5. **Dados acima de gosto**: decisões de conversão (ordem de seções, CTA) seguem evidência dos concorrentes vencedores e das métricas próprias (PostHog), não intuição.
+6. **Experiência > scroll estático**: interatividade com propósito (o minigame é o exemplo-mestre) — mas performance e clareza vencem espetáculo.

@@ -396,15 +396,10 @@ export default function PortalPage() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .map((e: any) => e.courseSlug);
       setEnrolledSlugs(Array.from(new Set(activeEnrollmentSlugs)));
-    } else if (isDashboardLoading === false && !cachedDashboardData) {
-      // If loading is done but no data, likely unauthorized or error
-       const token = localStorage.getItem("fayai_token");
-       if (!token || dashboardError === "Unauthorized" || dashboardError === "No token") {
-          // Clear stale token
-          if (token) localStorage.removeItem("fayai_token");
-          // The render logic will show login UI
-       }
     }
+    // NOTE: token clearing removed (13/07/2026) — session teardown is owned
+    // exclusively by UserContext/useDashboard (after a confirmed refresh
+    // failure). The render logic below shows the login UI when needed.
   }, [cachedDashboardData, isDashboardLoading, dashboardError, setUser, router]);
 
   const handleGenerateImage = async () => {
@@ -461,16 +456,12 @@ export default function PortalPage() {
   }
 
   if (!user || !dashboardData) {
-    const token = typeof window !== "undefined" ? localStorage.getItem("fayai_token") : null;
     const isAuthError =
       dashboardError === "Unauthorized" ||
       dashboardError === "No token" ||
       dashboardError === "No session";
 
     if (isAuthError) {
-      if (token && isAuthError && typeof window !== "undefined") {
-        localStorage.removeItem("fayai_token");
-      }
       return (
         <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
           <div className="flex flex-col items-center gap-6 max-w-md text-center px-4">
@@ -498,7 +489,26 @@ export default function PortalPage() {
         </div>
       );
     }
-    // Has valid token but no data yet — show loading
+    // Transient trouble (e.g. refresh 5xx/network): session was kept — offer
+    // an honest retry instead of kicking the user to the login screen.
+    if (dashboardError) {
+      return (
+        <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4 max-w-md text-center px-4">
+            <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-muted-foreground">Instabilidade momentânea ao carregar seus dados.</p>
+            <Button
+              variant="outline"
+              onClick={() => window.location.reload()}
+              className="border-white/20 text-white hover:bg-secondary"
+            >
+              Tentar novamente
+            </Button>
+          </div>
+        </div>
+      );
+    }
+    // Has a valid session but no data yet — show loading
     return (
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">

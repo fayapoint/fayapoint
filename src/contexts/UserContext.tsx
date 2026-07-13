@@ -81,45 +81,86 @@ export function UserProvider({ children }: { children: ReactNode }) {
       // (via credentials: 'include') so the server sees the freshest session.
       // Google OAuth only sets cookies (not localStorage), so sending a stale
       // localStorage token would override the correct cookie-based session.
-      fetch('/api/user/profile', { credentials: 'include', cache: 'no-store' })
-        .then(res => {
-          if (res.ok) return res.json();
-          // If 401/404, user session is invalid — clear stale data
-          if (res.status === 401 || res.status === 404) {
-            setUserState(null);
-            localStorage.removeItem('fayai_user');
-            localStorage.removeItem('fayai_token');
-          }
-          return null;
-        })
-        .then(data => {
-          if (data?.user) {
-            // Check if the server returned a DIFFERENT user than localStorage.
-            // This happens after Google OAuth login when localStorage still has
-            // a token from a previous email/password session as another user.
-            const prevStored = localStorage.getItem('fayai_user');
-            let prevId: string | null = null;
-            try {
-              const prev = prevStored ? JSON.parse(prevStored) : null;
-              prevId = prev?._id || prev?.id || null;
-            } catch { /* ignore */ }
+      //
+      // RESILIENCE (13/07/2026): a missing/invalid cookie is NOT enough to log
+      // the user out. Before clearing anything we try POST /api/auth/refresh
+      // with the localStorage Bearer token — if it's still valid the server
+      // re-issues the cookies and the session heals itself. Only a confirmed
+      // rejection of BOTH credentials logs the user out.
+      const applyServerUser = (serverUser: User & { _id?: string; id?: string }) => {
+        const prevStored = localStorage.getItem('fayai_user');
+        let prevId: string | null = null;
+        try {
+          const prev = prevStored ? JSON.parse(prevStored) : null;
+          prevId = prev?._id || prev?.id || null;
+        } catch { /* ignore */ }
 
-            const serverId = data.user._id || data.user.id;
-            if (prevId && prevId !== serverId) {
-              // Session changed (e.g., Google OAuth replaced a stale session).
-              // Remove the old Bearer token so other API calls use cookies.
-              localStorage.removeItem('fayai_token');
+        const serverId = serverUser._id || serverUser.id;
+        if (prevId && serverId && prevId !== serverId) {
+          // Session changed (e.g., Google OAuth replaced a stale session).
+          // Remove the old Bearer token so other API calls use cookies.
+          localStorage.removeItem('fayai_token');
+        }
+
+        // Server is the source of truth — always update from it
+        setUserState(serverUser);
+        localStorage.setItem('fayai_user', JSON.stringify(serverUser));
+      };
+
+      const clearSession = () => {
+        setUserState(null);
+        localStorage.removeItem('fayai_user');
+        localStorage.removeItem('fayai_token');
+      };
+
+      const tryRefreshThenDecide = async () => {
+        const bearer = localStorage.getItem('fayai_token');
+        if (!bearer) {
+          clearSession();
+          return;
+        }
+        try {
+          const res = await fetch('/api/auth/refresh', {
+            method: 'POST',
+            credentials: 'include',
+            cache: 'no-store',
+            headers: { Authorization: `Bearer ${bearer}` },
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.user) {
+              if (data.token) localStorage.setItem('fayai_token', data.token);
+              applyServerUser(data.user);
+              return;
             }
-
-            // Server is the source of truth — always update from it
-            setUserState(data.user);
-            localStorage.setItem('fayai_user', JSON.stringify(data.user));
-          } else if (data && !data.user && !data.error) {
-            // Server returned 200 but no user — session is gone, clear stale data
-            setUserState(null);
-            localStorage.removeItem('fayai_user');
-            localStorage.removeItem('fayai_token');
           }
+          // Refresh rejected both credentials — the session is truly gone
+          if (res.status === 401) {
+            clearSession();
+          }
+          // 5xx / anything else: transient server trouble — keep local session
+        } catch {
+          // Network error — keep existing localStorage data as fallback
+        }
+      };
+
+      fetch('/api/user/profile', { credentials: 'include', cache: 'no-store' })
+        .then(async res => {
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.user) {
+              applyServerUser(data.user);
+            } else if (data && !data.user && !data.error) {
+              // 200 with no user — cookie missing/invalid. Try to heal before
+              // clearing (this was the "ghost logout" bug).
+              await tryRefreshThenDecide();
+            }
+            return;
+          }
+          if (res.status === 401 || res.status === 404) {
+            await tryRefreshThenDecide();
+          }
+          // Other statuses (429/5xx): transient — keep local session
         })
         .catch(() => {
           // Network error — keep existing localStorage data as fallback

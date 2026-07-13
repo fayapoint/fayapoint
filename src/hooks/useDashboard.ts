@@ -82,17 +82,78 @@ export function useDashboard(): UseDashboardReturn {
       });
 
       if (res.status === 401) {
-        // Session is invalid — clear stale local data to prevent ghost sessions
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('fayai_token');
-          localStorage.removeItem('fayai_user');
+        // Cookie missing/invalid. Before declaring the session dead, try to
+        // heal it: POST /api/auth/refresh with the localStorage Bearer token
+        // re-issues the httpOnly cookies when the token is still valid.
+        // (This was the "ghost logout": one transient 401 wiped the session.)
+        const bearer = typeof window !== 'undefined' ? localStorage.getItem('fayai_token') : null;
+        let healed = false;
+        // Only a confirmed rejection (401 from refresh, or no bearer at all)
+        // may clear the session. Transient failures (5xx, network) keep it.
+        let confirmedDead = !bearer;
+
+        if (bearer) {
+          try {
+            const refreshRes = await fetch('/api/auth/refresh', {
+              method: 'POST',
+              credentials: 'include',
+              cache: 'no-store',
+              headers: { Authorization: `Bearer ${bearer}` },
+            });
+            if (refreshRes.status === 401) {
+              confirmedDead = true;
+            }
+            if (refreshRes.ok) {
+              const refreshData = await refreshRes.json();
+              if (refreshData?.token && typeof window !== 'undefined') {
+                localStorage.setItem('fayai_token', refreshData.token);
+              }
+              const retry = await fetch('/api/user/dashboard', {
+                credentials: 'include',
+                cache: 'no-store',
+              });
+              if (retry.ok) {
+                const result = await retry.json();
+                dashboardCache.data = result;
+                dashboardCache.timestamp = now;
+                if (result?.user && typeof window !== 'undefined') {
+                  localStorage.setItem('fayai_user', JSON.stringify(result.user));
+                }
+                if (mountedRef.current) {
+                  setData(result);
+                  setError(null);
+                }
+                healed = true;
+                fetchingRef.current = false;
+                return result;
+              }
+            }
+          } catch { /* transient — fall through without clearing */ }
         }
-        if (mountedRef.current) {
-          setError('Unauthorized');
-          setIsLoading(false);
+
+        if (!healed) {
+          if (confirmedDead) {
+            // Session is truly gone — clear stale local data
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('fayai_token');
+              localStorage.removeItem('fayai_user');
+            }
+            if (mountedRef.current) {
+              setError('Unauthorized');
+              setIsLoading(false);
+            }
+          } else {
+            // Transient trouble (refresh 5xx / network / retry failed):
+            // keep the local session and surface a soft error instead of
+            // kicking the user to the login screen.
+            if (mountedRef.current) {
+              setError('Temporarily unavailable');
+              setIsLoading(false);
+            }
+          }
+          fetchingRef.current = false;
+          return null;
         }
-        fetchingRef.current = false;
-        return null;
       }
 
       if (!res.ok) {
