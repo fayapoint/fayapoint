@@ -34,6 +34,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { TrailMap } from "@/components/portal/TrailMap";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import { TIER_CONFIGS, SubscriptionPlan } from "@/lib/course-tiers";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
@@ -381,37 +382,20 @@ export function DashboardHome({
 
 
       {/* ═══════════════════════════════════════════════════ */}
-      {/*  TRILHA — o caminho para aprender IA               */}
+      {/*  TRILHA — mapa de jornada com progresso REAL (F3)   */}
       {/* ═══════════════════════════════════════════════════ */}
-      <div className="rounded-2xl border border-border bg-card p-4">
-        <div className="flex items-baseline justify-between mb-3">
-          <h3 className="text-base font-bold">Seu caminho para dominar IA</h3>
-          <span className="text-[11px] text-muted-foreground uppercase tracking-wider">passo a passo</span>
-        </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
-          {[
-            { n: 1, cor: "#38bdf8", titulo: "Sinta a mágica", desc: "Exemplos práticos na página inicial", href: "/" },
-            { n: 2, cor: "#a78bfa", titulo: "Aprenda fazendo", desc: "Continue seu curso em andamento", href: "/cursos" },
-            { n: 3, cor: "#f5c04e", titulo: "Prove que sabe", desc: "Quiz e certificado verificável", href: "/certificacoes" },
-            { n: 4, cor: "#f472b6", titulo: "Vá além", desc: "Explore os projetos do ecossistema", href: "/projetos" },
-          ].map((passo) => (
-            <Link
-              key={passo.n}
-              href={passo.href}
-              className="group rounded-xl border border-border bg-background/60 p-3 hover:border-[var(--primary)] transition-colors"
-            >
-              <span
-                className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-extrabold mb-1.5"
-                style={{ background: `${passo.cor}22`, color: passo.cor }}
-              >
-                {passo.n}
-              </span>
-              <span className="block text-sm font-bold leading-tight">{passo.titulo}</span>
-              <span className="block mt-0.5 text-[11px] text-muted-foreground leading-snug">{passo.desc}</span>
-            </Link>
-          ))}
-        </div>
-      </div>
+      <TrailMap
+        stats={{
+          xp: stats.xp,
+          imagesGenerated: stats.imagesGenerated,
+          aiChats: stats.aiChats,
+          streak: stats.streak,
+          longestStreak: stats.longestStreak,
+        }}
+        achievementsCount={gamification?.achievements?.length ?? 0}
+        userCourses={userCourses}
+        onTabChange={onTabChange}
+      />
 
       {/* ═══════════════════════════════════════════════════ */}
       {/*  ECOSSISTEMA — projetos FayAI                       */}
