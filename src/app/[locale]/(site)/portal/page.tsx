@@ -629,12 +629,6 @@ export default function PortalPage() {
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
-            <Link href={`/${locale}`} className="hidden sm:inline-flex">
-              <Button variant="outline" size="sm" className="gap-2 bg-secondary/60 border-border">
-                <Box size={15} />
-                Cubo
-              </Button>
-            </Link>
             {/* Quick Stats */}
             <div className="hidden md:flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm">
