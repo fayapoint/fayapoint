@@ -24,6 +24,10 @@ export function BackToCube() {
     }, 460);
   }, [router, cubeHref]);
 
+  // Dentro do shell do portal a navegação é da sidebar/bottom-nav — um botão
+  // flutuante "sair para a home" quebra o senso de pertencimento (13/07/2026).
+  if (isPortal) return null;
+
   return (
     <>
       <div className={`${styles.exitOverlay} ${exiting ? styles.exitOverlayActive : ""}`} />

@@ -23,7 +23,7 @@ import {
   ShoppingBag,
   Home,
   UserCog,
-  Sparkles,
+
 } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -68,7 +68,6 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
   const pathname = usePathname();
   const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en");
   const cubeHref = locale ? `/${locale}` : "/";
-  const discoverHref = locale ? `/${locale}/descobrir` : "/descobrir";
   const accountHref = locale ? `/${locale}/portal/conta` : "/portal/conta";
   const settingsHref = locale ? `/${locale}/configuracoes` : "/configuracoes";
   const isPro = ["pro", "business", "starter", "explorador", "profissional", "expert"].includes(plan);
@@ -195,13 +194,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
             <Link href={cubeHref} className="min-w-0">
               <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-secondary rounded-xl text-muted-foreground hover:bg-white/10 transition">
                 <Home size={18} />
-                <span className="text-sm truncate">Cubo</span>
-              </button>
-            </Link>
-            <Link href={discoverHref} className="min-w-0">
-              <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-secondary rounded-xl text-muted-foreground hover:bg-white/10 transition">
-                <Sparkles size={18} />
-                <span className="text-sm truncate">Descobrir</span>
+                <span className="text-sm truncate">Ver o site</span>
               </button>
             </Link>
             <Link href={accountHref} className="min-w-0">

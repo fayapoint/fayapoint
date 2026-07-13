@@ -15,6 +15,7 @@ import {
   type MagicExample,
 } from "@/data/landing/examples";
 import type { AiNewsItem } from "@/data/landing/seed-news";
+import { useUser } from "@/contexts/UserContext";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 
@@ -34,6 +35,7 @@ const catArt = (id: ExampleCategory, v: number) => `/landing/cats/${id}-v${v}.we
 type Stage = "pick" | "reveal";
 
 export function NovaLanding({ news }: { news: AiNewsItem[] }) {
+  const { user, isLoggedIn, mounted } = useUser();
   const [stage, setStage] = useState<Stage>("pick");
   const [category, setCategory] = useState<ExampleCategory | null>(null);
   const [seenIds, setSeenIds] = useState<string[]>([]);
@@ -266,9 +268,21 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
               )}
             </AnimatePresence>
           </div>
-          <Link href="/login" className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
-            Entrar
-          </Link>
+          {mounted && isLoggedIn && user ? (
+            <Link
+              href="/portal"
+              className="fx-shine flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
+              style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
+            >
+              <span className="hidden sm:inline">Oi, {(user.name || "aluno").split(" ")[0]}!</span>
+              <span>Meu Portal</span>
+              <ArrowRight size={15} />
+            </Link>
+          ) : (
+            <Link href="/login" className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
+              Entrar
+            </Link>
+          )}
         </div>
       </header>
 
