@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { CheckCircle, Gift, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 
 export default function WaitingListPage() {
   const router = useRouter();
@@ -31,7 +29,6 @@ export default function WaitingListPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <Header />
       <main className="flex-grow flex items-center justify-center text-center px-4 pt-28 pb-16">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -54,7 +51,6 @@ export default function WaitingListPage() {
           </div>
         </motion.div>
       </main>
-      <Footer />
     </div>
   );
 }

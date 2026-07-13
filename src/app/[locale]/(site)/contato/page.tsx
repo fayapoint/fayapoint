@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Mail, Phone, MapPin, CalendarDays } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ScheduleMeetingForm } from "@/components/consultation/ScheduleMeetingForm";
@@ -56,7 +54,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-16">
         {/* Hero */}
         <section className="relative py-20 overflow-hidden">
@@ -155,7 +152,6 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

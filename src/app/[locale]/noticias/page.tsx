@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllNews } from "@/lib/ai-news";
 import { SEED_NEWS } from "@/data/landing/seed-news";
+import { ExperienceNav } from "@/components/layout/ExperienceNav";
 
 export const metadata: Metadata = {
   title: "IA Hoje — notícias de inteligência artificial | FayAI",
@@ -53,14 +54,7 @@ export default async function NoticiasPage({ searchParams }: Props) {
         .fimg { position: relative; overflow: hidden; aspect-ratio: 16 / 9; }
       ` }} />
 
-      <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 max-w-6xl mx-auto">
-        <Link href="/" className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
-          FAY<span style={{ color: GOLD }}>AI</span>
-        </Link>
-        <Link href="/login" className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
-          Entrar
-        </Link>
-      </header>
+      <ExperienceNav />
 
       <section className="px-4 sm:px-8 pt-6 pb-4 max-w-6xl mx-auto">
         <h1 className="text-5xl sm:text-7xl tracking-wide leading-[0.95]" style={bebas}>

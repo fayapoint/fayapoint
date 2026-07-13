@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
@@ -16,7 +14,6 @@ export default function ROICalculatorPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-2xl">
           <h1 className="text-4xl font-bold mb-6">Calculadora de ROI de IA</h1>
@@ -40,7 +37,6 @@ export default function ROICalculatorPage() {
           </Card>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

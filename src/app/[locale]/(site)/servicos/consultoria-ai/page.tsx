@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -100,7 +98,6 @@ export default async function AIConsultingPage({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <Script id="ld-ai-consulting-service" type="application/ld+json">
         {JSON.stringify(serviceLd)}
       </Script>
@@ -439,7 +436,6 @@ export default async function AIConsultingPage({
           </ScheduleConsultationButton>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

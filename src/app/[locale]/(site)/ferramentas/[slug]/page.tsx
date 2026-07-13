@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -197,7 +195,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           {!tool ? (
@@ -494,7 +491,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           )}
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

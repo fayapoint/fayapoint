@@ -18,8 +18,6 @@ import {
   Clock,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -169,7 +167,6 @@ export default function CoursesPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-b from-amber-900/30 to-black">
@@ -618,7 +615,6 @@ export default function CoursesPage() {
         </div>
       </section>
       
-      <Footer />
     </div>
   );
 }

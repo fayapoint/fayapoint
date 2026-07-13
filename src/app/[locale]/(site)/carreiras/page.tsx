@@ -1,7 +1,5 @@
 "use client";
 
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Briefcase, MapPin, Clock, Heart, Zap, Users, Coffee, Laptop } from "lucide-react";
@@ -36,7 +34,6 @@ export default function CareersPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       <main className="pt-32 pb-20">
         {/* Hero */}
@@ -140,7 +137,6 @@ export default function CareersPage() {
         </section>
       </main>
       
-      <Footer />
     </div>
   );
 }

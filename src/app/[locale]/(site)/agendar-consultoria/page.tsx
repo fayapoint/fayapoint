@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScheduleMeetingForm } from "@/components/consultation/ScheduleMeetingForm";
@@ -11,7 +9,6 @@ export default function ConsultPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main>
         <section className="relative pt-32 pb-20 overflow-hidden">
           <Image
@@ -82,7 +79,6 @@ export default function ConsultPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

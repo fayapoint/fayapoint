@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Sparkles, Wrench } from "lucide-react";
 import { FAY_PROJECTS, SERVICES, STATUS_LABEL, type ProjectStatus } from "@/data/landing/projects";
+import { ExperienceNav } from "@/components/layout/ExperienceNav";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 const GOLD = "#f5c04e";
@@ -85,14 +86,7 @@ export function ProjetosPage() {
       ` }} />
 
       {/* ============================== HEADER ============================== */}
-      <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2">
-        <Link href="/" className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
-          FAY<span style={{ color: GOLD }}>AI</span>
-        </Link>
-        <Link href="/login" className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
-          Entrar
-        </Link>
-      </header>
+      <ExperienceNav />
 
       {/* ============================== HERO ============================== */}
       <section className="px-4 sm:px-8 pt-6 pb-10 text-center">

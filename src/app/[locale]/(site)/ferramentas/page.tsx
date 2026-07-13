@@ -4,8 +4,6 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, Star, Tag, Layers, ArrowRight } from "lucide-react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -67,7 +65,6 @@ export default function ToolsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
@@ -167,7 +164,6 @@ export default function ToolsPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

@@ -2,8 +2,6 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -90,7 +88,6 @@ function CheckoutSuccessContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-2xl">
           {/* Success Icon */}
@@ -242,7 +239,6 @@ function CheckoutSuccessContent() {
           </p>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
@@ -251,7 +247,6 @@ function CheckoutSuccessContent() {
 function LoadingFallback() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-2xl flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
@@ -260,7 +255,6 @@ function LoadingFallback() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

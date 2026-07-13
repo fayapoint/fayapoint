@@ -37,8 +37,6 @@ import {
   Brain,
   DollarSign
 } from "lucide-react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -246,7 +244,6 @@ const handleEnroll = () => {
 
 return (
   <div className="min-h-screen bg-background text-foreground">
-    <Header />
     
     <main className="pt-24">
       {/* Hero Section */}
@@ -605,7 +602,6 @@ return (
       </section>
     </main>
 
-    <Footer />
   </div>
 );
 }

@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Card } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
 
@@ -13,7 +11,6 @@ export default function CoursesByToolPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold mb-6">{t("title")}</h1>
@@ -29,7 +26,6 @@ export default function CoursesByToolPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

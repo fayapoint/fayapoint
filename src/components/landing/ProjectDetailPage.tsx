@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { STATUS_LABEL, type FayProject } from "@/data/landing/projects";
+import { ExperienceNav } from "@/components/layout/ExperienceNav";
 import type { ProjectDetail } from "@/data/landing/project-details";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
@@ -66,18 +67,10 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
             }}
           />
         </div>
+        <div className="absolute top-0 left-0 right-0 z-20">
+          <ExperienceNav crumb={{ href: "/projetos", label: "Projetos", current: project.name }} />
+        </div>
         <div className="relative z-10 h-full max-w-5xl mx-auto px-4 sm:px-8 flex flex-col">
-          <header className="flex items-center justify-between pt-4">
-            <Link href="/" className="text-3xl tracking-wide select-none" style={bebas}>
-              FAY<span style={{ color: GOLD }}>AI</span>
-            </Link>
-            <Link
-              href="/projetos"
-              className="flex items-center gap-1.5 text-sm font-semibold text-white/70 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={15} /> Projetos
-            </Link>
-          </header>
           <div className="mt-auto pb-10">
             <span
               className="inline-block text-[10px] font-extrabold tracking-widest rounded-full px-3 py-1"

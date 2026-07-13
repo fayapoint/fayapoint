@@ -1,5 +1,3 @@
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -9,7 +7,6 @@ export default function ResourcesIndexPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
@@ -24,7 +21,6 @@ export default function ResourcesIndexPage() {
           </ul>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

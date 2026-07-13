@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -183,7 +181,6 @@ export default async function AutomationIntegrationPage({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <Script id="ld-automation-service" type="application/ld+json">
         {JSON.stringify(serviceLd)}
       </Script>
@@ -405,7 +402,6 @@ export default async function AutomationIntegrationPage({
           </ScheduleConsultationButton>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

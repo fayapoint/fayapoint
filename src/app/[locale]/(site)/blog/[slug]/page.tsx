@@ -5,8 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Clock, User, Eye, Tag, Share2, BookOpen } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getBlogPostContent } from "@/data/blog-posts";
@@ -98,7 +96,6 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <div className="min-h-screen bg-background text-foreground">
-        <Header />
         <main className="pt-24 pb-12">
           <div className="container mx-auto px-4 max-w-3xl text-center">
             <h1 className="text-4xl font-bold mb-6">Artigo não encontrado</h1>
@@ -108,7 +105,6 @@ export default function BlogPostPage() {
             </Link>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -117,7 +113,6 @@ export default function BlogPostPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-16 md:pt-20 pb-16">
         {/* Hero */}
         <div className="relative w-full h-[40vh] md:h-[50vh] overflow-hidden">
@@ -229,7 +224,6 @@ export default function BlogPostPage() {
           </section>
         )}
       </main>
-      <Footer />
     </div>
   );
 }

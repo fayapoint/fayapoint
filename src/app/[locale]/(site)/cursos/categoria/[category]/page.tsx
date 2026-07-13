@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, Clock, Users, Star, ChevronRight, Grid, List, Filter } from "lucide-react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +54,6 @@ export default function CoursesByCategoryPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           <div className="mb-8 text-center">
@@ -137,7 +134,6 @@ export default function CoursesByCategoryPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

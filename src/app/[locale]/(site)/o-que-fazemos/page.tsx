@@ -31,8 +31,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { useTranslations } from "next-intl";
 
 // Hero section with parallax
@@ -721,7 +719,6 @@ export default function WhatWeDoPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main>
         <HeroSection />
         <MissionSection />
@@ -734,7 +731,6 @@ export default function WhatWeDoPage() {
         <StacksSection />
         <CTASection />
       </main>
-      <Footer />
     </div>
   );
 }

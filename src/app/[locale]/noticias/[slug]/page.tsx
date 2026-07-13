@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getNewsBySlug, getAllNews, extraArtsFor } from "@/lib/ai-news";
+import { ExperienceNav } from "@/components/layout/ExperienceNav";
 
 export const revalidate = 900;
 
@@ -51,14 +52,7 @@ export default async function NoticiaPage({ params }: Props) {
         .glass-hover:hover { border-color: rgba(255,255,255,.32); transform: translateY(-3px); }
       ` }} />
 
-      <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 max-w-3xl mx-auto">
-        <Link href="/" className="text-3xl tracking-wide select-none" style={bebas}>
-          FAY<span style={{ color: GOLD }}>AI</span>
-        </Link>
-        <Link href="/noticias" className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
-          ← IA Hoje
-        </Link>
-      </header>
+      <ExperienceNav crumb={{ href: "/noticias", label: "IA Hoje", current: item.title }} />
 
       <article className="px-4 sm:px-8 pt-6 pb-10 max-w-3xl mx-auto">
         <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>

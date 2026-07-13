@@ -10,8 +10,6 @@ import {
   Share2, Heart, ShoppingCart, TrendingUp, Zap, Building2, User, Sparkles,
   Trophy, Gift, Shield, HelpCircle, ArrowRight, Rocket, Brain, DollarSign
 } from "lucide-react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +27,6 @@ export default function EnhancedCoursePage() {
   if (!course) {
     return (
       <div className="min-h-screen bg-background text-foreground">
-        <Header />
         <main className="pt-24 pb-12">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl font-bold mb-4">Curso não encontrado</h1>
@@ -40,7 +37,6 @@ export default function EnhancedCoursePage() {
             </Link>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -54,7 +50,6 @@ export default function EnhancedCoursePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 bg-gradient-to-b from-amber-900/30 to-black">
@@ -492,7 +487,6 @@ export default function EnhancedCoursePage() {
         </div>
       </section>
       
-      <Footer />
     </div>
   );
 }

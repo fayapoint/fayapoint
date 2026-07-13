@@ -2,8 +2,6 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
@@ -548,7 +546,6 @@ export default function CheckoutPage() {
   if (paymentResult && !paymentResult.isPaid) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
-        <Header />
         <main className="pt-24 pb-12">
           <div className="container mx-auto px-4 max-w-2xl">
             {/* Status Header */}
@@ -635,7 +632,6 @@ export default function CheckoutPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -644,7 +640,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
-      <Header />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-5xl">
 
@@ -1053,7 +1048,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

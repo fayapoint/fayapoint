@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { useUser } from "@/contexts/UserContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -219,7 +217,6 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground min-w-0 overflow-hidden">
-      <Header />
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-3 md:px-4 max-w-4xl min-w-0">
           {/* Back to Portal */}
@@ -518,7 +515,6 @@ export default function SettingsPage() {
           </Tabs>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

@@ -12,8 +12,6 @@ import {
   Brain, Target, DollarSign, Eye, EyeOff,
   Quote, BarChart3, Lightbulb, Rocket
 } from "lucide-react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -99,7 +97,6 @@ export default function ChatGPTAllowlistingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
-      <Header />
       
       <main className="pt-20">
         {/* HERO SECTION - Immersive Opening */}
@@ -727,7 +724,6 @@ export default function ChatGPTAllowlistingPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

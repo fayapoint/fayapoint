@@ -12,8 +12,6 @@ import {
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { Progress } from '@/components/ui/progress';
 import { useUser } from '@/contexts/UserContext';
 import { HoneypotField } from '@/components/security/HoneypotField';
@@ -195,7 +193,6 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <Header />
       <main className="flex-grow flex items-center justify-center p-4 pt-28 pb-16">
         <div className="w-full max-w-2xl">
           <div className="mb-8">
@@ -229,7 +226,6 @@ export default function OnboardingPage() {
           </AnimatePresence>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

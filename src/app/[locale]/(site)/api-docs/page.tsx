@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
@@ -438,7 +436,6 @@ function CategorySection({ category }: { category: APICategory }) {
 export default function APIDocsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       <main className="pt-24 pb-20">
         {/* Hero */}
@@ -586,7 +583,6 @@ const dashboard = await fetch('https://fayai.com.br/api/user/dashboard', {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

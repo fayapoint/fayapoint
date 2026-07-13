@@ -18,8 +18,6 @@ import {
   Twitter,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -62,7 +60,6 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       <main className="pt-24">
         {/* Hero Section */}
@@ -372,7 +369,6 @@ export default function AboutPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

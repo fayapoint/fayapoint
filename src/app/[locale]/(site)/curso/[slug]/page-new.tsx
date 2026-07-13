@@ -13,8 +13,6 @@ import {
   DollarSign, Timer, AlertCircle, Check, X, Play, ChevronRight,
   Quote, BadgeCheck, Flame, Crown, PhoneCall
 } from "lucide-react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -92,7 +90,6 @@ export default function CourseSalesPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       <main className="pt-20">
         {/* HERO SECTION - Above the Fold */}
@@ -506,7 +503,6 @@ export default function CourseSalesPage() {
 
       </main>
 
-      <Footer />
     </div>
   );
 }

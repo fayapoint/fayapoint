@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { 
@@ -110,7 +108,6 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       {/* Hero Section */}
       <section className="pt-32 pb-16 relative overflow-hidden">
@@ -402,7 +399,6 @@ export default function CommunityPage() {
         </div>
       )}
 
-      <Footer />
     </div>
   );
 }

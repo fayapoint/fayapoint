@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -74,7 +72,6 @@ export default function CasesPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main className="pt-24">
         {/* Hero Section */}
         <section className="relative py-20 px-4 overflow-hidden border-b border-border/40">
@@ -321,7 +318,6 @@ export default function CasesPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

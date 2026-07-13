@@ -1,7 +1,5 @@
 "use client";
 
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { HelpCircle, Search, MessageCircle } from "lucide-react";
@@ -29,7 +27,6 @@ export default function FAQPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       
       <main className="pt-32 pb-20">
         {/* Hero */}
@@ -101,7 +98,6 @@ export default function FAQPage() {
         </section>
       </main>
       
-      <Footer />
     </div>
   );
 }

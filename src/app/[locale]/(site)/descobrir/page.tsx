@@ -1,6 +1,4 @@
 import { cookies } from "next/headers";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/home/HeroSection";
 import { WhatWeDoSection } from "@/components/home/WhatWeDoSection";
 import { ServicesCarousel } from "@/components/home/ServicesCarousel";
@@ -19,7 +17,6 @@ import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 export default async function DescobrirPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
       <main>
         <div id="hero"><HeroSection /></div>
         <div id="curso-gratis"><FreeOfferBanner /></div>
@@ -33,7 +30,6 @@ export default async function DescobrirPage() {
         <div id="depoimentos"><TestimonialsSection /></div>
         <div id="comece-agora"><CTASection /></div>
       </main>
-      <Footer />
 
       {/* Conversion optimization */}
       <StickyCTA />
