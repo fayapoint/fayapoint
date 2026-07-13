@@ -53,8 +53,8 @@ export async function POST(request: Request) {
       const filter = item.url ? { $or: [{ slug: item.slug }, { url: item.url }] } : { slug: item.slug };
       await col.updateOne(filter, { $set: item }, { upsert: true });
     }
-    // Higiene: o hub /noticias mostra 30 dias
-    await col.deleteMany({ publishedAt: { $lt: new Date(Date.now() - 30 * 24 * 3600 * 1000) } });
+    // Higiene: o hub guarda um trimestre de histórico
+    await col.deleteMany({ publishedAt: { $lt: new Date(Date.now() - 90 * 24 * 3600 * 1000) } });
 
     return NextResponse.json({ published: clean.length, slugs: clean.map((i: { slug: string }) => i.slug) });
   } catch (error) {

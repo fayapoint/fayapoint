@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getNewsBySlug, getAllNews } from "@/lib/ai-news";
+import { getNewsBySlug, getAllNews, extraArtsFor } from "@/lib/ai-news";
 
 export const revalidate = 900;
 
@@ -26,6 +26,7 @@ export default async function NoticiaPage({ params }: Props) {
 
   const others = (await getAllNews(7)).filter((n) => n.slug !== slug).slice(0, 3);
   const paragraphs = item.body && item.body.length > 0 ? item.body : [item.summary];
+  const [artA, artB] = extraArtsFor(slug);
 
   return (
     <div
@@ -84,13 +85,36 @@ export default async function NoticiaPage({ params }: Props) {
           </p>
         </div>
 
-        {/* Análise FayAI */}
-        <div className="mt-7 space-y-4">
+        {/* Análise FayAI — com ilustrações intercaladas */}
+        <div className="mt-7 space-y-5">
           {paragraphs.map((p, i) => (
-            <p key={i} className={`leading-relaxed ${i === 0 ? "text-base sm:text-lg text-white/85" : "text-base text-white/70"}`}>
-              {p}
-            </p>
+            <div key={i} className="space-y-5">
+              <p className={`leading-relaxed ${i === 0 ? "text-base sm:text-lg text-white/85" : "text-base text-white/70"}`}>
+                {p}
+              </p>
+              {i === 0 && paragraphs.length > 1 && (
+                <figure className="glass rounded-2xl overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={artA} alt="" loading="lazy" className="w-full object-cover" style={{ aspectRatio: "16 / 8" }} />
+                  <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">Ilustração: FayAI Studio</figcaption>
+                </figure>
+              )}
+              {i === 2 && paragraphs.length > 3 && (
+                <figure className="glass rounded-2xl overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={artB} alt="" loading="lazy" className="w-full object-cover" style={{ aspectRatio: "16 / 8" }} />
+                  <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">Ilustração: FayAI Studio</figcaption>
+                </figure>
+              )}
+            </div>
           ))}
+          {paragraphs.length > 1 && paragraphs.length <= 3 && (
+            <figure className="glass rounded-2xl overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={artB} alt="" loading="lazy" className="w-full object-cover" style={{ aspectRatio: "16 / 8" }} />
+              <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">Ilustração: FayAI Studio</figcaption>
+            </figure>
+          )}
         </div>
 
         {/* Fonte original */}

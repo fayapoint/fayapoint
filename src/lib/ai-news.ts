@@ -21,6 +21,21 @@ const TAG_ART: Record<string, string> = {
 };
 const TAG_ART_POOL = Object.values(TAG_ART);
 
+// Pool de artes temáticas para rechear as matérias (2 por artigo, por hash do slug)
+const ARTICLE_POOL = [
+  "robo-dev", "chip", "foguete", "cerebro", "laptop-magico", "economia", "video", "musica",
+  "seguranca", "oculos", "conversa", "apps", "dados", "velocidade", "parceria", "mundo",
+].map((s) => `/landing/tags/pool-${s}.webp`);
+
+/** 2 artes extras determinísticas por artigo (não repetem a arte da tag). */
+export function extraArtsFor(slug: string): string[] {
+  let h = 7;
+  for (const c of slug) h = (h * 33 + c.charCodeAt(0)) >>> 0;
+  const a = h % ARTICLE_POOL.length;
+  const b = (a + 5 + (h >> 8) % 7) % ARTICLE_POOL.length;
+  return [ARTICLE_POOL[a], ARTICLE_POOL[b === a ? (a + 1) % ARTICLE_POOL.length : b]];
+}
+
 export function artForTag(tag: string, seedIndex = 0): string {
   const key = tag
     .toLowerCase()
@@ -75,8 +90,8 @@ export async function getAiNews(limit = 3): Promise<{ items: AiNewsArticle[]; li
   }
 }
 
-/** Hub /noticias — últimos 30 dias. */
-export async function getAllNews(limit = 30): Promise<AiNewsArticle[]> {
+/** Hub /noticias — histórico (até um trimestre). */
+export async function getAllNews(limit = 60): Promise<AiNewsArticle[]> {
   try {
     await dbConnect();
     const db = mongoose.connection.db;
