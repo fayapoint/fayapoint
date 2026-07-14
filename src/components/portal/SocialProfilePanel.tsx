@@ -31,89 +31,90 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
+import SocialComposer from "@/components/portal/SocialComposer";
 
 // ── Data ──────────────────────────────────────────────────────────
 
 const INDUSTRIES = [
-  { id: "tech", emoji: "\ud83d\udcbb", label: "Tecnologia" },
-  { id: "health", emoji: "\ud83c\udfe5", label: "Sa\u00fade" },
-  { id: "education", emoji: "\ud83d\udcda", label: "Educa\u00e7\u00e3o" },
-  { id: "ecommerce", emoji: "\ud83d\udecd\ufe0f", label: "E-commerce" },
-  { id: "finance", emoji: "\ud83d\udcb0", label: "Finan\u00e7as" },
-  { id: "marketing", emoji: "\ud83d\udcca", label: "Marketing" },
-  { id: "food", emoji: "\ud83c\udf55", label: "Alimenta\u00e7\u00e3o" },
-  { id: "fitness", emoji: "\ud83d\udcaa", label: "Fitness" },
-  { id: "beauty", emoji: "\ud83d\udc84", label: "Beleza" },
-  { id: "travel", emoji: "\u2708\ufe0f", label: "Viagens" },
-  { id: "real-estate", emoji: "\ud83c\udfe0", label: "Imobili\u00e1rio" },
-  { id: "law", emoji: "\u2696\ufe0f", label: "Direito" },
-  { id: "art", emoji: "\ud83c\udfa8", label: "Arte & Design" },
-  { id: "entertainment", emoji: "\ud83c\udfac", label: "Entretenimento" },
-  { id: "sustainability", emoji: "\ud83c\udf31", label: "Sustentabilidade" },
-  { id: "consulting", emoji: "\ud83d\udca1", label: "Consultoria" },
-  { id: "retail", emoji: "\ud83c\udfea", label: "Varejo" },
-  { id: "other", emoji: "\ud83d\udd2e", label: "Outro" },
+  { id: "tech", emoji: "💻", label: "Tecnologia" },
+  { id: "health", emoji: "🏥", label: "Saúde" },
+  { id: "education", emoji: "📚", label: "Educação" },
+  { id: "ecommerce", emoji: "🛍️", label: "E-commerce" },
+  { id: "finance", emoji: "💰", label: "Finanças" },
+  { id: "marketing", emoji: "📊", label: "Marketing" },
+  { id: "food", emoji: "🍕", label: "Alimentação" },
+  { id: "fitness", emoji: "💪", label: "Fitness" },
+  { id: "beauty", emoji: "💄", label: "Beleza" },
+  { id: "travel", emoji: "✈️", label: "Viagens" },
+  { id: "real-estate", emoji: "🏠", label: "Imobiliário" },
+  { id: "law", emoji: "⚖️", label: "Direito" },
+  { id: "art", emoji: "🎨", label: "Arte & Design" },
+  { id: "entertainment", emoji: "🎬", label: "Entretenimento" },
+  { id: "sustainability", emoji: "🌱", label: "Sustentabilidade" },
+  { id: "consulting", emoji: "💡", label: "Consultoria" },
+  { id: "retail", emoji: "🏪", label: "Varejo" },
+  { id: "other", emoji: "🔮", label: "Outro" },
 ];
 
 const TONES = [
-  { id: "formal", emoji: "\ud83c\udfaf", label: "Formal" },
-  { id: "casual", emoji: "\ud83d\ude0a", label: "Casual" },
-  { id: "fun", emoji: "\ud83d\ude04", label: "Divertido" },
-  { id: "inspirational", emoji: "\u2728", label: "Inspiracional" },
-  { id: "academic", emoji: "\ud83c\udf93", label: "Acad\u00eamico" },
-  { id: "energetic", emoji: "\ud83d\udd25", label: "Energ\u00e9tico" },
-  { id: "emotional", emoji: "\ud83d\udc9d", label: "Emocional" },
-  { id: "analytical", emoji: "\ud83d\udd2c", label: "Anal\u00edtico" },
-  { id: "controversial", emoji: "\u26a1", label: "Controverso" },
-  { id: "mysterious", emoji: "\ud83c\udf19", label: "Misterioso" },
-  { id: "dramatic", emoji: "\ud83c\udfad", label: "Dram\u00e1tico" },
-  { id: "neutral", emoji: "\u26aa", label: "Neutro" },
-  { id: "visionary", emoji: "\ud83d\ude80", label: "Vision\u00e1rio" },
-  { id: "romantic", emoji: "\ud83c\udf39", label: "Rom\u00e2ntico" },
+  { id: "formal", emoji: "🎯", label: "Formal" },
+  { id: "casual", emoji: "😊", label: "Casual" },
+  { id: "fun", emoji: "😄", label: "Divertido" },
+  { id: "inspirational", emoji: "✨", label: "Inspiracional" },
+  { id: "academic", emoji: "🎓", label: "Acadêmico" },
+  { id: "energetic", emoji: "🔥", label: "Energético" },
+  { id: "emotional", emoji: "💝", label: "Emocional" },
+  { id: "analytical", emoji: "🔬", label: "Analítico" },
+  { id: "controversial", emoji: "⚡", label: "Controverso" },
+  { id: "mysterious", emoji: "🌙", label: "Misterioso" },
+  { id: "dramatic", emoji: "🎭", label: "Dramático" },
+  { id: "neutral", emoji: "⚪", label: "Neutro" },
+  { id: "visionary", emoji: "🚀", label: "Visionário" },
+  { id: "romantic", emoji: "🌹", label: "Romântico" },
 ];
 
 const GOALS = [
-  { id: "engagement", emoji: "\ud83d\udcc8", label: "Aumentar engajamento" },
-  { id: "leads", emoji: "\ud83c\udfaf", label: "Gerar leads" },
-  { id: "authority", emoji: "\ud83d\udc51", label: "Construir autoridade" },
-  { id: "sales", emoji: "\ud83d\udcb0", label: "Aumentar vendas" },
-  { id: "awareness", emoji: "\ud83d\udce2", label: "Visibilidade da marca" },
-  { id: "community", emoji: "\ud83e\udd1d", label: "Criar comunidade" },
-  { id: "education", emoji: "\ud83d\udcd6", label: "Educar audi\u00eancia" },
-  { id: "traffic", emoji: "\ud83d\udd17", label: "Gerar tr\u00e1fego" },
-  { id: "retention", emoji: "\ud83d\udc8e", label: "Fidelizar clientes" },
-  { id: "networking", emoji: "\ud83c\udf10", label: "Networking" },
-  { id: "personal-brand", emoji: "\u2b50", label: "Marca pessoal" },
-  { id: "conversion", emoji: "\ud83c\udfaa", label: "Converter seguidores" },
-  { id: "content-scale", emoji: "\ud83c\udfed", label: "Escalar conte\u00fado" },
-  { id: "automate", emoji: "\ud83e\udd16", label: "Automatizar processos" },
+  { id: "engagement", emoji: "📈", label: "Aumentar engajamento" },
+  { id: "leads", emoji: "🎯", label: "Gerar leads" },
+  { id: "authority", emoji: "👑", label: "Construir autoridade" },
+  { id: "sales", emoji: "💰", label: "Aumentar vendas" },
+  { id: "awareness", emoji: "📢", label: "Visibilidade da marca" },
+  { id: "community", emoji: "🤝", label: "Criar comunidade" },
+  { id: "education", emoji: "📖", label: "Educar audiência" },
+  { id: "traffic", emoji: "🔗", label: "Gerar tráfego" },
+  { id: "retention", emoji: "💎", label: "Fidelizar clientes" },
+  { id: "networking", emoji: "🌐", label: "Networking" },
+  { id: "personal-brand", emoji: "⭐", label: "Marca pessoal" },
+  { id: "conversion", emoji: "🎪", label: "Converter seguidores" },
+  { id: "content-scale", emoji: "🏭", label: "Escalar conteúdo" },
+  { id: "automate", emoji: "🤖", label: "Automatizar processos" },
 ];
 
 const CONTENT_TYPES = [
-  { id: "photos", emoji: "\ud83d\udcf8", label: "Fotos" },
-  { id: "videos", emoji: "\ud83c\udfac", label: "V\u00eddeos" },
-  { id: "stories", emoji: "\ud83d\udcf1", label: "Stories" },
-  { id: "reels", emoji: "\ud83c\udf9e\ufe0f", label: "Reels" },
-  { id: "carousels", emoji: "\ud83d\udcca", label: "Carross\u00e9is" },
-  { id: "text", emoji: "\u270d\ufe0f", label: "Texto" },
-  { id: "lives", emoji: "\ud83d\udd34", label: "Lives" },
-  { id: "podcasts", emoji: "\ud83c\udf99\ufe0f", label: "Podcasts" },
-  { id: "infographics", emoji: "\ud83d\udcc9", label: "Infogr\u00e1ficos" },
-  { id: "memes", emoji: "\ud83d\ude02", label: "Memes" },
-  { id: "guides", emoji: "\ud83d\udccb", label: "Guias" },
-  { id: "tutorials", emoji: "\ud83c\udf93", label: "Tutoriais" },
-  { id: "reviews", emoji: "\u2b50", label: "Reviews" },
-  { id: "behind-scenes", emoji: "\ud83c\udfaa", label: "Bastidores" },
-  { id: "testimonials", emoji: "\ud83d\udcac", label: "Depoimentos" },
-  { id: "newsletters", emoji: "\ud83d\udce7", label: "Newsletters" },
-  { id: "threads", emoji: "\ud83e\uddf5", label: "Threads" },
-  { id: "shorts", emoji: "\u26a1", label: "Shorts" },
+  { id: "photos", emoji: "📸", label: "Fotos" },
+  { id: "videos", emoji: "🎬", label: "Vídeos" },
+  { id: "stories", emoji: "📱", label: "Stories" },
+  { id: "reels", emoji: "🎞️", label: "Reels" },
+  { id: "carousels", emoji: "📊", label: "Carrosséis" },
+  { id: "text", emoji: "✍️", label: "Texto" },
+  { id: "lives", emoji: "🔴", label: "Lives" },
+  { id: "podcasts", emoji: "🎙️", label: "Podcasts" },
+  { id: "infographics", emoji: "📉", label: "Infográficos" },
+  { id: "memes", emoji: "😂", label: "Memes" },
+  { id: "guides", emoji: "📋", label: "Guias" },
+  { id: "tutorials", emoji: "🎓", label: "Tutoriais" },
+  { id: "reviews", emoji: "⭐", label: "Reviews" },
+  { id: "behind-scenes", emoji: "🎪", label: "Bastidores" },
+  { id: "testimonials", emoji: "💬", label: "Depoimentos" },
+  { id: "newsletters", emoji: "📧", label: "Newsletters" },
+  { id: "threads", emoji: "🧵", label: "Threads" },
+  { id: "shorts", emoji: "⚡", label: "Shorts" },
 ];
 
 const LEVELS = [
-  { id: "beginner", emoji: "\ud83c\udf31", label: "Iniciante", description: "Estou come\u00e7ando com redes sociais" },
-  { id: "intermediate", emoji: "\ud83c\udf3f", label: "Intermedi\u00e1rio", description: "J\u00e1 publico regularmente" },
-  { id: "advanced", emoji: "\ud83c\udf33", label: "Avan\u00e7ado", description: "Sou profissional de conte\u00fado" },
+  { id: "beginner", emoji: "🌱", label: "Iniciante", description: "Estou começando com redes sociais" },
+  { id: "intermediate", emoji: "🌿", label: "Intermediário", description: "Já publico regularmente" },
+  { id: "advanced", emoji: "🌳", label: "Avançado", description: "Sou profissional de conteúdo" },
 ];
 
 const PLATFORMS = [
@@ -126,11 +127,11 @@ const PLATFORMS = [
 ];
 
 const STEP_TITLES = [
-  "Qual \u00e9 sua \u00e1rea?",
+  "Qual é sua área?",
   "Seu tom de voz",
   "Seus objetivos",
-  "Conte\u00fado que voc\u00ea cria",
-  "N\u00edvel de experi\u00eancia",
+  "Conteúdo que você cria",
+  "Nível de experiência",
 ];
 
 // ── Types ─────────────────────────────────────────────────────────
@@ -186,7 +187,19 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           fetch("/api/social/accounts", { headers }),
           fetch("/api/user/social-persona", { headers }),
         ]);
-        if (accRes.ok) setAccounts(await accRes.json());
+        if (accRes.ok) {
+          // A API devolve { accounts: [...] } — salvar o objeto inteiro
+          // quebrava o painel com "accounts.reduce is not a function"
+          const accData = await accRes.json();
+          const list = Array.isArray(accData) ? accData : accData?.accounts;
+          setAccounts(
+            (Array.isArray(list) ? list : []).map((a: { platform: string; username: string; metadata?: { followerCount?: number } }) => ({
+              platform: a.platform,
+              username: a.username,
+              followers: a.metadata?.followerCount || 0,
+            }))
+          );
+        }
         if (personaRes.ok) {
           const p = await personaRes.json();
           if (p && Object.keys(p).length) {
@@ -239,7 +252,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         toast.error("Erro ao salvar perfil");
       }
     } catch {
-      toast.error("Erro de conex\u00e3o");
+      toast.error("Erro de conexão");
     } finally {
       setSaving(false);
     }
@@ -411,7 +424,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
               onClick={() => setStep((s) => s + 1)}
               className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-semibold hover:from-amber-600 hover:to-yellow-600"
             >
-              Pr\u00f3ximo <ChevronRight className="h-4 w-4 ml-1" />
+              Próximo <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
           ) : (
             <Button
@@ -427,7 +440,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         </div>
 
         <p className="text-xs text-muted-foreground text-center">
-          Selecione at\u00e9 {step === 4 ? "1 op\u00e7\u00e3o" : "3 op\u00e7\u00f5es"}
+          Selecione até {step === 4 ? "1 opção" : "3 opções"}
         </p>
       </div>
     );
@@ -441,7 +454,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
     return (
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground">
-          Conecte suas redes sociais para desbloquear insights e automa\u00e7\u00e3o inteligente.
+          Conecte suas redes sociais para desbloquear insights e automação inteligente.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -512,16 +525,16 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           className="rounded-xl bg-gradient-to-br from-amber-500/10 to-yellow-500/5 border border-amber-500/20 p-8 text-center space-y-4"
         >
           <Brain className="h-12 w-12 text-amber-500 mx-auto" />
-          <h3 className="text-lg font-semibold text-foreground">Intelig\u00eancia Social</h3>
+          <h3 className="text-lg font-semibold text-foreground">Inteligência Social</h3>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
-            Conecte suas redes para descobrir insights incr\u00edveis sobre seu p\u00fablico e receba recomenda\u00e7\u00f5es personalizadas de conte\u00fado.
+            Conecte suas redes para descobrir insights incríveis sobre seu público e receba recomendações personalizadas de conteúdo.
           </p>
           <Button
             size="sm"
             variant="outline"
             className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
           >
-            <Sparkles className="h-4 w-4 mr-1" /> Come\u00e7ar agora
+            <Sparkles className="h-4 w-4 mr-1" /> Começar agora
           </Button>
         </motion.div>
       );
@@ -532,9 +545,9 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { label: "Audi\u00eancia total", value: totalAudience.toLocaleString(), icon: Users, color: "text-blue-400" },
+            { label: "Audiência total", value: totalAudience.toLocaleString(), icon: Users, color: "text-blue-400" },
             { label: "Contas conectadas", value: accounts.length, icon: Share2, color: "text-green-400" },
-            { label: "\u00c1reas", value: persona?.industries?.length ?? 0, icon: Target, color: "text-amber-400" },
+            { label: "Áreas", value: persona?.industries?.length ?? 0, icon: Target, color: "text-amber-400" },
             { label: "Tom de voz", value: persona?.tones?.length ?? 0, icon: Palette, color: "text-purple-400" },
           ].map((stat) => (
             <motion.div
@@ -553,7 +566,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {persona?.contentThemes && persona.contentThemes.length > 0 && (
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-amber-400" /> Temas de Conte\u00fado
+              <BarChart3 className="h-4 w-4 text-amber-400" /> Temas de Conteúdo
             </h4>
             <div className="flex flex-wrap gap-2">
               {persona.contentThemes.map((theme) => (
@@ -617,7 +630,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             className="rounded-xl bg-gradient-to-br from-amber-500/10 to-yellow-500/5 border border-amber-500/20 p-4 space-y-2"
           >
             <h4 className="text-sm font-medium text-amber-400 flex items-center gap-2">
-              <Sparkles className="h-4 w-4" /> Resultado da An\u00e1lise
+              <Sparkles className="h-4 w-4" /> Resultado da Análise
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {analysisResult.summary ?? JSON.stringify(analysisResult)}
@@ -655,7 +668,10 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             <Share2 className="h-4 w-4 mr-1.5" /> Contas
           </TabsTrigger>
           <TabsTrigger value="inteligencia" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-            <Brain className="h-4 w-4 mr-1.5" /> Intelig\u00eancia
+            <Brain className="h-4 w-4 mr-1.5" /> Inteligência
+          </TabsTrigger>
+          <TabsTrigger value="publicar" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
+            <Zap className="h-4 w-4 mr-1.5" /> Publicar
           </TabsTrigger>
         </TabsList>
 
@@ -674,6 +690,12 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         <TabsContent value="inteligencia" className="mt-4">
           <div className="rounded-xl bg-[#2a251d] border border-border p-5">
             <IntelligenceDashboard />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="publicar" className="mt-4">
+          <div className="rounded-xl bg-[#2a251d] border border-border p-5">
+            <SocialComposer />
           </div>
         </TabsContent>
       </Tabs>
