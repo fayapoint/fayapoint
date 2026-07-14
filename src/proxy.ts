@@ -717,6 +717,6 @@ export const config = {
   // UPDATED: Now includes API routes for protection
   matcher: [
     // Match all paths except static files
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|css|js)$).*)"
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webm|mp4|m4v|mov|mp3|wav|ogg|woff|woff2|css|js)$).*)"
   ]
 };
