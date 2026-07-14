@@ -34,8 +34,16 @@ const catArt = (id: ExampleCategory, v: number) => `/landing/cats/${id}-v${v}.we
 
 type Stage = "pick" | "reveal";
 
+/** Estado real da conta do aluno logado (fonte: GET /api/gate/claim-xp) */
+interface AccountState {
+  totalXp: number;
+  level: number;
+  playedIds: string[];
+  trail?: { done: number; total: number };
+}
+
 export function NovaLanding({ news }: { news: AiNewsItem[] }) {
-  const { user, isLoggedIn, mounted } = useUser();
+  const { user, setUser, isLoggedIn, mounted } = useUser();
   const [stage, setStage] = useState<Stage>("pick");
   const [category, setCategory] = useState<ExampleCategory | null>(null);
   const [seenIds, setSeenIds] = useState<string[]>([]);
@@ -44,6 +52,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
   const [copied, setCopied] = useState(false);
   const [xpPop, setXpPop] = useState(false);
   const [xp, setXp] = useState(0);
+  const [lastGain, setLastGain] = useState(XP_PER_EXAMPLE);
   const [guess, setGuess] = useState<number | null>(null);
   const [combo, setCombo] = useState(0);
   const [burst, setBurst] = useState(0); // chave do confete
@@ -51,6 +60,54 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
   const [artVariants, setArtVariants] = useState<Record<ExampleCategory, number>>({
     "trabalho": 1, "estudos": 1, "criar": 1, "dia-a-dia": 1,
   });
+
+  // ===== P0: home do aluno — o XP do logado NUNCA é jogado fora =====
+  const logged = mounted && isLoggedIn && !!user;
+  const [account, setAccount] = useState<AccountState | null>(null);
+  const [treino, setTreino] = useState(false); // exemplo já creditado antes
+  const [creditMsg, setCreditMsg] = useState<string | null>(null);
+  const playedIds = useMemo(() => account?.playedIds ?? [], [account]);
+
+  // Logado: resgata jornada anônima pendente (se houver) e carrega o estado
+  // real da conta — pill, exemplos já jogados e progresso da trilha.
+  useEffect(() => {
+    if (!logged) {
+      setAccount(null);
+      return;
+    }
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const raw = localStorage.getItem("fayai_landing");
+        const data = raw ? JSON.parse(raw) : null;
+        if (data && !data.claimed && Number(data.xp) > 0) {
+          const r = await fetch("/api/gate/claim-xp", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ xp: data.xp, categories: data.cats || [], seenIds: data.seenIds || [] }),
+          });
+          const res = await r.json().catch(() => null);
+          localStorage.setItem("fayai_landing", JSON.stringify({ ...data, claimed: true }));
+          if (res?.claimed && !cancelled) {
+            setCreditMsg(`+${res.xp} XP da sua jornada anterior creditados na sua conta ✨`);
+            setTimeout(() => setCreditMsg(null), 4200);
+          }
+        }
+      } catch { /* storage indisponível — sem drama */ }
+      try {
+        const r = await fetch("/api/gate/claim-xp", { credentials: "include", cache: "no-store" });
+        if (r.ok) {
+          const d = await r.json();
+          if (!cancelled && d && Array.isArray(d.playedIds)) {
+            setAccount({ totalXp: d.totalXp || 0, level: d.level || 1, playedIds: d.playedIds, trail: d.trail });
+          }
+        }
+      } catch { /* rede indisponível — a pill usa o contexto como fallback */ }
+    };
+    load();
+    return () => { cancelled = true; };
+  }, [logged]);
 
   // Sorteia a arte de cada categoria a cada visita
   useEffect(() => {
@@ -62,8 +119,13 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
     });
   }, []);
 
-  const limitReached = seenIds.length >= FREE_EXAMPLES_LIMIT;
+  // Anônimo: gate de 3 exemplos → cadastro. Logado: joga até esgotar o banco.
+  const limitReached = logged
+    ? seenIds.length >= MAGIC_EXAMPLES.length
+    : seenIds.length >= FREE_EXAMPLES_LIMIT;
   const accent = current ? CATEGORY_STYLE[current.category].color : GOLD;
+  // Pill do logado mostra o XP REAL da conta (nunca o contador local do gate)
+  const pillXp = logged ? (account?.totalXp ?? user?.progress?.xp ?? 0) : xp;
 
   const closeCard = () => {
     setStage("pick");
@@ -71,9 +133,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
     setRevealed(false);
   };
 
-  // Persiste a jornada — o XP é resgatado na conta após o cadastro
+  // Persiste a jornada ANÔNIMA — o XP é resgatado na conta após o cadastro.
+  // Logado não passa por aqui: o crédito é imediato via API (P0).
   useEffect(() => {
-    if (seenIds.length === 0) return;
+    if (logged || seenIds.length === 0) return;
     try {
       const prev = JSON.parse(localStorage.getItem("fayai_landing") || "{}");
       const cats = new Set<string>(Array.isArray(prev.cats) ? prev.cats : []);
@@ -83,7 +146,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
         JSON.stringify({ xp, seenIds, cats: [...cats], claimed: !!prev.claimed })
       );
     } catch { /* storage indisponível — sem drama */ }
-  }, [seenIds, category, xp]);
+  }, [logged, seenIds, category, xp]);
 
   // Esc fecha o card — sair tem que ser tão fácil quanto entrar
   useEffect(() => {
@@ -105,18 +168,75 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
     setRevealed(false);
     setCopied(false);
     setGuess(null);
+    setTreino(logged && playedIds.includes(ex.id));
     setStage("reveal");
   };
 
   const answerQuiz = (idx: number) => {
     if (!current || revealed) return;
     const acertou = idx === current.quiz.answer;
+    const gain = XP_PER_EXAMPLE + (acertou ? XP_BONUS_ACERTO : 0);
     setGuess(idx);
     setRevealed(true);
     setSeenIds((ids) => (ids.includes(current.id) ? ids : [...ids, current.id]));
-    setXp((v) => v + XP_PER_EXAMPLE + (acertou ? XP_BONUS_ACERTO : 0));
     setCombo((c) => (acertou ? c + 1 : 0));
     setBurst((b) => b + 1);
+
+    if (logged) {
+      // Já creditado antes → modo treino: joga de novo, sem re-farm de XP
+      if (playedIds.includes(current.id)) return;
+
+      setLastGain(gain);
+      setXpPop(true);
+      setTimeout(() => setXpPop(false), 1600);
+
+      // Crédito IMEDIATO na conta — idempotente por exampleId no servidor
+      fetch("/api/gate/claim-xp", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ exampleId: current.id, acertou, category: current.category }),
+      })
+        .then((r) => r.json())
+        .then((res) => {
+          if (res?.credited) {
+            setAccount((a) => ({
+              totalXp: res.totalXp,
+              level: res.level,
+              playedIds: [...(a?.playedIds ?? []), current.id],
+              trail: a?.trail,
+            }));
+            setCreditMsg(`+${res.xp} XP creditados na sua conta ✨`);
+            setTimeout(() => setCreditMsg(null), 3200);
+            // Portal reflete sem F5: atualiza contexto + localStorage
+            if (user) {
+              setUser({
+                ...user,
+                progress: {
+                  level: res.level,
+                  points: user.progress?.points ?? 0,
+                  currentStreak: user.progress?.currentStreak ?? 0,
+                  coursesCompleted: user.progress?.coursesCompleted ?? 0,
+                  coursesInProgress: user.progress?.coursesInProgress ?? 0,
+                  totalHours: user.progress?.totalHours ?? 0,
+                  certificates: user.progress?.certificates,
+                  xp: res.totalXp,
+                },
+              });
+            }
+          } else if (res?.reason === "already-credited") {
+            setAccount((a) =>
+              a ? { ...a, totalXp: res.totalXp, level: res.level, playedIds: [...a.playedIds, current.id] } : a
+            );
+          }
+        })
+        .catch(() => { /* rede indisponível — o servidor é idempotente, tenta na próxima */ });
+      return;
+    }
+
+    // Anônimo: contador local do gate (resgatado na conta após o cadastro)
+    setXp((v) => v + gain);
+    setLastGain(gain);
     setXpPop(true);
     setTimeout(() => setXpPop(false), 1600);
   };
@@ -243,7 +363,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
             style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
           >
             <Sparkles size={15} />
-            <span>{xp} XP</span>
+            <span>
+              {logged && account ? `Nv ${account.level} · ` : ""}
+              {pillXp.toLocaleString("pt-BR")} XP
+            </span>
             <AnimatePresence>
               {xpPop && (
                 <motion.span
@@ -254,7 +377,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                   className="absolute -top-1 right-2 font-extrabold pointer-events-none"
                   style={{ color: GOLD }}
                 >
-                  +{XP_PER_EXAMPLE}
+                  +{lastGain}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -286,6 +409,30 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
               initial={false}
               className="text-center"
             >
+              {logged && account?.trail && (
+                <Link
+                  href="/portal"
+                  className="glass fx-shine group inline-flex items-center gap-3 rounded-full pl-4 pr-5 py-2 mb-6 hover:opacity-95 transition-opacity"
+                  style={{ borderColor: `${GOLD}55` }}
+                >
+                  <span className="flex gap-1" aria-hidden>
+                    {Array.from({ length: account.trail.total }, (_, i) => (
+                      <span
+                        key={i}
+                        className="h-1.5 w-3 rounded-full"
+                        style={{ background: i < account.trail!.done ? GOLD : "rgba(255,255,255,.18)" }}
+                      />
+                    ))}
+                  </span>
+                  <span className="text-sm font-bold">
+                    Continuar minha trilha{" "}
+                    <span style={{ color: GOLD }}>
+                      ({account.trail.done} de {account.trail.total})
+                    </span>
+                  </span>
+                  <ArrowRight size={15} className="text-white/50 group-hover:text-white transition-colors" />
+                </Link>
+              )}
               <h1 className="text-4xl sm:text-6xl md:text-7xl leading-[0.95] tracking-wide" style={bebas}>
                 O QUE A <span style={{ color: GOLD }}>IA</span> FAZ POR VOCÊ
                 <br />
@@ -377,15 +524,21 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                   </h2>
                   <p className="mt-2 text-sm sm:text-base text-white/65">{current.hook}</p>
                 </div>
-                <div className="flex gap-1.5 shrink-0 mt-2">
-                  {progressDots.map((done, i) => (
-                    <span
-                      key={i}
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{ background: done ? GOLD : "rgba(255,255,255,.15)" }}
-                    />
-                  ))}
-                </div>
+                {logged ? (
+                  <span className="shrink-0 mt-2 text-[11px] font-bold text-white/45 whitespace-nowrap">
+                    {playedIds.length}/{MAGIC_EXAMPLES.length} jogados
+                  </span>
+                ) : (
+                  <div className="flex gap-1.5 shrink-0 mt-2">
+                    {progressDots.map((done, i) => (
+                      <span
+                        key={i}
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{ background: done ? GOLD : "rgba(255,255,255,.15)" }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
 
               {current && (
@@ -423,7 +576,9 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
               {!revealed ? (
                 <div className="mt-6">
                   <p className="text-sm font-extrabold uppercase tracking-wider" style={{ color: accent }}>
-                    🎯 Seu palpite vale +{XP_BONUS_ACERTO} XP
+                    {treino
+                      ? "🎓 Modo treino — este exemplo já rendeu XP na sua conta"
+                      : `🎯 Seu palpite vale +${XP_BONUS_ACERTO} XP`}
                   </p>
                   <p className="mt-1 text-base sm:text-lg font-bold">{current.quiz.question}</p>
                   <div className="mt-3 space-y-2">
@@ -457,8 +612,12 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                       }
                     >
                       {guess === current.quiz.answer
-                        ? `🎯 ACERTOU! +${XP_PER_EXAMPLE + XP_BONUS_ACERTO} XP${combo > 1 ? ` · combo x${combo}` : ""}`
-                        : `✨ Quase! A resposta era: ${current.quiz.options[current.quiz.answer]} · +${XP_PER_EXAMPLE} XP`}
+                        ? treino
+                          ? `🎯 ACERTOU! Modo treino — XP já creditado antes${combo > 1 ? ` · combo x${combo}` : ""}`
+                          : `🎯 ACERTOU! +${XP_PER_EXAMPLE + XP_BONUS_ACERTO} XP${logged ? " na sua conta" : ""}${combo > 1 ? ` · combo x${combo}` : ""}`
+                        : treino
+                          ? `✨ Quase! A resposta era: ${current.quiz.options[current.quiz.answer]} · modo treino`
+                          : `✨ Quase! A resposta era: ${current.quiz.options[current.quiz.answer]} · +${XP_PER_EXAMPLE} XP${logged ? " na sua conta" : ""}`}
                     </div>
                   )}
                   <div className="rounded-2xl p-4" style={{ border: `2px solid ${accent}77`, background: "#0c0e1d" }}>
@@ -507,6 +666,27 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
                         Trocar categoria
                       </button>
                     </div>
+                  ) : logged ? (
+                    <motion.div
+                      initial={false}
+                      className="rounded-2xl p-5 text-center"
+                      style={{ border: `2.5px solid ${GOLD}`, background: "rgba(245,192,78,.08)" }}
+                    >
+                      <p className="text-2xl sm:text-3xl tracking-wide" style={bebas}>
+                        🏆 VOCÊ EXPLOROU TODAS AS MÁGICAS!
+                      </p>
+                      <p className="mt-1.5 text-sm text-white/65">
+                        Cada XP está guardado na sua conta. A trilha continua no seu portal —
+                        cursos, desafios e o Arcade da IA esperam por você.
+                      </p>
+                      <Link
+                        href="/portal"
+                        className="fx-magic fx-shine mt-4 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
+                        style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
+                      >
+                        Continuar no meu Portal <ArrowRight size={18} />
+                      </Link>
+                    </motion.div>
                   ) : (
                     <motion.div
                       initial={false}
@@ -629,6 +809,29 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
           </p>
         </div>
       </footer>
+
+      {/* Toast de crédito — prova visível de que o esforço foi guardado (P0) */}
+      <AnimatePresence>
+        {creditMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.95 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 rounded-2xl px-5 py-3 shadow-2xl"
+            style={{
+              background: "linear-gradient(135deg, #f5c04e, #ffd97a)",
+              color: "#241a05",
+              boxShadow: "0 14px 40px rgba(245,192,78,.45)",
+              maxWidth: "min(92vw, 440px)",
+            }}
+            role="status"
+          >
+            <Sparkles size={18} className="shrink-0" />
+            <p className="text-sm font-bold leading-snug">{creditMsg}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

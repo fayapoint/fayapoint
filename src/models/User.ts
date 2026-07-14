@@ -113,6 +113,8 @@ export interface IUser extends Document {
     };
     streakFreeze: number;
     landingXpClaimed?: boolean;
+    /** Exemplos do minigame da landing já creditados (idempotência por exampleId) */
+    gateExamples?: string[];
     totalImagesGenerated: number;
     totalAiChats: number;
     referrals: number;
@@ -320,6 +322,7 @@ const UserSchema = new Schema<IUser>({
     },
     streakFreeze: { type: Number, default: 0 },
     landingXpClaimed: { type: Boolean, default: false },
+    gateExamples: { type: [String], default: [] },
     totalImagesGenerated: { type: Number, default: 0 },
     totalAiChats: { type: Number, default: 0 },
     referrals: { type: Number, default: 0 },

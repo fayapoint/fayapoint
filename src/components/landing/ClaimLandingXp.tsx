@@ -21,7 +21,7 @@ export function ClaimLandingXp() {
       fetch("/api/gate/claim-xp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ xp: data.xp, categories: data.cats || [] }),
+        body: JSON.stringify({ xp: data.xp, categories: data.cats || [], seenIds: data.seenIds || [] }),
       })
         .then((r) => r.json())
         .then((res) => {
