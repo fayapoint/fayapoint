@@ -10,6 +10,8 @@
  * - Payment webhooks
  */
 
+import { timingSafeEqual } from 'node:crypto';
+
 // =============================================================================
 // TYPES & INTERFACES
 // =============================================================================
@@ -236,7 +238,7 @@ const ASAAS_ENV = process.env.ASAAS_ENV || 'sandbox';
 
 const BASE_URL = ASAAS_ENV === 'production' 
   ? 'https://api.asaas.com/v3'
-  : 'https://sandbox.asaas.com/api/v3';
+  : 'https://api-sandbox.asaas.com/v3';
 
 // =============================================================================
 // HTTP CLIENT
@@ -1768,7 +1770,10 @@ export function verifyWebhookToken(
   receivedToken: string,
   expectedToken: string = process.env.ASAAS_WEBHOOK_TOKEN || ''
 ): boolean {
-  return receivedToken === expectedToken;
+  if (!receivedToken || !expectedToken) return false;
+  const received = Buffer.from(receivedToken, 'utf8');
+  const expected = Buffer.from(expectedToken, 'utf8');
+  return received.length === expected.length && timingSafeEqual(received, expected);
 }
 
 // =============================================================================
