@@ -58,9 +58,19 @@ O Arcade da IA passou de três experiências curtas para cinco minigames funcion
 - Cards mantêm identidade visual própria e arte contextual.
 - Layout aprovado em 1440×1000 e 390×844.
 
-### Pendente visual conhecido
+### Expansão visual ComfyUI — concluída em 14/07/2026
 
-A coleção exclusiva de uma arte inédita para cada uma das 30 cartas de Verdade ou Mito e o vídeo hero leve ainda não foram produzidos. Nesta entrega, as cartas reutilizam ativos contextuais já aprovados. Isso não bloqueia o jogo, mas permanece como acabamento visual do P1.
+- 48 cenas exclusivas geradas localmente com Qwen Image 2512 + Lightning: **8 variações para cada um dos 6 minigames**.
+- Resolução de origem web: 960×544 em WebP, com 2,17 MB no conjunto completo (média aproximada de 45 KB por imagem).
+- Seis loops de movimento em VP9/WebM, um por minigame, 640×360 e oito segundos, com 1,87 MB no conjunto completo (média aproximada de 312 KB por vídeo).
+- Cada visita escolhe uma cena diferente da última registrada para aquele jogo; passar o mouse avança novamente a imagem e revela o loop.
+- Vídeos usam carregamento sob demanda. Usuários com “reduzir movimento” veem somente as imagens estáticas.
+- Ao abrir um jogo, o loop correspondente vira o cabeçalho visual da experiência.
+- Hero e banner do Arcade também sorteiam um dos seis universos visuais sem repetição imediata.
+- Prompts, seeds e destinos estão registrados em `scripts/arcade/arcade-visual-manifest.json` e no relatório de geração junto aos ativos.
+- Cliente ComfyUI reutilizável e validado em `pinokio_agent/skills/local/comfyui`, sem porta, caminho local ou segredo fixado no skill.
+
+A meta aprovada nesta expansão foi de oito universos visuais rotativos por minigame. As 30 afirmações de Verdade ou Mito continuam pedagogicamente únicas e passam a compartilhar esse banco visual rotativo, evitando inflar o carregamento com 30 artes que não mudariam a mecânica.
 
 ## 5. Correção comercial encontrada durante o P1
 
@@ -79,12 +89,15 @@ A coleção exclusiva de uma arte inédita para cada uma das 30 cartas de Verdad
 - Caça ao Prompt: seleção, ordenação, correção e vocabulário aprovados.
 - Curso grátis: R$0, matrícula promocional e abertura do conteúdo aprovados.
 - Console dos fluxos principais: zero erros.
+- Inspeção em mosaico das 48 cenas: aprovada, com diferenciação clara entre jogos e entre variações.
+- Contagem de ativos: 48/48 WebP e 6/6 WebM; fila final do ComfyUI vazia e sem erro.
+- Cliente visual do Arcade: TypeScript e ESLint aprovados.
 - Conta técnica: removida.
 - Assinaturas, pagamentos, pedidos, recibos e certificados técnicos: zero.
 
 ## 7. Continuação recomendada
 
-1. Finalizar o acabamento visual do P1 com 30 artes exclusivas e vídeo hero otimizado.
+1. Monitorar em produção a taxa de abertura dos jogos e o custo de banda dos loops carregados sob demanda.
 2. Corrigir o desafio diário ainda exibido em inglês no portal.
-3. Iniciar P2 do handoff mestre com auditoria de localização, microcopy e navegação do portal.
+3. Continuar o plano integrado pelos próximos itens ainda abertos, sem reabrir P1, P2 e P3 já entregues.
 4. Manter P4.2 para um novo teste de pagamento real de baixo valor quando houver saldo e decisão explícita sobre estorno.

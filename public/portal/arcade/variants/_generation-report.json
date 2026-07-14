@@ -1,0 +1,393 @@
+{
+  "generated_at": "2026-07-14T13:54:55-0300",
+  "comfyui": "0.27.1",
+  "width": 960,
+  "height": 544,
+  "prompt_prefix": "Premium cinematic editorial illustration for FayAi, a friendly Brazilian artificial intelligence learning arcade. Sophisticated 3D storybook realism mixed with clean graphic shapes, deep midnight navy environment, luminous warm gold accents, rich tactile materials, diverse Brazilian adults, charming small helper robots, dramatic volumetric lighting, generous visual depth, dynamic but uncluttered composition, 16:9 landscape, polished commercial art direction, no readable text, no letters, no logos, no watermark.",
+  "jobs": [
+    {
+      "id": "monte-prompt-01",
+      "prompt": "Monte o Prompt theme in pink: a joyful inventor at a futuristic recipe laboratory combining five glowing ingredient orbs into one spectacular image portal, clear left-to-right visual story, rose and magenta energy trails.",
+      "seed": 1201101,
+      "output": "monte-o-prompt/variant-01.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-01.webp"
+    },
+    {
+      "id": "verdade-mito-01",
+      "prompt": "Verdade ou Mito theme in cyan: a curious detective comparing two holographic mirrors, one transparent and truthful, one distorted by colorful smoke, evidence objects on a sleek desk, cyan light.",
+      "seed": 1202101,
+      "output": "verdade-ou-mito/variant-01.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-01.webp"
+    },
+    {
+      "id": "qual-prompt-01",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: an art detective studying a luminous finished picture while three mysterious visual recipe trails converge behind it, magnifying lens and clue board, violet glow.",
+      "seed": 1203101,
+      "output": "qual-prompt/variant-01.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-01.webp"
+    },
+    {
+      "id": "palpite-30s-01",
+      "prompt": "Palpite em 30 Segundos theme in gold: an excited player at a circular arcade buzzer, glowing countdown ring represented only by segments, mystery silhouettes transforming rapidly around them, golden sparks.",
+      "seed": 1204101,
+      "output": "palpite-30s/variant-01.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-01.webp"
+    },
+    {
+      "id": "batalha-prompts-01",
+      "prompt": "Batalha de Prompts theme in orange: two friendly prompt-building robots facing off in a spectacular arena, each projects a different cinematic image from modular glowing blocks, orange energy at the center.",
+      "seed": 1205101,
+      "output": "batalha-prompts/variant-01.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-01.webp"
+    },
+    {
+      "id": "caca-prompt-01",
+      "prompt": "Caça ao Prompt Perdido theme in lime: an adventurous explorer and tiny robot following a treasure map through a magical jungle to collect five floating puzzle fragments, lime green fireflies.",
+      "seed": 1206101,
+      "output": "caca-prompt/variant-01.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-01.webp"
+    },
+    {
+      "id": "monte-prompt-02",
+      "prompt": "Monte o Prompt theme in pink: overhead view of a beautiful maker desk where a Brazilian woman arranges five physical prompt tiles like premium board-game pieces, each tile releases a different miniature world into a central canvas.",
+      "seed": 1201102,
+      "output": "monte-o-prompt/variant-02.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-02.webp"
+    },
+    {
+      "id": "verdade-mito-02",
+      "prompt": "Verdade ou Mito theme in cyan: an elegant balance scale in a futuristic fact-check studio, solid evidence crystals on one side and floating illusion bubbles on the other, a thoughtful host and helper robot observing.",
+      "seed": 1202102,
+      "output": "verdade-ou-mito/variant-02.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-02.webp"
+    },
+    {
+      "id": "qual-prompt-02",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: a gallery visitor faces one finished surreal artwork and three glowing doorways that reveal different behind-the-scenes creative recipes, cinematic symmetry, violet spotlights.",
+      "seed": 1203102,
+      "output": "qual-prompt/variant-02.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-02.webp"
+    },
+    {
+      "id": "palpite-30s-02",
+      "prompt": "Palpite em 30 Segundos theme in gold: a game-show contestant spins a luminous wheel divided into visual scene clues, a friendly robot holds a sandglass made of light, energetic diagonal composition.",
+      "seed": 1204102,
+      "output": "palpite-30s/variant-02.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-02.webp"
+    },
+    {
+      "id": "batalha-prompts-02",
+      "prompt": "Batalha de Prompts theme in orange: two creative teams duel across a giant chessboard, chess pieces transform into image subjects, lighting styles and camera lenses, playful strategic confrontation.",
+      "seed": 1205102,
+      "output": "batalha-prompts/variant-02.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-02.webp"
+    },
+    {
+      "id": "caca-prompt-02",
+      "prompt": "Caça ao Prompt Perdido theme in lime: top-down treasure-map table filled with winding trails and glowing prompt fragments, explorer hands, compass robot and miniature landscapes rising from the parchment.",
+      "seed": 1206102,
+      "output": "caca-prompt/variant-02.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-02.webp"
+    },
+    {
+      "id": "monte-prompt-03",
+      "prompt": "Monte o Prompt theme in pink: a whimsical construction site where miniature robots assemble subject, action, setting, light and style modules into a giant glowing cinematic frame, cranes made of pink light.",
+      "seed": 1201103,
+      "output": "monte-o-prompt/variant-03.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-03.webp"
+    },
+    {
+      "id": "verdade-mito-03",
+      "prompt": "Verdade ou Mito theme in cyan: a person navigates a maze split between a clear evidence path and a dazzling deceptive shortcut, overhead cinematic view, a cyan lighthouse marks the reliable exit.",
+      "seed": 1202103,
+      "output": "verdade-ou-mito/variant-03.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-03.webp"
+    },
+    {
+      "id": "qual-prompt-03",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: a photographer examines a cinematic scene emerging from a camera while three constellations of visual symbols suggest competing prompt recipes, purple night observatory.",
+      "seed": 1203103,
+      "output": "qual-prompt/variant-03.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-03.webp"
+    },
+    {
+      "id": "palpite-30s-03",
+      "prompt": "Palpite em 30 Segundos theme in gold: a runner races along a glowing track collecting visual clues before a segmented light ring closes, exhilarating perspective, gold and midnight palette.",
+      "seed": 1204103,
+      "output": "palpite-30s/variant-03.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-03.webp"
+    },
+    {
+      "id": "batalha-prompts-03",
+      "prompt": "Batalha de Prompts theme in orange: dramatic split-screen creative duel, the same simple idea becomes a flat dull image on one side and a rich professional scene on the other, two players analyzing the difference.",
+      "seed": 1205103,
+      "output": "batalha-prompts/variant-03.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-03.webp"
+    },
+    {
+      "id": "caca-prompt-03",
+      "prompt": "Caça ao Prompt Perdido theme in lime: an urban night scavenger hunt through a lively Brazilian neighborhood, glowing prompt pieces hidden near murals, market stalls and a tram, explorer and robot following green clues.",
+      "seed": 1206103,
+      "output": "caca-prompt/variant-03.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-03.webp"
+    },
+    {
+      "id": "monte-prompt-04",
+      "prompt": "Monte o Prompt theme in pink: a master chef of ideas in an elegant cosmic kitchen combines five floating visual ingredients in a transparent bowl that blossoms into a completed fantasy scene.",
+      "seed": 1201104,
+      "output": "monte-o-prompt/variant-04.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-04.webp"
+    },
+    {
+      "id": "verdade-mito-04",
+      "prompt": "Verdade ou Mito theme in cyan: a newsroom verification table where a journalist and robot pass a glowing claim through lenses, source crystals and a prism that separates fact from colorful hype.",
+      "seed": 1202104,
+      "output": "verdade-ou-mito/variant-04.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-04.webp"
+    },
+    {
+      "id": "qual-prompt-04",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: close cinematic view of hands on a luminous light table matching image clues to three sets of miniature scene objects, elegant puzzle atmosphere.",
+      "seed": 1203104,
+      "output": "qual-prompt/variant-04.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-04.webp"
+    },
+    {
+      "id": "palpite-30s-04",
+      "prompt": "Palpite em 30 Segundos theme in gold: a mysterious arcade box bursts open with rapidly changing miniature worlds while two friends race to identify the hidden creative pattern, gold confetti light.",
+      "seed": 1204104,
+      "output": "palpite-30s/variant-04.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-04.webp"
+    },
+    {
+      "id": "batalha-prompts-04",
+      "prompt": "Batalha de Prompts theme in orange: playful boxing ring where two holographic canvases compete rather than people, corner coaches adjust camera, lighting and detail modules, bright orange ropes.",
+      "seed": 1205104,
+      "output": "batalha-prompts/variant-04.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-04.webp"
+    },
+    {
+      "id": "caca-prompt-04",
+      "prompt": "Caça ao Prompt Perdido theme in lime: an explorer enters ancient technological ruins where glowing pictogram fragments must be placed into a circular stone portal, green moss and magical light.",
+      "seed": 1206104,
+      "output": "caca-prompt/variant-04.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-04.webp"
+    },
+    {
+      "id": "monte-prompt-05",
+      "prompt": "Monte o Prompt theme in pink: an astronomer connects five bright visual constellations around a central blank canvas; the completed connections summon a vivid world, poetic wide composition.",
+      "seed": 1201105,
+      "output": "monte-o-prompt/variant-05.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-05.webp"
+    },
+    {
+      "id": "verdade-mito-05",
+      "prompt": "Verdade ou Mito theme in cyan: a transparent laboratory prism receives one confusing beam and separates it into verified evidence objects and harmless fantasy shapes, scientist and tiny robot watching.",
+      "seed": 1202105,
+      "output": "verdade-ou-mito/variant-05.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-05.webp"
+    },
+    {
+      "id": "qual-prompt-05",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: a curious player looks through a portal at a finished image while ghostlike layers peel back to reveal subject, action, setting, light and style, immersive perspective.",
+      "seed": 1203105,
+      "output": "qual-prompt/variant-05.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-05.webp"
+    },
+    {
+      "id": "palpite-30s-05",
+      "prompt": "Palpite em 30 Segundos theme in gold: two players beneath a lightning-shaped decision tree choose among fast-changing visual clues, dynamic low camera, energetic golden streaks.",
+      "seed": 1204105,
+      "output": "palpite-30s/variant-05.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-05.webp"
+    },
+    {
+      "id": "batalha-prompts-05",
+      "prompt": "Batalha de Prompts theme in orange: elegant creative courtroom, two projected images present their visual evidence while a diverse jury compares specificity, composition and lighting, playful rather than serious.",
+      "seed": 1205105,
+      "output": "batalha-prompts/variant-05.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-05.webp"
+    },
+    {
+      "id": "caca-prompt-05",
+      "prompt": "Caça ao Prompt Perdido theme in lime: a puzzle cave full of floating visual fragments, an explorer uses a beam from a friendly robot to reveal the correct pieces hidden among decoys.",
+      "seed": 1206105,
+      "output": "caca-prompt/variant-05.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-05.webp"
+    },
+    {
+      "id": "monte-prompt-06",
+      "prompt": "Monte o Prompt theme in pink: an artisan workshop with drawers of visual ideas, a man selects five luminous components and assembles them into a miniature cinematic diorama under a glass dome.",
+      "seed": 1201106,
+      "output": "monte-o-prompt/variant-06.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-06.webp"
+    },
+    {
+      "id": "verdade-mito-06",
+      "prompt": "Verdade ou Mito theme in cyan: two bridges cross a glowing information canyon, one built from sturdy evidence blocks and one made of fragile illusion clouds, traveler choosing carefully.",
+      "seed": 1202106,
+      "output": "verdade-ou-mito/variant-06.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-06.webp"
+    },
+    {
+      "id": "qual-prompt-06",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: a detective board made of image fragments, lighting samples and camera-angle models, colored threads converge on one spectacular central artwork, no written notes.",
+      "seed": 1203106,
+      "output": "qual-prompt/variant-06.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-06.webp"
+    },
+    {
+      "id": "palpite-30s-06",
+      "prompt": "Palpite em 30 Segundos theme in gold: first-person arcade view, hands rapidly select the correct visual tile from a ring of transformations before a luminous sandglass empties, immersive motion.",
+      "seed": 1204106,
+      "output": "palpite-30s/variant-06.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-06.webp"
+    },
+    {
+      "id": "batalha-prompts-06",
+      "prompt": "Batalha de Prompts theme in orange: two sleek creative race lanes transform identical blank canvases, one prompt vehicle gathers precise visual modules and surges ahead, vibrant orange speed trails.",
+      "seed": 1205106,
+      "output": "batalha-prompts/variant-06.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-06.webp"
+    },
+    {
+      "id": "caca-prompt-06",
+      "prompt": "Caça ao Prompt Perdido theme in lime: night sky observatory where an explorer catches scattered prompt fragments as constellations and arranges them into one complete glowing scene.",
+      "seed": 1206106,
+      "output": "caca-prompt/variant-06.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-06.webp"
+    },
+    {
+      "id": "monte-prompt-07",
+      "prompt": "Monte o Prompt theme in pink: a conductor directs five families of floating visual objects like an orchestra, their light harmonizes into a grand cinematic image projected behind the stage.",
+      "seed": 1201107,
+      "output": "monte-o-prompt/variant-07.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-07.webp"
+    },
+    {
+      "id": "verdade-mito-07",
+      "prompt": "Verdade ou Mito theme in cyan: a lighthouse keeper scans an ocean of viral illusion bubbles; a strong cyan beam reveals the solid factual islands beneath, hopeful wide shot.",
+      "seed": 1202107,
+      "output": "verdade-ou-mito/variant-07.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-07.webp"
+    },
+    {
+      "id": "qual-prompt-07",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: a small theatre presents one finished visual masterpiece on stage while three backstage sets reveal competing construction methods, audience player comparing clues.",
+      "seed": 1203107,
+      "output": "qual-prompt/variant-07.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-07.webp"
+    },
+    {
+      "id": "palpite-30s-07",
+      "prompt": "Palpite em 30 Segundos theme in gold: a rapid collage tunnel of changing places, objects and styles races toward a player holding a glowing answer token, strong depth and movement.",
+      "seed": 1204107,
+      "output": "palpite-30s/variant-07.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-07.webp"
+    },
+    {
+      "id": "batalha-prompts-07",
+      "prompt": "Batalha de Prompts theme in orange: live creative debate stage where two friendly holographic assistants build competing image worlds in midair while players evaluate them, dramatic orange rim light.",
+      "seed": 1205107,
+      "output": "batalha-prompts/variant-07.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-07.webp"
+    },
+    {
+      "id": "caca-prompt-07",
+      "prompt": "Caça ao Prompt Perdido theme in lime: a floating island treasure hunt, explorer leaps between islands representing subject, action, setting, light and style while a robot guides the route.",
+      "seed": 1206107,
+      "output": "caca-prompt/variant-07.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-07.webp"
+    },
+    {
+      "id": "monte-prompt-08",
+      "prompt": "Monte o Prompt theme in pink: a magical library without visible writing, five shelves of miniature visual worlds feed glowing pieces into a central creation machine operated by two friends.",
+      "seed": 1201108,
+      "output": "monte-o-prompt/variant-08.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\monte-o-prompt\\variant-08.webp"
+    },
+    {
+      "id": "verdade-mito-08",
+      "prompt": "Verdade ou Mito theme in cyan: a friendly game-show set with two large visual portals, one grounded in clear evidence and one full of surreal exaggeration, contestant confidently identifies the difference.",
+      "seed": 1202108,
+      "output": "verdade-ou-mito/variant-08.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\verdade-ou-mito\\variant-08.webp"
+    },
+    {
+      "id": "qual-prompt-08",
+      "prompt": "Qual Prompt Gerou Isto theme in violet: a restoration studio where layers of a beautiful generated image hover separately in space, a player chooses which chain of visual ingredients could rebuild it.",
+      "seed": 1203108,
+      "output": "qual-prompt/variant-08.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\qual-prompt\\variant-08.webp"
+    },
+    {
+      "id": "palpite-30s-08",
+      "prompt": "Palpite em 30 Segundos theme in gold: an arcade host and player catch one correct glowing clue among a whirlwind of rapidly morphing objects, celebratory golden burst and expressive faces.",
+      "seed": 1204108,
+      "output": "palpite-30s/variant-08.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\palpite-30s\\variant-08.webp"
+    },
+    {
+      "id": "batalha-prompts-08",
+      "prompt": "Batalha de Prompts theme in orange: a glowing forge where two prompt smiths shape raw ideas into competing visual masterpieces, sparks form camera angles and lighting patterns, epic friendly showdown.",
+      "seed": 1205108,
+      "output": "batalha-prompts/variant-08.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\batalha-prompts\\variant-08.webp"
+    },
+    {
+      "id": "caca-prompt-08",
+      "prompt": "Caça ao Prompt Perdido theme in lime: a Brazilian coastal landscape becomes a giant scavenger puzzle, friends and a robot find luminous prompt fragments among cliffs, waves and tropical plants.",
+      "seed": 1206108,
+      "output": "caca-prompt/variant-08.webp",
+      "status": "skipped",
+      "path": "public\\portal\\arcade\\variants\\caca-prompt\\variant-08.webp"
+    }
+  ]
+}

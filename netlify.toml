@@ -41,6 +41,17 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
 
+# Arcade visual packs use stable paths and are loaded lazily/on interaction.
+[[headers]]
+  for = "/portal/arcade/variants/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/portal/arcade/loops/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=2592000"
+
 [[headers]]
   for = "/*.js"
   [headers.values]

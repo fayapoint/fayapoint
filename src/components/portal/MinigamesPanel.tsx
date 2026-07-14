@@ -9,30 +9,29 @@ import { VerdadeOuMito } from "@/components/portal/games/VerdadeOuMito";
 import { QualPrompt } from "@/components/portal/games/QualPrompt";
 import { BatalhaPrompts } from "@/components/portal/games/BatalhaPrompts";
 import { CacaPrompt } from "@/components/portal/games/CacaPrompt";
+import { ArcadeVisual, RandomArcadeVisual, type ArcadeGameId } from "@/components/portal/ArcadeVisual";
 
 /**
  * Arcade da IA — aba dedicada de minigames (F4 do PLANO_UX_NAVEGACAO).
- * Hub com arte gerada no ComfyUI, 3 jogos jogáveis hoje e os próximos com
- * selo CONSTRUINDO (honesto — nada de porta falsa). Backlog completo em
- * MINIGAMES_BACKLOG.md.
+ * Hub com arte gerada no ComfyUI e cinco jogos jogáveis hoje, além do
+ * Palpite em 30 Segundos na página inicial.
  */
 
 interface Jogo {
-  id: string;
   titulo: string;
   desc: string;
   cor: string;
-  art: string;
+  id: ArcadeGameId;
   status: "jogar" | "construindo" | "home";
 }
 
 const JOGOS: Jogo[] = [
-  { id: "monte-o-prompt", titulo: "Monte o Prompt", desc: "A receita dos 5 ingredientes de uma imagem profissional.", cor: "#f472b6", art: "/portal/arcade/monte-prompt.webp", status: "jogar" },
-  { id: "verdade-ou-mito", titulo: "Verdade ou Mito?", desc: "10 cartas para separar o hype da realidade da IA.", cor: "#38bdf8", art: "/portal/arcade/verdade-mito.webp", status: "jogar" },
-  { id: "qual-prompt", titulo: "Qual Prompt Gerou Isto?", desc: "Olhe a arte, adivinhe a receita que a criou.", cor: "#a78bfa", art: "/portal/arcade/qual-prompt.webp", status: "jogar" },
-  { id: "palpite-30s", titulo: "Palpite em 30 Segundos", desc: "O clássico da página inicial — palpites e mágica.", cor: "#f5c04e", art: "/portal/arcade/palpite-30s.webp", status: "home" },
-  { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Dois prompts entram, só um sai vencedor — descubra por quê.", cor: "#fb923c", art: "/portal/arcade/batalha-prompts.webp", status: "jogar" },
-  { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Escolha e arraste peças para reconstruir a receita original.", cor: "#a3e635", art: "/portal/arcade/caca-prompt.webp", status: "jogar" },
+  { id: "monte-o-prompt", titulo: "Monte o Prompt", desc: "A receita dos 5 ingredientes de uma imagem profissional.", cor: "#f472b6", status: "jogar" },
+  { id: "verdade-ou-mito", titulo: "Verdade ou Mito?", desc: "10 cartas para separar o hype da realidade da IA.", cor: "#38bdf8", status: "jogar" },
+  { id: "qual-prompt", titulo: "Qual Prompt Gerou Isto?", desc: "Olhe a arte, adivinhe a receita que a criou.", cor: "#a78bfa", status: "jogar" },
+  { id: "palpite-30s", titulo: "Palpite em 30 Segundos", desc: "O clássico da página inicial — palpites e mágica.", cor: "#f5c04e", status: "home" },
+  { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Dois prompts entram, só um sai vencedor — descubra por quê.", cor: "#fb923c", status: "jogar" },
+  { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Escolha e arraste peças para reconstruir a receita original.", cor: "#a3e635", status: "jogar" },
 ];
 
 const TITULOS: Record<string, string> = {
@@ -44,7 +43,7 @@ const TITULOS: Record<string, string> = {
 };
 
 export function MinigamesPanel() {
-  const [jogo, setJogo] = useState<string | null>(null);
+  const [jogo, setJogo] = useState<ArcadeGameId | null>(null);
 
   if (jogo) {
     return (
@@ -52,13 +51,16 @@ export function MinigamesPanel() {
         <button onClick={() => setJogo(null)} className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft size={15} /> Arcade
         </button>
-        <div className="rounded-2xl border border-border bg-card p-4 md:p-6">
+        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+          <ArcadeVisual gameId={jogo} alt={`Arte animada do jogo ${TITULOS[jogo]}`} active eager className="aspect-[16/5] border-b border-border" imageClassName="transition-transform duration-700 hover:scale-[1.02]" />
+          <div className="p-4 md:p-6">
           <h2 className="text-lg font-bold mb-4">{TITULOS[jogo]}</h2>
           {jogo === "monte-o-prompt" && <PromptBuilderGame />}
           {jogo === "verdade-ou-mito" && <VerdadeOuMito />}
           {jogo === "qual-prompt" && <QualPrompt />}
           {jogo === "batalha-prompts" && <BatalhaPrompts />}
           {jogo === "caca-prompt" && <CacaPrompt />}
+          </div>
         </div>
       </div>
     );
@@ -99,7 +101,7 @@ export function MinigamesPanel() {
               <img src="/landing/photos/cursos-hero.webp" alt="Pessoas aprendendo juntas com tecnologia" className="absolute inset-0 h-full w-full object-cover opacity-70" style={{ maskImage: "linear-gradient(90deg, transparent, black 22%)", WebkitMaskImage: "linear-gradient(90deg, transparent, black 22%)" }} />
               <span className="absolute inset-0 bg-gradient-to-l from-[#0c0e1d]/10 to-[#0c0e1d] sm:to-transparent" />
               <span className="arc-float absolute bottom-3 right-4 block aspect-[3/2] w-36 rotate-2 overflow-hidden rounded-2xl border border-white/25 bg-[#141731] shadow-2xl shadow-violet-500/30 sm:w-44">
-                <img src="/portal/arcade/arcade-hero.webp" alt="Robôs vetoriais jogando no Arcade da IA" className="h-full w-full object-cover" />
+                <RandomArcadeVisual alt="Cenas dos minigames do Arcade da IA" eager className="h-full w-full" imageClassName="h-full w-full object-cover" />
               </span>
             </div>
           </div>
@@ -120,8 +122,7 @@ export function MinigamesPanel() {
                 style={{ borderColor: `${j.cor}44` }}
               >
                 <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={j.art} alt={j.titulo} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" style={j.status === "construindo" ? { filter: "saturate(.5) brightness(.7)" } : undefined} />
+                  <ArcadeVisual gameId={j.id} alt={`Arte do minigame ${j.titulo}`} className="absolute inset-0 h-full w-full" imageClassName="transition-transform duration-500 group-hover:scale-105" />
                   <span className="absolute top-2.5 left-2.5 text-[9px] font-extrabold uppercase tracking-widest rounded-full px-2 py-0.5" style={{ background: j.status === "construindo" ? "#f5c04e" : j.cor, color: "#0c0e1d" }}>
                     {j.status === "construindo" ? "Construindo" : j.status === "home" ? "Na página inicial" : "Jogar agora"}
                   </span>
@@ -171,8 +172,7 @@ export function ArcadeBanner({ onOpen }: { onOpen: () => void }) {
     <button onClick={onOpen} className="w-full text-left group">
       <div className="relative rounded-2xl overflow-hidden border border-border" style={{ background: "#0c0e1d" }}>
         <div className="absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/portal/arcade/arcade-hero.webp" alt="" className="w-full h-full object-cover opacity-45 transition-transform duration-700 group-hover:scale-105" />
+          <RandomArcadeVisual alt="" className="absolute inset-0 h-full w-full opacity-45" imageClassName="transition-transform duration-700 group-hover:scale-105" />
           <span className="absolute inset-0" style={{ background: "linear-gradient(90deg, #0c0e1d 20%, rgba(12,14,29,.55) 60%, rgba(12,14,29,.25))" }} />
         </div>
         <div className="relative flex items-center justify-between gap-3 p-4 md:p-5">
