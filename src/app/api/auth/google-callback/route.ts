@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
+import { fireWelcomeFlow } from '@/lib/welcome-email';
 import { getAuthUser } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -231,6 +232,8 @@ export async function GET(request: NextRequest) {
         role: 'student',
         lastLoginAt: new Date(),
       });
+      // P5: boas-vindas + aviso ao admin — só em conta NOVA
+      fireWelcomeFlow(user.name, user.email, 'google-oauth');
     }
 
     // Create JWT token

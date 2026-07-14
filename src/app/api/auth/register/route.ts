@@ -4,6 +4,7 @@ import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { getClientIpFromRequest, rateLimit } from '@/lib/rate-limit';
+import { fireWelcomeFlow } from '@/lib/welcome-email';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -93,6 +94,9 @@ export async function POST(request: Request) {
         status: 'active'
       }
     });
+
+    // P5: boas-vindas + aviso ao admin — fire-and-forget, nunca bloqueia
+    fireWelcomeFlow(newUser.name, newUser.email, source || 'onboarding_v2');
 
     // Create token
     const token = jwt.sign(

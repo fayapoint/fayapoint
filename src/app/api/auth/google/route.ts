@@ -6,6 +6,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
+import { fireWelcomeFlow } from '@/lib/welcome-email';
 import { rateLimit, getClientIpFromRequest } from '@/lib/rate-limit';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
@@ -116,6 +117,8 @@ export async function POST(request: Request) {
         role: 'student',
         lastLoginAt: new Date(),
       });
+      // P5: boas-vindas + aviso ao admin — só em conta NOVA
+      fireWelcomeFlow(user.name, user.email, 'google-oauth');
     }
 
     // Create JWT token (same format as login route)
