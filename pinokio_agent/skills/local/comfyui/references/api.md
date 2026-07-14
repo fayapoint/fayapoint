@@ -1,14 +1,38 @@
-# ComfyUI API contract
+# ComfyUI local API contract
 
-The client relies only on the public local HTTP endpoints exposed by ComfyUI:
+The client uses ComfyUI's local HTTP API:
 
-- `GET /system_stats`: runtime and device health.
-- `GET /queue`: running and pending prompt queues.
-- `POST /prompt`: submit an API-format workflow as `{ "prompt": graph }`.
-- `GET /history/{prompt_id}`: poll completion and discover output images.
-- `GET /view?filename=...&subfolder=...&type=...`: download a completed output.
+- `GET /system_stats`: runtime, version, and GPU memory.
+- `GET /object_info`: installed nodes and model option discovery.
+- `GET /queue`: running and pending work.
+- `POST /prompt`: submit an API-format graph.
+- `GET /history/{prompt_id}`: poll status and recover output metadata.
+- `GET /view`: download an image, animation, video, or other file from history metadata.
+- `POST /upload/image`: upload an input image for `LoadImage`.
+- `POST /interrupt`: interrupt current execution.
+- `POST /queue` with `{ "clear": true }`: clear pending work.
+- `POST /free`: unload models and/or release cached memory.
 
-Image workflows use these built-in nodes: `UNETLoader`, `CLIPLoader`, `VAELoader`, `LoraLoaderModelOnly`, `ModelSamplingAuraFlow`, `CLIPTextEncode`, `EmptySD3LatentImage`, `KSampler`, `VAEDecode`, and `SaveImage`.
+The client treats any history output containing `filename`, `subfolder`, and `type` as downloadable. This covers `SaveImage` and `SaveVideo` outputs without hard-coding a file extension.
 
-Do not expose the API beyond the trusted local machine. ComfyUI's local API is not an authentication boundary.
+## Safety boundary
 
+Use only a trusted local ComfyUI instance. The API is powerful, can invoke custom nodes, and is not an authentication boundary. Do not expose it publicly. Do not load untrusted workflow JSON or model files. Queue and memory mutations require explicit client flags.
+
+## Generic workflow rules
+
+The `/prompt` endpoint accepts an API graph keyed by node ID:
+
+```json
+{
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Prompt",
+      "clip": ["2", 0]
+    }
+  }
+}
+```
+
+The normal browser workflow includes layout metadata and is not interchangeable with this graph. Export a workflow in API format before using `run`. The client validates all `class_type` values against `/object_info` before submission, but ComfyUI remains the final validator for types and connections.

@@ -1,5 +1,4 @@
 interface:
   display_name: "ComfyUI Local"
-  short_description: "Gera imagens e vídeos pela API local do ComfyUI"
-  default_prompt: "Use $local-comfyui para gerar um pacote visual e salvar os arquivos no projeto."
-
+  short_description: "Cria, edita e anima visuais no ComfyUI local"
+  default_prompt: "Use $local-comfyui para descobrir os modelos locais e criar, editar ou animar visuais reproduzíveis para o projeto."
