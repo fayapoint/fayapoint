@@ -7,6 +7,8 @@ import { ArrowLeft, ArrowRight, Gamepad2, Play } from "lucide-react";
 import { PromptBuilderGame } from "@/components/portal/PromptBuilderGame";
 import { VerdadeOuMito } from "@/components/portal/games/VerdadeOuMito";
 import { QualPrompt } from "@/components/portal/games/QualPrompt";
+import { BatalhaPrompts } from "@/components/portal/games/BatalhaPrompts";
+import { CacaPrompt } from "@/components/portal/games/CacaPrompt";
 
 /**
  * Arcade da IA — aba dedicada de minigames (F4 do PLANO_UX_NAVEGACAO).
@@ -29,14 +31,16 @@ const JOGOS: Jogo[] = [
   { id: "verdade-ou-mito", titulo: "Verdade ou Mito?", desc: "10 cartas para separar o hype da realidade da IA.", cor: "#38bdf8", art: "/portal/arcade/verdade-mito.webp", status: "jogar" },
   { id: "qual-prompt", titulo: "Qual Prompt Gerou Isto?", desc: "Olhe a arte, adivinhe a receita que a criou.", cor: "#a78bfa", art: "/portal/arcade/qual-prompt.webp", status: "jogar" },
   { id: "palpite-30s", titulo: "Palpite em 30 Segundos", desc: "O clássico da página inicial — palpites e mágica.", cor: "#f5c04e", art: "/portal/arcade/palpite-30s.webp", status: "home" },
-  { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Dois prompts entram, só um sai vencedor.", cor: "#fb923c", art: "/portal/arcade/batalha-prompts.webp", status: "construindo" },
-  { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Siga as pistas e reconstrua o prompt original.", cor: "#a3e635", art: "/portal/arcade/caca-prompt.webp", status: "construindo" },
+  { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Dois prompts entram, só um sai vencedor — descubra por quê.", cor: "#fb923c", art: "/portal/arcade/batalha-prompts.webp", status: "jogar" },
+  { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Escolha e arraste peças para reconstruir a receita original.", cor: "#a3e635", art: "/portal/arcade/caca-prompt.webp", status: "jogar" },
 ];
 
 const TITULOS: Record<string, string> = {
   "monte-o-prompt": "Monte o Prompt",
   "verdade-ou-mito": "Verdade ou Mito?",
   "qual-prompt": "Qual Prompt Gerou Isto?",
+  "batalha-prompts": "Batalha de Prompts",
+  "caca-prompt": "Caça ao Prompt Perdido",
 };
 
 export function MinigamesPanel() {
@@ -53,6 +57,8 @@ export function MinigamesPanel() {
           {jogo === "monte-o-prompt" && <PromptBuilderGame />}
           {jogo === "verdade-ou-mito" && <VerdadeOuMito />}
           {jogo === "qual-prompt" && <QualPrompt />}
+          {jogo === "batalha-prompts" && <BatalhaPrompts />}
+          {jogo === "caca-prompt" && <CacaPrompt />}
         </div>
       </div>
     );
@@ -90,8 +96,11 @@ export function MinigamesPanel() {
               </p>
             </div>
             <div className="relative h-40 sm:h-full min-h-[160px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/portal/arcade/arcade-hero.webp" alt="" className="arc-float absolute inset-0 w-full h-full object-cover" style={{ maskImage: "linear-gradient(90deg, transparent, black 22%)", WebkitMaskImage: "linear-gradient(90deg, transparent, black 22%)" }} />
+              <img src="/landing/photos/cursos-hero.webp" alt="Pessoas aprendendo juntas com tecnologia" className="absolute inset-0 h-full w-full object-cover opacity-70" style={{ maskImage: "linear-gradient(90deg, transparent, black 22%)", WebkitMaskImage: "linear-gradient(90deg, transparent, black 22%)" }} />
+              <span className="absolute inset-0 bg-gradient-to-l from-[#0c0e1d]/10 to-[#0c0e1d] sm:to-transparent" />
+              <span className="arc-float absolute bottom-3 right-4 block aspect-[3/2] w-36 rotate-2 overflow-hidden rounded-2xl border border-white/25 bg-[#141731] shadow-2xl shadow-violet-500/30 sm:w-44">
+                <img src="/portal/arcade/arcade-hero.webp" alt="Robôs vetoriais jogando no Arcade da IA" className="h-full w-full object-cover" />
+              </span>
             </div>
           </div>
         </div>
@@ -171,8 +180,8 @@ export function ArcadeBanner({ onOpen }: { onOpen: () => void }) {
             <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest rounded-full px-2.5 py-1" style={{ background: "rgba(245,192,78,.2)", color: "#f5c04e" }}>
               <Gamepad2 size={11} /> Novo: Arcade da IA
             </span>
-            <p className="mt-1.5 font-bold text-sm md:text-base">3 minigames para aprender IA jogando</p>
-            <p className="text-[12px] text-muted-foreground">Monte prompts, cace mitos, adivinhe receitas — entrou, jogou, aprendeu.</p>
+            <p className="mt-1.5 font-bold text-sm md:text-base">5 minigames para aprender IA jogando</p>
+            <p className="text-[12px] text-muted-foreground">Monte, compare e reconstrua prompts — entrou, jogou, aprendeu.</p>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-extrabold text-[#241a05] shrink-0 group-hover:opacity-90 transition-opacity" style={{ background: "linear-gradient(135deg, #f5c04e, #ffd97a)" }}>
             Jogar <ArrowRight size={14} />

@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/products";
 import { useLocale } from "next-intl";
 import { formatEditorialDate } from "@/lib/editorial-verification";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface AttractiveCourseCardProps {
   product: Product;
@@ -54,8 +53,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   const locale = useLocale();
   const isPtBr = locale === 'pt-BR';
   const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
-  const { monthlyOfferPrice, conversionDisplay } = useExchangeRate();
-  const effectivePrice = isFreeCourseOfMonth ? monthlyOfferPrice : product.pricing.price;
+  const effectivePrice = isFreeCourseOfMonth ? 0 : product.pricing.price;
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
     : product.pricing.originalPrice;
@@ -65,7 +63,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   );
   
   const discount = isFreeCourseOfMonth
-    ? Math.round(((product.pricing.price - monthlyOfferPrice) / product.pricing.price) * 100)
+    ? 100
     : product.pricing.originalPrice > product.pricing.price
       ? Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100)
       : 0;
@@ -285,7 +283,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                   </div>
                   {isFreeCourseOfMonth ? (
                     <p className="text-xs text-emerald-300 mt-1">
-                      {isPtBr ? `Oferta do mês — ${conversionDisplay}` : `Monthly offer — ${conversionDisplay}`}
+                      {isPtBr ? "Curso grátis do mês" : "Free course of the month"}
                     </p>
                   ) : (
                     <p className="text-xs text-muted-foreground mt-1">

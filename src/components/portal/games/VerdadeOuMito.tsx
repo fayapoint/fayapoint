@@ -3,57 +3,58 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, X, RefreshCw, ArrowRight } from "lucide-react";
+import { TRUTH_CARDS } from "@/data/games/verdade-mito";
+import { useRotatingDeck } from "@/lib/game-rotation";
+import { FxConfetti, VocabularyChip } from "@/components/portal/games/GameLearning";
 
-/**
- * Verdade ou Mito — minigame do Arcade (F4). Dez afirmações sobre IA,
- * julgamento rápido com feedback animado e explicação curta. Sem XP fake:
- * a recompensa é sair sabendo separar hype de realidade.
- */
-
-const CARTAS: { frase: string; verdade: boolean; explica: string }[] = [
-  { frase: "Você pode gravar uma reunião no celular e pedir para a IA transcrever e resumir.", verdade: true, explica: "É um dos usos mais práticos: áudio → texto → ata com decisões e pendências." },
-  { frase: "A IA sempre diz a verdade.", verdade: false, explica: "IAs podem 'alucinar' — inventar fatos com confiança. Sempre confira informações importantes." },
-  { frase: "Para usar IA no trabalho você precisa saber programar.", verdade: false, explica: "Saber conversar (prompt) já resolve a maioria dos usos do dia a dia." },
-  { frase: "Uma IA pode te ajudar a entender um contrato antes de assinar.", verdade: true, explica: "Cole a cláusula e peça a explicação simples + o que perguntar antes de assinar." },
-  { frase: "IAs conseguem analisar uma foto que você envia.", verdade: true, explica: "Modelos multimodais leem imagens: planta, prato, boleto, print de erro..." },
-  { frase: "A IA sabe tudo que aconteceu no mundo em tempo real.", verdade: false, explica: "O conhecimento tem data de corte; sem busca conectada, ela não viu a notícia de hoje." },
-  { frase: "Dá para criar uma música completa, com letra em português, usando IA.", verdade: true, explica: "Geradores de música criam melodia, arranjo e vocal a partir de uma descrição." },
-  { frase: "Prompts mais longos são sempre melhores.", verdade: false, explica: "Clareza vale mais que tamanho: contexto + tarefa + formato desejado." },
-  { frase: "A IA pode montar seu cardápio da semana só com o que tem na geladeira.", verdade: true, explica: "Liste os ingredientes e peça cardápio + lista de compras do que faltar." },
-  { frase: "Usar IA é sempre pago e caro.", verdade: false, explica: "Há versões gratuitas poderosas de chat, imagem e transcrição — o custo é aprender a usar." },
-];
+const ROUND_COUNT = 10;
 
 export function VerdadeOuMito() {
-  const [i, setI] = useState(0);
-  const [resposta, setResposta] = useState<boolean | null>(null);
-  const [acertos, setAcertos] = useState(0);
-  const [fim, setFim] = useState(false);
+  const { deck, rotate } = useRotatingDeck(TRUTH_CARDS, ROUND_COUNT, "fayai_seen_verdade_mito");
+  const [index, setIndex] = useState(0);
+  const [answer, setAnswer] = useState<boolean | null>(null);
+  const [score, setScore] = useState(0);
+  const [finished, setFinished] = useState(false);
 
-  const carta = CARTAS[i];
-  const acertou = resposta !== null && resposta === carta.verdade;
+  const card = deck[index];
+  const correct = answer !== null && answer === card.isTrue;
 
-  const responder = (v: boolean) => {
-    if (resposta !== null) return;
-    setResposta(v);
-    if (v === carta.verdade) setAcertos((a) => a + 1);
+  const respond = (value: boolean) => {
+    if (answer !== null) return;
+    setAnswer(value);
+    if (value === card.isTrue) setScore((current) => current + 1);
   };
 
-  const proxima = () => {
-    if (i + 1 >= CARTAS.length) { setFim(true); return; }
-    setI(i + 1);
-    setResposta(null);
+  const next = () => {
+    if (index + 1 >= deck.length) {
+      setFinished(true);
+      return;
+    }
+    setIndex((current) => current + 1);
+    setAnswer(null);
   };
 
-  const reiniciar = () => { setI(0); setResposta(null); setAcertos(0); setFim(false); };
+  const restart = () => {
+    rotate();
+    setIndex(0);
+    setAnswer(null);
+    setScore(0);
+    setFinished(false);
+  };
 
-  if (fim) {
-    const nota = acertos >= 9 ? "Você separa hype de realidade como gente grande! 🏆" : acertos >= 6 ? "Mandou bem — o resto a trilha ensina. ✨" : "Ótimo começo: agora você sabe o que NÃO sabia. 🌱";
+  if (finished) {
+    const message = score >= 9
+      ? "Você separa hype de realidade como gente grande!"
+      : score >= 6
+        ? "Mandou bem — cada explicação deixou seu radar mais forte."
+        : "Ótimo começo: descobrir o que ainda não sabemos também é aprender.";
     return (
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
-        <p className="text-5xl font-extrabold" style={{ color: "#f5c04e" }}>{acertos}/{CARTAS.length}</p>
-        <p className="mt-2 text-sm text-muted-foreground max-w-sm mx-auto">{nota}</p>
-        <button onClick={reiniciar} className="mt-5 inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-extrabold text-[#241a05]" style={{ background: "linear-gradient(135deg, #f5c04e, #ffd97a)" }}>
-          <RefreshCw size={14} /> Jogar de novo
+      <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="relative py-9 text-center">
+        <FxConfetti active={score >= 6} />
+        <p className="relative text-5xl font-extrabold text-amber-400">{score}/{deck.length}</p>
+        <p className="relative mx-auto mt-2 max-w-sm text-sm text-muted-foreground">{message}</p>
+        <button onClick={restart} className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-extrabold text-[#241a05]">
+          <RefreshCw size={14} /> Jogar com novas cartas
         </button>
       </motion.div>
     );
@@ -61,47 +62,57 @@ export function VerdadeOuMito() {
 
   return (
     <div>
-      <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
-        <span>Carta {i + 1} de {CARTAS.length}</span>
-        <span style={{ color: "#f5c04e" }}>{acertos} acertos</span>
+      <div className="mb-3 flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+        <span>Carta {index + 1} de {deck.length}</span>
+        <span className="text-amber-400">{score} acertos</span>
       </div>
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={i}
+          key={card.id}
           initial={{ opacity: 0, x: 30, rotate: 1.5 }}
           animate={{ opacity: 1, x: 0, rotate: 0 }}
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.25 }}
-          className="rounded-2xl border p-5 text-center"
+          className="overflow-hidden rounded-2xl border text-center"
           style={{
-            borderColor: resposta === null ? "rgba(255,255,255,.14)" : acertou ? "#a3e63588" : "#f4727688",
-            background: resposta === null ? "rgba(22,26,54,.42)" : acertou ? "rgba(163,230,53,.08)" : "rgba(244,114,118,.08)",
-            boxShadow: resposta !== null ? `0 14px 40px -14px ${acertou ? "#a3e635" : "#f47276"}55` : undefined,
+            borderColor: answer === null ? "rgba(255,255,255,.14)" : correct ? "#a3e63588" : "#f4727688",
+            background: answer === null ? "rgba(22,26,54,.42)" : correct ? "rgba(163,230,53,.08)" : "rgba(244,114,118,.08)",
           }}
         >
-          <p className="text-base sm:text-lg font-bold leading-snug">{carta.frase}</p>
-
-          {resposta === null ? (
-            <div className="mt-5 flex items-center justify-center gap-3">
-              <button onClick={() => responder(true)} className="flex items-center gap-2 rounded-2xl px-6 py-3 font-extrabold text-[#0c2a12] hover:scale-[1.04] transition-transform" style={{ background: "linear-gradient(135deg, #a3e635, #d3f36b)" }}>
-                <Check size={17} strokeWidth={3} /> Verdade
-              </button>
-              <button onClick={() => responder(false)} className="flex items-center gap-2 rounded-2xl px-6 py-3 font-extrabold text-white hover:scale-[1.04] transition-transform" style={{ background: "linear-gradient(135deg, #f47276, #f472b6)" }}>
-                <X size={17} strokeWidth={3} /> Mito
-              </button>
+          {card.art && (
+            <div className="relative mx-auto aspect-[3/2] max-h-52 overflow-hidden bg-[#0c0e1d]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={card.art} alt="" className="h-full w-full object-cover" />
+              <span className="absolute inset-0 bg-gradient-to-t from-[#0c0e1d] via-transparent to-transparent" />
             </div>
-          ) : (
-            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-4">
-              <p className="text-sm font-extrabold uppercase tracking-widest" style={{ color: acertou ? "#a3e635" : "#f47276" }}>
-                {acertou ? "Acertou!" : carta.verdade ? "Era verdade!" : "Era mito!"}
-              </p>
-              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{carta.explica}</p>
-              <button onClick={proxima} className="mt-4 inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-extrabold text-[#241a05]" style={{ background: "linear-gradient(135deg, #f5c04e, #ffd97a)" }}>
-                {i + 1 >= CARTAS.length ? "Ver resultado" : "Próxima"} <ArrowRight size={14} />
-              </button>
-            </motion.div>
           )}
+
+          <div className="p-5">
+            <p className="text-base font-bold leading-snug sm:text-lg">{card.statement}</p>
+
+            {answer === null ? (
+              <div className="mt-5 flex items-center justify-center gap-3">
+                <button onClick={() => respond(true)} className="flex items-center gap-2 rounded-2xl bg-gradient-to-br from-lime-400 to-lime-200 px-6 py-3 font-extrabold text-[#0c2a12] transition-transform hover:scale-[1.04]">
+                  <Check size={17} strokeWidth={3} /> Verdade
+                </button>
+                <button onClick={() => respond(false)} className="flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-400 px-6 py-3 font-extrabold text-white transition-transform hover:scale-[1.04]">
+                  <X size={17} strokeWidth={3} /> Mito
+                </button>
+              </div>
+            ) : (
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-4">
+                <p className="text-sm font-extrabold uppercase tracking-widest" style={{ color: correct ? "#a3e635" : "#f47276" }}>
+                  {correct ? "Acertou!" : card.isTrue ? "Era verdade!" : "Era mito!"}
+                </p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{card.explanation}</p>
+                <VocabularyChip term={card.term} />
+                <button onClick={next} className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-extrabold text-[#241a05]">
+                  {index + 1 >= deck.length ? "Ver resultado" : "Próxima"} <ArrowRight size={14} />
+                </button>
+              </motion.div>
+            )}
+          </div>
         </motion.div>
       </AnimatePresence>
     </div>

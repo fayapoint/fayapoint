@@ -179,3 +179,27 @@ Regras herdadas do §5: `prefers-reduced-motion` desliga tudo; conteúdo nunca d
 4. **3 passes de iteração obrigatórios**: após "pronto", revisar procurando (a) problemas de design, (b) oportunidades de sofisticar, (c) performance/robustez — com a página aberta no browser, não de memória.
 5. **Dados acima de gosto**: decisões de conversão (ordem de seções, CTA) seguem evidência dos concorrentes vencedores e das métricas próprias (PostHog), não intuição.
 6. **Experiência > scroll estático**: interatividade com propósito (o minigame é o exemplo-mestre) — mas performance e clareza vencem espetáculo.
+
+---
+
+## 12. Mix vetor + fotografia no mesmo quadro (v1.2 — 14/07/2026)
+
+O encontro entre os dois mundos da FayAI também pode acontecer **dentro de uma única composição**, não apenas alternando imagens numa galeria. A fotografia ancora a utilidade na vida real; o vetor encena a camada de ajuda e descoberta proporcionada pela IA.
+
+### Composição preferida: camadas independentes
+
+1. **Base fotográfica**: cena brasileira cândida e cinematográfica (§4b), tratada como ambiente real.
+2. **Janela vetorial**: robô, objeto mágico ou resultado gerado (§4a), dentro de moldura de vidro, tela ou card levemente inclinado.
+3. **Ligação visual**: glow, sparkles ou gradiente compartilha a cor de contexto e une os dois mundos.
+4. **Movimento**: fotografia permanece estável; camada vetorial flutua ou reage via Framer Motion. Em `prefers-reduced-motion`, a composição continua completa e legível.
+
+### Regras
+
+- A foto e o vetor devem contar **a mesma ação**; colagem decorativa ou genérica continua proibida.
+- Texto e dados reais permanecem em HTML/canvas, nunca dentro da imagem gerada.
+- Cada camada WebP deve buscar ≤40KB; reaproveitar uma foto existente só quando ela espelhar de fato o conteúdo.
+- O contraste precisa parecer deliberado: moldura, sombra e cor comum deixam claro que a IA está entrando na vida real, não que duas imagens foram sobrepostas por acaso.
+
+### Primeiro uso canônico
+
+Hero do Arcade da IA: fotografia de pessoas aprendendo juntas como base real + máquina de arcade e robôs vetoriais em moldura flutuante. A cena comunica “pessoas reais aprendem IA jogando” sem depender de texto dentro da arte.

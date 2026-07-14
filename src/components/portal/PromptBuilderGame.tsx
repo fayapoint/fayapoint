@@ -2,8 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Copy, Sparkles, RefreshCw } from "lucide-react";
+import { Check, Copy, Sparkles, RefreshCw, Dices } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PROMPT_INGREDIENTS } from "@/data/games/monte-prompt";
+import { VocabularyChip } from "@/components/portal/games/GameLearning";
 
 /**
  * Monte o Prompt — primeiro minigame novo da trilha (F4 do PLANO_UX_NAVEGACAO).
@@ -14,75 +16,15 @@ import { cn } from "@/lib/utils";
  * é o prompt pronto para usar no Studio ou em qualquer gerador.
  */
 
-interface Ingrediente {
-  id: string;
-  rotulo: string;
-  cor: string;
-  opcoes: { chip: string; trecho: string }[];
-}
-
-const INGREDIENTES: Ingrediente[] = [
-  {
-    id: "assunto",
-    rotulo: "Assunto",
-    cor: "#38bdf8",
-    opcoes: [
-      { chip: "🧁 Logotipo de confeitaria", trecho: "logotipo para a confeitaria 'Doce Manhã'" },
-      { chip: "🐶 Mascote de petshop", trecho: "mascote fofo para um petshop, um cachorrinho sorridente" },
-      { chip: "🚀 Capa de podcast de tecnologia", trecho: "capa para um podcast de tecnologia chamado 'Órbita'" },
-    ],
-  },
-  {
-    id: "estilo",
-    rotulo: "Estilo",
-    cor: "#a78bfa",
-    opcoes: [
-      { chip: "Minimalista flat", trecho: "estilo minimalista flat" },
-      { chip: "Aquarela artesanal", trecho: "estilo aquarela artesanal" },
-      { chip: "3D fofinho", trecho: "estilo 3D fofinho com formas arredondadas" },
-    ],
-  },
-  {
-    id: "cor",
-    rotulo: "Cores",
-    cor: "#f472b6",
-    opcoes: [
-      { chip: "Pastel suave", trecho: "paleta pastel suave" },
-      { chip: "Vibrante e quente", trecho: "cores vibrantes e quentes" },
-      { chip: "Azul e dourado", trecho: "paleta azul profundo com detalhes dourados" },
-    ],
-  },
-  {
-    id: "fundo",
-    rotulo: "Fundo",
-    cor: "#a3e635",
-    opcoes: [
-      { chip: "Liso e limpo", trecho: "fundo liso e limpo" },
-      { chip: "Gradiente sutil", trecho: "fundo em gradiente sutil" },
-      { chip: "Cena desfocada", trecho: "fundo de cena levemente desfocada" },
-    ],
-  },
-  {
-    id: "luz",
-    rotulo: "Luz",
-    cor: "#f5c04e",
-    opcoes: [
-      { chip: "Suave de estúdio", trecho: "iluminação suave de estúdio" },
-      { chip: "Golden hour", trecho: "luz quente de fim de tarde" },
-      { chip: "Neon dramático", trecho: "iluminação neon dramática" },
-    ],
-  },
-];
-
 export function PromptBuilderGame() {
   const [escolhas, setEscolhas] = useState<Record<string, number>>({});
   const [copiado, setCopiado] = useState(false);
 
-  const completo = INGREDIENTES.every((ing) => escolhas[ing.id] !== undefined);
+  const completo = PROMPT_INGREDIENTS.every((ing) => escolhas[ing.id] !== undefined);
 
   const prompt = useMemo(() => {
     if (!completo) return "";
-    const partes = INGREDIENTES.map((ing) => ing.opcoes[escolhas[ing.id]].trecho);
+    const partes = PROMPT_INGREDIENTS.map((ing) => ing.options[escolhas[ing.id]].excerpt);
     return `Crie uma imagem: ${partes[0]}, ${partes[1]}, ${partes[2]}, ${partes[3]}, ${partes[4]}, alta qualidade, sem texto.`;
   }, [escolhas, completo]);
 
@@ -92,6 +34,14 @@ export function PromptBuilderGame() {
       setCopiado(true);
       setTimeout(() => setCopiado(false), 2000);
     } catch { /* clipboard indisponível */ }
+  };
+
+  const surpreender = () => {
+    setEscolhas(Object.fromEntries(PROMPT_INGREDIENTS.map((ingredient) => [
+      ingredient.id,
+      Math.floor(Math.random() * ingredient.options.length),
+    ])));
+    setCopiado(false);
   };
 
   return (
@@ -114,16 +64,16 @@ export function PromptBuilderGame() {
       </div>
 
       <div className="mt-4 space-y-3">
-        {INGREDIENTES.map((ing) => (
+        {PROMPT_INGREDIENTS.map((ing) => (
           <div key={ing.id} className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
             <span
               className="shrink-0 w-20 text-[11px] font-extrabold uppercase tracking-widest"
-              style={{ color: ing.cor }}
+              style={{ color: ing.color }}
             >
-              {ing.rotulo}
+              {ing.label}
             </span>
             <div className="flex flex-wrap gap-2">
-              {ing.opcoes.map((op, idx) => {
+              {ing.options.map((op, idx) => {
                 const ativo = escolhas[ing.id] === idx;
                 return (
                   <button
@@ -133,7 +83,7 @@ export function PromptBuilderGame() {
                       "rounded-full border px-3 py-1.5 text-[13px] font-semibold transition-all",
                       ativo ? "scale-[1.03]" : "border-border text-muted-foreground hover:text-foreground hover:border-white/30"
                     )}
-                    style={ativo ? { borderColor: ing.cor, background: `${ing.cor}1e`, color: ing.cor } : undefined}
+                      style={ativo ? { borderColor: ing.color, background: `${ing.color}1e`, color: ing.color } : undefined}
                   >
                     {op.chip}
                   </button>
@@ -143,6 +93,10 @@ export function PromptBuilderGame() {
           </div>
         ))}
       </div>
+
+      <button onClick={surpreender} className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-violet-400/35 bg-violet-400/10 px-4 py-2 text-sm font-bold text-violet-200 hover:bg-violet-400/15">
+        <Dices size={15} /> Surpreenda-me
+      </button>
 
       <AnimatePresence>
         {completo && (
@@ -157,6 +111,7 @@ export function PromptBuilderGame() {
               Sua receita está pronta 🎉
             </span>
             <p className="text-sm leading-relaxed">{prompt}</p>
+            <VocabularyChip term={{ slug: "prompt", label: "prompt estruturado", definition: "Um pedido organizado em partes claras: assunto, estilo, paleta, composição e iluminação." }} />
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <button
                 onClick={copiar}

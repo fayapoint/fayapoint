@@ -20,7 +20,6 @@ import { Badge } from "@/components/ui/badge";
 import { useUser } from "@/contexts/UserContext";
 import { useLocale } from "next-intl";
 import type { Product } from "@/lib/products";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface MonthlyOffersResponse {
   monthKey: string;
@@ -61,7 +60,6 @@ export function HeroSection() {
   const locale = useLocale();
   const isPtBr = locale === "pt-BR";
   const [monthlyOffers, setMonthlyOffers] = useState<MonthlyOffersResponse | null>(null);
-  const { formattedBrl, conversionDisplay } = useExchangeRate();
 
   useEffect(() => {
     async function fetchMonthlyOffers() {
@@ -88,14 +86,14 @@ export function HeroSection() {
         ? "Aprenda IA com clareza, valor real e uma oferta que converte"
         : "Learn AI with clarity, real value, and an offer that converts";
   const headlineLineTwo = isPtBr
-    ? `comece por US$1 (${formattedBrl}), prove o resultado e só então avance de plano`
-    : `start for US$1 (${formattedBrl}), prove the result, and only then move up a plan`;
+    ? "comece pelo curso grátis do mês, prove o resultado e só então avance de plano"
+    : "start with the free course of the month, prove the result, and only then move up a plan";
 
   const monthlySummary = useMemo(() => {
     if (!monthlyOffers) {
       return isPtBr
-        ? `Todo mês, um curso completo fica disponível por US$1 (${formattedBrl}) e o restante do catálogo roda por faixa de plano.`
-        : `Every month one full course is available for US$1 (${formattedBrl}), and the rest of the catalog rotates by plan tier.`;
+        ? "Todo mês, um curso completo fica grátis e o restante do catálogo roda por faixa de plano."
+        : "Every month one full course is free, and the rest of the catalog rotates by plan tier.";
     }
 
     return isPtBr
@@ -121,7 +119,7 @@ export function HeroSection() {
             <div className="flex flex-wrap items-center gap-3">
               <Badge className="border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-emerald-200">
                 <Gift size={14} className="mr-2" />
-                {isPtBr ? `Oferta do mês por US$1 (${formattedBrl})` : `Monthly offer for US$1 (${formattedBrl})`}
+                {isPtBr ? "Curso grátis do mês" : "Free course of the month"}
               </Badge>
               <Badge className="border-cyan-400/15 bg-cyan-500/10 px-3 py-1 text-cyan-100">
                 <CalendarDays size={14} className="mr-2" />
@@ -139,8 +137,8 @@ export function HeroSection() {
 
               <p className="max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
                 {isPtBr
-                  ? `Descubra a oferta do mês por US$1 (${formattedBrl}), veja quais trilhas entram no seu plano agora e transforme a primeira experiência em confiança para continuar aprendendo.`
-                  : `Discover the monthly US$1 offer (${formattedBrl}), see which paths belong to your plan right now, and turn the first experience into confidence to keep learning.`}
+                  ? "Descubra o curso grátis do mês, veja quais trilhas entram no seu plano agora e transforme a primeira experiência em confiança para continuar aprendendo."
+                  : "Discover the free course of the month, see which paths belong to your plan right now, and turn the first experience into confidence to keep learning."}
             </p>
             </div>
 
@@ -172,8 +170,8 @@ export function HeroSection() {
                   <Gift className="mr-2 h-5 w-5" />
                   {freeCourse
                     ? isPtBr
-                      ? `Adquirir oferta do mês — US$1 (${formattedBrl})`
-                      : `Get monthly offer — US$1 (${formattedBrl})`
+                      ? "Liberar curso grátis do mês"
+                      : "Unlock free course of the month"
                     : isPtBr
                       ? "Assistir aula gratuita"
                       : "Watch free class"}
@@ -196,7 +194,7 @@ export function HeroSection() {
             <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-emerald-300" />
-                {isPtBr ? `Curso por US$1 (${formattedBrl}) com progresso salvo e acesso vitalício` : `US$1 course (${formattedBrl}) with saved progress and lifetime access`}
+                {isPtBr ? "Curso grátis com progresso salvo e acesso vitalício" : "Free course with saved progress and lifetime access"}
               </span>
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-emerald-300" />
@@ -224,8 +222,8 @@ export function HeroSection() {
                 </div>
                 <div className="rounded-[22px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.2),rgba(16,185,129,0.08))] px-4 py-3 text-right shadow-[0_12px_30px_rgba(16,185,129,0.16)]">
                   <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
-                  <p className="text-3xl font-black text-white">US$ 1</p>
-                  <p className="text-[10px] text-emerald-200/60">{formattedBrl}</p>
+                  <p className="text-3xl font-black text-white">GRÁTIS</p>
+                  <p className="text-[10px] text-emerald-200/60">sem cobrança</p>
                 </div>
               </div>
 

@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
 import { useUser } from "@/contexts/UserContext";
 import type { Product } from "@/lib/products";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface MonthlyOffersResponse {
   monthKey: string;
@@ -36,7 +35,6 @@ export function FreeOfferBanner() {
   const isPtBr = locale === "pt-BR";
   const { isLoggedIn, mounted, user } = useUser();
   const [monthlyOffers, setMonthlyOffers] = useState<MonthlyOffersResponse | null>(null);
-  const { formattedBrl, conversionDisplay } = useExchangeRate();
 
   useEffect(() => {
     async function fetchMonthlyOffers() {
@@ -62,7 +60,7 @@ export function FreeOfferBanner() {
     ? [
         {
           icon: Gift,
-          title: isPtBr ? `Oferta do mês — US$1 (${formattedBrl})` : `Monthly offer — US$1 (${formattedBrl})`,
+          title: isPtBr ? "Curso grátis do mês" : "Free course of the month",
           desc: freeCourse.name,
         },
         {
@@ -83,8 +81,8 @@ export function FreeOfferBanner() {
           icon: Sparkles,
           title: isPtBr ? "Experiência completa" : "Full experience",
           desc: isPtBr
-            ? `Aula, progresso, certificado e portal — tudo por US$1 (${formattedBrl}) no curso do mês.`
-            : `Lessons, progress, certificate, and portal — all for US$1 (${formattedBrl}) on the course of the month.`,
+            ? "Aula, progresso, certificado e portal — tudo grátis no curso do mês."
+            : "Lessons, progress, certificate, and portal — all free in the course of the month.",
         },
         {
           icon: Zap,
@@ -158,8 +156,8 @@ export function FreeOfferBanner() {
                 <p className="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground">
                   {freeCourse
                     ? isPtBr
-                      ? `${freeCourse.name} é a oferta do mês por apenas US$1 (${formattedBrl}). Acesso vitalício + certificado verificável incluído.`
-                      : `${freeCourse.name} is this month's offer for just US$1 (${formattedBrl}). Lifetime access + verified certificate included.`
+                      ? `${freeCourse.name} é o curso grátis do mês. Acesso vitalício + certificado verificável incluído.`
+                      : `${freeCourse.name} is this month's free course. Lifetime access + verified certificate included.`
                     : t("subtitle")}
                 </p>
 
@@ -175,8 +173,8 @@ export function FreeOfferBanner() {
                     </div>
                     <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-right">
                       <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
-                      <p className="text-3xl font-black text-white">US$ 1</p>
-                      <p className="text-[10px] text-emerald-200/60">{formattedBrl}</p>
+                      <p className="text-3xl font-black text-white">GRÁTIS</p>
+                      <p className="text-[10px] text-emerald-200/60">sem cobrança</p>
                     </div>
                   </div>
 
@@ -189,7 +187,7 @@ export function FreeOfferBanner() {
                         <Gift className="mr-2 h-5 w-5" />
                         {freeCourse
                           ? isLoggedIn
-                            ? (isPtBr ? `Ver oferta do mês — US$1 (${formattedBrl})` : `View monthly offer — US$1 (${formattedBrl})`)
+                            ? (isPtBr ? "Liberar curso grátis do mês" : "Unlock free course of the month")
                             : (isPtBr ? "Criar conta e aproveitar" : "Create account and get started")
                           : t("cta")}
                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -198,8 +196,8 @@ export function FreeOfferBanner() {
                     <p className="flex items-center text-sm text-muted-foreground">
                       {freeCourse
                         ? isPtBr
-                          ? `Apenas US$1 (${formattedBrl}) via PIX, cartão ou boleto. Acesso vitalício ao curso completo.`
-                          : `Just US$1 (${formattedBrl}) via PIX, card or boleto. Lifetime access to the full course.`
+                          ? "Sem cobrança. Acesso vitalício ao curso completo."
+                          : "No charge. Lifetime access to the full course."
                         : t("noCreditCard")}
                     </p>
                   </div>

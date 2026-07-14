@@ -25,7 +25,6 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { formatEditorialDate } from "@/lib/editorial-verification";
 import { getClientAuthHeaders } from "@/lib/client-auth";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 export default function CourseSalesPage() {
   const params = useParams();
@@ -41,8 +40,6 @@ export default function CourseSalesPage() {
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
   const [showTrailer, setShowTrailer] = useState(false);
   const locale = useLocale();
-  // Monthly offer costs US$1 converted to BRL at live rate — must be called before any early returns
-  const { monthlyOfferPrice, conversionDisplay } = useExchangeRate();
 
   // Fetch product from MongoDB
   useEffect(() => {
@@ -89,13 +86,13 @@ export default function CourseSalesPage() {
   const savings = product.pricing.originalPrice - product.pricing.price;
   const isPtBr = locale === 'pt-BR';
   const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
-  const effectivePrice = isFreeCourseOfMonth ? monthlyOfferPrice : product.pricing.price;
+  const effectivePrice = isFreeCourseOfMonth ? 0 : product.pricing.price;
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
     : product.pricing.originalPrice;
   const effectiveDiscount =
     isFreeCourseOfMonth && product.pricing.price > 0
-      ? Math.round(((product.pricing.price - monthlyOfferPrice) / product.pricing.price) * 100)
+      ? 100
       : discount;
   const verifiedAtLabel = formatEditorialDate(
     product.editorialVerification?.verifiedAt || "2026-04-27",
@@ -161,12 +158,17 @@ export default function CourseSalesPage() {
   };
 
   const handlePrimaryCourseAction = () => {
+    if (isFreeCourseOfMonth) {
+      void handleFreeCourseClaim();
+      return;
+    }
+
     addItem({
       id: `course:${product.slug}`,
       type: 'course',
       name: product.name,
       quantity: 1,
-      price: isFreeCourseOfMonth ? monthlyOfferPrice : product.pricing.price,
+      price: product.pricing.price,
       slug: product.slug
     });
     toast.success(t("toast.addedToCart"));
@@ -178,12 +180,17 @@ export default function CourseSalesPage() {
   };
 
   const handleSecondaryCourseAction = () => {
+    if (isFreeCourseOfMonth) {
+      void handleFreeCourseClaim();
+      return;
+    }
+
     addItem({
       id: `course:${product.slug}`,
       type: 'course',
       name: product.name,
       quantity: 1,
-      price: isFreeCourseOfMonth ? monthlyOfferPrice : product.pricing.price,
+      price: product.pricing.price,
       slug: product.slug
     });
     toast.success(t("toast.added"));
@@ -538,7 +545,7 @@ export default function CourseSalesPage() {
                       >
                         {isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
                         {isFreeCourseOfMonth
-                          ? (isPtBr ? `Adquirir por US$1 (${conversionDisplay})` : `Get for US$1 (${conversionDisplay})`)
+                          ? (isPtBr ? "Liberar grátis" : "Unlock free")
                           : t("sidebar.buyNow")}
                       </Button>
                       

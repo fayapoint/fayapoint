@@ -1,0 +1,34 @@
+import type { GameTerm } from "@/data/games/types";
+
+export interface PromptRound {
+  id: string;
+  image: string;
+  options: readonly [string, string, string];
+  correct: 0 | 1 | 2;
+  hint: string;
+  lesson: string;
+  term: GameTerm;
+}
+
+const prompt: GameTerm = { slug: "prompt", label: "prompt", definition: "A instrução e o contexto que orientam o resultado produzido pela IA." };
+const contexto: GameTerm = { slug: "contexto", label: "contexto", definition: "Informações sobre cenário, público e objetivo que eliminam ambiguidades." };
+const multimodal: GameTerm = { slug: "multimodal", label: "multimodal", definition: "Capacidade de trabalhar com texto, imagem, áudio ou vídeo no mesmo sistema." };
+const iteracao: GameTerm = { slug: "iteracao", label: "iteração", definition: "Processo de observar um resultado e ajustar o pedido em ciclos curtos." };
+
+export const PROMPT_ROUNDS: readonly PromptRound[] = [
+  { id: "meeting", image: "/landing/scenes/reuniao-resumida.webp", options: ["Robô DJ tocando música em um celular com luzes de festa", "Celular com gravador e onda sonora se transformando em checklist", "Fone de ouvido flutuando sobre um caderno"], correct: 1, hint: "O gravador é o objeto-palco e a lista é o resultado da mágica.", lesson: "Nomeie o objeto principal e a transformação que precisa aparecer.", term: prompt },
+  { id: "teacher", image: "/landing/scenes/professor-24h.webp", options: ["Robô professor com lousa mostrando futebol e moedas, aluna em forma de caneca", "Jogador robô chutando uma pilha de livros", "Professora humana escrevendo fórmulas em quadro verde"], correct: 0, hint: "Futebol e moedas na lousa transformam juros em uma analogia visual.", lesson: "Contexto específico vence descrições genéricas como 'professor ensinando'.", term: contexto },
+  { id: "meal", image: "/landing/scenes/cardapio-semana.webp", options: ["Chef robô cozinhando em panela gigante", "Mesa de jantar com velas", "Geladeira aberta com ingredientes sorridentes e calendário surgindo"], correct: 2, hint: "A geladeira é o palco; ingredientes e calendário contam a ação.", lesson: "Uma cena boa mostra problema e solução no mesmo quadro.", term: prompt },
+  { id: "flashcards", image: "/landing/scenes/flashcards.webp", options: ["Livro aberto cujas páginas viram cartões de estudo", "Estante de biblioteca com livros brilhantes", "Caderno com caneta dourada"], correct: 0, hint: "A transformação livro → cartões é a ação central.", lesson: "Verbos visuais como transformar, revelar e organizar tornam o prompt encenável.", term: multimodal },
+  { id: "contract", image: "/landing/scenes/conta-explicada.webp", options: ["Advogado robô em tribunal", "Robô com lupa sobre letras miúdas e balão com lâmpada", "Pilha de boletos com carimbo"], correct: 1, hint: "Lupa + letras miúdas + ideia clara representa explicação simples.", lesson: "Inclua símbolos que tornem uma ideia abstrata imediatamente compreensível.", term: contexto },
+  { id: "email", image: "/landing/scenes/email-dificil.webp", options: ["Envelope preocupado recebendo ajuda de robô, resposta organizada surgindo", "Carteiro humano em rua ensolarada", "Notebook fechado sobre mesa vazia"], correct: 0, hint: "O envelope difícil recebe uma resposta pronta — causa e efeito.", lesson: "Diga qual emoção e qual mudança precisam acontecer na cena.", term: prompt },
+  { id: "social-post", image: "/landing/scenes/post-30s.webp", options: ["Telefone com post se montando em blocos coloridos e cronômetro", "Câmera profissional em estúdio", "Pessoa escrevendo em caderno de papel"], correct: 0, hint: "Blocos se organizando e cronômetro contam criação rápida.", lesson: "Objetos de apoio ajudam a imagem a explicar tempo e processo.", term: iteracao },
+  { id: "designer", image: "/landing/scenes/imagem-sem-designer.webp", options: ["Robô pintando parede de uma casa", "Prompt em formas abstratas virando uma peça visual pronta", "Fotógrafo ajustando lente"], correct: 1, hint: "A entrada simples se transforma em resultado visual.", lesson: "Em geradores de imagem, peça 'sem texto' e aplique tipografia no editor depois.", term: multimodal },
+  { id: "first-image", image: "/portal/trail/primeira-imagem.webp", options: ["Uma fotografia impressa guardada numa caixa", "Robô revelando uma imagem brilhante a partir de formas de prompt", "Galeria de museu realista"], correct: 1, hint: "O robô apresenta o primeiro resultado como conquista.", lesson: "O prompt também pode definir a emoção: descoberta, orgulho ou surpresa.", term: prompt },
+  { id: "first-course", image: "/portal/trail/primeiro-curso.webp", options: ["Trilha com livro aberto e robô convidando para o primeiro passo", "Pilha de documentos de escritório", "Ônibus escolar em movimento"], correct: 0, hint: "Livro + caminho + convite visual representam início da jornada.", lesson: "Combine o objeto da tarefa com uma metáfora simples da experiência.", term: contexto },
+  { id: "halfway", image: "/portal/trail/meio-caminho.webp", options: ["Robô parado no meio de uma ponte luminosa com metade concluída", "Mapa-múndi sobre uma mesa", "Pessoa correndo maratona realista"], correct: 0, hint: "A composição mostra visualmente a metade da travessia.", lesson: "Frações e progresso ficam claros quando a composição espacial os representa.", term: prompt },
+  { id: "course-complete", image: "/portal/trail/curso-completo.webp", options: ["Livro fechado sem destaque", "Robô celebrando diante de livro concluído com brilho e selo", "Sala de aula vazia"], correct: 1, hint: "Selo, brilho e livro concluído comunicam fechamento.", lesson: "Descreva o estado final, não apenas o objeto principal.", term: iteracao },
+  { id: "certificate", image: "/portal/trail/certificado.webp", options: ["Documento de conquista em moldura mágica, sem texto legível", "Folha amassada numa lixeira", "Quadro branco de reunião"], correct: 0, hint: "A moldura e a luz dourada dão valor à conquista.", lesson: "Texto gerado costuma falhar; reserve uma área limpa para tipografia real.", term: multimodal },
+  { id: "streak", image: "/portal/trail/sequencia-3-dias.webp", options: ["Três marcos acesos numa trilha com chama amigável", "Relógio de parede quebrado", "Calendário corporativo cheio"], correct: 0, hint: "Três marcos e a chama representam sequência sem precisar de números escritos.", lesson: "Troque texto dentro da imagem por símbolos visuais inequívocos.", term: prompt },
+  { id: "magic", image: "/portal/trail/magica.webp", options: ["Robô abrindo portal de possibilidades com objetos de texto, imagem e som", "Mágico humano tirando coelho da cartola", "Computador desligado em mesa escura"], correct: 0, hint: "Os diferentes objetos saindo do portal mostram várias modalidades.", lesson: "Liste as modalidades ou elementos que precisam estar visíveis no quadro.", term: multimodal },
+];

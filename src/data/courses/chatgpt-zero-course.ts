@@ -1,0 +1,56 @@
+import type { CourseData } from "./index";
+
+export const chatGPTZeroCourse: CourseData = {
+  id: 2,
+  slug: "chatgpt-zero",
+  title: "ChatGPT do Zero",
+  subtitle: "Do primeiro prompt ao uso prático com confiança",
+  tool: "ChatGPT",
+  category: "IA Conversacional",
+  level: "Iniciante",
+  duration: "7.5+ horas",
+  totalLessons: 30,
+  price: 29,
+  originalPrice: 97,
+  rating: 0,
+  students: 0,
+  lastUpdated: "Julho de 2026",
+  shortDescription:
+    "Aprenda os fundamentos do ChatGPT do zero. Crie prompts eficazes e gere conteúdo de qualidade — curso rápido e objetivo para quem está começando.",
+  fullDescription:
+    "Aprenda a conversar com IA do jeito certo, revisar respostas e transformar o ChatGPT em uma ferramenta útil para estudo, trabalho e projetos pessoais.",
+  impactForIndividuals: ["Use o ChatGPT com segurança e intenção desde o primeiro dia."],
+  impactForEntrepreneurs: ["Acelere tarefas de conteúdo, pesquisa e planejamento."],
+  impactForCompanies: ["Crie uma base responsável para adoção de IA no time."],
+  whatYouLearn: [
+    "Entender o que o ChatGPT faz e onde exige revisão humana",
+    "Escrever prompts claros com contexto, formato e critérios",
+    "Revisar, iterar e reaproveitar respostas com segurança",
+  ],
+  modules: [
+    {
+      id: 1,
+      title: "Primeiros passos e mentalidade correta",
+      description: "Fundamentos, limites e primeiros resultados úteis.",
+      duration: "3.5 horas",
+      lessons: 15,
+      topics: ["Fundamentos", "Contexto", "Revisão"],
+    },
+    {
+      id: 2,
+      title: "Prompts e aplicação prática",
+      description: "Estrutura, iteração e fluxos reutilizáveis.",
+      duration: "4 horas",
+      lessons: 15,
+      topics: ["Anatomia do prompt", "Iteração", "Casos práticos"],
+    },
+  ],
+  testimonials: [],
+  bonuses: [],
+  guarantees: ["7 dias de garantia para compras fora da oferta gratuita"],
+  faqs: [],
+  realWorldProjects: ["Biblioteca inicial de prompts reutilizáveis"],
+  targetAudience: ["Iniciantes em IA", "Profissionais de todas as áreas"],
+  requirements: ["Nenhuma experiência prévia com IA"],
+  features: ["30 aulas", "Templates de prompts", "Certificado digital"],
+};

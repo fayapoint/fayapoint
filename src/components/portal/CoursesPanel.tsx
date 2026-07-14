@@ -36,7 +36,6 @@ import { cn } from "@/lib/utils";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import type { EnrollmentSlots, TierConfig } from "@/lib/course-tiers";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface CourseProgressCard {
   _id: string;
@@ -151,7 +150,6 @@ export function CoursesPanel({
   const completedCourses = startedCourses.filter((course) => course.progressPercent >= 100);
   const journeyCourses = [...activeCourses, ...readyToStartCourses];
 
-  const { formattedBrl } = useExchangeRate();
 
   const [apiFreeCourseSlug, setApiFreeCourseSlug] = useState<string | null>(null);
   useEffect(() => {
@@ -395,7 +393,7 @@ export function CoursesPanel({
                 <div className="flex items-center gap-2">
                   <h3 className="text-base font-bold truncate">Oferta do Mês</h3>
                   <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[9px] shrink-0">
-                    US$1 ({formattedBrl})
+                    GRÁTIS
                   </Badge>
                 </div>
                 <p className="text-xs text-muted-foreground">Curso completo + certificado</p>
@@ -508,7 +506,7 @@ export function CoursesPanel({
               const gradient = thumb?.gradient || "from-slate-600 to-slate-800";
 
               const statusLabel = course.isFreeMonthlyCourse
-                ? `US$1 (${formattedBrl})`
+                ? "Grátis no mês"
                 : course.isEnrolled
                   ? "No acervo"
                   : course.canAccessLevel && course.canAccessThisMonth && course.hasAvailableSlot

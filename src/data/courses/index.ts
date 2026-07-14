@@ -15,6 +15,7 @@ import { agentesIACourse } from './agentes-ia-course';
 import { iaSemFiltroCourse } from './ia-sem-filtro-course';
 import { autoresearchCourse } from './autoresearch-course';
 import { primeirasAutomacoesCourse } from './primeiras-automacoes-course';
+import { chatGPTZeroCourse } from './chatgpt-zero-course';
 import { normalizeCourseLevel, CourseLevel } from '@/lib/course-tiers';
 
 export interface CourseModule {
@@ -82,6 +83,7 @@ export interface CourseData {
 
 // Export all courses
 export const allCourses: CourseData[] = [
+  chatGPTZeroCourse,
   chatGPTCourse,
   n8nCourse,
   makeCourse,

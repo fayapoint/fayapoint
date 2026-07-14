@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { BookOpen, Search } from "lucide-react";
@@ -12,12 +12,21 @@ type Term = {
   category: string;
 };
 
+function termSlug(term: string) {
+  return term.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export default function GlossaryPage() {
   const t = useTranslations("Glossary");
   const terms = t.raw("terms") as Term[];
   const categories = t.raw("categories") as string[];
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search).get("q");
+    if (query) setSearch(query);
+  }, []);
 
   const filteredTerms = terms.filter(term => {
     const matchesSearch = term.term.toLowerCase().includes(search.toLowerCase()) ||
@@ -106,11 +115,12 @@ export default function GlossaryPage() {
                     {groupedTerms[letter].map((term, idx) => (
                       <motion.div
                         key={term.term}
+                        id={termSlug(term.term)}
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: idx * 0.02 }}
-                        className="bg-secondary border border-border rounded-xl p-5 hover:bg-white/10 transition"
+                        className="scroll-mt-28 bg-secondary border border-border rounded-xl p-5 hover:bg-white/10 transition"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div>
