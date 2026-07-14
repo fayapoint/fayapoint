@@ -798,7 +798,7 @@ export default function PortalPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                <CertificatesPanel />
+                <CertificatesPanel onTabChange={setActiveTab} />
               </motion.div>
             )}
 

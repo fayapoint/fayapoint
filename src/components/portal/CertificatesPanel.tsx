@@ -15,6 +15,9 @@ import {
   Trophy,
   Copy,
   Check,
+  ArrowRight,
+  Linkedin,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -22,9 +25,11 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { getClientAuthHeaders } from "@/lib/client-auth";
+import { CertificateArtwork } from "@/components/certificates/CertificateArtwork";
 
 interface CertificateItem {
   _id: string;
+  userName: string;
   courseTitle: string;
   courseSlug: string;
   courseLevel: string;
@@ -40,7 +45,7 @@ interface CertificateItem {
   totalChapters: number;
 }
 
-export function CertificatesPanel() {
+export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string) => void }) {
   const [certificates, setCertificates] = useState<CertificateItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState<string | null>(null);
@@ -190,14 +195,36 @@ export function CertificatesPanel() {
 
       {/* Certificates Grid */}
       {certificates.length === 0 ? (
-        <Card className="bg-white/[0.02] border-white/[0.06] p-6 md:p-12 text-center">
-          <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-yellow-600/5 border border-amber-500/15 flex items-center justify-center">
-            <Award className="w-8 h-8 md:w-10 md:h-10 text-amber-400/40" />
+        <Card className="relative overflow-hidden border-amber-400/15 bg-[#101221] p-5 md:p-8">
+          <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-amber-400/10 blur-3xl" />
+          <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_.92fr]">
+            <div>
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[.18em] text-amber-300">
+                <Sparkles className="h-3 w-3" /> Sua próxima conquista
+              </span>
+              <h3 className="max-w-xl text-2xl font-black leading-tight text-white md:text-4xl">
+                Seu primeiro certificado está a <span className="text-amber-300">1 curso</span> de distância.
+              </h3>
+              <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
+                Conclua um curso, passe na avaliação e ganhe uma peça verificável com seu nome — pronta para currículo e LinkedIn.
+              </p>
+              <Button
+                onClick={() => onTabChange?.("courses")}
+                className="mt-5 h-10 rounded-xl bg-amber-400 px-5 font-bold text-[#17120a] hover:bg-amber-300"
+              >
+                Continuar minha trilha <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+            <div className="mx-auto w-full max-w-lg rotate-[-1.5deg] transition-transform duration-500 hover:rotate-0">
+              <CertificateArtwork
+                courseSlug="primeiro-certificado"
+                courseTitle="Sua primeira conquista com Inteligência Artificial"
+                studentName="SEU NOME AQUI"
+                certificateNumber="FAYAI • VERIFICADO"
+                compact
+              />
+            </div>
           </div>
-          <h3 className="text-base md:text-lg font-semibold text-white/70 mb-2">Nenhum certificado ainda</h3>
-          <p className="text-xs md:text-sm text-white/30 max-w-md mx-auto">
-            Complete a leitura de um curso e passe na avaliação final para receber seu certificado de conclusão.
-          </p>
         </Card>
       ) : (
         <div className="grid gap-3 md:gap-4">
@@ -214,6 +241,16 @@ export function CertificatesPanel() {
                   <div className="h-1 bg-gradient-to-r from-amber-500/60 via-yellow-400/40 to-amber-500/60" />
 
                   <div className="p-4 sm:p-6">
+                    <div className="mb-5">
+                      <CertificateArtwork
+                        courseSlug={cert.courseSlug}
+                        courseTitle={cert.courseTitle}
+                        studentName={cert.userName}
+                        certificateNumber={cert.certificateNumber}
+                        issuedAt={cert.issuedAt}
+                        compact
+                      />
+                    </div>
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                       {/* Certificate Icon */}
                       <div className="flex-shrink-0">
@@ -289,6 +326,15 @@ export function CertificatesPanel() {
                               <Download className="w-3 h-3 mr-1 md:mr-1.5" />
                             )}
                             Baixar PDF
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cert.verificationUrl)}`, "_blank", "noopener,noreferrer")}
+                            className="h-7 md:h-8 border-[#0a66c2]/40 bg-[#0a66c2]/10 hover:bg-[#0a66c2]/20 text-[#70b7ff] text-[10px] md:text-xs rounded-lg px-2 md:px-3"
+                          >
+                            <Linkedin className="w-3 h-3 mr-1 md:mr-1.5" />
+                            LinkedIn
                           </Button>
                           <Button
                             size="sm"

@@ -20,11 +20,16 @@ export async function GET() {
       userId: authUser.id,
       status: 'issued',
     })
-      .select('courseTitle courseSlug courseLevel courseDuration certificateNumber verificationCode verificationUrl issuedAt quizScore totalStudyHours chaptersCompleted totalChapters courseCategory')
+      .select('userName courseTitle courseSlug courseLevel courseDuration certificateNumber verificationCode verificationUrl issuedAt quizScore totalStudyHours chaptersCompleted totalChapters courseCategory metadata.locale')
       .sort({ issuedAt: -1 })
       .lean();
 
-    return NextResponse.json({ certificates });
+    return NextResponse.json({
+      certificates: certificates.map((certificate) => ({
+        ...certificate,
+        verificationUrl: `https://fayai.com.br/${certificate.metadata?.locale || 'pt-BR'}/verificar-certificado/${certificate.verificationCode}`,
+      })),
+    });
   } catch (error) {
     console.error('Certificates list error:', error);
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });

@@ -51,10 +51,12 @@ export async function GET(
       certificate: {
         studentName: certificate.userName,
         courseTitle: certificate.courseTitle,
+        courseSlug: certificate.courseSlug,
         courseLevel: certificate.courseLevel,
         courseDuration: certificate.courseDuration,
         courseCategory: certificate.courseCategory,
         certificateNumber: certificate.certificateNumber,
+        verificationCode: certificate.verificationCode,
         issuedAt: certificate.issuedAt,
         quizScore: certificate.quizScore,
         totalStudyHours: certificate.totalStudyHours,
