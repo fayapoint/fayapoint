@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
-import Payment, { mapPaymentMethodToAsaasBillingType, PaymentMethod, type PaymentProvider } from '@/models/Payment';
+import Payment, { PaymentMethod, type PaymentProvider } from '@/models/Payment';
 import User from '@/models/User';
 import asaas, {
   getOrCreateCustomer,
@@ -23,6 +23,11 @@ import {
   mpConfig,
   type MPPaymentMethod,
 } from '@/lib/mercadopago';
+import {
+  calculateCheckoutSubtotal,
+  CheckoutCatalogError,
+  resolveCheckoutItems,
+} from '@/lib/checkout-catalog';
 
 // =============================================================================
 // POST - Create Payment
@@ -30,15 +35,24 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
+    const body = await request.json();
+
     // Provider selection (default: asaas, can be mercadopago)
-    const rawBody = await request.clone().json();
-    const selectedProvider: PaymentProvider = rawBody.provider || 'asaas';
+    const requestedProvider = body.provider ?? 'asaas';
+    if (requestedProvider !== 'asaas' && requestedProvider !== 'mercadopago') {
+      return NextResponse.json(
+        { error: 'Provedor de pagamento inválido' },
+        { status: 400 }
+      );
+    }
+    const selectedProvider: PaymentProvider = requestedProvider;
+    let provider: PaymentProvider = selectedProvider;
 
     // Check if selected provider is configured
     if (selectedProvider === 'asaas' && !asaasConfig.isConfigured) {
       if (mpConfig.isConfigured) {
         // Auto-fallback to mercadopago
-        rawBody.provider = 'mercadopago';
+        provider = 'mercadopago';
       } else {
         return NextResponse.json(
           { error: 'Gateway de pagamento não configurado' },
@@ -48,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
     if (selectedProvider === 'mercadopago' && !mpConfig.isConfigured) {
       if (asaasConfig.isConfigured) {
-        rawBody.provider = 'asaas';
+        provider = 'asaas';
       } else {
         return NextResponse.json(
           { error: 'Gateway de pagamento não configurado' },
@@ -56,8 +70,6 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-    const provider: PaymentProvider = rawBody.provider || selectedProvider;
-
     // Authenticate user
     const authUser = await getAuthUser();
     if (!authUser) {
@@ -76,9 +88,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
     const {
-      items,
       method,
       cpfCnpj,
       phone,
@@ -86,15 +96,6 @@ export async function POST(request: NextRequest) {
       creditCard,
       installments,
     } = body as {
-      items: Array<{
-        id?: string;
-        slug?: string;
-        type: 'course' | 'service' | 'subscription' | 'product' | 'pod';
-        name: string;
-        description?: string;
-        quantity: number;
-        price: number;
-      }>;
       method: PaymentMethod;
       cpfCnpj?: string;
       phone?: string;
@@ -117,13 +118,24 @@ export async function POST(request: NextRequest) {
       installments?: number;
     };
 
-    // Validate items
-    if (!items || items.length === 0) {
+    if (!['pix', 'boleto', 'credit_card', 'undefined'].includes(method)) {
       return NextResponse.json(
-        { error: 'Nenhum item no carrinho' },
+        { error: 'Forma de pagamento inválida' },
         { status: 400 }
       );
     }
+
+    if (installments !== undefined &&
+        (!Number.isInteger(installments) || installments < 1 || installments > 12)) {
+      return NextResponse.json(
+        { error: 'Número de parcelas inválido' },
+        { status: 400 }
+      );
+    }
+
+    // Resolve names, availability and prices from the server-side catalog.
+    // Client-provided prices are used only to detect a stale cart.
+    const paymentItems = await resolveCheckoutItems(body.items);
 
     // Validate CPF/CNPJ for Brazilian payments
     const cleanedCpfCnpj = cpfCnpj ? cleanCpfCnpj(cpfCnpj) : '';
@@ -141,23 +153,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate totals
-    const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = calculateCheckoutSubtotal(paymentItems);
     const total = subtotal; // Add discounts/fees logic here if needed
 
     // Generate order number
     const orderNumber = await (Payment as typeof Payment & { generateOrderNumber: () => Promise<string> }).generateOrderNumber();
-
-    // Prepare items for storage
-    const paymentItems = items.map(item => ({
-      productId: item.id,
-      productSlug: item.slug,
-      type: item.type,
-      name: item.name,
-      description: item.description,
-      quantity: item.quantity,
-      unitPrice: item.price,
-      totalPrice: item.price * item.quantity,
-    }));
 
     // =================================================================
     // MERCADO PAGO FLOW
@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
     if (provider === 'mercadopago') {
       const nameParts = user.name.split(' ');
       const mpResult = await createMPPayment(total, {
-        description: `Pedido ${orderNumber} - ${items.map(i => i.name).join(', ')}`,
+        description: `Pedido ${orderNumber} - ${paymentItems.map(i => i.name).join(', ')}`,
         externalReference: orderNumber,
         method: method === 'undefined' ? 'pix' : method as MPPaymentMethod,
         payer: {
@@ -268,7 +268,7 @@ export async function POST(request: NextRequest) {
 
     // Create payment in Asaas
     let asaasPayment;
-    const description = `Pedido ${orderNumber} - ${items.map(i => i.name).join(', ')}`;
+    const description = `Pedido ${orderNumber} - ${paymentItems.map(i => i.name).join(', ')}`;
     const externalReference = orderNumber;
     // Asaas requires callback URL domain to match the domain registered in account settings
     const successUrl = `https://fayai.com.br/pt-BR/checkout/success?order=${orderNumber}`;
@@ -503,6 +503,12 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
+    if (error instanceof CheckoutCatalogError) {
+      return NextResponse.json(
+        { error: error.message, code: error.code },
+        { status: error.status }
+      );
+    }
     console.error('[Payment] Error:', error);
     return NextResponse.json(
       { error: 'Erro interno do servidor' },

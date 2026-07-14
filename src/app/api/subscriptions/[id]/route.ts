@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
-import Subscription from '@/models/Subscription';
+import Subscription, { SUBSCRIPTION_PLANS } from '@/models/Subscription';
 import User from '@/models/User';
 import asaas, { asaasConfig } from '@/lib/asaas';
 
@@ -80,7 +80,7 @@ export async function PUT(
 
     const { id } = await params;
     const body = await request.json();
-    const { value, cycle, billingType, creditCardToken } = body;
+    const { cycle, billingType, creditCardToken } = body;
 
     await dbConnect();
 
@@ -93,14 +93,38 @@ export async function PUT(
       return NextResponse.json({ error: 'Assinatura não encontrada' }, { status: 404 });
     }
 
+    const nextCycle = cycle ?? subscription.cycle;
+    if (nextCycle !== 'monthly' && nextCycle !== 'yearly') {
+      return NextResponse.json({ error: 'Ciclo do plano inválido' }, { status: 400 });
+    }
+
+    if (billingType && !['pix', 'boleto', 'credit_card'].includes(billingType)) {
+      return NextResponse.json({ error: 'Forma de pagamento inválida' }, { status: 400 });
+    }
+
+    const plan = SUBSCRIPTION_PLANS[
+      subscription.planSlug as keyof typeof SUBSCRIPTION_PLANS
+    ];
+    if (!plan) {
+      return NextResponse.json(
+        { error: 'Plano da assinatura não encontrado' },
+        { status: 409 }
+      );
+    }
+
+    // Recalculate on every update. A client can choose a supported cycle or
+    // payment method, but can never choose the amount charged.
+    const canonicalValue = nextCycle === 'yearly'
+      ? plan.yearlyPrice
+      : plan.monthlyPrice;
+
     // Build update data for Asaas
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updateData: any = {};
-    
-    if (value !== undefined) updateData.value = value;
-    if (cycle) {
-      updateData.cycle = cycle.toUpperCase();
-    }
+    const updateData: any = {
+      value: canonicalValue,
+      cycle: nextCycle.toUpperCase(),
+    };
+
     if (billingType) {
       updateData.billingType = billingType.toUpperCase();
     }
@@ -116,8 +140,8 @@ export async function PUT(
       );
 
       // Update local record
-      if (value !== undefined) subscription.value = value;
-      if (cycle) subscription.cycle = cycle;
+      subscription.value = canonicalValue;
+      subscription.cycle = nextCycle;
       if (billingType) subscription.billingType = billingType;
       if (creditCardToken) subscription.creditCardToken = creditCardToken;
       if (asaasResult.nextDueDate) {

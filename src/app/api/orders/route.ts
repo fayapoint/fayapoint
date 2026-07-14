@@ -4,7 +4,11 @@ import dbConnect from '@/lib/mongodb';
 import Order, { IOrderItem } from '@/models/Order';
 import User from '@/models/User';
 import mongoose from 'mongoose';
-import { ObjectId } from 'mongodb';
+import {
+  calculateCheckoutSubtotal,
+  CheckoutCatalogError,
+  resolveCheckoutItems,
+} from '@/lib/checkout-catalog';
 
 // GET - Fetch user's orders
 export async function GET() {
@@ -50,26 +54,25 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { items, totalAmount, discountAmount, couponCode, paymentMethod, shippingAddress, notes } = body;
+    const { paymentMethod, shippingAddress, notes } = body;
 
-    // Validate items
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json(
-        { error: 'Itens do pedido são obrigatórios' },
-        { status: 400 }
-      );
-    }
-
-    // Validate each item
-    const validatedItems: IOrderItem[] = items.map((item: IOrderItem) => ({
-      id: item.id,
-      type: item.type,
-      name: item.name,
-      quantity: item.quantity || 1,
-      price: item.price,
-      image: item.image,
-      details: item.details,
-    }));
+    // This legacy endpoint creates only a pending order. Catalog data is still
+    // resolved server-side so it cannot mint fake revenue, stock changes or XP.
+    const catalogItems = await resolveCheckoutItems(body.items);
+    const validatedItems: IOrderItem[] = catalogItems.map((item) => {
+      if (item.type !== 'course' && item.type !== 'service' && item.type !== 'product') {
+        throw new CheckoutCatalogError('Tipo de item inválido para pedido', 'INVALID_ORDER_ITEM');
+      }
+      return {
+        id: item.productId || item.productSlug || '',
+        type: item.type,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.unitPrice,
+        details: item.productSlug ? { productSlug: item.productSlug } : undefined,
+      };
+    });
+    const totalAmount = calculateCheckoutSubtotal(catalogItems);
 
     // Create order
     const order = await Order.create({
@@ -78,47 +81,12 @@ export async function POST(request: NextRequest) {
       userName: user.name,
       items: validatedItems,
       totalAmount,
-      discountAmount: discountAmount || 0,
-      couponCode,
+      discountAmount: 0,
       status: 'pending',
       paymentMethod,
       shippingAddress,
       notes,
     });
-
-    // Update stock for store products (type: 'product')
-    const storeProductsCol = mongoose.connection.db?.collection('storeproducts');
-    if (storeProductsCol) {
-      for (const item of validatedItems) {
-        if (item.type === 'product' && item.id) {
-          try {
-            // Try to update by ObjectId first
-            const filter = ObjectId.isValid(item.id) 
-              ? { _id: new ObjectId(item.id) }
-              : { slug: item.id };
-            await storeProductsCol.updateOne(
-              filter,
-              { 
-                $inc: { 
-                  stock: -(item.quantity || 1),
-                  soldCount: (item.quantity || 1)
-                }
-              }
-            );
-          } catch (stockError) {
-            console.error('Error updating stock for product:', item.id, stockError);
-          }
-        }
-      }
-    }
-
-    // Award XP for purchase (10 XP per R$100 spent)
-    const xpAwarded = Math.floor(totalAmount / 100) * 10;
-    if (xpAwarded > 0) {
-      await User.findByIdAndUpdate(authUser.id, {
-        $inc: { xp: xpAwarded }
-      });
-    }
 
     return NextResponse.json({
       success: true,
@@ -128,9 +96,15 @@ export async function POST(request: NextRequest) {
         totalAmount: order.totalAmount,
         createdAt: order.createdAt,
       },
-      xpAwarded,
+      xpAwarded: 0,
     }, { status: 201 });
   } catch (error) {
+    if (error instanceof CheckoutCatalogError) {
+      return NextResponse.json(
+        { error: error.message, code: error.code },
+        { status: error.status }
+      );
+    }
     console.error('Error creating order:', error);
     return NextResponse.json(
       { error: 'Erro ao criar pedido' },

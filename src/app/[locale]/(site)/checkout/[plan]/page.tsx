@@ -444,6 +444,21 @@ export default function CheckoutPage() {
       const token = getClientBearerToken();
       if (!isLoggedIn && !token) { toast.error("Faça login para continuar."); router.push("/pt-BR/login"); return; }
 
+      // Send identifiers and the displayed price snapshot. The server resolves
+      // the actual name, availability and charge amount from its own catalog.
+      const orderItems = isCartCheckout
+        ? cartItems.map(item => ({
+            id: item.id,
+            slug: item.slug,
+            type: item.id.startsWith("store-") ? "product" : item.type,
+            quantity: item.quantity,
+            serviceSlug: item.serviceSlug,
+            unitLabel: item.unitLabel,
+            track: item.track,
+            expectedUnitPrice: item.price,
+          }))
+        : [{ id: planInfo?.slug || planName, slug: planInfo?.slug || planName, type: "subscription", quantity: 1, expectedUnitPrice: total }];
+
       // MercadoPago redirect flow
       if (selectedMethod === "mercadopago" && !isFreeCourseCheckout) {
         const mpRes = await fetch("/api/payments/mercadopago-preference", {
@@ -451,9 +466,8 @@ export default function CheckoutPage() {
           headers: { "Content-Type": "application/json", ...getClientAuthHeaders() },
           credentials: "include",
           body: JSON.stringify({
+            items: isCartCheckout ? orderItems : undefined,
             planSlug: planInfo?.slug || planName,
-            planName: planInfo?.name || planName,
-            price: effectiveTotal,
             cycle: subscriptionCycle,
           }),
         });
@@ -481,12 +495,6 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Build order items
-      const orderItems = isCartCheckout
-        ? cartItems.map(item => ({ id: item.id, slug: item.slug || item.id, type: item.id.startsWith("store-") ? "product" : item.type, name: item.name, quantity: item.quantity, price: item.price }))
-        : [{ id: planInfo?.slug || planName, slug: planInfo?.slug || planName, type: "subscription", name: `Plano ${planInfo?.name || planName}`, quantity: 1, price: total }];
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const body: any = { items: orderItems, method: selectedMethod, cpfCnpj: cpfCnpj.replace(/\D/g, ""), phone: phone.replace(/\D/g, "") };
 
       if (selectedMethod === "credit_card") {

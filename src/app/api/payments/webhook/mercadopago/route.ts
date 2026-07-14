@@ -58,6 +58,23 @@ export async function POST(request: NextRequest) {
 
     const previousStatus = payment.status;
     const newStatus = mapMPStatusToPaymentStatus(mpPayment.status || '');
+    const receivedAmount = Number(mpPayment.transaction_amount);
+
+    // The notification is verified against Mercado Pago's API, but fulfillment
+    // still requires the paid amount to match our server-side order snapshot.
+    if (newStatus === 'paid' &&
+        (!Number.isFinite(receivedAmount) || Math.abs(receivedAmount - payment.total) >= 0.01)) {
+      payment.status = 'failed';
+      payment.notes = `Valor divergente no Mercado Pago: recebido=${receivedAmount}, esperado=${payment.total}`;
+      payment.webhookEvents.push({
+        event: 'MP_AMOUNT_MISMATCH',
+        receivedAt: new Date(),
+        data: { receivedAmount, expectedAmount: payment.total },
+      });
+      await payment.save();
+      console.error(`[MP Webhook] Amount mismatch for ${payment.orderNumber}`);
+      return NextResponse.json({ received: true, error: 'Amount mismatch' });
+    }
 
     // Update payment record
     payment.status = newStatus;
@@ -184,8 +201,14 @@ async function grantUserAccess(payment: any) {
           const planMap: Record<string, string> = { starter: 'explorador', pro: 'profissional', business: 'expert', explorador: 'explorador', profissional: 'profissional', expert: 'expert' };
           const plan = planMap[item.productSlug?.toLowerCase() || ''];
           if (plan) {
-            user.plan = plan;
-            user.planExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+            const isYearly = item.productId?.endsWith(':yearly');
+            if (!user.subscription) user.subscription = {};
+            user.subscription.plan = plan;
+            user.subscription.status = 'active';
+            user.subscription.pendingPlan = undefined;
+            user.subscription.expiresAt = new Date(
+              Date.now() + (isYearly ? 365 : 30) * 24 * 60 * 60 * 1000
+            );
           }
           break;
         }
@@ -213,8 +236,10 @@ async function revokeUserAccess(payment: any) {
         user.enrolledCourses = user.enrolledCourses.filter((c: any) => c.courseSlug !== item.productSlug);
       }
       if (item.type === 'subscription') {
-        user.plan = 'free';
-        user.planExpiresAt = null;
+        if (!user.subscription) user.subscription = {};
+        user.subscription.plan = 'free';
+        user.subscription.status = 'cancelled';
+        user.subscription.expiresAt = null;
       }
     }
 

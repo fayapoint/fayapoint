@@ -3,6 +3,13 @@ import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { createMPPreference, mpConfig } from '@/lib/mercadopago';
+import { SUBSCRIPTION_PLANS } from '@/models/Subscription';
+import Payment, { type IPaymentItem } from '@/models/Payment';
+import {
+  calculateCheckoutSubtotal,
+  CheckoutCatalogError,
+  resolveCheckoutItems,
+} from '@/lib/checkout-catalog';
 
 // Plan details for rich MP checkout
 const PLAN_DETAILS: Record<string, {
@@ -53,44 +60,119 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { planSlug, planName, price, cycle } = body as {
-      planSlug: string;
-      planName: string;
-      price: number;
+    const { planSlug, cycle = 'monthly', items } = body as {
+      planSlug?: string;
       cycle?: 'monthly' | 'yearly';
+      items?: unknown;
     };
 
-    if (!planSlug || !planName || !price || price <= 0) {
-      return NextResponse.json({ error: 'Dados do plano inválidos' }, { status: 400 });
+    let checkoutItems: IPaymentItem[];
+    let checkoutTitle: string;
+    let checkoutDescription: string;
+    let pictureUrl = 'https://fayai.com.br/images/fayai-logo-social.png';
+
+    if (Array.isArray(items)) {
+      checkoutItems = await resolveCheckoutItems(items);
+      checkoutTitle = checkoutItems.length === 1
+        ? checkoutItems[0].name
+        : `Pedido FayAi (${checkoutItems.length} itens)`;
+      checkoutDescription = checkoutItems.map((item) => item.name).join(' • ');
+    } else {
+      if (cycle !== 'monthly' && cycle !== 'yearly') {
+        return NextResponse.json({ error: 'Ciclo do plano inválido' }, { status: 400 });
+      }
+
+      const plan = SUBSCRIPTION_PLANS[planSlug as keyof typeof SUBSCRIPTION_PLANS];
+      if (!plan) {
+        return NextResponse.json({ error: 'Plano inválido' }, { status: 400 });
+      }
+
+      // Price and plan name always come from the server-side plan table.
+      const canonicalSlug = plan.slug;
+      const price = cycle === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice;
+      const cycleLabel = cycle === 'yearly' ? 'Anual' : 'Mensal';
+      const planDetail = PLAN_DETAILS[canonicalSlug];
+      pictureUrl = planDetail?.pictureUrl || pictureUrl;
+
+      const featureList = planDetail?.features.join(' • ') || '';
+      checkoutTitle = `FayAi ${plan.name} — ${cycleLabel}`;
+      checkoutDescription = [
+        `Assinatura FayAi Academia de IA — Plano ${plan.name} (${cycleLabel})`,
+        featureList ? `Inclui: ${featureList}` : '',
+        'Acesso imediato após pagamento. Garantia de 7 dias.',
+      ].filter(Boolean).join('. ');
+      checkoutItems = [{
+        productId: `${canonicalSlug}:${cycle}`,
+        productSlug: canonicalSlug,
+        type: 'subscription',
+        name: checkoutTitle,
+        description: checkoutDescription,
+        quantity: 1,
+        unitPrice: price,
+        totalPrice: price,
+      }];
     }
 
-    const externalReference = `mp-sub-${user._id}-${planSlug}-${Date.now()}`;
-    const cycleLabel = cycle === 'yearly' ? 'Anual' : 'Mensal';
-    const planDetail = PLAN_DETAILS[planSlug];
+    const total = calculateCheckoutSubtotal(checkoutItems);
+    const orderNumber = await Payment.generateOrderNumber();
 
-    // Build a rich description for the MP checkout page
-    const featureList = planDetail?.features.join(' • ') || '';
-    const description = [
-      `Assinatura FayAi Academia de IA — Plano ${planName} (${cycleLabel})`,
-      featureList ? `Inclui: ${featureList}` : '',
-      'Acesso imediato após pagamento. Garantia de 7 dias.',
-    ].filter(Boolean).join('. ');
+    // Persist the authoritative order before creating an external checkout so
+    // a very fast webhook can always find its local payment record.
+    const payment = await Payment.create({
+      orderNumber,
+      userId: user._id,
+      userEmail: user.email,
+      userName: user.name,
+      provider: 'mercadopago',
+      method: 'undefined',
+      status: 'pending',
+      items: checkoutItems,
+      subtotal: total,
+      discount: 0,
+      fees: 0,
+      total,
+      currency: 'BRL',
+      externalReference: orderNumber,
+      source: 'mercadopago_checkout_pro',
+      webhookEvents: [{
+        event: 'MP_PREFERENCE_REQUESTED',
+        receivedAt: new Date(),
+      }],
+    });
 
-    const preference = await createMPPreference(
-      [
+    let preference;
+    try {
+      preference = await createMPPreference(
+        [
+          {
+            title: checkoutTitle,
+            description: checkoutDescription,
+            quantity: 1,
+            unitPrice: total,
+            pictureUrl,
+          },
+        ],
         {
-          title: `FayAi ${planName} — ${cycleLabel}`,
-          description,
-          quantity: 1,
-          unitPrice: price,
-          pictureUrl: planDetail?.pictureUrl || 'https://fayai.com.br/images/fayai-logo-social.png',
-        },
-      ],
-      {
-        externalReference,
-        payerEmail: user.email,
-      }
-    );
+          externalReference: orderNumber,
+          payerEmail: user.email,
+        }
+      );
+      payment.webhookEvents.push({
+        event: 'MP_PREFERENCE_CREATED',
+        receivedAt: new Date(),
+        data: { preferenceId: preference.preferenceId },
+      });
+      await payment.save();
+    } catch (error) {
+      payment.status = 'failed';
+      payment.notes = error instanceof Error ? error.message : 'Falha ao criar preferência';
+      payment.webhookEvents.push({
+        event: 'MP_PREFERENCE_FAILED',
+        receivedAt: new Date(),
+      });
+      await payment.save();
+      throw error;
+    }
 
     const redirectUrl = mpConfig.isSandbox
       ? preference.sandboxInitPoint
@@ -98,10 +180,19 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      orderNumber,
+      paymentId: payment._id,
+      total,
       preferenceId: preference.preferenceId,
       redirectUrl,
     });
   } catch (error) {
+    if (error instanceof CheckoutCatalogError) {
+      return NextResponse.json(
+        { error: error.message, code: error.code },
+        { status: error.status }
+      );
+    }
     console.error('[MP Preference] Error:', error);
     const errorMsg = error instanceof Error ? error.message : 'Erro desconhecido';
     return NextResponse.json(

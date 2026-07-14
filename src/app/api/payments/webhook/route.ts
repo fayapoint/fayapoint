@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       console.error('[Asaas Webhook] ASAAS_WEBHOOK_TOKEN not configured');
       return NextResponse.json({ error: 'Webhook not configured' }, { status: 503 });
     }
-    if (webhookToken && !verifyWebhookToken(webhookToken, expectedToken)) {
+    if (!webhookToken || !verifyWebhookToken(webhookToken, expectedToken)) {
       console.warn('[Asaas Webhook] Invalid webhook token');
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
