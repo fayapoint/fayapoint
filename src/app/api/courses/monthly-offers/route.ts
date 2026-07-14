@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAllProducts } from "@/lib/products";
 import { getMonthlyCourseOfferSetAsync } from "@/lib/monthly-course-offers";
-import { getCourseBySlug } from "@/data/courses";
 
 export async function GET() {
   try {
@@ -10,8 +9,11 @@ export async function GET() {
     const products = await getAllProducts({ type: "course", limit: 100, sortBy: "students" });
     const bySlug = new Map(products.map((product) => [product.slug, product]));
 
+    // Só produtos ATIVOS podem ser o curso grátis do mês — o fallback estático
+    // não tem `metrics` e quebrava a vitrine quando o slug sorteado estava
+    // arquivado (visto em 14/07/2026 com perplexity-pesquisa-inteligente).
     const freeCourse = offerSet.freeCourseSlug
-      ? bySlug.get(offerSet.freeCourseSlug) || getCourseBySlug(offerSet.freeCourseSlug) || null
+      ? bySlug.get(offerSet.freeCourseSlug) || null
       : null;
 
     return NextResponse.json({

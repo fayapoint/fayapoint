@@ -158,12 +158,12 @@ export default function CoursesPage() {
   const emptyStateTitle = t("empty.title");
   const emptyStateDescription = t("empty.description");
 
-  const totalStudents = products.reduce((sum, p) => sum + p.metrics.students, 0).toLocaleString(locale);
+  const totalStudents = products.reduce((sum, p) => sum + (p.metrics?.students || 0), 0).toLocaleString(locale);
   const totalCourses = products.length;
   const averageRating = products.length
-    ? (products.reduce((sum, p) => sum + p.metrics.rating, 0) / products.length).toFixed(1)
+    ? (products.reduce((sum, p) => sum + (p.metrics?.rating || 0), 0) / products.length).toFixed(1)
     : "0.0";
-  const totalLessons = products.reduce((sum, p) => sum + p.metrics.lessons, 0).toLocaleString(locale);
+  const totalLessons = products.reduce((sum, p) => sum + (p.metrics?.lessons || 0), 0).toLocaleString(locale);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -333,12 +333,16 @@ export default function CoursesPage() {
                     <Badge className="bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
                       {isPtBr ? "Certificado incluso" : "Certificate included"}
                     </Badge>
-                    <Badge className="bg-secondary text-gray-200 border-border">
-                      {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? "aulas" : "lessons"}
-                    </Badge>
-                    <Badge className="bg-secondary text-gray-200 border-border">
-                      {monthlyOffers.freeCourse.metrics.duration}
-                    </Badge>
+                    {monthlyOffers.freeCourse.metrics?.lessons != null && (
+                      <Badge className="bg-secondary text-gray-200 border-border">
+                        {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? "aulas" : "lessons"}
+                      </Badge>
+                    )}
+                    {monthlyOffers.freeCourse.metrics?.duration && (
+                      <Badge className="bg-secondary text-gray-200 border-border">
+                        {monthlyOffers.freeCourse.metrics.duration}
+                      </Badge>
+                    )}
                   </div>
                   <div className="mt-6 flex flex-wrap items-center gap-4">
                     <Link href={`/curso/${monthlyOffers.freeCourse.slug}`}>
