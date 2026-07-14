@@ -76,10 +76,16 @@ export async function POST(request: NextRequest) {
       ],
     });
 
-    // If no payment found, check if this is a subscription payment
-    // Subscription payments use externalReference like "sub-{userId}-{planSlug}"
-    if (!payment && asaasPayment.externalReference?.startsWith('sub-')) {
-      console.log(`[Asaas Webhook] Subscription payment detected: ${asaasPayment.externalReference}`);
+    // Subscription charges carry the Asaas subscription id. Older charges can
+    // still be recognized by their external reference for backwards compatibility.
+    const isSubscriptionPayment = Boolean(
+      asaasPayment.subscription || asaasPayment.externalReference?.startsWith('sub-')
+    );
+    if (!payment && isSubscriptionPayment) {
+      console.log('[Asaas Webhook] Subscription payment detected', {
+        externalReference: asaasPayment.externalReference,
+        subscription: asaasPayment.subscription,
+      });
 
       // Handle subscription payment confirmation — ACTIVATE the plan
       if (body.event === 'PAYMENT_CONFIRMED' || body.event === 'PAYMENT_RECEIVED') {
@@ -541,29 +547,38 @@ async function handleInvoiceEvent(body: AsaasInvoiceWebhookEvent) {
 async function activateSubscriptionFromPayment(asaasPayment: AsaasPaymentResponse) {
   try {
     const externalRef = asaasPayment.externalReference;
-    if (!externalRef) return;
+    const lookup = [];
+    if (externalRef) lookup.push({ externalReference: externalRef });
+    if (asaasPayment.subscription) {
+      lookup.push({ asaasSubscriptionId: asaasPayment.subscription });
+    }
+    if (lookup.length === 0) return;
 
-    // Parse "sub-{userId}-{planSlug}"
-    const parts = externalRef.split('-');
-    if (parts.length < 3) return;
-
-    const planSlug = parts[parts.length - 1]; // Last part is planSlug
-
-    // Find the subscription record
-    const subscription = await Subscription.findOne({
-      externalReference: externalRef,
-    });
+    const subscription = await Subscription.findOne({ $or: lookup });
 
     if (subscription) {
+      const planSlug = subscription.planSlug;
+      const alreadyRecorded = subscription.webhookEvents.some(event =>
+        event.event === 'PAYMENT_CONFIRMED_ACTIVATION'
+        && event.data?.asaasPaymentId === asaasPayment.id
+      );
+
       subscription.status = 'active';
-      subscription.webhookEvents.push({
-        event: 'PAYMENT_CONFIRMED_ACTIVATION',
-        receivedAt: new Date(),
-        data: {
-          asaasPaymentId: asaasPayment.id,
-          value: asaasPayment.value,
-        },
-      });
+      if (!alreadyRecorded) {
+        subscription.totalPayments += 1;
+        subscription.totalPaid += asaasPayment.value || subscription.value;
+        subscription.lastPaymentDate = asaasPayment.paymentDate
+          ? new Date(asaasPayment.paymentDate)
+          : new Date();
+        subscription.webhookEvents.push({
+          event: 'PAYMENT_CONFIRMED_ACTIVATION',
+          receivedAt: new Date(),
+          data: {
+            asaasPaymentId: asaasPayment.id,
+            value: asaasPayment.value,
+          },
+        });
+      }
       await subscription.save();
 
       // Activate user plan
@@ -581,7 +596,7 @@ async function activateSubscriptionFromPayment(asaasPayment: AsaasPaymentRespons
         console.log(`[Asaas Webhook] Subscription ACTIVATED for user ${user.email}: plan=${planSlug}`);
 
         // Generate receipt for subscription payment
-        try {
+        if (!alreadyRecorded) try {
           const receipt = await generateReceiptFromSubscription({
             userId: String(user._id),
             userEmail: user.email,
@@ -620,11 +635,14 @@ async function activateSubscriptionFromPayment(asaasPayment: AsaasPaymentRespons
 async function deactivateSubscriptionFromPayment(asaasPayment: AsaasPaymentResponse) {
   try {
     const externalRef = asaasPayment.externalReference;
-    if (!externalRef) return;
+    const lookup = [];
+    if (externalRef) lookup.push({ externalReference: externalRef });
+    if (asaasPayment.subscription) {
+      lookup.push({ asaasSubscriptionId: asaasPayment.subscription });
+    }
+    if (lookup.length === 0) return;
 
-    const subscription = await Subscription.findOne({
-      externalReference: externalRef,
-    });
+    const subscription = await Subscription.findOne({ $or: lookup });
 
     if (subscription && subscription.status !== 'active') {
       // Only deactivate if never activated (still pending)

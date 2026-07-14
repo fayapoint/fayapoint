@@ -15,6 +15,7 @@ import asaas, {
   tokenizeCreditCard,
   getSubscriptionPayments,
   getPixQrCode,
+  getBoletoIdentification,
   AsaasCreditCard,
   AsaasCreditCardHolderInfo,
   cleanCpfCnpj,
@@ -22,6 +23,7 @@ import asaas, {
   isValidCnpj,
   asaasConfig,
   getDefaultDueDate,
+  AsaasApiError,
 } from '@/lib/asaas';
 
 // =============================================================================
@@ -79,17 +81,65 @@ export async function POST(request: NextRequest) {
       saveCard?: boolean;
     };
 
-    // Validate plan
-    console.log('[Subscription] planSlug received:', planSlug);
-    console.log('[Subscription] Available plans:', Object.keys(SUBSCRIPTION_PLANS));
-    
+    // Validate every client-selectable field. Amounts always come from our catalog.
     const plan = SUBSCRIPTION_PLANS[planSlug as keyof typeof SUBSCRIPTION_PLANS];
     if (!plan) {
-      console.error('[Subscription] Invalid plan:', planSlug);
       return NextResponse.json({ error: `Plano inválido: ${planSlug}` }, { status: 400 });
     }
-    
-    console.log('[Subscription] Plan found:', plan.name, 'Price:', plan.monthlyPrice, '/', plan.yearlyPrice);
+
+    if (cycle !== 'monthly' && cycle !== 'yearly') {
+      return NextResponse.json({ error: 'Ciclo do plano inválido' }, { status: 400 });
+    }
+
+    if (!['pix', 'boleto', 'credit_card'].includes(billingType)) {
+      return NextResponse.json({ error: 'Forma de pagamento inválida' }, { status: 400 });
+    }
+
+    // Never create a second recurring charge while another one is active or
+    // pending. Reconcile a stale local record if its Asaas subscription vanished.
+    const existingSubscriptions = await Subscription.find({
+      userId: user._id,
+      status: { $in: ['active', 'pending'] },
+    }).sort({ createdAt: -1 });
+
+    for (const existing of existingSubscriptions) {
+      let existsInAsaas = true;
+      try {
+        const remote = await asaas.getSubscription(existing.asaasSubscriptionId);
+        existsInAsaas = !remote.deleted && !['INACTIVE', 'EXPIRED'].includes(remote.status);
+      } catch (error) {
+        if (error instanceof AsaasApiError && error.status === 404) {
+          existsInAsaas = false;
+        } else {
+          console.error('[Subscription] Unable to verify existing subscription:', error);
+          return NextResponse.json(
+            { error: 'Não foi possível verificar sua assinatura atual no Asaas. Tente novamente em alguns instantes.' },
+            { status: 502 },
+          );
+        }
+      }
+
+      if (existsInAsaas) {
+        return NextResponse.json(
+          {
+            error: existing.status === 'active'
+              ? 'Você já possui uma assinatura ativa. Gerencie ou cancele o plano atual antes de criar outro.'
+              : 'Já existe uma assinatura aguardando pagamento. Conclua ou cancele a cobrança atual antes de tentar novamente.',
+            subscriptionId: String(existing._id),
+          },
+          { status: 409 }
+        );
+      }
+
+      existing.status = 'cancelled';
+      existing.cancelledAt = new Date();
+      existing.webhookEvents.push({
+        event: 'STALE_SUBSCRIPTION_RECONCILED',
+        receivedAt: new Date(),
+        data: { reason: 'Asaas subscription missing, inactive or expired' },
+      });
+      await existing.save();
+    }
 
     // Validate CPF/CNPJ
     const cleanedCpfCnpj = cpfCnpj ? cleanCpfCnpj(cpfCnpj) : '';
@@ -268,8 +318,13 @@ export async function POST(request: NextRequest) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userDoc = user as any;
     if (!userDoc.subscription) userDoc.subscription = {};
-    userDoc.subscription.plan = 'free'; // Keep as free until payment confirmed
-    userDoc.subscription.status = 'pending';
+    const hasActivePlan = userDoc.subscription.status === 'active'
+      && userDoc.subscription.plan
+      && userDoc.subscription.plan !== 'free';
+    if (!hasActivePlan) {
+      userDoc.subscription.plan = 'free'; // Keep free until payment confirmed
+      userDoc.subscription.status = 'pending';
+    }
     userDoc.subscription.pendingPlan = plan.slug; // What they'll get once paid
     userDoc.subscription.asaasSubscriptionId = asaasSubscription.id;
 
@@ -301,11 +356,13 @@ export async function POST(request: NextRequest) {
     
     if (billingType === 'pix' || billingType === 'boleto') {
       try {
-        // Wait a moment for Asaas to create the first payment
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Get the first payment from the subscription
-        const payments = await getSubscriptionPayments(asaasSubscription.id);
+        // The first charge is generated asynchronously by Asaas. Retry briefly
+        // so the checkout can display the PIX/boleto immediately when available.
+        let payments = await getSubscriptionPayments(asaasSubscription.id);
+        for (let attempt = 0; payments.data.length === 0 && attempt < 4; attempt += 1) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          payments = await getSubscriptionPayments(asaasSubscription.id);
+        }
         console.log('[Subscription] First payments:', payments);
         
         if (payments.data && payments.data.length > 0) {
@@ -326,12 +383,11 @@ export async function POST(request: NextRequest) {
             }
           }
           
-          if (billingType === 'boleto' && firstPayment.bankSlipUrl) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const paymentAny = firstPayment as any;
+          if (billingType === 'boleto' && firstPayment.id) {
+            const identification = await getBoletoIdentification(firstPayment.id);
             boletoData = {
-              barCode: paymentAny.nossoNumero || '',
-              digitableLine: paymentAny.identificationField || '',
+              barCode: identification.barCode,
+              digitableLine: identification.identificationField,
               bankSlipUrl: firstPayment.bankSlipUrl,
               dueDate: firstPayment.dueDate,
             };
@@ -349,7 +405,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       orderNumber,
-      paymentId: subscription._id,
+      paymentId: String(subscription._id),
+      subscriptionId: String(subscription._id),
       status: 'pending',
       method: billingType,
       total: value,

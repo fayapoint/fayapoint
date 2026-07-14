@@ -25,6 +25,7 @@ export interface IPaymentItem {
   name: string;
   description?: string;
   quantity: number;
+  originalUnitPrice?: number;
   unitPrice: number;
   totalPrice: number;
 }
@@ -145,6 +146,7 @@ const PaymentItemSchema = new Schema<IPaymentItem>({
   name: { type: String, required: true },
   description: { type: String },
   quantity: { type: Number, required: true, default: 1 },
+  originalUnitPrice: { type: Number },
   unitPrice: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
 }, { _id: false });

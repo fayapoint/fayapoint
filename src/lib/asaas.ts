@@ -134,6 +134,7 @@ export interface AsaasPaymentResponse {
   invoiceUrl: string;
   invoiceNumber?: string;
   externalReference?: string;
+  subscription?: string;
   deleted: boolean;
   anticipated: boolean;
   anticipable: boolean;
@@ -229,6 +230,16 @@ export interface AsaasError {
   }>;
 }
 
+export class AsaasApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+  ) {
+    super(message);
+    this.name = 'AsaasApiError';
+  }
+}
+
 // =============================================================================
 // CONFIGURATION
 // =============================================================================
@@ -274,9 +285,10 @@ async function asaasRequest<T>(
   if (!response.ok) {
     console.error(`[Asaas] Error ${response.status}:`, JSON.stringify(data));
     const error = data as AsaasError;
-    throw new Error(
-      error.errors?.map(e => e.description).join(', ') || 
-      `Asaas API error: ${response.status}`
+    throw new AsaasApiError(
+      error.errors?.map(e => e.description).join(', ') ||
+      `Asaas API error: ${response.status}`,
+      response.status,
     );
   }
 

@@ -2,6 +2,7 @@ import { ObjectId, type Document } from 'mongodb';
 import { getMongoClient } from '@/lib/products';
 import StoreProduct from '@/models/StoreProduct';
 import type { IPaymentItem } from '@/models/Payment';
+import { resolvePlan, TIER_CONFIGS } from '@/lib/course-tiers';
 
 const PRODUCTS_DATABASE = 'fayapointProdutos';
 const MAX_CART_LINES = 20;
@@ -24,6 +25,11 @@ export interface CheckoutItemInput {
   expectedUnitPrice?: unknown;
   /** Legacy client field kept only for stale-price detection. */
   price?: unknown;
+}
+
+export interface CheckoutPricingContext {
+  subscriptionPlan?: string;
+  subscriptionActive?: boolean;
 }
 
 export class CheckoutCatalogError extends Error {
@@ -259,7 +265,10 @@ async function resolveStoreProduct(input: CheckoutItemInput): Promise<IPaymentIt
   };
 }
 
-export async function resolveCheckoutItems(rawItems: unknown): Promise<IPaymentItem[]> {
+export async function resolveCheckoutItems(
+  rawItems: unknown,
+  pricing: CheckoutPricingContext = {},
+): Promise<IPaymentItem[]> {
   if (!Array.isArray(rawItems) || rawItems.length === 0) {
     throw new CheckoutCatalogError('Nenhum item no carrinho', 'EMPTY_CART');
   }
@@ -299,6 +308,17 @@ export async function resolveCheckoutItems(rawItems: unknown): Promise<IPaymentI
         throw new CheckoutCatalogError('Tipo de item inválido', 'INVALID_ITEM_TYPE');
     }
 
+    if (item.type === 'course' && pricing.subscriptionActive) {
+      const plan = resolvePlan(pricing.subscriptionPlan || 'free');
+      const discount = TIER_CONFIGS[plan].purchaseDiscount;
+      if (discount > 0) {
+        const originalUnitPrice = item.unitPrice;
+        item.originalUnitPrice = originalUnitPrice;
+        item.unitPrice = Math.round(originalUnitPrice * (1 - discount) * 100) / 100;
+        item.totalPrice = Math.round(item.unitPrice * item.quantity * 100) / 100;
+      }
+    }
+
     const key = `${item.type}:${item.productId || item.productSlug}`;
     if (seen.has(key)) {
       throw new CheckoutCatalogError('Item duplicado no carrinho', 'DUPLICATE_ITEM');
@@ -312,4 +332,11 @@ export async function resolveCheckoutItems(rawItems: unknown): Promise<IPaymentI
 
 export function calculateCheckoutSubtotal(items: IPaymentItem[]): number {
   return Math.round(items.reduce((sum, item) => sum + item.totalPrice, 0) * 100) / 100;
+}
+
+export function calculateCheckoutOriginalSubtotal(items: IPaymentItem[]): number {
+  return Math.round(items.reduce(
+    (sum, item) => sum + (item.originalUnitPrice ?? item.unitPrice) * item.quantity,
+    0,
+  ) * 100) / 100;
 }

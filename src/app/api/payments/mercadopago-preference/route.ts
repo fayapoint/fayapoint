@@ -7,6 +7,7 @@ import { SUBSCRIPTION_PLANS } from '@/models/Subscription';
 import Payment, { type IPaymentItem } from '@/models/Payment';
 import {
   calculateCheckoutSubtotal,
+  calculateCheckoutOriginalSubtotal,
   CheckoutCatalogError,
   resolveCheckoutItems,
 } from '@/lib/checkout-catalog';
@@ -72,7 +73,10 @@ export async function POST(request: NextRequest) {
     let pictureUrl = 'https://fayai.com.br/images/fayai-logo-social.png';
 
     if (Array.isArray(items)) {
-      checkoutItems = await resolveCheckoutItems(items);
+      checkoutItems = await resolveCheckoutItems(items, {
+        subscriptionPlan: user.subscription?.plan,
+        subscriptionActive: user.subscription?.status === 'active',
+      });
       checkoutTitle = checkoutItems.length === 1
         ? checkoutItems[0].name
         : `Pedido FayAi (${checkoutItems.length} itens)`;
@@ -114,6 +118,8 @@ export async function POST(request: NextRequest) {
     }
 
     const total = calculateCheckoutSubtotal(checkoutItems);
+    const subtotal = calculateCheckoutOriginalSubtotal(checkoutItems);
+    const discount = Math.round((subtotal - total) * 100) / 100;
     const orderNumber = await Payment.generateOrderNumber();
 
     // Persist the authoritative order before creating an external checkout so
@@ -127,8 +133,8 @@ export async function POST(request: NextRequest) {
       method: 'undefined',
       status: 'pending',
       items: checkoutItems,
-      subtotal: total,
-      discount: 0,
+      subtotal,
+      discount,
       fees: 0,
       total,
       currency: 'BRL',

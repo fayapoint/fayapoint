@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import { TIER_CONFIGS, type SubscriptionPlan } from '@/lib/course-tiers';
 
 // =============================================================================
 // TYPES
@@ -331,98 +332,32 @@ export function mapAsaasStatusToSubscriptionStatus(
   return statusMap[asaasStatus] || 'pending';
 }
 
-// Plan configurations — NEW TIER SYSTEM (March 2026)
+// The course tier catalog is the single source of truth for subscription
+// prices and benefits. Legacy aliases remain accepted, but can never drift.
+type PaidSubscriptionPlan = Exclude<SubscriptionPlan, 'free'>;
+
+function toSubscriptionPlan(slug: PaidSubscriptionPlan) {
+  const tier = TIER_CONFIGS[slug];
+  return {
+    id: slug,
+    name: tier.displayName,
+    slug,
+    monthlyPrice: tier.monthlyPrice,
+    yearlyPrice: tier.yearlyPrice,
+    monthlyCredits: tier.monthlyCredits,
+    features: [...tier.features],
+  } as const;
+}
+
+const EXPLORADOR_PLAN = toSubscriptionPlan('explorador');
+const PROFISSIONAL_PLAN = toSubscriptionPlan('profissional');
+const EXPERT_PLAN = toSubscriptionPlan('expert');
+
 export const SUBSCRIPTION_PLANS = {
-  // Legacy aliases (for backwards compat)
-  starter: {
-    id: 'explorador',
-    name: 'Explorador',
-    slug: 'explorador',
-    monthlyPrice: 57,
-    yearlyPrice: 570,
-    monthlyCredits: 100,
-    features: [
-      '3 cursos iniciantes por mês',
-      '100 créditos/mês para IA',
-      '10% de desconto em certificações e cursos avulsos',
-      'Certificados verificáveis online',
-      'Acesso à comunidade',
-    ],
-  },
-  pro: {
-    id: 'profissional',
-    name: 'Profissional',
-    slug: 'profissional',
-    monthlyPrice: 97,
-    yearlyPrice: 970,
-    monthlyCredits: 300,
-    features: [
-      '5 iniciantes + 2 intermediários + 1 avançado/mês',
-      '300 créditos/mês para IA',
-      '20% de desconto em certificações e cursos avulsos',
-      'Suporte prioritário',
-      'Conteúdo exclusivo e antecipado',
-    ],
-  },
-  business: {
-    id: 'expert',
-    name: 'Expert',
-    slug: 'expert',
-    monthlyPrice: 167,
-    yearlyPrice: 1670,
-    monthlyCredits: 800,
-    features: [
-      '7 iniciantes + 4 intermediários + 3 avançados/mês',
-      '800 créditos/mês para IA',
-      '50% de desconto em certificações e cursos avulsos',
-      'Suporte VIP + conteúdo exclusivo',
-      'Consultoria mensal com especialista',
-    ],
-  },
-  // New canonical keys
-  explorador: {
-    id: 'explorador',
-    name: 'Explorador',
-    slug: 'explorador',
-    monthlyPrice: 57,
-    yearlyPrice: 570,
-    monthlyCredits: 100,
-    features: [
-      '3 cursos iniciantes por mês',
-      '100 créditos/mês para IA',
-      '10% de desconto em certificações e cursos avulsos',
-      'Certificados verificáveis online',
-      'Acesso à comunidade',
-    ],
-  },
-  profissional: {
-    id: 'profissional',
-    name: 'Profissional',
-    slug: 'profissional',
-    monthlyPrice: 97,
-    yearlyPrice: 970,
-    monthlyCredits: 300,
-    features: [
-      '5 iniciantes + 2 intermediários + 1 avançado/mês',
-      '300 créditos/mês para IA',
-      '20% de desconto em certificações e cursos avulsos',
-      'Suporte prioritário',
-      'Conteúdo exclusivo e antecipado',
-    ],
-  },
-  expert: {
-    id: 'expert',
-    name: 'Expert',
-    slug: 'expert',
-    monthlyPrice: 167,
-    yearlyPrice: 1670,
-    monthlyCredits: 800,
-    features: [
-      '7 iniciantes + 4 intermediários + 3 avançados/mês',
-      '800 créditos/mês para IA',
-      '50% de desconto em certificações e cursos avulsos',
-      'Suporte VIP + conteúdo exclusivo',
-      'Consultoria mensal com especialista',
-    ],
-  },
+  starter: EXPLORADOR_PLAN,
+  pro: PROFISSIONAL_PLAN,
+  business: EXPERT_PLAN,
+  explorador: EXPLORADOR_PLAN,
+  profissional: PROFISSIONAL_PLAN,
+  expert: EXPERT_PLAN,
 } as const;

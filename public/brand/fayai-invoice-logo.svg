@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300" role="img" aria-labelledby="title desc">
+  <title id="title">FayAi</title>
+  <desc id="desc">Logotipo FayAi para faturas e cobranças</desc>
+  <rect width="900" height="300" rx="32" fill="#0c0e1d"/>
+  <g transform="translate(86 62)">
+    <path d="M45 7 54 33 80 42 54 51 45 77 36 51 10 42 36 33Z" fill="#f5c04e"/>
+    <circle cx="91" cy="15" r="7" fill="#f5c04e" opacity=".75"/>
+    <text x="125" y="140" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="154" font-weight="800" letter-spacing="-8">FAY</text>
+    <text x="440" y="140" fill="#f5c04e" font-family="Arial, Helvetica, sans-serif" font-size="154" font-weight="800" letter-spacing="-8">AI</text>
+  </g>
+</svg>

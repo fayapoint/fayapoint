@@ -38,8 +38,33 @@ export async function GET(
     try {
       asaasData = await asaas.getSubscription(subscription.asaasSubscriptionId);
       payments = await asaas.getSubscriptionPayments(subscription.asaasSubscriptionId);
+
+      if (
+        subscription.status !== 'cancelled'
+        && (asaasData.deleted || ['INACTIVE', 'EXPIRED'].includes(asaasData.status))
+      ) {
+        subscription.status = 'cancelled';
+        subscription.cancelledAt = new Date();
+        subscription.webhookEvents.push({
+          event: 'STALE_SUBSCRIPTION_RECONCILED_ON_READ',
+          receivedAt: new Date(),
+          data: { asaasStatus: asaasData.status, deleted: asaasData.deleted },
+        });
+        await subscription.save();
+
+        const user = await User.findById(authUser.id);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const userAny = user as any;
+        if (userAny?.subscription?.asaasSubscriptionId === subscription.asaasSubscriptionId) {
+          userAny.subscription.plan = 'free';
+          userAny.subscription.status = 'cancelled';
+          userAny.subscription.pendingPlan = undefined;
+          userAny.subscription.asaasSubscriptionId = undefined;
+          await userAny.save();
+        }
+      }
     } catch {
-      // Ignore Asaas errors
+      // A temporary gateway error must not mutate a valid local subscription.
     }
 
     return NextResponse.json({
@@ -234,14 +259,17 @@ export async function DELETE(
 
     await subscription.save();
 
-    // Downgrade user plan to free
+    // Downgrade only when this is the subscription currently attached to the
+    // user. Cancelling an old record must never remove a newer paid plan.
     const userDoc = await User.findById(authUser.id);
     if (userDoc) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const userAny = userDoc as any;
-      if (userAny.subscription) {
+      if (userAny.subscription?.asaasSubscriptionId === subscription.asaasSubscriptionId) {
         userAny.subscription.plan = 'free';
         userAny.subscription.status = 'cancelled';
+        userAny.subscription.pendingPlan = undefined;
+        userAny.subscription.asaasSubscriptionId = undefined;
       }
       await userAny.save();
     }

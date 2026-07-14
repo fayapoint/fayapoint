@@ -7,6 +7,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
 import { toast } from "react-hot-toast";
 import { getClientAuthHeaders, getClientBearerToken } from "@/lib/client-auth";
+import { resolvePlan, TIER_CONFIGS, type SubscriptionPlan } from "@/lib/course-tiers";
 import {
   CreditCard,
   FileText,
@@ -30,49 +31,44 @@ import Image from "next/image";
 
 // ─── Plan Data ────────────────────────────────────────────────────────────────
 
+type PaidSubscriptionPlan = Exclude<SubscriptionPlan, "free">;
+
+const PLAN_VISUALS: Record<PaidSubscriptionPlan, {
+  emoji: string; color: string; gradient: string; badge?: string;
+}> = {
+  explorador: { emoji: "🧭", color: "emerald", gradient: "from-emerald-500 to-teal-600" },
+  profissional: { emoji: "🚀", color: "amber", gradient: "from-amber-500 to-yellow-600", badge: "Mais Popular" },
+  expert: { emoji: "👑", color: "amber", gradient: "from-amber-500 to-orange-600" },
+};
+
+function checkoutPlan(slug: PaidSubscriptionPlan) {
+  const tier = TIER_CONFIGS[slug];
+  return {
+    name: tier.displayName,
+    slug,
+    monthlyPrice: tier.monthlyPrice,
+    yearlyPrice: tier.yearlyPrice,
+    monthlyCredits: tier.monthlyCredits,
+    features: [...tier.features],
+    ...PLAN_VISUALS[slug],
+  };
+}
+
+const EXPLORADOR_PLAN = checkoutPlan("explorador");
+const PROFISSIONAL_PLAN = checkoutPlan("profissional");
+const EXPERT_PLAN = checkoutPlan("expert");
+
 const PLAN_DATA: Record<string, {
   name: string; slug: string; monthlyPrice: number; yearlyPrice: number;
   monthlyCredits: number; emoji: string; color: string; gradient: string;
   features: string[]; badge?: string;
 }> = {
-  explorador: {
-    name: "Explorador", slug: "explorador", monthlyPrice: 57, yearlyPrice: 570,
-    monthlyCredits: 100, emoji: "🧭", color: "emerald", gradient: "from-emerald-500 to-teal-600",
-    features: [
-      "3 cursos iniciantes por mês",
-      "100 créditos/mês para IA",
-      "10% de desconto em certificações",
-      "Certificados verificáveis online",
-      "Acesso à comunidade",
-    ],
-  },
-  profissional: {
-    name: "Profissional", slug: "profissional", monthlyPrice: 97, yearlyPrice: 970,
-    monthlyCredits: 300, emoji: "🚀", color: "amber", gradient: "from-amber-500 to-yellow-600",
-    badge: "Mais Popular",
-    features: [
-      "8 cursos por mês (todos os níveis)",
-      "300 créditos/mês para IA",
-      "20% de desconto em certificações",
-      "Suporte prioritário",
-      "Conteúdo exclusivo antecipado",
-    ],
-  },
-  expert: {
-    name: "Expert", slug: "expert", monthlyPrice: 167, yearlyPrice: 1670,
-    monthlyCredits: 800, emoji: "👑", color: "amber", gradient: "from-amber-500 to-orange-600",
-    features: [
-      "14 cursos por mês (todos os níveis)",
-      "800 créditos/mês para IA",
-      "50% de desconto em certificações",
-      "Suporte VIP dedicado",
-      "Consultoria mensal com especialista",
-    ],
-  },
-  // Legacy aliases
-  starter: { name: "Explorador", slug: "explorador", monthlyPrice: 57, yearlyPrice: 570, monthlyCredits: 100, emoji: "🧭", color: "emerald", gradient: "from-emerald-500 to-teal-600", features: [] },
-  pro: { name: "Profissional", slug: "profissional", monthlyPrice: 97, yearlyPrice: 970, monthlyCredits: 300, emoji: "🚀", color: "amber", gradient: "from-amber-500 to-yellow-600", features: [] },
-  business: { name: "Expert", slug: "expert", monthlyPrice: 167, yearlyPrice: 1670, monthlyCredits: 800, emoji: "👑", color: "amber", gradient: "from-amber-500 to-orange-600", features: [] },
+  explorador: EXPLORADOR_PLAN,
+  profissional: PROFISSIONAL_PLAN,
+  expert: EXPERT_PLAN,
+  starter: EXPLORADOR_PLAN,
+  pro: PROFISSIONAL_PLAN,
+  business: EXPERT_PLAN,
 };
 
 // ─── 3D-Style Payment Method Icons (Warm, friendly, Apple-inspired) ──────────
@@ -244,6 +240,7 @@ interface SavedCard {
 
 interface PaymentResult {
   success: boolean; orderNumber: string; paymentId: string;
+  subscriptionId?: string;
   status: string; method: PaymentMethod; total: number;
   paymentUrl?: string;
   pixData?: { qrCodeBase64: string; qrCodePayload: string; expirationDate: string; };
@@ -301,20 +298,29 @@ export default function CheckoutPage() {
   const subscriptionPlans = useMemo(() => ["starter", "pro", "business", "explorador", "profissional", "expert"], []);
   const planInfo = PLAN_DATA[planName] || null;
   const isCartCheckout = planName === "cart";
-  const cartItems = Object.values(items);
+  const cartItems = useMemo(() => Object.values(items), [items]);
+  const activePurchaseDiscount = user?.subscription?.status === "active"
+    ? TIER_CONFIGS[resolvePlan(user.subscription.plan)].purchaseDiscount
+    : 0;
+  const courseDiscountAmount = useMemo(() => Math.round(cartItems.reduce(
+    (sum, item) => item.type === "course"
+      ? sum + item.price * item.quantity * activePurchaseDiscount
+      : sum,
+    0,
+  ) * 100) / 100, [cartItems, activePurchaseDiscount]);
 
   const total = useMemo(() => {
-    if (isCartCheckout) return cartTotal;
+    if (isCartCheckout) return Math.round((cartTotal - courseDiscountAmount) * 100) / 100;
     if (planInfo) {
       return subscriptionCycle === "yearly" ? planInfo.yearlyPrice : planInfo.monthlyPrice;
     }
     return 0;
-  }, [isCartCheckout, cartTotal, planInfo, subscriptionCycle]);
+  }, [isCartCheckout, cartTotal, courseDiscountAmount, planInfo, subscriptionCycle]);
 
   const isFreeCourseCheckout = isCartCheckout && cartItems.length > 0 && !isSubscription && total <= 0
     && cartItems.every((item) => item.type === "course" && Boolean(item.slug));
 
-  const effectiveTotal = isFreeCourseCheckout ? 0 : selectedMethod === "boleto" ? total * 0.95 : total;
+  const effectiveTotal = isFreeCourseCheckout ? 0 : total;
 
   const installmentOptions = useMemo(() => {
     const opts = [];
@@ -354,13 +360,6 @@ export default function CheckoutPage() {
       if (hasSubscription) setIsSubscription(true);
     }
   }, [planName, items, subscriptionPlans, cartItems]);
-
-  useEffect(() => {
-    if (paymentResult?.method === "pix" && paymentResult.status === "pending") {
-      const interval = setInterval(checkPaymentStatus, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [paymentResult]);
 
   // ─── Helpers ────────────────────────────────────────────────────────
 
@@ -416,9 +415,15 @@ export default function CheckoutPage() {
     if (!paymentResult?.paymentId) return;
     setCheckingStatus(true);
     try {
-      const res = await fetch(`/api/payments/${paymentResult.paymentId}`, { headers: getClientAuthHeaders(), credentials: "include" });
+      const statusUrl = paymentResult.subscriptionId
+        ? `/api/subscriptions/${paymentResult.subscriptionId}`
+        : `/api/payments/${paymentResult.paymentId}`;
+      const res = await fetch(statusUrl, { headers: getClientAuthHeaders(), credentials: "include" });
       const data = await res.json();
-      if (data.payment?.status === "paid") {
+      const paid = paymentResult.subscriptionId
+        ? data.subscription?.status === "active"
+        : data.payment?.status === "paid";
+      if (paid) {
         toast.success("Pagamento confirmado!");
         clearCart();
         router.push(`/pt-BR/checkout/success?order=${paymentResult.orderNumber}`);
@@ -426,6 +431,13 @@ export default function CheckoutPage() {
     } catch (e) { console.error("Error checking status:", e); }
     finally { setCheckingStatus(false); }
   }, [paymentResult, clearCart, router]);
+
+  useEffect(() => {
+    if (paymentResult?.method === "pix" && paymentResult.status === "pending") {
+      const interval = setInterval(checkPaymentStatus, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [paymentResult, checkPaymentStatus]);
 
   const handlePayment = async () => {
     if (!name || !email) { toast.error("Preencha nome e email."); return; }
@@ -774,7 +786,7 @@ export default function CheckoutPage() {
                           <BoletoIcon3D active={selectedMethod === "boleto"} />
                         </div>
                         <span className="text-sm font-semibold text-gray-900 block">Boleto</span>
-                        <span className="text-xs text-blue-600 font-medium">5% de desconto</span>
+                        <span className="text-xs text-blue-600 font-medium">Vencimento claro</span>
                       </button>
 
                       {/* Credit Card */}
@@ -943,12 +955,12 @@ export default function CheckoutPage() {
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="text-gray-700">{formatCurrency(total)}</span>
+                    <span className="text-gray-700">{formatCurrency(isCartCheckout ? cartTotal : total)}</span>
                   </div>
-                  {!isFreeCourseCheckout && selectedMethod === "boleto" && (
+                  {isCartCheckout && courseDiscountAmount > 0 && (
                     <div className="flex justify-between items-center text-sm text-emerald-600">
-                      <span>Desconto Boleto (5%)</span>
-                      <span>-{formatCurrency(total * 0.05)}</span>
+                      <span>Benefício do plano ({Math.round(activePurchaseDiscount * 100)}%)</span>
+                      <span>-{formatCurrency(courseDiscountAmount)}</span>
                     </div>
                   )}
                   <div className="h-px bg-gray-100" />

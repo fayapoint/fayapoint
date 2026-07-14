@@ -11,12 +11,12 @@
  * Expert:      R$167/mês  — 7 beginner + 4 intermediate + 3 advanced, 800 credits
  *
  * ═══════════════════════════════════════════════════════════
- * COURSE LEVELS & PURCHASE PRICES
+ * INDIVIDUAL COURSE PURCHASES
  * ═══════════════════════════════════════════════════════════
  *
- * Beginner:     R$57 individual purchase
- * Intermediate:  R$97 individual purchase
- * Advanced:      R$167 individual purchase
+ * Every course has its own price in fayapointProdutos.products.
+ * Checkout resolves that catalog price on the server; course level is never
+ * used as a substitute for the product price.
  * Tier discounts apply: Explorador 10%, Profissional 20%, Expert 50%
  *
  * ═══════════════════════════════════════════════════════════
@@ -71,7 +71,10 @@ export const LEGACY_PLAN_MAP: Record<string, SubscriptionPlan> = {
 
 /** Resolve a plan slug that could be legacy or current */
 export function resolvePlan(planSlug: string): SubscriptionPlan {
-  return LEGACY_PLAN_MAP[planSlug] ?? (planSlug as SubscriptionPlan) ?? 'free';
+  const resolved = LEGACY_PLAN_MAP[planSlug] ?? planSlug;
+  return ['free', 'explorador', 'profissional', 'expert'].includes(resolved)
+    ? resolved as SubscriptionPlan
+    : 'free';
 }
 
 // ─── Tier Limits ─────────────────────────────────────────
@@ -200,16 +203,6 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
   },
 };
 
-// ─── Course Purchase Prices ──────────────────────────────
-
-/** Individual course purchase price (for non-tier or beyond-limit purchases) */
-export const COURSE_PURCHASE_PRICE: Record<CourseLevel, number> = {
-  free: 0,
-  beginner: 57,
-  intermediate: 97,
-  advanced: 167,
-};
-
 /** Quiz + Certificate base price */
 export const QUIZ_CERTIFICATE_BASE_PRICE: Record<CourseLevel, number> = {
   free: 19,
@@ -261,20 +254,6 @@ export const MONTHLY_POOL = {
 } as const;
 
 // ─── Price Calculations ──────────────────────────────────
-
-/**
- * Get the discounted purchase price for a course
- */
-export function getCoursePurchasePrice(
-  plan: SubscriptionPlan,
-  courseLevel: CourseLevel
-): { basePrice: number; discount: number; finalPrice: number } {
-  const basePrice = COURSE_PURCHASE_PRICE[courseLevel];
-  const config = TIER_CONFIGS[plan];
-  const discount = config.purchaseDiscount;
-  const finalPrice = Math.round(basePrice * (1 - discount));
-  return { basePrice, discount, finalPrice };
-}
 
 /**
  * Calculate the quiz + certificate price for a user's tier

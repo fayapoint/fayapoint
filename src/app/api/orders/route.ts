@@ -6,6 +6,7 @@ import User from '@/models/User';
 import mongoose from 'mongoose';
 import {
   calculateCheckoutSubtotal,
+  calculateCheckoutOriginalSubtotal,
   CheckoutCatalogError,
   resolveCheckoutItems,
 } from '@/lib/checkout-catalog';
@@ -58,7 +59,10 @@ export async function POST(request: NextRequest) {
 
     // This legacy endpoint creates only a pending order. Catalog data is still
     // resolved server-side so it cannot mint fake revenue, stock changes or XP.
-    const catalogItems = await resolveCheckoutItems(body.items);
+    const catalogItems = await resolveCheckoutItems(body.items, {
+      subscriptionPlan: user.subscription?.plan,
+      subscriptionActive: user.subscription?.status === 'active',
+    });
     const validatedItems: IOrderItem[] = catalogItems.map((item) => {
       if (item.type !== 'course' && item.type !== 'service' && item.type !== 'product') {
         throw new CheckoutCatalogError('Tipo de item inválido para pedido', 'INVALID_ORDER_ITEM');
@@ -73,6 +77,7 @@ export async function POST(request: NextRequest) {
       };
     });
     const totalAmount = calculateCheckoutSubtotal(catalogItems);
+    const originalSubtotal = calculateCheckoutOriginalSubtotal(catalogItems);
 
     // Create order
     const order = await Order.create({
@@ -81,7 +86,7 @@ export async function POST(request: NextRequest) {
       userName: user.name,
       items: validatedItems,
       totalAmount,
-      discountAmount: 0,
+      discountAmount: Math.round((originalSubtotal - totalAmount) * 100) / 100,
       status: 'pending',
       paymentMethod,
       shippingAddress,

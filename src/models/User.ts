@@ -45,7 +45,8 @@ export interface IUser extends Document {
   savedCards: ISavedCard[];
   subscription: {
     plan: 'free' | 'starter' | 'pro' | 'business' | 'explorador' | 'profissional' | 'expert';
-    status: 'active' | 'cancelled' | 'past_due';
+    status: 'active' | 'pending' | 'cancelled' | 'past_due' | 'expired';
+    pendingPlan?: 'explorador' | 'profissional' | 'expert';
     expiresAt?: Date;
     stripeCustomerId?: string;
     stripeSubscriptionId?: string;
@@ -252,8 +253,12 @@ const UserSchema = new Schema<IUser>({
     },
     status: {
       type: String,
-      enum: ['active', 'cancelled', 'past_due'],
+      enum: ['active', 'pending', 'cancelled', 'past_due', 'expired'],
       default: 'active',
+    },
+    pendingPlan: {
+      type: String,
+      enum: ['explorador', 'profissional', 'expert'],
     },
     expiresAt: Date,
     stripeCustomerId: String,

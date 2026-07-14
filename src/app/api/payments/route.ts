@@ -25,6 +25,7 @@ import {
 } from '@/lib/mercadopago';
 import {
   calculateCheckoutSubtotal,
+  calculateCheckoutOriginalSubtotal,
   CheckoutCatalogError,
   resolveCheckoutItems,
 } from '@/lib/checkout-catalog';
@@ -135,7 +136,10 @@ export async function POST(request: NextRequest) {
 
     // Resolve names, availability and prices from the server-side catalog.
     // Client-provided prices are used only to detect a stale cart.
-    const paymentItems = await resolveCheckoutItems(body.items);
+    const paymentItems = await resolveCheckoutItems(body.items, {
+      subscriptionPlan: user.subscription?.plan,
+      subscriptionActive: user.subscription?.status === 'active',
+    });
 
     // Validate CPF/CNPJ for Brazilian payments
     const cleanedCpfCnpj = cpfCnpj ? cleanCpfCnpj(cpfCnpj) : '';
@@ -153,8 +157,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate totals
-    const subtotal = calculateCheckoutSubtotal(paymentItems);
-    const total = subtotal; // Add discounts/fees logic here if needed
+    const subtotal = calculateCheckoutOriginalSubtotal(paymentItems);
+    const total = calculateCheckoutSubtotal(paymentItems);
+    const discount = Math.round((subtotal - total) * 100) / 100;
 
     // Generate order number
     const orderNumber = await (Payment as typeof Payment & { generateOrderNumber: () => Promise<string> }).generateOrderNumber();
@@ -205,7 +210,7 @@ export async function POST(request: NextRequest) {
         status: mpResult.status === 'approved' ? 'paid' : 'pending',
         items: paymentItems,
         subtotal,
-        discount: 0,
+        discount,
         fees: 0,
         total,
         currency: 'BRL',
@@ -288,8 +293,6 @@ export async function POST(request: NextRequest) {
             description,
             externalReference,
             callback: { successUrl, autoRedirect: true },
-            // Add 5% discount for payment within 3 days
-            discount: { value: 5, dueDateLimitDays: 3, type: 'PERCENTAGE' },
             // 2% monthly interest after due date
             interest: { value: 2 },
             // 1% fine for late payment
@@ -418,7 +421,7 @@ export async function POST(request: NextRequest) {
         : 'pending',
       items: paymentItems,
       subtotal,
-      discount: 0,
+      discount,
       fees: 0,
       total,
       currency: 'BRL',
