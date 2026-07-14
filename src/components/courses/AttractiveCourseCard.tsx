@@ -298,7 +298,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               >
                 <span>
                   {isFreeCourseOfMonth
-                    ? (isPtBr ? `Adquirir por US$1` : `Get for US$1`)
+                    ? (isPtBr ? "Liberar grátis" : "Unlock free")
                     : isPtBr ? 'Ver Curso Completo' : 'View Full Course'}
                 </span>
                 <Play size={18} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />

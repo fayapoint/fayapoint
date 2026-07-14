@@ -447,7 +447,7 @@ export function CoursesPanel({
                 ) : (
                   <Link href={`/curso/${freeMonthlyCourse.slug}`} className="flex-1">
                     <Button size="sm" className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-black text-xs h-8 gap-1">
-                      <Gift size={12} /> Adquirir US$1
+                      <Gift size={12} /> Liberar grátis
                     </Button>
                   </Link>
                 )}
@@ -590,7 +590,7 @@ export function CoursesPanel({
                             {isEnrolling === course.slug ? (
                               <Loader2 size={10} className="animate-spin" />
                             ) : course.isFreeMonthlyCourse ? (
-                              <><Gift size={10} /> US$1</>
+                              <><Gift size={10} /> Grátis</>
                             ) : (
                               <><Sparkles size={10} /> Liberar</>
                             )}
@@ -863,7 +863,7 @@ export function CoursesPanel({
 
         <div className="space-y-2">
           <div className="bg-secondary rounded-lg p-3 border border-emerald-500/15">
-            <p className="text-xs font-semibold text-emerald-300">Oferta do Mês — US$1</p>
+            <p className="text-xs font-semibold text-emerald-300">Curso grátis do mês</p>
             <p className="text-xs text-muted-foreground mt-1">Acesso vitalício + certificado verificável incluído.</p>
           </div>
           <div className="bg-secondary rounded-lg p-3 border border-border">

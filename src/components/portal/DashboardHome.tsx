@@ -40,6 +40,7 @@ import { ArcadeBanner } from "@/components/portal/MinigamesPanel";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
 import { TIER_CONFIGS, SubscriptionPlan } from "@/lib/course-tiers";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
+import { getChallengeGuide } from "@/lib/challenges";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -165,6 +166,7 @@ export function DashboardHome({
   const hasStartedCourses = userCourses.length > 0;
   const hasUsedAssistant = stats.aiChats > 0;
   const dailyChallenge = gamification?.dailyChallenge;
+  const dailyChallengeGuide = getChallengeGuide(dailyChallenge?.id, dailyChallenge?.description);
   const streakCalendar = activity?.streakCalendar?.slice(-7) || [];
   const unlockedAchievements =
     gamification?.achievements?.filter((a: any) => a.unlocked) || [];
@@ -510,7 +512,7 @@ export function DashboardHome({
                     <h4 className="text-sm font-bold">Desafio Diário</h4>
                     <span className="text-[9px] font-bold text-yellow-400 flex items-center gap-0.5"><Zap size={9} />+{dailyChallenge?.reward || 50} XP</span>
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">{dailyChallenge?.description || "Complete uma lição hoje"}</p>
+                  <p className="text-xs text-muted-foreground truncate">{dailyChallengeGuide.title}</p>
                 </div>
                 {dailyChallenge?.completed ? (
                   <Badge className="bg-green-500/15 text-green-400 border-green-500/30 text-[9px] shrink-0">✓</Badge>

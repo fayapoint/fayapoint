@@ -47,8 +47,8 @@ const PLANS = [
     nameEn: "Free",
     monthlyPrice: 0,
     yearlyPrice: 0,
-    description: "Experimente antes de assinar. Um curso completo por mês por apenas US$1.",
-    descriptionEn: "Try before you subscribe. One full course per month for just US$1.",
+    description: "Experimente antes de assinar. Um curso completo fica grátis todo mês.",
+    descriptionEn: "Try before you subscribe. One full course is free every month.",
     cta: "Criar conta grátis",
     ctaEn: "Create free account",
     href: "/registro",
@@ -56,7 +56,7 @@ const PLANS = [
     badge: null,
     gradient: "from-gray-500 to-slate-600",
     features: {
-      "Oferta do mês (US$1)": true,
+      "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
       "Cursos iniciantes/mês": "0",
@@ -85,7 +85,7 @@ const PLANS = [
     badge: null,
     gradient: "from-emerald-500 to-teal-600",
     features: {
-      "Oferta do mês (US$1)": true,
+      "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
       "Cursos iniciantes/mês": "3",
@@ -114,7 +114,7 @@ const PLANS = [
     badge: "Mais Popular",
     gradient: "from-amber-500 to-yellow-600",
     features: {
-      "Oferta do mês (US$1)": true,
+      "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
       "Cursos iniciantes/mês": "5",
@@ -143,7 +143,7 @@ const PLANS = [
     badge: null,
     gradient: "from-amber-500 to-orange-600",
     features: {
-      "Oferta do mês (US$1)": true,
+      "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
       "Cursos iniciantes/mês": "7",
@@ -163,7 +163,7 @@ const FEATURE_KEYS = Object.keys(PLANS[0].features) as (keyof typeof PLANS[0]["f
 
 const FAQ_ITEMS_PT = [
   { q: "Posso cancelar a qualquer momento?", a: "Sim. Sem fidelidade, sem multa. Seu acesso continua até o fim do ciclo pago." },
-  { q: "O que é a oferta do mês?", a: "Todo mês, um curso completo fica disponível por apenas US$1 (convertido para BRL na hora) — com acesso vitalício e certificado incluso. É a melhor forma de experimentar a plataforma." },
+  { q: "O que é o curso grátis do mês?", a: "Todo mês, um curso completo fica disponível sem cobrança — com acesso vitalício e certificado incluso. É a melhor forma de experimentar a plataforma." },
   { q: "O que acontece se eu não usar todas as vagas do mês?", a: "As vagas não acumulam. No dia 1 do próximo mês, o catálogo rotativo atualiza e você recebe novas vagas do seu plano." },
   { q: "Posso comprar cursos avulsos sem assinar?", a: "Sim. Qualquer curso pode ser comprado individualmente. Assinantes recebem desconto." },
   { q: "O pagamento é seguro?", a: "100%. Usamos PIX, Boleto e Cartão de Crédito via gateways certificados (Asaas e MercadoPago). Seus dados nunca ficam nos nossos servidores." },

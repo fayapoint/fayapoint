@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ClaimLandingXp } from "@/components/landing/ClaimLandingXp";
@@ -197,9 +197,14 @@ export default function PortalPage() {
   const { items: cartItems, cartTotal } = useServiceCart();
   const { data: cachedDashboardData, isLoading: isDashboardLoading, error: dashboardError, refetch: refetchDashboard } = useDashboard();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const contentScrollRef = useRef<HTMLDivElement>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [userCourses, setUserCourses] = useState<DashboardCourseProgress[]>([]);
+
+  useEffect(() => {
+    contentScrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
+  }, [activeTab]);
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
@@ -672,7 +677,7 @@ export default function PortalPage() {
         </header>
 
         {/* Content — scrolls independently from header and bottom nav */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain p-4 md:p-6 pb-32 md:pb-6">
+        <div ref={contentScrollRef} className="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain p-4 md:p-6 pb-32 md:pb-6">
           <AnimatePresence mode="wait">
             {/* Dashboard Tab — New Bento Grid Layout */}
             {activeTab === "dashboard" && (
@@ -1053,6 +1058,7 @@ export default function PortalPage() {
                   streak={stats.streak}
                   isPro={isPro}
                   streakCalendar={activity?.streakCalendar || []}
+                  onTabChange={setActiveTab}
                 />
               </motion.div>
             )}

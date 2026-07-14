@@ -42,8 +42,8 @@ const statTone = [
   {
     icon: Gift,
     value: "1",
-    labelPt: "curso completo por US$1/mês",
-    labelEn: "full course for US$1 each month",
+    labelPt: "curso completo grátis todo mês",
+    labelEn: "one full course free each month",
     className: "border-emerald-400/20 bg-emerald-500/10 text-emerald-200",
   },
   {
@@ -217,7 +217,7 @@ export function HeroSection() {
                     {isPtBr ? "Oferta principal do mês" : "Primary offer of the month"}
                   </p>
                   <h2 className="mt-2 text-2xl font-black text-white">
-                    {freeCourse?.name || (isPtBr ? "Um curso completo por US$1 todo mês" : "A full course for US$1 every month")}
+                    {freeCourse?.name || (isPtBr ? "Um curso completo grátis todo mês" : "A full course free every month")}
                   </h2>
                 </div>
                 <div className="rounded-[22px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.2),rgba(16,185,129,0.08))] px-4 py-3 text-right shadow-[0_12px_30px_rgba(16,185,129,0.16)]">
@@ -263,7 +263,7 @@ export function HeroSection() {
                   <ul className="mt-3 space-y-2 text-sm text-white/85">
                     <li className="inline-flex items-center gap-2">
                       <Zap size={14} className="text-cyan-300" />
-                      {isPtBr ? "1 curso novo por US$1 no início de cada mês" : "1 new course for US$1 at the start of each month"}
+                      {isPtBr ? "1 curso novo grátis no início de cada mês" : "1 new free course at the start of each month"}
                     </li>
                     <li className="inline-flex items-center gap-2">
                       <Zap size={14} className="text-cyan-300" />
@@ -293,8 +293,8 @@ export function HeroSection() {
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {isPtBr
-                    ? "Oferta por US$1, catálogo mensal e upgrade aparecem com contexto, sem telas confusas."
-                    : "US$1 offer, monthly catalog, and upgrade appear with context, without confusing screens."}
+                    ? "Curso grátis, catálogo mensal e upgrade aparecem com contexto, sem telas confusas."
+                    : "The free course, monthly catalog, and upgrade appear with context, without confusing screens."}
                 </p>
               </div>
 

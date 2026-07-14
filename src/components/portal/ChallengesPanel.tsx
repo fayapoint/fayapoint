@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Target,
@@ -15,14 +14,18 @@ import {
   TrendingUp,
   BookOpen,
   Image as ImageIcon,
-  MessageSquare,
   Share2,
+  ArrowRight,
+  Snowflake,
+  Footprints,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { FxConfetti } from "@/components/portal/games/GameLearning";
+import { getChallengeGuide, type ChallengeDestination } from "@/lib/challenges";
 
 interface DailyChallenge {
   id: string;
@@ -52,6 +55,7 @@ interface ChallengesPanelProps {
   streak: number;
   isPro: boolean;
   streakCalendar: { date: string; active: boolean }[];
+  onTabChange: (tab: ChallengeDestination | "rewards") => void;
 }
 
 const CHALLENGE_ICONS: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -79,16 +83,11 @@ export function ChallengesPanel({
   streak,
   isPro,
   streakCalendar,
+  onTabChange,
 }: ChallengesPanelProps) {
-  const [isClaimingReward, setIsClaimingReward] = useState(false);
   const ChallengeIcon = CHALLENGE_ICONS[dailyChallenge.id] || Target;
+  const guide = getChallengeGuide(dailyChallenge.id, dailyChallenge.description);
   const goalProgress = Math.min(100, (weeklyGoal.current / weeklyGoal.target) * 100);
-
-  const handleClaimReward = async () => {
-    setIsClaimingReward(true);
-    // API call would go here
-    setTimeout(() => setIsClaimingReward(false), 1000);
-  };
 
   // Get day names for calendar
   const dayNames = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
@@ -98,7 +97,9 @@ export function ChallengesPanel({
       {/* Streak Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-6">
         {/* Current Streak */}
-        <Card className="bg-gradient-to-br from-orange-900/30 to-red-900/30 border-orange-500/30 p-3 md:p-6 lg:col-span-1">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-orange-900/30 to-red-900/30 border-orange-500/30 p-3 md:p-6 lg:col-span-1">
+          <img src="/portal/trail/sequencia-3-dias.webp" alt="Sequência de aprendizagem" className="absolute -right-8 -bottom-10 h-36 w-36 object-contain opacity-20" />
+          <div className="relative">
           <div className="flex items-center justify-between mb-3 md:mb-4 min-w-0">
             <h3 className="font-semibold flex items-center gap-2 text-sm md:text-base">
               <Flame className="text-orange-400 shrink-0" size={18} />
@@ -106,7 +107,7 @@ export function ChallengesPanel({
             </h3>
             {streakFreeze > 0 && (
               <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px] md:text-xs shrink-0">
-                ❄️ {streakFreeze} freeze
+                <Snowflake size={11} className="mr-1" /> {streakFreeze} proteção{streakFreeze === 1 ? "" : "ões"}
               </Badge>
             )}
           </div>
@@ -124,12 +125,17 @@ export function ChallengesPanel({
                 : "Incrível! Mantenha o ritmo! 🔥"}
           </p>
 
+          <div className="mt-3 rounded-xl border border-cyan-400/15 bg-cyan-500/[0.06] p-3 text-[11px] leading-relaxed text-cyan-100/75">
+            <strong className="text-cyan-200">Proteção de sequência:</strong> se você perder um dia, uma proteção preserva seu streak automaticamente. Nada é consumido enquanto você mantém o ritmo.
+          </div>
+
           {isPro && streakFreeze < 3 && (
-            <Button variant="outline" size="sm" className="mt-3 md:mt-4 w-full border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 text-xs md:text-sm">
+            <Button onClick={() => onTabChange("rewards")} variant="outline" size="sm" className="mt-3 w-full border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/10 text-xs md:text-sm">
               <Gift size={14} className="mr-2 shrink-0" />
-              Comprar Streak Freeze (50 XP)
+              Ver proteção nas recompensas
             </Button>
           )}
+          </div>
         </Card>
 
         {/* Streak Calendar */}
@@ -154,22 +160,22 @@ export function ChallengesPanel({
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: idx * 0.01 }}
-                className={cn(
-                  "aspect-square rounded-md flex items-center justify-center text-[10px] md:text-xs",
+              className={cn(
+                  "aspect-square rounded-md flex items-center justify-center text-[10px] md:text-xs border",
                   day.active
-                    ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white font-semibold"
-                    : "bg-secondary/50 text-gray-600"
+                    ? "bg-gradient-to-br from-orange-500/30 to-amber-500/15 text-orange-300 border-orange-400/30 font-semibold shadow-[0_0_12px_rgba(251,146,60,0.12)]"
+                    : "bg-secondary/50 text-gray-600 border-transparent"
                 )}
                 title={day.date}
               >
-                {new Date(day.date).getDate()}
+                {day.active ? <Flame size={14} className="fill-orange-400/30" /> : new Date(day.date).getDate()}
               </motion.div>
             ))}
           </div>
 
           <div className="flex items-center gap-3 md:gap-4 mt-3 md:mt-4 text-[10px] md:text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5 md:gap-2">
-              <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded bg-gradient-to-br from-green-500 to-emerald-600 shrink-0" />
+              <Flame size={13} className="text-orange-400 fill-orange-400/30" />
               <span>Ativo</span>
             </div>
             <div className="flex items-center gap-1.5 md:gap-2">
@@ -187,24 +193,14 @@ export function ChallengesPanel({
           ? "bg-green-900/20 border-green-500/30"
           : "bg-gradient-to-r from-amber-900/30 to-yellow-900/30 border-amber-500/30"
       )}>
-        <div className="flex items-start gap-3 md:gap-4 min-w-0">
-          <div className={cn(
-            "w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center shrink-0",
-            dailyChallenge.completed
-              ? "bg-green-500/20"
-              : "bg-amber-500/20"
-          )}>
-            {dailyChallenge.completed ? (
-              <>
-                <CheckCircle size={24} className="text-green-400 md:hidden" />
-                <CheckCircle size={32} className="text-green-400 hidden md:block" />
-              </>
-            ) : (
-              <>
-                <ChallengeIcon size={24} className="text-amber-400 md:hidden" />
-                <ChallengeIcon size={32} className="text-amber-400 hidden md:block" />
-              </>
-            )}
+        {dailyChallenge.completed && <FxConfetti />}
+        <div className="grid gap-4 md:grid-cols-[180px_1fr] min-w-0">
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/20 min-h-36">
+            <img src={guide.art} alt={`Arte do desafio: ${guide.title}`} className="absolute inset-0 h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+            <div className={cn("absolute left-3 bottom-3 flex h-10 w-10 items-center justify-center rounded-xl backdrop-blur", dailyChallenge.completed ? "bg-green-500/80" : "bg-amber-500/80")}>
+              {dailyChallenge.completed ? <CheckCircle size={22} className="text-white" /> : <ChallengeIcon size={22} className="text-black" />}
+            </div>
           </div>
 
           <div className="flex-1 min-w-0">
@@ -218,7 +214,17 @@ export function ChallengesPanel({
               </div>
             </div>
 
-            <h3 className="text-base md:text-xl font-bold mb-1.5 md:mb-2 line-clamp-2">{dailyChallenge.description}</h3>
+            <h3 className="text-lg md:text-2xl font-bold mb-1">{guide.title}</h3>
+            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{guide.intro}</p>
+
+            <div className="mt-4 grid gap-2 sm:grid-cols-3">
+              {guide.steps.map((step, index) => (
+                <div key={step} className="rounded-xl border border-white/8 bg-black/15 p-3">
+                  <span className="mb-1 flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-300"><Footprints size={11} /> Passo {index + 1}</span>
+                  <p className="text-xs leading-relaxed text-white/80">{step}</p>
+                </div>
+              ))}
+            </div>
 
             {dailyChallenge.completed ? (
               <div className="flex items-center gap-2 text-green-400">
@@ -232,30 +238,12 @@ export function ChallengesPanel({
               </div>
             )}
 
-            {/* Claim button moves inline on mobile */}
-            {dailyChallenge.completed && (
-              <Button
-                onClick={handleClaimReward}
-                disabled={isClaimingReward}
-                size="sm"
-                className="bg-green-600 hover:bg-green-700 mt-2 md:hidden text-xs"
-              >
-                <Gift size={14} className="mr-1.5" />
-                Resgatar
+            {!dailyChallenge.completed && (
+              <Button onClick={() => onTabChange(guide.destination)} className="mt-4 bg-amber-400 text-black hover:bg-amber-300">
+                {guide.cta}<ArrowRight size={16} className="ml-2" />
               </Button>
             )}
           </div>
-
-          {dailyChallenge.completed && (
-            <Button
-              onClick={handleClaimReward}
-              disabled={isClaimingReward}
-              className="bg-green-600 hover:bg-green-700 hidden md:flex shrink-0"
-            >
-              <Gift size={18} className="mr-2" />
-              Resgatar
-            </Button>
-          )}
         </div>
 
         {/* Timer */}
@@ -289,8 +277,8 @@ export function ChallengesPanel({
               <h3 className="text-base md:text-xl font-bold mb-1.5 md:mb-2 line-clamp-2">{weeklyMission.description}</h3>
 
               <div className="flex items-center gap-2 md:gap-4">
-                <Progress value={0} className="flex-1 h-2 bg-gray-700 max-w-xs" />
-                <span className="text-xs md:text-sm text-muted-foreground shrink-0">Em progresso</span>
+                <Progress value={goalProgress} className="flex-1 h-2 bg-gray-700 max-w-xs" />
+                <span className="text-xs md:text-sm text-muted-foreground shrink-0">{weeklyGoal.current}/{weeklyGoal.target}</span>
               </div>
             </div>
           </div>
