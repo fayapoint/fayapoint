@@ -188,8 +188,19 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
         {stage === "intro" && (
           <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center">
             <div className="relative mx-auto aspect-[3/2] max-h-56 w-full overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={art("vidente-hero")} alt="O Vidente da FayAI" className="h-full w-full object-cover" />
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster={art("vidente-hero")}
+                className="h-full w-full object-cover motion-reduce:hidden"
+                aria-hidden
+              >
+                <source src="/portal/persona/vidente-loop.webm" type="video/webm" />
+              </video>
+              {/* eslint-disable-next-line @next/next/no-img-element -- fallback reduced-motion */}
+              <img src={art("vidente-hero")} alt="O Vidente da FayAI" className="hidden h-full w-full object-cover motion-reduce:block" />
             </div>
             <div className="p-5">
               <h3 className="text-lg font-extrabold text-foreground">🔮 O Vidente</h3>

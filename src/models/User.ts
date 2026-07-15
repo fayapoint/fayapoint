@@ -120,6 +120,13 @@ export interface IUser extends Document {
     totalAiChats: number;
     referrals: number;
   };
+  /** Sequência de e-mails pós-cadastro (P5.2) — idempotência por marcação */
+  followups?: {
+    d2SentAt?: Date;
+    d2Ok?: boolean;
+    d7SentAt?: Date;
+    d7Ok?: boolean;
+  };
   // POD earnings and commissions
   podEarnings: {
     totalEarnings: number;
@@ -331,6 +338,13 @@ const UserSchema = new Schema<IUser>({
     totalImagesGenerated: { type: Number, default: 0 },
     totalAiChats: { type: Number, default: 0 },
     referrals: { type: Number, default: 0 },
+  },
+  // Sequência de e-mails pós-cadastro (P5.2)
+  followups: {
+    d2SentAt: Date,
+    d2Ok: Boolean,
+    d7SentAt: Date,
+    d7Ok: Boolean,
   },
   podEarnings: {
     totalEarnings: { type: Number, default: 0 },

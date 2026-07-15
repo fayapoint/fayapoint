@@ -57,10 +57,29 @@ export default async function NoticiasPage({ searchParams }: Props) {
       <ExperienceNav />
 
       <section className="px-4 sm:px-8 pt-6 pb-4 max-w-6xl mx-auto">
-        <h1 className="text-5xl sm:text-7xl tracking-wide leading-[0.95]" style={bebas}>
-          BLOG IA <span style={{ color: GOLD }}>HOJE</span>
-        </h1>
-        <p className="mt-3 text-base sm:text-lg text-white/65 max-w-2xl">
+        {/* Hero com vídeo-loop (Liga B §10: 1 por página, ≤400KB, mudo) */}
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 mb-6">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/blog/covers/hero.webp"
+            className="h-44 sm:h-64 w-full object-cover motion-reduce:hidden"
+            aria-hidden
+          >
+            <source src="/blog/hero-loop.webm" type="video/webm" />
+          </video>
+          {/* eslint-disable-next-line @next/next/no-img-element -- fallback estático p/ reduced-motion */}
+          <img src="/blog/covers/hero.webp" alt="" aria-hidden className="hidden h-44 sm:h-64 w-full object-cover motion-reduce:block" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e1d] via-[#0c0e1d]/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 p-5 sm:p-7">
+            <h1 className="text-5xl sm:text-7xl tracking-wide leading-[0.95]" style={bebas}>
+              BLOG IA <span style={{ color: GOLD }}>HOJE</span>
+            </h1>
+          </div>
+        </div>
+        <p className="text-base sm:text-lg text-white/65 max-w-2xl">
           As notícias de IA que importam — selecionadas e explicadas todos os dias para quem está
           aprendendo no Brasil. Sempre com o link da fonte original.
         </p>
