@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { PROMPT_BATTLES } from "@/data/games/batalha-prompts";
 import { useRotatingDeck } from "@/lib/game-rotation";
 import { FxConfetti, VocabularyChip } from "@/components/portal/games/GameLearning";
+import { PersonaFisher } from "@/components/portal/games/PersonaFisher";
 
 export function BatalhaPrompts() {
   const { deck, rotate } = useRotatingDeck(PROMPT_BATTLES, 5, "fayai_seen_batalha_prompts");
@@ -39,6 +40,9 @@ export function BatalhaPrompts() {
       <p className="relative text-5xl font-extrabold text-amber-400">{score}/{deck.length}</p>
       <p className="relative mx-auto mt-2 max-w-sm text-sm text-muted-foreground">Você treinou um olhar mais importante que decorar fórmulas: reconhecer instruções claras.</p>
       <button onClick={restart} className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-extrabold text-[#241a05]"><RefreshCw size={14} /> Novas batalhas</button>
+      <div className="relative mx-auto mt-2 max-w-md text-left">
+        <PersonaFisher source="batalha-prompts" />
+      </div>
     </div>
   );
 

@@ -23,7 +23,7 @@ const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 const GOLD = "#f5c04e";
 // Cada categoria tem 5 artes monocromáticas na SUA cor — a cor é a navegação.
 // A variação é sorteada a cada visita (pós-montagem, para não divergir do SSR).
-const CAT_VARIANTS = 5;
+const CAT_VARIANTS = 7; // v6-v7: fusão vetor+foto cinematográfica (14/07)
 const CATEGORY_STYLE: Record<ExampleCategory, { color: string }> = {
   "trabalho": { color: "#38bdf8" },
   "estudos": { color: "#a78bfa" },
@@ -724,7 +724,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
         <div className="relative max-w-5xl mx-auto">
           <div className="flex items-baseline gap-3 mb-2.5">
             <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
-              IA <span style={{ color: GOLD }}>HOJE</span>
+              BLOG IA <span style={{ color: GOLD }}>HOJE</span>
             </h3>
             <span className="text-[11px] uppercase tracking-wider text-white/40">
               {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long" })}
@@ -784,7 +784,7 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
               { href: "/cursos", icon: GraduationCap, label: "Cursos", desc: "18 cursos com certificado", color: "#38bdf8" },
               { href: "/ferramentas", icon: Wrench, label: "Ferramentas", desc: "100+ ferramentas de IA", color: "#a78bfa" },
               { href: "/projetos", icon: Rocket, label: "Projetos", desc: "O ecossistema FayAI e a história por trás", color: "#f472b6" },
-              { href: "/noticias", icon: BookOpen, label: "IA Hoje", desc: "Notícias de IA explicadas todo dia", color: "#a3e635" },
+              { href: "/noticias", icon: BookOpen, label: "Blog IA Hoje", desc: "Notícias e guias de IA todo dia", color: "#a3e635" },
             ].map(({ href, icon: Icon, label, desc, color }) => (
               <Link
                 key={href}

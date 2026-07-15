@@ -32,6 +32,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
 import SocialComposer from "@/components/portal/SocialComposer";
+import PersonaOracle from "@/components/portal/PersonaOracle";
 
 // ── Data ──────────────────────────────────────────────────────────
 
@@ -675,7 +676,8 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="persona" className="mt-4">
+        <TabsContent value="persona" className="mt-4 space-y-4">
+          <PersonaOracle />
           <div className="rounded-xl bg-[#2a251d] border border-border p-5">
             <PersonaBuilder />
           </div>

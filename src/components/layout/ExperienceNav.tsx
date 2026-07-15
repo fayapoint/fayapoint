@@ -17,7 +17,7 @@ const LINKS = [
   { href: "/", label: "Início" },
   { href: "/cursos", label: "Cursos" },
   { href: "/projetos", label: "Projetos" },
-  { href: "/noticias", label: "IA Hoje" },
+  { href: "/noticias", label: "Blog IA Hoje" },
 ];
 
 export interface ExperienceCrumb {

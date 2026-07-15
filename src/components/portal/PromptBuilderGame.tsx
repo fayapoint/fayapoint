@@ -6,6 +6,7 @@ import { Check, Copy, Sparkles, RefreshCw, Dices } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PROMPT_INGREDIENTS } from "@/data/games/monte-prompt";
 import { VocabularyChip } from "@/components/portal/games/GameLearning";
+import { PersonaFisher } from "@/components/portal/games/PersonaFisher";
 
 /**
  * Monte o Prompt — primeiro minigame novo da trilha (F4 do PLANO_UX_NAVEGACAO).
@@ -132,6 +133,7 @@ export function PromptBuilderGame() {
                 Cole no Studio AI ou em qualquer gerador — a receita vale mais que a ferramenta.
               </span>
             </div>
+            <PersonaFisher source="monte-prompt" />
           </motion.div>
         )}
       </AnimatePresence>

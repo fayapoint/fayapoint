@@ -233,6 +233,14 @@ export default function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("perfil");
 
+  // Deep-link: /portal/conta?tab=preferencias (usado pelo redirect de /configuracoes)
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get("tab");
+    if (t && ["perfil", "assinatura", "seguranca", "certificados", "preferencias"].includes(t)) {
+      setActiveTab(t);
+    }
+  }, []);
+
   // Profile form state
   const [profileForm, setProfileForm] = useState({
     name: "",
@@ -568,8 +576,12 @@ export default function AccountPage() {
   return (
     <div className="min-h-screen bg-gray-950 text-white pb-24 md:pb-8">
       <div className="max-w-4xl mx-auto px-4 py-6 md:py-8">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
+        {/* Header — identidade com arte §12 (14/07) */}
+        <div className="relative overflow-hidden rounded-2xl border border-border mb-6 p-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/portal/conta/perfil-hero.webp" alt="" aria-hidden className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/30" />
+          <div className="relative flex items-center gap-4">
           <Link href="/portal">
             <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
               <ArrowLeft size={20} className="text-muted-foreground" />
@@ -597,6 +609,7 @@ export default function AccountPage() {
                 </Badge>
               </div>
             </div>
+          </div>
           </div>
         </div>
 

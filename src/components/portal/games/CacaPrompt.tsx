@@ -6,6 +6,7 @@ import { ArrowRight, Check, GripVertical, RefreshCw, RotateCcw } from "lucide-re
 import { PROMPT_HUNTS } from "@/data/games/caca-prompt";
 import { useRotatingDeck } from "@/lib/game-rotation";
 import { FxConfetti, VocabularyChip } from "@/components/portal/games/GameLearning";
+import { PersonaFisher } from "@/components/portal/games/PersonaFisher";
 
 export function CacaPrompt() {
   const { deck, rotate } = useRotatingDeck(PROMPT_HUNTS, 5, "fayai_seen_caca_prompt");
@@ -44,6 +45,9 @@ export function CacaPrompt() {
       <p className="relative text-5xl font-extrabold text-amber-400">{score}/{deck.length}</p>
       <p className="relative mx-auto mt-2 max-w-sm text-sm text-muted-foreground">Você desmontou imagens em ingredientes e remontou a anatomia dos prompts.</p>
       <button onClick={restart} className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-extrabold text-[#241a05]"><RefreshCw size={14} /> Novas caçadas</button>
+      <div className="relative mx-auto mt-2 max-w-md text-left">
+        <PersonaFisher source="caca-prompt" />
+      </div>
     </div>
   );
 

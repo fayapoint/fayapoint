@@ -6,6 +6,7 @@ import { RefreshCw, ArrowRight, Check, X } from "lucide-react";
 import { PROMPT_ROUNDS } from "@/data/games/qual-prompt";
 import { useRotatingDeck } from "@/lib/game-rotation";
 import { FxConfetti, VocabularyChip } from "@/components/portal/games/GameLearning";
+import { PersonaFisher } from "@/components/portal/games/PersonaFisher";
 
 const ROUND_COUNT = 10;
 
@@ -46,6 +47,9 @@ export function QualPrompt() {
         <button onClick={restart} className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-extrabold text-[#241a05]">
           <RefreshCw size={14} /> Jogar novas rodadas
         </button>
+        <div className="relative mx-auto mt-2 max-w-md text-left">
+          <PersonaFisher source="qual-prompt" />
+        </div>
       </motion.div>
     );
   }

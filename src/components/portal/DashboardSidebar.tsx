@@ -280,6 +280,8 @@ export function DashboardSidebar({
 
       {/* Account & Settings Links */}
       <div className="p-2 border-t border-border space-y-1">
+        {/* Unificado 14/07: Minha Conta é a casa única (perfil, assinatura,
+            segurança, certificados e preferências) — Configurações duplicava */}
         <Link href="/portal/conta">
           <button className={cn(
             "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary hover:text-white transition",
@@ -287,15 +289,6 @@ export function DashboardSidebar({
           )}>
             <UserCog size={20} />
             {!isCollapsed && <span className="text-sm font-medium">Minha Conta</span>}
-          </button>
-        </Link>
-        <Link href="/configuracoes">
-          <button className={cn(
-            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:bg-secondary hover:text-white transition",
-            isCollapsed && "justify-center"
-          )}>
-            <Settings size={20} />
-            {!isCollapsed && <span className="text-sm font-medium">Configurações</span>}
           </button>
         </Link>
         <Link href={cubeHref}>

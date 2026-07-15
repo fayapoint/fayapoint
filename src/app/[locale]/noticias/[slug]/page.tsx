@@ -52,7 +52,7 @@ export default async function NoticiaPage({ params }: Props) {
         .glass-hover:hover { border-color: rgba(255,255,255,.32); transform: translateY(-3px); }
       ` }} />
 
-      <ExperienceNav crumb={{ href: "/noticias", label: "IA Hoje", current: item.title }} />
+      <ExperienceNav crumb={{ href: "/noticias", label: "Blog IA Hoje", current: item.title }} />
 
       <article className="px-4 sm:px-8 pt-6 pb-10 max-w-3xl mx-auto">
         <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>
@@ -141,7 +141,7 @@ export default async function NoticiaPage({ params }: Props) {
       {others.length > 0 && (
         <section className="px-4 sm:px-8 pb-16 max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl tracking-wide mb-4" style={bebas}>
-            MAIS <span style={{ color: GOLD }}>IA HOJE</span>
+            MAIS DO <span style={{ color: GOLD }}>BLOG IA HOJE</span>
           </h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {others.map((n) => (

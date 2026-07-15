@@ -71,7 +71,8 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
   const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en");
   const cubeHref = locale ? `/${locale}` : "/";
   const accountHref = locale ? `/${locale}/portal/conta` : "/portal/conta";
-  const settingsHref = locale ? `/${locale}/configuracoes` : "/configuracoes";
+  // Unificado 14/07: preferências vivem em Minha Conta (Configurações duplicava)
+  const settingsHref = locale ? `/${locale}/portal/conta?tab=preferencias` : "/portal/conta?tab=preferencias";
   const isPro = ["pro", "business", "starter", "explorador", "profissional", "expert"].includes(plan);
 
   const isActiveInMore = MORE_NAV_ITEMS.some(item => item.id === activeTab);

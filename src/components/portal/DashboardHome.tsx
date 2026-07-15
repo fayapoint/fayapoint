@@ -231,25 +231,9 @@ export function DashboardHome({
       .slice(0, 2);
   }, [availableCatalog, tierConfig, freeSlug]);
 
-  // Gallery image for Studio showcase
-  const [galleryImage, setGalleryImage] = useState<GalleryImage | null>(null);
+  // Studio showcase usa arte contextual própria (§12, 14/07) — a busca na
+  // galeria pública foi removida: imagem aleatória de terceiros destoava.
   const [storeProducts, setStoreProducts] = useState<StoreProductItem[]>([]);
-
-  const fetchGalleryImage = useCallback(async () => {
-    try {
-      const res = await fetch("/api/public/gallery?page=1&limit=20");
-      if (res.ok) {
-        const data = await res.json();
-        const creations = data.creations || [];
-        if (creations.length > 0) {
-          const randomIdx = Math.floor(Math.random() * Math.min(creations.length, 12));
-          setGalleryImage(creations[randomIdx]);
-        }
-      }
-    } catch (e) {
-      console.error("Failed to fetch gallery:", e);
-    }
-  }, []);
 
   const fetchStoreProducts = useCallback(async () => {
     try {
@@ -274,9 +258,8 @@ export function DashboardHome({
   }, []);
 
   useEffect(() => {
-    fetchGalleryImage();
     fetchStoreProducts();
-  }, [fetchGalleryImage, fetchStoreProducts]);
+  }, [fetchStoreProducts]);
 
   const levelLabels: Record<string, string> = {
     free: 'Gratuito', beginner: 'Iniciante', intermediate: 'Intermediário', advanced: 'Avançado'
@@ -449,16 +432,9 @@ export function DashboardHome({
               <div className="flex">
                 {/* Small thumbnail */}
                 <div className="relative w-20 sm:w-28 md:w-32 shrink-0 bg-gradient-to-br from-amber-950 to-card overflow-hidden">
-                  {galleryImage ? (
-                    <>
-                      <img src={galleryImage.imageUrl} alt="" className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/60" />
-                    </>
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center min-h-[100px]">
-                      <Sparkles size={24} className="text-amber-500/40" />
-                    </div>
-                  )}
+                  {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 (14/07) */}
+                  <img src="/portal/dash/studio-promo.webp" alt="" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 min-h-[100px]" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/60" />
                   <div className="absolute top-2 left-2">
                     <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg">
                       <Sparkles size={13} className="text-white" />
@@ -503,7 +479,9 @@ export function DashboardHome({
               )}
               onClick={() => onTabChange("challenges")}
             >
-              <div className="flex items-center gap-2.5">
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+              <img src="/portal/dash/desafio-diario.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-28 object-cover opacity-50 group-hover:opacity-70 transition-opacity" style={{ WebkitMaskImage: "linear-gradient(to left, black 45%, transparent)", maskImage: "linear-gradient(to left, black 45%, transparent)" }} />
+              <div className="relative flex items-center gap-2.5">
                 <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", dailyChallenge?.completed ? "bg-green-500/15" : "bg-orange-500/15")}>
                   <Target size={15} className={dailyChallenge?.completed ? "text-green-400" : "text-orange-400"} />
                 </div>
@@ -525,8 +503,10 @@ export function DashboardHome({
 
           {/* Streak + Level — compact */}
           <motion.div variants={itemVariants}>
-            <Card className="border-border bg-card p-3.5">
-              <div className="flex items-center gap-2.5 mb-2.5">
+            <Card className="relative overflow-hidden border-border bg-card p-3.5">
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+              <img src="/portal/dash/streak.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-32 object-cover opacity-40" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
+              <div className="relative flex items-center gap-2.5 mb-2.5">
                 <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
                   <Flame size={15} className="text-orange-400" fill="currentColor" />
                 </div>
@@ -758,10 +738,12 @@ export function DashboardHome({
           {/* Ranking — compact */}
           <motion.div variants={itemVariants}>
             <Card
-              className="border-yellow-500/10 bg-card p-3.5 cursor-pointer group hover:border-yellow-500/25 transition-all"
+              className="relative overflow-hidden border-yellow-500/10 bg-card p-3.5 cursor-pointer group hover:border-yellow-500/25 transition-all"
               onClick={() => onTabChange("leaderboard")}
             >
-              <div className="flex items-center justify-between mb-2.5">
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+              <img src="/portal/dash/ranking.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-32 object-cover opacity-40 group-hover:opacity-60 transition-opacity" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
+              <div className="relative flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center">
                     <Trophy size={15} className="text-white" />
@@ -792,10 +774,12 @@ export function DashboardHome({
           {/* AI Assistant — compact */}
           <motion.div variants={itemVariants}>
             <Card
-              className={cn("border-cyan-500/15 bg-card p-3.5 cursor-pointer group hover:border-cyan-500/30 transition-all", !isPro && "opacity-60")}
+              className={cn("relative overflow-hidden border-cyan-500/15 bg-card p-3.5 cursor-pointer group hover:border-cyan-500/30 transition-all", !isPro && "opacity-60")}
               onClick={() => isPro && onTabChange("assistant")}
             >
-              <div className="flex items-center gap-2.5">
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+              <img src="/portal/dash/assistente.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-28 object-cover opacity-45 group-hover:opacity-65 transition-opacity" style={{ WebkitMaskImage: "linear-gradient(to left, black 45%, transparent)", maskImage: "linear-gradient(to left, black 45%, transparent)" }} />
+              <div className="relative flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shrink-0">
                   <Bot size={15} className="text-white" />
                 </div>
@@ -816,10 +800,12 @@ export function DashboardHome({
           {/* Rewards — compact */}
           <motion.div variants={itemVariants}>
             <Card
-              className={cn("border-amber-500/10 bg-card p-3.5 cursor-pointer group hover:border-amber-500/25 transition-all", !isPro && "opacity-60")}
+              className={cn("relative overflow-hidden border-amber-500/10 bg-card p-3.5 cursor-pointer group hover:border-amber-500/25 transition-all", !isPro && "opacity-60")}
               onClick={() => onTabChange("rewards")}
             >
-              <div className="flex items-center gap-2.5">
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+              <img src="/portal/dash/recompensas.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-28 object-cover opacity-45 group-hover:opacity-65 transition-opacity" style={{ WebkitMaskImage: "linear-gradient(to left, black 45%, transparent)", maskImage: "linear-gradient(to left, black 45%, transparent)" }} />
+              <div className="relative flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shrink-0">
                   <Gift size={15} className="text-white" />
                 </div>

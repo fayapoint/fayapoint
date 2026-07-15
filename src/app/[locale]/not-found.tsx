@@ -11,7 +11,7 @@ const ROTAS = [
   { href: "/", titulo: "Início", desc: "A mágica em 30 segundos", cor: "#38bdf8" },
   { href: "/cursos", titulo: "Cursos", desc: "Aprenda IA fazendo", cor: "#f5c04e" },
   { href: "/projetos", titulo: "Projetos", desc: "O ecossistema FayAI", cor: "#f472b6" },
-  { href: "/noticias", titulo: "IA Hoje", desc: "Notícias explicadas todo dia", cor: "#a78bfa" },
+  { href: "/noticias", titulo: "Blog IA Hoje", desc: "Notícias explicadas todo dia", cor: "#a78bfa" },
   { href: "/portal", titulo: "Meu Portal", desc: "Sua jornada de aprendizado", cor: "#a3e635" },
 ];
 
