@@ -49,3 +49,4 @@ PROJECT_CREDENTIALS.md
 # playwright artifacts
 .playwright-cli/
 output/
+scripts/arcade/arcade_loops_run*.log

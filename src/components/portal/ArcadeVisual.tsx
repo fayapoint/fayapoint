@@ -16,6 +16,8 @@ export const ARCADE_GAME_IDS = [
 export type ArcadeGameId = (typeof ARCADE_GAME_IDS)[number];
 
 const VARIANT_COUNT = 8;
+// Loops LTX reais (16/07) — 4 por jogo; o loop acompanha a still exibida (1-4→1-4, 5-8→1-4)
+const LOOP_COUNT = 4;
 
 function pickDifferent(previous: number, count: number) {
   if (count < 2) return 1;
@@ -25,6 +27,11 @@ function pickDifferent(previous: number, count: number) {
 
 function variantPath(gameId: ArcadeGameId, variant: number) {
   return `/portal/arcade/variants/${gameId}/variant-${String(variant).padStart(2, "0")}.webp`;
+}
+
+function loopPath(gameId: ArcadeGameId, variant: number) {
+  const loop = ((variant - 1) % LOOP_COUNT) + 1;
+  return `/portal/arcade/loops/${gameId}-${String(loop).padStart(2, "0")}.webm`;
 }
 
 interface ArcadeVisualProps {
@@ -110,8 +117,8 @@ export function ArcadeVisual({
       <AnimatePresence>
         {showVideo && (
           <motion.video
-            key={`${gameId}-loop`}
-            src={`/portal/arcade/loops/${gameId}.webm`}
+            key={`${gameId}-loop-${variant}`}
+            src={loopPath(gameId, variant)}
             autoPlay
             muted
             loop
