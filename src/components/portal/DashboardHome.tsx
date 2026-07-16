@@ -736,8 +736,8 @@ export function DashboardHome({
           )}
         </div>
 
-        {/* ── COL 3: Ranking + Assistant + Rewards + Store — last on mobile ── */}
-        <div className="space-y-4 order-3 min-w-0">
+        {/* ── COL 3: Ranking + Assistant + Rewards + Store — last on mobile; sticky p/ não sobrar vazio no desktop ── */}
+        <div className="space-y-4 order-3 min-w-0 lg:sticky lg:top-4 lg:self-start">
           {/* Ranking — compact */}
           <motion.div variants={itemVariants}>
             <Card
@@ -871,6 +871,29 @@ export function DashboardHome({
               ) : (
                 <p className="text-[10px] text-muted-foreground/70 text-center py-3">Produtos em breve!</p>
               )}
+            </Card>
+          </motion.div>
+
+          {/* Sua Persona — o Vidente aprende com cada jogada (diferencial Expert) */}
+          <motion.div variants={itemVariants}>
+            <Card
+              className="relative overflow-hidden border-violet-500/15 bg-card p-0 cursor-pointer group hover:border-violet-500/30 transition-all"
+              onClick={() => onTabChange("social")}
+            >
+              <div className="relative h-24 overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+                <img src="/portal/persona/vidente-hero.webp" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e1d] via-[#0c0e1d]/30 to-transparent" />
+              </div>
+              <div className="relative -mt-6 p-3.5 pt-0">
+                <h4 className="text-sm font-bold flex items-center gap-1.5"><Sparkles size={13} className="text-violet-400" /> Sua Persona</h4>
+                <p className="mt-1 text-xs text-muted-foreground leading-snug">
+                  Cada jogo e leitura ensina o site a te conhecer — e molda o conteúdo para você.
+                </p>
+                <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-violet-300">
+                  Visitar o Vidente <ChevronRight size={12} />
+                </span>
+              </div>
             </Card>
           </motion.div>
 

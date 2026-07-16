@@ -44,9 +44,11 @@ const RANK_STYLES: Record<number, { bg: string; icon: React.ReactNode; glow: str
 export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
   return (
     <div className="space-y-4 md:space-y-6 min-w-0 overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3 min-w-0">
-        <div className="min-w-0 flex-1">
+      {/* Header — arte contextual §12 */}
+      <Card className="relative overflow-hidden border-border bg-card p-4 flex flex-row items-center justify-between gap-3 min-w-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/portal/dash/ranking.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-56 object-cover opacity-30" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
+        <div className="relative min-w-0 flex-1">
           <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 md:gap-3">
             <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center shrink-0">
               <Trophy size={18} className="text-white md:hidden" />
@@ -57,11 +59,11 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
           <p className="text-muted-foreground text-xs md:text-sm mt-1 truncate">Compete com outros alunos e ganhe XP extra!</p>
         </div>
 
-        <Card className="bg-amber-500/10 border-amber-500/30 px-3 py-1.5 md:px-4 md:py-2 shrink-0">
+        <Card className="relative bg-amber-500/10 border-amber-500/30 px-3 py-1.5 md:px-4 md:py-2 shrink-0">
           <p className="text-[10px] md:text-xs text-muted-foreground">Sua posição</p>
           <p className="text-xl md:text-2xl font-bold text-amber-400">#{userRank}</p>
         </Card>
-      </div>
+      </Card>
 
       {/* Top 3 Podium */}
       <div className="grid grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-8">

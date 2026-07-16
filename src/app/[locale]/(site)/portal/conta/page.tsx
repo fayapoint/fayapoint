@@ -610,6 +610,12 @@ export default function AccountPage() {
               </div>
             </div>
           </div>
+          <a
+            href="/portal?tab=profile"
+            className="relative shrink-0 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-white hover:border-amber-400/40 transition-colors"
+          >
+            Meu Perfil
+          </a>
           </div>
         </div>
 

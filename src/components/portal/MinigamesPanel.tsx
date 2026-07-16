@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Gamepad2, Play } from "lucide-react";
 import { PromptBuilderGame } from "@/components/portal/PromptBuilderGame";
@@ -149,10 +148,12 @@ export function MinigamesPanel() {
               );
             }
             if (j.status === "home") {
+              // <a> nativo: navegação garantida p/ a landing (o Link client-side
+              // já falhou em produção — o jogo vive na página inicial)
               return (
-                <Link key={j.id} href="/">
+                <a key={j.id} href="/" className="block">
                   {conteudo}
-                </Link>
+                </a>
               );
             }
             return <div key={j.id}>{conteudo}</div>;

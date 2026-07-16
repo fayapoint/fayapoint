@@ -205,6 +205,15 @@ export default function PortalPage() {
   useEffect(() => {
     contentScrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
   }, [activeTab]);
+
+  // Deep-link: /portal?tab=games abre direto a aba (mesmo padrão de /portal/conta)
+  useEffect(() => {
+    const VALID_TABS = ["dashboard", "pod-store", "store", "cart", "profile", "courses", "certificates", "social", "studio", "assistant", "achievements", "leaderboard", "challenges", "games", "resources", "history", "rewards"];
+    try {
+      const t = new URLSearchParams(window.location.search).get("tab");
+      if (t && VALID_TABS.includes(t)) setActiveTab(t);
+    } catch { /* sem window/URL — mantém dashboard */ }
+  }, []);
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);

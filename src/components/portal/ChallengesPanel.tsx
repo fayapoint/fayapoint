@@ -145,7 +145,7 @@ export function ChallengesPanel({
             <span className="truncate">Calendário de Atividade (últimos 30 dias)</span>
           </h3>
 
-          <div className="grid grid-cols-7 gap-1 md:gap-2">
+          <div className="grid max-w-sm grid-cols-7 gap-1 md:gap-2">
             {/* Day headers */}
             {dayNames.map((day, i) => (
               <div key={i} className="text-center text-[10px] md:text-xs text-muted-foreground mb-1">

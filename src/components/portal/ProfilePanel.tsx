@@ -199,6 +199,12 @@ export function ProfilePanel({
                     <Edit2 size={16} />
                   </Button>
                 )}
+                <a
+                  href="/portal/conta"
+                  className="ml-auto shrink-0 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-white hover:border-amber-400/40 transition-colors"
+                >
+                  Configurações da conta
+                </a>
               </div>
               <p className="text-muted-foreground mb-3 text-sm md:text-base truncate">{user.email}</p>
               
