@@ -47,7 +47,7 @@ export function MinigamesPanel() {
 
   if (jogo) {
     return (
-      <div className="space-y-4 min-w-0">
+      <div className="mx-auto max-w-screen-xl space-y-4 min-w-0">
         <button onClick={() => setJogo(null)} className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
           <ArrowLeft size={15} /> Arcade
         </button>
@@ -67,7 +67,7 @@ export function MinigamesPanel() {
   }
 
   return (
-    <div className="space-y-5 min-w-0 overflow-hidden">
+    <div className="mx-auto max-w-screen-xl space-y-5 min-w-0 overflow-hidden">
       <style dangerouslySetInnerHTML={{ __html: `
         @property --arc-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
         @keyframes arc-rotate { to { --arc-angle: 360deg; } }
@@ -121,7 +121,7 @@ export function MinigamesPanel() {
                 className="group relative rounded-2xl overflow-hidden border bg-card h-full"
                 style={{ borderColor: `${j.cor}44` }}
               >
-                <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>
+                <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                   <ArcadeVisual gameId={j.id} alt={`Arte do minigame ${j.titulo}`} className="absolute inset-0 h-full w-full" imageClassName="transition-transform duration-500 group-hover:scale-105" />
                   <span className="absolute top-2.5 left-2.5 text-[9px] font-extrabold uppercase tracking-widest rounded-full px-2 py-0.5" style={{ background: j.status === "construindo" ? "#f5c04e" : j.cor, color: "#0c0e1d" }}>
                     {j.status === "construindo" ? "Construindo" : j.status === "home" ? "Na página inicial" : "Jogar agora"}

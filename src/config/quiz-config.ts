@@ -138,6 +138,12 @@ REQUIREMENTS:
 - Difficulty should range from moderate to challenging
 - All text must be in Portuguese (Brazilian)
 - Wrong answer options must be plausible and tempting (good discrimination)
+- CRITICAL — the correct answer must NOT be identifiable without reading the course content:
+  * All 4 options must have SIMILAR LENGTH (within ~20% of each other) and the same grammatical structure and level of detail
+  * NEVER make the correct option the longest, most elaborate, most nuanced or most "textbook-sounding" one
+  * Each wrong option must be a real misconception a student could hold (a common confusion, an outdated fact, a subtly wrong number or term) — never absurd, jokey or obviously off-topic
+  * At least 2 questions should have a correct answer that is SHORTER than some wrong options
+  * A reader who never saw the course must score ~25% (chance level) on these questions
 - Return ONLY valid JSON, no markdown, no explanations
 
 Return this JSON format:

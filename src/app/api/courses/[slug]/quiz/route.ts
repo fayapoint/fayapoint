@@ -168,6 +168,25 @@ async function callOpenRouterForQuiz(
   return content;
 }
 
+/**
+ * Embaralha as opções de cada pergunta remapeando o índice da correta.
+ * Elimina viés de posição do gerador (a correta não pode ter posição previsível).
+ */
+function shuffleOptions(questions: QuizQuestion[]): QuizQuestion[] {
+  return questions.map((q) => {
+    const order = q.options.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return {
+      question: q.question,
+      options: order.map((i) => q.options[i]),
+      correctAnswer: order.indexOf(q.correctAnswer),
+    };
+  });
+}
+
 function parseQuizResponse(content: string): QuizQuestion[] {
   // Parse JSON from response (handle markdown code blocks)
   let jsonStr = content;
@@ -351,6 +370,9 @@ export async function GET(
     if (!questions) {
       questions = await generateQuizFromContent(courseContent, courseTitle);
     }
+
+    // Sempre embaralhar as opções — a posição/forma da correta não pode ser padrão
+    questions = shuffleOptions(questions);
 
     // Create or update certificate record
     if (!certificate) {

@@ -86,7 +86,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   milestone: "Marcos",
 };
 
-const ACHIEVEMENT_NAMES: Record<string, { name: string; description: string }> = {
+export const ACHIEVEMENT_NAMES: Record<string, { name: string; description: string }> = {
   first_lesson: { name: "Primeiro Passo", description: "Complete sua primeira lição" },
   lesson_streak_7: { name: "Semana Perfeita", description: "Mantenha um streak de 7 dias" },
   lesson_streak_30: { name: "Mês Dedicado", description: "Mantenha um streak de 30 dias" },

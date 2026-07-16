@@ -33,6 +33,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
 import { ProfileAvatarEditor } from "@/components/user/ProfileAvatarEditor";
+import { ACHIEVEMENT_NAMES } from "@/components/portal/AchievementsPanel";
 
 interface Achievement {
   id: string;
@@ -159,9 +160,11 @@ export function ProfilePanel({
     <div className="space-y-4 md:space-y-8 pb-8">
       {/* Profile Header */}
       <Card className="bg-gradient-to-br from-gray-900 to-card border-border overflow-hidden">
-        {/* Banner */}
-        <div className="h-32 bg-gradient-to-r from-amber-600/30 via-pink-600/30 to-blue-600/30 relative">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
+        {/* Banner — arte da casa (fusão §12), não gradiente genérico */}
+        <div className="h-32 md:h-40 relative overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/portal/conta/perfil-hero.webp" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e1d] via-[#0c0e1d]/35 to-transparent" />
           {isPro && (
             <div className="absolute top-4 right-4">
               <Badge className="bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold">
@@ -477,22 +480,22 @@ export function ProfilePanel({
             {unlockedAchievements.slice(0, 8).map((achievement) => (
               <div
                 key={achievement.id}
-                className={cn(
-                  "rounded-xl p-3 md:p-4 bg-gradient-to-br border overflow-hidden",
-                  TIER_COLORS[achievement.tier]
-                )}
+                className="rounded-xl border border-border bg-secondary/60 p-3 md:p-4 overflow-hidden"
               >
                 <div className="flex items-center gap-2 md:gap-3 min-w-0">
-                  <div className="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
+                  <div className={cn(
+                    "w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 border",
+                    TIER_COLORS[achievement.tier]
+                  )}>
                     <Trophy size={16} className="text-white md:hidden" />
                     <Trophy size={20} className="text-white hidden md:block" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-semibold text-white text-xs md:text-sm capitalize truncate">
-                      {achievement.id.replace(/_/g, " ")}
+                    <p className="font-semibold text-xs md:text-sm truncate">
+                      {ACHIEVEMENT_NAMES[achievement.id]?.name || achievement.id.replace(/_/g, " ")}
                     </p>
-                    <p className="text-[10px] md:text-xs text-white/70">
-                      +{achievement.xpReward} XP
+                    <p className="text-[10px] md:text-xs text-muted-foreground capitalize">
+                      {achievement.tier} · +{achievement.xpReward} XP
                     </p>
                   </div>
                 </div>

@@ -122,20 +122,6 @@ export function UserAvatarWithBadges({
     .sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier))
     .slice(0, maxBadges);
 
-  // Calculate badge positions around the avatar in a circle
-  const getBadgePosition = (index: number, total: number) => {
-    const startAngle = -90; // Start from top
-    const angleStep = 360 / Math.max(total, 4);
-    const angle = startAngle + (index * angleStep);
-    const radian = (angle * Math.PI) / 180;
-    const radius = sizeConfig.badgeOffset;
-    
-    return {
-      x: Math.cos(radian) * radius,
-      y: Math.sin(radian) * radius,
-    };
-  };
-
   const initials = user.name?.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) || "US";
 
   return (
@@ -184,66 +170,57 @@ export function UserAvatarWithBadges({
           )}
         </motion.div>
 
-        {/* Achievement badges around avatar */}
+        {/* Prateleira de medalhas — na borda inferior, nunca sobre o rosto */}
         {showBadges && unlockedAchievements.length > 0 && (
           <AnimatePresence>
-            {unlockedAchievements.map((achievement, index) => {
-              const position = getBadgePosition(index, unlockedAchievements.length);
-              const Icon = ACHIEVEMENT_ICONS[achievement.icon] || Star;
-              const tierColor = TIER_COLORS[achievement.tier];
-              const tierGlow = TIER_GLOW[achievement.tier];
+            <div className="absolute -bottom-1.5 left-1/2 flex -translate-x-1/2 -space-x-1">
+              {unlockedAchievements.map((achievement, index) => {
+                const Icon = ACHIEVEMENT_ICONS[achievement.icon] || Star;
+                const tierColor = TIER_COLORS[achievement.tier];
+                const tierGlow = TIER_GLOW[achievement.tier];
 
-              return (
-                <Tooltip key={achievement.id}>
-                  <TooltipTrigger asChild>
-                    <motion.div
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ 
-                        scale: 1, 
-                        opacity: 1,
-                        x: position.x,
-                        y: position.y,
-                      }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ 
-                        delay: index * 0.1,
-                        type: "spring",
-                        stiffness: 260,
-                        damping: 20
-                      }}
-                      whileHover={{ scale: 1.2 }}
-                      className={cn(
-                        "absolute bg-gradient-to-br rounded-full flex items-center justify-center border shadow-lg cursor-pointer",
-                        sizeConfig.badge,
-                        tierColor,
-                        tierGlow
-                      )}
-                      style={{
-                        left: "50%",
-                        top: "50%",
-                        marginLeft: `-${parseInt(sizeConfig.badge.split(" ")[0].replace("w-", "")) * 2}px`,
-                        marginTop: `-${parseInt(sizeConfig.badge.split(" ")[0].replace("w-", "")) * 2}px`,
-                      }}
+                return (
+                  <Tooltip key={achievement.id}>
+                    <TooltipTrigger asChild>
+                      <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        transition={{
+                          delay: index * 0.08,
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 20
+                        }}
+                        whileHover={{ scale: 1.2 }}
+                        style={{ zIndex: unlockedAchievements.length - index }}
+                        className={cn(
+                          "relative bg-gradient-to-br rounded-full flex items-center justify-center border shadow-lg cursor-pointer ring-2 ring-background",
+                          sizeConfig.badge,
+                          tierColor,
+                          tierGlow
+                        )}
+                      >
+                        <Icon size={sizeConfig.icon} className="text-white drop-shadow" />
+                      </motion.div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      className="bg-card border-border px-3 py-2"
                     >
-                      <Icon size={sizeConfig.icon} className="text-white drop-shadow" />
-                    </motion.div>
-                  </TooltipTrigger>
-                  <TooltipContent 
-                    side="top" 
-                    className="bg-card border-border px-3 py-2"
-                  >
-                    <div className="text-center">
-                      <p className="font-semibold text-sm capitalize">
-                        {achievement.id.replace(/_/g, " ")}
-                      </p>
-                      <p className="text-xs text-muted-foreground capitalize">
-                        {achievement.tier} • +{achievement.xpReward} XP
-                      </p>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
+                      <div className="text-center">
+                        <p className="font-semibold text-sm capitalize">
+                          {achievement.id.replace(/_/g, " ")}
+                        </p>
+                        <p className="text-xs text-muted-foreground capitalize">
+                          {achievement.tier} • +{achievement.xpReward} XP
+                        </p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              })}
+            </div>
           </AnimatePresence>
         )}
       </div>
