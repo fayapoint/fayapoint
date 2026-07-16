@@ -129,6 +129,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
     return (
       <div className="flex items-center justify-center py-20">
         <div className="flex flex-col items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element -- carregando §12 */}
+          <img src="/fx/carregando.webp" alt="" aria-hidden className="h-20 w-32 rounded-xl object-cover opacity-90" />
           <Loader2 className="w-8 h-8 animate-spin text-violet-400" />
           <p className="text-sm text-white/40">Carregando certificados...</p>
         </div>
@@ -156,12 +158,14 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
       {/* Stats Summary */}
       {certificates.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
-          <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
-            <div className="flex items-center gap-1.5 md:gap-2 mb-1">
+          <Card className="relative bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+            <img src="/fx/certificado-fx.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-20 object-cover opacity-40" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
+            <div className="relative flex items-center gap-1.5 md:gap-2 mb-1">
               <Trophy className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-400 shrink-0" />
               <span className="text-[10px] md:text-xs text-white/40 truncate">Certificados</span>
             </div>
-            <p className="text-lg md:text-xl font-bold text-white">{certificates.length}</p>
+            <p className="relative text-lg md:text-xl font-bold text-white">{certificates.length}</p>
           </Card>
           <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
             <div className="flex items-center gap-1.5 md:gap-2 mb-1">

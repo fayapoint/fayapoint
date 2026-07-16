@@ -10,9 +10,10 @@ import { ArrowRight, X } from "lucide-react";
  * (localStorage fayai_tour_done), sempre pulável, nunca segura conteúdo.
  */
 
-const STEPS = [
+const STEPS: { art: string; video?: string; cor: string; titulo: string; texto: string }[] = [
   {
-    art: "/portal/trail/magica.webp",
+    art: "/portal/dash/boas-vindas.webp",
+    video: "/portal/dash/boas-vindas-loop.webm",
     cor: "#38bdf8",
     titulo: "Bem-vindo ao seu portal!",
     texto: "Este é o seu espaço. O mapa 'Seu caminho para dominar IA' mostra exatamente onde você está na jornada — cada passo concluído vira um selo dourado, de verdade, sem enfeite.",
@@ -86,8 +87,19 @@ export function PortalTour() {
               className="mx-auto block w-28 h-28 rounded-full overflow-hidden"
               style={{ border: `3px solid ${s.cor}`, boxShadow: `0 0 28px -6px ${s.cor}aa` }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={s.art} alt="" className="w-full h-full object-cover" />
+              {s.video ? (
+                <>
+                  {/* Vídeo mudo ≤400KB com poster + fallback estático (Liga B, IDENTIDADE_VISUAL §10) */}
+                  <video autoPlay loop muted playsInline poster={s.art} className="w-full h-full object-cover motion-reduce:hidden" aria-hidden>
+                    <source src={s.video} type="video/webm" />
+                  </video>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={s.art} alt="" className="hidden w-full h-full object-cover motion-reduce:block" />
+                </>
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={s.art} alt="" className="w-full h-full object-cover" />
+              )}
             </span>
             <h2 className="mt-4 text-xl font-bold">{s.titulo}</h2>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.texto}</p>

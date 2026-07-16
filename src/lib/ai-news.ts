@@ -7,19 +7,30 @@ export interface AiNewsArticle extends AiNewsItem {
   sourceImage?: string; // og:image da matéria original (exibida com crédito)
 }
 
-// Arte da casa por categoria — "geradas por nós" (IDENTIDADE_VISUAL.md §4a)
-const TAG_ART: Record<string, string> = {
-  "tendencia": "/landing/tags/tendencia.webp",
-  "ferramentas": "/landing/tags/ferramentas.webp",
-  "modelos": "/landing/tags/modelos.webp",
-  "negocios": "/landing/tags/negocios.webp",
-  "pesquisa": "/landing/tags/pesquisa.webp",
-  "voce sabia?": "/landing/tags/voce-sabia.webp",
-  "voce sabia": "/landing/tags/voce-sabia.webp",
-  "custo": "/landing/tags/custo.webp",
-  "infraestrutura": "/landing/tags/infraestrutura.webp",
+// Capas editoriais do Blog IA Hoje — "geradas por nós" (IDENTIDADE_VISUAL.md §4a)
+// Uma capa por editoria; tags sem capa própria mapeiam para a editoria mais próxima.
+const BLOG_COVERS: Record<string, string> = {
+  "tendencia": "/blog/covers/tendencia.webp",
+  "ferramentas": "/blog/covers/ferramentas.webp",
+  "negocios": "/blog/covers/negocios.webp",
+  "pesquisa": "/blog/covers/pesquisa.webp",
+  "mercado": "/blog/covers/mercado.webp",
+  "futuro": "/blog/covers/futuro.webp",
+  "educacao": "/blog/covers/educacao.webp",
+  "saude": "/blog/covers/saude.webp",
+  "etica": "/blog/covers/etica.webp",
+  "brasil": "/blog/covers/brasil.webp",
+  "criatividade": "/blog/covers/criatividade.webp",
+  "robotica": "/blog/covers/robotica.webp",
+  // Tags históricas → editoria mais próxima
+  "modelos": "/blog/covers/futuro.webp",
+  "treinamento": "/blog/covers/educacao.webp",
+  "custo": "/blog/covers/mercado.webp",
+  "infraestrutura": "/blog/covers/robotica.webp",
+  "voce sabia?": "/blog/covers/criatividade.webp",
+  "voce sabia": "/blog/covers/criatividade.webp",
 };
-const TAG_ART_POOL = Object.values(TAG_ART);
+const COVER_POOL = [...new Set(Object.values(BLOG_COVERS))];
 
 // Pool de artes temáticas para rechear as matérias (2 por artigo, por hash do slug)
 const ARTICLE_POOL = [
@@ -36,23 +47,18 @@ export function extraArtsFor(slug: string): string[] {
   return [ARTICLE_POOL[a], ARTICLE_POOL[b === a ? (a + 1) % ARTICLE_POOL.length : b]];
 }
 
-const TAG_VARIANTS = 5;
-
-/** Arte da tag com 5 variantes — estável por artigo (hash do seed/slug). */
+/** Capa editorial da tag — estável por artigo (hash do seed/slug para tags sem capa). */
 export function artForTag(tag: string, seedIndex = 0, seedKey = ""): string {
   const key = tag
     .toLowerCase()
     .normalize("NFD")
     // eslint-disable-next-line no-misleading-character-class
     .replace(/[̀-ͯ]/g, "");
+  const cover = BLOG_COVERS[key];
+  if (cover) return cover;
   let h = seedIndex + 11;
   for (const c of seedKey || key) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  const variant = 1 + (h % TAG_VARIANTS);
-  const base = TAG_ART[key];
-  if (base) {
-    return variant === 1 ? base : base.replace(".webp", `-v${variant}.webp`);
-  }
-  return TAG_ART_POOL[h % TAG_ART_POOL.length];
+  return COVER_POOL[h % COVER_POOL.length];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

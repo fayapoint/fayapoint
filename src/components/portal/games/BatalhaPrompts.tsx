@@ -8,6 +8,13 @@ import { useRotatingDeck } from "@/lib/game-rotation";
 import { FxConfetti, VocabularyChip } from "@/components/portal/games/GameLearning";
 import { PersonaFisher } from "@/components/portal/games/PersonaFisher";
 
+// Cenários da arena — arte da casa (IDENTIDADE_VISUAL.md §12)
+const BATTLE_SCENES = [
+  "/portal/arcade/batalha/arena.webp",
+  "/portal/arcade/batalha/duelo-oeste.webp",
+  "/portal/arcade/batalha/esgrima.webp",
+];
+
 export function BatalhaPrompts() {
   const { deck, rotate } = useRotatingDeck(PROMPT_BATTLES, 5, "fayai_seen_batalha_prompts");
   const [index, setIndex] = useState(0);
@@ -36,6 +43,8 @@ export function BatalhaPrompts() {
   if (finished) return (
     <div className="relative py-9 text-center">
       <FxConfetti active={score >= 4} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={score >= 4 ? "/portal/arcade/batalha/vitoria.webp" : "/portal/arcade/batalha/empate.webp"} alt="" aria-hidden className="relative mx-auto mb-3 h-32 w-48 rounded-2xl border border-amber-400/25 object-cover" />
       <Swords className="relative mx-auto mb-2 text-orange-400" size={38} />
       <p className="relative text-5xl font-extrabold text-amber-400">{score}/{deck.length}</p>
       <p className="relative mx-auto mt-2 max-w-sm text-sm text-muted-foreground">Você treinou um olhar mais importante que decorar fórmulas: reconhecer instruções claras.</p>
@@ -51,9 +60,12 @@ export function BatalhaPrompts() {
       <div className="mb-3 flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
         <span>Batalha {index + 1} de {deck.length}</span><span className="text-amber-400">{score} vitórias</span>
       </div>
-      <div className="rounded-2xl border border-orange-400/30 bg-orange-400/5 p-4 text-center">
-        <span className="text-[10px] font-extrabold uppercase tracking-widest text-orange-300">Missão</span>
-        <p className="mt-1 font-bold">{round.task}</p>
+      <div className="relative overflow-hidden rounded-2xl border border-orange-400/30 bg-orange-400/5 p-4 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={BATTLE_SCENES[index % BATTLE_SCENES.length]} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e1d]/95 via-[#0c0e1d]/70 to-[#0c0e1d]/40" />
+        <span className="relative text-[10px] font-extrabold uppercase tracking-widest text-orange-300">Missão</span>
+        <p className="relative mt-1 font-bold">{round.task}</p>
       </div>
       <div className="mt-3 grid gap-3 md:grid-cols-2">
         {(["A", "B"] as const).map((letter) => {

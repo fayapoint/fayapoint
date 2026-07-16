@@ -1033,8 +1033,10 @@ export default function AccountPage() {
                 className="space-y-6 mt-6"
               >
                 {/* Change Password */}
-                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-4">Alterar Senha</h3>
+                <Card className="relative p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+                  <img src="/portal/conta/seguranca.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-24 w-40 object-cover opacity-35" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
+                  <h3 className="relative text-base md:text-lg font-semibold mb-4">Alterar Senha</h3>
                   <div className="space-y-4 max-w-md">
                     <div className="space-y-2">
                       <Label className="text-muted-foreground">Senha atual</Label>
@@ -1178,8 +1180,10 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Delete Account */}
-                <Card className="p-4 md:p-6 bg-card border-red-900/50 min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold text-red-400 mb-2">Zona de Perigo</h3>
+                <Card className="relative p-4 md:p-6 bg-card border-red-900/50 min-w-0 overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- privacidade/controle dos dados §12 */}
+                  <img src="/portal/conta/privacidade.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-24 w-40 object-cover opacity-30" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
+                  <h3 className="relative text-base md:text-lg font-semibold text-red-400 mb-2">Zona de Perigo</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.
                   </p>
@@ -1366,8 +1370,10 @@ export default function AccountPage() {
                 </Card>
 
                 {/* Notifications */}
-                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-4">Notificações</h3>
+                <Card className="relative p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+                  <img src="/portal/conta/notificacoes.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-24 w-40 object-cover opacity-35" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
+                  <h3 className="relative text-base md:text-lg font-semibold mb-4">Notificações</h3>
                   <div className="space-y-4">
                     {[
                       {

@@ -47,6 +47,8 @@ export function ClaimLandingXp() {
       }}
       role="status"
     >
+      {/* eslint-disable-next-line @next/next/no-img-element -- nível-up §12 */}
+      <img src="/fx/nivel-up.webp" alt="" aria-hidden className="h-12 w-12 shrink-0 rounded-xl object-cover" />
       <Sparkles size={20} className="shrink-0" />
       <p className="text-sm font-bold leading-snug">🏆 {msg}</p>
       <button

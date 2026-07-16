@@ -8,6 +8,13 @@ import { useRotatingDeck } from "@/lib/game-rotation";
 import { FxConfetti, VocabularyChip } from "@/components/portal/games/GameLearning";
 import { PersonaFisher } from "@/components/portal/games/PersonaFisher";
 
+// Cenários da caçada — arte da casa (IDENTIDADE_VISUAL.md §12)
+const HUNT_SCENES = [
+  "/portal/arcade/caca/floresta.webp",
+  "/portal/arcade/caca/mapa.webp",
+  "/portal/arcade/caca/museu.webp",
+];
+
 export function CacaPrompt() {
   const { deck, rotate } = useRotatingDeck(PROMPT_HUNTS, 5, "fayai_seen_caca_prompt");
   const [index, setIndex] = useState(0);
@@ -42,6 +49,8 @@ export function CacaPrompt() {
   if (finished) return (
     <div className="relative py-9 text-center">
       <FxConfetti active={score >= 4} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/portal/arcade/caca/tesouro.webp" alt="" aria-hidden className="relative mx-auto mb-3 h-32 w-48 rounded-2xl border border-amber-400/25 object-cover" />
       <p className="relative text-5xl font-extrabold text-amber-400">{score}/{deck.length}</p>
       <p className="relative mx-auto mt-2 max-w-sm text-sm text-muted-foreground">Você desmontou imagens em ingredientes e remontou a anatomia dos prompts.</p>
       <button onClick={restart} className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-extrabold text-[#241a05]"><RefreshCw size={14} /> Novas caçadas</button>
@@ -53,7 +62,14 @@ export function CacaPrompt() {
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-muted-foreground"><span>Caçada {index + 1} de {deck.length}</span><span className="text-amber-400">{score} completos</span></div>
+      <div className="relative mb-3 h-16 overflow-hidden rounded-2xl border border-lime-400/20">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={HUNT_SCENES[index % HUNT_SCENES.length]} alt="" aria-hidden className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0c0e1d]/90 via-[#0c0e1d]/55 to-[#0c0e1d]/25" />
+        <div className="absolute inset-0 flex items-center justify-between px-4 text-[11px] font-bold uppercase tracking-widest text-white/90">
+          <span>Caçada {index + 1} de {deck.length}</span><span className="text-amber-400">{score} completos</span>
+        </div>
+      </div>
       <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
         <div>
           <div className="relative aspect-[3/2] overflow-hidden rounded-2xl border border-lime-400/30">
@@ -77,7 +93,13 @@ export function CacaPrompt() {
               );
             })}
           </Reorder.Group>
-          {selected.length < round.answer.length && <div className="mt-2 rounded-xl border border-dashed border-white/15 px-3 py-3 text-center text-xs text-muted-foreground">Faltam {round.answer.length - selected.length} peça(s)</div>}
+          {selected.length < round.answer.length && (
+            <div className="mt-2 flex items-center justify-center gap-2 rounded-xl border border-dashed border-white/15 px-3 py-2 text-xs text-muted-foreground">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/portal/arcade/caca/lupa.webp" alt="" aria-hidden className="h-9 w-9 rounded-lg object-cover opacity-80" />
+              <span>Faltam {round.answer.length - selected.length} peça(s)</span>
+            </div>
+          )}
           <div className="mt-3 flex flex-wrap gap-2">
             {round.pieces.map((piece) => {
               const active = selected.includes(piece.id);

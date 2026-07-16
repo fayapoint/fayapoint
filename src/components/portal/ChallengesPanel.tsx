@@ -304,8 +304,10 @@ export function ChallengesPanel({
       )}
 
       {/* Weekly Goal */}
-      <Card className="bg-secondary border-border p-3 md:p-6">
-        <div className="flex items-center justify-between mb-3 md:mb-4 min-w-0 gap-2">
+      <Card className="relative bg-secondary border-border p-3 md:p-6 overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12; xp-chuva celebra a meta batida */}
+        <img src={goalProgress >= 100 ? "/fx/xp-chuva.webp" : "/fx/meta-semanal.webp"} alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-28 object-cover opacity-35" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
+        <div className="relative flex items-center justify-between mb-3 md:mb-4 min-w-0 gap-2">
           <h3 className="font-semibold flex items-center gap-2 text-sm md:text-base">
             <TrendingUp className="text-blue-400 shrink-0" size={18} />
             Meta Semanal

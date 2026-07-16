@@ -123,8 +123,10 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
     <div className="space-y-4 md:space-y-6 min-w-0 overflow-hidden">
       {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-        <Card className="bg-secondary border-border p-3 md:p-6">
-          <div className="flex items-center gap-3 md:gap-4">
+        <Card className="relative bg-secondary border-border p-3 md:p-6 overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+          <img src="/fx/conquista.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-28 object-cover opacity-40" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
+          <div className="relative flex items-center gap-3 md:gap-4">
             <div className="w-10 h-10 md:w-14 md:h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center shrink-0">
               <Trophy size={20} className="text-white md:hidden" />
               <Trophy size={28} className="text-white hidden md:block" />

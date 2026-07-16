@@ -203,3 +203,19 @@ O encontro entre os dois mundos da FayAI também pode acontecer **dentro de uma 
 ### Primeiro uso canônico
 
 Hero do Arcade da IA: fotografia de pessoas aprendendo juntas como base real + máquina de arcade e robôs vetoriais em moldura flutuante. A cena comunica “pessoas reais aprendem IA jogando” sem depender de texto dentro da arte.
+
+### 12.1 Fusão gerada num único quadro (v1.3 — 15/07/2026, estilo aprovado 9.5/10)
+
+A evolução do mix: em vez de compor camadas no front, a fusão acontece **na geração** — o mascote robô vetorial fofo vive dentro de uma cena fotorrealista cinematográfica, num único quadro sem emendas. Foi o estilo do lote de 100 artes + 3 vídeos (deploy 15/07).
+
+**Receita do prompt (sufixo em toda imagem):**
+
+> `[cena específica que ENCENA o conteúdo — regra do espelho §9] + ", an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"`
+
+**Cores por contexto** (glow/acento da cena): cyan = trabalho · violet = estudos · rose = criar · lime = dia-a-dia · gold = recompensa (ouro segue reservado a marca/recompensa/CTA, §3).
+
+**Pipeline comprovado:** Qwen 2512 fp8 + Lightning 4-steps no ComfyUI local (~14s/img) — parâmetros exatos em `scripts/arcade/generate_abundance.py`; prompts/seeds das 100 artes em `scripts/arcade/abundance-manifest.json`. Vídeo: LTX 2.3 I2V two-pass em `scripts/arcade/generate_abundance_videos.py` (~6min/vídeo), regras da Liga B (§10).
+
+**Pós-processo:** `ffmpeg -i in.png -vf scale=768:-1 -quality 80 out.webp` (≤40KB). Vídeo: WebM mudo ≤400KB, sempre com poster + fallback `motion-reduce`.
+
+**Exemplos vivos:** capas do blog (`public/blog/covers/`), cenários dos minigames (`public/portal/arcade/batalha/`, `caca/`), celebrações (`public/fx/`), widgets do dashboard (`public/portal/dash/`), abas de Minha Conta (`public/portal/conta/`).

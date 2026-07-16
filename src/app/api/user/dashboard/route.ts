@@ -306,15 +306,19 @@ export async function GET(request: Request) {
     }
 
     // OPTIMIZATION: Handle daily login checkin inline (saves 1 API call)
+    // Comparação exige AMBOS normalizados à meia-noite — `today` cru fazia
+    // o check-in disparar em todo load (+XP infinito) e travava o streak em 1.
     let dailyXpEarned = 0;
-    const lastActive = user.progress?.lastActiveDate 
-      ? new Date(user.progress.lastActiveDate) 
+    const todayMidnight = new Date(today);
+    todayMidnight.setHours(0, 0, 0, 0);
+    const lastActive = user.progress?.lastActiveDate
+      ? new Date(user.progress.lastActiveDate)
       : null;
     if (lastActive) lastActive.setHours(0, 0, 0, 0);
-    
-    if (!lastActive || lastActive.getTime() !== today.getTime()) {
+
+    if (!lastActive || lastActive.getTime() !== todayMidnight.getTime()) {
       // First login of the day - update streak and award XP
-      const yesterday = new Date(today);
+      const yesterday = new Date(todayMidnight);
       yesterday.setDate(yesterday.getDate() - 1);
       
       let newStreak = user.progress?.currentStreak || 0;

@@ -504,8 +504,8 @@ export function DashboardHome({
           {/* Streak + Level — compact */}
           <motion.div variants={itemVariants}>
             <Card className="relative overflow-hidden border-border bg-card p-3.5">
-              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
-              <img src="/portal/dash/streak.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-32 object-cover opacity-40" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12; streak-7 celebra a semana cheia */}
+              <img src={stats.streak >= 7 ? "/fx/streak-7.webp" : "/portal/dash/streak.webp"} alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-32 object-cover opacity-40" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
               <div className="relative flex items-center gap-2.5 mb-2.5">
                 <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
                   <Flame size={15} className="text-orange-400" fill="currentColor" />
@@ -561,8 +561,10 @@ export function DashboardHome({
         {/* ── COL 2: Sua Jornada — appears FIRST on mobile ── */}
         <div className="space-y-4 order-1 md:order-2 min-w-0">
           <motion.div variants={itemVariants}>
-            <Card className="border-emerald-500/15 bg-card p-4 min-w-0 overflow-hidden">
-              <div className="flex items-center justify-between mb-3 min-w-0">
+            <Card className="relative border-emerald-500/15 bg-card p-4 min-w-0 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+              <img src="/portal/dash/jornada.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-16 w-28 object-cover opacity-40" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
+              <div className="relative flex items-center justify-between mb-3 min-w-0">
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shrink-0">
                     <BookOpen size={15} className="text-white" />
@@ -609,7 +611,8 @@ export function DashboardHome({
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <BookOpen size={24} className="text-muted-foreground mx-auto mb-2" />
+                  {/* eslint-disable-next-line @next/next/no-img-element -- vazio inspirador §12 */}
+                  <img src="/fx/vazio-inspirador.webp" alt="" aria-hidden className="mx-auto mb-2 h-20 w-32 rounded-xl object-cover opacity-90" />
                   <p className="text-xs text-muted-foreground mb-2">Nenhum curso iniciado</p>
                   <Button size="sm" onClick={() => onTabChange("courses")} className="bg-emerald-600 hover:bg-emerald-500 gap-1 text-xs h-7">
                     <Rocket size={12} /> Explorar Cursos

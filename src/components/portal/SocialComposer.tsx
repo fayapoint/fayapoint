@@ -366,9 +366,13 @@ export default function SocialComposer() {
           </button>
         </div>
         {posts.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-4 text-center">
-            Nenhum post ainda — o primeiro está a um clique de distância.
-          </p>
+          <div className="py-4 text-center">
+            {/* eslint-disable-next-line @next/next/no-img-element -- primeiro post §12 */}
+            <img src="/fx/primeiro-post.webp" alt="" aria-hidden className="mx-auto mb-2 h-20 w-32 rounded-xl object-cover opacity-90" />
+            <p className="text-sm text-muted-foreground">
+              Nenhum post ainda — o primeiro está a um clique de distância.
+            </p>
+          </div>
         ) : (
           <div className="space-y-2">
             {posts.map((p) => {
