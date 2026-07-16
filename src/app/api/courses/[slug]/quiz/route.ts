@@ -9,6 +9,7 @@ import Certificate, { QUIZ_CONFIG } from '@/models/Certificate';
 import { getAuthUser } from '@/lib/auth';
 import { getCourseBySlug } from '@/data/courses';
 import { getQuizConfig } from '@/config/quiz-config';
+import { resolveContentFacts } from '@/lib/content-facts';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 const BANKS_DIR = path.join(process.cwd(), 'data', 'question-banks');
@@ -348,7 +349,10 @@ export async function GET(
 
     // Build unified course info from whichever source is available
     const courseTitle = staticCourse?.title || product?.name || slug;
-    const courseContent = product?.courseContent || staticCourse?.fullDescription || '';
+    // Fatos voláteis resolvidos: o quiz é gerado com os nomes/valores ATUAIS
+    const courseContent = await resolveContentFacts(
+      product?.courseContent || staticCourse?.fullDescription || ''
+    );
 
     if (!courseContent || courseContent.length < 100) {
       return NextResponse.json({ error: 'Conteúdo do curso insuficiente para gerar avaliação' }, { status: 400 });

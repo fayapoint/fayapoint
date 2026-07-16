@@ -16,6 +16,7 @@ import {
   countCourseContentChapters,
   sanitizeCourseContent,
 } from '@/lib/course-content-sanitizer';
+import { resolveContentFacts } from '@/lib/content-facts';
 
 type CourseModule = {
   title?: string;
@@ -93,12 +94,16 @@ export async function GET(
       typeof product.courseContent === 'string' ? product.courseContent : 'Conteúdo em breve...'
     );
 
+    // Fatos voláteis ({{fact:...}} → valor atual do registry) — o motor de
+    // autoresearch atualiza o registry e todos os cursos ficam atuais na hora
+    const resolvedContent = await resolveContentFacts(sanitizedContent.content || '');
+
     const payload = {
-      content: sanitizedContent.content || 'Conteúdo em breve...',
+      content: resolvedContent || 'Conteúdo em breve...',
       title: product.name || course?.title || slug,
       modules: product.detailedCurriculum || fallbackDetailedCurriculum,
       slug: product.slug || slug,
-      contentChapters: countCourseContentChapters(sanitizedContent.content),
+      contentChapters: countCourseContentChapters(resolvedContent),
       contentUpdatedAt: product.contentUpdatedAt || null,
       lessonContentCoverage,
       editorialVerification: normalizeEditorialVerification(
