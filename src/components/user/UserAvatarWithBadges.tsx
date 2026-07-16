@@ -115,12 +115,15 @@ export function UserAvatarWithBadges({
   const [isHovered, setIsHovered] = useState(false);
   const sizeConfig = SIZES[size];
   
-  // Get top achievements by tier (prioritize higher tiers)
+  // Top-3 conquistas por tier + contador "+N" — a prateleira NUNCA cresce com
+  // o total de conquistas (escala p/ dezenas sem poluir o avatar)
   const tierOrder = ['diamond', 'platinum', 'gold', 'silver', 'bronze'];
-  const unlockedAchievements = achievements
+  const allUnlocked = achievements
     .filter(a => a.unlocked)
-    .sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier))
-    .slice(0, maxBadges);
+    .sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier));
+  const shelfMax = Math.min(maxBadges, 3);
+  const unlockedAchievements = allUnlocked.slice(0, shelfMax);
+  const overflowCount = allUnlocked.length - unlockedAchievements.length;
 
   const initials = user.name?.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) || "US";
 
@@ -220,6 +223,17 @@ export function UserAvatarWithBadges({
                   </Tooltip>
                 );
               })}
+              {overflowCount > 0 && (
+                <span
+                  className={cn(
+                    "relative flex items-center justify-center rounded-full bg-secondary border border-border text-[8px] font-black text-muted-foreground ring-2 ring-background",
+                    sizeConfig.badge
+                  )}
+                  title={`+${overflowCount} conquistas`}
+                >
+                  +{overflowCount}
+                </span>
+              )}
             </div>
           </AnimatePresence>
         )}

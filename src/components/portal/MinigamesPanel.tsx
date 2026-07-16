@@ -8,6 +8,7 @@ import { VerdadeOuMito } from "@/components/portal/games/VerdadeOuMito";
 import { QualPrompt } from "@/components/portal/games/QualPrompt";
 import { BatalhaPrompts } from "@/components/portal/games/BatalhaPrompts";
 import { CacaPrompt } from "@/components/portal/games/CacaPrompt";
+import { PalpiteGame } from "@/components/portal/games/PalpiteGame";
 import { ArcadeVisual, RandomArcadeVisual, type ArcadeGameId } from "@/components/portal/ArcadeVisual";
 
 /**
@@ -28,7 +29,7 @@ const JOGOS: Jogo[] = [
   { id: "monte-o-prompt", titulo: "Monte o Prompt", desc: "A receita dos 5 ingredientes de uma imagem profissional.", cor: "#f472b6", status: "jogar" },
   { id: "verdade-ou-mito", titulo: "Verdade ou Mito?", desc: "10 cartas para separar o hype da realidade da IA.", cor: "#38bdf8", status: "jogar" },
   { id: "qual-prompt", titulo: "Qual Prompt Gerou Isto?", desc: "Olhe a arte, adivinhe a receita que a criou.", cor: "#a78bfa", status: "jogar" },
-  { id: "palpite-30s", titulo: "Palpite em 30 Segundos", desc: "O clássico da página inicial — palpites e mágica.", cor: "#f5c04e", status: "home" },
+  { id: "palpite-30s", titulo: "Palpite em 30 Segundos", desc: "Veja a mágica, dê seu palpite — XP direto na conta.", cor: "#f5c04e", status: "jogar" },
   { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Dois prompts entram, só um sai vencedor — descubra por quê.", cor: "#fb923c", status: "jogar" },
   { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Escolha e arraste peças para reconstruir a receita original.", cor: "#a3e635", status: "jogar" },
 ];
@@ -37,6 +38,7 @@ const TITULOS: Record<string, string> = {
   "monte-o-prompt": "Monte o Prompt",
   "verdade-ou-mito": "Verdade ou Mito?",
   "qual-prompt": "Qual Prompt Gerou Isto?",
+  "palpite-30s": "Palpite em 30 Segundos",
   "batalha-prompts": "Batalha de Prompts",
   "caca-prompt": "Caça ao Prompt Perdido",
 };
@@ -57,6 +59,7 @@ export function MinigamesPanel() {
           {jogo === "monte-o-prompt" && <PromptBuilderGame />}
           {jogo === "verdade-ou-mito" && <VerdadeOuMito />}
           {jogo === "qual-prompt" && <QualPrompt />}
+          {jogo === "palpite-30s" && <PalpiteGame />}
           {jogo === "batalha-prompts" && <BatalhaPrompts />}
           {jogo === "caca-prompt" && <CacaPrompt />}
           </div>

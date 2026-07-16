@@ -44,10 +44,19 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 
 ### FASE 0 — Sessão de verificação conjunta + consertos na hora (1 sessão, COM o Ricardo)
 > Objetivo: zerar a tabela do §2 — cada `[~]` vira `[✅]` ou `[✗]`+fix imediato.
-- [ ] 0.1 **Palpite em 30s**: diagnóstico ao vivo (DevTools) e fix definitivo. Aceite: você clica no card e joga o Palpite.
-- [ ] 0.2 Passar TODOS os `[~]` do §2, um a um, você validando (roteiro de 15 min).
-- [ ] 0.3 O que reprovar é consertado NA SESSÃO ou vira item de topo desta fila.
-- [ ] 0.4 Registrar aqui o resultado (editar o §2).
+- [ ] 0.1 **Palpite em 30s** — DIAGNOSTICADO ao vivo 16/07: o clique navega para a home (fix do `<a>` funcionou), mas a expectativa certa é jogar DENTRO do Arcade como os outros 5. **Decisão do Ricardo: abrir in-place.** Tarefa: extrair o jogo da NovaLanding para componente reutilizável `<PalpiteGame/>`; para logado no portal, creditar XP direto (sem o claim via localStorage). Aceite: você clica no card e joga o Palpite sem sair do Arcade.
+  - Nota de diagnóstico da sessão: o estado "congelado/esmaecido" que aparecia nos MEUS testes era a janela do Claude cobrindo o Chrome (occlusion correta do navegador) — não era bug do site para o usuário. Hardening anti-congelamento continua valendo como robustez (item 0.5).
+- [ ] 0.5 **Hardening de animação**: quando `visibilityState==='hidden'` no mount ou rAF morto, renderizar conteúdo direto visível (sem entrance) — usuários que abrem a aba em segundo plano nunca veem tela em branco.
+- [x] 0.2 Roteiro de validação executado pelo Ricardo em 16/07 (noite). Resultado:
+  - ✅ XP honesto (3× F5, idêntico) · ✅ Thumbs Arcade · ✅ Calendário Desafios
+  - ✅ Badges fora da foto, MAS: design das badges desatualizado E a prateleira não escala (imagine as dezenas de conquistas futuras sob a foto) → **0.6**
+  - ✅ Card Sua Persona existe, MAS escondido → deve ficar ACIMA do "Ecossistema FayAI" → **0.7**
+  - ✅ Botão Conta↔Perfil existe, MAS a seção Persona real deve ser VISUAL: thumbnails clicáveis como entrada principal, texto só como fallback → spec da FASE 3 atualizada
+  - ⏳ Quiz anti-óbvio: Ricardo valida depois
+  - ⏳ Gerador USS: incompleto por definição até a Fase 3 (persona rica)
+- [ ] 0.6 **Badges 2.0**: mostrar no avatar só top-3 tiers + chip "+N"; redesign visual das medalhas (estão datadas); pensar escala p/ dezenas de conquistas. Aceite: avatar limpo mesmo com 25 conquistas.
+- [ ] 0.7 **Card Sua Persona em destaque**: mover para ACIMA da seção "Ecossistema FayAI" no dashboard. Aceite: visível sem rolar.
+- [ ] 0.4 Registrar resultados (este bloco) — FEITO 16/07.
 
 ### FASE 1 — Conteúdo fala do PRESENTE (1 sessão; primeira metade sem depender de você)
 > Você apontou: os cursos citam exatamente os modelos velhos. O registry existe mas mantive os valores antigos por segurança. Agora é atualizar de verdade.
@@ -68,7 +77,7 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 - Aceite da fase: você lê um capítulo e diz "é isso".
 
 ### FASE 3 — PERSONA COMPLETA + conteúdo customizado para VOCÊ (beta tester Expert) (1-2 sessões)
-- [ ] 3.1 **Meu Perfil → seção "Sua Persona"**: mostra o que o site já sabe (socialPersona) + **formulário completo** (quem sou, meu negócio, objetivos, tom, público) gravando no peso `custom`.
+- [ ] 3.1 **Meu Perfil → seção "Sua Persona"** (spec refinada pelo Ricardo 16/07): interface VISUAL com **thumbnails clicáveis** para cada dimensão (setor, tom, objetivos, tipos de conteúdo, público...) — geradas no estilo §12; campos de texto existem apenas como fallback quando as opções visuais não cobrem o caso. Mostra também o que o site já aprendeu (socialPersona) e o completionPercent. Grava no peso `custom`.
 - [ ] 3.2 **Slots de exemplo** (convenção já definida no ARQUITETURA_CONTEUDO_DINAMICO.md): marcar os primeiros slots no curso piloto da Fase 2.
 - [ ] 3.3 **Gerador de exemplos por persona** (motor Expert v1): para usuário Expert, gerar e servir os exemplos customizados nos slots. **Beta: a SUA conta** — você abre o capítulo piloto e os exemplos falam do SEU contexto.
 - Aceite: você lê o piloto e os exemplos são sobre você/seus projetos.

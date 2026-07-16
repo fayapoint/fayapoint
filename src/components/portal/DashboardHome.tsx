@@ -387,6 +387,32 @@ export function DashboardHome({
       <ArcadeBanner onOpen={() => onTabChange("games")} />
 
       {/* ═══════════════════════════════════════════════════ */}
+      {/*  SUA PERSONA — em destaque (pedido do Ricardo 16/07) */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <motion.div variants={itemVariants}>
+        <Card
+          className="relative overflow-hidden border-violet-500/20 bg-card cursor-pointer group hover:border-violet-500/40 transition-all"
+          onClick={() => onTabChange("social")}
+        >
+          <div className="flex items-center gap-4 p-4">
+            <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl">
+              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
+              <img src="/portal/persona/vidente-hero.webp" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-base font-bold flex items-center gap-2"><Sparkles size={15} className="text-violet-400" /> Sua Persona</h3>
+              <p className="mt-0.5 text-sm text-muted-foreground leading-snug">
+                Cada jogo e leitura ensina o site a te conhecer — e molda o conteúdo para você. Visite o Vidente e complete seu perfil.
+              </p>
+            </div>
+            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-extrabold text-[#241a05] shrink-0 group-hover:opacity-90 transition-opacity" style={{ background: "linear-gradient(135deg, #a78bfa, #c4b5fd)" }}>
+              Abrir <ChevronRight size={14} />
+            </span>
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* ═══════════════════════════════════════════════════ */}
       {/*  ECOSSISTEMA — projetos FayAI                       */}
       {/* ═══════════════════════════════════════════════════ */}
       <div className="rounded-2xl border border-border bg-card p-4">
@@ -871,29 +897,6 @@ export function DashboardHome({
               ) : (
                 <p className="text-[10px] text-muted-foreground/70 text-center py-3">Produtos em breve!</p>
               )}
-            </Card>
-          </motion.div>
-
-          {/* Sua Persona — o Vidente aprende com cada jogada (diferencial Expert) */}
-          <motion.div variants={itemVariants}>
-            <Card
-              className="relative overflow-hidden border-violet-500/15 bg-card p-0 cursor-pointer group hover:border-violet-500/30 transition-all"
-              onClick={() => onTabChange("social")}
-            >
-              <div className="relative h-24 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
-                <img src="/portal/persona/vidente-hero.webp" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e1d] via-[#0c0e1d]/30 to-transparent" />
-              </div>
-              <div className="relative -mt-6 p-3.5 pt-0">
-                <h4 className="text-sm font-bold flex items-center gap-1.5"><Sparkles size={13} className="text-violet-400" /> Sua Persona</h4>
-                <p className="mt-1 text-xs text-muted-foreground leading-snug">
-                  Cada jogo e leitura ensina o site a te conhecer — e molda o conteúdo para você.
-                </p>
-                <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-violet-300">
-                  Visitar o Vidente <ChevronRight size={12} />
-                </span>
-              </div>
             </Card>
           </motion.div>
 
