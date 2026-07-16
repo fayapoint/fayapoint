@@ -88,6 +88,24 @@ export async function POST(request: NextRequest) {
     const charLimit = PLATFORM_LIMITS[platform] || 2200;
     const langName = language === 'pt-BR' ? 'Brazilian Portuguese' : language === 'en' ? 'English' : language;
 
+    // Persona do usuário (Vidente/pescaria/builder alimentam socialPersona) —
+    // o blueprint do engine (Uss/docs) exige persona estruturada em TODA geração
+    const sp = userDoc.socialPersona || {};
+    const personaFields: Record<string, unknown> = {};
+    if (sp.industry?.length) personaFields.industry = sp.industry;
+    if (sp.toneOfVoice?.length) personaFields.tone_of_voice = sp.toneOfVoice;
+    if (sp.marketingGoals?.length) personaFields.marketing_goals = sp.marketingGoals;
+    if (sp.contentTypes?.length) personaFields.content_types = sp.contentTypes;
+    if (sp.experienceLevel) personaFields.experience_level = sp.experienceLevel;
+    if (sp.topHashtags?.length) personaFields.top_hashtags = sp.topHashtags;
+    if (sp.contentThemes?.length) personaFields.content_themes = sp.contentThemes;
+    if (sp.audienceInsights) personaFields.audience_insights = sp.audienceInsights;
+    if (sp.writingStyle) personaFields.writing_style = sp.writingStyle;
+    if (sp.primaryInterests?.length) personaFields.primary_interests = sp.primaryInterests;
+    const personaBlock = Object.keys(personaFields).length
+      ? `\n\nUser persona (write in THIS voice; align topics, examples and CTAs with these interests, audience and goals; prefer their proven hashtags when relevant):\n<persona_json>\n${JSON.stringify(personaFields)}\n</persona_json>`
+      : '';
+
     let userPrompt = '';
 
     if (action === 'generatePosts') {
@@ -103,19 +121,19 @@ Requirements:
 - Each post must be unique and engaging
 - Optimize for ${platform} algorithm and best practices
 - Include clear calls to action
-- Suggest best posting times (timezone: America/Sao_Paulo)`;
+- Suggest best posting times (timezone: America/Sao_Paulo)${personaBlock}`;
     } else if (action === 'generateHashtags') {
       userPrompt = `Generate 20 relevant hashtags for ${platform} content about: "${topic}"
 Language: ${langName}
 ${platformContext}
 
-Return JSON: { "posts": [{ "content": "", "hashtags": [...20 hashtags...], "mediaPrompt": "", "callToAction": "", "bestTimeToPost": "", "estimatedEngagement": "medium" }] }`;
+Return JSON: { "posts": [{ "content": "", "hashtags": [...20 hashtags...], "mediaPrompt": "", "callToAction": "", "bestTimeToPost": "", "estimatedEngagement": "medium" }] }${personaBlock}`;
     } else if (action === 'analyzeTrends') {
       userPrompt = `Analyze current trends on ${platform} related to: "${topic}"
 Language: ${langName}
 ${platformContext}
 
-Return JSON with posts array where each item represents a trend-inspired post idea.`;
+Return JSON with posts array where each item represents a trend-inspired post idea.${personaBlock}`;
     } else {
       return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
