@@ -3,9 +3,11 @@
 
 ---
 
-## ⏩ PRÓXIMA SESSÃO COMEÇA AQUI (atualizado 17/07 — vereditos colhidos, Fase 2 em andamento)
+## ⏩ PRÓXIMA SESSÃO COMEÇA AQUI (atualizado 17/07 — piloto Leitura 2.0 NO AR aguardando veredito)
 
-**Estado:** Fase 0 FECHADA (0.6/0.7 validados) · Fase 1 núcleo validado, resta 1.3 visual + 1.4/1.5 (dependem do auditor) + 1.6 especificado · **FASE 2 (Leitura 2.0) EM ANDAMENTO** — piloto do chatgpt-zero.
+**Estado:** Fase 0 FECHADA (0.6/0.7 validados) · Fase 1 núcleo validado, resta 1.3 visual + 1.4/1.5 (dependem do auditor) + 1.6 especificado · **FASE 2: piloto cap.1 chatgpt-zero DEPLOYADO (12a84f7) e marcadores no Atlas — AGUARDA VEREDITO DO RICARDO.**
+
+**⭐ TESTE DO RICARDO (30s):** abrir o curso **ChatGPT do Zero** no portal, capítulo 1 (Parte 01): deve haver **4 imagens + 2 vídeos em loop DENTRO do texto**, cada um no trecho a que se refere, com legenda. Se aprovar → escalar para o curso inteiro (2.2 automatizado); se reprovar → nota do que falhou. Itens 2.3 (capítulos menores) e 2.4 (design da página) são os próximos da fila COM ele.
 
 **O que o Ricardo já validou (✅ dele, de verdade):**
 - 0.1 Palpite em 30s DENTRO do Arcade — aprovado com elogio à decisão ("usuário completionist não se sente jogado de volta à tela inicial").
