@@ -3,23 +3,27 @@
 
 ---
 
-## ⏩ PRÓXIMA SESSÃO COMEÇA AQUI (atualizado 17/07, madrugada)
+## ⏩ PRÓXIMA SESSÃO COMEÇA AQUI (atualizado 17/07 — vereditos colhidos, Fase 2 em andamento)
 
-**Estado:** Fase 0 praticamente fechada · Fase 1 núcleo CONCLUÍDO E VALIDÁVEL · próximo grande alvo = FASE 2 (Leitura 2.0).
+**Estado:** Fase 0 FECHADA (0.6/0.7 validados) · Fase 1 núcleo validado, resta 1.3 visual + 1.4/1.5 (dependem do auditor) + 1.6 especificado · **FASE 2 (Leitura 2.0) EM ANDAMENTO** — piloto do chatgpt-zero.
 
 **O que o Ricardo já validou (✅ dele, de verdade):**
 - 0.1 Palpite em 30s DENTRO do Arcade — aprovado com elogio à decisão ("usuário completionist não se sente jogado de volta à tela inicial").
 - XP honesto (F5 3×) · Thumbs Arcade · Calendário Desafios · Vídeos LTX dos minigames.
 - Tabela de modelos da Fase 1 (com correção dele: Gemini 3.5 Pro) → registry aplicado e VERIFICADO em prod (Opus 4.8/Sonnet 5/GPT-5.6 no ar).
+- **17/07: Badges top-3+"+N" (0.6) · Banner "Sua Persona" acima do Ecossistema (0.7, deploy c03d087) · Quiz anti-óbvio — os três aprovados.**
 
-**Aguardando validação do Ricardo `[~]`:** badges top-3+"+N" · banner "Sua Persona" acima do Ecossistema (deploy c03d087) · quiz anti-óbvio (item 7 do roteiro, ele vê depois) · nomes novos visíveis nas aulas (1.3).
+**Aguardando validação do Ricardo `[~]`:** nomes novos visíveis nas aulas (1.3) — abrir qualquer curso e ver Opus 4.8/Sonnet 5/GPT-5.6 citados, zero modelos velhos.
 
-**Ordem imediata da próxima sessão:**
-1. Pedir os vereditos `[~]` acima (30s cada).
-2. Decisões do Ricardo pendentes: formato do item 1.6 (livro de ferramentas: guia blog × mini-curso × e-book) + ferramentas além de Unsloth Studio e LLM Arena.
-3. **FASE 2 — Leitura 2.0**: começar pelo item 2.1 (mídia inline) + 2.5 (piloto de 1 capítulo do chatgpt-zero para aprovação DELE antes de escalar). Specs completas na Fase 2 abaixo.
-4. Paralelo P.2: auditor hermes p/ cursos grandes (chip pendente no painel) — destrava 1.4/1.5.
-5. Continuam nas mãos do Ricardo: PIX real · FB/IG · cupom TikTok · Turnstile · Vidente (P.1).
+**Decisões do Ricardo registradas em 17/07 (item 1.6):**
+- Formato: **guia evergreen no blog** (série `guia-*`, com `{{fact:}}` desde o nascimento).
+- Lista: Unsloth Studio · LLM Arena · OpenRouter · Ollama/LM Studio · ComfyUI · NotebookLM.
+- Expansão pedida por ele: pesquisar **repos de muito sucesso no GitHub**, explicar **agentes** (o que são, como essas ferramentas os afetam), **Higgsfield** e outros que fizerem sentido. **NÃO é prioridade** — entra bem especificado aqui, mas a prioridade é seguir o MASTERPLAN e ter o site perfeito. Fazer quando a fila permitir.
+
+**Ordem imediata:**
+1. **FASE 2 — Leitura 2.0**: item 2.1 (mídia inline) + 2.5 (piloto de 1 capítulo do chatgpt-zero para aprovação DELE antes de escalar). Specs completas na Fase 2 abaixo.
+2. Paralelo P.2: auditor hermes p/ cursos grandes (chip pendente no painel) — destrava 1.4/1.5.
+3. Continuam nas mãos do Ricardo: PIX real · FB/IG · cupom TikTok · Turnstile · Vidente (P.1) · veredito 1.3.
 
 **Regras de ouro (não esquecer):** §1 regra do PRONTO (só Ricardo promove a ✅; reportar "mudou no código, teste assim") · piloto antes de escalar · memória `feedback-regra-do-pronto` · Chrome dele minimizado congela animações (testar com janela visível) · mudanças no Atlas = produção NA HORA.
 
@@ -45,11 +49,11 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 | Palpite em 30s abre | Card virou `<a href="/">` nativo; landing renderiza o jogo p/ logados; sem redirect achado; sem service worker | `[✗]` **Ricardo reprovou** — diagnóstico pendente | Fase 0: você clica com DevTools aberto e vemos juntos o que acontece (nada? navega? volta?) |
 | Vídeos LTX nos minigames | 24 loops no ar | `[✅]` **Ricardo aprovou** ("funcionando ok!") | — |
 | Fix XP infinito / streak | Comparação corrigida; XP estável em reloads (testado em prod via DOM) | `[~]` | Recarregue o portal 3× e veja se o XP não sobe; streak deve crescer amanhã |
-| Quiz anti-óbvio (certificado) | Prompt novo + shuffle server-side | `[~]` | Refaça um quiz de certificado: as opções devem ter tamanhos parecidos e a certa não ser "a mais bonita" |
-| Badges fora da foto | Prateleira na borda inferior | `[~]` | Olhar sidebar e Meu Perfil |
+| Quiz anti-óbvio (certificado) | Prompt novo + shuffle server-side | `[✅]` **Ricardo aprovou 17/07** | — |
+| Badges fora da foto | Prateleira → Badges 2.0 (top-3 + "+N") | `[✅]` **Ricardo aprovou 17/07** (via 0.6) | — |
 | Thumbs do Arcade contidas | max-w + 16:9 | `[~]` | Abrir Minigames em tela cheia |
 | Calendário dos Desafios | max-w-sm | `[~]` | Abrir Desafios |
-| Card "Sua Persona" + col 3 sticky | No dashboard | `[~]` | Ver dashboard desktop |
+| Card "Sua Persona" + col 3 sticky | Acima do Ecossistema FayAI | `[✅]` **Ricardo aprovou 17/07** (via 0.7) | — |
 | Deep-link `?tab=` + links cruzados Conta↔Perfil | Implementado | `[~]` | Minha Conta → botão "Meu Perfil" |
 | Fatos voláteis (registry) | `{{fact:}}` resolvido na entrega; 95 menções tokenizadas | `[~]` PORÉM **valores continuam os antigos** — ver Fase 1 | Depois da Fase 1: abrir claude-ia-segura e ver modelos ATUAIS citados |
 | Ilustrações chatgpt-zero | 31 artes no header/galeria por seção | `[✗]` **Reprovado como solução** — viraram "3 imagens no topo + parede de texto". Vira insumo da Leitura 2.0 (Fase 2) | — |
@@ -76,8 +80,8 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
   - ✅ Botão Conta↔Perfil existe, MAS a seção Persona real deve ser VISUAL: thumbnails clicáveis como entrada principal, texto só como fallback → spec da FASE 3 atualizada
   - ⏳ Quiz anti-óbvio: Ricardo valida depois
   - ⏳ Gerador USS: incompleto por definição até a Fase 3 (persona rica)
-- [ ] 0.6 **Badges 2.0**: mostrar no avatar só top-3 tiers + chip "+N"; redesign visual das medalhas (estão datadas); pensar escala p/ dezenas de conquistas. Aceite: avatar limpo mesmo com 25 conquistas.
-- [ ] 0.7 **Card Sua Persona em destaque**: mover para ACIMA da seção "Ecossistema FayAI" no dashboard. Aceite: visível sem rolar.
+- [✅] 0.6 **Badges 2.0** — VALIDADO PELO RICARDO 17/07: avatar mostra só top-3 tiers + chip "+N".
+- [✅] 0.7 **Card Sua Persona em destaque** — VALIDADO PELO RICARDO 17/07: acima do "Ecossistema FayAI", visível sem rolar (deploy c03d087).
 - [ ] 0.4 Registrar resultados (este bloco) — FEITO 16/07.
 
 ### FASE 1 — Conteúdo fala do PRESENTE (1 sessão; primeira metade sem depender de você)
@@ -87,17 +91,26 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 - [x] 1.3 Registry atualizado (14 chaves) e **VERIFICADO em produção**: claude-ia-segura cita Opus 4.8 (19×) e Sonnet 5 (9×), zero menções antigas. Primeira atualização real do motor. `[~]` p/ validação visual do Ricardo em qualquer curso.
 - [ ] 1.4 Varredura das menções NÃO tokenizadas (GPT-4o, Claude 3, `sonnet-4-...` em código): auditor decide caso a caso (histórico legítimo × desatualização) e propõe patch por aula com aprovação.
 - [ ] 1.5 **Cobertura de labs ausentes**: onde o texto deveria citar players novos (Kimi/Moonshot etc.) e não cita — vira patch proposto pelo pipeline do auditor.
-- [ ] 1.6 **"Livro" de ferramentas dos profissionais** (ideia do Ricardo 17/07): guia descrevendo ferramentas que os profissionais usam e o usuário comum desconhece mas se beneficiaria muito — Unsloth Studio, LLM Arena (lmarena), e afins (Ollama? OpenRouter? ComfyUI? — curar lista). Decisões pendentes: formato (guia evergreen no blog `guia-*` × mini-curso × e-book) e lista final de ferramentas. Conteúdo usa `{{fact:}}` desde o nascimento.
+- [ ] 1.6 **Guia evergreen no blog: ferramentas dos profissionais** (DECIDIDO pelo Ricardo 17/07 — formato: série `guia-*` no blog IA Hoje, `{{fact:}}` desde o nascimento). Ferramentas que profissionais usam e o usuário comum desconhece mas se beneficiaria muito:
+  - Lista aprovada: **Unsloth Studio · LLM Arena (lmarena) · OpenRouter · Ollama/LM Studio · ComfyUI · NotebookLM**.
+  - Expansão pedida por ele (17/07): pesquisar **repos de muito sucesso no GitHub** (curar os que agregam valor real ao usuário comum); explicar **agentes de IA** — o que são e como essas ferramentas os afetam/potencializam; incluir **Higgsfield** e outros que a curadoria julgar convenientes.
+  - **Prioridade: BAIXA por ordem explícita dele** — "isso deve entrar no masterplan bem explicado para fazermos, mas não é nossa prioridade; seguir o masterplan e ter o site perfeito é a prioridade". Fazer quando a fila das fases permitir.
+  - Aceite: ele lê o primeiro guia publicado no blog e aprova tom + utilidade.
 - Dependência: 1.4/1.5 precisam do **auditor hermes consertado p/ cursos grandes** (chip já criado; chunking por módulo + pular quem falha 2×).
 
 ### FASE 2 — LEITURA 2.0 (a maior e mais importante; 2-3 sessões; piloto aprovado antes de escalar)
 > Spec do Ricardo (16/07): imagens **no trecho a que se referem**, em pontos importantes/difíceis onde ajudam a compreensão; **4-5 imagens + no mínimo 2 vídeos por capítulo**; capítulos **menores**; design bonito e palatável; e o conteúdo refletindo a persona (Expert).
-- [ ] 2.1 **Arquitetura de mídia inline** (substitui o header-only): marcadores no markdown (`<!--media:img id="..." prompt="..."-->` / `<!--media:video ...-->`) que o reader renderiza NO PONTO, com componente bonito (moldura, legenda, largura, motion sutil; vídeos mudos ≤400KB com poster, respeitando ≤1 vídeo VISÍVEL por dobra).
-- [ ] 2.2 **Passe editorial por capítulo (LLM)**: identificar os 4-5 pontos de difícil compreensão + 2 pontos "cinemáticos" → inserir marcadores com prompt de imagem/vídeo espelhando O TRECHO (não o tema genérico). As 31 artes do piloto viram acervo reaproveitável onde couberem.
+- [~] 2.1 **Arquitetura de mídia inline** — IMPLEMENTADA 17/07 (madrugada): marcadores `media:img`/`media:video` (comentários HTML com id/src/poster/caption) que o reader renderiza NO PONTO via `InlineMediaFigure`/`InlineMediaVideo` (moldura, legenda, reveal suave com hardening anti-aba-oculta; vídeo mudo, loop, `preload="none"`, poster, play/pause por visibilidade). Verificado no dev local por DOM: 6 figuras no ponto certo, zero marcador cru. Aguarda deploy + validação do Ricardo.
+- [~] 2.2 **Passe editorial por capítulo**: feito À MÃO para o cap.1 do piloto (6 pontos: sistema-em-camadas, intenção×execução, fluxo 5 passos VÍDEO, ideias→planos, validação, checklist VÍDEO — prompts espelhando O TRECHO). Automatizar via LLM ao escalar. As 31 artes header viram acervo onde couberem.
 - [ ] 2.3 **Capítulos menores**: re-chunking do conteúdo (seções de leitura de ~5-7 min; hoje "Partes" de 12+ min); revisar `buildReaderSections`.
 - [ ] 2.4 **Design da página de leitura**: hierarquia, callouts (dica/erro comum/exemplo), respiros, tipografia — 3 passes de iteração no browser COM você.
-- [ ] 2.5 **PILOTO**: 1 capítulo do chatgpt-zero completo nesse padrão → sua aprovação → escalar para o curso → depois demais cursos (batch ComfyUI + LTX por curso).
+- [~] 2.5 **PILOTO cap.1 chatgpt-zero**: mídia GERADA E INSTALADA (4 webp ≤47KB + 2 webm ≤181KB em `public/cursos/media/chatgpt-zero/inline/`; receitas Qwen 2512 + LTX 2.3 I2V comprovadas). Marcadores prontos (`insert-cap1-inline-markers.cjs`) — aplicar no Atlas SÓ DEPOIS do deploy do reader (ver armadilha abaixo). Critério de aceite: abrir cap.1 e ver 4 imagens + 2 vídeos no ponto do texto.
 - Aceite da fase: você lê um capítulo e diz "é isso".
+- ⚠️ **ARMADILHAS DESCOBERTAS 17/07** (não repetir):
+  1. **Comentários HTML NÃO são invisíveis no react-markdown v10** — viram TEXTO ESCAPADO na tela (a premissa do ARQUITETURA_CONTEUDO_DINAMICO estava errada). Marcadores no Atlas só APÓS o reader novo estar em produção. Houve exposição de ~1h de marcadores crus no cap.1 na madrugada de 17/07 (restaurado do backup `products_backup_leitura20_20260717`). Vale também para os slots `exemplo` da Camada 2 (Fase 3)!
+  2. **Literal `<!--`/`-->` em fonte TSX mata a rota no Turbopack** — 404 silencioso, sem erro de build. Montar via `new RegExp("<"+"!--...")`.
+  3. **Turbopack dev usa nomes de chunk SEM hash** — o browser cacheia chunk velho mesmo após restart do server; verificação local exige refresh do cache HTTP dos chunks (`fetch(src, {cache:"reload"})` + reload). Em produção não afeta (chunks com hash).
+  4. Prompt de imagem com "seal/badge/placa" gera TEXTO embaralhado na arte — usar conceitos sem texto (carimbo de cera em branco etc.).
 
 ### FASE 3 — PERSONA COMPLETA + conteúdo customizado para VOCÊ (beta tester Expert) (1-2 sessões)
 - [ ] 3.1 **Meu Perfil → seção "Sua Persona"** (spec refinada pelo Ricardo 16/07): interface VISUAL com **thumbnails clicáveis** para cada dimensão (setor, tom, objetivos, tipos de conteúdo, público...) — geradas no estilo §12; campos de texto existem apenas como fallback quando as opções visuais não cobrem o caso. Mostra também o que o site já aprendeu (socialPersona) e o completionPercent. Grava no peso `custom`.

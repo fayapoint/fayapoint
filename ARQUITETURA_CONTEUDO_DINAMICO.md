@@ -37,7 +37,9 @@ ficam literais — só o auditor com contexto decide (IDs de API podem virar
 **Problema:** exemplos genéricos ("imagine uma padaria") deveriam falar do negócio
 DO aluno Expert.
 
-**Convenção no markdown** (comentários HTML — invisíveis no ReactMarkdown):
+**Convenção no markdown** (comentários HTML — ⚠️ CORREÇÃO 17/07: react-markdown v10
+NÃO esconde comentários, ele os renderiza como TEXTO ESCAPADO. Qualquer marcador
+só pode entrar no Atlas DEPOIS que o reader que o interpreta estiver em produção):
 
 ```markdown
 <!--exemplo id="cgz-cap07-contexto" tema="prompt com contexto de negócio"-->

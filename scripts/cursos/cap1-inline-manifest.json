@@ -1,0 +1,58 @@
+[
+ {
+  "kind": "img",
+  "name": "cap01-sistema",
+  "seed": 7200,
+  "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot carefully stacking translucent glowing glass layers into a delicate tower, one dim foggy layer making the whole tower lean and flicker, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark",
+  "ok": true
+ },
+ {
+  "kind": "img",
+  "name": "cap01-intencao",
+  "seed": 7201,
+  "prompt": "real cozy kitchen table bathed in warm morning light, on one side the mascot calmly writing on a small glowing planning card, on the other side a friendly robotic arm assembling wooden pieces, a clear gap of soft light separating thinking from doing, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark",
+  "ok": true
+ },
+ {
+  "kind": "img",
+  "name": "cap01-fluxo",
+  "seed": 7202,
+  "prompt": "real cozy kitchen table with fresh coffee, a winding path of five glowing stepping stones crossing the table from a coffee mug to a finished wrapped deliverable, the tiny mascot walking on the stones mid-journey, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark",
+  "ok": true
+ },
+ {
+  "kind": "img",
+  "name": "cap01-planos",
+  "seed": 7203,
+  "prompt": "real cozy kitchen table with a laptop, a swirl of misty crumpled paper scraps rising above the table and condensing into one crisp glowing organized plan board that the mascot proudly holds up, morning light, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark",
+  "ok": true
+ },
+ {
+  "kind": "img",
+  "name": "cap01-validacao",
+  "seed": 7204,
+  "prompt": "real cozy kitchen table with a laptop and fresh coffee, the mascot examining a glowing answer scroll through a large magnifying glass, a kind amber warning light above, an approval seal floating nearby still waiting, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark",
+  "ok": true
+ },
+ {
+  "kind": "img",
+  "name": "cap01-checklist",
+  "seed": 7205,
+  "prompt": "real cozy kitchen table at golden morning, the mascot writing a glowing checklist card with soft check marks, behind it a large friendly launch button waiting dimmed until the list is complete, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark",
+  "ok": true
+ },
+ {
+  "kind": "video",
+  "name": "cap01-fluxo",
+  "seed": 9200,
+  "motion": "The five glowing stepping stones pulse softly in sequence one after another, steam drifts from the coffee mug, the tiny mascot walks gently forward across the stones, warm dust motes float in the morning light, slow cinematic push-in, seamless loop",
+  "ok": true
+ },
+ {
+  "kind": "video",
+  "name": "cap01-checklist",
+  "seed": 9210,
+  "motion": "Soft glowing check marks light up one by one on the card, the mascot's pen moves gently, the big button in the background slowly brightens as the list completes, steam drifts from the coffee, slow cinematic push-in, seamless loop",
+  "ok": true
+ }
+]

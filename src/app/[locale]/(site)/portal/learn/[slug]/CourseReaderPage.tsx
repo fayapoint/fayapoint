@@ -394,6 +394,193 @@ function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; 
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Inline Media (Leitura 2.0 — Fase 2)
+   Markers no markdown como comentários HTML: media:img id/src/caption
+   e media:video id/src/poster/caption. Comentários HTML são invisíveis
+   no ReactMarkdown, então conteúdo marcado renderiza normal em readers
+   antigos. (Sequências de comentário HTML montadas via RegExp/string —
+   literais no fonte quebram o lexer do Turbopack, que deixa de
+   registrar a rota e serve 404.)
+   ═══════════════════════════════════════════════════════════ */
+
+type InlineMediaMarker = {
+  type: "img" | "video";
+  id: string;
+  src: string;
+  poster?: string;
+  caption?: string;
+};
+
+type ChapterSegment =
+  | { kind: "markdown"; content: string; key: string }
+  | { kind: "media"; media: InlineMediaMarker; key: string };
+
+const INLINE_MEDIA_REGEX = new RegExp("<" + "!--\\s*media:(img|video)\\s+([^>]*?)--" + ">", "g");
+
+function parseMediaAttrs(raw: string): Record<string, string> {
+  const attrs: Record<string, string> = {};
+  for (const match of raw.matchAll(/([\w-]+)="([^"]*)"/g)) {
+    attrs[match[1]] = match[2];
+  }
+  return attrs;
+}
+
+function splitContentWithMedia(content: string): ChapterSegment[] {
+  if (!content) return [];
+  const segments: ChapterSegment[] = [];
+  let lastIndex = 0;
+  let mediaCount = 0;
+
+  for (const match of content.matchAll(INLINE_MEDIA_REGEX)) {
+    const before = content.slice(lastIndex, match.index).trim();
+    if (before) {
+      segments.push({ kind: "markdown", content: before, key: `md-${lastIndex}` });
+    }
+    lastIndex = (match.index ?? 0) + match[0].length;
+
+    const attrs = parseMediaAttrs(match[2]);
+    // Marker sem src = mídia ainda não gerada → fica invisível (mesmo comportamento do comentário)
+    if (attrs.src) {
+      mediaCount += 1;
+      segments.push({
+        kind: "media",
+        key: `media-${attrs.id || mediaCount}`,
+        media: {
+          type: match[1] as "img" | "video",
+          id: attrs.id || `inline-${mediaCount}`,
+          src: attrs.src,
+          poster: attrs.poster,
+          caption: attrs.caption,
+        },
+      });
+    }
+  }
+
+  const tail = content.slice(lastIndex).trim();
+  if (tail) {
+    segments.push({ kind: "markdown", content: tail, key: `md-${lastIndex}` });
+  }
+
+  return segments.length ? segments : [{ kind: "markdown", content, key: "md-0" }];
+}
+
+/* Revela com transição CSS suave; se a aba está oculta no mount ou não há
+   IntersectionObserver, renderiza visível direto (hardening anti-congelamento). */
+function useRevealOnVisible<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (
+      !el ||
+      typeof IntersectionObserver === "undefined" ||
+      document.visibilityState === "hidden"
+    ) {
+      setRevealed(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return { ref, revealed };
+}
+
+function InlineMediaFigure({ media }: { media: InlineMediaMarker }) {
+  const { ref, revealed } = useRevealOnVisible<HTMLElement>();
+  return (
+    <figure
+      ref={ref}
+      className={cn(
+        "my-10 transition-all duration-700 ease-out motion-reduce:transition-none",
+        revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+      )}
+    >
+      <div className="rounded-2xl overflow-hidden ring-1 ring-[rgba(var(--reader-tint),0.08)] shadow-xl shadow-black/30">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={media.src}
+          alt={media.caption || ""}
+          className="w-full h-auto object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      {media.caption && (
+        <figcaption className="mt-3 text-center text-xs text-[rgba(var(--reader-tint),0.35)] italic">
+          {media.caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function InlineMediaVideo({ media }: { media: InlineMediaMarker }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { ref, revealed } = useRevealOnVisible<HTMLElement>();
+
+  /* Toca só quando visível na dobra (≤1 vídeo rodando por vez na prática),
+     pausa ao sair — mudo, loop, sem controles: é ilustração, não player. */
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const video = videoRef.current;
+        if (!video) return;
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <figure
+      ref={ref}
+      className={cn(
+        "my-10 transition-all duration-700 ease-out motion-reduce:transition-none",
+        revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+      )}
+    >
+      <div className="relative rounded-2xl overflow-hidden ring-1 ring-[rgba(var(--reader-tint),0.08)] shadow-2xl shadow-black/40">
+        <video
+          ref={videoRef}
+          src={media.src}
+          poster={media.poster}
+          muted
+          loop
+          playsInline
+          preload="none"
+          className="w-full h-auto"
+          aria-label={media.caption || "Animação ilustrativa"}
+        />
+      </div>
+      {media.caption && (
+        <figcaption className="mt-3 text-center text-xs text-[rgba(var(--reader-tint),0.35)] italic">
+          {media.caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -404,7 +591,8 @@ function slugify(text: string): string {
 }
 
 function estimateReadingMinutes(text: string): number {
-  const words = text.split(/\s+/).filter(Boolean).length;
+  const readable = text.replace(new RegExp("<" + "!--[\\s\\S]*?--" + ">", "g"), "");
+  const words = readable.split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 200));
 }
 
@@ -774,6 +962,10 @@ export default function CourseReaderPage() {
   const currentChapter = chapters[currentChapterIndex] || null;
   const currentChapterSubheadings = useMemo(
     () => extractChapterSubheadings(currentChapter?.content || ""),
+    [currentChapter?.content]
+  );
+  const chapterSegments = useMemo(
+    () => splitContentWithMedia(currentChapter?.content || ""),
     [currentChapter?.content]
   );
   const totalReadingMinutes = useMemo(
@@ -2196,12 +2388,23 @@ export default function CourseReaderPage() {
                       "prose-td:px-5 prose-td:py-3 prose-td:text-sm prose-td:border-t prose-td:border-[rgba(var(--reader-tint),0.04)]"
                     )}
                   >
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={markdownComponents}
-                    >
-                      {currentChapter.content}
-                    </ReactMarkdown>
+                    {chapterSegments.map((segment) =>
+                      segment.kind === "media" ? (
+                        segment.media.type === "video" ? (
+                          <InlineMediaVideo key={segment.key} media={segment.media} />
+                        ) : (
+                          <InlineMediaFigure key={segment.key} media={segment.media} />
+                        )
+                      ) : (
+                        <ReactMarkdown
+                          key={segment.key}
+                          remarkPlugins={[remarkGfm]}
+                          components={markdownComponents}
+                        >
+                          {segment.content}
+                        </ReactMarkdown>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
