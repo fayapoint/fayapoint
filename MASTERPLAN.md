@@ -60,11 +60,12 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 
 ### FASE 1 — Conteúdo fala do PRESENTE (1 sessão; primeira metade sem depender de você)
 > Você apontou: os cursos citam exatamente os modelos velhos. O registry existe mas mantive os valores antigos por segurança. Agora é atualizar de verdade.
-- [ ] 1.1 **Pesquisa (WebSearch) do estado da arte HOJE**: modelos atuais de cada lab (ex.: Kimi K3 lançado 16/07; família Claude 5/Fable; o que a OpenAI tem de atual), com fontes. Entregável: tabela proposta de valores novos por chave do registry.
-- [ ] 1.2 **Você aprova a tabela** (5 min — nomes que o site vai passar a citar).
-- [ ] 1.3 Atualizar `content_facts` → todos os cursos citam modelos atuais em ≤5 min. Aceite: abrir prompt-engineering e ver os nomes novos.
+- [x] 1.1 Pesquisa feita (16-17/07): GPT-5.6 Sol · Opus 4.8/Fable 5 · Sonnet 5 · Kimi K3 (16/07) · Gemini 3.5 Flash/Pro · GPT Image 2 · Nano Banana Pro · Midjourney v8 · Kling v3 · Veo 3.1 · Runway Gen-4.5.
+- [x] 1.2 **Tabela APROVADA pelo Ricardo** (17/07), com correção dele: Gemini 3.5 Pro (não 3.1) + pedido de incluir geradores de imagem/vídeo.
+- [x] 1.3 Registry atualizado (14 chaves) e **VERIFICADO em produção**: claude-ia-segura cita Opus 4.8 (19×) e Sonnet 5 (9×), zero menções antigas. Primeira atualização real do motor. `[~]` p/ validação visual do Ricardo em qualquer curso.
 - [ ] 1.4 Varredura das menções NÃO tokenizadas (GPT-4o, Claude 3, `sonnet-4-...` em código): auditor decide caso a caso (histórico legítimo × desatualização) e propõe patch por aula com aprovação.
 - [ ] 1.5 **Cobertura de labs ausentes**: onde o texto deveria citar players novos (Kimi/Moonshot etc.) e não cita — vira patch proposto pelo pipeline do auditor.
+- [ ] 1.6 **"Livro" de ferramentas dos profissionais** (ideia do Ricardo 17/07): guia descrevendo ferramentas que os profissionais usam e o usuário comum desconhece mas se beneficiaria muito — Unsloth Studio, LLM Arena (lmarena), e afins (Ollama? OpenRouter? ComfyUI? — curar lista). Decisões pendentes: formato (guia evergreen no blog `guia-*` × mini-curso × e-book) e lista final de ferramentas. Conteúdo usa `{{fact:}}` desde o nascimento.
 - Dependência: 1.4/1.5 precisam do **auditor hermes consertado p/ cursos grandes** (chip já criado; chunking por módulo + pular quem falha 2×).
 
 ### FASE 2 — LEITURA 2.0 (a maior e mais importante; 2-3 sessões; piloto aprovado antes de escalar)
