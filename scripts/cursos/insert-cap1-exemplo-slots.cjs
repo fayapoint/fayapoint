@@ -40,7 +40,13 @@ const CLOSE = '<!--/exemplo-->';
   if (h < 0) throw new Error('seção Cenários não encontrada');
   const p1Start = cap.indexOf('\n', h) + 1;
   const p1End = cap.indexOf('\n\n', p1Start);
-  const p2Start = p1End + 2;
+  // pula marcadores de mídia entre os parágrafos (inseridos pela Leitura 2.0)
+  let p2Start = p1End + 2;
+  while (cap.slice(p2Start).trimStart().startsWith('<!--')) {
+    const next = cap.indexOf('\n\n', p2Start);
+    if (next < 0) throw new Error('fim inesperado após marcador');
+    p2Start = next + 2;
+  }
   const p2End = cap.indexOf('\n\n', p2Start);
   if (p1End < 0 || p2End < 0) throw new Error('parágrafos de Cenários não encontrados');
 
