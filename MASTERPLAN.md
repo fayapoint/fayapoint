@@ -3,6 +3,28 @@
 
 ---
 
+## ⏩ PRÓXIMA SESSÃO COMEÇA AQUI (atualizado 17/07, madrugada)
+
+**Estado:** Fase 0 praticamente fechada · Fase 1 núcleo CONCLUÍDO E VALIDÁVEL · próximo grande alvo = FASE 2 (Leitura 2.0).
+
+**O que o Ricardo já validou (✅ dele, de verdade):**
+- 0.1 Palpite em 30s DENTRO do Arcade — aprovado com elogio à decisão ("usuário completionist não se sente jogado de volta à tela inicial").
+- XP honesto (F5 3×) · Thumbs Arcade · Calendário Desafios · Vídeos LTX dos minigames.
+- Tabela de modelos da Fase 1 (com correção dele: Gemini 3.5 Pro) → registry aplicado e VERIFICADO em prod (Opus 4.8/Sonnet 5/GPT-5.6 no ar).
+
+**Aguardando validação do Ricardo `[~]`:** badges top-3+"+N" · banner "Sua Persona" acima do Ecossistema (deploy c03d087) · quiz anti-óbvio (item 7 do roteiro, ele vê depois) · nomes novos visíveis nas aulas (1.3).
+
+**Ordem imediata da próxima sessão:**
+1. Pedir os vereditos `[~]` acima (30s cada).
+2. Decisões do Ricardo pendentes: formato do item 1.6 (livro de ferramentas: guia blog × mini-curso × e-book) + ferramentas além de Unsloth Studio e LLM Arena.
+3. **FASE 2 — Leitura 2.0**: começar pelo item 2.1 (mídia inline) + 2.5 (piloto de 1 capítulo do chatgpt-zero para aprovação DELE antes de escalar). Specs completas na Fase 2 abaixo.
+4. Paralelo P.2: auditor hermes p/ cursos grandes (chip pendente no painel) — destrava 1.4/1.5.
+5. Continuam nas mãos do Ricardo: PIX real · FB/IG · cupom TikTok · Turnstile · Vidente (P.1).
+
+**Regras de ouro (não esquecer):** §1 regra do PRONTO (só Ricardo promove a ✅; reportar "mudou no código, teste assim") · piloto antes de escalar · memória `feedback-regra-do-pronto` · Chrome dele minimizado congela animações (testar com janela visível) · mudanças no Atlas = produção NA HORA.
+
+---
+
 ## §1. PROCESSO — a regra do PRONTO (o que mudou depois de 16/07)
 
 O problema: itens foram reportados como "verificados" com checagens técnicas (DOM, typecheck, API 200) que **não equivalem a um usuário real usando**. Com o Chrome minimizado, animações congelam e abas do portal nem trocam — parte das validações reais era impossível e mesmo assim virou "✅". Isso não pode se repetir.
@@ -44,7 +66,7 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 
 ### FASE 0 — Sessão de verificação conjunta + consertos na hora (1 sessão, COM o Ricardo)
 > Objetivo: zerar a tabela do §2 — cada `[~]` vira `[✅]` ou `[✗]`+fix imediato.
-- [ ] 0.1 **Palpite em 30s** — DIAGNOSTICADO ao vivo 16/07: o clique navega para a home (fix do `<a>` funcionou), mas a expectativa certa é jogar DENTRO do Arcade como os outros 5. **Decisão do Ricardo: abrir in-place.** Tarefa: extrair o jogo da NovaLanding para componente reutilizável `<PalpiteGame/>`; para logado no portal, creditar XP direto (sem o claim via localStorage). Aceite: você clica no card e joga o Palpite sem sair do Arcade.
+- [✅] 0.1 **Palpite em 30s** — VALIDADO PELO RICARDO 17/07: PalpiteGame extraído, joga dentro do Arcade, XP direto na conta (idempotente, modo treino). Nota dele: melhor assim, o completionist quer tela dedicada, não ser jogado à home. (deploy c03d087)
   - Nota de diagnóstico da sessão: o estado "congelado/esmaecido" que aparecia nos MEUS testes era a janela do Claude cobrindo o Chrome (occlusion correta do navegador) — não era bug do site para o usuário. Hardening anti-congelamento continua valendo como robustez (item 0.5).
 - [ ] 0.5 **Hardening de animação**: quando `visibilityState==='hidden'` no mount ou rAF morto, renderizar conteúdo direto visível (sem entrance) — usuários que abrem a aba em segundo plano nunca veem tela em branco.
 - [x] 0.2 Roteiro de validação executado pelo Ricardo em 16/07 (noite). Resultado:
