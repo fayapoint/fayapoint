@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
+import { generate } from '@/lib/ai/provider';
 
 export async function POST(request: Request) {
   try {
@@ -35,9 +34,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get message from request
+    // Get message + histórico da conversa (últimas mensagens do cliente)
     const body = await request.json();
-    const { message } = body;
+    const { message, history } = body;
 
     if (!message || typeof message !== 'string') {
       return NextResponse.json(
@@ -46,57 +45,60 @@ export async function POST(request: Request) {
       );
     }
 
-    // Prepare system prompt
-    const systemPrompt = `Você é o assistente de IA da FayAi Academy, uma plataforma de cursos sobre Inteligência Artificial, automação e ferramentas digitais.
+    // ── Tutor FayAI (Fase 6.2): contexto de persona + cursos do aluno ──
+    const persona = user.socialPersona;
+    const personaLines = [
+      persona?.industry?.length ? `Setor: ${persona.industry.join(', ')}` : '',
+      persona?.marketingGoals?.length ? `Objetivos: ${persona.marketingGoals.join(', ')}` : '',
+      persona?.experienceLevel ? `Nível com IA: ${persona.experienceLevel}` : '',
+      persona?.contentTypes?.length ? `Produz: ${persona.contentTypes.join(', ')}` : '',
+    ].filter(Boolean).join('\n');
 
-Seu papel é:
-- Ajudar alunos com dúvidas sobre cursos e conteúdos
-- Explicar conceitos de IA, automação, ChatGPT, Midjourney, n8n, etc.
-- Dar dicas práticas sobre uso de ferramentas de IA
-- Motivar e engajar os alunos em sua jornada de aprendizado
-- Responder de forma clara, amigável e em português brasileiro
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const enrolled = (user.enrolledCourses || []).filter((c: any) => c.isActive);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const coursesLine = enrolled.map((c: any) => c.courseSlug).slice(0, 8).join(', ');
 
-Informações sobre o usuário:
+    const systemPrompt = `Você é o Tutor FayAI — o tutor pessoal da FayAi Academy, plataforma brasileira de cursos de Inteligência Artificial.
+
+Seu papel de TUTOR (não só assistente):
+- Tirar dúvidas sobre os cursos e conceitos de IA (ChatGPT, geração de imagem, automação, agentes)
+- Sempre que fizer sentido, dar o exemplo NO CONTEXTO do aluno (setor/objetivos abaixo), nunca genérico
+- Sugerir o próximo passo concreto na plataforma (continuar um capítulo, refazer um quiz, testar no Studio AI)
+- Responder em português brasileiro, claro e direto; emojis com moderação
+- Se não souber algo específico de um curso, seja honesto e aponte onde encontrar no portal
+
+Sobre o aluno:
 - Nome: ${user.name}
-- Nível: ${user.progress?.level || 1}
-- Plano: ${plan}
+- Nível ${user.progress?.level || 1} · Plano ${plan}
+${personaLines ? personaLines : '- Persona ainda não preenchida (sugira completar em Meu Perfil → Sua Persona quando fizer sentido)'}
+${coursesLine ? `- Cursos matriculados: ${coursesLine}` : ''}
 
-Mantenha as respostas concisas mas úteis. Use emojis moderadamente para tornar a conversa mais engajadora.`;
+Mantenha as respostas concisas mas úteis.`;
 
-    // Call OpenRouter API
-    const apiKey = OPENROUTER_API_KEY.trim();
-    const authValue = apiKey.startsWith('Bearer ') ? apiKey : `Bearer ${apiKey}`;
+    // Histórico: últimas 8 trocas enviadas pelo cliente (role/content)
+    const historyMessages = Array.isArray(history)
+      ? history
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .filter((m: any) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+          .slice(-8)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((m: any) => ({ role: m.role as 'user' | 'assistant', content: m.content.slice(0, 4000) }))
+      : [];
 
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authValue,
-        'HTTP-Referer': 'https://fayai.com.br',
-        'X-Title': 'FayAi AI Academy',
-      },
-      body: JSON.stringify({
-        model: 'openrouter/free',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: message },
-        ],
-        max_tokens: 1024,
-        temperature: 0.7,
-      }),
+    // Provider unificado (fallback free→budget; o antigo 'openrouter/free' não é um modelo válido)
+    const ai = await generate({
+      tier: plan === 'expert' ? 'budget' : 'free',
+      maxTokens: 1024,
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...historyMessages,
+        { role: 'user', content: message },
+      ],
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('OpenRouter error:', errorData);
-      return NextResponse.json(
-        { error: 'Erro ao processar mensagem' },
-        { status: 500 }
-      );
-    }
-
-    const data = await response.json();
-    const assistantResponse = data.choices?.[0]?.message?.content || 'Desculpe, não consegui processar sua pergunta.';
+    const assistantResponse = ai.content || 'Desculpe, não consegui processar sua pergunta.';
 
     // Update user's AI chat count
     await User.findByIdAndUpdate(userId, {

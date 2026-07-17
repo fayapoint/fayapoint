@@ -106,6 +106,29 @@ export async function POST(request: NextRequest) {
       ? `\n\nUser persona (write in THIS voice; align topics, examples and CTAs with these interests, audience and goals; prefer their proven hashtags when relevant):\n<persona_json>\n${JSON.stringify(personaFields)}\n</persona_json>`
       : '';
 
+    // ── Trends em tempo real (Fase 7.2): manchetes de IA das últimas 48h do
+    // hub IA Hoje entram no prompt — o post nasce ancorado no assunto do dia
+    let trendsBlock = '';
+    try {
+      const db = (await import('mongoose')).default.connection.db;
+      if (db) {
+        const news = await db
+          .collection('ainews')
+          .find({ publishedAt: { $gte: new Date(Date.now() - 48 * 3600 * 1000) } })
+          .sort({ publishedAt: -1 })
+          .limit(5)
+          .project({ title: 1, summary: 1 })
+          .toArray();
+        if (news.length) {
+          trendsBlock =
+            `\n\nCurrent AI trends (last 48h headlines — if any is relevant to the topic, reference it to make the post timely; otherwise ignore):\n` +
+            news.map((n) => `- ${n.title}: ${String(n.summary || '').slice(0, 140)}`).join('\n');
+        }
+      }
+    } catch {
+      /* trends são opcionais — geração segue sem elas */
+    }
+
     let userPrompt = '';
 
     if (action === 'generatePosts') {
@@ -121,19 +144,25 @@ Requirements:
 - Each post must be unique and engaging
 - Optimize for ${platform} algorithm and best practices
 - Include clear calls to action
-- Suggest best posting times (timezone: America/Sao_Paulo)${personaBlock}`;
+- Suggest best posting times (timezone: America/Sao_Paulo)${personaBlock}${trendsBlock}`;
     } else if (action === 'generateHashtags') {
       userPrompt = `Generate 20 relevant hashtags for ${platform} content about: "${topic}"
 Language: ${langName}
 ${platformContext}
 
 Return JSON: { "posts": [{ "content": "", "hashtags": [...20 hashtags...], "mediaPrompt": "", "callToAction": "", "bestTimeToPost": "", "estimatedEngagement": "medium" }] }${personaBlock}`;
+    } else if (action === 'generateMediaPrompt') {
+      // Fase 7.3: pipeline modular — só o prompt de imagem, para um post já escrito
+      userPrompt = `Write ONE detailed image-generation prompt (in English, for an AI image model) for a ${platform} post with this content: "${topic}"
+
+The image must feel premium, on-brand and scroll-stopping. No text in the image.
+Return JSON: { "posts": [{ "content": "", "hashtags": [], "mediaPrompt": "THE PROMPT HERE", "callToAction": "", "bestTimeToPost": "", "estimatedEngagement": "medium" }] }${personaBlock}`;
     } else if (action === 'analyzeTrends') {
       userPrompt = `Analyze current trends on ${platform} related to: "${topic}"
 Language: ${langName}
 ${platformContext}
 
-Return JSON with posts array where each item represents a trend-inspired post idea.${personaBlock}`;
+Return JSON with posts array where each item represents a trend-inspired post idea.${personaBlock}${trendsBlock}`;
     } else {
       return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }

@@ -5,6 +5,8 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import ImageCreation from '@/models/ImageCreation';
 import { invalidateCachePattern, invalidateCache, CACHE_KEYS } from '@/lib/redis';
+import { resolvePlan } from '@/lib/course-tiers';
+import { DAILY_IMAGE_QUOTA, getStudioModel, planAtLeast } from '@/lib/studio-models';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
@@ -28,41 +30,26 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
-    // Check Usage Limits
-    const plan = user.subscription?.plan || 'free';
-    // Strict limit for Free tier as requested: 1 image total
-    const LIMITS: Record<string, number> = {
-        free: 1,
-        starter: 50, explorador: 50,
-        pro: 1000000, profissional: 1000000, // Effectively unlimited
-        business: 1000000, expert: 1000000
-    };
-
-    if (plan === 'free') {
-        const usageCount = await ImageCreation.countDocuments({ userId: user._id });
-        if (usageCount >= LIMITS.free) {
-            return NextResponse.json({
-                error: 'Limite do plano Gratuito atingido. Faça upgrade para gerar mais imagens.'
-            }, { status: 403 });
-        }
-    } else if (plan === 'starter' || plan === 'explorador') {
-        // For explorador/starter, check monthly usage
-        const startOfMonth = new Date();
-        startOfMonth.setDate(1);
-        startOfMonth.setHours(0, 0, 0, 0);
-        const usageCount = await ImageCreation.countDocuments({
-            userId: user._id,
-            createdAt: { $gte: startOfMonth }
-        });
-        if (usageCount >= (LIMITS[plan] || 50)) {
-            return NextResponse.json({
-                error: 'Limite mensal do plano atingido.'
-            }, { status: 403 });
-        }
+    // ── Cota DIÁRIA por plano (Fase 4.1/4.2) ──
+    const plan = resolvePlan(user.subscription?.plan || 'free');
+    const dailyQuota = user.role === 'admin' ? 1000000 : DAILY_IMAGE_QUOTA[plan];
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const usedToday = await ImageCreation.countDocuments({
+        userId: user._id,
+        createdAt: { $gte: startOfDay },
+    });
+    if (usedToday >= dailyQuota) {
+        return NextResponse.json({
+            error: plan === 'free'
+                ? `Suas ${dailyQuota} gerações grátis de hoje acabaram — volte amanhã ou faça upgrade para gerar mais.`
+                : `Sua cota diária de ${dailyQuota} imagens acabou — volta à meia-noite.`,
+            quota: { used: usedToday, limit: dailyQuota },
+        }, { status: 403 });
     }
 
     const body = await request.json();
-    const { prompt, model = 'flux-1-schnell' } = body;
+    const { prompt, model = 'nano-banana-1', referenceImage } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt é obrigatório' }, { status: 400 });
@@ -73,51 +60,31 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'API Key não configurada no servidor' }, { status: 500 });
     }
 
-    // Determine model configuration
-    let primaryModel = 'black-forest-labs/flux-1-schnell';
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let additionalBodyParams: any = {};
-
-    // Check plan for Pro models
-    if (model === 'nano-banana-pro' && plan === 'free') {
-        return NextResponse.json({ 
-            error: 'O modelo Nano Banana Pro está disponível apenas para planos Starter ou superior.' 
+    // ── Catálogo único de modelos + gating por plano (Fase 4.2/4.4) ──
+    const studioModel = getStudioModel(model) || getStudioModel('nano-banana-1')!;
+    if (user.role !== 'admin' && !planAtLeast(plan, studioModel.minPlan)) {
+        return NextResponse.json({
+            error: `O modelo ${studioModel.name} está disponível a partir do plano ${studioModel.minPlan}.`,
         }, { status: 403 });
     }
 
-    switch (model) {
-        case 'nano-banana-1':
-            // Gemini 2.5 Flash (New Default)
-            primaryModel = 'google/gemini-2.5-flash-image';
-            break;
-        case 'nano-banana-pro':
-            // Gemini 3 Pro Image Preview (Premium)
-            primaryModel = 'google/gemini-3-pro-image-preview';
-            additionalBodyParams = {
-                modalities: ['image', 'text']
-            };
-            break;
-        case 'gpt-5-image-mini':
-            primaryModel = 'openai/gpt-5-image-mini';
-            break;
-        case 'flux-1-dev':
-            primaryModel = 'black-forest-labs/flux-1-dev';
-            break;
-        case 'recraft-v3':
-            primaryModel = 'recraft-ai/recraft-v3';
-            break;
-        case 'stable-diffusion-3.5-large':
-            primaryModel = 'stabilityai/stable-diffusion-3-5-large';
-            break;
-        case 'flux-1-schnell':
-        default:
-            primaryModel = 'black-forest-labs/flux-1-schnell';
-            if (model === 'nano-banana-1') {
-                 // Fallback if nano-banana-1 is not explicitly matched (though it is above)
-                 primaryModel = 'google/gemini-2.5-flash-image';
-            }
-            break;
+    // ── Edição / consistência de personagem (Fase 4.3, omni da Google) ──
+    // Com imagem de referência, roteia para o modelo omni que aceita entrada
+    // multimodal e devolve imagem editada mantendo o personagem.
+    const isEdit = typeof referenceImage === 'string' && referenceImage.length > 0;
+    const editModel = getStudioModel('nano-banana-pro')!;
+    if (isEdit && user.role !== 'admin' && !planAtLeast(plan, editModel.minPlan)) {
+        return NextResponse.json({
+            error: `Edição com imagem de referência está disponível a partir do plano ${editModel.minPlan}.`,
+        }, { status: 403 });
     }
+
+    const primaryModel = isEdit ? editModel.orModel : studioModel.orModel;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const additionalBodyParams: any =
+        primaryModel === 'google/gemini-3-pro-image-preview'
+            ? { modalities: ['image', 'text'] }
+            : {};
 
     // Fallback chain - Removed invalid IDs, keeping simple for now to debug primary
     const uniqueModels = [primaryModel];
@@ -133,13 +100,21 @@ export async function POST(request: Request) {
         try {
             console.log(`Attempting generation with model: ${currentModel}`);
             
+            // Com referência (edição/consistência), envia conteúdo multimodal
+            const userContent = isEdit
+                ? [
+                      { type: 'text', text: prompt },
+                      { type: 'image_url', image_url: { url: referenceImage } },
+                  ]
+                : prompt;
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const requestBody: any = {
                 model: currentModel,
                 messages: [
                     {
                         "role": "user",
-                        "content": prompt
+                        "content": userContent
                     }
                 ],
                 ...additionalBodyParams
@@ -252,7 +227,7 @@ export async function POST(request: Request) {
         prompt: prompt,
         imageUrl: uploadResult.secure_url,
         publicId: uploadResult.public_id,
-        provider: 'flux-1-schnell'
+        provider: usedModel || primaryModel
     });
 
     // REDIS: Invalidate caches (new image added)
@@ -269,9 +244,10 @@ export async function POST(request: Request) {
       }
     }).catch(err => console.error('Image XP update error:', err));
 
-    return NextResponse.json({ 
+    return NextResponse.json({
         imageUrl: uploadResult.secure_url,
-        creationId: newCreation._id
+        creationId: newCreation._id,
+        quota: { used: usedToday + 1, limit: dailyQuota }
     });
 
   } catch (error) {

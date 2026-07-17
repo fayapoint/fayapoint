@@ -28,6 +28,7 @@ import {
   Play,
   Settings2,
   Sparkles,
+  AlertTriangle,
   Trophy,
   X,
   Award,
@@ -462,7 +463,19 @@ function splitContentWithMedia(content: string): ChapterSegment[] {
     segments.push({ kind: "markdown", content: tail, key: `md-${lastIndex}` });
   }
 
-  return segments.length ? segments : [{ kind: "markdown", content, key: "md-0" }];
+  // Guarda: react-markdown v10 renderiza comentários HTML como TEXTO —
+  // remove qualquer comentário restante (ex.: slots <exemplo> da Camada 2)
+  // dos segmentos de markdown para nunca vazar marcador cru na tela.
+  const GENERIC_COMMENT = new RegExp("<" + "!--[\\s\\S]*?--" + ">", "g");
+  const cleaned = segments
+    .map((segment) =>
+      segment.kind === "markdown"
+        ? { ...segment, content: segment.content.replace(GENERIC_COMMENT, "").trim() }
+        : segment
+    )
+    .filter((segment) => segment.kind !== "markdown" || segment.content);
+
+  return cleaned.length ? cleaned : [{ kind: "markdown", content, key: "md-0" }];
 }
 
 /* Revela com transição CSS suave; se a aba está oculta no mount ou não há
@@ -772,49 +785,64 @@ function splitIntoChapters(markdown: string): Chapter[] {
   return chapters;
 }
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value));
+/* Leitura 2.0 (item 2.3): seções de ~5-7 min. Capítulo curto fica inteiro;
+   capítulo longo é dividido nos limites de "##" em blocos de leitura.
+   (Substitui o agrupamento antigo em "Partes" de 12+ min.) */
+const TARGET_SECTION_MINUTES = 7;
+const MAX_SECTION_MINUTES = 9;
+
+function splitChapterByReadingTime(chapter: Chapter): Chapter[] {
+  if (chapter.readingMinutes <= MAX_SECTION_MINUTES) return [chapter];
+
+  const blocks = chapter.content.split(/^(?=## )/m).filter((b) => b.trim());
+  if (blocks.length < 3) return [chapter];
+
+  const groups: string[][] = [];
+  let current: string[] = [];
+  let currentMinutes = 0;
+
+  for (const block of blocks) {
+    const minutes = estimateReadingMinutes(block);
+    if (current.length && currentMinutes + minutes > TARGET_SECTION_MINUTES) {
+      groups.push(current);
+      current = [block];
+      currentMinutes = minutes;
+    } else {
+      current.push(block);
+      currentMinutes += minutes;
+    }
+  }
+  if (current.length) groups.push(current);
+
+  // Última parte minúscula (<2 min) funde com a anterior
+  if (groups.length >= 2) {
+    const last = groups[groups.length - 1];
+    const lastMinutes = estimateReadingMinutes(last.join("\n"));
+    if (lastMinutes < 2) {
+      groups[groups.length - 2].push(...groups.pop()!);
+    }
+  }
+  if (groups.length < 2) return [chapter];
+
+  return groups.map((group, i) => {
+    const content = group.join("\n").trim();
+    return {
+      id: i === 0 ? chapter.id : `${chapter.id}--${i + 1}`,
+      title: i === 0 ? chapter.title : `${chapter.title} (${i + 1}/${groups.length})`,
+      content,
+      index: chapter.index,
+      readingMinutes: estimateReadingMinutes(content),
+      sourceIds: chapter.sourceIds,
+      sourceStartIndex: chapter.sourceStartIndex,
+      sourceEndIndex: chapter.sourceEndIndex,
+    };
+  });
 }
 
 function buildReaderSections(rawChapters: Chapter[]): Chapter[] {
-  if (rawChapters.length <= 30) {
-    return rawChapters.map((chapter, index) => ({
-      ...chapter,
-      index,
-    }));
-  }
-
-  const targetCount = clamp(Math.round(rawChapters.length / 4), 15, 24);
-  const baseSize = Math.floor(rawChapters.length / targetCount);
-  const remainder = rawChapters.length % targetCount;
-  const grouped: Chapter[] = [];
-  let cursor = 0;
-
-  for (let groupIndex = 0; groupIndex < targetCount; groupIndex++) {
-    const size = baseSize + (groupIndex < remainder ? 1 : 0);
-    const slice = rawChapters.slice(cursor, cursor + size);
-    cursor += size;
-    if (!slice.length) continue;
-
-    const first = slice[0];
-    const last = slice[slice.length - 1];
-
-    grouped.push({
-      id: `parte-${groupIndex + 1}-${first.id}`,
-      title:
-        slice.length === 1
-          ? first.title
-          : `Parte ${String(groupIndex + 1).padStart(2, "0")} · ${first.title}`,
-      content: slice.map((chapter) => chapter.content.trim()).join("\n\n---\n\n"),
-      index: groupIndex,
-      readingMinutes: slice.reduce((sum, chapter) => sum + chapter.readingMinutes, 0),
-      sourceIds: slice.flatMap((chapter) => chapter.sourceIds),
-      sourceStartIndex: first.sourceStartIndex,
-      sourceEndIndex: last.sourceEndIndex,
-    });
-  }
-
-  return grouped;
+  return rawChapters
+    .flatMap(splitChapterByReadingTime)
+    .map((chapter, index) => ({ ...chapter, index }));
 }
 
 function sanitizeChapterTitle(title: string): string {
@@ -1442,41 +1470,49 @@ export default function CourseReaderPage() {
         const id = slugify(text);
         const Tag = `h${level}` as "h1" | "h2" | "h3";
 
-        /* Special h2 treatments */
+        /* Special h2 treatments — sistema de seções da Leitura 2.0 (item 2.4):
+           cada seção recorrente ganha ícone + acento de cor consistente */
         if (level === 2) {
-          const isExercicio = text.includes("Exercício Prático") || text.includes("Exercicio Pratico");
-          const isResumo = text.includes("Resumo do Capítulo") || text.includes("Resumo do Capitulo");
+          const H2_SECTIONS: {
+            test: (t: string) => boolean;
+            Icon: typeof Pencil;
+            border: string;
+            chip: string;
+            icon: string;
+          }[] = [
+            { test: (t) => t.includes("Exercício Prático") || t.includes("Exercicio Pratico"),
+              Icon: Pencil, border: "border-amber-400/30", chip: "bg-amber-500/15 border-amber-400/20", icon: "text-amber-400" },
+            { test: (t) => t.includes("Resumo do Capítulo") || t.includes("Resumo do Capitulo"),
+              Icon: ListChecks, border: "border-emerald-400/30", chip: "bg-emerald-500/15 border-emerald-400/20", icon: "text-emerald-400" },
+            { test: (t) => t.includes("Erros Comuns") || t.includes("Erros comuns"),
+              Icon: AlertTriangle, border: "border-rose-400/30", chip: "bg-rose-500/15 border-rose-400/20", icon: "text-rose-400" },
+            { test: (t) => t.includes("Visão Geral") || t.includes("Visao Geral"),
+              Icon: BookOpen, border: "border-violet-400/30", chip: "bg-violet-500/15 border-violet-400/20", icon: "text-violet-400" },
+            { test: (t) => t.includes("Conceitos-Chave") || t.includes("Conceitos Chave"),
+              Icon: Sparkles, border: "border-fuchsia-400/30", chip: "bg-fuchsia-500/15 border-fuchsia-400/20", icon: "text-fuchsia-400" },
+            { test: (t) => t.includes("Fluxo de Execução") || t.includes("Fluxo de Execucao"),
+              Icon: Play, border: "border-cyan-400/30", chip: "bg-cyan-500/15 border-cyan-400/20", icon: "text-cyan-400" },
+            { test: (t) => t.includes("Cenários Aplicados") || t.includes("Cenarios Aplicados"),
+              Icon: MousePointerClick, border: "border-emerald-400/30", chip: "bg-emerald-500/15 border-emerald-400/20", icon: "text-emerald-400" },
+            { test: (t) => t.includes("Checklist de Implementação") || t.includes("Checklist de Implementacao"),
+              Icon: CheckCircle2, border: "border-emerald-400/30", chip: "bg-emerald-500/15 border-emerald-400/20", icon: "text-emerald-400" },
+          ];
 
-          if (isExercicio) {
+          const section = H2_SECTIONS.find((s) => s.test(text));
+          if (section) {
+            const { Icon } = section;
             return (
               <h2
                 id={id}
                 className={cn(
-                  "scroll-mt-24 flex items-center gap-3 pb-3 mb-2 border-b-2 border-amber-400/30",
+                  "scroll-mt-24 flex items-center gap-3 pb-3 mb-2 border-b-2",
+                  section.border,
                   cls
                 )}
                 {...props}
               >
-                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-400/20 shrink-0">
-                  <Pencil size={18} className="text-amber-400" />
-                </span>
-                <span>{children}</span>
-              </h2>
-            );
-          }
-
-          if (isResumo) {
-            return (
-              <h2
-                id={id}
-                className={cn(
-                  "scroll-mt-24 flex items-center gap-3 pb-3 mb-2 border-b-2 border-emerald-400/30",
-                  cls
-                )}
-                {...props}
-              >
-                <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-400/20 shrink-0">
-                  <ListChecks size={18} className="text-emerald-400" />
+                <span className={cn("flex items-center justify-center w-9 h-9 rounded-xl border shrink-0", section.chip)}>
+                  <Icon size={18} className={section.icon} />
                 </span>
                 <span>{children}</span>
               </h2>
@@ -1576,31 +1612,56 @@ export default function CourseReaderPage() {
         );
       },
 
-      /* ── Blockquote with Dica Pro / Dica callout detection ── */
+      /* ── Blockquote callouts (item 2.4): Dica/Dica Pro, Erro comum/Atenção, Exemplo ── */
       blockquote: ({ className, children, ...props }: BlockquoteProps) => {
-        const rawText = extractText(children);
-        const isDicaPro = rawText.trimStart().startsWith("Dica Pro:");
-        const isDica = !isDicaPro && rawText.trimStart().startsWith("Dica:");
+        const rawText = extractText(children).trimStart();
 
-        if (isDicaPro || isDica) {
+        const CALLOUTS: {
+          test: (t: string) => boolean;
+          Icon: typeof Lightbulb;
+          wrap: string;
+          bar: string;
+          chip: string;
+          icon: string;
+          body: string;
+        }[] = [
+          { test: (t) => t.startsWith("Dica Pro:") || t.startsWith("Dica:"),
+            Icon: Lightbulb,
+            wrap: "bg-gradient-to-br from-amber-500/[0.08] via-amber-400/[0.04] to-yellow-500/[0.02] border-amber-400/20 shadow-amber-900/10",
+            bar: "bg-gradient-to-r from-amber-400/60 via-yellow-400/40 to-amber-400/20",
+            chip: "bg-amber-400/15 border-amber-400/20",
+            icon: "text-amber-400",
+            body: "text-amber-100/90 [&>p]:text-amber-100/90 [&>p]:leading-[1.75] [&>p:first-child>strong:first-child]:text-amber-300 [&>p:first-child>strong:first-child]:font-semibold" },
+          { test: (t) => t.startsWith("Erro comum:") || t.startsWith("Erro Comum:") || t.startsWith("Atenção:") || t.startsWith("Cuidado:"),
+            Icon: AlertTriangle,
+            wrap: "bg-gradient-to-br from-rose-500/[0.08] via-rose-400/[0.04] to-red-500/[0.02] border-rose-400/20 shadow-rose-900/10",
+            bar: "bg-gradient-to-r from-rose-400/60 via-red-400/40 to-rose-400/20",
+            chip: "bg-rose-400/15 border-rose-400/20",
+            icon: "text-rose-400",
+            body: "text-rose-100/90 [&>p]:text-rose-100/90 [&>p]:leading-[1.75] [&>p:first-child>strong:first-child]:text-rose-300 [&>p:first-child>strong:first-child]:font-semibold" },
+          { test: (t) => t.startsWith("Exemplo:") || t.startsWith("Na prática:") || t.startsWith("Na pratica:"),
+            Icon: MousePointerClick,
+            wrap: "bg-gradient-to-br from-cyan-500/[0.08] via-cyan-400/[0.04] to-sky-500/[0.02] border-cyan-400/20 shadow-cyan-900/10",
+            bar: "bg-gradient-to-r from-cyan-400/60 via-sky-400/40 to-cyan-400/20",
+            chip: "bg-cyan-400/15 border-cyan-400/20",
+            icon: "text-cyan-400",
+            body: "text-cyan-100/90 [&>p]:text-cyan-100/90 [&>p]:leading-[1.75] [&>p:first-child>strong:first-child]:text-cyan-300 [&>p:first-child>strong:first-child]:font-semibold" },
+        ];
+
+        const callout = CALLOUTS.find((c) => c.test(rawText));
+        if (callout) {
+          const { Icon } = callout;
           return (
             <aside
-              className={cn(
-                "relative my-8 rounded-2xl overflow-hidden",
-                "bg-gradient-to-br from-amber-500/[0.08] via-amber-400/[0.04] to-yellow-500/[0.02]",
-                "border border-amber-400/20",
-                "shadow-lg shadow-amber-900/10",
-                className
-              )}
+              className={cn("relative my-8 rounded-2xl overflow-hidden border shadow-lg", callout.wrap, className)}
               {...props}
             >
-              {/* Top accent bar */}
-              <div className="h-[3px] bg-gradient-to-r from-amber-400/60 via-yellow-400/40 to-amber-400/20" />
+              <div className={cn("h-[3px]", callout.bar)} />
               <div className="flex gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-5">
-                <span className="flex items-center justify-center shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-400/15 border border-amber-400/20 mt-0.5">
-                  <Lightbulb size={18} className="text-amber-400 sm:w-5 sm:h-5" />
+                <span className={cn("flex items-center justify-center shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl border mt-0.5", callout.chip)}>
+                  <Icon size={18} className={cn("sm:w-5 sm:h-5", callout.icon)} />
                 </span>
-                <div className="flex-1 min-w-0 text-amber-100/90 [&>p]:text-amber-100/90 [&>p]:leading-[1.75] [&>p:first-child>strong:first-child]:text-amber-300 [&>p:first-child>strong:first-child]:font-semibold">
+                <div className={cn("flex-1 min-w-0", callout.body)}>
                   {children}
                 </div>
               </div>

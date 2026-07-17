@@ -92,7 +92,14 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
           ...getClientAuthHeaders(),
         },
         credentials: "include",
-        body: JSON.stringify({ message: input.trim() }),
+        body: JSON.stringify({
+          message: input.trim(),
+          // Tutor com memória da conversa (Fase 6.2): últimas trocas
+          history: messages
+            .filter((m) => m.id !== "welcome")
+            .slice(-8)
+            .map((m) => ({ role: m.role, content: m.content })),
+        }),
       });
 
       if (!response.ok) {

@@ -17,6 +17,8 @@ import {
   sanitizeCourseContent,
 } from '@/lib/course-content-sanitizer';
 import { resolveContentFacts } from '@/lib/content-facts';
+import { substituteExamples } from '@/lib/course-examples';
+import UserCourseExample from '@/models/UserCourseExample';
 
 type CourseModule = {
   title?: string;
@@ -189,6 +191,23 @@ export async function GET(
         if (proposals) hasAccess = true;
       } catch (e) {
         console.error('Error checking external access', e);
+      }
+    }
+
+    // Motor Expert (Fase 3.3): para Expert/admin, troca o miolo dos slots
+    // de exemplo pelos exemplos gerados pela persona (free/pro veem o padrão)
+    if (userPlan === 'expert' || user.role === 'admin') {
+      try {
+        const examples = await UserCourseExample.find({
+          userId: String(user._id),
+          courseSlug: slug,
+        }).select('exampleId content');
+        if (examples.length) {
+          const byId = new Map(examples.map((e) => [e.exampleId, e.content]));
+          payload.content = substituteExamples(payload.content, byId);
+        }
+      } catch (e) {
+        console.error('Expert examples substitution error', e);
       }
     }
 

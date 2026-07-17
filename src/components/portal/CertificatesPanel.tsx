@@ -50,6 +50,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  // 5.1: cards compactos — só o certificado clicado expande
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCertificates();
@@ -231,134 +233,212 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
           </div>
         </Card>
       ) : (
-        <div className="grid gap-3 md:gap-4">
-          <AnimatePresence>
-            {certificates.map((cert, idx) => (
-              <motion.div
-                key={cert._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-              >
-                <Card className="bg-white/[0.02] border-white/[0.06] overflow-hidden group hover:border-amber-500/20 transition-all duration-300">
-                  {/* Gold top accent */}
-                  <div className="h-1 bg-gradient-to-r from-amber-500/60 via-yellow-400/40 to-amber-500/60" />
+        <>
+          {/* 5.1: grid compacto — thumb do certificado, expande sob demanda */}
+          <div className="grid gap-3 md:gap-4 sm:grid-cols-2">
+            <AnimatePresence>
+              {certificates.map((cert, idx) => {
+                const isExpanded = expandedId === cert._id;
+                return (
+                  <motion.div
+                    key={cert._id}
+                    layout
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(idx * 0.06, 0.4), layout: { duration: 0.3 } }}
+                    className={cn(isExpanded && "sm:col-span-2")}
+                  >
+                    <Card
+                      className={cn(
+                        "bg-white/[0.02] border-white/[0.06] overflow-hidden group transition-all duration-300",
+                        isExpanded
+                          ? "border-amber-500/30 shadow-xl shadow-amber-900/10"
+                          : "hover:border-amber-500/20 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-900/10 cursor-pointer"
+                      )}
+                      onClick={() => !isExpanded && setExpandedId(cert._id)}
+                    >
+                      <div className="h-1 bg-gradient-to-r from-amber-500/60 via-yellow-400/40 to-amber-500/60" />
 
-                  <div className="p-4 sm:p-6">
-                    <div className="mb-5">
-                      <CertificateArtwork
-                        courseSlug={cert.courseSlug}
-                        courseTitle={cert.courseTitle}
-                        studentName={cert.userName}
-                        certificateNumber={cert.certificateNumber}
-                        issuedAt={cert.issuedAt}
-                        compact
-                      />
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                      {/* Certificate Icon */}
-                      <div className="flex-shrink-0">
-                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-amber-500/15 to-yellow-600/10 border border-amber-500/20 flex items-center justify-center relative">
-                          <Award className="w-6 h-6 md:w-8 md:h-8 text-amber-400" />
-                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center border-2 border-gray-950">
-                            <CheckCircle2 className="w-3 h-3 text-white" />
+                      {!isExpanded ? (
+                        /* ── Card compacto ── */
+                        <div className="p-3 md:p-4">
+                          <div className="relative mb-3 overflow-hidden rounded-lg">
+                            <div className="pointer-events-none origin-top-left">
+                              <CertificateArtwork
+                                courseSlug={cert.courseSlug}
+                                courseTitle={cert.courseTitle}
+                                studentName={cert.userName}
+                                certificateNumber={cert.certificateNumber}
+                                issuedAt={cert.issuedAt}
+                                compact
+                              />
+                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <span className="absolute bottom-2 right-2 rounded-full bg-black/60 px-2.5 py-1 text-[10px] font-bold text-amber-300 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                              Ver certificado
+                            </span>
+                          </div>
+                          <div className="flex items-start justify-between gap-2">
+                            <h3 className="text-xs md:text-sm font-bold text-white leading-tight line-clamp-2 min-w-0">
+                              {cert.courseTitle}
+                            </h3>
+                            <Badge className={cn("text-[9px] px-1.5 py-0.5 border flex-shrink-0", getLevelColor(cert.courseLevel))}>
+                              {cert.courseLevel}
+                            </Badge>
+                          </div>
+                          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-white/35">
+                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{formatDate(cert.issuedAt)}</span>
+                            <span className="flex items-center gap-1"><Star className="w-3 h-3" />Quiz {cert.quizScore}%</span>
                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        /* ── Card expandido ── */
+                        <div className="p-4 sm:p-6">
+                          <div className="mb-4 flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <h3 className="text-sm md:text-base font-bold text-white leading-tight">{cert.courseTitle}</h3>
+                              <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-white/35">
+                                <span className="flex items-center gap-1"><Shield className="w-3 h-3" />{cert.certificateNumber}</span>
+                                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{formatDate(cert.issuedAt)}</span>
+                                <span className="flex items-center gap-1"><Star className="w-3 h-3" />Quiz: {cert.quizScore}%</span>
+                                {cert.totalStudyHours > 0 && (
+                                  <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" />{cert.totalStudyHours}h de estudo</span>
+                                )}
+                              </div>
+                            </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setExpandedId(null); }}
+                              className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold text-white/50 hover:text-white hover:border-white/30 transition-colors shrink-0 cursor-pointer"
+                            >
+                              Fechar
+                            </button>
+                          </div>
 
-                      {/* Certificate Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2 mb-2 min-w-0">
-                          <h3 className="text-sm md:text-base font-bold text-white leading-tight line-clamp-2 min-w-0">
-                            {cert.courseTitle}
-                          </h3>
-                          <Badge className={cn("text-[9px] md:text-[10px] px-1.5 md:px-2 py-0.5 border flex-shrink-0", getLevelColor(cert.courseLevel))}>
-                            {cert.courseLevel}
-                          </Badge>
-                        </div>
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.35 }}
+                            className="mb-5"
+                          >
+                            <CertificateArtwork
+                              courseSlug={cert.courseSlug}
+                              courseTitle={cert.courseTitle}
+                              studentName={cert.userName}
+                              certificateNumber={cert.certificateNumber}
+                              issuedAt={cert.issuedAt}
+                            />
+                          </motion.div>
 
-                        <div className="flex flex-wrap items-center gap-x-3 md:gap-x-4 gap-y-1 text-[10px] md:text-xs text-white/35 mb-2 md:mb-3">
-                          <span className="flex items-center gap-1 shrink-0">
-                            <Shield className="w-3 h-3 shrink-0" />
-                            <span className="truncate max-w-[100px] sm:max-w-none">{cert.certificateNumber}</span>
-                          </span>
-                          <span className="flex items-center gap-1 shrink-0">
-                            <Clock className="w-3 h-3 shrink-0" />
-                            {formatDate(cert.issuedAt)}
-                          </span>
-                          <span className="flex items-center gap-1 shrink-0">
-                            <Star className="w-3 h-3 shrink-0" />
-                            Quiz: {cert.quizScore}%
-                          </span>
-                          {cert.totalStudyHours > 0 && (
-                            <span className="flex items-center gap-1 shrink-0">
-                              <BookOpen className="w-3 h-3 shrink-0" />
-                              {cert.totalStudyHours}h de estudo
-                            </span>
-                          )}
-                        </div>
+                          <div className="flex items-center gap-2 mb-4 min-w-0 flex-wrap">
+                            <span className="text-[10px] text-white/25 uppercase tracking-wider shrink-0">Verificação:</span>
+                            <code className="text-[10px] md:text-xs font-mono text-amber-400/70 bg-amber-500/5 px-2 py-0.5 rounded truncate max-w-[200px] sm:max-w-none">
+                              {cert.verificationCode}
+                            </code>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); copyVerificationCode(cert.verificationCode); }}
+                              className="p-1 hover:bg-secondary rounded transition-colors cursor-pointer"
+                            >
+                              {copiedCode === cert.verificationCode ? (
+                                <Check className="w-3 h-3 text-emerald-400" />
+                              ) : (
+                                <Copy className="w-3 h-3 text-white/25 hover:text-white/50" />
+                              )}
+                            </button>
+                          </div>
 
-                        {/* Verification Code */}
-                        <div className="flex items-center gap-2 mb-3 md:mb-4 min-w-0 flex-wrap">
-                          <span className="text-[10px] text-white/25 uppercase tracking-wider shrink-0">Verificação:</span>
-                          <code className="text-[10px] md:text-xs font-mono text-amber-400/70 bg-amber-500/5 px-2 py-0.5 rounded truncate max-w-[160px] sm:max-w-none">
-                            {cert.verificationCode}
-                          </code>
-                          <button
-                            onClick={() => copyVerificationCode(cert.verificationCode)}
-                            className="p-1 hover:bg-secondary rounded transition-colors"
-                          >
-                            {copiedCode === cert.verificationCode ? (
-                              <Check className="w-3 h-3 text-emerald-400" />
-                            ) : (
-                              <Copy className="w-3 h-3 text-white/25 hover:text-white/50" />
-                            )}
-                          </button>
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              size="sm"
+                              onClick={(e) => { e.stopPropagation(); handleDownload(cert); }}
+                              disabled={downloading === cert.verificationCode}
+                              className="h-8 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-xs rounded-lg shadow-lg shadow-amber-600/20 px-3"
+                            >
+                              {downloading === cert.verificationCode ? (
+                                <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                              ) : (
+                                <Download className="w-3 h-3 mr-1.5" />
+                              )}
+                              Baixar PDF
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const year = new Date(cert.issuedAt).getFullYear();
+                                window.open(
+                                  `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(cert.courseTitle)}&organizationName=FayAI&issueYear=${year}&certUrl=${encodeURIComponent(cert.verificationUrl)}&certId=${encodeURIComponent(cert.certificateNumber)}`,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                );
+                              }}
+                              className="h-8 border-[#0a66c2]/40 bg-[#0a66c2]/10 hover:bg-[#0a66c2]/20 text-[#70b7ff] text-xs rounded-lg px-3"
+                            >
+                              <Linkedin className="w-3 h-3 mr-1.5" />
+                              Adicionar ao perfil
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={(e) => { e.stopPropagation(); window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cert.verificationUrl)}`, "_blank", "noopener,noreferrer"); }}
+                              className="h-8 border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50 text-xs rounded-lg px-3"
+                            >
+                              <ExternalLink className="w-3 h-3 mr-1.5" />
+                              Compartilhar
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={(e) => { e.stopPropagation(); window.open(cert.verificationUrl, "_blank"); }}
+                              className="h-8 border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50 text-xs rounded-lg px-3"
+                            >
+                              <Shield className="w-3 h-3 mr-1.5" />
+                              Verificar Online
+                            </Button>
+                          </div>
                         </div>
+                      )}
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
 
-                        {/* Actions */}
-                        <div className="flex flex-wrap gap-2">
-                          <Button
-                            size="sm"
-                            onClick={() => handleDownload(cert)}
-                            disabled={downloading === cert.verificationCode}
-                            className="h-7 md:h-8 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-[10px] md:text-xs rounded-lg shadow-lg shadow-amber-600/20 px-2 md:px-3"
-                          >
-                            {downloading === cert.verificationCode ? (
-                              <Loader2 className="w-3 h-3 mr-1 md:mr-1.5 animate-spin" />
-                            ) : (
-                              <Download className="w-3 h-3 mr-1 md:mr-1.5" />
-                            )}
-                            Baixar PDF
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(cert.verificationUrl)}`, "_blank", "noopener,noreferrer")}
-                            className="h-7 md:h-8 border-[#0a66c2]/40 bg-[#0a66c2]/10 hover:bg-[#0a66c2]/20 text-[#70b7ff] text-[10px] md:text-xs rounded-lg px-2 md:px-3"
-                          >
-                            <Linkedin className="w-3 h-3 mr-1 md:mr-1.5" />
-                            LinkedIn
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => window.open(cert.verificationUrl, "_blank")}
-                            className="h-7 md:h-8 border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50 text-[10px] md:text-xs rounded-lg px-2 md:px-3"
-                          >
-                            <ExternalLink className="w-3 h-3 mr-1 md:mr-1.5" />
-                            <span className="hidden sm:inline">Verificar Online</span>
-                            <span className="sm:hidden">Verificar</span>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+          {/* 5.2: Onde usar seu certificado */}
+          <Card className="bg-white/[0.02] border-white/[0.06] p-4 md:p-6 overflow-hidden">
+            <h3 className="text-sm md:text-base font-bold text-white flex items-center gap-2 mb-4">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              Onde usar seu certificado
+            </h3>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="rounded-xl border border-[#0a66c2]/25 bg-[#0a66c2]/[0.06] p-4">
+                <Linkedin className="w-5 h-5 text-[#70b7ff] mb-2" />
+                <p className="text-xs font-bold text-white mb-1">Perfil do LinkedIn</p>
+                <p className="text-[11px] leading-relaxed text-white/45">
+                  Use &quot;Adicionar ao perfil&quot; no certificado expandido — ele entra na seção
+                  Licenças e certificados com link de verificação.
+                </p>
+              </div>
+              <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-4">
+                <BookOpen className="w-5 h-5 text-emerald-400 mb-2" />
+                <p className="text-xs font-bold text-white mb-1">Currículo</p>
+                <p className="text-[11px] leading-relaxed text-white/45">
+                  Baixe o PDF e cite o número do certificado na seção de formação —
+                  recrutadores podem conferir a autenticidade online.
+                </p>
+              </div>
+              <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.05] p-4">
+                <Shield className="w-5 h-5 text-violet-400 mb-2" />
+                <p className="text-xs font-bold text-white mb-1">Verificação pública</p>
+                <p className="text-[11px] leading-relaxed text-white/45">
+                  Cada certificado tem uma página pública de verificação — mande o link
+                  para qualquer pessoa confirmar que é seu.
+                </p>
+              </div>
+            </div>
+          </Card>
+        </>
       )}
     </div>
   );

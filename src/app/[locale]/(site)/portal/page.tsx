@@ -55,13 +55,6 @@ import {
   ExternalLink,
   BarChart3,
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -78,6 +71,7 @@ import { getCourseBySlug, CourseData, allCourses, getNormalizedLevel } from "@/d
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { TIER_CONFIGS, SubscriptionPlan, EnrollmentSlots, resolvePlan } from "@/lib/course-tiers";
+import { STUDIO_MODELS, planAtLeast, type StudioModel as StudioModelType } from "@/lib/studio-models";
 
 // Components
 import { DashboardSidebar } from "@/components/portal/DashboardSidebar";
@@ -165,12 +159,67 @@ interface DashboardData {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-const AI_MODELS = [
-  { id: "nano-banana-1", name: "Nano Banana 1", icon: Zap, description: "Rápido e eficiente" },
-  { id: "nano-banana-pro", name: "Nano Banana Pro", icon: Crown, description: "Qualidade máxima", proOnly: true },
-  { id: "flux-1-schnell", name: "Flux 1 Schnell", icon: Flame, description: "Ultra-rápido" },
-  { id: "flux-1-dev", name: "Flux 1 Dev", icon: Star, description: "Maior detalhamento" },
-];
+/* Studio AI (Fase 4.4): card visual por modelo — thumbnail de exemplo gerada
+   com o MESMO prompt em cada modelo (em /portal/studio/<id>.webp) + explicação
+   de uso. Catálogo único compartilhado com a API em @/lib/studio-models. */
+function StudioModelCard({
+  model,
+  selected,
+  locked,
+  onSelect,
+}: {
+  model: StudioModelType;
+  selected: boolean;
+  locked: boolean;
+  onSelect: () => void;
+}) {
+  const [imgOk, setImgOk] = useState(true);
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      disabled={locked}
+      className={cn(
+        "relative overflow-hidden rounded-xl border text-left transition-all shrink-0 w-[168px] sm:w-[188px]",
+        selected
+          ? "border-amber-400/80 ring-2 ring-amber-400/50 shadow-lg shadow-amber-900/30"
+          : locked
+            ? "border-border opacity-60 cursor-not-allowed"
+            : "border-border hover:border-amber-400/40 cursor-pointer"
+      )}
+    >
+      <div className="relative aspect-video bg-gradient-to-br from-amber-500/20 to-yellow-600/10">
+        {imgOk ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={`/portal/studio/${model.id}.webp`}
+            alt={model.name}
+            loading="lazy"
+            onError={() => setImgOk(false)}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <Sparkles className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-amber-400/50" size={28} />
+        )}
+        {model.badge && (
+          <span className="absolute left-1.5 top-1.5 rounded-full bg-black/60 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-amber-300 backdrop-blur-sm">
+            {model.badge}
+          </span>
+        )}
+        {locked && (
+          <span className="absolute right-1.5 top-1.5 rounded-full bg-black/60 px-2 py-0.5 text-[9px] font-extrabold uppercase text-white/80 backdrop-blur-sm">
+            {model.minPlan}+
+          </span>
+        )}
+      </div>
+      <div className="p-2.5">
+        <p className="text-xs font-bold truncate">{model.name}</p>
+        <p className="text-[10px] text-muted-foreground truncate">{model.description}</p>
+        <p className="mt-1 text-[10px] leading-snug text-muted-foreground/80 line-clamp-2">{model.uso}</p>
+      </div>
+    </button>
+  );
+}
 
 const STYLES = [
   { id: "none", name: "Normal", icon: Monitor },
@@ -233,6 +282,8 @@ export default function PortalPage() {
   const [selectedModel, setSelectedModel] = useState("nano-banana-1");
   const [aspectRatio, setAspectRatio] = useState("1:1");
   const [style, setStyle] = useState("none");
+  const [referenceImage, setReferenceImage] = useState<string | null>(null);
+  const [imageQuota, setImageQuota] = useState<{ used: number; limit: number } | null>(null);
 
   const isPro = plan !== "free";
   const tierConfig = TIER_CONFIGS[plan as SubscriptionPlan] || TIER_CONFIGS.free;
@@ -441,10 +492,12 @@ export default function PortalPage() {
         body: JSON.stringify({
           prompt: fullPrompt,
           model: selectedModel,
+          referenceImage: referenceImage || undefined,
         }),
       });
 
       const data = await res.json();
+      if (data.quota) setImageQuota(data.quota);
       if (!res.ok) throw new Error(data.error || "Falha na geração");
 
       setGeneratedImage(data.imageUrl);
@@ -842,32 +895,67 @@ export default function PortalPage() {
                         Crie imagens incríveis com inteligência artificial
                       </p>
                     </div>
-                    <div className="w-full md:w-64">
-                      <Select value={selectedModel} onValueChange={setSelectedModel}>
-                        <SelectTrigger className="bg-secondary border-border">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-card border-border text-white">
-                          {AI_MODELS.map((m) => (
-                            <SelectItem
-                              key={m.id}
-                              value={m.id}
-                              disabled={m.proOnly && !isPro}
-                            >
-                              <div className="flex items-center gap-2">
-                                <m.icon size={14} />
-                                <span>{m.name}</span>
-                                {m.proOnly && (
-                                  <Badge variant="outline" className="text-[10px] border-yellow-500/50 text-yellow-500">
-                                    PRO
-                                  </Badge>
-                                )}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    {imageQuota && (
+                      <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300 whitespace-nowrap">
+                        {imageQuota.used}/{imageQuota.limit} hoje
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Model cards (Fase 4.4): thumbnail + uso ideal por modelo */}
+                  <div className="flex gap-3 overflow-x-auto pb-4 mb-4">
+                    {STUDIO_MODELS.map((m) => {
+                      const locked = !planAtLeast(resolvePlan(plan), m.minPlan);
+                      return (
+                        <StudioModelCard
+                          key={m.id}
+                          model={m}
+                          selected={selectedModel === m.id}
+                          locked={locked}
+                          onSelect={() => setSelectedModel(m.id)}
+                        />
+                      );
+                    })}
+                  </div>
+
+                  {/* Imagem de referência (Fase 4.3): edição/consistência via omni */}
+                  <div className="mb-4 flex flex-wrap items-center gap-2">
+                    <label className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                      <ImageIcon size={13} />
+                      {referenceImage ? "Trocar referência" : "Usar imagem de referência"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const reader = new FileReader();
+                          reader.onload = () => setReferenceImage(String(reader.result));
+                          reader.readAsDataURL(file);
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+                    {referenceImage && (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={referenceImage}
+                          alt="Referência"
+                          className="h-9 w-9 rounded-lg object-cover ring-1 ring-amber-400/40"
+                        />
+                        <span className="text-[11px] text-muted-foreground">
+                          Mantém o personagem/estilo desta imagem (usa Nano Banana Pro)
+                        </span>
+                        <button
+                          onClick={() => setReferenceImage(null)}
+                          className="text-[11px] font-bold text-rose-400 hover:text-rose-300 cursor-pointer"
+                        >
+                          remover
+                        </button>
+                      </>
+                    )}
                   </div>
 
                   {/* Style Selection */}

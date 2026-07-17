@@ -74,6 +74,8 @@ export default function SocialComposer() {
   const [content, setContent] = useState("");
   const [hashtags, setHashtags] = useState("");
   const [mediaUrl, setMediaUrl] = useState("");
+  const [mediaPrompt, setMediaPrompt] = useState("");
+  const [creatingImage, setCreatingImage] = useState(false);
   const [scheduledFor, setScheduledFor] = useState("");
   const [topic, setTopic] = useState("");
   const [generating, setGenerating] = useState(false);
@@ -135,6 +137,7 @@ export default function SocialComposer() {
       if (res.ok && first?.content) {
         setContent(first.content);
         if (Array.isArray(first.hashtags)) setHashtags(first.hashtags.join(" "));
+        if (typeof first.mediaPrompt === "string") setMediaPrompt(first.mediaPrompt);
         toast.success("Post gerado — revise antes de publicar ✨");
       } else {
         toast.error(data?.error || "A IA não conseguiu gerar agora");
@@ -143,6 +146,30 @@ export default function SocialComposer() {
       toast.error("Erro de rede ao gerar");
     } finally {
       setGenerating(false);
+    }
+  };
+
+  /* Fase 4.5: mediaPrompt do gerador → imagem pronta no Studio → mediaUrl */
+  const createImageFromPrompt = async () => {
+    if (!mediaPrompt.trim()) return;
+    setCreatingImage(true);
+    try {
+      const res = await fetch("/api/ai/generate-image", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ prompt: mediaPrompt, model: "nano-banana-1" }),
+      });
+      const data = await res.json();
+      if (res.ok && data.imageUrl) {
+        setMediaUrl(data.imageUrl);
+        toast.success("Imagem criada e anexada ao post 🎨");
+      } else {
+        toast.error(data?.error || "Não deu para criar a imagem agora");
+      }
+    } catch {
+      toast.error("Erro de rede ao criar imagem");
+    } finally {
+      setCreatingImage(false);
     }
   };
 
@@ -322,6 +349,28 @@ export default function SocialComposer() {
             />
           </div>
         </div>
+        {mediaPrompt && (
+          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2">
+            <p className="flex-1 min-w-[180px] text-[11px] text-muted-foreground line-clamp-2">
+              <strong className="text-amber-300">Imagem sugerida pela IA:</strong> {mediaPrompt}
+            </p>
+            <button
+              onClick={createImageFromPrompt}
+              disabled={creatingImage}
+              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 px-3.5 py-1.5 text-[11px] font-extrabold text-black hover:from-amber-400 hover:to-yellow-400 transition-colors cursor-pointer disabled:opacity-60"
+            >
+              {creatingImage ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ImageIcon className="h-3.5 w-3.5" />}
+              {mediaUrl ? "Recriar imagem" : "Criar imagem"}
+            </button>
+          </div>
+        )}
+        {mediaUrl && (
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={mediaUrl} alt="Mídia do post" className="h-14 w-14 rounded-lg object-cover ring-1 ring-amber-400/40" />
+            <span className="text-[11px] text-muted-foreground">Imagem anexada ao post</span>
+          </div>
+        )}
         <p className="text-[11px] text-muted-foreground text-right">{content.length}/5000</p>
       </div>
 

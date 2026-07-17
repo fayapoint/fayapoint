@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
 import { ProfileAvatarEditor } from "@/components/user/ProfileAvatarEditor";
 import { ACHIEVEMENT_NAMES } from "@/components/portal/AchievementsPanel";
+import { PersonaSection } from "@/components/portal/PersonaSection";
 
 interface Achievement {
   id: string;
@@ -433,6 +434,9 @@ export function ProfilePanel({
           </div>
         </Card>
       </div>
+
+      {/* Sua Persona — entrada principal visual (Fase 3.1) */}
+      <PersonaSection />
 
       {/* Achievements Summary */}
       <Card className="bg-card border-border p-4 md:p-6 overflow-hidden">

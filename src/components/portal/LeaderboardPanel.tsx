@@ -23,6 +23,32 @@ interface LeaderboardPanelProps {
   currentUserId?: string;
 }
 
+const PLAN_LABEL: Record<string, string> = {
+  free: "FREE",
+  starter: "EXPLORADOR",
+  explorador: "EXPLORADOR",
+  pro: "PRO",
+  profissional: "PRO",
+  business: "EXPERT",
+  expert: "EXPERT",
+};
+
+/* Avatar com foto real quando existir (o campo image era ignorado) */
+function RankAvatar({ user, className }: { user: LeaderboardUser; className?: string }) {
+  return user.image ? (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
+      src={user.image}
+      alt={user.name}
+      className={cn("rounded-full object-cover", className)}
+    />
+  ) : (
+    <div className={cn("rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center font-bold", className)}>
+      {user.name?.substring(0, 2).toUpperCase() || "??"}
+    </div>
+  );
+}
+
 const RANK_STYLES: Record<number, { bg: string; icon: React.ReactNode; glow: string }> = {
   1: { 
     bg: "bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border-yellow-500/50", 
@@ -100,12 +126,13 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                   "mx-auto rounded-full flex items-center justify-center mb-2 md:mb-4 relative",
                   isFirst ? "w-14 h-14 md:w-20 md:h-20" : "w-10 h-10 md:w-16 md:h-16"
                 )}>
-                  <div className={cn(
-                    "w-full h-full rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-sm md:text-xl font-bold",
-                    user.isCurrentUser && "ring-2 md:ring-4 ring-amber-500 ring-offset-1 md:ring-offset-2 ring-offset-gray-900"
-                  )}>
-                    {user.name?.substring(0, 2).toUpperCase() || "??"}
-                  </div>
+                  <RankAvatar
+                    user={user}
+                    className={cn(
+                      "w-full h-full text-sm md:text-xl",
+                      user.isCurrentUser && "ring-2 md:ring-4 ring-amber-500 ring-offset-1 md:ring-offset-2 ring-offset-gray-900"
+                    )}
+                  />
 
                   {!isFirst && (
                     <div className="absolute -bottom-1 -right-1 w-5 h-5 md:w-6 md:h-6 bg-card rounded-full flex items-center justify-center">
@@ -124,7 +151,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                     "text-[8px] md:text-[10px]",
                     user.plan !== 'free' ? "border-yellow-500/50 text-yellow-400" : "border-border text-muted-foreground"
                   )}>
-                    {user.plan.toUpperCase()}
+                    {PLAN_LABEL[user.plan] || user.plan.toUpperCase()}
                   </Badge>
                   <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground">
                     <Flame size={10} className="text-amber-400 md:hidden" />
@@ -177,9 +204,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                 {user.rank}
               </div>
 
-              <div className="w-9 h-9 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-amber-500/50 to-yellow-500/50 flex items-center justify-center font-semibold text-xs md:text-base shrink-0">
-                {user.name?.substring(0, 2).toUpperCase() || "??"}
-              </div>
+              <RankAvatar user={user} className="w-9 h-9 md:w-12 md:h-12 text-xs md:text-base shrink-0" />
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1 md:gap-2 min-w-0">
@@ -202,6 +227,24 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
             </motion.div>
           ))}
         </div>
+
+        {/* Você fora do top? Linha fixada com sua posição real */}
+        {userRank > 0 && !users.some((u) => u.isCurrentUser) && (
+          <div className="flex items-center gap-2 md:gap-4 p-3 md:p-4 border-t-2 border-amber-500/30 bg-amber-500/10">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xs md:text-sm shrink-0">
+              {userRank}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-sm md:text-base">Você</span>
+                <Badge className="bg-amber-500 text-[10px] shrink-0">Sua posição</Badge>
+              </div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">
+                Ganhe XP em aulas, quizzes e minigames para subir no ranking
+              </p>
+            </div>
+          </div>
+        )}
       </Card>
 
       {/* Weekly Rewards Info */}

@@ -3,11 +3,34 @@
 
 ---
 
-## ⏩ PRÓXIMA SESSÃO COMEÇA AQUI (atualizado 17/07 — piloto Leitura 2.0 NO AR aguardando veredito)
+## ⏩ HANDOFF PARA OPUS 4.8 — COMEÇAR POR AQUI (17/07 noite; Ricardo volta segunda)
 
-**Estado:** Fase 0 FECHADA (0.6/0.7 validados) · Fase 1 núcleo validado, resta 1.3 visual + 1.4/1.5 (dependem do auditor) + 1.6 especificado · **FASE 2: piloto cap.1 chatgpt-zero DEPLOYADO (12a84f7) e marcadores no Atlas — AGUARDA VEREDITO DO RICARDO.**
+**Contexto:** maratona 17/07 com Fable codificou as Fases 2-7 LOCALMENTE e o Ricardo autorizou o deploy final ("quando terminar, pode fazer o deploy"). Toda a mídia do chatgpt-zero está gerada e instalada (240 arquivos em `public/cursos/media/chatgpt-zero/inline/`, 0 faltas). O deploy pode já ter sido disparado no fim da sessão de 17/07 — VERIFICAR antes de repetir (git log: procurar commit "leitura2 escala completa"; prod: `curl -sI https://fayai.com.br/cursos/media/chatgpt-zero/inline/cap05-fluxo.webm` → 200 = deployado).
 
-**⭐ TESTE DO RICARDO (30s):** abrir o curso **ChatGPT do Zero** no portal, capítulo 1 (Parte 01): deve haver **4 imagens + 2 vídeos em loop DENTRO do texto**, cada um no trecho a que se refere, com legenda. Se aprovar → escalar para o curso inteiro (2.2 automatizado); se reprovar → nota do que falhou. Itens 2.3 (capítulos menores) e 2.4 (design da página) são os próximos da fila COM ele.
+**🔴 PASSOS RESTANTES DO DEPLOY (nesta ordem, com MONGODB_URI do .env.local):**
+1. Se ainda não pushado: `git add -A && git commit && git push` (build já validado: 398 páginas, exit 0). Netlify deploya main automaticamente (~10 min).
+2. **SÓ DEPOIS do deploy no ar** (arquivos acima respondendo 200): `node scripts/cursos/insert-course-inline-markers.cjs --apply` (~174 marcadores nos caps 2-30; idempotente; backup automático) e `node scripts/cursos/insert-cap1-exemplo-slots.cjs --apply` (2 slots Expert no cap.1). ⚠️ NUNCA aplicar marcador no Atlas antes do reader novo estar no ar — react-markdown v10 mostra comentário como TEXTO CRU (aconteceu 17/07, ~1h de exposição).
+3. Thumbs da persona: se `public/portal/persona/opts/` estiver vazio, rodar `python scripts/cursos/generate_persona_thumbs.py` (ComfyUI porta 8000) e converter: `cd /c/WORKS/ComfyUI/output/persona_opts && for f in *.png; do ffmpeg -y -i "$f" -vf scale=480:-1 -quality 80 "<repo>/public/portal/persona/opts/${f%_*_.png}.webp"; done` (nomes: `<dim>-<key>.webp`, ex.: industry-tech.webp) + commit+push.
+4. Beta Expert (conta do Ricardo): logado como ele (ou admin), `POST /api/user/course-examples/generate` body `{"courseSlug":"chatgpt-zero"}` — os 2 slots do cap.1 passam a falar do contexto DELE.
+5. Cron na VPS (76.13.234.38): 1×/hora `curl -X POST -H "x-social-secret: $SOCIAL_CRON_SECRET" https://fayai.com.br/api/social/sync-due` (secret no .env do site; fallback AINEWS_SECRET).
+
+**🎬 MATERIAL DO FIM DE SEMANA — mídia inline para os DEMAIS cursos (ComfyUI):**
+O gerador `scripts/cursos/generate_course_inline_media.py` é o template. Para cada curso novo:
+1. Adaptar `THEMES` (6 cenários, 1 por módulo do curso — cenário REAL + cor: seguir IDENTIDADE_VISUAL.md §12) e conferir se o curso segue o template de 5 tipos de aula (Fundamentos/Configuração/Aplicação/Erros/Projeto — os `SLOT_ACTIONS` já cobrem esses 5 tipos e NÃO precisam mudar).
+2. Trocar `SLUG`, `CAPS` e `BASE_SEED` (usar faixa nova, ex.: 8000+, para variar).
+3. Rodar (imagens ~15s cada; vídeos LTX ~2min cada; 1 curso de 30 caps ≈ 2h30 de GPU). Receita comprovada: Qwen 2512+Lightning 1152×640 4 steps; LTX 2.3 I2V two-pass 97 frames.
+4. Adaptar `install_course_inline_media.sh` (trocar slug) e `insert-course-inline-markers.cjs` (trocar slug; ⚠️ CONFERIR âncoras com dry-run — cursos que não sigam o template de seções idênticas precisam de âncoras próprias).
+5. Prompt-base das imagens (FUSION, obrigatório no fim de todo prompt): `an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark`. ⚠️ Nunca pedir "seal/badge/placa" (gera texto embaralhado); conceitos sem texto (carimbo de cera em branco etc.).
+
+**⚠️ ARMADILHAS DESCOBERTAS 17/07 (ler antes de mexer no reader/ícones):**
+1. react-markdown v10 renderiza comentários HTML como TEXTO escapado (premissa "invisível" era falsa; doc corrigido no ARQUITETURA_CONTEUDO_DINAMICO).
+2. Literal `<!--`/`-->` em fonte TSX mata a rota no Turbopack (404 silencioso, compila `_not-found`); montar via `new RegExp("<"+"!--...")`.
+3. Ícone lucide com nome-alias (ex.: TriangleAlert) passa no tsc mas 404a a rota com optimizePackageImports — conferir `node_modules/lucide-react/dist/esm/icons/<kebab>.js` antes de importar.
+4. Turbopack dev serve chunk VELHO do cache do browser (nomes sem hash) — verificar com `fetch(chunkSrc, {cache:"reload"})`; prod não afeta.
+5. OpenRouter: Flux/SD/Recraft NÃO existem mais em chat-completions (só google/gemini-*-image e openai/gpt-*-image); `openrouter/free` também não é modelo válido.
+6. Memórias com o resto: `progress-leitura20`, `feedback-local-ate-masterplan`, `reference-armadilhas-sessao16`.
+
+**Segunda-feira com o Ricardo:** roteiro de validação dos itens [~] (cada fase abaixo tem o critério de aceite) · vereditos: piloto cap.1 + Fases 2-7 · depois Fase 8 (motor Expert completo, só após 2+3 validados) · pendentes de código: 7.4 (credenciais dele), 7.5 (analytics UI), 1.4/1.5 (auditor hermes), 1.6 (guia blog, não prioritário), 0.5 hardening.
 
 **O que o Ricardo já validou (✅ dele, de verdade):**
 - 0.1 Palpite em 30s DENTRO do Arcade — aprovado com elogio à decisão ("usuário completionist não se sente jogado de volta à tela inicial").
@@ -104,8 +127,8 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 > Spec do Ricardo (16/07): imagens **no trecho a que se referem**, em pontos importantes/difíceis onde ajudam a compreensão; **4-5 imagens + no mínimo 2 vídeos por capítulo**; capítulos **menores**; design bonito e palatável; e o conteúdo refletindo a persona (Expert).
 - [~] 2.1 **Arquitetura de mídia inline** — IMPLEMENTADA 17/07 (madrugada): marcadores `media:img`/`media:video` (comentários HTML com id/src/poster/caption) que o reader renderiza NO PONTO via `InlineMediaFigure`/`InlineMediaVideo` (moldura, legenda, reveal suave com hardening anti-aba-oculta; vídeo mudo, loop, `preload="none"`, poster, play/pause por visibilidade). Verificado no dev local por DOM: 6 figuras no ponto certo, zero marcador cru. Aguarda deploy + validação do Ricardo.
 - [~] 2.2 **Passe editorial por capítulo**: feito À MÃO para o cap.1 do piloto (6 pontos: sistema-em-camadas, intenção×execução, fluxo 5 passos VÍDEO, ideias→planos, validação, checklist VÍDEO — prompts espelhando O TRECHO). Automatizar via LLM ao escalar. As 31 artes header viram acervo onde couberem.
-- [ ] 2.3 **Capítulos menores**: re-chunking do conteúdo (seções de leitura de ~5-7 min; hoje "Partes" de 12+ min); revisar `buildReaderSections`.
-- [ ] 2.4 **Design da página de leitura**: hierarquia, callouts (dica/erro comum/exemplo), respiros, tipografia — 3 passes de iteração no browser COM você.
+- [~] 2.3 **Capítulos menores** — FEITO 17/07 (local): `buildReaderSections` agora divide por TEMPO (seções ≤9 min; capítulo longo quebra nos `##` em blocos de ~5-7 min; funde sobras <2 min). chatgpt-zero: 15 "Partes" de 12+ min → **31 seções de ~6 min** (verificado no DOM local). Sem deploy (diretriz 17/07).
+- [~] 2.4 **Design da página de leitura** — FEITO 17/07 (local): sistema de seções com ícone+cor consistente nas 8 seções recorrentes (Visão Geral/Conceitos/Fluxo/Cenários/Erros/Exercício/Checklist/Resumo) + callouts novos por prefixo de blockquote ("Erro comum:"/"Atenção:" rosa · "Exemplo:"/"Na prática:" ciano · Dica/Dica Pro âmbar). Passes de iteração visual COM você ficam para a validação final.
 - [~] 2.5 **PILOTO cap.1 chatgpt-zero**: mídia GERADA E INSTALADA (4 webp ≤47KB + 2 webm ≤181KB em `public/cursos/media/chatgpt-zero/inline/`; receitas Qwen 2512 + LTX 2.3 I2V comprovadas). Marcadores prontos (`insert-cap1-inline-markers.cjs`) — aplicar no Atlas SÓ DEPOIS do deploy do reader (ver armadilha abaixo). Critério de aceite: abrir cap.1 e ver 4 imagens + 2 vídeos no ponto do texto.
 - Aceite da fase: você lê um capítulo e diz "é isso".
 - ⚠️ **ARMADILHAS DESCOBERTAS 17/07** (não repetir):
@@ -115,35 +138,36 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
   4. Prompt de imagem com "seal/badge/placa" gera TEXTO embaralhado na arte — usar conceitos sem texto (carimbo de cera em branco etc.).
 
 ### FASE 3 — PERSONA COMPLETA + conteúdo customizado para VOCÊ (beta tester Expert) (1-2 sessões)
-- [ ] 3.1 **Meu Perfil → seção "Sua Persona"** (spec refinada pelo Ricardo 16/07): interface VISUAL com **thumbnails clicáveis** para cada dimensão (setor, tom, objetivos, tipos de conteúdo, público...) — geradas no estilo §12; campos de texto existem apenas como fallback quando as opções visuais não cobrem o caso. Mostra também o que o site já aprendeu (socialPersona) e o completionPercent. Grava no peso `custom`.
-- [ ] 3.2 **Slots de exemplo** (convenção já definida no ARQUITETURA_CONTEUDO_DINAMICO.md): marcar os primeiros slots no curso piloto da Fase 2.
-- [ ] 3.3 **Gerador de exemplos por persona** (motor Expert v1): para usuário Expert, gerar e servir os exemplos customizados nos slots. **Beta: a SUA conta** — você abre o capítulo piloto e os exemplos falam do SEU contexto.
+- [~] 3.1 **Meu Perfil → seção "Sua Persona"** — FEITO 17/07 (local): `PersonaSection.tsx` no topo do Meu Perfil com tiles visuais clicáveis para as 5 dimensões (setor 8 · tom 6 · objetivos 7 · tipos de conteúdo 6 · momento com IA 3), texto só como fallback ("Outro? Digite e Enter"), barra de completionPercent, bloco "o que o site já aprendeu" (temas/hashtags/estilo/público do socialPersona). E2E local: selecionar → salvar → 100% persistido (XP na 1ª vez via API existente). Thumbnails §12: prompts prontos em `generate_persona_thumbs.py` (roda pós-batch; tiles caem em gradiente+emoji até lá).
+- [~] 3.2 **Slots de exemplo** — script pronto (`insert-cap1-exemplo-slots.cjs`): 2 slots nos parágrafos de Cenários Aplicados do cap.1. ⚠️ Aplicar no Atlas SÓ no deploy final (reader antigo mostraria comentário cru). Reader novo já engole qualquer comentário (guard).
+- [~] 3.3 **Gerador de exemplos por persona (motor Expert v1)** — FEITO 17/07 (local): `POST /api/user/course-examples/generate` (Expert/admin; LLM tier budget reescreve o exemplo padrão para o contexto do aluno; grava em `userCourseExamples`) + content API injeta os exemplos no miolo dos slots para Expert. Beta na SUA conta: rodar após deploy final + slots aplicados.
 - Aceite: você lê o piloto e os exemplos são sobre você/seus projetos.
 
 ### FASE 4 — STUDIO AI revitalização (1 sessão cheia)
-- [ ] 4.1 Free: modelos de imagem gratuitos (OpenRouter) com limite 1-2/dia.
-- [ ] 4.2 Pagos: cota diária por tier; modelos bons/baratos (OpenRouter/Meta).
-- [ ] 4.3 Character consistency + edit via omni model da Google.
-- [ ] 4.4 UI: thumbnail de exemplo POR MODELO mostrando a diferença + explicação breve de uso.
-- [ ] 4.5 Ligar o `mediaPrompt` do gerador USS → botão "Criar imagem" no Composer.
+> 🚨 DESCOBERTA 17/07: o Studio em produção estava QUEBRADO em 4 dos modelos (Flux/SD/Recraft saíram do OpenRouter — "invalid model ID", incluindo o default flux-1-schnell). Catálogo reconstruído com 7 modelos REAIS, todos verificados com geração de verdade.
+- [~] 4.1 Free — FEITO 17/07 (local): 2 modelos grátis (Nano Banana/gemini-2.5-flash-image + Gemini 3.1 Lite) com cota de 2 gerações/DIA (antes: 1 imagem PARA SEMPRE).
+- [~] 4.2 Pagos — FEITO 17/07 (local): cota diária por tier (free 2 · explorador 15 · profissional 40 · expert 120) + catálogo único `src/lib/studio-models.ts` compartilhado API↔UI com gating por plano (Gemini 3.1 Flash · Gemini 3 Pro · Nano Banana Pro · GPT Image Mini · GPT Image 2).
+- [~] 4.3 Edição/consistência — FEITO 17/07 (local): botão "Usar imagem de referência" (upload → dataURL) roteia para o omni google/gemini-3-pro-image-preview com conteúdo multimodal; mantém personagem/estilo.
+- [~] 4.4 UI — FEITO 17/07 (local): Select → grid de cards com THUMBNAIL REAL por modelo (mesmo prompt de referência gerado em cada um — `public/portal/studio/*.webp`, 15-37KB) + explicação de uso + badge de plano + chip de cota "N/M hoje".
+- [~] 4.5 Composer — FEITO 17/07 (local): `mediaPrompt` do gerador USS agora aparece no Composer com botão "Criar imagem" → gera no Studio e anexa a URL ao post (IG exige imagem).
 - Aceite: você gera imagem no free e no expert e vê a diferença clara de oferta.
 
 ### FASE 5 — CERTIFICADOS redesign (½-1 sessão)
-- [ ] 5.1 Fim do "super mega certificado": card compacto/preview em thumb, expande sob demanda.
-- [ ] 5.2 Seção "Onde usar seu certificado" (LinkedIn, currículo, verificação pública) com CTAs.
-- [ ] 5.3 Animações (entrada, hover, emissão).
+- [~] 5.1 FEITO 17/07 (local): fim do "super mega certificado" — grid 2 colunas de cards compactos (thumb da arte + hover "Ver certificado"); clique expande para largura total com a arte completa, verificação e ações; botão Fechar.
+- [~] 5.2 FEITO 17/07 (local): seção "Onde usar seu certificado" (LinkedIn/Currículo/Verificação pública) + botão "Adicionar ao perfil" com deep-link oficial do LinkedIn (entra direto em Licenças e certificados com certId e URL de verificação).
+- [~] 5.3 FEITO 17/07 (local): entrada em stagger, hover lift, expansão com layout animation e scale-in da arte.
 - Aceite: a aba Certificados fica bonita na sua tela sem rolar um metro.
 
 ### FASE 6 — RANKING + ASSISTENTE IA (1 sessão, com Chrome visível p/ iterar)
-- [ ] 6.1 Ranking: redesign completo (pódio, lista, você em destaque, arte da casa).
-- [ ] 6.2 Assistente IA: repensar proposta (tutor por curso? contexto da persona?) + upgrade de UI.
+- [~] 6.1 FEITO 17/07 (local): avatares com FOTO real (campo image era ignorado — iniciais só como fallback), linha "Você #N" fixada no fim da lista quando você está fora do top exibido, badges de plano normalizados (PRO/EXPERT/EXPLORADOR). Pódio/arte da casa mantidos. Passe visual fino COM você na validação final.
+- [~] 6.2 FEITO 17/07 (local): Assistente virou **Tutor FayAI** — system prompt com persona do aluno (setor/objetivos/nível) + cursos matriculados + próximos passos concretos na plataforma; agora tem MEMÓRIA da conversa (histórico das últimas 8 trocas); trocado o modelo quebrado 'openrouter/free' pelo provider unificado com fallback (free→budget por plano).
 
 ### FASE 7 — USS nível 2 (1-2 sessões)
-- [ ] 7.1 Feedback loop: sync de métricas pós-publicação agendado + engajamento refinando persona/prompts.
-- [ ] 7.2 Trends em tempo real no prompt do gerador.
-- [ ] 7.3 Pipeline modular (conteúdo/hashtags/imagem separados — prompts prontos nos Uss/docs §10).
-- [ ] 7.4 Plataformas: Twitter/Pinterest (apps seus) → LinkedIn/TikTok.
-- [ ] 7.5 Analytics do USS (ANALYTICS_SYSTEM.md).
+- [~] 7.1 FEITO 17/07 (local): `POST /api/social/sync-due` (cron VPS, header x-social-secret, mesmo padrão do publish-due) — sincroniza métricas das contas ativas de TODOS os usuários (lote 25, lastSync>20h) E refina a persona pelo engajamento real: hashtags dos 10 posts com melhor engagementRate (30d) viram `socialPersona.topHashtags` ponderadas. Falta no deploy: adicionar o cron na VPS (1×/hora, curl -X POST -H "x-social-secret: $SOCIAL_CRON_SECRET" https://fayai.com.br/api/social/sync-due).
+- [~] 7.2 FEITO 17/07 (local): manchetes de IA das últimas 48h (hub IA Hoje, coleção ainews) entram no prompt do gerador — post nasce ancorado no assunto do dia (generatePosts e analyzeTrends).
+- [~] 7.3 FEITO 17/07 (local): nova action modular `generateMediaPrompt` (prompt de imagem para post JÁ escrito) somando às existentes generatePosts/generateHashtags/analyzeTrends; Composer agora captura o mediaPrompt e cria a imagem com 1 clique (4.5).
+- [ ] 7.4 Plataformas: Twitter/Pinterest (apps SEUS — bloqueado nas suas credenciais, P.1) → LinkedIn/TikTok.
+- [ ] 7.5 Analytics do USS (ANALYTICS_SYSTEM.md) — próxima sessão (UI de analytics dedicada).
 
 ### FASE 8 — MOTOR EXPERT COMPLETO (o diferencial; depois de 2+3 provados)
 - [ ] 8.1 Curso inteiro gerado/adaptado pela persona (texto+exemplos+imagens do contexto do aluno).
