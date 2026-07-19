@@ -1,0 +1,535 @@
+[
+ {
+  "n": 2,
+  "module": 0,
+  "accent": "lime",
+  "images": {
+   "sistema": {
+    "seed": 7420,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot carefully arranging two distinct glowing glass tablets side by side into a tower — one tablet etched with a small briefcase and audience-figures icon for stable facts, the other etched with tone waveform lines for response style — keeping them from blending into a single blurred layer, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7421,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, on one side the mascot deliberately writing all at once on a solid glowing tablet labeled with a pen icon for personalized instructions, on the other side a soft cloud of small glowing fragments slowly drifting in one by one and settling into a loose pile representing memory built from many past conversations, a clear gap of soft light between the deliberate tablet and the slowly accumulating cloud, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7422,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a winding path of five glowing stepping stones crossing the table from a closed glowing settings-gear panel, through two glowing instruction tablets, past a small pile of glowing memory fragments being reviewed, to a single glowing question-mark stone at the end, the tiny mascot walking the stones mid-journey, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7423,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a swirl of misty crumpled paper scraps rising above the table and condensing into two crisp glowing instruction tablets, one showing a small dumbbell and an encouraging tone waveform for a personal trainer's setup, the other showing a handcrafted pottery icon and a warm personal tone waveform for an artisan seller's setup, the mascot proudly holding both up, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7424,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot examining two blank glowing instruction tablets through a large magnifying glass while a faint ghost of an attached document dissolves into mist beside them, a kind amber warning light above, a small round blank wax stamp resting unused, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7425,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot writing a glowing checklist card etched with a small mirror icon reflecting looping summary text, behind it a large friendly launch button waiting dimmed until the reflection looks complete, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9320,
+    "motion": "The settings-gear stone lights up first, then the two instruction tablet stones brighten as if being filled with text, then the memory-fragment stone glows softly as fragments are sorted, the tiny mascot walks gently forward across the stones, the final question-mark stone pulses as if being tested, warm dust motes float in the light, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9325,
+    "motion": "The mirror-icon checklist glows as reflected summary text softly appears line by line, the mascot's pen taps twice in quiet confirmation, the large button in the background slowly brightens as the reflected summary completes, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 3,
+  "module": 0,
+  "accent": "lime",
+  "images": {
+   "sistema": {
+    "seed": 7430,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot carefully stacking two kinds of translucent glowing glass layers into a tower — bright confident layers labeled with a speech-bubble icon for arguments the mascot may shape, and dimmer human-held layers labeled with a small coin icon that only a real person's hand may place, keeping the two kinds from mixing into the same layer, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7431,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, on one side the mascot calmly writing on a small glowing planning card labeled with four stacked note icons — facts, argument, reaction, tone — on the other side a friendly robotic arm assembling those four pieces one careful stage at a time instead of all at once, a clear gap of soft light between thinking and doing, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7432,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a winding path of five glowing stepping stones crossing the table from a single glowing percentage-sign card, through a stack of fact cards, past a stone showing a small argumentative speech bubble, through an external glowing magnifying-glass stone checking a data card, to a final stone shaped like a rehearsed speech balloon, the tiny mascot walking the stones mid-journey, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7433,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a swirl of misty crumpled paper scraps rising above the table and condensing into one crisp glowing argument card showing a small upward percentage arrow and a tidy project-result icon, the mascot proudly holding it up while a second faint glowing card labeled with a coin-range icon hovers uncertainly beside an open external research book waiting to confirm it, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7434,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot examining a glowing coin-range card through a large magnifying glass against an unrolled glowing external research map, a kind amber warning light above, a small round blank wax stamp resting unused beside an unopened objection card, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7435,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot writing a glowing checklist card while a small shadowy mirrored version of the mascot on the other side plays devil's advocate, arms crossed, behind them a large friendly launch button dimmed until the toughest objection is answered, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9330,
+    "motion": "The percentage-sign stone pulses first, then the fact-card stones brighten in sequence, the speech-bubble objection stone flickers with a testing glow, the magnifying-glass stone shines brighter as it checks the data card, the tiny mascot walks gently forward across the stones toward the final rehearsed speech-balloon stone, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9335,
+    "motion": "The checklist card glows as check marks appear, the shadowy mirrored figure leans in with a challenging gesture then softens, the large button in the background slowly brightens as the toughest objection is resolved, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 4,
+  "module": 0,
+  "accent": "lime",
+  "images": {
+   "sistema": {
+    "seed": 7440,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot carefully stacking translucent glowing glass layers into a tower, the layers each polished to a flawless shine, but the mascot pausing mid-stack to tap one shiny layer that rings hollow — surface polish not matching the dim uncertain glow hidden inside it, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7441,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, on one side the mascot calmly writing a small glowing citation card with a convincing book-and-gavel icon, on the other side a friendly robotic arm holding up an identical-looking card that dissolves into mist when touched, a clear gap of soft light between the confident-looking card and the one that cannot hold together, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7442,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a winding path of five glowing stepping stones crossing the table from a three-tier risk-level card (low, medium, high), through a stone circling specific numbers and names, past an external glowing reference-book stone, through a stone where the mascot questions its own glowing card, to a final approval-stamp stone, the tiny mascot walking the stones mid-journey, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7443,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a swirl of misty crumpled paper scraps rising above the table splitting into two crisp glowing pages — one a formal dismissal letter with a small gavel icon and a faint crack running through its cited article number, the other a tidy bibliography page whose book-spine icons shimmer and dissolve one by one when the mascot reaches to touch them, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7444,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot examining a glowing formal document through a large magnifying glass, a kind amber warning light flickering above a suspiciously perfect citation, a small round blank wax stamp resting unused beside two contradicting glowing cards side by side, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7445,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot writing a glowing checklist card with a direct question mark icon pointed at a source-citation card, behind it a large friendly launch button dimmed until the source admits uncertainty, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9340,
+    "motion": "The three-tier risk card stone lights up first, then the circled-numbers stone brightens, the external reference-book stone glows as pages turn, the mascot pauses at the self-questioning stone with a thoughtful gesture, the final approval-stamp stone brightens only at the very end, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9345,
+    "motion": "The checklist card glows as the question mark pulses toward the citation card, the citation card flickers uncertainly and dims in honest admission, the large button in the background slowly brightens once the uncertainty is acknowledged, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 5,
+  "module": 0,
+  "accent": "lime",
+  "images": {
+   "sistema": {
+    "seed": 7450,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot placing the final translucent glowing layer on a steady completed tower built over several small day-marked platforms, comparing it against a single wobbly isolated layer floating alone nearby to show the difference between one lucky attempt and a repeated pattern, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7451,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, on one side the mascot calmly writing on a small glowing daily log card with a pen icon, on the other side a foggy cloud-shaped memory bubble quietly erasing its own rough edges and keeping only the shiny parts, a clear gap of soft light between the honest written log and the self-editing memory cloud, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7452,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a winding path of five glowing stepping stones crossing the table from two instruction tablets, through three small glowing task icons in a row, past a stack of daily log cards, through a stone where the log pages are being reviewed, to a final single glowing one-page manual stone, the tiny mascot walking the stones mid-journey, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7453,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, a swirl of misty crumpled paper scraps rising above the table condensing into two crisp glowing results — a lesson-plan card that sharpens into focus only once a small clock-and-grade-level icon is added beside it, and a collection-message card whose tone visibly warms and softens from a cold formal glow to a friendly one, the mascot proudly holding both up, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7454,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot checking a row of seven small day-marked log cards through a large magnifying glass, one card conspicuously blank and greyed out mid-week, a kind amber warning light above, a small round blank wax stamp resting unused beside an unfinished one-page manual, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7455,
+    "prompt": "real cozy kitchen table with a laptop and fresh coffee, morning light through a window, the mascot gathering a full week of glowing log cards into one hand and feeding them toward a large friendly launch button, the button dimmed until all seven cards have been absorbed into a single glowing page, lime glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9350,
+    "motion": "The instruction-tablet stone glows first, then the three task-icon stones brighten one by one, the log-card stack pulses as pages accumulate, the review stone glows as pages are compared side by side, the tiny mascot steps onto the final one-page manual stone as it brightens fully, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9355,
+    "motion": "The seven log cards drift one by one into the mascot's outstretched hand and merge into a single glowing page, the large button in the background brightens gradually as each card is absorbed, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 7,
+  "module": 1,
+  "accent": "violet",
+  "images": {
+   "sistema": {
+    "seed": 7470,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot carefully stacking translucent glowing glass layers into a tower, reaching for the next layer only to find empty air where a reference-text page should be, an incomplete gap glowing faintly where the missing material was supposed to sit, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7471,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, on one side the mascot flipping on a small glowing web-search switch beside a card showing today's date, on the other side a friendly robotic arm unrolling a long glowing Canvas scroll meant for editing piece by piece, a clear gap of soft light between the quick lookup switch and the long editable scroll, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7472,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a winding path of five glowing stepping stones crossing the table from a stack of reference pages, through a glowing web-search toggle stone, past a stone splitting into Canvas scroll versus plain chat bubble, through a four-part template stone (role, task, context, format), to a final glowing saved-note stone, the tiny mascot walking the stones mid-journey, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7473,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a swirl of misty crumpled paper scraps rising above the table condensing into two crisp glowing results — a real estate description card with bracket-shaped placeholders and a small house icon, and a news card glowing brighter only after a small web-search icon lights up beside it, the mascot proudly holding both up, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7474,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot examining an empty-handed prompt card through a large magnifying glass beside a stack of unused reference pages, a kind amber warning light above a Canvas scroll unrolled far too long for a short simple answer, a small round blank wax stamp resting unused, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7475,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot writing a glowing checklist card that folds itself into a template shape with small bracket-shaped placeholder slots opening up along its edges, behind it a large friendly launch button dimmed until every bracket slot is ready, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9370,
+    "motion": "The reference-page stack glows first, then the web-search toggle stone flips on with a soft click of light, the Canvas-versus-chat stone splits and one path brightens, the four-part template stone lights each of its four corners in sequence, the tiny mascot steps onto the final saved-note stone as it seals shut with a gentle glow, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9375,
+    "motion": "The checklist card folds and reshapes into a template with bracket-shaped slots opening one by one along its edges, the mascot's pen taps each slot into place, the large button in the background slowly brightens as the last bracket slot opens, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 8,
+  "module": 1,
+  "accent": "violet",
+  "images": {
+   "sistema": {
+    "seed": 7480,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot carefully stacking translucent glowing glass layers into a tower, the first layer set down calm and cool-toned, the mascot pausing to notice it lacks the warm urgent glow the finished tower will need, about to reach for a brighter replacement layer, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7481,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, on one side the mascot calmly writing one wide glowing planning card covering goal, product and audience all at once, on the other side a friendly robotic arm narrowing that single card into three smaller focused cards — body, subject lines, channel — one at a time instead of all together, a clear gap of soft light between the wide start and the narrowing sequence, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7482,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a winding path of five glowing stepping stones crossing the table from one wide glowing campaign card, through a stone where the card is being read closely for gaps, past three small glowing subject-line variant stones, through a stone reshaping into a social-post format, to a final magnifying-glass stone checking price and date numbers, the tiny mascot walking the stones mid-journey, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7483,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a swirl of misty crumpled paper scraps rising above the table condensing into three crisp glowing results — a warmly glowing email card with a small candle icon and an urgency clock, three flickering subject-line ribbons beside it, and a square photo-post card with empty space left for an image, the mascot proudly holding all three up, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7484,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot examining a glowing email card through a large magnifying glass, cross-checking a discount percentage and a deadline date against a small calendar card, a kind amber warning light above, a small round blank wax stamp resting unused beside a social-post card still shaped exactly like the email, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7485,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot writing a glowing checklist card sorting three small subject-line ribbons into three labeled slots — a clock icon for urgency, a question mark for curiosity, a gift icon for benefit — behind it a large friendly launch button dimmed until all three are sorted, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9380,
+    "motion": "The wide campaign card stone glows first, then it dims slightly as the gap-reading stone highlights a missing warm tone, the three subject-line stones flicker in sequence as each is compared, the channel-reshaping stone morphs from an envelope shape into a small photo-post shape, the tiny mascot steps onto the final magnifying-glass stone checking the price and date, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9385,
+    "motion": "The three subject-line ribbons drift and settle one by one into their labeled slots — clock, question mark, gift — the mascot's pen checks each one off, the large button in the background slowly brightens as the last ribbon settles into place, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 9,
+  "module": 1,
+  "accent": "violet",
+  "images": {
+   "sistema": {
+    "seed": 7490,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot carefully stacking translucent glowing glass layers into a tower, two layers pulling in opposite directions — one glowing layer trying to shrink small and another trying to expand wide at the same time — jamming against each other instead of stacking cleanly, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7491,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, on one side the mascot calmly writing on a small glowing planning card holding just one task icon, on the other side a friendly robotic arm juggling three separate glowing task icons at once — review, summary, title — each one wobbling and losing focus, a clear gap of soft light between the single clear card and the overloaded juggling arm, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7492,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a winding path of five glowing stepping stones crossing the table from a stone showing two clashing arrows, through a stone with three task icons splitting apart, past a fading glowing restriction card being checked, through a single isolated glowing variable stone, to a final written note stone, the tiny mascot walking the stones mid-journey, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7493,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a swirl of misty crumpled paper scraps rising above the table condensing into two crisp glowing results — a small tidy card showing either ten short bullet points or three clean lines, never both squeezed together, and a long glowing scroll of many message bubbles with one faded budget card near the start being relit and pulled forward to the front, the mascot proudly presenting both, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7494,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot examining a glowing contradictory instruction card through a large magnifying glass, three overlapping task icons tangled together beside a long faded scroll of old messages, a kind amber warning light above, a small round blank wax stamp resting unused, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7495,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot writing a glowing checklist card with a direct question aimed at two clashing arrow icons, behind it a large friendly launch button dimmed until the arrows resolve into a single aligned direction, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9390,
+    "motion": "The clashing-arrows stone pulses with tension first, then the three task icons visibly separate and space out on the next stone, the fading restriction card brightens again as it's rechecked, a single variable stone glows alone while the others dim, the tiny mascot steps onto the final note stone as it seals with a satisfied glow, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9395,
+    "motion": "The checklist card glows as the question is posed to the two clashing arrows, the arrows slowly rotate and align into one single direction, the large button in the background brightens once alignment is reached, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 10,
+  "module": 1,
+  "accent": "violet",
+  "images": {
+   "sistema": {
+    "seed": 7500,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot placing the final translucent glowing layer on a steady completed tower, then setting a labeled glowing template plate beside it that can be reused instantly on a second tower forming nearby without restacking each layer individually, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7501,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, on one side the mascot calmly writing on a small glowing planning card with fixed unchanging text, on the other side a friendly robotic arm inserting small bracket-shaped placeholder tiles into open slots on that same card, a clear gap of soft light between the fixed wording and the swappable bracket tiles, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7502,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a winding path of five glowing stepping stones crossing the table from a row of small glowing task-list icons, through a stone showing a card filling with bracket placeholders, past a stone testing against a real pasted case, through a single glowing bound-document stone gathering them all, to a final calendar stone marking two weeks ahead, the tiny mascot walking the stones mid-journey, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7503,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, a swirl of misty crumpled paper scraps rising above the table condensing into three crisp glowing template cards — a meeting-notes card gaining a small project-name tag, a complaint-response card gaining a severity-level dial, and a status-report card with one glowing block still stubbornly empty until a small reminder note appears beside it, the mascot proudly holding all three up, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7504,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot examining a scattered pile of glowing template cards through a large magnifying glass, several fading and outdated at the edges, no single binding document holding them together, a kind amber warning light above, a small round blank wax stamp resting unused, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7505,
+    "prompt": "real writer's desk with beautiful recipe cards and wooden word blocks being assembled, the mascot catching a small glowing ad-hoc prompt card right as it sparkles with unexpected success, immediately folding it into a bracket-slotted template shape, behind it a large friendly launch button dimmed until the fold is complete, violet glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9400,
+    "motion": "The row of task-list icons glows one by one, the bracket-placeholder stone lights each slot as it's filled, the real-case testing stone flickers as it's checked against actual pasted text, the bound-document stone brightens as templates gather inside it, the tiny mascot steps onto the final calendar stone as a two-week marker softly glows, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9405,
+    "motion": "The ad-hoc prompt card sparkles brightly the instant it succeeds, the mascot swiftly folds it into a bracket-slotted template shape before the sparkle fades, the large button in the background brightens as the fold completes, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 11,
+  "module": 2,
+  "accent": "cyan",
+  "images": {
+   "sistema": {
+    "seed": 7510,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot carefully stacking translucent glowing glass layers into a tower built directly from a swirl of loose scattered glowing scraps being pulled in and organized layer by layer, one dim foggy layer showing where organization is still incomplete, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7511,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, on one side the mascot calmly writing on a small glowing planning card, on the other side a friendly robotic arm reaching toward a locked glowing calendar icon it cannot open on its own, a clear gap of soft light between what the mascot is told and the calendar it cannot see, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7512,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a winding path of five glowing stepping stones crossing the table from a pile of scattered scrap notes, through a stone splitting into two roles (structure vs decide), past an empty glowing destination-folder stone, through a raw-draft card stone, to a final stone where the draft is manually carried into a real notebook, the tiny mascot walking the stones mid-journey, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7513,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a swirl of misty crumpled paper scraps rising above the table condensing into two crisp glowing results — a prioritized task list card with an overdue item glowing brightest at the top, and a meeting agenda card assembled from several small glowing envelope-shaped email fragments merging together, the mascot proudly holding both up before carrying them toward a real notebook, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7514,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot examining a glowing task list through a large magnifying glass beside a locked calendar icon that stays dark and unreachable, a kind amber warning light above, a small round blank wax stamp resting unused beside a draft that never left the glowing table, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7515,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot writing a glowing checklist card with a clearly labeled priority-rule tag pinned to the top, behind it a large friendly launch button dimmed until the rule is explicitly set, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9410,
+    "motion": "The scattered scrap pile glows and gathers first, then the two-role stone splits softly into structure and decide, the empty destination-folder stone waits dim until claimed, the raw-draft card brightens as it forms, the tiny mascot carries the glowing draft by hand onto the final stone where it settles into a real notebook, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9415,
+    "motion": "The checklist card glows as a priority-rule tag is pinned firmly to its top edge, the items below reorder themselves according to the rule, the large button in the background brightens once the explicit rule is in place, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 12,
+  "module": 2,
+  "accent": "cyan",
+  "images": {
+   "sistema": {
+    "seed": 7520,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot carefully stacking translucent glowing glass layers into several separate small towers instead of one — each tower fenced off in its own glowing enclosure so a layer from one tower can never drift into another, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7521,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, on one side the mascot calmly writing on a small glowing planning card summarizing numbers from memory, on the other side a friendly robotic arm holding up an actual glowing spreadsheet file plugged directly into the table, a clear gap of soft light between the remembered summary and the real attached file, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7522,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a winding path of five glowing stepping stones crossing the table from several small glowing fenced enclosures, through a stone where each enclosure gets its own instruction tablet, past a stone where real files are plugged in, through a consistent-use stone, to a final calendar-marked review stone, the tiny mascot walking the stones mid-journey, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7523,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a swirl of misty crumpled paper scraps rising above the table condensing into three separate crisp glowing fenced enclosures, each holding a distinct client-briefing tablet, beside a fourth enclosure holding a glowing spreadsheet that refreshes itself with a new monthly stack of numbers, the mascot proudly tending all of them, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7524,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot examining a single overcrowded glowing enclosure through a large magnifying glass where too many unrelated tablets are crammed together, a faded outdated spreadsheet glowing dim and stale beside it, a kind amber warning light above, a small round blank wax stamp resting unused, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7525,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot writing a glowing checklist card that asks a direct question toward a fenced enclosure, causing every file and instruction tablet inside to briefly light up and list themselves, behind it a large friendly launch button dimmed until the inventory is confirmed, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9420,
+    "motion": "Each fenced enclosure lights up separately in sequence, then an instruction tablet settles into each one, the real file plugs in with a soft click of light, the consistent-use stone glows steadily, the tiny mascot steps onto the final calendar stone as a monthly review mark softly pulses, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9425,
+    "motion": "The checklist card glows as the question is posed, every tablet and file inside the fenced enclosure briefly lights up one by one in response, the large button in the background brightens once the full inventory is confirmed, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 13,
+  "module": 2,
+  "accent": "cyan",
+  "images": {
+   "sistema": {
+    "seed": 7530,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot carefully stacking translucent glowing glass layers into a tower built from raw unfiltered scraps still bearing their rough original texture, a neighboring pre-polished smooth layer sitting empty and hollow because its important texture was sanded away before it arrived, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7531,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, on one side the mascot calmly writing on a small glowing planning card with four labeled empty slots — owner, deadline, status, priority — on the other side a friendly robotic arm sorting a messy pile of notes directly into those four slots, a clear gap of soft light between the defined slots and the raw pile being sorted, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7532,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a winding path of five glowing stepping stones crossing the table from three overlapping glowing note piles, through a four-slot structure stone, past a stone splitting into decided versus open items, through a magnifying-glass stone checking owner names, to a final stone exporting into a real shared board, the tiny mascot walking the stones mid-journey, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7533,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a swirl of misty crumpled paper scraps rising above the table — three overlapping note piles labeled with faint different handwriting styles — condensing into one crisp glowing action-plan table with owner, deadline and status columns, one name tag flickering between two glowing initials until the mascot reaches in to correct it by hand, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7534,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot examining a glowing action-plan table through a large magnifying glass, one owner name tag glowing amber with uncertainty, a kind amber warning light above, a small round blank wax stamp resting unused beside a plan still trapped inside a glowing conversation bubble instead of a real board, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7535,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot writing a glowing checklist card that stamps a small asterisk beside any owner name tag still uncertain in the action-plan table, behind it a large friendly launch button dimmed until every asterisk has been reviewed, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9430,
+    "motion": "The three overlapping note piles glow and merge onto the first stone, the four-slot structure stone lights each slot as data sorts in, the decided-versus-open stone splits cleanly into two glowing halves, the magnifying-glass stone brightens over a name being double-checked, the tiny mascot carries the finished plan onto the final stone where it settles into a real shared board, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9435,
+    "motion": "The checklist card glows as small asterisks appear beside uncertain owner tags one by one, the mascot's pen circles each asterisk for review, the large button in the background brightens once every asterisk has been checked, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 14,
+  "module": 2,
+  "accent": "cyan",
+  "images": {
+   "sistema": {
+    "seed": 7540,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot carefully stacking translucent glowing glass layers into a tower, each layer polished and perfectly aligned, but one thin layer glowing deceptively bright despite being far too short to actually support the weight the tower needs at that point, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7541,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, on one side the mascot calmly writing on a small glowing planning card with client names and email icons fully visible, on the other side a friendly robotic arm holding an identical card with only anonymized code numbers and revenue figures showing, a clear gap of soft light between the exposed version and the safely anonymized one, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7542,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a winding path of five glowing stepping stones crossing the table from a stone questioning a sensitive data file, through a stone comparing a schedule against real past experience, past a stone weighing priorities against private knowledge, through a stone where the plan is questioned for weaknesses, to a final official-stamp stone, the tiny mascot walking the stones mid-journey, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7543,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a swirl of misty crumpled paper scraps rising above the table condensing into two crisp glowing results — a client spreadsheet card where name and email columns fade to safe blank anonymized code the moment before upload, and a project schedule card where a short glowing two-day block visibly stretches and lengthens into a realistic multi-week block once corrected, the mascot proudly holding both up, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7544,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot examining a glowing client spreadsheet through a large magnifying glass with exposed name columns still visible, a short deceptively bright schedule block glowing beside it, a kind amber warning light above, a small round blank wax stamp resting unused, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7545,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot writing a glowing checklist card posing a direct question to a sensitive data file, causing the file's identifying columns to fade to safe blank code, behind it a large friendly launch button dimmed until the fade completes, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9440,
+    "motion": "The sensitive-data stone glows with a questioning pulse first, then the schedule stone flickers as it's measured against a longer real timeline, the priority stone glows as private knowledge is weighed in, the weakness-check stone dims and brightens as flaws surface, the tiny mascot steps onto the final official-stamp stone only once it's fully bright, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9445,
+    "motion": "The checklist card glows as the question is posed to the data file, the file's name and email columns visibly fade into safe anonymized blanks, the large button in the background brightens once the fade is complete, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ },
+ {
+  "n": 15,
+  "module": 2,
+  "accent": "cyan",
+  "images": {
+   "sistema": {
+    "seed": 7550,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot placing the final translucent glowing layer on a steady completed tower each of three separate weeks, then holding up two towers side by side to compare — one glowing plan tower and one dimmer actual-outcome tower — checking how closely their heights and shapes match, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "intencao": {
+    "seed": 7551,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, on one side the mascot calmly writing on a small glowing fixed-format card with three labeled slots — pending, commitments, priorities — on the other side a friendly robotic arm adjusting one of those three slots slightly differently each week instead of leaving it frozen, a clear gap of soft light between the fixed structure and the actively adjusted content, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "fluxo": {
+    "seed": 7552,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a winding path of five glowing stepping stones crossing the table from a fenced dedicated-project stone, through a fixed three-slot prompt card, past a stone splitting into planned-versus-actual outcomes, through an adjustment stone correcting the gap, to a final stone marked with three repeating week-cycles, the tiny mascot walking the stones mid-journey, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "cenario": {
+    "seed": 7553,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, a swirl of misty crumpled paper scraps rising above the table condensing into three crisp glowing weekly-plan cards side by side — the first with two glowing task blocks awkwardly overlapping two small recurring-meeting icons, the second with the same meeting icons now clearly fenced off and respected, the third matching the second exactly, the mascot proudly holding up all three in a row, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "validacao": {
+    "seed": 7554,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot examining a single lonely week-plan card through a large magnifying glass with no second or third card beside it for comparison, a kind amber warning light above a prompt card that looks copied and unfamiliar, a small round blank wax stamp resting unused, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   },
+   "dica": {
+    "seed": 7555,
+    "prompt": "real tidy home office with a paper agenda, sticky notes becoming neat floating lists, the mascot holding two glowing weekly-plan cards side by side, a shared glowing thread of light connecting the same recurring flaw visible in both, behind it a large friendly launch button dimmed until the repeating pattern is named, cyan glow, an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, professional photography, high detail, no text, no letters, no logos, no watermark"
+   }
+  },
+  "videos": {
+   "fluxo": {
+    "seed": 9450,
+    "motion": "The dedicated-project stone glows first, then the fixed three-slot prompt card lights each slot in turn, the planned-versus-actual stone splits and the two halves visibly compared side by side, the adjustment stone flickers as a correction is written in, the tiny mascot walks across three repeating week-cycle stones at the end, each brightening in sequence, warm dust motes drift, slow cinematic push-in, seamless loop"
+   },
+   "dica": {
+    "seed": 9455,
+    "motion": "The two weekly-plan cards hover side by side as a glowing thread of light traces the same recurring flaw connecting both, the mascot circles the shared thread with a pen, the large button in the background brightens once the repeating pattern is clearly named, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ }
+]

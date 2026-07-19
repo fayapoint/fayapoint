@@ -1,0 +1,220 @@
+{
+ "note": "Bespoke per-chapter media prompts for caps 16-30 of aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia. Composition MOTIF repeats per slot (design language, matches original script's per-slot idea), but concrete objects/nouns are uniquely grounded in each chapter's actual text (Conceitos-Chave / Fluxo de Execucao / Cenarios Aplicados / Erros Comuns / Dica Pro). Assembled prompt = f\"{THEME_SETTING}, {IMAGE[cap][slot]}, {THEME_ACCENT} glow\" + FUSION (FUSION suffix identical to reference script). Video motion texts replace VIDEO_MOTION[slot] fixed strings from the reference script, per chapter.",
+ "modules": {
+  "module3_caps16-20": {"theme_setting": "real study corner with open books, a warm lamp and floating glowing flashcards", "accent": "rose"},
+  "module4_caps21-25": {"theme_setting": "real creative desk with a notebook, a camera and loose sketches turning into a polished glowing draft", "accent": "gold"},
+  "module5_caps26-30": {"theme_setting": "real quiet desk with a closed drawer and a tidy folder of documents beside a small softly glowing lock icon", "accent": "violet"}
+ },
+ "chapters": {
+  "16": {
+   "image": {
+    "sistema": "the mascot stacking two different translucent glowing layers into a tower — one layer dusty and frozen like an old photograph, the other layer bright and rippling like a live signal — beside an open book and a small radar-like search icon, one dim frozen layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card labeled with a lightbulb 'entendi', on the other side a friendly robotic arm testing the mascot with a closed book and a blank recall card three days later, a clear gap of soft light between reading and remembering",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a fork-shaped signpost marked with two glowing coin icons (CDB and Tesouro Direto) to a small glowing notebook, the tiny mascot walking on the stones mid-journey, one stone shaped like a question mark, one stone glowing brighter as layered explanation, one stone dimmed representing closed-eyes recall",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like loan installment slips and a bank counter sign rising above the table and condensing into one crisp glowing amortization chart marked '36' that the mascot proudly holds up, a second faint glowing law-book icon beside a calendar checking 'today or past?'",
+    "validacao": "the mascot examining a glowing paper scroll marked 'explica tudo sobre X' through a large magnifying glass against an unrolled glowing reference map split into training-dust and live-search halves, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card with three numbered check marks beside a small blindfolded scroll icon representing not looking back, behind it a large friendly launch button waiting dimmed until the list is complete"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the coin-icon signpost toward the notebook, the tiny mascot walks gently forward pausing longer on the dimmed recall stone, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The three numbered check marks on the glowing card light up one at a time while the blindfold icon stays closed, the mascot's pen moves gently without peeking back, the launch button slowly brightens as the last mark completes, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "17": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower — one layer a scanned contract page, one layer a lecture notebook, one layer a product manual — next to an empty ghost-layer labeled only by memory, that hollow layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card showing a stable math symbol needing no search, on the other side a friendly robotic arm spinning a radar dish toward glowing price tags and law-book icons that change with time, a clear gap of soft light between stable and time-sensitive",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a stack of real PDFs and an official edital pamphlet to an open blank notebook, the tiny mascot walking on the stones mid-journey, one stone shaped like a small stopwatch marking session time",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like a generic lease-clause list rising above the table and condensing into one crisp glowing actual rental contract page with three circled clauses that the mascot proudly holds up, a second faint glowing certification exam index turning into a study calendar",
+    "validacao": "the mascot examining a glowing blank silhouette of a document (unpasted) through a large magnifying glass against an unrolled glowing reference map with a missing clock and missing notebook icon, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card copied directly from a real course syllabus index, behind it a large friendly launch button waiting dimmed until the topic list is complete"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the PDF stack toward the open notebook, the tiny mascot walks gently forward and pauses briefly at the stopwatch-shaped stone, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "Soft glowing check marks light up one by one along the syllabus-index checklist card, the mascot's pen copies each topic in order, the launch button slowly brightens as the index empties into the plan, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "18": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing spreadsheet-column layers into a tower, some columns crooked and merged cells cracked mid-layer, beside a real printed header row reading VENDAS/CLIENTE/DATA, the crooked merged-cell layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card marked 'Bloco 1: PROCV', on the other side a friendly robotic arm clicking through a pivot-table interface too fast with sparks of confusion, a clear gap of soft light between sequenced understanding and rushed clicking",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a pasted column-header list to a real live spreadsheet glowing green, the tiny mascot walking on the stones mid-journey, three middle stones labeled faintly '1' '2' '3' for the three practice blocks",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like a broken PROCV formula with a red error symbol rising above the table and condensing into one crisp glowing corrected formula with a small cleaning-function icon that the mascot proudly holds up, a second faint glowing 40-page report shrinking into three labeled cards: numbers, decisions, one-pager",
+    "validacao": "the mascot examining a glowing spreadsheet formula through a large magnifying glass against an unrolled glowing reference map of skipped checkpoint flags, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card with three difficulty tiers marked easy, medium, and a jagged 'missing data' tier, behind it a large friendly launch button waiting dimmed until all three are checked"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the header-list stone toward the live green spreadsheet, the tiny mascot walks gently forward slowing at each numbered block stone, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "Soft glowing check marks light up across easy, medium, then the jagged irregular tier on the checklist card, the mascot's pen presses hardest on the jagged tier, the launch button slowly brightens as all three complete, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "19": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing citation-card layers into a tower — author name, title, year, page number each glowing perfectly formatted — but the whole tower floating with no real book underneath it, the missing-foundation layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card while holding a real pasted article page, on the other side a friendly robotic arm reconstructing a book from foggy memory fragments, a clear gap of soft light between reading the real page and guessing from memory",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a pile of mixed factual and decorative notes to a labeled verified/unverified notebook, the tiny mascot walking on the stones mid-journey, one stone shaped like a small stopwatch reading '30s'",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like fake bibliography entries rising above the table and condensing into one crisp glowing empty search-result page marked 'nao encontrado' that the mascot holds up with concern, a second faint glowing pair of health-question speech bubbles giving two different colored answers",
+    "validacao": "the mascot examining a glowing paper scroll of citations through a large magnifying glass against an unrolled glowing reference map, one confident-looking paragraph glowing suspiciously smooth and unchecked, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card tagging certain lines with a small [verificar] stamp, behind it a large friendly launch button waiting dimmed until every tagged line is checked"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the mixed-notes pile toward the verified notebook, the tiny mascot walks gently forward and lingers on the 30-second stopwatch stone, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "Soft glowing [verificar] stamps press onto flagged lines one by one on the checklist card, the mascot's pen moves deliberately across each tag, the launch button slowly brightens as the tagged lines clear, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "20": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower, each layer engraved with a specific testable outcome icon (a piggy bank goal, a calculator result) instead of a vague blank topic layer, one vague foggy unlabeled layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card marking a calendar with growing gaps between reviews, on the other side a friendly robotic arm reviewing an older glowing block that is starting to fade, a clear gap of soft light between spaced revisiting and letting memory decay",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a labeled goal sign to a closed exam booklet waiting face-down, the tiny mascot walking on the stones mid-journey, middle stones each holding a tiny question-mark flag for verification",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like scattered investment terms rising above the table and condensing into one crisp glowing simple emergency-reserve portfolio chart that the mascot proudly presents aloud, a second faint glowing two-week countdown calendar leading into a company training-room icon",
+    "validacao": "the mascot examining a glowing overloaded calendar through a large magnifying glass against an unrolled glowing reference map missing checkpoint flags, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card with one trick question card glowing amber among the plain ones, behind it a large friendly launch button waiting dimmed until the trick question is answered correctly"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the goal sign toward the face-down exam booklet, the tiny mascot walks gently forward and the booklet slowly turns to face up as it arrives, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "Soft glowing check marks light up on the checklist card while the amber trick-question card flips over to reveal the right answer, the mascot's pen pauses thoughtfully there, the launch button slowly brightens as the list completes, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "21": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing draft-page layers into a tower, each layer looking suspiciously identical to a ghostly twin tower beside it made by another writer with the same prompt, the identical-twin resemblance making the tower lean uneasily",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card labeled 'ghostwriter draft', on the other side a friendly robotic arm dressing a bare skeleton outline with real glowing meat made of facts and decisions, a clear gap of soft light between the hired draft and the real author's flesh",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a target-and-audience sign to a finished signed letter, the tiny mascot walking on the stones mid-journey, one middle stone shaped like a bare skeleton outline slowly gaining detail",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like generic phrases 'jornada' and 'gratidao' rising above the table and condensing into one crisp glowing LinkedIn post card naming a specific real project and a colleague's name that the mascot proudly holds up, a second faint glowing internal memo card with a real transition deadline stamped on it",
+    "validacao": "the mascot examining a glowing draft page through a large magnifying glass against an unrolled glowing reference map circling phrases 'mergulhar em' and 'desvendar' in red, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card asking itself in a thought bubble 'so eu poderia ter escrito isso?', behind it a large friendly launch button waiting dimmed until the answer glows yes"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the target-audience sign toward the finished signed letter, the tiny mascot walks gently forward as the skeleton stone visibly fills in with detail, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The thought-bubble question pulses softly on the checklist card while the mascot's pen circles a real specific detail added to the draft, the launch button slowly brightens as the answer turns to yes, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "22": {
+   "image": {
+    "sistema": "the mascot stacking five translucent glowing layers into a tower, each labeled with one briefing question — objective, audience, tone, format, call-to-action — beside an unrolled glowing brief sheet, one blank unanswered layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card holding a real pasted old email as a style sample, on the other side a friendly robotic arm guessing blindly at a vague label 'direto e informal' floating in fog, a clear gap of soft light between a concrete sample and a vague guess",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a blank briefing sheet to a reusable glowing folder labeled 'briefing padrao', the tiny mascot walking on the stones mid-journey, one stone shaped like a small gear representing persistent instructions",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like a stopwatch reading '20 min' rising above the table and condensing into one crisp glowing stopwatch reading '5 min' beside a fixed weekly-post template that the mascot proudly holds up, a second faint glowing proposal folder gathering a past-project card, a price tag, and a highlighted differentiator",
+    "validacao": "the mascot examining a glowing blank briefing sheet through a large magnifying glass against an unrolled glowing reference map with a missing audience box and a missing character-limit note, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card titled 'briefing padrao' with five filled-in answers, behind it a large friendly launch button waiting dimmed until all five are filled"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the blank briefing sheet toward the reusable folder, the tiny mascot walks gently forward and the gear-shaped stone spins softly as it passes, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "Soft glowing checkmarks fill in the five briefing-padrao fields one by one on the card, the mascot's pen moves steadily through objective, audience, tone, format, and call-to-action, the launch button slowly brightens as the last field completes, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "23": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower — a full proposal document layer, a condensed email layer, a team-message layer — all radiating from one single glowing source layer at the base, one layer drifting off-source and mismatched making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card holding a completed formal proposal document, on the other side a friendly robotic arm reshaping the same content into a shorter warmer message for the team, a clear gap of soft light between the formal source and the adapted tone",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a project briefing sign to a small glowing envelope marked '150 palavras', the tiny mascot walking on the stones mid-journey, one stone shaped like a magnifying glass checking matching numbers",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like lost paper record slips rising above the table and condensing into one crisp glowing shared-spreadsheet proposal card with a '15 min' meeting-request stamp that the mascot proudly holds up, a second faint glowing calendar with three spaced glowing welcome-message dots across a first week",
+    "validacao": "the mascot examining a glowing email through a large magnifying glass against an unrolled glowing reference map circling an unfilled '[inserir data]' placeholder in red, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card with a rule 'nenhum dado novo' circled twice, behind it a large friendly launch button waiting dimmed until the derived text matches the source exactly"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the briefing sign toward the 150-word envelope, the tiny mascot walks gently forward and the magnifying-glass stone glows as matching numbers align, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The 'nenhum dado novo' rule glows steadily on the checklist card while the mascot's pen crosses out any new invented detail that tries to sneak in, the launch button slowly brightens as the derived text stays faithful to the source, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "24": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower, one layer engraved with a suspiciously perfect '68%' statistic glowing too smoothly, floating with no real source root beneath it, that rootless statistic layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card with common recycled phrases, on the other side a friendly robotic arm holding up a radar dish that beeps red at the recycled phrases, a clear gap of soft light between generic wording and a reader's sharp radar",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a small glowing speech-bubble (reading aloud) to a second real person's eye giving final approval, the tiny mascot walking on the stones mid-journey, one stone circled in red for a leftover '[inserir aqui]' placeholder",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like a glowing '40%' statistic with a question mark rising above the table and condensing into one crisp glowing honest shorter proposal without the fake number that the mascot proudly holds up, a second faint glowing social post gaining one real store detail among generic ones",
+    "validacao": "the mascot examining a glowing paragraph through a large magnifying glass against an unrolled glowing reference map listing repeated sentence structures in a row, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card listing each number from the text separately in its own row, behind it a large friendly launch button waiting dimmed until every row is confirmed"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the reading-aloud speech-bubble toward the real person's approving eye, the tiny mascot walks gently forward and the red-circled placeholder stone glows until it is filled in, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "Soft glowing check marks confirm each numbered row on the checklist card one at a time, the mascot's pen taps each number before moving to the next, the launch button slowly brightens as every row is verified, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "25": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower branching at the top into three glowing shapes — a document, an envelope, and a slide card — all rooted in one single base layer, a branch drifting away from the base making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card labeled 'projeto 1', on the other side a friendly robotic arm stamping the same card as a reusable template ready for 'projeto 2', a clear gap of soft light between a one-off task and a reusable process",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a project sign with two connected icons to a stack of finished matching pieces, the tiny mascot walking on the stones mid-journey, the final stone glowing beside a real person's approving eye",
+    "cenario": "a swirl of misty crumpled paper scraps rising above the table and condensing into three crisp glowing matching pieces — a proposal document, an email, and a slide summary sharing the same number — that the mascot proudly holds up together, a second faint glowing family-event invitation shrinking into a group-chat message and a social post, same date on all three",
+    "validacao": "the mascot examining three glowing pieces of content through a large magnifying glass against an unrolled glowing reference map checking for a mismatched number between them, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card asking 'mesma historia, mesmos numeros?' while holding all three pieces together, behind it a large friendly launch button waiting dimmed until they match"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the two-icon project sign toward the stack of matching finished pieces, the tiny mascot walks gently forward as the final stone lights up beside the approving eye, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The three content pieces glow and align side by side on the checklist card as the cross-check question pulses, the mascot's pen checks each piece against the others, the launch button slowly brightens as they all match, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "26": {
+   "image": {
+    "sistema": "the mascot stacking two translucent glowing layers into a tower — one layer a personal saved-history folder, one layer a distant training-data cloud — each with its own separate glowing lock dial, one dial left unchecked and foggy making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card holding a plain work email snippet, on the other side a friendly robotic arm holding the same snippet now glowing red with a CPF and address stamped on it, a clear gap of soft light between the safe version and the risky version",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from two separate glowing lock dials to a balanced scale holding both caution and continued use, the tiny mascot walking on the stones mid-journey, one stone shaped like a small magnifying glass reviewing ten past chat bubbles",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like a full employment contract with salary and address rising above the table and condensing into one crisp glowing single highlighted clause that the mascot proudly holds up, a second faint glowing plain grammar-check email sitting untouched beside an overly locked drawer with a small worried mascot shadow avoiding it",
+    "validacao": "the mascot examining a glowing settings menu through a large magnifying glass, never yet opened, against an unrolled glowing reference map showing 'so dessa vez' repeated week after week, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card with a small five-second hourglass icon beside the question 'minimo necessario?', behind it a large friendly launch button waiting dimmed until the hourglass empties"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the two lock dials toward the balanced scale, the tiny mascot walks gently forward pausing at the ten-chat-bubble magnifying-glass stone, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The five-second hourglass drains slowly on the checklist card while the mascot's pen waits, only writing once it empties, the launch button slowly brightens as the pause completes, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "27": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower — a settings-menu layer, a training-data toggle layer, a temporary-chat layer — one toggle layer still dim and never switched, that unchecked dim layer making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card listing six forbidden-data icons (password, ID card, bank note, medical cross, NDA seal, child silhouette), on the other side a friendly robotic arm holding just a vague foggy thought instead of a written list, a clear gap of soft light between the written list and the vague memory",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a settings-gear icon to a calendar with a recurring glowing review date circled, the tiny mascot walking on the stones mid-journey, one stone split in two representing separate work and personal accounts",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like exact bank statement numbers rising above the table and condensing into one crisp glowing rounded budget chart under a temporary-chat hourglass icon that the mascot proudly holds up, a second faint glowing tangled chat history splitting cleanly into two separate labeled folders, work and personal",
+    "validacao": "the mascot examining a glowing settings menu through a large magnifying glass, dust visibly covering an unopened privacy tab, against an unrolled glowing reference map with tangled work and personal threads crossing, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card and pinning it directly onto a glowing phone-screen mockup right where the chat icon sits, behind it a large friendly launch button waiting dimmed until the pin is placed"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the settings-gear icon toward the circled recurring review date, the tiny mascot walks gently forward as the split work/personal stone visibly separates into two, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The glowing checklist card slides onto the phone-screen mockup and pins itself beside the chat icon, the mascot's pen gives a final tap to secure it, the launch button slowly brightens once the pin holds, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "28": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower, each real identifier layer (a name tag, an ID card, a street address, an order number) swapped mid-air for a glowing generic marker layer (Cliente A, documento X, bairro generico, pedido no 000), one identifier layer still unswapped and glowing with real text making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card showing rounded numbers 'por volta de X mil', on the other side a friendly robotic arm holding an exact glowing bank statement with precise digits, a clear gap of soft light between the rounded safe version and the exact risky version",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a real name-tag document to a finished letter with the real name reinserted by hand outside the chat, the tiny mascot walking on the stones mid-journey, one middle stone glowing with the generic marker 'Cliente A'",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like a full customer complaint email with real name and phone rising above the table and condensing into one crisp glowing anonymized card reading 'Cliente A, pedido no 000, atraso 5 dias' that the mascot proudly holds up, a second faint glowing set of three rounded money icons reading 'cerca de 6 mil', 'cerca de 2 mil', 'aproximadamente 15 mil'",
+    "validacao": "the mascot examining a glowing final letter through a large magnifying glass, catching one leftover 'Cliente A' marker that was never swapped back, against an unrolled glowing reference map, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card doing a quick 'find and replace' pass with a small fifteen-second timer icon, behind it a large friendly launch button waiting dimmed until every identifier is swapped"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the real name-tag document toward the finished hand-completed letter, the tiny mascot walks gently forward as the 'Cliente A' marker stone glows then quietly swaps back to the real name only at the very end, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The fifteen-second timer on the checklist card counts down as the mascot's pen swaps each identifier for a generic marker in turn, the launch button slowly brightens as the timer reaches zero with every swap done, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "29": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower — a signed contract layer, a full medical exam layer, a plaintext password layer, a private screenshot layer — each one dangerously whole instead of trimmed to just the needed part, the plaintext password layer glowing brightest and most alarming, making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card asking 'o que significa esta clausula?', on the other side a friendly robotic arm stamping a final glowing verdict 'devo assinar' without any professional in sight, a clear gap of soft light between seeking clarity and outsourcing the decision",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from a red-flagged high-risk document pile to a logged-out glowing device screen, the tiny mascot walking on the stones mid-journey, one stone splitting personal and work speech bubbles apart",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like a full blood-test sheet with name and birthdate rising above the table and condensing into one crisp glowing single circled lab value that the mascot proudly holds up, a second faint glowing office computer screen with a personal chat still logged in as a colleague's shadow walks past",
+    "validacao": "the mascot examining a glowing plaintext password typed into a chat box through a large magnifying glass against an unrolled glowing reference map of a still-logged-in shared device, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card rephrasing 'o que eu devo fazer' into 'o que entender antes do profissional', behind it a large friendly launch button waiting dimmed until the rephrasing is complete"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the red-flagged document pile toward the logged-out device screen, the tiny mascot walks gently forward as the split personal/work bubble stone visibly separates, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The checklist card's question crosses out 'o que eu devo fazer' and glows in 'o que entender antes do profissional' instead, the mascot's pen makes the correction deliberately, the launch button slowly brightens as the rephrasing settles, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  },
+  "30": {
+   "image": {
+    "sistema": "the mascot stacking translucent glowing layers into a tower, each layer labeled with one real category of use (work, study, family finances, content, kids' homework) sized to fit exactly, one layer far too wide and vague and another far too narrow both making the tower lean",
+    "intencao": "on one side the mascot calmly writing on a small glowing planning card listing 'sempre' rules glowing green, on the other side a friendly robotic arm stamping 'nunca' rules glowing red as an automatic brake, a clear gap of soft light between the positive habits and the protective brakes",
+    "fluxo": "a winding path of five glowing stepping stones crossing the table from five labeled category flags to a real completed task stamped 'testado', the tiny mascot walking on the stones mid-journey, one stone shaped like a calendar page with a circled review date",
+    "cenario": "a swirl of misty crumpled paper scraps shaped like three business categories (marketing, atendimento, financas) rising above the table and condensing into one crisp glowing written protocol page gaining a new supplier-anonymization line after two months that the mascot proudly holds up, a second faint glowing family protocol page with a child silhouette crossed by a 'nunca nome ou escola' rule",
+    "validacao": "the mascot examining a glowing unwritten protocol still only in a thought bubble through a large magnifying glass against an unrolled glowing reference map with a missing review-date stamp, a kind amber warning light above, a small round blank wax stamp resting unused",
+    "dica": "the mascot writing a glowing checklist card and circling a recurring date every two to three months on a small calendar page, behind it a large friendly launch button waiting dimmed until the recurring date is locked in"
+   },
+   "video": {
+    "fluxo": "The five glowing stepping stones pulse in sequence from the five category flags toward the 'testado' stamped task, the tiny mascot walks gently forward as the calendar-page stone's circled date glows warmly, warm dust motes drift, slow cinematic push-in, seamless loop",
+    "dica": "The calendar page on the checklist card flips forward two to three months as the circled review date glows steadily, the mascot's pen locks the recurring date in place, the launch button slowly brightens as the reminder is set, warm ambient drift, slow cinematic push-in, seamless loop"
+   }
+  }
+ }
+}

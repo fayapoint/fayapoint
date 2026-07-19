@@ -1,0 +1,44 @@
+6 word shingles repeated across chapters: 32
+  [20, 21, 22, 23, 24, 25] -> criação de conteúdo para trabalho e
+  [20, 21, 22, 23, 24, 25] -> de conteúdo para trabalho e projetos
+  [16, 26] -> este capítulo instala o modelo mental
+  [16, 21] -> fluxo de execução 1 defina o
+  [16, 21] -> de execução 1 defina o objetivo
+  [16, 20] -> o que ficou e o que
+  [16, 17] -> demais ou avançadas demais para o
+  [17, 19] -> você pergunta sobre o conteúdo de
+  [17, 19] -> pergunta sobre o conteúdo de um
+  [19, 29] -> a segunda distinção crítica é entre
+  [19, 24] -> recentemente com ajuda de ia —
+  [20, 30] -> projeto orientado a entrega o projeto
+  [20, 30] -> orientado a entrega o projeto final
+  [20, 25] -> fluxo de execução 1 escolha um
+  [20, 30] -> ia seguindo os cinco passos deste
+  [20, 30] -> seguindo os cinco passos deste capítulo
+  [20, 25] -> o próximo módulo muda de foco
+  [21, 22] -> ao modelo um alvo concreto de
+  [21, 22] -> modelo um alvo concreto de tom
+  [21, 22] -> o que esse texto precisa fazer
+  [21, 24] -> para quem já reconhece o padrão
+  [23, 25] -> não como textos novos e independentes
+  [23, 25] -> contam a mesma história com os
+  [23, 25] -> a mesma história com os mesmos
+  [25, 30] -> a segunda ideia central é que
+  [25, 30] -> a terceira ideia que fecha o
+  [26, 28] -> antes de colar qualquer coisa num
+  [26, 28] -> de colar qualquer coisa num chat
+  [26, 30] -> nome completo cpf e endereço de
+  [26, 29] -> exigia — o mesmo esclarecimento poderia
+  [26, 28] -> dica pro antes de colar qualquer
+  [26, 28] -> pro antes de colar qualquer texto
+7 word shingles repeated across chapters: 9
+  [20, 21, 22, 23, 24, 25] -> criação de conteúdo para trabalho e projetos
+  [16, 21] -> fluxo de execução 1 defina o objetivo
+  [17, 19] -> você pergunta sobre o conteúdo de um
+  [20, 30] -> projeto orientado a entrega o projeto final
+  [20, 30] -> ia seguindo os cinco passos deste capítulo
+  [21, 22] -> ao modelo um alvo concreto de tom
+  [23, 25] -> contam a mesma história com os mesmos
+  [26, 28] -> antes de colar qualquer coisa num chat
+  [26, 28] -> dica pro antes de colar qualquer texto
+8 word shingles repeated across chapters: 0
