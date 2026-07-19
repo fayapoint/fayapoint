@@ -1,0 +1,265 @@
+{
+  "slug": "rag-knowledge",
+  "themes": [
+    ["real minimalist engineering desk with a glass whiteboard sketch of boxes and arrows connecting a question to an answer", "cyan"],
+    ["real desk with stacks of real paper documents and folders being sorted into labeled trays", "lime"],
+    ["real desk with a large library card catalog cabinet half-open, glowing index cards emerging", "violet"]
+  ],
+  "chapters": [
+    {
+      "n": 1,
+      "module": 0,
+      "grounding_note": "Ch1 = 3 structural LLM limits (cutoff/lost-in-middle/hallucination) + RAG vs fine-tuning + fintech/law-firm/ecommerce scenarios + no-fallback error + freq/cost question",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a calendar page frozen at a past date, one showing a long scrolling document with its middle section faded and dim while the top and bottom glow bright (the lost-in-the-middle effect), one containing a speech bubble filled with a suspiciously confident exclamation mark - the speech-bubble layer flickering unstable and making the tower lean",
+        "intencao": "on one side the mascot pulling a single glowing document from a small external archive and sliding it under a waiting question mark, on the other side a friendly robotic arm slowly rewelding internal gears deep inside a sealed machine labeled with tiny weight dials, a clear gap of soft light between the fast archive pull and the slow internal rewelding",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a large glowing question mark to a cited answer card with a small source tag - the stones read in sequence: a magnifying glass over a question, two separate glowing boxes linked by a thin wire, a slowly spinning refresh loop icon, a stone with a calm empty-handed gesture icon, a stone stamped with a small quote mark - the tiny mascot walking the path mid-journey",
+        "cenario": "a swirl of misty regulatory circulars and legal case files rising above the desk and condensing into one crisp glowing policy card stamped with an exact citation tag, while off to the side a separate glowing speech-bubble labeled with a smiling brand tone sits untouched by the swirl, the mascot proudly holding up the cited policy card",
+        "validacao": "the mascot inspecting a glowing document window through a large magnifying glass, noticing its middle section fading into fog while the edges stay bright, and beside it an empty search-result tray quietly filling itself with a fabricated glowing answer bubble instead of staying empty, a kind amber warning light above",
+        "dica": "the mascot writing on a glowing checklist card with two glowing dials - one marked with a spinning frequency clock, one marked with a rising cost bar - both dials tipping toward high, behind it a large friendly launch button waiting dimmed until both dials are checked"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones light up one after another in sequence - magnifying glass, linked boxes, spinning refresh loop, empty-handed gesture, quote-mark stamp - the tiny mascot walks gently forward across them toward the cited answer card, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "The frequency clock dial spins and the cost bar rises on the glowing checklist card, the mascot's pen taps a soft check mark beside each one, the launch button in the background slowly brightens as both dials settle high, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 2,
+      "module": 0,
+      "grounding_note": "Ch2 = source inventory heterogeneity + freshness vs latency budget + ACL as retrieval-layer metadata (fintech/SaaS tenant_id)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a scattered mix of icons (a PDF page, a wiki icon, a support ticket, a signed contract, a meeting transcript), one showing two side-by-side dials labeled with a calendar for freshness and a stopwatch for latency, one showing a padlock with faint dotted lines separating a public folder from a restricted one - the padlock layer glowing dim and making the tower lean",
+        "intencao": "on one side the mascot slowly turning a large glowing calendar dial toward a weekly reindex mark, on the other side a friendly robotic arm racing a stopwatch toward a near-instant response mark, a clear gap of soft light between the slow calendar turn and the fast stopwatch race",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a scattered pile of document icons to a finished one-page architecture card - the stones read: a magnifying glass over a stack of mixed documents, a calendar dial, a stopwatch dial, a small padlock tag, a checkmark ruler - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty regulatory PDFs, spreadsheet rows and wiki pages rising above the desk and condensing into two separate glowing labeled trays - one marked slow-cadence circulars, one marked daily-edited wiki - while a third glowing tray stamped tenant_id locks itself shut before the swirl even reaches it, the mascot proudly holding up the sorted trays",
+        "validacao": "the mascot inspecting a glowing search result stream through a large magnifying glass and catching a stray document card labeled with a different business unit's tag slipping through an unlocked retrieval gate, while a separate padlock icon sits uselessly on a far-away interface screen, a kind amber warning light above",
+        "dica": "the mascot filling in a glowing five-column checklist card - format, volume, owner, frequency, sensitivity - one row at a time with soft check marks, behind it a large friendly launch button waiting dimmed until every column of the row is complete"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - magnifying glass, calendar dial, stopwatch dial, padlock tag, checkmark ruler - pulse softly in sequence, the tiny mascot walks gently forward across them toward the finished architecture card, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "Soft glowing check marks fill in one column at a time across the five-column card - format, volume, owner, frequency, sensitivity - the mascot's pen moves steadily, the launch button in the background slowly brightens as the row completes, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 3,
+      "module": 0,
+      "grounding_note": "Ch3 = 5-stage query lifecycle (reformulation/search/rerank/context/citation) + FAQ vs long-ticket granularity + relevance threshold (SaaS support scenario)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a follow-up chat bubble rewriting itself into a self-contained question, one showing a cross-encoder magnifying icon reordering three floating result cards, one showing a finished answer card with a small glowing citation tag pointing back to its source - the reordering layer humming actively bright at the center",
+        "intencao": "on one side the mascot calmly placing a single short glowing FAQ card straight into the index untouched, on the other side a friendly robotic arm carefully trimming greetings and small talk off a long tangled ticket transcript before placing only the glowing resolution fragment into the index, a clear gap of soft light between the untouched card and the trimmed transcript",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a typed question bubble to a cited answer card - the stones read: a chat bubble rewriting itself, a sorting scale weighing short versus long documents, a glowing threshold bar, a small citation tag, a stack of real crumpled sticky-note questions - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty chat transcript fragments (greetings, waiting messages, back-and-forth) rising above the desk and condensing into one crisp glowing resolved-ticket card reading a stuck-at-90-percent export fix, promoted above a duller FAQ card and a duller changelog card, the mascot proudly holding up the resolved ticket",
+        "validacao": "the mascot inspecting three floating glowing result cards through a large magnifying glass, all three dimly glowing below a visible threshold line, and instead of forcing a bright answer the mascot gently sets down an honest not-in-knowledge-base card, a kind amber warning light above",
+        "dica": "the mascot writing ten small glowing numbered question cards pulled from a stack of old real ticket slips onto a checklist card, behind it a large friendly launch button waiting dimmed until all ten cards are placed"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - rewriting chat bubble, sorting scale, threshold bar, citation tag, sticky-note stack - pulse softly in sequence, the tiny mascot walks gently forward across them toward the cited answer card, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "Ten small numbered question cards are placed one by one onto the checklist card from the stack of old ticket slips, the mascot's pen checks each one, the launch button in the background slowly brightens as the tenth card lands, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 4,
+      "module": 0,
+      "grounding_note": "Ch4 = blind faith in retrieval + absent eval framework/golden dataset + ACL leakage between departments (healthcare/insurance scenarios)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a document icon assumed found but marked with a faint question mark, one showing an empty golden-dataset grid with only two of thirty cells filled, one showing a padlocked folder with a thin crack leaking a faint document sliver into a neighboring folder - the cracked padlock layer glowing dim and making the tower lean",
+        "intencao": "on one side the mascot admiring a glowing answer card for its smooth flowing handwriting, on the other side a friendly robotic arm tracing a glowing thread from the same answer card back down to its exact source paragraph, a clear gap of soft light between admiring the handwriting and tracing the thread",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from ten real questions to a regression checklist card - the stones read: a magnifying glass over search results, a grid of thirty glowing question-answer pairs, a grounding thread linking answer to source, a padlocked figure standing at a restricted gate, a looping refresh arrow - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty clinical protocol pages, some stamped faintly revoked, rising above the desk and condensing into one crisp glowing current-protocol card marked active, while a dimmer revoked protocol card is pushed to the side, the mascot proudly holding up the active protocol",
+        "validacao": "the mascot inspecting a glowing composite answer card through a large magnifying glass, spotting one faint stitched-in fragment from a document stamped revoked hiding inside an otherwise current-looking answer, a kind amber warning light above",
+        "dica": "the mascot stamping a glowing status tag - active, revoked, or obsolete - onto a checklist card before letting a document pass through a small gate, behind it a large friendly launch button waiting dimmed until the status tag is stamped"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - magnifying glass, thirty-pair grid, grounding thread, padlocked gate figure, looping refresh arrow - pulse softly in sequence, the tiny mascot walks gently forward across them toward the regression checklist, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "The status tag stamps down onto the checklist card with a soft glow - active, revoked, obsolete cycling briefly before settling - the mascot's pen confirms it, the launch button in the background slowly brightens as the gate opens, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 5,
+      "module": 0,
+      "grounding_note": "Ch5 = 5-question architecture doc (problem/sources/query flow/limits/success criteria), HR policy assistant delivery project",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a specific measurable sentence replacing a vague cloud of words, one showing three small folder icons (employee handbook, per-country benefits, Notion FAQ) neatly labeled, one showing a stop-sign boundary marking a disciplinary case as off-limits - the boundary layer glowing steady and grounding the whole tower upright",
+        "intencao": "on one side the mascot staring at a foggy glowing cloud labeled improve HR with AI, on the other side a friendly robotic arm engraving a precise glowing sentence reading reduce three days to minutes onto a small plaque, a clear gap of soft light between the foggy cloud and the engraved plaque",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a foggy question cloud to a signed one-page architecture card - the stones read: an engraved problem plaque, three labeled folder icons, a small flow diagram, a stop-sign boundary marker, a target with three to five rings - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty vacation requests, benefit forms and home-office policy questions rising above the desk and condensing into one crisp glowing one-page architecture card listing three sources and a stop-sign for disciplinary cases, the mascot proudly presenting the finished page",
+        "validacao": "the mascot inspecting a nearly finished glowing architecture card through a large magnifying glass and noticing one section left completely blank where the stop-sign boundary marker should be, a kind amber warning light above the empty space",
+        "dica": "the mascot handing a glowing one-page architecture card to a real person outside the desk for a first read, watching their face for understanding, behind it a large friendly launch button waiting dimmed until the nod of approval"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - engraved plaque, three folder icons, flow diagram, stop-sign marker, five-ring target - pulse softly in sequence, the tiny mascot walks gently forward across them toward the signed architecture card, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "The mascot holds out the glowing one-page card toward the real person's hand, a soft nod of understanding ripples across their face, the launch button in the background slowly brightens as the card is accepted, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 6,
+      "module": 1,
+      "grounding_note": "Ch6 = PDF/HTML parsing challenges + chunking spectrum (fixed/recursive/semantic/structure-aware) + metadata+dedup (insurance clauses/call transcripts/HTML boilerplate)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a PDF page split into confused multi-column streams and a table turned to scrambled characters, one showing four small chunking blocks labeled fixed, recursive, semantic and structure-aware glowing in ascending quality, one showing twin near-identical document icons overlapping with a faint duplicate warning - the duplicate layer glowing dim and making the tower lean",
+        "intencao": "on one side the mascot slicing a glowing paragraph straight through the middle of a sentence with a blunt ruler, on the other side a friendly robotic arm gently following the natural curve of a paragraph break and a markdown heading to make a clean cut, a clear gap of soft light between the blunt slice and the gentle natural cut",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a pile of mixed PDFs and HTML pages to a clean labeled chunk tray - the stones read: a document classifier lens, four chunking-strategy blocks, a ruler measuring overlap, a metadata tag template, a duplicate-detection hash icon - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty insurance policy pages with numbered clauses and noisy call transcript pages rising above the desk and condensing into two distinct clean chunk trays - one labeled by clause number, one labeled by topic shift - while a separate pile of website menus and cookie banners is swept entirely off the desk, the mascot proudly holding up the clean trays",
+        "validacao": "the mascot inspecting a glowing text chunk through a large magnifying glass and finding it ends mid-word with a jagged torn edge, while a second chunk nearby is still cluttered with a faint ghost of a website menu bar bleeding into the text, a kind amber warning light above",
+        "dica": "the mascot holding a small pair of scissors over five real representative documents spread on the desk, hand-marking where a human would cut each one on a glowing checklist card, behind it a large friendly launch button waiting dimmed until all five hand-cuts are marked"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - classifier lens, four chunking blocks, overlap ruler, metadata tag, hash icon - pulse softly in sequence, the tiny mascot walks gently forward across them toward the labeled chunk tray, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "The mascot's scissors hover and mark a soft glowing cut line on each of the five documents in turn, the checklist card fills with matching marks, the launch button in the background slowly brightens as the fifth cut is marked, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 7,
+      "module": 1,
+      "grounding_note": "Ch7 = parsing tools by source + chunk size/overlap parametrization (10-20%) + document lifecycle hash/timestamp (marketplace seller policies scenario)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with three small parsing-tool icons chosen for PDF, HTML and spreadsheet sources, one showing a ruler marked with a 10-to-20-percent overlap band between two chunk blocks, one showing a fingerprint-hash tag watching a document for changes over time - the fingerprint layer pulsing softly at the base of the tower",
+        "intencao": "on one side the mascot holding a small precise glowing chunk card that fits neatly in one hand, on the other side a friendly robotic arm straining to hold a large glowing chunk card blurring slightly at its edges from mixing too many topics, a clear gap of soft light between the small precise card and the blurring large card",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from three raw source piles to a maintained chunk tray - the stones read: three parsing-tool icons, an overlap ruler, a metadata schema card with hash and timestamp fields, a change-detection fingerprint scanner, a removal trash-bin icon - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty seller PDFs, portal pages and an exceptions spreadsheet rising above the desk and condensing into three distinct clean pipelines, while a fourth glowing pass reindexes only a small highlighted thirty-percent section of a quarterly policy update, leaving the rest of the document undisturbed, the mascot proudly overseeing the selective reindex",
+        "validacao": "the mascot inspecting a glowing document record through a large magnifying glass and finding its hash and timestamp fields blank, while nearby a faded orphaned chunk still lingers in the tray long after its source document icon has vanished, a kind amber warning light above",
+        "dica": "the mascot stamping a glowing fingerprint-hash tag onto every chunk card as it enters the tray, checking it off a checklist card, behind it a large friendly launch button waiting dimmed until every chunk carries its hash tag"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - three tool icons, overlap ruler, hash-timestamp schema card, change-detection scanner, removal bin - pulse softly in sequence, the tiny mascot walks gently forward across them toward the maintained chunk tray, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "A soft glowing fingerprint-hash tag stamps onto each chunk card as it passes by, the checklist fills one mark at a time, the launch button in the background slowly brightens as the last chunk is stamped, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 8,
+      "module": 1,
+      "grounding_note": "Ch8 = law firm 12k contracts: format classifier, selective OCR, clause-boundary chunking with parent-child link, legal metadata granularity",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a small lens sorting contracts by roman versus arabic clause-numbering style, one showing a long clause split into three linked fragments all tethered by a glowing thread to one parent-clause tag, one showing a dense metadata card listing client, contract number, type, date, status and clause number - the linked-fragment layer glowing brightest at its center thread",
+        "intencao": "on one side the mascot watching a glowing legal clause get sliced blindly in half by a blunt ruler losing its meaning, on the other side a friendly robotic arm carefully cutting along the numbered clause boundary and tying a glowing thread back to the parent clause, a clear gap of soft light between the blind slice and the careful boundary cut",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a stack of twelve thousand contract pages to a precisely cited clause card - the stones read: a format-classifier lens, a selective OCR scanner lighting only scanned pages, a numbered-clause boundary cutter, a legal metadata card, a magnifying glass over a sample stack - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty contract pages in mismatched templates and faded scanned annexes rising above the desk and condensing into one crisp glowing clause card stamped clause 7.3, contract 4521, the mascot proudly holding up the precisely cited clause",
+        "validacao": "the mascot inspecting a glowing search result through a large magnifying glass, noticing only one of three linked clause fragments returned, then gently pulling the glowing parent thread to reveal the two missing sibling fragments still connected nearby, a kind amber warning light above the incomplete result",
+        "dica": "the mascot tying a small glowing parent-tag thread from a clause fragment back to its container clause on a checklist card, behind it a large friendly launch button waiting dimmed until every fragment is tethered"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - format lens, selective OCR scanner, clause-boundary cutter, legal metadata card, sample magnifying glass - pulse softly in sequence, the tiny mascot walks gently forward across them toward the precisely cited clause card, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "A soft glowing thread ties itself from each clause fragment back to its parent tag on the checklist card, the mascot's hand guides the thread gently, the launch button in the background slowly brightens as the last fragment is tethered, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 9,
+      "module": 1,
+      "grounding_note": "Ch9 = silent ingestion errors: blind fixed cuts, excessive overlap, incomplete metadata fill rate, no dedup (telecom tickets/retail regiao field scenarios)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a table cut clean through its header row leaving orphaned columns below, one showing three near-identical overlapping chunk blocks piled wastefully on top of each other, one showing a metadata grid with only sixty out of a hundred cells lit - the sparse metadata layer glowing dim and making the tower lean",
+        "intencao": "on one side the mascot squinting at a lone glowing text fragment that makes no sense by itself, on the other side a friendly robotic arm holding the same fragment beside its full original glowing document where it reads clearly, a clear gap of soft light between the confusing lone fragment and the clear full document",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a random chunk sample to a documented exceptions log - the stones read: a magnifying glass over an isolated chunk, a percentage-fill gauge, a duplicate-similarity scanner, a boundary-crossing test question, an exception notebook - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty ticket text mixing greetings, hold-music apologies and the real fix together rising above the desk and condensing into one crisp glowing resolution-only chunk, with the greeting and small-talk fragments pushed aside as separate metadata, the mascot proudly holding up the isolated resolution",
+        "validacao": "the mascot inspecting a glowing regional-policy card through a large magnifying glass and finding its regiao metadata field completely blank, tracing the gap back to a renamed file icon that broke the naming convention, a kind amber warning light above",
+        "dica": "the mascot laying out fifty small glowing chunk cards side by side with their metadata tags on a checklist card, reviewing them one row at a time, behind it a large friendly launch button waiting dimmed until the full row of fifty is reviewed"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - isolated-chunk lens, fill gauge, duplicate scanner, boundary question, exception notebook - pulse softly in sequence, the tiny mascot walks gently forward across them toward the exceptions log, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "Fifty small chunk cards slide into place one row at a time on the checklist card, the mascot's eyes scan each one, the launch button in the background slowly brightens as the last card is reviewed, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 10,
+      "module": 1,
+      "grounding_note": "Ch10 = engineering wiki 3k pages: markdown-header chunking, code-block separation with language metadata, obsolescence flag (18 months)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with nested markdown heading marks forming a clean staircase, one showing a fenced code block glowing in a different color than the prose around it with a small language tag, one showing a calendar counting eighteen months since last edit with a faint possibly-outdated stamp - the calendar layer glowing softly amber, cautionary rather than dim",
+        "intencao": "on one side the mascot calmly reading a glowing runbook with clean numbered headings, on the other side a friendly robotic arm untangling a glowing scribbled meeting-notes page with no structure at all, a clear gap of soft light between the clean headings and the tangled scribble",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a raw wiki export to an answered engineering question - the stones read: a markdown heading staircase, a fenced code block tag, a page-type sorting icon, a possibly-outdated calendar stamp, a real technical question card - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty wiki pages - runbooks, architecture decision records, scribbled meeting notes and code snippets - rising above the desk and condensing into neatly separated glowing chunk piles, one tagged by markdown heading, one tagged by programming language, the mascot proudly holding up the sorted piles",
+        "validacao": "the mascot inspecting two glowing runbook cards through a large magnifying glass side by side - one fresh with a recent-edit glow, one dim with a possibly-outdated amber stamp describing a deploy system that no longer exists - a kind amber warning light above the older card",
+        "dica": "the mascot placing a glowing fenced code block into its own separate labeled slot on a checklist card, tagging it with a small language icon, behind it a large friendly launch button waiting dimmed until every code block has its own slot"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - heading staircase, code-block tag, page-type icon, outdated-calendar stamp, real question card - pulse softly in sequence, the tiny mascot walks gently forward across them toward the answered question, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "Each glowing code block slides into its own labeled slot on the checklist card with a soft chime, a language tag lights up beside it, the launch button in the background slowly brightens as the last block finds its slot, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 11,
+      "module": 2,
+      "grounding_note": "Ch11 = embedding model dimensionality + vector DB choice (Pinecone/Weaviate/pgvector/Qdrant/Milvus) + similarity metric + ANN index (media/ecommerce/support scenarios)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a small dial ranging from 384 to 3072 marking vector dimension, one showing five tiny labeled vector-database icons with one glowing brighter as chosen, one showing a cosine-angle symbol beside a faster dot-product symbol - the chosen-database layer glowing steady at the tower's center",
+        "intencao": "on one side the mascot holding two glowing word-cards that share no letters at all standing far apart, on the other side a friendly robotic arm gently pulling those same two glowing cards close together in vector space because they mean the same thing, a clear gap of soft light between the distant word-cards and the close vector pull",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a raw text query to a ranked list of index cards - the stones read: an embedding-model dial, a vector-database icon, a cosine-angle symbol, an HNSW-graph icon, a hybrid-search fork - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty decades of archived news articles rising above the desk and condensing into one crisp glowing vector-index card nested neatly inside a familiar relational-database folder, the mascot proudly holding up the simplified single-system setup",
+        "validacao": "the mascot inspecting two glowing vectors through a large magnifying glass, discovering they were generated by two different embedding-model stamps and therefore point in incomparable directions despite looking similar at a glance, a kind amber warning light above",
+        "dica": "the mascot running a small glowing pilot batch of a few hundred index cards through a recall-at-k gauge on a checklist card, behind it a large friendly launch button waiting dimmed until the gauge reading is recorded"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - embedding dial, vector-database icon, cosine-angle symbol, HNSW-graph icon, hybrid-search fork - pulse softly in sequence, the tiny mascot walks gently forward across them toward the ranked index cards, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "The recall-at-k gauge needle rises softly as the small pilot batch of cards runs through it, the mascot watches and notes the reading, the launch button in the background slowly brightens as the gauge settles, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 12,
+      "module": 2,
+      "grounding_note": "Ch12 = dimensionality tradeoff/Matryoshka truncation + HNSW params M/efConstruction/efSearch + hybrid BM25+RRF infra (streaming platform 50k titles scenario)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with a nested Matryoshka-doll vector shrinking from full size to a smaller truncated size with barely any glow lost, one showing a graph-mesh layer with a dial marked M between sixteen and sixty-four, one showing a small separate efSearch slider that moves freely without disturbing the layers below it - the efSearch slider glowing brightest as the easiest layer to adjust",
+        "intencao": "on one side the mascot quickly finishing a glowing graph-mesh in forty minutes with a slightly lower recall glow, on the other side a friendly robotic arm patiently finishing a denser glowing graph-mesh in eighty-five minutes with a noticeably brighter recall glow, a clear gap of soft light between the quick mesh and the dense mesh",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a raw catalog to a tuned index card - the stones read: a recall-at-k gauge, an M-and-efConstruction dial pair, a loose efSearch slider, a BM25-plus-vector fork, three latency gauges marked p50 p95 p99 - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty streaming-title descriptions and transcripts rising above the desk and condensing into one crisp glowing truncated Matryoshka-vector card, a small tag beside it reading sixty percent smaller, two percent recall lost, the mascot proudly holding up the efficient index card",
+        "validacao": "the mascot inspecting a glowing latency gauge through a large magnifying glass, calm and green during a single lonely test query, then watching the same gauge spike into amber the moment a crowd of tiny concurrent query icons arrive at once, a kind amber warning light above",
+        "dica": "the mascot lining up a crowd of tiny glowing concurrent-query icons to test the index together on a checklist card, watching the p95 and p99 gauges together, behind it a large friendly launch button waiting dimmed until the load test completes"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - recall gauge, M-efConstruction dial, efSearch slider, BM25-vector fork, triple latency gauges - pulse softly in sequence, the tiny mascot walks gently forward across them toward the tuned index card, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "A crowd of tiny concurrent-query icons march onto the checklist card together, the p95 and p99 gauges tick upward in sync, the launch button in the background slowly brightens as the load test settles, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 13,
+      "module": 2,
+      "grounding_note": "Ch13 = dev tools API docs 8k pages: hybrid BM25+vector, Reciprocal Rank Fusion, cross-encoder reranking, version metadata filter",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with an exact glowing error code stamp reading ERR_INVALID_TOKEN caught precisely, one showing a soft semantic cloud of related authentication concepts glowing around it, one showing two ranked lists merging into a single fused list by their positions rather than their raw scores - the fused-list layer glowing brightest where the two lists overlap",
+        "intencao": "on one side the mascot quickly stamping many glowing document vectors independently ahead of time and filing them away, on the other side a friendly robotic arm carefully holding one question and one document together at once, studying their joint glow closely before scoring them, a clear gap of soft light between the fast independent stamping and the careful joint study",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a developer's typed error message to a precise troubleshooting answer - the stones read: a paired BM25-and-vector fork, a rank-fusion merge icon, a cross-encoder magnifying reorder, a version-number filter tag, a paired text-and-code card - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty API reference pages, changelogs and code samples rising above the desk and condensing into one crisp glowing troubleshooting card stamped ERR_INVALID_TOKEN with a second glowing card about expired versus invalid tokens promoted right beside it, the mascot proudly holding up the paired result",
+        "validacao": "the mascot inspecting two glowing documentation cards through a large magnifying glass, one stamped version two with an old parameter name and one stamped version three with the renamed parameter, catching the mismatch before it slips past a missing version filter, a kind amber warning light above",
+        "dica": "the mascot running twenty small glowing query cards with exact codes and function names side by side through two lanes on a checklist card - one lane vector-only, one lane hybrid - behind it a large friendly launch button waiting dimmed until the comparison is complete"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - BM25-vector fork, rank-fusion merge, cross-encoder reorder, version filter tag, paired text-code card - pulse softly in sequence, the tiny mascot walks gently forward across them toward the troubleshooting answer, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "Twenty small query cards race down two lanes on the checklist card, the hybrid lane pulling ahead visibly, the mascot watches the gap widen, the launch button in the background slowly brightens as the twentieth pair finishes, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 14,
+      "module": 2,
+      "grounding_note": "Ch14 = model version mismatch + metric mismatch + efSearch too low + tenant filter applied post-search instead of pre-condition (SaaS multi-tenant leak scenario)",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with two vector stamps from different model-version numbers pointing in incompatible directions, one showing a euclidean-ruler icon mismatched against a cosine-angle icon it was never meant to pair with, one showing an efSearch slider pushed too low with a faint trail of missed relevant cards falling silently through the gaps - the low-efSearch layer glowing dim and making the tower lean",
+        "intencao": "on one side the mascot locking a small glowing tenant-gate before any search cards are allowed to pass through it, on the other side a friendly robotic arm letting all search cards through first and only checking the gate afterward, with one stray card already slipping past unnoticed, a clear gap of soft light between the early lock and the late check",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from a suspicious quality drop to a hardened pipeline - the stones read: a version-check alarm, a metric-confirmation scroll, a recurring recall-at-k gauge, a gate-position auditor, a reranking-impact scale - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty mixed-tenant search results rising above the desk, one stray document card glowing with the wrong tenant's tag, condensing into one crisp glowing pipeline with a tenant-gate now locked firmly before the very first search step, the mascot proudly standing guard at the sealed gate",
+        "validacao": "the mascot inspecting a glowing search pipeline through a large magnifying glass and finding the tenant-lock gate placed one step too late, right after the search already ran, with a thin glowing crack where a stray card had already slipped through, a kind amber warning light above",
+        "dica": "the mascot stamping a precise glowing version-number tag onto the index itself, like labeling a dependency in a code library, checking it against a matching tag at query time on a checklist card, behind it a large friendly launch button waiting dimmed until both tags match"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - version-check alarm, metric-confirmation scroll, recall gauge, gate-position auditor, reranking scale - pulse softly in sequence, the tiny mascot walks gently forward across them toward the hardened pipeline, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "The version-number tag stamps onto the index and a matching tag stamps at query time, the two tags glow and check against each other with a soft pulse, the launch button in the background slowly brightens as they match, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    },
+    {
+      "n": 15,
+      "module": 2,
+      "grounding_note": "Ch15 = pharma 200k docs: embedding validated for scientific vocab, recall-priority ANN config, mandatory hybrid search, 4 access levels, confidence threshold with domain experts",
+      "prompts": {
+        "sistema": "the mascot stacking three translucent glowing glass layers into a tower - one etched with dense pharmaceutical vocabulary (active ingredient names, protocol codes) tested against the embedding model until it glows steady, one showing an efSearch dial pushed deliberately high past the normal comfort mark, one showing four stacked access-level bands labeled public, internal, regulatory-restricted and study-restricted - the four-band layer glowing in careful graded intensity from bright to deeply guarded",
+        "intencao": "on one side the mascot showing a typical glowing balance tipped toward speed with recall slightly lower, on the other side a friendly robotic arm deliberately tipping the same balance hard toward recall, accepting a slower glowing latency dial as the price, a clear gap of soft light between the typical balance and the deliberately inverted one",
+        "fluxo": "a winding path of five glowing stepping stones crossing the desk from two hundred thousand scattered documents to a trustworthy cited answer - the stones read: a scientific-vocabulary validation lens, a recall-favoring efSearch dial, a mandatory BM25-vector fork, four graded access-level bands, a confidence-threshold gauge with a mandatory reranking stamp - the tiny mascot walking on the stones mid-journey",
+        "cenario": "a swirl of misty clinical trial reports, regulatory bulletins and scientific articles rising above the desk and condensing into one crisp glowing cited answer card naming an exact active ingredient, stamped with a confidence-checked seal and a visible access-level band, the mascot proudly holding up the trustworthy result",
+        "validacao": "the mascot inspecting a handful of faintly glowing, weakly related document fragments through a large magnifying glass about a rare side effect, then deliberately setting down an honest glowing card reading evidence limited instead of forcing a falsely confident answer, a kind amber warning light above",
+        "dica": "the mascot and a real person in a lab coat jointly turning a glowing confidence-threshold dial together on a checklist card, neither one alone, behind it a large friendly launch button waiting dimmed until both hands agree on the setting"
+      },
+      "motion": {
+        "fluxo": "The five glowing stepping stones - vocabulary lens, recall-favoring dial, mandatory hybrid fork, four access bands, confidence gauge - pulse softly in sequence, the tiny mascot walks gently forward across them toward the trustworthy cited answer, warm dust motes drift, slow cinematic push-in, seamless loop",
+        "dica": "The confidence-threshold dial turns slowly as the mascot's hand and the lab-coated person's hand both guide it together, settling on an agreed mark, the launch button in the background slowly brightens as both hands release, warm ambient drift, slow cinematic push-in, seamless loop"
+      }
+    }
+  ]
+}

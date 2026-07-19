@@ -17,6 +17,7 @@ const SOURCES = {
   'chatgpt-zero': ['chatgpt-zero_cap1.json', 'chatgpt-zero_caps_2-15.json', 'chatgpt-zero_cap6.json', 'chatgpt-zero_caps_16-30.json'],
   'primeiras-automacoes': ['primeiras-automacoes_caps_1-15.json', 'primeiras-automacoes_caps_16-30.json'],
   'aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia': ['ia-dia-a-dia_caps_1-15.json', 'ia-dia-a-dia_caps_16-30.json'],
+  'rag-knowledge': ['rag-knowledge_caps_1-15.json', 'rag-knowledge_caps_16-30.json'],
 };
 
 const files = SOURCES[SLUG];
