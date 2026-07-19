@@ -26,7 +26,15 @@
 
 **⚠️ ARMADILHA NOVA 19/07 (grave, gastou tempo):** Turbopack dev pode manter uma INSTÂNCIA DE MÓDULO em memória mesmo depois de `preview_stop`+`preview_start` — o `.js` servido pelo browser CONTINHA o código novo (confirmado via fetch do chunk), mas o componente React montado continuava executando a versão antiga (array com 4 itens em vez de 5), e nem abrir aba nova resolvia. Só resolveu matando o processo `node .../next/dist/server/lib/start-server.js` DIRETO por PID (não só via `preview_stop`, que não mata processos órfãos) e confirmando com `npx next build` + `npx next start` numa porta separada — **build de produção é a fonte da verdade, sempre verificar por ali quando o dev server parecer ignorar uma mudança, não insistir em reload/restart do preview.**
 
-**Pendente de deploy:** tudo commitado localmente, aguardando push+deploy (próximo passo desta sessão).
+**✅ Deployado** (commit `fbbeb19`, confirmado no ar) — `/arcade` público, funil PostHog, hardening de animação.
+
+**✅ FEITO 19/07 (final da sessão) — 2 fusões de catálogo, pedido direto do Ricardo:**
+- **Cluster ChatGPT investigado** (chatgpt-zero + chatgpt-masterclass + prompt-engineering) — Ricardo pediu avaliação honesta de sobreposição antes de decidir fundir. Achado: overlap real mas ESTREITO — chatgpt-masterclass §3 ("7 Componentes RCTFTRE") ensina essencialmente a mesma lição que chatgpt-zero cap.6 (framework de 4 elementos), só isso (~2 de 16 seções). O resto do masterclass (Code Interpreter, DALL-E, GPTs/API, ética, casos de negócio) e todo o prompt-engineering (CoT, ToT, meta-prompting, por-modelo) são genuinamente novos. **Não é caso de fusão** como n8n/Perplexity — é um trim leve (cross-referenciar em vez de re-ensinar), baixa prioridade, não fiz ainda.
+- **Allowlisting**: Ricardo confirmou que continua relevante mas precisa ser repensado — sair do foco só em SEO/search engines e cobrir visibilidade para AGENTES de IA. Anotado, não iniciado.
+- **n8n fundido**: `automacao-n8n` (templado, mad-libs confirmado na prosa, R$99, **0 matrículas reais**) arquivado — `n8n-automacao-avancada` (editorial real, comparativo vs Make/Zapier, R$199, 2 matrículas) é agora o único curso de n8n ativo.
+- **Perplexity fundido**: `perplexity-pesquisa-inteligente-e-conhecimento-instantaneo` (templado, R$79, **0 matrículas**) arquivado — `perplexity-pesquisa-inteligente` (editorial real, estava ARQUIVADO por engano, R$37, 2 matrículas) foi **revivido** como o único curso de Perplexity ativo.
+- Ambas as fusões: **0 clientes reais afetados** (conferido `users.enrolledCourses` + `courseprogresses` + `orders` antes de mexer). Backup em `fayapoint.courses_backup_merge_20260719` e `fayapointProdutos.products_backup_merge_20260719`. Mudança de status é instantânea (Atlas = produção na hora, sem deploy) — já confirmado sumindo/aparecendo em `/api/products?type=course`.
+- **Nota pendente**: `perplexity-pesquisa-inteligente` revivido manteve o preço antigo (R$37) — pode valer reprecificar já que virou o curso canônico (padrão dos outros ficou R$79-199). Não mexi, é decisão de preço, não de conteúdo.
 
 ---
 
