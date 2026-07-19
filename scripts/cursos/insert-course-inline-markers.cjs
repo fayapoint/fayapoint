@@ -130,14 +130,10 @@ function findInsertPos(capText, s) {
     let cap = content.slice(start, end);
     cursor = end;
 
-    if (cap.includes('<!--media:')) {
-      skippedHas++;
-      updated += cap;
-      continue;
-    }
-
     const plan = [];
     for (const s of SLOTS) {
+      const id = `${SLUG.slice(0, 6)}-cap${String(n).padStart(2, '0')}-${s.slot}`;
+      if (cap.includes(`id="${id}"`)) { skippedHas++; continue; } // ja marcado, backfill incremental
       const pos = findInsertPos(cap, s);
       if (pos < 0) { console.log(`cap ${n} ${s.slot}: âncora NÃO ACHADA`); failed++; continue; }
       if (!mediaFilesExist(n, s)) { skippedMedia++; continue; }
