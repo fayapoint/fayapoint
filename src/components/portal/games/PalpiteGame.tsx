@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Copy, Sparkles } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import {
   CATEGORIES,
   MAGIC_EXAMPLES,
@@ -23,6 +24,7 @@ import { FxConfetti } from "@/components/portal/games/GameLearning";
 const catArt = (id: ExampleCategory) => `/landing/cats/${id}-v1.webp`;
 
 export function PalpiteGame() {
+  const posthog = usePostHog();
   const [playedIds, setPlayedIds] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [category, setCategory] = useState<ExampleCategory | null>(null);
@@ -67,6 +69,7 @@ export function PalpiteGame() {
     setRevealed(false);
     setCopied(false);
     setTreino(playedIds.includes(ex.id));
+    posthog?.capture("minigame_start", { game: "palpite-30s", category: cat, example_id: ex.id });
   };
 
   const answer = (idx: number) => {
@@ -75,6 +78,13 @@ export function PalpiteGame() {
     setGuess(idx);
     setRevealed(true);
     setSeenNow((s) => (s.includes(current.id) ? s : [...s, current.id]));
+    posthog?.capture("minigame_complete", {
+      game: "palpite-30s",
+      category: current.category,
+      example_id: current.id,
+      correct: acertou,
+      treino: playedIds.includes(current.id),
+    });
 
     if (playedIds.includes(current.id)) return; // treino: sem re-farm
 

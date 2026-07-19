@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTabHiddenAtMount } from "@/hooks/useTabHiddenAtMount";
 
 export const ARCADE_GAME_IDS = [
   "monte-o-prompt",
@@ -58,6 +59,8 @@ export function ArcadeVisual({
   eager = false,
 }: ArcadeVisualProps) {
   const reduceMotion = useReducedMotion();
+  const tabHiddenAtMount = useTabHiddenAtMount();
+  const skipEntrance = reduceMotion || tabHiddenAtMount;
   const [variant, setVariant] = useState(1);
   const [hovered, setHovered] = useState(false);
 
@@ -107,7 +110,7 @@ export function ArcadeVisual({
           alt={alt}
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
-          initial={reduceMotion ? false : { opacity: 0, scale: 1.025 }}
+          initial={skipEntrance ? false : { opacity: 0, scale: 1.025 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={reduceMotion ? undefined : { opacity: 0 }}
           transition={{ duration: 0.35 }}
@@ -125,7 +128,7 @@ export function ArcadeVisual({
             playsInline
             preload="metadata"
             aria-hidden="true"
-            initial={{ opacity: 0 }}
+            initial={skipEntrance ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}

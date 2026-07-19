@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Copy, Check, ArrowRight, ArrowUpRight, X, GraduationCap, Wrench, Rocket, BookOpen } from "lucide-react";
+import { Sparkles, Copy, Check, ArrowRight, ArrowUpRight, X, GraduationCap, Wrench, Rocket, BookOpen, Gamepad2 } from "lucide-react";
 import {
   MAGIC_EXAMPLES,
   CATEGORIES,
@@ -779,9 +779,10 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
       {/* ============================== LINKS ============================== */}
       <footer className="px-4 sm:px-8 pb-4 shrink-0">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             {[
               { href: "/cursos", icon: GraduationCap, label: "Cursos", desc: "18 cursos com certificado", color: "#38bdf8" },
+              { href: "/arcade", icon: Gamepad2, label: "Arcade", desc: "5 jogos grátis, sem cadastro", color: "#f5c04e" },
               { href: "/ferramentas", icon: Wrench, label: "Ferramentas", desc: "100+ ferramentas de IA", color: "#a78bfa" },
               { href: "/projetos", icon: Rocket, label: "Projetos", desc: "O ecossistema FayAI e a história por trás", color: "#f472b6" },
               { href: "/noticias", icon: BookOpen, label: "Blog IA Hoje", desc: "Notícias e guias de IA todo dia", color: "#a3e635" },

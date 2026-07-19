@@ -52,6 +52,8 @@ import {
   type EditorialVerification,
   type LessonContentCoverage,
 } from "@/lib/editorial-verification";
+import { useTabHiddenAtMount } from "@/hooks/useTabHiddenAtMount";
+import { usePostHog } from "posthog-js/react";
 
 /* ═══════════════════════════════════════════════════════════
    Types
@@ -483,14 +485,11 @@ function splitContentWithMedia(content: string): ChapterSegment[] {
 function useRevealOnVisible<T extends HTMLElement>() {
   const ref = useRef<T | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const tabHiddenAtMount = useTabHiddenAtMount();
 
   useEffect(() => {
     const el = ref.current;
-    if (
-      !el ||
-      typeof IntersectionObserver === "undefined" ||
-      document.visibilityState === "hidden"
-    ) {
+    if (!el || typeof IntersectionObserver === "undefined" || tabHiddenAtMount) {
       setRevealed(true);
       return;
     }
@@ -505,7 +504,7 @@ function useRevealOnVisible<T extends HTMLElement>() {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [tabHiddenAtMount]);
 
   return { ref, revealed };
 }
@@ -946,6 +945,7 @@ export default function CourseReaderPage() {
   const slug = params.slug as string;
   const locale = (params.locale as string) || "pt-BR";
   const router = useRouter();
+  const posthog = usePostHog();
 
   /* ─── State ─── */
   const [rawContent, setRawContent] = useState("");
@@ -988,6 +988,17 @@ export default function CourseReaderPage() {
     [sanitizedContent]
   );
   const currentChapter = chapters[currentChapterIndex] || null;
+
+  useEffect(() => {
+    if (!currentChapter) return;
+    posthog?.capture("lesson_view", {
+      course_slug: slug,
+      chapter_id: currentChapter.id,
+      chapter_index: currentChapterIndex,
+      chapter_title: currentChapter.title,
+    });
+  }, [currentChapter, currentChapterIndex, slug, posthog]);
+
   const currentChapterSubheadings = useMemo(
     () => extractChapterSubheadings(currentChapter?.content || ""),
     [currentChapter?.content]

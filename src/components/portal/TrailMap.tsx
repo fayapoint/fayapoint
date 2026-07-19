@@ -4,6 +4,8 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTabHiddenAtMount } from "@/hooks/useTabHiddenAtMount";
+import { usePostHog } from "posthog-js/react";
 
 /**
  * TrailMap — "Seu caminho para dominar IA" (F3 do PLANO_UX_NAVEGACAO).
@@ -40,6 +42,9 @@ interface TrailNode {
 
 export function TrailMap({ stats, achievementsCount, userCourses, onTabChange }: TrailMapProps) {
   const reduce = useReducedMotion();
+  const tabHiddenAtMount = useTabHiddenAtMount();
+  const skipEntrance = reduce || tabHiddenAtMount;
+  const posthog = usePostHog();
 
   const anyCourse = userCourses.length > 0;
   const halfCourse = userCourses.some((c) => c.progressPercent >= 50);
@@ -76,7 +81,7 @@ export function TrailMap({ stats, achievementsCount, userCourses, onTabChange }:
           const pulse = isCurrent && !reduce;
           const art = (
             <motion.span
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={skipEntrance ? false : { opacity: 0, scale: 0.8 }}
               animate={pulse ? { opacity: 1, scale: [1, 1.06, 1] } : { opacity: 1, scale: 1 }}
               transition={
                 pulse
@@ -142,11 +147,22 @@ export function TrailMap({ stats, achievementsCount, userCourses, onTabChange }:
                 />
               )}
               {n.href ? (
-                <Link href={n.href} className="group block">
+                <Link
+                  href={n.href}
+                  className="group block"
+                  onClick={() => posthog?.capture("trail_node_click", { node_id: n.id, node_done: n.done, node_current: isCurrent })}
+                >
                   {inner}
                 </Link>
               ) : (
-                <button type="button" onClick={() => n.tab && onTabChange(n.tab)} className="group block cursor-pointer">
+                <button
+                  type="button"
+                  onClick={() => {
+                    posthog?.capture("trail_node_click", { node_id: n.id, node_done: n.done, node_current: isCurrent });
+                    n.tab && onTabChange(n.tab);
+                  }}
+                  className="group block cursor-pointer"
+                >
                   {inner}
                 </button>
               )}
