@@ -266,7 +266,10 @@ def upload_to_cloudinary(png_bytes, public_id, cloud_name, api_key, api_secret):
     padrao do site (768 largura, qualidade 80, webp — IDENTIDADE_VISUAL.md §4)."""
     timestamp = str(int(time.time()))
     folder = "fayapoint/ainews"
-    to_sign = f"folder={folder}&timestamp={timestamp}{api_secret}"
+    # Cloudinary assina TODOS os parametros enviados (exceto file/cloud_name/
+    # api_key/resource_type), em ordem alfabetica de chave. Faltou public_id
+    # aqui na primeira versao — por isso todo upload voltava 401.
+    to_sign = f"folder={folder}&public_id={public_id}&timestamp={timestamp}{api_secret}"
     signature = hashlib.sha1(to_sign.encode()).hexdigest()
 
     boundary = "----fayainewsBoundary"

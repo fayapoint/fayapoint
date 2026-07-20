@@ -17,18 +17,35 @@ import socketserver
 import sys
 import urllib.error
 import urllib.request
+from datetime import datetime
 
 COMFY = "http://127.0.0.1:8000"
 SECRET = os.environ.get("COMFY_BRIDGE_SECRET")
 PORT = 8088
+LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "comfy_bridge.log")
 
 if not SECRET:
     sys.exit("Defina COMFY_BRIDGE_SECRET no ambiente antes de rodar este script.")
 
 
+def log(msg):
+    line = f"[{datetime.now():%Y-%m-%d %H:%M:%S}] {msg}"
+    print(line, flush=True)
+    try:
+        with open(LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+    except Exception:
+        pass
+
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def _authorized(self):
-        return self.headers.get("x-comfy-secret") == SECRET
+        got = self.headers.get("x-comfy-secret")
+        ok = got == SECRET
+        if not ok:
+            got_tail = got[-4:] if got else "(ausente)"
+            log(f"401 de {self.address_string()} {self.command} {self.path} — secret recebido termina em '{got_tail}' (len={len(got) if got else 0})")
+        return ok
 
     def _proxy(self):
         if not self._authorized():
@@ -66,10 +83,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self._proxy()
 
     def log_message(self, fmt, *args):
-        print(f"[comfy-bridge] {self.address_string()} {fmt % args}")
+        log(f"{self.address_string()} {fmt % args}")
 
 
 if __name__ == "__main__":
     with socketserver.ThreadingTCPServer(("0.0.0.0", PORT), Handler) as httpd:
-        print(f"comfy-bridge listening on 0.0.0.0:{PORT} -> {COMFY}")
+        log(f"comfy-bridge listening on 0.0.0.0:{PORT} -> {COMFY}")
         httpd.serve_forever()
