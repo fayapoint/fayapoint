@@ -39,6 +39,12 @@ export async function POST(request: Request) {
           typeof i.sourceImage === 'string' && /^https?:\/\//.test(i.sourceImage)
             ? i.sourceImage.slice(0, 600)
             : undefined,
+        // Capa gerada especificamente pra esta matéria (regra do espelho, IDENTIDADE_VISUAL.md §9).
+        // Se ausente, mapDoc() cai no pool genérico por editoria (ai-news.ts).
+        image:
+          typeof i.image === 'string' && /^https?:\/\//.test(i.image)
+            ? i.image.slice(0, 600)
+            : undefined,
         publishedAt: new Date(),
       }))
       .filter((i: { slug: string; title: string; summary: string }) => i.slug && i.title && i.summary);
