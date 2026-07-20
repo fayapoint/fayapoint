@@ -484,7 +484,9 @@ export default function CourseSalesPage() {
                           <span className="font-bold text-green-400">
                             {isFreeCourseOfMonth
                               ? (isPtBr ? 'Curso grátis do mês' : 'Free course of the month')
-                              : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
+                              : product.pricing.note
+                                ? (isPtBr ? 'Preço simbólico' : 'Symbolic price')
+                                : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground">
@@ -492,8 +494,10 @@ export default function CourseSalesPage() {
                             ? (isPtBr
                                 ? 'Oferta mensal liberada para qualquer usuário logado, com certificado incluso.'
                                 : 'Monthly offer unlocked for any logged-in user, including the certificate.')
-                            : locale === 'pt-BR' 
-                              ? 'Aproveite o preço especial de lançamento. O valor aumentará em breve.' 
+                            : product.pricing.note
+                              ? product.pricing.note
+                              : locale === 'pt-BR'
+                              ? 'Aproveite o preço especial de lançamento. O valor aumentará em breve.'
                               : 'Take advantage of the special launch price. Price will increase soon.'}
                         </p>
                       </div>
@@ -521,6 +525,12 @@ export default function CourseSalesPage() {
                           {isPtBr
                             ? "Acesso completo liberado neste mês para qualquer usuário logado, com certificado incluído."
                             : "Full access is unlocked this month for any logged-in user, including the certificate."}
+                        </div>
+                      ) : product.pricing.note ? (
+                        // Preço simbólico (ex.: chatgpt-zero R$5): nota honesta no
+                        // lugar de parcelamento/economia — 12x de R$0,42 soaria ridículo.
+                        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-muted-foreground">
+                          {product.pricing.note}
                         </div>
                       ) : (
                         <>

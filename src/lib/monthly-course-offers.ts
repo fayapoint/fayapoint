@@ -144,8 +144,13 @@ function computeAlgorithmicOfferSet(referenceDate: Date = new Date()): MonthlyCo
   const intermediateCourses = getPaidCoursesByLevel("intermediate");
   const advancedCourses = getPaidCoursesByLevel("advanced");
 
-  const freeCourseCandidates = sortForMonth(beginnerCourses, monthKey, "free-course");
-  const freeCourseSlug = freeCourseCandidates[0]?.slug || null;
+  // Regra de negócio 20/07/2026 (decisão do Ricardo): NENHUM curso é 100%
+  // grátis — cursos de entrada usam preço simbólico (pricing.note no produto).
+  // O algoritmo não elege mais "curso grátis do mês"; o antigo eleito passa a
+  // integrar o pool beginner normalmente. Isso também elimina o bug do
+  // fallback síncrono: enquanto o cache do override aquecia, o algoritmo
+  // anunciava um curso grátis que o enroll (async, lendo o override) negava.
+  const freeCourseSlug: string | null = null;
 
   const pools = {
     beginner: sortForMonth(
