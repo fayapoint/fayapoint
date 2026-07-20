@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Copy, Check, ArrowRight, ArrowUpRight, X, GraduationCap, Wrench, Rocket, BookOpen, Gamepad2 } from "lucide-react";
+import { Sparkles, Copy, Check, ArrowRight, ArrowUpRight, X, GraduationCap, Wrench, Rocket, BookOpen, Gamepad2, BadgeCheck, Clock, PlayCircle } from "lucide-react";
 import {
   MAGIC_EXAMPLES,
   CATEGORIES,
@@ -42,7 +42,21 @@ interface AccountState {
   trail?: { done: number; total: number };
 }
 
-export function NovaLanding({ news }: { news: AiNewsItem[] }) {
+/** Cursos revisados aula por aula — marcados como featured no catálogo (src/lib/products.ts) */
+export interface FeaturedCourse {
+  slug: string;
+  tool: string;
+  name: string;
+  shortDescription: string;
+  level: string;
+  duration: string;
+  lessons: number;
+  price: number;
+  originalPrice: number;
+  discount: number;
+}
+
+export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]; featuredCourses?: FeaturedCourse[] }) {
   const { user, setUser, isLoggedIn, mounted } = useUser();
   const [stage, setStage] = useState<Stage>("pick");
   const [category, setCategory] = useState<ExampleCategory | null>(null);
@@ -715,6 +729,65 @@ export function NovaLanding({ news }: { news: AiNewsItem[] }) {
           )}
         </div>
       </main>
+
+      {/* ============================== CURSOS PRONTOS ============================== */}
+      {featuredCourses.length > 0 && (
+        <section className="relative px-4 sm:px-8 pb-3 shrink-0">
+          <div aria-hidden className="fx-orb" style={{ width: 280, height: 280, left: "8%", top: -40, background: "radial-gradient(circle, rgba(245,192,78,.35), transparent 65%)", animation: "fx-drift-a 12s ease-in-out infinite" }} />
+          <div aria-hidden className="fx-orb" style={{ width: 240, height: 240, right: "6%", top: 40, background: "radial-gradient(circle, rgba(163,230,53,.3), transparent 65%)", animation: "fx-drift-b 14s ease-in-out infinite" }} />
+          <div className="relative max-w-5xl mx-auto">
+            <div className="flex items-baseline gap-3 mb-1 flex-wrap">
+              <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
+                COMECE POR <span style={{ color: GOLD }}>AQUI</span>
+              </h3>
+              <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-lime-300/80">
+                <BadgeCheck size={13} /> revisados aula por aula
+              </span>
+            </div>
+            <p className="text-sm text-white/55 mb-3 max-w-xl">
+              Os 4 cursos que já reescrevemos do zero — conteúdo, exemplos e mídia atualizados.
+              O ponto de partida certo, sem enrolação.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {featuredCourses.map((course) => (
+                <Link
+                  key={course.slug}
+                  href={`/curso/${course.slug}`}
+                  className="glass glass-hover group rounded-2xl p-4 flex flex-col"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40">
+                      {course.tool} · {course.level}
+                    </span>
+                    <ArrowUpRight size={14} className="text-white/30 group-hover:text-white/70 transition-colors shrink-0" />
+                  </div>
+                  <h4 className="text-sm font-bold leading-snug mb-1">{course.name}</h4>
+                  <p className="text-xs text-white/55 leading-relaxed line-clamp-3 flex-1">
+                    {course.shortDescription}
+                  </p>
+                  <div className="mt-3 flex items-center justify-between text-[11px] text-white/40">
+                    <span className="inline-flex items-center gap-1">
+                      <PlayCircle size={12} /> {course.lessons} aulas
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <Clock size={12} /> {course.duration}
+                    </span>
+                  </div>
+                  <div className="mt-3 flex items-baseline gap-2">
+                    <span className="text-lg font-extrabold" style={{ color: GOLD }}>
+                      R$ {course.price}
+                    </span>
+                    <span className="text-xs text-white/35 line-through">R$ {course.originalPrice}</span>
+                    <span className="ml-auto text-[10px] font-bold text-lime-300/90">
+                      -{course.discount}%
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ============================== IA HOJE ============================== */}
       <section className="relative px-4 sm:px-8 pb-3 shrink-0">

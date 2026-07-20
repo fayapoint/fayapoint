@@ -61,10 +61,26 @@ STATUS=${PIPESTATUS[0]}
 # (bug pre-existente do hermes, não é falha de curso grande especificamente
 # — reproduzido em make-integracao-total E chatgpt-masterclass, isolado).
 # Fallback: se o arquivo esperado não existir, extrai do stdout capturado
-# (a partir de "# Auditoria:") e grava no lugar esperado antes do publish.
+# a partir da primeira linha que menciona "auditoria" e grava no lugar
+# esperado antes do publish.
+# FIX 19/07/2026 (lote de 14): o awk original só pegava "^# Auditoria:"
+# (H1, no início da linha) — hermes às vezes usa "## Auditoria:" (H2),
+# "AUDITORIA:" (caixa alta sem markdown) ou até gruda texto antes do "#"
+# na mesma linha ("Now produce# Auditoria:"). Achados 3 casos reais no
+# lote de 14 (claude-cowork-colaboracao, n8n-automacao-avancada,
+# chatgpt-allowlisting) que geraram relatório completo e válido mas
+# passaram batido pelo fallback antigo. grep -i sem âncora cobre os 3.
+# NOTA: isso NÃO cobre os casos em que o hermes não produz relatório
+# algum (responde só a saudação padrão, trava em loop repetindo a mesma
+# frase, ou corta o raciocínio pela metade — bugs de confiabilidade do
+# próprio hermes, sem "auditoria" no stdout p/ recuperar; esses exigem
+# re-rodar o curso, não têm fallback de texto possível).
 REPORT_PATH="/root/.hermes/course-audit/${SLUG}/${TODAY}_report.md"
 if [ ! -f "$REPORT_PATH" ]; then
-  awk '/^# Auditoria:/{found=1} found' "$HERMES_OUT" > "$REPORT_PATH.tmp"
+  FIRST_LINE=$(grep -in -m1 'auditoria' "$HERMES_OUT" | cut -d: -f1)
+  if [ -n "$FIRST_LINE" ]; then
+    tail -n "+${FIRST_LINE}" "$HERMES_OUT" > "$REPORT_PATH.tmp"
+  fi
   if [ -s "$REPORT_PATH.tmp" ]; then
     mv "$REPORT_PATH.tmp" "$REPORT_PATH"
     echo "[$(date '+%Y-%m-%d %H:%M')] Fallback: relatório recuperado do stdout do hermes p/ $SLUG." >> "$LOG"

@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import {
   ChevronRight,
   MessageCircle,
@@ -17,8 +18,39 @@ const quickMessages = [
   "Olá! Quero ajuda para escolher meus cursos e certificações deste mês.",
 ];
 
+/**
+ * Distância que o botão sobe quando o <footer> da página entra na viewport —
+ * evita sobrepor o último item da grade de links (mobile: bottom-5 right-5
+ * colide direto com o card "Blog IA Hoje"). Reavalia em scroll/resize.
+ */
+function useFooterClearance() {
+  const [lift, setLift] = useState(0);
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+
+    const update = () => {
+      const rect = footer.getBoundingClientRect();
+      const overlap = window.innerHeight - rect.top;
+      setLift(overlap > 0 ? Math.min(overlap + 16, rect.height + 16) : 0);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
+  return lift;
+}
+
 export function WhatsAppButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const footerLift = useFooterClearance();
 
   const links = useMemo(
     () =>
@@ -30,7 +62,16 @@ export function WhatsAppButton() {
   );
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    <motion.div
+      initial={{ opacity: 0, y: 24, scale: 0.9 }}
+      animate={{ opacity: 1, y: -footerLift, scale: 1 }}
+      transition={{
+        opacity: { duration: 0.5, delay: 0.6 },
+        scale: { duration: 0.5, delay: 0.6 },
+        y: { type: "spring", stiffness: 260, damping: 28 },
+      }}
+      className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3"
+    >
       {isOpen && (
         <div className="w-[320px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[28px] border border-border bg-[linear-gradient(180deg,rgba(10,16,28,0.94),rgba(3,7,18,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
           <div className="border-b border-white/8 bg-[linear-gradient(135deg,rgba(16,185,129,0.22),rgba(6,95,70,0.08))] p-5">
@@ -110,6 +151,6 @@ export function WhatsAppButton() {
           <div className="text-sm font-semibold">WhatsApp FayAi</div>
         </div>
       </button>
-    </div>
+    </motion.div>
   );
 }

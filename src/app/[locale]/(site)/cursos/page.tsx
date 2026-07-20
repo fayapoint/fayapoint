@@ -129,8 +129,14 @@ export default function CoursesPage() {
       return matchesSearch && matchesCategory && matchesLevel;
     });
 
-    // Sort courses
+    // Sort courses (featured courses always lead, regardless of sort mode)
     filtered = [...filtered].sort((a, b) => {
+      const featuredDiff = (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+      if (featuredDiff !== 0) return featuredDiff;
+      if (a.featured && b.featured) {
+        return (a.featuredOrder ?? 0) - (b.featuredOrder ?? 0);
+      }
+
       switch (sortBy) {
         case "price-low":
           return a.pricing.price - b.pricing.price;

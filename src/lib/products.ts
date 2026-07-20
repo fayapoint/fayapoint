@@ -168,6 +168,8 @@ export interface Product {
   thumbnail?: string;
   trailer?: string;
   monthlyOffer?: CourseMonthlyOfferMeta | null;
+  featured?: boolean;
+  featuredOrder?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -209,10 +211,10 @@ export async function getAllProducts(options?: {
       let sort: Record<string, 1 | -1> = {};
       switch (options?.sortBy) {
         case 'students':
-          sort = { 'metrics.students': -1 };
+          sort = { featured: -1, featuredOrder: 1, 'metrics.students': -1 };
           break;
         case 'rating':
-          sort = { 'metrics.rating': -1 };
+          sort = { featured: -1, featuredOrder: 1, 'metrics.rating': -1 };
           break;
         case 'price':
           sort = { 'pricing.price': 1 };
@@ -221,7 +223,7 @@ export async function getAllProducts(options?: {
           sort = { 'createdAt': -1 };
           break;
         default:
-          sort = { 'metrics.students': -1 };
+          sort = { featured: -1, featuredOrder: 1, 'metrics.students': -1 };
       }
       
       const query: Record<string, unknown> = { status: 'active' };
@@ -317,9 +319,11 @@ export async function getFeaturedProducts(limit: number = 3): Promise<Product[]>
   const collection = await getProductsCollection();
   const products = await collection
     .find({ status: 'active' })
-    .sort({ 
+    .sort({
+      featured: -1,
+      featuredOrder: 1,
       'metrics.rating': -1,
-      'metrics.students': -1 
+      'metrics.students': -1
     })
     .limit(limit)
     .toArray();

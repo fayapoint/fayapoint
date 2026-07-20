@@ -1,6 +1,7 @@
 import { NovaLanding } from "@/components/landing/NovaLanding";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 import { getAiNews } from "@/lib/ai-news";
+import { getAllProducts } from "@/lib/products";
 
 // Home oficial (12/07/2026): a experiência de imersão gamificada substituiu o
 // gate de hype e o cubo 3D. O gate segue existindo apenas como código
@@ -11,10 +12,30 @@ import { getAiNews } from "@/lib/ai-news";
 export const revalidate = 1800;
 
 export default async function Home() {
-  const { items } = await getAiNews(3);
+  const [{ items }, courses] = await Promise.all([
+    getAiNews(3),
+    getAllProducts({ type: "course" }),
+  ]);
+
+  const featuredCourses = courses
+    .filter((course) => course.featured)
+    .sort((a, b) => (a.featuredOrder ?? 0) - (b.featuredOrder ?? 0))
+    .map((course) => ({
+      slug: course.slug,
+      tool: course.tool,
+      name: course.name,
+      shortDescription: course.copy.shortDescription,
+      level: course.level,
+      duration: course.metrics.duration,
+      lessons: course.metrics.lessons,
+      price: course.pricing.price,
+      originalPrice: course.pricing.originalPrice,
+      discount: course.pricing.discount,
+    }));
+
   return (
     <>
-      <NovaLanding news={items} />
+      <NovaLanding news={items} featuredCourses={featuredCourses} />
       <WhatsAppButton />
     </>
   );
