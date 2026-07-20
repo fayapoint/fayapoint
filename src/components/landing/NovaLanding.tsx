@@ -54,6 +54,8 @@ export interface FeaturedCourse {
   price: number;
   originalPrice: number;
   discount: number;
+  /** Nota de preço (ex.: valor simbólico que só cobre o processamento do pagamento) */
+  priceNote?: string;
 }
 
 export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]; featuredCourses?: FeaturedCourse[] }) {
@@ -782,6 +784,11 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                       -{course.discount}%
                     </span>
                   </div>
+                  {course.priceNote && (
+                    <p className="mt-1.5 text-[10px] leading-snug text-lime-200/70">
+                      {course.priceNote}
+                    </p>
+                  )}
                 </Link>
               ))}
             </div>

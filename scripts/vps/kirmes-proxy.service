@@ -1,0 +1,22 @@
+[Unit]
+Description=Kirmes Model Proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/kirmes
+Environment=OPENROUTER_KEY=<REDACTED — chave real só na VPS em /etc/systemd/system/kirmes-proxy.service>
+Environment=PRIMARY_MODEL=google/gemini-3-flash-preview
+Environment=FALLBACK_MODEL=google/gemini-2.5-flash
+Environment=PREMIUM_MODEL=moonshotai/kimi-k3
+Environment=PROXY_PORT=7860
+ExecStart=/usr/bin/python3 /root/kirmes/model_proxy.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

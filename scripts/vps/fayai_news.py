@@ -129,7 +129,9 @@ def extract_json(text):
 
 def call_proxy(prompt, max_tokens=12000):
     body = json.dumps({
-        "model": "kirmes-proxy",
+        # rota premium do proxy (20/07): blog diario e tarefa importante ->
+        # Kimi K3; o resto do ecossistema usa "kirmes-proxy" (Gemini Flash)
+        "model": "kirmes-premium",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.4,
         "max_tokens": max_tokens,

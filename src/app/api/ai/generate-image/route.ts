@@ -211,14 +211,26 @@ export async function POST(request: Request) {
          return NextResponse.json({ error: 'Nenhuma imagem gerada pelo modelo. O modelo pode ter recusado o prompt.' }, { status: 500 });
     }
 
-    // Upload to Cloudinary
-    const uploadResult = await cloudinary.uploader.upload(tempImageUrl, {
-        folder: 'fayapoint-ai-creations',
-        context: {
-            username: user.name,
-            prompt: prompt
-        }
-    });
+    // Upload to Cloudinary. Se falhar (ex.: credenciais ausentes no host — foi
+    // exatamente o bug de 20/07: geração cobrada no OpenRouter e "Erro interno"
+    // pro usuário), devolve a imagem crua mesmo assim: o usuário pagou por ela.
+    let uploadResult;
+    try {
+        uploadResult = await cloudinary.uploader.upload(tempImageUrl, {
+            folder: 'fayapoint-ai-creations',
+            context: {
+                username: user.name,
+                prompt: prompt
+            }
+        });
+    } catch (uploadError) {
+        console.error('Cloudinary upload failed after successful generation:', uploadError);
+        return NextResponse.json({
+            imageUrl: tempImageUrl,
+            warning: 'Imagem gerada, mas não foi salva na sua galeria — baixe agora se quiser guardá-la.',
+            quota: { used: usedToday, limit: dailyQuota },
+        });
+    }
 
     // Save to MongoDB
     const newCreation = await ImageCreation.create({

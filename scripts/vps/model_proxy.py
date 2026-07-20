@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
-"""Kirmes Model Proxy — modelo principal Kimi K3, fallback Gemini 3 Flash
-Preview (ambos via OpenRouter, direto — sem LM Studio local).
+"""Kirmes Model Proxy — duas rotas por custo (ambas via OpenRouter, direto).
 
-TROCADO 19/07/2026 a pedido do Ricardo por melhora de qualidade. Antes era
-LM Studio (Qwen3.6-27B, PC do Ricardo via Tailscale) com fallback para o
-free tier da OpenRouter (nemotron-3-super:free) — mas o LM Studio ficou
-inacessivel por dias sem ninguem perceber (causa raiz de "IA HOJE" parado
-17-19/07) e o modelo free vazava raciocinio no lugar do JSON pedido.
+REESTRUTURADO 20/07/2026 a pedido do Ricardo: a troca de 19/07 colocou o
+Kimi K3 ($3/M in, $15/M out) como modelo de TUDO — inclusive os crons
+agenticos pesados (auditoria de cursos 14h, TCH worldbuilding 13h, com
+contextos de 65KB+ multi-turn) — e queimou ~$6 em um dia. Agora:
+
+  - "kirmes-proxy"   (padrao)  -> PRIMARY_MODEL (Gemini 3 Flash Preview,
+                                  $0.50/$3 por M — 5-6x mais barato) com
+                                  fallback FALLBACK_MODEL (Gemini 2.5 Flash).
+  - "kirmes-premium" (blog etc)-> PREMIUM_MODEL (Kimi K3) com fallback na
+                                  cadeia barata. So tarefas explicitamente
+                                  importantes pedem esta rota (fayai_news.py).
+
+Historico: antes de 19/07 era LM Studio (Qwen3.6-27B, PC do Ricardo via
+Tailscale) + free tier — o LM Studio ficou inacessivel por dias sem ninguem
+perceber (causa raiz de "IA HOJE" parado 17-19/07) e o modelo free vazava
+raciocinio no lugar do JSON pedido. Nao voltar para free tier.
 
 Kimi K3 tem aviso oficial da OpenRouter de capacidade limitada (pode
 retornar 429 com frequencia) — por isso o failover aqui e feito pela
@@ -20,8 +30,9 @@ from fastapi.responses import StreamingResponse, JSONResponse
 app = FastAPI(title="Kirmes Proxy")
 OPENROUTER_URL = "https://openrouter.ai/api/v1"
 OPENROUTER_KEY = os.getenv("OPENROUTER_KEY", "")
-PRIMARY_MODEL = os.getenv("PRIMARY_MODEL", "moonshotai/kimi-k3")
-FALLBACK_MODEL = os.getenv("FALLBACK_MODEL", "google/gemini-3-flash-preview")
+PRIMARY_MODEL = os.getenv("PRIMARY_MODEL", "google/gemini-3-flash-preview")
+FALLBACK_MODEL = os.getenv("FALLBACK_MODEL", "google/gemini-2.5-flash")
+PREMIUM_MODEL = os.getenv("PREMIUM_MODEL", "moonshotai/kimi-k3")
 
 
 def _headers():
@@ -35,7 +46,12 @@ def _headers():
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "primary": PRIMARY_MODEL, "fallback": FALLBACK_MODEL}
+    return {
+        "status": "ok",
+        "primary": PRIMARY_MODEL,
+        "fallback": FALLBACK_MODEL,
+        "premium": PREMIUM_MODEL,
+    }
 
 
 @app.get("/v1/models")
@@ -44,8 +60,10 @@ async def models():
         "object": "list",
         "data": [
             {"id": "kirmes-proxy", "object": "model"},
+            {"id": "kirmes-premium", "object": "model"},
             {"id": PRIMARY_MODEL, "object": "model"},
             {"id": FALLBACK_MODEL, "object": "model"},
+            {"id": PREMIUM_MODEL, "object": "model"},
         ],
     }
 
@@ -55,7 +73,13 @@ async def chat(request: Request):
     body = await request.json()
     stream = body.get("stream", False)
 
-    for model in (PRIMARY_MODEL, FALLBACK_MODEL):
+    # rota premium (Kimi K3) so quando o consumidor pede explicitamente
+    if body.get("model") == "kirmes-premium":
+        chain = (PREMIUM_MODEL, PRIMARY_MODEL, FALLBACK_MODEL)
+    else:
+        chain = (PRIMARY_MODEL, FALLBACK_MODEL)
+
+    for model in chain:
         req_body = dict(body)
         req_body["model"] = model
         print(f"[Proxy] tentando {model} | stream={stream}", flush=True)
@@ -92,7 +116,7 @@ async def chat(request: Request):
             print(f"[Proxy] {model} falhou (status {r.status_code}): {r.text[:200]}", flush=True)
 
     return JSONResponse(
-        {"error": f"Ambos os modelos falharam ({PRIMARY_MODEL}, {FALLBACK_MODEL})"},
+        {"error": f"Todos os modelos da cadeia falharam ({', '.join(chain)})"},
         status_code=502,
     )
 

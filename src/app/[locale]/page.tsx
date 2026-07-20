@@ -31,6 +31,7 @@ export default async function Home() {
       price: course.pricing.price,
       originalPrice: course.pricing.originalPrice,
       discount: course.pricing.discount,
+      priceNote: course.pricing.note,
     }));
 
   return (

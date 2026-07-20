@@ -70,6 +70,8 @@ export interface Product {
     price: number;
     originalPrice: number;
     discount: number;
+    /** Nota exibida junto ao preço (ex.: valor simbólico de processamento) */
+    note?: string;
     installments?: {
       enabled: boolean;
       maxInstallments: number;

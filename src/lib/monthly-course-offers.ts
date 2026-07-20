@@ -34,7 +34,10 @@ async function fetchMonthlyOverride(monthKey: string): Promise<MonthlyCourseOffe
       status: { $in: ["active", "published"] },
     });
 
-    if (!doc || !doc.freeCourseSlug || !doc.pools) {
+    // freeCourseSlug: null EXPLÍCITO é um override válido (decisão 20/07:
+    // mês sem curso 100% grátis — cursos de entrada passam a preço simbólico).
+    // Só rejeita quando o campo está AUSENTE (doc malformado) ou sem pools.
+    if (!doc || doc.freeCourseSlug === undefined || !doc.pools) {
       _overrideCache = { data: null, fetchedAt: Date.now() };
       return null;
     }
@@ -44,7 +47,7 @@ async function fetchMonthlyOverride(monthKey: string): Promise<MonthlyCourseOffe
       monthKey: doc.monthKey,
       startsAt: doc.startsAt || bounds.startsAt,
       endsAt: doc.endsAt || bounds.endsAt,
-      freeCourseSlug: doc.freeCourseSlug,
+      freeCourseSlug: doc.freeCourseSlug ?? null,
       pools: {
         beginner: doc.pools.beginner || [],
         intermediate: doc.pools.intermediate || [],
