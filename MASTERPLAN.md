@@ -3,7 +3,81 @@
 
 ---
 
-## ⏩ SESSÃO 19/07 (tarde) — COMEÇAR POR AQUI
+## ⏩ SESSÃO 20/07 (noite) — COMEÇAR POR AQUI
+
+**Contexto:** Ricardo trouxe 6 frentes: (1) custo do Hermes ($6 num dia após a troca pro Kimi K3), (2) usar a API da assinatura ChatGPT dele, (3) prioridade continua estabilidade do site antes de conteúdo de curso, (4) anúncio do chatgpt-zero na home (R$29 vs. grátis do mês, sem menção) + decisão: cobrar valor simbólico ~R$5, (5) tráfego + delegar Instagram da fayai pra agentes, (6) bug: imagem no Studio cobrada no OpenRouter mas com erro.
+
+**✅ FEITO 20/07:**
+
+1. **Custo do Hermes ESTANCADO** — causa: a troca de 19/07 pôs Kimi K3 (**$3/M in, $15/M out** — preço de modelo topo!) em TUDO que passa pelo kirmes-proxy, inclusive os crons agênticos pesados (TCH worldbuilding 13h, auditoria de cursos 14h — 41 chamadas desde 19/07, quase todas dos crons). Solução deployada e testada na VPS: **proxy com 2 rotas** — `kirmes-proxy` (padrão) agora usa Gemini 3 Flash Preview ($0.50/$3, 5-6x mais barato) com fallback Gemini 2.5 Flash; `kirmes-premium` usa Kimi K3 (fallback na cadeia barata) e SÓ o blog diário (`fayai_news.py`) pede essa rota. Ambas as rotas verificadas com chamadas reais. Estimativa: o mesmo workload de ontem cai de ~$6 pra ~$1/dia. Scripts versionados em `scripts/vps/` (model_proxy.py, fayai_news.py, kirmes-proxy.service com chave redigida). ⚠️ Kimi K3 "pensa" antes de responder — chamadas de teste precisam de max_tokens ≥ 200 ou o content vem vazio.
+
+2. **API da assinatura ChatGPT FUNCIONANDO (custo zero)** — o `~/.codex/auth.json` local estava em `auth_mode: chatgpt` (OAuth da assinatura, de quando Ricardo usava com o OpenClaw). Instalei o Codex CLI (0.144.6) local E na VPS (auth.json copiado — fluxo headless oficial), `codex exec` testado nos dois: responde usando a assinatura, sem tocar em API paga. **Ainda não apontei nenhum cron pra ele** — proposta: migrar a auditoria diária de cursos (o maior consumidor de tokens) de hermes/OpenRouter pra `codex exec`, mas só depois de rodar 1 auditoria comparativa (qualidade do relatório hermes vs codex). ⚠️ Local e VPS compartilham o mesmo refresh token — se um dia a auth quebrar nos dois ao mesmo tempo, refazer `codex login` local e re-copiar o auth.json.
+
+3. **Bug do Studio (cobrado + erro) RESOLVIDO** — causa raiz: **Netlify não tinha NENHUMA env CLOUDINARY_*** — a geração completava no OpenRouter (cobrança real), aí o upload pro Cloudinary explodia → "Erro interno do servidor". Nunca UMA geração de IA tinha sido gravada em produção (imagecreations só tem uploads/mockups até março). Consertado em 2 camadas: (a) as 5 vars CLOUDINARY_* configuradas no Netlify (contexto production), (b) hardening no route: se o upload falhar de novo, o usuário RECEBE a imagem crua (base64) com aviso, em vez de perder a geração paga. Reproduzido antes do fix com a conta QA free (HTTP 500 em prod); pós-deploy verificado — ver bloco de verificação abaixo. Nota: modelo default (Nano Banana) funciona sem `modalities`; teste local direto no OpenRouter gerou imagem ok ($0.039).
+
+4. **Preço honesto do chatgpt-zero** — confirmado o mecanismo: existe **override ativo do Mission Control** (`fayapoint.monthly_offers`, 2026-07) com `freeCourseSlug: chatgpt-zero` — por isso ele é grátis pra qualquer conta, enquanto a home anuncia R$29 (de R$97, -62%). Implementado (código deployado + Atlas): override de julho passou a `freeCourseSlug: null` (agora aceito pelo código como "mês sem curso 100% grátis") **com chatgpt-zero adicionado ao pool beginner** (assinantes explorador+ continuam acessando pelo plano); preço avulso R$5 com `pricing.note` explicando o valor simbólico, exibida no card da home. **Números REAIS do Asaas** (consultados na API da conta): PIX R$1,99 fixo **e os primeiros 100 PIX/mês estão ISENTOS**; boleto R$1,99; cartão 2,99%+R$0,49. Ou seja: o repasse real é ~R$2 (não R$5) — o R$5 se justifica como **valor mínimo de cobrança do Asaas** + custo operacional, e a copy foi escrita assim ("valor simbólico que cobre o processamento"), sem prometer "repasse exato". ⚠️ DECISÃO PENDENTE do Ricardo: validar a copy e o valor (dá pra cobrar R$5 e ser honesto, mas não dá pra cobrar menos que R$5 no Asaas). **Fix adicional (commit ae11db5):** o fallback algorítmico (`computeAlgorithmicOfferSet`) elegia um curso grátis por conta própria enquanto o cache do override aquecia — a página de vendas ainda mostrava "Liberar grátis / R$0" depois do Atlas mudado. Agora o algoritmo NUNCA elege curso 100% grátis (regra de negócio permanente) e a página de vendas mostra "Preço simbólico" + a nota no sidebar (e suprime o ridículo "12x de R$0,42").
+
+5. **Tráfego + Instagram delegado a agentes** — plano registrado como FASE 9 abaixo (não iniciado hoje; bloqueado primeiro em P.1: conectar FB/IG).
+
+**Verificação pós-deploy (commit 05691b4):** ver critérios de aceite no fim do bloco — Studio gerando imagem em prod com conta QA, home mostrando R$5+nota, `/api/courses/monthly-offers` sem freeCourse, página de vendas do chatgpt-zero com CTA de compra (não "Liberar grátis").
+
+## ⏩ SESSÃO 20/07 (parte 2, noite) — 4 vídeos destilados + Hermes no browser + estratégia de modelos
+
+Ricardo trouxe 4 vídeos pra extrair o que serve. Transcripts completos salvos e analisados (yt-dlp, ~108K chars). O que foi FEITO e o que foi REGISTRADO:
+
+**✅ FEITO nesta parte:**
+
+1. **Hermes Dashboard no browser (pedido nº1 do Ricardo)** — o Hermes Agent já traz um dashboard web com aba de CHAT embutida (`hermes dashboard --tui`); estava simplesmente desligado. Criado serviço systemd `hermes-dashboard.service` na VPS: bind APENAS no IP Tailscale (`100.111.28.77:9119`) — inacessível da internet pública, acessível de qualquer aparelho do seu tailnet; sobrevive a reboot (espera o container kirmes subir). **Verificado fim-a-fim do PC do Ricardo: HTTP 200.** → **Acesse: `http://100.111.28.77:9119`** (adicionar aos favoritos). Critério de aceite: abrir no Chrome, ver o dashboard, conversar na aba Chat.
+
+2. **Descoberta importante sobre auth Codex×Hermes**: o código do Hermes mantém sessão OAuth do ChatGPT SEPARADA do Codex CLI de propósito ("prevents refresh token rotation conflicts — one app's refresh invalidates the other's session"). Portanto: (a) NÃO copiar `~/.codex/auth.json` pro auth store do Hermes; (b) o nosso setup local+VPS compartilhando o mesmo auth.json do Codex tem risco teórico do mesmo conflito — se a auth quebrar nos dois, refazer `codex login` local e recopiar.
+
+**⏳ PASSO DO RICARDO (~2 min, só você pode — é o login da SUA conta ChatGPT):** plugar sua assinatura ChatGPT como cérebro do Hermes (nível 3 do vídeo, "super important"): abrir o dashboard acima → seção de providers/API keys → OpenAI Codex → login; OU na VPS: `docker exec -it kirmes /opt/hermes/.venv/bin/hermes auth add openai-codex --type oauth --no-browser` (imprime URL+código; aprovar no browser). Depois `hermes model` pra tornar GPT-5.x-codex o default do chat. Com isso o CHAT do Hermes (Telegram+dashboard) fica de graça na assinatura; os crons continuam no proxy barato (não mudam sozinhos — envs explícitos).
+
+**📼 Destilado dos 4 vídeos (o que serve pra nós):**
+- **Vídeo 1 (Hermes, 5 upgrades):** ✅ browser access (feito acima) · ✅ ChatGPT sub como cérebro (passo seu acima) · Firecrawl p/ pesquisa (60x mais rápido, extrai só texto+brand identity: logo/cores/fontes — tem free tier, candidato p/ Fase 9 research) · morning brief auto-melhorável (Hermes+Gmail/Calendar via Zapier MCP, permissões só-leitura, nunca enviar) · completion contracts (/goal com verify+constraints+boundaries — adotar como PADRÃO nos prompts de cron: pedir PROVA de conclusão; alinha com nossa regra do PRONTO).
+- **Vídeo 2 (7 níveis):** estamos ~nível 4-5 (integrações+orquestração). Lições a adotar: modelo-por-tarefa em TODA skill/agent ("não usar astrofísico pra montar Lego") → virou a tabela §8 abaixo · SOUL.md do Hermes na VPS está genérico — enriquecer com o contexto fayai (negócio, métricas, missão) p/ respostas personalizadas · nível 6 = tarefas agendadas assíncronas (já fazemos via cron) · nível 7 = "um OS pra toda IA": nossa versão é o mission-control + memória compartilhada (não perseguir dashboard de terceiros).
+- **Vídeo 3 (Higgsfield MCP + Fable 5, site cinematográfico):** técnica-chave REPLICÁVEL COM COMFYUI (sem esperar os 5 dias do Higgsfield): imagem-mestre cinematográfica → animar em clipes curtos → **extrair frames → canvas controlado pelo scroll** (GSAP ScrollTrigger + Lenis) → encadear clipes usando o ÚLTIMO frame de um como imagem-semente do próximo (continuidade perfeita). Pasta de fotos de referência (frente+perfil) p/ consistência de personagem. SEMPRE equilibrar com peso/SEO/mobile (o próprio autor avisa). → virou FASE 10 abaixo.
+- **Vídeo 4 (Claude Design):** claude.ai/design incluso na assinatura Claude · **criar DESIGN SYSTEM primeiro** (upload logo/site → extrai voz, cores, tipografia, botões) e gerar TUDO com ele selecionado — senão sai genérico · templates: UI mockup, slides, docs, animação, 3D, HTML email · animações de motion graphics a partir de prompt+transcript com timestamps, export MP4 (ótimo p/ Reels/vídeos de curso!) · fluxo Design (iterar rápido, edição inline) → Claude Code (produção). **Ação barata de alto valor: Ricardo criar o design system "FayAI" no claude.ai/design usando IDENTIDADE_VISUAL.md + logo + site como insumos — vira fábrica de artes IG/slides/certificados on-brand pra Fase 9.**
+
+### FASE 9 — TRÁFEGO + INSTAGRAM AUTÔNOMO (planejada 20/07, executar após P.1)
+A infra já existe quase toda (USS publicador + cron publish-due + OAuth FB/IG pronto + persona + manchetes IA Hoje no prompt). O que falta é ligar as pontas:
+- [ ] 9.0 **BLOQUEADOR (Ricardo, ~10 min):** conectar FB/IG da fayai no USS (Perfil Social → Conectar) — o OAuth está pronto desde 14/07.
+- [ ] 9.1 Cron diário de conteúdo IG: agente (kirmes/hermes via rota barata, ou codex exec com a assinatura) gera 1-2 posts/dia com o motor USS (persona fayai + manchetes das últimas 48h), agenda via USS; `uss_publish_due` (já roda a cada 5 min) publica sozinho.
+- [ ] 9.2 Qualidade visual: imagem de cada post via Studio/ComfyUI (mediaPrompt do gerador → Composer já faz isso manualmente; automatizar a chamada).
+- [ ] 9.3 Loop de melhoria: `sync-due` (7.1) já refina a persona pelo engajamento real — revisar semanalmente os top posts e ajustar temas.
+- [ ] 9.4 Tráfego orgânico de busca: blog IA Hoje já publica diário; adicionar interlinks curso↔post e sitemap ping (baixo esforço, alto SEO).
+- Critério de aceite: 7 dias seguidos de posts no IG da fayai sem intervenção manual, com engajamento medido no sync-due.
+- [ ] 9.5 (novo, do vídeo 1) Adotar "completion contracts" nos prompts dos crons: todo job agêntico pede PROVA verificável de conclusão (arquivo gravado, URL 200, contagem exata) + constraints/boundaries explícitos.
+- [ ] 9.6 (novo, do vídeo 4) Ricardo cria o design system "FayAI" no claude.ai/design (insumos: IDENTIDADE_VISUAL.md, logo, fayai.com.br) → artes de IG/slides on-brand com 1 prompt; opcional: avaliar Firecrawl free tier pra research de conteúdo.
+
+### FASE 10 — HOME CINEMATOGRÁFICA (scroll-vídeo estilo Higgsfield, via ComfyUI) — planejada 20/07, PILOTO primeiro
+Receita provada no vídeo 3, replicável 100% local (RTX 5060 Ti + Qwen image + LTX I2V, receitas que já dominamos da Leitura 2.0):
+- [ ] 10.1 PILOTO: UMA seção hero para a home — imagem-mestre cinematográfica do universo fayai (Qwen 2512) → 1 clipe LTX de ~4-6s → script Python extrai frames → canvas com scroll-scrub (GSAP ScrollTrigger + Lenis), fallback estático p/ mobile/reduced-motion. Aprovação do Ricardo ANTES de escalar (§1).
+- [ ] 10.2 Se aprovado: narrativa de 3-4 cenas encadeadas (último frame de cada clipe = semente do próximo) contando a jornada do aluno (caos → domínio da IA), respeitando peso (WebP/WebM comprimidos, lazy, LCP) — a home já perdeu banda Netlify antes, não repetir.
+- [ ] 10.3 Quando o Higgsfield voltar (5 dias): comparar qualidade dos clipes (Higgsfield MCP direto no Claude) vs LTX local pros planos de câmera que o LTX não segura.
+- Regra: NÃO tocar na home em produção antes do piloto aprovado; efeitos nunca podem quebrar SEO/mobile (aviso do próprio autor do vídeo).
+
+## §8. ESTRATÉGIA DE MODELOS — qual cérebro pra cada trabalho (decisão 20/07, pedida pelo Ricardo)
+Princípio (vídeo 2): "não usar astrofísico pra montar Lego" — o modelo mais caro só onde a diferença aparece. Sem gastar a mais: Claude sub cobre Fable/Opus/Sonnet; ChatGPT sub cobre Codex; OpenRouter só no que sobrar.
+
+| Trabalho | Modelo | Por quê |
+|---|---|---|
+| Sessões de masterplan comigo: arquitetura, produção (VPS+Atlas+Netlify), incidentes, decisões multi-sistema, design de alto nível, Leitura 2.0/motor Expert | **Fable 5** (eu) | Mais contexto+julgamento; erros aqui custam caro. É a sessão "cérebro". |
+| Implementação pesada mas bem-especificada (feature grande já planejada, refactors, batches de código) | **Opus 4.8** (com /fast quando quiser) | 90% do resultado em coding puro, gasta menos do orçamento da sub que Fable. |
+| Rotina: scripts, QA, aplicar conteúdo já aprovado, pequenos fixes, subagentes de busca/exploração | **Sonnet 5** | Barato, rápido, mais que suficiente. Default pro dia a dia. |
+| Subagentes triviais (glue, listagens, formatação) | Haiku 4.5 | Centavos. |
+| Hermes chat (Telegram + dashboard novo) | **GPT-5.6 via SUA assinatura ChatGPT** (após seu OAuth) | Custo ZERO de API; era o maior desperdício. |
+| Crons da VPS (auditoria, TCH, news) via kirmes-proxy | Gemini 3 Flash Preview (fallback 2.5 Flash) | $0.50/$3 por M — já configurado 20/07. |
+| Blog diário IA Hoje (qualidade editorial) | Kimi K3 (rota kirmes-premium) | Decisão do Ricardo; único consumidor da rota cara. |
+| Candidato: auditoria de cursos migrar p/ `codex exec` (assinatura) | GPT-5.x-codex | Custo zero; PENDENTE comparativo de qualidade vs hermes (1 rodada lado a lado). |
+| Mídia (imagens/vídeo cursos, home cinematográfica) | ComfyUI local (Qwen/LTX) | GPU própria, custo zero, receitas provadas. |
+| One-pagers HTML de apresentação/design rápido (padrão do vídeo 1) | Kimi K3 via OpenRouter | Forte em design HTML por fração do preço de Fable. |
+
+Regra de bolso: **Fable 5 decide, Opus constrói, Sonnet mantém, assinaturas (ChatGPT/Claude) absorvem tudo que puderem, OpenRouter só paga o que nenhuma assinatura cobre, GPU local gera mídia.**
+
+---
+
+## ⏩ SESSÃO 19/07 (tarde) — histórico
 
 **Contexto:** os 4 cursos ficaram prontos pra vender (bloco 18/07 abaixo). Ricardo disse "vou revisar o conteúdo dos cursos ao longo da semana, continue o resto do masterplan e cuide do site" — sessão de hoje é toda em cima disso, sem mexer mais em conteúdo de curso.
 
