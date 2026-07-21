@@ -13,11 +13,39 @@ interface Props {
   params: Promise<{ slug: string; locale: string }>;
 }
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? "https://fayai.com.br";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const item = await getNewsBySlug(slug);
   if (!item) return {};
-  return { title: `${item.title} — IA Hoje | FayAI`, description: item.summary };
+
+  // canonical PRÓPRIO é obrigatório aqui: o layout de [locale] declara
+  // `alternates.canonical = /${locale}`, e no App Router a página herda esse
+  // valor quando não define o seu. Sem isto, todo artigo se declarava cópia da
+  // home — o Google respondia "URL não está no Google / não reconhece o URL"
+  // para as 19 matérias publicadas (confirmado no Search Console em 21/07).
+  const canonical = `${SITE_URL}/${locale}/noticias/${slug}`;
+
+  return {
+    title: `${item.title} — IA Hoje | FayAI`,
+    description: item.summary,
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      title: item.title,
+      description: item.summary,
+      url: canonical,
+      siteName: "FayAI",
+      ...(item.date ? { publishedTime: item.date } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: item.title,
+      description: item.summary,
+    },
+  };
 }
 
 export default async function NoticiaPage({ params }: Props) {

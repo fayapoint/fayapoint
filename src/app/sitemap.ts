@@ -32,7 +32,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/servicos/consultoria-ai",
     "/servicos/edicao-de-video",
     "/cursos",
-    "/blog",
+    // hub real das matérias — "/blog" responde 307 para cá (URL que redireciona
+    // não deve figurar em sitemap)
+    "/noticias",
     "/faq",
     "/contato",
     "/agendar-consultoria",
@@ -78,7 +80,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       if (!article.slug) continue;
       const published = article.date ? new Date(article.date) : now;
       entries.push({
-        url: url(`/${locale}/blog/${article.slug}`),
+        // /noticias/<slug> é a URL canônica e a que o hub linka internamente;
+        // /blog/<slug> é rota legada que renderiza a listagem genérica.
+        url: url(`/${locale}/noticias/${article.slug}`),
         lastModified: Number.isNaN(published.valueOf()) ? now : published,
         changeFrequency: "monthly",
         priority: 0.8,

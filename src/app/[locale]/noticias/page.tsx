@@ -4,10 +4,15 @@ import { getAllNews } from "@/lib/ai-news";
 import { SEED_NEWS } from "@/data/landing/seed-news";
 import { ExperienceNav } from "@/components/layout/ExperienceNav";
 
+// canonical explícito: sem ele o hub herda o canonical da home declarado no
+// layout de [locale] e some do índice do Google (mesmo bug das matérias).
 export const metadata: Metadata = {
   title: "Blog IA Hoje — notícias e guias de inteligência artificial | FayAI",
   description:
     "As notícias de IA que importam para brasileiros, selecionadas e explicadas todos os dias pela FayAI — com link para a fonte original.",
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://fayai.com.br"}/pt-BR/noticias`,
+  },
 };
 
 export const revalidate = 900;
