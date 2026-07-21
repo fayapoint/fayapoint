@@ -41,6 +41,31 @@ Ricardo trouxe 4 vídeos pra extrair o que serve. Transcripts completos salvos e
 - **Vídeo 3 (Higgsfield MCP + Fable 5, site cinematográfico):** técnica-chave REPLICÁVEL COM COMFYUI (sem esperar os 5 dias do Higgsfield): imagem-mestre cinematográfica → animar em clipes curtos → **extrair frames → canvas controlado pelo scroll** (GSAP ScrollTrigger + Lenis) → encadear clipes usando o ÚLTIMO frame de um como imagem-semente do próximo (continuidade perfeita). Pasta de fotos de referência (frente+perfil) p/ consistência de personagem. SEMPRE equilibrar com peso/SEO/mobile (o próprio autor avisa). → virou FASE 10 abaixo.
 - **Vídeo 4 (Claude Design):** claude.ai/design incluso na assinatura Claude · **criar DESIGN SYSTEM primeiro** (upload logo/site → extrai voz, cores, tipografia, botões) e gerar TUDO com ele selecionado — senão sai genérico · templates: UI mockup, slides, docs, animação, 3D, HTML email · animações de motion graphics a partir de prompt+transcript com timestamps, export MP4 (ótimo p/ Reels/vídeos de curso!) · fluxo Design (iterar rápido, edição inline) → Claude Code (produção). **Ação barata de alto valor: Ricardo criar o design system "FayAI" no claude.ai/design usando IDENTIDADE_VISUAL.md + logo + site como insumos — vira fábrica de artes IG/slides/certificados on-brand pra Fase 9.**
 
+## 🔎 AUDITORIA SEO NO SEARCH CONSOLE — 21/07 (a resposta para "por que ninguém entra")
+
+Ricardo pediu para entrar no GSC e melhorar o tráfego. O diagnóstico achou uma cadeia de bugs que, juntos, tornavam o site **estruturalmente invisível** — não era falta de divulgação, era o site dizendo ao Google para não indexá-lo.
+
+**Números encontrados (propriedade `sc-domain:fayai.com.br`):**
+- Dados existem só de **11/07 a 19/07** (propriedade nova) — 9 dias.
+- **1 clique, 59 impressões, posição média 11,6.**
+- As 6 consultas são **todas variações da marca** ("fayai", "fayz ai", "fazer ai", "ai fay", "fay ai") + 1 de conteúdo ("seo local com inteligência artificial", 1 impressão). Zero descoberta por tema.
+- A **home concentra 51 das 59 impressões**; só 12 páginas do site já apareceram alguma vez.
+- Relatório de Páginas indisponível ("dados em processamento", lado do Google).
+
+**Causa raiz nº1 — CANONICAL APONTANDO PARA A HOME (o mais grave).** `src/app/[locale]/layout.tsx` declara `alternates.canonical = ${SITE_URL}/${locale}`. No App Router, **toda página filha herda esse valor se não definir o próprio**. As páginas de curso definem o seu (por isso estão corretas); **as matérias do IA Hoje não definiam** — então cada artigo declarava `<link rel="canonical" href="https://fayai.com.br/pt-BR"/>`, isto é, "sou uma duplicata da home, indexe ela no meu lugar". Prova na Inspeção de URL: *"O URL não está no Google / O Google não reconhece o URL"*. Explica a home concentrar as impressões e nenhum artigo jamais ranquear. **CORRIGIDO** (commit 4dd8ffb): canonical próprio + OpenGraph `article` + twitter card nas matérias e no hub.
+
+**Causa raiz nº2 — SITEMAP CEGO.** `src/app/sitemap.ts` tinha 3 defeitos simultâneos: (a) lia a lista **estática** `@/data/courses` em vez do banco — anunciava curso arquivado (`banana-dev-deploy-ia`) e **omitia 3 ativos, incluindo 2 dos 4 carro-chefe reformados** (`aprenda-a-usar-ia-no-dia-a-dia`, `rag-knowledge`); (b) **nunca incluiu nenhuma matéria** (19 publicadas, todas fora); (c) era função **síncrona** = congelada no build, então matéria nova só entraria no próximo deploy. **CORRIGIDO** (56e272c + 4dd8ffb): async, lê do banco, inclui as matérias em `/noticias/<slug>`, `revalidate = 3600`.
+
+**Causa raiz nº3 — DESCOBERTA INTERNA QUEBRADA.** `/blog` responde **307 → `/noticias`** (e era `/blog` que estava no sitemap). O hub real `/noticias` está OK e linka 21 matérias no HTML servidor. Mas a Inspeção confirmou "Nenhum sitemap de referência" + "Nenhuma página de referência" para os artigos: os dois caminhos de descoberta estavam cortados ao mesmo tempo. **CORRIGIDO**: sitemap aponta para `/noticias` e para cada `/noticias/<slug>`.
+
+**Bônus — visibilidade em agentes de IA (diretriz sua de 19/07).** `public/robots.txt` bloqueava **todos** os bots de IA. Reescrito em duas camadas: **liberados** os motores de resposta que citam e mandam usuário (`OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User`, `ClaudeBot`, `Google-Extended`); **seguem bloqueados** os de treino/scraping em massa (`GPTBot`, `CCBot`, `anthropic-ai`, `Claude-Web`, `cohere-ai`, `Diffbot`, `YouBot`). Reversível em 1 arquivo se você discordar.
+
+**Pendências registradas (não feitas):**
+- [ ] Rota legada `/blog/[slug]` (client component, dados estáticos `@/data/blog-posts`) responde 200 servindo a listagem genérica para slugs de notícia — duplicata fraca. Ideal: 301 para `/noticias/<slug>`. Não mexi para não quebrar os posts legados.
+- [ ] `Crawl-delay: 1` no robots para Googlebot é inócuo (Google ignora), mas pode sair.
+- [ ] Sem dados de Core Web Vitals ainda (tráfego insuficiente).
+- [ ] **O gargalo real depois disto é conteúdo com demanda de busca**: hoje nada no site responde a uma pergunta que brasileiros digitam. Os 4 cursos reformados + o blog diário são a matéria-prima; falta mirar termos ("como usar chatgpt", "curso de ia gratis", "o que é rag") em títulos/H1. Isso conecta com a Fase 9.4.
+
 ### FASE 9 — TRÁFEGO + INSTAGRAM AUTÔNOMO (planejada 20/07, executar após P.1)
 A infra já existe quase toda (USS publicador + cron publish-due + OAuth FB/IG pronto + persona + manchetes IA Hoje no prompt). O que falta é ligar as pontas:
 - [ ] 9.0 **BLOQUEADOR (Ricardo, ~10 min):** conectar FB/IG da fayai no USS (Perfil Social → Conectar) — o OAuth está pronto desde 14/07.
