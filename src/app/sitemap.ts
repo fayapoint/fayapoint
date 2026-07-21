@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { allCourses } from "@/data/courses";
+import { getAllProducts } from "@/lib/products";
+import { getAllNews } from "@/lib/ai-news";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -8,11 +10,17 @@ const SITE_URL =
 
 const LOCALES = ["pt-BR", "en"] as const;
 
+// O sitemap consulta o banco (cursos ativos + artigos do blog), então precisa
+// ser revalidado — antes era uma função síncrona congelada no build, e cada
+// artigo novo do IA Hoje (1-3 por dia) ficava invisível para o Google até o
+// próximo deploy.
+export const revalidate = 3600;
+
 function url(path: string) {
   return `${SITE_URL}${path}`;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticPaths = [
@@ -32,6 +40,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/sobre",
   ];
 
+  // Cursos: o banco é a fonte da verdade. A lista estática @/data/courses
+  // ficou defasada das fusões/arquivamentos de 19/07 — anunciava curso
+  // arquivado e omitia curso ativo. Só cai nela se o banco falhar, para o
+  // sitemap nunca quebrar o build.
+  const [products, articles] = await Promise.all([
+    getAllProducts({ type: "course", limit: 200 }).catch(() => []),
+    getAllNews(500).catch(() => []),
+  ]);
+
+  const courseSlugs = products.length
+    ? products.map((p) => p.slug)
+    : allCourses.map((c) => c.slug);
+
   const entries: MetadataRoute.Sitemap = [];
 
   for (const locale of LOCALES) {
@@ -44,12 +65,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       });
     }
 
-    for (const course of allCourses) {
+    for (const slug of courseSlugs) {
       entries.push({
-        url: url(`/${locale}/curso/${course.slug}`),
+        url: url(`/${locale}/curso/${slug}`),
         lastModified: now,
         changeFrequency: "monthly",
         priority: 0.6,
+      });
+    }
+
+    for (const article of articles) {
+      if (!article.slug) continue;
+      const published = article.date ? new Date(article.date) : now;
+      entries.push({
+        url: url(`/${locale}/blog/${article.slug}`),
+        lastModified: Number.isNaN(published.valueOf()) ? now : published,
+        changeFrequency: "monthly",
+        priority: 0.8,
       });
     }
   }

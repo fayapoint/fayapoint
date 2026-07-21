@@ -149,7 +149,36 @@ Disallow: /
 User-agent: Majestic
 Disallow: /
 
-# AI training crawlers
+# =============================================================================
+# AGENTES DE IA — política em duas camadas (revisada 21/07/2026)
+#
+# Distinção que vale dinheiro: um crawler que só COLETA PARA TREINO consome
+# nosso conteúdo e não devolve nada; um crawler de MOTOR DE RESPOSTA cita a
+# fonte e manda usuário real. Nosso público pergunta "qual curso de IA fazer"
+# dentro do ChatGPT/Perplexity — estar bloqueado ali era sumir da vitrine onde
+# nosso cliente já está.
+# =============================================================================
+
+# --- Motores de resposta: LIBERADOS (citam e enviam tráfego) ---
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# --- Coleta para treino / scraping em massa: BLOQUEADOS ---
 User-agent: GPTBot
 Disallow: /
 
@@ -159,9 +188,6 @@ Disallow: /
 User-agent: anthropic-ai
 Disallow: /
 
-User-agent: ClaudeBot
-Disallow: /
-
 User-agent: Claude-Web
 Disallow: /
 
@@ -169,9 +195,6 @@ User-agent: cohere-ai
 Disallow: /
 
 User-agent: Diffbot
-Disallow: /
-
-User-agent: PerplexityBot
 Disallow: /
 
 User-agent: YouBot
