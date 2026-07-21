@@ -60,6 +60,28 @@ Ricardo pediu para entrar no GSC e melhorar o tráfego. O diagnóstico achou uma
 
 **Bônus — visibilidade em agentes de IA (diretriz sua de 19/07).** `public/robots.txt` bloqueava **todos** os bots de IA. Reescrito em duas camadas: **liberados** os motores de resposta que citam e mandam usuário (`OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User`, `ClaudeBot`, `Google-Extended`); **seguem bloqueados** os de treino/scraping em massa (`GPTBot`, `CCBot`, `anthropic-ai`, `Claude-Web`, `cohere-ai`, `Diffbot`, `YouBot`). Reversível em 1 arquivo se você discordar.
 
+### Otimização de títulos para busca — 21/07 (segunda parte, a pedido do Ricardo)
+
+**Bug encontrado antes de otimizar:** `generateMetadata` da página de curso lia a MESMA lista estática defasada do sitemap — então **3 cursos serviam o título genérico `"Curso - FayAi AI Academy"`**: `rag-knowledge`, `ia-producao` e `aprenda-a-usar-ia-no-dia-a-dia` (dois deles carro-chefe reformados). O título é o maior sinal de relevância on-page e eles simplesmente não tinham um. **Corrigido** (fd8e0cc): agora lê `getProductBySlug` e usa `seo.metaTitle`/`seo.metaDescription` do banco — **títulos viraram dado editável no Atlas, sem deploy** — com fallback em cascata (banco → nome → lista estática → genérico).
+
+**Pesquisa de termos:** usei o autocomplete do Google (pt-BR/br) — dado real de busca, não chute. Padrões que dominam no Brasil: **"grátis/gratuito/de graça"** aparece em quase todo tema; **"o que é"** (intenção informacional); **"curso"**; **"na prática"**; **"para iniciantes"**; **"com certificado"**; **"com n8n"** e **"para whatsapp"** como modificadores fortes em automação/agentes.
+
+**19 títulos reescritos e gravados no banco** (backup em `products_seo_backup_20260721`). Regras: termo de busca **no começo**, ≤60 caracteres (senão o Google trunca), sufixo curto `| FayAI` — o antigo `- FayAi AI Academy` comia 20 dos 60 caracteres com uma marca que ninguém procura. Exemplos:
+- `rag-knowledge`: genérico → **"O que é RAG em IA: curso prático de Knowledge Base | FayAI"** (busca real: "rag ia", "rag ia significado")
+- `aprenda-a-usar-ia-no-dia-a-dia`: genérico → **"Inteligência Artificial no Dia a Dia: curso prático | FayAI"** (busca: "exemplos de inteligência artificial no dia a dia")
+- `crie-agentes-de-ia-autonomos`: "Do Conceito à Produção" → **"Agentes de IA: o que são e como criar do zero | FayAI"** (busca: "agentes de ia o que são")
+- `chatgpt-allowlisting`: → **"Como Aparecer nas Respostas do ChatGPT (AEO) | FayAI"**
+- Home: "FayAi - Aprenda IA do Zero ao Avançado" → **"Cursos de Inteligência Artificial do Zero | FayAI"** (a marca sai da frente: as 6 consultas do GSC eram variações ERRADAS do nome)
+- `/cursos`: → **"Cursos de Inteligência Artificial com Certificado | FayAI"**
+
+**Correção de honestidade:** a descrição de `/cursos` prometia **"mais de 50 cursos"** — o catálogo tem **20 ativos**. Número inflado em página de venda queima confiança e não ajuda ranking nenhum. Corrigido para 20.
+
+**`ia-sem-filtro-por-claude` ficou de fora de propósito** — conteúdo sagrado, não toquei nem no título.
+
+**Aviso estratégico honesto:** título otimizado não cria autoridade. Com domínio novo, brigar por "curso de inteligência artificial" (SENAC/USP na 1ª página) é perder tempo; por isso mirei **cauda longa informacional** ("o que é RAG", "agentes de ia o que são", "exemplos de IA no dia a dia") — ganhável com uma página boa. O próximo passo real é **conteúdo que responda essas perguntas**, não mais ajuste de tag.
+
+**Pendência de posicionamento:** `ia-producao` tem título novo, mas o termo "IA em produção" **não tem busca** (o autocomplete devolve produção de música/vídeo). O curso precisa de decisão sua sobre reposicionamento — é o candidato mais fraco do catálogo em demanda.
+
 **Pendências registradas (não feitas):**
 - [ ] Rota legada `/blog/[slug]` (client component, dados estáticos `@/data/blog-posts`) responde 200 servindo a listagem genérica para slugs de notícia — duplicata fraca. Ideal: 301 para `/noticias/<slug>`. Não mexi para não quebrar os posts legados.
 - [ ] `Crawl-delay: 1` no robots para Googlebot é inócuo (Google ignora), mas pode sair.
