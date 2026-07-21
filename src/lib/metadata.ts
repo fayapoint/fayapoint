@@ -67,13 +67,15 @@ export function generatePageMetadata({
  */
 export const pageMetadataConfig = {
   cursos: {
+    // "mais de 50 cursos" era falso — o catálogo tem 20 ativos (21/07). Número
+    // inflado em página de venda queima confiança e não ajuda em ranking.
     "pt-BR": {
-      title: "Cursos de IA - FayAi",
-      description: "Explore mais de 50 cursos práticos de Inteligência Artificial. Aprenda ChatGPT, Midjourney, automação com n8n, machine learning e muito mais. Certificado incluso e acesso vitalício.",
+      title: "Cursos de Inteligência Artificial com Certificado | FayAI",
+      description: "20 cursos práticos de IA em português: ChatGPT, automação com n8n, Midjourney, agentes e RAG. Certificado verificável, acesso vitalício e conteúdo atualizado.",
     },
     en: {
-      title: "AI Courses - FayAi",
-      description: "Explore 50+ hands-on Artificial Intelligence courses. Learn ChatGPT, Midjourney, n8n automation, machine learning and more. Certificate included with lifetime access.",
+      title: "Artificial Intelligence Courses with Certificate | FayAI",
+      description: "20 hands-on AI courses: ChatGPT, n8n automation, Midjourney, agents and RAG. Verifiable certificate, lifetime access and content kept up to date.",
     },
   },
   contato: {

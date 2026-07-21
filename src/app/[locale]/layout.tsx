@@ -80,8 +80,11 @@ const baseMetadata = {
 const localizedMetadata: Record<string, Metadata> = {
   "pt-BR": {
     ...baseMetadata,
-    title: "FayAi - Aprenda IA do Zero ao Avançado",
-    description: "A plataforma definitiva para dominar Inteligência Artificial. Cursos práticos de IA, automação, ChatGPT, Midjourney e mais de 100 ferramentas.",
+    // Título lidera com o termo de busca, não com a marca: ninguém procura
+    // "FayAi" ainda (as 6 consultas do Search Console em 21/07 eram todas
+    // variações erradas do nome). A marca fica no fim, como assinatura.
+    title: "Cursos de Inteligência Artificial do Zero | FayAI",
+    description: "Aprenda IA na prática, em português: ChatGPT, automação, agentes e criação de imagens. Cursos curtos com exemplos reais, certificado e trilha guiada do zero.",
     keywords: "inteligência artificial, IA, cursos online, ChatGPT, Midjourney, automação, machine learning, Brasil",
     openGraph: {
       ...baseMetadata.openGraph,
