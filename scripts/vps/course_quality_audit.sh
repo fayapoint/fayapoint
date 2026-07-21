@@ -53,7 +53,7 @@ Para cada um: **Aula** (arquivo) · **Trecho problemático** (citação curta) �
 Seja específico e honesto — nota alta sem mérito é proibida. NUNCA invente trecho que não está nas aulas: cite apenas o que você leu."
 
 HERMES_OUT="/root/kirmes/logs/hermes_stdout_${SLUG}_${TODAY}.txt"
-docker exec kirmes /opt/hermes/.venv/bin/hermes -z "$TASK" 2>&1 | tee "$HERMES_OUT" >> "$LOG"
+docker exec -e OPENROUTER_BASE_URL=http://127.0.0.1:7860/v1 -e OPENROUTER_API_KEY=kirmes-local kirmes /opt/hermes/.venv/bin/hermes -z "$TASK" -m kirmes-proxy --provider openrouter 2>&1 | tee "$HERMES_OUT" >> "$LOG"
 STATUS=${PIPESTATUS[0]}
 
 # FIX 19/07/2026: hermes -z frequentemente IMPRIME o relatório completo em
