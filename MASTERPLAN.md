@@ -3,6 +3,11 @@
 
 ---
 
+## 🔴 LEIA ANTES DE ABRIR QUALQUER SESSÃO — §8 (política de modelo e esforço)
+**Cartão de bolso em §8.6.** Escolher o modelo certo ANTES de começar é a diferença entre queimar 20% da cota semanal numa terça e chegar no domingo com folga. Resumo: **Fable decide · Opus constrói · Sonnet mantém · Haiku faz o trivial · sessão nova a cada mudança de assunto.**
+
+---
+
 ## ⏩ SESSÃO 20/07 (noite) — COMEÇAR POR AQUI
 
 **Contexto:** Ricardo trouxe 6 frentes: (1) custo do Hermes ($6 num dia após a troca pro Kimi K3), (2) usar a API da assinatura ChatGPT dele, (3) prioridade continua estabilidade do site antes de conteúdo de curso, (4) anúncio do chatgpt-zero na home (R$29 vs. grátis do mês, sem menção) + decisão: cobrar valor simbólico ~R$5, (5) tráfego + delegar Instagram da fayai pra agentes, (6) bug: imagem no Studio cobrada no OpenRouter mas com erro.
@@ -106,23 +111,124 @@ Receita provada no vídeo 3, replicável 100% local (RTX 5060 Ti + Qwen image + 
 - [ ] 10.3 Quando o Higgsfield voltar (5 dias): comparar qualidade dos clipes (Higgsfield MCP direto no Claude) vs LTX local pros planos de câmera que o LTX não segura.
 - Regra: NÃO tocar na home em produção antes do piloto aprovado; efeitos nunca podem quebrar SEO/mobile (aviso do próprio autor do vídeo).
 
-## §8. ESTRATÉGIA DE MODELOS — qual cérebro pra cada trabalho (decisão 20/07, pedida pelo Ricardo)
-Princípio (vídeo 2): "não usar astrofísico pra montar Lego" — o modelo mais caro só onde a diferença aparece. Sem gastar a mais: Claude sub cobre Fable/Opus/Sonnet; ChatGPT sub cobre Codex; OpenRouter só no que sobrar.
+## §8. ESTRATÉGIA DE MODELOS E ESFORÇO — como não queimar a cota (v2, 21/07 — PRIORIDADE 0 do Ricardo)
 
-| Trabalho | Modelo | Por quê |
+> **Contexto:** terça-feira, 20% da cota semanal já consumida. Esta seção existe para que isso não se repita. Leia §8.0 antes da tabela — o maior desperdício **não** é o nível de esforço, é rodar o modelo mais caro em trabalho que não precisa dele, com contexto gigante, em sessões longas.
+
+### §8.0 — O que realmente consome cota (em ordem de impacto)
+
+Quatro fatores se multiplicam. Mexer no primeiro vale mais que otimizar os outros três:
+
+1. **Tier do modelo** — o fator dominante. Preço de API por milhão de tokens (proxy honesto do peso relativo na cota; a contabilidade exata da assinatura não é pública, mas a *proporção* entre modelos é o modelo mental certo):
+
+   | Modelo | Entrada | Saída | Relativo a Sonnet |
+   |---|---|---|---|
+   | **Fable 5** (eu, por padrão) | $10 | $50 | **~3,3x** |
+   | **Opus 4.8** | $5 | $25 | ~1,7x |
+   | **Sonnet 5** | $3 | $15 (intro $2/$10 até 31/08) | 1x |
+   | **Haiku 4.5** | $1 | $5 | ~0,3x |
+
+   Ou seja: **a mesma tarefa em Sonnet 5 custa ~1/3 do que custa em Fable 5.** Você já fez a jogada certa nesta sessão ao trocar para Opus 4.8 — mantenha esse reflexo.
+
+2. **Tamanho do contexto × número de turnos.** Cada turno reenvia a conversa inteira. Numa sessão longa com o MASTERPLAN (que já é enorme) relido várias vezes, o custo de *entrada* cresce quadraticamente. **Sessão longa em Fable 5 é o pior cenário possível** — foi o que aconteceu ontem.
+
+3. **Nível de esforço (`effort`)** — controla profundidade de raciocínio e quantos tokens de saída são gastos. Real, mas menor que os dois de cima.
+
+4. **Número de chamadas de ferramenta.** Esforço baixo consolida chamadas; esforço alto explora mais.
+
+### §8.1 — Níveis de esforço: o que são e quando usar
+
+Cinco níveis: `low` · `medium` · `high` (padrão) · `xhigh` · `max`. Esforço mais baixo = menos preâmbulo, menos chamadas de ferramenta, respostas mais diretas.
+
+**A armadilha que quero desfazer:** "sempre usar o máximo para ter qualidade" está errado em duas direções.
+
+- **Para baixo:** em **Fable 5**, `low` e `medium` continuam excelentes — a documentação oficial é explícita: frequentemente **superam o desempenho de modelos anteriores rodando em `xhigh` ou `max`**. Trabalho rotineiro meu não precisa de esforço alto.
+- **Para cima:** em trabalho agêntico (várias ferramentas, várias etapas), **esforço alto no começo costuma REDUZIR o custo total**, porque resolve em menos turnos. Baixar tudo para `low` pode sair mais caro por multiplicar idas e vindas.
+
+Recomendações por modelo (da referência oficial):
+
+| Nível | Quando usar | Observação importante |
 |---|---|---|
-| Sessões de masterplan comigo: arquitetura, produção (VPS+Atlas+Netlify), incidentes, decisões multi-sistema, design de alto nível, Leitura 2.0/motor Expert | **Fable 5** (eu) | Mais contexto+julgamento; erros aqui custam caro. É a sessão "cérebro". |
-| Implementação pesada mas bem-especificada (feature grande já planejada, refactors, batches de código) | **Opus 4.8** (com /fast quando quiser) | 90% do resultado em coding puro, gasta menos do orçamento da sub que Fable. |
-| Rotina: scripts, QA, aplicar conteúdo já aprovado, pequenos fixes, subagentes de busca/exploração | **Sonnet 5** | Barato, rápido, mais que suficiente. Default pro dia a dia. |
-| Subagentes triviais (glue, listagens, formatação) | Haiku 4.5 | Centavos. |
-| Hermes chat (Telegram + dashboard novo) | **GPT-5.6 via SUA assinatura ChatGPT** (após seu OAuth) | Custo ZERO de API; era o maior desperdício. |
-| Crons da VPS (auditoria, TCH, news) via kirmes-proxy | Gemini 3 Flash Preview (fallback 2.5 Flash) | $0.50/$3 por M — já configurado 20/07. |
-| Blog diário IA Hoje (qualidade editorial) | Kimi K3 (rota kirmes-premium) | Decisão do Ricardo; único consumidor da rota cara. |
-| Candidato: auditoria de cursos migrar p/ `codex exec` (assinatura) | GPT-5.x-codex | Custo zero; PENDENTE comparativo de qualidade vs hermes (1 rodada lado a lado). |
-| Mídia (imagens/vídeo cursos, home cinematográfica) | ComfyUI local (Qwen/LTX) | GPU própria, custo zero, receitas provadas. |
-| One-pagers HTML de apresentação/design rápido (padrão do vídeo 1) | Kimi K3 via OpenRouter | Forte em design HTML por fração do preço de Fable. |
+| `max` | Só quando acertar importa mais que o custo | Pode "pensar demais" e dar retorno decrescente. Reserve para o raro. |
+| `xhigh` | Codificação e trabalho agêntico difícil | É o padrão do Claude Code. **Em Opus 4.8, NÃO use por reflexo** — 4.8 tem teto de inteligência mais alto; comece em `high`. |
+| `high` | **Padrão.** Trabalho sensível a inteligência | O melhor equilíbrio qualidade/tokens na maioria dos casos. |
+| `medium` | Economia consciente | Em Fable 5 entrega muito bem; em Sonnet 5 equivale ao Sonnet 4.6 em `high`. |
+| `low` | Tarefas curtas e escopadas, subagentes, coisas não sensíveis a inteligência | Risco de raciocínio raso em problema complexo — se acontecer, **suba o esforço em vez de tentar contornar por prompt**. |
 
-Regra de bolso: **Fable 5 decide, Opus constrói, Sonnet mantém, assinaturas (ChatGPT/Claude) absorvem tudo que puderem, OpenRouter só paga o que nenhuma assinatura cobre, GPU local gera mídia.**
+**Sinal prático:** se uma tarefa terminou **correta mas demorada demais**, o certo é *baixar* o esforço. Se terminou **rápida mas rasa**, *subir*. Não julgue pelo tempo isolado.
+
+### §8.2 — Matriz: modelo + esforço por tipo de trabalho
+
+Princípio (vídeo 2): "não usar astrofísico pra montar Lego". Sem gastar a mais: a assinatura Claude cobre Fable/Opus/Sonnet/Haiku; a assinatura ChatGPT cobre o Codex e o chat do Hermes; OpenRouter só no que sobrar; a GPU local faz mídia.
+
+| Trabalho | Modelo | Esforço | Por quê |
+|---|---|---|---|
+| **Decisão de rumo**: arquitetura, incidente em produção, "por que ninguém entra no site", escolher entre caminhos caros, revisar se o plano está certo | **Fable 5** | `high` | Erro aqui custa semanas. É a única categoria que justifica o tier mais caro. **Sessão curta e focada** — entra, decide, sai. |
+| **Implementação pesada já especificada**: feature grande planejada, refactor, lote de correções, auditoria técnica de sistema | **Opus 4.8** | `high` (subir p/ `xhigh` só se ficar raso) | ~90% do resultado em código puro por ~metade do custo de Fable. **É o cavalo de batalha.** |
+| **Rotina**: scripts, QA, aplicar conteúdo aprovado, correções pequenas, verificações, deploy, mexer em config | **Sonnet 5** | `medium`–`high` | 1/3 do custo. Mais que suficiente. **Deveria ser a maioria das sessões.** |
+| **Subagentes de busca/exploração** (varrer repo, achar arquivo, listar) | Sonnet 5 ou Haiku 4.5 | `low` | Esforço baixo é explicitamente recomendado p/ subagente. |
+| **Glue trivial**: formatar, listar, converter | Haiku 4.5 | `low` | ~0,3x Sonnet. |
+| Chat do Hermes (Telegram + dashboard) | **GPT-5.6 pela SUA assinatura ChatGPT** | — | **Custo zero.** Já configurado e verificado 21/07. |
+| Crons da VPS (auditoria, TCH) | Gemini 3 Flash via kirmes-proxy | — | $0,50/$3 por M. Já pinado. |
+| Blog diário IA Hoje | Kimi K3 (rota `kirmes-premium`) | — | Sua decisão; único consumidor da rota cara. |
+| Mídia (imagens/vídeo de curso, home cinematográfica) | ComfyUI local | — | GPU própria, custo zero. |
+| Volume/triagem/scoring mecânico offline | **LM Studio local** | — | Ver §8.4 — com ressalvas sérias de velocidade. |
+
+**Regra de bolso:** **Fable decide · Opus constrói · Sonnet mantém · Haiku faz o trivial · as assinaturas absorvem o que puderem · OpenRouter só paga o que nenhuma assinatura cobre · a GPU local faz mídia.**
+
+### §8.3 — Higiene de sessão (o maior ganho que está na SUA mão)
+
+Isto vale mais que qualquer ajuste de esforço:
+
+1. **Uma sessão = um assunto.** Quando o assunto muda (do SEO para o Hermes, do Hermes para a home), **abra sessão nova**. Continuar na mesma arrasta todo o histórico caro a cada turno.
+2. **Escolha o modelo ANTES de começar**, pela primeira linha da tabela que descreve a tarefa. Trocar no meio não desfaz o que já foi gasto.
+3. **Não use Fable 5 para sessões longas de execução.** Se a sessão vai ter dezenas de turnos e muitas ferramentas, é Opus ou Sonnet. Fable é para decidir, não para executar por horas.
+4. **Peça o plano em Fable, execute em Opus/Sonnet.** Padrão que economiza muito: uma sessão curta em Fable produz o plano escrito no MASTERPLAN; uma sessão em Sonnet executa aquele plano.
+5. **Trabalho não-interativo vai para cron/assinatura ChatGPT/local**, nunca para uma sessão minha aberta.
+
+### §8.4 — LM Studio: o que ele resolve e o que NÃO resolve (medido em 21/07)
+
+**Medi, não estimei.** Hardware: RTX 5060 Ti, 16 GB VRAM. Servidor acessível via Tailscale em `http://100.84.253.67:1234`, com 16 modelos disponíveis.
+
+**Resultado da medição:** `gpt-oss-20b` respondeu uma classificação em **12,7s (6,2 tokens/s)**; `qwen3.5-9b` gastou 21s e devolveu **conteúdo vazio** (modelo de raciocínio consumindo tudo no "pensamento" — mesmo defeito que vimos no Kimi K3). No momento do teste a GPU estava **livre** (ComfyUI desligado, 2% de utilização), então **6-7 tok/s é a velocidade real desta máquina**, não disputa de recurso.
+
+**O que isso significa na prática:**
+- Uma resposta de 1.000 tokens leva **~2,5 minutos**. Uma API de nuvem faz o mesmo em segundos.
+- Reescrever um curso de 30 capítulos localmente levaria **dias de máquina ligada**.
+- **Conclusão honesta: LM Studio não substitui Claude/ChatGPT para nada interativo nem para geração de conteúdo longo.**
+
+**Restrição de VRAM (importante):** com 16 GB totais e ~12,8 GB já ocupados com um modelo carregado + desktop do Windows, os modelos de 16 GB+ do seu catálogo (Qwen3.6 27B, Gemma 4 26B, GLM 4.7 Flash) **transbordam para a RAM e ficam ainda mais lentos**. A faixa utilizável é a de 6-13 GB. E o mais importante: **ComfyUI e LM Studio disputam a mesma GPU** — enquanto um gera vídeo de curso, o outro não roda modelo grande. É um ou outro, não os dois.
+
+**Onde LM Studio VALE a pena (custo zero, latência irrelevante):**
+- **Triagem/classificação em lote, offline**: passar 100 títulos e marcar "tem termo de busca? sim/não". Saída de 5-20 tokens é rápida mesmo a 7 tok/s.
+- **Scoring mecânico contra checklist explícito** (não julgamento editorial).
+- **Embeddings — MEDIDO E VALIDADO 21/07, é o melhor uso imediato.** `nomic-embed-text-v1.5` levou **768 ms por texto** (os 20 cursos do catálogo sairiam em ~15s, custo zero). E o teste **já achou um problema real**: os títulos que escrevi hoje para `n8n-automacao-avancada` ("Curso de n8n: automação com IA na prática") e `primeiras-automacoes` ("Automação com IA na Prática: curso para iniciantes") têm **similaridade 0,810 — os dois disputam o mesmo termo de busca**, canibalização que eu mesmo introduzi. ⚠️ **PENDENTE:** diferenciar um dos dois (sugestão: `primeiras-automacoes` mirar "automatizar tarefas repetitivas sem programar", deixando "automação com IA na prática" só para o n8n). Isso prova o caso de uso: rodar embeddings sobre todos os títulos + descrições e listar os pares acima de ~0,80 é uma varredura de canibalização de custo zero que dá para repetir sempre que o catálogo mudar.
+- **Rascunho descartável** que um modelo bom depois reescreve.
+
+**Onde NÃO vale:** qualquer coisa que o cliente vê, decisão de arquitetura, conteúdo de curso, copy de venda, código de produção.
+
+⚠️ **Armadilha histórica que não pode repetir:** o LM Studio já ficou **inacessível por dias sem ninguém perceber** — foi a causa raiz do "IA HOJE" parado de 17 a 19/07. Qualquer coisa que dependa dele **precisa de health-check e fallback automático**, como o proxy tem hoje. Nunca colocá-lo no caminho crítico sem rede de segurança.
+
+### §8.5 — Autoresearch no Mission Control: resposta honesta
+
+**Está configurado?** Não. Existe o *padrão* de autoresearch documentado (`reference_autoresearch_pattern`) e existem skills (`homepage-autoresearch`, `story-autoresearch`), mas **não há loop de autoresearch rodando dentro do Mission Control** hoje, e o LM Studio não está ligado a nada — o proxy da VPS foi migrado para Gemini/Kimi justamente porque ele caiu.
+
+**Seria bom?** Em partes — e vale ser específico, porque autoresearch é por natureza **caríssimo em tokens** (o loop gera muitas variantes e avalia cada uma). Rodá-lo em Fable 5 seria a maneira mais rápida de zerar a cota semanal.
+
+- ✅ **Faz sentido**: o loop rodar em modelo **barato ou local**, com o Claude entrando **só no veredito final**. Ex.: LM Studio gera 20 variantes de título → um script mecânico filtra → Sonnet 5 escolhe as 3 melhores → você aprova.
+- ✅ **Faz muito sentido agora**: usar embeddings locais (nomic) para achar canibalização de conteúdo no catálogo e no blog — custo zero, é exatamente o tipo de trabalho mecânico que a máquina faz bem.
+- ❌ **Não faz sentido**: autoresearch de conteúdo editorial rodando em modelo local a 7 tok/s — o loop levaria dias e a qualidade dos modelos de 9-27B não chega perto do necessário para conteúdo que o cliente lê.
+- ⚠️ **Pré-requisito que falta**: autoresearch só funciona com **métrica real de sucesso**. Hoje o site tem ~1 clique/semana no Search Console — **não há sinal estatístico para otimizar contra**. Montar o loop antes de ter tráfego é otimizar ruído.
+
+**Recomendação:** **não montar autoresearch agora.** A ordem correta é (1) o SEO que consertamos começar a trazer impressões, (2) Fase 9 trazer tráfego de Instagram, (3) **aí sim** existir dado para um loop otimizar. Enquanto isso, o uso local de melhor retorno é embeddings para higiene de catálogo — barato, útil e não depende de tráfego.
+
+### §8.6 — Cartão de bolso (o resumo de 20 segundos)
+
+> **Vai decidir rumo?** Fable 5, `high`, sessão curta.
+> **Vai construir algo grande já planejado?** Opus 4.8, `high`.
+> **Vai fazer o resto (a maioria)?** Sonnet 5, `medium`.
+> **É repetitivo, offline ou não-interativo?** Cron, assinatura ChatGPT, ou local.
+> **Mudou de assunto?** Sessão nova.
 
 ---
 
