@@ -3,6 +3,38 @@
 
 ---
 
+## ⏩ SESSÃO 24/07 — ARCADE REDESENHADO (Opus 5)
+
+Ricardo deu 3 dias de espaço e pediu o trabalho mais difícil: repensar o design da home e **principalmente** os minigames, "tornando-os mais parecidos com um game do que um quiz, e que haja maior diferenciação entre eles".
+
+**Diagnóstico (o problema era estrutural, não cosmético):** os 5 jogos eram **o mesmo jogo com pele diferente**. Todos rodavam `useRotatingDeck → mostra card → clica opção → lê explicação → "Próxima" → placar N/10 + confete`. Nenhum tinha tempo, risco, gesto, combo ou progressão — os quatro ingredientes que separam um jogo de um formulário. Pior: a descrição do Caça ao Prompt **prometia "escolha e arraste peças"** enquanto o código era uma fileira de `<button onClick={toggle}>` — nada arrastava.
+
+**A solução: cada jogo ganhou um VERBO motor próprio.** O verbo é a diferenciação — é o que a mão faz, e é o que faz lembrar de um jogo e não do outro.
+
+| Jogo | Verbo | O que mudou |
+|---|---|---|
+| Verdade ou Mito | **DESLIZAR** | Pilha de cartas com swipe (arrasta pra direita = verdade). 60s no relógio em vez de 10 cartas fixas — a pergunta virou "quantas dá pra fazer". Combo multiplica pontos (×2 aos 3 acertos, ×4 aos 9); acerto devolve 1s, erro custa 3s. As explicações dos **erros** são reunidas na tela final: revisar erro ensina mais e não quebra o ritmo da corrida. |
+| Batalha de Prompts | **APOSTAR** | Banca de 500 fichas. Antes de apontar o vencedor você decide quanto arriscar (25%/50%/tudo). Dobra ou perde; zerar encerra. Troca a pergunta "qual é o melhor?" por "**o quanto eu confio na minha leitura?**" — que é a que de fato ensina a avaliar prompt. |
+| Qual Prompt Gerou Isto? | **DEDUZIR** | A imagem entra borrada (34px) e vai focando em 14s. Os pontos caem junto: 240 no escuro, 40 com tudo nítido. A dica só aparece na **metade** do tempo — mostrá-la antes entregaria a resposta e mataria a decisão de arriscar cedo. |
+| Caça ao Prompt | **MONTAR** | Drag & drop de verdade — cumpre a promessa que o texto fazia há meses. Clique e teclado seguem funcionando (acessibilidade e `prefers-reduced-motion`). Cronômetro aqui **não pune**, vira bônus de velocidade: punir tempo num jogo de leitura cuidadosa empurraria para o chute. |
+| Palpite 30s | (inalterado) | Continua sendo o funil de conversão logado. |
+
+**Engine compartilhada** (`src/lib/arcade/engine.ts`): relógio medido por timestamp real (`setInterval` atrasa quando a aba perde prioridade — mediria errado), **pausa quando a aba fica oculta** (senão o jogador volta e já perdeu), combo, recorde local por jogo (`localStorage` — o Arcade é sem cadastro, então o "melhor de todos os tempos" mora no navegador e é o que dá motivo pra jogar de novo), haptics no celular. HUD comum em `games/fx/ArcadeHud.tsx`, tudo respeitando `prefers-reduced-motion`.
+
+**Home:** o Arcade — o ativo mais incomum do site — era um **link de 11px no rodapé**, espremido entre "Ferramentas" e "Projetos". Agora tem vitrine própria (`ArcadeShowcase.tsx`) **antes dos cursos**, porque jogar é o degrau de menor compromisso do funil (zero cadastro, zero real). Cada card anuncia o VERBO em destaque e faz deep-link `?jogo=<id>` caindo direto na partida, sem segunda tela de escolha.
+
+**Verificado no build de produção** (não no dev — ver armadilha abaixo): cronômetro correndo 60→58; acerto dá +100 e +1s; erro tira 3s e zera o combo; aposta all-in levou a banca de 500→1000; desfoque foi de 31,7px→15,0px→3,5px; encaixe de peça atualiza o `aria-label`; os 5 deep-links respondem.
+
+⚠️ **Bug encontrado e corrigido durante o teste:** o desfoque do Qual Prompt usava `animate` do framer-motion e **travava em ~22px** — como o valor muda a cada frame, a transição de 0.15s reiniciava sem nunca alcançar o alvo. Trocado por `style` CSS direto, animado pelo próprio clock em `requestAnimationFrame`. **Só apareceu porque testei de verdade** — typecheck e lint passavam.
+
+⚠️ **Armadilha do Turbopack confirmada de novo** (já documentada em 19/07): o dev server serviu **o código antigo** mesmo após salvar o arquivo — o teste do blur no dev mostrava o bug já corrigido. `npx next build && npx next start` numa porta separada é a fonte da verdade. Nota extra: no browser headless, `.click()` nativo **não dispara** o onClick do React; chamar `props.onClick({})` via `__reactProps` funciona.
+
+**Commit:** `d3c0e24`. **[~] Aguardando validação do Ricardo** (§1 — só ele promove a ✅). Teste de 30s: abrir a home, ver a faixa "JOGUE AGORA" com os verbos, clicar em DESLIZE e jogar 60 segundos.
+
+**Pendente nesta frente:** as artes do Arcade (`ArcadeVisual`) ainda são as antigas, feitas para os jogos-quiz — vale regerar no ComfyUI refletindo os verbos novos (mão deslizando carta, fichas de aposta, imagem focando, peças encaixando). Não fiz para não misturar com a validação da mecânica.
+
+---
+
 ## 🔴 LEIA ANTES DE ABRIR QUALQUER SESSÃO — §8 (política de modelo e esforço)
 **Cartão de bolso em §8.6.** Escolher o modelo certo ANTES de começar é a diferença entre queimar 20% da cota semanal numa terça e chegar no domingo com folga. Resumo: **Fable decide · Opus constrói · Sonnet mantém · Haiku faz o trivial · sessão nova a cada mudança de assunto.**
 
