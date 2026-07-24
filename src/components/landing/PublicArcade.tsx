@@ -31,12 +31,18 @@ interface Jogo {
   cor: string;
 }
 
+/**
+ * As descrições anunciam o VERBO de cada jogo (24/07/2026). Antes todas
+ * descreviam o mesmo quiz — e a do Caça chegava a prometer "arraste", que o
+ * código não fazia. Cada linha agora diz o que a mão vai fazer, porque é isso
+ * que diferencia um jogo do outro na hora de escolher.
+ */
 const JOGOS: Jogo[] = [
   { id: "monte-o-prompt", titulo: "Monte o Prompt", desc: "A receita dos 5 ingredientes de uma imagem profissional.", cor: "#f472b6" },
-  { id: "verdade-ou-mito", titulo: "Verdade ou Mito?", desc: "10 cartas para separar o hype da realidade da IA.", cor: "#38bdf8" },
-  { id: "qual-prompt", titulo: "Qual Prompt Gerou Isto?", desc: "Olhe a arte, adivinhe a receita que a criou.", cor: "#a78bfa" },
-  { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Dois prompts entram, só um sai vencedor — descubra por quê.", cor: "#fb923c" },
-  { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Escolha e arraste peças para reconstruir a receita original.", cor: "#a3e635" },
+  { id: "verdade-ou-mito", titulo: "Verdade ou Mito?", desc: "60 segundos no relógio. Deslize rápido e emende acertos.", cor: "#38bdf8" },
+  { id: "qual-prompt", titulo: "Qual Prompt Gerou Isto?", desc: "A imagem entra borrada. Adivinhe antes de ficar nítida.", cor: "#a78bfa" },
+  { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Você tem 500 fichas. Aposte no prompt que vence.", cor: "#fb923c" },
+  { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Arraste os ingredientes certos e desvie dos intrusos.", cor: "#a3e635" },
 ];
 
 const TITULOS: Record<PublicGameId, string> = Object.fromEntries(
@@ -50,6 +56,19 @@ export function PublicArcade() {
   useEffect(() => {
     posthog?.capture("public_arcade_view");
   }, [posthog]);
+
+  // Deep-link `?jogo=<id>`: a vitrine da home manda o visitante direto para a
+  // partida, sem uma segunda tela de escolha. Lido de window.location em vez de
+  // useSearchParams para não exigir um <Suspense> em volta da página inteira.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("jogo");
+    if (requested && JOGOS.some((j) => j.id === requested)) {
+      setJogo(requested as PublicGameId);
+      posthog?.capture("minigame_start", { game: requested, context: "deep_link" });
+    }
+    // só no mount — trocar de jogo depois é decisão do usuário, não da URL
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function openGame(id: PublicGameId) {
     setJogo(id);

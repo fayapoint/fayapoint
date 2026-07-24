@@ -16,6 +16,7 @@ import {
 } from "@/data/landing/examples";
 import type { AiNewsItem } from "@/data/landing/seed-news";
 import { useUser } from "@/contexts/UserContext";
+import { ArcadeShowcase } from "@/components/landing/ArcadeShowcase";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 
@@ -731,6 +732,13 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           )}
         </div>
       </main>
+
+      {/* ====================== ARCADE (vitrine dos 5 jogos) ======================
+          Vem ANTES dos cursos de propósito: jogar é o degrau de menor
+          compromisso do funil (0 clique de cadastro, 0 real), então é o convite
+          certo logo depois do hero. Antes disto o Arcade só existia como um
+          link de 11px no rodapé. */}
+      <ArcadeShowcase />
 
       {/* ============================== CURSOS PRONTOS ============================== */}
       {featuredCourses.length > 0 && (
