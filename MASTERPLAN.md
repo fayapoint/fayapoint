@@ -5,7 +5,16 @@
 
 ## 🤝 HANDOFF — RADAR FAYAI + 3D NA INTERFACE (fechado 26/07/2026)
 
-**Para quem abrir uma sessão nova: leia este bloco inteiro antes de tocar em qualquer coisa.** Sessão de ~24h com o Ricardo, evolução contínua. Tudo abaixo está **local, buildando e verificado — nada foi deployado.**
+**Para quem abrir uma sessão nova: leia este bloco inteiro antes de tocar em qualquer coisa.** Sessão de ~24h com o Ricardo, evolução contínua.
+
+> ⚡ **ATUALIZAÇÃO 26/07 (noite) — ISTO ESTÁ NO AR.** O Ricardo mandou deployar e depois seguir com as pendências. Foram 4 commits (`503589d`, `aeb9683`, `b4f6533`, `12fe51c`), todos verificados **em produção**, não só no build. A diretriz "sem deploy até o masterplan fechar" ([[feedback_local_ate_masterplan]]) foi **suspensa por decisão dele**, não esquecida.
+>
+> O que a verificação em produção mudou de fato:
+> - **O maior risco caiu por medição, não por torcida**: o Google **não** bloqueia os IPs da Netlify. `/api/radar/mundo?lugar=BR` responde `live` em **742 ms** (são 28 pedidos em paralelo lá dentro), o mundo em 1,3 s e `/api/radar` em ~2 s — folgado abaixo do limite de 10 s da função.
+> - **Dois defeitos de SEO achados só porque olhei produção**, ambos da família que deixou o site invisível até 21/07: `/radar` tinha canonical relativo (apontava para uma URL que responde 307) e **`/arcade` estava sem canonical nenhum desde 19/07**, se declarando cópia da home. Nenhuma das duas estava no sitemap.
+> - **R6 não era "contraintuitivo", era inválido** — ver a linha R6 na tabela. A barra de volume por região saiu do ar.
+>
+> Antes de mexer no Radar, leia R6: **o `approx_traffic` do Google não é comparável entre lugares.** Qualquer coisa nova que some ou ranqueie lugares por esse número está errada por construção — inclusive a altura dos marcadores 3D, que ainda usa isso e é a decisão que ficou aberta para o Ricardo.
 
 ### Como rodar e validar
 
@@ -37,6 +46,23 @@ npm run radar:seed            # snapshot do IA Trend (src/data/landing/radar-see
 python scripts/radar-geo.py   # GeoJSON mundo/regiões/estados (src/data/geo/)
 python scripts/logo-svg.py    # contornos do logo a partir da fonte (public/3d/)
 ```
+
+### ⏩ Sessão 26/07 (noite) — deploy + pendências (Opus 5)
+
+Ordem do Ricardo: *"vamos deploy e então ter certeza que tudo roda perfeito, e depois continue com as pendências."* Feito nessa ordem.
+
+**Antes de subir** (o build passava, mas isto não estava certo para produção):
+- `three-globe` continuava no `package.json` sem **nenhum import** — a dependência de uma biblioteca que provou não funcionar aqui. Removida; o `package-lock` voltou sozinho ao estado anterior, o que confirma que ela era a única mudança de lock.
+- `RadarGlobe.tsx` (o globo v1 que você reprovou) seguia no repo sem ser importado por ninguém. Removido — código morto que subiria junto.
+- **Preposição de lugar**: a home mostrava "#1 em Brasil" e a página "EM ALTA EM BRASIL". Português não tem regra para isso ("no Acre" mas "em Alagoas"), então virou tabela em `radar-lugares.ts` com a função `noLugar()`. Verificado nos quatro casos: **no** Brasil · **no** Nordeste · **na** Bahia · **em** Goiás.
+- **Teto de 6 s** por consulta externa (era 9 s). Medir o Brasil dispara 28 pedidos em paralelo e o relógio da função serverless é o do mais lento — com 9 s, uma fonte travada levaria a função inteira junto e o visitante receberia erro em vez de dado parcial.
+- Ruído fora do versionamento: logs de geração, `__pycache__` e manifests de lote entraram no `.gitignore`. A fonte de Inter usada pelo `logo-svg.py` ficou versionada de propósito (OFL, 318 KB) — sem ela o script não é reproduzível.
+
+**Depois de subir**, a verificação achou o que só produção mostra — os dois defeitos de SEO e a confirmação de que o Google não bloqueia a Netlify (detalhes no aviso do topo, linhas R8 e R12 da tabela).
+
+**Pendências fechadas nesta rodada:** R6 (a barra de volume por região media contagem de estados), R7 (`radar.py` ranqueava a própria pergunta) e R11 (o filtro de português engolia "ia jurídica gratuita", o sinal do nicho advogados).
+
+**Ficou para você decidir:** a altura dos marcadores 3D, que ainda usa o volume somado e portanto herda o problema do R6 — mudar isso mexe na cara do globo, que você vinha ajustando a olho.
 
 ### O que fazer a seguir, na ordem combinada com o Ricardo
 
@@ -101,11 +127,13 @@ Lista viva. O que está feito saiu daqui e está descrito nos blocos de sessão 
 | R3 | **Imagens de categoria com o rosto do Ricardo** (Soul atual) — parada por crédito Higgsfield não resetado. Reavaliar se ainda faz sentido depois de R2, já que a decisão foi ícone em vez de imagem. | esperando crédito | Ricardo libera |
 | R4 | **Matcap/textura para os marcadores** via ComfyUI local (grátis) — dá acabamento "cartoon premium" da marca sem depender de R1. | ideia, não iniciada | eu |
 | R5 | **Nicho padrão da página `/radar`**: em "Todo mundo" os cartões "só YouTube" e "só Google" marcam **zero** (o dado é esse). Talvez abrir num nicho profissional, onde a leitura de canal é forte. | decisão do Ricardo | Ricardo |
-| R6 | **Sudeste aparecer abaixo do Norte** em volume somado é contraintuitivo — pode ser característica do feed do Google por estado, não população. Investigar antes de usar esse número em qualquer argumento. | aberta | eu |
-| R7 | **`radar.py` ainda ranqueia a própria pergunta** — o site já corrige, o script não. Corrigir antes de automatizar pelo Hermes. | aberta | eu |
+| R6 | ~~Sudeste abaixo do Norte em volume somado~~ **INVESTIGADO E CORRIGIDO 26/07.** Não era contraintuitivo, era inválido. Medi o feed cru nos 27 estados: ele devolve **no máximo 10 assuntos por geo**, então a soma da região acompanha o **número de estados**, não a procura (NE 9 estados/197.600 · S 3 estados/44.400 — mas **por estado** é 21.956 contra 14.800, mesma faixa). E o `approx_traffic` é **relativo à linha de base de cada lugar**: SP (44 mi hab) reportou 19.500 no mesmo dia em que MS (2,8 mi hab) reportou 50.100. Somar ou ranquear lugares com esse número não mede nada. **A barra saiu**; no lugar entrou o alcance dentro da própria região ("aparece em 3 estados de 3"), que é contagem e não estimativa. Medido: Sul unânime (3/3), Sudeste disperso (1/4) — leitura que a barra escondia. ⚠️ **Consequência ainda aberta:** a altura dos marcadores 3D (`intensidade`) usa o mesmo volume somado e portanto tem o mesmo defeito — no nível Brasil o Nordeste sempre sobressai por ter 9 estados. Não mexi porque muda a cara do globo, que você vinha ajustando a olho: **decisão sua** entre altura constante (marcador só diz "há sinal aqui") ou outra medida. | ✅ corrigido; sobra a decisão do marcador | eu → Ricardo |
+| R7 | ~~`radar.py` ainda ranqueia a própria pergunta~~ **FEITO 26/07.** As consultas próprias saem do ranking (mesma regra do site) e o script ganhou o filtro de português que só existia no site. Verificado: rodando com semente `ia juridica`, a semente sumiu do topo e o #1 virou `ia juridico`, que é demanda medida. Também corrigido o stdout para UTF-8 — o console do Windows abre em cp1252 e devolvia "intelig?ncia artificial", o que viraria dado corrompido quando o Hermes capturar essa saída. ⚠️ `PRODUCAO/` fica **fora** do repo `fayapoint-ai`, então esta correção não está em nenhum commit. | ✅ | eu |
+| R11 | **Filtro de português estava engolindo demanda real** (achado ao fazer R7). A regra sempre foi "só entra palavra que NÃO existe em português" e tinha sido quebrada: `aprender` barrava "ia gratis para aprender ingles" e `gratuita` barrava **"ia jurídica gratuita"** — justo o sinal do nicho advogados que a própria seção exibe. Medido sobre 291 termos reais: 6 descartes, 2 deles legítimos. Saíram também `make` (a ferramenta Make, que tem curso no catálogo), `top` e `for`. Corrigido no site e no `radar.py`. | ✅ | eu |
 | R9 | **Vídeo na página `/radar`**, no espaço vazio ao lado do cabeçalho. **Autorizado pelo Ricardo em 26/07**, com direção dada: usar a imagem dele + os personagens da marca. Pipeline local LTX (`comfy-video`), custo zero. Não entrou nesta rodada — priorizei os bugs que estavam de pé. **É a próxima coisa.** | aberta, autorizada | eu |
 | R10 | **Cruzamento assunto ↔ região no nível Brasil casa pouco** (7 de 22). Não é bug: o feed nacional do Google traz assuntos que simplesmente não aparecem nos feeds regionais. Casar por palavra já melhorou de 4 para 7. Ideia futura: cruzar também pela manchete, não só pelo título. | aberta, limitação de dado | eu |
-| R8 | **Nada disso foi deployado** — vale a diretriz de testar local até o masterplan fechar. | — | Ricardo decide |
+| R8 | ~~Nada disso foi deployado~~ **DEPLOYADO 26/07**, a seu pedido — três commits: `503589d` (Radar + logo 3D), `aeb9683` (canonical de /radar e /arcade + sitemap), `b4f6533` (filtro de português), `12fe51c` (R6). Verificado **em produção**, não só local: globo desenha, navegação por região voa e troca os dados, logo 3D monta no hover e recolhe ao sair, assets `.glb`/`.svg` servidos, zero erro de console. **Google não bloqueia os IPs da Netlify** — era o maior risco e caiu por medição: `/api/radar/mundo` responde `live` em 742 ms no Brasil, 1,3 s no mundo, e `/api/radar` em ~2 s, todos muito abaixo do limite de 10 s da função. | ✅ no ar | eu |
+| R12 | **Achado durante a verificação do deploy:** `/arcade` estava **sem canonical próprio desde 19/07**, herdando `/${locale}` do layout — ou seja, se declarando cópia da home, o mesmo defeito que manteve as 19 matérias fora do índice até 21/07. Varredura das rotas públicas: era a única ainda assim. Corrigido junto com `/radar`, as duas agora passam por `generatePageMetadata` (que emite também os `hreflang`) e entraram no sitemap. | ✅ | eu |
 
 ---
 
