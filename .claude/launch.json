@@ -8,6 +8,12 @@
       "port": 3000
     },
     {
+      "name": "fayapoint-build",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "eval \"$(fnm env --shell bash)\" && npx next start --port 3002"],
+      "port": 3002
+    },
+    {
       "name": "prototypes",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", ".prototypes", "-p", "3099", "-s", "--no-clipboard"],

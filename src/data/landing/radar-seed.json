@@ -1,0 +1,1352 @@
+{
+ "geral": {
+  "geradoEm": "2026-07-26T06:25:04.333Z",
+  "termos": [
+   {
+    "termo": "ia para criar videos",
+    "score": 36.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 0,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "o que é ia",
+    "score": 36.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 0,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "o que e ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia na pratica",
+    "score": 35.1,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para praticar ingles",
+    "score": 31.6,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "o que é ia generativa",
+    "score": 31.6,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "o que e ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "como usar ia no whatsapp",
+    "score": 31.3,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "como usar ia"
+    ],
+    "formato": "vídeo tutorial"
+   },
+   {
+    "termo": "ia gratis para videos",
+    "score": 27.4,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 4,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "ia para fazer slides",
+    "score": 25.5,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 5,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "como usar ia para ganhar dinheiro",
+    "score": 23.6,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 7,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "como usar ia"
+    ],
+    "formato": "vídeo tutorial"
+   },
+   {
+    "termo": "como usar ia no canva",
+    "score": 22,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 6,
+    "canais": "web+yt",
+    "sementes": [
+     "como usar ia"
+    ],
+    "formato": "vídeo tutorial"
+   }
+  ]
+ },
+ "concurso": {
+  "geradoEm": "2026-07-26T06:25:05.788Z",
+  "termos": [
+   {
+    "termo": "ia para concursos",
+    "score": 36.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 0,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para concurso"
+    ],
+    "formato": "página de curso"
+   },
+   {
+    "termo": "ia para estudar para concurso",
+    "score": 33.2,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para estudar"
+    ],
+    "formato": "página de curso"
+   },
+   {
+    "termo": "ia para estudantes de medicina",
+    "score": 31.6,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para estudantes"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para estudar para prova",
+    "score": 27.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 3,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para estudar"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para estudar ingles",
+    "score": 26.5,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 4,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para estudar"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para estudar matemática",
+    "score": 19.4,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 6,
+    "posYt": 4,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para estudar"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para estudar pdf",
+    "score": 19.1,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 5,
+    "posYt": 5,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para estudar"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para estudar medicina",
+    "score": 14,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 7,
+    "posYt": 6,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para estudar"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para estudos",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para estudar"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para concursos publicos",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para concurso"
+    ],
+    "formato": "página de curso"
+   }
+  ]
+ },
+ "advogados": {
+  "geradoEm": "2026-07-26T06:25:07.257Z",
+  "termos": [
+   {
+    "termo": "ia juridico",
+    "score": 13.5,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 0,
+    "canais": "yt",
+    "sementes": [
+     "ia juridica"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "melhor ia para advogados",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para advogados"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "melhor ia juridica",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia juridica"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia na advocacia",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia juridica"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "curso chatgpt para advogados",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "chatgpt para advogados"
+    ],
+    "formato": "página de curso"
+   },
+   {
+    "termo": "inteligência artificial para advogados",
+    "score": 11.7,
+    "web": 0,
+    "yt": 2,
+    "posWeb": null,
+    "posYt": 1.5,
+    "canais": "yt",
+    "sementes": [
+     "ia para advogados"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia juridico gratuito",
+    "score": 11.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 0,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia juridica"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "manual ia jurídica na prática",
+    "score": 11.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 0,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia juridica"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "manus ia para advogados",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia para advogados"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "curso escrita fiscal para iniciantes",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia juridica"
+    ],
+    "formato": "página de curso"
+   }
+  ]
+ },
+ "saude": {
+  "geradoEm": "2026-07-26T06:25:08.718Z",
+  "termos": [
+   {
+    "termo": "melhor ia para medicos",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para medicos"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "inteligencia artificial para medicos",
+    "score": 12.3,
+    "web": 0,
+    "yt": 3,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para medicos"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para trabalhos academicos",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para medicos"
+    ],
+    "formato": "Reel de resultado"
+   },
+   {
+    "termo": "como usar ia na medicina",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia na medicina"
+    ],
+    "formato": "vídeo tutorial"
+   },
+   {
+    "termo": "iam medicina na pratica",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia na medicina"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "inteligencia artificial e medicina",
+    "score": 11.7,
+    "web": 0,
+    "yt": 2,
+    "posWeb": null,
+    "posYt": 1.5,
+    "canais": "yt",
+    "sementes": [
+     "ia para medicos"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "lp ia na medicina - curso gratuito",
+    "score": 11.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 0,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia na medicina"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "ia de saude gratis",
+    "score": 11.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 0,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para saude"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "ia para medicos curso",
+    "score": 10.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 1,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para medicos"
+    ],
+    "formato": "página de curso"
+   },
+   {
+    "termo": "ia para médicos gratis",
+    "score": 10.5,
+    "web": 2,
+    "yt": 0,
+    "posWeb": 1,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para medicos"
+    ],
+    "formato": "isca grátis"
+   }
+  ]
+ },
+ "rh": {
+  "geradoEm": "2026-07-26T06:25:10.203Z",
+  "termos": [
+   {
+    "termo": "ia para recrutamento e seleção",
+    "score": 36.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 0,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para recrutamento"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para gestão",
+    "score": 32.9,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 0,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para gestao"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para gestao de projetos",
+    "score": 13.5,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 0,
+    "canais": "yt",
+    "sementes": [
+     "ia para gestao"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "agente de ia para rh",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para rh"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para gestao de trafego",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para gestao"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "is this love",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia para rh"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para rh gratuito",
+    "score": 11,
+    "web": 2,
+    "yt": 0,
+    "posWeb": 0.5,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para rh"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "curso de ia para rh gratuito",
+    "score": 10.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 1,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para rh"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "ia para gestao de empresas",
+    "score": 10.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 1,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para gestao"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para recrutamento e seleção curso",
+    "score": 10.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 1,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para recrutamento"
+    ],
+    "formato": "página de curso"
+   }
+  ]
+ },
+ "vendas": {
+  "geradoEm": "2026-07-26T06:25:11.673Z",
+  "termos": [
+   {
+    "termo": "ia para marketing digital",
+    "score": 33.8,
+    "web": 1,
+    "yt": 3,
+    "posWeb": 1,
+    "posYt": 0.7,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para marketing"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para vendas online",
+    "score": 32.9,
+    "web": 1,
+    "yt": 3,
+    "posWeb": 2,
+    "posYt": 0.3,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para vendas"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "automatizar vendas pelo whatsapp",
+    "score": 13.5,
+    "web": 0,
+    "yt": 2,
+    "posWeb": null,
+    "posYt": 0,
+    "canais": "yt",
+    "sementes": [
+     "automatizar vendas com ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "como criar um site de vendas com inteligencia artificial",
+    "score": 13.5,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 0,
+    "canais": "yt",
+    "sementes": [
+     "automatizar vendas com ia"
+    ],
+    "formato": "vídeo tutorial"
+   },
+   {
+    "termo": "ia para criar pagina de vendas",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para vendas"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "automatizar vendas",
+    "score": 12.3,
+    "web": 0,
+    "yt": 2,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "automatizar vendas com ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "como automatizar o whatsapp com chatgpt",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "automatizar vendas com ia"
+    ],
+    "formato": "vídeo tutorial"
+   },
+   {
+    "termo": "ia para marketing digital gratis",
+    "score": 11.7,
+    "web": 0,
+    "yt": 2,
+    "posWeb": null,
+    "posYt": 1.5,
+    "canais": "yt",
+    "sementes": [
+     "ia para marketing"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "ia para vendas whatsapp",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia para vendas"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "automação whatsapp com manychat",
+    "score": 11.1,
+    "web": 0,
+    "yt": 2,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "automatizar vendas com ia"
+    ],
+    "formato": "Reel curto"
+   }
+  ]
+ },
+ "professores": {
+  "geradoEm": "2026-07-26T06:25:13.159Z",
+  "termos": [
+   {
+    "termo": "ia na educação",
+    "score": 36.7,
+    "web": 1,
+    "yt": 3,
+    "posWeb": 0,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "ia na educacao"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "melhor ia para professores",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para professores"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para fazer artes",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para professores"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "inteligência artificial para professores",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para professores"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia na educacao basica",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia na educacao"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para professores grátis",
+    "score": 11.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 0,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para professores"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para educação gratis",
+    "score": 11.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 0,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia na educacao"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "curso de ia para professores",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia para professores"
+    ],
+    "formato": "página de curso"
+   },
+   {
+    "termo": "ia para fazer arte",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia para professores"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia na educação inclusiva",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia na educacao"
+    ],
+    "formato": "Reel curto"
+   }
+  ]
+ },
+ "empreendedores": {
+  "geradoEm": "2026-07-26T06:25:14.632Z",
+  "termos": [
+   {
+    "termo": "automatizar whatsapp business com ia gratis",
+    "score": 36.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 0,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "automatizar whatsapp com ia"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "automatizar whatsapp business com ia",
+    "score": 33.2,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "automatizar whatsapp com ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ganhar dinheiro com ia 2026",
+    "score": 26.1,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 3,
+    "posYt": 3,
+    "canais": "web+yt",
+    "sementes": [
+     "ganhar dinheiro com ia"
+    ],
+    "formato": "Reel de resultado"
+   },
+   {
+    "termo": "ganhar dinheiro com ia 2025",
+    "score": 25.2,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 6,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "ganhar dinheiro com ia"
+    ],
+    "formato": "Reel de resultado"
+   },
+   {
+    "termo": "ganhar dinheiro com ia do job",
+    "score": 24.9,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 5,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "ganhar dinheiro com ia"
+    ],
+    "formato": "Reel de resultado"
+   },
+   {
+    "termo": "ganhar dinheiro com ia na internet",
+    "score": 16.9,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 4,
+    "posYt": 7,
+    "canais": "web+yt",
+    "sementes": [
+     "ganhar dinheiro com ia"
+    ],
+    "formato": "Reel de resultado"
+   },
+   {
+    "termo": "ia para criar cursos",
+    "score": 13.5,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 0,
+    "canais": "yt",
+    "sementes": [
+     "ia para pequenas empresas"
+    ],
+    "formato": "página de curso"
+   },
+   {
+    "termo": "como criar uma empresa com inteligencia artificial",
+    "score": 13.5,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 0,
+    "canais": "yt",
+    "sementes": [
+     "ia para pequenas empresas"
+    ],
+    "formato": "vídeo tutorial"
+   },
+   {
+    "termo": "ganhar dinheiro com ia no youtube",
+    "score": 12.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 9,
+    "posYt": 5,
+    "canais": "web+yt",
+    "sementes": [
+     "ganhar dinheiro com ia"
+    ],
+    "formato": "Reel de resultado"
+   },
+   {
+    "termo": "automação whatsapp com manychat",
+    "score": 12.3,
+    "web": 0,
+    "yt": 2,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "automatizar whatsapp com ia"
+    ],
+    "formato": "Reel curto"
+   }
+  ]
+ },
+ "automacao": {
+  "geradoEm": "2026-07-26T06:25:16.122Z",
+  "termos": [
+   {
+    "termo": "automatizar whatsapp com ia",
+    "score": 34.8,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 0,
+    "posYt": 1,
+    "canais": "web+yt",
+    "sementes": [
+     "automatizar com ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "automatizar tarefas com ia",
+    "score": 29.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "automatizar com ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "automatizar processos com ia",
+    "score": 29.3,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 3,
+    "canais": "web+yt",
+    "sementes": [
+     "automatizar com ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "agentes de ia para whatsapp gratis",
+    "score": 28.1,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 3,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "agentes de ia"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "criar agentes de ia gratis",
+    "score": 27.7,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 3,
+    "canais": "web+yt",
+    "sementes": [
+     "agentes de ia"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "n8n o que é",
+    "score": 27.4,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 1,
+    "posYt": 4,
+    "canais": "web+yt",
+    "sementes": [
+     "n8n"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "n8n gratis vps",
+    "score": 23.3,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 6,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "n8n"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "n8n gratuito docker",
+    "score": 21,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 5,
+    "posYt": 4,
+    "canais": "web+yt",
+    "sementes": [
+     "n8n"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "agentes de ia para whatsapp",
+    "score": 18.1,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 2,
+    "posYt": 8,
+    "canais": "web+yt",
+    "sementes": [
+     "agentes de ia"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "n8n hostinger",
+    "score": 17.2,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 5,
+    "posYt": 6,
+    "canais": "web+yt",
+    "sementes": [
+     "n8n"
+    ],
+    "formato": "Reel curto"
+   }
+  ]
+ },
+ "criadores": {
+  "geradoEm": "2026-07-26T06:25:17.610Z",
+  "termos": [
+   {
+    "termo": "ia para criar vídeos grátis",
+    "score": 31.9,
+    "web": 1,
+    "yt": 2,
+    "posWeb": 0,
+    "posYt": 2.5,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para criar videos"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para criar conteudo",
+    "score": 30.3,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 4,
+    "posYt": 0,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para conteudo"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para criar videos curtos gratis",
+    "score": 20.1,
+    "web": 1,
+    "yt": 1,
+    "posWeb": 8,
+    "posYt": 2,
+    "canais": "web+yt",
+    "sementes": [
+     "ia para criar videos"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "como criar imagens na inteligencia artificial",
+    "score": 13.5,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 0,
+    "canais": "yt",
+    "sementes": [
+     "ia para criar imagens"
+    ],
+    "formato": "vídeo tutorial"
+   },
+   {
+    "termo": "ia para criar videos gratuito",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para criar videos"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "ia para criar videos longos gratis",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para criar videos"
+    ],
+    "formato": "isca grátis"
+   },
+   {
+    "termo": "ia para criar conteudo instagram",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para conteudo"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para criar livros",
+    "score": 12.3,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 1,
+    "canais": "yt",
+    "sementes": [
+     "ia para conteudo"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para criar imagens gratuitos",
+    "score": 11.5,
+    "web": 1,
+    "yt": 0,
+    "posWeb": 0,
+    "posYt": null,
+    "canais": "web",
+    "sementes": [
+     "ia para criar imagens"
+    ],
+    "formato": "Reel curto"
+   },
+   {
+    "termo": "ia para criar videos a partir de texto",
+    "score": 11.1,
+    "web": 0,
+    "yt": 1,
+    "posWeb": null,
+    "posYt": 2,
+    "canais": "yt",
+    "sementes": [
+     "ia para criar videos"
+    ],
+    "formato": "Reel curto"
+   }
+  ]
+ }
+}

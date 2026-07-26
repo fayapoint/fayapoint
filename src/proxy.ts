@@ -716,7 +716,14 @@ export default async function middleware(request: NextRequest) {
 export const config = {
   // UPDATED: Now includes API routes for protection
   matcher: [
-    // Match all paths except static files
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webm|mp4|m4v|mov|mp3|wav|ogg|woff|woff2|css|js)$).*)"
+    // Match all paths except static files.
+    //
+    // ⚠️ Esta lista precisa crescer junto com os tipos de asset do site. Duas
+    // vezes em 26/07/2026 um arquivo estático novo voltou 404 sem explicação
+    // por não estar aqui: primeiro os GeoJSON do Radar (`json`), depois o
+    // ícone 3D (`glb`). Rotas de API não terminam nessas extensões, então
+    // excluí-las não desprotege nada — mas esquecer de incluir custa uma hora
+    // de depuração no lugar errado.
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webm|mp4|m4v|mov|mp3|wav|ogg|woff|woff2|css|js|json|glb|gltf|hdr|ktx2|bin)$).*)"
   ]
 };

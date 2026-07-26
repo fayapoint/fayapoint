@@ -17,6 +17,8 @@ import {
 import type { AiNewsItem } from "@/data/landing/seed-news";
 import { useUser } from "@/contexts/UserContext";
 import { ArcadeShowcase } from "@/components/landing/ArcadeShowcase";
+import { RadarSection } from "@/components/landing/RadarSection";
+import { LogoFayai } from "@/components/marca/LogoFayai";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 
@@ -372,7 +374,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
       {/* ============================== HEADER ============================== */}
       <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 shrink-0">
         <span className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
-          FAY<span style={{ color: GOLD }}>AI</span>
+          <LogoFayai texto="FAYAI" />
         </span>
         <div className="flex items-center gap-3">
           <div
@@ -739,6 +741,14 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           certo logo depois do hero. Antes disto o Arcade só existia como um
           link de 11px no rodapé. */}
       <ArcadeShowcase />
+
+      {/* ============================== RADAR DA IA ==============================
+          Vem ANTES dos cursos porque estabelece a demanda antes de oferecer a
+          resposta: primeiro o visitante vê o que o Brasil procura na profissão
+          dele, depois encontra o curso que responde àquilo. É o único bloco da
+          home que mostra dado medido em vez de promessa — e é dado que ninguém
+          mais publica de graça. */}
+      <RadarSection news={news} />
 
       {/* ============================== CURSOS PRONTOS ============================== */}
       {featuredCourses.length > 0 && (

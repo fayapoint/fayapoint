@@ -50,3 +50,10 @@ PROJECT_CREDENTIALS.md
 .playwright-cli/
 output/
 scripts/arcade/arcade_loops_run*.log
+
+# saida de scripts de geracao (logs, manifests de lote, cache do python).
+# Sao rastro de execucao, nao fonte: o que importa esta em public/ e no Atlas.
+scripts/**/*.log
+scripts/**/__pycache__/
+scripts/cursos/*-manifest*.json
+scripts/cursos/audit_courses_raw.json

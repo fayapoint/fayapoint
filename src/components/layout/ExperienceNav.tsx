@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
+import { LogoFayai } from "@/components/marca/LogoFayai";
 
 /**
  * Navegação das páginas-experiência (/projetos, /noticias) — elas vivem fora
@@ -33,7 +34,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
     <div className="w-full">
       <header className="flex items-center justify-between gap-4 px-4 sm:px-8 pt-4 pb-2 max-w-6xl mx-auto">
         <Link href="/" className="text-3xl sm:text-4xl tracking-wide select-none shrink-0" style={bebas}>
-          FAY<span style={{ color: GOLD }}>AI</span>
+          <LogoFayai texto="FAYAI" />
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           {LINKS.map((l) => (

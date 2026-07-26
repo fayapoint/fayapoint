@@ -3,6 +3,308 @@
 
 ---
 
+## 🤝 HANDOFF — RADAR FAYAI + 3D NA INTERFACE (fechado 26/07/2026)
+
+**Para quem abrir uma sessão nova: leia este bloco inteiro antes de tocar em qualquer coisa.** Sessão de ~24h com o Ricardo, evolução contínua. Tudo abaixo está **local, buildando e verificado — nada foi deployado.**
+
+### Como rodar e validar
+
+```
+cd fayapoint-ai
+npm run build          # fonte da verdade; NUNCA valide só no dev
+```
+Depois suba o preview `fayapoint-build` (porta 3002, config em `.claude/launch.json`). Telas: `/pt-BR` (home) e `/pt-BR/radar` (página dedicada).
+
+🔴 **Três regras que custaram horas nesta sessão. Não repita:**
+1. **Turbopack dev serve build ANTIGO** mesmo após reiniciar. Edição por script não acorda o watcher no Windows. Sintomas enganosos: hydration mismatch, `useEffect` que "não roda", estado que não chega ao DOM. → `rm -rf .next` **e** reiniciar; validar no build.
+2. **O matcher do `src/proxy.ts` precisa listar cada extensão de asset nova.** Já derrubou `.json` (GeoJSON) e `.glb` (ícone) com 404 sem explicação. Hoje inclui `json|glb|gltf|hdr|ktx2|bin`.
+3. **Rota nova em `[locale]/(site)/` pode ser redirecionada para a home** pelo proxy — perdi tempo depurando a home achando que era outra página.
+
+### O que existe hoje
+
+**Radar FayAI** — duas leituras do mesmo planeta, na home (`components/landing/RadarSection.tsx`) e na página `/radar` (`components/radar/RadarPagina.tsx`).
+- **World Trend**: Google Trends RSS (27 estados + 16 países, verificado) e Wikipedia most-read. Cada assunto leva à fonte.
+- **IA Trend**: autocomplete Google/YouTube por profissão, 3 fontes combináveis que mudam a **nota**, não só o filtro.
+- **Globo** (`components/3d/RadarGlobo.tsx`): Terra com mapa político, contexto esmaecido, extrude no foco, siglas projetadas, marcadores 3D, voo com bezier e arco, malha de meridianos no IA Trend.
+- **Painel HUD** (`components/radar/ModalAssunto.tsx` + `usePainelAssunto.ts`): hover espia, clique/alfinete fixa, 5 gestos de entrada/saída sorteados, câmera desloca o mundo por `setViewOffset`.
+
+**3D na interface** — `components/marca/LogoFayai.tsx` + `LogoFayai3D.tsx`. Logo 2D vira WebGL no hover e se demonstra sozinho em intervalos irregulares. Nos três headers do site (`Header`, `ExperienceNav`, `NovaLanding` — **são três, não um**).
+
+### Scripts que regeram os dados
+
+```
+npm run radar:seed            # snapshot do IA Trend (src/data/landing/radar-seed.json)
+python scripts/radar-geo.py   # GeoJSON mundo/regiões/estados (src/data/geo/)
+python scripts/logo-svg.py    # contornos do logo a partir da fonte (public/3d/)
+```
+
+### O que fazer a seguir, na ordem combinada com o Ricardo
+
+1. **R9 — vídeo na página `/radar`** (autorizado, direção dada: imagem do Ricardo + personagens da marca, pipeline LTX local, custo zero).
+2. **Levar o 3D para o resto do site**, na ordem que ele indicou: **gestor de identidade de persona** (maior ganho — é onde o usuário decide algo sobre ele mesmo), depois certificados, criador de imagens, dashboard. ⚠️ **Decisão de arquitetura pendente:** um canvas WebGL por ícone não escala. Antes de espalhar, resolver entre canvas compartilhado, sprites pré-renderizados ou extrusão CSS por caso.
+3. **R5, R6, R7, R10** — ver a tabela de pendências logo abaixo.
+
+### Convenções deste código
+
+- Comentários e nomes **em português**, explicando *por quê* e não *o quê*.
+- Nada de número estimado na tela: se não foi medido, não entra.
+- Nunca prometer curso que não existe (a ponte por nicho em `radar-nichos.ts` é escrita à mão).
+- `prefers-reduced-motion` desliga toda animação nova.
+- **Regra do PRONTO (§1):** só o Ricardo promove para ✅.
+
+---
+
+## ✨ 3D NA INTERFACE — A TÉCNICA E ONDE ELA CABE (26/07)
+
+O Ricardo viu o ícone do radar e pediu para levar a técnica ao site: logo, dashboard, certificados, criador de imagens e **gestor de identidade de persona** — com a regra certa de que a primeira visualização fica no estilo atual e o 3D entra **no hover ou no clique**, sem virar comum.
+
+**Piloto entregue: o logo** (`components/marca/LogoFayai.tsx`), já no header das páginas-experiência.
+
+**A decisão técnica que vale para tudo que vier depois — são DUAS técnicas, não uma:**
+
+| | Malha gerada (Hunyuan3D) | Extrusão de texto (CSS 3D) |
+|---|---|---|
+| Serve para | **objetos** — pino, troféu, medalha, ferramenta | **tipografia** — logo, números, siglas |
+| Por quê | dá forma orgânica que ninguém modela à mão | imagem generativa **erra letra** (IDENTIDADE §8 proíbe texto em arte gerada); um logo com letra errada não é o logo |
+| Custo | ~30 KB por peça + WebGL na tela | alguns nós de DOM, **zero WebGL** |
+| Escala | limitado — vinte canvases disputando GPU | ilimitado, é só CSS |
+
+**Por isso o logo não virou malha.** As camadas são o **texto real** da marca: tipografia exata em qualquer tamanho, continua selecionável e legível por leitor de tela, e o efeito pode se repetir pelo site sem custo de GPU — que é exatamente o que viabiliza levar a ideia para o dashboard e o gestor de persona.
+
+**Como funciona:** oito camadas do mesmo texto deslocadas em Z formam a lateral extrudada, escurecendo com a profundidade (bloco sólido, não sombra empilhada); a face nunca é substituída — é o logo de sempre. A inclinação **segue o cursor**, então o volume parece real em vez de uma animação que roda igual toda vez, e um brilho especular atravessa a face na chegada. `prefers-reduced-motion` desliga tudo.
+
+**Atualização 26/07 — o Ricardo pediu 3D de verdade no logo, mesmo custando mais, para medirmos.** Feito: `LogoFayai3D.tsx`, WebGL, montado **só no hover** e desmontado ao sair (quem nunca passa o cursor não paga nada — e o header existe em toda página).
+
+A tipografia continua exata porque a geometria **não é gerada por IA**: `scripts/logo-svg.py` extrai os contornos dos glifos da própria fonte com fontTools → SVG → `SVGLoader` → `ExtrudeGeometry` com chanfro. O "Fay" claro e o "Ai" dourado viram materiais distintos (o ouro com `metalness` .85 para ler como metal, não como amarelo chapado). A rotação segue o cursor e a entrada gira para o lugar.
+
+⚠️ **Armadilha que custou um ciclo:** usei `size` (pixels) onde three quer `viewport` (unidades de mundo) para calcular a escala. O logo foi para uma escala dezenas de vezes maior e o que aparecia era o interior de uma letra.
+
+**Ajustes 26/07 (3ª rodada do logo), todos a pedido do Ricardo:**
+- **A saída pulava.** A versão anterior desmontava o canvas no `mouseleave`, então o logo sumia girado para um lado e reaparecia chapado. Agora existe uma fase de **recolhimento**: o volume volta ao neutro, encolhe e desvanece pela mesma curva da entrada, e só então o canvas é descartado. O 2D reaparece no mesmo ritmo. Verificado: aos 200 ms o canvas ainda está lá; aos 700 ms saiu.
+- **A home não tinha mudado nada** porque ela usa um terceiro header — o do `NovaLanding`, não o `Header` nem o `ExperienceNav`. Os três agora usam o mesmo componente.
+- **Demonstração automática ("o flex").** A cada 10 s o logo se desembrulha sozinho por ~2,6 s, gira devagar mostrando o volume e recolhe. Só roda quando está **na tela**, **sem cursor em cima**, com a **aba visível** e sem `prefers-reduced-motion` — mostrar o que foi construído não pode virar movimento que incomoda quem só quer ler. Verificado: disparou sozinho e recolheu dentro da janela observada.
+
+**Ajuste final 26/07 — a demonstração ficou irregular.** Intervalo fixo vira relógio: em duas voltas o olho já sabe quando vem, e o que era surpresa vira ruído previsível. Agora a primeira aparição é aos 10 s e, dali em diante, **espera sorteada entre 10 e 20 s, exibição entre 5 e 9 s, e o giro começa de um ângulo diferente a cada vez** (uma semente desloca a fase dos senos). `setTimeout` encadeado em vez de `setInterval`, que é o que permite cada espera ter duração própria.
+
+**Próximo passo antes de espalhar:** medir com o logo no ar. Se o custo for o esperado (é), levar para certificados e o gestor de persona, que é onde o Ricardo apontou o maior ganho — o momento em que o usuário decide algo sobre ele mesmo.
+
+---
+
+## 📌 RADAR FAYAI — PENDÊNCIAS ABERTAS (a pedido do Ricardo, 26/07)
+
+Lista viva. O que está feito saiu daqui e está descrito nos blocos de sessão abaixo.
+
+| # | Pendência | Estado | Quem |
+|---|---|---|---|
+| R1 | ~~Baixar o modelo de geração 3D~~ **FEITO 26/07** — **Hunyuan3D-2mv fp16 (4,9 GB)** baixado em `D:\ComfyUI-Models\checkpoints\hunyuan3d`, ligado ao ComfyUI por **junction** em `C:\WORKS\ComfyUI\models\checkpoints\hunyuan3d` (não editei o `shared_model_paths.yaml`, que o Comfy Desktop regenera). Escolhido por ter **suporte nativo** no ComfyUI e pedir ~6 GB de VRAM para geometria — folgado nos 16 GB da 5060 Ti. ⚠️ Textura/PBR ainda **não** é suportado nativamente: sai geometria, a cor é nossa. | ✅ baixado, não testado | eu |
+| R2 | ~~Ícone 3D próprio~~ **FEITO 26/07.** Feito em 26/07: imagem-fonte gerada no HiDream O1 local (pino navy com borda dourada e tela de radar dentro, identidade certa) → **Hunyuan3D-2mv** gerou a malha → `gltf-transform` decimou de **236.688 para 2.840 triângulos (8,52 MB → 30,7 KB)**, sem Draco para não depender de decoder externo → servido em `/3d/pino-radar.glb` → **carregado no three.js e confirmado** (1.432 vértices, normalizado para altura 1). **A causa de o ícone não aparecer** (achada instrumentando o `Marcadores`, não a página): eu escalava o **grupo** do marcador, e escalar um grupo escala também a **posição** dos filhos — com fator 0,7, um ícone ancorado no raio 103 ia parar no raio 72, ou seja, **dentro do planeta**. Nada de escala, material ou luz. Corrigido separando as responsabilidades: grupo externo ancora e orienta (nunca escala), grupo interno cresce a partir da superfície. | ✅ | eu |
+| R3 | **Imagens de categoria com o rosto do Ricardo** (Soul atual) — parada por crédito Higgsfield não resetado. Reavaliar se ainda faz sentido depois de R2, já que a decisão foi ícone em vez de imagem. | esperando crédito | Ricardo libera |
+| R4 | **Matcap/textura para os marcadores** via ComfyUI local (grátis) — dá acabamento "cartoon premium" da marca sem depender de R1. | ideia, não iniciada | eu |
+| R5 | **Nicho padrão da página `/radar`**: em "Todo mundo" os cartões "só YouTube" e "só Google" marcam **zero** (o dado é esse). Talvez abrir num nicho profissional, onde a leitura de canal é forte. | decisão do Ricardo | Ricardo |
+| R6 | **Sudeste aparecer abaixo do Norte** em volume somado é contraintuitivo — pode ser característica do feed do Google por estado, não população. Investigar antes de usar esse número em qualquer argumento. | aberta | eu |
+| R7 | **`radar.py` ainda ranqueia a própria pergunta** — o site já corrige, o script não. Corrigir antes de automatizar pelo Hermes. | aberta | eu |
+| R9 | **Vídeo na página `/radar`**, no espaço vazio ao lado do cabeçalho. **Autorizado pelo Ricardo em 26/07**, com direção dada: usar a imagem dele + os personagens da marca. Pipeline local LTX (`comfy-video`), custo zero. Não entrou nesta rodada — priorizei os bugs que estavam de pé. **É a próxima coisa.** | aberta, autorizada | eu |
+| R10 | **Cruzamento assunto ↔ região no nível Brasil casa pouco** (7 de 22). Não é bug: o feed nacional do Google traz assuntos que simplesmente não aparecem nos feeds regionais. Casar por palavra já melhorou de 4 para 7. Ideia futura: cruzar também pela manchete, não só pelo título. | aberta, limitação de dado | eu |
+| R8 | **Nada disso foi deployado** — vale a diretriz de testar local até o masterplan fechar. | — | Ricardo decide |
+
+---
+
+## ⏩ SESSÃO 26/07 (parte 2) — RADAR FAYAI: O GLOBO DE VERDADE (Opus 5)
+
+Ricardo reprovou o globo da v1 ("não ficou bom… uma única rotação para um eixo, deixa bem monótono") e pediu a reconstrução. **Está no ar localmente e funcionando ponta a ponta** — verificado no build de produção.
+
+**O que mudou:**
+- **Nome:** RADAR DA IA → **RADAR FAYAI** (licença poética para dar a informação mais precisa que conseguirmos).
+- **Duas abas** abaixo do nome: **World Trend** (o que está em alta de verdade, qualquer assunto) e **IA Trend** (o recorte de IA, que era a v1 inteira). A ordem é essa de propósito: quem chega vê o mundo real primeiro, e o recorte de IA é o passo natural de quem já está num site de IA.
+- **O globo é a Terra**, com mapa político: no mundo, países; no Brasil, as 5 regiões do IBGE em cores da paleta; dentro de uma região, os estados dela. Clicar voa até lá com **easing bezier e arco** — a câmera sobe no meio do caminho, e quanto mais longe o destino, mais alto o arco.
+- **A deriva parada não é rotação em um eixo:** dois senos de períodos que não fecham entre si mais uma respiração de altitude, então o movimento nunca repete o mesmo quadro. Controles **+/−** e arrastar para girar.
+- **`showGraticules` + casca wireframe** entram ao trocar para IA Trend, crescendo de dentro para fora.
+- **"Temos curso" saiu.** Era falso — não existe curso de IA para advogados — e frustração custa mais que a visita. No lugar, uma **ponte escrita à mão por nicho** dizendo o que temos, o que **não** temos e por que ainda ajuda. Ex.: advogados → "não existe curso de IA jurídica no catálogo, e não vamos fingir que existe; o que existe é o domínio do ChatGPT e da escrita de prompt". Criadores → Banana Dev tem mais conteúdo de criador do que o nome entrega, e falta cobrir mais ferramentas ("limitação nossa, não sua").
+- **Filtro de português:** termos que voltam em espanhol/inglês (`automatizar con ia gratis`) são descartados por lista de palavras que não existem em português — nunca por acento, porque brasileiro digita sem acento.
+
+**Fontes novas do World Trend (gratuitas, com link para a origem):**
+- **Google Trends RSS** — verificado nos **27 estados** (`BR-SP`, `BR-BA`…) e em 16 países. Traz volume aproximado, a manchete que explica o assunto e o veículo. Região do Brasil não tem geo própria: é medida **agregando os estados** que a compõem.
+- **Wikipedia most-read** — o que o idioma inteiro está lendo, com contagem real de visitas, no degrau de país.
+- Isto reabre o veredito do FLUXO_02, que tinha descartado o Google Trends por ser "dominado por futebol e celebridade": para o **World Trend** é exatamente isso que se quer.
+
+**Dados geográficos:** `scripts/radar-geo.py` baixa Natural Earth (domínio público) + malhas do IBGE, poda propriedades e simplifica por Douglas-Peucker escrito à mão. **845 KB → 121 KB**, contorno conferido visualmente antes de usar.
+
+**⚠️ As três armadilhas que custaram a maior parte da sessão — leia antes de mexer no Radar:**
+1. **`r3f-globe` e `three-globe` não renderizam neste projeto.** Montam sem erro nenhum, com props mínimas, por `<primitive>` e por `scene.add`, com cor berrante — e não desenham nada, numa cena onde uma esfera comum aparece normalmente. **O globo hoje é geometria própria:** esfera + fronteiras do GeoJSON viradas em `lineLoop`. Hover e clique por **raycast na esfera → lat/lng → ponto-em-polígono**, que é mais estável do que tentar acertar uma linha de 1px.
+2. **O `src/proxy.ts` não excluía `.json`** do matcher, então qualquer JSON estático em `public/` voltava 404. Corrigido (rotas de API não terminam em `.json`, então não desprotege nada).
+3. **O Turbopack em dev serviu build antigo por horas**, inclusive depois de reiniciar o servidor — o cache em `.next` sobrevive ao restart, e edição por script não acorda o watcher no Windows. O sintoma é *hydration mismatch* e efeitos que parecem não rodar. **Regra: depois de editar por script, `rm -rf .next` + reiniciar; e valide no build (`npm run build` + porta 3002), não no dev.**
+
+**Correção depois do seu olho (26/07):** você disse que "tudo está invertido… para onde quer que mexa, ele vai pro lado oposto" — e estava certo. Eu usei `theta = 90 + lng` na conversão de coordenadas; a convenção de globo é `90 − lng`. Isso **espelhava o planeta inteiro** no eixo leste-oeste e fazia o arrasto responder ao contrário. Corrigido nos três lugares que precisam concordar (pontos, câmera e a inversa do raycast). Verificado: Norte à esquerda, Nordeste à direita, Sul embaixo, e arrastar para a direita move o globo para a direita.
+
+**Também nesta rodada:** as regiões deixaram de ser só contorno e ganharam **preenchimento** (`ShapeUtils.triangulateShape` + uma subdivisão antes de projetar, senão o triângulo vira corda reta e afunda no planeta). Agora é mapa político de verdade.
+
+**Estado:** `tsc --noEmit` limpo, `npm run build` passando, testado no build — globo desenha na orientação certa, regiões preenchidas, hover identifica a região, clique voa e o painel troca para o trending daquele lugar (medido "45.000+ buscas" no Norte). **Nada é ✅ até você ver.**
+
+**Terceira rodada, também a pedido seu:**
+- **Associação mapa ↔ palavra, nos dois sentidos.** O hover subiu do globo para a seção: passar o mouse numa região acende o nome na **faixa de lugares** (novo), e passar o mouse no nome acende a região no globo. A faixa também dá navegação por teclado e serve a quem não consegue mirar um estado com o mouse.
+- **Siglas dos estados** projetadas em HTML por cima do canvas (`useFrame` só escreve `transform`/`opacity` em nós que já existem). Discretas — 42% de opacidade, 100% no destaque — e somem quando estão do outro lado do planeta. Só aparecem dentro de uma região: 173 rótulos no mundo inteiro viram sujeira.
+- **Página dedicada `/radar`** (`src/components/radar/RadarPagina.tsx`), com o globo grande, ranking completo com contexto e veículo, **comparação das 5 regiões** por volume somado (medido: Nordeste 147.000, Norte 98.200, CO 79.900, SE 31.100, S 6.800), a **leitura de canal do IA Trend** (Google+YouTube / só YouTube / só Google) e uma seção de **metodologia** dizendo o que medimos e o que não fazemos. A home ganhou o link "abrir o radar completo" e **não perdeu nada**.
+
+**Quarta rodada — travamento e ícones:**
+
+- **O travamento que você sentiu era real, e a culpa era minha.** Duas causas: (a) o globo refazia raycast + ponto-em-polígono contra **todos** os polígonos a cada quadro — no degrau do mundo são 173 países percorridos ponto a ponto, 160 vezes por segundo; (b) ele continuava renderizando depois que você rolava para longe. Corrigido com **caixa envolvente por anel** (descarta quase tudo com quatro comparações), **raycast só quando o ponteiro se move**, e **pausa fora da viewport** via IntersectionObserver. Medido depois: scroll a 160 fps de média, pior quadro 143 fps, e a troca de região com pior quadro de **17 ms** — sem engasgo perceptível.
+- **Ícones 3D, não imagens.** Você repensou e pediu ícone 3D acima do que existe, em vez de mais arte competindo com o mapa — e é a decisão certa. Cada lugar com sinal ganhou um **marcador de geometria própria**: haste + anel girando (a varredura, que é o que dá cara de radar) + núcleo que pulsa no destaque. A **altura é o volume medido**, então dá para ver de relance onde está acontecendo sem clicar em nada. Custo: zero crédito, zero download, alguns kilobytes.
+
+**Sobre gerar os ícones no ComfyUI — a resposta honesta:** o ComfyUI gera **imagem 2D**. Ícone 3D de verdade (malha) precisaria de Hunyuan3D/TripoSG, que **não estão instalados** e o disco está a 94%. O `generate_3d` do Higgsfield (imagem → GLB) faria, mas depende de crédito. Por isso a escolha foi geometria nativa: é 3D real, gira, pega luz e reage ao hover. O ComfyUI continua útil aqui se quisermos depois um acabamento mais "cartoon premium" — gerar *matcaps*/texturas para os marcadores, o que é barato e local.
+
+**Quinta rodada — as arestas que você apontou no print:**
+- **Os marcadores 3D estavam gigantes no zoom** (o print do Maranhão mostrava anéis cobrindo o mapa). Causa: tamanho fixo em unidades do mundo. Agora têm **tamanho angular constante** — ocupam o mesmo espaço na tela de longe e de perto — e ficaram bem menores: discretos por padrão, presentes só no destaque. O anel também só varre quando aceso; movimento perpétuo em 27 estados cansa a vista.
+- **"Não fica onde largamos" era bug de verdade.** A deriva usava o valor absoluto do seno, então ao soltar o globo pulava até 8° de uma vez. Agora a deriva é medida como **diferença desde o instante do release** — no momento em que você solta, o deslocamento é zero e cresce suavemente a partir dali.
+- **A associação que faltava — trend ↔ lugar, nos dois sentidos.** Era o motivo do mapa existir, e você tinha razão que faltava. O servidor passou a registrar, para cada assunto agregado numa região, **em quais estados ele apareceu**. Agora passar o mouse num assunto acende exatamente esses estados no mapa (verificado: "Athletico-PR × Internacional" acende PB, PI e SE), e passar o mouse num estado apaga os assuntos que não são de lá. Cada linha também mostra as siglas.
+- **Cores com variação sutil por estado** — desvio determinístico de ±13% de luminosidade sobre a cor da região. Dá textura e tira o chapado sem a região perder unidade.
+
+**Sexta rodada — o mapa deixou de esconder o país:**
+- **O contexto não some mais.** Ao focar numa região, o Brasil inteiro continua desenhado, só que apagado (7% de opacidade na face, 22% no contorno), e a região em foco **sobe** — extrude animado de verdade, com o destaque subindo ainda mais. Era o ponto do seu pedido: dá para ver que um assunto também acontece no Sul sem precisar navegar até lá.
+- **Cor com variação mais perceptível**: o desvio de luminosidade dobrou (±26%) e ganhou um giro pequeno de matiz. Dois estados podem ter a mesma luz e ainda assim se distinguir, sem a região perder unidade.
+- **A malha do IA Trend virou meridianos e paralelos.** O icosaedro dava triângulos grandes atravessando o planeta e lia como "poliedro flutuando". Agora é uma grade que segue a geometria do globo, com um pulso suave percorrendo as linhas — a metáfora certa de camada de dados sobre a Terra.
+- **A relação assunto ↔ mapa agora também existe na página `/radar`**, que só tinha na home.
+
+**Sétima rodada — os bugs que o Ricardo caçou usando:**
+- **"Mundo" dizia "Sem sinal".** Bug real: a raiz não tem geo própria no Google Trends e eu nunca tratei o caso. Agora o mundo é a **soma dos países medidos**, ordenado por *em quantos países o assunto aparece* — o que é uma leitura melhor que volume nesse degrau ("em 2 países · CA AU").
+- **O extrude ia se afastando a cada ida e volta.** A elevação vivia em `userData` do grupo e a chave do React era o índice — ao trocar de degrau, um grupo reaproveitado herdava a altura do anterior e ia somando. Chave estável por identidade da feição + reset do estado quando o conjunto muda.
+- **Enquadramento**: as regiões estavam quase saindo da tela. Centros e altitudes recalibrados, mais perto e mais centrado.
+- **Bullet time**: a viagem ficou deliberadamente mais lenta (1,5 s + distância, teto de 3,4 s) e com arco mais alto. O que se ganha não é tempo, é a leitura do caminho.
+- **Malha do IA Trend menor e mais fina** — raio de 1,035 para 1,012 do globo, linhas a cada 10° e opacidade quase pela metade.
+- **Página `/radar` ganhou os rótulos** "World Trend" e "IA Trend" — sem eles a página parecia não ter as duas leituras, só seções soltas.
+- **Hover no nível Brasil**: agora o servidor cruza os assuntos nacionais com as cinco regiões. ⚠️ Casa 7 de 22 — ver R10, é limitação do dado, não do código.
+
+**Oitava rodada — imersão:**
+- **As siglas "descolavam" dos estados** porque `useFrame` executa na ordem de montagem e a câmera era o **último** componente: os rótulos projetavam com a câmera do quadro anterior. A câmera passou a ser o primeiro. Bug de uma linha, sintoma que parecia erro de posicionamento.
+- **Viagem em três fases.** Ir de uma região para a irmã era um zoom lateral — a nova chegava grande demais e fora de centro. Agora o alvo carrega um `pico`: trocar de região passa por uma vista do Brasil, trocar de estado passa por uma da região. Sobe, atravessa, desce.
+- **Drift reduzido a um terço** — com o modal aberto, quadro que vagueia atrapalha a leitura.
+- **Siglas também no nível Brasil** (N/NE/SE/S/CO), sumindo ao entrar numa região, onde as siglas dos estados assumem.
+- **Modal do assunto dentro do mapa** (`components/radar/ModalAssunto.tsx`), nas duas telas. Clicar num assunto **não joga mais o visitante direto para fora**: primeiro mostramos o que medimos — o volume em corpo grande, **a janela que faltava** ("últimas 24h" para busca, "ontem, dia fechado" para leitura), a manchete e onde foi medido — e a fonte vira uma escolha clara. Quem quer o atalho continua tendo a setinha na linha. O mapa aproxima enquanto o modal está aberto.
+
+**Nona rodada — o painel virou HUD de transmissão.** O Ricardo pediu que o detalhe não fosse um modal por cima, e sim uma peça inserida no mapa, estilo transmissão de F1: a região se desloca e o painel entra no espaço que sobrou.
+
+- **O deslocamento é feito no FRUSTUM da câmera** (`setViewOffset`), não movendo ou encolhendo objeto nenhum. A região sai do centro para cima e para a esquerda sem ser escalada, distorcida ou recortada — é o que mantém o mapa "em foco" enquanto o painel ocupa o canto inferior direito. Animado, e desfeito ao fechar.
+- **Nada de cortina escura.** Um véu por cima mataria a ideia. O escurecimento é um gradiente **diagonal** que só existe atrás do painel; o mapa continua legível do outro lado.
+- **Perspectiva de verdade, sutil**: `rotateY(-9°) rotateX(3°) translateZ(24px)` com origem no canto — o painel pertence ao espaço 3D em vez de parecer cartão colado. Canto chanfrado por `clip-path`, borda-guia na cor do lugar, trilhos de varredura a 13% e um brilho que percorre a placa a cada 3,2 s.
+- **O número é o herói**: 34px, tabular, com halo na cor do lugar e a janela logo abaixo.
+- `prefers-reduced-motion` desliga entrada, véu e varredura.
+
+**Décima rodada — o painel ganhou vida própria** (`components/radar/usePainelAssunto.ts`). O Ricardo notou que o painel anterior ficava preso até alguém fechar. Agora ele responde ao hover, mas com três freios que resolvem problemas diferentes:
+
+| Tempo | Para quê |
+|---|---|
+| **250 ms** para abrir | filtra o mouse que só está de passagem pela lista |
+| **2 s de aviso** antes de trocar | o painel atual **pisca** quando outro pede a vez: quem passou sem querer volta a tempo, quem quis trocar vê que foi entendido |
+| **9 s de permanência** | tempo de leitura sem precisar fechar nada — com um fio fino correndo no topo, que mostra o prazo |
+
+**Duas formas de dizer "quero manter":** clicar no assunto (intenção explícita) ou o **alfinete** no painel. Fixado, nenhum tempo corre e o fio some — o retorno visual de que funcionou. A saída usa o caminho inverso da entrada, com a mesma curva.
+
+**Mais perspectiva**, também a pedido: `perspective` encurtada para 760px com origem deslocada e `rotateY(-17°) rotateX(6°) translateZ(36px)`. A borda esquerda recua de verdade em vez de sugerir profundidade.
+
+Verificado no build, estado por estado: nada antes dos 250 ms → ativo → **piscando** ao pedir a vez, ainda mostrando o anterior → troca aos 2 s. Com o alfinete, o hover em outro item não troca nada.
+
+**Décima primeira rodada — cada assunto virou uma peça própria.** O Ricardo notou que trocar entre cards fixados mudava o conteúdo dentro da mesma placa, sem saída nem entrada: "tira o senso de unicidade de cada um".
+
+- **A troca agora passa pela desmontagem.** O painel atual sai pelo seu próprio gesto e só então o novo se monta — vale tanto para clique quanto para a troca por hover.
+- **Cinco gestos, sorteados sem repetir o anterior:** (0) **desmonta** — as peças internas saem em cascata invertida e entram em cascata direta; (1) **desliza** de baixo com profundidade; (2) **desvanece** com desfoque; (3) **dobra** no eixo X, como placa física; (4) **corta** — a placa se revela e se recolhe por uma fresta (`clip-path`). Cinco porque, com um só, a interface vira "lista com efeito"; variando, mexer no radar vira algo que se faz por gosto.
+- **O flicker deixou de parecer glitch.** Virou **interferência de sinal**: a placa recua no eixo Z, ganha saturação e um `skew` mínimo por dois pulsos. Lê como HUD perdendo sintonia — intencional —, não como falha de render.
+- `prefers-reduced-motion` desliga todos os cinco.
+
+Verificado no build: cinco cliques seguidos passaram pela saída antes de montar o novo, com três variantes distintas e nenhuma repetida em sequência.
+
+**O que ficou de fora do seu pedido e continua na fila:** ver a tabela de **pendências abertas** no topo deste documento (R1 a R10). Ordem combinada com o Ricardo: **terminar o polimento → ícones 3D (R2) → vídeos (R9)**.
+
+---
+
+## ⏩ SESSÃO 26/07 — RADAR DA IA NA HOME (Opus 5)
+
+Ricardo escolheu esta frente sabendo da ressalva: **é escopo novo, fora da ordem das fases.** Fica registrado assim — não foi descuido da regra, foi decisão dele.
+
+**O que é:** a home passou a mostrar, entre o Arcade e os cursos, o que o Brasil está realmente procurando sobre IA — medido, não opinado. Fonte: autocomplete do Google e do YouTube, que devolve o que as pessoas digitaram, ordenado por frequência e recência. Zero API key, zero custo por consulta.
+
+**Por que isto é o diferencial e não mais uma seção:** é o único bloco da home que mostra **dado medido em vez de promessa**, e é dado que ninguém publica de graça. Ele também ataca a lacuna achada no FLUXO_02 — o catálogo é organizado por **ferramenta** (ChatGPT, n8n, Midjourney) e a busca brasileira é organizada por **profissão** ("para advogados", "para concurso"). Os 10 nichos da seção são profissões, e cada termo aponta para o curso que já existe.
+
+**As três fontes são combináveis e mudam a NOTA, não só o filtro** — é a regra de três sinais virando controle na mão do visitante. Desligar o YouTube tira o peso 1,2× e o bônus de 1,6× da confirmação em dois canais, exatamente como o `radar.py` faria se tivesse consultado um canal só. A terceira fonte cruza com as manchetes do dia (as mesmas do IA Hoje) e vale 1,35×.
+
+**Achado que a própria seção expõe, medido hoje:** nos nichos profissionais (advogados, médicos, professores) a demanda é quase toda **só do YouTube** — gente procurando VÍDEO sobre isso, onde um canal ganha antes de o site ranquear. Com o Google desligado, o topo de "Automação" vira `agentes de ia n8n`, que é demanda de vídeo explícita por um curso que já existe aqui (R$199) e que não tem um vídeo nosso.
+
+**Correção de honestidade feita no caminho:** a primeira medição colocava o termo-semente em 1º com nota máxima nos 10 nichos — mas isso é artefato de termos digitado a pergunta, não demanda medida. As consultas próprias agora saem do ranking, nos dois lados (site e `radar.py` continuam com a mesma fórmula no resto). Um radar que devolve a própria pergunta não está medindo nada.
+
+**Arquivos:**
+- `src/lib/radar.ts` — coleta e pontuação (porte fiel do `PRODUCAO/scripts/radar.py`, que segue sendo a fonte de verdade da fórmula)
+- `src/data/landing/radar-nichos.ts` — os 10 nichos + tipos (fora do `lib/` para não arrastar o código de servidor para o bundle do cliente)
+- `src/data/landing/radar-seed.json` — snapshot real de 26/07, 10 nichos × 10 termos (26 KB). Regerar com `npm run radar:seed`
+- `src/app/api/radar/route.ts` — medição ao vivo, cache 6h em memória, degrada para o snapshot
+- `src/components/landing/RadarSection.tsx` + `src/components/3d/RadarGlobe.tsx`
+
+**Robustez (§5 do IDENTIDADE_VISUAL):** o snapshot pinta primeiro e a medição ao vivo entra por cima — a lista nunca depende da rede. O globo é decoração: só monta quando a seção entra na tela, e `prefers-reduced-motion` para a rotação sem esconder nada.
+
+**Ressalva honesta (§1):** verificado no navegador com dado real — troca de nicho, as três fontes combinando, globo montando, sem erro de console, sem estouro horizontal no mobile, `tsc --noEmit` limpo. **Nada disso é ✅ até você ver e dizer.** Duas coisas que só você decide: (a) o termo `automatizar con ia gratis` aparece com "con" espanholado — é o que o autocomplete devolve de verdade, mantive por honestidade, mas numa página brasileira parece erro nosso; (b) a seção fica antes dos cursos, apostando que estabelecer a demanda antes de oferecer a resposta converte melhor — é hipótese, não medição.
+
+---
+
+## ⏩ SESSÃO 25/07 — STACK DE MÍDIA LOCAL REARMADO (Opus 5)
+
+Ricardo pediu para atualizar a skill do ComfyUI usando o que há de melhor na atualização que saiu, e para termos à mão áudio/música, edição de vídeo e consistência de personagem — servindo tanto o fayai.com.br quanto a worldforge. Pesquisa profunda feita: instalação local auditada nó a nó (812 tipos), changelog oficial v0.20→v0.28 destrinchado, templates oficiais extraídos, comparativos independentes de modelos lidos.
+
+**O achado que muda o jogo: o problema nunca foi falta de ferramenta — era falta de mapa.** A máquina tem, **instalados e funcionais**, cinco coisas que nenhuma documentação nossa mencionava e que portanto nunca foram usadas:
+
+| Instalado, nunca usado | O que faz |
+|---|---|
+| **ACE-Step 1.5 XL Turbo** | música completa com letra em pt-BR, 8 passos (estava na pasta legada `unet/`, por isso invisível nas listagens) |
+| **Stable Audio 3 Medium** | SFX, foley, ambiência, one-shots |
+| **SAM 3.1** | segmentação promptável por texto + **rastreamento de objetos em vídeo** |
+| **HiDream O1** | imagem 2048² com texto legível (o ponto fraco histórico de todos os outros — a armadilha do "seal/badge" de 17/07) |
+| **IC-LoRA Ingredients (LTX 2.3)** | **consistência de personagem/adereço/cenário dentro de um vídeo gerado** |
+
+Ou seja: **trilha própria, sound design de verdade e consistência de personagem em vídeo estão a zero download de distância.** Hoje o `compose_reel_v7.py` sintetiza SFX com ondas senoidais no FFmpeg.
+
+**Além disso, o ComfyUI 0.28 trouxe uma categoria inteira que não existia: pós-produção nativa.** SeedVR2 (restauração/upscale com consistência temporal), RIFE/FILM (interpolação de frames), BiRefNet (remoção de fundo), VOID (inpainting de vídeo), Depth Anything 3, `LTXVContextWindows` (vídeo longo e loop fechado) e — o mais estratégico — **treinador de LoRA nativo**, que aposenta o plano antigo de instalar AI-Toolkit/Kohya.
+
+**Entregue nesta sessão (documentação e ferramental, sem tocar no site):**
+- **`PESQUISA_COMFYUI_2026-07-25.md`** (raiz do autoresearch) — dossiê completo; supersede o de 12/07, que ficou marcado como histórico.
+- **3 skills novas:** `comfy-audio` (música/SFX/TTS), `comfy-video` (geração + pós-produção), `comfy-character` (consistência em 4 níveis + treino de LoRA).
+- **`comfy-local` atualizada** — versão certa (0.28.3), inventário real de modelos (o antigo estava errado: listava Flux 2 Klein no lugar errado e omitia 10 modelos), os dois diretórios-raiz de modelos, e duas descobertas que economizam tempo: os **templates oficiais são servidos localmente** em `http://localhost:8000/templates/` com as URLs de download embutidas em cada um, e a **armadilha dos subgraphs** (templates de 2026 embrulham o grafo real num nó com `class_type` UUID — o JSON não é mais submissível direto como formato de API; o grafo verdadeiro está em `definitions.subgraphs`).
+- **`comfy-fayai` atualizada** com a tabela de quatro gambiarras do pipeline de reels que agora têm substituto nativo — com a instrução explícita de trocar **uma de cada vez**, comparando a saída.
+
+**⚠️ Restrição real que limita tudo:** o disco `C:` está a **94% (≈200 GB livres)**, com 434 GB só em modelos. Nada foi baixado — a decisão é sua. Os 4 downloads de melhor retorno somam **~6 GB**: RIFE+FILM (~100 MB, o melhor custo-benefício da lista inteira — elimina a gambiarra de ping-pong dos reels e dobra a duração útil dos clipes LTX), BiRefNet (~1 GB, destrava as camadas transparentes da Liga A sem rembg manual), SeedVR2 3B int8 (~4 GB, qualidade final), Depth Anything 3 small (~1 GB).
+
+**Honestidade sobre o que isto é (§1):** tudo marcado como instalado foi **verificado** via `/object_info` e listagem em disco. Mas **nenhum dos fluxos novos foi executado** — as cadeias de nós vêm dos templates oficiais, não de uma geração real nesta máquina. Nada disso é ✅ até rodar e você ver.
+
+**Piloto proposto (não iniciado, custo zero, nenhum download):** uma trilha ACE-Step de 30 s + três SFX do Stable Audio 3 (acerto / erro / fim de tempo do Arcade). É o teste mais barato e mais audível do que foi destravado. Encaixa direto na pendência aberta em 24/07 de regerar as artes do Arcade refletindo os verbos novos.
+
+### FASE 11 — STACK DE MÍDIA (nova, planejada 25/07; ordem por retorno, não por vontade)
+- [~] 11.1 **Piloto de áudio — EXECUTADO 25/07.** Trilha de 30 s do Arcade (ACE-Step 1.5 XL Turbo, 8 passos/cfg 1/euler) em ~35 s; 4 SFX (acerto/erro/fim-de-tempo/combo, Stable Audio 3) em **11 s no total**. Verificados com `volumedetect` (conteúdo real, não silêncio). ⚠️ A trilha tem `max_volume 0.0 dB` — normalizar antes de usar no mix. **Aceite: Ricardo ouve e diz se substitui as senoides do `compose_reel_v7.py`.**
+  - Armadilha: o checkpoint do Stable Audio 3 **não traz CLIP embutido** — precisa de `CLIPLoader("t5gemma_b_b_ul2", type="stable_audio")` à parte, senão dá "clip input is invalid: None". E o nosso `stable_audio_3_medium` é o **destilado**: 8 passos/cfg 1/lcm (o template `_base` usa 50/7 e é outro arquivo).
+- [x] 11.2 **Kit baixado 25/07 (4,8 GB):** RIFE 4.26 + FILM (88 MB), BiRefNet (424 MB), SeedVR2 3B int8 + VAE (3,8 GB), Depth Anything 3 base (517 MB). Ricardo autorizou e vai liberar ~1 TB depois.
+- [ ] 11.3 **RIFE no pipeline de reels**: substituir ping-pong por interpolação 2× em UM reel, comparar lado a lado com o v7 atual. Aceite: você aponta qual dos dois é melhor.
+- [ ] 11.4 **BiRefNet → camadas Liga A**: gerar 1 arte do site em camadas com alpha e animar com Framer Motion (piloto de 1 seção).
+- [ ] 11.5 **Artes do Arcade regeradas** com os verbos novos (pendência aberta em 24/07) + SFX do 11.1.
+- [ ] 11.6 **worldforge — consistência de personagem**: retrato mestre → folha de 360° → folha de referência IC-LoRA → 1 clipe. Executável hoje, sem download e sem treino. Aceite: o mesmo personagem reconhecível em 3 clipes diferentes.
+- [~] 11.7 **LoRA do Ricardo — EM ANDAMENTO 25/07** (ele pediu, para usar no site). Dataset dele: 40 fotos reais em `LORA/Ricardo_Faya` (as mesmas do LoRA que ele fez no Higgsfield).
+  - **Veredito medido sobre consistência SEM treino:** Qwen Edit 2511 com referência acerta o *tipo* (barba, cavanhaque, estrutura) mas **não a pessoa** — rosto sai mais jovem e magro, grisalho some. Em 40 passos sem Lightning (8,5 min/imagem, 15× mais caro) melhora a luz e recupera o grisalho, mas ainda não é ele. **Confirma que LoRA é necessário para pessoa real.**
+  - **Preparo do dataset (armadilhas achadas):** **29 das 40 fotos estavam com rotação EXIF não aplicada** (treinariam rostos deitados). Curadoria 42→22: fora fotos com outras pessoas, óculos escuros, rostos minúsculos, 1 imagem gerada por IA, e as de 2018 (visual muito diferente = deriva). Recorte de cabeça com **SAM 3.1** — 22/22 detecções em 48 s, promptável por texto.
+  - **3 armadilhas de VRAM no treinador nativo (16 GB), todas gravadas na skill `comfy-character`:** (a) o text encoder de 7,5 GB fica **residente** após `MakeTrainingDataset` → separar em 2 estágios com `SaveTrainingDataset`/`LoadTrainingDataset`; (b) **só `bypass_mode=True` faz o treino rodar** — testei a matriz (offloading on/off, com/sem gradient checkpointing): tudo estourava, inclusive com 4 imagens de 256px e rank 8 com 15,8 GB livres; (c) `checkpoint_depth` **1 é o mais agressivo**, não 5.
+  - **Armadilha de processo (custou 81 min):** treino de 500 passos rodou 81 minutos e estourou perto do fim (fragmentação), e como `SaveLoRA` fica **depois** do `TrainLoraNode`, perdeu tudo. Agora treina em **blocos curtos com retomada via `existing_lora`**, salvando a cada bloco.
+  - **Base escolhida: Z-Image bf16 carregado em fp8.** Qwen Image 2512 fp8 tem 20 GB e **não cabe** para treino em 16 GB.
+  - **[✗] VEREDITO 25/07: treino de LoRA de rosto NÃO é viável nesta máquina.** Medições reais:
+
+    | Configuração (22 imgs, rank 24) | Resultado |
+    |---|---|
+    | 512px, offloading ON | rodou 81 min → OOM (perdeu tudo) |
+    | 512px, offloading OFF | OOM imediato |
+    | 384px, offloading ON | ✅ **47 s/passagem** |
+    | 384px, offloading OFF | ✅ **31 s/passagem** |
+    | 384px, bf16 sem offloading | **travou o ComfyUI** (Ricardo teve que reiniciar) |
+
+    Melhor caso viável: 384px a 31 s/passagem = **4h20 para 500 passagens, 13h para 1500**. E 384px é justamente a resolução que perde pele/barba — o detalhe que faria parecer ele. **Decisão: o rosto do Ricardo vem do LoRA que ele já tem no Higgsfield.** Não vale queimar uma noite de GPU, com risco de travar de novo, para um resultado provavelmente pior.
+  - **O que ficou aproveitável:** dataset curado, EXIF corrigido, recortado em 1024² e legendado, em `LORA/Ricardo_Faya/_dataset/crops` (22 imagens) — serve para retreinar no Higgsfield ou aqui quando houver hardware. Cache codificado em `output/ds_lora_ricardo`, dataset de treino em `input/lora_ricardo`.
+  - **Onde o treino local AINDA faz sentido:** personagem estilizado/fictício da worldforge em resolução menor, onde 384px não é penalidade e o rosto não precisa passar no teste de "é uma pessoa que eu conheço".
+- [ ] 11.7b Comparar com os vídeos/LoRA que o Ricardo já fez no Higgsfield (ele vai indicar o caminho) — régua de qualidade + frames de perfil, que faltam no dataset atual (as 22 fotos são quase todas frontais).
+- [ ] 11.8 (opcional) Avaliar TTS local (`Qwen3-TTS` ou `TTS-Audio-Suite`) **só para vozes de personagem da worldforge** — a narração comercial continua na ElevenLabs, já calibrada em pt-BR. Custom node + pesos + disputa de VRAM: perguntar antes de instalar.
+- Regra: 11.1 antes de 11.2 (provar valor antes de gastar disco). Nenhum item toca produção sem piloto aprovado.
+
+---
+
 ## ⏩ SESSÃO 24/07 — ARCADE REDESENHADO (Opus 5)
 
 Ricardo deu 3 dias de espaço e pediu o trabalho mais difícil: repensar o design da home e **principalmente** os minigames, "tornando-os mais parecidos com um game do que um quiz, e que haja maior diferenciação entre eles".
@@ -495,6 +797,7 @@ O problema: itens foram reportados como "verificados" com checagens técnicas (D
 
 ## §4. ESPECIFICAÇÕES DE REFERÊNCIA
 - Identidade visual e receitas de geração: `IDENTIDADE_VISUAL.md` (§12 fusão; Liga B §10).
+- **Stack de mídia local (ComfyUI): `../PESQUISA_COMFYUI_2026-07-25.md`** — inventário real, o que mudou v0.20→v0.28, downloads prioritários. Skills: `comfy-local` (hub/imagem) · `comfy-video` (vídeo + pós) · `comfy-audio` (música/SFX/TTS) · `comfy-character` (consistência) · `comfy-fayai` (reels).
 - Arquitetura de conteúdo (fatos/slots/mídia): `ARQUITETURA_CONTEUDO_DINAMICO.md` (a Camada 3 muda na Fase 2: header → inline).
 - Visão USS/motor: `../Uss/docs/engine/` (prompts prontos §10) + memória `project_uss_engine`.
 - Infra/comercial herdado: `PENDENCIAS_2026-07-15.md` (continua válido no que não conflita).

@@ -10,7 +10,8 @@
     "seed": "tsx scripts/seed-products.ts",
     "seed:watch": "tsx watch scripts/seed-products.ts",
     "seed:admin": "tsx scripts/seed-admin.ts",
-    "enrich": "tsx scripts/enrich-curriculum.ts"
+    "enrich": "tsx scripts/enrich-curriculum.ts",
+    "radar:seed": "tsx scripts/radar-seed.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

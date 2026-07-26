@@ -13,6 +13,7 @@ import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMe
 import { cn } from "@/lib/utils";
 import { NavCart } from "@/components/cart/NavCart";
 import type { LucideIcon } from "lucide-react";
+import { LogoFayai } from "@/components/marca/LogoFayai";
 
 // Mobile navigation link component
 interface MobileNavLinkProps {
@@ -146,7 +147,7 @@ export function Header() {
             href="/" 
             className="text-2xl font-bold text-primary hover:opacity-80 transition flex-shrink-0"
           >
-            {t("logo")}
+            <LogoFayai texto={t("logo")} />
           </Link>
 
           {/* Spacer - pushes content to right */}
