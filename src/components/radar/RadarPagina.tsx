@@ -22,6 +22,7 @@ import {
   getLugar,
   filhosDe,
   trilhaDe,
+  estadosDaRegiao,
   PAISES_COM_DADO,
   noLugar,
   type Lugar,
@@ -140,23 +141,44 @@ export function RadarPagina() {
   const itens = trends[lugarId] ?? [];
   const volumeTopo = itens[0]?.volume || 1;
 
+  /**
+   * O que cada região está procurando — SEM ranquear as regiões entre si.
+   *
+   * A versão anterior somava o volume dos estados e desenhava uma barra por
+   * região. Medição dos 27 estados em 26/07/2026 mostrou que essa barra media
+   * outra coisa: o feed do Google devolve no máximo 10 assuntos por geo, então
+   * a soma acompanha o NÚMERO DE ESTADOS, não a procura. Nordeste (9 estados)
+   * somava 197.600 e Sul (3 estados) 44.400 — mas por estado os dois ficam na
+   * mesma faixa (21.956 contra 14.800). Pior: São Paulo, com 44 milhões de
+   * habitantes, reportava 19.500 enquanto Mato Grosso do Sul, com 2,8 milhões,
+   * reportava 50.100. O `approx_traffic` do Google é relativo à linha de base
+   * de cada geo — "está quente AQUI" —, e por isso não se soma nem se compara
+   * entre lugares.
+   *
+   * O que É comparável e continua sendo informação: o alcance de um assunto
+   * dentro da própria região, "aparece em 6 dos 9 estados". Isso é contagem de
+   * estados, não volume estimado, e é a leitura que o mapa ao lado já mostra.
+   */
   const porRegiao = useMemo(
     () =>
       REGIOES_BR.map((r) => {
         const l = getLugar(`BR-r-${r}`);
         const lista = trends[`BR-r-${r}`] ?? [];
+        const primeiro = lista[0];
         return {
           sigla: r,
           nome: l.nome,
           cor: COR_REGIAO[r],
-          total: lista.reduce((s, i) => s + i.volume, 0),
-          topo: lista[0]?.titulo ?? null,
+          topo: primeiro?.titulo ?? null,
+          // Em quantos estados da região o assunto do topo apareceu.
+          alcance: primeiro?.lugares?.length ?? 0,
+          estados: estadosDaRegiao(r).length,
           comIa: lista.filter((i) => i.temIa).length,
+          medindo: lista.length === 0,
         };
       }),
     [trends]
   );
-  const maiorRegiao = Math.max(1, ...porRegiao.map((r) => r.total));
 
   // Leitura de canal do IA Trend — o achado que a home só insinua.
   const canais = useMemo(() => {
@@ -445,41 +467,43 @@ export function RadarPagina() {
             O BRASIL POR <span style={{ color: GOLD }}>REGIÃO</span>
           </h2>
           <p className="text-sm text-white/50 mb-3 max-w-2xl">
-            Volume somado dos assuntos em alta em cada região — cada uma medida pelos seus próprios
-            estados, um a um. As barras comparam regiões entre si, não com o país.
+            O assunto do momento em cada região, e em quantos estados dela ele aparece — que é
+            contagem de estados, não volume. As regiões estão em ordem geográfica de propósito:{" "}
+            <strong className="text-white/75">não dá para dizer qual procura mais</strong>, porque o
+            Google reporta o volume relativo à linha de base de cada lugar, não em escala comum.
           </p>
-          <div className="glass rounded-2xl p-4 space-y-2.5">
+          <div className="glass rounded-2xl p-4 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
             {porRegiao.map((r) => (
               <button
                 key={r.sigla}
                 onMouseEnter={() => setSobCursor(r.sigla)}
                 onMouseLeave={() => setSobCursor(null)}
                 onClick={() => irPara(`BR-r-${r.sigla}`)}
-                className="w-full text-left cursor-pointer group"
+                className="text-left cursor-pointer rounded-xl p-3 transition-colors bg-white/[0.03] hover:bg-white/[0.06]"
+                style={{
+                  border: `1px solid ${r.cor}${sobCursor === r.sigla ? "88" : "33"}`,
+                  boxShadow: sobCursor === r.sigla ? `0 0 14px ${r.cor}44` : undefined,
+                }}
               >
-                <div className="flex items-baseline justify-between text-[11px] mb-0.5">
-                  <span className="font-bold" style={{ color: r.cor }}>
-                    {r.nome}
-                  </span>
-                  <span className="text-white/35">
-                    {r.total ? `${r.total.toLocaleString("pt-BR")} buscas` : "medindo…"}
-                    {r.comIa > 0 && <span className="text-violet-300/70"> · {r.comIa} sobre IA</span>}
-                  </span>
-                </div>
-                <div className="h-2 rounded-full overflow-hidden bg-white/[0.06]">
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{
-                      width: `${Math.max(2, Math.round((r.total / maiorRegiao) * 100))}%`,
-                      background: `linear-gradient(90deg, ${r.cor}, ${r.cor}66)`,
-                      boxShadow: sobCursor === r.sigla ? `0 0 14px ${r.cor}88` : undefined,
-                    }}
-                  />
-                </div>
-                {r.topo && (
-                  <p className="mt-0.5 text-[10px] text-white/30 truncate capitalize">
-                    #1 aqui: {r.topo}
-                  </p>
+                <span className="block text-[11px] font-bold" style={{ color: r.cor }}>
+                  {r.nome}
+                </span>
+                {r.medindo ? (
+                  <span className="block mt-1 text-[11px] text-white/35">medindo…</span>
+                ) : (
+                  <>
+                    <span className="block mt-1 text-sm font-semibold leading-snug capitalize line-clamp-2">
+                      {r.topo}
+                    </span>
+                    <span className="block mt-1 text-[10px] text-white/35">
+                      {r.alcance > 0
+                        ? `aparece em ${r.alcance} ${r.alcance === 1 ? "estado" : "estados"} de ${r.estados}`
+                        : `medido nos ${r.estados} estados da região`}
+                      {r.comIa > 0 && (
+                        <span className="text-violet-300/70"> · {r.comIa} sobre IA</span>
+                      )}
+                    </span>
+                  </>
                 )}
               </button>
             ))}
@@ -615,10 +639,18 @@ export function RadarPagina() {
               YouTube, que devolve o que as pessoas digitaram, ordenado por frequência. A nota
               combina posição, amplitude e confirmação entre canais (aparecer nos dois vale 1,6×).
             </li>
+            <li>
+              <strong className="text-white/75">O limite do volume</strong> — o número de buscas que
+              o Google devolve é relativo à linha de base de cada lugar, não uma escala comum. São
+              Paulo aparecer com menos que Mato Grosso do Sul não significa que se procura menos em
+              São Paulo. Por isso comparamos assuntos <em>dentro</em> de um lugar, e nunca somamos
+              lugares para dizer qual procura mais.
+            </li>
             <li className="text-white/40">
               O que <em>não</em> fazemos: estimar. As consultas que nós mesmos fazemos ficam fora do
               ranking — um radar que devolve a própria pergunta não está medindo nada. Termos que
-              voltam em espanhol ou inglês são descartados.
+              voltam em espanhol ou inglês são descartados, mas só por palavras que não existem em
+              português: &ldquo;IA jurídica gratuita&rdquo; é português e fica.
             </li>
           </ul>
           <Link
