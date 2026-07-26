@@ -652,18 +652,27 @@ function usarPino(): THREE.BufferGeometry | null {
  * uma arte gerada seria mais um PNG competindo com o mapa por atenção. O
  * conjunto (haste + anel girando + núcleo pulsando) é o que dá cara de radar,
  * em vez de cara de mapa com bolinhas.
+ *
+ * ⚠️ A altura é CONSTANTE, de propósito. Até 26/07/2026 ela era proporcional ao
+ * volume somado do lugar, o que parecia informação e não era: o feed do Google
+ * devolve no máximo 10 assuntos por geo e o volume é relativo à linha de base
+ * de cada um, então o marcador do Nordeste subia por ter 9 estados e o de São
+ * Paulo afundava apesar dos 44 milhões de habitantes (ver R6 no MASTERPLAN).
+ * O marcador diz "há sinal aqui" — que é verdade — e nada além disso.
  */
+const ALTURA_PINO = 19;
+
 function Marcadores({
   poligonos,
   chave,
   corDe,
-  intensidade,
+  comSinal,
   acesos,
 }: {
   poligonos: Poligono[];
   chave: string;
   corDe: (p: Record<string, string>) => string;
-  intensidade: Record<string, number>;
+  comSinal: Set<string>;
   acesos: Set<string>;
 }) {
   const grupo = useRef<Group>(null);
@@ -674,11 +683,10 @@ function Marcadores({
       poligonos
         .map((f) => {
           const id = f.properties[chave];
-          const v = intensidade[id];
-          if (!v) return null;
+          if (!comSinal.has(id)) return null;
           const c = centroDe(f);
           const normal = naEsfera(c.lat, c.lng, 1).normalize();
-          const altura = 6 + v * 26;
+          const altura = ALTURA_PINO;
           return {
             id,
             cor: corDe(f.properties),
@@ -693,7 +701,7 @@ function Marcadores({
           };
         })
         .filter((x): x is NonNullable<typeof x> => x !== null),
-    [poligonos, chave, corDe, intensidade]
+    [poligonos, chave, corDe, comSinal]
   );
 
   useFrame((state, dt) => {
@@ -998,7 +1006,7 @@ function Cena(props: {
   chave: string;
   refsSiglas: React.RefObject<Map<string, HTMLSpanElement>>;
   mostrarSiglas: boolean;
-  intensidade: Record<string, number>;
+  comSinal: Set<string>;
   corDe: (p: Record<string, string>) => string;
   camada: Camada;
   acesos: Set<string>;
@@ -1045,7 +1053,7 @@ function Cena(props: {
         poligonos={props.poligonos}
         chave={props.chave}
         corDe={props.corDe}
-        intensidade={props.intensidade}
+        comSinal={props.comSinal}
         acesos={props.acesos}
       />
 
@@ -1079,8 +1087,9 @@ export interface RadarGloboProps {
   onEscolher: (props: Record<string, string>) => void;
   /** Tira o mundo do centro para o painel de detalhe entrar ao lado. */
   desviado?: boolean;
-  /** Sinal por lugar, de 0 a 1 — vira a altura do marcador 3D. */
-  intensidade?: Record<string, number>;
+  /** Lugares onde há sinal medido — ganham marcador. Presença, não quantidade:
+   *  o volume do Google não é comparável entre lugares (R6). */
+  comSinal?: Set<string>;
   /** Destaque controlado de fora — é o que liga o globo à lista ao lado.
    *  Aceita vários porque um assunto em alta pode estar em muitos estados. */
   destacado?: string | string[] | null;
@@ -1097,7 +1106,7 @@ export function RadarGlobo({
   zoom,
   parado = false,
   destacado = null,
-  intensidade = {},
+  comSinal = new Set<string>(),
   desviado = false,
   onDestacar,
 }: RadarGloboProps) {
@@ -1203,7 +1212,7 @@ export function RadarGlobo({
           emFoco={emFoco}
           refsSiglas={refsSiglas}
           mostrarSiglas={mostrarSiglas}
-          intensidade={intensidade}
+          comSinal={comSinal}
           alvo={alvo}
           arrastando={arrastando}
           onEscolher={onEscolher}

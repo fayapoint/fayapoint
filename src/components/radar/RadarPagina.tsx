@@ -189,19 +189,19 @@ export function RadarPagina() {
 
 
   /**
-   * Intensidade por lugar (0..1) — vira a altura do marcador 3D no globo.
-   * Mede-se em silêncio os filhos do lugar atual: é o que permite ver de
-   * relance ONDE está acontecendo, sem precisar clicar em cada um.
+   * Onde há sinal medido — vira o marcador 3D no globo. PRESENÇA, não
+   * quantidade: até 26/07 a altura do marcador era proporcional ao volume
+   * somado, o que fazia o Nordeste sobressair por ter 9 estados e São Paulo
+   * afundar apesar dos 44 milhões de habitantes. O volume do Google é relativo
+   * à linha de base de cada lugar e não se compara entre lugares (R6).
    */
-  const intensidade = useMemo(() => {
+  const comSinal = useMemo(() => {
     const filhos = filhosDe(lugar.degrau === "estado" ? (lugar.pai ?? lugar.id) : lugar.id);
-    const brutos = filhos.map((l) => ({
-      chave: l.degrau === "estado" ? l.id.replace("BR-", "") : l.id.replace("BR-r-", ""),
-      total: (trends[l.id] ?? []).reduce((a, i) => a + i.volume, 0),
-    }));
-    const teto = Math.max(1, ...brutos.map((b) => b.total));
-    const out: Record<string, number> = {};
-    for (const b of brutos) if (b.total > 0) out[b.chave] = Math.min(1, b.total / teto);
+    const out = new Set<string>();
+    for (const l of filhos) {
+      if ((trends[l.id] ?? []).length === 0) continue;
+      out.add(l.degrau === "estado" ? l.id.replace("BR-", "") : l.id.replace("BR-r-", ""));
+    }
     return out;
   }, [lugar, trends]);
 
@@ -297,7 +297,7 @@ export function RadarPagina() {
                 zoom={aberto ? zoom * 0.86 : zoom}
                 desviado={!!aberto}
                 parado={parado}
-                intensidade={intensidade}
+                comSinal={comSinal}
                 destacado={lugaresDoItem.length ? lugaresDoItem : sobCursor}
                 onDestacar={(p) =>
                   setSobCursor(p ? (p.uf ?? p.regiao ?? p.iso ?? null) : null)
