@@ -35,6 +35,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // hub real das matérias — "/blog" responde 307 para cá (URL que redireciona
     // não deve figurar em sitemap)
     "/noticias",
+    // Radar: dado medido que ninguém mais publica de graça. Sem esta linha a
+    // única porta de entrada é o link da home — e foi exatamente a descoberta
+    // interna cortada que deixou as matérias invisíveis até 21/07.
+    "/radar",
+    // Arcade: joga sem cadastro, é o degrau de menor compromisso do funil.
+    "/arcade",
     "/faq",
     "/contato",
     "/agendar-consultoria",
