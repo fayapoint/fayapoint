@@ -141,14 +141,25 @@ function formato(termo: string): string {
  * Filtramos por palavras que NAO existem em portugues, nunca por acento:
  * brasileiro digita sem acento o tempo todo, e "inteligencia artificial" e
  * portugues legitimo.
+ *
+ * REGRA PARA MEXER NESTA LISTA: so entra palavra que nao existe em portugues.
+ * Medicao de 26/07/2026 sobre 291 termos reais do autocomplete — 6 descartes,
+ * dos quais 2 eram falso positivo por essa regra ter sido quebrada:
+ *   "aprender"  barrava  "ia gratis para aprender ingles"
+ *   "gratuita"  barrava  "ia juridica gratuita"  (justo o nicho advogados)
+ * Tambem saíram, por serem portugues de uso corrente ainda que de origem
+ * estrangeira: "make" (a ferramenta Make, que tem curso no catalogo), "top"
+ * ("top 10 ferramentas de ia") e "for" (futuro do subjuntivo: "quando for").
+ * Um filtro que engole demanda real e pior que nenhum filtro: o estrangeirismo
+ * ocasional se explica, a demanda que nunca aparece nao se recupera.
  */
 const ESTRANGEIRAS = new Set([
   // espanhol
   "con", "el", "los", "las", "una", "mejor", "mejores", "hacer", "puedo",
-  "cuales", "tambien", "pero", "ademas", "gratuita", "aprender",
+  "cuales", "tambien", "ademas", "pero",
   // ingles
-  "the", "how", "what", "best", "free", "your", "with", "and", "for", "you",
-  "beginners", "step", "using", "guide", "learn", "make", "top", "tools",
+  "the", "how", "what", "best", "free", "your", "with", "and", "you",
+  "beginners", "step", "using", "guide", "learn", "tools",
 ]);
 
 function ehPortugues(termo: string): boolean {
