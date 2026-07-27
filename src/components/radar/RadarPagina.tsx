@@ -31,6 +31,7 @@ import { NICHOS, NICHO_PADRAO, type TermoRadar } from "@/data/landing/radar-nich
 import seedBruto from "@/data/landing/radar-seed.json";
 import { ModalAssunto, type AssuntoAberto } from "@/components/radar/ModalAssunto";
 import { usePainelAssunto } from "@/components/radar/usePainelAssunto";
+import { VideoAbertura } from "@/components/radar/VideoAbertura";
 
 /**
  * RADAR FAYAI — a página inteira.
@@ -243,26 +244,29 @@ export function RadarPagina() {
         />
 
         {/* -------------------------------- cabeçalho ------------------------------- */}
-        <header className="relative">
-          <h1 className="text-4xl sm:text-6xl tracking-wide" style={bebas}>
-            RADAR <span style={{ color: GOLD }}>FAYAI</span>
-          </h1>
-          <p className="mt-1 text-sm sm:text-base text-white/60 max-w-2xl">
-            O que o mundo está procurando agora, lugar por lugar — e o recorte de inteligência
-            artificial dentro disso. Tudo medido: buscas em alta do Google, artigos mais lidos da
-            Wikipédia e o autocomplete do Google e do YouTube.{" "}
-            <span className="text-white/40">Nenhum número aqui é estimado.</span>
-          </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-white/40">
-            <Radar size={13} />
-            {medindo ? (
-              <>
-                <Loader2 size={11} className="animate-spin" /> medindo
-              </>
-            ) : (
-              "em alta agora"
-            )}
-          </span>
+        <header className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <h1 className="text-4xl sm:text-6xl tracking-wide" style={bebas}>
+              RADAR <span style={{ color: GOLD }}>FAYAI</span>
+            </h1>
+            <p className="mt-1 text-sm sm:text-base text-white/60 max-w-2xl">
+              O que o mundo está procurando agora, lugar por lugar — e o recorte de inteligência
+              artificial dentro disso. Tudo medido: buscas em alta do Google, artigos mais lidos da
+              Wikipédia e o autocomplete do Google e do YouTube.{" "}
+              <span className="text-white/40">Nenhum número aqui é estimado.</span>
+            </p>
+            <span className="mt-2 inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-white/40">
+              <Radar size={13} />
+              {medindo ? (
+                <>
+                  <Loader2 size={11} className="animate-spin" /> medindo
+                </>
+              ) : (
+                "em alta agora"
+              )}
+            </span>
+          </div>
+          <VideoAbertura />
         </header>
 
         {/* As duas leituras aparecem nomeadas, como na home — sem os rótulos a
