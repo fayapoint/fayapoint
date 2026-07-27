@@ -20,18 +20,17 @@ FPS = 25
 # Agora: camera TRAVADA, globo parado no lugar, e a unica animacao pedida e o
 # pulsar dos alfinetes.
 POS = (
-    "cinematic medium shot, locked-off static camera, a calm bearded man on the left "
-    "looking straight at camera, breathing gently, subtle eye blink, otherwise still; "
-    "behind him on the right a clean holographic wireframe globe holding its position, "
-    "thin steady blue grid lines, small coloured pins glowing and pulsing gently on its "
-    "surface; dark navy studio background, soft golden rim light, clean and precise, "
-    "premium tech brand film, no camera movement"
+    "cinematic portrait of a calm bearded man against a plain dark grey backdrop, "
+    "he turns his head slowly toward the camera and gives a small warm smile, "
+    "blinks naturally, shoulders rise and fall with breathing, hair and beard catch "
+    "the light as he moves, soft key light from the left, shallow depth of field, "
+    "natural human motion, documentary interview footage, 4k"
 )
 NEG = (
-    "light trails, streaks, swirling ribbons, glowing filaments, motion blur trails, "
-    "sparks, particles flying, chaotic background, fast motion, jump cut, warping face, "
-    "distorted features, changing identity, morphing, text, watermark, logo, subtitles, "
-    "flicker, strobing, camera shake, zoom in, zoom out, cartoon, plastic skin"
+    "frozen, still image, no movement, static, motionless, warping face, distorted "
+    "features, changing identity, morphing, melting, extra limbs, text, watermark, "
+    "logo, subtitles, flicker, strobing, background objects, globe, grid lines, "
+    "light trails, streaks, cartoon, plastic skin"
 )
 
 
@@ -86,7 +85,7 @@ g = {
   "up":  {"class_type": "LatentUpscaleModelLoader", "inputs": {
             "model_name": "ltx-2.3-spatial-upscaler-x2-1.1.safetensors"}},
 
-  "img": {"class_type": "LoadImage", "inputs": {"image": "r9_cena.png"}},
+  "img": {"class_type": "LoadImage", "inputs": {"image": "r9b_pessoa_fonte.png"}},
   "rz":  {"class_type": "ResizeImagesByLongerEdge", "inputs": {"images": ["img", 0], "longer_edge": 1536}},
   "pp":  {"class_type": "LTXVPreprocess", "inputs": {"image": ["rz", 0], "img_compression": 18}},
 
@@ -101,7 +100,7 @@ g = {
             "frames_number": FRAMES, "frame_rate": FPS, "batch_size": 1, "audio_vae": ["av", 0]}},
   "i2v": {"class_type": "LTXVImgToVideoInplace", "inputs": {
             "vae": ["ck", 2], "image": ["pp", 0], "latent": ["lat", 0],
-            "strength": 0.82, "bypass": False}},
+            "strength": 0.62, "bypass": False}},
   "cat": {"class_type": "LTXVConcatAVLatent", "inputs": {
             "video_latent": ["i2v", 0], "audio_latent": ["aud", 0]}},
 
@@ -110,7 +109,7 @@ g = {
   "sm":  {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler_ancestral_cfg_pp"}},
   "sg":  {"class_type": "ManualSigmas", "inputs": {
             "sigmas": "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"}},
-  "ns":  {"class_type": "RandomNoise", "inputs": {"noise_seed": 770220}},
+  "ns":  {"class_type": "RandomNoise", "inputs": {"noise_seed": 880311}},
   "s1":  {"class_type": "SamplerCustomAdvanced", "inputs": {
             "noise": ["ns", 0], "guider": ["gd", 0], "sampler": ["sm", 0],
             "sigmas": ["sg", 0], "latent_image": ["cat", 0]}},
@@ -130,7 +129,7 @@ g = {
             "model": ["lo", 0], "positive": ["cg", 0], "negative": ["cg", 1], "cfg": 1.0}},
   "sm2": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler_cfg_pp"}},
   "sg2": {"class_type": "ManualSigmas", "inputs": {"sigmas": "0.85, 0.7250, 0.4219, 0.0"}},
-  "ns2": {"class_type": "RandomNoise", "inputs": {"noise_seed": 770221}},
+  "ns2": {"class_type": "RandomNoise", "inputs": {"noise_seed": 880312}},
   "s2":  {"class_type": "SamplerCustomAdvanced", "inputs": {
             "noise": ["ns2", 0], "guider": ["gd2", 0], "sampler": ["sm2", 0],
             "sigmas": ["sg2", 0], "latent_image": ["ct2", 0]}},
@@ -140,7 +139,7 @@ g = {
             "samples": ["sp2", 0], "vae": ["ck", 2],
             "tile_size": 768, "overlap": 64, "temporal_size": 4096, "temporal_overlap": 64}},
   "sv":  {"class_type": "SaveImage", "inputs": {
-            "images": ["dec", 0], "filename_prefix": "r9_frames_v2/r9"}},
+            "images": ["dec", 0], "filename_prefix": "r9b_pessoa/p"}},
 }
 
 print("enfileirando LTX 2.3 i2v...", flush=True)

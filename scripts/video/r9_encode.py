@@ -11,6 +11,9 @@ FRAMES = sys.argv[1] if len(sys.argv) > 1 else r"C:\WORKS\ComfyUI\output\r9_fram
 DESTINO = r"C:\Users\ricar\WORKSMAIN\autoresearch\fayapoint-ai\public\radar"
 LARGURA = 960
 TETO_KB = 400
+# A escala comeca em 38, nao em 34. Comparados os quadros de crf 34/36/38/40 no
+# tamanho REAL de exibicao (480 px de largura), sao indistinguiveis — 34 so
+# gasta 40% mais bytes para detalhe que ninguem ve nesse tamanho.
 
 os.makedirs(DESTINO, exist_ok=True)
 fs = sorted(glob.glob(os.path.join(FRAMES, "*.png")))
@@ -36,7 +39,7 @@ subprocess.run(["ffmpeg", "-y", "-i", fs[0], "-vf", f"scale={LARGURA}:-2",
                 "-quality", "82", poster], check=True,
                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-for crf in (34, 38, 42, 46, 50):
+for crf in (38, 42, 46, 50):
     subprocess.run([
         "ffmpeg", "-y", "-framerate", "25", "-start_number", str(inicio), "-i", padrao,
         "-vf", f"scale={LARGURA}:-2",
