@@ -3,6 +3,100 @@
 
 ---
 
+## 🔴 HANDOFF ABERTO — DEFEITOS ACHADOS PELO RICARDO USANDO O SITE (27/07/2026)
+
+**Esta é a fila da próxima sessão. Nada aqui foi corrigido** — ele pediu explicitamente diagnóstico e handoff, não conserto, porque a cota da semana já está pela metade. Tudo abaixo foi **verificado em produção**, com a causa isolada e não suposta.
+
+> **Ordem sugerida:** D1 → D2 → D3 são bugs de uma linha a poucas linhas, com impacto visual enorme e risco quase zero. D4 e D8 são trabalho de interface. D5, D6 e D7 são produto — envolvem decidir o que a ferramenta *é*, e é onde está o valor real que ele cobrou.
+
+### D1 · O `.fx-orb` não é absoluto fora da home — 449 px de vazio no topo da `/radar`
+
+**Sintoma dele:** *"temos um espaço gigante antes de apresentar o conteúdo"* (desktop e celular).
+
+**Causa, isolada:** a regra `.fx-orb { position: absolute; ... }` está declarada **dentro de um `<style>` no `NovaLanding.tsx`** (linha ~363). Quem não renderiza o `NovaLanding` nunca recebe essa regra. A `/radar` é exatamente esse caso: medido em produção, `position: static`, sem nenhuma regra `.fx-orb` nas folhas de estilo da página. O orbe decorativo de 420×420 vira um bloco no fluxo normal e empurra a página inteira para baixo.
+
+Medido: **449 px** entre o fim do nav e o `<h1>` na `/radar`. Na home, os 9 orbes estão todos `absolute` e o layout está correto — por isso o defeito passou despercebido.
+
+**Solução:** mover a regra `.fx-orb` (e as `@keyframes fx-drift-a/b` que a acompanham) do `<style>` do `NovaLanding` para o CSS global. Enquanto ela morar num componente, qualquer página nova que use a classe nasce quebrada. ⚠️ Verificar junto as outras classes do mesmo bloco (`.fx-shine`, `.fx-magic`, `.fx-float`, `.fx-conf`) — têm o mesmo problema latente.
+
+**Aceite:** abrir `/pt-BR/radar` e o título aparecer logo abaixo do menu, sem tela vazia.
+
+### D2 · Barras de volume com 1000% de largura
+
+**Achado durante a verificação** — ele não relatou, e é o defeito que mais estraga a leitura do ranking.
+
+**Causa:** `volumeTopo = itens[0]?.volume || 1` (`RadarSection.tsx` ~141 e `RadarPagina.tsx`) assume que o **primeiro item é o de maior volume**. Não é: no degrau "mundo" a lista é ordenada por *em quantos países o assunto aparece*, e as leituras da Wikipédia entram na mesma lista com contagem de visitas, que é outra escala. Quando o item 0 tem volume pequeno (ou zero, virando o `|| 1`), a razão explode.
+
+Medido em produção no celular: larguras de `1000%`, `500%`, `200%` — e elementos com **85.226 px** de largura. Não quebra o scroll horizontal porque o pai tem `overflow: hidden`, mas **todas as barras ficam cheias** e a comparação visual entre assuntos deixa de existir.
+
+**Solução:** `const volumeTopo = Math.max(1, ...itens.map(i => i.volume))`. Uma linha, nos dois arquivos.
+
+**Aceite:** no celular, as barras da lista terem comprimentos visivelmente diferentes entre si.
+
+### D3 · O painel do assunto vaza para fora do mapa no celular
+
+**Sintoma dele:** *"quase tudo fica errado e fora do nosso modal do mapa"* — visível no print dele: o cartão "EM ALTA · Apple iPhone… 1.000…" atravessa a borda direita do mapa e é cortado.
+
+**Causa:** o `ModalAssunto` foi desenhado para o painel HUD do desktop, onde o mapa tem 420-560 px. No celular o container do globo mede **317×317** e o painel é posicionado dentro dele com largura pensada para a tela grande. O deslocamento de câmera por `setViewOffset` (que abre espaço para o painel) também pressupõe largura que o celular não tem.
+
+**Solução:** abaixo de `sm`, o painel deixa de ser HUD-dentro-do-mapa e vira uma folha ancorada **abaixo** do mapa (ou um bottom-sheet), com o mapa mantendo o destaque da região. O gesto de entrada/saída e o alfinete continuam; o que muda é a âncora. Não tentar encolher o HUD atual — em 317 px ele não cabe de forma legível.
+
+**Aceite:** abrir um assunto no celular e o painel ficar inteiro na tela, sem corte.
+
+### D4 · IA Trend na home não tem cartão nem relação com o mapa
+
+**Sintoma dele:** *"não temos os cards 3d nem o relacionamento deles quando fazemos o hover sobre um trend aparecendo no mapa"*.
+
+**Causa, confirmada no código:** as linhas do IA Trend (`PainelIa`, `RadarSection.tsx` ~852) são `<div>` puras — sem `onClick`, sem `onMouseEnter`. E o componente **não recebe** `onDestacar`/`onAbrir`: sua assinatura tem só `nichoId`, `fontes`, `linhas`, `notaTopo`. O World Trend tem toda a ligação com o globo; o IA Trend nunca teve.
+
+⚠️ **A parte do mapa não é trabalho de interface, é de dado.** O IA Trend vem do autocomplete do Google/YouTube consultado com `gl=br` — é **nacional, sem recorte geográfico**. Não existe "onde" para acender no mapa. Para o hover fazer o que ele espera, é preciso **medir o IA Trend por região**, repetindo as consultas com o parâmetro de região por estado. Isso multiplica o número de consultas (hoje 18 por nicho) e precisa de cache próprio — decidir o alcance antes de codar.
+
+**Solução em duas partes:** (a) barata e imediata — a linha do IA Trend vira botão e abre o mesmo `ModalAssunto` do World Trend, com nota, canais e a ponte do nicho; (b) cara — medição regional para destravar o hover no mapa.
+
+### D5 · O IA Trend da `/radar` é só uma âncora
+
+**Sintoma dele:** *"clicamos em ia trend, ele simplesmente nos leva a parte de baixo da página, ignorando completamente tudo que fizemos e está pronto na home"*.
+
+**Causa:** na home o botão troca a **camada** do radar (`onVerIa={() => setCamada("ia")}`) — o globo muda, o painel muda. Na `/radar` é `<a href="#ia-trend">` (`RadarPagina.tsx` ~282): só rola a página. Duas implementações diferentes para o mesmo botão.
+
+**Solução:** a `/radar` passa a trocar de camada como a home, e a seção `#ia-trend` deixa de ser um destino de rolagem para virar a leitura completa que a página dedicada deveria ter. Ele foi explícito: *"deveria ser ainda mais completo com mais informações gráficos temporais"* — ver D6, porque gráfico temporal depende de ter histórico.
+
+### D6 · Não guardamos nada do que medimos — e é o que ele mais cobrou
+
+**Palavras dele:** *"não percebemos nenhum tipo de inteligência do nosso sistema para com os dados que já obtivemos, servimos anteriormente… se é inútil pra gente, por conseguinte será inútil para ele. Temos que criar valor para o usuário com nossa ferramenta e nossas informações coletadas."*
+
+**Causa:** todo o Radar é **stateless**. `/api/radar` e `/api/radar/mundo` medem, guardam num cache em memória do processo (30 min / 6 h) e esquecem. Nada vai para o banco. Um visitante que volta amanhã vê uma foto do agora, sem nenhuma memória — e nós também não temos.
+
+**Solução (é uma fase, não um patch):** persistir cada medição numa coleção (`radar_snapshots`: lugar/nicho, termo, volume ou nota, canais, `medidoEm`) alimentada pelos próprios endpoints, ou por um cron leve. Com histórico nasce o que ele pediu e o que hoje não existe em lugar nenhum de graça:
+- **série temporal** por assunto e por nicho (o gráfico que ele quer);
+- **"subiu/caiu"** contra ontem e contra a semana — que é a leitura que faz o visitante voltar;
+- **"apareceu agora"**: assunto que não existia no snapshot anterior;
+- **memória por região**, que dá sentido ao mapa no IA Trend (D4).
+
+⚠️ Ler [[reference_google_trends_volume]] antes de desenhar o gráfico: o volume do Google **não é comparável entre lugares**. Série temporal do *mesmo* lugar é legítima; comparar lugares por volume não é.
+
+### D7 · A metodologia está detalhada demais
+
+**Palavras dele:** *"Dentro do radar damos nosso método de medição de forma detalhada, e não precisamos, nem devemos, apenas dizer que são dados reais basta."*
+
+**Onde:** seção "COMO ISTO É MEDIDO" (`RadarPagina.tsx` ~622) e o parágrafo de nota no fim do `PainelIa`.
+
+**Solução:** reduzir a uma linha do tipo "dados reais, medidos agora, com link para a fonte". ⚠️ **Não apagar a frase de limite do volume** (a que explica que São Paulo aparecer abaixo de Mato Grosso do Sul não significa menos procura) enquanto houver qualquer número comparando lugares na tela — ela é o que impede o número de ser lido errado. Se D6 trouxer gráfico comparativo, essa ressalva tem que sobreviver em algum lugar.
+
+### D8 · O WhatsApp atrapalha a leitura — ele já disse como quer
+
+**Palavras dele:** *"na home o modal do whatsapp fica incomodando quando tentamos ler algo… quero que ao chegar no fim da página ele se acople entre o footer e os botões, e que dentro dele no canto superior esquerdo, tenha um botão de x, como se fosse para fechar, mas ele vai se acoplar ao fundo. No celular isso fica ainda pior e esta solução resolve tudo."*
+
+**Estado atual:** `WhatsAppButton.tsx` é `fixed bottom-5 right-5 z-50` e já tem um `useFooterClearance` que, ao ver o rodapé, **sobe** o botão. É o oposto do que ele quer.
+
+**Solução:** trocar a elevação por **acoplamento** — ao rodapé entrar na viewport, o botão sai de `fixed` e passa a ocupar um lugar próprio entre o rodapé e a grade de botões. Somar o "X" no canto superior esquerdo que **acopla** (não fecha), com a preferência guardada em `localStorage` para não voltar a incomodar na próxima página. Montado hoje só em `/[locale]/page.tsx` e `/descobrir` — confirmar onde mais deve existir.
+
+### O que NÃO está nesta lista
+
+O **conteúdo do vídeo** da `/radar`. Ele disse: *"não se preocupe com o conteúdo do vídeo, vamos refazer no higgsfield"*. O componente (`VideoAbertura.tsx`), o carregamento tardio, o loop e a retomada por `visibilitychange` continuam valendo — o que troca é o arquivo. **Mas ver D1:** ele quer o vídeo ocupando o espaço vazio do topo, e não ao lado do título como está hoje; isso é decisão de composição que vem junto com o conserto do gap.
+
+---
+
 ## 🤝 HANDOFF — RADAR FAYAI + 3D NA INTERFACE (fechado 26/07/2026)
 
 **Para quem abrir uma sessão nova: leia este bloco inteiro antes de tocar em qualquer coisa.** Sessão de ~24h com o Ricardo, evolução contínua.
