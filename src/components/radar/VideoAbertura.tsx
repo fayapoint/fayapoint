@@ -32,18 +32,49 @@ export function VideoAbertura() {
     if (!v) return;
 
     const reduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let naTela = false;
+
+    // Tenta e deixa o navegador recusar, em vez de decidir por ele a partir de
+    // `document.hidden`. Medido em 27/07: o painel de navegador embutido reporta
+    // `hidden: true` de forma permanente mesmo com a página à vista — condicionar
+    // o play a essa flag deixaria o vídeo parado para sempre nesse caso. Uma
+    // recusa do navegador é inofensiva (a promessa rejeita e nós engolimos);
+    // não tentar é que custa o vídeo.
+    const tocar = () => {
+      if (reduzido || !naTela) return;
+      void v.play().catch(() => {});
+    };
 
     const obs = new IntersectionObserver(
       ([e]) => {
+        naTela = e.isIntersecting;
         setVisivel(e.isIntersecting);
         if (reduzido) return;
-        if (e.isIntersecting) void v.play().catch(() => {});
+        if (e.isIntersecting) tocar();
         else v.pause();
       },
       { rootMargin: "120px" }
     );
     obs.observe(v);
-    return () => obs.disconnect();
+
+    /**
+     * O Chrome pausa mídia muda e sem áudio quando a aba sai de vista, para
+     * economizar bateria — o `play()` volta com
+     * "AbortError: video-only background media was paused to save power".
+     * Sozinho o IntersectionObserver não recupera disso: o elemento nunca
+     * deixou de intersectar, então o observer não dispara de novo e quem
+     * trocou de aba e voltou encontra o vídeo congelado. Daí este ouvinte.
+     */
+    const aoVoltar = () => {
+      if (document.hidden) v.pause();
+      else tocar();
+    };
+    document.addEventListener("visibilitychange", aoVoltar);
+
+    return () => {
+      obs.disconnect();
+      document.removeEventListener("visibilitychange", aoVoltar);
+    };
   }, []);
 
   // Sem o arquivo, a página segue inteira: o vídeo é reforço do argumento,
