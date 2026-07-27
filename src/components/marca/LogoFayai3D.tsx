@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
+import { RECEITAS, VARIANTE_ATUAL, type VarianteLogo } from "@/components/marca/logo3d-variantes";
 
 /**
  * O logo em 3D de verdade — WebGL, extrudado a partir dos contornos da fonte.
@@ -28,15 +29,21 @@ interface PecaLogo {
   cor: string;
 }
 
-let cachePecas: PecaLogo[] | null = null;
+/** Uma malha por variante: a extrusão faz parte da leitura, não é só material. */
+const cachePecas: Partial<Record<VarianteLogo, PecaLogo[]>> = {};
 /** Largura do logo com altura normalizada em 1 — usada para enquadrar. */
 let cacheProporcao = 2.8;
 
-function usarLogo(): PecaLogo[] | null {
-  const [pecas, setPecas] = useState<PecaLogo[] | null>(cachePecas);
+function usarLogo(variante: VarianteLogo): PecaLogo[] | null {
+  const [pecas, setPecas] = useState<PecaLogo[] | null>(cachePecas[variante] ?? null);
 
   useEffect(() => {
-    if (cachePecas) return;
+    const pronto = cachePecas[variante];
+    if (pronto) {
+      setPecas(pronto);
+      return;
+    }
+    const { extrusao } = RECEITAS[variante];
     new SVGLoader().load(CAMINHO_SVG, (dados) => {
       const brutas: PecaLogo[] = [];
       for (const caminho of dados.paths) {
@@ -44,11 +51,8 @@ function usarLogo(): PecaLogo[] | null {
         const formas = SVGLoader.createShapes(caminho);
         for (const forma of formas) {
           const geo = new THREE.ExtrudeGeometry(forma, {
-            depth: 180,
+            ...extrusao,
             bevelEnabled: true,
-            bevelThickness: 26,
-            bevelSize: 18,
-            bevelSegments: 3,
             curveSegments: 6,
           });
           brutas.push({ geo, cor });
@@ -76,10 +80,10 @@ function usarLogo(): PecaLogo[] | null {
       }
 
       cacheProporcao = Math.max(0.5, tam.x / Math.max(tam.y, 1e-6));
-      cachePecas = brutas;
+      cachePecas[variante] = brutas;
       setPecas(brutas);
     });
-  }, []);
+  }, [variante]);
 
   return pecas;
 }
@@ -89,14 +93,16 @@ function Letras({
   recolhendo,
   demonstrando,
   semente,
+  variante,
 }: {
   mouse: React.RefObject<{ x: number; y: number }>;
   recolhendo: boolean;
   demonstrando: boolean;
   /** Desloca a fase do giro — cada aparição começa de um ângulo diferente. */
   semente: number;
+  variante: VarianteLogo;
 }) {
-  const pecas = usarLogo();
+  const pecas = usarLogo(variante);
   const grupo = useRef<THREE.Group>(null);
   const entrada = useRef(0);
   const { viewport } = useThree();
@@ -160,17 +166,63 @@ function Letras({
   return (
     <group ref={grupo} scale={0}>
       <group scale={escala}>
-        {pecas.map((p, i) => (
-          <mesh key={i} geometry={p.geo}>
-            <meshStandardMaterial
-              color={p.cor}
-              metalness={p.cor.toLowerCase() === "#f5c04e" ? 0.85 : 0.35}
-              roughness={p.cor.toLowerCase() === "#f5c04e" ? 0.22 : 0.4}
-              emissive={p.cor}
-              emissiveIntensity={0.12}
-            />
-          </mesh>
-        ))}
+        {pecas.map((p, i) => {
+          const dourado = p.cor.toLowerCase() === "#f5c04e";
+
+          if (variante === "vidro") {
+            // O ouro fica sólido de propósito: se as duas metades virassem
+            // vidro, o logo perderia o contraste que o torna legível de longe.
+            return dourado ? (
+              <mesh key={i} geometry={p.geo}>
+                <meshStandardMaterial color={p.cor} metalness={0.95} roughness={0.14} emissive={p.cor} emissiveIntensity={0.18} />
+              </mesh>
+            ) : (
+              <mesh key={i} geometry={p.geo}>
+                <meshPhysicalMaterial
+                  color="#dfe6ff"
+                  transmission={0.92}
+                  thickness={1.1}
+                  ior={1.46}
+                  roughness={0.08}
+                  metalness={0}
+                  // Sem espessura óptica o vidro vira plástico leitoso.
+                  attenuationColor="#7f9cff"
+                  attenuationDistance={2.4}
+                  clearcoat={1}
+                  clearcoatRoughness={0.06}
+                />
+              </mesh>
+            );
+          }
+
+          if (variante === "contorno") {
+            // Duas passagens: o corpo escuro engole a luz, e uma casca um
+            // pouco maior desenhada por dentro (BackSide) escapa só na
+            // silhueta — é isso que acende a aresta sem post-processing.
+            return (
+              <group key={i}>
+                <mesh geometry={p.geo} scale={1.035}>
+                  <meshBasicMaterial color={dourado ? "#f5c04e" : "#8ab4ff"} side={THREE.BackSide} />
+                </mesh>
+                <mesh geometry={p.geo}>
+                  <meshStandardMaterial color="#0b0f1f" metalness={0.6} roughness={0.85} emissive={dourado ? "#f5c04e" : "#6d8cff"} emissiveIntensity={0.16} />
+                </mesh>
+              </group>
+            );
+          }
+
+          return (
+            <mesh key={i} geometry={p.geo}>
+              <meshStandardMaterial
+                color={p.cor}
+                metalness={dourado ? 0.85 : 0.35}
+                roughness={dourado ? 0.22 : 0.4}
+                emissive={p.cor}
+                emissiveIntensity={0.12}
+              />
+            </mesh>
+          );
+        })}
       </group>
     </group>
   );
@@ -181,11 +233,13 @@ export function LogoFayai3D({
   recolhendo = false,
   demonstrando = false,
   semente = 0,
+  variante = VARIANTE_ATUAL,
 }: {
   mouse: React.RefObject<{ x: number; y: number }>;
   recolhendo?: boolean;
   demonstrando?: boolean;
   semente?: number;
+  variante?: VarianteLogo;
 }) {
   return (
     <Canvas
@@ -200,7 +254,7 @@ export function LogoFayai3D({
       <ambientLight intensity={0.55} />
       <directionalLight position={[2.4, 2.2, 3]} intensity={2.1} color="#fff6e2" />
       <directionalLight position={[-2.6, -1.2, 1.6]} intensity={0.8} color="#8ab4ff" />
-      <Letras mouse={mouse} recolhendo={recolhendo} demonstrando={demonstrando} semente={semente} />
+      <Letras mouse={mouse} recolhendo={recolhendo} demonstrando={demonstrando} semente={semente} variante={variante} />
     </Canvas>
   );
 }

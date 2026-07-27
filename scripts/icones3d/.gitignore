@@ -1,0 +1,4 @@
+# Intermediários pesados e reproduzíveis pelos próprios scripts:
+# 51 imagens-fonte (~45 MB) e 51 malhas cruas antes da decimação.
+fonte/
+malhas/

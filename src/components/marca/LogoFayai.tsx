@@ -19,6 +19,8 @@ import dynamic from "next/dynamic";
  * ritmo, então a troca acontece sem salto.
  */
 
+import { VARIANTE_ATUAL, type VarianteLogo } from "@/components/marca/logo3d-variantes";
+
 const LogoFayai3D = dynamic(
   () => import("@/components/marca/LogoFayai3D").then((m) => ({ default: m.LogoFayai3D })),
   { ssr: false }
@@ -44,7 +46,16 @@ const entre = (min: number, max: number) => min + Math.random() * (max - min);
 
 type Fase = "plano" | "3d" | "recolhendo";
 
-export function LogoFayai({ texto = "FayAi", className = "" }: { texto?: string; className?: string }) {
+export function LogoFayai({
+  texto = "FayAi",
+  className = "",
+  variante = VARIANTE_ATUAL,
+}: {
+  texto?: string;
+  className?: string;
+  /** Qual das três leituras usar. O padrão é a que está no ar. */
+  variante?: VarianteLogo;
+}) {
   const [fase, setFase] = useState<Fase>("plano");
   const [demo, setDemo] = useState(false);
   /** Desloca o ponto de partida do giro a cada aparição. */
@@ -165,6 +176,7 @@ export function LogoFayai({ texto = "FayAi", className = "" }: { texto?: string;
             demonstrando={emDemonstracao}
             semente={semente}
             mouse={mouse}
+            variante={variante}
           />
         </span>
       )}

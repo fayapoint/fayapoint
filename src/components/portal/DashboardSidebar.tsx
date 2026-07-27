@@ -38,6 +38,15 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { UserAvatarWithBadges } from "@/components/user/UserAvatarWithBadges";
+import dynamic from "next/dynamic";
+import { temIcone3D } from "@/components/portal/IconeMenu3D";
+
+// WebGL não entra no bundle do portal: o chunk só é baixado quando alguém
+// passa o cursor pela primeira vez. Quem nunca passar não paga nada.
+const IconeMenu3D = dynamic(
+  () => import("@/components/portal/IconeMenu3D").then((m) => m.IconeMenu3D),
+  { ssr: false }
+);
 
 interface Achievement {
   id: string;
@@ -102,6 +111,14 @@ export function DashboardSidebar({
   onCollapsedChange
 }: DashboardSidebarProps) {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
+  /**
+   * Quem está autorizado a desenhar em 3D agora.
+   *
+   * Mora aqui, e não dentro de cada item, porque é o que garante UM contexto
+   * WebGL no menu inteiro: dezessete itens montando o seu próprio canvas
+   * estouraria o limite do navegador na primeira varrida de cursor.
+   */
+  const [hover3d, setHover3d] = useState<string | null>(null);
   const pathname = usePathname();
   const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en");
   const cubeHref = locale ? `/${locale}` : "/";
@@ -208,6 +225,8 @@ export function DashboardSidebar({
               <button
                 key={item.id}
                 onClick={() => !isLocked && onTabChange(item.id)}
+                onMouseEnter={() => !isLocked && temIcone3D(item.id) && setHover3d(item.id)}
+                onMouseLeave={() => setHover3d((atual) => (atual === item.id ? null : atual))}
                 disabled={isLocked}
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative",
@@ -218,10 +237,19 @@ export function DashboardSidebar({
                   isCollapsed && "justify-center px-2"
                 )}
               >
-                <item.icon size={20} className={cn(
-                  "shrink-0 transition-transform",
-                  isActive && "scale-110"
-                )} />
+                <span className="relative shrink-0 block w-5 h-5">
+                  {/* O vetorial é a leitura padrão; ele apenas desvanece
+                      enquanto a peça 3D entra, e volta quando ela sai. */}
+                  <item.icon
+                    size={20}
+                    className={cn(
+                      "transition-all duration-200",
+                      isActive && "scale-110",
+                      hover3d === item.id && "opacity-0 scale-90"
+                    )}
+                  />
+                  {hover3d === item.id && <IconeMenu3D slug={item.id} aceso />}
+                </span>
                 
                 {!isCollapsed && (
                   <>
