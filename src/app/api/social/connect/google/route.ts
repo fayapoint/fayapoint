@@ -34,7 +34,12 @@ export async function GET(request: NextRequest) {
 
   const origin = getPublicOrigin(request);
   const redirectUri = `${origin}/api/social/connect/google/callback`;
-  const state = Buffer.from(JSON.stringify({ userId: user.id, redirect: '/admin/social' })).toString('base64url');
+
+  // De onde o usuário saiu é onde ele volta. Antes era sempre /admin/social,
+  // e quem clicava no portal era despejado numa tela de administrador.
+  const pedido = request.nextUrl.searchParams.get('redirect');
+  const volta = pedido && pedido.startsWith('/') && !pedido.startsWith('//') ? pedido : '/portal?tab=social';
+  const state = Buffer.from(JSON.stringify({ userId: user.id, redirect: volta })).toString('base64url');
 
   const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
   authUrl.searchParams.set('client_id', GOOGLE_CLIENT_ID);
@@ -44,6 +49,10 @@ export async function GET(request: NextRequest) {
   authUrl.searchParams.set('response_type', 'code');
   authUrl.searchParams.set('access_type', 'offline');
   authUrl.searchParams.set('prompt', 'consent');
+  // Quem já entrou com o Google não escolhe conta de novo: o e-mail vai como
+  // dica e a tela do Google fica só com o "permitir".
+  authUrl.searchParams.set('login_hint', user.email);
+  authUrl.searchParams.set('include_granted_scopes', 'true');
 
   return NextResponse.redirect(authUrl.toString());
 }

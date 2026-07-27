@@ -39,7 +39,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { UserAvatarWithBadges } from "@/components/user/UserAvatarWithBadges";
 import dynamic from "next/dynamic";
-import { temIcone3D } from "@/components/portal/IconeMenu3D";
+import { temIcone3D } from "@/data/icones3d-tem";
 
 // WebGL não entra no bundle do portal: o chunk só é baixado quando alguém
 // passa o cursor pela primeira vez. Quem nunca passar não paga nada.

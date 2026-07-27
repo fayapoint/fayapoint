@@ -7,6 +7,7 @@ import { getMongoClient } from "@/lib/products";
 import { resolvePlan } from "@/lib/course-tiers";
 import { parseExampleSlots } from "@/lib/course-examples";
 import { generate } from "@/lib/ai/provider";
+import { blocoDePersona, type PersonaProfunda } from "@/lib/persona";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -65,19 +66,11 @@ export async function POST(request: NextRequest) {
     }).select("exampleId");
     const existingIds = new Set(existing.map((e) => e.exampleId));
 
-    const persona = user.socialPersona || ({} as typeof user.socialPersona);
-    const personaResumo = [
-      persona.industry?.length ? `Setor: ${persona.industry.join(", ")}` : "",
-      persona.marketingGoals?.length ? `Objetivos: ${persona.marketingGoals.join(", ")}` : "",
-      persona.toneOfVoice?.length ? `Tom de voz: ${persona.toneOfVoice.join(", ")}` : "",
-      persona.contentTypes?.length ? `Produz: ${persona.contentTypes.join(", ")}` : "",
-      persona.experienceLevel ? `Nível com IA: ${persona.experienceLevel}` : "",
-      persona.contentThemes?.length ? `Temas do conteúdo dele: ${persona.contentThemes.slice(0, 5).join(", ")}` : "",
-      persona.audienceInsights ? `Público dele: ${persona.audienceInsights}` : "",
-      persona.writingStyle ? `Estilo de escrita dele: ${persona.writingStyle}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
+    // O mesmo contexto profundo que o gerador de posts usa, com o recorte de
+    // CURSO: aqui interessa nível, ritmo de aprendizado, ferramentas que ele
+    // já tem abertas e o que ele tentou e não deu certo. Ver `lib/persona.ts`.
+    const persona = (user.socialPersona || {}) as unknown as PersonaProfunda;
+    const personaResumo = blocoDePersona(persona, "curso");
 
     if (!personaResumo) {
       return NextResponse.json(

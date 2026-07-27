@@ -128,6 +128,9 @@ export async function GET(request: NextRequest) {
           tokenExpiresAt: new Date(Date.now() + expiresIn * 1000),
           isActive: true,
           status: 'active',
+          // Agora sim: o vínculo tem permissão de plataforma, não só
+          // identidade. É esta diferença que a aba Contas mostra ao usuário.
+          scopes: (tokenData.scope || '').split(' ').filter(Boolean),
           lastSync: new Date(),
           metadata: {
             profilePictureUrl: googleUser.picture || '',

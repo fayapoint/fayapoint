@@ -35,6 +35,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { TrailMap } from "@/components/portal/TrailMap";
+import { CartaoPersona } from "@/components/portal/CartaoPersona";
 import { PortalTour } from "@/components/portal/PortalTour";
 import { ArcadeBanner } from "@/components/portal/MinigamesPanel";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
@@ -390,26 +391,7 @@ export function DashboardHome({
       {/*  SUA PERSONA — em destaque (pedido do Ricardo 16/07) */}
       {/* ═══════════════════════════════════════════════════ */}
       <motion.div variants={itemVariants}>
-        <Card
-          className="relative overflow-hidden border-violet-500/20 bg-card cursor-pointer group hover:border-violet-500/40 transition-all"
-          onClick={() => onTabChange("social")}
-        >
-          <div className="flex items-center gap-4 p-4">
-            <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl">
-              {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
-              <img src="/portal/persona/vidente-hero.webp" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h3 className="text-base font-bold flex items-center gap-2"><Sparkles size={15} className="text-violet-400" /> Sua Persona</h3>
-              <p className="mt-0.5 text-sm text-muted-foreground leading-snug">
-                Cada jogo e leitura ensina o site a te conhecer — e molda o conteúdo para você. Visite o Vidente e complete seu perfil.
-              </p>
-            </div>
-            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-extrabold text-[#241a05] shrink-0 group-hover:opacity-90 transition-opacity" style={{ background: "linear-gradient(135deg, #a78bfa, #c4b5fd)" }}>
-              Abrir <ChevronRight size={14} />
-            </span>
-          </div>
-        </Card>
+        <CartaoPersona onAbrir={() => onTabChange("social")} />
       </motion.div>
 
       {/* ═══════════════════════════════════════════════════ */}

@@ -7,6 +7,7 @@ import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 import { getAuthUser } from '@/lib/auth';
 import { fireWelcomeFlow } from '@/lib/welcome-email';
+import { vincularGoogleDoLogin } from '@/lib/social-identity';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -228,6 +229,16 @@ export async function GET(request: NextRequest) {
       // P5: boas-vindas + aviso ao admin — só em conta NOVA
       fireWelcomeFlow(user.name, user.email, 'google-oauth');
     }
+
+    // A conta com que ele entrou passa a aparecer conectada na aba Contas —
+    // pedir para entrar de novo com a mesma conta era o atrito mais gratuito
+    // do portal. Ver `lib/social-identity.ts` para o que este vínculo NÃO dá.
+    await vincularGoogleDoLogin(user._id, {
+      id: googleUser.id,
+      email: googleUser.email,
+      name: googleUser.name,
+      picture: googleUser.picture,
+    });
 
     // Create JWT token
     const jwtToken = jwt.sign(

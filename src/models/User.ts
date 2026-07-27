@@ -181,6 +181,73 @@ export interface IUser extends Document {
     weights: { profile: number; social: number; custom: number };
     lastAnalyzed?: Date;
     completionPercent: number;
+    /**
+     * Quantos passos e blocos já RENDERAM XP. Sem este teto, desmarcar e
+     * remarcar uma opção viraria fazenda de XP — o mesmo defeito que o
+     * check-in diário teve em 16/07. Ver a rota `social-persona`.
+     */
+    xpPassosPagos?: number;
+    xpBlocosPagos?: number;
+    /**
+     * A profundidade que o USS de 2024 já tinha e aqui faltava (27/07/2026).
+     *
+     * Os campos acima são rótulos: bons para escolher com o dedo, fracos para
+     * escrever. Estes são o que faz um texto soar como a pessoa — sobretudo
+     * `voz.amostra`, que vale mais no prompt do que todos os adjetivos de tom
+     * somados. Ver `src/lib/persona.ts`, que é quem lê e escreve isto.
+     *
+     * Tudo opcional de propósito: a persona é preenchida ao longo do tempo, e
+     * o painel do dossiê mede o quanto já sabemos em vez de exigir tudo de uma
+     * vez.
+     */
+    identidade?: {
+      marca?: string;
+      papel?: string;
+      cidade?: string;
+      missao?: string;
+      valores?: string[];
+      site?: string;
+    };
+    voz?: {
+      emoji?: number;
+      formalidade?: number;
+      bordoes?: string[];
+      usaHumor?: boolean;
+      usaPergunta?: boolean;
+      usaHistoria?: boolean;
+      usaCta?: boolean;
+      vocabulario?: string;
+      amostra?: string;
+    };
+    publico?: {
+      idade?: number[];
+      lugares?: string[];
+      quemE?: string;
+      dores?: string[];
+      desejos?: string[];
+    };
+    estrategia?: {
+      pilares?: string[];
+      porSemana?: number;
+      melhoresHorarios?: string[];
+      assinatura?: string;
+      naoFalar?: string[];
+    };
+    aprendizado?: {
+      objetivo?: string;
+      ritmo?: string;
+      tempo?: string;
+      ferramentas?: string[];
+      travando?: string;
+    };
+    /** Rosto do usuário por contexto de uso — ver TIPOS_FOTO em lib/persona.ts */
+    fotos?: {
+      tipo: string;
+      url: string;
+      origem: string;
+      publicId?: string;
+      addedAt?: Date;
+    }[];
   };
   // Helper methods for course access
   getActiveEnrollments(): IEnrolledCourse[];
@@ -402,6 +469,59 @@ const UserSchema = new Schema<IUser>({
     },
     lastAnalyzed: { type: Date },
     completionPercent: { type: Number, default: 0 },
+    xpPassosPagos: { type: Number, default: 0 },
+    xpBlocosPagos: { type: Number, default: 0 },
+    // Profundidade USS (27/07) — ver a interface acima para o porquê de cada bloco
+    identidade: {
+      marca: { type: String, default: '' },
+      papel: { type: String, default: '' },
+      cidade: { type: String, default: '' },
+      missao: { type: String, default: '' },
+      valores: [{ type: String }],
+      site: { type: String, default: '' },
+    },
+    voz: {
+      emoji: { type: Number },
+      formalidade: { type: Number },
+      bordoes: [{ type: String }],
+      usaHumor: { type: Boolean },
+      usaPergunta: { type: Boolean },
+      usaHistoria: { type: Boolean },
+      usaCta: { type: Boolean },
+      vocabulario: { type: String, default: '' },
+      amostra: { type: String, default: '' },
+    },
+    publico: {
+      idade: [{ type: Number }],
+      lugares: [{ type: String }],
+      quemE: { type: String, default: '' },
+      dores: [{ type: String }],
+      desejos: [{ type: String }],
+    },
+    estrategia: {
+      pilares: [{ type: String }],
+      porSemana: { type: Number },
+      melhoresHorarios: [{ type: String }],
+      assinatura: { type: String, default: '' },
+      naoFalar: [{ type: String }],
+    },
+    aprendizado: {
+      objetivo: { type: String, default: '' },
+      ritmo: { type: String, default: '' },
+      tempo: { type: String, default: '' },
+      ferramentas: [{ type: String }],
+      travando: { type: String, default: '' },
+    },
+    fotos: [
+      {
+        _id: false,
+        tipo: { type: String },
+        url: { type: String },
+        origem: { type: String, default: 'upload' },
+        publicId: { type: String },
+        addedAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   lastLoginAt: Date,
 }, {

@@ -13,6 +13,13 @@ export interface ISocialAccount extends Document {
   tokenExpiresAt?: Date;
   isActive: boolean;
   status: 'active' | 'pending' | 'error' | 'disconnected';
+  /**
+   * O que este vínculo pode fazer. O login social devolve só identidade
+   * (`openid email profile`); publicar exige escopo de plataforma. Sem
+   * registrar isto, "conectado" vira uma promessa que o botão de publicar
+   * quebra na frente do usuário. Ver `lib/social-identity.ts`.
+   */
+  scopes: string[];
   lastSync?: Date;
   metadata: {
     followerCount: number;
@@ -54,6 +61,7 @@ const SocialAccountSchema = new Schema<ISocialAccount>(
       enum: ['active', 'pending', 'error', 'disconnected'],
       default: 'pending',
     },
+    scopes: [{ type: String }],
     lastSync: { type: Date },
     metadata: {
       followerCount: { type: Number, default: 0 },

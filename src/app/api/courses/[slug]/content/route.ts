@@ -19,6 +19,8 @@ import {
 import { resolveContentFacts } from '@/lib/content-facts';
 import { substituteExamples } from '@/lib/course-examples';
 import UserCourseExample from '@/models/UserCourseExample';
+import UserCourseLayer from '@/models/UserCourseLayer';
+import { injetarCamada } from '@/lib/curso-personalizado';
 
 type CourseModule = {
   title?: string;
@@ -208,6 +210,32 @@ export async function GET(
         }
       } catch (e) {
         console.error('Expert examples substitution error', e);
+      }
+
+      // Motor Expert v2 (27/07): a camada por CAPÍTULO. Vale para qualquer
+      // curso, inclusive os que nunca receberam slot de exemplo — que são a
+      // maioria do catálogo. Ver `lib/curso-personalizado.ts`.
+      try {
+        const camadas = await UserCourseLayer.find({
+          userId: String(user._id),
+          courseSlug: slug,
+        })
+          .select('capitulo abertura exemplo tarefa')
+          .lean();
+        if (camadas.length) {
+          payload.content = injetarCamada(
+            payload.content,
+            camadas.map((c) => ({
+              indice: c.capitulo,
+              abertura: c.abertura,
+              exemplo: c.exemplo,
+              tarefa: c.tarefa,
+            })),
+            user.name
+          );
+        }
+      } catch (e) {
+        console.error('Camada personalizada do curso', e);
       }
     }
 

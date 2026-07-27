@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
+import PautasDoDia from "@/components/portal/PautasDoDia";
 
 /**
  * Composer USS — escrever, gerar com IA, publicar agora ou agendar.
@@ -260,21 +261,25 @@ export default function SocialComposer() {
     );
   }
 
-  if (accounts.length === 0) {
-    return (
-      <div className="text-center py-10">
-        <Share2 className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
-        <p className="font-semibold text-foreground">Nenhuma conta pronta para publicar</p>
-        <p className="text-sm text-muted-foreground mt-1">
-          Conecte Facebook + Instagram na aba <span className="text-amber-400 font-semibold">Contas</span> e
-          volte aqui — publicar leva 10 segundos.
-        </p>
-      </div>
-    );
-  }
+  const semConta = accounts.length === 0;
 
   return (
     <div className="space-y-6">
+      {/* A pauta vem ANTES de tudo — inclusive de conectar conta. A tela em
+          branco trava a pessoa muito antes de a integração travar. */}
+      <PautasDoDia onEscolher={(t) => setTopic(t)} />
+
+      {semConta && (
+        <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-4 text-center">
+          <Share2 className="mx-auto mb-2 h-8 w-8 text-amber-400/70" />
+          <p className="font-semibold text-foreground">Nenhuma conta pronta para publicar</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Você pode escrever e gerar aqui do mesmo jeito. Para publicar direto, conecte Facebook + Instagram
+            na aba <span className="font-semibold text-amber-400">Contas</span>.
+          </p>
+        </div>
+      )}
+
       {/* Escolha da conta */}
       <div className="flex flex-wrap gap-2">
         {accounts.map((a) => {
@@ -378,7 +383,8 @@ export default function SocialComposer() {
       <div className="flex flex-col sm:flex-row gap-3">
         <Button
           onClick={() => createPost("now")}
-          disabled={sending !== null}
+          disabled={sending !== null || semConta}
+          title={semConta ? "Conecte uma conta na aba Contas para publicar" : undefined}
           className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-bold hover:from-amber-400 hover:to-yellow-400"
         >
           {sending === "now" ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Send className="h-4 w-4 mr-1.5" />}
@@ -393,7 +399,7 @@ export default function SocialComposer() {
           />
           <Button
             onClick={() => createPost("schedule")}
-            disabled={sending !== null}
+            disabled={sending !== null || semConta}
             variant="outline"
             className="border-sky-500/40 text-sky-300 hover:bg-sky-500/10"
           >

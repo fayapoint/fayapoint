@@ -7,6 +7,7 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 import { fireWelcomeFlow } from '@/lib/welcome-email';
+import { vincularGoogleDoLogin } from '@/lib/social-identity';
 import { rateLimit, getClientIpFromRequest } from '@/lib/rate-limit';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
@@ -120,6 +121,15 @@ export async function POST(request: Request) {
       // P5: boas-vindas + aviso ao admin — só em conta NOVA
       fireWelcomeFlow(user.name, user.email, 'google-oauth');
     }
+
+    // Mesma decisão do fluxo de código: quem entrou com o Google já tem o
+    // Google conectado. Aqui o `sub` do token é o id da conta.
+    await vincularGoogleDoLogin(user._id, {
+      id: googleUser.sub,
+      email: googleUser.email,
+      name: googleUser.name,
+      picture: googleUser.picture,
+    });
 
     // Create JWT token (same format as login route)
     const jwtToken = jwt.sign(

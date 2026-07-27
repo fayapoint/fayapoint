@@ -3,6 +3,185 @@
 
 ---
 
+## 🧠 SESSÃO 27/07 (dia) — O USS DE VERDADE: PERSONA PROFUNDA, DOSSIÊ E CURSO PERSONALIZADO
+
+> **Estado: LOCAL, buildando, NÃO deployado.** O Ricardo foi dormir depois de dois dias
+> acordado e pediu o máximo possível sem intervenção dele. Deploy só com o sim dele
+> ([[feedback_pedir_autorizacao_deploy]]).
+
+Ordem dele, resumida: *"quero que o dashboard ofereça ao usuário tudo que ele acredita
+que terá… foco no USS, a parte social deve extrair muito mais informação… ícones em 3D
+no hover… um modal ao lado angulado como o do radar… leia os documentos do USS e entenda
+a profundidade que precisamos… não apenas criar posts com a voz do usuário, devemos criar
+o conteúdo do curso personalizado… fotos… a conta do Google que usei para entrar não
+aparece conectada… pesquise ferramentas como o mLabs."*
+
+### ⛔ O achado que explica tudo: a persona NUNCA foi salva
+
+Antes de qualquer coisa nova, três defeitos que se somavam em um só sintoma —
+"ficamos muito longe de conseguir determinar sua persona":
+
+| | Defeito | Consequência |
+|---|---|---|
+| 1 | O painel fazia **POST** em `/api/user/social-persona`, que só tinha `GET` e `PUT` | **405 em toda tentativa de salvar.** O construtor de 5 passos nunca gravou nada |
+| 2 | O painel lia `p.industries` de uma resposta `{ socialPersona: { industry } }` | Mesmo que salvasse, **não voltava para a tela** |
+| 3 | O XP só era pago se `personaVersion === 0` | Quem respondesse qualquer coisa antes do construtor **perdia o XP dos 5 passos para sempre** |
+
+A persona não parecia rasa por ser curta. Ela estava **vazia**.
+
+Os três estão corrigidos e **medidos no navegador** com a conta QA `expert`
+([[reference_test_accounts]]): salvar uma resposta leva a dimensão "Como você fala" de
+**0% → 31%**, e o fato aparece no dossiê na mesma hora.
+
+⚠️ **Armadilha de XP evitada, e ela é a mesma de 16/07 (check-in dando +15 por
+carregamento).** Trocar "pague na primeira versão" por "pague quando estiver preenchido"
+transformaria desmarcar-e-remarcar numa fazenda de XP. A conta agora guarda quantos
+passos e blocos **já foram pagos** e só rende o que passa desse teto. Medido:
+`195 → 0 → 0 → 0` repetindo, limpando e repondo.
+
+### A profundidade que faltava (e que o USS de 2024 já tinha)
+
+`Uss/src/lib/persona/single-source-of-truth.ts` trabalhava com oito blocos. O
+`socialPersona` daqui tinha **cinco listas de rótulos e três strings soltas**. A diferença
+não é acadêmica, é o prompt: `["tech","formal"]` produz post de agência.
+
+`src/lib/persona.ts` (novo) é o domínio compartilhado — vocabulário, dossiê e o bloco que
+vai para os modelos. O schema ganhou `identidade`, `voz`, `publico`, `estrategia`,
+`aprendizado` e `fotos`.
+
+**O campo que mais muda o resultado é `voz.amostra`** — um trecho que a própria pessoa
+escreveu. Vale mais no prompt do que todos os adjetivos de tom somados, e é exatamente o
+que as ferramentas boas de 2026 fazem (o Jasper chama isso de *brand voice training*).
+
+### O dossiê — a placa angulada, e por que ela se endireita
+
+`components/portal/PersonaDossie.tsx`. Linguagem do painel do Radar: `perspective` curta,
+`rotateY`, canto chanfrado, trilhos de varredura.
+
+**Mas o do Radar nunca é preenchido e este é FORMULÁRIO.** Texto em perspectiva é bonito
+de olhar e ruim de digitar — a linha de base inclina e o cursor cai fora de onde o olho
+espera. Então a perspectiva é o **estado de repouso**: a placa se endireita quando uma
+dimensão abre para edição. Você olha uma peça inclinada; você escreve numa peça reta.
+
+Sete dimensões, cada uma com confiança medida **no servidor** (nunca no cliente — duas
+telas da mesma pessoa têm que dizer o mesmo número), o que já sabemos, e **cada lacuna
+com a pergunta que a fecha e o que ela destrava**. Pedir dado sem dizer para quê é
+formulário; o painel só ganha o direito de perguntar porque responde "para quê" antes.
+
+### O curso personalizado — motor Expert v2
+
+O motor v1 (`lib/course-examples.ts`) troca slots `<!--exemplo-->` marcados à mão. Funciona
+— e só em curso que tem slot, que é a minoria do catálogo.
+
+O v2 (`lib/curso-personalizado.ts` + `/api/user/curso-personalizado`) trabalha sobre o
+**capítulo**, que todo curso tem. Por capítulo: uma abertura ("por que isto muda o seu
+jogo"), um exemplo no ramo dele e uma tarefa executável hoje.
+
+**A aula original não é reescrita, e isso é decisão.** O texto do curso é verificado
+editorialmente; deixar um modelo reescrever a explicação troca conteúdo conferido por
+conteúdo plausível. A camada **envolve** a aula.
+
+**A recusa faz parte do produto:** abaixo de 35% de confiança a rota devolve 422 com as
+perguntas que faltam. Personalizar com persona rasa produz um texto que AFIRMA falar do
+negócio da pessoa e fala de um negócio genérico — pior do que não personalizar.
+
+### A conta do Google que já estava conectada
+
+O login social criava o usuário e **nunca criava o vínculo**. A aba Contas pedia para ele
+entrar de novo com a conta que ele tinha acabado de usar.
+
+Agora o login vincula (`lib/social-identity.ts`). Com uma honestidade que a tela mostra:
+o login pede `openid email profile`, o que identifica e **não** dá permissão de publicar.
+O vínculo entra como **"Conectada"** e ao lado aparece **"Liberar"** — um clique de
+permissão extra, com `login_hint` e `include_granted_scopes`, sem novo login. Marcar como
+pronta seria mais bonito na tela e mentira no produto: o botão publicar apareceria e
+morreria com 403 do Google na frente dele.
+
+### Fotos por FUNÇÃO, não galeria
+
+Quatro vagas (`perfil`, `profissional`, `casual`, `pessoal`), cada uma com o uso
+declarado. **A vaga `perfil` já vem preenchida com o avatar do Google** — mostrá-la é a
+diferença entre "envie 4 fotos" e "já tenho a sua, faltam 3".
+
+### Pauta do dia — o que o mLabs não tem
+
+Pesquisa feita: mLabs, Etus e os globais (Buffer, Sprout, Jasper) resolvem agendar, medir,
+aprovar e treinar voz de marca. Nenhum responde **"sobre o que eu publico hoje?"** — a
+resposta deles é calendário de datas comemorativas, igual para todo mundo, decidido meses
+antes.
+
+Nós medimos todo dia o que o brasileiro pergunta sobre IA **por profissão** (o Radar).
+`/api/social/pautas` cruza isso com a área da persona e entrega no publicador. Um advogado
+recebe a pauta de advogado. Sem área na persona, cai no recorte geral **e a tela diz isso**.
+
+### Ícones 3D no construtor de persona
+
+Mesma regra do menu: **2D primeiro, 3D no hover**, e **uma tela WebGL na grade inteira** —
+quem decide qual peça desenha é a grade, não o cartão (o navegador para de criar contexto
+por volta de dezesseis). A malha, o material e o balanço saíram para `Peca3D`,
+compartilhado com o menu.
+
+32 peças novas (18 áreas + 14 objetivos), família sólida, **1,9 MB no total, nenhuma acima
+do teto de 120 KB**. Pipeline `scripts/icones3d/gerar_persona.py` — Qwen 2512 + Lightning →
+Hunyuan3D-2mv → gltf-transform, tudo local, custo zero.
+
+⚠️ **Duas peças estouraram o teto na primeira passada, e a culpa era do PROMPT, não do
+simplificador.** `area-ecommerce` ("sacola com etiqueta pendurada") saiu com **834 KB** e
+`area-beauty` ("batom ao lado de um espelho compacto") com **211 KB**: superfícies finas e
+objetos soltos que o decimador não consegue colapsar. Tirar a etiqueta e o espelho —
+**um objeto, sólido** — levou para **56 KB** e **19 KB**. Vale como regra para qualquer
+ícone novo: peça sólida e única, sem apêndice fino.
+
+⚠️ **Uma armadilha de React que só aparece com WebGL.** A grade estava dentro de uma função
+declarada no render do painel. Definido ali, o cartão vira **um tipo de componente novo a
+cada mudança de estado** — e o estado que muda é justamente o `hover3d`. React desmontava e
+remontava a árvore inteira a cada passada de cursor, criando e destruindo um contexto WebGL
+por vez, que é exatamente como se chega ao limite de dezesseis do navegador. O cartão foi
+para o escopo do módulo e os blocos internos passaram a ser **chamados** (`{PersonaBuilder()}`)
+em vez de montados (`<PersonaBuilder />`).
+
+⚠️ **A peça desenhava em 300x150 — e isso já estava NO AR desde a madrugada.** O `<Canvas>`
+do r3f monta no tamanho padrão do HTML e só se remede quando o medidor dele acorda. Medido
+no build de produção: contêiner **89x80**, buffer **300x150** — proporção errada e peça
+transbordando o ícone. Passou despercebido na sessão anterior porque a verificação foi por
+**contagem de contextos**, não por **medida de tamanho**, e o menu fica atrás de login.
+
+Duas correções que **não** funcionaram, anotadas para ninguém repetir:
+1. `setSize` de dentro da cena — o r3f reconcilia o tamanho da própria medição e sobrescreve.
+2. Um componente com `useThree` dentro do `<Canvas>` — **o efeito nem roda** (instrumentado
+   com marca global: nunca apareceu). Filho de `<Canvas>` vive no reconciliador do three.
+
+O que funciona é um `resize` de janela disparado de fora, em React comum, algumas dezenas de
+ms depois da montagem — mais a classe `[&_canvas]:!w-full [&_canvas]:!h-full`, porque o r3f
+estica o DIV e deixa o `<canvas>` no padrão. Medido depois: **buffer 89x80 em todos os
+cartões, no máximo 1 contexto varrendo oito, zero perdidos, zero ao sair.**
+
+⚠️ **`temIcone3D`/`temPersona3D` moravam dentro dos componentes 3D**, que importam
+`@react-three/fiber` no topo. Quem só queria saber se deve ligar o `onMouseEnter` — a barra
+lateral e o construtor — **puxava o three.js inteiro para o pacote do portal**, anulando o
+`next/dynamic`. As duas perguntas foram para `src/data/icones3d-tem.ts`, que só lê catálogo.
+Isso conserta também o menu, onde o problema já existia desde 27/07 de madrugada.
+
+### Como ver
+
+```
+cd fayapoint-ai && npm run build
+```
+Depois `/pt-BR/portal?tab=social` logado. A placa do dossiê fica à direita; passe o cursor
+pelos cartões de área para ver o volume.
+
+### O que ficou aberto
+
+- **Calendário editorial** (visão de mês do que está agendado) — é o que o mLabs faz de
+  melhor e nós temos só a lista. Não é conserto, é fase.
+- **A camada do curso ainda não tem botão na página de leitura** — ela é gerada e injetada
+  pelo `/api/courses/[slug]/content`, e o gatilho mora no Perfil Social. O lugar natural é
+  o topo do capítulo, dentro do leitor (2.900 linhas — merece sessão própria).
+- **Duas malhas passaram do teto de 120 KB** (`area-ecommerce` 834 KB, `area-beauty`
+  211 KB): superfícies finas que o simplificador não colapsa. Regerar com outra semente.
+
+---
+
 ## ✅ SESSÃO 27/07 (madrugada) — OS 8 DEFEITOS + 3D PARA ESCOLHER (Opus 5)
 
 Ordem do Ricardo: *"vamos começar a corrigir os erros e deixar o site limpo de erros, e ao mesmo tempo quero que gere mais 3 opções do logo FayaAi em 3d… depois também quero que gere os ícones em 3d… 3 opções para cada ícone estático que temos, isso deve acontecer em paralelo."* Foi feito nessa ordem, com a GPU rodando o tempo todo em segundo plano.

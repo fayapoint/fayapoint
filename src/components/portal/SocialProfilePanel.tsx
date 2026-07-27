@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Share2,
-  Instagram,
   Facebook,
   Youtube,
   Twitter,
@@ -17,13 +17,14 @@ import {
   Target,
   Palette,
   MessageCircle,
-  Camera,
-  Film,
   Loader2,
   ArrowLeft,
   Zap,
   TrendingUp,
   BookOpen,
+  ShieldCheck,
+  KeyRound,
+  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,13 @@ import { cn } from "@/lib/utils";
 import { toast } from "react-hot-toast";
 import SocialComposer from "@/components/portal/SocialComposer";
 import PersonaOracle from "@/components/portal/PersonaOracle";
+import PersonaDossie, { GaleriaDeFotos } from "@/components/portal/PersonaDossie";
+import CursoComSuaCara from "@/components/portal/CursoComSuaCara";
+import { temPersona3D } from "@/data/icones3d-tem";
+import type { Dossie, FotoPersona, PersonaProfunda } from "@/lib/persona";
+
+// WebGL fora do bundle: o chunk só desce quando alguém passa o cursor.
+const IconePersona3D = dynamic(() => import("@/components/portal/IconePersona3D").then((m) => m.IconePersona3D), { ssr: false });
 
 // ── Data ──────────────────────────────────────────────────────────
 
@@ -120,7 +128,7 @@ const LEVELS = [
 
 const PLATFORMS = [
   { id: "facebook", name: "Facebook + Instagram", icon: Facebook, gradient: "from-blue-600 to-blue-700", url: "/api/social/connect/facebook", available: true },
-  { id: "google", name: "Google + YouTube", icon: Youtube, gradient: "from-red-500 to-red-700", url: "/api/social/connect/google", available: true },
+  { id: "google", name: "Google + YouTube", icon: Youtube, gradient: "from-red-500 to-red-700", url: "/api/social/connect/google?redirect=/portal", available: true },
   { id: "twitter", name: "X (Twitter)", icon: Twitter, gradient: "from-sky-400 to-sky-600", url: "/api/social/connect/twitter", available: false },
   { id: "pinterest", name: "Pinterest", icon: Share2, gradient: "from-red-600 to-red-700", url: "/api/social/connect/pinterest", available: false },
   { id: "whatsapp", name: "WhatsApp", icon: MessageCircle, gradient: "from-green-500 to-green-600", url: "", available: false },
@@ -138,24 +146,70 @@ const STEP_TITLES = [
 // ── Types ─────────────────────────────────────────────────────────
 
 interface ConnectedAccount {
+  _id?: string;
   platform: string;
   username: string;
   followers: number;
-}
-
-interface SocialPersona {
-  industries?: string[];
-  tones?: string[];
-  goals?: string[];
-  contentTypes?: string[];
-  level?: string;
-  contentThemes?: string[];
-  audienceInsights?: string;
-  recommendedCourses?: { id: string; title: string }[];
+  status: string;
+  scopes: string[];
+  avatar?: string;
 }
 
 interface SocialProfilePanelProps {
-  user: any;
+  user: { name?: string; image?: string } | null;
+}
+
+/**
+ * O cartão de escolha com emoji que vira volume no cursor.
+ *
+ * ⚠️ **Mora no escopo do MÓDULO de propósito.** Definido dentro do render do
+ * painel, ele seria um tipo de componente novo a cada estado que mudasse — e o
+ * estado que muda aqui é justamente o `hover3d`. React desmontaria e remontaria
+ * a árvore inteira a cada passada de cursor, criando e destruindo um contexto
+ * WebGL por vez. O navegador para de criar contexto por volta de dezesseis: uma
+ * varrida pela grade derrubaria a página.
+ *
+ * `grupo` casa com o catálogo das malhas: "area" para as áreas, "meta" para os
+ * objetivos. Quem não tem peça continua só com o emoji, sem buraco.
+ */
+function CartaoComVolume({
+  grupo,
+  item,
+  selecionado,
+  aceso,
+  tamanhoEmoji,
+  onClick,
+  onEntrar,
+  onSair,
+}: {
+  grupo: string;
+  item: { id: string; emoji: string; label: string };
+  selecionado: boolean;
+  aceso: boolean;
+  tamanhoEmoji: string;
+  onClick: () => void;
+  onEntrar: () => void;
+  onSair: () => void;
+}) {
+  return (
+    <motion.div
+      whileTap={{ scale: 0.95 }}
+      className={cn(
+        "relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-border bg-white/[0.03] p-4 transition-all duration-200",
+        selecionado ? "border-amber-500 bg-amber-500/10" : "hover:border-amber-500/50"
+      )}
+      onClick={onClick}
+      onMouseEnter={onEntrar}
+      onMouseLeave={onSair}
+    >
+      <span className="relative block">
+        <span className={cn(tamanhoEmoji, "block transition-opacity duration-200", aceso && "opacity-0")}>{item.emoji}</span>
+        {aceso && <IconePersona3D grupo={grupo} id={item.id} aceso />}
+      </span>
+      <span className="text-center text-xs leading-tight">{item.label}</span>
+      {selecionado && <Check className="absolute right-1 top-1 h-4 w-4 text-amber-500" />}
+    </motion.div>
+  );
 }
 
 // ── Component ─────────────────────────────────────────────────────
@@ -163,7 +217,9 @@ interface SocialProfilePanelProps {
 export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   const token = typeof window !== "undefined" ? localStorage.getItem("fayai_token") || "" : "";
   const [accounts, setAccounts] = useState<ConnectedAccount[]>([]);
-  const [persona, setPersona] = useState<SocialPersona | null>(null);
+  const [persona, setPersona] = useState<PersonaProfunda | null>(null);
+  const [dossie, setDossie] = useState<Dossie | null>(null);
+  const [fotos, setFotos] = useState<FotoPersona[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Persona builder state
@@ -174,43 +230,75 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   const [contentTypes, setContentTypes] = useState<string[]>([]);
   const [level, setLevel] = useState<string>("");
   const [saving, setSaving] = useState(false);
+  /** O usuário pediu para refazer a base mesmo já tendo os cinco passos. */
+  const [refazendo, setRefazendo] = useState(false);
+
+  /**
+   * Quem está autorizado a desenhar em 3D agora — mesma regra da barra
+   * lateral: o cursor está sobre UM cartão, então existe no máximo um contexto
+   * WebGL na grade inteira. Dezoito cartões montando o próprio canvas
+   * estourariam o limite do navegador na primeira varrida.
+   */
+  const [hover3d, setHover3d] = useState<string | null>(null);
 
   // Intelligence
   const [analyzing, setAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [analysisResult, setAnalysisResult] = useState<{ summary?: string } | null>(null);
 
   const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+
+  const carregarFotos = useCallback(async () => {
+    try {
+      const res = await fetch("/api/user/persona-fotos", { credentials: "include", headers, cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setFotos(Array.isArray(data.fotos) ? data.fotos : []);
+      }
+    } catch {
+      /* silencioso — a galeria mostra as vagas vazias */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   useEffect(() => {
     async function load() {
       try {
         const [accRes, personaRes] = await Promise.all([
-          fetch("/api/social/accounts", { headers }),
-          fetch("/api/user/social-persona", { headers }),
+          fetch("/api/social/accounts", { credentials: "include", headers }),
+          fetch("/api/user/social-persona", { credentials: "include", headers }),
         ]);
+
         if (accRes.ok) {
           // A API devolve { accounts: [...] } — salvar o objeto inteiro
           // quebrava o painel com "accounts.reduce is not a function"
           const accData = await accRes.json();
           const list = Array.isArray(accData) ? accData : accData?.accounts;
           setAccounts(
-            (Array.isArray(list) ? list : []).map((a: { platform: string; username: string; metadata?: { followerCount?: number } }) => ({
+            (Array.isArray(list) ? list : []).map((a) => ({
+              _id: a._id,
               platform: a.platform,
               username: a.username,
               followers: a.metadata?.followerCount || 0,
+              status: a.status || "pending",
+              scopes: a.scopes || [],
+              avatar: a.metadata?.profilePictureUrl,
             }))
           );
         }
+
         if (personaRes.ok) {
-          const p = await personaRes.json();
-          if (p && Object.keys(p).length) {
-            setPersona(p);
-            if (p.industries) setIndustries(p.industries);
-            if (p.tones) setTones(p.tones);
-            if (p.goals) setGoals(p.goals);
-            if (p.contentTypes) setContentTypes(p.contentTypes);
-            if (p.level) setLevel(p.level);
-          }
+          // Antes isto lia `p.industries` numa resposta que devolve
+          // `{ socialPersona: { industry } }` — e por isso a persona salva
+          // nunca voltava para a tela.
+          const data = await personaRes.json();
+          const p: PersonaProfunda = data.socialPersona || {};
+          setPersona(p);
+          setDossie(data.dossie || null);
+          if (p.industry?.length) setIndustries(p.industry);
+          if (p.toneOfVoice?.length) setTones(p.toneOfVoice);
+          if (p.marketingGoals?.length) setGoals(p.marketingGoals);
+          if (p.contentTypes?.length) setContentTypes(p.contentTypes);
+          if (p.experienceLevel) setLevel(p.experienceLevel);
         }
       } catch {
         /* silent */
@@ -219,6 +307,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
       }
     }
     load();
+    carregarFotos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -227,6 +316,10 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
     if (list.length >= max) return list;
     return [...list, id];
   }, []);
+
+  /** Os cinco passos já estão respondidos? Então o construtor sai da frente. */
+  const baseFechada =
+    industries.length > 0 && tones.length > 0 && goals.length > 0 && contentTypes.length > 0 && level !== "";
 
   const canProceed = () => {
     if (step === 0) return industries.length >= 1;
@@ -241,16 +334,27 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
     setSaving(true);
     try {
       const res = await fetch("/api/user/social-persona", {
-        method: "POST",
+        method: "PUT",
+        credentials: "include",
         headers,
-        body: JSON.stringify({ industries, tones, goals, contentTypes, level }),
+        // Os nomes que o modelo usa. A rota aceita os antigos por
+        // compatibilidade, mas mandar o certo é o que evita o próximo bug.
+        body: JSON.stringify({
+          industry: industries,
+          toneOfVoice: tones,
+          marketingGoals: goals,
+          contentTypes,
+          experienceLevel: level,
+        }),
       });
+      const data = await res.json();
       if (res.ok) {
-        const data = await res.json();
-        setPersona(data);
-        toast.success("Perfil social salvo!");
+        setPersona(data.socialPersona);
+        setDossie(data.dossie);
+        setRefazendo(false);
+        toast.success(data.xpAwarded > 0 ? `Perfil salvo — +${data.xpAwarded} XP ✨` : "Perfil social salvo!");
       } else {
-        toast.error("Erro ao salvar perfil");
+        toast.error(data?.error || "Erro ao salvar perfil");
       }
     } catch {
       toast.error("Erro de conexão");
@@ -262,7 +366,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   const runAnalysis = async () => {
     setAnalyzing(true);
     try {
-      const res = await fetch("/api/social/analyze", { method: "POST", headers });
+      const res = await fetch("/api/social/analyze", { method: "POST", credentials: "include", headers });
       if (res.ok) setAnalysisResult(await res.json());
     } catch {
       toast.error("Erro ao analisar");
@@ -284,12 +388,6 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
 
   // ── Shared card style ─────────────────────────────────────────
 
-  const selectCard = (selected: boolean) =>
-    cn(
-      "rounded-xl bg-white/[0.03] border border-border cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 p-4",
-      selected ? "border-amber-500 bg-amber-500/10" : "hover:border-amber-500/50"
-    );
-
   const selectPill = (selected: boolean) =>
     cn(
       "inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm cursor-pointer transition-all duration-200",
@@ -305,7 +403,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Passo {step + 1} de 5</span>
-            <span className="text-amber-400 font-medium">{Math.round(((step + 1) / 5) * 100)}%</span>
+            <span className="font-medium text-amber-400">{Math.round(((step + 1) / 5) * 100)}%</span>
           </div>
           <Progress value={((step + 1) / 5) * 100} className="h-2 bg-white/[0.05] [&>[data-slot=progress-indicator]]:bg-gradient-to-r [&>[data-slot=progress-indicator]]:from-amber-500 [&>[data-slot=progress-indicator]]:to-yellow-400" />
         </div>
@@ -318,21 +416,22 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.25 }}
           >
-            <h3 className="text-xl font-bold text-foreground mb-4">{STEP_TITLES[step]}</h3>
+            <h3 className="mb-4 text-xl font-bold text-foreground">{STEP_TITLES[step]}</h3>
 
             {step === 0 && (
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
                 {INDUSTRIES.map((item) => (
-                  <motion.div
+                  <CartaoComVolume
                     key={item.id}
-                    whileTap={{ scale: 0.95 }}
-                    className={selectCard(industries.includes(item.id))}
+                    grupo="area"
+                    item={item}
+                    tamanhoEmoji="text-4xl"
+                    selecionado={industries.includes(item.id)}
+                    aceso={hover3d === `area-${item.id}`}
                     onClick={() => setIndustries(toggle(industries, item.id, 3))}
-                  >
-                    <span className="text-4xl">{item.emoji}</span>
-                    <span className="text-xs text-center leading-tight">{item.label}</span>
-                    {industries.includes(item.id) && <Check className="h-4 w-4 text-amber-500 absolute top-1 right-1" />}
-                  </motion.div>
+                    onEntrar={() => temPersona3D("area", item.id) && setHover3d(`area-${item.id}`)}
+                    onSair={() => setHover3d((a) => (a === `area-${item.id}` ? null : a))}
+                  />
                 ))}
               </div>
             )}
@@ -356,17 +455,19 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             )}
 
             {step === 2 && (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
                 {GOALS.map((item) => (
-                  <motion.div
+                  <CartaoComVolume
                     key={item.id}
-                    whileTap={{ scale: 0.95 }}
-                    className={selectCard(goals.includes(item.id))}
+                    grupo="meta"
+                    item={item}
+                    tamanhoEmoji="text-3xl"
+                    selecionado={goals.includes(item.id)}
+                    aceso={hover3d === `meta-${item.id}`}
                     onClick={() => setGoals(toggle(goals, item.id, 3))}
-                  >
-                    <span className="text-3xl">{item.emoji}</span>
-                    <span className="text-xs text-center leading-tight">{item.label}</span>
-                  </motion.div>
+                    onEntrar={() => temPersona3D("meta", item.id) && setHover3d(`meta-${item.id}`)}
+                    onSair={() => setHover3d((a) => (a === `meta-${item.id}` ? null : a))}
+                  />
                 ))}
               </div>
             )}
@@ -390,7 +491,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             )}
 
             {step === 4 && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {LEVELS.map((item) => (
                   <motion.div
                     key={item.id}
@@ -398,14 +499,14 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                     animate={level === item.id ? { scale: 1.03 } : { scale: 1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     className={cn(
-                      "rounded-xl bg-white/[0.03] border border-border cursor-pointer transition-all duration-200 flex flex-col items-center gap-3 p-6",
+                      "flex cursor-pointer flex-col items-center gap-3 rounded-xl border border-border bg-white/[0.03] p-6 transition-all duration-200",
                       level === item.id ? "border-amber-500 bg-amber-500/10" : "hover:border-amber-500/50"
                     )}
                     onClick={() => setLevel(item.id)}
                   >
                     <span className="text-5xl">{item.emoji}</span>
                     <span className="font-semibold text-foreground">{item.label}</span>
-                    <span className="text-xs text-muted-foreground text-center">{item.description}</span>
+                    <span className="text-center text-xs text-muted-foreground">{item.description}</span>
                   </motion.div>
                 ))}
               </div>
@@ -416,32 +517,32 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {/* Navigation */}
         <div className="flex items-center justify-between pt-2">
           <Button variant="ghost" size="sm" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>
-            <ArrowLeft className="h-4 w-4 mr-1" /> Voltar
+            <ArrowLeft className="mr-1 h-4 w-4" /> Voltar
           </Button>
           {step < 4 ? (
             <Button
               size="sm"
               disabled={!canProceed()}
               onClick={() => setStep((s) => s + 1)}
-              className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-semibold hover:from-amber-600 hover:to-yellow-600"
+              className="bg-gradient-to-r from-amber-500 to-yellow-500 font-semibold text-black hover:from-amber-600 hover:to-yellow-600"
             >
-              Próximo <ChevronRight className="h-4 w-4 ml-1" />
+              Próximo <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           ) : (
             <Button
               size="sm"
               disabled={!canProceed() || saving}
               onClick={savePersona}
-              className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-semibold hover:from-amber-600 hover:to-yellow-600"
+              className="bg-gradient-to-r from-amber-500 to-yellow-500 font-semibold text-black hover:from-amber-600 hover:to-yellow-600"
             >
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Sparkles className="h-4 w-4 mr-1" />}
+              {saving ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Sparkles className="mr-1 h-4 w-4" />}
               Salvar Perfil
             </Button>
           )}
         </div>
 
-        <p className="text-xs text-muted-foreground text-center">
-          Selecione até {step === 4 ? "1 opção" : "3 opções"}
+        <p className="text-center text-xs text-muted-foreground">
+          Selecione até {step === 4 ? "1 opção" : "3 opções"} — passe o cursor para ver em 3D
         </p>
       </div>
     );
@@ -450,7 +551,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   // ── Connect Accounts ──────────────────────────────────────────
 
   function ConnectAccounts() {
-    const connected = new Set(accounts.map((a) => a.platform));
+    const porPlataforma = new Map(accounts.map((a) => [a.platform, a]));
 
     return (
       <div className="space-y-4">
@@ -458,53 +559,77 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           Conecte suas redes sociais para desbloquear insights e automação inteligente.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {PLATFORMS.map((p) => {
             const Icon = p.icon;
-            const isConnected = connected.has(p.id);
-            const acc = accounts.find((a) => a.platform === p.id);
+            const acc = porPlataforma.get(p.id);
+            // O Google do login entra como identidade: conectado, mas sem
+            // permissão de publicação. Mostrar isso é o que evita um botão
+            // "publicar" que morre com 403 na frente do usuário.
+            const soIdentidade = !!acc && acc.status !== "active";
+            const conectado = !!acc;
 
             return (
               <motion.div
                 key={p.id}
                 whileHover={{ y: -2 }}
-                className="rounded-xl bg-white/[0.03] border border-border p-4 flex items-center gap-4"
+                className="flex items-center gap-4 rounded-xl border border-border bg-white/[0.03] p-4"
               >
-                <div className={cn("h-12 w-12 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0", p.gradient)}>
+                <div className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br", p.gradient)}>
                   <Icon className="h-6 w-6 text-white" />
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-foreground">{p.name}</p>
-                  {isConnected && acc ? (
-                    <p className="text-xs text-muted-foreground truncate">
-                      @{acc.username} &middot; {acc.followers.toLocaleString()} seguidores
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-foreground">{p.name}</p>
+                  {conectado ? (
+                    <p className="truncate text-xs text-muted-foreground">
+                      {acc.username}
+                      {acc.followers > 0 && ` · ${acc.followers.toLocaleString("pt-BR")} seguidores`}
                     </p>
                   ) : !p.available ? (
                     <p className="text-xs text-muted-foreground">Em breve</p>
                   ) : null}
+                  {soIdentidade && (
+                    <p className="mt-0.5 flex items-start gap-1 text-[11px] leading-snug text-amber-400/80">
+                      <Info className="mt-[1px] h-3 w-3 shrink-0" />
+                      Reconhecemos você por esta conta. Para publicar, falta só liberar a permissão — sem novo login.
+                    </p>
+                  )}
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  {isConnected ? (
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
-                      <Check className="h-3 w-3 mr-1" /> Conectado
+                <div className="flex shrink-0 items-center gap-2">
+                  {conectado && !soIdentidade ? (
+                    <Badge className="border-green-500/30 bg-green-500/20 text-xs text-green-400">
+                      <ShieldCheck className="mr-1 h-3 w-3" /> Pronta para publicar
                     </Badge>
-                  ) : p.available ? (
+                  ) : conectado && soIdentidade ? (
                     <>
-                      <Badge variant="outline" className="text-amber-400 border-amber-500/30 text-xs">
-                        <Zap className="h-3 w-3 mr-0.5" /> +100 XP
+                      <Badge className="border-emerald-500/30 bg-emerald-500/15 text-xs text-emerald-400">
+                        <Check className="mr-1 h-3 w-3" /> Conectada
                       </Badge>
                       <Button
                         size="sm"
-                        className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-semibold text-xs h-8"
+                        className="h-8 bg-gradient-to-r from-amber-500 to-yellow-500 text-xs font-semibold text-black"
+                        onClick={() => (window.location.href = p.url)}
+                      >
+                        <KeyRound className="mr-1 h-3 w-3" /> Liberar
+                      </Button>
+                    </>
+                  ) : p.available ? (
+                    <>
+                      <Badge variant="outline" className="border-amber-500/30 text-xs text-amber-400">
+                        <Zap className="mr-0.5 h-3 w-3" /> +100 XP
+                      </Badge>
+                      <Button
+                        size="sm"
+                        className="h-8 bg-gradient-to-r from-amber-500 to-yellow-500 text-xs font-semibold text-black"
                         onClick={() => (window.location.href = p.url)}
                       >
                         Conectar
                       </Button>
                     </>
                   ) : (
-                    <Badge variant="outline" className="text-muted-foreground border-border text-xs">Em breve</Badge>
+                    <Badge variant="outline" className="border-border text-xs text-muted-foreground">Em breve</Badge>
                   )}
                 </div>
               </motion.div>
@@ -523,20 +648,13 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl bg-gradient-to-br from-amber-500/10 to-yellow-500/5 border border-amber-500/20 p-8 text-center space-y-4"
+          className="space-y-4 rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-yellow-500/5 p-8 text-center"
         >
-          <Brain className="h-12 w-12 text-amber-500 mx-auto" />
+          <Brain className="mx-auto h-12 w-12 text-amber-500" />
           <h3 className="text-lg font-semibold text-foreground">Inteligência Social</h3>
-          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          <p className="mx-auto max-w-md text-sm text-muted-foreground">
             Conecte suas redes para descobrir insights incríveis sobre seu público e receba recomendações personalizadas de conteúdo.
           </p>
-          <Button
-            size="sm"
-            variant="outline"
-            className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
-          >
-            <Sparkles className="h-4 w-4 mr-1" /> Começar agora
-          </Button>
         </motion.div>
       );
     }
@@ -544,18 +662,14 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
     return (
       <div className="space-y-6">
         {/* Stats row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {[
-            { label: "Audiência total", value: totalAudience.toLocaleString(), icon: Users, color: "text-blue-400" },
+            { label: "Audiência total", value: totalAudience.toLocaleString("pt-BR"), icon: Users, color: "text-blue-400" },
             { label: "Contas conectadas", value: accounts.length, icon: Share2, color: "text-green-400" },
-            { label: "Áreas", value: persona?.industries?.length ?? 0, icon: Target, color: "text-amber-400" },
-            { label: "Tom de voz", value: persona?.tones?.length ?? 0, icon: Palette, color: "text-purple-400" },
+            { label: "Confiança da persona", value: `${dossie?.confianca ?? 0}%`, icon: Brain, color: "text-amber-400" },
+            { label: "Áreas", value: persona?.industry?.length ?? 0, icon: Target, color: "text-purple-400" },
           ].map((stat) => (
-            <motion.div
-              key={stat.label}
-              whileHover={{ y: -2 }}
-              className="rounded-xl bg-white/[0.03] border border-border p-4 space-y-1"
-            >
+            <motion.div key={stat.label} whileHover={{ y: -2 }} className="space-y-1 rounded-xl border border-border bg-white/[0.03] p-4">
               <stat.icon className={cn("h-5 w-5", stat.color)} />
               <p className="text-xl font-bold text-foreground">{stat.value}</p>
               <p className="text-xs text-muted-foreground">{stat.label}</p>
@@ -566,12 +680,12 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {/* Content themes */}
         {persona?.contentThemes && persona.contentThemes.length > 0 && (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
+            <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
               <BarChart3 className="h-4 w-4 text-amber-400" /> Temas de Conteúdo
             </h4>
             <div className="flex flex-wrap gap-2">
               {persona.contentThemes.map((theme) => (
-                <Badge key={theme} variant="outline" className="border-amber-500/30 text-amber-400 text-xs">
+                <Badge key={theme} variant="outline" className="border-amber-500/30 text-xs text-amber-400">
                   {theme}
                 </Badge>
               ))}
@@ -581,28 +695,11 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
 
         {/* Audience insights */}
         {persona?.audienceInsights && (
-          <div className="rounded-xl bg-white/[0.03] border border-border p-4 space-y-2">
-            <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
-              <Brain className="h-4 w-4 text-purple-400" /> Sua Persona AI
+          <div className="space-y-2 rounded-xl border border-border bg-white/[0.03] p-4">
+            <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <Brain className="h-4 w-4 text-purple-400" /> O que já aprendemos sobre você
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">{persona.audienceInsights}</p>
-          </div>
-        )}
-
-        {/* Recommended courses */}
-        {persona?.recommendedCourses && persona.recommendedCourses.length > 0 && (
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
-              <BookOpen className="h-4 w-4 text-green-400" /> Cursos Recomendados
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {persona.recommendedCourses.map((course) => (
-                <div key={course.id} className="rounded-lg bg-white/[0.03] border border-border px-4 py-3 flex items-center justify-between">
-                  <span className="text-sm text-foreground">{course.title}</span>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
-              ))}
-            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">{persona.audienceInsights}</p>
           </div>
         )}
 
@@ -610,15 +707,15 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         <Button
           onClick={runAnalysis}
           disabled={analyzing}
-          className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-semibold hover:from-amber-600 hover:to-yellow-600"
+          className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 font-semibold text-black hover:from-amber-600 hover:to-yellow-600"
         >
           {analyzing ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin mr-2" /> Analisando...
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analisando...
             </>
           ) : (
             <>
-              <TrendingUp className="h-4 w-4 mr-2" /> Analisar Perfil
+              <TrendingUp className="mr-2 h-4 w-4" /> Analisar Perfil
             </>
           )}
         </Button>
@@ -628,12 +725,12 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl bg-gradient-to-br from-amber-500/10 to-yellow-500/5 border border-amber-500/20 p-4 space-y-2"
+            className="space-y-2 rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-yellow-500/5 p-4"
           >
-            <h4 className="text-sm font-medium text-amber-400 flex items-center gap-2">
+            <h4 className="flex items-center gap-2 text-sm font-medium text-amber-400">
               <Sparkles className="h-4 w-4" /> Resultado da Análise
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               {analysisResult.summary ?? JSON.stringify(analysisResult)}
             </p>
           </motion.div>
@@ -645,62 +742,108 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   // ── Main render ───────────────────────────────────────────────
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-    >
-      <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-yellow-500">
           <Share2 className="h-5 w-5 text-black" />
         </div>
-        <div>
+        <div className="flex-1">
           <h2 className="text-xl font-bold text-foreground">Perfil Social</h2>
-          <p className="text-sm text-muted-foreground">Monte sua identidade e conecte suas redes</p>
+          <p className="text-sm text-muted-foreground">
+            {user?.name ? `${user.name.split(" ")[0]}, quanto melhor eu te conhecer, mais o conteúdo vira seu` : "Monte sua identidade e conecte suas redes"}
+          </p>
         </div>
+        {dossie && (
+          <Badge variant="outline" className="border-amber-500/40 text-amber-300">
+            <Brain className="mr-1.5 h-3.5 w-3.5" /> Te conheço {dossie.confianca}%
+          </Badge>
+        )}
       </div>
 
-      <Tabs defaultValue="persona" className="w-full">
-        <TabsList className="w-full bg-[#2a251d] border border-border">
-          <TabsTrigger value="persona" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-            <Palette className="h-4 w-4 mr-1.5" /> Persona
-          </TabsTrigger>
-          <TabsTrigger value="contas" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-            <Share2 className="h-4 w-4 mr-1.5" /> Contas
-          </TabsTrigger>
-          <TabsTrigger value="inteligencia" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-            <Brain className="h-4 w-4 mr-1.5" /> Inteligência
-          </TabsTrigger>
-          <TabsTrigger value="publicar" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-            <Zap className="h-4 w-4 mr-1.5" /> Publicar
-          </TabsTrigger>
-        </TabsList>
+      {/* A coluna do dossiê acompanha as quatro abas: o retrato não é um passo
+          do fluxo, é o contexto permanente do que a gente sabe. */}
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px]">
+        <div className="min-w-0">
+          <Tabs defaultValue="persona" className="w-full">
+            <TabsList className="w-full border border-border bg-[#2a251d]">
+              <TabsTrigger value="persona" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
+                <Palette className="mr-1.5 h-4 w-4" /> Persona
+              </TabsTrigger>
+              <TabsTrigger value="contas" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
+                <Share2 className="mr-1.5 h-4 w-4" /> Contas
+              </TabsTrigger>
+              <TabsTrigger value="inteligencia" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
+                <Brain className="mr-1.5 h-4 w-4" /> Inteligência
+              </TabsTrigger>
+              <TabsTrigger value="publicar" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
+                <Zap className="mr-1.5 h-4 w-4" /> Publicar
+              </TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="persona" className="mt-4 space-y-4">
-          <PersonaOracle />
-          <div className="rounded-xl bg-[#2a251d] border border-border p-5">
-            <PersonaBuilder />
-          </div>
-        </TabsContent>
+            <TabsContent value="persona" className="mt-4 space-y-4">
+              <PersonaOracle />
 
-        <TabsContent value="contas" className="mt-4">
-          <div className="rounded-xl bg-[#2a251d] border border-border p-5">
-            <ConnectAccounts />
-          </div>
-        </TabsContent>
+              {/* Quem já fechou os cinco passos não precisa reencontrá-los
+                  abertos toda vez. O trabalho contínuo agora mora no dossiê ao
+                  lado; o construtor vira o botão de refazer do zero. */}
+              {baseFechada && !refazendo ? (
+                <button
+                  onClick={() => {
+                    setRefazendo(true);
+                    setStep(0);
+                  }}
+                  className="flex w-full items-center justify-between rounded-xl border border-border bg-[#2a251d] px-5 py-3.5 text-left transition-colors hover:border-amber-500/40 cursor-pointer"
+                >
+                  <span>
+                    <span className="block text-sm font-bold text-foreground">Sua base está montada</span>
+                    <span className="mt-0.5 block text-[11.5px] text-muted-foreground">
+                      Área, tom, objetivos, formatos e nível. Refinar o resto é no painel ao lado.
+                    </span>
+                  </span>
+                  <span className="ml-3 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/40 px-3 py-1 text-[11px] font-bold text-amber-300">
+                    Refazer <ChevronRight className="h-3 w-3" />
+                  </span>
+                </button>
+              ) : (
+                <div className="rounded-xl border border-border bg-[#2a251d] p-5">
+                  {PersonaBuilder()}
+                </div>
+              )}
+              <GaleriaDeFotos fotos={fotos} token={token} aoRecarregar={carregarFotos} />
+              <CursoComSuaCara token={token} />
+            </TabsContent>
 
-        <TabsContent value="inteligencia" className="mt-4">
-          <div className="rounded-xl bg-[#2a251d] border border-border p-5">
-            <IntelligenceDashboard />
-          </div>
-        </TabsContent>
+            <TabsContent value="contas" className="mt-4">
+              <div className="rounded-xl border border-border bg-[#2a251d] p-5">
+                {ConnectAccounts()}
+              </div>
+            </TabsContent>
 
-        <TabsContent value="publicar" className="mt-4">
-          <div className="rounded-xl bg-[#2a251d] border border-border p-5">
-            <SocialComposer />
-          </div>
-        </TabsContent>
-      </Tabs>
+            <TabsContent value="inteligencia" className="mt-4">
+              <div className="rounded-xl border border-border bg-[#2a251d] p-5">
+                {IntelligenceDashboard()}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="publicar" className="mt-4">
+              <div className="rounded-xl border border-border bg-[#2a251d] p-5">
+                <SocialComposer />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        <aside className="lg:sticky lg:top-4 lg:self-start">
+          <PersonaDossie dossie={dossie} fotos={fotos} onSalvo={setDossie} aoRecarregarFotos={carregarFotos} />
+
+          {dossie && dossie.confianca < 100 && (
+            <p className="mt-3 flex items-start gap-1.5 px-1 text-[11px] leading-snug text-muted-foreground">
+              <BookOpen className="mt-[1px] h-3 w-3 shrink-0 text-amber-400" />
+              Cada resposta aqui muda o post <em>e</em> o conteúdo do seu curso — os exemplos são reescritos para o seu contexto.
+            </p>
+          )}
+        </aside>
+      </div>
     </motion.div>
   );
 }

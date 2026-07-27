@@ -5,6 +5,7 @@ import User from '@/models/User';
 import SocialAccount from '@/models/SocialAccount';
 import SocialPost from '@/models/SocialPost';
 import { generate } from '@/lib/ai/provider';
+import { blocoDePersona, type PersonaProfunda } from '@/lib/persona';
 
 const PLATFORM_LIMITS: Record<string, number> = {
   twitter: 280,
@@ -88,22 +89,17 @@ export async function POST(request: NextRequest) {
     const charLimit = PLATFORM_LIMITS[platform] || 2200;
     const langName = language === 'pt-BR' ? 'Brazilian Portuguese' : language === 'en' ? 'English' : language;
 
-    // Persona do usuário (Vidente/pescaria/builder alimentam socialPersona) —
-    // o blueprint do engine (Uss/docs) exige persona estruturada em TODA geração
-    const sp = userDoc.socialPersona || {};
-    const personaFields: Record<string, unknown> = {};
-    if (sp.industry?.length) personaFields.industry = sp.industry;
-    if (sp.toneOfVoice?.length) personaFields.tone_of_voice = sp.toneOfVoice;
-    if (sp.marketingGoals?.length) personaFields.marketing_goals = sp.marketingGoals;
-    if (sp.contentTypes?.length) personaFields.content_types = sp.contentTypes;
-    if (sp.experienceLevel) personaFields.experience_level = sp.experienceLevel;
-    if (sp.topHashtags?.length) personaFields.top_hashtags = sp.topHashtags;
-    if (sp.contentThemes?.length) personaFields.content_themes = sp.contentThemes;
-    if (sp.audienceInsights) personaFields.audience_insights = sp.audienceInsights;
-    if (sp.writingStyle) personaFields.writing_style = sp.writingStyle;
-    if (sp.primaryInterests?.length) personaFields.primary_interests = sp.primaryInterests;
-    const personaBlock = Object.keys(personaFields).length
-      ? `\n\nUser persona (write in THIS voice; align topics, examples and CTAs with these interests, audience and goals; prefer their proven hashtags when relevant):\n<persona_json>\n${JSON.stringify(personaFields)}\n</persona_json>`
+    // Persona do usuário — em português e por extenso, não em códigos.
+    //
+    // Antes isto virava um JSON de rótulos (`{"industry":["tech"]}`), e o
+    // resultado tinha a cara disso: post de agência. `blocoDePersona` monta o
+    // contexto profundo do USS — formalidade, emoji, bordões, dores do público
+    // e, quando existe, uma AMOSTRA REAL da escrita da pessoa, que é o campo
+    // que mais muda o texto. Ver `lib/persona.ts`.
+    const sp = (userDoc.socialPersona || {}) as PersonaProfunda;
+    const contexto = blocoDePersona(sp, 'post');
+    const personaBlock = contexto
+      ? `\n\nQuem está publicando (escreva NA VOZ desta pessoa — imite o ritmo de frase da amostra quando houver, use os assuntos e o público dela, respeite os proibidos):\n<persona>\n${contexto}\n</persona>`
       : '';
 
     // ── Trends em tempo real (Fase 7.2): manchetes de IA das últimas 48h do

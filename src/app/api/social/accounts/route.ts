@@ -32,14 +32,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const planError = requireProPlan(user);
-    if (planError) return planError;
+    // Listar as próprias contas não é recurso pago: é o espelho do que a
+    // pessoa já autorizou. O plano é cobrado no que CUSTA — gerar e publicar.
+    // Com o gate aqui, um usuário free recebia 403 e a aba Contas ficava vazia
+    // sem explicar por quê, inclusive para a conta Google do próprio login.
+    const podePublicar = requireProPlan(user) === null;
 
     const accounts = await SocialAccount.find({ userId: (user as any)._id })
       .sort({ platform: 1 })
       .lean();
 
-    return NextResponse.json({ accounts });
+    return NextResponse.json({ accounts, podePublicar });
   } catch (error) {
     console.error('[Social Accounts] GET Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
