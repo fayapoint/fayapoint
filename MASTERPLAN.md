@@ -5,9 +5,17 @@
 
 ## 🧠 SESSÃO 27/07 (dia) — O USS DE VERDADE: PERSONA PROFUNDA, DOSSIÊ E CURSO PERSONALIZADO
 
-> **Estado: LOCAL, buildando, NÃO deployado.** O Ricardo foi dormir depois de dois dias
-> acordado e pediu o máximo possível sem intervenção dele. Deploy só com o sim dele
-> ([[feedback_pedir_autorizacao_deploy]]).
+> **Estado: NO AR desde 27/07 (commit `89be084`).** Escrito enquanto o Ricardo dormia
+> depois de dois dias acordado; deployado depois, a pedido explícito dele ("faça o deploy
+> se nada estiver errado ou não funcionando") — a regra de pedir autorização
+> ([[feedback_pedir_autorizacao_deploy]]) foi cumprida, não contornada.
+>
+> **Verificado em produção**, não só no build: as 6 páginas públicas em 200 (radar em
+> 0,45 s), os 49 `.glb` servidos (32 da persona + 17 do menu, nenhum 404), as 4 rotas
+> novas devolvendo 401 sem sessão, `/pt-BR/portal` redirecionando para o login, canonical
+> da home intacto, globo do Radar com 1 canvas e 0 contextos perdidos, zero erro de
+> console. No build logado com a conta QA expert: dossiê em 66 % com dado real, hover do
+> menu com 1 canvas e buffer 42×42 batendo com o CSS, 8 pautas cruzadas com a área.
 
 Ordem dele, resumida: *"quero que o dashboard ofereça ao usuário tudo que ele acredita
 que terá… foco no USS, a parte social deve extrair muito mais informação… ícones em 3D
@@ -177,8 +185,10 @@ pelos cartões de área para ver o volume.
 - **A camada do curso ainda não tem botão na página de leitura** — ela é gerada e injetada
   pelo `/api/courses/[slug]/content`, e o gatilho mora no Perfil Social. O lugar natural é
   o topo do capítulo, dentro do leitor (2.900 linhas — merece sessão própria).
-- **Duas malhas passaram do teto de 120 KB** (`area-ecommerce` 834 KB, `area-beauty`
-  211 KB): superfícies finas que o simplificador não colapsa. Regerar com outra semente.
+- ~~Duas malhas acima do teto de 120 KB~~ — **não é mais pendência, era a lista que
+  estava desatualizada.** O corpo desta seção já descreve o conserto (tirar a etiqueta
+  da sacola e o espelho do batom), e a medição de 27/07 confirma: as 32 malhas somam
+  1,8 MB, média 58 KB, **nenhuma acima de 120 KB**.
 
 ---
 
