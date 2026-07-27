@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getNewsBySlug, getAllNews, extraArtsFor } from "@/lib/ai-news";
 import { ExperienceNav } from "@/components/layout/ExperienceNav";
+import { schemaMateria, schemaTrilha } from "@/lib/structured-data";
 
 export const revalidate = 900;
 
@@ -49,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function NoticiaPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const item = await getNewsBySlug(slug);
   if (!item) notFound();
 
@@ -57,7 +58,33 @@ export default async function NoticiaPage({ params }: Props) {
   const paragraphs = item.body && item.body.length > 0 ? item.body : [item.summary];
   const [artA, artB] = extraArtsFor(slug);
 
+  // Sem `Article`, uma matéria é texto qualquer para o Google. Com ele, entra
+  // na disputa por resultado rico — e é grátis.
+  const dados = [
+    schemaMateria({
+      slug,
+      locale,
+      titulo: item.title,
+      resumo: item.summary,
+      publicadoEm: item.date,
+      imagem: artA,
+    }),
+    schemaTrilha(locale, [
+      { nome: "Início", caminho: "" },
+      { nome: "IA Hoje", caminho: "/noticias" },
+      { nome: item.title, caminho: `/noticias/${slug}` },
+    ]),
+  ];
+
   return (
+    <>
+      {dados.map((d, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }}
+        />
+      ))}
     <div
       className="min-h-dvh overflow-x-hidden text-[#f3f1ff]"
       style={{
@@ -192,5 +219,6 @@ export default async function NoticiaPage({ params }: Props) {
         © {new Date().getFullYear()} FayAI — aprenda IA fazendo, não assistindo.
       </footer>
     </div>
+    </>
   );
 }

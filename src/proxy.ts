@@ -239,6 +239,41 @@ function addSecurityHeaders(response: NextResponse): void {
 // ============================================================================
 // MAIN MIDDLEWARE - COMPREHENSIVE BOT PROTECTION
 // ============================================================================
+/**
+ * Para onde mandar quem pediu uma URL sem prefixo de idioma.
+ *
+ * **Com cookie:** respeita a escolha da pessoa, e o redirecionamento é
+ * TEMPORÁRIO (307) — o destino varia por visitante, e um 308 cacheado
+ * prenderia alguém num idioma para sempre.
+ *
+ * **Sem cookie:** vai para pt-BR, sempre, com 308 permanente.
+ *
+ * O "sempre" é o ponto. Um dos três caminhos partia de `en` e só virava
+ * `pt-BR` se aparecesse cabeçalho de país ou `Accept-Language` com "pt" — e o
+ * Googlebot não manda cookie nenhum. Tornar isso permanente sem fixar o
+ * destino faria o Google gravar `/cursos → /en/cursos` para sempre, apontando
+ * de vez para a árvore que acabamos de marcar como `noindex`. Todo o texto do
+ * site é português e o acesso é só do Brasil: pt-BR não é palpite, é o idioma
+ * do site.
+ *
+ * O 307 era o que mantinha `/cursos`, `/blog` e `/radar` vivos no índice com
+ * título antigo em inglês, ao lado das versões `/pt-BR/…`. O `site:` do
+ * domínio em 27/07/2026 mostrava as duas árvores convivendo — com o próprio
+ * Google avisando que omitiu resultados "bastante semelhantes".
+ */
+function idiomaDestino(request: NextRequest): Locale {
+  const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
+  return cookieLocale && routing.locales.includes(cookieLocale) ? cookieLocale : "pt-BR";
+}
+
+function redirecionaParaIdioma(request: NextRequest, url: URL) {
+  const escolheu = !!request.cookies.get("NEXT_LOCALE")?.value;
+  const response = NextResponse.redirect(url, escolheu ? 307 : 308);
+  // Diz aos caches que a resposta depende do cookie de idioma.
+  response.headers.set("Vary", "Cookie");
+  return response;
+}
+
 export default async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
@@ -284,15 +319,11 @@ export default async function middleware(request: NextRequest) {
     const segments = pathname.split("/").filter(Boolean);
     const hasLocalePrefix = segments.length > 0 && routing.locales.includes(segments[0] as Locale);
     if (!hasLocalePrefix) {
-      let locale: Locale = "pt-BR";
-      const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
-      if (cookieLocale && routing.locales.includes(cookieLocale)) {
-        locale = cookieLocale;
-      }
+      const locale = idiomaDestino(request);
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
       url.search = searchParams.toString();
-      const response = NextResponse.redirect(url, 307);
+      const response = redirecionaParaIdioma(request, url);
       addSecurityHeaders(response);
       return response;
     }
@@ -504,15 +535,11 @@ export default async function middleware(request: NextRequest) {
     const segments = pathname.split("/").filter(Boolean);
     const hasLocalePrefix = segments.length > 0 && routing.locales.includes(segments[0] as Locale);
     if (!hasLocalePrefix) {
-      let locale: Locale = "pt-BR";
-      const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
-      if (cookieLocale && routing.locales.includes(cookieLocale)) {
-        locale = cookieLocale;
-      }
+      const locale = idiomaDestino(request);
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
       url.search = searchParams.toString();
-      const response = NextResponse.redirect(url, 307);
+      const response = redirecionaParaIdioma(request, url);
       addSecurityHeaders(response);
       return response;
     }
@@ -660,30 +687,13 @@ export default async function middleware(request: NextRequest) {
   }
 
   if (!hasLocalePrefix) {
-    let locale: Locale = "en";
-
-    const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value as Locale | undefined;
-    if (cookieLocale && routing.locales.includes(cookieLocale)) {
-      locale = cookieLocale;
-    } else {
-      const country = request.headers.get("x-country") ||
-                      request.headers.get("x-vercel-ip-country") ||
-                      request.headers.get("cf-ipcountry");
-
-      if (country) {
-        locale = getLocaleFromCountry(country);
-      } else {
-        if (acceptLanguage.toLowerCase().includes("pt")) {
-          locale = "pt-BR";
-        }
-      }
-    }
+    const locale = idiomaDestino(request);
 
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
     url.search = searchParams.toString();
 
-    const response = NextResponse.redirect(url, 307);
+    const response = redirecionaParaIdioma(request, url);
     addSecurityHeaders(response);
 
     // Add rate limit headers

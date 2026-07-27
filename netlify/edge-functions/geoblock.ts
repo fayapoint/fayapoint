@@ -67,6 +67,28 @@ const VERIFIED_CRAWLER_UAS = [
   "bingbot",               // Bing search crawler
 ];
 
+// Motores de RESPOSTA de IA — liberados por UA.
+//
+// O robots.txt abriu para eles em 21/07/2026 com o argumento certo: quem só
+// coleta para treino consome e não devolve nada, mas quem responde perguntas
+// CITA a fonte e manda usuário real — e o nosso público pergunta "qual curso
+// de IA fazer" dentro do ChatGPT e do Perplexity.
+//
+// Só que a permissão nunca valeu: eles rastreiam de IPs fora do Brasil, então
+// caíam no bloqueio geográfico e recebiam 403. O robots dizia "entre" e a
+// borda dizia "não". Sem esta lista, aquela decisão era letra morta.
+//
+// Vão por UA, e não por faixa de IP, porque nenhum deles publica faixas
+// oficiais como o Google e a Microsoft. O risco de falsificação é o mesmo dos
+// bots sociais: buscam páginas avulsas, não varrem o site.
+const ANSWER_ENGINE_UAS = [
+  "oai-searchbot",   // busca do ChatGPT
+  "chatgpt-user",    // navegação a pedido de um usuário do ChatGPT
+  "perplexitybot",   // índice do Perplexity
+  "perplexity-user", // navegação a pedido de um usuário do Perplexity
+  "claudebot",       // busca do Claude
+];
+
 // Preview/validator bots allowed by UA alone — they fetch single pages for
 // link previews, so spoofing them has little scraping value.
 const SOCIAL_BOT_UAS = [
@@ -210,6 +232,12 @@ export default async (request: Request, context: Context) => {
     // true = IP verified; null = range feeds unreachable, fail open so a real
     // Googlebot is never blocked by our own outage
     console.log(`[GEOBLOCK_BOT] Search crawler allowed (${verified === null ? "failopen" : "ip-verified"}): UA=${userAgent.slice(0, 80)}, Path=${pathname}`);
+    return context.next();
+  }
+
+  const isAnswerEngine = ANSWER_ENGINE_UAS.some((bot) => uaLower.includes(bot));
+  if (isAnswerEngine) {
+    console.log(`[GEOBLOCK_BOT_BYPASS] Answer engine: UA=${userAgent.slice(0, 80)}, Path=${pathname}`);
     return context.next();
   }
 

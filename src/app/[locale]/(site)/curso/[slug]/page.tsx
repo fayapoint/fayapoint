@@ -3,6 +3,7 @@ import CourseSalesPage from "./CourseSalesPage";
 import { allCourses } from "@/data/courses";
 import { getProductBySlug } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
+import { schemaCurso, schemaTrilha } from "@/lib/structured-data";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -45,6 +46,50 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default function Page() {
-  return <CourseSalesPage />;
+export default async function Page({ params }: Props) {
+  const { locale, slug } = await params;
+
+  // O JSON-LD sai do SERVIDOR: a página de vendas é client component, e dado
+  // estruturado injetado depois da hidratação chega tarde para o rastreador.
+  const product = await getProductBySlug(slug).catch(() => null);
+  const course = allCourses.find((c) => c.slug === slug);
+
+  const nome = product?.name || course?.title || slug;
+  const descricao =
+    product?.seo?.metaDescription?.trim() ||
+    product?.copy?.shortDescription ||
+    course?.shortDescription ||
+    "";
+
+  const dados = [
+    schemaCurso({
+      slug,
+      locale,
+      nome,
+      descricao,
+      nivel: product?.level || course?.level,
+      duracao: product?.metrics?.duration || course?.duration,
+      aulas: product?.metrics?.lessons,
+      preco: product?.pricing?.price,
+      moeda: product?.pricing?.currency,
+    }),
+    schemaTrilha(locale, [
+      { nome: "Início", caminho: "" },
+      { nome: "Cursos", caminho: "/cursos" },
+      { nome, caminho: `/curso/${slug}` },
+    ]),
+  ];
+
+  return (
+    <>
+      {dados.map((d, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }}
+        />
+      ))}
+      <CourseSalesPage />
+    </>
+  );
 }

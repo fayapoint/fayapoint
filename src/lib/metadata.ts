@@ -25,9 +25,20 @@ export function generatePageMetadata({
 }: PageMetadataParams): Metadata {
   const fullPath = `/${locale}${path}`;
   const canonicalUrl = `${SITE_URL}${fullPath}`;
-  const altLocale = locale === "pt-BR" ? "en" : "pt-BR";
-  const altPath = `${SITE_URL}/${altLocale}${path}`;
 
+  /**
+   * O `hreflang="en"` saiu — e a razão é medida, não estética.
+   *
+   * A árvore `/en/` serve o MESMO conteúdo em português: em 27/07/2026,
+   * `/en/noticias` respondia com `<title>Blog IA Hoje — notícias e guias…`.
+   * Declarar essa URL como a versão inglesa é dizer ao Google uma coisa que
+   * não é verdade, e o efeito prático é ele escolher sozinho qual das duas
+   * cópias mostrar. O `site:` do domínio confirmava o estrago: resultados em
+   * inglês para páginas que hoje são portuguesas, e o aviso de que entradas
+   * "bastante semelhantes" tinham sido omitidas.
+   *
+   * Quando existir tradução de verdade, o alternativo volta — junto com ela.
+   */
   return {
     ...(title && { title }),
     ...(description && { description }),
@@ -36,7 +47,6 @@ export function generatePageMetadata({
       languages: {
         "x-default": `${SITE_URL}/pt-BR${path}`,
         "pt-BR": `${SITE_URL}/pt-BR${path}`,
-        "en": `${SITE_URL}/en${path}`,
       },
     },
     openGraph: {

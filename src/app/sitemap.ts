@@ -8,7 +8,19 @@ const SITE_URL =
   process.env.SITE_URL ??
   "https://fayai.com.br";
 
-const LOCALES = ["pt-BR", "en"] as const;
+/**
+ * Só pt-BR entra no sitemap.
+ *
+ * A árvore `/en/` existe como rota, mas serve o MESMO texto em português —
+ * verificado em 27/07/2026. Anunciar 64 cópias ao Google num domínio novo
+ * gastava metade do orçamento de rastreamento com duplicata e ainda dava a
+ * ele a chance de escolher a versão errada como canônica. O `site:` mostrava
+ * exatamente isso: páginas indexadas em `/cursos` e `/blog` com título antigo
+ * em inglês, e o aviso de resultados "bastante semelhantes" omitidos.
+ *
+ * Quando existir tradução de verdade, `en` volta para cá — junto com ela.
+ */
+const LOCALES = ["pt-BR"] as const;
 
 // O sitemap consulta o banco (cursos ativos + artigos do blog), então precisa
 // ser revalidado — antes era uma função síncrona congelada no build, e cada

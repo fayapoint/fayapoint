@@ -129,12 +129,24 @@ export async function generateMetadata({
 
   return {
     ...metadata,
+    /**
+     * `/en/` sai do índice enquanto servir português.
+     *
+     * A rota continua funcionando — quem chegar nela vê o site. O que muda é
+     * o que dizemos ao Google: hoje `/en/qualquer-coisa` devolve o mesmo texto
+     * em português de `/pt-BR/qualquer-coisa`, e anunciar isso como versão
+     * inglesa é duplicata declarada por nós mesmos. Num domínio sem
+     * autoridade, gastar metade do rastreamento em cópia é caro.
+     *
+     * `follow` fica ligado: as páginas continuam passando valor pelos links
+     * internos; elas só não competem consigo mesmas no índice.
+     */
+    ...(locale === "en" && { robots: { index: false, follow: true } }),
     alternates: {
       canonical: `${SITE_URL}/${locale}`,
       languages: {
         "x-default": `${SITE_URL}/pt-BR`,
         "pt-BR": `${SITE_URL}/pt-BR`,
-        "en": `${SITE_URL}/en`,
       },
     },
   };

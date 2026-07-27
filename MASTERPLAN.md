@@ -103,6 +103,55 @@ Depois `/pt-BR/lab/3d` (as opções), `/pt-BR/radar` (D1, D2, D5, D7) e `/pt-BR`
 
 ---
 
+## 🔎 SEO — O DIAGNÓSTICO DE 27/07 (por que estamos estagnados)
+
+O Ricardo pediu para atacar o tráfego. O Search Console de 11/07 a 24/07:
+**2 cliques, 87 impressões, posição média 11,6** — e as **12 consultas são
+todas variações do nome** ("fayai", "fayz ai", "fazer ai", "fai ia",
+"uaifai"). Nenhuma consulta de conteúdo. Ou seja: quem já conhece a marca
+acha; quem procura o assunto, não.
+
+Descoberta não é o gargalo: o sitemap está enviado desde 21/07, foi lido em
+26/07 e processado com 128 URLs. O gargalo é o que essas URLs dizem ao Google.
+
+### O que o `site:fayai.com.br` revelou
+
+O índice tinha **as mesmas páginas duas vezes**, e as cópias sem prefixo de
+idioma vinham com **título antigo em inglês**:
+
+- `fayai.com.br` → "FayAi - Master AI from Beginner to Pro"
+- `fayai.com.br/cursos` → "AI Courses - FayAi… Explore 50+ hands-on courses"
+- `fayai.com.br/blog` → "AI Blog - Articles & Tutorials"
+- e ao lado, `fayai.com.br/pt-BR/cursos`, `/pt-BR/noticias`, `/pt-BR/radar`
+
+Com o próprio Google avisando no rodapé que **omitiu resultados "bastante
+semelhantes"**. Ele estava filtrando nossa duplicata.
+
+### As cinco causas, todas corrigidas
+
+| | O que estava errado | Conserto |
+|---|---|---|
+| 1 | **307 no redirecionamento de idioma.** Temporário = "mantenha a URL antiga no índice", e foi o que ele fez. | 308 quando não há cookie. ⚠️ **E o destino teve que virar determinístico**: um dos três caminhos partia de `en` e só virava `pt-BR` com cabeçalho de país ou `Accept-Language` — tornar isso permanente gravaria `/cursos → /en/cursos` para sempre. Medido depois: com `Accept-Language: en-US`, o destino é `/pt-BR/cursos`. |
+| 2 | **`/en/` serve português.** `/en/noticias` respondia com `<title>Blog IA Hoje…`. Eram **64 das 128 URLs do sitemap** — metade do rastreamento gasto em cópia, num domínio sem autoridade. | Fora do sitemap (128 → 64), `noindex, follow` na árvore `/en/`, e o `hreflang="en"` removido. A rota continua funcionando; ela só deixa de competir consigo mesma. Quando houver tradução de verdade, tudo volta junto com ela. |
+| 3 | **Cadeia de 4 respostas no `/blog`**: `/blog → /pt-BR/blog → /noticias → /pt-BR/noticias`, tudo temporário. | `permanentRedirect` com o idioma no destino: 2 saltos, ambos 308. |
+| 4 | **Zero dado estruturado nos 20 cursos e nas 29 matérias** — as páginas que competem por busca eram as únicas sem schema. | `Course` + `CourseInstance` + `Offer` + `BreadcrumbList` nos cursos; `Article` + `BreadcrumbList` nas matérias. ⚠️ **Sem `aggregateRating`**: as notas do banco são dado de teste (auditoria de 18/07), e estrela inventada é ação manual do Google além de mentira. |
+| 5 | **Os motores de resposta de IA estavam bloqueados na borda.** O robots.txt os liberou em 21/07 com o argumento certo, mas eles rastreiam de IPs fora do Brasil e caíam no geoblock: o robots dizia "entre" e a borda respondia 403. A decisão era letra morta. | `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User` e `ClaudeBot` passam por UA (nenhum publica faixa de IP oficial, ao contrário de Google e Bing). |
+
+### O que isto NÃO resolve — e é onde está o trabalho real
+
+Nada acima cria demanda. Some a duplicata, consolida os sinais nas URLs certas
+e torna as páginas elegíveis a resultado rico — mas **o site continua sem
+conteúdo que responda a uma pergunta que brasileiro digita**. As 12 consultas
+do Search Console provam isso: só marca, nenhum tema.
+
+O próximo passo de tráfego é conteúdo de cauda longa informacional ("o que é
+RAG", "agentes de IA o que são", "como usar ChatGPT"), que já está apontado no
+§8.5 e na Fase 9.4. E a matéria-prima existe: o Radar mede todo dia o que o
+Brasil pergunta sobre IA, por profissão — é literalmente uma lista de pautas
+com demanda comprovada, e ninguém escreveu uma linha a partir dela ainda.
+
+---
+
 ## 🤝 HANDOFF — RADAR FAYAI + 3D NA INTERFACE (fechado 26/07/2026)
 
 **Para quem abrir uma sessão nova: leia este bloco inteiro antes de tocar em qualquer coisa.** Sessão de ~24h com o Ricardo, evolução contínua.
