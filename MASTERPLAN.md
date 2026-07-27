@@ -137,6 +137,42 @@ semelhantes"**. Ele estava filtrando nossa duplicata.
 | 4 | **Zero dado estruturado nos 20 cursos e nas 29 matérias** — as páginas que competem por busca eram as únicas sem schema. | `Course` + `CourseInstance` + `Offer` + `BreadcrumbList` nos cursos; `Article` + `BreadcrumbList` nas matérias. ⚠️ **Sem `aggregateRating`**: as notas do banco são dado de teste (auditoria de 18/07), e estrela inventada é ação manual do Google além de mentira. |
 | 5 | **Os motores de resposta de IA estavam bloqueados na borda.** O robots.txt os liberou em 21/07 com o argumento certo, mas eles rastreiam de IPs fora do Brasil e caíam no geoblock: o robots dizia "entre" e a borda respondia 403. A decisão era letra morta. | `OAI-SearchBot`, `ChatGPT-User`, `PerplexityBot`, `Perplexity-User` e `ClaudeBot` passam por UA (nenhum publica faixa de IP oficial, ao contrário de Google e Bing). |
 
+### O que a Inspeção de URL revelou — e que muda a leitura de tudo
+
+Inspecionando `https://fayai.com.br/pt-BR` no Search Console, o Google
+respondeu com todas as letras:
+
+- **"O URL não está no Google"** — a home canônica **não está indexada**.
+- Motivo: **"Cópia sem página canônica selecionada pelo usuário"**.
+- **"URL canônico declarado pelo usuário: Nenhum"**.
+- **"URL canônico selecionado pelo Google: `https://fayai.com.br/`"** — ele
+  escolheu a raiz sem prefixo no lugar dela.
+- **"Último rastreamento: 20 de abril de 2026"**.
+
+Ou seja: **o Google trabalha com uma foto de três meses atrás.** Naquele
+rastreamento não havia canonical por página (o bug que só foi corrigido em
+21/07), então ele dobrou tudo na raiz. Nada do que consertamos desde então —
+nem o canonical de 21/07, nem os títulos, nem o de hoje — chegou até ele.
+
+E `/pt-BR/arcade` apareceu como **"Detectada, mas não indexada no momento"**,
+com "Último rastreamento: N/D": descoberta pelo sitemap, **nunca rastreada**.
+É o sintoma clássico de orçamento de rastreamento gasto em outro lugar — no
+caso, nas 64 duplicatas.
+
+**Ação tomada (27/07):** rastreamento prioritário solicitado para as 7 URLs
+que carregam o negócio — `/pt-BR`, `/pt-BR/cursos`, `/pt-BR/noticias`,
+`/pt-BR/radar`, `/pt-BR/arcade`, `/pt-BR/curso/chatgpt-zero` e
+`/pt-BR/curso/rag-knowledge`. Sem isso, os consertos ficariam esperando o
+Google voltar sozinho — o que, pelo histórico, leva meses.
+
+⚠️ **Esperar as impressões CAÍREM antes de subir.** As 71 impressões da raiz e
+as 8 de `/en/cursos` somem por construção. A aposta é que consolidem em
+`/pt-BR/`. Se em duas semanas a soma não voltar, a hipótese estava errada e o
+caminho é outro.
+
+**Também verificado:** nenhuma ação manual, sitemap enviado e processado.
+Nenhum bloqueio pesa contra o site — o que pesava era a duplicata.
+
 ### O que isto NÃO resolve — e é onde está o trabalho real
 
 Nada acima cria demanda. Some a duplicata, consolida os sinais nas URLs certas
