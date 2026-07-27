@@ -3,97 +3,103 @@
 
 ---
 
-## 🔴 HANDOFF ABERTO — DEFEITOS ACHADOS PELO RICARDO USANDO O SITE (27/07/2026)
+## ✅ SESSÃO 27/07 (madrugada) — OS 8 DEFEITOS + 3D PARA ESCOLHER (Opus 5)
 
-**Esta é a fila da próxima sessão. Nada aqui foi corrigido** — ele pediu explicitamente diagnóstico e handoff, não conserto, porque a cota da semana já está pela metade. Tudo abaixo foi **verificado em produção**, com a causa isolada e não suposta.
+Ordem do Ricardo: *"vamos começar a corrigir os erros e deixar o site limpo de erros, e ao mesmo tempo quero que gere mais 3 opções do logo FayaAi em 3d… depois também quero que gere os ícones em 3d… 3 opções para cada ícone estático que temos, isso deve acontecer em paralelo."* Foi feito nessa ordem, com a GPU rodando o tempo todo em segundo plano.
 
-> **Ordem sugerida:** D1 → D2 → D3 são bugs de uma linha a poucas linhas, com impacto visual enorme e risco quase zero. D4 e D8 são trabalho de interface. D5, D6 e D7 são produto — envolvem decidir o que a ferramenta *é*, e é onde está o valor real que ele cobrou.
+**DEPLOYADO a pedido dele**, depois de escolher a família de ícones e de eu somar a regra que impede build por documentação. Verificado no build antes de subir; verificação em produção logo abaixo.
 
-### D1 · O `.fx-orb` não é absoluto fora da home — 449 px de vazio no topo da `/radar`
+### Os defeitos: 7 dos 8 fechados
 
-**Sintoma dele:** *"temos um espaço gigante antes de apresentar o conteúdo"* (desktop e celular).
+| # | O que era | Estado |
+|---|---|---|
+| D1 | `.fx-orb` declarado dentro do `<style>` do `NovaLanding`: fora da home virava bloco no fluxo e empurrava a `/radar` 449 px | ✅ a família `fx-*` inteira (orb, shine, magic, float, conf, quiz + keyframes) mudou para `globals.css`. Medido na `/radar`: `position: absolute`, título logo abaixo do menu |
+| D2 | `itens[0].volume` como divisor dava barras de 1000% | ✅ `radar-barra.ts`. **Não foi só trocar por `Math.max`:** busca e leitura convivem na mesma lista com réguas diferentes, então cada fonte tem seu próprio topo. Medido: 4/10/20/37/100%, dois 100% (um por fonte), nenhum acima |
+| D3 | O painel vazava do mapa no celular | ✅ abaixo de 640 px vira folha ancorada no rodapé da janela. **Trocar para `fixed` não bastava** — `backdrop-filter` no `.glass` do cartão faz dele o bloco contêiner, e o painel resolvia contra 341 px em vez da janela. Resolvido com portal para o `body` |
+| D4 | Linhas do IA Trend eram `<div>` sem interação | ✅ viraram botão e abrem o mesmo painel do World Trend, com nota, canais (posição no Google e no YouTube), amplitude e a ponte do nicho. **A parte do mapa continua aberta** — ver abaixo |
+| D5 | `/radar` tinha `<a href="#ia-trend">`: só rolava a página | ✅ vira troca de camada como na home, e a página ganhou o ranking de IA que só existia lá. Medido: `scrollY` fica em 0, o título vira "IA TREND" e a coluna troca |
+| D6 | Nada do que medimos é guardado | ❌ **não fiz — é fase, não conserto.** Ver abaixo |
+| D7 | Metodologia detalhada demais | ✅ virou uma linha com link para as fontes. A ressalva do volume **não sumiu**: mudou para junto dos números que a exigem, na comparação por região |
+| D8 | O WhatsApp subia ao ver o rodapé, em vez de acoplar | ✅ acopla **entre o rodapé e a grade de botões**, exatamente onde ele pediu, via encaixe nomeado (`#wpp-acoplado`) com retorno seguro para páginas sem o encaixe. O X no canto superior esquerdo acopla (não fecha) e a escolha fica no `localStorage` |
 
-**Causa, isolada:** a regra `.fx-orb { position: absolute; ... }` está declarada **dentro de um `<style>` no `NovaLanding.tsx`** (linha ~363). Quem não renderiza o `NovaLanding` nunca recebe essa regra. A `/radar` é exatamente esse caso: medido em produção, `position: static`, sem nenhuma regra `.fx-orb` nas folhas de estilo da página. O orbe decorativo de 420×420 vira um bloco no fluxo normal e empurra a página inteira para baixo.
+**Dois defeitos que apareceram durante a verificação e entraram no conserto:**
+- O `<h1>` da `/radar` ficava **por baixo do cabeçalho fixo**. Estava escondido pelo próprio D1: com 449 px de vazio ninguém via. Corrigido nas duas páginas novas.
+- O painel de IA mostrava **"GOOGLE · 0º"** e **"1 PERGUNTA DISTINTAS"**. A posição do autocomplete é 0-indexada e "0º" lê como erro; a concordância estava quebrada.
 
-Medido: **449 px** entre o fim do nav e o `<h1>` na `/radar`. Na home, os 9 orbes estão todos `absolute` e o layout está correto — por isso o defeito passou despercebido.
+### O que ficou aberto, e por quê
 
-**Solução:** mover a regra `.fx-orb` (e as `@keyframes fx-drift-a/b` que a acompanham) do `<style>` do `NovaLanding` para o CSS global. Enquanto ela morar num componente, qualquer página nova que use a classe nasce quebrada. ⚠️ Verificar junto as outras classes do mesmo bloco (`.fx-shine`, `.fx-magic`, `.fx-float`, `.fx-conf`) — têm o mesmo problema latente.
+- **D6 (memória do que medimos)** — o Ricardo tem razão de que é o que mais vale, e é justamente por isso que não entra como patch: precisa de coleção nova (`radar_snapshots`), decisão de cron e desenho do gráfico. Continua descrito no bloco de handoff anterior, que segue válido como especificação.
+- **D4, segunda metade (hover do IA Trend acendendo o mapa)** — não é interface, é **dado**: o IA Trend é medido com `gl=br`, nacional, sem recorte geográfico. Não existe "onde" para acender. Destravar isso exige medir por região, o que multiplica as consultas e pede cache próprio.
+- **O vídeo da `/radar`** — ele disse que quer o plano ocupando o vazio do topo. Consertado o vazio, não há mais vazio: o vídeo continua ao lado do título. **Decisão de composição dele.**
 
-**Aceite:** abrir `/pt-BR/radar` e o título aparecer logo abaixo do menu, sem tela vazia.
+### Logo em 3D — 3 opções (`/pt-BR/lab/3d`)
 
-### D2 · Barras de volume com 1000% de largura
+Não são três ajustes da mesma peça: são três MATÉRIAS. A forma não muda em nenhuma — os contornos continuam saindo dos glifos da fonte (`scripts/logo-svg.py`), porque imagem generativa erra letra.
 
-**Achado durante a verificação** — ele não relatou, e é o defeito que mais estraga a leitura do ranking.
+| | O que afirma | GPU |
+|---|---|---|
+| **Maciço** | letreiro físico, ouro polido, chanfro largo — é o que está no ar | baixo |
+| **Vidro** | o "Fay" vira vidro fumê e o "Ai" fica ouro maciço por dentro; o dourado aparece através | alto |
+| **Contorno** | corpo escuro com a aresta acesa (casca `BackSide`), a linguagem do HUD do Radar | médio |
 
-**Causa:** `volumeTopo = itens[0]?.volume || 1` (`RadarSection.tsx` ~141 e `RadarPagina.tsx`) assume que o **primeiro item é o de maior volume**. Não é: no degrau "mundo" a lista é ordenada por *em quantos países o assunto aparece*, e as leituras da Wikipédia entram na mesma lista com contagem de visitas, que é outra escala. Quando o item 0 tem volume pequeno (ou zero, virando o `|| 1`), a razão explode.
+A bancada tem alternador de fundo claro/escuro — o vidro é a única que depende do fundo para existir, e escolher sem isso seria escolher no escuro. Verificado: as três montam WebGL no hover, zero erro de console.
 
-Medido em produção no celular: larguras de `1000%`, `500%`, `200%` — e elementos com **85.226 px** de largura. Não quebra o scroll horizontal porque o pai tem `overflow: hidden`, mas **todas as barras ficam cheias** e a comparação visual entre assuntos deixa de existir.
+### Ícones do dashboard — 3 opções para cada um dos 17
 
-**Solução:** `const volumeTopo = Math.max(1, ...itens.map(i => i.volume))`. Uma linha, nos dois arquivos.
+Pipeline: **Qwen 2512 + Lightning** desenha a imagem-fonte (clay render isolado, sem texto) → **Hunyuan3D-2mv** reconstrói a malha → **gltf-transform** decima. Tudo local, custo zero. Scripts em `scripts/icones3d/`.
 
-**Aceite:** no celular, as barras da lista terem comprimentos visivelmente diferentes entre si.
+As três opções são três **linguagens de forma** aplicadas aos 17 ícones: `sólido` (volume cheio), `facetado` (planos e arestas) e `emblema` (o objeto em relevo dentro de um disco — a linguagem do pino do Radar). Escolher é escolher um CONJUNTO: num menu, o que importa é as dezessete peças combinarem entre si.
 
-### D3 · O painel do assunto vaza para fora do mapa no celular
+⚠️ **Duas armadilhas medidas, para não repetir:**
+1. **`--simplify-error` é orçamento de ERRO, não alvo de tamanho.** Quando a malha é ruidosa o simplificador para antes da meta e devolve o arquivo quase inteiro: o robô facetado saiu com **4.436 KB**. A decimação agora sobe o erro até caber num teto de 120 KB — num ícone de 40 px, 8% de erro de forma não se vê; 4 MB se sente. O mesmo arquivo passou a sair com **62 KB**.
+2. **`npx` não existe no PATH de um subprocesso do Python** (o node é gerenciado por fnm), e achar o `npx.cmd` não basta — ele chama `node`, que também precisa estar no PATH. O sintoma é código 1 sem mensagem, que manda depurar a ferramenta errada.
 
-**Sintoma dele:** *"quase tudo fica errado e fora do nosso modal do mapa"* — visível no print dele: o cartão "EM ALTA · Apple iPhone… 1.000…" atravessa a borda direita do mapa e é cortado.
+**Resultado: 51 malhas, 3,0 MB no total** (média 60 KB; três teimosas entre 136 e 344 KB — `courses_facetado` é um livro aberto, e páginas finas são muitas superfícies separadas que o simplificador não consegue colapsar). Os 17 ícones × 3 famílias estão reconhecíveis.
 
-**Causa:** o `ModalAssunto` foi desenhado para o painel HUD do desktop, onde o mapa tem 420-560 px. No celular o container do globo mede **317×317** e o painel é posicionado dentro dele com largura pensada para a tela grande. O deslocamento de câmera por `setViewOffset` (que abre espaço para o painel) também pressupõe largura que o celular não tem.
+**A pendência de arquitetura do 3D ficou respondida na prática:** a bancada usa **uma tela WebGL por ícone, não por opção**, montada só quando entra em cena. Uma por opção seriam 51 contextos — e o navegador para de criar por volta de dezesseis. É esse o padrão que o dashboard vai precisar.
 
-**Solução:** abaixo de `sm`, o painel deixa de ser HUD-dentro-do-mapa e vira uma folha ancorada **abaixo** do mapa (ou um bottom-sheet), com o mapa mantendo o destaque da região. O gesto de entrada/saída e o alfinete continuam; o que muda é a âncora. Não tentar encolher o HUD atual — em 317 px ele não cabe de forma legível.
+**Terceira armadilha, e essa era MINHA, não do pipeline.** A primeira versão da bancada girava as peças 360° em Y sobre fundo navy escuro: os emblemas — que são discos — passavam a maior parte do tempo de perfil, e as peças liam como manchas marrons. Parecia malha ruim e não era. Duas correções e as formas apareceram: **balanço de ±40° em vez de rotação completa** (a peça nunca some) e **corpo claro com luz de trás dourada** em vez de navy chapado (o contorno separa do fundo). Vale para qualquer lugar do site que exiba estas peças em miniatura.
 
-**Aceite:** abrir um assunto no celular e o painel ficar inteiro na tela, sem corte.
+**As malhas NÃO estão versionadas** (`/public/3d/icones/` no `.gitignore`): 51 arquivos no repositório para uma decisão que descarta dois terços deles não se justifica. Depois da escolha, as 17 da família vencedora passam a ser versionadas.
 
-### D4 · IA Trend na home não tem cartão nem relação com o mapa
+### A escolha dele, e o que saiu dela
 
-**Sintoma dele:** *"não temos os cards 3d nem o relacionamento deles quando fazemos o hover sobre um trend aparecendo no mapa"*.
+**Logo: fica como está** (Maciço). As outras duas continuam na bancada para quando ele quiser rever.
 
-**Causa, confirmada no código:** as linhas do IA Trend (`PainelIa`, `RadarSection.tsx` ~852) são `<div>` puras — sem `onClick`, sem `onMouseEnter`. E o componente **não recebe** `onDestacar`/`onAbrir`: sua assinatura tem só `nichoId`, `fontes`, `linhas`, `notaTopo`. O World Trend tem toda a ligação com o globo; o IA Trend nunca teve.
+**Ícones: família SÓLIDA**, escolhida pelo critério que ele deu — "não sendo os que ficaram grande demais". Medido:
 
-⚠️ **A parte do mapa não é trabalho de interface, é de dado.** O IA Trend vem do autocomplete do Google/YouTube consultado com `gl=br` — é **nacional, sem recorte geográfico**. Não existe "onde" para acender no mapa. Para o hover fazer o que ele espera, é preciso **medir o IA Trend por região**, repetindo as consultas com o parâmetro de região por estado. Isso multiplica o número de consultas (hoje 18 por nicho) e precisa de cache próprio — decidir o alcance antes de codar.
+| família | total | maior peça | acima de 120 KB |
+|---|---|---|---|
+| **sólido** | **943 KB** | **116 KB** | **nenhuma** |
+| facetado | 1.099 KB | 340 KB (`courses`) | 1 |
+| emblema | 1.081 KB | 207 KB (`history`) | 2 |
 
-**Solução em duas partes:** (a) barata e imediata — a linha do IA Trend vira botão e abre o mesmo `ModalAssunto` do World Trend, com nota, canais e a ponte do nicho; (b) cara — medição regional para destravar o hover no mapa.
+As 34 peças descartadas saíram do `public/`; as 17 escolhidas passaram a ser versionadas.
 
-### D5 · O IA Trend da `/radar` é só uma âncora
+**No portal elas aparecem no hover** (`IconeMenu3D` + `DashboardSidebar`), seguindo a regra dele de 2D primeiro. Quem decide qual peça desenha é a **barra lateral**, não cada item: o cursor está sobre um só, então existe no máximo **um contexto WebGL** no menu inteiro. Sem esse controle, uma varrida de cursor empilharia canvases.
 
-**Sintoma dele:** *"clicamos em ia trend, ele simplesmente nos leva a parte de baixo da página, ignorando completamente tudo que fizemos e está pronto na home"*.
+⚠️ **A verificação da barra lateral não pôde ser visual** — o portal fica atrás de login e eu não entro na conta de ninguém. O que foi verificado: os 17 ids do menu batem 1-a-1 com o catálogo, os `.glb` são servidos com `model/gltf-binary`, e **o mesmo componente, com a mesma regra de um-por-vez, foi montado na bancada** e medido (antes do cursor: 0 canvas e o vetorial visível; com o cursor: 1 canvas e o vetorial em opacidade 0; varrendo os cinco itens: continua 1). O teste de 30 s dele: abrir o portal e passar o cursor pelo menu.
 
-**Causa:** na home o botão troca a **camada** do radar (`onVerIa={() => setCamada("ia")}`) — o globo muda, o painel muda. Na `/radar` é `<a href="#ia-trend">` (`RadarPagina.tsx` ~282): só rola a página. Duas implementações diferentes para o mesmo botão.
+### O limite do WebGL deixou de ser teoria e virou medição
 
-**Solução:** a `/radar` passa a trocar de camada como a home, e a seção `#ia-trend` deixa de ser um destino de rolagem para virar a leitura completa que a página dedicada deveria ter. Ele foi explícito: *"deveria ser ainda mais completo com mais informações gráficos temporais"* — ver D6, porque gráfico temporal depende de ter histórico.
+A primeira bancada montava **um canvas por cartão** — e quebrou: medidos **5 de 11 contextos com `isContextLost() === true`**, cartões vazios na tela. É o despejo do navegador por volta de dezesseis contextos, exatamente o risco anotado como pendência de arquitetura.
 
-### D6 · Não guardamos nada do que medimos — e é o que ele mais cobrou
+A grade agora usa **uma única tela WebGL**, fixa na janela, com as 17 peças posicionadas em pixels sobre os cartões (câmera ortográfica com zoom 1 → unidade de mundo = pixel; cartão fora da janela não desenha). Depois: **5 canvases na página inteira, zero perdidos**. É este o padrão para qualquer lugar do site que queira 3D em quantidade.
 
-**Palavras dele:** *"não percebemos nenhum tipo de inteligência do nosso sistema para com os dados que já obtivemos, servimos anteriormente… se é inútil pra gente, por conseguinte será inútil para ele. Temos que criar valor para o usuário com nossa ferramenta e nossas informações coletadas."*
+### Netlify: documentação não gasta mais build
 
-**Causa:** todo o Radar é **stateless**. `/api/radar` e `/api/radar/mundo` medem, guardam num cache em memória do processo (30 min / 6 h) e esquecem. Nada vai para o banco. Um visitante que volta amanhã vê uma foto do agora, sem nenhuma memória — e nós também não temos.
+`netlify.toml` ganhou um `ignore`. A convenção é invertida em relação ao que parece: **sair com 0 CANCELA** o build. Como `git diff --quiet` devolve 0 quando não há diferença, "nada mudou fora dos caminhos excluídos" cancela.
 
-**Solução (é uma fase, não um patch):** persistir cada medição numa coleção (`radar_snapshots`: lugar/nicho, termo, volume ou nota, canais, `medidoEm`) alimentada pelos próprios endpoints, ou por um cron leve. Com histórico nasce o que ele pediu e o que hoje não existe em lugar nenhum de graça:
-- **série temporal** por assunto e por nicho (o gráfico que ele quer);
-- **"subiu/caiu"** contra ontem e contra a semana — que é a leitura que faz o visitante voltar;
-- **"apareceu agora"**: assunto que não existia no snapshot anterior;
-- **memória por região**, que dá sentido ao mapa no IA Trend (D4).
+Excluídos: `*.md`, `scripts/*` e `.gitignore`. Tudo o mais continua construindo. A comparação é contra `CACHED_COMMIT_REF` (último deploy com **sucesso**), então um build que falhou não some do diff; e sem a variável sai com 1 — na dúvida, constrói.
 
-⚠️ Ler [[reference_google_trends_volume]] antes de desenhar o gráfico: o volume do Google **não é comparável entre lugares**. Série temporal do *mesmo* lugar é legítima; comparar lugares por volume não é.
+Testado contra commits reais deste repositório antes de subir: `fdb2ee0` (só MASTERPLAN) → **pula**; `d8aed89` (só `.tsx`) → **constrói**.
 
-### D7 · A metodologia está detalhada demais
+### Como ver
 
-**Palavras dele:** *"Dentro do radar damos nosso método de medição de forma detalhada, e não precisamos, nem devemos, apenas dizer que são dados reais basta."*
-
-**Onde:** seção "COMO ISTO É MEDIDO" (`RadarPagina.tsx` ~622) e o parágrafo de nota no fim do `PainelIa`.
-
-**Solução:** reduzir a uma linha do tipo "dados reais, medidos agora, com link para a fonte". ⚠️ **Não apagar a frase de limite do volume** (a que explica que São Paulo aparecer abaixo de Mato Grosso do Sul não significa menos procura) enquanto houver qualquer número comparando lugares na tela — ela é o que impede o número de ser lido errado. Se D6 trouxer gráfico comparativo, essa ressalva tem que sobreviver em algum lugar.
-
-### D8 · O WhatsApp atrapalha a leitura — ele já disse como quer
-
-**Palavras dele:** *"na home o modal do whatsapp fica incomodando quando tentamos ler algo… quero que ao chegar no fim da página ele se acople entre o footer e os botões, e que dentro dele no canto superior esquerdo, tenha um botão de x, como se fosse para fechar, mas ele vai se acoplar ao fundo. No celular isso fica ainda pior e esta solução resolve tudo."*
-
-**Estado atual:** `WhatsAppButton.tsx` é `fixed bottom-5 right-5 z-50` e já tem um `useFooterClearance` que, ao ver o rodapé, **sobe** o botão. É o oposto do que ele quer.
-
-**Solução:** trocar a elevação por **acoplamento** — ao rodapé entrar na viewport, o botão sai de `fixed` e passa a ocupar um lugar próprio entre o rodapé e a grade de botões. Somar o "X" no canto superior esquerdo que **acopla** (não fecha), com a preferência guardada em `localStorage` para não voltar a incomodar na próxima página. Montado hoje só em `/[locale]/page.tsx` e `/descobrir` — confirmar onde mais deve existir.
-
-### O que NÃO está nesta lista
-
-O **conteúdo do vídeo** da `/radar`. Ele disse: *"não se preocupe com o conteúdo do vídeo, vamos refazer no higgsfield"*. O componente (`VideoAbertura.tsx`), o carregamento tardio, o loop e a retomada por `visibilitychange` continuam valendo — o que troca é o arquivo. **Mas ver D1:** ele quer o vídeo ocupando o espaço vazio do topo, e não ao lado do título como está hoje; isso é decisão de composição que vem junto com o conserto do gap.
+```
+cd fayapoint-ai && npm run build
+```
+Depois `/pt-BR/lab/3d` (as opções), `/pt-BR/radar` (D1, D2, D5, D7) e `/pt-BR` (D4, D8). No celular, abrir um assunto na `/radar` prova o D3 e rolar até o fim da home prova o D8.
 
 ---
 
