@@ -1,6 +1,9 @@
 "use client";
 
-import { ArrowUpRight, X, Clock, Search, BookOpen, Sparkles, Pin, PinOff } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import Link from "next/link";
+import { ArrowUpRight, X, Clock, Search, BookOpen, Sparkles, Pin, PinOff, Youtube, BookOpenText } from "lucide-react";
 import type { EstadoPainel } from "@/components/radar/usePainelAssunto";
 
 /**
@@ -25,9 +28,30 @@ import type { EstadoPainel } from "@/components/radar/usePainelAssunto";
  *    intervalo não informa nada.
  */
 
+/**
+ * A leitura de IA de um termo — o que a linha do IA Trend carrega.
+ *
+ * Existe porque o IA Trend não mede volume: mede POSIÇÃO no autocomplete e
+ * CANAL. Espremer isso no formato do World Trend (volume + janela) daria um
+ * número que não foi medido. São grandezas diferentes e a placa mostra cada
+ * uma pelo que ela é.
+ */
+export interface DetalheIa {
+  nota: number;
+  canais: "web+yt" | "web" | "yt";
+  posWeb: number | null;
+  posYt: number | null;
+  /** Quantas perguntas diferentes trouxeram este termo — a amplitude do tema. */
+  sementes: number;
+  naNoticia: boolean;
+  nicho: string;
+  /** A ponte honesta com o catálogo: o que temos, o que não temos. */
+  ponte: { texto: string; cursos: Array<{ slug: string; nome: string }> };
+}
+
 export interface AssuntoAberto {
   titulo: string;
-  fonte: "busca" | "leitura";
+  fonte: "busca" | "leitura" | "ia";
   volume: number;
   volumeRotulo: string;
   contexto: string | null;
@@ -35,6 +59,8 @@ export interface AssuntoAberto {
   veiculo: string | null;
   temIa: boolean;
   lugares?: string[];
+  /** Presente só quando `fonte === "ia"`. */
+  ia?: DetalheIa;
 }
 
 const NOME_REGIAO: Record<string, string> = {
@@ -66,16 +92,37 @@ export function ModalAssunto({
   onFechar: () => void;
   onPin: () => void;
 }) {
+  const ehIa = assunto.fonte === "ia";
   const ehBusca = assunto.fonte === "busca";
+  const ia = assunto.ia;
 
-  return (
-    <div className="absolute inset-0 z-20" style={{ perspective: "760px", perspectiveOrigin: "78% 72%" }}>
+  /**
+   * No celular a folha precisa sair da árvore do mapa — e trocar para
+   * `position: fixed` NÃO basta.
+   *
+   * O cartão do mapa é `.glass`, e `backdrop-filter` num ancestral faz dele o
+   * **bloco contêiner** de qualquer descendente `fixed`. Medido: com `inset:
+   * auto 0 0 0` o painel resolvia contra o cartão de 341 px em vez da janela,
+   * e continuava exatamente onde estava. O portal corta a ancestralidade e
+   * devolve a janela como referência.
+   */
+  const [emCelular, setEmCelular] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const aplica = () => setEmCelular(mq.matches);
+    aplica();
+    mq.addEventListener("change", aplica);
+    return () => mq.removeEventListener("change", aplica);
+  }, []);
+
+  const conteudo = (
+    <div className="radar-hud-caixa absolute inset-0 z-20" style={{ perspective: "760px", perspectiveOrigin: "78% 72%" }}>
       {/* Sombra diagonal: escurece só o canto onde o painel vive, deixando o
           mapa nítido do outro lado. */}
       <div
         aria-hidden
         onClick={onFechar}
-        className="absolute inset-0 radar-hud-veu"
+        className="radar-hud-veu absolute inset-0"
         style={{
           background:
             "linear-gradient(115deg, transparent 30%, rgba(6,8,20,.34) 52%, rgba(6,8,20,.72) 78%)",
@@ -83,12 +130,12 @@ export function ModalAssunto({
       />
 
       <div
-        className={`radar-hud radar-v${variante} absolute right-0 bottom-0 w-[92%] sm:w-[86%] max-w-[380px] p-2.5 ${
+        className={`radar-hud radar-v${variante} radar-hud-placa absolute right-0 bottom-0 w-[92%] sm:w-[86%] max-w-[380px] p-2.5 ${
           estado === "saindo" ? "radar-hud-saindo" : ""
         } ${estado === "piscando" ? "radar-hud-piscando" : ""}`}
       >
         <div
-          className="relative"
+          className="radar-hud-perspectiva relative"
           style={{
             // Perspectiva mais assumida: a placa pertence ao espaço 3D do
             // mapa. Com `perspective` curta (760px) e origem deslocada, a
@@ -144,8 +191,8 @@ export function ModalAssunto({
                   className="inline-flex items-center gap-1 text-[9px] font-extrabold uppercase tracking-[0.18em]"
                   style={{ color: cor }}
                 >
-                  {ehBusca ? <Search size={10} /> : <BookOpen size={10} />}
-                  {ehBusca ? "em alta" : "mais lido"} · {nomeDoLugar}
+                  {ehIa ? <Sparkles size={10} /> : ehBusca ? <Search size={10} /> : <BookOpen size={10} />}
+                  {ehIa ? `demanda de IA · ${ia?.nicho ?? ""}` : `${ehBusca ? "em alta" : "mais lido"} · ${nomeDoLugar}`}
                 </span>
                 <span className="flex items-center gap-0.5 shrink-0 -mt-0.5 -mr-0.5">
                   <button
@@ -178,17 +225,20 @@ export function ModalAssunto({
                   className="text-[34px] font-extrabold tabular-nums leading-[0.85]"
                   style={{ color: cor, textShadow: `0 0 26px ${cor}55` }}
                 >
-                  {assunto.volume ? assunto.volume.toLocaleString("pt-BR") : "—"}
-                  {assunto.volume ? "+" : ""}
+                  {ehIa
+                    ? (ia?.nota ?? 0).toLocaleString("pt-BR")
+                    : assunto.volume
+                      ? `${assunto.volume.toLocaleString("pt-BR")}+`
+                      : "—"}
                 </span>
                 <span className="text-[10px] text-white/45 leading-tight pb-0.5">
-                  {ehBusca ? "buscas" : "leituras"}
+                  {ehIa ? "nota do radar" : ehBusca ? "buscas" : "leituras"}
                   <br />
                   <span className="inline-flex items-center gap-0.5 text-white/30">
-                    <Clock size={8} /> {ehBusca ? "últimas 24h" : "ontem"}
+                    <Clock size={8} /> {ehIa ? "posição no autocomplete" : ehBusca ? "últimas 24h" : "ontem"}
                   </span>
                 </span>
-                {assunto.temIa && (
+                {assunto.temIa && !ehIa && (
                   <span
                     className="ml-auto inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
                     style={{ background: "#a78bfa26", color: "#a78bfa" }}
@@ -197,6 +247,49 @@ export function ModalAssunto({
                   </span>
                 )}
               </div>
+
+              {/* O canal é a leitura que importa no IA Trend: um termo que só
+                  aparece no YouTube é demanda de VÍDEO, onde um canal ganha
+                  antes de o site ranquear. Sem isto a nota é um número solto. */}
+              {ehIa && ia && (
+                <div className="radar-peca mt-2 flex flex-wrap gap-1" style={{ ["--i" as string]: 3 } as React.CSSProperties}>
+                  {ia.posWeb !== null && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
+                      style={{ background: "#38bdf826", color: "#38bdf8" }}
+                    >
+                      <Search size={8} /> Google · {ia.posWeb + 1}º
+                    </span>
+                  )}
+                  {ia.posYt !== null && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
+                      style={{ background: "#f472b626", color: "#f472b6" }}
+                    >
+                      <Youtube size={8} /> YouTube · {ia.posYt + 1}º
+                    </span>
+                  )}
+                  {ia.canais === "web+yt" && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
+                      style={{ background: "#a3e63526", color: "#a3e635" }}
+                    >
+                      confirmado nos dois
+                    </span>
+                  )}
+                  {ia.naNoticia && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
+                      style={{ background: "#f5c04e26", color: "#f5c04e" }}
+                    >
+                      no noticiário de hoje
+                    </span>
+                  )}
+                  <span className="inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/35">
+                    {ia.sementes} {ia.sementes === 1 ? "pergunta distinta" : "perguntas distintas"}
+                  </span>
+                </div>
+              )}
 
               {assunto.contexto && (
                 <p className="radar-peca mt-2 text-[12px] text-white/65 leading-snug line-clamp-3" style={{ ["--i" as string]: 3 } as React.CSSProperties}>
@@ -218,6 +311,38 @@ export function ModalAssunto({
                 </div>
               ) : null}
 
+              {/* A ponte com o catálogo é escrita à mão por nicho e diz também o
+                  que NÃO temos — prometer curso que não existe custa mais caro
+                  que a visita perdida. */}
+              {ehIa && ia && (
+                <div
+                  className="radar-peca mt-2.5 rounded-lg p-2"
+                  style={{ ["--i" as string]: 4, border: `1px solid ${cor}33`, background: `${cor}0d` } as React.CSSProperties}
+                >
+                  <p
+                    className="flex items-center gap-1 text-[9px] font-extrabold uppercase tracking-widest mb-1"
+                    style={{ color: cor }}
+                  >
+                    <BookOpenText size={9} /> como a FayAI ajuda
+                  </p>
+                  <p className="text-[11px] text-white/65 leading-snug line-clamp-3">{ia.ponte.texto}</p>
+                  {ia.ponte.cursos.length > 0 && (
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      {ia.ponte.cursos.slice(0, 2).map((c) => (
+                        <Link
+                          key={c.slug}
+                          href={`/curso/${c.slug}`}
+                          className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold border transition-colors hover:bg-white/10"
+                          style={{ borderColor: `${cor}55`, color: "#f3f1ff" }}
+                        >
+                          {c.nome} <ArrowUpRight size={9} />
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {assunto.url && (
                 <a
                   href={assunto.url}
@@ -226,7 +351,7 @@ export function ModalAssunto({
                   className="radar-peca mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider transition-opacity hover:opacity-80"
                   style={{ ["--i" as string]: 5 } as React.CSSProperties}
                 >
-                  Ler em {assunto.veiculo ?? "fonte"} <ArrowUpRight size={12} />
+                  {ehIa ? "Ver no" : "Ler em"} {assunto.veiculo ?? "fonte"} <ArrowUpRight size={12} />
                 </a>
               )}
             </div>
@@ -235,6 +360,46 @@ export function ModalAssunto({
       </div>
 
       <style>{`
+        /* ---------------------------------------------------------------
+           CELULAR — o painel deixa de ser HUD-dentro-do-mapa.
+           No desktop o mapa tem 420-560px e sobra canto para a placa entrar.
+           No celular o container do globo mede 317x317: a mesma placa
+           atravessa a borda e é cortada. Abaixo de 640px ela vira uma folha
+           ancorada no rodapé da janela — o mapa continua inteiro e visível
+           acima, com a região acesa, que é o ponto de ter mapa.
+           Encolher o HUD não resolveria: em 317px ele não cabe legível.
+           --------------------------------------------------------------- */
+        @media (max-width: 639px) {
+          .radar-hud-caixa {
+            position: fixed;
+            inset: auto 0 0 0;
+            z-index: 60;
+            perspective: none !important;
+          }
+          /* Nada de cortina: o mapa fica acima da folha e precisa continuar
+             legível — é ele que mostra ONDE o assunto acontece. */
+          .radar-hud-caixa .radar-hud-veu { display: none; }
+          .radar-hud-placa {
+            position: static;
+            width: 100%;
+            max-width: none;
+            padding: 0;
+          }
+          /* A perspectiva é o que faz a placa pertencer ao espaço 3D do mapa.
+             Fora do mapa ela só rouba largura e corta texto. */
+          .radar-hud-caixa .radar-hud-perspectiva {
+            transform: none !important;
+            transform-style: flat !important;
+          }
+          .radar-hud-caixa .radar-hud-perspectiva > div {
+            border-left-width: 0;
+            border-bottom-width: 0;
+            border-radius: 18px 18px 0 0;
+            clip-path: none !important;
+            box-shadow: 0 -18px 44px -14px rgba(0,0,0,.9) !important;
+          }
+        }
+
         /* ---------------------------------------------------------------
            Cinco gestos. A troca sorteia um (sem repetir o anterior), e é isso
            que dá a cada assunto a sensação de ser uma peça própria em vez de
@@ -359,4 +524,6 @@ export function ModalAssunto({
       `}</style>
     </div>
   );
+
+  return emCelular ? createPortal(conteudo, document.body) : conteudo;
 }

@@ -982,3 +982,57 @@ body {
   border: 1px solid var(--cube-face-border);
   box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.3);
 }
+
+/* ========================================================================
+   FAMÍLIA fx-* — efeitos decorativos compartilhados
+   ------------------------------------------------------------------------
+   Moradia obrigatoriamente GLOBAL. Enquanto estas regras viviam dentro de um
+   <style> do NovaLanding, qualquer página que usasse as classes sem renderizar
+   aquele componente nascia quebrada: na /radar o .fx-orb caía em position:static
+   e o orbe decorativo de 420px empurrava a página inteira 449px para baixo.
+   Classe compartilhada tem que morar onde toda página enxerga.
+   ==================================================================== */
+@property --fx-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes fx-rotate { to { --fx-angle: 360deg; } }
+@keyframes fx-sweep { 0% { left: -60%; } 55% { left: 130%; } 100% { left: 130%; } }
+@keyframes fx-drift-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(34px,-22px) scale(1.12); } }
+@keyframes fx-drift-b { 0%,100% { transform: translate(0,0) scale(1.05); } 50% { transform: translate(-28px,18px) scale(.94); } }
+@keyframes fx-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes fx-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes fx-conf {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(720deg) scale(.6); opacity: 0; }
+}
+
+/* O orbe é decoração de fundo: sai do fluxo, senão vira um bloco de 420px. */
+.fx-orb { position: absolute; border-radius: 9999px; filter: blur(46px); pointer-events: none; }
+
+.fx-float { animation: fx-float 7s ease-in-out infinite; }
+
+.fx-magic { position: relative; z-index: 0; }
+.fx-magic::before {
+  content: ""; position: absolute; inset: -3px; border-radius: 1.15rem; z-index: -1;
+  background: conic-gradient(from var(--fx-angle), #38bdf8, #a78bfa, #f472b6, #f5c04e, #38bdf8);
+  animation: fx-rotate 4s linear infinite;
+  filter: blur(7px); opacity: .75;
+}
+
+.fx-shine { position: relative; overflow: hidden; }
+.fx-shine::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+  transform: skewX(-20deg); pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+  animation: fx-sweep 5.2s ease-in-out infinite;
+}
+
+.fx-conf {
+  position: absolute; width: 9px; height: 13px; border-radius: 2px;
+  animation: fx-conf .9s ease-out forwards; pointer-events: none; z-index: 30;
+}
+
+.fx-quiz { transition: border-color .2s ease, background .2s ease, transform .15s ease; }
+.fx-quiz:hover { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-orb, .fx-shine::after, .fx-magic::before, .fx-float { animation: none !important; }
+}

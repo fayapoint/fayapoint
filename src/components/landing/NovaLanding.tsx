@@ -315,10 +315,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         }
       }}
     >
+      {/* A família fx-* mora em globals.css — classe compartilhada não pode
+          depender deste componente estar na tela (ver comentário lá). Aqui
+          fica só o .glass rico, que é a leitura própria desta página. */}
       <style dangerouslySetInnerHTML={{ __html: `
-        @property --fx-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
-        @keyframes fx-rotate { to { --fx-angle: 360deg; } }
-        @keyframes fx-sweep { 0% { left: -60%; } 55% { left: 130%; } 100% { left: 130%; } }
         .glass {
           position: relative;
           background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,0) 38%), rgba(22, 26, 54, 0.42);
@@ -339,37 +339,6 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           transform: perspective(900px) rotateX(2.2deg) translateY(-4px);
           box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 22px 50px -16px rgba(0,0,0,.6);
         }
-        @keyframes fx-drift-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(34px,-22px) scale(1.12); } }
-        @keyframes fx-drift-b { 0%,100% { transform: translate(0,0) scale(1.05); } 50% { transform: translate(-28px,18px) scale(.94); } }
-        @keyframes fx-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        .fx-float { animation: fx-float 7s ease-in-out infinite; }
-        @media (prefers-reduced-motion: reduce) {
-          .fx-orb, .fx-shine::after, .fx-magic::before, .fx-float { animation: none !important; }
-        }
-        .fx-magic { position: relative; z-index: 0; }
-        .fx-magic::before {
-          content: ""; position: absolute; inset: -3px; border-radius: 1.15rem; z-index: -1;
-          background: conic-gradient(from var(--fx-angle), #38bdf8, #a78bfa, #f472b6, #f5c04e, #38bdf8);
-          animation: fx-rotate 4s linear infinite;
-          filter: blur(7px); opacity: .75;
-        }
-        .fx-shine { position: relative; overflow: hidden; }
-        .fx-shine::after {
-          content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
-          transform: skewX(-20deg); pointer-events: none;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
-          animation: fx-sweep 5.2s ease-in-out infinite;
-        }
-        .fx-orb { position: absolute; border-radius: 9999px; filter: blur(46px); pointer-events: none; }
-        @keyframes fx-conf {
-          0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
-          100% { transform: translate(var(--dx), var(--dy)) rotate(720deg) scale(.6); opacity: 0; }
-        }
-        .fx-conf { position: absolute; width: 9px; height: 13px; border-radius: 2px;
-                   animation: fx-conf .9s ease-out forwards; pointer-events: none; z-index: 30; }
-        @keyframes fx-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-        .fx-quiz { transition: border-color .2s ease, background .2s ease, transform .15s ease; }
-        .fx-quiz:hover { transform: translateX(4px); }
       ` }} />
       {/* ============================== HEADER ============================== */}
       <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 shrink-0">
@@ -877,6 +846,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
       {/* ============================== LINKS ============================== */}
       <footer className="px-4 sm:px-8 pb-4 shrink-0">
         <div className="max-w-5xl mx-auto">
+          {/* Encaixe do atendimento: quando o visitante chega ao fim (ou pede
+              pelo X), o botão do WhatsApp deixa de flutuar e pousa AQUI, entre
+              a página e a grade de links. Vazio até lá, e sem custo. */}
+          <div id="wpp-acoplado" className="empty:hidden mb-3" />
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             {[
               { href: "/cursos", icon: GraduationCap, label: "Cursos", desc: "18 cursos com certificado", color: "#38bdf8" },

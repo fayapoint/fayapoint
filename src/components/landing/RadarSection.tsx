@@ -18,6 +18,14 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { NICHOS, NICHO_PADRAO, type TermoRadar } from "@/data/landing/radar-nichos";
+import { toposPorFonte, larguraBarra, type ToposPorFonte } from "@/data/landing/radar-barra";
+import {
+  rankearIa,
+  vocabularioDe,
+  assuntoDeIa,
+  type LinhaIa,
+  type FonteId,
+} from "@/data/landing/radar-ia";
 import {
   COR_REGIAO,
   getLugar,
@@ -75,7 +83,6 @@ interface ItemTrend {
 }
 
 type Camada = "mundo" | "ia";
-type FonteId = "web" | "yt" | "noticias";
 
 const FONTES: { id: FonteId; label: string; icon: typeof Search; desc: string }[] = [
   { id: "web", label: "Google", icon: Search, desc: "demanda de busca" },
@@ -83,47 +90,12 @@ const FONTES: { id: FonteId; label: string; icon: typeof Search; desc: string }[
   { id: "noticias", label: "Notícias de hoje", icon: Newspaper, desc: "o tema está no noticiário" },
 ];
 
-const PESO_NOTICIA = 1.35;
 const TERMOS_VISIVEIS = 6;
 const TRENDS_VISIVEIS = 6;
 
 // ---------------------------------------------------------------------------
 // Auxiliares
 // ---------------------------------------------------------------------------
-
-function semAcento(s: string) {
-  return s.normalize("NFD").replace(/[̀-ͯ]/g, "");
-}
-
-const VAZIAS = new Set([
-  "para", "como", "mais", "sobre", "voce", "seus", "isso", "esse", "essa", "pelo",
-  "pela", "uma", "dos", "das", "que", "nao", "com", "sem", "ainda", "agora", "hoje",
-  "melhor", "melhores", "novo", "nova", "sao", "pode", "todo", "toda", "gratis",
-  "inteligencia", "artificial", "generativa",
-]);
-
-function palavrasUteis(texto: string): string[] {
-  return semAcento(texto.toLowerCase())
-    .split(/[^a-z0-9]+/)
-    .filter((p) => p.length >= 5 && !VAZIAS.has(p));
-}
-
-function recalcular(t: TermoRadar, fontes: Set<FonteId>, naNoticia: boolean): number | null {
-  const usaWeb = fontes.has("web") && t.web > 0;
-  const usaYt = fontes.has("yt") && t.yt > 0;
-  if (!usaWeb && !usaYt) return null;
-  const pWeb = usaWeb && t.posWeb !== null ? Math.max(0, 10 - t.posWeb) : 0;
-  const pYt = usaYt && t.posYt !== null ? Math.max(0, 10 - t.posYt) * 1.2 : 0;
-  const ambos = usaWeb && usaYt ? 1.6 : 1;
-  let score = (pWeb + pYt) * ambos + t.sementes.length * 1.5;
-  if (fontes.has("noticias") && naNoticia) score *= PESO_NOTICIA;
-  return Math.round(score * 10) / 10;
-}
-
-interface Linha extends TermoRadar {
-  nota: number;
-  naNoticia: boolean;
-}
 
 export interface RadarSeed {
   [nicho: string]: { geradoEm: string; termos: TermoRadar[] };
@@ -291,27 +263,15 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
   const comIa = useMemo(() => (trends[lugarId]?.itens ?? []).filter((i) => i.temIa).length, [trends, lugarId]);
 
   // ---- dados de tela: IA ---------------------------------------------------
-  const vocabularioNoticias = useMemo(() => {
-    const v = new Set<string>();
-    for (const n of news) for (const p of palavrasUteis(`${n.title} ${n.summary ?? ""}`)) v.add(p);
-    return v;
-  }, [news]);
+  const vocabularioNoticias = useMemo(() => vocabularioDe(news), [news]);
 
-  const linhasIa: Linha[] = useMemo(() => {
-    const bruto = dadosIa[nichoId]?.termos ?? [];
-    const saida: Linha[] = [];
-    for (const t of bruto) {
-      const naNoticia = palavrasUteis(t.termo).some((p) => vocabularioNoticias.has(p));
-      const nota = recalcular(t, fontes, naNoticia);
-      if (nota === null) continue;
-      saida.push({ ...t, nota, naNoticia });
-    }
-    saida.sort((a, b) => b.nota - a.nota);
-    return saida.slice(0, TERMOS_VISIVEIS);
-  }, [dadosIa, nichoId, fontes, vocabularioNoticias]);
+  const linhasIa: LinhaIa[] = useMemo(
+    () => rankearIa(dadosIa[nichoId]?.termos ?? [], fontes, vocabularioNoticias, TERMOS_VISIVEIS),
+    [dadosIa, nichoId, fontes, vocabularioNoticias]
+  );
 
   const notaTopo = linhasIa[0]?.nota ?? 1;
-  const volumeTopo = itensMundo[0]?.volume || 1;
+  const toposVolume = useMemo(() => toposPorFonte(itensMundo), [itensMundo]);
 
   const alternarFonte = (id: FonteId) => {
     setFontes((f) => {
@@ -386,7 +346,12 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
             return (
               <button
                 key={id}
-                onClick={() => setCamada(id)}
+                onClick={() => {
+                  setCamada(id);
+                  // O painel aberto pertence à camada que sai: mantê-lo faria
+                  // um assunto do World Trend sobreviver dentro do IA Trend.
+                  painel.fechar();
+                }}
                 aria-pressed={on}
                 className="inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wider transition-colors cursor-pointer"
                 style={
@@ -455,7 +420,7 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
               {aberto && (
                 <ModalAssunto
                   assunto={aberto}
-                  cor={lugar.cor}
+                  cor={aberto.fonte === "ia" ? nicho.cor : lugar.cor}
                   nomeDoLugar={lugar.nome}
                   estado={painel.estado}
                   fixado={painel.fixado}
@@ -530,10 +495,13 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
                 sobCursor={sobCursor}
                 onItemSobCursor={setLugaresDoItem}
                 itens={itensMundo}
-                volumeTopo={volumeTopo}
+                toposVolume={toposVolume}
                 comIa={comIa}
                 medindo={medindoMundo}
-                onVerIa={() => setCamada("ia")}
+                onVerIa={() => {
+                  setCamada("ia");
+                  painel.fechar();
+                }}
               />
             ) : (
               <PainelIa
@@ -543,6 +511,9 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
                 alternarFonte={alternarFonte}
                 linhas={linhasIa}
                 notaTopo={notaTopo}
+                onAbrir={(l) => painel.abrir(assuntoDeIa(l, nicho))}
+                onEspiar={(l) => painel.espiar(assuntoDeIa(l, nicho))}
+                onLargar={painel.largar}
               />
             )}
           </div>
@@ -617,7 +588,7 @@ function PainelMundo({
   sobCursor,
   onItemSobCursor,
   itens,
-  volumeTopo,
+  toposVolume,
   comIa,
   medindo,
   onVerIa,
@@ -629,7 +600,7 @@ function PainelMundo({
   sobCursor: string | null;
   onItemSobCursor: (lugares: string[]) => void;
   itens: ItemTrend[];
-  volumeTopo: number;
+  toposVolume: ToposPorFonte;
   comIa: number;
   medindo: boolean;
   onVerIa: () => void;
@@ -709,7 +680,7 @@ function PainelMundo({
                 aria-hidden
                 className="absolute inset-y-0 left-0"
                 style={{
-                  width: `${Math.max(5, Math.round((it.volume / volumeTopo) * 100))}%`,
+                  width: `${larguraBarra(it, toposVolume, 5)}%`,
                   background: `linear-gradient(90deg, ${lugar.cor}18, transparent)`,
                 }}
               />
@@ -783,13 +754,19 @@ function PainelIa({
   alternarFonte,
   linhas,
   notaTopo,
+  onAbrir,
+  onEspiar,
+  onLargar,
 }: {
   nichoId: string;
   setNichoId: (id: string) => void;
   fontes: Set<FonteId>;
   alternarFonte: (id: FonteId) => void;
-  linhas: Linha[];
+  linhas: LinhaIa[];
   notaTopo: number;
+  onAbrir: (l: LinhaIa) => void;
+  onEspiar: (l: LinhaIa) => void;
+  onLargar: () => void;
 }) {
   const nicho = NICHOS.find((n) => n.id === nichoId) ?? NICHOS[0];
 
@@ -851,7 +828,16 @@ function PainelIa({
         <ol className="space-y-1">
           {linhas.map((l, i) => (
             <li key={l.termo}>
-              <div className="glass rounded-xl px-3 py-2 relative overflow-hidden">
+              <button
+                type="button"
+                onClick={() => onAbrir(l)}
+                onMouseEnter={() => onEspiar(l)}
+                onMouseLeave={onLargar}
+                onFocus={() => onEspiar(l)}
+                onBlur={onLargar}
+                aria-label={`Ver detalhe de ${l.termo}`}
+                className="glass glass-hover w-full text-left rounded-xl px-3 py-2 relative overflow-hidden cursor-pointer"
+              >
                 <span
                   aria-hidden
                   className="absolute inset-y-0 left-0"
@@ -885,8 +871,9 @@ function PainelIa({
                   >
                     {l.nota.toFixed(1)}
                   </span>
+                  <ArrowUpRight size={12} className="shrink-0 text-white/20" />
                 </div>
-              </div>
+              </button>
             </li>
           ))}
         </ol>
@@ -915,10 +902,10 @@ function PainelIa({
         </div>
       </div>
 
-      <p className="mt-2 text-[11px] leading-relaxed text-white/30">
-        Nota = posição no autocomplete + amplitude + confirmação entre canais (Google <em>e</em>{" "}
-        YouTube vale 1,6×). As consultas que fizemos ficam fora do ranking, e termos que voltam em
-        espanhol ou inglês são descartados.
+      {/* Dizer que o dado é real basta. A metodologia inteira na tela roubava
+          a atenção do que a seção tem de valioso, que é o dado. */}
+      <p className="mt-2 text-[11px] text-white/30">
+        Medido agora no autocomplete do Google e do YouTube.
       </p>
     </div>
   );

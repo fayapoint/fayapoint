@@ -28,6 +28,8 @@ import {
   type Lugar,
 } from "@/data/landing/radar-lugares";
 import { NICHOS, NICHO_PADRAO, type TermoRadar } from "@/data/landing/radar-nichos";
+import { toposPorFonte, larguraBarra } from "@/data/landing/radar-barra";
+import { rankearIa, assuntoDeIa, type LinhaIa, type FonteId } from "@/data/landing/radar-ia";
 import seedBruto from "@/data/landing/radar-seed.json";
 import { ModalAssunto, type AssuntoAberto } from "@/components/radar/ModalAssunto";
 import { usePainelAssunto } from "@/components/radar/usePainelAssunto";
@@ -90,6 +92,33 @@ export function RadarPagina() {
   const emVoo = useRef<Set<string>>(new Set());
 
   const [nichoId, setNichoId] = useState(NICHO_PADRAO);
+  /**
+   * A camada é ESTADO, não âncora.
+   *
+   * Antes, "IA Trend" aqui era um `<a href="#ia-trend">`: só rolava a página,
+   * enquanto na home o mesmo botão troca o globo e o painel inteiro. Duas
+   * implementações para o mesmo botão davam a impressão de que a página
+   * dedicada tinha menos do que a home — e tinha mesmo.
+   */
+  const [camada, setCamada] = useState<"mundo" | "ia">("mundo");
+  const [fontes, setFontes] = useState<Set<FonteId>>(new Set<FonteId>(["web", "yt"]));
+
+  const alternarFonte = (id: FonteId) =>
+    setFontes((f) => {
+      const novo = new Set(f);
+      if (novo.has(id)) novo.delete(id);
+      else novo.add(id);
+      // Sem Google nem YouTube não sobra medição nenhuma: religa o que saiu.
+      if (!novo.has("web") && !novo.has("yt")) novo.add(id);
+      return novo;
+    });
+
+  /** O ranking completo do nicho — na página cabe o dobro do que cabe na home. */
+  const linhasIa: LinhaIa[] = useMemo(
+    () => rankearIa(SEED[nichoId]?.termos ?? [], fontes, new Set<string>(), 12),
+    [nichoId, fontes]
+  );
+  const notaTopo = linhasIa[0]?.nota ?? 1;
 
   const lugar = getLugar(lugarId);
   const trilha = useMemo(() => trilhaDe(lugarId), [lugarId]);
@@ -140,7 +169,7 @@ export function RadarPagina() {
   }, [lugar, medir]);
 
   const itens = trends[lugarId] ?? [];
-  const volumeTopo = itens[0]?.volume || 1;
+  const toposVolume = useMemo(() => toposPorFonte(itens), [itens]);
 
   /**
    * O que cada região está procurando — SEM ranquear as regiões entre si.
@@ -228,7 +257,13 @@ export function RadarPagina() {
   const filhos = useMemo(() => filhosDe(baseFilhos), [baseFilhos]);
 
   return (
-    <div className="min-h-dvh px-4 sm:px-8 py-10" style={{ background: "#0c0e1d", color: "#f3f1ff" }}>
+    <div
+      // pt-24: o cabeçalho do site é fixo (64px) e comia o título. Isto passou
+      // despercebido enquanto o orbe empurrava a página 449px para baixo —
+      // consertado o vazio, a sobreposição apareceu.
+      className="min-h-dvh px-4 sm:px-8 pt-24 pb-10"
+      style={{ background: "#0c0e1d", color: "#f3f1ff" }}
+    >
       <div className="relative max-w-6xl mx-auto">
         <div
           aria-hidden
@@ -271,20 +306,32 @@ export function RadarPagina() {
 
         {/* As duas leituras aparecem nomeadas, como na home — sem os rótulos a
             página parecia não ter World Trend nem IA Trend, só seções soltas. */}
-        <div className="mt-5 flex items-center gap-2 flex-wrap">
-          <span
-            className="inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider"
-            style={{ background: `${GOLD}22`, color: GOLD }}
-          >
-            <Globe2 size={13} /> World Trend
-          </span>
-          <a
-            href="#ia-trend"
-            className="inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider transition-colors hover:bg-white/[0.06]"
-            style={{ color: "#a78bfa" }}
-          >
-            <Sparkles size={13} /> IA Trend ↓
-          </a>
+        <div className="mt-5 flex items-center gap-2 flex-wrap" role="tablist">
+          {([
+            { id: "mundo" as const, label: "World Trend", icone: Globe2, cor: GOLD },
+            { id: "ia" as const, label: "IA Trend", icone: Sparkles, cor: "#a78bfa" },
+          ]).map(({ id, label, icone: Icone, cor }) => {
+            const on = camada === id;
+            return (
+              <button
+                key={id}
+                role="tab"
+                aria-selected={on}
+                onClick={() => {
+                  setCamada(id);
+                  painel.fechar();
+                }}
+                className="inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider transition-colors cursor-pointer"
+                style={
+                  on
+                    ? { background: `${cor}22`, color: cor }
+                    : { color: "rgba(255,255,255,.4)" }
+                }
+              >
+                <Icone size={13} /> {label}
+              </button>
+            );
+          })}
         </div>
 
         {/* ---------------------------- globo + ranking ---------------------------- */}
@@ -296,7 +343,7 @@ export function RadarPagina() {
             >
               <RadarGlobo
                 lugar={lugar}
-                camada="mundo"
+                camada={camada}
                 onEscolher={escolherPoligono}
                 zoom={aberto ? zoom * 0.86 : zoom}
                 desviado={!!aberto}
@@ -310,7 +357,7 @@ export function RadarPagina() {
               {aberto && (
                 <ModalAssunto
                   assunto={aberto}
-                  cor={lugar.cor}
+                  cor={aberto.fonte === "ia" ? nicho.cor : lugar.cor}
                   nomeDoLugar={lugar.nome}
                   estado={painel.estado}
                   fixado={painel.fixado}
@@ -383,8 +430,22 @@ export function RadarPagina() {
             </div>
           </div>
 
-          {/* ranking completo */}
+          {/* ranking completo — troca com a camada, como na home */}
           <div>
+            {camada === "ia" ? (
+              <RankingIa
+                nichoId={nichoId}
+                setNichoId={setNichoId}
+                fontes={fontes}
+                alternarFonte={alternarFonte}
+                linhas={linhasIa}
+                notaTopo={notaTopo}
+                onAbrir={(l) => painel.abrir(assuntoDeIa(l, nicho))}
+                onEspiar={(l) => painel.espiar(assuntoDeIa(l, nicho))}
+                onLargar={painel.largar}
+              />
+            ) : (
+            <>
             <h2 className="text-lg tracking-wide mb-2" style={bebas}>
               WORLD TREND — EM ALTA{" "}
               <span style={{ color: lugar.cor }}>{noLugar(lugar).toUpperCase()}</span>
@@ -416,7 +477,7 @@ export function RadarPagina() {
                         aria-hidden
                         className="absolute inset-y-0 left-0"
                         style={{
-                          width: `${Math.max(4, Math.round((it.volume / volumeTopo) * 100))}%`,
+                          width: `${larguraBarra(it, toposVolume, 4)}%`,
                           background: `linear-gradient(90deg, ${lugar.cor}1c, transparent)`,
                         }}
                       />
@@ -461,6 +522,8 @@ export function RadarPagina() {
                   );
                 })}
               </ol>
+            )}
+            </>
             )}
           </div>
         </div>
@@ -623,40 +686,34 @@ export function RadarPagina() {
         </section>
 
         {/* ------------------------------- metodologia ------------------------------ */}
+        {/* Uma linha. A metodologia detalhada ocupava meia tela e competia com
+            o próprio dado — dizer que é real, e mostrar de onde vem, basta.
+            A ressalva sobre volume NÃO sumiu: ela mora agora ao lado dos
+            números que a exigem, na comparação por região, que é onde alguém
+            poderia ler "o Sudeste procura menos" e estar errado. */}
         <section className="mt-10 glass rounded-2xl p-4">
-          <h2 className="text-base tracking-wide mb-1.5" style={bebas}>
-            COMO ISTO É <span style={{ color: GOLD }}>MEDIDO</span>
-          </h2>
-          <ul className="text-[12px] text-white/55 leading-relaxed space-y-1.5">
-            <li>
-              <strong className="text-white/75">Buscas em alta</strong> — Google Trends, por país e
-              pelos 27 estados brasileiros. Traz volume aproximado e a manchete que explica o
-              assunto. Uma região do Brasil não tem consulta própria: é medida somando os seus
-              estados, um a um.
-            </li>
-            <li>
-              <strong className="text-white/75">Leitura</strong> — artigos mais lidos da Wikipédia
-              no idioma do país, com contagem real de visitas.
-            </li>
-            <li>
-              <strong className="text-white/75">Demanda de IA</strong> — autocomplete do Google e do
-              YouTube, que devolve o que as pessoas digitaram, ordenado por frequência. A nota
-              combina posição, amplitude e confirmação entre canais (aparecer nos dois vale 1,6×).
-            </li>
-            <li>
-              <strong className="text-white/75">O limite do volume</strong> — o número de buscas que
-              o Google devolve é relativo à linha de base de cada lugar, não uma escala comum. São
-              Paulo aparecer com menos que Mato Grosso do Sul não significa que se procura menos em
-              São Paulo. Por isso comparamos assuntos <em>dentro</em> de um lugar, e nunca somamos
-              lugares para dizer qual procura mais.
-            </li>
-            <li className="text-white/40">
-              O que <em>não</em> fazemos: estimar. As consultas que nós mesmos fazemos ficam fora do
-              ranking — um radar que devolve a própria pergunta não está medindo nada. Termos que
-              voltam em espanhol ou inglês são descartados, mas só por palavras que não existem em
-              português: &ldquo;IA jurídica gratuita&rdquo; é português e fica.
-            </li>
-          </ul>
+          <p className="text-[12px] text-white/55 leading-relaxed">
+            <strong className="text-white/75">Dados reais, medidos agora.</strong> Nada aqui é
+            estimado, e cada assunto leva à fonte que o publicou —{" "}
+            <a
+              href="https://trends.google.com/trending?geo=BR"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-white/25 hover:text-white transition-colors"
+            >
+              Google Trends
+            </a>
+            ,{" "}
+            <a
+              href="https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-white/25 hover:text-white transition-colors"
+            >
+              Wikipédia
+            </a>{" "}
+            e o autocomplete do Google e do YouTube.
+          </p>
           <Link
             href="/"
             className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-white/45 hover:text-white transition-colors"
@@ -671,6 +728,152 @@ export function RadarPagina() {
           ela.
         </p>
       </div>
+    </div>
+  );
+}
+
+/**
+ * O ranking do IA Trend na coluna do mapa — o que a home tem e a página não
+ * tinha. Mesmas linhas clicáveis, mesmo painel: o gesto não muda entre as duas
+ * leituras nem entre as duas telas.
+ */
+function RankingIa({
+  nichoId,
+  setNichoId,
+  fontes,
+  alternarFonte,
+  linhas,
+  notaTopo,
+  onAbrir,
+  onEspiar,
+  onLargar,
+}: {
+  nichoId: string;
+  setNichoId: (id: string) => void;
+  fontes: Set<FonteId>;
+  alternarFonte: (id: FonteId) => void;
+  linhas: LinhaIa[];
+  notaTopo: number;
+  onAbrir: (l: LinhaIa) => void;
+  onEspiar: (l: LinhaIa) => void;
+  onLargar: () => void;
+}) {
+  const nicho = NICHOS.find((n) => n.id === nichoId) ?? NICHOS[0];
+  const FONTES: { id: FonteId; label: string; icone: typeof Search; desc: string }[] = [
+    { id: "web", label: "Google", icone: Search, desc: "demanda de busca" },
+    { id: "yt", label: "YouTube", icone: Youtube, desc: "demanda de vídeo" },
+  ];
+
+  return (
+    <div>
+      <h2 className="text-lg tracking-wide mb-2" style={bebas}>
+        IA TREND — <span style={{ color: nicho.cor }}>{nicho.label.toUpperCase()}</span>
+      </h2>
+
+      <div className="flex gap-1.5 flex-wrap mb-2" role="tablist">
+        {NICHOS.map((n) => {
+          const on = n.id === nichoId;
+          return (
+            <button
+              key={n.id}
+              role="tab"
+              aria-selected={on}
+              onClick={() => setNichoId(n.id)}
+              className="rounded-full px-2.5 py-1 text-[11px] font-bold border-2 transition-colors cursor-pointer"
+              style={
+                on
+                  ? { borderColor: n.cor, background: `${n.cor}1f`, color: n.cor }
+                  : { borderColor: "rgba(255,255,255,.12)", color: "rgba(255,255,255,.5)" }
+              }
+            >
+              {n.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Desligar uma fonte recalcula a NOTA — não é um filtro de lista. É o
+          radar consultando um canal só, que é o controle na mão do visitante. */}
+      <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+        <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/30 mr-1">
+          Fontes
+        </span>
+        {FONTES.map(({ id, label, icone: Icone, desc }) => {
+          const on = fontes.has(id);
+          return (
+            <button
+              key={id}
+              onClick={() => alternarFonte(id)}
+              aria-pressed={on}
+              title={desc}
+              className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold border transition-colors cursor-pointer"
+              style={
+                on
+                  ? { borderColor: "rgba(255,255,255,.3)", background: "rgba(255,255,255,.07)", color: "#f3f1ff" }
+                  : { borderColor: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.32)" }
+              }
+            >
+              <Icone size={11} />
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      {linhas.length === 0 ? (
+        <div className="glass rounded-2xl p-5 text-sm text-white/55">
+          Nenhum termo sobrevive a essa combinação. Religue o Google ou o YouTube.
+        </div>
+      ) : (
+        <ol className="space-y-1">
+          {linhas.map((l, i) => (
+            <li key={l.termo}>
+              <button
+                type="button"
+                onClick={() => onAbrir(l)}
+                onMouseEnter={() => onEspiar(l)}
+                onMouseLeave={onLargar}
+                onFocus={() => onEspiar(l)}
+                onBlur={onLargar}
+                aria-label={`Ver detalhe de ${l.termo}`}
+                className="glass glass-hover w-full text-left rounded-xl px-3 py-2 relative overflow-hidden cursor-pointer"
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-y-0 left-0"
+                  style={{
+                    width: `${Math.min(100, Math.max(6, Math.round((l.nota / notaTopo) * 100)))}%`,
+                    background: `linear-gradient(90deg, ${nicho.cor}1f, transparent)`,
+                  }}
+                />
+                <div className="relative flex items-center gap-2.5">
+                  <span
+                    className="shrink-0 text-xs font-extrabold tabular-nums w-4 text-right"
+                    style={{ color: i === 0 ? nicho.cor : "rgba(255,255,255,.28)" }}
+                  >
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[13px] font-bold leading-snug break-words">{l.termo}</p>
+                    <p className="text-[10px] text-white/35">
+                      {l.canais === "web+yt"
+                        ? "Google e YouTube"
+                        : l.canais === "yt"
+                          ? "só YouTube — demanda de vídeo"
+                          : "só Google"}{" "}
+                      · {l.formato}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-xs font-extrabold tabular-nums" style={{ color: nicho.cor }}>
+                    {l.nota.toFixed(1)}
+                  </span>
+                  <ArrowUpRight size={12} className="shrink-0 text-white/20" />
+                </div>
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }
