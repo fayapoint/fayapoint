@@ -1,0 +1,31 @@
+[Unit]
+Description=Hermes Agent Web Dashboard (Tailscale-only, porta 9119)
+After=docker.service tailscaled.service
+Requires=docker.service
+
+[Service]
+Type=simple
+# Binda APENAS no IP Tailscale da VPS (100.111.28.77): acessivel so pelo tailnet
+# do Ricardo. --insecure e exigido pelo hermes p/ bind fora de localhost, mas a
+# exposicao real e limitada a interface tailscale0. --tui liga a aba Chat.
+ExecStartPre=/bin/sh -c 'until docker inspect -f {{.State.Running}} kirmes | grep -q true; do sleep 3; done'
+# Mata instancia orfa dentro do container antes de subir a nossa.
+#
+# Sem esta linha o servico ficava em laco eterno: parar a unit mata o `docker
+# exec` no HOST, mas o processo DENTRO do container sobrevive e continua com a
+# porta 9119. O ExecStart seguinte entao morria com "address already in use" a
+# cada 10s -- 46.904 reinicios entre 21/07 e 28/07/2026, com o painel no ar o
+# tempo todo servido pelo orfao, que ninguem gerenciava.
+#
+# Sem `sh -c` de proposito: assim o processo no container e o proprio pkill, que
+# nao casa consigo mesmo. Com wrapper, o shell teria o padrao na propria linha
+# de comando e se mataria antes de agir.
+ExecStartPre=-/usr/bin/docker exec kirmes pkill -f "hermes dashboard"
+ExecStart=/usr/bin/docker exec -e HERMES_DASHBOARD_TUI=1 kirmes /opt/hermes/.venv/bin/hermes dashboard --host 100.111.28.77 --port 9119 --insecure --no-open --tui
+# E na saida nao deixa orfao para tras -- a origem do problema acima.
+ExecStopPost=-/usr/bin/docker exec kirmes pkill -f "hermes dashboard"
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
