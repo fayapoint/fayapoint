@@ -168,7 +168,16 @@ export async function getHistorico(
     .map(([termo, linha]) => {
       const pontos = eixo.map((dia) => ({ dia, score: linha.get(dia) ?? null }));
       const presentes = pontos.filter((p) => p.score !== null);
-      const atual = linha.get(ultimo) ?? presentes[presentes.length - 1]?.score ?? 0;
+
+      // `atual` é o score do ÚLTIMO dia, e 0 quando o termo não apareceu nele.
+      //
+      // Antes caía na última nota conhecida, e o efeito era mentiroso: medido em
+      // produção em 28/07/2026, "ia juridico" liderava o painel de `advogados`
+      // com a nota de 26/07 mesmo tendo sumido da medição de hoje — e o delta
+      // saía 0, dizendo "não mudou nada" sobre um termo que saiu da lista. Com
+      // 0, quem sumiu simplesmente desce e dá lugar a quem está em alta agora,
+      // que é o que o painel promete.
+      const atual = linha.get(ultimo) ?? 0;
       const primeiro = presentes[0]?.score ?? 0;
       const m = meta.get(termo)!;
 
