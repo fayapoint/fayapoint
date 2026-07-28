@@ -260,5 +260,16 @@ export async function getRadar(nichoId: string): Promise<ResultadoRadar> {
   }
 
   cache.set(nicho.id, { em: Date.now(), dado });
+
+  // Toda medição ao vivo entra no histórico. Sem `await` de propósito: gravar é
+  // ganho de longo prazo e não pode atrasar (nem derrubar) a resposta do Radar.
+  // `salvarMedicao` já engole os próprios erros; o `catch` aqui é só para o caso
+  // de a promessa rejeitar antes de entrar nela.
+  //
+  // Importação dinâmica porque `radar.ts` também é usado em contexto sem banco.
+  import("@/lib/radar-historico")
+    .then((m) => m.salvarMedicao(dado))
+    .catch(() => {});
+
   return dado;
 }

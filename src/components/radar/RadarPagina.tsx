@@ -32,6 +32,7 @@ import { toposPorFonte, larguraBarra } from "@/data/landing/radar-barra";
 import { rankearIa, assuntoDeIa, type LinhaIa, type FonteId } from "@/data/landing/radar-ia";
 import seedBruto from "@/data/landing/radar-seed.json";
 import { ModalAssunto, type AssuntoAberto } from "@/components/radar/ModalAssunto";
+import { HistoricoTendencia } from "@/components/radar/HistoricoTendencia";
 import { usePainelAssunto } from "@/components/radar/usePainelAssunto";
 import { VideoAbertura } from "@/components/radar/VideoAbertura";
 
@@ -684,6 +685,12 @@ export function RadarPagina() {
             </div>
           </div>
         </section>
+
+        {/* ---------------------------- linha do tempo ----------------------------- */}
+        {/* Vem logo depois do IA Trend de propósito: o leitor acabou de ver o
+            ranking de HOJE daquele nicho, e a pergunta seguinte é sempre "isso
+            é novo?". O painel responde para o mesmo nicho já selecionado. */}
+        <HistoricoTendencia nichoId={nichoId} corNicho={nicho.cor} />
 
         {/* ------------------------------- metodologia ------------------------------ */}
         {/* Uma linha. A metodologia detalhada ocupava meia tela e competia com

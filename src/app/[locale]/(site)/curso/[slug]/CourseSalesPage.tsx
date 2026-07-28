@@ -26,23 +26,37 @@ import { useRouter } from "next/navigation";
 import { formatEditorialDate } from "@/lib/editorial-verification";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 
-export default function CourseSalesPage() {
+export default function CourseSalesPage({
+  initialProduct = null,
+}: {
+  initialProduct?: Product | null;
+}) {
   const params = useParams();
   const slug = params.slug as string;
   const router = useRouter();
   const { addItem } = useServiceCart();
   const { isLoggedIn } = useUser();
   const t = useTranslations("CoursePage");
-  
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  const [product, setProduct] = useState<Product | null>(initialProduct);
+  const [loading, setLoading] = useState(!initialProduct);
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
   const [showTrailer, setShowTrailer] = useState(false);
   const locale = useLocale();
 
-  // Fetch product from MongoDB
+  // O curso chega pronto do servidor (`initialProduct`) e só caímos no fetch se
+  // ele faltar — banco fora do ar, essencialmente.
+  //
+  // Antes esta busca era o ÚNICO caminho, e custava a página inteira no Google:
+  // o HTML servido era menu + "Carregando curso..." + rodapé, 624 caracteres
+  // idênticos nas 20 URLs de curso (medido em produção 28/07/2026). Duas falhas
+  // de uma vez — página sem conteúdo (soft 404) e 20 cópias entre si. E não
+  // adiantava esperar o Googlebot rodar o JS: `/api/` é `Disallow` no
+  // robots.txt, então o fetch nunca completa para ele e o componente cai no
+  // ramo `!product`, que renderiza literalmente "Curso não encontrado".
   useEffect(() => {
+    if (initialProduct) return;
     async function fetchProduct() {
       try {
         const res = await fetch(`/api/products/${slug}`);
@@ -55,7 +69,7 @@ export default function CourseSalesPage() {
       }
     }
     fetchProduct();
-  }, [slug]);
+  }, [slug, initialProduct]);
 
 
   if (loading) {

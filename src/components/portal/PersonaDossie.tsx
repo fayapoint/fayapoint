@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   User as UserIcon,
   Mic,
@@ -17,6 +17,8 @@ import {
   Sparkles,
   Upload,
   Trash2,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { RITMOS, TEMPOS, ROTULO_FOTO, TIPOS_FOTO, type Dossie, type DimensaoDossie, type FotoPersona, type TipoFoto } from "@/lib/persona";
@@ -129,7 +131,31 @@ export default function PersonaDossie({
   const [aberta, setAberta] = useState<string | null>(null);
   const [salvando, setSalvando] = useState<string | null>(null);
   const [rascunho, setRascunho] = useState<Record<string, unknown>>({});
+  const [ampliada, setAmpliada] = useState(false);
   const editando = aberta !== null;
+
+  // Ampliada, a placa fica reta e maior. A perspectiva é o charme da coluna
+  // lateral; quem vai LER as sete dimensões de uma vez quer texto reto e
+  // largura — foi o retorno que o Ricardo recebeu (28/07/2026). Por isso é um
+  // botão e não uma troca: o repouso continua angulado.
+  const reta = editando || ampliada;
+
+  // Esc fecha e o fundo trava. Uma camada por cima da página que não responde a
+  // Esc é armadilha de teclado, e página que rola atrás de overlay dá a
+  // impressão de que o clique vazou.
+  useEffect(() => {
+    if (!ampliada) return;
+    const aoTeclar = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAmpliada(false);
+    };
+    const antes = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", aoTeclar);
+    return () => {
+      document.body.style.overflow = antes;
+      window.removeEventListener("keydown", aoTeclar);
+    };
+  }, [ampliada]);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("fayai_token") || "" : "";
 
@@ -172,14 +198,18 @@ export default function PersonaDossie({
     );
   }
 
-  return (
-    <div className="dossie-caixa" style={{ perspective: editando ? "none" : "1100px", perspectiveOrigin: "10% 40%" }}>
+  const placa = (
+    <div
+      className="dossie-caixa"
+      style={{ perspective: reta ? "none" : "1100px", perspectiveOrigin: "10% 40%" }}
+    >
       <div
         className="dossie-placa relative"
         style={{
-          // A perspectiva é o repouso. Ao editar a placa se endireita, porque
-          // formulário inclinado é bonito de longe e ruim de perto.
-          transform: editando ? "none" : "rotateY(12deg) rotateX(3deg) translateZ(-18px)",
+          // A perspectiva é o repouso. Ao editar — ou ao ampliar — a placa se
+          // endireita, porque formulário inclinado é bonito de longe e ruim de
+          // perto.
+          transform: reta ? "none" : "rotateY(12deg) rotateX(3deg) translateZ(-18px)",
           transformOrigin: "0% 50%",
           transformStyle: "preserve-3d",
           transition: "transform .55s cubic-bezier(.2,.85,.3,1)",
@@ -203,7 +233,11 @@ export default function PersonaDossie({
             style={{ backgroundImage: "repeating-linear-gradient(180deg, #f5c04e, #f5c04e 1px, transparent 1px, transparent 5px)" }}
           />
 
-          <Cabecalho dossie={dossie} />
+          <Cabecalho
+            dossie={dossie}
+            ampliada={ampliada}
+            onAlternarTamanho={() => setAmpliada((a) => !a)}
+          />
 
           <div className="relative divide-y divide-white/[0.06] border-t border-white/[0.07]">
             {dossie.dimensoes.map((d) => (
@@ -238,19 +272,70 @@ export default function PersonaDossie({
       `}</style>
     </div>
   );
+
+  if (!ampliada) return placa;
+
+  // Ampliada a placa sai da coluna lateral — de dentro dela não tem como ficar
+  // maior, o `aside` é estreito por definição. Vira camada por cima da página.
+  return (
+    <>
+      {/* o lugar dela na coluna não colapsa: sem isto a página inteira pula
+          quando a placa sai e volta */}
+      <div aria-hidden style={{ minHeight: 320 }} />
+
+      <div
+        className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto overscroll-contain p-4 sm:p-6"
+        style={{ background: "rgba(8,7,5,.72)", backdropFilter: "blur(6px)" }}
+        onClick={() => setAmpliada(false)}
+      >
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="O que eu sei de você"
+          className="my-auto w-full max-w-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {placa}
+        </div>
+      </div>
+    </>
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────
 
-function Cabecalho({ dossie }: { dossie: Dossie }) {
+function Cabecalho({
+  dossie,
+  ampliada,
+  onAlternarTamanho,
+}: {
+  dossie: Dossie;
+  ampliada: boolean;
+  onAlternarTamanho: () => void;
+}) {
   const raio = 26;
   const circ = 2 * Math.PI * raio;
 
   return (
     <div className="relative p-4">
-      <p className="flex items-center gap-1.5 text-[9px] font-extrabold uppercase tracking-[0.18em] text-amber-400">
-        <Sparkles size={10} /> o que eu sei de você
-      </p>
+      <div className="flex items-start gap-2">
+        <p className="flex items-center gap-1.5 text-[9px] font-extrabold uppercase tracking-[0.18em] text-amber-400">
+          <Sparkles size={10} /> o que eu sei de você
+        </p>
+
+        {/* O botão fica no canto oposto ao chanfro — ali o canto é reto e o
+            alvo não some sob o `clipPath`. */}
+        <button
+          type="button"
+          onClick={onAlternarTamanho}
+          aria-pressed={ampliada}
+          aria-label={ampliada ? "Reduzir o dossiê" : "Ampliar o dossiê"}
+          title={ampliada ? "Reduzir (Esc)" : "Ampliar e deixar reto"}
+          className="-mr-1 -mt-1 ml-auto shrink-0 cursor-pointer rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/[0.07] hover:text-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
+        >
+          {ampliada ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+        </button>
+      </div>
 
       <div className="mt-3 flex items-center gap-3.5">
         <div className="relative shrink-0" style={{ width: 64, height: 64 }}>

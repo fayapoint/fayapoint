@@ -142,13 +142,31 @@ export async function generateMetadata({
      * internos; elas só não competem consigo mesmas no índice.
      */
     ...(locale === "en" && { robots: { index: false, follow: true } }),
-    alternates: {
-      canonical: `${SITE_URL}/${locale}`,
-      languages: {
-        "x-default": `${SITE_URL}/pt-BR`,
-        "pt-BR": `${SITE_URL}/pt-BR`,
-      },
-    },
+    /**
+     * O layout NÃO declara `alternates.canonical` — de propósito.
+     *
+     * Em Next, metadata de layout desce para todo filho que não a
+     * sobrescreve. Como aqui havia `canonical: ${SITE_URL}/${locale}`, cada
+     * página sem metadata própria declarava ser a HOME. Medido em produção em
+     * 28/07/2026: 18 URLs públicas (`/recursos`, `/casos`, `/instrutores`,
+     * `/comunidade`, `/certificacoes`, `/termos`, `/privacidade`…) todas
+     * apontando para `https://fayai.com.br/pt-BR`. É a origem direta do
+     * "Cópia, o Google e o usuário selecionaram uma página canônica
+     * diferente" do Search Console — estávamos pedindo ao Google para
+     * descartar 18 páginas em favor da home.
+     *
+     * Sem esta chave, página sem canônica própria simplesmente não emite a
+     * tag, e o Google se auto-canonicaliza pela URL rastreada — que é o
+     * comportamento correto. Cada página abaixo declara a sua com
+     * `generatePageMetadata`, que já monta canônica e hreflang juntos.
+     *
+     * O `languages` saiu junto e pelo mesmo motivo: hreflang também descia
+     * para os filhos, então toda página anunciava a home como sua versão
+     * pt-BR. `generatePageMetadata` monta os dois por caminho.
+     *
+     * ⚠️ Não reintroduzir `alternates` aqui. Rota nova sob `[locale]` resolve
+     * isso no próprio `page.tsx`.
+     */
   };
 }
 

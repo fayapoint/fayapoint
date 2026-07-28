@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import { NovaLanding } from "@/components/landing/NovaLanding";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 import { getAiNews } from "@/lib/ai-news";
 import { getAllProducts } from "@/lib/products";
+import { generatePageMetadata } from "@/lib/metadata";
 
 // Home oficial (12/07/2026): a experiência de imersão gamificada substituiu o
 // gate de hype e o cubo 3D. O gate segue existindo apenas como código
@@ -10,6 +12,19 @@ import { getAllProducts } from "@/lib/products";
 
 // Revalida a cada 30 min — a seção IA HOJE pega as notícias novas do agente
 export const revalidate = 1800;
+
+// A canônica da home mora aqui desde 28/07/2026. Ela vinha do layout, e de lá
+// descia para TODA página filha — que passava a se declarar home. Título e
+// descrição continuam vindo do layout; só o `alternates` é próprio.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const { alternates } = generatePageMetadata({ locale, path: "" });
+  return { alternates };
+}
 
 export default async function Home() {
   const [{ items }, courses] = await Promise.all([

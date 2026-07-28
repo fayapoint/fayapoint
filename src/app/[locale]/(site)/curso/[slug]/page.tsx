@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import CourseSalesPage from "./CourseSalesPage";
 import { allCourses } from "@/data/courses";
 import { getProductBySlug } from "@/lib/products";
@@ -8,6 +9,11 @@ import { schemaCurso, schemaTrilha } from "@/lib/structured-data";
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
+
+// Agora que o curso vem embutido no HTML, ele também congela no HTML: sem esta
+// linha a página é gerada uma vez no build e um preço alterado no banco só
+// apareceria no deploy seguinte. 900s é o mesmo intervalo já usado nas matérias.
+export const revalidate = 900;
 
 export async function generateStaticParams() {
   return allCourses.map((course) => ({
@@ -51,8 +57,27 @@ export default async function Page({ params }: Props) {
 
   // O JSON-LD sai do SERVIDOR: a página de vendas é client component, e dado
   // estruturado injetado depois da hidratação chega tarde para o rastreador.
-  const product = await getProductBySlug(slug).catch(() => null);
+  //
+  // O `catch` aqui separa "o banco disse que não existe" de "o banco não
+  // respondeu" de propósito. Se ele engolisse o erro num `null`, uma queda do
+  // Mongo transformaria as 20 páginas de curso em 404 de uma vez — e 404 é o
+  // que o Google usa para remover URL do índice. Banco fora do ar tem que
+  // degradar para a busca no cliente, nunca para 404.
+  let product = null;
+  let bancoRespondeu = true;
+  try {
+    product = await getProductBySlug(slug);
+  } catch {
+    bancoRespondeu = false;
+  }
   const course = allCourses.find((c) => c.slug === slug);
+
+  // Sem isto, /curso/<qualquer-coisa> respondia 200 com a página de vendas
+  // vazia e canonical apontando para si mesma: uma fábrica infinita de soft
+  // 404 para o rastreador (verificado em produção 28/07/2026).
+  if (bancoRespondeu && !product && !course) {
+    notFound();
+  }
 
   const nome = product?.name || course?.title || slug;
   const descricao =
@@ -89,7 +114,7 @@ export default async function Page({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }}
         />
       ))}
-      <CourseSalesPage />
+      <CourseSalesPage initialProduct={product} />
     </>
   );
 }
