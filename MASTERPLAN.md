@@ -3,6 +3,224 @@
 
 ---
 
+## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 28/07/2026, 05:30 UTC
+
+> Tudo abaixo está **NO AR** (commits `3bf1659`, `2063579`, `aa2533d`, `b6fd74d`).
+> Quatro pushes, todos com autorização explícita do Ricardo ([[feedback_pedir_autorizacao_deploy]]).
+
+### O que fazer primeiro, na ordem
+
+| # | Tarefa | Por quê |
+|---|---|---|
+| **1** | **Conferir se a rotina das 06:55 disparou.** Ler `%LOCALAPPDATA%\FayAI\janela-capas.log` e olhar o blog do dia: a matéria de hoje tem capa própria ou genérica? | A rotina foi criada e testada **à mão** em 28/07, mas **nunca rodou pelo agendador**. É a primeira coisa a validar. |
+| **2** | **Conferir se o cron do Radar rodou às 09:00 UTC.** `ssh root@76.13.234.38 'cat /root/kirmes/logs/radar_historico_$(date +%Y%m%d).log'` — esperado "10 gravados, 0 falharam". | Mesma coisa: rodou manualmente em 28/07, mas nunca pelo cron. Sem ele o gráfico só enche o nicho `geral`. |
+| **3** | **Guardar o `image_prompt` no `ainews`** (ver "dívida" abaixo). | É a única melhoria de qualidade pendente das capas, e é pequena. |
+| **4** | Escrever conteúdo a partir do Radar. | ⚠️ Continua sendo **o gargalo real do tráfego** — nada disso cria demanda (herdado de 27/07). |
+
+### As três frentes que fecharam nesta sessão
+
+**SEO — as páginas de curso serviam 624 caracteres.** O Google mandou 4 avisos (404, soft 404, redirecionamento, cópia com/sem canônica). A causa não era lentidão: `CourseSalesPage` era `"use client"` e buscava `/api/products/<slug>`, e **`/api/` é `Disallow` no robots.txt** — o Googlebot nunca completava o fetch e caía no ramo que renderiza *"Curso não encontrado"*. Soft 404 permanente por construção, idêntico nas 20 URLs. Medido: texto servido no sitemap **164.409 → 261.733 caracteres**, páginas com menos de 1000 chars **21 → 0**, `/cursos` **873 → 11.907**, sitemap 65/65 sem regressão.
+
+**Radar — o D6 caiu.** O Radar media e esquecia (`Map` em memória, TTL 6h). Agora grava 1 documento por (nicho, dia), tem `/api/radar/historico`, a seção **"A LINHA DO TEMPO"** na `/radar` e **cron na VPS às 6h BRT** nos 10 nichos.
+
+**VPS — o erro que o Ricardo recebeu** era o `hermes-dashboard` em **46.904 reinícios**. Junto: journal 289→102MB e o acervo do blog em **29/29 com capa própria** (estava 0).
+
+---
+
+## 🔴 SESSÃO 28/07 (madrugada) — POR QUE O GOOGLE NÃO INDEXAVA, O RADAR COM MEMÓRIA E A VPS EM LAÇO
+
+> **Estado: NO AR.** Commits `3bf1659` (SEO + radar + persona), `2063579` (defeito achado
+> depois do deploy), `aa2533d` (scripts da VPS) e `b6fd74d` (rotina do Windows).
+> Os dois últimos não disparam deploy — `scripts/*` está na regra de ignore do `netlify.toml`.
+
+Pedido dele, em três partes: *"recebi notificações do Google Search Console dizendo que
+motivos impedem a indexação, você poderia verificar e resolver?"* · *"queria gráficos na
+página do radar… temporal dos trends baseados no que capturamos ao longo do tempo"* +
+*"no modal o que eu sei de você, quero uma opção de aumentar ele e deixar reto… um
+botãozinho de maximizar e minimizar"* · *"vamos fazer pelo VPS, peço pra aproveitar e ver
+se tem alguma coisa errada ou faltando pois recebi uma mensagem dele que tinha algum erro"*.
+
+### ⛔ Parte 1 — O achado: a página de curso servia 624 caracteres idênticos
+
+Os 4 e-mails do Search Console (27–28/07) listavam: **404, soft 404, página com
+redirecionamento, cópia com canônica diferente, cópia sem canônica**.
+
+O corpo servido de **toda** página de curso eram **624 caracteres**: menu,
+*"Carregando curso…"* e rodapé. Cabeçalho impecável — canonical certo, JSON-LD certo desde
+27/07 — e corpo vazio, **idêntico nas 20 URLs**. Duas falhas de uma vez: página sem
+conteúdo (soft 404) e 20 cópias entre si.
+
+⚠️ **E não adiantaria esperar o Googlebot rodar o JS.** O componente era `"use client"` e
+buscava `fetch('/api/products/<slug>')`; **`/api/` é `Disallow` no `robots.txt`**, então o
+fetch nunca completa para ele e o componente cai no ramo `!product`, que renderiza
+literalmente *"Curso não encontrado"*. **Não é lentidão de renderização — é soft 404
+permanente por construção.** A vitrine `/cursos` (que está no sitemap) tinha o mesmo
+defeito: 873 caracteres, contadores em `"..."`, zero cards.
+
+**Conserto:** `page.tsx` (server) busca no banco e passa `initialProduct` /
+`initialProducts`; o cliente só busca se a prop vier vazia.
+
+⚠️ **O `catch` separa "não existe" de "banco não respondeu" de propósito.**
+`getProductBySlug(slug).catch(() => null)` seguido de `notFound()` transformaria uma queda
+do Mongo em **404 nas 20 páginas de uma vez** — e 404 é o que o Google usa para **remover**
+URL do índice. Agora marca `bancoRespondeu = false` e degrada para a busca no cliente.
+
+### A segunda causa, independente: 28 rotas declaravam ser a home
+
+`[locale]/layout.tsx` tinha `alternates.canonical = ${SITE_URL}/${locale}`. Metadata de
+layout **desce para todo filho que não a sobrescreve** — então `/recursos`, `/casos`,
+`/instrutores`, `/termos`, `/privacidade` e mais 23 diziam ao Google *"descarte esta
+página, a boa é a home"*. É a origem direta do "Cópia, o Google e o usuário selecionaram
+uma página canônica diferente".
+
+⚠️ **Não reintroduzir `alternates` no layout.** Página sem canônica própria simplesmente
+não emite a tag, e o Google se auto-canonicaliza pela URL rastreada — que é o correto.
+O `languages` saiu junto e pelo mesmo motivo (hreflang também descia).
+
+⚠️ **Grep em `page.tsx` engana:** as 65 URLs do sitemap já tinham canônica porque ela mora
+num **`layout.tsx` irmão**, não no `page.tsx`. Procurar só em `page.tsx` faz parecer que 58
+rotas estão quebradas quando não estão.
+
+### Os outros quatro defeitos
+
+| | O que estava errado | Conserto |
+|---|---|---|
+| 1 | `/curso/<slug-inexistente>` respondia **200** com canonical apontando para si mesmo | `notFound()` — era fábrica infinita de soft 404 |
+| 2 | `/blog/<slug>` (client) herdava canonical `/pt-BR/blog`, **que responde 308**. Canônica apontando para redirecionamento é descartada pelo Google | Virou server component com canônica própria |
+| 3 | `/blog/<slug>` devolvia **200** dizendo *"Artigo não encontrado"*, e 6 posts sem corpo davam 200 com *"Conteúdo completo em breve"* | `notFound()` — página que anuncia a própria ausência com 200 é a definição de soft 404 |
+| 4 | `/cursos/<slug>` e `/nova` usavam `redirect()`, que responde **307 (temporário)** — e ainda perdiam o locale, virando cadeia de 2 saltos | `permanentRedirect()` com locale. Temporário manda o Google **guardar** a URL antiga |
+
+**Medido em produção depois do deploy:** menor página do sitemap **1217 chars** (era 624),
+`/cursos` **11.907**, 27/27 canônicas corretas, redirects em 308, 404 reais em 404.
+
+### 📈 Parte 2 — Radar: a linha do tempo (o D6 caiu)
+
+O Radar **media e esquecia**: `Map` em memória com TTL de 6h + um `radar-seed.json`
+congelado. Dava para dizer "o que o Brasil procura hoje" e era impossível dizer "o que
+subiu esta semana" — que é a pergunta que decide pauta.
+
+- `src/lib/radar-historico.ts` — coleção `radar_historico`, **1 documento por (nicho, dia)**
+  com `upsert` e índice único. ⚠️ **Dia em `America/Sao_Paulo`, não UTC** — medição das 22h
+  cairia no dia seguinte e a série ganharia buracos que não aconteceram.
+- `POST /api/radar/medir?nicho=X` — **medição forçada** para o cron. ⚠️ Chamar `/api/radar`
+  **não serve**: num processo quente ela devolve o cache e **retorna antes de gravar**,
+  deixando o dia sem ponto de forma silenciosa e intermitente.
+- VPS: `/root/kirmes/radar_historico_daily.sh`, cron **`0 9 * * *`**. Um nicho por chamada
+  (~1,5s cada, 52s no total) — os dez numa requisição estouram o teto da função. A lista de
+  nichos vem da própria API, então nicho novo entra sem editar o script.
+- Backfill do snapshot de 26/07: `npm run radar:historico` (idempotente).
+
+**Estado do dado:** 2 dias × 10 nichos. Primeira execução real do script: **10 gravados,
+0 falharam**.
+
+⚠️ **Defeito achado NA VERIFICAÇÃO PÓS-DEPLOY** (commit `2063579`): `atual` caía na última
+nota conhecida quando o termo sumia do dia. Em produção, "ia juridico" liderava `advogados`
+com a nota de 26/07 tendo sumido em 28/07, e o **delta saía 0** — "não mudou nada" sobre um
+termo que saiu da lista. Agora `atual` é o score do último dia **ou 0**.
+
+### Parte 3 — Persona: maximizar/minimizar
+
+Botão no cabeçalho do dossiê. Medido nos três estados: repouso **inclinado**
+(`matrix3d`, cos 12° = 0,978 — a perspectiva que ele gosta continua), ampliado
+**336 → 672px e reto**, Esc devolve ao repouso. Fecha por Esc, clique no fundo e botão;
+trava a rolagem atrás e o lugar na coluna não colapsa, então a página não pula.
+
+Para testar sem login criei **`/pt-BR/lab/dossie`** — bancada `noindex`, no molde do
+`/lab/3d`, montando o componente real com `montarDossie`. ⚠️ **Não digito senha, nem de
+conta de teste** — por isso a bancada existe. Se incomodar, apagar.
+
+### 🖥️ Parte 4 — VPS: o erro que ele recebeu
+
+**`hermes-dashboard` em laço desde 21/07 — 46.904 reinícios**, um a cada 13s, com
+`address already in use`. **O painel funcionava o tempo todo**, servido por um processo
+**órfão** (PID 168, de 21/07) que ninguém gerenciava.
+
+⚠️ **A causa é o padrão `docker exec` em systemd:** parar a unit mata o `docker exec` **no
+host**, mas o processo **dentro do container sobrevive** segurando a porta. Conserto:
+`ExecStartPre=-docker exec kirmes pkill -f "hermes dashboard"` (limpa órfão ao subir) e
+`ExecStopPost=` igual (não deixa órfão ao sair). ⚠️ **Sem `sh -c`** — com wrapper o shell
+teria o padrão na própria linha de comando e se mataria antes de agir. Depois: `active`,
+**0 reinícios, 0 linhas de journal**.
+
+Junto: **journal 289MB → 102MB** (`--vacuum-size=120M`; `--vacuum-time=30d` liberou 0B
+porque os logs tinham menos de 30 dias).
+
+**Os 8 crons rodando diariamente** (7 arquivos de log em 7 dias cada): `*/5` health-check ·
+`*/5` USS publish-due · **`0 9` radar (novo)** · `0 10` notícias · `0 12` e-mails D+2/D+7 ·
+`0 13` TCH · `0 14` auditoria de curso · **`15 */3` capas (novo)** · seg `0 11` semanal.
+
+### 🎨 As capas do blog — o diagnóstico que mudou o problema
+
+A capa de cada matéria sai do **ComfyUI no PC do Ricardo**, alcançado pela VPS via Tailscale
+(`comfy-bridge` 8088 → `127.0.0.1:8000`). O cron publica **7h BRT**; se a máquina estiver
+desligada ou o ComfyUI fechado naquele minuto, sai a imagem genérica do pool — e o cron
+**termina em exit 0**, então nada alerta.
+
+**Estado encontrado: 15 matérias recentes genéricas, 14 anteriores com capa** → quebrou por
+volta de **22/07**.
+
+⚠️ **Duas falhas distintas, distinguíveis pela resposta:** `timeout` = bridge fora (o
+processo dele morre com a sessão); **502** = bridge de pé e **ComfyUI fechado**.
+
+**Conserto em duas camadas:**
+
+1. `fayai_capas_backfill.py` na VPS (cron `15 */3`) **desacopla capa de publicação** —
+   preenche o que faltou assim que a máquina estiver disponível, e sai em silêncio se não
+   estiver. ⚠️ **Escreve no Mongo direto de propósito:** `/api/ainews/publish` faz `$set` do
+   item inteiro com `publishedAt=agora`, e usá-la para corrigir só a imagem jogaria matéria
+   velha para o topo do feed. **Fila zerada: 14 capas, 0 falhas, acervo em 29/29.**
+2. `scripts/windows/janela-capas.ps1` + duas tarefas agendadas **neste PC**:
+   **06:55 abrir** (ComfyUI + bridge + janela SSH) e **07:20 fechar**.
+
+⚠️ **As duas guardas da rotina, ambas testadas:** (a) **só fecha o que ela abriu** — se o
+ComfyUI já estava de pé às 06:55 ela não inicia nada e **não grava marcador**, e às 07:20
+não encosta na sessão; o marcador em `%LOCALAPPDATA%\FayAI` é a única autorização de
+fechamento que existe. (b) **só fecha com a fila vazia** — consulta `127.0.0.1:8000/queue`,
+espera até 20 min, e se não esvaziar **desiste e apaga o marcador**: GPU ocupada é melhor
+que geração morta pela metade. O bridge **sobrevive** ao fechamento de propósito.
+
+### 📉 Armadilhas de gráfico SVG que só a medição no navegador pega
+
+Build limpo e typecheck limpo **não pegam nenhuma** das três:
+
+1. **`viewBox` fora da largura renderizada põe TODO o texto em escala.** Medi viewBox 1118
+   dentro de caixa de 690px — fonte 10 virou 6 na tela. Checagem:
+   `Math.abs(svg.viewBox.baseVal.width - svg.getBoundingClientRect().width) < 2`.
+   Corolário: **nada de piso** tipo `Math.max(largura, 320)` — o piso é exatamente uma
+   largura que não é a real.
+2. **`ResizeObserver` no nó que você troca = laço.** O padrão
+   `if (!largura) return <div ref={ref}/>` observa o placeholder; quando a medida chega o nó
+   é substituído, o RO dispara com **width 0** na desmontagem e o placeholder volta —
+   pisca em laço. O nó observado tem que ser **estável**, e **medida 0 nunca vira estado**.
+3. **Rótulo direto na ponta colide quando as séries convergem.** O topo do Radar é um
+   pelotão (36,7 · 36,7 · 35,1 · 31,6) — **6 colisões medidas**. Empurrar o texto desgruda
+   o rótulo da linha; a saída é **recuar** e deixar legenda e balão carregarem a identidade.
+
+⚠️ **A paleta do HUD reprova em daltonismo** como cinco linhas sobrepostas (violeta × ciano
+= ΔE 5,2 em deuteranopia). Rodar `scripts/validate_palette.js` da skill `dataviz` contra a
+**superfície real do card** (`#181a28` = white/5 sobre `#0c0e1d`). Ordem aprovada:
+`#3987e5, #d95926, #199e70, #c98500, #d55181`. O dourado continua sendo a cor da seção —
+só não carrega dado.
+
+### 💳 Dívidas e pendências que saem desta sessão
+
+| | Pendência | Tamanho |
+|---|---|---|
+| 1 | **Validar que a rotina 06:55/07:20 disparou pelo agendador** (só rodou à mão) | 5 min |
+| 2 | **Validar que o cron do Radar rodou às 09:00 UTC** (só rodou à mão) | 5 min |
+| 3 | **Guardar `image_prompt` no `ainews` na publicação.** Hoje o backfill usa o **título** como prompt: sai imagem única e no estilo certo, mas menos ligada ao assunto que a cena que o LLM descrevia | pequeno |
+| 4 | **ComfyUI não tem autostart e fecha sozinho** (verificado 3× nesta sessão). A rotina das 06:55 cobre a janela do blog; fora dela, nenhuma capa é gerada | decisão dele |
+| 5 | `header` estoura a largura no mobile (451px × 375) em **todas as páginas**. ⚠️ `window.innerWidth` também reportava 451 — **pode ser artefato da emulação**; confirmar em celular real antes de mexer no layout compartilhado | investigar |
+| 6 | **TTFB da home: 2,5s** contra 0,5s da `/cursos` — herdado de 27/07, **não corrigido** | aberto |
+| 7 | OG do venturebeat volta **HTTP 429** no `fayai_news` (degradação menor) | aberto |
+| 8 | Decidir se `/pt-BR/lab/dossie` fica ou sai | 1 min |
+
+⚠️ **E a ressalva que não muda:** nada disso **cria demanda**. O Radar mede as perguntas
+todo dia por profissão — é uma lista de pautas com demanda comprovada e **ninguém escreveu
+nada a partir dela**. Continua sendo o gargalo real do tráfego.
+
+---
+
 ## 🧠 SESSÃO 27/07 (dia) — O USS DE VERDADE: PERSONA PROFUNDA, DOSSIÊ E CURSO PERSONALIZADO
 
 > **Estado: NO AR desde 27/07 (commit `89be084`).** Escrito enquanto o Ricardo dormia
