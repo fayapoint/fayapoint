@@ -108,6 +108,15 @@ arquivo casados.
 "no text" não impede texto rabiscado na tela — a saída é escrever cenas que não
 dependam de texto legível. As 24 capas restantes seguem com o mascote.
 
+⚠️⚠️ **E o conserto quase se desfez sozinho.** Os dois scripts que rodam por cron na
+VPS — `fayai_news.py` (1-3 matérias/dia, 10:00 UTC) e `fayai_capas_backfill.py` (a cada
+3h) — carregavam o **mesmo** `FUSION_SUFFIX`. Sem mexer neles, toda matéria nova nasceria
+com o robozinho de volta e o preenchedor colocaria mascote nas que ficaram sem capa,
+misturando dois registros visuais na mesma listagem. Os dois foram trocados, copiados
+para `/root/kirmes/` com backup `.bak-20260729`, e verificados **na VPS avaliando a
+constante por AST, não por grep** (`mascote no prompt ativo: False`). Commit `789c8a9`.
+**Lição: trocar o prompt de um one-off não basta — o que repõe conteúdo é o cron.**
+
 ### Verificado
 
 Build limpo (410 páginas), `tsc` limpo, **duas suítes passando** contra `next start`:
