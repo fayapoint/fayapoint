@@ -42,11 +42,15 @@ DIAS = int(os.environ.get("CAPAS_DIAS", "30"))
 # render. 6 capas ~= 90s de uso.
 MAX = int(os.environ.get("CAPAS_MAX", "6"))
 GLOWS = ["cyan", "violet", "rose", "lime", "gold"]
+# Sem mascote — ver a nota longa em `fayai_news.py`. Os dois precisam andar
+# juntos: este preenche a capa que aquele nao gerou, e se divergirem o blog
+# volta a misturar dois registros visuais na mesma listagem.
 FUSION_SUFFIX = (
-    ", an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a "
-    "breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, "
-    "shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, "
-    "professional photography, high detail, no text, no letters, no logos, no watermark"
+    ", editorial photojournalism, real photograph, cinematic film lighting, "
+    "shallow depth of field, natural bokeh, deep dark navy blue atmosphere, "
+    "rich cinematic color grading, shot on 35mm, high detail, "
+    "no text, no letters, no logos, no watermark, no cartoon, no illustration, "
+    "no mascot, no 3d render, no anthropomorphic robot"
 )
 
 

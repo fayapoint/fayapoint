@@ -30,12 +30,27 @@ FEEDS = [
     ("VentureBeat", "https://venturebeat.com/category/ai/feed/"),
 ]
 
-# Estilo §12.1 do IDENTIDADE_VISUAL.md — mesmo pipeline/sufixo usado em
-# generate_abundance.py e generate_blog_pool.py (9.5/10 aprovado).
-FUSION_SUFFIX = (", an adorable glossy flat-vector robot mascot with big cute eyes naturally interacting inside a "
-                  "breathtaking cinematic photorealistic scene, seamless style fusion, dramatic film lighting, "
-                  "shallow depth of field, bokeh, deep dark navy blue atmosphere, rich cinematic color grading, "
-                  "professional photography, high detail, no text, no letters, no logos, no watermark")
+# Capa de NOTICIA nao leva mascote — 29/07/2026.
+#
+# O sufixo anterior colava "an adorable glossy flat-vector robot mascot with big
+# cute eyes" em toda capa. A cena mudava por materia, o mascote nao, e a
+# listagem virava nove cards seguidos com o mesmo robozinho em cores
+# diferentes. O Ricardo, olhando o blog: "imagens tao genericas que colocam em
+# questao a veracidade de todo o blog".
+#
+# O problema nao e a qualidade da imagem, e o REGISTRO: mascote de desenho
+# sobre uma noticia diz "isto e conteudo de marca". Numa materia sobre
+# vazamento de conversa privada, o leitor desconta a credibilidade do texto
+# junto. A identidade visual passa a vir da LUZ (mesma gradacao azul-marinho,
+# foco raso, luz de cinema) e nao de um personagem repetido.
+#
+# ⚠️ O mascote CONTINUA valendo para curso e material de marca (§12.1 do
+# IDENTIDADE_VISUAL.md) — a mudanca e so para o Blog IA Hoje.
+FUSION_SUFFIX = (", editorial photojournalism, real photograph, cinematic film lighting, "
+                  "shallow depth of field, natural bokeh, deep dark navy blue atmosphere, "
+                  "rich cinematic color grading, shot on 35mm, high detail, "
+                  "no text, no letters, no logos, no watermark, no cartoon, no illustration, "
+                  "no mascot, no 3d render, no anthropomorphic robot")
 VALID_GLOWS = {"cyan", "violet", "rose", "lime", "gold"}
 
 def load_env():
