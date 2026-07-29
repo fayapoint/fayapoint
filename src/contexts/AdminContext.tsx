@@ -17,7 +17,7 @@ interface AdminContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
   refreshAdmin: () => Promise<void>;
 }
 
@@ -74,7 +74,15 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    // O cookie que o portão do proxy lê é httpOnly — JS não apaga. Sem esta
+    // chamada, "sair" limpava a tela e deixava a sessão de servidor valendo
+    // por até 24h.
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch (error) {
+      console.error("Admin logout error:", error);
+    }
     localStorage.removeItem("fayai_admin_token");
     localStorage.removeItem("fayai_admin");
     setToken(null);

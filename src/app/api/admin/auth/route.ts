@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     );
 
     // Return admin info
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       token,
       admin: {
@@ -90,6 +90,30 @@ export async function POST(request: Request) {
         role: user.role,
       },
     });
+
+    /**
+     * O mesmo token, agora também em cookie httpOnly.
+     *
+     * O `AdminContext` guarda em `localStorage`, que o servidor não enxerga —
+     * por isso o proxy não tinha como barrar `/admin` antes de entregar a
+     * página, e ela saía com 200 para qualquer visitante. O cookie existe para
+     * o portão do edge (`src/proxy.ts`, bloco 6.0) poder decidir ANTES de
+     * renderizar. O `localStorage` continua, porque é dele que saem os
+     * `Authorization: Bearer` das chamadas de API.
+     *
+     * `httpOnly` para JS de terceiros não conseguir ler; `sameSite: strict`
+     * porque nada legítimo chega ao painel vindo de outro site; `maxAge` igual
+     * ao `expiresIn` do JWT para o cookie não sobreviver ao token.
+     */
+    response.cookies.set("fayai_admin_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 24 * 60 * 60,
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Admin login error:', error);

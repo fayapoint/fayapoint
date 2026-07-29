@@ -10,15 +10,23 @@ Allow: /pt-BR/
 Allow: /en/
 
 # Block all private/dynamic areas
+#
+# Revisado em 29/07/2026. Duas correcoes, e a segunda inverte uma decisao.
+#
+# 1) Nenhum destes padroes casava com o prefixo de locale. A URL real do painel
+#    e /pt-BR/admin/, nao /admin/ — o bloqueio nunca valeu para ela. Por isso as
+#    variantes com prefixo entram explicitamente.
+#
+# 2) As paginas de conta (login, registro, portal, checkout...) SAIRAM daqui de
+#    proposito. Elas ja estavam sendo rastreadas apesar do Disallow, e bloquear
+#    e o oposto do que se quer: URL bloqueada no robots.txt pode continuar
+#    indexada so pela URL, porque o Google nunca chega a LER a tag que manda
+#    remove-la. Agora cada uma serve <meta name="robots" content="noindex"> e
+#    precisa ser rastreavel para que essa tag seja vista e obedecida.
 Disallow: /api/
 Disallow: /admin/
-Disallow: /portal/
-Disallow: /login
-Disallow: /onboarding
-Disallow: /configuracoes
-Disallow: /checkout/
-Disallow: /registro
-Disallow: /recuperar-senha
+Disallow: /pt-BR/admin/
+Disallow: /en/admin/
 
 # Block RSC requests (React Server Components)
 Disallow: /*?_rsc=*
@@ -55,11 +63,14 @@ Crawl-delay: 1
 # =============================================================================
 
 # Google (main search)
+# /portal/ saiu: as paginas de conta agora dizem noindex na tag, e para o
+# Google obedecer ele precisa poder busca-las. Ver a nota no bloco geral.
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
 Disallow: /admin/
-Disallow: /portal/
+Disallow: /pt-BR/admin/
+Disallow: /en/admin/
 Disallow: /*?_rsc=*
 Crawl-delay: 1
 
@@ -68,7 +79,8 @@ User-agent: Bingbot
 Allow: /
 Disallow: /api/
 Disallow: /admin/
-Disallow: /portal/
+Disallow: /pt-BR/admin/
+Disallow: /en/admin/
 Disallow: /*?_rsc=*
 Crawl-delay: 2
 
@@ -77,7 +89,8 @@ User-agent: DuckDuckBot
 Allow: /
 Disallow: /api/
 Disallow: /admin/
-Disallow: /portal/
+Disallow: /pt-BR/admin/
+Disallow: /en/admin/
 Disallow: /*?_rsc=*
 Crawl-delay: 2
 

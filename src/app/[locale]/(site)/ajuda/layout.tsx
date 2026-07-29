@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { generatePageMetadata } from "@/lib/metadata";
+import { routeMetadata } from "@/lib/metadata";
 
 /**
  * Canônica própria de `/ajuda`.
@@ -10,8 +10,9 @@ import { generatePageMetadata } from "@/lib/metadata";
  * origem do "Cópia, o Google e o usuário selecionaram uma página canônica
  * diferente" no Search Console.
  *
- * Só `alternates` sai daqui: título e descrição seguem vindo de quem já os
- * definia.
+ * Desde 29/07/2026 o título e a descrição também saem daqui. Antes não
+ * saíam, e a página servia o título da home — ver ROUTE_SEO em
+ * `src/lib/metadata.ts`.
  */
 export async function generateMetadata({
   params,
@@ -19,8 +20,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const { alternates } = generatePageMetadata({ locale, path: "/ajuda" });
-  return { alternates };
+  return routeMetadata({ locale, path: "/ajuda" });
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

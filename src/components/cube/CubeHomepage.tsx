@@ -258,7 +258,7 @@ export function CubeHomepage() {
             <Link href="/certificacoes" className={s.navLink}>Certificados</Link>
             <Link href="/servicos" className={s.navLink}>Serviços</Link>
             <Link href="/precos" className={s.navLink}>Preços</Link>
-            <Link href="/blog" className={s.navLink}>Blog</Link>
+            <Link href="/noticias" className={s.navLink}>Blog</Link>
             <Link href="/portal" className={s.navLink}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
             <Link href={isLoggedIn ? "/portal" : "/registro"} className={s.navCta}>
               {isLoggedIn ? "Continuar" : "Comece Grátis"}

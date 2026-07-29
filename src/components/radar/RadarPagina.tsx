@@ -114,10 +114,45 @@ export function RadarPagina() {
       return novo;
     });
 
+  /**
+   * A medição do nicho — ao vivo, com o arquivo estático só de piso.
+   *
+   * Até 29/07/2026 esta página **nunca chamava `/api/radar`**: todo o painel de
+   * IA Trend saía de `radar-seed.json`, um arquivo congelado no repositório,
+   * enquanto o rodapé da própria página afirmava *"Dados reais, medidos agora.
+   * Nada aqui é estimado."* A home media ao vivo; a página completa, que é para
+   * onde o botão "abrir o radar completo" manda, não.
+   *
+   * O seed continua como primeiro quadro — ele evita a página nascer vazia
+   * enquanto a medição (~2s de autocomplete) não volta —, mas é substituído
+   * assim que o dado real chega, e a interface diz qual dos dois está na tela.
+   */
+  const [termosIa, setTermosIa] = useState<TermoRadar[]>(SEED[nichoId]?.termos ?? []);
+  const [medidoAoVivo, setMedidoAoVivo] = useState(false);
+
+  useEffect(() => {
+    let vivo = true;
+    setTermosIa(SEED[nichoId]?.termos ?? []);
+    setMedidoAoVivo(false);
+    fetch(`/api/radar?nicho=${encodeURIComponent(nichoId)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!vivo || !d || !Array.isArray(d.termos) || !d.termos.length) return;
+        setTermosIa(d.termos);
+        setMedidoAoVivo(true);
+      })
+      .catch(() => {
+        /* fica o seed; a etiqueta continua dizendo que não é medição de agora */
+      });
+    return () => {
+      vivo = false;
+    };
+  }, [nichoId]);
+
   /** O ranking completo do nicho — na página cabe o dobro do que cabe na home. */
   const linhasIa: LinhaIa[] = useMemo(
-    () => rankearIa(SEED[nichoId]?.termos ?? [], fontes, new Set<string>(), 12),
-    [nichoId, fontes]
+    () => rankearIa(termosIa, fontes, new Set<string>(), 12),
+    [termosIa, fontes]
   );
   const notaTopo = linhasIa[0]?.nota ?? 1;
 
@@ -211,12 +246,33 @@ export function RadarPagina() {
     [trends]
   );
 
-  // Leitura de canal do IA Trend — o achado que a home só insinua.
+  /**
+   * Leitura de canal do IA Trend — agora do que foi medido, não do arquivo.
+   *
+   * Dois defeitos aqui, e o Ricardo pegou os dois olhando a tela em 29/07/2026:
+   * *"temos número 0 individuais e a soma dos 2 dá 10"*.
+   *
+   * O primeiro é a fonte: lia `SEED`, congelado, e não a medição.
+   *
+   * O segundo é de leitura. Os três mostradores sempre somam o total, então
+   * quando a medição confirma tudo nos dois canais o painel exibe `10 · 0 · 0`
+   * — dois cartões grandes, zerados, cada um com uma legenda prometendo um
+   * achado ("demanda de VÍDEO que a busca web não mostra") que não existe
+   * naquele nicho. Zero legítimo apresentado com o mesmo peso visual de um
+   * número que importa vira ruído, e ruído num painel de dado vira dúvida sobre
+   * o dado todo. Agora um canal exclusivo só ganha cartão quando tem o que
+   * mostrar; quando não tem, uma linha de texto explica que a confirmação foi
+   * nos dois canais — que é a informação real.
+   */
   const canais = useMemo(() => {
-    const t = SEED[nichoId]?.termos ?? [];
-    const so = (c: string) => t.filter((x) => x.canais === c).length;
-    return { ambos: so("web+yt"), yt: so("yt"), web: so("web"), total: t.length || 1 };
-  }, [nichoId]);
+    const so = (c: string) => termosIa.filter((x) => x.canais === c).length;
+    return {
+      ambos: so("web+yt"),
+      yt: so("yt"),
+      web: so("web"),
+      total: termosIa.length || 1,
+    };
+  }, [termosIa]);
 
 
   /**
@@ -585,10 +641,24 @@ export function RadarPagina() {
               IA TREND — O RECORTE DE <span style={{ color: "#a78bfa" }}>IA</span>
             </span>
           </h2>
-          <p className="text-sm text-white/50 mb-3 max-w-2xl">
+          <p className="text-sm text-white/50 mb-2 max-w-2xl">
             O que o Brasil digita sobre inteligência artificial, por profissão. A leitura que
             importa é o <strong className="text-white/75">canal</strong>: termo que só aparece no
             YouTube é demanda de vídeo — onde um canal ganha antes de o site ranquear.
+          </p>
+
+          {/* Qual dos dois está na tela. A página afirma no rodapé que nada aqui
+              é estimado; enquanto a medição não volta, quem está no ar é o
+              último retrato guardado, e isso precisa estar escrito. */}
+          <p className="mb-3 flex items-center gap-1.5 text-[11px] text-white/40">
+            <span
+              className="inline-block h-1.5 w-1.5 rounded-full"
+              style={{ background: medidoAoVivo ? "#a3e635" : "#f5c04e" }}
+              aria-hidden
+            />
+            {medidoAoVivo
+              ? "Medido agora, neste carregamento."
+              : "Medindo… no ar, o último retrato guardado."}
           </p>
 
           <div className="flex gap-1.5 flex-wrap mb-3">
@@ -634,7 +704,14 @@ export function RadarPagina() {
                 icone: Search,
                 nota: "intenção de leitura — matéria e página",
               },
-            ].map(({ rotulo, n, cor, icone: Icone, nota }) => (
+            ]
+              // Canal exclusivo com zero termos não ganha cartão. Ver a nota em
+              // `canais`: dois mostradores zerados do tamanho do que importa
+              // faziam o painel parecer quebrado — e a legenda deles prometia um
+              // achado que, naquele nicho, não existe. "Google e YouTube" fica
+              // sempre, porque é a leitura principal e o seu zero é informação.
+              .filter(({ rotulo, n }) => n > 0 || rotulo === "Google e YouTube")
+              .map(({ rotulo, n, cor, icone: Icone, nota }) => (
               <div key={rotulo} className="glass rounded-2xl p-3.5">
                 <p
                   className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest"
@@ -658,6 +735,15 @@ export function RadarPagina() {
               </div>
             ))}
           </div>
+
+          {/* O que os cartões escondidos diriam — em uma linha, sem ocupar o
+              espaço de um número que não existe. */}
+          {canais.yt === 0 && canais.web === 0 && (
+            <p className="mt-2 text-[12px] leading-snug text-white/40">
+              Nenhum termo exclusivo de um canal só neste recorte: os {canais.ambos} apareceram
+              no Google <em>e</em> no YouTube, que é a confirmação mais forte que este método dá.
+            </p>
+          )}
 
           {/* a ponte honesta com o catálogo */}
           <div
@@ -690,7 +776,7 @@ export function RadarPagina() {
         {/* Vem logo depois do IA Trend de propósito: o leitor acabou de ver o
             ranking de HOJE daquele nicho, e a pergunta seguinte é sempre "isso
             é novo?". O painel responde para o mesmo nicho já selecionado. */}
-        <HistoricoTendencia nichoId={nichoId} corNicho={nicho.cor} />
+        <HistoricoTendencia corNicho={nicho.cor} />
 
         {/* ------------------------------- metodologia ------------------------------ */}
         {/* Uma linha. A metodologia detalhada ocupava meia tela e competia com

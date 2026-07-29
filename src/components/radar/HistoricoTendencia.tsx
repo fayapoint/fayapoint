@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TrendingUp, TrendingDown, Minus, Sparkles, Table2, LineChart } from "lucide-react";
-import type { HistoricoRadar, SerieTermo } from "@/lib/radar-historico";
+import type { LeituraRadar, SerieLeitura } from "@/lib/radar-leitura";
 
 /**
  * A linha do tempo do Radar — o que subiu, o que caiu, o que estreou.
@@ -47,8 +47,8 @@ function rotuloDia(dia: string) {
   return `${d}/${m}`;
 }
 
-export function HistoricoTendencia({ nichoId, corNicho }: { nichoId: string; corNicho: string }) {
-  const [dado, setDado] = useState<HistoricoRadar | null>(null);
+export function HistoricoTendencia({ corNicho }: { corNicho: string }) {
+  const [dado, setDado] = useState<LeituraRadar | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [tabela, setTabela] = useState(false);
   const [dias, setDias] = useState(30);
@@ -57,15 +57,15 @@ export function HistoricoTendencia({ nichoId, corNicho }: { nichoId: string; cor
   useEffect(() => {
     let vivo = true;
     setCarregando(true);
-    fetch(`/api/radar/historico?nicho=${nichoId}&dias=${dias}&series=5`)
+    fetch(`/api/radar/leitura?dias=${dias}`)
       .then((r) => r.json())
-      .then((d: HistoricoRadar) => vivo && setDado(d))
+      .then((d: LeituraRadar) => vivo && setDado(d))
       .catch(() => vivo && setDado(null))
       .finally(() => vivo && setCarregando(false));
     return () => {
       vivo = false;
     };
-  }, [nichoId, dias]);
+  }, [dias]);
 
   const temSerie = !!dado && dado.dias.length >= 2 && dado.series.length > 0;
 
@@ -75,9 +75,11 @@ export function HistoricoTendencia({ nichoId, corNicho }: { nichoId: string; cor
         A LINHA DO <span style={{ color: corNicho }}>TEMPO</span>
       </h2>
       <p className="mb-3 max-w-2xl text-sm text-white/50">
-        O mesmo termo medido dia após dia. O que interessa aqui não é a altura da linha,
-        é a <strong className="text-white/75">inclinação</strong> — assunto que sobe rápido
-        tem janela curta e rende matéria hoje; linha plana é conteúdo que não perde a validade.
+        Quantas pessoas abriram cada verbete de IA na{" "}
+        <strong className="text-white/75">Wikipédia em português</strong>, dia a dia. O que
+        interessa é a <strong className="text-white/75">inclinação</strong> — tema que sobe
+        rápido tem janela curta e rende matéria hoje; linha estável é conteúdo que não perde
+        a validade. É <em>leitura</em>, não busca: mede quem foi atrás de entender o assunto.
       </p>
 
       <div className="glass rounded-2xl p-4">
@@ -144,8 +146,8 @@ function Esqueleto() {
  * pior que dizer a verdade: quem olha precisa saber que a série está enchendo,
  * não que o Radar quebrou.
  */
-function SerieCurta({ dado }: { dado: HistoricoRadar | null }) {
-  const guardados = dado?.diasGuardados ?? 0;
+function SerieCurta({ dado }: { dado: LeituraRadar | null }) {
+  const guardados = dado?.dias.length ?? 0;
 
   return (
     <div className="grid place-items-center px-4 py-10 text-center" style={{ minHeight: GRAF.alt }}>
@@ -153,13 +155,13 @@ function SerieCurta({ dado }: { dado: HistoricoRadar | null }) {
         <Sparkles className="mx-auto mb-3 h-6 w-6" style={{ color: "#c98500" }} />
         <p className="text-sm font-semibold text-white/80">
           {guardados === 0
-            ? "A série começa agora"
-            : `Só ${guardados} ${guardados === 1 ? "dia medido" : "dias medidos"} até aqui`}
+            ? "A Wikipédia não respondeu agora"
+            : `Só ${guardados} ${guardados === 1 ? "dia devolvido" : "dias devolvidos"}`}
         </p>
         <p className="mx-auto mt-1.5 max-w-md text-[12px] leading-relaxed text-white/45">
-          Tendência precisa de pelo menos dois dias para virar linha. O Radar passou a
-          guardar cada medição — a partir de amanhã este painel desenha a trajetória, e
-          fica mais útil a cada dia que passa.
+          Esta série vem da API de pageviews da Wikimedia, que é pública e gratuita.
+          Quando ela não responde, o painel prefere dizer isso a desenhar uma linha
+          no chão — linha zerada e “não medimos” são coisas diferentes.
         </p>
       </div>
     </div>
@@ -208,12 +210,12 @@ function usarLargura() {
   return { ref, largura };
 }
 
-function Grafico({ dado, foco }: { dado: HistoricoRadar; foco: number | null }) {
+function Grafico({ dado, foco }: { dado: LeituraRadar; foco: number | null }) {
   const { ref, largura } = usarLargura();
   const [sobre, setSobre] = useState<number | null>(null);
 
   const maximo = useMemo(() => {
-    const v = dado.series.flatMap((s) => s.pontos.map((p) => p.score ?? 0));
+    const v = dado.series.flatMap((s) => s.pontos.map((p) => p.leituras ?? 0));
     return Math.max(10, Math.ceil(Math.max(...v) / 10) * 10);
   }, [dado]);
 
@@ -233,7 +235,7 @@ function Grafico({ dado, foco }: { dado: HistoricoRadar; foco: number | null }) 
   const rotulosCabem = useMemo(() => {
     if (largura <= 560) return false;
     const ys = dado.series
-      .map((s) => [...s.pontos].reverse().find((p) => p.score !== null)?.score)
+      .map((s) => [...s.pontos].reverse().find((p) => p.leituras !== null)?.leituras)
       .filter((v): v is number => v !== undefined)
       .map(y)
       .sort((a, b) => a - b);
@@ -254,16 +256,16 @@ function Grafico({ dado, foco }: { dado: HistoricoRadar; foco: number | null }) 
   // Uma linha pode ter buracos (termo sumiu do autocomplete naquele dia). Cada
   // trecho contínuo vira um `path` próprio — interpolar por cima do buraco
   // desenharia um dado que não foi medido.
-  function trechos(s: SerieTermo) {
+  function trechos(s: SerieLeitura) {
     const out: string[] = [];
     let atual: string[] = [];
     s.pontos.forEach((p, i) => {
-      if (p.score === null) {
+      if (p.leituras === null) {
         if (atual.length > 1) out.push(atual.join(" "));
         atual = [];
         return;
       }
-      atual.push(`${atual.length ? "L" : "M"}${x(i).toFixed(1)} ${y(p.score).toFixed(1)}`);
+      atual.push(`${atual.length ? "L" : "M"}${x(i).toFixed(1)} ${y(p.leituras).toFixed(1)}`);
     });
     if (atual.length > 1) out.push(atual.join(" "));
     return out;
@@ -288,7 +290,7 @@ function Grafico({ dado, foco }: { dado: HistoricoRadar; foco: number | null }) 
         width="100%"
         viewBox={`0 0 ${L} ${GRAF.alt}`}
         role="img"
-        aria-label={`Evolução do score dos ${dado.series.length} termos em alta ao longo de ${n} dias`}
+        aria-label={`Leituras diárias na Wikipédia de ${dado.series.length} temas de IA ao longo de ${n} dias`}
         onMouseLeave={() => setSobre(null)}
       >
         {/* grade recessiva, 1px, sólida */}
@@ -333,33 +335,33 @@ function Grafico({ dado, foco }: { dado: HistoricoRadar; foco: number | null }) 
         {dado.series.map((s, si) => {
           const cor = SERIE_CORES[si];
           const apagar = foco !== null && foco !== si;
-          const ultimo = [...s.pontos].reverse().find((p) => p.score !== null);
+          const ultimo = [...s.pontos].reverse().find((p) => p.leituras !== null);
           const iUlt = ultimo ? s.pontos.findIndex((p) => p.dia === ultimo.dia) : -1;
 
           return (
-            <g key={s.termo} opacity={apagar ? 0.18 : 1} style={{ transition: "opacity .18s" }}>
+            <g key={s.rotulo} opacity={apagar ? 0.18 : 1} style={{ transition: "opacity .18s" }}>
               {trechos(s).map((d, i) => (
                 <path key={i} d={d} fill="none" stroke={cor} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
               ))}
 
               {/* ponto do dia sob o cursor, com anel da superfície */}
-              {sobre !== null && s.pontos[sobre]?.score !== null && (
-                <circle cx={x(sobre)} cy={y(s.pontos[sobre].score!)} r="4.5" fill={cor} stroke={SUPERFICIE} strokeWidth="2" />
+              {sobre !== null && s.pontos[sobre]?.leituras !== null && (
+                <circle cx={x(sobre)} cy={y(s.pontos[sobre].leituras!)} r="4.5" fill={cor} stroke={SUPERFICIE} strokeWidth="2" />
               )}
 
               {/* ponta + rótulo direto */}
               {iUlt >= 0 && (
                 <>
-                  <circle cx={x(iUlt)} cy={y(ultimo!.score!)} r="4" fill={cor} stroke={SUPERFICIE} strokeWidth="2" />
+                  <circle cx={x(iUlt)} cy={y(ultimo!.leituras!)} r="4" fill={cor} stroke={SUPERFICIE} strokeWidth="2" />
                   {rotulosCabem && (
                     <text
                       x={x(iUlt) + 9}
-                      y={y(ultimo!.score!) + 3.5}
+                      y={y(ultimo!.leituras!) + 3.5}
                       fontSize="10"
                       fill={TINTA.secundaria}
                       className="capitalize"
                     >
-                      {s.termo.length > 17 ? `${s.termo.slice(0, 16)}…` : s.termo}
+                      {s.rotulo.length > 17 ? `${s.rotulo.slice(0, 16)}…` : s.rotulo}
                     </text>
                   )}
                 </>
@@ -389,10 +391,10 @@ function Grafico({ dado, foco }: { dado: HistoricoRadar; foco: number | null }) 
   );
 }
 
-function Balao({ dado, i, x, largura }: { dado: HistoricoRadar; i: number; x: number; largura: number }) {
+function Balao({ dado, i, x, largura }: { dado: LeituraRadar; i: number; x: number; largura: number }) {
   const daDireita = x > largura * 0.55;
   const linhas = dado.series
-    .map((s, si) => ({ s, si, v: s.pontos[i]?.score }))
+    .map((s, si) => ({ s, si, v: s.pontos[i]?.leituras }))
     .filter((l) => l.v !== null && l.v !== undefined)
     .sort((a, b) => (b.v as number) - (a.v as number));
 
@@ -412,10 +414,10 @@ function Balao({ dado, i, x, largura }: { dado: HistoricoRadar; i: number; x: nu
         <p style={{ color: TINTA.apagada }}>sem medição</p>
       ) : (
         linhas.map(({ s, si, v }) => (
-          <p key={s.termo} className="flex items-center gap-1.5 leading-snug">
+          <p key={s.rotulo} className="flex items-center gap-1.5 leading-snug">
             <span className="h-[2px] w-3 shrink-0 rounded-full" style={{ background: SERIE_CORES[si] }} />
             <span className="truncate capitalize" style={{ color: TINTA.secundaria }}>
-              {s.termo}
+              {s.rotulo}
             </span>
             <span className="ml-auto font-bold tabular-nums" style={{ color: TINTA.principal }}>
               {v}
@@ -432,14 +434,14 @@ function Legenda({
   foco,
   setFoco,
 }: {
-  dado: HistoricoRadar;
+  dado: LeituraRadar;
   foco: number | null;
   setFoco: (n: number | null) => void;
 }) {
   return (
     <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
       {dado.series.map((s, i) => (
-        <li key={s.termo}>
+        <li key={s.rotulo}>
           <button
             onMouseEnter={() => setFoco(i)}
             onMouseLeave={() => setFoco(null)}
@@ -449,7 +451,7 @@ function Legenda({
             style={{ opacity: foco !== null && foco !== i ? 0.4 : 1, color: TINTA.secundaria }}
           >
             <span className="h-[3px] w-4 shrink-0 rounded-full" style={{ background: SERIE_CORES[i] }} />
-            <span className="capitalize">{s.termo}</span>
+            <span className="capitalize">{s.rotulo}</span>
           </button>
         </li>
       ))}
@@ -458,32 +460,28 @@ function Legenda({
 }
 
 /** Os deltas em texto — a leitura que o gráfico sugere, dita em número. */
-function Movimentos({ series }: { series: SerieTermo[] }) {
+function Movimentos({ series }: { series: SerieLeitura[] }) {
   return (
     <div className="mt-4 grid gap-1.5 border-t border-white/[0.07] pt-3 sm:grid-cols-2 lg:grid-cols-3">
       {series.map((s, i) => {
-        const sobe = s.delta > 0.5;
-        const desce = s.delta < -0.5;
+        const sobe = s.variacao > 0.5;
+        const desce = s.variacao < -0.5;
         const Icone = sobe ? TrendingUp : desce ? TrendingDown : Minus;
         const cor = sobe ? "#0ca30c" : desce ? "#d03b3b" : TINTA.apagada;
 
         return (
-          <div key={s.termo} className="flex items-center gap-2 rounded-lg bg-white/[0.03] px-2.5 py-1.5">
+          <div key={s.rotulo} className="flex items-center gap-2 rounded-lg bg-white/[0.03] px-2.5 py-1.5">
             <span className="h-[3px] w-3 shrink-0 rounded-full" style={{ background: SERIE_CORES[i] }} />
             <span className="min-w-0 flex-1 truncate text-[11px] capitalize" style={{ color: TINTA.secundaria }}>
-              {s.termo}
+              {s.rotulo}
             </span>
-            {s.estreante ? (
-              <span className="shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold" style={{ background: "#c9850022", color: "#c98500" }}>
-                ESTREOU
-              </span>
-            ) : (
-              <span className="flex shrink-0 items-center gap-1 text-[11px] font-bold tabular-nums" style={{ color: cor }}>
-                <Icone size={11} aria-hidden />
-                {s.delta > 0 ? "+" : ""}
-                {s.delta}
-              </span>
-            )}
+            {/* Percentual, e o sinal explícito: "12" sozinho podia ser lido como
+                doze leituras. É variação da última semana contra a anterior. */}
+            <span className="flex shrink-0 items-center gap-1 text-[11px] font-bold tabular-nums" style={{ color: cor }}>
+              <Icone size={11} aria-hidden />
+              {s.variacao > 0 ? "+" : ""}
+              {s.variacao}%
+            </span>
           </div>
         );
       })}
@@ -492,7 +490,7 @@ function Movimentos({ series }: { series: SerieTermo[] }) {
 }
 
 /** A mesma série sem depender de cor nenhuma. */
-function Tabela({ dado }: { dado: HistoricoRadar }) {
+function Tabela({ dado }: { dado: LeituraRadar }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-[11px]">
@@ -511,13 +509,13 @@ function Tabela({ dado }: { dado: HistoricoRadar }) {
         </thead>
         <tbody>
           {dado.series.map((s) => (
-            <tr key={s.termo} className="border-b border-white/[0.05]">
+            <tr key={s.rotulo} className="border-b border-white/[0.05]">
               <th scope="row" className="max-w-[170px] truncate py-1.5 pr-3 text-left font-medium capitalize" style={{ color: TINTA.secundaria }}>
-                {s.termo}
+                {s.rotulo}
               </th>
               {s.pontos.map((p) => (
-                <td key={p.dia} className="px-1.5 py-1.5 text-right tabular-nums" style={{ color: p.score === null ? TINTA.apagada : TINTA.principal }}>
-                  {p.score ?? "—"}
+                <td key={p.dia} className="px-1.5 py-1.5 text-right tabular-nums" style={{ color: p.leituras === null ? TINTA.apagada : TINTA.principal }}>
+                  {p.leituras ?? "—"}
                 </td>
               ))}
             </tr>

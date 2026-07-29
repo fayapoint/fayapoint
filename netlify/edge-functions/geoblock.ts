@@ -192,7 +192,16 @@ async function isVerifiedCrawlerIp(ip: string | undefined): Promise<boolean | nu
   return list.some(([start, end]) => parsed.value >= start && parsed.value <= end);
 }
 
-const BYPASS_SECRET = Netlify.env.get("GEOBLOCK_BYPASS_SECRET") || "fayapoint-bypass-2024";
+/**
+ * Sem valor padrão, de propósito.
+ *
+ * Antes caía em `"fayapoint-bypass-2024"` quando a variável não estava
+ * configurada — uma senha fixa, escrita no código, que abre o site inteiro de
+ * qualquer país. Agora, se `GEOBLOCK_BYPASS_SECRET` não existir, o bypass
+ * simplesmente não existe (o `null` abaixo nunca casa com um cabeçalho, porque
+ * a comparação só acontece quando o segredo está definido).
+ */
+const BYPASS_SECRET = Netlify.env.get("GEOBLOCK_BYPASS_SECRET") || null;
 
 export default async (request: Request, context: Context) => {
   const url = new URL(request.url);
@@ -251,12 +260,25 @@ export default async (request: Request, context: Context) => {
   // 2. BYPASS SECRET - For admin access from anywhere
   // =========================================================================
   const bypassHeader = request.headers.get("x-geobypass-secret");
-  if (bypassHeader === BYPASS_SECRET) {
+  if (BYPASS_SECRET && bypassHeader === BYPASS_SECRET) {
     return context.next();
   }
 
   // =========================================================================
-  // 3. TEST OVERRIDE - For local testing with ?_geo=BR or ?_geo=US
+  // 3. TEST OVERRIDE - simular país com ?_geo=XX
+  //
+  // ⚠️ ISTO ERA UM BYPASS COMPLETO DO BLOQUEIO, EM PRODUÇÃO.
+  //
+  // A versão anterior fazia `return context.next()` quando `?_geo` valia um
+  // país permitido — ANTES de olhar o país de verdade. Efeito prático:
+  // qualquer pessoa, de qualquer lugar do mundo, entrava no site inteiro
+  // digitando `fayai.com.br/?_geo=BR`. Não era preciso segredo, cabeçalho nem
+  // ferramenta: um parâmetro na barra de endereço.
+  //
+  // Agora o override só vale para BLOQUEAR (testar `?_geo=IN` continua
+  // devolvendo 403, que é o que se quer poder testar em produção) e para
+  // LIBERAR apenas em pré-visualização ou com o segredo — nunca no site
+  // publicado só por causa do parâmetro.
   // =========================================================================
   const testGeo = url.searchParams.get("_geo");
   if (testGeo) {
@@ -264,7 +286,12 @@ export default async (request: Request, context: Context) => {
     if (!ALLOWED_COUNTRIES.has(testCountry)) {
       return blockRequest(testCountry, pathname, context.ip || "unknown", userAgent);
     }
-    return context.next();
+    // Simular país permitido só passa fora do site publicado. Em produção,
+    // cai adiante e o país REAL decide.
+    const contexto = Netlify.env.get("CONTEXT"); // "production" | "deploy-preview" | "branch-deploy" | "dev"
+    if (contexto && contexto !== "production") {
+      return context.next();
+    }
   }
 
   // =========================================================================

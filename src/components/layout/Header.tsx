@@ -237,10 +237,12 @@ export function Header() {
 
                 {/* Simple Links */}
                 <NavigationMenuItem>
-                  <Link href="/blog" className={cn(
+                  {/* /noticias é o hub real. `/blog` responde 308 para cá, e o
+                      link ficava a dois saltos do destino em toda página. */}
+                  <Link href="/noticias" className={cn(
                     "px-3 py-2 text-sm font-medium transition",
-                    pathname === "/blog" 
-                      ? "text-primary" 
+                    pathname === "/noticias"
+                      ? "text-primary"
                       : "text-foreground/90 hover:text-primary"
                   )}>
                     {t("nav.blog")}
@@ -390,8 +392,8 @@ export function Header() {
               >
                 {t("nav.tools")}
               </MobileNavLink>
-              <MobileNavLink 
-                href="/blog" 
+              <MobileNavLink
+                href="/noticias"
                 icon={Newspaper}
                 onClick={() => setMobileMenuOpen(false)}
               >

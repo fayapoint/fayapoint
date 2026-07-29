@@ -639,6 +639,53 @@ export default async function middleware(request: NextRequest) {
     || request.cookies.get("fayai_token")?.value
     || null;
 
+  // -------------------------------------------------------------------------
+  // 6.0. ADMIN — PORTÃO NO SERVIDOR, FALHANDO FECHADO
+  //
+  // Medido em produção em 29/07/2026: `/pt-BR/admin`, `/pt-BR/admin/users` e
+  // `/pt-BR/admin/payments` respondiam **200 para qualquer visitante**. Só as
+  // APIs (`/api/admin/*`) devolviam 401, então o DADO estava protegido — mas a
+  // interface inteira era servida, com a estrutura do painel, os nomes das
+  // rotas e o JS que as chama. A proteção era só o `AdminContext`, que lê
+  // `localStorage` **depois** de a página já ter sido entregue e renderizada.
+  // Client-side não é proteção: é decoração.
+  //
+  // Duas diferenças deliberadas em relação ao portão do `/portal` logo abaixo:
+  //
+  //  1. **Falha FECHADO.** O portal deixa passar quando a verificação falha,
+  //     para não deslogar gente de verdade por deriva de segredo no edge. Aqui
+  //     não: token ausente, inválido, expirado ou sem `role: "admin"` volta
+  //     para o login. Se o segredo do edge estiver quebrado, o certo é o admin
+  //     não entrar — não o contrário.
+  //  2. **Confere o papel**, não só a assinatura. Um JWT de aluno é
+  //     perfeitamente válido; só não é de administrador.
+  //
+  // `/admin/login` fica de fora, senão não há como entrar. Ela é `noindex` e
+  // tem limite de 30 req/min por IP (bloco 5).
+  if (rawPathname.match(/^\/admin(\/|$)/) && !rawPathname.startsWith("/admin/login")) {
+    const adminToken = request.cookies.get("fayai_admin_token")?.value || null;
+
+    let ehAdmin = false;
+    if (adminToken) {
+      try {
+        const { payload } = await jwtVerify(adminToken, JWT_SECRET_BYTES);
+        ehAdmin = payload.role === "admin";
+      } catch (error) {
+        console.warn(`[ADMIN_GATE_REJEITADO] ${pathname}`, error);
+      }
+    }
+
+    if (!ehAdmin) {
+      console.warn(`[ADMIN_GATE] Acesso negado: Path=${pathname}, IP=${ip}`);
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = hasLocalePrefix
+        ? `/${segments[0]}/admin/login`
+        : "/admin/login";
+      loginUrl.search = "";
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
   if (
     rawPathname.startsWith("/portal") &&
     (searchParams.has("code") || searchParams.has("error")) &&

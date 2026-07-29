@@ -3,21 +3,213 @@
 
 ---
 
-## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 28/07/2026, 05:30 UTC
+## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 29/07/2026
 
-> Tudo abaixo está **NO AR** (commits `3bf1659`, `2063579`, `aa2533d`, `b6fd74d`).
-> Quatro pushes, todos com autorização explícita do Ricardo ([[feedback_pedir_autorizacao_deploy]]).
+> ⛔ **A sessão de 29/07 está PRONTA E VERIFICADA, mas NÃO DEPLOYADA.** 41 arquivos,
+> build limpo, 25/25 verificações passando no servidor de produção local. Esperando
+> o sim do Ricardo ([[feedback_pedir_autorizacao_deploy]]).
+>
+> Tudo de 28/07 e antes está **NO AR** (`3bf1659`, `2063579`, `aa2533d`, `b6fd74d`).
 
 ### O que fazer primeiro, na ordem
 
 | # | Tarefa | Por quê |
 |---|---|---|
-| **1** | **Conferir se a rotina das 06:55 disparou.** Ler `%LOCALAPPDATA%\FayAI\janela-capas.log` e olhar o blog do dia: a matéria de hoje tem capa própria ou genérica? | A rotina foi criada e testada **à mão** em 28/07, mas **nunca rodou pelo agendador**. É a primeira coisa a validar. |
-| **2** | **Conferir se o cron do Radar rodou às 09:00 UTC.** `ssh root@76.13.234.38 'cat /root/kirmes/logs/radar_historico_$(date +%Y%m%d).log'` — esperado "10 gravados, 0 falharam". | Mesma coisa: rodou manualmente em 28/07, mas nunca pelo cron. Sem ele o gráfico só enche o nicho `geral`. |
-| **3** | **Guardar o `image_prompt` no `ainews`** (ver "dívida" abaixo). | É a única melhoria de qualidade pendente das capas, e é pequena. |
-| **4** | Escrever conteúdo a partir do Radar. | ⚠️ Continua sendo **o gargalo real do tráfego** — nada disso cria demanda (herdado de 27/07). |
+| **1** | **Pedir autorização e deployar o SEO de 29/07.** | Está tudo pronto e medido. Enquanto não sobe, o Google segue sem saber que 81 páginas existem. |
+| **2** | **Depois do deploy: reenviar o sitemap no Search Console** e pedir indexação de `/pt-BR/servicos`, `/pt-BR/ferramentas` e `/pt-BR/chatgpt-allowlisting`. | O sitemap dobrou (67 → 148). O Google só descobre o novo lote quando relê. |
+| **3** | **Conferir se a rotina das 06:55 disparou.** Ler `%LOCALAPPDATA%\FayAI\janela-capas.log` e olhar o blog do dia: a matéria de hoje tem capa própria ou genérica? | A rotina foi criada e testada **à mão** em 28/07, mas **nunca rodou pelo agendador**. Continua sem validação. |
+| **4** | **Conferir se o cron do Radar rodou às 09:00 UTC.** `ssh root@76.13.234.38 'cat /root/kirmes/logs/radar_historico_$(date +%Y%m%d).log'` — esperado "10 gravados, 0 falharam". | Mesma coisa: rodou manualmente em 28/07, mas nunca pelo cron. |
+| **5** | **Guardar o `image_prompt` no `ainews`**. | Única melhoria pendente das capas, e é pequena. |
+| **6** | Escrever conteúdo a partir do Radar. | ⚠️ Continua sendo **o gargalo real do tráfego** — nada disso cria demanda (herdado de 27/07). |
 
-### As três frentes que fecharam nesta sessão
+---
+
+## 🔴 SESSÃO 29/07 (parte 2) — O `/admin` ESTAVA ABERTO, E O `?_geo=BR` ERA UMA PORTA
+
+> Pedido do Ricardo, em cinco partes, olhando o site: *"quero garantir que nenhuma
+> página de admin será acessível por ninguém"* · *"se puder especificamente incluir no
+> geoblock, ásia e áfrica"* · *"o primeiro lugar mudou… isso vai contra o propósito"* ·
+> *"temos 2 notícias quase idênticas"* · *"imagens tão genéricas que colocam em questão
+> a veracidade de todo o blog"*.
+
+### ⛔ As duas falhas de segurança
+
+**O painel era servido a qualquer visitante.** Medido: `/pt-BR/admin`,
+`/pt-BR/admin/users`, `/pt-BR/admin/payments` respondiam **200** sem sessão nenhuma. As
+APIs devolviam 401, então o *dado* estava salvo — mas a interface inteira ia pro
+navegador. A proteção era o `AdminContext` lendo `localStorage` **depois** de a página
+já ter sido entregue e renderizada. Client-side não é proteção, é decoração.
+
+Conserto: portão no `proxy.ts` (bloco 6.0), no servidor, antes de renderizar. Duas
+diferenças deliberadas em relação ao portão do `/portal`: **falha fechado** (o do portal
+deixa passar em caso de dúvida, para não deslogar aluno por deriva de segredo — aqui o
+certo é o oposto) e **confere `role`, não só assinatura** (JWT de aluno é válido; só não
+é de administrador). O login passou a gravar cookie `httpOnly`, porque o servidor não
+enxerga `localStorage`, e ganhou `/api/admin/logout` — `localStorage.removeItem` não
+apaga cookie `httpOnly`, então "sair" deixava a sessão viva por 24h.
+
+**`?_geo=BR` abria o site inteiro de qualquer país.** No edge function o teste `_geo`
+era avaliado ANTES do país real e dava `return context.next()` para país permitido.
+Qualquer pessoa, em qualquer lugar, entrava digitando `fayai.com.br/?_geo=BR`. Sem
+segredo, sem ferramenta. Agora o override só BLOQUEIA em produção; liberar, só fora do
+site publicado. Junto: `GEOBLOCK_BYPASS_SECRET` deixou de cair no padrão fixo
+`"fayapoint-bypass-2024"` escrito no código — sem variável, o bypass não existe.
+
+⚠️ **Ásia e África já estavam bloqueadas.** O geoblock é BR-only: IN, CN, JP, KR, EG
+todos em 403, confirmado em produção. Não havia lista a estender — o pedido partia de
+uma premissa errada, e o acesso da Índia tinha a outra origem, acima.
+
+### O Radar: três defeitos, e o Ricardo acertou o diagnóstico do produto
+
+**O #1 mudava entre a home e a `/radar`.** O cache era um `Map` em memória **por
+instância**; no Netlify as duas páginas caíam em instâncias diferentes e cada uma media
+do zero. Não era ordenação — eram duas medições distintas exibidas como a mesma leitura.
+Conserto: instantâneo compartilhado no Mongo (`radar-instantaneo.ts`).
+
+**"Semaglutida" e "Semaglutide" eram duas linhas.** A deduplicação casava título
+normalizado inteiro. Agora casa por radical (corte no 6º caractere).
+
+**O gráfico flat e o `0 + 0 = 10`.** O histórico devolvia `36,7 / 36,7 / 36,7` em três
+dias, em todos os termos — porque o score mede **posição no autocomplete**, que muda em
+escala de semanas. O gráfico estava certo; errada era a legenda prometendo *"o que
+interessa é a inclinação"* numa métrica que não tem como inclinar.
+
+⚠️ **Google Trends foi testado e NÃO serve.** `/api/explore` responde 200 com cookie,
+mas `/api/widgetdata/multiline` devolve **429** de forma consistente — cookie novo, 9s
+entre chamadas, IP residencial. De datacenter (que é de onde a função roda) tende a ser
+pior. Substituto: **API de pageviews da Wikimedia**, oficial, sem chave, medida antes de
+virar código — "Inteligência artificial" oscilou 199→2.360 em 30 dias, 29 valores
+distintos. A seção passou a responder *"o que o Brasil LÊ sobre IA"* em vez de *"o que
+busca"* — mudança de sentido aprovada pelo Ricardo.
+
+**A `/radar` nunca chamava `/api/radar`.** Todo o painel de IA Trend lia
+`radar-seed.json` congelado, enquanto o rodapé afirmava *"Dados reais, medidos agora"*.
+Agora mede, com o seed só de primeiro quadro, e uma etiqueta diz qual dos dois está na
+tela. Os mostradores de canal zerados sumiram: zero legítimo com o peso visual de um
+número que importa vira ruído, e ruído em painel de dado vira dúvida sobre o dado todo.
+
+### Blog: a duplicata e o mascote
+
+As duas matérias do Opus 5 (TechCrunch 25/07 e The Verge 27/07) eram o mesmo lançamento.
+**Fundidas** num texto único sob `claude-opus-5`, com 308 permanente da URL aposentada —
+não 404, que jogaria fora o sinal já rastreado. Backup do documento removido antes de
+apagar. 31 → 30 matérias.
+
+**As capas eram todas o mesmo robô porque isso está no código.** `backfill_news_covers.py`
+cola em TODA capa o `FUSION_SUFFIX`: *"an adorable glossy flat-vector robot mascot with
+big cute eyes"*. A cena muda por matéria, o mascote não. Novo script
+`gerar_capas_editoriais.py`: sem mascote, identidade vinda da **luz** (mesma gradação
+azul-marinho, foco raso) e não de um personagem. 6 capas geradas, subidas e trocadas no
+banco; prompts do Higgsfield em `_capas_novas/PROMPTS_HIGGSFIELD.md`, com os nomes de
+arquivo casados.
+
+⚠️ **Prompt negativo não funciona neste workflow.** O `ConditioningZeroOut` + CFG 1.0
+(exigido pela LoRA Lightning de 4 passos) significa que negativo é ignorado. Por isso
+"no text" não impede texto rabiscado na tela — a saída é escrever cenas que não
+dependam de texto legível. As 24 capas restantes seguem com o mascote.
+
+### Verificado
+
+Build limpo (410 páginas), `tsc` limpo, **duas suítes passando** contra `next start`:
+a de SEO (25 checagens) e a desta leva (16) — portão do admin com cookie forjado
+rejeitado, 308 da duplicata, sitemap em 147 sem a matéria fundida, e as 5 séries do
+gráfico com 21 a 30 valores distintos cada (antes: 1).
+
+---
+
+## 🔵 SESSÃO 29/07 (parte 1) — AS 81 PÁGINAS QUE O GOOGLE NUNCA SOUBE QUE EXISTIAM
+
+> **Estado: PRONTO, VERIFICADO, NÃO DEPLOYADO.** 41 arquivos tocados.
+> Pedido do Ricardo, com a tela do Search Console: *"precisamos resolver os problemas
+> do google search console"*.
+
+### O ponto de partida: a tela era anterior às correções de 27–28/07
+
+149 não indexadas contra 20 indexadas, em 7 motivos. Antes de tocar em qualquer
+coisa, medi as 67 URLs do sitemap em produção com UA de navegador: **67/67 em 200,
+todas com canônica própria, `h1` e JSON-LD, texto mediano de 3.492 caracteres**. O
+soft 404 das páginas de curso, que era o assunto de 28/07, está resolvido de fato.
+
+⚠️ **O 403 que aparece ao forjar o UA do Googlebot é o verificador de bot falso
+funcionando** (`b750be0`, verificação por faixa de IP oficial), não uma falha —
+mas custa lembrar: **toda medição de SEO neste site precisa de UA de navegador**,
+senão o que se mede é a proteção, não a página ([[feedback_verificar_em_producao]]).
+
+### O que realmente restou — e não era erro técnico
+
+**139 das 149 estavam em dois baldes**: "Detectada, mas não indexada" (89) e
+"Rastreada, mas não indexada" (50). Nenhum dos dois é defeito de servidor. É o
+Google dizendo *"achei e não achei que valia a pena"* e *"li e não achei que
+valia a pena"*. As causas foram quatro, todas medidas:
+
+**1. O sitemap declarava 67 URLs e o Google conhecia 169.** A diferença tem nome:
+**56 páginas de ferramenta** (`/ferramentas/chatgpt`, `/n8n`, `/midjourney`…, 2–3 mil
+caracteres de ficha real cada, com `generateStaticParams` e título próprio desde
+sempre) e ~25 páginas públicas — `/descobrir` (8.180 chars), `/chatgpt-allowlisting`
+(5.365, a página de venda do curso de AEO), `/recursos/glossario` (5.513), `/casos`
+(4.980). **56 + 25 ≈ os 89 "Detectada"**: existiam há meses, eram alcançáveis pelo
+link interno, e nunca foram anunciadas.
+
+**2. 25 páginas serviam o título da home, letra por letra.** Amostrei 20 em produção:
+**18 respondiam `Cursos de Inteligência Artificial do Zero | FayAI`**. A causa é a
+cascata de metadata do Next — o layout de `[locale]` declara `title`, e todo filho
+que não sobrescreve herda. O conserto de 28/07 deu canônica própria a cada rota mas
+deixou título e descrição de fora *de propósito* (o comentário no código dizia
+"seguem vindo de quem já os definia" — só que ninguém os definia). É a fábrica dos
+50 "Rastreada, mas não indexada": 25 páginas distintas pedindo para serem tratadas
+como a mesma coisa.
+
+**3. `/pt-BR/servicos` respondia 404 — e está no menu da home.** A pasta tinha
+`layout.tsx` (com canônica própria e entrada de intenção no sitemap) e **nenhuma
+`page.tsx`**. `CubeHomepage.tsx:259` e `:283` linkam `/servicos` no menu do topo e no
+mobile, então toda visita à home oferecia um link quebrado e o Googlebot o seguia a
+cada rastreamento. Origem mais provável do "Não encontrado (404)".
+
+**4. O robots.txt nunca alcançou o que achava que bloqueava.** `Disallow: /login` não
+casa com `/pt-BR/login` — a URL real. Medido: `/pt-BR/login` e `/pt-BR/registro`
+respondiam **200, `index, follow`, com o título da home**. O mesmo vale para
+`/admin/` e `/portal/`.
+
+### O que foi feito
+
+| Frente | O quê |
+|---|---|
+| **Título e descrição** | `ROUTE_SEO` em `src/lib/metadata.ts`: 25 rotas × 2 idiomas, texto escrito a partir do HTML **servido**, não do nome da rota. Os 25 `layout.tsx` passaram a chamar `routeMetadata`. `/en` traduz de verdade (`/en/casos` → "Projects That Deliver Real Results"), então o par bilíngue não é decorativo. |
+| **Sitemap 67 → 148** | Entram `/servicos`, 24 páginas públicas e as **56 ferramentas**. Usa `toolsData`, **não** o `toolsMap` da página — este soma apelidos legados (`dalle` ≙ `dall-e`) que serviriam a mesma ficha em duas URLs. |
+| **Hub `/servicos`** | `page.tsx` novo, índice dos 5 serviços com `ItemList` em JSON-LD. O texto de cada cartão é o mesmo `description` que a página filha declara, para não haver duas promessas do mesmo serviço. |
+| **Fora do índice** | 9 `layout.tsx` com `noindex` nas rotas de conta (login, registro, recuperar-senha, onboarding, configuracoes, checkout, portal, receipt, verificar-certificado) + 3 no `ROUTE_SEO`: `/status` (transitório), `/waiting-list` (confirmação pós-cadastro), `/certificacoes` (placeholder "em breve"). |
+| **robots.txt** | Entram `/pt-BR/admin/` e `/en/admin/`. **Saem** as páginas de conta — e essa inversão é o ponto: URL bloqueada no robots.txt pode seguir indexada só pela URL, porque o Google nunca chega a LER a tag que manda removê-la. Para tirar do índice é preciso **deixar rastrear e dizer noindex**. |
+| **Menu** | `/blog` → `/noticias` em `Header.tsx` (×2) e `CubeHomepage.tsx`. `/blog` respondia 308 para `/pt-BR/blog`, que respondia 308 para `/pt-BR/noticias` — dois saltos, em link presente em toda página. |
+
+### Verificado (não "deve funcionar")
+
+`npm run build` limpo, `tsc --noEmit` limpo, e **25/25 checagens passando** contra o
+servidor de produção local (`next start`, porta 3002) — script em
+`scratchpad/verify_local.mjs`. Cobre: título próprio nas 9 amostradas, título inglês
+em `/en`, `/servicos` em 200, `noindex` nas 6 rotas de conta e nos 3 placeholders,
+sitemap com 148 URLs, as 56 ferramentas presentes, nenhuma URL `noindex` anunciada e
+zero duplicatas.
+
+### O que NÃO foi feito, e por quê
+
+- **Páginas magras mantidas indexáveis**: `/recursos` (718 chars), `/contato/vendas`
+  (719), `/recursos/calculadora-roi` (771), `/instrutores` (1.135), `/ajuda` (1.286).
+  Ganharam título próprio, mas podem cair em "Rastreada, mas não indexada" mesmo
+  assim. **Precisam de conteúdo real** — e inventar corpo docente ou artigo de
+  suporte é decisão do Ricardo, não minha.
+- **O 308 do prefixo de locale continua em todo link de menu.** Os componentes usam
+  `next/link` cru com `href="/cursos"`, e o middleware redireciona para `/pt-BR/cursos`.
+  É um salto por link em toda página. Consertar exige trocar o `Link` em todo o
+  código — refatoração grande, risco desproporcional dentro de uma tarefa de SEO.
+  **Fica registrado como dívida.**
+- **`/en` segue rastreável.** É `noindex, follow` desde 27/07 e há páginas dela
+  indexadas ([[reference_seo_duplicata_indice]]). Bloquear no robots.txt agora
+  **impediria** o Google de ver o `noindex` e elas ficariam presas no índice. A ordem
+  certa é: deixar rastrear até sair do índice, *depois* considerar bloquear.
+
+---
+
+### As três frentes que fecharam na sessão de 28/07
 
 **SEO — as páginas de curso serviam 624 caracteres.** O Google mandou 4 avisos (404, soft 404, redirecionamento, cópia com/sem canônica). A causa não era lentidão: `CourseSalesPage` era `"use client"` e buscava `/api/products/<slug>`, e **`/api/` é `Disallow` no robots.txt** — o Googlebot nunca completava o fetch e caía no ramo que renderiza *"Curso não encontrado"*. Soft 404 permanente por construção, idêntico nas 20 URLs. Medido: texto servido no sitemap **164.409 → 261.733 caracteres**, páginas com menos de 1000 chars **21 → 0**, `/cursos` **873 → 11.907**, sitemap 65/65 sem regressão.
 

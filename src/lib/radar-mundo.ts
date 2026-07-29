@@ -18,6 +18,7 @@
  */
 
 import { getLugar, estadosDaRegiao, filhosDe, type Lugar } from "@/data/landing/radar-lugares";
+import { lerInstantaneo, gravarInstantaneo } from "@/lib/radar-instantaneo";
 
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36";
@@ -237,13 +238,40 @@ function chavesDe(titulo: string): string[] {
     .filter((p) => p.length >= 5);
 }
 
+/**
+ * Chave de identidade de um assunto, tolerante a variação de grafia.
+ *
+ * A versão anterior comparava o título normalizado inteiro, o que só pegava
+ * repetição idêntica. Em 29/07/2026 o painel mostrava **"Semaglutida" em 4º e
+ * "Semaglutide" em 6º** — o mesmo medicamento, a mesma notícia, duas linhas,
+ * porque um feed usa a grafia em português e o outro a internacional. Para
+ * quem lê, é a lista se contradizendo.
+ *
+ * Aqui o título vira um conjunto de radicais: sem acento, sem plural, e
+ * cortado no 6º caractere, que basta para "semaglutid(a)" e "semaglutid(e)"
+ * colidirem sem juntar coisas que nada têm a ver. Palavras curtas entram
+ * inteiras, senão "táxi" e "tática" virariam a mesma coisa.
+ */
+function identidade(titulo: string): string {
+  const radicais = titulo
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .split(/[^a-z0-9]+/)
+    .filter((p) => p.length >= 4)
+    .map((p) => (p.length > 6 ? p.slice(0, 6) : p.replace(/s$/, "")))
+    .sort();
+  // Sem radical significativo (título muito curto), cai no título inteiro.
+  return radicais.length ? radicais.join("|") : titulo.toLowerCase().trim();
+}
+
 /** Mantém a ordem de relevância mas não deixa um assunto aparecer duas vezes. */
 function juntar(listas: ItemTrend[][]): ItemTrend[] {
   const vistos = new Set<string>();
   const out: ItemTrend[] = [];
   for (const lista of listas) {
     for (const it of lista) {
-      const chave = it.titulo.toLowerCase().replace(/[^a-z0-9à-ú ]/gi, "").trim();
+      const chave = identidade(it.titulo);
       if (vistos.has(chave)) continue;
       vistos.add(chave);
       out.push(it);
@@ -359,11 +387,35 @@ async function medir(lugar: Lugar): Promise<ItemTrend[]> {
   return itens;
 }
 
+/**
+ * O que está em alta naquele lugar — a MESMA leitura para todo mundo.
+ *
+ * Três degraus, nesta ordem:
+ *
+ *  1. **Memória do processo.** Evita ida ao banco dentro da mesma instância.
+ *  2. **Instantâneo no Mongo.** É o que garante que a home e a `/radar` mostrem
+ *     o mesmo #1. O degrau 1 sozinho não garantia nada: no Netlify cada
+ *     requisição pode cair numa instância diferente, com memória vazia, e cada
+ *     uma media do zero. Foi assim que o painel mostrou "Semaglutida" na home e
+ *     "Glen Hansard" na página completa, com segundos de diferença.
+ *  3. **Medir ao vivo** e regravar para os próximos.
+ *
+ * `geradoEm` passa a ser sempre a hora da MEDIÇÃO, nunca a hora da resposta —
+ * é ele que a interface mostra, e dizer "medido agora" sobre um dado de 20
+ * minutos atrás é o tipo de imprecisão que custa a confiança da página inteira.
+ */
 export async function getMundo(lugarId: string): Promise<ResultadoMundo> {
   const lugar = getLugar(lugarId);
+
   const guardado = cache.get(lugar.id);
   if (guardado && Date.now() - guardado.em < CACHE_TTL_MS) {
     return { ...guardado.dado, origem: "cache" };
+  }
+
+  const compartilhado = await lerInstantaneo<ResultadoMundo>(lugar.id, CACHE_TTL_MS);
+  if (compartilhado) {
+    cache.set(lugar.id, { em: compartilhado.em.getTime(), dado: compartilhado.dado });
+    return { ...compartilhado.dado, origem: "cache" };
   }
 
   const itens = await medir(lugar);
@@ -377,6 +429,9 @@ export async function getMundo(lugarId: string): Promise<ResultadoMundo> {
     origem: "live",
     itens,
   };
-  if (itens.length) cache.set(lugar.id, { em: Date.now(), dado });
+  if (itens.length) {
+    cache.set(lugar.id, { em: Date.now(), dado });
+    await gravarInstantaneo(lugar.id, dado);
+  }
   return dado;
 }

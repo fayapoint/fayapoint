@@ -163,6 +163,39 @@ const config: NextConfig = {
       },
     ];
   },
+
+  /**
+   * Matérias aposentadas por fusão.
+   *
+   * Quando duas matérias cobrem o mesmo fato, a saída não é apagar a mais
+   * fraca: a URL dela já foi rastreada, pode estar indexada e pode ter link
+   * apontando para si. Apagar joga esse sinal fora e ainda devolve 404 a quem
+   * tiver o link. O 301 consolida os dois no endereço que fica.
+   *
+   * `permanent: true` de propósito — 301, não 307. Redirecionamento temporário
+   * manda o Google GUARDAR a URL antiga, que é o oposto de consolidar (mesma
+   * armadilha corrigida em `/cursos/<slug>` e `/nova` em 28/07/2026).
+   *
+   * 29/07/2026 — "Anthropic lança Opus 5: o novo titã da inteligência
+   * artificial" (TechCrunch, 25/07) e "Anthropic lança Claude Opus 5, seu
+   * modelo de IA mais avançado" (The Verge, 27/07) eram o mesmo lançamento,
+   * publicados a dois dias de distância, e apareciam lado a lado na listagem
+   * com capas quase idênticas. O conteúdo dos dois foi fundido no segundo.
+   */
+  async redirects() {
+    return [
+      {
+        source: '/:locale(pt-BR|en)/noticias/anthropic-lanca-opus-5',
+        destination: '/:locale/noticias/claude-opus-5',
+        permanent: true,
+      },
+      {
+        source: '/noticias/anthropic-lanca-opus-5',
+        destination: '/pt-BR/noticias/claude-opus-5',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withNextIntl(config);
