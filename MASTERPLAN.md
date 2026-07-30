@@ -1330,7 +1330,7 @@ Princípio (vídeo 2): "não usar astrofísico pra montar Lego". Sem gastar a ma
 | **Glue trivial**: formatar, listar, converter | Haiku 4.5 | `low` | ~0,3x Sonnet. |
 | Chat do Hermes (Telegram + dashboard) | **GPT-5.6 pela SUA assinatura ChatGPT** | — | **Custo zero.** Já configurado e verificado 21/07. |
 | Crons da VPS (auditoria, TCH) | Gemini 3 Flash via kirmes-proxy | — | $0,50/$3 por M. Já pinado. |
-| Blog diário IA Hoje | Kimi K3 (rota `kirmes-premium`) | — | Sua decisão; único consumidor da rota cara. |
+| Blog diário IA Hoje | Gemini 3.5 Flash Lite (rota `kirmes-premium`) | — | Trocado 29/07: saiu o Kimi K3 ($3/$15) e entrou o Flash Lite ($0,30/$2,50, contexto de 1M). ⚠️ A rota "premium" agora é a mais BARATA das duas — o nome ficou legado. |
 | Mídia (imagens/vídeo de curso, home cinematográfica) | ComfyUI local | — | GPU própria, custo zero. |
 | Volume/triagem/scoring mecânico offline | **LM Studio local** | — | Ver §8.4 — com ressalvas sérias de velocidade. |
 

@@ -1,5 +1,26 @@
+# ⚠️ APOSENTADO EM 29/07/2026 — mantido so como receita de rollback.
+#
+# Esta unit rodava `docker exec` como ROOT dentro do container. O Hermes
+# roda como uid 10000, entao todo log criado por ela nascia root:root e o
+# gateway nao conseguia mais abrir /opt/data/logs/agent.log no restart
+# seguinte — PermissionError em laco (foi o que derrubou o gateway durante
+# o update de 29/07). Era tambem a origem dos 46.904 reinicios de 21-28/07.
+#
+# AGORA: o dashboard e supervisionado pelo s6 DENTRO do container, que faz
+# `s6-setuidgid hermes` — nada mais escreve como root. Ligado pelas env do
+# container: HERMES_DASHBOARD=1, HERMES_DASHBOARD_HOST=100.111.28.77,
+# HERMES_DASHBOARD_PORT=9119, HERMES_DASHBOARD_TUI=1 (ver
+# /root/kirmes/_bak_2907/kirmes.env.new na VPS).
+#
+# ⚠️ --insecure NAO desliga mais o portao de autenticacao (endurecimento de
+# jun/2026). Quem satisfaz o portao hoje e o bloco dashboard.basic_auth do
+# config.yaml (usuario `ricardo`).
+#
+# Para reverter: systemctl enable --now hermes-dashboard.service e tirar as
+# env HERMES_DASHBOARD* do container.
+
 [Unit]
-Description=Hermes Agent Web Dashboard (Tailscale-only, porta 9119)
+Description=Hermes Agent Web Dashboard (Tailscale-only, porta 9119) [APOSENTADO 29/07]
 After=docker.service tailscaled.service
 Requires=docker.service
 

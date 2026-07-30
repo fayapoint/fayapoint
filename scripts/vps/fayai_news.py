@@ -19,7 +19,7 @@ UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/126 Safari/537.3
 # modelo de raciocinio que vaza o "pensamento" direto no campo content, sem
 # nunca terminar com o JSON pedido — o proxy so repassa a resposta, sem
 # tratar isso. Ultimo recurso deste script (alem do proprio failover do
-# proxy, que agora tenta Kimi K3 -> Gemini 3 Flash Preview): chamada DIRETA
+# proxy, que tenta Gemini 3.5 Flash Lite -> Gemini 3 Flash Preview): chamada DIRETA
 # a Gemini 3 Flash Preview, caso o proxy inteiro fique fora do ar.
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 FALLBACK_MODEL = "google/gemini-3-flash-preview"
@@ -117,11 +117,12 @@ def build_prompt(headlines):
     )
 
 def message_text(message):
-    # FIX 19/07/2026: com o Kimi K3 (modelo de raciocinio "pensa" bastante
-    # antes de responder), a resposta as vezes vem com content=None e o
-    # texto real dentro de reasoning — se so lermos content cegamente isso
-    # quebra com "expected string or bytes-like object, got NoneType" em vez
-    # de cair no fallback direito. Aqui tratamos os dois casos.
+    # FIX 19/07/2026: modelo de raciocinio "pensa" bastante antes de responder
+    # e a resposta as vezes vem com content=None e o texto real dentro de
+    # reasoning — se so lermos content cegamente isso quebra com "expected
+    # string or bytes-like object, got NoneType" em vez de cair no fallback
+    # direito. Aqui tratamos os dois casos. Nasceu do Kimi K3 (saiu em 29/07),
+    # mas fica como guarda geral: qualquer modelo pode responder assim.
     content = message.get("content")
     if isinstance(content, str) and content.strip():
         return content
@@ -144,8 +145,9 @@ def extract_json(text):
 
 def call_proxy(prompt, max_tokens=12000):
     body = json.dumps({
-        # rota premium do proxy (20/07): blog diario e tarefa importante ->
-        # Kimi K3; o resto do ecossistema usa "kirmes-proxy" (Gemini Flash)
+        # rota premium do proxy: blog diario e tarefa importante -> Gemini 3.5
+        # Flash Lite (era Kimi K3 ate 29/07); o resto do ecossistema usa
+        # "kirmes-proxy" (Gemini 3 Flash Preview)
         "model": "kirmes-premium",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.4,
@@ -182,7 +184,8 @@ def llm(headlines, openrouter_key=None):
     # tivesse "choices" — se viesse com choices mas o content fosse
     # raciocinio vazado (sem JSON valido), ela desistia na hora, fora do
     # loop de retry. Agora o ciclo completo (chamada + extracao) e
-    # re-tentado. O proprio proxy ja tenta 2 modelos internamente (Kimi K3 ->
+    # re-tentado. O proprio proxy ja tenta 2 modelos internamente (Gemini 3.5
+    # Flash Lite ->
     # Gemini 3 Flash Preview, ate ~100s cada) — por isso aqui bastam 2
     # tentativas (cobre uma falha transitoria de rede/timeout do proxy
     # inteiro), nao 3, senao o pior caso passa de 10 minutos. Se o proxy
