@@ -17,7 +17,7 @@
 |---|---|---|
 | **1** | **Pedir autorização e deployar o SEO de 29/07.** | Está tudo pronto e medido. Enquanto não sobe, o Google segue sem saber que 81 páginas existem. |
 | **2** | **Depois do deploy: reenviar o sitemap no Search Console** e pedir indexação de `/pt-BR/servicos`, `/pt-BR/ferramentas` e `/pt-BR/chatgpt-allowlisting`. | O sitemap dobrou (67 → 148). O Google só descobre o novo lote quando relê. |
-| **3** | **Conferir se a rotina das 10:55 disparou.** Ler `%LOCALAPPDATA%\FayAI\janela-capas.log` e olhar o blog do dia: a matéria de hoje tem capa própria ou genérica? | A rotina foi criada e testada **à mão** em 28/07, mas **nunca rodou pelo agendador**. Horário movido de 06:55 para 10:55 em 31/07 (às 7h o Ricardo dormia). Continua sem validação. |
+| **3** | ✅ **VALIDADO em 31/07.** A rotina disparou pelo agendador às **10:55:02** e as notícias das **11:01** saíram com **3 capas reais do ComfyUI** (Cloudinary). Horário movido de 06:55 para 10:55 no mesmo dia — às 7h o Ricardo dormia e a capa saía genérica. | Fechado. ⚠️ Para reconferir, ler `%LOCALAPPDATA%\FayAI\janela-capas.log` **no terminal dele** — a sessão do Claude enxerga uma cópia-sombra desse caminho e mostra outro arquivo. |
 | **4** | **Conferir se o cron do Radar rodou às 09:00 UTC.** `ssh root@76.13.234.38 'cat /root/kirmes/logs/radar_historico_$(date +%Y%m%d).log'` — esperado "10 gravados, 0 falharam". | Mesma coisa: rodou manualmente em 28/07, mas nunca pelo cron. |
 | **5** | **Guardar o `image_prompt` no `ainews`**. | Única melhoria pendente das capas, e é pequena. |
 | **6** | Escrever conteúdo a partir do Radar. | ⚠️ Continua sendo **o gargalo real do tráfego** — nada disso cria demanda (herdado de 27/07). |
@@ -412,7 +412,7 @@ só não carrega dado.
 
 | | Pendência | Tamanho |
 |---|---|---|
-| 1 | **Validar que a rotina 10:55/11:20 disparou pelo agendador** (só rodou à mão; horário movido em 31/07) | 5 min |
+| 1 | ✅ ~~Validar que a rotina disparou pelo agendador~~ — **feito em 31/07: 10:55:02, primeira vez** | fechado |
 | 2 | **Validar que o cron do Radar rodou às 09:00 UTC** (só rodou à mão) | 5 min |
 | 3 | **Guardar `image_prompt` no `ainews` na publicação.** Hoje o backfill usa o **título** como prompt: sai imagem única e no estilo certo, mas menos ligada ao assunto que a cena que o LLM descrevia | pequeno |
 | 4 | **ComfyUI não tem autostart e fecha sozinho** (verificado 3× nesta sessão). A rotina das 10:55 cobre a janela do blog; fora dela, nenhuma capa é gerada | decisão dele |
