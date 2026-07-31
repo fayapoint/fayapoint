@@ -17,7 +17,7 @@
 |---|---|---|
 | **1** | **Pedir autorização e deployar o SEO de 29/07.** | Está tudo pronto e medido. Enquanto não sobe, o Google segue sem saber que 81 páginas existem. |
 | **2** | **Depois do deploy: reenviar o sitemap no Search Console** e pedir indexação de `/pt-BR/servicos`, `/pt-BR/ferramentas` e `/pt-BR/chatgpt-allowlisting`. | O sitemap dobrou (67 → 148). O Google só descobre o novo lote quando relê. |
-| **3** | **Conferir se a rotina das 06:55 disparou.** Ler `%LOCALAPPDATA%\FayAI\janela-capas.log` e olhar o blog do dia: a matéria de hoje tem capa própria ou genérica? | A rotina foi criada e testada **à mão** em 28/07, mas **nunca rodou pelo agendador**. Continua sem validação. |
+| **3** | **Conferir se a rotina das 10:55 disparou.** Ler `%LOCALAPPDATA%\FayAI\janela-capas.log` e olhar o blog do dia: a matéria de hoje tem capa própria ou genérica? | A rotina foi criada e testada **à mão** em 28/07, mas **nunca rodou pelo agendador**. Horário movido de 06:55 para 10:55 em 31/07 (às 7h o Ricardo dormia). Continua sem validação. |
 | **4** | **Conferir se o cron do Radar rodou às 09:00 UTC.** `ssh root@76.13.234.38 'cat /root/kirmes/logs/radar_historico_$(date +%Y%m%d).log'` — esperado "10 gravados, 0 falharam". | Mesma coisa: rodou manualmente em 28/07, mas nunca pelo cron. |
 | **5** | **Guardar o `image_prompt` no `ainews`**. | Única melhoria pendente das capas, e é pequena. |
 | **6** | Escrever conteúdo a partir do Radar. | ⚠️ Continua sendo **o gargalo real do tráfego** — nada disso cria demanda (herdado de 27/07). |
@@ -347,13 +347,18 @@ Junto: **journal 289MB → 102MB** (`--vacuum-size=120M`; `--vacuum-time=30d` li
 porque os logs tinham menos de 30 dias).
 
 **Os 8 crons rodando diariamente** (7 arquivos de log em 7 dias cada): `*/5` health-check ·
-`*/5` USS publish-due · **`0 9` radar (novo)** · `0 10` notícias · `0 12` e-mails D+2/D+7 ·
+`*/5` USS publish-due · **`0 9` radar (novo)** · `0 14` notícias · `0 12` e-mails D+2/D+7 ·
 `0 13` TCH · `0 14` auditoria de curso · **`15 */3` capas (novo)** · seg `0 11` semanal.
+
+⚠️ **31/07: o bloco do ComfyUI saiu das 7h para as 11h BRT.** Notícias `0 10` → **`0 14`**
+e briefing do Buzz `30 11` → **`45 14`**; a janela do PC foi de 06:55/07:20 para
+**10:55/11:20**. Motivo: às 7h o Ricardo dorme, o PC fica fora do ar e o pedido de capa
+morre — a matéria saía com imagem genérica todo dia.
 
 ### 🎨 As capas do blog — o diagnóstico que mudou o problema
 
 A capa de cada matéria sai do **ComfyUI no PC do Ricardo**, alcançado pela VPS via Tailscale
-(`comfy-bridge` 8088 → `127.0.0.1:8000`). O cron publica **7h BRT**; se a máquina estiver
+(`comfy-bridge` 8088 → `127.0.0.1:8000`). O cron publica **11h BRT** (era 7h até 31/07); se a máquina estiver
 desligada ou o ComfyUI fechado naquele minuto, sai a imagem genérica do pool — e o cron
 **termina em exit 0**, então nada alerta.
 
@@ -371,10 +376,10 @@ processo dele morre com a sessão); **502** = bridge de pé e **ComfyUI fechado*
    item inteiro com `publishedAt=agora`, e usá-la para corrigir só a imagem jogaria matéria
    velha para o topo do feed. **Fila zerada: 14 capas, 0 falhas, acervo em 29/29.**
 2. `scripts/windows/janela-capas.ps1` + duas tarefas agendadas **neste PC**:
-   **06:55 abrir** (ComfyUI + bridge + janela SSH) e **07:20 fechar**.
+   **10:55 abrir** (ComfyUI + bridge + janela SSH) e **11:20 fechar**.
 
 ⚠️ **As duas guardas da rotina, ambas testadas:** (a) **só fecha o que ela abriu** — se o
-ComfyUI já estava de pé às 06:55 ela não inicia nada e **não grava marcador**, e às 07:20
+ComfyUI já estava de pé às 10:55 ela não inicia nada e **não grava marcador**, e às 11:20
 não encosta na sessão; o marcador em `%LOCALAPPDATA%\FayAI` é a única autorização de
 fechamento que existe. (b) **só fecha com a fila vazia** — consulta `127.0.0.1:8000/queue`,
 espera até 20 min, e se não esvaziar **desiste e apaga o marcador**: GPU ocupada é melhor
@@ -407,10 +412,10 @@ só não carrega dado.
 
 | | Pendência | Tamanho |
 |---|---|---|
-| 1 | **Validar que a rotina 06:55/07:20 disparou pelo agendador** (só rodou à mão) | 5 min |
+| 1 | **Validar que a rotina 10:55/11:20 disparou pelo agendador** (só rodou à mão; horário movido em 31/07) | 5 min |
 | 2 | **Validar que o cron do Radar rodou às 09:00 UTC** (só rodou à mão) | 5 min |
 | 3 | **Guardar `image_prompt` no `ainews` na publicação.** Hoje o backfill usa o **título** como prompt: sai imagem única e no estilo certo, mas menos ligada ao assunto que a cena que o LLM descrevia | pequeno |
-| 4 | **ComfyUI não tem autostart e fecha sozinho** (verificado 3× nesta sessão). A rotina das 06:55 cobre a janela do blog; fora dela, nenhuma capa é gerada | decisão dele |
+| 4 | **ComfyUI não tem autostart e fecha sozinho** (verificado 3× nesta sessão). A rotina das 10:55 cobre a janela do blog; fora dela, nenhuma capa é gerada | decisão dele |
 | 5 | `header` estoura a largura no mobile (451px × 375) em **todas as páginas**. ⚠️ `window.innerWidth` também reportava 451 — **pode ser artefato da emulação**; confirmar em celular real antes de mexer no layout compartilhado | investigar |
 | 6 | **TTFB da home: 2,5s** contra 0,5s da `/cursos` — herdado de 27/07, **não corrigido** | aberto |
 | 7 | OG do venturebeat volta **HTTP 429** no `fayai_news` (degradação menor) | aberto |

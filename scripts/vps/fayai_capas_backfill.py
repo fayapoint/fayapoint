@@ -4,7 +4,7 @@
 ## O problema
 
 A capa de cada materia sai do ComfyUI, que roda no PC do Ricardo e e alcancado
-pelo comfy-bridge via Tailscale. O cron das noticias roda 10h UTC (7h BRT) — e
+pelo comfy-bridge via Tailscale. O cron das noticias roda 14h UTC (11h BRT) — e
 se naquele minuto o PC estiver desligado, ou o ComfyUI fechado, a materia sai
 com a imagem generica do pool por editoria. O cron termina em exit 0 e nada
 alerta. Medido em 28/07/2026: **as 29 materias do acervo estavam com capa

@@ -1,24 +1,29 @@
-<#
+﻿<#
 .SYNOPSIS
     Abre a janela diaria em que o blog consegue gerar capa, e fecha depois.
 
 .DESCRIPTION
-    O blog diario publica as 7h BRT e a capa de cada materia sai do ComfyUI,
+    O blog diario publica as 11h BRT e a capa de cada materia sai do ComfyUI,
     que roda NESTE PC e e alcancado pela VPS via Tailscale (comfy-bridge).
     Ate 28/07/2026 nada disso subia sozinho: as materias sairam com imagem
     generica desde ~22/07 e o cron terminava em exit 0, sem alertar ninguem.
 
+    31/07/2026: a janela era 06:55/07:20 e o Ricardo estava dormindo — o PC
+    ficava fora do ar, o pedido do bridge nao era atendido e a capa saia
+    generica. Todo o bloco (janela + cron das noticias na VPS) foi movido para
+    11h BRT, horario em que ele esta sempre acordado.
+
     Esta rotina abre a janela pouco antes da publicacao e a fecha depois, para
     nao deixar a GPU ocupada o dia inteiro:
 
-      06:55  -Acao abrir   -> ComfyUI + comfy-bridge + janela SSH da VPS
-      07:20  -Acao fechar  -> fecha o que ELA abriu, se o ComfyUI estiver ocioso
+      10:55  -Acao abrir   -> ComfyUI + comfy-bridge + janela SSH da VPS
+      11:20  -Acao fechar  -> fecha o que ELA abriu, se o ComfyUI estiver ocioso
 
     ## As duas regras que evitam fechar o que nao e nosso
 
     1. **So fecha o que esta rotina abriu.** Se o ComfyUI ja estava de pe as
-       06:55 (voce trabalhando de madrugada), ela nao inicia nada e nao grava
-       marcador — e as 07:20 nao fecha nada. O marcador
+       10:55 (voce ja trabalhando), ela nao inicia nada e nao grava
+       marcador — e as 11:20 nao fecha nada. O marcador
        (`%LOCALAPPDATA%\FayAI\janela-capas.json`) e a unica autorizacao de
        fechamento que existe.
 
@@ -85,7 +90,7 @@ function FilaOcupada {
 
 if ($Acao -eq 'abrir') {
     if (PortaAtiva 8000) {
-        Registrar 'ComfyUI JA estava aberto — nao inicio nem gravo marcador (as 07:20 nada sera fechado).'
+        Registrar 'ComfyUI JA estava aberto — nao inicio nem gravo marcador (as 11:20 nada sera fechado).'
         # O bridge ainda precisa estar de pe mesmo assim: e ele que da acesso
         # a VPS, e morre junto com a sessao dele.
         if (-not (PortaAtiva 8088)) {
