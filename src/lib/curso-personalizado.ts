@@ -37,6 +37,15 @@ export interface CapituloDoCurso {
   indice: number;
   titulo: string;
   corpo: string;
+  /**
+   * Número que o ALUNO vê. `null` quando o bloco não é capítulo — o primeiro
+   * `# ` de vários cursos é o título do curso, não a aula 1.
+   *
+   * O `indice` continua sendo a posição crua e NÃO pode mudar: é a chave que
+   * liga `UserCourseLayer.capitulo` ao bloco na hora de injetar. Filtrar o
+   * preâmbulo aqui deslocaria todas as camadas já gravadas dos alunos.
+   */
+  numero: number | null;
 }
 
 export interface CamadaDeCapitulo {
@@ -53,7 +62,7 @@ const marca = (i: number) => `<` + `!--fayai:cap-${i}--` + `>`;
 const marcaFim = (i: number) => `<` + `!--/fayai:cap-${i}--` + `>`;
 
 export function dividirCapitulos(markdown: string): CapituloDoCurso[] {
-  return markdown
+  const blocos = markdown
     .replace(/\r\n/g, '\n')
     .split(SPLIT_CAPITULO)
     .map((s) => s.trim())
@@ -62,8 +71,26 @@ export function dividirCapitulos(markdown: string): CapituloDoCurso[] {
       indice,
       titulo: (corpo.split('\n')[0] || '').replace(/^#\s+/, '').trim(),
       corpo,
+      numero: null as number | null,
     }))
     .filter((c) => !!c.titulo);
+
+  // Quando o curso numera os capítulos ("# Capítulo 7: ..."), só esses são
+  // aula — o resto é capa. Sem isso o preâmbulo virava "CAPÍTULO 1" no prompt
+  // e empurrava a numeração de todos os outros em um.
+  const numerados = blocos.filter((b) => /^Cap[íi]tulo\s+\d+/i.test(b.titulo));
+  if (numerados.length) {
+    for (const b of blocos) {
+      const m = b.titulo.match(/^Cap[íi]tulo\s+(\d+)/i);
+      b.numero = m ? Number(m[1]) : null;
+    }
+  } else {
+    blocos.forEach((b, i) => {
+      b.numero = i + 1;
+    });
+  }
+
+  return blocos;
 }
 
 function montarBloco(nome: string | undefined, c: CamadaDeCapitulo): string {

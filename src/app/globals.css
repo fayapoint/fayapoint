@@ -1036,3 +1036,44 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .fx-orb, .fx-shine::after, .fx-magic::before, .fx-float { animation: none !important; }
 }
+
+/* ---------------------------------------------------------------------------
+   Prévia pública do curso (/curso/<slug>/previa)
+   Conteúdo vem do servidor como HTML puro, então a estilização é por descendência.
+   --------------------------------------------------------------------------- */
+.curso-previa-conteudo { color: rgba(255,255,255,.72); line-height: 1.75; }
+.curso-previa-conteudo > * + * { margin-top: 1.1rem; }
+.curso-previa-conteudo h3 {
+  margin-top: 2.4rem; margin-bottom: .9rem;
+  font-size: 1.25rem; font-weight: 600; color: #fff; letter-spacing: -.01em;
+}
+.curso-previa-conteudo p { font-size: 1.02rem; }
+.curso-previa-conteudo strong { color: rgba(255,255,255,.94); font-weight: 600; }
+.curso-previa-conteudo code {
+  padding: .1em .38em; border-radius: .35rem;
+  background: rgba(255,255,255,.08); font-size: .9em;
+}
+.curso-previa-conteudo ol,
+.curso-previa-conteudo ul { padding-left: 1.35rem; }
+.curso-previa-conteudo ol { list-style: decimal; }
+.curso-previa-conteudo ul { list-style: disc; }
+.curso-previa-conteudo li + li { margin-top: .55rem; }
+.curso-previa-conteudo blockquote {
+  padding: 1rem 1.15rem; border-left: 3px solid rgba(52,211,153,.5);
+  border-radius: 0 .75rem .75rem 0; background: rgba(52,211,153,.06);
+  color: rgba(255,255,255,.82);
+}
+.curso-previa-conteudo blockquote p { margin: 0; }
+
+/* Mídia inline: a legenda ENSINA, então ela é texto de conteúdo e não adorno. */
+.curso-media { margin: 2rem 0; }
+.curso-media img,
+.curso-media video {
+  width: 100%; height: auto; display: block;
+  border-radius: .9rem; border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.02);
+}
+.curso-media figcaption {
+  margin-top: .7rem; font-size: .875rem; line-height: 1.6;
+  color: rgba(255,255,255,.5);
+}

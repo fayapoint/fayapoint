@@ -79,6 +79,42 @@ export function schemaCurso(c: DadosCurso) {
   };
 }
 
+/**
+ * Ementa do curso para a página de prévia.
+ *
+ * `syllabusSections` é o que permite ao Google entender que a URL descreve um
+ * programa de estudo com N unidades, e não uma landing page a mais. Cada seção
+ * carrega a descrição real do módulo — não um rótulo genérico.
+ */
+export function schemaEmenta(
+  c: DadosCurso & { modulos: Array<{ numero: number; titulo: string; descricao: string; capitulos: number }> }
+) {
+  const url = `${SITE_URL}/${c.locale}/curso/${c.slug}/previa`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: c.nome,
+    description: c.descricao,
+    url,
+    provider: ORGANIZACAO,
+    inLanguage: c.locale === "en" ? "en" : "pt-BR",
+    ...(c.nivel && { educationalLevel: c.nivel }),
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "online",
+      courseWorkload: paraDuracaoISO(c.duracao) ?? undefined,
+    },
+    syllabusSections: c.modulos.map((m) => ({
+      "@type": "Syllabus",
+      position: m.numero,
+      name: m.titulo,
+      description: m.descricao,
+      timeRequired: undefined,
+      ...(m.capitulos ? { about: `${m.capitulos} capítulos` } : {}),
+    })),
+  };
+}
+
 export interface DadosMateria {
   slug: string;
   locale: string;

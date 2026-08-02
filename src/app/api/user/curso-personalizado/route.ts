@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
@@ -28,6 +29,16 @@ export const maxDuration = 300;
  * painel do dossiê usa essa lista para pedir exatamente aquilo.
  */
 const MINIMA_CONFIANCA = 35;
+
+/**
+ * Impressão curta do trecho que gerou a camada.
+ *
+ * Não precisa ser criptográfica — só precisa mudar quando o capítulo muda, e
+ * caber num campo indexável. `createHash` do Node serve e não traz dependência.
+ */
+function impressao(texto: string): string {
+  return createHash("sha1").update(texto).digest("hex").slice(0, 16);
+}
 
 const SISTEMA =
   "Você adapta material didático de IA ao contexto REAL de um aluno brasileiro. " +
@@ -73,8 +84,27 @@ export async function GET(request: NextRequest) {
     const persona = (user.socialPersona || {}) as unknown as PersonaProfunda;
     const dossie = montarDossie(persona, { nome: user.name, temFoto: !!user.image, avatar: user.image });
     const camadas = await UserCourseLayer.find({ userId: String(user._id), courseSlug: curso })
-      .select("capitulo personaVersion generatedAt")
+      .select("capitulo personaVersion hashCapitulo generatedAt")
       .lean();
+
+    // Para saber se o CURSO mudou desde a camada, é preciso reler o conteúdo e
+    // comparar as impressões — é a mesma conta do POST, feita só para relatar.
+    let hashAtual = new Map<number, string>();
+    try {
+      const client = await getMongoClient();
+      const prod = await client
+        .db("fayapointProdutos")
+        .collection("products")
+        .findOne({ slug: curso }, { projection: { courseContent: 1 } });
+      if (prod?.courseContent) {
+        const texto = sanitizeCourseContent(String(prod.courseContent)).content || "";
+        hashAtual = new Map(
+          dividirCapitulos(texto).map((c) => [c.indice, impressao(c.corpo.slice(0, 2600))])
+        );
+      }
+    } catch {
+      // Sem o conteúdo, só não dá para afirmar que envelheceu por curso.
+    }
 
     const versaoAtual = persona.personaVersion || 0;
     return NextResponse.json({
@@ -82,8 +112,13 @@ export async function GET(request: NextRequest) {
       confianca: dossie.confianca,
       minima: MINIMA_CONFIANCA,
       pronto: dossie.confianca >= MINIMA_CONFIANCA,
-      // Envelheceu = a persona mudou desde que a camada foi escrita.
-      desatualizada: camadas.some((c) => (c.personaVersion || 0) < versaoAtual),
+      // Envelheceu por qualquer um dos dois lados: a persona mudou, ou o
+      // capítulo foi reescrito debaixo da camada.
+      desatualizada: camadas.some(
+        (c) =>
+          (c.personaVersion || 0) < versaoAtual ||
+          (hashAtual.size > 0 && hashAtual.get(c.capitulo) !== undefined && hashAtual.get(c.capitulo) !== (c.hashCapitulo || ""))
+      ),
       faltando: dossie.dimensoes
         .filter((d) => d.confianca < 50)
         .flatMap((d) => d.faltando.slice(0, 1).map((f) => ({ dimensao: d.titulo, ...f }))),
@@ -148,9 +183,11 @@ export async function POST(request: NextRequest) {
     }
 
     const existentes = await UserCourseLayer.find({ userId: String(user._id), courseSlug: curso })
-      .select("capitulo personaVersion")
+      .select("capitulo personaVersion hashCapitulo")
       .lean();
-    const jaTem = new Map(existentes.map((e) => [e.capitulo, e.personaVersion || 0]));
+    const jaTem = new Map(
+      existentes.map((e) => [e.capitulo, { versao: e.personaVersion || 0, hash: e.hashCapitulo || "" }])
+    );
     const versao = persona.personaVersion || 0;
 
     const contexto = blocoDePersona(persona, "curso");
@@ -159,39 +196,78 @@ export async function POST(request: NextRequest) {
     const erros: string[] = [];
 
     for (const cap of capitulos) {
+      // Bloco sem número é a capa do curso, não uma aula. Gerar camada para ele
+      // gastava uma chamada e escrevia "por que ESTE capítulo importa" em cima
+      // do título do curso.
+      if (cap.numero === null) continue;
+
+      const trecho = cap.corpo.slice(0, 2600);
+      const hash = impressao(trecho);
       const anterior = jaTem.get(cap.indice);
-      if (!refazer && anterior !== undefined && anterior >= versao) {
+      if (!refazer && anterior !== undefined && anterior.versao >= versao && anterior.hash === hash) {
         puladas++;
         continue;
       }
 
       try {
-        const res = await generate({
-          tier: "budget",
-          json: true,
-          maxTokens: 700,
-          temperature: 0.7,
-          messages: [
-            { role: "system", content: SISTEMA },
-            {
-              role: "user",
-              content:
-                `ALUNO:\n${contexto}\n\n` +
-                `CURSO: ${produto.name || curso}\n` +
-                `CAPÍTULO ${cap.indice + 1}: ${cap.titulo}\n\n` +
-                // O capítulo inteiro estouraria o contexto num curso longo; o
-                // começo carrega a tese, que é o que a camada precisa amarrar.
-                `TRECHO DO CAPÍTULO:\n${cap.corpo.slice(0, 2600)}\n\n` +
-                `Escreva as três peças para ESTE aluno neste capítulo.`,
-            },
-          ],
-        });
+        const pedir = async (reforco: boolean) => {
+          const res = await generate({
+            // Barato primeiro, caro só quando o barato falha — a mesma ordem
+            // que o curso ensina. O tier budget entrega JSON com uma chave
+            // vazia em ~13% dos capítulos mesmo com o reforço no prompt;
+            // escalar só nesses casos custa quase nada e fecha o buraco.
+            tier: reforco ? "premium" : "budget",
+            json: true,
+            // 700 apertava quando o exemplo vinha completo; o modelo entregava
+            // JSON válido com `exemplo` vazio em ~1 de cada 4 capítulos.
+            maxTokens: 1000,
+            temperature: 0.7,
+            messages: [
+              { role: "system", content: SISTEMA },
+              {
+                role: "user",
+                content:
+                  `ALUNO:\n${contexto}\n\n` +
+                  `CURSO: ${produto.name || curso}\n` +
+                  `CAPÍTULO ${cap.numero}: ${cap.titulo}\n\n` +
+                  // O capítulo inteiro estouraria o contexto num curso longo; o
+                  // começo carrega a tese, que é o que a camada precisa amarrar.
+                  `TRECHO DO CAPÍTULO:\n${trecho}\n\n` +
+                  `Escreva as três peças para ESTE aluno neste capítulo.` +
+                  (reforco
+                    ? `\n\nATENÇÃO: a tentativa anterior veio com alguma das três chaves vazia. ` +
+                      `As três — abertura, exemplo e tarefa — precisam vir preenchidas.`
+                    : ""),
+              },
+            ],
+          });
+          // ⚠️ Nem todo modelo honra `response_format: json_object` do mesmo
+          // jeito. O tier premium devolve o JSON dentro de ```json … ```, e o
+          // `JSON.parse` cru recusa — o que transformou o escalonamento numa
+          // regressão: 4 falhas viraram 12. A cerca sai antes de interpretar.
+          const cru = String(res.content || "")
+            .trim()
+            .replace(/^```(?:json)?\s*/i, "")
+            .replace(/```\s*$/, "");
+          const d = JSON.parse(cru);
+          return {
+            abertura: String(d.abertura || "").trim(),
+            exemplo: String(d.exemplo || "").trim(),
+            tarefa: String(d.tarefa || "").trim(),
+            model: res.model,
+          };
+        };
 
-        const dados = JSON.parse(res.content);
-        const abertura = String(dados.abertura || "").trim();
-        const exemplo = String(dados.exemplo || "").trim();
-        const tarefa = String(dados.tarefa || "").trim();
-        if (!abertura && !exemplo && !tarefa) throw new Error("resposta vazia");
+        let dados = await pedir(false);
+        // A checagem antiga só reprovava se as TRÊS viessem vazias, então uma
+        // camada sem `exemplo` — a peça mais valiosa — passava direto e era
+        // gravada. Medido em 02/08: 8 de 31 capítulos sem exemplo.
+        if (!dados.abertura || !dados.exemplo || !dados.tarefa) {
+          dados = await pedir(true);
+        }
+        const { abertura, exemplo, tarefa } = dados;
+        if (!abertura || !exemplo || !tarefa) throw new Error("camada incompleta após 2 tentativas");
+        const res = { model: dados.model };
 
         await UserCourseLayer.updateOne(
           { userId: String(user._id), courseSlug: curso, capitulo: cap.indice },
@@ -202,6 +278,7 @@ export async function POST(request: NextRequest) {
               exemplo,
               tarefa,
               personaVersion: versao,
+              hashCapitulo: hash,
               modelUsed: res.model,
               generatedAt: new Date(),
             },
@@ -210,7 +287,9 @@ export async function POST(request: NextRequest) {
         );
         geradas++;
       } catch (err) {
-        erros.push(`cap ${cap.indice + 1}: ${err instanceof Error ? err.message : "erro"}`);
+        // `cap.numero` e não `indice + 1`: com o preâmbulo pulado, o índice
+        // deixou de casar com o número que o aluno vê.
+        erros.push(`cap ${cap.numero}: ${err instanceof Error ? err.message : "erro"}`);
       }
     }
 

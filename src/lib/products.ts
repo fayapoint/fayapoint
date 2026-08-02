@@ -151,6 +151,12 @@ export interface Product {
   features: string[];
   contentChapters?: number;
   contentUpdatedAt?: string | Date | null;
+  /**
+   * Markdown do curso inteiro. Já vinha do banco e era lido por rotas que o
+   * acessavam via `as` — a prévia pública (`/curso/<slug>/previa`) usa direto,
+   * então o campo passou a ser declarado.
+   */
+  courseContent?: string;
   detailedCurriculum?: Array<{
     title?: string;
     description?: string;

@@ -562,6 +562,19 @@ export default function CourseSalesPage({
 
                     {/* CTAs */}
                     <div className="space-y-3 mb-6">
+                      {/* Link para a prévia. Vale duas coisas ao mesmo tempo:
+                          converte quem quer ler antes de pagar, e é o link
+                          interno que aponta autoridade para a única URL do
+                          curso com conteúdo de profundidade indexável. */}
+                      <Link
+                        href={`/${locale}/curso/${slug}/previa`}
+                        className="block w-full rounded-lg border border-emerald-500/40 bg-emerald-500/5 px-4 py-3 text-center text-sm font-medium text-emerald-300 transition hover:bg-emerald-500/10"
+                      >
+                        {isPtBr
+                          ? "Ler um capítulo inteiro de graça →"
+                          : "Read a full chapter for free →"}
+                      </Link>
+
                       <Button
                         className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold py-6 text-lg shadow-lg shadow-amber-500/50"
                         size="lg"

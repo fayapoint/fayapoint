@@ -171,6 +171,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "monthly",
         priority: 0.6,
       });
+
+      // A prévia carrega o conteúdo REAL do curso — ementa dos 30 capítulos e
+      // um capítulo inteiro. É a única URL do curso com texto de profundidade,
+      // então ela vale mais como sinal de busca que a própria página de vendas,
+      // que é copy comercial. Prioridade acima de propósito.
+      entries.push({
+        url: url(`/${locale}/curso/${slug}/previa`),
+        lastModified: now,
+        changeFrequency: "monthly",
+        priority: 0.7,
+      });
     }
 
     for (const article of articles) {

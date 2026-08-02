@@ -1,5 +1,6 @@
 import { getAllProducts } from "@/lib/products";
 import CoursesCatalog from "./CoursesCatalog";
+import IndicePrevias from "@/components/courses/IndicePrevias";
 
 /**
  * A vitrine passou a ser montada no SERVIDOR em 28/07/2026.
@@ -15,10 +16,23 @@ import CoursesCatalog from "./CoursesCatalog";
  */
 export const revalidate = 900;
 
-export default async function Page() {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const products = await getAllProducts({ type: "course", limit: 200 }).catch(
     () => [],
   );
 
-  return <CoursesCatalog initialProducts={products} />;
+  return (
+    <>
+      <CoursesCatalog initialProducts={products} />
+      {/* Fora do catálogo de propósito: a vitrine é client component e seus
+          links dependem do filtro. Este índice sai no HTML do servidor e dá a
+          cada prévia um link interno de um hub — ver IndicePrevias. */}
+      <IndicePrevias produtos={products} locale={locale} />
+    </>
+  );
 }

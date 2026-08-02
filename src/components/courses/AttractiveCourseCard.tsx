@@ -79,7 +79,11 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
       whileHover={{ y: -8, transition: { duration: 0.2 } }}
       className="h-full"
     >
-      <Link href={`/curso/${product.slug}`}>
+      {/* Com o prefixo de idioma: sem ele o `next/link` cru aponta para
+          `/curso/...`, o proxy redireciona para `/pt-BR/curso/...` e cada card
+          da vitrine vira um salto de redirecionamento. Num site com 20 de 170
+          páginas indexadas, não vale gastar rastreio com isso. */}
+      <Link href={`/${locale}/curso/${product.slug}`}>
         <Card className="h-full overflow-hidden border-2 border-transparent hover:border-amber-500/50 transition-all duration-300 group hover:shadow-2xl hover:shadow-amber-500/20 bg-card/50 backdrop-blur">
           {/* Cover Image or Gradient Header */}
           {product.thumbnail ? (
