@@ -295,7 +295,13 @@ export default async function middleware(request: NextRequest) {
   const acceptLanguage = request.headers.get("accept-language") || "";
   const acceptEncoding = request.headers.get("accept-encoding") || "";
   const isRSC = searchParams.has("_rsc");
-  const isApiRoute = pathname.startsWith("/api");
+  // Casar o SEGMENTO, nao o prefixo. Com `startsWith("/api")` a pagina
+  // `/api-docs` era tratada como rota de API: escapava do redirecionamento de
+  // idioma e servia 404 na versao sem prefixo, enquanto `/pt-BR/api-docs` e
+  // `/en/api-docs` respondiam 200. O Google registrou o 404 (confirmado no
+  // Search Console em 01/08/2026, rastreada em 12/07). Qualquer rota futura
+  // comecada por "api" — /api-status, /apidocs — cairia na mesma armadilha.
+  const isApiRoute = pathname === "/api" || pathname.startsWith("/api/");
 
   // =========================================================================
   // 0. EMERGENCY BLOCKLIST - Immediate block for known bad actors
