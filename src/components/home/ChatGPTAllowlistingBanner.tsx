@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { ArrowRight, ShieldCheck, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export const ChatGPTAllowlistingBanner = () => {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.AllowlistingBanner");
   
   return (
@@ -36,7 +39,7 @@ export const ChatGPTAllowlistingBanner = () => {
           </div>
 
           <div className="flex items-center gap-4 shrink-0">
-            <Link href="/chatgpt-allowlisting">
+            <Link href={rota("/chatgpt-allowlisting")}>
               <Button 
                 variant="outline" 
                 className="border-green-500/50 text-green-400 hover:bg-green-500/10 hover:text-green-300 group"

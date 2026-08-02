@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { 
   Sparkles, 
   Shirt, 
@@ -16,9 +17,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export function ValuePropositionCTA() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.ValueCTA");
 
   const steps = [
@@ -183,7 +186,7 @@ export function ValuePropositionCTA() {
             transition={{ delay: 0.9 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link href="/portal">
+            <Link href={rota("/portal")}>
               <Button 
                 size="lg" 
                 className="px-8 py-6 text-lg bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 shadow-xl shadow-amber-500/30"
@@ -193,7 +196,7 @@ export function ValuePropositionCTA() {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
-            <Link href="/precos">
+            <Link href={rota("/precos")}>
               <Button 
                 variant="outline" 
                 size="lg" 

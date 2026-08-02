@@ -1063,6 +1063,31 @@ export default function CourseReaderPage() {
     localStorage.setItem("fayapoint_reader_settings_v2", JSON.stringify(settings));
   }, [settings]);
 
+  /**
+   * ⚠️ O tema do leitor precisa estar no `<html>`, não só na `<div>` da página.
+   *
+   * Defeito medido em 02/08 (relatado no celular): abrir o painel de
+   * preferências deixava "tudo meio transparente". Causa: o `PopoverContent` do
+   * Radix renderiza num PORTAL preso ao `document.body` — fora da div que carrega
+   * `data-reader-theme`. Lá fora, `--reader-popover` e `--reader-tint` não
+   * existem, então `bg-[var(--reader-popover)]` vira fundo nenhum e
+   * `rgba(var(--reader-tint),0.9)` vira cor inválida. No desktop passava
+   * despercebido porque o painel cai sobre o cabeçalho, que tem fundo próprio;
+   * no celular ele cobre o texto do capítulo e a transparência fica óbvia.
+   *
+   * Marcando o `<html>`, qualquer portal — popover, diálogo, tooltip — herda as
+   * variáveis. A div continua marcada para o caso de o leitor ser embutido.
+   */
+  useEffect(() => {
+    const html = document.documentElement;
+    const anterior = html.getAttribute("data-reader-theme");
+    html.setAttribute("data-reader-theme", settings.theme);
+    return () => {
+      if (anterior) html.setAttribute("data-reader-theme", anterior);
+      else html.removeAttribute("data-reader-theme");
+    };
+  }, [settings.theme]);
+
   /* ─── Open sidebar on desktop by default ─── */
   useEffect(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
@@ -2026,7 +2051,7 @@ export default function CourseReaderPage() {
                 <Settings2 size={14} className="text-[rgba(var(--reader-tint),0.5)]" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-72 bg-[var(--reader-popover)] border-[rgba(var(--reader-tint),0.06)] shadow-2xl shadow-black/50 p-0 rounded-2xl">
+            <PopoverContent className="w-72 bg-[var(--reader-popover,#12131c)] border-[rgba(var(--reader-tint,255,255,255),0.06)] shadow-2xl shadow-black/50 p-0 rounded-2xl backdrop-blur-xl">
               <div className="p-4 border-b border-[rgba(var(--reader-tint),0.05)]">
                 <span className="text-sm font-semibold text-[rgba(var(--reader-tint),0.9)]">
                   Preferências de Leitura
@@ -2574,7 +2599,7 @@ export default function CourseReaderPage() {
                         <PopoverContent
                           align="end"
                           sideOffset={10}
-                          className="w-[280px] rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[var(--reader-float)]/96 p-2 text-[var(--reader-fg)] shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
+                          className="w-[280px] rounded-2xl border border-[rgba(var(--reader-tint,255,255,255),0.08)] bg-[var(--reader-float,#0d0f18)] p-2 text-[var(--reader-fg,#ffffff)] shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl"
                         >
                           <div className="max-h-[280px] overflow-y-auto pr-1">
                             {currentChapterSubheadings.length > 0 ? (

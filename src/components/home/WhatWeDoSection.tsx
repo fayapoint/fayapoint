@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import {
@@ -17,7 +18,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 type Capability = {
   id: "webProduct" | "automation" | "aiTraining" | "contentVideo";
@@ -159,6 +160,8 @@ function CapabilityCard({
 }
 
 export function WhatWeDoSection() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.WhatWeDo");
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
@@ -217,13 +220,13 @@ export function WhatWeDoSection() {
           </div>
 
           <div className="flex flex-col gap-4 pt-4 sm:flex-row">
-            <Link href="/o-que-fazemos">
+            <Link href={rota("/o-que-fazemos")}>
               <Button size="lg" className="h-12 px-6 text-base shadow-lg shadow-fuchsia-500/20">
                 {t("ctaPrimary")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/casos">
+            <Link href={rota("/casos")}>
               <Button
                 size="lg"
                 variant="outline"

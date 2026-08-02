@@ -4,10 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Gift, Sparkles, ArrowRight, Zap } from "lucide-react";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { useUser } from "@/contexts/UserContext";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export function ExitIntentPopup() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("ExitIntent");
   const { isLoggedIn, mounted } = useUser();
   const [isVisible, setIsVisible] = useState(false);
@@ -113,7 +116,7 @@ export function ExitIntentPopup() {
 
             {/* CTA */}
             <Link
-              href="/aula-gratis"
+              href={rota("/aula-gratis")}
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-500 text-white font-semibold text-lg rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105"
               onClick={handleClose}
             >

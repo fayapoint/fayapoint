@@ -6,7 +6,8 @@ import { Quote, Star, MessageSquare, Sparkles, TrendingUp } from "lucide-react";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { comIdioma } from "@/lib/rota-idioma";
+import { useTranslations, useLocale } from "next-intl";
 
 const testimonialMeta = [
   { key: "ana", image: "/testimonials/ana.jpg", rating: 5 },
@@ -18,6 +19,8 @@ const testimonialMeta = [
 ];
 
 export function TestimonialsSection() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const sectionRef = useRef(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const t = useTranslations("Home.Testimonials");
@@ -245,7 +248,7 @@ export function TestimonialsSection() {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full blur-md group-hover:blur-lg transition-all duration-300" />
             <Link 
-              href="/cursos"
+              href={rota("/cursos")}
               className="relative inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full text-white font-semibold hover:from-amber-700 hover:to-yellow-800 transition-all duration-300"
             >
               {t("ctaButton")}

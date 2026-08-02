@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -56,6 +57,7 @@ const statTone = [
 ];
 
 export function HeroSection() {
+  const rota = (h: string) => comIdioma(h, locale);
   const { user, isLoggedIn, mounted: userMounted } = useUser();
   const locale = useLocale();
   const isPtBr = locale === "pt-BR";
@@ -178,7 +180,7 @@ export function HeroSection() {
                 </Button>
               </Link>
 
-              <Link href="/precos">
+              <Link href={rota("/precos")}>
                 <Button
                   size="lg"
                   variant="outline"

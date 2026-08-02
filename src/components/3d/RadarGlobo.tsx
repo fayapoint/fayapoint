@@ -1125,6 +1125,25 @@ export function RadarGlobo({
   const posicao = useRef<AlvoGlobo>({ lat: lugar.lat, lng: lugar.lng, alt: lugar.alt });
   const inicio = useRef<{ x: number; y: number; lat: number; lng: number } | null>(null);
 
+  /**
+   * ⚠️ O globo cortado no celular — medido em 02/08.
+   *
+   * O `<canvas>` nascia com **300x150** (o padrão do HTML) dentro de uma caixa
+   * quadrada de 317px, e só pulava para o tamanho certo quando um evento
+   * `resize` acontecia. No desktop isso passa: qualquer redimensionamento ou a
+   * barra do navegador conserta em seguida. **No celular esse evento nunca
+   * vem** — a janela não muda de tamanho — então o buffer 2:1 fica esticado
+   * numa caixa 1:1 e o planeta aparece achatado e cortado pela borda.
+   *
+   * A causa é a ordem: este componente entra por `next/dynamic`, e monta dentro
+   * de um contêiner cuja altura vem de `aspect-ratio`. No instante da primeira
+   * medição do R3F a altura ainda não resolveu; depois disso o tamanho não muda
+   * mais, então o ResizeObserver não tem o que notificar e a medição errada
+   * fica.
+   *
+   * Conserto: observar a própria caixa e forçar UMA remedição assim que ela
+   * tiver tamanho real. Barato, e não depende de o usuário mexer na janela.
+   */
   const alvo = useMemo<AlvoGlobo>(
     () => ({
       lat: lugar.lat,
@@ -1151,6 +1170,43 @@ export function RadarGlobo({
     });
     io.observe(el);
     return () => io.disconnect();
+  }, []);
+
+  /**
+   * ⚠️ O globo cortado no celular — medido em 02/08 no Chrome real.
+   *
+   * O `<canvas>` do R3F nasce com **300x150** (o padrão do HTML, sem CSS
+   * nenhum) dentro de uma caixa de 540x540, e só assume o tamanho certo quando
+   * um evento `resize` chega. No desktop qualquer coisa dispara isso em
+   * seguida; **no celular esse evento nunca vem** — a janela não muda de
+   * tamanho — e o buffer 2:1 fica esticado numa caixa 1:1: planeta achatado e
+   * cortado pela borda.
+   *
+   * Duas tentativas que NÃO resolveram, para ninguém repetir:
+   *   - `resize={{ offsetSize: true }}` no Canvas: canvas continuou 300x150;
+   *   - despachar `resize` de dentro de um ResizeObserver, em rajada: o canvas
+   *     **parou de ser criado** — o evento chegava durante a montagem do R3F.
+   *
+   * O que funciona: esperar a montagem terminar e despachar UMA vez, e só se o
+   * canvas ainda estiver no tamanho errado. Duas janelas (600ms e 1.6s) cobrem
+   * aparelho lento sem virar rajada.
+   */
+  useEffect(() => {
+    const conferir = () => {
+      const el = caixa.current;
+      const canvas = el?.querySelector("canvas");
+      if (!el || !canvas) return;
+      const { width, height } = el.getBoundingClientRect();
+      if (width < 2 || height < 2) return;
+      const certo = Math.abs(canvas.width - Math.round(width)) <= 2 && Math.abs(canvas.height - Math.round(height)) <= 2;
+      if (!certo) window.dispatchEvent(new Event("resize"));
+    };
+    const t1 = setTimeout(conferir, 600);
+    const t2 = setTimeout(conferir, 1600);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, []);
 
   const aoDestacar = (p: Record<string, string> | null) => {
@@ -1197,6 +1253,27 @@ export function RadarGlobo({
     >
       <Canvas
         camera={{ position: [0, 0, 320], fov: 42, near: 1, far: 3000 }}
+        /**
+         * ⚠️ `offsetSize` conserta o globo cortado no celular.
+         *
+         * Sem ele o `<canvas>` nascia com **300x150** — o padrão do HTML —
+         * dentro de uma caixa quadrada, e só pulava para o tamanho certo quando
+         * um evento `resize` acontecia. No desktop qualquer coisa dispara isso
+         * em seguida; **no celular esse evento nunca vem**, então o buffer 2:1
+         * ficava esticado numa caixa 1:1 e o planeta aparecia achatado.
+         *
+         * A causa é a ordem: este componente entra por `next/dynamic` e monta
+         * dentro de um contêiner cuja altura vem de `aspect-ratio`. Na primeira
+         * medição do R3F essa altura ainda não resolveu. `offsetSize: true`
+         * troca a fonte da medida para `offsetWidth`/`offsetHeight`, que já
+         * estão certos assim que o layout roda.
+         *
+         * ⚠️ NÃO tente resolver despachando `window.resize` de um efeito: eu
+         * tentei em 02/08 e o canvas **parou de ser criado**. Além disso o
+         * caminho dependia de `requestAnimationFrame`, que não dispara em aba
+         * que não compõe quadros.
+         */
+        resize={{ offsetSize: true }}
         dpr={[1, 1.5]}
         gl={{ antialias: true, powerPreference: "high-performance" }}
         frameloop={parado || !naTela ? "demand" : "always"}

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SectionDivider } from "@/components/ui/section-divider";
@@ -69,6 +70,7 @@ const categories = [
 ];
 
 export function CourseCategoriesSection() {
+  const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.CourseCategories");
   const locale = useLocale();
   const isPtBr = locale.toLowerCase().startsWith("pt");
@@ -195,7 +197,7 @@ export function CourseCategoriesSection() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <Link href="/cursos">
+          <Link href={rota("/cursos")}>
             <Button 
               size="lg" 
               className="bg-primary hover:bg-primary/90 text-primary-foreground"

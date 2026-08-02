@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { ExternalLink, Sparkles, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { comIdioma } from "@/lib/rota-idioma";
 import { createPortal } from "react-dom";
 
 interface AITool {
@@ -272,9 +273,12 @@ const MarqueeRow = ({
   t: any
 }) => {
   const [isPaused, setIsPaused] = useState(false);
+  // Sem o prefixo, cada uma das ~110 fichas de ferramenta desta faixa custa um
+  // 308 antes de abrir. Era a maior fonte de link sem idioma do site.
+  const locale = useLocale();
 
   return (
-    <div 
+    <div
       className="flex overflow-hidden select-none py-6 group/marquee"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => {
@@ -311,7 +315,7 @@ const MarqueeRow = ({
           if (!name) name = tool.key;
 
           const isInternal = !!tool.slug;
-          const linkUrl = isInternal ? `/ferramentas/${tool.slug}` : (tool.url || "#");
+          const linkUrl = isInternal ? comIdioma(`/ferramentas/${tool.slug}`, locale) : (tool.url || "#");
 
           return (
             <motion.div

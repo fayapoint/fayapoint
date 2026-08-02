@@ -3,10 +3,11 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { Rocket, MessageCircle, Calendar, Sparkles, Star, CheckCircle2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 import { CompleteRegistrationForm } from "@/components/registration/CompleteRegistrationForm";
 
@@ -22,6 +23,8 @@ const generateParticles = () => {
 };
 
 export function CTASection() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const [mounted, setMounted] = useState(false);
   const particles = useMemo(() => generateParticles(), []);
   const t = useTranslations("Home.CTA");
@@ -150,7 +153,7 @@ export function CTASection() {
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-12 py-8 shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-300 group relative overflow-hidden"
               >
-                <Link href="/registro">
+                <Link href={rota("/registro")}>
                   <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                   <Rocket className="mr-2 group-hover:rotate-12 transition-transform" /> 
                   <span>{t("primaryButton")}</span>

@@ -4,10 +4,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { useUser } from "@/contexts/UserContext";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export function StickyCTA() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("StickyCTA");
   const { isLoggedIn, mounted } = useUser();
   const [isVisible, setIsVisible] = useState(false);
@@ -68,7 +71,7 @@ export function StickyCTA() {
           
           <div className="flex items-center gap-3">
             <Link
-              href="/cursos"
+              href={rota("/cursos")}
               className="px-6 py-3 bg-white text-amber-900 font-semibold rounded-full hover:bg-amber-100 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
             >
               {t("cta")}

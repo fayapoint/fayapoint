@@ -809,7 +809,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               return (
                 <a
                   key={item.slug}
-                  href={item.url || "/blog"}
+                  href={external ? item.url! : rota(item.url || "/noticias")}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
                   className="glass glass-hover group rounded-2xl overflow-hidden"
@@ -866,7 +866,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             ].map(({ href, icon: Icon, label, desc, color }) => (
               <Link
                 key={href}
-                href={href}
+                href={rota(href)}
                 className="glass glass-hover group rounded-2xl px-4 py-3 flex items-center gap-3"
               >
                 <span

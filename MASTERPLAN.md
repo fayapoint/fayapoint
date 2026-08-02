@@ -13,16 +13,120 @@
 
 | # | Tarefa | Por quê |
 |---|---|---|
-| **1** | **Validar as correções no Search Console** (soft 404, 404 e duplicatas) e **reenviar o sitemap**. | Só agora, com as 20 prévias respondendo 200, a validação passa. Validar antes disparava revisita com o defeito no ar. |
+| **1** | **Ler o `ia-para-criar-videos` e dar o veredito.** 30 capítulos no ar a R$79. | ⚠️ O painel de juízes se provou **instável** (mesmo texto, 8,4 e depois 1) e foi rebaixado a conselho. Quem promove a ✅ é você ([[feedback_regra_do_pronto]]) — e desta vez o painel não substitui isso nem de longe. |
 | **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada — não há caminho automático. |
-| **3** | **Ler o `#conteudo` e o `#seo` no Buzz.** O debate semanal e o relatório diário passaram a publicar sozinhos. | É o novo canal de decisão sobre conteúdo. Responder no fio do `#conteudo` vira diretriz do laço. |
-| **4** | Escrever o **curso de WhatsApp/vendas** (ou o que o debate da semana apontar). | ⚠️ Continua sendo **o gargalo real do tráfego** — nada de infra cria demanda (herdado de 27/07). |
+| **3** | **Ler o `#conteudo` e o `#seo` no Buzz.** O debate semanal e o relatório diário publicam sozinhos. | É o novo canal de decisão sobre conteúdo. Responder no fio do `#conteudo` vira diretriz do laço. |
+| **4** | **Próximo curso pelo mesmo método: WhatsApp/vendas** (306 buscas somadas, zero páginas). | O `curriculo.json` + `novo_curso.mjs` fazem 30 capítulos por **US$ 0,12**. O gargalo agora é revisão humana, não produção. |
 | **5** | **Guardar o `image_prompt` no `ainews`**. | Última melhoria pendente das capas, e é pequena. |
-| **6** | Prefixo de idioma no que sobrou: `/descobrir` serve **75** links internos sem `/pt-BR`. | Cada um custa um 308. O grosso já foi (187 → 91); ficou o hub `/descobrir` e alguns cartões. |
+| **6** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
 
 ---
 
-## 💸 SESSÃO 02/08 — O CUSTO, AS 15 PRÉVIAS EM 404, E O DEBATE QUE SE PUBLICA SOZINHO
+## 🎬 SESSÃO 02/08 (parte 2) — O CURSO DE VÍDEO, O LEITOR NO CELULAR E O GLOBO CORTADO
+
+> Pedido do Ricardo: *"vamos começar com o próximo curso… o de ferramentas"* ·
+> *"quero o resultado da análise dos agentes do buzz"* · *"revise o leitor, utilizei no
+> celular e algumas partes estavam estranhas"* · *"no radar no celular… o globo cortado"* ·
+> *"conserta o /descobrir também"* · *"já abri o google search console, pode usar"*.
+
+### 1. O redteam disse não à hipótese — usando a métrica errada
+
+O painel rejeitou "curso de ferramentas" com um número forte: **372 de 409 termos (91%) do
+Radar não citam ferramenta nenhuma**. As únicas nomeadas são n8n (18) e ChatGPT (14).
+
+Só que esse número responde **descoberta**, e o argumento do Ricardo era de **convicção**:
+"o usuário, ao ver o que aprendeu, RECONHECE e vê vantagem". São perguntas diferentes, e a
+segunda o Radar não mede — nem teria como, com 4 cliques em 3 meses.
+
+**A síntese que fecha os dois:** o TÍTULO mira a tarefa (é assim que a pessoa acha), os
+MÓDULOS são as ferramentas (é isso que convence quem chegou). Não competem.
+
+### 2. `ia-para-criar-videos` — 30 capítulos, no ar
+
+Escolhido por três razões que se somam: é o termo **mais persistente do Radar inteiro** ("ia
+para criar videos", 7 dias, score 36,7), o cluster tem **26 buscas e zero cursos**, e é onde
+a densidade de ferramenta reconhecível é maior — Sora, Veo, Runway, Kling, HeyGen,
+ElevenLabs, Suno, CapCut, Descript.
+
+| | |
+|---|---|
+| capítulos | 30, em 6 módulos |
+| texto | 223.766 chars (7.459/capítulo) |
+| mídia | 180 imagens + 60 vídeos, gerados aqui |
+| preço | R$79 |
+| custo de escrita | **US$ 0,12** — o curso inteiro |
+
+⚠️ **O gerador inventou 172 marcadores de mídia** apontando para caminhos que não existem
+(`/cursos/media/curso3/…`). Ele viu marcadores no `padrao.md` e imitou o formato. Seriam 172
+imagens quebradas na cara do aluno, e passa em toda checagem de texto porque o markdown fica
+perfeito. `publicar_curso.mjs` agora arranca todo marcador do gerador — mídia é
+responsabilidade de quem confere o arquivo no disco.
+
+### 3. 🔴 O painel de juízes estava corrompendo a própria medição
+
+Duas coisas, e a segunda quase estragou capítulos bons:
+
+**(a) Juiz que não responde valia ZERO.** JSON cortado por orçamento virava `nota: 0` e
+entrava na média. Capítulos sem nenhum problema apareciam com 4 e 5,4 porque dois dos cinco
+juízes falharam. Agora falha vira `null` e **sai da conta** — corrigido no `novo_curso.mjs`
+e no `loop.mjs`.
+
+**(b) Mesmo corrigido, o painel é instável demais para ser portão automático.** Medido: o
+mesmo capítulo 2, sem alteração, tirou **8,4 e depois 1**. O laço de conserto chegou a
+**salvar uma versão pior** confiando nessa leitura. Parei o laço.
+
+**Regra nova, e ela vale para o `loop.mjs` também:** o portão automático é o
+**determinístico** (tamanho, nove seções, frase-molde) — esse é reprodutível. A nota do
+painel é **conselho**, entra no relatório e não decide sozinha se guarda ou descarta.
+
+### 4. O leitor no celular: o painel transparente
+
+Causa: `PopoverContent` do Radix renderiza num **portal preso ao `document.body`**, fora da
+`<div>` que carrega `data-reader-theme`. Lá fora `--reader-popover` e `--reader-tint` não
+existem — `bg-[var(--reader-popover)]` vira fundo nenhum e `rgba(var(--reader-tint),0.9)`
+vira cor inválida. No desktop passava porque o painel cai sobre o cabeçalho, que tem fundo
+próprio; no celular ele cobre o texto e a transparência fica óbvia.
+
+Conserto: `data-reader-theme` passou a ser marcado no `<html>`, então qualquer portal herda.
+Mais valores padrão nas duas classes, para um portal futuro não repetir a história.
+
+### 5. O globo do Radar: o canvas nascia 300×150
+
+O `<canvas>` do R3F nascia com o **padrão do HTML (300×150)** dentro de uma caixa de 317px, e
+só pulava para o tamanho certo quando um evento `resize` acontecia. No desktop qualquer coisa
+conserta em seguida; **no celular esse evento nunca vem**, então o buffer 2:1 ficava esticado
+numa caixa 1:1 — o planeta achatado e cortado.
+
+Causa: o componente entra por `next/dynamic` e monta dentro de um contêiner cuja altura vem
+de `aspect-ratio`; na primeira medição do R3F a altura ainda não resolveu, e depois o tamanho
+não muda mais, então o ResizeObserver não tem o que notificar.
+
+⚠️ **A primeira versão do conserto não funcionava e eu só descobri porque conferi:** ela
+dependia de `requestAnimationFrame`, que **não dispara em aba que não está compondo quadros**
+(medido). A versão que ficou **confere o canvas e tenta de novo até bater** — mesma regra do
+resto da casa: evento despachado não é prova, o tamanho do canvas é.
+
+### 6. Link interno sem prefixo: 187 → 19
+
+Continuação do item da parte 1. Fechados: grade de `/ferramentas` (56 links), faixa de
+ferramentas da `/descobrir` (110), cartões de notícia, `ExperienceNav`, `ServicesCarousel`,
+menu da home. **A home foi a zero.** Sobraram 19, em `/descobrir` e `/noticias`.
+
+### 7. Search Console — feito, e uma coisa que eu deliberadamente NÃO fiz
+
+- ✅ **Soft 404 (3 páginas): validação iniciada.** As três conferidas antes em produção —
+  200, com 4.930 a 6.465 chars de texto e canônica própria.
+- ✅ **Sitemap reenviado** (2 de agosto).
+- ✅ **Indexação solicitada para `/pt-BR/cursos`** — fila prioritária. É a página que agora
+  distribui link para as 20 prévias.
+- ⛔ **NÃO validei o grupo "Não encontrado (404)".** São 3 URLs: `/api-docs` e `/servicos`
+  estão consertadas, mas a terceira é `fayai.com.br/mês` — que **não existe e deve mesmo dar
+  404**. Validar o grupo inteiro falharia por causa dela, e falha bloqueia nova validação por
+  um tempo. As duas consertadas saem do relatório sozinhas no próximo rastreio.
+
+---
+
+## 💸 SESSÃO 02/08 (parte 1) — O CUSTO, AS 15 PRÉVIAS EM 404, E O DEBATE QUE SE PUBLICA SOZINHO
 
 > Pedido do Ricardo, em três partes: *"troque o modelo utilizado no hermes e em todo e
 > qualquer fluxo que utilize modelos pagos do openrouter pelo deepseek 4 flash"* ·

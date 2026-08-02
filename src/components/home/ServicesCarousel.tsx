@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import { Monitor, Video, Bot, Workflow, ArrowRight, CheckCircle2, MapPin } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ScheduleConsultationButton } from "@/components/consultation/ScheduleConsultationButton";
 
@@ -83,6 +84,8 @@ type ServiceCopy = {
 };
 
 export function ServicesCarousel() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.Services");
   const t2 = useTranslations("ServicesCarousel");
   const [activeServiceId, setActiveServiceId] = useState<string>(services[0].id);
@@ -113,7 +116,7 @@ export function ServicesCarousel() {
                 onMouseEnter={() => setActiveServiceId(service.id)}
                 onFocus={() => setActiveServiceId(service.id)}
               >
-                <Link href={service.link} aria-label={t(`${service.id}.title`)}>
+                <Link href={rota(service.link)} aria-label={t(`${service.id}.title`)}>
                   <motion.div
                     className={`w-24 h-24 rounded-2xl ${tileStyles.tileBg} flex items-center justify-center border ${tileStyles.tileBorder} transition-all duration-300 ${
                       isActive ? "ring-2 ring-offset-2 ring-offset-background ring-white/40" : "shadow-sm"
@@ -178,7 +181,7 @@ export function ServicesCarousel() {
                   </div>
                 </div>
                 <div className="space-y-3 mt-6">
-                  <Link href={activeService.link}>
+                  <Link href={rota(activeService.link)}>
                     <Button className="w-full py-6 text-base">
                       {t("learnMore")}
                       <ArrowRight className="ml-2 w-4 h-4" />
