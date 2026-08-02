@@ -17,6 +17,30 @@ interface Props {
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? "https://fayai.com.br";
 
+const CAPA_PADRAO = "/landing/tags/tendencia.webp";
+
+// og:image/twitter:image exigem URL ABSOLUTA — caminho relativo é ignorado pelo
+// WhatsApp, X e LinkedIn. As capas do ComfyUI já chegam absolutas (Cloudinary),
+// mas as matérias antigas e o seed guardam caminho local.
+function capaAbsoluta(image?: string): string {
+  const src = image && image.length > 0 ? image : CAPA_PADRAO;
+  return src.startsWith("http") ? src : `${SITE_URL}${src}`;
+}
+
+// A capa e servida em `w_768` — o tamanho do card do site, abaixo dos 1200px
+// que o `summary_large_image` espera. Para partilha pedimos ao Cloudinary a
+// variante 1200x630 em jpg (formato que todo crawler le; webp ainda falha em
+// alguns). Troca-se APENAS o segmento de transformacao: um caminho sem
+// transformacao (`/upload/fayapoint/...`) ou com versao (`/upload/v123/...`)
+// nao casa com o padrao `letra_valor` e passa intacto.
+function capaSocial(image?: string): string {
+  const abs = capaAbsoluta(image);
+  const m = abs.match(/^(https?:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(.+)$/);
+  if (!m) return abs;
+  const semTransformacao = m[2].replace(/^[a-z]{1,3}_[^/]*\//, "");
+  return `${m[1]}w_1200,h_630,c_fill,f_jpg,q_80/${semTransformacao}`;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params;
   const item = await getNewsBySlug(slug);
@@ -29,6 +53,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // para as 19 matérias publicadas (confirmado no Search Console em 21/07).
   const canonical = `${SITE_URL}/${locale}/noticias/${slug}`;
 
+  // A capa propria de cada materia sai do ComfyUI todo dia as 11h e vai para o
+  // Cloudinary — mas ate 01/08/2026 ela nao era declarada aqui: as materias
+  // eram compartilhadas SEM imagem nenhuma, com `twitter:card` prometendo
+  // `summary_large_image`. Todo o trabalho da capa morria na hora da partilha.
+  const capa = capaSocial(item.image);
+
   return {
     title: `${item.title} — IA Hoje | FayAI`,
     description: item.summary,
@@ -39,12 +69,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: item.summary,
       url: canonical,
       siteName: "FayAI",
+      images: [{ url: capa, width: 1200, height: 630, alt: item.title }],
       ...(item.date ? { publishedTime: item.date } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: item.title,
       description: item.summary,
+      images: [capa],
     },
   };
 }
@@ -67,7 +99,10 @@ export default async function NoticiaPage({ params }: Props) {
       titulo: item.title,
       resumo: item.summary,
       publicadoEm: item.date,
-      imagem: artA,
+      // A capa PROPRIA da materia, nao `artA` — que e uma arte generica do pool
+      // da editoria, sorteada por hash e repetida entre materias. O resultado
+      // rico do Google mostrava a arte de enfeite no lugar da capa do dia.
+      imagem: capaSocial(item.image),
     }),
     schemaTrilha(locale, [
       { nome: "Início", caminho: "" },

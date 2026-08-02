@@ -413,7 +413,9 @@ só não carrega dado.
 | | Pendência | Tamanho |
 |---|---|---|
 | 1 | ✅ ~~Validar que a rotina disparou pelo agendador~~ — **feito em 31/07: 10:55:02, primeira vez** | fechado |
-| 2 | **Validar que o cron do Radar rodou às 09:00 UTC** (só rodou à mão) | 5 min |
+| 2 | ✅ ~~Validar que o cron do Radar rodou às 09:00 UTC~~ — **feito em 01/08: `[09:01] Fim (10 gravados, 0 falharam)`** | fechado |
+| 2b | ✅ **Backfill de capas era um no-op** (achado em 01/08): rodava `15 */3`, 8×/dia, mas o ComfyUI só existe das 10:55 às 11:20 — as 8 tentativas falhavam por construção. Passou para `10,16 14` (11:10 e 11:16 BRT), **dentro** da janela | fechado |
+| 2c | ✅ **Matérias eram compartilhadas SEM imagem** (achado em 01/08): `og:image` e `twitter:image` nunca foram declarados, com `twitter:card=summary_large_image` prometendo imagem grande. O schema `Article` ainda declarava uma arte genérica do pool no lugar da capa do dia. Corrigido e servido em 1200×630 jpg pelo Cloudinary | **aguarda deploy** |
 | 3 | **Guardar `image_prompt` no `ainews` na publicação.** Hoje o backfill usa o **título** como prompt: sai imagem única e no estilo certo, mas menos ligada ao assunto que a cena que o LLM descrevia | pequeno |
 | 4 | **ComfyUI não tem autostart e fecha sozinho** (verificado 3× nesta sessão). A rotina das 10:55 cobre a janela do blog; fora dela, nenhuma capa é gerada | decisão dele |
 | 5 | `header` estoura a largura no mobile (451px × 375) em **todas as páginas**. ⚠️ `window.innerWidth` também reportava 451 — **pode ser artefato da emulação**; confirmar em celular real antes de mexer no layout compartilhado | investigar |

@@ -4,7 +4,14 @@
 ## O problema
 
 A capa de cada materia sai do ComfyUI, que roda no PC do Ricardo e e alcancado
-pelo comfy-bridge via Tailscale. O cron das noticias roda 14h UTC (11h BRT) — e
+pelo comfy-bridge via Tailscale.
+
+⚠️ 01/08/2026: este backfill rodava `15 */3` (8x/dia) e NUNCA podia funcionar — o
+ComfyUI so existe entre 10:55 e 11:20 BRT (janela-capas.ps1), entao 8 das 8
+tentativas falhavam por construcao. Passou para `10,16 14 * * *`: 11:10 e 11:16
+BRT, DENTRO da janela.
+
+O cron das noticias roda 14h UTC (11h BRT) — e
 se naquele minuto o PC estiver desligado, ou o ComfyUI fechado, a materia sai
 com a imagem generica do pool por editoria. O cron termina em exit 0 e nada
 alerta. Medido em 28/07/2026: **as 29 materias do acervo estavam com capa
@@ -154,7 +161,7 @@ def main():
     try:
         bridge("/system_stats", timeout=12).read()
     except Exception as e:
-        log(f"bridge/ComfyUI indisponivel ({e}) — o PC deve estar desligado. Tento na proxima.")
+        log(f"bridge/ComfyUI indisponivel ({e}) — janela das capas fechada ou PC desligado. Tento na proxima.")
         return 0
 
     col = MongoClient(MONGO)["fayapoint"]["ainews"]
