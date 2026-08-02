@@ -21,10 +21,14 @@ const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 const GOLD = "#f5c04e";
 
 interface Props {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ tag?: string }>;
 }
 
-export default async function NoticiasPage({ searchParams }: Props) {
+export default async function NoticiasPage({ params, searchParams }: Props) {
+  // O hub das notícias distribui ~40 links internos. Sem o prefixo de idioma
+  // todos eles chegam na matéria depois de um 308.
+  const { locale } = await params;
   const { tag } = await searchParams;
   const all = await getAllNews(60);
   const tags = [...new Set(all.map((n) => n.tag))].slice(0, 8);
@@ -93,7 +97,7 @@ export default async function NoticiasPage({ searchParams }: Props) {
         {tags.length > 1 && (
           <div className="flex flex-wrap gap-2 mt-5">
             <Link
-              href="/noticias"
+              href={`/${locale}/noticias`}
               className="rounded-full px-4 py-1.5 text-xs font-bold border transition-colors"
               style={
                 !tag
@@ -124,7 +128,7 @@ export default async function NoticiasPage({ searchParams }: Props) {
       {/* Destaque */}
       {featured && (
         <section className="px-4 sm:px-8 pb-6 max-w-6xl mx-auto">
-          <Link href={`/noticias/${featured.slug}`} className="glass glass-hover nimg feat rounded-3xl overflow-hidden block">
+          <Link href={`/${locale}/noticias/${featured.slug}`} className="glass glass-hover nimg feat rounded-3xl overflow-hidden block">
             <span className="fimg block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={featured.image ?? "/landing/tags/tendencia.webp"} alt={featured.title} className="absolute inset-0 w-full h-full object-cover" />
@@ -156,7 +160,7 @@ export default async function NoticiasPage({ searchParams }: Props) {
         <section className="px-4 sm:px-8 pb-10 max-w-6xl mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {rest.map((item) => (
-              <Link key={item.slug} href={`/noticias/${item.slug}`} className="glass glass-hover nimg group rounded-2xl overflow-hidden block">
+              <Link key={item.slug} href={`/${locale}/noticias/${item.slug}`} className="glass glass-hover nimg group rounded-2xl overflow-hidden block">
                 <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={item.image ?? "/landing/tags/tendencia.webp"} alt={item.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />

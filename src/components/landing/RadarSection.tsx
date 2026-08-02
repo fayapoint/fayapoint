@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
+import { useLocale } from "next-intl";
 import {
   Radar,
   Youtube,
@@ -106,6 +108,10 @@ const SEED = seedBruto as unknown as RadarSeed;
 // ---------------------------------------------------------------------------
 
 export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
+  const locale = useLocale();
+  // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
+  // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
+  const rota = (h: string) => comIdioma(h, locale);
   const [camada, setCamada] = useState<Camada>("mundo");
   const [lugarId, setLugarId] = useState("BR");
   const [zoom, setZoom] = useState(1);
@@ -368,7 +374,7 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
         </div>
 
         <Link
-          href="/radar"
+          href={rota("/radar")}
           className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-white/45 hover:text-white transition-colors"
         >
           Abrir o radar completo <ArrowUpRight size={12} />
@@ -768,6 +774,8 @@ function PainelIa({
   onEspiar: (l: LinhaIa) => void;
   onLargar: () => void;
 }) {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const nicho = NICHOS.find((n) => n.id === nichoId) ?? NICHOS[0];
 
   return (
@@ -892,7 +900,7 @@ function PainelIa({
           {nicho.ponte.cursos.map((c) => (
             <Link
               key={c.slug}
-              href={`/curso/${c.slug}`}
+              href={rota(`/curso/${c.slug}`)}
               className="inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-[11px] font-bold border transition-colors hover:bg-white/10"
               style={{ borderColor: `${nicho.cor}55`, color: "#f3f1ff" }}
             >

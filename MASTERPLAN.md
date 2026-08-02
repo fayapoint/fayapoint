@@ -3,24 +3,149 @@
 
 ---
 
-## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 29/07/2026
+## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 02/08/2026
 
-> ⛔ **A sessão de 29/07 está PRONTA E VERIFICADA, mas NÃO DEPLOYADA.** 41 arquivos,
-> build limpo, 25/25 verificações passando no servidor de produção local. Esperando
-> o sim do Ricardo ([[feedback_pedir_autorizacao_deploy]]).
->
-> Tudo de 28/07 e antes está **NO AR** (`3bf1659`, `2063579`, `aa2533d`, `b6fd74d`).
+> Tudo de 29/07 a 01/08 está **NO AR** (`dad07f4`, `2145b5d`, `88e2358`).
+> A sessão de 02/08 (custo + prévias + relatórios) foi **autorizada e deployada** pelo
+> Ricardo no fim da própria sessão — ver §"SESSÃO 02/08" logo abaixo.
 
 ### O que fazer primeiro, na ordem
 
 | # | Tarefa | Por quê |
 |---|---|---|
-| **1** | **Pedir autorização e deployar o SEO de 29/07.** | Está tudo pronto e medido. Enquanto não sobe, o Google segue sem saber que 81 páginas existem. |
-| **2** | **Depois do deploy: reenviar o sitemap no Search Console** e pedir indexação de `/pt-BR/servicos`, `/pt-BR/ferramentas` e `/pt-BR/chatgpt-allowlisting`. | O sitemap dobrou (67 → 148). O Google só descobre o novo lote quando relê. |
-| **3** | ✅ **VALIDADO em 31/07.** A rotina disparou pelo agendador às **10:55:02** e as notícias das **11:01** saíram com **3 capas reais do ComfyUI** (Cloudinary). Horário movido de 06:55 para 10:55 no mesmo dia — às 7h o Ricardo dormia e a capa saía genérica. | Fechado. ⚠️ Para reconferir, ler `%LOCALAPPDATA%\FayAI\janela-capas.log` **no terminal dele** — a sessão do Claude enxerga uma cópia-sombra desse caminho e mostra outro arquivo. |
-| **4** | **Conferir se o cron do Radar rodou às 09:00 UTC.** `ssh root@76.13.234.38 'cat /root/kirmes/logs/radar_historico_$(date +%Y%m%d).log'` — esperado "10 gravados, 0 falharam". | Mesma coisa: rodou manualmente em 28/07, mas nunca pelo cron. |
-| **5** | **Guardar o `image_prompt` no `ainews`**. | Única melhoria pendente das capas, e é pequena. |
-| **6** | Escrever conteúdo a partir do Radar. | ⚠️ Continua sendo **o gargalo real do tráfego** — nada disso cria demanda (herdado de 27/07). |
+| **1** | **Validar as correções no Search Console** (soft 404, 404 e duplicatas) e **reenviar o sitemap**. | Só agora, com as 20 prévias respondendo 200, a validação passa. Validar antes disparava revisita com o defeito no ar. |
+| **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada — não há caminho automático. |
+| **3** | **Ler o `#conteudo` e o `#seo` no Buzz.** O debate semanal e o relatório diário passaram a publicar sozinhos. | É o novo canal de decisão sobre conteúdo. Responder no fio do `#conteudo` vira diretriz do laço. |
+| **4** | Escrever o **curso de WhatsApp/vendas** (ou o que o debate da semana apontar). | ⚠️ Continua sendo **o gargalo real do tráfego** — nada de infra cria demanda (herdado de 27/07). |
+| **5** | **Guardar o `image_prompt` no `ainews`**. | Última melhoria pendente das capas, e é pequena. |
+| **6** | Prefixo de idioma no que sobrou: `/descobrir` serve **75** links internos sem `/pt-BR`. | Cada um custa um 308. O grosso já foi (187 → 91); ficou o hub `/descobrir` e alguns cartões. |
+
+---
+
+## 💸 SESSÃO 02/08 — O CUSTO, AS 15 PRÉVIAS EM 404, E O DEBATE QUE SE PUBLICA SOZINHO
+
+> Pedido do Ricardo, em três partes: *"troque o modelo utilizado no hermes e em todo e
+> qualquer fluxo que utilize modelos pagos do openrouter pelo deepseek 4 flash"* ·
+> *"troque também no buzz, que está utilizando o sonnet e hoje veio um custo bem mais alto
+> que o programado"* · *"elabore ou melhore o fluxo onde eles debatem sobre como melhorar o
+> conteúdo … bem como relatórios do nosso google search console"*.
+
+### 1. Todo modelo pago virou DeepSeek V4 Flash
+
+US$ 0,09/0,18 por M (era 0,50/3,00 no Gemini 3 Flash e 3,00/15,00 no Sonnet). Gasto medido
+antes da troca: **US$ 1,21 em 24h**, projeção de US$ 36/mês, com **US$ 34,68 de saldo**.
+
+| Onde | Antes | Depois |
+|---|---|---|
+| Proxy Kirmes (VPS) — as duas rotas | gemini-3-flash / 2.5-flash / 3.5-flash-lite | `~deepseek/deepseek-v4-flash-latest` |
+| Hermes (`/opt/data/config.yaml`) | `gpt-5.6-terra` via openai-codex | rota `kirmes` (deepseek); codex vira **fallback** |
+| Buzz — agente **Honey** | `runtime: claude`, `model: sonnet` | `openai-compat` → proxy Kirmes |
+| `cursos/loop.mjs` — escritor e juiz | `claude-sonnet-4-6` + `gemini-2.5-flash` | deepseek (US$ 0,12 → ~0,004 por capítulo) |
+| `provider.ts` — tiers budget/premium | gemini-2.5-flash / claude-sonnet-4-6 | deepseek v4 flash / **v4 pro** |
+| `quiz-config` (site e mission-control) | `anthropic/claude-sonnet-4.6`, `openrouter/auto` | deepseek |
+| question-bank (3 rotas do MC) | `openrouter/auto` — roteador que escolhe o caro | deepseek |
+
+⚠️ **O tier premium continua sendo um modelo DIFERENTE do budget de propósito.**
+`api/user/curso-personalizado` escala de um para o outro quando o JSON volta com chave vazia
+(acontece em ~13% dos capítulos). Se os dois fossem o mesmo modelo o escalonamento viraria uma
+segunda tentativa idêntica — por isso premium = `deepseek/deepseek-v4-pro`, ainda 7x mais
+barato que o Sonnet.
+
+⚠️ **Duas rotas NÃO foram trocadas, e é intencional:** `media/reverse-prompt` manda imagem e o
+DeepSeek V4 é texto-para-texto (`input_modalities: ["text"]`, conferido na API); e os modelos
+de **imagem** do Studio (`gpt-5-image-mini`, `gpt-5.4-image-2`) não têm equivalente DeepSeek.
+
+**As armadilhas do modelo estão em [[reference_deepseek_v4_raciocinio]]** — leia antes de
+apontar qualquer fluxo novo para ele. Resumo: é modelo de raciocínio, o pensamento sai do
+mesmo `max_tokens` (com orçamento curto o `content` volta **vazio**, sem erro), a rota de quiz
+tinha timeout de **6 s** contra ~10 s de latência real, e com `json_object` a resposta às vezes
+sai inteira no canal `reasoning`.
+
+### 2. 🔴 15 das 20 prévias respondiam 404 — com a URL declarada no sitemap
+
+Achado pelo relatório de SEO novo, na **primeira execução**. O parser de
+`src/lib/curso-previa.ts` exigia `# Capítulo N: título`, e **só 5 cursos escrevem isso**; o
+resto do catálogo usa o título direto (`# O Que o ChatGPT Realmente É`). `montarPrevia`
+devolvia `totalCapitulos: 0` e a página chamava `notFound()`.
+
+É o pior caso possível para indexação: o sitemap **anuncia** a URL, o Google gasta rastreio
+para buscar, e recebe 404 — que é exatamente o balde "Não encontrado (404)" que estávamos
+tentando esvaziar. E era invisível no build, porque `notFound()` em rota dinâmica não quebra
+compilação.
+
+Corrigido com a mesma regra dos três formatos que o `capitulos.mjs` do laço já usava (se algum
+H1 começa com "Capítulo", só esses contam; senão todo H1 é capítulo), mais o corte de H1 de
+capa — bloco < 1.500 chars antes do primeiro capítulo real, que só o
+`mastering-ai-with-chatgpt` tem (746 chars contra 3.659 do menor capítulo do catálogo).
+
+**Medido depois:** 20/20 respondem 200, com 6.808 a 27.014 caracteres de texto indexável e 22
+links internos cada. Regressão coberta por `scripts/cursos/conferir_previas.ts` — roda em 20 s
+contra o banco e sai com código 1 se alguma prévia voltar a ficar sem capítulo.
+
+### 3. Link interno sem prefixo de idioma: 187 → 91
+
+O cabeçalho e o rodapé, que aparecem em **toda** página, emitiam `/cursos`, `/sobre`,
+`/precos` sem o `/pt-BR`. Cada link custava um 308 antes de chegar na página. A grade de
+`/ferramentas` fazia isso com os **56** links de ficha.
+
+Uma implementação só, em `src/lib/rota-idioma.ts`, aplicada em Header, Footer, CubeHomepage,
+grade de ferramentas, hub e matérias de notícias.
+
+⚠️ Isso também **corrigia a medição**: o relatório contava `/cursos` e `/pt-BR/cursos` como
+destinos diferentes e acusava **29 órfãs** onde havia **2**. Página que recebe link de todo
+lado aparecia como órfã.
+
+### 4. O debate de conteúdo — cinco papéis com incentivos opostos
+
+`autoresearch/cursos/debate.mjs`. Não é o `loop.mjs` (que julga UM capítulo já escrito): é a
+camada acima, que decide **o que** escrever, reposicionar e apagar.
+
+- **R1** cada papel propõe sozinho, sem ver os outros (evita ancoragem no primeiro que falar).
+- **R2** cada papel recebe as propostas e é **obrigado a atacar** pelo menos uma.
+- **R3** o relator consolida — e tudo passa por um **portão determinístico**: recomendação que
+  não cita um número existente no pacote de evidências é **descartada**, não sinalizada.
+
+Os papéis têm incentivos conflitantes de propósito: PROSPECTOR quer catálogo maior, CAIXA quer
+menor; EDITOR quer profundidade, SEO quer descoberta; CÉTICO não propõe nada, só ataca.
+
+O pacote de evidências (`evidencias.mjs`) é determinístico e vem do banco: catálogo com preço,
+capítulos, chars/capítulo e mídia inline; demanda do `radar_historico` cruzada em 14 clusters;
+achados de auditoria; e o resumo do SEO.
+
+**Custo medido: US$ 0,0068 por rodada completa.** Primeira execução: 8 ações aprovadas, 4
+descartadas no portão.
+
+### 5. Os relatórios, publicando sozinhos
+
+| Cron (VPS) | Quando | Canal |
+|---|---|---|
+| `relatorio_seo_daily.sh` | todo dia 08:00 BRT | `#seo` |
+| `debate_conteudo_weekly.sh` | segundas 09:00 BRT | `#conteudo` |
+
+Semanal e não diário para o debate: a demanda do Radar se move em escala de semanas, e um
+debate diário produziria a mesma lista sete vezes — treinando você a ignorar o canal.
+
+O relatório de SEO tem duas partes: **medição própria** (sempre roda, sem credencial) e
+**Search Console** (quando `GSC_REFRESH_TOKEN` existir). Elas respondem perguntas diferentes:
+a primeira diz o que o site **serve**, a segunda o que o Google **decidiu**. A primeira é a
+acionável — foi ela que achou as 15 prévias em 404.
+
+### 6. Canibalização de título resolvida
+
+`primeiras-automacoes` e `n8n-automacao-avancada` disputavam "automação com IA na prática"
+(similaridade 0,810, medida em 21/07 e pendente desde então). O primeiro passou a mirar
+**"Automatizar tarefas repetitivas sem programar"**. Backup do valor antigo em
+`seo._backup_20260802` no próprio documento.
+
+### 7. O que fica dito, sem enfeite
+
+O agente **Revisor** do Buzz deixou de ser pendência: o **Honey já era** "Revisor crítico" no
+prompt dele, e agora roda no deepseek em vez do Sonnet. O `debate.mjs` cobre a revisão
+editorial sem depender do app de desktop — que é melhor, porque o `BUZZ_AUTH_TAG` só o
+Desktop emite.
+
+E o de sempre: **backlinks continuam em 0**. Tudo acima arruma a casa e tira defeito do
+caminho. Nada acima cria demanda.
 
 ---
 

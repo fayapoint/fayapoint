@@ -219,8 +219,12 @@ const DEFAULT_FALLBACK_QUESTIONS = [
 // ═══════════════════════════════════════════════════════════════════════════
 
 export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
-  // Use the most reliable free models by default
+  // 02/08: o DeepSeek V4 Flash entrou na frente. Não é grátis, mas custa
+  // US$ 0,09/0,18 por M — um quiz inteiro sai por menos de um centavo — e é
+  // muito mais confiável que a fila `:free`, que responde 429 em horário de
+  // pico. Os dois grátis ficam atrás como rede.
   activeModels: [
+    '~deepseek/deepseek-v4-flash-latest',
     'openrouter/free',
     'stepfun/step-3.5-flash:free',
   ],

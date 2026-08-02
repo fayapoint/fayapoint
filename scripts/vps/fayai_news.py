@@ -19,10 +19,16 @@ UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/126 Safari/537.3
 # modelo de raciocinio que vaza o "pensamento" direto no campo content, sem
 # nunca terminar com o JSON pedido — o proxy so repassa a resposta, sem
 # tratar isso. Ultimo recurso deste script (alem do proprio failover do
-# proxy, que tenta Gemini 3.5 Flash Lite -> Gemini 3 Flash Preview): chamada DIRETA
-# a Gemini 3 Flash Preview, caso o proxy inteiro fique fora do ar.
+# proxy): chamada DIRETA ao modelo, caso o proxy inteiro fique fora do ar.
+#
+# TROCA 02/08/2026: o fallback direto saiu do google/gemini-3-flash-preview
+# e passou a ser o deepseek v4 flash, o mesmo que o proxy usa agora.
+# ⚠️ O deepseek v4 flash e modelo de RACIOCINIO: os tokens de pensamento
+# saem do mesmo orcamento de max_tokens. Com max_tokens curto o campo
+# `content` volta VAZIO (medido: 40 tokens -> content=None). Por isso os
+# 8000 aqui e os 12000 do call_proxy nao sao folga, sao requisito.
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-FALLBACK_MODEL = "google/gemini-3-flash-preview"
+FALLBACK_MODEL = "~deepseek/deepseek-v4-flash-latest"
 
 FEEDS = [
     ("The Verge", "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"),
@@ -145,9 +151,8 @@ def extract_json(text):
 
 def call_proxy(prompt, max_tokens=12000):
     body = json.dumps({
-        # rota premium do proxy: blog diario e tarefa importante -> Gemini 3.5
-        # Flash Lite (era Kimi K3 ate 29/07); o resto do ecossistema usa
-        # "kirmes-proxy" (Gemini 3 Flash Preview)
+        # rota premium do proxy. Desde 02/08 as duas rotas apontam para o
+        # mesmo deepseek v4 flash; a rota foi mantida pelo nome.
         "model": "kirmes-premium",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.4,

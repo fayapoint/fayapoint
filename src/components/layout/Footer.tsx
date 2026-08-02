@@ -2,10 +2,11 @@
 
 import { useState, useEffect, type FormEvent } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { getAttributionUtmPayload } from "@/lib/attribution";
+import { comIdioma as prefixar } from "@/lib/rota-idioma";
 import { 
   Facebook, 
   Instagram, 
@@ -49,6 +50,17 @@ const socialLinks = [
 
 export function Footer() {
   const t = useTranslations("Footer");
+  const locale = useLocale();
+
+  /**
+   * O rodapé aparece em TODA página, então é o maior distribuidor de link
+   * interno do site. Até 02/08 ele emitia `/sobre`, `/cursos`, `/precos` sem o
+   * prefixo de idioma — e a URL real é `/pt-BR/sobre`. Cada link custava um 308
+   * antes de chegar na página, em todas as páginas do site ao mesmo tempo.
+   * Ver [[reference_seo_armadilhas_locale]]: o mesmo descasamento já tinha
+   * feito `Disallow: /login` não casar com `/pt-BR/login` no robots.txt.
+   */
+  const comIdioma = (href: string) => prefixar(href, locale);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterLoading, setNewsletterLoading] = useState(false);
@@ -177,7 +189,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-block mb-4">
+            <Link href={comIdioma("/")} className="inline-block mb-4">
               <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 FayAi
               </h2>
@@ -212,7 +224,7 @@ export function Footer() {
               {footerLinks.cursos.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={comIdioma(link.href)}
                     className="block py-2 text-muted-foreground hover:text-white transition"
                   >
                     {t(link.key)}
@@ -228,7 +240,7 @@ export function Footer() {
               {footerLinks.empresa.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={comIdioma(link.href)}
                     className="block py-2 text-muted-foreground hover:text-white transition"
                   >
                     {t(link.key)}
@@ -244,7 +256,7 @@ export function Footer() {
               {footerLinks.suporte.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={comIdioma(link.href)}
                     className="block py-2 text-muted-foreground hover:text-white transition"
                   >
                     {t(link.key)}

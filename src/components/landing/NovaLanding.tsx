@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
+import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Copy, Check, ArrowRight, ArrowUpRight, X, GraduationCap, Wrench, Rocket, BookOpen, Gamepad2, BadgeCheck, Clock, PlayCircle } from "lucide-react";
 import {
@@ -62,6 +64,10 @@ export interface FeaturedCourse {
 }
 
 export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]; featuredCourses?: FeaturedCourse[] }) {
+  const locale = useLocale();
+  // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
+  // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
+  const rota = (h: string) => comIdioma(h, locale);
   const { user, setUser, isLoggedIn, mounted } = useUser();
   const [stage, setStage] = useState<Stage>("pick");
   const [category, setCategory] = useState<ExampleCategory | null>(null);
@@ -372,7 +378,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           </div>
           {mounted && isLoggedIn && user ? (
             <Link
-              href="/portal"
+              href={rota("/portal")}
               className="fx-shine flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
               style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
             >
@@ -381,7 +387,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               <ArrowRight size={15} />
             </Link>
           ) : (
-            <Link href="/login" className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
+            <Link href={rota("/login")} className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
               Entrar
             </Link>
           )}
@@ -399,7 +405,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             >
               {logged && account?.trail && (
                 <Link
-                  href="/portal"
+                  href={rota("/portal")}
                   className="glass fx-shine group inline-flex items-center gap-3 rounded-full pl-4 pr-5 py-2 mb-6 hover:opacity-95 transition-opacity"
                   style={{ borderColor: `${GOLD}55` }}
                 >
@@ -668,7 +674,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         cursos, desafios e o Arcade da IA esperam por você.
                       </p>
                       <Link
-                        href="/portal"
+                        href={rota("/portal")}
                         className="fx-magic fx-shine mt-4 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
                         style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
                       >
@@ -689,7 +695,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         mágica é personalizada para a sua vida.
                       </p>
                       <Link
-                        href="/registro"
+                        href={rota("/registro")}
                         className="fx-magic fx-shine mt-4 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
                         style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
                       >
@@ -741,7 +747,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               {featuredCourses.map((course) => (
                 <Link
                   key={course.slug}
-                  href={`/curso/${course.slug}`}
+                  href={rota(`/curso/${course.slug}`)}
                   className="glass glass-hover group rounded-2xl p-4 flex flex-col"
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">

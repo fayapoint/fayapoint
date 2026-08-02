@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useLocale } from "next-intl";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, Star, Tag, Layers, ArrowRight } from "lucide-react";
@@ -35,6 +36,9 @@ const staticTools: ToolEntry[] = Object.entries(toolsData).map(([slug, tool]) =>
 }));
 
 export default function ToolsPage() {
+  // Sem o prefixo, cada um dos 56 links da grade custa um 308 antes de abrir
+  // a ficha da ferramenta. Ver [[reference_seo_armadilhas_locale]].
+  const locale = useLocale();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("Todas");
   const [pricing, setPricing] = useState<string>("Todos");
@@ -147,7 +151,7 @@ export default function ToolsPage() {
                     ))}
                   </div>
                   <div className="flex gap-2">
-                    <Link href={`/ferramentas/${t.slug}`} className="flex-1">
+                    <Link href={`/${locale}/ferramentas/${t.slug}`} className="flex-1">
                       <Button className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800">
                         Ver detalhes <ArrowRight className="ml-2 w-4 h-4" />
                       </Button>

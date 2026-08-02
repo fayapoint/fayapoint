@@ -89,7 +89,9 @@ Mantenha as respostas concisas mas úteis.`;
     // Provider unificado (fallback free→budget; o antigo 'openrouter/free' não é um modelo válido)
     const ai = await generate({
       tier: plan === 'expert' ? 'budget' : 'free',
-      maxTokens: 1024,
+      // 02/08: 1024 -> 2500. O tier budget virou DeepSeek V4, que raciocina
+      // antes de responder e gasta esse orçamento junto com a resposta.
+      maxTokens: 2500,
       temperature: 0.7,
       messages: [
         { role: 'system', content: systemPrompt },

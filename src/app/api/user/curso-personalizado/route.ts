@@ -220,7 +220,10 @@ export async function POST(request: NextRequest) {
             json: true,
             // 700 apertava quando o exemplo vinha completo; o modelo entregava
             // JSON válido com `exemplo` vazio em ~1 de cada 4 capítulos.
-            maxTokens: 1000,
+            // 02/08: subiu de 1000 para 3000 junto com a troca para o DeepSeek
+            // V4 — ele raciocina antes de responder e o pensamento sai do
+            // mesmo orçamento, então 1000 devolveria `content` vazio.
+            maxTokens: 3000,
             temperature: 0.7,
             messages: [
               { role: "system", content: SISTEMA },

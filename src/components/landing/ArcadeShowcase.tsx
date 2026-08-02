@@ -17,6 +17,8 @@
  */
 
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
+import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { ArrowRight, Gamepad2 } from "lucide-react";
 import { ArcadeVisual } from "@/components/portal/ArcadeVisual";
@@ -72,6 +74,10 @@ const GAMES: ShowcaseGame[] = [
 ];
 
 export function ArcadeShowcase() {
+  const locale = useLocale();
+  // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
+  // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
+  const rota = (h: string) => comIdioma(h, locale);
   const reduced = useReducedMotion();
 
   return (
@@ -129,7 +135,7 @@ export function ArcadeShowcase() {
               className={i === 4 ? "col-span-2 lg:col-span-1" : undefined}
             >
               <Link
-                href={`/arcade?jogo=${game.id}`}
+                href={rota(`/arcade?jogo=${game.id}`)}
                 className="group block h-full overflow-hidden rounded-2xl border transition-all hover:-translate-y-1"
                 style={{
                   borderColor: `${game.cor}44`,
@@ -167,7 +173,7 @@ export function ArcadeShowcase() {
         </div>
 
         <Link
-          href="/arcade"
+          href={rota("/arcade")}
           className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-white/55 transition-colors hover:text-white"
         >
           Ver o arcade completo <ArrowRight size={13} />

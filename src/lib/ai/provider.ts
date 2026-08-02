@@ -55,9 +55,27 @@ export interface BudgetStatus {
 }
 
 // =============================================================================
-// DEFAULT MODELS (April 2026)
+// DEFAULT MODELS
 // =============================================================================
-
+//
+// TROCA 02/08/2026, a pedido do Ricardo: todo modelo pago da OpenRouter saiu
+// da rotação e entrou a família DeepSeek V4. Os antigos ficaram no arquivo,
+// com `enabled: false`, porque a cadeia de fallback lê esta lista e apagá-los
+// esconderia o histórico de preço que justifica a troca.
+//
+//   budget  → deepseek v4 flash  US$ 0,09 / 0,18 por M  (era 0,15 / 0,60)
+//   premium → deepseek v4 pro    US$ 0,44 / 0,87 por M  (era 3,00 / 15,00)
+//
+// O tier premium continua sendo um modelo DIFERENTE do budget de propósito:
+// `api/user/curso-personalizado` escala de um para o outro quando o JSON volta
+// com chave vazia. Se os dois fossem o mesmo modelo, esse escalonamento viraria
+// uma segunda tentativa idêntica — e ele existe porque a primeira falha em ~13%
+// dos capítulos.
+//
+// ⚠️ DeepSeek V4 é modelo de RACIOCÍNIO: os tokens de pensamento saem do mesmo
+// orçamento de `maxTokens`. Medido em 02/08: com 40 tokens o `content` volta
+// VAZIO e o texto fica em `reasoning`. Quem chamar com orçamento apertado
+// recebe string vazia, não erro. Nenhuma chamada abaixo de ~1500 é segura.
 const DEFAULT_MODELS: ModelConfig[] = [
   // Free tier
   {
@@ -82,6 +100,40 @@ const DEFAULT_MODELS: ModelConfig[] = [
   },
   // Budget tier
   {
+    id: '~deepseek/deepseek-v4-flash-latest',
+    name: 'DeepSeek V4 Flash',
+    provider: 'openrouter',
+    costPer1MInput: 0.09,
+    costPer1MOutput: 0.18,
+    tier: 'budget',
+    maxTokens: 16384,
+    enabled: true,
+  },
+  {
+    // Build fixado por trás do alias em 02/08. Segundo da fila: se a OpenRouter
+    // apontar o "~latest" para um build quebrado, este ainda responde.
+    id: 'deepseek/deepseek-v4-flash-0731',
+    name: 'DeepSeek V4 Flash (build fixado)',
+    provider: 'openrouter',
+    costPer1MInput: 0.09,
+    costPer1MOutput: 0.18,
+    tier: 'budget',
+    maxTokens: 16384,
+    enabled: true,
+  },
+  // Premium tier
+  {
+    id: 'deepseek/deepseek-v4-pro',
+    name: 'DeepSeek V4 Pro',
+    provider: 'openrouter',
+    costPer1MInput: 0.435,
+    costPer1MOutput: 0.87,
+    tier: 'premium',
+    maxTokens: 16384,
+    enabled: true,
+  },
+  // ——— Aposentados em 02/08. Mantidos desabilitados como registro de preço.
+  {
     id: 'google/gemini-2.5-flash',
     name: 'Gemini 2.5 Flash',
     provider: 'openrouter',
@@ -89,7 +141,7 @@ const DEFAULT_MODELS: ModelConfig[] = [
     costPer1MOutput: 0.6,
     tier: 'budget',
     maxTokens: 8192,
-    enabled: true,
+    enabled: false,
   },
   {
     id: 'anthropic/claude-haiku-4-5',
@@ -99,9 +151,8 @@ const DEFAULT_MODELS: ModelConfig[] = [
     costPer1MOutput: 4,
     tier: 'budget',
     maxTokens: 8192,
-    enabled: true,
+    enabled: false,
   },
-  // Premium tier
   {
     id: 'anthropic/claude-sonnet-4-6',
     name: 'Claude Sonnet 4.6',
@@ -110,7 +161,7 @@ const DEFAULT_MODELS: ModelConfig[] = [
     costPer1MOutput: 15,
     tier: 'premium',
     maxTokens: 8192,
-    enabled: true,
+    enabled: false,
   },
   {
     id: 'openai/gpt-5.5',
@@ -120,7 +171,7 @@ const DEFAULT_MODELS: ModelConfig[] = [
     costPer1MOutput: 30,
     tier: 'premium',
     maxTokens: 8192,
-    enabled: true,
+    enabled: false,
   },
   // LMStudio local (zero cost)
   {
@@ -206,9 +257,24 @@ async function callOpenRouter(
 
   const data = await res.json();
   const choice = data.choices?.[0];
+  const content: string = choice?.message?.content || '';
+
+  // ⚠️ Modelo de raciocínio com orçamento apertado devolve 200 + content vazio
+  // e o texto todo em `reasoning` — os tokens de pensamento saem do mesmo
+  // `max_tokens`. Sem este lançamento a chamada seria contabilizada como
+  // sucesso, o chamador receberia '' e o erro apareceria três camadas adiante
+  // como "resposta vazia", sem dizer a causa. Lançar aqui também faz a cadeia
+  // de fallback tentar o próximo modelo, que é o comportamento certo.
+  if (!content.trim()) {
+    const gastos = data.usage?.completion_tokens_details?.reasoning_tokens;
+    throw new Error(
+      `OpenRouter ${model}: content vazio` +
+        (gastos ? ` — ${gastos} tokens gastos em raciocínio de ${body.max_tokens} disponíveis. Aumente maxTokens.` : '')
+    );
+  }
 
   return {
-    content: choice?.message?.content || '',
+    content,
     tokensInput: data.usage?.prompt_tokens || 0,
     tokensOutput: data.usage?.completion_tokens || 0,
   };

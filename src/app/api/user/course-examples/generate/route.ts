@@ -91,7 +91,9 @@ export async function POST(request: NextRequest) {
       try {
         const res = await generate({
           tier: "budget",
-          maxTokens: 700,
+          // 02/08: 700 -> 2500. O DeepSeek V4 raciocina antes de escrever e
+          // o pensamento sai do mesmo orçamento de max_tokens.
+          maxTokens: 2500,
           temperature: 0.7,
           messages: [
             {

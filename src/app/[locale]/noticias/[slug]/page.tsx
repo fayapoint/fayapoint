@@ -235,7 +235,7 @@ export default async function NoticiaPage({ params }: Props) {
           </h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {others.map((n) => (
-              <Link key={n.slug} href={`/noticias/${n.slug}`} className="glass glass-hover group rounded-2xl overflow-hidden block">
+              <Link key={n.slug} href={`/${locale}/noticias/${n.slug}`} className="glass glass-hover group rounded-2xl overflow-hidden block">
                 <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={n.image ?? "/landing/tags/tendencia.webp"} alt={n.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />

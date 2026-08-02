@@ -130,7 +130,12 @@ async function callOpenRouterForQuiz(
   maxTokens: number,
 ): Promise<string> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 6000); // 6 second timeout per model
+  // 02/08: 6s -> 25s. Medido com o DeepSeek V4 Flash, que agora encabeça a
+  // lista: um quiz de 5 perguntas leva ~10s porque ele raciocina antes de
+  // escrever (786 tokens de pensamento nessa medição). Com 6s TODA tentativa
+  // era abortada pelo cliente e o quiz caía no banco de questões sem que
+  // nenhum log dissesse "estourou o tempo" — só "modelo falhou".
+  const timeout = setTimeout(() => controller.abort(), 25000);
 
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',

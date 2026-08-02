@@ -248,18 +248,18 @@ export function CubeHomepage() {
       {/* Navigation */}
       <nav className={s.nav}>
         <div className={s.navInner}>
-          <Link href="/" className={s.navLogo}>
+          <Link href={localizeRoute("/")} className={s.navLogo}>
             FAY<span className={s.navLogoAccent}>AI</span>
           </Link>
           <div className={s.navLinks}>
             <button type="button" className={s.navLinkButton} onClick={() => scrollToSection(0)}>Cubo</button>
-            <Link href="/descobrir" className={s.navLink}>Descobrir</Link>
-            <Link href="/cursos" className={s.navLink}>Cursos</Link>
-            <Link href="/certificacoes" className={s.navLink}>Certificados</Link>
-            <Link href="/servicos" className={s.navLink}>Serviços</Link>
-            <Link href="/precos" className={s.navLink}>Preços</Link>
-            <Link href="/noticias" className={s.navLink}>Blog</Link>
-            <Link href="/portal" className={s.navLink}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
+            <Link href={localizeRoute("/descobrir")} className={s.navLink}>Descobrir</Link>
+            <Link href={localizeRoute("/cursos")} className={s.navLink}>Cursos</Link>
+            <Link href={localizeRoute("/certificacoes")} className={s.navLink}>Certificados</Link>
+            <Link href={localizeRoute("/servicos")} className={s.navLink}>Serviços</Link>
+            <Link href={localizeRoute("/precos")} className={s.navLink}>Preços</Link>
+            <Link href={localizeRoute("/noticias")} className={s.navLink}>Blog</Link>
+            <Link href={localizeRoute("/portal")} className={s.navLink}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
             <Link href={isLoggedIn ? "/portal" : "/registro"} className={s.navCta}>
               {isLoggedIn ? "Continuar" : "Comece Grátis"}
             </Link>
@@ -277,12 +277,12 @@ export function CubeHomepage() {
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div className={s.mobileMenu}>
-          <Link href="/descobrir" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Descobrir</Link>
-          <Link href="/cursos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Cursos</Link>
-          <Link href="/certificacoes" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Certificados</Link>
-          <Link href="/servicos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
-          <Link href="/precos" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Preços</Link>
-          <Link href="/portal" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
+          <Link href={localizeRoute("/descobrir")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Descobrir</Link>
+          <Link href={localizeRoute("/cursos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Cursos</Link>
+          <Link href={localizeRoute("/certificacoes")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Certificados</Link>
+          <Link href={localizeRoute("/servicos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
+          <Link href={localizeRoute("/precos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Preços</Link>
+          <Link href={localizeRoute("/portal")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
           <Link href={isLoggedIn ? "/portal" : "/registro"} className={s.navCta} onClick={() => setMobileMenuOpen(false)} style={{ marginTop: "0.5rem", textAlign: "center" }}>
             {isLoggedIn ? "Continuar" : "Comece Grátis"}
           </Link>

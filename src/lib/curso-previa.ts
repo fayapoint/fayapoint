@@ -37,6 +37,57 @@ export interface PreviaCurso {
 
 const RX_CAPITULO = /^# (Cap[íi]tulo\s+(\d+)\s*[:—-]\s*(.+))$/gm;
 const RX_MODULO = /^## (M[óo]dulo\s+(\d+)\s*[:—-]\s*(.+))$/gm;
+/** Qualquer H1. É o que sobra quando o curso não escreve "Capítulo N:". */
+const RX_H1 = /^# ([^#\n].*)$/gm;
+
+/**
+ * Acha os capítulos em QUALQUER um dos três formatos do catálogo.
+ *
+ * ⚠️ Isto nasceu de um defeito medido em produção em 02/08: a versão anterior
+ * exigia `# Capítulo N: título` e **15 das 20 prévias respondiam 404** — todas
+ * declaradas no sitemap. Só `ia-producao`, `chatgpt-zero` e mais três escrevem
+ * a palavra "Capítulo" no H1; o resto do catálogo usa o título do capítulo
+ * direto (`# O Que o ChatGPT Realmente É`). Sitemap apontando para 404 é o pior
+ * dos mundos: gasta rastreio e alimenta o balde "Não encontrado (404)" do
+ * Search Console.
+ *
+ * A regra é a mesma de `autoresearch/cursos/capitulos.mjs`, de propósito — os
+ * dois lados precisam concordar sobre o que é um capítulo, senão o laço
+ * reescreve um pedaço e a prévia mostra outro:
+ *
+ *   se ALGUM H1 começa com "Capítulo", só esses são capítulos
+ *   (o que vem antes do primeiro é preâmbulo: título do curso, ementa, módulos)
+ *   senão, TODO H1 é capítulo, numerado na ordem em que aparece.
+ */
+function acharCapitulos(conteudo: string): Array<{ numero: number; titulo: string; inicio: number }> {
+  const numerados: Array<{ numero: number; titulo: string; inicio: number }> = [];
+  RX_CAPITULO.lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = RX_CAPITULO.exec(conteudo))) {
+    numerados.push({ numero: Number(m[2]), titulo: m[3].trim(), inicio: m.index });
+  }
+  if (numerados.length) return numerados;
+
+  const soltos: Array<{ titulo: string; inicio: number }> = [];
+  RX_H1.lastIndex = 0;
+  let h: RegExpExecArray | null;
+  while ((h = RX_H1.exec(conteudo))) {
+    soltos.push({ titulo: h[1].trim(), inicio: h.index });
+  }
+
+  // Um H1 de capa: bloco curto antes do primeiro capítulo de verdade. Medido em
+  // 02/08 nos 25 cursos: só `mastering-ai-with-chatgpt` tem esse formato (746
+  // chars), e o menor capítulo real do catálogo tem 3.659. O corte em 1.500
+  // separa os dois com folga dos dois lados. Sem isto a capa vira "Capítulo 1"
+  // e empurra a numeração de todos os outros — o mesmo defeito que a camada de
+  // personalização teve em 02/08.
+  if (soltos.length >= 3) {
+    const tamanhoDoPrimeiro = soltos[1].inicio - soltos[0].inicio;
+    if (tamanhoDoPrimeiro < 1500) soltos.shift();
+  }
+
+  return soltos.map((s, i) => ({ numero: i + 1, titulo: s.titulo, inicio: s.inicio }));
+}
 
 function escapar(s: string) {
   return s
@@ -174,13 +225,8 @@ function extrairResumo(corpo: string): string[] {
 export function montarPrevia(courseContent: string, slug: string, capituloAmostra = 1): PreviaCurso {
   const conteudo = courseContent || "";
 
-  // Capítulos
-  const marcas: Array<{ numero: number; titulo: string; inicio: number }> = [];
-  RX_CAPITULO.lastIndex = 0;
-  let m: RegExpExecArray | null;
-  while ((m = RX_CAPITULO.exec(conteudo))) {
-    marcas.push({ numero: Number(m[2]), titulo: m[3].trim(), inicio: m.index });
-  }
+  // Capítulos — os três formatos, ver `acharCapitulos`.
+  const marcas = acharCapitulos(conteudo);
 
   const preambulo = marcas.length ? conteudo.slice(0, marcas[0].inicio) : conteudo;
 

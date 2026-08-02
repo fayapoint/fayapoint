@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { NavCart } from "@/components/cart/NavCart";
 import type { LucideIcon } from "lucide-react";
 import { LogoFayai } from "@/components/marca/LogoFayai";
+import { comIdioma } from "@/lib/rota-idioma";
 
 // Mobile navigation link component
 interface MobileNavLinkProps {
@@ -24,9 +25,10 @@ interface MobileNavLinkProps {
 }
 
 function MobileNavLink({ href, icon: Icon, children, onClick }: MobileNavLinkProps) {
+  const locale = useLocale();
   return (
     <Link
-      href={href}
+      href={comIdioma(href, locale)}
       onClick={onClick}
       className="flex items-center gap-3 px-3 py-3 rounded-xl text-foreground/90 hover:text-foreground hover:bg-accent active:bg-accent/80 transition-colors"
     >
@@ -95,6 +97,8 @@ const toolsMenu = [
 ];
 
 export function Header() {
+  const locale = useLocale();
+  const rota = (h: string) => comIdioma(h, locale);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { user, isLoggedIn, logout, mounted } = useUser();
@@ -144,7 +148,7 @@ export function Header() {
         <div className="flex items-center h-16">
           {/* Logo */}
           <Link 
-            href="/" 
+            href={rota("/")} 
             className="text-2xl font-bold text-primary hover:opacity-80 transition flex-shrink-0"
           >
             <LogoFayai texto={t("logo")} />
@@ -185,7 +189,7 @@ export function Header() {
                       ))}
                       <div className="col-span-3 mt-4 pt-4 border-t border-border">
                         <Link
-                          href="/cursos"
+                          href={rota("/cursos")}
                           className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-2"
                         >
                           {t("menus.courses.viewAll")}
@@ -224,7 +228,7 @@ export function Header() {
                       ))}
                       <div className="col-span-3 mt-4 pt-4 border-t border-border">
                         <Link
-                          href="/ferramentas"
+                          href={rota("/ferramentas")}
                           className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-2"
                         >
                           {t("menus.tools.viewAll")}
@@ -239,7 +243,7 @@ export function Header() {
                 <NavigationMenuItem>
                   {/* /noticias é o hub real. `/blog` responde 308 para cá, e o
                       link ficava a dois saltos do destino em toda página. */}
-                  <Link href="/noticias" className={cn(
+                  <Link href={rota("/noticias")} className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/noticias"
                       ? "text-primary"
@@ -250,7 +254,7 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/sobre" className={cn(
+                  <Link href={rota("/sobre")} className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/sobre" 
                       ? "text-primary" 
@@ -261,7 +265,7 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/comunidade" className={cn(
+                  <Link href={rota("/comunidade")} className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/comunidade" 
                       ? "text-primary" 
@@ -272,7 +276,7 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/casos" className={cn(
+                  <Link href={rota("/casos")} className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/casos" 
                       ? "text-primary" 
@@ -283,7 +287,7 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/precos" className={cn(
+                  <Link href={rota("/precos")} className={cn(
                     "px-3 py-2 text-sm font-medium transition",
                     pathname === "/precos" 
                       ? "text-primary" 
@@ -317,7 +321,7 @@ export function Header() {
             {mounted && isLoggedIn && user ? (
               <>
                 <div className="flex items-center gap-2 text-foreground/80">
-                  <Link href="/portal" className="flex items-center gap-2 hover:text-primary transition">
+                  <Link href={rota("/portal")} className="flex items-center gap-2 hover:text-primary transition">
                     <UserCircle size={20} />
                     <span className="text-sm font-medium">{t("auth.greeting", { name: user.name.split(" ")[0] })}</span>
                   </Link>
@@ -337,12 +341,12 @@ export function Header() {
               </>
             ) : mounted ? (
               <>
-                <Link href="/login">
+                <Link href={rota("/login")}>
                   <Button variant="ghost" className="text-foreground/80 hover:text-foreground">
                     {t("buttons.signIn")}
                   </Button>
                 </Link>
-                <Link href="/onboarding">
+                <Link href={rota("/onboarding")}>
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                     {t("buttons.startFree")}
                   </Button>
@@ -379,49 +383,49 @@ export function Header() {
             {/* Navigation Links */}
             <nav className="py-2 space-y-1">
               <MobileNavLink 
-                href="/cursos" 
+                href={rota("/cursos")} 
                 icon={BookOpen}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.courses")}
               </MobileNavLink>
               <MobileNavLink 
-                href="/ferramentas" 
+                href={rota("/ferramentas")} 
                 icon={Wrench}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.tools")}
               </MobileNavLink>
               <MobileNavLink
-                href="/noticias"
+                href={rota("/noticias")}
                 icon={Newspaper}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.blog")}
               </MobileNavLink>
               <MobileNavLink 
-                href="/sobre" 
+                href={rota("/sobre")} 
                 icon={Info}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.about")}
               </MobileNavLink>
               <MobileNavLink 
-                href="/comunidade" 
+                href={rota("/comunidade")} 
                 icon={Users}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.community")}
               </MobileNavLink>
               <MobileNavLink 
-                href="/casos" 
+                href={rota("/casos")} 
                 icon={Briefcase}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.cases")}
               </MobileNavLink>
               <MobileNavLink 
-                href="/precos" 
+                href={rota("/precos")} 
                 icon={DollarSign}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -434,7 +438,7 @@ export function Header() {
               {mounted && isLoggedIn && user ? (
                 <>
                   <Link 
-                    href="/portal" 
+                    href={rota("/portal")} 
                     className="flex items-center gap-3 p-3 rounded-xl bg-accent/50 hover:bg-accent transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -461,12 +465,12 @@ export function Header() {
                 </>
               ) : mounted ? (
                 <div className="grid grid-cols-2 gap-3">
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="block">
+                  <Link href={rota("/login")} onClick={() => setMobileMenuOpen(false)} className="block">
                     <Button variant="outline" className="w-full h-12 text-base">
                       {t("buttons.signIn")}
                     </Button>
                   </Link>
-                  <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)} className="block">
+                  <Link href={rota("/onboarding")} onClick={() => setMobileMenuOpen(false)} className="block">
                     <Button className="w-full h-12 text-base bg-primary text-primary-foreground">
                       {t("buttons.startFree")}
                     </Button>
