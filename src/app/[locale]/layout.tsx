@@ -47,16 +47,21 @@ const baseMetadata = {
     url: SITE_URL,
     siteName: "FayAi",
     images: [{
-      url: "/rwx6.jpg",
+      // Trocada em 02/08/2026. A anterior (rwx6.jpg) era foto do Web Summit
+      // com marca d'agua de OUTRO dominio (fayacuts.com.br), anunciava o
+      // Ultimate Social Suite em vez dos cursos, e vinha 2000x934 quando o
+      // card pede 1,91:1 — o Facebook e o LinkedIn cortavam por conta propria.
+      // Gerada por scripts/og_card.py (fundo ComfyUI + texto PIL).
+      url: "/og-fayai.jpg",
       width: 1200,
       height: 630,
-      alt: "FayAi",
+      alt: "FayAI — cursos de IA em portugues",
     }],
   },
   twitter: {
     card: "summary_large_image" as const,
     creator: "@fayai",
-    images: ["/rwx6.jpg"],
+    images: ["/og-fayai.jpg"],
   },
   robots: {
     index: true,
@@ -191,7 +196,9 @@ export default async function RootLayout({
     "@type": "Organization",
     name: "FayAi",
     url: SITE_URL,
-    logo: `${SITE_URL}/rwx6.jpg`,
+    // `logo` do schema.org e o LOGO da organizacao, nao a capa social. Estava
+    // apontando para a foto do Web Summit — que nao e logo de coisa nenhuma.
+    logo: `${SITE_URL}/brand/fayai-invoice-logo.png`,
     sameAs: ["https://www.instagram.com/fayai"],
   };
 

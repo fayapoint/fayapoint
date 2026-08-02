@@ -21,7 +21,7 @@ export function generatePageMetadata({
   path,
   title,
   description,
-  image = "/rwx6.jpg",
+  image = "/og-fayai.jpg",
 }: PageMetadataParams): Metadata {
   const fullPath = `/${locale}${path}`;
   const canonicalUrl = `${SITE_URL}${fullPath}`;
