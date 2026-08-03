@@ -13,7 +13,7 @@
 
 | # | Tarefa | Por quê |
 |---|---|---|
-| **1** | **Ler o `ia-no-whatsapp` e o `ia-para-criar-videos` e dar o veredito.** 30 capítulos cada. | ⚠️ O painel de juízes se provou **instável** (mesmo texto, 8,4 e depois 1) e foi rebaixado a conselho. Quem promove a ✅ é você ([[feedback_regra_do_pronto]]). |
+| **1** | **Ler o `ia-no-whatsapp` (FP027, R9, NO AR e em destaque na home) e o `ia-para-criar-videos` e dar o veredito.** 30 capítulos cada, escritos pelo laço e **sem revisão humana**. | ⚠️ O painel de juízes se provou **instável** (mesmo texto, 8,4 e depois 1) e foi rebaixado a conselho. Quem promove a ✅ é você ([[feedback_regra_do_pronto]]). |
 | **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada. |
 | **3** | 🔴 **Imagens de resultado e vídeo no `/inventando`.** | Pedido de 03/08 que **NÃO foi feito**: *"temos muito poucas imagens, nenhum vídeo"*. A estrutura de dados (`Microcurso`) ainda não tem campo de mídia por aula. É a maior lacuna aberta da seção. |
 | **4** | 🔴 **A biblioteca do dashboard ainda é fraca.** | 03/08 consertou o destino do card (vai para a apresentação) e a capa (deduzida do slug). O que o Ricardo chamou de "incompleta" — filtros, trilha, o que fazer a seguir — continua de pé. |
@@ -22,7 +22,7 @@
 
 ---
 
-## 🔐 SESSÃO 03/08 — A FONTE FECHADA, OS TIERS DE VERDADE E AS CAPAS REFEITAS
+## 🔐 SESSÃO 03/08 — A FONTE FECHADA, OS TIERS DE VERDADE E AS CAPAS REFEITAS **NO AR** (`6c34328` + MC `061d723`)
 
 > Pedido do Ricardo, na segunda mensagem da sessão: *"não quero revelar a
 > fonte, o site AI search é uma fonte segura nossa, se dermos aos usuários,
