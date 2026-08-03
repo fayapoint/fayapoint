@@ -3,22 +3,91 @@
 
 ---
 
-## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 03/08/2026
+## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 03/08/2026 (noite) · **NO AR**
 
-> Tudo de 29/07 a 02/08 está **NO AR** (`dad07f4`, `2145b5d`, `88e2358`, `18b6f58`).
-> A sessão de 03/08 (fonte fechada, tiers de verdade, capas refeitas, curso de
-> WhatsApp, painel do MC) está descrita em §"SESSÃO 03/08" logo abaixo.
+> ### 📄 **A frente tem handoff próprio: [`../HANDOFF_BIBLIOTECA_2026-08-03.md`](../HANDOFF_BIBLIOTECA_2026-08-03.md)**
+>
+> **Não cole este MASTERPLAN numa sessão nova — ele tem 236k e sozinho come 20%
+> da janela.** O handoff é auto-suficiente. Comece por ele.
+>
+> ✅ **Os 8 itens do handoff foram executados e publicados em 03/08 (noite)**,
+> com autorização explícita do Ricardo (*"quando terminar tudo que ainda está
+> pendente, pode fazer o deploy"*). Foram ao ar: os 9 cursos destravados, as
+> capas sem corte, a biblioteca em 3 seções, o celular, o selo removido de 6
+> telas, o livro folheável, a galeria e a varredura de canon nos cursos.
+>
+> ⚠️ **O que ainda NÃO teve veredito humano**: a biblioteca nova, o livro, a
+> galeria e os dois cursos escritos pelo laço (`ia-no-whatsapp`,
+> `ia-para-criar-videos`). Publicado ≠ PRONTO — quem promove a ✅ é o Ricardo
+> ([[feedback_regra_do_pronto]]).
+
+> Tudo de 29/07 a 03/08 está **NO AR**.
 
 ### O que fazer primeiro, na ordem
 
 | # | Tarefa | Por quê |
 |---|---|---|
-| **1** | **Ler o `ia-no-whatsapp` (FP027, R9, NO AR e em destaque na home) e o `ia-para-criar-videos` e dar o veredito.** 30 capítulos cada, escritos pelo laço e **sem revisão humana**. | ⚠️ O painel de juízes se provou **instável** (mesmo texto, 8,4 e depois 1) e foi rebaixado a conselho. Quem promove a ✅ é você ([[feedback_regra_do_pronto]]). |
-| **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada. |
-| **3** | 🔴 **Imagens de resultado e vídeo no `/inventando`.** | Pedido de 03/08 que **NÃO foi feito**: *"temos muito poucas imagens, nenhum vídeo"*. A estrutura de dados (`Microcurso`) ainda não tem campo de mídia por aula. É a maior lacuna aberta da seção. |
-| **4** | 🔴 **A biblioteca do dashboard ainda é fraca.** | 03/08 consertou o destino do card (vai para a apresentação) e a capa (deduzida do slug). O que o Ricardo chamou de "incompleta" — filtros, trilha, o que fazer a seguir — continua de pé. |
-| **5** | **Ler o `#conteudo` e o `#seo` no Buzz.** | Canal de decisão sobre conteúdo. Responder no fio vira diretriz do laço. |
-| **6** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
+| **1** | 👀 **Abrir o portal em produção e dar o veredito** — `?tab=courses`, `?tab=galeria`, `/cursos`, e o mesmo no celular. | Regra do PRONTO. Está no ar, mas ninguém olhou ainda com olho de dono. |
+| **2** | 🟡 **`gemini-ia-google`: passagem do laço com pesquisa.** | Único resto da varredura de canon: 15 menções ao "Gemini 2.5" presas a preço ($1.25/M, $0.15/M). Trocar só o nome grudaria preço velho em modelo novo — precisa de pesquisa da linha atual e reescrita do capítulo, não de find/replace. As outras 97 menções foram resolvidas (`scripts/atualizar-canon-cursos.mjs`). |
+| **2b** | 🟡 **Publicar (ou aposentar) os 5 cursos em `status: draft`.** | `automacao-n8n`, `banana-dev-deploy-ia`, `mastering-ai-with-chatgpt`, `midjourney-masterclass` e `perplexity-…-instantaneo` não aparecem na `/cursos` pública, **mas aparecem no portal do aluno** com "Liberar no plano". O `automacao-n8n` é justamente o que ganhou capa nova. |
+| **3** | **Ler o `ia-no-whatsapp` (FP027) e o `ia-para-criar-videos` e dar o veredito.** 30 capítulos cada, escritos pelo laço e **sem revisão humana**. | ⚠️ O painel de juízes se provou **instável** (mesmo texto, 8,4 e depois 1) e foi rebaixado a conselho. Quem promove a ✅ é você. |
+| **4** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada. |
+| **5** | 🔴 **Imagens de resultado e vídeo no `/inventando`.** | Pedido de 03/08 que **NÃO foi feito**: *"temos muito poucas imagens, nenhum vídeo"*. A estrutura de dados (`Microcurso`) ainda não tem campo de mídia por aula. |
+| **6** | **Ler o `#conteudo` e o `#seo` no Buzz.** | Canal de decisão sobre conteúdo. Responder no fio vira diretriz do laço. |
+| **7** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
+
+---
+
+## 📚 SESSÃO 03/08 — A BIBLIOTECA, O LIVRO E O CELULAR · **NO AR**
+
+> **Detalhe completo em [`../HANDOFF_BIBLIOTECA_2026-08-03.md`](../HANDOFF_BIBLIOTECA_2026-08-03.md).**
+> Esta seção é só o resumo, para o MASTERPLAN continuar sendo o índice.
+
+Começou como diagnóstico sem deploy, virou execução completa dos 8 itens ao
+longo do dia e foi publicada à noite, com autorização do Ricardo.
+
+### O que a parte da noite acrescentou
+
+| Entrega | Onde |
+|---|---|
+| **O prompt do livro inteiro nos 27 `PROMPT.md`** — formato aprovado pelo Ricardo com a capa do `automacao-n8n` na mão: couro, título gravado em ouro, arte gravada no mesmo relevo. Uma geração só, no Higgsfield. Fonte única em `promptLivro()` | `scripts/gerar-capas-cursos.mjs`, `scripts/arquivar-capas.mjs`, `D:\fayai\Cursos\capas\` |
+| **`--so-subir`**, para publicar um livro já pronto do Higgsfield sem redesenhar o SVG por cima | `scripts/gerar-capas-livro.mjs` |
+| **97 das 112 menções a modelo velho, resolvidas** — tokens `{{fact:}}` para o que é "o topo de linha agora", nome sem dígito de versão para exemplo técnico, literal para história e para preço | `scripts/atualizar-canon-cursos.mjs` |
+| **8 fatos novos/corrigidos no registry**, incluindo `claude-flagship` que estava em Opus 4.8 | `fayapointProdutos.content_facts` |
+| **Dois vazamentos de token fechados**: a prévia pública (`/curso/<slug>/previa`) renderizava `{{fact:…}}` cru para visitante e para o Google; o curso personalizado mandava token para o modelo | `previa/page.tsx`, `api/user/curso-personalizado/route.ts` |
+
+### O que a parte da manhã tinha feito
+
+| Entrega | Onde |
+|---|---|
+| **27 capas arquivadas**, uma pasta por curso, com o prompt exato que gerou cada uma (positivo, negativo, modelo, parâmetros, couro/ângulo sorteados pelo hash do slug) e o passo a passo para trocar | `D:\fayai\Cursos\capas\` + `LEIA-ME.md` |
+| **A arte crua de cada capa recuperada.** A rodada de 03/08 salvou 29 PNGs como `capa_000NN_.png`, sem slug — casei todos por semelhança perceptual (erro 0,3 contra 23+ do segundo colocado) | idem |
+| **O defeito corrigido na origem:** `filename_prefix` agora leva o slug | `scripts/gerar-capas-cursos.mjs` |
+| **`arquivar-capas.mjs`** — arquiva capas e escreve os `PROMPT.md`. Importa `motivo()`/`promptDe()`/`composicaoDe()` dos scripts de geração em vez de reimplementar, para não documentar uma capa diferente da que está no ar | `scripts/arquivar-capas.mjs` |
+| **`auditar-cursos.mjs`** — leitura só: modelos antigos por curso, canon editorial, e os cursos do banco ausentes da lista estática | `scripts/auditar-cursos.mjs` |
+| **A convenção das pastas de imagem**, escrita | `D:\fayai\Blog images\LEIA-ME.md` |
+
+### O que foi descoberto
+
+1. **9 cursos do banco não existem na lista estática de 18** → o Expert não vê e
+   o `enroll` responde 404. O conserto de 02/08 foi meio conserto: trouxe os
+   nove para o catálogo e quatro filtros depois eles voltaram a sumir.
+2. **A capa nova foi ao ar sem o código que sabe exibi-la** — o `TrilhoParallax`
+   nunca foi commitado. É a causa principal dos cortes.
+3. **"Biblioteca" e "Catálogo do plano" saem da mesma lista.** Um é subconjunto
+   estrito do outro.
+4. **O `chatgpt-zero` não cita modelo nenhum no texto** — o que o Ricardo viu foi
+   a *faixa do selo*, anunciando o canon "GPT-5.4 / Claude Opus 4.6" de 19/03,
+   gravado em 25 produtos. O padrão do código também já envelheceu e nunca
+   aparece, porque o produto sempre sobrescreve.
+5. **13 dos 27 cursos citam modelo antigo no corpo do texto** (~90 menções, 65
+   delas em 4 cursos).
+
+### As três decisões do Ricardo
+
+**Carrossel:** evoluir o `TrilhoParallax` (não trazer Embla) — em troca, teclado,
+ARIA e toque viram dívida nossa. **Livro:** View Transitions API, a técnica do
+pen *Elven Field Journal*. **Selo:** remover a faixa inteira.
 
 ---
 

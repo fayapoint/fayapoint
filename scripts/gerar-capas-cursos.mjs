@@ -26,6 +26,7 @@
 
 import { writeFile, mkdir, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import path from "node:path";
 import sharp from "sharp";
 import { MongoClient } from "mongodb";
@@ -43,13 +44,13 @@ const LADO = 1024;
  *
  * O terço inferior fica deliberadamente vazio: é onde o título vai entrar.
  */
-const ESTILO =
+export const ESTILO =
   "translucent violet and cyan crystal glass, deep internal refraction and caustics, " +
   "deep navy blue background, glowing teal data streams orbiting in wide arcs, " +
   "volumetric light, cinematic studio lighting, octane render, ultra detailed, 8k, " +
   "centered composition, generous empty dark space in the lower third";
 
-const NEGATIVO =
+export const NEGATIVO =
   "text, letters, words, typography, watermark, signature, logo, caption, book, book cover, " +
   "ugly, blurry, low quality, deformed, cluttered, busy, human face, hands";
 
@@ -66,7 +67,7 @@ const NEGATIVO =
  * A ordem também importa: marca primeiro (midjourney, perplexity), palavra
  * genérica depois (produção, segurança).
  */
-function motivo({ slug = "", tool = "" }) {
+export function motivo({ slug = "", tool = "" }) {
   const s = `${slug} ${tool}`.toLowerCase();
   const tem = (...ks) => ks.some((k) => s.includes(k));
 
@@ -91,7 +92,80 @@ function motivo({ slug = "", tool = "" }) {
   return "a faceted crystal polyhedron suspended in mid air, light refracting through its core";
 }
 
-function fluxo(prompt, semente) {
+/**
+ * O prompt positivo completo, montado num lugar só.
+ *
+ * O objeto vem primeiro e sozinho na frase, e o estilo entra depois como
+ * material. Com o estilo grudado por vírgula, o Qwen dilui o objeto no meio
+ * dos adjetivos: o pedido de engrenagens virou uma paleta de pintor no
+ * primeiro ensaio.
+ *
+ * Exportado porque o arquivador (`arquivar-capas.mjs`) precisa escrever o
+ * prompt EXATO em `D:\fayai\Cursos\capas\...\PROMPT.md`. Se ele remontasse a
+ * frase por conta própria, o arquivo documentaria uma capa que não é a que
+ * está no ar.
+ */
+export function promptDe(produto) {
+  return `${motivo(produto)}. The object is made of ${ESTILO}`;
+}
+
+/* ── O livro inteiro, num prompt só ───────────────────────────────────────── */
+
+/**
+ * O prefixo que transforma o prompt do objeto no prompt do LIVRO acabado.
+ *
+ * ── Por que a regra "o modelo nunca escreve" foi revista ───────────────────
+ *
+ * Ela nasceu do Qwen local, que cuspia "Make Automacio" e "#N5F3" — e continua
+ * valendo para ele: o `NEGATIVO` acima segue proibindo texto, e o pipeline do
+ * ComfyUI segue compondo título em SVG. O que mudou é que o Higgsfield acerta
+ * a grafia, inclusive com acento e cedilha, e grava o título em ouro no couro
+ * com um relevo que o SVG não imita.
+ *
+ * O preço é conhecido e aceito: título assado no pixel volta a congelar. Se o
+ * `shortName` mudar no banco, a capa continua anunciando o título velho até
+ * alguém regerar. É a troca que o Ricardo fez com a capa na mão, em 03/08.
+ *
+ * ⚠️ Começa em "A book", não "a brand new book". Não é preciosismo: as duas
+ * variantes foram geradas lado a lado em 03/08 e "a brand new book" levou o
+ * modelo a um livro em 3/4, deitado, com o título subindo torto na diagonal —
+ * ilegível no card de 180px do trilho. "A book" dá o livro de frente, título
+ * reto, que é o que foi aprovado.
+ *
+ * Os espaços duplos são os do prompt aprovado. Não fazem diferença para o
+ * codificador de texto, mas manter o prompt literal é o ponto deste arquivo.
+ */
+export const PREFIXO_LIVRO = (titulo) =>
+  `A book with a leather cover and the title of the book is  engraved with gold ` +
+  `with the robotto font, having the text "${titulo}",   the image on the cover ` +
+  `of the book, also is engraved, making it seamless integrated in the book, it is `;
+
+/**
+ * O prompt do livro acabado — o formato aprovado pelo Ricardo em 03/08/2026.
+ *
+ * Monta-se sobre o `promptDe` de propósito: objeto e estilo têm um dono só.
+ * Se o motivo de um curso mudar aqui e não lá, as duas rotas de geração
+ * passariam a desenhar coisas diferentes para o mesmo curso.
+ */
+export function promptLivro(produto) {
+  const titulo = produto.shortName?.trim() || produto.name || produto.slug;
+  return PREFIXO_LIVRO(titulo) + promptDe(produto);
+}
+
+/** Parâmetros do KSampler, para o arquivador documentar sem adivinhar. */
+export const PARAMETROS = {
+  modelo: "qwen_image_2512_fp8_e4m3fn.safetensors",
+  clip: "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+  vae: "qwen_image_vae.safetensors",
+  lado: LADO,
+  steps: 24,
+  cfg: 2.5,
+  sampler: "euler",
+  scheduler: "simple",
+  denoise: 1,
+};
+
+function fluxo(prompt, semente, slug = "") {
   return {
     1: { class_type: "UNETLoader", inputs: { unet_name: "qwen_image_2512_fp8_e4m3fn.safetensors", weight_dtype: "default" } },
     2: { class_type: "CLIPLoader", inputs: { clip_name: "qwen_2.5_vl_7b_fp8_scaled.safetensors", type: "qwen_image" } },
@@ -107,15 +181,20 @@ function fluxo(prompt, semente) {
       },
     },
     8: { class_type: "VAEDecode", inputs: { samples: ["7", 0], vae: ["3", 0] } },
-    9: { class_type: "SaveImage", inputs: { images: ["8", 0], filename_prefix: "capa" } },
+    // ⚠️ O prefixo LEVA O SLUG. Sem ele, a rodada de 03/08/2026 deixou 29
+    // arquivos chamados `capa_000NN_.png` em C:\WORKS\ComfyUI\output e ninguém
+    // mais soube qual PNG cru pertencia a qual curso — foi preciso casar as
+    // 29 imagens por semelhança para arquivá-las. O nome do arquivo é o único
+    // vínculo entre a arte crua e o curso; não desperdice esse vínculo.
+    9: { class_type: "SaveImage", inputs: { images: ["8", 0], filename_prefix: slug ? `capa_${slug}` : "capa" } },
   };
 }
 
-async function gerarArte(prompt) {
+async function gerarArte(prompt, slug = "") {
   const r = await fetch(`${COMFY}/prompt`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt: fluxo(prompt, Math.floor(Math.random() * 2 ** 31)) }),
+    body: JSON.stringify({ prompt: fluxo(prompt, Math.floor(Math.random() * 2 ** 31), slug) }),
   });
   if (!r.ok) throw new Error(`enfileirar HTTP ${r.status}`);
   const { prompt_id } = await r.json();
@@ -247,12 +326,7 @@ async function main() {
         composta = await readFile(arquivo);
         console.log(`· ${p.slug} — já estava no disco`);
       } else {
-        // O objeto vem primeiro e sozinho na frase, e o estilo entra depois
-        // como material. Com o estilo grudado por vírgula, o Qwen dilui o
-        // objeto no meio dos adjetivos: o pedido de engrenagens virou uma
-        // paleta de pintor no primeiro ensaio.
-        const prompt = `${motivo(p)}. The object is made of ${ESTILO}`;
-        const bruta = await gerarArte(prompt);
+        const bruta = await gerarArte(promptDe(p), p.slug);
         composta = await sharp(bruta)
           .resize(LADO, LADO, { fit: "cover", position: "centre" })
           .composite([{ input: camadaTexto({ titulo, etiqueta }), top: 0, left: 0 }])
@@ -285,7 +359,12 @@ async function main() {
   if (!gravar) console.log("Ensaio. Rode de novo com --gravar para subir ao Cloudinary e apontar o banco.");
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+// Só roda quando chamado direto. O arquivador importa `motivo`, `promptDe` e
+// `PARAMETROS` deste arquivo — sem esta guarda, `import` dispararia uma
+// regeração completa do catálogo no ComfyUI.
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

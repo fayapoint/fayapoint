@@ -64,3 +64,16 @@ _capas_novas/*.png
 # Artes intermediárias das capas de curso — o que vale é o que subiu para o
 # Cloudinary (fayai/courses/<slug>/capa-v2), regerável por scripts/gerar-capas-cursos.mjs
 scripts/_capas_v2/
+
+# Mesma razão, um degrau adiante: os livros montados. 2,7 MB de webp que o
+# gerar-capas-livro.mjs refaz igual a partir do hash do slug, e cuja versão
+# publicada é a do Cloudinary. O arquivo de trabalho mora em D:\fayai\Cursos\capas.
+scripts/_capas_livro/
+
+# Sobras de geração local (mascote 3D, capturas de tela, testes de logo). São
+# dezenas de MB de binário regenerável — ver scripts/arcade/.
+_capas_novas/_logo_cache/
+_capas_novas/_teste/
+_capas_novas/mascote/
+_capas_novas/pessoa/
+_capas_novas/telas/
