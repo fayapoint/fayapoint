@@ -17,11 +17,25 @@ import { PRECO_EXPERT } from "@/lib/inventando-acesso";
  *    topo — o objetivo é que o Expert seja o destino óbvio, não o degrau.
  */
 
+/**
+ * O que cada degrau abre — e por que estes rótulos mudaram em 03/08/2026.
+ *
+ * Os antigos descreviam uma escada que o código não cumpria. Todo microcurso
+ * da seção tem 3 aulas, e a régua liberava 1/2/3/todas: o Profissional já via
+ * as três, então o Expert não acrescentava aula nenhuma. Quem assinasse o topo
+ * pagava a mais por nada visível — e foi exatamente isso que o Ricardo
+ * relatou ("não percebi diferença entre o primeiro, segundo ou terceiro").
+ *
+ * O conserto não foi inflar o número de aulas, foi dar ao topo o que só ele
+ * pode ter: a **página oficial da ferramenta** e a ficha técnica inteira. É o
+ * fim da jornada, não mais um pedaço dela — e é a única coisa que a pessoa não
+ * consegue obter lendo mais um parágrafo nosso.
+ */
 const ESCADA_ROTULOS: Record<string, { nome: string; abre: string }> = {
-  free: { nome: "Gratuito", abre: "Ficha da ferramenta" },
-  explorador: { nome: "Explorador", abre: "1ª aula + limitações" },
-  profissional: { nome: "Profissional", abre: "2ª aula + para quem serve" },
-  expert: { nome: "Expert", abre: "Microcurso completo" },
+  free: { nome: "Gratuito", abre: "Abertura da 1ª aula" },
+  explorador: { nome: "Explorador", abre: "1ª aula inteira + limitações" },
+  profissional: { nome: "Profissional", abre: "Todas as aulas + para quem serve" },
+  expert: { nome: "Expert", abre: "Ficha completa + site oficial da ferramenta" },
 };
 
 const ORDEM = ["free", "explorador", "profissional", "expert"] as const;

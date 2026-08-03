@@ -3,24 +3,194 @@
 
 ---
 
-## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 02/08/2026
+## 🚦 PRÓXIMA SESSÃO COMEÇA AQUI — estado em 03/08/2026
 
-> Tudo de 29/07 a 01/08 está **NO AR** (`dad07f4`, `2145b5d`, `88e2358`).
-> A sessão de 02/08 (custo + prévias + relatórios) foi **autorizada e deployada** pelo
-> Ricardo no fim da própria sessão — ver §"SESSÃO 02/08" logo abaixo.
+> Tudo de 29/07 a 02/08 está **NO AR** (`dad07f4`, `2145b5d`, `88e2358`, `18b6f58`).
+> A sessão de 03/08 (fonte fechada, tiers de verdade, capas refeitas, curso de
+> WhatsApp, painel do MC) está descrita em §"SESSÃO 03/08" logo abaixo.
 
 ### O que fazer primeiro, na ordem
 
 | # | Tarefa | Por quê |
 |---|---|---|
-| **1** | **Ler o `ia-para-criar-videos` e dar o veredito.** 30 capítulos no ar a R$79. | ⚠️ O painel de juízes se provou **instável** (mesmo texto, 8,4 e depois 1) e foi rebaixado a conselho. Quem promove a ✅ é você ([[feedback_regra_do_pronto]]) — e desta vez o painel não substitui isso nem de longe. |
-| **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada — não há caminho automático. |
-| **3** | **Ler o `#conteudo` e o `#seo` no Buzz.** O debate semanal e o relatório diário publicam sozinhos. | É o novo canal de decisão sobre conteúdo. Responder no fio do `#conteudo` vira diretriz do laço. |
-| **4** | **Próximo curso pelo mesmo método: WhatsApp/vendas** (306 buscas somadas, zero páginas). | O `curriculo.json` + `novo_curso.mjs` fazem 30 capítulos por **US$ 0,12**. O gargalo agora é revisão humana, não produção. |
-| **5** | ✅ ~~Refazer a página de ferramentas~~ — **FEITO e no ar** (`18b6f58`). Ver §"SESSÃO 02/08 (parte 4)". | `/inventando` (microcursos ilustrados) e `/ferramentaria` (56 ferramentas por verbo) no ar. Falta: **regerar as capas de curso com texto errado** — o método está provado em `scripts/gerar-hero-og.mjs` (arte pelo ComfyUI, texto composto por cima como SVG, nunca assado no pixel). |
-| **5b** | ⚠️ **Criar o curso de WhatsApp — ele NÃO existe.** | O Ricardo cobrou que ele "não aparece na biblioteca". Não aparecia porque nunca foi criado: era o item 4 desta mesma lista. Os outros três que faltavam (`ia-para-criar-videos`, `ia-producao`, `rag-knowledge`) apareceram assim que a biblioteca passou a ler o banco. |
-| **6** | **Guardar o `image_prompt` no `ainews`**. | Última melhoria pendente das capas, e é pequena. |
-| **7** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
+| **1** | **Ler o `ia-no-whatsapp` e o `ia-para-criar-videos` e dar o veredito.** 30 capítulos cada. | ⚠️ O painel de juízes se provou **instável** (mesmo texto, 8,4 e depois 1) e foi rebaixado a conselho. Quem promove a ✅ é você ([[feedback_regra_do_pronto]]). |
+| **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada. |
+| **3** | 🔴 **Imagens de resultado e vídeo no `/inventando`.** | Pedido de 03/08 que **NÃO foi feito**: *"temos muito poucas imagens, nenhum vídeo"*. A estrutura de dados (`Microcurso`) ainda não tem campo de mídia por aula. É a maior lacuna aberta da seção. |
+| **4** | 🔴 **A biblioteca do dashboard ainda é fraca.** | 03/08 consertou o destino do card (vai para a apresentação) e a capa (deduzida do slug). O que o Ricardo chamou de "incompleta" — filtros, trilha, o que fazer a seguir — continua de pé. |
+| **5** | **Ler o `#conteudo` e o `#seo` no Buzz.** | Canal de decisão sobre conteúdo. Responder no fio vira diretriz do laço. |
+| **6** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
+
+---
+
+## 🔐 SESSÃO 03/08 — A FONTE FECHADA, OS TIERS DE VERDADE E AS CAPAS REFEITAS
+
+> Pedido do Ricardo, na segunda mensagem da sessão: *"não quero revelar a
+> fonte, o site AI search é uma fonte segura nossa, se dermos aos usuários,
+> eles não tem motivos para voltar"* · *"não percebi diferença entre o
+> primeiro, segundo ou terceiro tier"* · *"o site da ferramenta deve aparecer
+> somente no tier 3 o expert"* · *"antes de entrar direto no curso, devemos ter
+> uma página de apresentação"* · *"no tier expert poderemos ter 4 [cursos
+> abertos]"*.
+
+### 1. 🔴 A seção estava entregando a própria fonte
+
+O `/inventando` publicava, em toda página e nos dois níveis (grátis e
+`/completo`): o **canal**, o **título do vídeo**, o **minuto exato** e um link
+direto para o trecho. Também declarava tudo isso em `isBasedOn` no JSON-LD, que
+é dado público por definição — tirar do texto e deixar no schema teria sido
+teatro.
+
+Isso não era um detalhe de layout. Era o mapa para o leitor pular o site e
+assistir à novidade na origem, e a origem é justamente a apuração que nos
+diferencia. Uma seção que ensina o atalho para si mesma não retém ninguém.
+
+**Corrigido:** a seção "De onde saiu este microcurso" virou "**Como apuramos**"
+— descreve o método (fonte primária, conferência contra a documentação do
+fabricante, os limites junto) sem nomear ninguém. Os campos `fonte` continuam
+no dado, porque são o nosso rastro de auditoria; `recortarMicrocurso` os apaga
+antes de virar HTML, para **todos os planos, inclusive o Expert**. A rota
+`/api/inventando` (nova, criada nesta mesma sessão para o Mission Control)
+também deixou de publicá-los — JSON público é mais fácil de raspar que HTML.
+
+O selo "Patrocinado na fonte" virou "**Divulgação paga do fabricante**": dizia,
+sem querer, que existe uma fonte externa e que ela estava vendendo.
+
+### 2. 🔴 Por que os três tiers pareciam iguais — e eram
+
+Todo microcurso da seção tem **3 aulas**. A régua liberava 1 / 2 / 3 / todas
+para free / explorador / profissional / expert. Com 3 aulas, `profissional` já
+via **todas** — o Expert, R$167/mês, não acrescentava uma linha sequer.
+
+O conserto não foi inflar o número de aulas. Foi dar ao topo o que só ele pode
+ter: a **página oficial da ferramenta** e a **ficha técnica inteira**. É o fim
+da jornada, não mais um pedaço dela, e é a única coisa que a pessoa não obtém
+lendo mais um parágrafo nosso.
+
+| plano | o que abre |
+|---|---|
+| Gratuito | abertura da 1ª aula (2 seções) + 3 linhas da ficha |
+| Explorador | 1ª aula inteira + limitações |
+| Profissional | todas as aulas + para quem serve |
+| **Expert** | **ficha completa + site oficial da ferramenta** |
+
+A página pública também emagreceu: servia a **primeira aula inteira** de graça
+e a ficha técnica completa. Agora serve a abertura e três linhas — o bastante
+para não ser soft 404 (a armadilha de 28/07), insuficiente para dispensar a
+assinatura.
+
+⚠️ **Armadilha encontrada e corrigida na hora:** a página `/completo` tem duas
+variáveis, `microcurso` (íntegro) e `visivel` (recortado). Escrevi o botão do
+Expert lendo `microcurso.linkOficial` — o link teria vazado para todos os
+planos. Portão que lê a fonte errada não é portão.
+
+### 3. Limite de cursos ABERTOS ao mesmo tempo
+
+`TierConfig.limits` sempre foi matrícula **por mês**. Não impedia abrir sete
+cursos e não terminar nenhum — e é isso que corrói a recorrência: quem sente
+que levou tudo no primeiro mês cancela no segundo.
+
+`CURSOS_SIMULTANEOS` — free 1, explorador 2, profissional 3, **expert 4**
+(número do Ricardo). Curso **concluído não ocupa vaga**, senão o aluno aplicado
+seria o mais punido. A conta é feita contra `CourseProgress`, e não contra
+`progress.coursesInProgress` do usuário: aquele contador é incrementado à mão
+em vários pontos e dessincroniza — número aproximado não governa portão.
+
+A recusa é **409, não 403**, e a mensagem diz "conclua um deles" antes de falar
+em upgrade: negar por vaga é conversa diferente de negar por plano, e quem lê
+"compre um upgrade" quando bastava terminar um curso simplesmente desiste.
+
+### 4. As capas de curso, refeitas — e a regra que fecha o defeito
+
+As 26 capas eram mockups de livro 3D com o título **assado no pixel** por um
+modelo de difusão. Medido nas seis primeiras: "Make **Automacio**" (palavra que
+não existe), "n8n **Automacao**" e "Zero ao **Avancado**" sem cedilha, e lixo
+tipográfico — "#N5F3" — na capa do Leonardo. Fora a distorção de perspectiva.
+
+**A regra:** o modelo produz só a **arte**; marca e título entram depois, como
+**SVG vetorial** composto pelo sharp. Nítido em qualquer tela, sempre igual ao
+banco, regerável em um segundo. Pior que o erro de grafia era o congelamento:
+título alterado no banco, capa anunciando o antigo, e ninguém percebe.
+
+`scripts/gerar-capas-cursos.mjs` — 1024×1024 (o card é `aspect-square`), arte
+por assunto, upload para `fayai/courses/<slug>/capa-v2`.
+
+⚠️ **Duas armadilhas medidas no caminho:**
+
+1. **O `name` sequestrava o roteador de arte.** Roteando por slug + tool +
+   name, "Make (Integromat): Integração **Visual** e Automação" caiu no ramo de
+   arte e ganhou uma paleta de pintor. "Prompt Engineering: Domine a **Arte**
+   de Conversar" cairia igual. Nome é texto de marketing — roteia por **slug e
+   ferramenta**, que descrevem o assunto e não a promessa.
+2. **O Qwen dilui o objeto quando o estilo vem colado por vírgula.** Com
+   `objeto, estilo…` o pedido de engrenagens virou paleta duas vezes. Com
+   `objeto. The object is made of estilo…` ele obedece.
+
+### 5. O `COURSE_THUMBNAILS` era a lista estática de 18 outra vez
+
+A biblioteca do dashboard lia um **mapa escrito à mão** com 17 dos 26 cursos e
+um `public_id` aleatório por linha — curso novo nascia sem capa até alguém
+editar o arquivo. Mesma doença da lista de 18 cursos consertada em 02/08.
+
+Como o `capa-v2` tem endereço **previsível**, a URL agora se deduz do slug. O
+mapa virou reserva: `<CapaDoCurso>` degrada sozinho (capa nova → capa antiga →
+gradiente).
+
+### 6. Curso de WhatsApp — criado (era o item que nunca existiu)
+
+`ia-no-whatsapp`, FP027, 30 capítulos, 6 módulos, **US$ 0,12**. Título = tarefa,
+módulos = ferramentas (WhatsApp Business, Meta AI, Cloud API, n8n, Make,
+ManyChat). O módulo 1 abre com o que quase nenhum conteúdo do assunto diz: **o
+jeito errado de automatizar derruba o seu número**.
+
+### 7. Painel `/inventando` no Mission Control
+
+O MC é outro repositório e não importa o TS do site, então o site expõe
+`/api/inventando` (metadados e medidas, **nunca** o corpo das aulas nem a
+fonte) e o painel analisa em cima. Duas metades: **analisar** (achados com o
+motivo junto, alto/médio) e **escrever** (transcrição → microcurso pronto em
+TypeScript, para colar; **não publica** — conteúdo entra por commit revisado).
+
+⚠️ O primeiro corte de "página magra" era 500 palavras e acusava **as 16**. Dois
+erros: a medida ignorava metade do texto renderizado, e o formato é curto **por
+decisão**. Corrigido para 260 com a medida certa. Painel que aponta tudo não
+prioriza nada — foi assim que o painel de juízes dos cursos se desqualificou.
+
+### 8. O resto da lista que estava aberta
+
+- **Home:** `ia-para-criar-videos` estava `active` mas não `featured` — por isso
+  não aparecia em destaque. Agora é o primeiro dos 5. A frase dizia "Os **4**
+  cursos" com o número **escrito à mão** e grade de 4 colunas; virou
+  `{featuredCourses.length}` e 3 colunas, senão acrescentar destaque faria o
+  texto mentir.
+- **`image_prompt` no `ainews`** (item 6 da lista antiga): a rota de publicação
+  é lista branca e **descartava** o campo. Sem ele no banco, o backfill de
+  capas só tinha o **título** como prompt — imagem no estilo certo e desligada
+  do assunto. Agora persiste, e o backfill lê do banco em vez da lista escrita
+  à mão.
+- **Biblioteca → apresentação:** o card ia direto para `/portal/learn/<slug>`,
+  o leitor no capítulo 1. Agora curso não iniciado vai para `/curso/<slug>` (a
+  página de apresentação, que já existia e é boa); quem já começou continua
+  indo direto para onde parou.
+
+### 🔴 O que NÃO foi feito nesta sessão
+
+1. **Imagens de resultado e vídeo no `/inventando`.** O tipo `Microcurso` não
+   tem campo de mídia por aula; é mudança de estrutura + geração em lote.
+
+   ⚠️ **E tem uma decisão editorial a tomar antes de gerar qualquer coisa.**
+   "Imagens dos resultados" da ferramenta X não podem ser imagens que NÓS
+   geramos no ComfyUI e apresentamos como saída da ferramenta X — isso é
+   inventar prova, e é o oposto da autoridade que a seção está construindo com
+   os `limites`. Os dois caminhos honestos são: (a) captura de tela real da
+   ferramenta rodando, com legenda dizendo que é captura nossa; ou (b) arte
+   conceitual claramente rotulada como ilustração. O (a) vale muito mais e é
+   trabalho manual; o (b) é rápido e vale pouco. Vale a pena decidir com o
+   Ricardo antes de gastar GPU.
+2. **A biblioteca do dashboard "muito melhor".** Só o destino e a capa foram
+   consertados. Filtros, trilha e "o que fazer a seguir" continuam de pé.
+3. **Regerar as capas dos microcursos por ferramenta** — continuam por
+   categoria (7 artes para 16 páginas), que foi decisão de 02/08 e o Ricardo
+   agora sinaliza querer mais riqueza visual.
 
 ---
 

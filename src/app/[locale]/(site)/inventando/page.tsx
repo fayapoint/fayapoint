@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { Crown, Youtube, Clock, ArrowRight, Check, Sparkles } from "lucide-react";
-import { capaDe, getCategorias, getFontes, microcursosOrdenados } from "@/data/microcursos";
+import { Crown, Clock, ArrowRight, Check, Sparkles } from "lucide-react";
+import { capaDe, getCategorias, microcursosOrdenados } from "@/data/microcursos";
 import { generatePageMetadata } from "@/lib/metadata";
 import { TIER_CONFIGS } from "@/lib/course-tiers";
 
@@ -58,7 +58,6 @@ export default async function InventandoHub({ params, searchParams }: Props) {
   const { categoria, p } = await searchParams;
 
   const categorias = getCategorias();
-  const fontes = getFontes();
 
   const filtrados = categoria
     ? microcursosOrdenados.filter((m) => m.categoria === categoria)
@@ -105,7 +104,7 @@ export default async function InventandoHub({ params, searchParams }: Props) {
             Toda semana saem dezenas de ferramentas novas, quase sempre
             anunciadas em inglês e em vídeos de meia hora. Aqui cada uma vira um
             microcurso curto em português — o que é, como usar e onde falha —
-            com a fonte e o minuto exato citados.
+            conferido contra a documentação oficial do fabricante.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
@@ -272,31 +271,17 @@ export default async function InventandoHub({ params, searchParams }: Props) {
           </div>
         </section>
 
-        {/* ── Fontes ─────────────────────────────────────────────────── */}
-        <section className="mt-12">
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
-            <Youtube aria-hidden className="h-4 w-4 text-red-400" />
-            De onde vem o conteúdo
-          </h2>
-          <p className="mb-5 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
-            Acompanhamos os canais que cobrem lançamento de IA, transcrevemos os
-            vídeos, conferimos cada nome contra a página oficial da ferramenta e
-            reescrevemos em português. O crédito e o minuto exato ficam em toda página.
-          </p>
-          <ul className="grid gap-2.5">
-            {fontes.map((f) => (
-              <li key={f.videoId} className="flex flex-col gap-1 rounded-xl border border-border bg-card/40 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <span className="min-w-0">
-                  <span className="block truncate text-sm text-foreground/80">{f.titulo}</span>
-                  <span className="block text-xs text-muted-foreground">
-                    {f.canal} · {new Date(f.publicadoEm).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}
-                  </span>
-                </span>
-                <span className="shrink-0 text-xs text-muted-foreground">{f.total} microcursos</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {/* ── A seção "De onde vem o conteúdo" foi REMOVIDA em 03/08/2026 ──
+            Ela listava, no hub da seção, o TÍTULO e o CANAL de cada vídeo que
+            originou os microcursos, com a contagem de quantos saíram de cada
+            um. Era um índice das nossas fontes, servido na porta de entrada:
+            quem quisesse pular o site tinha ali a lista completa de para onde
+            ir. Nenhum microcurso individual vazava tanto quanto esta página.
+
+            O método continua descrito — em "Como apuramos", dentro de cada
+            microcurso — sem nomear ninguém.  segue existindo no
+            módulo de dados para auditoria interna; ele apenas não é chamado
+            por nenhuma página. */}
       </div>
     </div>
   );

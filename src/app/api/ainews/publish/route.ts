@@ -45,6 +45,20 @@ export async function POST(request: Request) {
           typeof i.image === 'string' && /^https?:\/\//.test(i.image)
             ? i.image.slice(0, 600)
             : undefined,
+        // A cena que o LLM descreveu para a capa, guardada com a matéria.
+        //
+        // Ela já era gerada e já era usada — mas morria aqui, porque este
+        // `clean` é lista branca. Sem ela no banco, o backfill de capas
+        // (scripts/arcade/backfill_news_covers.py) só tinha o TÍTULO como
+        // prompt: a imagem saía no estilo certo e desligada do assunto.
+        // O agente manda em snake_case; aqui vira camelCase como o resto.
+        imagePrompt:
+          typeof i.image_prompt === 'string'
+            ? i.image_prompt.slice(0, 600)
+            : typeof i.imagePrompt === 'string'
+              ? i.imagePrompt.slice(0, 600)
+              : undefined,
+        glow: typeof i.glow === 'string' ? i.glow.slice(0, 20) : undefined,
         publishedAt: new Date(),
       }))
       .filter((i: { slug: string; title: string; summary: string }) => i.slug && i.title && i.summary);

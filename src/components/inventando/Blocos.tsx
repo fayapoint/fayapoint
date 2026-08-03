@@ -85,8 +85,13 @@ export function BlocoSecao({ secao }: { secao: Secao }) {
           <blockquote className="text-[15px] italic leading-relaxed text-white/80">
             {secao.texto}
           </blockquote>
+          {/* Dizia "Fonte, aos 04:08". O minuto era o último rastro da origem
+              que sobrou depois de 03/08/2026: junto com o texto da citação —
+              que é pesquisável — ele diz que existe um vídeo e onde procurar.
+              O `minuto` continua no dado, para auditoria; a legenda agora
+              atribui a fala a quem a fez, que é a informação útil ao leitor. */}
           <figcaption className="mt-2.5 text-xs text-white/45">
-            Fonte, aos {secao.minuto}
+            Da demonstração oficial
           </figcaption>
         </figure>
       );

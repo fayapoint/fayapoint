@@ -60,3 +60,7 @@ scripts/cursos/audit_courses_raw.json
 
 # PNGs das capas geradas localmente — o que vale é a URL no Cloudinary
 _capas_novas/*.png
+
+# Artes intermediárias das capas de curso — o que vale é o que subiu para o
+# Cloudinary (fayai/courses/<slug>/capa-v2), regerável por scripts/gerar-capas-cursos.mjs
+scripts/_capas_v2/

@@ -101,9 +101,64 @@ const COURSE_THUMBNAILS: Record<string, {
   "primeiras-automacoes": { thumbnailPath: "fayai/courses/primeiras-automacoes/jkqklclcchprjq8d7qo8.png", gradient: "from-amber-600 to-yellow-800" },
 };
 
-function getCourseThumbnailUrl(slug: string): string | undefined {
+/**
+ * Para onde o card da biblioteca leva.
+ *
+ * Antes: sempre direto para `/portal/learn/<slug>` — o leitor, no capítulo 1.
+ * A pessoa caía dentro do curso sem nunca ver do que ele trata, quantos
+ * capítulos tem ou o que vai conseguir fazer no fim. Pedido do Ricardo em
+ * 03/08/2026: "antes de entrar direto no curso, devemos ter uma página de
+ * apresentação, bonita e atraente".
+ *
+ * A página existe e é boa — `/curso/<slug>`, com promessa, ementa e prova
+ * social. O que faltava era alguém mandar o aluno para lá.
+ *
+ * O corte é o progresso, não a matrícula: quem ainda não abriu o curso vai
+ * para a apresentação; quem já começou vai direto para onde parou. Mandar
+ * alguém no capítulo 12 para uma página de vendas seria um passo a mais no
+ * caminho de quem já decidiu.
+ */
+function destinoDoCurso(slug: string, progressoPercent: number): string {
+  return progressoPercent > 0 ? `/portal/learn/${slug}` : `/curso/${slug}`;
+}
+
+/**
+ * A capa do curso na biblioteca.
+ *
+ * `COURSE_THUMBNAILS` é um mapa escrito à mão, com 17 dos 26 cursos e um
+ * `public_id` aleatório em cada linha. Cada curso novo nascia sem capa até
+ * alguém lembrar de editar este arquivo — a mesma doença da lista estática de
+ * 18 cursos que escondia os cursos do laço da biblioteca inteira.
+ *
+ * As capas regeradas em 03/08/2026 sobem para um endereço PREVISÍVEL,
+ * `fayai/courses/<slug>/capa-v2`, então o mapa deixou de ser necessário: a URL
+ * se deduz do slug. O mapa continua como reserva histórica — se o `capa-v2`
+ * não existir, `onError` no <img> cai nele e depois no gradiente.
+ */
+function getCourseThumbnailUrl(slug: string): string {
+  return `${CLOUDINARY_BASE}/w_512,q_80,f_auto/fayai/courses/${slug}/capa-v2`;
+}
+
+/** A capa antiga, quando existir — só usada se a nova falhar ao carregar. */
+function getCourseThumbnailFallback(slug: string): string | undefined {
   const entry = COURSE_THUMBNAILS[slug];
   return entry?.thumbnailPath ? `${CLOUDINARY_BASE}/${entry.thumbnailPath}` : undefined;
+}
+
+/** <img> da capa que degrada sozinho: capa nova → capa antiga → nada. */
+function CapaDoCurso({ slug, alt }: { slug: string; alt: string }) {
+  const [tentativa, setTentativa] = useState(0);
+  const src = tentativa === 0 ? getCourseThumbnailUrl(slug) : getCourseThumbnailFallback(slug);
+  if (!src) return null;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      className="w-full h-full object-cover"
+      onError={() => setTentativa((t) => t + 1)}
+    />
+  );
 }
 
 function CourseToolIcon({ logo, name, className }: { logo?: string; name: string; className?: string }) {
@@ -371,7 +426,7 @@ export function CoursesPanel({
               const isCompleted = course.progressPercent >= 100;
 
               return (
-                <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
+                <Link key={course._id} href={destinoDoCurso(course.courseId, course.progressPercent)}>
                   <div className="group relative flex flex-col rounded-xl border border-border bg-card overflow-hidden transition-all hover:border-amber-500/40">
                     <div className={cn(
                       "relative aspect-square flex items-center justify-center bg-gradient-to-br overflow-hidden",
@@ -379,7 +434,7 @@ export function CoursesPanel({
                       gradient
                     )}>
                       {getCourseThumbnailUrl(course.courseId) ? (
-                        <img src={getCourseThumbnailUrl(course.courseId)} alt={course.courseId} className="w-full h-full object-cover" loading="lazy" />
+                        <CapaDoCurso slug={course.courseId} alt={course.courseId} />
                       ) : thumb?.logo ? (
                         <CourseToolIcon
                           logo={thumb.logo}
@@ -472,7 +527,7 @@ export function CoursesPanel({
                   return (
                     <div className={cn("w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
                       {getCourseThumbnailUrl(freeMonthlyCourse.slug) ? (
-                        <img src={getCourseThumbnailUrl(freeMonthlyCourse.slug)} alt={freeMonthlyCourse.slug} className="w-full h-full object-cover" loading="lazy" />
+                        <CapaDoCurso slug={freeMonthlyCourse.slug} alt={freeMonthlyCourse.slug} />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={freeMonthlyCourse.tool} className="w-8 h-8 rounded-lg" />
                       ) : (
@@ -606,7 +661,7 @@ export function CoursesPanel({
                     {/* Thumbnail */}
                     <div className={cn("w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
                       {getCourseThumbnailUrl((course as any).slug || (course as any).courseId) ? (
-                        <img src={getCourseThumbnailUrl((course as any).slug || (course as any).courseId)} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
+                        <CapaDoCurso slug={(course as any).slug || (course as any).courseId} alt={course.slug} />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-7 h-7 rounded-lg" />
                       ) : (
@@ -704,7 +759,7 @@ export function CoursesPanel({
                   <div className="flex gap-3 min-w-0">
                     <div className={cn("w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
                       {getCourseThumbnailUrl((course as any).slug || (course as any).courseId) ? (
-                        <img src={getCourseThumbnailUrl((course as any).slug || (course as any).courseId)} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
+                        <CapaDoCurso slug={(course as any).slug || (course as any).courseId} alt={course.slug} />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-7 h-7 rounded-lg" />
                       ) : (
@@ -791,7 +846,7 @@ export function CoursesPanel({
             const isActive = course.progressPercent > 0 && course.progressPercent < 100;
 
             return (
-              <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
+              <Link key={course._id} href={destinoDoCurso(course.courseId, course.progressPercent)}>
                 <div className="bg-secondary rounded-lg p-3 border border-border hover:border-emerald-500/30 transition-all cursor-pointer group overflow-hidden">
                   <div className="flex items-center justify-between mb-1.5 gap-2 min-w-0">
                     <h4 className="text-sm font-semibold text-foreground truncate min-w-0 flex-1 group-hover:text-emerald-400 transition-colors">
@@ -838,7 +893,7 @@ export function CoursesPanel({
 
           <div className="space-y-2">
             {completedCourses.slice(0, 6).map((course) => (
-              <Link key={course._id} href={`/portal/learn/${course.courseId}`}>
+              <Link key={course._id} href={destinoDoCurso(course.courseId, course.progressPercent)}>
                 <div className="bg-secondary rounded-lg p-3 border border-border hover:border-emerald-500/30 transition-all cursor-pointer group overflow-hidden">
                   <div className="flex items-center justify-between gap-2 min-w-0">
                     <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -880,7 +935,7 @@ export function CoursesPanel({
                   <div className="flex gap-3 min-w-0">
                     <div className={cn("w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 overflow-hidden", gradient)}>
                       {getCourseThumbnailUrl((course as any).slug || (course as any).courseId) ? (
-                        <img src={getCourseThumbnailUrl((course as any).slug || (course as any).courseId)} alt={course.slug} className="w-full h-full object-cover" loading="lazy" />
+                        <CapaDoCurso slug={(course as any).slug || (course as any).courseId} alt={course.slug} />
                       ) : thumb?.logo ? (
                         <CourseToolIcon logo={thumb.logo} name={course.tool} className="w-6 h-6 rounded-md" />
                       ) : (

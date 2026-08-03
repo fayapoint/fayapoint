@@ -739,11 +739,15 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 <BadgeCheck size={13} /> revisados aula por aula
               </span>
             </div>
+            {/* A contagem sai do array, não da mão. Estava escrita como "Os 4
+                cursos" e travava a vitrine em quatro: destacar um curso novo
+                fazia a frase mentir — o mesmo defeito das capas com o título
+                assado no pixel. Agora acrescentar destaque é só mexer no banco. */}
             <p className="text-sm text-white/55 mb-3 max-w-xl">
-              Os 4 cursos que já reescrevemos do zero — conteúdo, exemplos e mídia atualizados.
-              O ponto de partida certo, sem enrolação.
+              Os {featuredCourses.length} cursos que já reescrevemos do zero — conteúdo, exemplos e
+              mídia atualizados. O ponto de partida certo, sem enrolação.
             </p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {featuredCourses.map((course) => (
                 <Link
                   key={course.slug}

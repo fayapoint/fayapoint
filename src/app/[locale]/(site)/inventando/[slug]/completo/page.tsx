@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Clock, Youtube, ExternalLink, Signal, Tag, Megaphone } from "lucide-react";
-import {
-  getMicrocurso,
-  getRelacionados,
-  linkDaFonte,
-  timestampLegivel,
-} from "@/data/microcursos";
+import { Clock, ShieldCheck, Crown, Lock, ExternalLink, Signal, Tag, Megaphone } from "lucide-react";
+import { getMicrocurso, getRelacionados } from "@/data/microcursos";
 import {
   calcularAcesso,
   getPlanoAtual,
@@ -85,11 +80,9 @@ export default async function MicrocursoPage({ params }: Props) {
       isAccessibleForFree: false,
       cssSelector: ".microcurso-pago",
     },
-    isBasedOn: {
-      "@type": "VideoObject",
-      name: microcurso.fonte.tituloVideo,
-      url: linkDaFonte(microcurso),
-    },
+    // `isBasedOn` declarava o vídeo de origem. Saiu com a seção da fonte: dado
+    // estruturado é público, e deixá-lo aqui devolveria no schema.org o que
+    // acabou de sair do texto.
   };
 
   return (
@@ -134,7 +127,7 @@ export default async function MicrocursoPage({ params }: Props) {
             {microcurso.patrocinado && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs text-amber-200">
                 <Megaphone aria-hidden className="h-3 w-3" />
-                Patrocinado na fonte
+                Divulgação paga do fabricante
               </span>
             )}
           </div>
@@ -313,50 +306,47 @@ export default async function MicrocursoPage({ params }: Props) {
           )}
         </div>
 
-        {/* Fonte — sempre visível. Crédito não é conteúdo pago. */}
+        {/* ── Apuração e o destino final ─────────────────────────────────
+            Esta seção creditava a fonte por nome, com o minuto e o link do
+            trecho. Saiu inteira: entregar o vídeo original é entregar o motivo
+            de não voltar aqui. O que sobrou é o método, que é nosso.
+
+            A página oficial da ferramenta continua — mas só para o Expert, e é
+            `recortarMicrocurso` quem apaga o endereço nos outros planos, no
+            servidor. Abaixo do topo o campo chega vazio e o bloco nem existe;
+            não há link escondido no HTML para achar no código-fonte. */}
         <section className="mt-12 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80">
-            <Youtube aria-hidden className="h-4 w-4 text-red-400/80" />
-            De onde saiu este microcurso
+            <ShieldCheck aria-hidden className="h-4 w-4 text-emerald-400/80" />
+            Como apuramos
           </h2>
           <p className="text-sm leading-relaxed text-white/55">
-            Do capítulo{" "}
-            <strong className="font-medium text-white/80">
-              &ldquo;{microcurso.fonte.capitulo}&rdquo;
-            </strong>{" "}
-            (aos {timestampLegivel(microcurso.fonte.inicio)}) do vídeo{" "}
-            <em>{microcurso.fonte.tituloVideo}</em>, do canal{" "}
-            <a
-              href={microcurso.fonte.canalUrl}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="text-white/75 underline decoration-white/25 underline-offset-2 transition-colors hover:text-white"
-            >
-              {microcurso.fonte.canal}
-            </a>
-            . Transcrevemos, conferimos os nomes contra as páginas oficiais e
-            reescrevemos em português.
+            Acompanhamos os lançamentos direto nas fontes primárias, transcrevemos o
+            que é demonstrado, conferimos cada nome e cada número contra a
+            documentação oficial do fabricante e reescrevemos em português — com os
+            limites da ferramenta junto, que é a parte que o anúncio omite.
           </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <a
-              href={linkDaFonte(microcurso)}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-3.5 py-2 text-xs text-white/70 transition-colors hover:border-white/35 hover:text-white"
-            >
-              Ver o trecho no vídeo
-              <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-            </a>
-            <a
-              href={microcurso.linkOficial}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-3.5 py-2 text-xs text-white/70 transition-colors hover:border-white/35 hover:text-white"
-            >
-              Página oficial da ferramenta
-              <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-            </a>
-          </div>
+
+          {visivel.linkOficial ? (
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <a
+                href={visivel.linkOficial}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#f5c04e]/40 bg-[#f5c04e]/10 px-3.5 py-2 text-xs font-medium text-[#f5c04e] transition-colors hover:bg-[#f5c04e]/20"
+              >
+                <Crown aria-hidden className="h-3.5 w-3.5" />
+                Ir para a {visivel.ferramenta}
+                <ExternalLink aria-hidden className="h-3.5 w-3.5" />
+              </a>
+              <span className="text-xs text-white/35">liberado pelo seu plano Expert</span>
+            </div>
+          ) : (
+            <p className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs text-white/40">
+              <Lock aria-hidden className="h-3.5 w-3.5" />
+              O endereço oficial da {visivel.ferramenta} abre no plano Expert
+            </p>
+          )}
         </section>
 
         {/* Relacionados — distribuição de links internos */}

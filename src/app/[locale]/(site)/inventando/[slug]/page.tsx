@@ -3,11 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
-  Clock, Youtube, ExternalLink, Signal, Tag, Megaphone, ArrowRight, Lock, Check,
+  Clock, ShieldCheck, Signal, Tag, Megaphone, ArrowRight, Lock, Check,
 } from "lucide-react";
 import {
-  capaDe, getMicrocurso, getRelacionados, getTodosSlugs, linkDaFonte,
-  logoDaFerramenta, timestampLegivel,
+  capaDe, getMicrocurso, getRelacionados, getTodosSlugs, logoDaFerramenta,
 } from "@/data/microcursos";
 import manifesto from "../../../../../../public/ferramentaria/manifesto.json";
 import { generatePageMetadata } from "@/lib/metadata";
@@ -62,6 +61,16 @@ export default async function MicrocursoGratisPage({ params }: Props) {
   const relacionados = getRelacionados(slug, 3);
   const [primeiraAula, ...demais] = m.aulas;
 
+  // O recorte do que é público. Mantido aqui, ao lado do JSX, porque é a única
+  // página da seção que não passa por `recortarMicrocurso` — ela não tem plano
+  // para consultar, é pública por definição.
+  const AMOSTRA_SECOES = 2;
+  const amostraDaAula = primeiraAula?.secoes.slice(0, AMOSTRA_SECOES) ?? [];
+  const temMaisNaAula = (primeiraAula?.secoes.length ?? 0) > AMOSTRA_SECOES;
+  // Três linhas identificam a ferramenta; a ficha inteira dispensaria o
+  // microcurso. O resto é benefício do Expert, em `/completo`.
+  const fichaPublica = m.ficha.slice(0, 3);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
@@ -75,7 +84,9 @@ export default async function MicrocursoGratisPage({ params }: Props) {
     isAccessibleForFree: true,
     image: `https://fayai.com.br${capa}`,
     provider: { "@type": "Organization", name: "FayAI", url: "https://fayai.com.br" },
-    isBasedOn: { "@type": "VideoObject", name: m.fonte.tituloVideo, url: linkDaFonte(m) },
+    // `isBasedOn` apontava para o vídeo de origem. Saiu junto com a seção da
+    // fonte: dado estruturado é público por definição, e declarar a origem no
+    // JSON-LD entregaria no schema o que acabamos de tirar do texto.
   };
 
   return (
@@ -111,10 +122,13 @@ export default async function MicrocursoGratisPage({ params }: Props) {
               <Check aria-hidden className="h-3 w-3" />
               Microcurso grátis
             </span>
+            {/* "Patrocinado na fonte" dizia, sem querer, que existe uma fonte
+                externa — e ainda por cima que ela estava vendendo. Vira um
+                aviso sobre a FERRAMENTA, que é o que interessa a quem lê. */}
             {m.patrocinado && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-amber-400/15 px-3 py-1 text-xs text-amber-200 backdrop-blur">
                 <Megaphone aria-hidden className="h-3 w-3" />
-                Patrocinado na fonte
+                Divulgação paga do fabricante
               </span>
             )}
           </div>
@@ -161,7 +175,13 @@ export default async function MicrocursoGratisPage({ params }: Props) {
           </ul>
         </section>
 
-        {/* A aula grátis, inteira */}
+        {/* ── A amostra da 1ª aula ───────────────────────────────────────
+            Antes esta seção servia a primeira aula INTEIRA, de graça. Era
+            generoso demais em dois sentidos: a pessoa saía satisfeita sem
+            motivo para assinar, e o degrau do free ficava igual ao de quem
+            paga. Agora sai a abertura — o bastante para provar que o texto
+            presta e para o Google ter conteúdo real que não é soft 404 — e o
+            resto da própria aula 1 já é o primeiro benefício de plano. */}
         {primeiraAula && (
           <section className="mt-11">
             <div className="mb-5 flex items-baseline justify-between gap-4">
@@ -171,8 +191,13 @@ export default async function MicrocursoGratisPage({ params }: Props) {
               </h2>
               <span className="shrink-0 text-xs text-muted-foreground">{primeiraAula.duracao}</span>
             </div>
-            <div className="rounded-2xl border border-border bg-card/40 p-5 sm:p-6">
-              <Secoes secoes={primeiraAula.secoes} />
+            <div className="relative rounded-2xl border border-border bg-card/40 p-5 sm:p-6">
+              <Secoes secoes={amostraDaAula} />
+              {temMaisNaAula && (
+                <div className="mt-5 border-t border-border pt-4 text-sm text-muted-foreground">
+                  O passo a passo desta aula continua no microcurso.
+                </div>
+              )}
             </div>
           </section>
         )}
@@ -180,7 +205,7 @@ export default async function MicrocursoGratisPage({ params }: Props) {
         <section className="mt-10">
           <h2 className="mb-4 text-lg font-semibold">Ficha técnica</h2>
           <dl className="overflow-hidden rounded-2xl border border-border">
-            {m.ficha.map((linha, i) => (
+            {fichaPublica.map((linha, i) => (
               <div key={i} className="flex flex-col gap-1 border-b border-border px-4 py-3 last:border-0 sm:flex-row sm:gap-4">
                 <dt className="shrink-0 text-xs uppercase tracking-wide text-muted-foreground sm:w-44 sm:pt-0.5">{linha.rotulo}</dt>
                 <dd className="text-[15px] text-foreground/80">{linha.valor}</dd>
@@ -199,11 +224,12 @@ export default async function MicrocursoGratisPage({ params }: Props) {
               Continue no microcurso completo
             </p>
             <h2 className="mt-2.5 text-2xl font-bold leading-snug sm:text-3xl">
-              Você leu a primeira de {m.aulas.length} aulas
+              Você leu a abertura de {m.aulas.length} aulas
             </h2>
             <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-              A versão detalhada traz o passo a passo completo, os critérios de
-              escolha, onde a ferramenta falha e para quem ela realmente serve.
+              O microcurso traz o passo a passo completo, os critérios de escolha,
+              onde a ferramenta falha, para quem ela realmente serve — e, no Expert,
+              o endereço oficial para começar hoje.
             </p>
 
             {demais.length > 0 && (
@@ -228,27 +254,26 @@ export default async function MicrocursoGratisPage({ params }: Props) {
           </div>
         </section>
 
+        {/* ── Apuração, sem entregar a fonte ────────────────────────────
+            Aqui havia o canal, o título do vídeo, o minuto e dois links: um
+            para o trecho original e outro para a página oficial da ferramenta.
+            Os três eram o caminho para o leitor sair do site e não voltar — o
+            vídeo entrega a novidade e a página oficial entrega o produto.
+            O que fica é a credibilidade do método, que é nossa; o endereço,
+            que é de terceiros, sai. A página oficial passou a ser um benefício
+            do Expert e vive em `/completo`. */}
         <section className="mt-12 rounded-2xl border border-border bg-card/40 p-5">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
-            <Youtube aria-hidden className="h-4 w-4 text-red-400" />
-            De onde saiu este microcurso
+            <ShieldCheck aria-hidden className="h-4 w-4 text-emerald-400" />
+            Como apuramos
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            Do capítulo <strong className="font-medium text-foreground/80">&ldquo;{m.fonte.capitulo}&rdquo;</strong>{" "}
-            (aos {timestampLegivel(m.fonte.inicio)}) do vídeo <em>{m.fonte.tituloVideo}</em>, do canal{" "}
-            <a href={m.fonte.canalUrl} target="_blank" rel="noopener noreferrer nofollow" className="underline underline-offset-2 hover:text-foreground">
-              {m.fonte.canal}
-            </a>
-            . Transcrevemos, conferimos os nomes contra as páginas oficiais e reescrevemos em português.
+            Acompanhamos os lançamentos direto nas fontes primárias, transcrevemos o que
+            é demonstrado, conferimos cada nome e cada número contra a documentação
+            oficial do fabricante e reescrevemos em português — com o que a ferramenta{" "}
+            <strong className="font-medium text-foreground/80">não</strong> faz junto,
+            que é a parte que o anúncio omite.
           </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <a href={linkDaFonte(m)} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-2 rounded-lg border border-border px-3.5 py-2 text-xs transition-colors hover:border-foreground/30">
-              Ver o trecho no vídeo <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-            </a>
-            <a href={m.linkOficial} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-2 rounded-lg border border-border px-3.5 py-2 text-xs transition-colors hover:border-foreground/30">
-              Página oficial <ExternalLink aria-hidden className="h-3.5 w-3.5" />
-            </a>
-          </div>
         </section>
 
         {relacionados.length > 0 && (

@@ -10,6 +10,8 @@ import {
   calculateEnrollmentSlots,
   getUpgradeSuggestion,
   resolvePlan,
+  limiteSimultaneo,
+  TIER_CONFIGS,
 } from '@/lib/course-tiers';
 import { getCourseBySlug, allCourses } from '@/data/courses';
 import { canPlanAccessMonthlyOffer, getMonthlyCourseOfferSetAsync } from '@/lib/monthly-course-offers';
@@ -89,6 +91,60 @@ export async function POST(request: Request) {
         enrollment: existingEnrollment,
         progress
       });
+    }
+
+    // ── Limite de cursos ABERTOS ao mesmo tempo ──────────────────────────
+    //
+    // Vem antes das outras checagens de propósito: negar por vaga é uma
+    // conversa diferente de negar por plano. Aqui a pessoa não precisa pagar
+    // mais nada — precisa terminar o que começou —, e a mensagem tem que dizer
+    // isso, senão ela lê "compre um upgrade" e desiste.
+    //
+    // Curso concluído não ocupa vaga. A conta é feita contra o CourseProgress
+    // e não contra `progress.coursesInProgress` do usuário, porque aquele
+    // contador é incrementado/decrementado à mão em vários pontos do código e
+    // dessincroniza — um número aproximado não pode governar um portão.
+    // Só matrícula de ASSINATURA ocupa vaga.
+    //
+    // Curso comprado avulso (`source: 'purchase'`), ganho ou de promoção é
+    // propriedade da pessoa — ela pagou por aquele curso, não por uma vaga.
+    // Contá-los faria o cliente que mais gasta perder acesso ao que a
+    // assinatura promete, que é o oposto do que este limite existe para fazer.
+    // A compra, aliás, nem passa por aqui: ela é cumprida pelo webhook.
+    const ativos = enrolledCourses.filter(
+      (c: { isActive: boolean; source?: string }) =>
+        c.isActive && (c.source ?? 'subscription') === 'subscription',
+    );
+    const slugsAtivos = ativos.map((c: { courseSlug: string }) => c.courseSlug);
+    const concluidos = await CourseProgress.find({
+      userId,
+      courseId: { $in: slugsAtivos },
+      isCompleted: true,
+    })
+      .select('courseId')
+      .lean<Array<{ courseId: string }>>();
+    const slugsConcluidos = new Set(concluidos.map((p) => p.courseId));
+    const emAndamento = slugsAtivos.filter((s: string) => !slugsConcluidos.has(s));
+    const limite = limiteSimultaneo(userPlan);
+
+    if (emAndamento.length >= limite) {
+      return NextResponse.json(
+        {
+          error:
+            `Seu plano ${TIER_CONFIGS[userPlan].displayName} mantém ${limite} ` +
+            `${limite === 1 ? 'curso aberto' : 'cursos abertos'} ao mesmo tempo, e você já ` +
+            `${emAndamento.length === 1 ? 'tem 1 em andamento' : `tem ${emAndamento.length} em andamento`}. ` +
+            `Conclua um deles — ou saia de um — para liberar a vaga.`,
+          limiteSimultaneo: limite,
+          emAndamento: emAndamento.length,
+          cursosEmAndamento: emAndamento,
+          // Não é "upgradeRequired": a saída barata é terminar um curso. O
+          // upgrade fica como alternativa, não como única porta.
+          upgradeRequired: false,
+          podeFazerUpgrade: userPlan !== 'expert',
+        },
+        { status: 409 },
+      );
     }
 
     // Use async version to get Mission Control override from MongoDB

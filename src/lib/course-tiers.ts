@@ -118,6 +118,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     quizDiscount: 0,
     canAccessLevel: (level) => level === 'free',
     features: [
+      '1 curso aberto por vez',
       '3 capítulos grátis por curso',
       'Acesso limitado para experimentar',
     ],
@@ -139,6 +140,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     quizDiscount: 0.10,
     canAccessLevel: (level) => level === 'free' || level === 'beginner',
     features: [
+      '2 cursos abertos ao mesmo tempo',
       '3 cursos iniciantes por mês',
       '100 créditos/mês para IA',
       '10% de desconto em certificações',
@@ -164,6 +166,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     quizDiscount: 0.20,
     canAccessLevel: () => true,
     features: [
+      '3 cursos abertos ao mesmo tempo',
       '5 cursos iniciantes por mês',
       '2 cursos intermediários por mês',
       '1 curso avançado por mês',
@@ -191,6 +194,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     quizDiscount: 0.50,
     canAccessLevel: () => true,
     features: [
+      '4 cursos abertos ao mesmo tempo',
       '7 cursos iniciantes por mês',
       '4 cursos intermediários por mês',
       '3 cursos avançados por mês',
@@ -202,6 +206,40 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     ],
   },
 };
+
+/**
+ * Quantos cursos podem estar ABERTOS ao mesmo tempo, por plano.
+ *
+ * ── Por que este limite existe (03/08/2026) ────────────────────────────────
+ *
+ * Os limites que já existiam em `TierConfig.limits` são de MATRÍCULA POR MÊS —
+ * quantos cursos novos o plano libera no período. Eles não impedem que a pessoa
+ * abra sete cursos e não termine nenhum, e é exatamente isso que corrói a
+ * assinatura: quem tem acesso a tudo de uma vez sente que já levou tudo no
+ * primeiro mês e cancela. Um catálogo grande vira argumento contra a
+ * recorrência em vez de a favor.
+ *
+ * O limite simultâneo transforma o catálogo em fila. Terminar um curso é o que
+ * abre a vaga do próximo, e isso alinha três coisas que antes brigavam: o aluno
+ * conclui mais, o certificado é emitido mais, e a assinatura tem motivo para
+ * continuar no mês seguinte.
+ *
+ * O número do Expert — 4 — é decisão do Ricardo. Os outros degraus descem de um
+ * em um a partir dele, para que subir de plano seja sentido na hora.
+ *
+ * Curso CONCLUÍDO não ocupa vaga: o limite é sobre o que está em andamento, não
+ * sobre o que já foi feito. Sem isso o aluno aplicado seria o mais punido.
+ */
+export const CURSOS_SIMULTANEOS: Record<SubscriptionPlan, number> = {
+  free: 1,
+  explorador: 2,
+  profissional: 3,
+  expert: 4,
+};
+
+export function limiteSimultaneo(plan: SubscriptionPlan): number {
+  return CURSOS_SIMULTANEOS[plan] ?? 1;
+}
 
 /** Quiz + Certificate base price */
 export const QUIZ_CERTIFICATE_BASE_PRICE: Record<CourseLevel, number> = {

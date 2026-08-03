@@ -109,8 +109,31 @@ if __name__ == "__main__":
     client = MongoClient(mongo_uri)
     col = client["fayapoint"]["ainews"]
 
+    # ── De onde saem as cenas (mudou em 03/08/2026) ─────────────────────────
+    #
+    # Antes: a lista ITEMS acima, escrita a mao. Ela existia porque o
+    # `image_prompt` que o LLM ja produzia era DESCARTADO na publicacao — a
+    # rota /api/ainews/publish e lista branca e nao tinha o campo. Sem a cena
+    # no banco, quem quisesse refazer uma capa so tinha o titulo, e a imagem
+    # saia no estilo certo e desligada do assunto.
+    #
+    # Agora a publicacao guarda `imagePrompt` e `glow`, entao o backfill le do
+    # banco: qualquer materia sem capa entra sozinha na fila, com a MESMA cena
+    # que o LLM escreveu ao publicar. A ITEMS fica como reserva para materias
+    # antigas, anteriores ao campo — elas nunca terao `imagePrompt`.
+    do_banco = [
+        (d["slug"], d.get("glow") or "cyan", d["imagePrompt"])
+        for d in col.find(
+            {"imagePrompt": {"$exists": True, "$ne": ""}, "image": {"$in": [None, ""]}},
+            {"slug": 1, "glow": 1, "imagePrompt": 1},
+        ).sort("publishedAt", -1).limit(30)
+    ]
+    ja_tem = {s for s, _, _ in do_banco}
+    fila = do_banco + [t for t in ITEMS if t[0] not in ja_tem]
+    print(f"[fila] {len(do_banco)} do banco + {len(fila) - len(do_banco)} da lista antiga")
+
     ok, failed = [], []
-    for i, (slug, glow, cena) in enumerate(ITEMS):
+    for i, (slug, glow, cena) in enumerate(fila):
         try:
             prompt_text = cena + f", {glow} glow" + FUSION_SUFFIX
             prefix = f"ainews_backfill/{time.strftime('%Y%m%d')}_{slug}"

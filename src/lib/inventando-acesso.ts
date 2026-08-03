@@ -20,18 +20,29 @@ import type { Microcurso } from "@/data/microcursos/tipos";
  *
  * ── A calibragem da fatia gratuita ─────────────────────────────────────────
  *
- * O free recebe a "ficha de identificação" da ferramenta (o que é, ficha
- * técnica, a fonte) e ZERO aulas. Nenhum passo, nenhum critério de escolha,
- * nenhum "quando usar" — a parte que ensina fica inteira do outro lado do
- * portão.
+ * O free recebe a "ficha de identificação" da ferramenta e uma amostra da
+ * primeira aula. Nenhum passo completo, nenhum critério de escolha, nenhum
+ * "quando usar" — a parte que ensina fica do outro lado do portão.
  *
- * A fatia livre não é menor do que isso por um motivo medido, não por
- * generosidade: quem chega anônimo do Google é tratado como free, então é a
- * versão gratuita que vira a página indexada. Em 28/07/2026 vinte páginas de
- * curso serviam 624 chars idênticos e o Google as classificou como soft 404 —
- * páginas que anunciam a própria ausência somem do índice, e uma página que
- * sumiu não vende plano nenhum. A fatia gratuita precisa se sustentar como
- * conteúdo de verdade; o que ela não pode conter é o produto.
+ * A fatia livre não é ainda menor por um motivo medido, não por generosidade:
+ * quem chega anônimo do Google é tratado como free, então é a versão gratuita
+ * que vira a página indexada. Em 28/07/2026 vinte páginas de curso serviam 624
+ * chars idênticos e o Google as classificou como soft 404 — páginas que
+ * anunciam a própria ausência somem do índice, e uma página que sumiu não vende
+ * plano nenhum. A fatia gratuita precisa se sustentar como conteúdo de verdade;
+ * o que ela não pode conter é o produto.
+ *
+ * ── Duas coisas que NUNCA saem no HTML, em plano nenhum ────────────────────
+ *
+ * 1. **A fonte.** Canal, título do vídeo e timestamp são a nossa vantagem de
+ *    apuração. Publicá-los entrega ao leitor o caminho para pular o site e ir
+ *    direto ao original — e aí não há motivo para voltar. Os campos continuam
+ *    no `Microcurso` porque são o nosso rastro de verificação; eles só não
+ *    viram página. Ver `recortarMicrocurso`, que os apaga.
+ *
+ * 2. **A página oficial da ferramenta, exceto no Expert.** Mesma lógica, um
+ *    degrau acima: o link é o fim da jornada, e entregá-lo de graça encerra a
+ *    visita antes da assinatura.
  */
 
 /**
@@ -69,6 +80,15 @@ export interface AcessoMicrocurso {
   veLimites: boolean;
   vePraQuemServe: boolean;
   veProximosPassos: boolean;
+  /**
+   * A página oficial da ferramenta — só no Expert.
+   *
+   * É o único item que não é "mais conteúdo", e sim o destino final. Por isso
+   * ele é o degrau que fecha a escada.
+   */
+  veLinkOficial: boolean;
+  /** Ficha técnica inteira. Abaixo do Expert ela vem resumida. */
+  veFichaCompleta: boolean;
 
   /** Verdadeiro só no Expert: nada bloqueado. */
   completo: boolean;
@@ -139,6 +159,8 @@ export function calcularAcesso(
     veLimites: plano !== "free",
     vePraQuemServe: plano === "profissional" || plano === "expert",
     veProximosPassos: plano === "expert",
+    veLinkOficial: plano === "expert",
+    veFichaCompleta: plano === "expert",
 
     completo: plano === "expert",
     proximoPlano,
@@ -171,6 +193,22 @@ export function recortarMicrocurso(microcurso: Microcurso, acesso: AcessoMicrocu
     limites: acesso.veLimites ? microcurso.limites : [],
     praQuemServe: acesso.vePraQuemServe ? microcurso.praQuemServe : [],
     proximosPassos: acesso.veProximosPassos ? microcurso.proximosPassos : [],
+
+    // O link oficial fecha a escada: é o destino, e o destino é do Expert.
+    linkOficial: acesso.veLinkOficial ? microcurso.linkOficial : "",
+
+    // A ficha resumida corta as três primeiras linhas — o suficiente para
+    // identificar a ferramenta, insuficiente para dispensar o microcurso.
+    ficha: acesso.veFichaCompleta ? microcurso.ficha : microcurso.ficha.slice(0, 3),
+
+    // ⚠️ A fonte é apagada aqui, para TODOS os planos, inclusive o Expert.
+    //
+    // Não é portão de plano — é decisão de negócio. O canal, o título do vídeo
+    // e o minuto exato são o trabalho de apuração que nos diferencia; impressos
+    // na página, viram um atalho para o leitor assistir ao original e nunca
+    // mais voltar. O campo continua no dado, e é ele que nos deixa auditar de
+    // onde cada afirmação saiu — ele apenas não vira HTML.
+    fonte: undefined as unknown as Microcurso["fonte"],
   };
 }
 
