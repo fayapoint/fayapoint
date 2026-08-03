@@ -1110,3 +1110,106 @@ body {
   margin-top: .7rem; font-size: .875rem; line-height: 1.6;
   color: rgba(255,255,255,.5);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   O LIVRO DOS CURSOS — a virada de página (View Transitions API)
+
+   Usado por `src/components/biblioteca/LivroDosCursos.tsx`. Estas regras não
+   podem morar no componente: `::view-transition-*` são pseudo-elementos do
+   DOCUMENTO, gerados pelo navegador fora da árvore da página.
+
+   A escolha de 03/08/2026 (Ricardo): a técnica do pen "Elven Field Journal",
+   sem biblioteca de flipbook. O navegador fotografa o estado velho e o novo;
+   nós giramos as duas fotos em `rotateY` sob uma perspectiva.
+
+   `data-virada-livro` é escrito no <html> pelo componente e diz para que lado
+   a página vai. Sem ele, nenhuma destas regras casa — e o navegador faz a
+   transição padrão (um fade), que é o que se quer quando nada foi pedido.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+[data-pagina="esquerda"] { view-transition-name: pagina-esquerda; }
+[data-pagina="direita"]  { view-transition-name: pagina-direita; }
+
+::view-transition-group(pagina-esquerda),
+::view-transition-group(pagina-direita) {
+  animation-duration: 700ms;
+  animation-timing-function: linear;
+  perspective: 1800px;
+  overflow: visible;
+}
+
+/* Para a frente: a página da DIREITA dobra para a esquerda e some; a da
+   ESQUERDA desdobra no lugar dela. */
+html[data-virada-livro="frente"]::view-transition-old(pagina-direita) {
+  z-index: 10;
+  transform-origin: left center;
+  backface-visibility: hidden;
+  animation: livro-dobra-frente 700ms linear both;
+}
+html[data-virada-livro="frente"]::view-transition-new(pagina-esquerda) {
+  z-index: 10;
+  transform-origin: right center;
+  backface-visibility: hidden;
+  animation: livro-desdobra-frente 700ms linear both;
+}
+
+/* Para trás: o espelho exato do de cima. */
+html[data-virada-livro="tras"]::view-transition-old(pagina-esquerda) {
+  z-index: 10;
+  transform-origin: right center;
+  backface-visibility: hidden;
+  animation: livro-dobra-tras 700ms linear both;
+}
+html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
+  z-index: 10;
+  transform-origin: left center;
+  backface-visibility: hidden;
+  animation: livro-desdobra-tras 700ms linear both;
+}
+
+/* O `skewY` de meio grau é o que faz o papel parecer papel e não uma placa:
+   a folha cede de leve enquanto gira. */
+@keyframes livro-dobra-frente {
+  0%        { transform: rotateY(0deg)   skewY(0deg); }
+  12%       { transform: rotateY(-5deg)  skewY(-.05deg); }
+  28%       { transform: rotateY(-27deg) skewY(-.15deg); }
+  46%       { transform: rotateY(-72deg) skewY(-.4deg); opacity: 1; }
+  54%       { transform: rotateY(-88deg) skewY(-.5deg); opacity: .18; }
+  58%, 100% { transform: rotateY(-90deg) skewY(-.5deg); opacity: 0; }
+}
+@keyframes livro-desdobra-frente {
+  0%, 42%   { transform: rotateY(90deg) skewY(.5deg);  opacity: 0; }
+  46%       { transform: rotateY(88deg) skewY(.5deg);  opacity: .18; }
+  54%       { transform: rotateY(72deg) skewY(.4deg);  opacity: 1; }
+  72%       { transform: rotateY(27deg) skewY(.15deg); }
+  88%       { transform: rotateY(5deg)  skewY(.05deg); }
+  100%      { transform: rotateY(0deg)  skewY(0deg); }
+}
+@keyframes livro-dobra-tras {
+  0%        { transform: rotateY(0deg)  skewY(0deg); }
+  12%       { transform: rotateY(5deg)  skewY(.05deg); }
+  28%       { transform: rotateY(27deg) skewY(.15deg); }
+  46%       { transform: rotateY(72deg) skewY(.4deg);  opacity: 1; }
+  54%       { transform: rotateY(88deg) skewY(.5deg);  opacity: .18; }
+  58%, 100% { transform: rotateY(90deg) skewY(.5deg);  opacity: 0; }
+}
+@keyframes livro-desdobra-tras {
+  0%, 42%   { transform: rotateY(-90deg) skewY(-.5deg);  opacity: 0; }
+  46%       { transform: rotateY(-88deg) skewY(-.5deg);  opacity: .18; }
+  54%       { transform: rotateY(-72deg) skewY(-.4deg);  opacity: 1; }
+  72%       { transform: rotateY(-27deg) skewY(-.15deg); }
+  88%       { transform: rotateY(-5deg)  skewY(-.05deg); }
+  100%      { transform: rotateY(0deg)   skewY(0deg); }
+}
+
+/* Quem pediu menos movimento não recebe uma página girando em 3D. O componente
+   já evita chamar `startViewTransition` neste caso; isto é a segunda tranca,
+   para o dia em que alguém mexer no componente e esquecer da primeira. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(pagina-esquerda),
+  ::view-transition-group(pagina-direita) { animation: none; }
+  html[data-virada-livro] ::view-transition-old(pagina-esquerda),
+  html[data-virada-livro] ::view-transition-old(pagina-direita),
+  html[data-virada-livro] ::view-transition-new(pagina-esquerda),
+  html[data-virada-livro] ::view-transition-new(pagina-direita) { animation: none; }
+}

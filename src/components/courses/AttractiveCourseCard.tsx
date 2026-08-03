@@ -57,8 +57,13 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
     : product.pricing.originalPrice;
-  const verifiedAtLabel = formatEditorialDate(
-    product.editorialVerification?.verifiedAt || "2026-04-27",
+  /** Quando o CONTEÚDO mudou — não quando alguém declarou tê-lo revisado. */
+  const atualizadoEm = formatEditorialDate(
+    (typeof product.contentUpdatedAt === "string"
+      ? product.contentUpdatedAt
+      : product.contentUpdatedAt instanceof Date
+        ? product.contentUpdatedAt.toISOString()
+        : null) || product.updatedAt || "2026-08-03",
     isPtBr ? "pt-BR" : "en-US"
   );
   
@@ -87,7 +92,15 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
         <Card className="h-full overflow-hidden border-2 border-transparent hover:border-amber-500/50 transition-all duration-300 group hover:shadow-2xl hover:shadow-amber-500/20 bg-card/50 backdrop-blur">
           {/* Cover Image or Gradient Header */}
           {product.thumbnail ? (
-            <div className="relative overflow-hidden aspect-square">
+            /* ⚠️ RETRATO, não quadrado.
+               A capa do curso é um LIVRO gerado em 720×1040 — proporção 0,692.
+               Com `aspect-square` e `object-cover`, o navegador cortava 31% da
+               altura, metade em cima: some exatamente o título gravado em ouro,
+               que é o único lugar onde o nome do curso aparece DENTRO da
+               ilustração. Ricardo, 03/08/2026: *"As capas atuais que você gerou
+               ficam muito cortadas quando utilizadas na página de cursos"*.
+               `aspect-[720/1040]` é a proporção do arquivo: corte zero. */
+            <div className="relative overflow-hidden aspect-[720/1040]">
               <img
                 src={product.thumbnail}
                 alt={product.name}
@@ -207,15 +220,21 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               {product.copy.shortDescription}
             </p>
 
+            {/* ⚠️ 03/08/2026: este selo dizia "Revisado em … com GPT-5.4 /
+                Claude Opus 4.6 e 100% de cobertura real por aula" — modelos
+                desatualizados na vitrine e uma porcentagem que, nas palavras
+                do Ricardo, *"só leva o usuário a acreditar exatamente no
+                oposto"*. No lugar, dois números que ele confere abrindo o
+                curso. */}
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-white">
                 <ShieldCheck size={15} className="text-emerald-400" />
-                <span>{isPtBr ? "Conteúdo verificado" : "Verified content"}</span>
+                <span>{isPtBr ? "Curso escrito por inteiro" : "Fully written course"}</span>
               </div>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 {isPtBr
-                  ? `Revisado em ${verifiedAtLabel} com ${product.editorialVerification?.canonModels?.join(" / ")} e ${product.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real por aula.`
-                  : `Reviewed on ${verifiedAtLabel} with ${product.editorialVerification?.canonModels?.join(" / ")} and ${product.lessonContentCoverage?.coveragePercent ?? 0}% real lesson coverage.`}
+                  ? `${product.contentChapters || 0} capítulos com texto, exemplos e exercícios. Atualizado em ${atualizadoEm}.`
+                  : `${product.contentChapters || 0} chapters with text, examples and exercises. Updated ${atualizadoEm}.`}
               </p>
             </div>
 

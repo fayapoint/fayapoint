@@ -21,6 +21,7 @@ import { useUser } from "@/contexts/UserContext";
 import { ArcadeShowcase } from "@/components/landing/ArcadeShowcase";
 import { RadarSection } from "@/components/landing/RadarSection";
 import { LogoFayai } from "@/components/marca/LogoFayai";
+import { TrilhoParallax, type ItemTrilho } from "@/components/biblioteca/TrilhoParallax";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 
@@ -69,6 +70,32 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
   // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
   const rota = (h: string) => comIdioma(h, locale);
   const { user, setUser, isLoggedIn, mounted } = useUser();
+
+  /**
+   * Os cursos em destaque, no formato do trilho.
+   *
+   * A capa e DEDUZIDA do slug — `fayai/courses/<slug>/capa-v2` no Cloudinary.
+   * O mesmo endereco previsivel que tirou o mapa escrito a mao de dentro do
+   * CoursesPanel: curso novo em destaque nasce com capa, sem ninguem editar
+   * arquivo nenhum.
+   */
+  const itensDoTrilho: ItemTrilho[] = useMemo(
+    () =>
+      featuredCourses.map((c) => ({
+        slug: c.slug,
+        titulo: c.name,
+        resumo: c.shortDescription,
+        capa: `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dfd7iigzq"}/image/upload/w_720,q_82,f_auto/fayai/courses/${c.slug}/capa-v2`,
+        href: comIdioma(`/curso/${c.slug}`, locale),
+        ferramenta: c.tool,
+        nivel: c.level,
+        aulas: c.lessons,
+        duracao: c.duration,
+        preco: c.price,
+        precoDe: c.originalPrice,
+      })),
+    [featuredCourses, locale],
+  );
   const [stage, setStage] = useState<Stage>("pick");
   const [category, setCategory] = useState<ExampleCategory | null>(null);
   const [seenIds, setSeenIds] = useState<string[]>([]);
@@ -747,50 +774,16 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               Os {featuredCourses.length} cursos que já reescrevemos do zero — conteúdo, exemplos e
               mídia atualizados. O ponto de partida certo, sem enrolação.
             </p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {featuredCourses.map((course) => (
-                <Link
-                  key={course.slug}
-                  href={rota(`/curso/${course.slug}`)}
-                  className="glass glass-hover group rounded-2xl p-4 flex flex-col"
-                >
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40">
-                      {course.tool} · {course.level}
-                    </span>
-                    <ArrowUpRight size={14} className="text-white/30 group-hover:text-white/70 transition-colors shrink-0" />
-                  </div>
-                  <h4 className="text-sm font-bold leading-snug mb-1">{course.name}</h4>
-                  <p className="text-xs text-white/55 leading-relaxed line-clamp-3 flex-1">
-                    {course.shortDescription}
-                  </p>
-                  <div className="mt-3 flex items-center justify-between text-[11px] text-white/40">
-                    <span className="inline-flex items-center gap-1">
-                      <PlayCircle size={12} /> {course.lessons} aulas
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Clock size={12} /> {course.duration}
-                    </span>
-                  </div>
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-lg font-extrabold" style={{ color: GOLD }}>
-                      R$ {course.price}
-                    </span>
-                    <span className="text-xs text-white/35 line-through">R$ {course.originalPrice}</span>
-                    <span className="ml-auto text-[10px] font-bold text-lime-300/90">
-                      -{course.discount}%
-                    </span>
-                  </div>
-                  {course.priceNote && (
-                    <p className="mt-1.5 text-[10px] leading-snug text-lime-200/70">
-                      {course.priceNote}
-                    </p>
-                  )}
-                </Link>
-              ))}
-            </div>
           </div>
-        </section>
+
+          {/* O trilho substitui a grade de cards (03/08/2026).
+              Pedido do Ricardo: "ao inves dos cards que temos, utilizaremos a
+              imagem e entao as informacoes que temos". A capa-livro passa a ser
+              o corpo do card, e o texto vive por cima dela. A grade mostrava a
+              capa em lugar nenhum — o objeto que mais diz "curso" ficava de
+              fora justamente na vitrine. */}
+          <TrilhoParallax itens={itensDoTrilho} />
+      </section>
       )}
 
       {/* ============================== IA HOJE ============================== */}

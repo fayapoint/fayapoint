@@ -89,6 +89,7 @@ import SocialProfilePanel from "@/components/portal/SocialProfilePanel";
 import { MobileBottomNav } from "@/components/portal/MobileBottomNav";
 import { CertificatesPanel } from "@/components/portal/CertificatesPanel";
 import { CoursesPanel } from "@/components/portal/CoursesPanel";
+import { GaleriaPanel } from "@/components/portal/GaleriaPanel";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 
 // Types
@@ -257,7 +258,9 @@ export default function PortalPage() {
 
   // Deep-link: /portal?tab=games abre direto a aba (mesmo padrão de /portal/conta)
   useEffect(() => {
-    const VALID_TABS = ["dashboard", "pod-store", "store", "cart", "profile", "courses", "certificates", "social", "studio", "assistant", "achievements", "leaderboard", "challenges", "games", "resources", "history", "rewards"];
+    // ⚠️ Aba nova precisa entrar AQUI também, senão `?tab=<nome>` é ignorado em
+    // silêncio e o deep-link cai no dashboard sem dizer por quê.
+    const VALID_TABS = ["dashboard", "pod-store", "store", "cart", "profile", "courses", "certificates", "social", "studio", "assistant", "achievements", "leaderboard", "challenges", "games", "galeria", "resources", "history", "rewards"];
     try {
       const t = new URLSearchParams(window.location.search).get("tab");
       if (t && VALID_TABS.includes(t)) setActiveTab(t);
@@ -691,6 +694,7 @@ export default function PortalPage() {
               {activeTab === "leaderboard" && "Ranking"}
               {activeTab === "challenges" && "Desafios"}
               {activeTab === "games" && "Arcade da IA"}
+              {activeTab === "galeria" && "Galeria"}
               {activeTab === "resources" && "Recursos"}
               {activeTab === "history" && "Histórico"}
               {activeTab === "rewards" && "Recompensas"}
@@ -861,6 +865,18 @@ export default function PortalPage() {
                 exit={{ opacity: 0, y: -20 }}
               >
                 <CertificatesPanel onTabChange={setActiveTab} />
+              </motion.div>
+            )}
+
+            {/* Galeria da comunidade */}
+            {activeTab === "galeria" && (
+              <motion.div
+                key="galeria"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <GaleriaPanel />
               </motion.div>
             )}
 

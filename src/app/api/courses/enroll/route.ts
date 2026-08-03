@@ -13,12 +13,59 @@ import {
   limiteSimultaneo,
   TIER_CONFIGS,
 } from '@/lib/course-tiers';
-import { getCourseBySlug, allCourses } from '@/data/courses';
+import { getCourseBySlug, allCourses, type CourseData } from '@/data/courses';
 import { canPlanAccessMonthlyOffer, getMonthlyCourseOfferSetAsync } from '@/lib/monthly-course-offers';
+import { getMongoClient } from '@/lib/products';
 
 interface EnrollmentRequest {
   courseSlug: string;
   courseId?: string;
+}
+
+/**
+ * O curso que existe só no banco.
+ *
+ * Devolve o mínimo que a matrícula precisa — nível, preço e um id. Nada de
+ * módulos, depoimentos ou FAQ: quem tem isso é a lista estática, e um curso
+ * novo simplesmente não tem. O que ele não pode é deixar de existir.
+ *
+ * `id` cai para o slug quando o produto não tem `productId`. O campo alimenta
+ * `newEnrollment.courseId`, que é só um rótulo — o vínculo real do progresso é
+ * o `courseSlug`, usado em todas as buscas de `CourseProgress`.
+ */
+async function buscarCursoNoBanco(slug: string): Promise<CourseData | null> {
+  try {
+    const client = await getMongoClient();
+    const produto = await client
+      .db('fayapointProdutos')
+      .collection('products')
+      .findOne(
+        { slug, type: 'course' },
+        { projection: { slug: 1, name: 1, level: 1, productId: 1, pricing: 1, categoryPrimary: 1 } },
+      );
+    if (!produto) return null;
+
+    // ⚠️ Preço ausente vira 1, não 0.
+    //
+    // Mais abaixo, `isFreeEnrollment` testa `courseData.price === 0` e, sendo
+    // verdadeiro, PULA a checagem de vagas do plano. Um campo que não veio no
+    // documento não pode virar "curso grátis" por omissão — o erro cairia para
+    // o lado de dar de graça o que é pago. Hoje todos os 27 produtos têm
+    // `pricing.price`; o 1 é para o dia em que um não tiver.
+    const preco =
+      typeof produto.pricing?.price === 'number' ? produto.pricing.price : 1;
+
+    return {
+      id: produto.productId || slug,
+      slug,
+      title: produto.name || slug,
+      level: produto.level || produto.categoryPrimary || 'Iniciante',
+      price: preco,
+    } as unknown as CourseData;
+  } catch (err) {
+    console.error('[enroll] falha ao buscar curso no banco:', err);
+    return null;
+  }
 }
 
 /**
@@ -55,8 +102,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
-    // Get course info
-    const courseData = getCourseBySlug(courseSlug);
+    // ── O curso: lista estática primeiro, banco em seguida ──
+    //
+    // ⚠️ Até 03/08/2026 esta linha era só `getCourseBySlug(courseSlug)`, que lê
+    // `allCourses` — 18 cursos escritos à mão. O banco tem 27. Os nove que só
+    // existem no banco levavam 404 aqui: nem com link direto o assinante
+    // Expert conseguia se matricular no curso lançado na véspera.
+    //
+    // A lista estática continua vindo primeiro porque carrega metadados ricos
+    // (módulos, depoimentos, FAQ) que o produto no banco não tem. Mas ela
+    // deixou de ser a fronteira do que existe.
+    const courseData = getCourseBySlug(courseSlug) ?? (await buscarCursoNoBanco(courseSlug));
     if (!courseData) {
       return NextResponse.json({ error: 'Curso não encontrado' }, { status: 404 });
     }
@@ -67,7 +123,7 @@ export async function POST(request: Request) {
 
     // Check if already enrolled
     const existingEnrollment = enrolledCourses.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       (c: any) => c.courseSlug === courseSlug && c.isActive
     );
 
@@ -180,7 +236,13 @@ export async function POST(request: Request) {
       }, { status: 403 });
     }
 
-    if (!isFreeEnrollment && !canPlanAccessMonthlyOffer(userPlan, courseSlug)) {
+    // ⚠️ Passa o CURSO, não o slug.
+    //
+    // Com o slug, `canPlanAccessMonthlyOffer` volta a consultar a lista
+    // estática de 18 e devolve `false` para os nove cursos que só existem no
+    // banco — o 404 de antes viraria um 403, que é o mesmo bloqueio com outra
+    // roupa. Aqui já temos o curso resolvido; use-o.
+    if (!isFreeEnrollment && !canPlanAccessMonthlyOffer(userPlan, courseData)) {
       return NextResponse.json({
         error: 'Este curso não faz parte do catálogo liberado neste mês para o seu plano. Você pode aguardar a próxima rotação, fazer upgrade ou comprar individualmente.',
         upgradeRequired: false,

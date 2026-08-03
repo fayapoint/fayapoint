@@ -83,6 +83,11 @@ interface DashboardSidebarProps {
 const MENU_ITEMS = [
   { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", proOnly: false },
   { id: "games", icon: Gamepad2, label: "Minigames", proOnly: false, badge: "NOVO" },
+  // A galeria da comunidade existia em `/comunidade` e na home, mas não tinha
+  // porta nenhuma dentro do portal (Ricardo, 03/08/2026). Ao mexer nesta lista,
+  // mexa também no `MORE_NAV_ITEMS` do `MobileBottomNav` — as duas precisam
+  // oferecer o mesmo produto.
+  { id: "galeria", icon: ImageIcon, label: "Galeria", proOnly: false, badge: "NOVO" },
   { id: "pod-store", icon: Palette, label: "Minha Loja POD", proOnly: false, badge: "NOVO" },
   { id: "store", icon: Store, label: "Loja Tech", proOnly: false },
   { id: "cart", icon: ShoppingCart, label: "Carrinho", proOnly: false },

@@ -23,7 +23,8 @@ import {
   ShoppingBag,
   Home,
   UserCog,
-
+  Award,
+  Share2,
   Gamepad2,
 } from "lucide-react";
 import { useState } from "react";
@@ -51,11 +52,26 @@ const MAIN_NAV_ITEMS = [
   { id: "store", icon: Store, label: "Loja" },
 ];
 
+/**
+ * ⚠️ Esta lista tem que cobrir o `MENU_ITEMS` do `DashboardSidebar`.
+ *
+ * Ricardo, 03/08/2026: *"quando vamos no menu mais, não temos acesso a tudo
+ * que o dashboard oferece"*. Estava certo — o menu lateral tinha 17 itens e o
+ * celular, 15: faltavam **Certificados** e **Perfil Social (USS)**. Quem entra
+ * pelo telefone não deveria descobrir que existe uma parte do produto só
+ * quando abre o computador.
+ *
+ * Ao acrescentar item na barra lateral, acrescente aqui também — os quatro do
+ * `MAIN_NAV_ITEMS` mais estes precisam somar o menu inteiro.
+ */
 const MORE_NAV_ITEMS = [
   { id: "games", icon: Gamepad2, label: "Minigames", badge: "NOVO" },
+  { id: "galeria", icon: ImageIcon, label: "Galeria", badge: "NOVO" },
   { id: "pod-store", icon: Palette, label: "Loja POD", badge: "NOVO" },
   { id: "cart", icon: ShoppingCart, label: "Carrinho" },
+  { id: "social", icon: Share2, label: "Perfil Social", badge: "USS" },
   { id: "profile", icon: Crown, label: "Meu Perfil" },
+  { id: "certificates", icon: Award, label: "Certificados" },
   { id: "assistant", icon: Bot, label: "Assistente IA", proOnly: true, badge: "PRO" },
   { id: "achievements", icon: Trophy, label: "Conquistas" },
   { id: "leaderboard", icon: Users, label: "Ranking" },
@@ -192,14 +208,10 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
             <ThemeSwitcher />
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links.
+              "Ver o site" saiu daqui em 03/08/2026: virou item fixo da barra
+              de baixo, onde o dedo o encontra sem abrir gaveta nenhuma. */}
           <div className="p-4 border-t border-border grid grid-cols-2 gap-3">
-            <Link href={cubeHref} className="min-w-0">
-              <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-secondary rounded-xl text-muted-foreground hover:bg-white/10 transition">
-                <Home size={18} />
-                <span className="text-sm truncate">Ver o site</span>
-              </button>
-            </Link>
             <Link href={accountHref} className="min-w-0">
               <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-secondary rounded-xl text-muted-foreground hover:bg-white/10 transition">
                 <UserCog size={18} />
@@ -217,8 +229,19 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
       )}
 
       {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-xl border-t border-border z-50 md:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
-        <div className="flex items-center justify-around h-full px-2">
+      {/* ⚠️ `h-16` no <nav>, e não só no filho.
+          Ricardo, 03/08/2026: *"o menu do footer fica absolutamente colado, sem
+          um respiro ou toque final que dê uma boa impressão"*. A causa era
+          exata: o <nav> não tinha altura, e o <div> de dentro pedia `h-full` —
+          que sem altura no pai não resolve nada. A barra ficava com a altura do
+          conteúdo, ~40px, e os ícones encostavam nas duas bordas.
+          O painel "Mais" também dependia disso: ele abre em `bottom-16` (64px),
+          uma medida que só agora existe de verdade. */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 h-16 bg-card/95 backdrop-blur-xl border-t border-border z-50 md:hidden"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      >
+        <div className="flex items-center justify-around h-full gap-1 px-2 py-1.5">
           {MAIN_NAV_ITEMS.map((item) => {
             const isActive = activeTab === item.id;
 
@@ -227,7 +250,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 h-full transition-colors relative",
+                  "flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-full rounded-xl transition-colors relative",
                   isActive ? "text-amber-400" : "text-muted-foreground"
                 )}
               >
@@ -237,17 +260,29 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
                     className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-amber-500 rounded-b-full"
                   />
                 )}
-                <item.icon size={18} className={isActive ? "scale-110" : ""} />
-                <span className="text-[9px] font-medium truncate max-w-full">{item.label}</span>
+                <item.icon size={19} className={isActive ? "scale-110" : ""} />
+                <span className="text-[9px] font-medium leading-none truncate max-w-full">{item.label}</span>
               </button>
             );
           })}
+
+          {/* Voltar ao site.
+              Estava só no fim da gaveta "Mais", atrás de três toques — e a
+              home é onde mora a maior parte do conteúdo público. Ricardo:
+              *"não tem uma forma de voltarmos a página home"*. Tinha, mas
+              escondida, que para o dedo dá no mesmo. */}
+          <Link href={cubeHref} className="flex-1 min-w-0 h-full">
+            <span className="flex h-full flex-col items-center justify-center gap-1 rounded-xl text-muted-foreground transition-colors hover:text-white">
+              <Home size={19} />
+              <span className="text-[9px] font-medium leading-none truncate max-w-full">Site</span>
+            </span>
+          </Link>
 
           {/* More Button */}
           <button
             onClick={() => setIsMoreOpen(!isMoreOpen)}
             className={cn(
-              "flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 h-full transition-colors relative",
+              "flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-full rounded-xl transition-colors relative",
               isMoreOpen || isActiveInMore ? "text-amber-400" : "text-muted-foreground"
             )}
           >
@@ -257,8 +292,8 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
                 className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-amber-500 rounded-b-full"
               />
             )}
-            <Menu size={18} className={isMoreOpen ? "scale-110" : ""} />
-            <span className="text-[9px] font-medium">Mais</span>
+            <Menu size={19} className={isMoreOpen ? "scale-110" : ""} />
+            <span className="text-[9px] font-medium leading-none">Mais</span>
           </button>
         </div>
       </nav>

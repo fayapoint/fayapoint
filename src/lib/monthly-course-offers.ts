@@ -204,14 +204,49 @@ export function getMonthlyCourseOfferSet(referenceDate: Date = new Date()): Mont
   return computeAlgorithmicOfferSet(referenceDate);
 }
 
+/**
+ * Um curso identificado por slug, ou já resolvido com o nível junto.
+ *
+ * ⚠️ Aceitar o objeto não é conveniência — é o conserto de 03/08/2026.
+ *
+ * Passando só o slug, esta função dependia de `getCourseBySlug`, que lê
+ * `allCourses` — a lista ESTÁTICA de 18 cursos em `src/data/courses/`. O banco
+ * tem 27. Os nove que só existem no banco (`ia-no-whatsapp`,
+ * `ia-para-criar-videos`, `ia-producao`, `rag-knowledge` e mais cinco) caíam no
+ * `return null` da primeira linha, e a partir dali tudo desabava: sumiam da
+ * biblioteca, sumiam do catálogo do plano, e o `POST /api/courses/enroll`
+ * respondia 404. Ricardo, 03/08: *"eu que sou um usuário do tier expert, não
+ * tenho acesso, um usuário que pague o tier máximo e não ter acesso ao curso
+ * fará ele ficar frustrado."*
+ *
+ * Quem já tem o curso em mãos — a biblioteca tem, o `enroll` tem — passa o
+ * objeto e não depende mais da lista estática.
+ */
+export type CursoOuSlug = string | { slug: string; level?: string; price?: number; isFree?: boolean };
+
+function resolverCurso(entrada: CursoOuSlug): { slug: string; level: CourseLevel } | null {
+  if (typeof entrada !== "string") {
+    // O objeto manda. `getNormalizedLevel` aceita qualquer coisa com `level`,
+    // `price` e `isFree` — é exatamente o que a biblioteca monta a partir do
+    // banco.
+    return {
+      slug: entrada.slug,
+      level: getNormalizedLevel(entrada as unknown as CourseData),
+    };
+  }
+  const course = getCourseBySlug(entrada);
+  if (!course) return null;
+  return { slug: entrada, level: getNormalizedLevel(course) };
+}
+
 export function getCourseMonthlyOfferMeta(
-  courseSlug: string,
+  curso: CursoOuSlug,
   referenceDate: Date = new Date()
 ): CourseMonthlyOfferMeta | null {
-  const course = getCourseBySlug(courseSlug);
-  if (!course) return null;
+  const resolvido = resolverCurso(curso);
+  if (!resolvido) return null;
 
-  const level = getNormalizedLevel(course);
+  const { slug: courseSlug, level } = resolvido;
   const offerSet = getMonthlyCourseOfferSet(referenceDate);
 
   if (offerSet.freeCourseSlug === courseSlug) {
@@ -229,19 +264,23 @@ export function getCourseMonthlyOfferMeta(
   const poolLevel = level === "beginner" || level === "intermediate" || level === "advanced" ? level : null;
   if (!poolLevel) return null;
 
-  const includedInPool = offerSet.pools[poolLevel].includes(courseSlug);
-  if (!includedInPool) {
-    return {
-      monthKey: offerSet.monthKey,
-      startsAt: offerSet.startsAt,
-      endsAt: offerSet.endsAt,
-      isFreeCourseOfMonth: false,
-      includedInPool: false,
-      poolLevel,
-      availablePlans: [],
-    };
-  }
-
+  /**
+   * Quem pode abrir um curso deste nível.
+   *
+   * Sai do NÍVEL, não da rotação do mês. Antes, um curso fora do pool voltava
+   * com `availablePlans: []` — ninguém, nem o Expert. Isso transformava "não
+   * está na vitrine deste mês" em "proibido", que são coisas diferentes.
+   *
+   * E a rotação já era vazia na prática: `MONTHLY_POOL` libera 10/8/5 por mês
+   * contra 18 cursos estáticos no total, então todos os que passavam pelo
+   * filtro de preço já entravam. Derivar do nível não afrouxa nada que
+   * estivesse apertado — só para de punir os cursos que a lista estática
+   * esqueceu.
+   *
+   * O limite de verdade continua onde sempre esteve e continua valendo: as
+   * VAGAS do plano (7/4/3 por mês no Expert) e o teto de cursos simultâneos,
+   * checados no `POST /api/courses/enroll`.
+   */
   const availablePlans: SubscriptionPlan[] =
     poolLevel === "beginner"
       ? ["explorador", "profissional", "expert"]
@@ -252,7 +291,9 @@ export function getCourseMonthlyOfferMeta(
     startsAt: offerSet.startsAt,
     endsAt: offerSet.endsAt,
     isFreeCourseOfMonth: false,
-    includedInPool: true,
+    // `includedInPool` continua dizendo a verdade sobre a vitrine do mês — é
+    // rótulo ("em destaque neste mês"), não portão.
+    includedInPool: offerSet.pools[poolLevel].includes(courseSlug),
     poolLevel,
     availablePlans,
   };
@@ -262,18 +303,18 @@ export function isCourseFreeThisMonth(courseSlug: string, referenceDate: Date = 
   return getMonthlyCourseOfferSet(referenceDate).freeCourseSlug === courseSlug;
 }
 
-export function isCourseInCurrentMonthlyPool(courseSlug: string, referenceDate: Date = new Date()) {
-  const offer = getCourseMonthlyOfferMeta(courseSlug, referenceDate);
+export function isCourseInCurrentMonthlyPool(curso: CursoOuSlug, referenceDate: Date = new Date()) {
+  const offer = getCourseMonthlyOfferMeta(curso, referenceDate);
   return Boolean(offer?.includedInPool);
 }
 
 export function canPlanAccessMonthlyOffer(
   plan: string,
-  courseSlug: string,
+  curso: CursoOuSlug,
   referenceDate: Date = new Date()
 ) {
   const resolvedPlan = resolvePlan(plan || "free");
-  const offer = getCourseMonthlyOfferMeta(courseSlug, referenceDate);
+  const offer = getCourseMonthlyOfferMeta(curso, referenceDate);
   if (!offer) return false;
   return offer.availablePlans.includes(resolvedPlan);
 }
