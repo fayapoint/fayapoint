@@ -108,8 +108,22 @@ export default function CourseSalesPage({
     isFreeCourseOfMonth && product.pricing.price > 0
       ? 100
       : discount;
-  const verifiedAtLabel = formatEditorialDate(
-    product.editorialVerification?.verifiedAt || "2026-04-27",
+  /**
+   * Quando o CONTEÚDO foi mexido pela última vez — não quando alguém disse
+   * que revisou.
+   *
+   * `editorialVerification.verifiedAt` está gravado em 19/03/2026 em 25 dos 27
+   * produtos e não se move sozinho: era uma data que envelhecia enquanto se
+   * apresentava como prova de frescor. `contentUpdatedAt` é escrito pelo laço
+   * toda vez que o texto muda, então diz a verdade sem ninguém precisar
+   * lembrar de atualizá-la.
+   */
+  const atualizadoEm = formatEditorialDate(
+    (typeof product.contentUpdatedAt === "string"
+      ? product.contentUpdatedAt
+      : product.contentUpdatedAt instanceof Date
+        ? product.contentUpdatedAt.toISOString()
+        : null) || product.updatedAt || "2026-08-03",
     isPtBr ? "pt-BR" : "en-US"
   );
   
@@ -316,22 +330,27 @@ export default function CourseSalesPage({
                 <div className="mb-8 rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent p-5">
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
+                      {/* ⚠️ 03/08/2026: saíram a porcentagem de "cobertura
+                          real" e o canon de modelos.
+                          O canon vinha de `editorialVerification` gravado em
+                          cada produto, congelado em 19/03 — a página de vendas
+                          de um curso de IA anunciando modelos de quatro meses
+                          atrás. E a porcentagem, nas palavras do Ricardo, *"só
+                          leva o usuário a acreditar exatamente no oposto"*.
+                          Ficam os números que ele confere abrindo o curso. */}
                       <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
                         <BadgeCheck size={16} />
-                        <span>{isPtBr ? 'Conteúdo verificado editorialmente' : 'Editorially verified content'}</span>
+                        <span>{isPtBr ? 'Curso escrito por inteiro' : 'Fully written course'}</span>
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">
                         {isPtBr
-                          ? `Revisado em ${verifiedAtLabel} com ${product.editorialVerification?.canonModels?.join(" / ")} e ${product.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real por aula.`
-                          : `Reviewed on ${verifiedAtLabel} with ${product.editorialVerification?.canonModels?.join(" / ")} and ${product.lessonContentCoverage?.coveragePercent ?? 0}% real lesson coverage.`}
+                          ? `Nenhuma aula é um resumo de uma linha: são ${product.contentChapters || 0} capítulos com texto, exemplos e exercícios. Atualizado em ${atualizadoEm}.`
+                          : `No lesson is a one-line summary: ${product.contentChapters || 0} chapters with text, examples and exercises. Updated ${atualizadoEm}.`}
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                       <span className="rounded-full border border-border bg-secondary px-3 py-1">
-                        {isPtBr ? `${product.contentChapters || 0} capítulos-base` : `${product.contentChapters || 0} base chapters`}
-                      </span>
-                      <span className="rounded-full border border-border bg-secondary px-3 py-1">
-                        {product.editorialVerification?.canonModels?.join(" / ")}
+                        {isPtBr ? `${product.contentChapters || 0} capítulos` : `${product.contentChapters || 0} chapters`}
                       </span>
                     </div>
                   </div>
@@ -605,10 +624,14 @@ export default function CourseSalesPage({
                           <BadgeCheck size={15} />
                           <span>{isPtBr ? 'Atualizado para o cenário atual' : 'Updated for the current landscape'}</span>
                         </div>
+                        {/* O canon de modelos saiu daqui em 03/08/2026 — ver o
+                            bloco de verificação mais acima. Anunciar quais
+                            modelos são "o canon" data o curso na hora em que o
+                            próximo modelo sai. */}
                         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                           {isPtBr
-                            ? `Fontes oficiais recentes. Canon editorial: ${product.editorialVerification?.canonModels?.join(" / ")}.`
-                            : `Recent official sources. Editorial canon: ${product.editorialVerification?.canonModels?.join(" / ")}.`}
+                            ? `Escrito a partir das fontes oficiais de cada ferramenta. Conteúdo revisado em ${atualizadoEm}.`
+                            : `Written from each tool's official sources. Content revised on ${atualizadoEm}.`}
                         </p>
                       </div>
 

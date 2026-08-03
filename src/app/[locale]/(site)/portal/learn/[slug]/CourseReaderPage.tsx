@@ -2155,65 +2155,32 @@ export default function CourseReaderPage() {
         </div>
       </header>
 
-      <div className="border-b border-[rgba(var(--reader-tint),0.04)] bg-[var(--reader-surface-alt)]/90 backdrop-blur-xl min-w-0 overflow-hidden">
-        <div className="mx-auto flex max-w-[1600px] flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-start gap-3 min-w-0">
-            <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 shrink-0">
-              <Award size={16} className="text-emerald-400" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-semibold text-[rgba(var(--reader-tint),0.9)]">
-                {isPtBr ? "Conteúdo verificado editorialmente" : "Editorially verified course content"}
-              </p>
-              <p className="text-xs text-[rgba(var(--reader-tint),0.45)]">
-                {isPtBr
-                  ? `Revisado em ${verifiedAtLabel} com canon ${editorialVerification.canonModels.join(" / ")}.`
-                  : `Reviewed on ${verifiedAtLabel} using the ${editorialVerification.canonModels.join(" / ")} canon.`}
-              </p>
-            </div>
-          </div>
+      {/* ⚠️ A FAIXA DE VERIFICAÇÃO EDITORIAL FOI REMOVIDA EM 03/08/2026.
+          Ela anunciava, no topo de todo curso:
 
-          <div className="flex flex-col gap-2 lg:items-end">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-[rgba(var(--reader-tint),0.08)] bg-[rgba(var(--reader-tint),0.03)] px-3 py-1 text-[11px] text-[rgba(var(--reader-tint),0.65)]">
-                {contentMeta?.lessonContentCoverage
-                  ? isPtBr
-                    ? `${contentMeta.lessonContentCoverage.coveragePercent}% das aulas com conteúdo real`
-                    : `${contentMeta.lessonContentCoverage.coveragePercent}% of lessons have real content`
-                  : isPtBr
-                    ? "Cobertura editorial em atualização"
-                    : "Editorial coverage updating"}
-              </span>
-              <span className="rounded-full border border-[rgba(var(--reader-tint),0.08)] bg-[rgba(var(--reader-tint),0.03)] px-3 py-1 text-[11px] text-[rgba(var(--reader-tint),0.65)]">
-                {isPtBr
-                  ? `${chapters.length} partes de leitura`
-                  : `${chapters.length} reading sections`}
-              </span>
-              {contentUpdatedLabel && (
-                <span className="rounded-full border border-[rgba(var(--reader-tint),0.08)] bg-[rgba(var(--reader-tint),0.03)] px-3 py-1 text-[11px] text-[rgba(var(--reader-tint),0.65)]">
-                  {isPtBr ? `Atualizado ${contentUpdatedLabel}` : `Updated ${contentUpdatedLabel}`}
-                </span>
-              )}
-            </div>
+            "Conteúdo verificado editorialmente · Revisado em 19 de mar. de
+             2026 com canon GPT-5.4 / Claude Opus 4.6"
+            "100% das aulas com conteúdo real"
 
-            {sourceLinks.length > 0 && (
-              <div className="flex flex-wrap gap-3 text-[11px] text-[rgba(var(--reader-tint),0.45)]">
-                {sourceLinks.map((link, index) => (
-                  <a
-                    key={link}
-                    href={link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline decoration-[rgba(var(--reader-tint),0.1)] underline-offset-4 transition-colors hover:text-violet-300"
-                  >
-                    {isPtBr ? `Fonte oficial ${index + 1}` : `Official source ${index + 1}`}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+          Ricardo, sobre a porcentagem: *"este tipo de afirmação só leva o
+          usuário a acreditar exatamente no oposto"*. Ele tem razão — é uma
+          afirmação que o leitor não consegue conferir, feita justamente sobre
+          aquilo de que ele desconfia. Cada palavra dela gastava confiança em
+          vez de construí-la.
+
+          O canon era pior ainda: gravado em `editorialVerification` de 25
+          produtos, congelado em 19/03, ele ANUNCIAVA modelos desatualizados
+          num site que ensina IA. Era o que o Ricardo tinha visto ao abrir o
+          `chatgpt-zero` — o texto do curso não cita modelo velho nenhum; quem
+          citava era esta faixa.
+
+          O que substitui: nada aqui. Os fatos que o leitor confere sozinho —
+          quantos capítulos, quanto tempo, quando foi atualizado — já vivem na
+          barra de progresso e no cabeçalho de cada capítulo.
+
+          `editorialVerification` continua no banco e na API: é dado editorial
+          útil para o laço e para o Mission Control decidirem o que reescrever.
+          Só parou de ser propaganda. */}
 
       {/* ═══ BODY ═══ */}
       <div className="flex flex-1 min-h-0 relative">

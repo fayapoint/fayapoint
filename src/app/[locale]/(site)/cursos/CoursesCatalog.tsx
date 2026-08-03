@@ -85,11 +85,6 @@ export default function CoursesCatalog({
   const [sortBy, setSortBy] = useState("popular");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const isPtBr = locale === "pt-BR";
-  const verifiedAtLabel = formatEditorialDate(
-    DEFAULT_EDITORIAL_VERIFICATION.verifiedAt,
-    isPtBr ? "pt-BR" : "en-US"
-  );
-
   // O catálogo chega pronto do servidor; aqui só buscamos o que falta.
   //
   // Antes os cursos vinham TODOS deste efeito, e o HTML servido de `/cursos`
@@ -308,13 +303,17 @@ export default function CoursesCatalog({
               <Sparkles className="text-amber-400" size={18} />
               <span>{t("promo.lifetimeAccess")}</span>
             </div>
+            {/* ⚠️ O canon de modelos saiu daqui em 03/08/2026.
+                A faixa anunciava "Verificado em 27 de abr. de 2026 · GPT-5.5 /
+                Claude Opus 4.7 / Gemini 3.1" — três modelos que já eram
+                passado, estampados na vitrine de um site que ensina IA. Foi a
+                mesma decisão que apagou a faixa do leitor: uma data de
+                verificação envelhece sozinha e, quando envelhece, deixa de ser
+                prova e passa a ser confissão.
+                Ficam as duas garantias que não dependem de data. */}
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="text-blue-400" size={18} />
-              <span>
-                {isPtBr
-                  ? `Verificado em ${verifiedAtLabel} · ${DEFAULT_EDITORIAL_VERIFICATION.canonModels.join(" / ")}`
-                  : `Verified on ${verifiedAtLabel} · ${DEFAULT_EDITORIAL_VERIFICATION.canonModels.join(" / ")}`}
-              </span>
+              <span>{isPtBr ? "Conteúdo atualizado continuamente" : "Continuously updated content"}</span>
             </div>
           </div>
         </div>
@@ -473,12 +472,17 @@ export default function CoursesCatalog({
 
                       {/* Content Section */}
                       <div className="md:col-span-2 p-8">
+                        {/* ⚠️ Saiu em 03/08/2026 o selo "100% de cobertura
+                            real · GPT-5.4 / Claude Opus 4.6". Ricardo: *"este
+                            tipo de afirmação só leva o usuário a acreditar
+                            exatamente no oposto"*. No lugar, o número que o
+                            visitante confere sozinho abrindo o curso. */}
                         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
                           <Shield className="h-3.5 w-3.5" />
                           <span>
                             {isPtBr
-                              ? `${featured.lessonContentCoverage?.coveragePercent ?? 0}% de cobertura real · ${featured.editorialVerification?.canonModels?.join(" / ")}`
-                              : `${featured.lessonContentCoverage?.coveragePercent ?? 0}% real coverage · ${featured.editorialVerification?.canonModels?.join(" / ")}`}
+                              ? `${featured.contentChapters ?? featured.curriculum?.moduleCount ?? 0} capítulos escritos`
+                              : `${featured.contentChapters ?? featured.curriculum?.moduleCount ?? 0} written chapters`}
                           </span>
                         </div>
                         <div className="flex flex-wrap gap-2 mb-4">

@@ -8,6 +8,7 @@ import { getMongoClient } from "@/lib/products";
 import { resolvePlan } from "@/lib/course-tiers";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
+import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { blocoDePersona, montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { generate } from "@/lib/ai/provider";
 
@@ -191,6 +192,9 @@ export async function POST(request: NextRequest) {
     const versao = persona.personaVersion || 0;
 
     const contexto = blocoDePersona(persona, "curso");
+    // Uma leitura do registry para o laço inteiro — ele já tem cache de 5 min,
+    // mas buscar por capítulo seria pedir a mesma coisa 30 vezes.
+    const fatos = await getContentFacts();
     let geradas = 0;
     let puladas = 0;
     const erros: string[] = [];
@@ -202,7 +206,14 @@ export async function POST(request: NextRequest) {
       if (cap.numero === null) continue;
 
       const trecho = cap.corpo.slice(0, 2600);
+      // O hash fica sobre o texto CRU, com os `{{fact:…}}` no lugar. Se
+      // resolvesse antes de hashear, cada atualização do registry mudaria a
+      // impressão de todos os capítulos e mandaria regerar a camada de todos
+      // os alunos — uma conta de LLM por trocar o nome de um modelo.
       const hash = impressao(trecho);
+      // Já o que vai para o modelo é resolvido: ele não deve ver token, e
+      // muito menos copiar um para dentro do texto que o aluno lê.
+      const trechoResolvido = applyContentFacts(trecho, fatos);
       const anterior = jaTem.get(cap.indice);
       if (!refazer && anterior !== undefined && anterior.versao >= versao && anterior.hash === hash) {
         puladas++;
@@ -235,7 +246,7 @@ export async function POST(request: NextRequest) {
                   `CAPÍTULO ${cap.numero}: ${cap.titulo}\n\n` +
                   // O capítulo inteiro estouraria o contexto num curso longo; o
                   // começo carrega a tese, que é o que a camada precisa amarrar.
-                  `TRECHO DO CAPÍTULO:\n${trecho}\n\n` +
+                  `TRECHO DO CAPÍTULO:\n${trechoResolvido}\n\n` +
                   `Escreva as três peças para ESTE aluno neste capítulo.` +
                   (reforco
                     ? `\n\nATENÇÃO: a tentativa anterior veio com alguma das três chaves vazia. ` +

@@ -20,9 +20,32 @@ type CourseModuleLike = {
   }>;
 };
 
+/**
+ * ⚠️ `canonModels` não é mais exibido em lugar nenhum, e é de propósito.
+ *
+ * Até 03/08/2026 esta lista aparecia em seis telas — a faixa do leitor, a
+ * faixa de confiança da /cursos, o curso em destaque, o selo de cada card da
+ * vitrine, dois pontos da página de vendas e a home. Em todas com o mesmo
+ * defeito: o documento do produto sobrescrevia o padrão daqui, e os 27
+ * produtos carregavam "GPT-5.4 / Claude Opus 4.6" com data de 19/03. Dois
+ * canons, os dois velhos, e o que o visitante lia era sempre o pior dos dois.
+ *
+ * As seis faixas foram trocadas por fatos que o visitante confere sozinho —
+ * número de capítulos e `contentUpdatedAt`, que o laço escreve de verdade a
+ * cada reescrita, ao contrário do `verifiedAt`, que ficou parado em 19/03.
+ *
+ * O canon vivo mora hoje no registry `content_facts` (ver `content-facts.ts`),
+ * de onde o texto dos cursos o lê por token `{{fact:…}}`. Os valores abaixo
+ * são a cópia de segurança para os tipos continuarem fechando; se alguma tela
+ * voltar a exibir canon, leia do registry, não daqui — dois lugares foi
+ * exatamente o que produziu o problema acima.
+ */
 export const DEFAULT_EDITORIAL_VERIFICATION: EditorialVerification = {
+  // A data fica na última verificação editorial de verdade. Adiantá-la para
+  // hoje seria afirmar uma revisão que não houve — o defeito que as seis
+  // faixas cometiam.
   verifiedAt: "2026-04-27",
-  canonModels: ["GPT-5.5", "Claude Opus 4.7", "Gemini 3.1"],
+  canonModels: ["GPT-5.6", "Claude Opus 5", "Gemini 3.5 Pro"],
   rule: "Conteúdo revisado com fontes oficiais recentes e cobertura real por aula.",
   sourceGroup: "official-current",
   toolLabel: "Mission Control Editorial Engine",

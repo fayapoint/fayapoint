@@ -6,6 +6,7 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { schemaEmenta, schemaTrilha } from "@/lib/structured-data";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { montarPrevia } from "@/lib/curso-previa";
+import { resolveContentFacts } from "@/lib/content-facts";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -86,7 +87,12 @@ export default async function PreviaPage({ params }: Props) {
   if (bancoRespondeu && !product) notFound();
   if (!product?.courseContent) notFound();
 
-  const conteudo = sanitizeCourseContent(String(product.courseContent)).content || "";
+  // Os tokens `{{fact:…}}` precisam virar texto ANTES de sair daqui. Esta
+  // página é pública e indexada: sem isto, o visitante lê
+  // "{{fact:openai-flagship}}" no meio da frase — e o Google indexa junto.
+  const conteudo = await resolveContentFacts(
+    sanitizeCourseContent(String(product.courseContent)).content || ""
+  );
   const previa = montarPrevia(conteudo, slug, 1);
   if (!previa.totalCapitulos) notFound();
 

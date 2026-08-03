@@ -128,12 +128,19 @@ export function CourseCategoriesSection() {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
                 <Sparkles className="w-5 h-5" />
               </div>
+              {/* ⚠️ Aqui a home anunciava "Canon de fronteira: GPT-5.5 /
+                  Claude Opus 4.7 / Gemini 3.1" — uma lista escrita à mão que
+                  passa a mentir no dia em que o próximo modelo sai, na página
+                  mais vista do site. Prometer método envelhece bem; prometer
+                  versão, não. */}
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  {isPtBr ? "Canon de fronteira" : "Frontier canon"}
+                  {isPtBr ? "Sempre no modelo atual" : "Always on the current model"}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {DEFAULT_EDITORIAL_VERIFICATION.canonModels.join(" / ")}
+                  {isPtBr
+                    ? "Cada curso é reescrito quando a ferramenta muda"
+                    : "Every course is rewritten when the tool changes"}
                 </p>
               </div>
             </div>
