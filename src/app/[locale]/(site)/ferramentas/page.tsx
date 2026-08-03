@@ -76,6 +76,30 @@ export default function ToolsPage() {
             <p className="text-muted-foreground">Descubra, compare e aprenda as principais ferramentas de IA do mercado</p>
           </div>
 
+          {/*
+            Ponte para os microcursos.
+            Este diretório cobre as ferramentas consolidadas; os lançamentos da
+            semana chegam primeiro em /inventando. Sem este link a seção nova
+            só teria a entrada do menu — e é daqui que vem o visitante com a
+            intenção certa.
+          */}
+          <Link
+            href={`/${locale}/inventando`}
+            className="group mb-8 flex flex-col gap-1 rounded-lg border border-amber-400/25 bg-amber-400/[0.06] px-5 py-4 transition-colors hover:border-amber-400/45 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+          >
+            <span>
+              <span className="block text-sm font-semibold text-amber-200">
+                Ferramenta recém-lançada não está aqui?
+              </span>
+              <span className="mt-0.5 block text-sm text-muted-foreground">
+                Os lançamentos da semana viram microcursos curtos, com passo a passo em português.
+              </span>
+            </span>
+            <span className="shrink-0 text-sm font-medium text-amber-200 group-hover:underline">
+              Ver microcursos <ArrowRight className="inline h-4 w-4" />
+            </span>
+          </Link>
+
           {/* Controls */}
           <div className="bg-popover/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">

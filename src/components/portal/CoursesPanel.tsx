@@ -33,7 +33,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { allCourses, getNormalizedLevel } from "@/data/courses";
+import { allCourses, getNormalizedLevel, type CourseData } from "@/data/courses";
 import type { EnrollmentSlots, TierConfig } from "@/lib/course-tiers";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
 
@@ -161,8 +161,70 @@ export function CoursesPanel({
       .catch(() => {});
   }, []);
 
+  /**
+   * Cursos que só existem no banco.
+   *
+   * ⚠️ Defeito corrigido em 02/08/2026, relatado pelo Ricardo: "o curso novo de
+   * criação de imagem e o de whatsapp não aparecem na biblioteca de cursos".
+   *
+   * A causa: esta biblioteca listava `allCourses`, a lista ESTÁTICA em
+   * `@/data/courses` — 18 cursos congelados no arquivo. O banco tinha 21. Os
+   * quatro cursos produzidos pelo laço (`ia-para-criar-videos`, `ia-producao`,
+   * `rag-knowledge`, `aprenda-a-usar-...-dia-a-dia`) nasciam invisíveis para o
+   * aluno logado, porque ninguém os acrescentou ao arquivo à mão.
+   *
+   * O banco é a fonte da verdade (o sitemap já tratava assim desde 19/07). A
+   * lista estática continua entrando porque carrega metadados ricos que o
+   * produto no banco não tem — módulos, depoimentos, FAQ.
+   */
+  const [cursosDoBanco, setCursosDoBanco] = useState<CourseData[]>([]);
+  useEffect(() => {
+    fetch("/api/products?type=course&limit=200", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const lista: unknown[] = data?.products ?? data?.data ?? (Array.isArray(data) ? data : []);
+        const conhecidos = new Set(allCourses.map((c) => c.slug));
+
+        const novos = lista
+          .map((p) => p as Record<string, unknown>)
+          .filter((p) => typeof p.slug === "string" && !conhecidos.has(p.slug as string))
+          .map(
+            (p) =>
+              ({
+                // Só os campos que a grade usa. O resto do `CourseData` fica
+                // com o padrão — curso do banco não tem módulo nem depoimento.
+                id: 0,
+                slug: p.slug as string,
+                title: (p.title as string) || (p.name as string) || (p.slug as string),
+                subtitle: (p.subtitle as string) || "",
+                tool: (p.tool as string) || "IA",
+                category: (p.category as string) || "IA Generativa",
+                level: (p.level as string) || "Iniciante",
+                duration: (p.duration as string) || "",
+                totalLessons: (p.totalLessons as number) || 0,
+                price: (p.price as number) ?? 0,
+                originalPrice: (p.originalPrice as number) ?? 0,
+                rating: (p.rating as number) ?? 0,
+                students: (p.students as number) ?? 0,
+                shortDescription:
+                  (p.shortDescription as string) || (p.description as string) || "",
+                modules: [],
+                testimonials: [],
+                bonuses: [],
+                faqs: [],
+              }) as unknown as CourseData,
+          );
+
+        if (novos.length) setCursosDoBanco(novos);
+      })
+      .catch(() => {
+        // Banco fora do ar não pode esvaziar a biblioteca — sem os novos, mas
+        // com os 18 estáticos, ainda é uma página útil.
+      });
+  }, []);
+
   const courseCatalog = useMemo(() => {
-    return allCourses.map((course) => {
+    return [...allCourses, ...cursosDoBanco].map((course) => {
       const normalizedLevel = getNormalizedLevel(course);
       const isEnrolled = enrolledSlugs.includes(course.slug);
       const canAccessLevel = tierConfig.canAccessLevel(normalizedLevel);
@@ -187,7 +249,7 @@ export function CoursesPanel({
         canEnroll: !isEnrolled && (isFreeMonthlyCourse || (canAccessLevel && hasAvailableSlot && canAccessThisMonth)),
       };
     });
-  }, [enrolledSlugs, enrollmentSlots, tierConfig, apiFreeCourseSlug]);
+  }, [enrolledSlugs, enrollmentSlots, tierConfig, apiFreeCourseSlug, cursosDoBanco]);
 
   const freeMonthlyCourse = courseCatalog.find((course) => course.isFreeMonthlyCourse) ?? null;
   const freeMonthlyCourseCanClaim = Boolean(freeMonthlyCourse && freeMonthlyCourse.canEnroll);

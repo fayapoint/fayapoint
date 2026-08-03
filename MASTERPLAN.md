@@ -17,8 +17,65 @@
 | **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada — não há caminho automático. |
 | **3** | **Ler o `#conteudo` e o `#seo` no Buzz.** O debate semanal e o relatório diário publicam sozinhos. | É o novo canal de decisão sobre conteúdo. Responder no fio do `#conteudo` vira diretriz do laço. |
 | **4** | **Próximo curso pelo mesmo método: WhatsApp/vendas** (306 buscas somadas, zero páginas). | O `curriculo.json` + `novo_curso.mjs` fazem 30 capítulos por **US$ 0,12**. O gargalo agora é revisão humana, não produção. |
-| **5** | **Guardar o `image_prompt` no `ainews`**. | Última melhoria pendente das capas, e é pequena. |
-| **6** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
+| **5** | 🎨 **Refazer a página de ferramentas — veredito do Ricardo em 02/08: "não dá vontade alguma de interagir com ela".** Ver §"A DÍVIDA VISUAL DAS FERRAMENTAS" abaixo. | `/ferramentas` é uma grade de 56 cartões de texto, **sem uma única imagem**, com filtros que parecem formulário de intranet. É a página que deveria vender o catálogo inteiro e é a mais sem graça do site. O `/microcursos` que nasceu em 02/08 tem **o mesmo defeito** e precisa ser resolvido junto — não adianta trocar a moldura de uma e deixar a outra. |
+| **6** | **Guardar o `image_prompt` no `ainews`**. | Última melhoria pendente das capas, e é pequena. |
+| **7** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
+
+---
+
+## 🎓 SESSÃO 02/08 (parte 3) — OS MICROCURSOS, E A DÍVIDA VISUAL DAS FERRAMENTAS
+
+> Pedido do Ricardo: *"crie uma seção no site, que vai funcionar como um blog de
+> ferramentas"* · *"faça uma transcrição deste vídeo, separe tudo e crie
+> microcursos com o que foi dito nele"* · *"o microcurso completo fica disponível
+> para usuários expert, e apenas um teaser… para usuários free"*.
+
+### O que entrou (pronto em local, **sem deploy**)
+
+`/microcursos` — cada **capítulo** de um vídeo de lançamento vira **um**
+microcurso. Fonte 1: canal AI Search, vídeo `OrcBSpADCGk`, 17 capítulos → 16
+microcursos. Detalhes técnicos e armadilhas do pipeline em
+`[[progress_microcursos_secao_0208]]` e `[[reference_microcursos_pipeline]]`.
+
+O portão por plano corta **no servidor** — free 665 chars, expert 3.803, e o
+conteúdo pago não aparece no HTML. Sitemap 147 → 193.
+
+### 🎨 A DÍVIDA VISUAL DAS FERRAMENTAS
+
+Ricardo abriu `/ferramentas` no fim da sessão e o veredito foi direto:
+
+> *"a página parece muito feia e antiquada… não dá vontade alguma de interagir
+> com ela"* · *"quero uma coisa mais blog style, e com um design de página
+> absolutamente inovador e interativo, quero muitas imagens, tanto imagens
+> nossas quanto das ferramentas"*.
+
+**O diagnóstico, sem suavizar:** `/ferramentas` são 56 cartões de texto numa
+grade de 3 colunas, com três `<select>` no topo. Zero imagem. Zero movimento.
+Nada distingue o ChatGPT do Bolt.new além do texto dentro do cartão — e é
+justamente a página que deveria dar vontade de percorrer o catálogo inteiro.
+
+**E o `/microcursos` nasceu com o mesmo defeito.** Foi construído na mesma
+sessão, é tipografia sobre fundo escuro e não tem uma única imagem. A crítica
+vale para os dois; consertar um e deixar o outro seria trocar a moldura de
+metade da parede.
+
+**O que a reforma precisa ter** (do que o Ricardo pediu, sem interpretar a
+mais):
+
+1. **Blog style**, não diretório — peça editorial com hierarquia, não grade
+   uniforme onde tudo tem o mesmo peso.
+2. **Design inovador e interativo** — a página tem que responder ao cursor, não
+   só existir.
+3. **Muitas imagens, de duas origens:** nossas (o pipeline de capas do blog via
+   ComfyUI já existe e é reaproveitável — ver `BLOG_COVER_POOLS` em
+   `src/lib/ai-news.ts`) **e** das próprias ferramentas (logo e captura).
+4. **Nome novo, mais sugestivo** — o Ricardo abriu essa porta explicitamente.
+
+**Restrição que não pode ser esquecida na empolgação:** `/ferramentas` tem
+14.772 caracteres medidos, está no sitemap e é uma das poucas páginas com
+conteúdo de profundidade. Não se apaga nem se troca a URL por cima. O caminho
+seguro é **página nova em URL nova**, e só depois de ela provar valor é que
+`/ferramentas` responde 308 para lá.
 
 ---
 

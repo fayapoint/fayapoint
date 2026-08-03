@@ -3,6 +3,7 @@ import { allCourses } from "@/data/courses";
 import { getAllProducts } from "@/lib/products";
 import { getAllNews } from "@/lib/ai-news";
 import { toolsData } from "@/data/tools-complete";
+import { microcursos } from "@/data/microcursos";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -54,6 +55,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/radar",
     // Arcade: joga sem cadastro, é o degrau de menor compromisso do funil.
     "/arcade",
+    // Microcursos: o blog de ferramentas. Cada ferramenta que aparece nos
+    // lançamentos vira uma página própria — é a seção que mais cresce em
+    // número de URLs, e o hub é quem distribui link interno para elas.
+    "/inventando",
+    // Inventando: a vitrine das 56 ferramentas organizada por objetivo.
+    // `/ferramentas` continua declarado abaixo — as duas convivem até a nova
+    // provar valor.
+    "/ferramentaria",
     "/faq",
     "/contato",
     "/agendar-consultoria",
@@ -161,6 +170,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: now,
         changeFrequency: "monthly",
         priority: 0.5,
+      });
+    }
+
+    /**
+     * Microcursos entram com prioridade alta (0.75), acima das fichas de
+     * ferramenta.
+     *
+     * A razão é o conteúdo: a ficha de `/ferramentas/<slug>` é catálogo, e
+     * dezenas de sites publicam a mesma coisa sobre as mesmas ferramentas. O
+     * microcurso é texto original em português sobre um lançamento que quase
+     * ninguém cobriu nesse idioma — é onde temos chance real de ranquear.
+     *
+     * Nota sobre o portão de plano: a página serve a ficha da ferramenta para
+     * qualquer visitante, incluindo o robô, e declara a parte fechada com
+     * `isAccessibleForFree: false`. Anunciar aqui é legítimo — o que não se
+     * pode é declarar no sitemap uma URL que responde vazia para quem não
+     * pagou, e não é o caso.
+     */
+    for (const m of microcursos) {
+      entries.push({
+        url: url(`/${locale}/inventando/${m.slug}`),
+        lastModified: new Date(m.publicadoEm),
+        changeFrequency: "monthly",
+        priority: 0.75,
       });
     }
 

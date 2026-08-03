@@ -134,6 +134,29 @@ body {
 
 :root {
   --radius: 0.625rem;
+
+  /**
+   * Cor de marca das ferramentas (`/inventando`, `/microcursos`).
+   *
+   * A matiz vem do logo de cada ferramenta e é injetada inline (`--marca-h`);
+   * saturação e luminosidade vêm daqui, porque precisam mudar com o tema.
+   *
+   * O motivo é medido: `hsl(258 70% 58%)` — o roxo do "Conversar" — dá
+   * contraste 3,51 sobre o fundo escuro, que passa raspando o mínimo de texto
+   * grande e lê como apagado. A mesma cor sobre o fundo claro (#f0ece3) daria
+   * menos ainda. Uma luminosidade só não serve para os dois temas: no escuro a
+   * cor precisa subir, no claro precisa descer.
+   *
+   * ⚠️ Estes valores TÊM que ficar aqui, antes do bloco `.dark`. `:root` e
+   * `.dark` têm a mesma especificidade (0-1-0), então quem vier depois no
+   * arquivo vence. Declarados depois, os valores do tema claro sobrescreviam
+   * os do escuro e a cor voltava a ficar apagada — exatamente o defeito que
+   * este bloco existe para consertar.
+   */
+  --marca-s: 70%;
+  --marca-l: 38%;
+  --marca-l-fundo: 46%;
+
   /* Warm light palette — #f0ece3 bg, #0d0d14 fg, #3a6e00 green accent */
   --background: oklch(0.94 0.01 85);
   --foreground: oklch(0.15 0.01 280);
@@ -202,6 +225,16 @@ body {
   --sidebar-accent-foreground: oklch(0.93 0.01 80);
   --sidebar-border: oklch(0.93 0.01 80 / 10%);
   --sidebar-ring: oklch(0.78 0.12 75);
+
+  /* Cor de marca no tema escuro — ver bloco abaixo. */
+  --marca-s: 85%;
+  --marca-l: 68%;
+  --marca-l-fundo: 55%;
+}
+
+/** Cor de marca pronta para texto — precisa de `--marca-h` no elemento. */
+.tinta-marca {
+  color: hsl(var(--marca-h, 42) var(--marca-s) var(--marca-l));
 }
 
 /* Theme aliases */

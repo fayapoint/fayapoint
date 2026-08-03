@@ -1,0 +1,486 @@
+{
+  "chatgpt": {
+    "logo": "chatgpt.png",
+    "capa": "chatgpt.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "claude": {
+    "logo": "claude.png",
+    "capa": "claude.webp",
+    "cor": "#da704e",
+    "hsl": [
+      15,
+      65,
+      58
+    ]
+  },
+  "gemini": {
+    "logo": "gemini.png",
+    "capa": null,
+    "cor": "#3387ff",
+    "hsl": [
+      215,
+      100,
+      60
+    ]
+  },
+  "perplexity": {
+    "logo": "perplexity.png",
+    "capa": null,
+    "cor": null,
+    "hsl": null
+  },
+  "midjourney": {
+    "logo": "midjourney.png",
+    "capa": null,
+    "cor": null,
+    "hsl": null
+  },
+  "stable-diffusion": {
+    "logo": "stable-diffusion.png",
+    "capa": "stable-diffusion.webp",
+    "cor": "#a494c4",
+    "hsl": [
+      260,
+      29,
+      67
+    ]
+  },
+  "leonardo": {
+    "logo": "leonardo.png",
+    "capa": null,
+    "cor": null,
+    "hsl": null
+  },
+  "n8n": {
+    "logo": "n8n.png",
+    "capa": "n8n.webp",
+    "cor": "#ed4c72",
+    "hsl": [
+      346,
+      82,
+      61
+    ]
+  },
+  "make": {
+    "logo": "make.jpg",
+    "capa": null,
+    "cor": "#7304cf",
+    "hsl": [
+      273,
+      96,
+      41
+    ]
+  },
+  "zapier": {
+    "logo": "zapier.png",
+    "capa": "zapier.webp",
+    "cor": "#ff4f01",
+    "hsl": [
+      18,
+      100,
+      50
+    ]
+  },
+  "flowise": {
+    "logo": "flowise.jpg",
+    "capa": "flowise.webp",
+    "cor": "#2f1346",
+    "hsl": [
+      273,
+      57,
+      17
+    ]
+  },
+  "dall-e": {
+    "logo": "dall-e.png",
+    "capa": null,
+    "cor": null,
+    "hsl": null
+  },
+  "runwayml": {
+    "logo": "runwayml.png",
+    "capa": "runwayml.webp",
+    "cor": "#efeee6",
+    "hsl": [
+      53,
+      22,
+      92
+    ]
+  },
+  "elevenlabs": {
+    "logo": null,
+    "capa": "elevenlabs.webp"
+  },
+  "suno": {
+    "logo": "suno.png",
+    "capa": "suno.webp",
+    "cor": "#ff4c29",
+    "hsl": [
+      10,
+      100,
+      58
+    ]
+  },
+  "github-copilot": {
+    "logo": "github-copilot.png",
+    "capa": "github-copilot.webp",
+    "cor": "#1a2126",
+    "hsl": [
+      205,
+      19,
+      13
+    ]
+  },
+  "cursor": {
+    "logo": "cursor.png",
+    "capa": "cursor.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "notebooklm": {
+    "logo": "notebooklm.png",
+    "capa": null,
+    "cor": "#ea4234",
+    "hsl": [
+      5,
+      81,
+      56
+    ]
+  },
+  "pika-labs": {
+    "logo": "pika-labs.png",
+    "capa": "pika-labs.webp",
+    "cor": "#ebe6df",
+    "hsl": [
+      35,
+      23,
+      90
+    ]
+  },
+  "meta-ai": {
+    "logo": "meta-ai.png",
+    "capa": null,
+    "cor": "#7647ff",
+    "hsl": [
+      255,
+      100,
+      64
+    ]
+  },
+  "mistral": {
+    "logo": "mistral.png",
+    "capa": "mistral.webp",
+    "cor": "#fa500f",
+    "hsl": [
+      17,
+      96,
+      52
+    ]
+  },
+  "grok": {
+    "logo": "grok.png",
+    "capa": null,
+    "cor": null,
+    "hsl": null
+  },
+  "deepseek": {
+    "logo": "deepseek.png",
+    "capa": "deepseek.webp",
+    "cor": "#4d6bfe",
+    "hsl": [
+      230,
+      99,
+      65
+    ]
+  },
+  "cohere": {
+    "logo": "cohere.png",
+    "capa": "cohere.webp",
+    "cor": "#355146",
+    "hsl": [
+      156,
+      21,
+      26
+    ]
+  },
+  "jasper": {
+    "logo": "jasper.png",
+    "capa": "jasper.webp",
+    "cor": "#fa4028",
+    "hsl": [
+      7,
+      95,
+      57
+    ]
+  },
+  "copy-ai": {
+    "logo": "copy-ai.png",
+    "capa": "copy-ai.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "grammarly": {
+    "logo": "grammarly.png",
+    "capa": "grammarly.webp",
+    "cor": "#027e6f",
+    "hsl": [
+      173,
+      97,
+      25
+    ]
+  },
+  "gamma": {
+    "logo": "gamma.jpg",
+    "capa": null,
+    "cor": "#14264c",
+    "hsl": [
+      221,
+      58,
+      19
+    ]
+  },
+  "tome": {
+    "logo": null,
+    "capa": null
+  },
+  "beautiful-ai": {
+    "logo": "beautiful-ai.png",
+    "capa": "beautiful-ai.webp",
+    "cor": "#00bcfe",
+    "hsl": [
+      196,
+      100,
+      50
+    ]
+  },
+  "synthesia": {
+    "logo": "synthesia.png",
+    "capa": "synthesia.webp",
+    "cor": "#3e57da",
+    "hsl": [
+      230,
+      68,
+      55
+    ]
+  },
+  "heygen": {
+    "logo": "heygen.png",
+    "capa": "heygen.webp",
+    "cor": "#fda2ff",
+    "hsl": [
+      299,
+      100,
+      82
+    ]
+  },
+  "descript": {
+    "logo": "descript.png",
+    "capa": "descript.webp",
+    "cor": "#651a39",
+    "hsl": [
+      335,
+      59,
+      25
+    ]
+  },
+  "kling": {
+    "logo": "kling.png",
+    "capa": "kling.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "luma": {
+    "logo": "luma.png",
+    "capa": "luma.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "replit": {
+    "logo": "replit.png",
+    "capa": "replit.webp",
+    "cor": "#ff3d00",
+    "hsl": [
+      14,
+      100,
+      50
+    ]
+  },
+  "v0": {
+    "logo": "v0.png",
+    "capa": "v0.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "lovable": {
+    "logo": "lovable.jpg",
+    "capa": "lovable.webp",
+    "cor": "#fe7403",
+    "hsl": [
+      27,
+      99,
+      50
+    ]
+  },
+  "bolt": {
+    "logo": "bolt.png",
+    "capa": "bolt.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "windsurf": {
+    "logo": "windsurf.png",
+    "capa": "windsurf.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "notion-ai": {
+    "logo": "notion-ai.png",
+    "capa": "notion-ai.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "microsoft-copilot": {
+    "logo": "microsoft-copilot.jpg",
+    "capa": "microsoft-copilot.webp",
+    "cor": "#ef5b8d",
+    "hsl": [
+      340,
+      82,
+      65
+    ]
+  },
+  "google-workspace-ai": {
+    "logo": "google-workspace-ai.png",
+    "capa": "google-workspace-ai.webp",
+    "cor": "#3087ff",
+    "hsl": [
+      215,
+      100,
+      59
+    ]
+  },
+  "canva": {
+    "logo": "canva.jpg",
+    "capa": null,
+    "cor": "#04c0ce",
+    "hsl": [
+      184,
+      96,
+      41
+    ]
+  },
+  "figma": {
+    "logo": "figma.png",
+    "capa": "figma.webp",
+    "cor": "#ff3737",
+    "hsl": [
+      0,
+      100,
+      61
+    ]
+  },
+  "adobe-firefly": {
+    "logo": "adobe-firefly.png",
+    "capa": "adobe-firefly.webp",
+    "cor": "#ea1101",
+    "hsl": [
+      4,
+      99,
+      46
+    ]
+  },
+  "ideogram": {
+    "logo": "ideogram.png",
+    "capa": null,
+    "cor": "#ede9e5",
+    "hsl": [
+      30,
+      18,
+      91
+    ]
+  },
+  "hugging-face": {
+    "logo": "hugging-face.png",
+    "capa": "hugging-face.webp",
+    "cor": "#ffd31e",
+    "hsl": [
+      48,
+      100,
+      56
+    ]
+  },
+  "langchain": {
+    "logo": "langchain.png",
+    "capa": "langchain.webp",
+    "cor": "#7fc8fe",
+    "hsl": [
+      206,
+      98,
+      75
+    ]
+  },
+  "vercel-ai": {
+    "logo": "vercel-ai.png",
+    "capa": "vercel-ai.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "supabase": {
+    "logo": "supabase.png",
+    "capa": "supabase.webp",
+    "cor": "#32a873",
+    "hsl": [
+      153,
+      54,
+      43
+    ]
+  },
+  "pinecone": {
+    "logo": "pinecone.png",
+    "capa": "pinecone.webp",
+    "cor": null,
+    "hsl": null
+  },
+  "slack-ai": {
+    "logo": "slack-ai.png",
+    "capa": "slack-ai.webp",
+    "cor": "#2eb77d",
+    "hsl": [
+      155,
+      60,
+      45
+    ]
+  },
+  "discord": {
+    "logo": "discord.png",
+    "capa": "discord.webp",
+    "cor": "#5865f2",
+    "hsl": [
+      235,
+      86,
+      65
+    ]
+  },
+  "napkin-ai": {
+    "logo": "napkin-ai.png",
+    "capa": null,
+    "cor": "#c357ea",
+    "hsl": [
+      284,
+      78,
+      63
+    ]
+  },
+  "claude-code": {
+    "logo": "claude-code.png",
+    "capa": "claude-code.webp",
+    "cor": "#da7757",
+    "hsl": [
+      15,
+      64,
+      60
+    ]
+  }
+}
