@@ -17,9 +17,113 @@
 | **2** | **Ligar o Search Console ao relatório automático:** `cd autoresearch/cursos && node --env-file=../fayapoint-ai/.env.local gsc_auth.mjs`, colar as duas linhas no `.env.local` e copiar para `/root/kirmes/.env.fayai`. | 2 minutos, uma vez. Sem isso o relatório diário mede o que o site **serve**, mas não o que o Google **decidiu**. Exige o clique de uma pessoa logada — não há caminho automático. |
 | **3** | **Ler o `#conteudo` e o `#seo` no Buzz.** O debate semanal e o relatório diário publicam sozinhos. | É o novo canal de decisão sobre conteúdo. Responder no fio do `#conteudo` vira diretriz do laço. |
 | **4** | **Próximo curso pelo mesmo método: WhatsApp/vendas** (306 buscas somadas, zero páginas). | O `curriculo.json` + `novo_curso.mjs` fazem 30 capítulos por **US$ 0,12**. O gargalo agora é revisão humana, não produção. |
-| **5** | 🎨 **Refazer a página de ferramentas — veredito do Ricardo em 02/08: "não dá vontade alguma de interagir com ela".** Ver §"A DÍVIDA VISUAL DAS FERRAMENTAS" abaixo. | `/ferramentas` é uma grade de 56 cartões de texto, **sem uma única imagem**, com filtros que parecem formulário de intranet. É a página que deveria vender o catálogo inteiro e é a mais sem graça do site. O `/microcursos` que nasceu em 02/08 tem **o mesmo defeito** e precisa ser resolvido junto — não adianta trocar a moldura de uma e deixar a outra. |
+| **5** | ✅ ~~Refazer a página de ferramentas~~ — **FEITO e no ar** (`18b6f58`). Ver §"SESSÃO 02/08 (parte 4)". | `/inventando` (microcursos ilustrados) e `/ferramentaria` (56 ferramentas por verbo) no ar. Falta: **regerar as capas de curso com texto errado** — o método está provado em `scripts/gerar-hero-og.mjs` (arte pelo ComfyUI, texto composto por cima como SVG, nunca assado no pixel). |
+| **5b** | ⚠️ **Criar o curso de WhatsApp — ele NÃO existe.** | O Ricardo cobrou que ele "não aparece na biblioteca". Não aparecia porque nunca foi criado: era o item 4 desta mesma lista. Os outros três que faltavam (`ia-para-criar-videos`, `ia-producao`, `rag-knowledge`) apareceram assim que a biblioteca passou a ler o banco. |
 | **6** | **Guardar o `image_prompt` no `ainews`**. | Última melhoria pendente das capas, e é pequena. |
 | **7** | Prefixo de idioma nos 19 que sobraram (`/descobrir` e `/noticias`). | Cada um custa um 308. Já foi de 187 para 19, e a home está em zero. |
+
+---
+
+## 🚀 SESSÃO 02/08 (parte 4) — INVENTANDO E FERRAMENTARIA **NO AR** (`18b6f58`)
+
+> Pedido do Ricardo: *"o nome Inventando deve ser para o que você pensou ser
+> microcursos"* · *"gostei do estilo com a imagem aparecendo por trás como
+> blur"* · *"dentro de cada card, botões que levem direto a página de cada um
+> com o microcurso gratuito e curto"* · *"o microcurso gratuito deve ser bem
+> rico em imagens"* · *"atualize a nossa hero image"* · *"os cursos não
+> aparecem na biblioteca"* · *"então faça o deploy"*.
+
+### A troca de nomes, e por que ela estava certa
+
+O microcurso é o **conteúdo**; a ferramenta é o **objeto**. A primeira versão
+tinha os dois nomes trocados. Agora:
+
+| rota | o que é | render |
+|---|---|---|
+| `/inventando` | hub dos microcursos, paginado 9 por página | `ƒ` (searchParams) |
+| `/inventando/<slug>` | **microcurso grátis**, público e ilustrado | `●` pré-renderizado |
+| `/inventando/<slug>/completo` | as demais aulas, portão por plano | `ƒ` (lê sessão) |
+| `/ferramentaria` | as 56 ferramentas por VERBO, 12 por página | `●` |
+| `/ferramentas` | **intocada**, continua no ar | — |
+
+### O desenho de duas páginas por microcurso — é ele que faz o negócio fechar
+
+A página grátis é **pública, inteira, sem portão**, e entrega a primeira aula
+completa. Isso resolve dois problemas de uma vez:
+
+1. **Conversão.** Quem chega do Google recebe valor antes de qualquer pedido.
+   O portão aparece depois, quando a pessoa já sabe que o conteúdo presta.
+2. **SEO.** Não há mais o que declarar ao Google, nem risco de conteúdo raso —
+   o que o robô vê é exatamente o que o visitante vê. E a página é estática,
+   então não gasta função da Netlify.
+
+O portão vive só em `/completo`, e corta **no servidor**: conteúdo pago não é
+renderizado e não sai no HTML.
+
+Escada: todos veem a 1ª aula · Explorador +1 · Profissional +2 · Expert tudo.
+
+### 🔴 A biblioteca de cursos estava mentindo há semanas
+
+Ricardo: *"o curso novo de criação de imagem e o de whatsapp não aparecem na
+biblioteca de cursos do meu dashboard"*.
+
+**A causa:** `CoursesPanel` listava `allCourses` — a lista **estática** de 18
+cursos em `@/data/courses`. O banco tinha **21**. Os quatro cursos produzidos
+pelo laço (`ia-para-criar-videos`, `ia-producao`, `rag-knowledge`,
+`aprenda-a-usar-…-dia-a-dia`) nasciam **invisíveis para o aluno logado**,
+porque ninguém os acrescentou ao arquivo à mão. O sitemap já tratava o banco
+como fonte da verdade desde 19/07; a biblioteca não.
+
+Corrigido: a biblioteca lê o banco e completa com a estática (que carrega
+módulos, depoimentos e FAQ que o produto do banco não tem).
+
+⚠️ **O curso de WhatsApp não existe** — nem no banco, nem na estática. Ele era
+o item 4 desta lista ("próximo curso pelo mesmo método"), e foi lido como se
+já tivesse sido feito.
+
+### 🎨 A regra do texto em imagem — a correção que fecha o defeito das capas
+
+Ricardo: *"muitos dos cursos estão com as capas com texto errado"*.
+
+**Texto não é gerado pelo modelo de imagem. Nunca.** O modelo faz a arte; a
+marca e a frase entram depois, compostas como SVG vetorial pelo `sharp`.
+
+Motivo: texto assado no pixel por modelo de difusão sai torto, com letra
+trocada, e — pior — **congela**. Quando o título do curso muda, a capa passa a
+mentir e ninguém percebe. Composto depois, é nítido em qualquer tela, sempre
+correto, e regerável em um segundo.
+
+`scripts/gerar-hero-og.mjs` é o caminho provado. `/og-fayai.jpg` foi refeita
+assim, em 1200×630 — a medida que nenhuma rede social recorta.
+
+### Peso: o que quase foi para produção
+
+- Arte gerada: **12,7 MB → 0,8 MB** (WebP q82)
+- Capas das ferramentas: **24 MB → 1,9 MB** — o `figma.gif` sozinho tinha 9 MB
+
+`scripts/otimizar-arte.mjs` roda depois de toda geração. PNG do ComfyUI **não**
+entra no repositório.
+
+### ⚠️ Armadilhas medidas nesta sessão
+
+1. **`:root` depois de `.dark` no CSS sobrescreve o tema escuro.** Mesma
+   especificidade (0-1-0) — o último no arquivo vence. Contraste 3,51 → 5,16.
+2. **Dev server serve bundle antigo do cliente.** O link estava no HTML
+   (confirmado por `curl`) e não no DOM depois da hidratação. `rm -rf .next`
+   não resolveu; **só o build de produção decide** se é defeito ou cache.
+3. **`og:image` exige `Sec-Fetch-*`,** não só `User-Agent` — nove domínios
+   davam 403 sem eles.
+4. **Piso de tamanho diferente para logo e capa.** Favicon simples comprime
+   para 400 B; piso único de 1 KB descartou 14 logos bons.
+
+### O que NÃO foi feito, e por quê
+
+- **Mission Control gerando conteúdo para a seção.** O MC vai no ar junto (é o
+  mesmo app), mas um painel que analisa e gera microcurso é feature nova, não
+  ajuste — merece sessão própria em vez de meia implementação.
+- **Regerar as capas de curso erradas.** O método está provado no
+  `gerar-hero-og.mjs`; falta rodar por curso e conferir uma a uma.
+- **Os outros 10 vídeos do canal.** Pipeline pronto, IDs levantados.
 
 ---
 
