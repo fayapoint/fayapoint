@@ -126,14 +126,37 @@ const ARTE_POR_CATEGORIA: Record<Categoria, string> = {
  * Quem não tiver arte própria cai na da categoria — a seção nunca fica sem
  * imagem enquanto o lote não fecha.
  */
-const ARTE_POR_MICROCURSO: Record<string, string> = {};
+const COM_ARTE_PROPRIA = new Set([
+  // Vídeo
+  "id-v2v-trocar-o-estilo-do-video-sem-trocar-o-ator", // três painéis, o mesmo busto, acabamentos diferentes
+  "higgsfield-marketing-studio-e-cinema-studio", // duas portas: uma com claquete, outra com megafone
+  "seedance-2-5-trinta-segundos-de-video-com-o-mesmo-personagem", // fita em espiral, a mesma silhueta em todo quadro
+  "minimax-h3-video-em-2k-tres-vezes-mais-barato", // painel denso que quase não pesa na balança
+  // Áudio
+  "crisperwhisper-2-transcricao-com-tempo-por-palavra", // onda presa a uma régua por marcas douradas
+  // Modelos
+  "deepseek-v4-flash-0731-inteligencia-de-fronteira-a-tres-centavos", // moeda minúscula equilibrando a torre
+  "kimi-k3-o-maior-modelo-aberto-e-o-que-fazer-com-ele", // cofre colossal aberto
+  "instella-o-modelo-da-amd-treinado-sem-nvidia", // um chip sozinho alimentando a constelação
+  "inkling-small-o-modelo-aberto-que-escuta", // concha pequena em ondas enormes
+  // Imagem
+  "redesign-transformar-uma-imagem-plana-em-camadas-editaveis", // folha plana se abrindo em camadas
+  "ideogram-object-remover-tirar-o-objeto-a-sombra-e-o-reflexo", // objeto, sombra e reflexo sumindo juntos
+  // Robótica
+  "prism-robos-que-decidem-com-mais-de-um-sentido", // três feixes entram, um dourado sai
+  "gemini-robotics-2-do-pe-a-ponta-dos-dedos", // mão e pé ligados por um fio de luz
+  // Mundos 3D
+  "wonder-da-adobe-um-video-que-vira-cenario-navegavel", // o quadro plano se abrindo em cenário
+  "phi-zero-pensar-a-fisica-antes-do-primeiro-quadro", // a esfera com a trajetória já desenhada
+  // Produtividade
+  "gemini-voice-typing-ditado-que-ja-sai-limpo", // onda embaraçada entra, linha limpa sai
+]);
 
 export function capaDe(m: Microcurso): string {
-  return (
-    ARTE_POR_MICROCURSO[m.slug] ??
-    ARTE_POR_CATEGORIA[m.categoria] ??
-    "/inventando/arte/microcurso.webp"
-  );
+  if (COM_ARTE_PROPRIA.has(m.slug)) {
+    return `/inventando/arte/micro/${m.slug}.webp`;
+  }
+  return ARTE_POR_CATEGORIA[m.categoria] ?? "/inventando/arte/microcurso.webp";
 }
 
 /**
