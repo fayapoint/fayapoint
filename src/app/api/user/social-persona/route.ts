@@ -35,8 +35,15 @@ const CAMPOS_RASOS = [
   'writingStyle', 'postingFrequency', 'primaryInterests', 'weights',
 ];
 
-/** Blocos profundos: substituídos inteiros, mas só os que vierem no corpo. */
-const BLOCOS = ['identidade', 'voz', 'publico', 'estrategia', 'aprendizado'] as const;
+/**
+ * Blocos profundos: substituídos inteiros, mas só os que vierem no corpo.
+ *
+ * ⚠️ `negocio` entrou em 03/08/2026 e esta lista é o portão: um bloco que não
+ * está aqui é descartado em silêncio na gravação. O painel salvaria, a tela
+ * mostraria sucesso e o dado sumiria — o pior tipo de defeito, porque não
+ * aparece em lugar nenhum até alguém reparar que a confiança não sobe.
+ */
+const BLOCOS = ['identidade', 'voz', 'publico', 'estrategia', 'aprendizado', 'negocio'] as const;
 
 function calculateCompletionPercent(persona: Record<string, unknown>): number {
   let filled = 0;

@@ -98,6 +98,31 @@ const EDITORES: Record<string, Editor> = {
   "aprendizado.tempo": { tipo: "escolha", opcoes: TEMPOS },
   "aprendizado.ferramentas": { tipo: "itens", dica: "Ex.: ChatGPT, Canva, WhatsApp Business", max: 8 },
   "aprendizado.travando": { tipo: "paragrafo", dica: "O que você tentou e desistiu? Onde ficou confuso?", linhas: 3 },
+  /**
+   * O NEGÓCIO (03/08/2026) — a dimensão que faltava.
+   *
+   * As perguntas são propositalmente pequenas e concretas. "Qual seu ticket
+   * médio?" é respondível em cinco segundos e muda TODO cálculo de retorno que
+   * o curso faz para essa pessoa; "descreva seu posicionamento" seria mais
+   * completo e ficaria em branco.
+   */
+  "negocio.oQueVende": {
+    tipo: "texto",
+    dica: "Concreto, como você diria no balcão. Ex.: banho e tosa para cães de porte pequeno",
+  },
+  "negocio.ticket": { tipo: "numero", min: 1, max: 100000, sufixo: "reais por venda, em média" },
+  "negocio.canal": { tipo: "texto", dica: "Ex.: WhatsApp e Instagram; loja física na Rua X" },
+  "negocio.objecao": {
+    tipo: "texto",
+    dica: 'A frase, com as palavras dela. Ex.: "vou pensar e te falo", "tá caro"',
+  },
+  "negocio.clientesPorMes": { tipo: "numero", min: 1, max: 100000, sufixo: "clientes por mês" },
+  "negocio.orgulho": { tipo: "texto", dica: "O produto ou serviço que você faria de novo de graça" },
+  "negocio.referencias": {
+    tipo: "itens",
+    dica: "Perfis ou marcas que você admira no seu ramo — servem de régua e de fonte de ideias",
+    max: 4,
+  },
   "fotos.profissional": { tipo: "foto", vaga: "profissional" },
   "fotos.casual": { tipo: "foto", vaga: "casual" },
   "fotos.pessoal": { tipo: "foto", vaga: "pessoal" },

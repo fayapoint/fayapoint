@@ -213,7 +213,56 @@ export interface PersonaProfunda {
     ferramentas?: string[];
     travando?: string;
   };
+  /**
+   * O NEGÓCIO — a dimensão nova de 03/08/2026, e a que mais muda o exemplo.
+   *
+   * Ricardo: *"se você pensar e refletir sobre o que temos e o quanto a mais
+   * podemos e na verdade devemos ter, vai perceber que está muito raso o quanto
+   * coletamos de informação, deixando assim o conteúdo final bem superficial e
+   * quase não justifica ele gastar seus créditos."*
+   *
+   * Ele está certo, e dá para apontar onde: as sete dimensões antigas descrevem
+   * QUEM a pessoa é e COMO ela fala. Nenhuma descreve o que ela VENDE. O
+   * exemplo do capítulo — a peça mais cara da camada, aquela que precisa de
+   * números plausíveis — era escrito sem saber preço, canal, volume ou objeção.
+   * Daí "imagine que você atende clientes": correto, genérico e esquecível.
+   *
+   * Com ticket e objeção na mão, o mesmo exemplo vira "numa venda de R$180, a
+   * objeção 'vou pensar' que você ouve toda semana...". É a diferença entre
+   * material didático e consultoria.
+   */
+  negocio?: {
+    /** O que ela vende, em uma frase concreta. */
+    oQueVende?: string;
+    /** Ticket médio em reais — o número que torna todo exemplo plausível. */
+    ticket?: number;
+    /** Onde a venda acontece: Instagram, WhatsApp, loja física, marketplace… */
+    canal?: string;
+    /** A objeção que ela mais ouve. Ouro puro para exemplo e para tarefa. */
+    objecao?: string;
+    /** Quantos clientes por mês, aproximadamente — dá escala ao exemplo. */
+    clientesPorMes?: number;
+    /** O produto ou serviço do qual ela mais se orgulha. */
+    orgulho?: string;
+    /** Concorrentes e referências que ela admira (perfis, marcas). */
+    referencias?: string[];
+  };
   fotos?: FotoPersona[];
+  /**
+   * O caderno de personagem — as imagens do mesmo rosto em vários ângulos.
+   *
+   * Gravado aqui, e não numa coleção própria, porque é persona: envelhece com
+   * ela, viaja com ela e some com ela. `imagens` guarda as URLs no Cloudinary;
+   * `origem` diz de quais fotos ele foi tirado, para dar para refazer quando a
+   * pessoa mandar fotos melhores.
+   */
+  caderno?: {
+    imagens?: string[];
+    origem?: string[];
+    geradoEm?: Date | string;
+    /** 'pendente' enquanto a fila não devolveu — o crédito só sai no fim. */
+    status?: 'pendente' | 'pronto' | 'falhou';
+  };
 }
 
 export interface CampoFaltando {
@@ -272,6 +321,7 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
   const publico = p.publico || {};
   const estrategia = p.estrategia || {};
   const aprendizado = p.aprendizado || {};
+  const negocio = p.negocio || {};
   const fotos = p.fotos || [];
 
   const areas = traduz(lista(p.industry), AREAS);
@@ -484,6 +534,61 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
       ].filter(Boolean) as CampoFaltando[],
     },
     {
+      id: 'negocio',
+      titulo: 'O que você vende',
+      paraQue:
+        'A dimensão que dá NÚMERO ao exemplo. Sem ticket e sem objeção, o exemplo do capítulo vira "imagine que você atende clientes" — correto e esquecível.',
+      icone: 'store',
+      cor: '#34d399',
+      confianca: pontos([
+        [!!negocio.oQueVende, 3],
+        [typeof negocio.ticket === 'number' && negocio.ticket > 0, 3],
+        [!!negocio.objecao, 3],
+        [!!negocio.canal, 2],
+        [typeof negocio.clientesPorMes === 'number' && negocio.clientesPorMes > 0, 2],
+        [!!negocio.orgulho, 1],
+        [(negocio.referencias || []).length > 0, 1],
+      ]),
+      conhecido: [
+        negocio.oQueVende ? { rotulo: 'Vende', valor: negocio.oQueVende } : null,
+        negocio.ticket ? { rotulo: 'Ticket médio', valor: `R$ ${negocio.ticket}` } : null,
+        negocio.canal ? { rotulo: 'Canal de venda', valor: negocio.canal } : null,
+        negocio.clientesPorMes ? { rotulo: 'Clientes/mês', valor: String(negocio.clientesPorMes) } : null,
+        negocio.objecao ? { rotulo: 'Objeção mais comum', valor: negocio.objecao } : null,
+        negocio.orgulho ? { rotulo: 'Orgulho', valor: negocio.orgulho } : null,
+        (negocio.referencias || []).length
+          ? { rotulo: 'Referências', valor: (negocio.referencias || []).join(' · ') }
+          : null,
+      ].filter(Boolean) as DimensaoDossie['conhecido'],
+      faltando: [
+        !negocio.oQueVende && {
+          campo: 'negocio.oQueVende',
+          pergunta: 'O que você vende, em uma frase? ("banho e tosa para cães de porte pequeno")',
+          ganho: 'Os exemplos passam a falar do seu produto, não de "o seu negócio"',
+        },
+        !negocio.ticket && {
+          campo: 'negocio.ticket',
+          pergunta: 'Quanto custa, em média, uma venda sua?',
+          ganho: 'Todo cálculo de retorno no curso passa a usar o SEU número',
+        },
+        !negocio.objecao && {
+          campo: 'negocio.objecao',
+          pergunta: 'Qual a desculpa que você mais ouve de quem não compra?',
+          ganho: 'As tarefas passam a atacar a objeção que te custa dinheiro hoje',
+        },
+        !negocio.canal && {
+          campo: 'negocio.canal',
+          pergunta: 'Onde a venda acontece? WhatsApp, Instagram, loja, marketplace?',
+          ganho: 'Os exemplos usam a ferramenta que você já tem aberta',
+        },
+        !(negocio.referencias || []).length && {
+          campo: 'negocio.referencias',
+          pergunta: 'Cite 2 ou 3 perfis ou marcas que você admira no seu ramo',
+          ganho: 'Serve de régua de qualidade e de fonte de ideias no seu nível',
+        },
+      ].filter(Boolean) as CampoFaltando[],
+    },
+    {
       id: 'aprendizado',
       titulo: 'Como você aprende',
       paraQue: 'É o que personaliza o CURSO, não o post: exemplos do seu ramo, ritmo e profundidade.',
@@ -554,10 +659,13 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
     },
   ];
 
+  // ⚠️ A média é sobre `dimensoes.length`, não sobre um 7 escrito à mão — a
+  // dimensão "O que você vende" entrou em 03/08 e virou oito. Um denominador
+  // fixo teria feito a confiança de todo mundo passar de 100 sem aviso.
   const confianca = Math.round(dimensoes.reduce((s, d) => s + d.confianca, 0) / dimensoes.length);
   const fortes = dimensoes.filter((d) => d.confianca >= 60).length;
   const qualidade: Dossie['qualidade'] =
-    fortes >= 6 ? 'dossiê' : fortes >= 4 ? 'retrato' : fortes >= 2 ? 'rascunho' : 'esboço';
+    fortes >= 7 ? 'dossiê' : fortes >= 5 ? 'retrato' : fortes >= 2 ? 'rascunho' : 'esboço';
 
   return { confianca, qualidade, dimensoes, resumo: resumir(p, extras?.nome) };
 }
@@ -650,6 +758,22 @@ export function blocoDePersona(p: PersonaProfunda, foco: 'post' | 'curso' | 'ima
     if (formatos.length) l.push(`Formatos que ele produz: ${formatos.join(', ')}`);
     if ((p.topHashtags || []).length) l.push(`Hashtags dele: ${(p.topHashtags || []).slice(0, 10).map((h) => `#${h.replace(/^#/, '')}`).join(' ')}`);
   }
+
+  /**
+   * O negócio entra em TODOS os focos — inclusive imagem.
+   *
+   * É o bloco que dá número ao exemplo do curso, contexto ao post e cenário à
+   * imagem. Ticket e objeção primeiro: são os dois que o modelo mais usa e os
+   * dois que mais mudam a frase que sai.
+   */
+  const neg = p.negocio || {};
+  if (neg.oQueVende) l.push(`O que vende: ${neg.oQueVende}`);
+  if (neg.ticket) l.push(`Ticket médio: R$ ${neg.ticket} — use ESTE número nas contas de retorno`);
+  if (neg.objecao) l.push(`Objeção que mais ouve: "${neg.objecao}"`);
+  if (neg.canal) l.push(`Onde vende: ${neg.canal}`);
+  if (neg.clientesPorMes) l.push(`Clientes por mês: cerca de ${neg.clientesPorMes}`);
+  if (neg.orgulho) l.push(`Do que mais se orgulha: ${neg.orgulho}`);
+  if ((neg.referencias || []).length) l.push(`Referências que admira: ${(neg.referencias || []).join(', ')}`);
 
   if (foco === 'curso') {
     if (p.experienceLevel) l.push(`Nível com IA: ${NIVEIS[p.experienceLevel] ?? p.experienceLevel}`);
