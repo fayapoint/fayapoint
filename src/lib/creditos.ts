@@ -1,5 +1,11 @@
 import User from '@/models/User';
-import { CREDIT_COSTS, CREDIT_PACKS, TIER_CONFIGS, type CreditAction } from '@/lib/course-tiers';
+import {
+  CREDIT_COSTS,
+  CREDIT_PACKS,
+  TIER_CONFIGS,
+  resolvePlan,
+  type CreditAction,
+} from '@/lib/course-tiers';
 
 /**
  * Os créditos, com quantidade (03/08/2026).
@@ -98,6 +104,155 @@ export async function garantirBoasVindas(userId: string): Promise<number> {
     },
   });
   return valor;
+}
+
+/** Marca do refill mensal no extrato. */
+const ACAO_REFILL = 'monthly_refill';
+
+/**
+ * A data do próximo ciclo: o mesmo dia do mês seguinte.
+ *
+ * ⚠️ `setMonth(+1)` sozinho transborda: 31/01 vira 03/03, porque fevereiro não
+ * tem 31. Quem assinou dia 31 teria o ciclo andando para frente todo mês até
+ * escorregar de mês inteiro. O `Math.min` com o último dia do mês de destino
+ * ancora o dia 31 no dia 28/29 de fevereiro e o devolve ao 31 em março.
+ */
+function proximoCiclo(desde: Date): Date {
+  const d = new Date(desde);
+  const diaDesejado = d.getDate();
+  const alvo = new Date(d.getFullYear(), d.getMonth() + 1, 1, d.getHours(), d.getMinutes(), d.getSeconds());
+  const ultimoDia = new Date(alvo.getFullYear(), alvo.getMonth() + 1, 0).getDate();
+  alvo.setDate(Math.min(diaDesejado, ultimoDia));
+  return alvo;
+}
+
+/**
+ * Repõe a alocação mensal do assinante quando o ciclo vira (03/08/2026).
+ *
+ * ## O buraco que esta função fecha
+ *
+ * A economia nova promete "400 créditos por mês" ao Expert, e a promessa é
+ * mensal. Mas o único lugar que aplicava `monthlyCredits` era o webhook de
+ * pagamento. Se o provedor não dispara webhook em toda renovação — e o
+ * histórico do site não prova que dispara — o assinante paga o segundo mês e
+ * não recebe crédito nenhum. Era uma promessa mensal sem mecanismo que a
+ * cumprisse.
+ *
+ * ## Por que não é um cron
+ *
+ * Um cron para isto precisaria de infraestrutura nova (a VPS já carrega 7),
+ * varreria a base inteira todo dia para achar os poucos que viraram o ciclo, e
+ * falharia em silêncio — que é exatamente como o cron das capas do blog passou
+ * seis dias quebrado sem ninguém saber. Concedendo na hora em que a pessoa OLHA
+ * o saldo, o gatilho é o próprio uso: crédito só vale quando alguém entra para
+ * gastá-lo, e quem não entrou não perdeu nada, porque o ciclo é ancorado na
+ * última reposição e não no calendário.
+ *
+ * É o mesmo desenho de `garantirBoasVindas`, pelas mesmas razões: nenhuma
+ * migração, os 20 usuários que já existem entram pelo mesmo caminho dos novos,
+ * e a regra e a prova (o extrato) são o mesmo dado.
+ *
+ * ## Repõe, não soma
+ *
+ * `$set` e não `$inc`. O crédito da mensalidade expira na virada do ciclo — é a
+ * regra que a ordem de consumo de `debitar()` já assume ao gastar a mensalidade
+ * antes do pacote comprado. Somar faria o assinante inativo acumular 4.800
+ * créditos no ano e transformaria a mensalidade num estoque, quebrando a razão
+ * de o pacote comprado durar 90 dias.
+ *
+ * ⚠️ Os pacotes COMPRADOS não são tocados: eles têm validade própria e foram
+ * pagos à parte.
+ *
+ * ## Só assinante ativo
+ *
+ * Plano gratuito não tem ciclo — recebe o empurrão único de boas-vindas e
+ * pronto. E `status` diferente de `active` (pagamento atrasado, cancelado)
+ * não repõe: repor crédito a quem parou de pagar é dar o produto de graça.
+ */
+export async function garantirRefillMensal(userId: string, agora: Date = new Date()): Promise<number> {
+  const user = await User.findById(userId).select('credits subscription');
+  if (!user) return 0;
+
+  const plano = resolvePlan(user.subscription?.plan || 'free');
+  if (plano === 'free' || user.subscription?.status !== 'active') return 0;
+
+  const valor = TIER_CONFIGS[plano].monthlyCredits;
+  if (!valor) return 0;
+
+  const ultima: Date | undefined = user.credits?.lastRefillDate;
+  // Sem data nenhuma, este é o primeiro ciclo que o mecanismo enxerga: é o caso
+  // dos assinantes que já existiam quando a economia mudou. Eles recebem agora
+  // e passam a ter âncora daqui para frente.
+  if (ultima && agora < proximoCiclo(new Date(ultima))) return 0;
+
+  // Compare-and-set: a condição carrega a data que acabamos de ler. Duas
+  // requisições simultâneas (a aba do dashboard e a do Ateliê abrindo juntas)
+  // entrariam as duas aqui; só a primeira encontra o documento nesse estado e
+  // a segunda modifica zero documentos. Sem isto, o assinante ganharia a
+  // alocação duas vezes por abrir duas abas.
+  const r = await User.updateOne(
+    { _id: userId, 'credits.lastRefillDate': ultima ?? { $in: [null, undefined] } },
+    {
+      $set: {
+        'credits.balance': valor,
+        'credits.monthlyAllocation': valor,
+        'credits.lastRefillDate': agora,
+      },
+      $push: {
+        'credits.history': {
+          $each: [
+            {
+              action: ACAO_REFILL,
+              amount: valor,
+              description: `Créditos do mês — plano ${TIER_CONFIGS[plano].displayName}: ${valor} créditos (= R$${valor})`,
+              createdAt: agora,
+            },
+          ],
+          $slice: -200,
+        },
+      },
+    },
+  );
+
+  return r.modifiedCount > 0 ? valor : 0;
+}
+
+/**
+ * As duas concessões automáticas, num chamador só.
+ *
+ * Existe para que nenhuma rota que lê saldo precise lembrar de chamar as duas.
+ * Esquecer uma delas produz o pior tipo de defeito deste módulo: silencioso,
+ * visível só no fim do mês, e do lado do aluno.
+ */
+export async function garantirCreditos(userId: string): Promise<number> {
+  const boasVindas = await garantirBoasVindas(userId);
+  const mensal = await garantirRefillMensal(userId);
+  return boasVindas + mensal;
+}
+
+/**
+ * O saldo de quem vai GASTAR — concedido antes de ser lido.
+ *
+ * ## O defeito que esta função existe para tornar impossível
+ *
+ * `saldoDe(user)` lê o documento que a rota já tinha em mãos. Isso serve para
+ * exibir, e não serve para autorizar um gasto: se o ciclo do assinante virou e
+ * ele foi DIRETO gerar — sem abrir a tela de créditos nem o Ateliê, que são as
+ * duas telas que concedem — a conferência acontecia contra o saldo do mês
+ * passado. O assinante ouvia "crédito insuficiente" no dia em que ganhou os
+ * créditos do mês.
+ *
+ * Medido em 04/08/2026: duas rotas de gasto (`/api/user/caderno` e
+ * `/api/user/curso-personalizado`) liam o saldo sem nunca conceder.
+ *
+ * ⚠️ **Toda rota que vai gastar deve chamar esta função, não `saldoDe`.**
+ * `saldoDe` continua existindo para exibição e para o cálculo interno de
+ * `debitar`, onde conceder no meio de uma cobrança seria errado.
+ */
+export async function saldoParaGastar(userId: string): Promise<Saldo> {
+  await garantirCreditos(userId);
+  const fresco = await User.findById(userId).select('credits');
+  return saldoDe((fresco ?? {}) as UsuarioComCreditos);
 }
 
 /**

@@ -4,7 +4,7 @@ import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 import { getAuthUser } from "@/lib/auth";
 import { CREDIT_COSTS } from "@/lib/course-tiers";
-import { debitar, saldoDe } from "@/lib/creditos";
+import { debitar, saldoParaGastar } from "@/lib/creditos";
 import type { PersonaProfunda } from "@/lib/persona";
 
 export const dynamic = "force-dynamic";
@@ -101,7 +101,7 @@ export async function POST() {
     }
 
     const custo = CREDIT_COSTS.character_sheet;
-    const saldo = saldoDe(user);
+    const saldo = await saldoParaGastar(String(user._id));
     if (saldo.total < custo) {
       return NextResponse.json(
         {

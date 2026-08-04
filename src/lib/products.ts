@@ -220,6 +220,55 @@ function normalizeProduct(product: unknown): Product {
   };
 }
 
+/**
+ * Os campos que NUNCA podem atravessar a fronteira servidor→cliente.
+ *
+ * ⚠️ Medido em 04/08/2026 na `/cursos` servida em produção local: **4,3 MB de
+ * HTML**, dos quais 3,9 MB eram payload RSC. Dentro dele, o texto das aulas dos
+ * 22 cursos — 230 blocos "## Exercício Prático", 230 "Dica Pro" e 221 "O que
+ * levar deste capítulo". Ou seja: **o conteúdo pago inteiro do catálogo estava
+ * legível com "ver código-fonte", numa página pública, sem login.**
+ *
+ * A causa não é um bug de lógica, é a fronteira: `getAllProducts()` devolve o
+ * documento completo do Mongo, e a página passava esse documento como prop para
+ * `CoursesCatalog`, que é um Client Component. Tudo que é passado a um Client
+ * Component é serializado no HTML — mesmo o que nenhum componente renderiza.
+ *
+ * Três estragos ao mesmo tempo:
+ *   1. **comercial** — o curso que custa R$149 podia ser lido de graça;
+ *   2. **SEO** — o Google indexa o conteúdo pago numa URL de vitrine, criando
+ *      duplicata do próprio produto (e a indexação já está em 20/170);
+ *   3. **desempenho** — 4,3 MB numa página que abre no celular de quem recebeu
+ *      um flyer.
+ *
+ * ⚠️ É lista de EXCLUSÃO e não de inclusão de propósito: uma lista de inclusão
+ * quebraria a vitrine em silêncio no dia em que um card passasse a mostrar um
+ * campo novo. Aqui, o pior caso de esquecer um campo é peso a mais — nunca
+ * tela quebrada. Mas o `courseContent` é o que importa: se um campo novo
+ * carregar texto de aula, ele precisa entrar nesta lista.
+ */
+const CAMPOS_FORA_DA_VITRINE = [
+  'courseContent',
+  'detailedCurriculum',
+  'canonModels',
+] as const;
+
+/**
+ * O produto reduzido ao que a vitrine precisa mostrar.
+ *
+ * Use SEMPRE que produtos forem passados como prop para um Client Component.
+ * Para a página de venda de UM curso, que precisa do currículo, continue
+ * passando o produto inteiro — lá o custo é de um curso, não de vinte e dois,
+ * e o `courseContent` segue de fora.
+ */
+export function paraVitrine(produtos: Product[]): Product[] {
+  return produtos.map((p) => {
+    const copia = { ...p } as Record<string, unknown>;
+    for (const campo of CAMPOS_FORA_DA_VITRINE) delete copia[campo];
+    return copia as unknown as Product;
+  });
+}
+
 // Get all active products (CACHED: 10 minutes)
 export async function getAllProducts(options?: {
   limit?: number;

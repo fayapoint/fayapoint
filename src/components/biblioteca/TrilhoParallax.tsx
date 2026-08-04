@@ -33,6 +33,35 @@
  *     o texto é conteúdo.
  *   · **Clique não é arrasto.** Guardamos a distância percorrida no ponteiro e
  *     cancelamos a navegação acima de 8px, senão todo arrasto vira clique.
+ *
+ * ── O conserto de suavidade (03/08/2026) ───────────────────────────────────
+ *
+ * Veredito do Ricardo sobre a versão anterior: *"10x melhor… mas ainda não
+ * está silky smooth"*. Eram três causas somadas, todas mensuráveis:
+ *
+ * 1. **Layout síncrono forçado, ~66 vezes por quadro.** O laço lia
+ *    `getBoundingClientRect()` de um card e logo depois escrevia
+ *    `img.style.transform` — leitura, escrita, leitura, escrita. Cada leitura
+ *    que vem DEPOIS de uma escrita obriga o navegador a refazer o layout na
+ *    hora, dentro do quadro. Com 3 clones de 22 cursos são 66 cards, e mais 2
+ *    leituras de `larguraDoConjunto()` por quadro. Agora **todas** as medidas
+ *    são tiradas uma vez (em `medir()`, disparado por `ResizeObserver`) e o
+ *    quadro só escreve. Zero leitura de layout no laço.
+ *
+ * 2. **A física era por quadro, não por tempo.** `alvo += velocidade` e
+ *    `velocidade *= 0.92` supõem 60Hz. Num monitor de 120Hz tudo corria em
+ *    dobro — a inércia morria na metade do tempo e o encaixe chegava seco.
+ *    Agora cada constante é elevada a `dt/16.67`, então o movimento é o mesmo
+ *    a 60, 120 ou 144Hz. É o que mais muda a *sensação* no monitor do Ricardo.
+ *
+ * 3. **O laço repintava para sempre.** Mesmo parado, cada quadro reescrevia 66
+ *    transformações. Agora, quando não há arrasto, velocidade nem distância
+ *    para o alvo, o quadro sai em 3 comparações e o `will-change` é desligado
+ *    — o navegador devolve as camadas de composição em vez de segurá-las.
+ *
+ * ⚠️ Ao mexer aqui: se precisar de uma medida nova, tire-a em `medir()`. Uma
+ * única chamada de `getBoundingClientRect()` dentro do laço traz o problema 1
+ * de volta inteiro, e ele não aparece em nenhum teste — só no dedo.
  */
 
 import Link from "next/link";
@@ -101,6 +130,7 @@ const TONS_ESTADO: Record<NonNullable<ItemTrilho["estado"]>["tom"], string> = {
 const CLONES = 3;
 const AMORTECIMENTO = 0.92;
 const SUAVIZACAO = 0.15;
+const SUAVIZACAO_CAPA = 0.12;
 const ATRASO_ENCAIXE = 300;
 const FORCA_ENCAIXE = 0.08;
 
@@ -108,7 +138,30 @@ const FORCA_ENCAIXE = 0.08;
 const ESCALA_CAPA = 1.05;
 const DESLOC_MAX = 7;
 
+/** Um quadro a 60Hz, em ms. É a unidade em que as constantes acima foram medidas. */
+const QUADRO_60HZ = 1000 / 60;
+
+/**
+ * Teto do passo de tempo.
+ *
+ * Aba em segundo plano (ou GC longo) devolve um `dt` de centenas de ms. Sem
+ * teto, o primeiro quadro depois de voltar aplicaria a inércia acumulada de
+ * uma vez e o trilho daria um salto. 50ms = 3 quadros a 60Hz.
+ */
+const PASSO_MAX_MS = 50;
+
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+/**
+ * Converte uma constante medida por quadro (a 60Hz) para o `dt` real.
+ *
+ * `0.92` de amortecimento por quadro vira `0.92^(dt/16.67)`; `0.15` de
+ * suavização vira `1 - 0.85^(dt/16.67)`. É o que faz o movimento ser o mesmo
+ * num monitor de 60, 120 ou 144Hz — sem isto a inércia some pela metade num
+ * monitor rápido, que foi o que sobrou de "não silky" na versão anterior.
+ */
+const porTempo = (porQuadro: number, passo: number) => Math.pow(porQuadro, passo);
+const suavePorTempo = (t60: number, passo: number) => 1 - Math.pow(1 - t60, passo);
 
 export function TrilhoParallax({
   itens,
@@ -124,11 +177,26 @@ export function TrilhoParallax({
   const imagens = useRef<HTMLElement[]>([]);
   const desloc = useRef<number[]>([]);
 
+  /**
+   * As medidas do trilho, tiradas UMA vez por mudança de tamanho.
+   *
+   * Tudo aqui está em "coordenada de trilho": o mesmo eixo do `scrollLeft`,
+   * com a origem no início do conteúdo rolável. É o que permite o laço de
+   * animação decidir o que está visível e onde está o centro sem tocar no
+   * layout — a conta é `pos[i] - scrollLeft`, aritmética pura.
+   */
+  const pos = useRef<number[]>([]);
+  const larg = useRef<number[]>([]);
+  const visivel = useRef(0);
+  const total = useRef(0);
+  const conjunto = useRef(0);
+
   const alvo = useRef(0);
   const atual = useRef(0);
   const velocidade = useRef(0);
   const arrastando = useRef(false);
   const emLaco = useRef(false);
+  const ativo = useRef(false);
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
   const percorrido = useRef(0);
 
@@ -140,6 +208,15 @@ export function TrilhoParallax({
   const repetir = itens.length >= 4 ? CLONES : 1;
   const lista = Array.from({ length: repetir }, () => itens).flat();
 
+  /**
+   * Tira TODAS as medidas de uma vez. É o único lugar do componente que lê
+   * layout — chamado na montagem e pelo `ResizeObserver`, nunca por quadro.
+   *
+   * `offsetLeft` (e não `getBoundingClientRect`) de propósito: ele é relativo
+   * ao ancestral posicionado e **não** muda com o scroll, então a medida
+   * sobrevive ao trilho andar. `card.offsetLeft - el.offsetLeft` dá a posição
+   * na mesma origem do `scrollLeft`, que é o eixo em que o laço raciocina.
+   */
   const medir = useCallback(() => {
     const el = trilho.current;
     if (!el) return;
@@ -148,35 +225,38 @@ export function TrilhoParallax({
     if (desloc.current.length !== cards.current.length) {
       desloc.current = new Array(cards.current.length).fill(0);
     }
-  }, []);
 
-  const larguraDoConjunto = useCallback(() => {
-    if (cards.current.length === 0 || repetir === 1) return 0;
-    const primeiro = cards.current[0].getBoundingClientRect();
-    const ultimo = cards.current[itens.length - 1].getBoundingClientRect();
-    return ultimo.right - primeiro.left + 16;
+    const origem = el.offsetLeft;
+    pos.current = cards.current.map((c) => c.offsetLeft - origem);
+    larg.current = cards.current.map((c) => c.offsetWidth);
+    visivel.current = el.clientWidth;
+    total.current = el.scrollWidth;
+
+    // A largura de um conjunto é a distância entre o primeiro card e o
+    // primeiro card do clone seguinte — exata, e sem depender do `gap`.
+    conjunto.current =
+      repetir > 1 && pos.current.length > itens.length
+        ? pos.current[itens.length] - pos.current[0]
+        : 0;
   }, [itens.length, repetir]);
 
   const encaixar = useCallback(() => {
     if (temporizador.current) clearTimeout(temporizador.current);
     temporizador.current = setTimeout(() => {
-      const el = trilho.current;
-      if (!el || Math.abs(velocidade.current) > 0.5) return;
-      const centro = el.getBoundingClientRect().left + el.clientWidth / 2;
-      let maisPerto = 0;
+      if (!trilho.current || Math.abs(velocidade.current) > 0.5) return;
+      // Tudo em coordenada de trilho: nada de ler o DOM aqui.
+      const centro = alvo.current + visivel.current / 2;
+      let destino = alvo.current;
       let menor = Infinity;
-      cards.current.forEach((c, i) => {
-        const r = c.getBoundingClientRect();
-        const d = Math.abs(centro - (r.left + r.width / 2));
+      for (let i = 0; i < pos.current.length; i++) {
+        const meio = pos.current[i] + larg.current[i] / 2;
+        const d = Math.abs(centro - meio);
         if (d < menor) {
           menor = d;
-          maisPerto = i;
+          destino = meio - visivel.current / 2;
         }
-      });
-      const r = cards.current[maisPerto]?.getBoundingClientRect();
-      if (!r) return;
-      const destino = alvo.current + (r.left + r.width / 2 - centro);
-      const max = el.scrollWidth - el.clientWidth;
+      }
+      const max = Math.max(0, total.current - visivel.current);
       velocidade.current += (Math.max(0, Math.min(destino, max)) - alvo.current) * FORCA_ENCAIXE;
     }, ATRASO_ENCAIXE);
   }, []);
@@ -189,7 +269,7 @@ export function TrilhoParallax({
     // Começa no meio: com três clones, o conjunto do meio é o que permite
     // rolar para os dois lados sem bater na borda logo de cara.
     if (repetir > 1) {
-      const w = larguraDoConjunto();
+      const w = conjunto.current;
       alvo.current = w;
       atual.current = w;
       el.scrollLeft = w;
@@ -199,27 +279,68 @@ export function TrilhoParallax({
     // Respeita quem pediu menos movimento: sem parallax, sem inércia.
     const menosMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    /**
+     * Liga e desliga o `will-change` das capas visíveis.
+     *
+     * Deixá-lo ligado o tempo todo faria o navegador segurar uma camada de
+     * composição por card — 66 camadas de 306×440 em DPR 2 são ~140MB de VRAM
+     * paradas, e num celular isso é o bastante para a aba ser descartada.
+     * Ligado só enquanto há movimento, custa nada e entrega o que promete:
+     * a primeira fração de segundo do arrasto deixa de ter o soluço da
+     * promoção de camada.
+     */
+    const marcarAtivo = (ligado: boolean) => {
+      if (ativo.current === ligado) return;
+      ativo.current = ligado;
+      for (const img of imagens.current) {
+        if (img) img.style.willChange = ligado ? "transform" : "";
+      }
+    };
+
     let quadro = 0;
-    const animar = () => {
+    let anterior = performance.now();
+
+    const animar = (agora: number) => {
       const c = trilho.current;
       if (!c) return;
 
+      // Passo em unidades de "quadro a 60Hz" — é nessa unidade que
+      // AMORTECIMENTO, SUAVIZACAO e as velocidades foram medidas.
+      const dt = Math.min(agora - anterior, PASSO_MAX_MS);
+      anterior = agora;
+      const passo = dt / QUADRO_60HZ;
+
       if (!arrastando.current) {
-        alvo.current += velocidade.current;
-        velocidade.current *= AMORTECIMENTO;
+        alvo.current += velocidade.current * passo;
+        velocidade.current *= porTempo(AMORTECIMENTO, passo);
         if (Math.abs(velocidade.current) < 0.05) velocidade.current = 0;
       }
 
-      const max = c.scrollWidth - c.clientWidth;
+      const max = Math.max(0, total.current - visivel.current);
       alvo.current = Math.max(0, Math.min(alvo.current, max));
+
+      // Parado é parado: sem isto o quadro reescrevia 66 transformações para
+      // sempre, segurando as camadas de composição e o rádio da GPU acesos.
+      if (!arrastando.current && velocidade.current === 0 && Math.abs(alvo.current - atual.current) < 0.05) {
+        if (atual.current !== alvo.current) {
+          atual.current = alvo.current;
+          c.scrollLeft = atual.current;
+        }
+        marcarAtivo(false);
+        quadro = requestAnimationFrame(animar);
+        return;
+      }
+      marcarAtivo(true);
 
       // O laço infinito: salta um conjunto inteiro sem que nada pisque.
       if (repetir > 1 && !emLaco.current) {
-        const w = larguraDoConjunto();
+        const w = conjunto.current;
         const limiar = w * 0.3;
-        if (alvo.current > max - limiar || alvo.current < limiar) {
+        if (w > 0 && (alvo.current > max - limiar || alvo.current < limiar)) {
           emLaco.current = true;
           const novo = alvo.current > max - limiar ? alvo.current - w : alvo.current + w;
+          // O alvo E o atual saltam juntos: mover só um deles faria o `lerp`
+          // do quadro seguinte atravessar o trilho inteiro em uma passada.
           alvo.current = novo;
           atual.current = novo;
           c.scrollLeft = novo;
@@ -229,19 +350,25 @@ export function TrilhoParallax({
         }
       }
 
-      atual.current = lerp(atual.current, alvo.current, SUAVIZACAO);
+      atual.current = lerp(atual.current, alvo.current, suavePorTempo(SUAVIZACAO, passo));
       c.scrollLeft = atual.current;
 
       if (!menosMovimento) {
-        const centro = c.getBoundingClientRect().left + c.clientWidth / 2;
+        // O centro do trilho na MESMA coordenada das posições medidas.
+        // Nenhuma leitura de layout daqui para baixo — só aritmética e escrita.
+        const centro = atual.current + visivel.current / 2;
+        const suave = suavePorTempo(SUAVIZACAO_CAPA, passo);
+        const bordaEsq = atual.current - 400;
+        const bordaDir = atual.current + visivel.current + 400;
+
         for (let i = 0; i < imagens.current.length; i++) {
-          const card = cards.current[i];
           const img = imagens.current[i];
-          if (!card || !img) continue;
-          const r = card.getBoundingClientRect();
-          // Fora da tela não vale calcular: 3 clones × N cards vira muito
-          // getBoundingClientRect por quadro.
-          if (r.right < -400 || r.left > window.innerWidth + 400) continue;
+          if (!img) continue;
+          const esq = pos.current[i];
+          const larguraCard = larg.current[i];
+          // Fora da tela não vale calcular: 3 clones × N cards são muitas
+          // escritas de estilo por quadro.
+          if (esq + larguraCard < bordaEsq || esq > bordaDir) continue;
           // ±7px de deslocamento, e ESCALA só o suficiente para caber.
           //
           // ⚠️ Conserto de 03/08/2026. Ricardo: *"As capas atuais que você
@@ -259,10 +386,10 @@ export function TrilhoParallax({
           // antes de mexer nos números: a folga tem que ser MAIOR que o
           // deslocamento máximo, e a perda vertical MENOR que a margem do
           // título.
-          let off = (centro - (r.left + r.width / 2)) / 20;
+          let off = (centro - (esq + larguraCard / 2)) / 20;
           off = Math.max(-DESLOC_MAX, Math.min(DESLOC_MAX, off));
-          desloc.current[i] = lerp(desloc.current[i] ?? 0, off, 0.12);
-          img.style.transform = `translateX(${desloc.current[i].toFixed(1)}px) scale(${ESCALA_CAPA})`;
+          desloc.current[i] = lerp(desloc.current[i] ?? 0, off, suave);
+          img.style.transform = `translateX(${desloc.current[i].toFixed(2)}px) scale(${ESCALA_CAPA})`;
         }
       }
 
@@ -274,19 +401,28 @@ export function TrilhoParallax({
       medir();
       const c = trilho.current;
       if (!c) return;
-      const max = c.scrollWidth - c.clientWidth;
+      const max = Math.max(0, total.current - visivel.current);
       alvo.current = Math.max(0, Math.min(alvo.current, max));
       atual.current = alvo.current;
       c.scrollLeft = alvo.current;
     };
+
+    // `ResizeObserver` e não só `resize` da janela: o trilho encolhe quando
+    // uma barra lateral abre, quando a fonte carrega e quando o painel do
+    // dashboard troca de aba — nenhum desses eventos redimensiona a janela, e
+    // sem remedir as posições ficam de uma largura antiga e o parallax
+    // desalinha do card.
+    const observador = new ResizeObserver(aoRedimensionar);
+    observador.observe(el);
     window.addEventListener("resize", aoRedimensionar);
 
     return () => {
       cancelAnimationFrame(quadro);
+      observador.disconnect();
       window.removeEventListener("resize", aoRedimensionar);
       if (temporizador.current) clearTimeout(temporizador.current);
     };
-  }, [medir, larguraDoConjunto, repetir]);
+  }, [medir, repetir]);
 
   /* ── Gestos ──────────────────────────────────────────────────────────── */
 
@@ -296,14 +432,27 @@ export function TrilhoParallax({
   const ultimoT = useRef(0);
 
   const aoDescer = (e: React.PointerEvent) => {
+    // Botão do meio e direito não arrastam: o do meio é "abrir em nova aba" e
+    // sequestrá-lo tira do visitante o gesto mais útil que um trilho de links
+    // tem.
+    if (e.button !== 0 && e.pointerType === "mouse") return;
     arrastando.current = true;
     percorrido.current = 0;
     inicioX.current = e.clientX;
     inicioScroll.current = alvo.current;
     ultimoX.current = e.clientX;
-    ultimoT.current = Date.now();
+    ultimoT.current = performance.now();
     velocidade.current = 0;
     if (temporizador.current) clearTimeout(temporizador.current);
+    // Captura do ponteiro: o arrasto continua funcionando com o cursor fora do
+    // trilho, e o `pointerup` chega mesmo que ele suba sobre outro elemento.
+    // Sem isso, sair um pixel para cima no meio do gesto cortava o movimento
+    // pela metade — era o `onPointerLeave` fazendo as vezes de `pointerup`.
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {
+      /* navegador sem captura: o arrasto ainda funciona dentro do trilho */
+    }
   };
 
   const aoMover = (e: React.PointerEvent) => {
@@ -312,22 +461,33 @@ export function TrilhoParallax({
     if (!el) return;
     const dx = inicioX.current - e.clientX;
     percorrido.current = Math.max(percorrido.current, Math.abs(dx));
-    const max = el.scrollWidth - el.clientWidth;
+    const max = Math.max(0, total.current - visivel.current);
     const novo = Math.max(0, Math.min(inicioScroll.current + dx, max));
     alvo.current = novo;
     atual.current = novo;
     el.scrollLeft = novo;
 
-    const agora = Date.now();
+    // `performance.now()` e não `Date.now()`: o relógio de parede tem
+    // resolução de ~16ms no Windows e pode até andar para trás com o ajuste de
+    // horário. Num dt de 8ms (120Hz) isso fazia a velocidade sair 0 ou
+    // infinita, e o arremesso saía errado a esmo.
+    const agora = performance.now();
     const dt = agora - ultimoT.current;
     if (dt > 0 && dt < 100) velocidade.current = ((ultimoX.current - e.clientX) / dt) * 8;
     ultimoX.current = e.clientX;
     ultimoT.current = agora;
   };
 
-  const aoSubir = () => {
+  const aoSubir = (e?: React.PointerEvent) => {
     if (!arrastando.current) return;
     arrastando.current = false;
+    if (e) {
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        /* já solto */
+      }
+    }
     encaixar();
   };
 
@@ -369,9 +529,7 @@ export function TrilhoParallax({
    * para as pontas.
    */
   const aoTeclar = (e: React.KeyboardEvent) => {
-    const largura = (cards.current[0]?.getBoundingClientRect().width ?? 320) + 16;
-    const el = trilho.current;
-    if (!el) return;
+    if (!trilho.current) return;
 
     if (e.key === "ArrowRight") {
       e.preventDefault();
@@ -386,12 +544,13 @@ export function TrilhoParallax({
       e.preventDefault();
       // Com o laço ligado, "fim" é o fim do PRIMEIRO conjunto — ir ao fim dos
       // três clones levaria a pessoa para uma repetição, o que parece defeito.
-      alvo.current = repetir > 1 ? largura * itens.length - el.clientWidth : el.scrollWidth - el.clientWidth;
+      const fimDoConjunto = repetir > 1 ? conjunto.current : total.current;
+      alvo.current = Math.max(0, fimDoConjunto - visivel.current);
     }
   };
 
   const empurrar = (direcao: 1 | -1) => {
-    const largura = cards.current[0]?.getBoundingClientRect().width ?? 400;
+    const largura = larg.current[0] ?? 400;
     velocidade.current += direcao * largura * 0.22;
     encaixar();
   };
@@ -444,7 +603,7 @@ export function TrilhoParallax({
         onPointerDown={aoDescer}
         onPointerMove={aoMover}
         onPointerUp={aoSubir}
-        onPointerLeave={aoSubir}
+        onPointerCancel={aoSubir}
         className="flex cursor-grab gap-4 overflow-x-hidden px-4 pb-3 active:cursor-grabbing sm:px-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
         style={{
           scrollBehavior: "auto",
@@ -454,6 +613,15 @@ export function TrilhoParallax({
           // vertical da página e as duas travam. `pan-y` entrega o eixo
           // vertical ao navegador e fica com o horizontal.
           touchAction: "pan-y",
+          // O trilho é o fim da linha do gesto horizontal: sem `contain`, o
+          // arrasto que chega na ponta vira "voltar página" no trackpad do
+          // Mac e no Chrome do Android — o visitante perde a página tentando
+          // ver o próximo curso.
+          overscrollBehaviorX: "contain",
+          // Arrastar não seleciona texto. Sem isto, um arrasto que começa em
+          // cima do título deixa meia biblioteca azul de seleção.
+          userSelect: "none",
+          WebkitUserSelect: "none",
         }}
       >
         {lista.map((item, i) => (
@@ -495,7 +663,15 @@ export function TrilhoParallax({
               src={item.capa}
               alt=""
               draggable={false}
-              loading="lazy"
+              // Só o primeiro conjunto é ansioso. Os clones repetem as MESMAS
+              // URLs, então o navegador os serve do cache sem uma requisição
+              // a mais — e as capas do conjunto do meio, que é onde o trilho
+              // começa, já estão desenhadas quando o dedo encosta. Era o
+              // "aparece vazio no meio do movimento" do handoff.
+              loading={i < itens.length ? "eager" : "lazy"}
+              decoding="async"
+              width={306}
+              height={440}
               className="pointer-events-none absolute inset-0 h-full w-full object-cover"
               style={{ transform: `scale(${ESCALA_CAPA})` }}
               onError={(e) => {

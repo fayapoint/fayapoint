@@ -131,8 +131,87 @@ function sortForMonth(courses: CourseData[], monthKey: string, salt: string) {
   });
 }
 
+/* ── O catálogo que alimenta o sorteio ─────────────────────────────────────
+ *
+ * ⚠️ Até 04/08/2026 o sorteio lia `allCourses`, a lista ESTÁTICA. Medido
+ * naquele dia, com 22 cursos ativos no banco e 18 na lista:
+ *
+ *   · **5 cursos ativos jamais podiam entrar no pool** nem ser o grátis do mês
+ *     (`ia-producao`, `rag-knowledge`, `ia-no-whatsapp`, `ia-para-criar-videos`
+ *     e o de IA no dia a dia). Não dava erro — eles simplesmente nunca eram
+ *     sorteados, e ninguém tinha como notar a ausência.
+ *   · **1 curso na lista estática é RASCUNHO no banco** (`banana-dev-deploy-ia`,
+ *     sobre a banana.dev, que descontinuou o serviço). Ele era elegível a ser
+ *     sorteado como oferta do mês — um curso não publicado, sobre plataforma
+ *     morta, na vitrine.
+ *
+ * É a terceira vez que a classe "o curso existe mas o porteiro não o conhece"
+ * volta. Ela morre aqui: o BANCO decide quem existe; a lista estática só entra
+ * como rede de segurança enquanto o cache não aqueceu.
+ */
+interface CursoDoCatalogo {
+  slug: string;
+  level: string;
+  price: number;
+  isFree?: boolean;
+}
+
+let _catalogoCache: { cursos: CursoDoCatalogo[]; fetchedAt: number } | null = null;
+
+async function fetchCatalogo(): Promise<CursoDoCatalogo[] | null> {
+  if (_catalogoCache && Date.now() - _catalogoCache.fetchedAt < CACHE_TTL) {
+    return _catalogoCache.cursos;
+  }
+  try {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) return null;
+
+    // Mesma disciplina de `fetchMonthlyOverride`: `dbConnect()` e não
+    // `mongoose.connect()` direto — sem `dbName` a conexão cai no banco "test"
+    // e envenena o cache global do Mongoose.
+    const dbConnectModule = await import("@/lib/mongodb");
+    await dbConnectModule.default();
+
+    const client = mongoose.connection.getClient();
+    const docs = await client
+      .db("fayapointProdutos")
+      .collection("products")
+      // `status: 'active'` é o filtro que impede rascunho de ir à vitrine — a
+      // mesma regra que a `/api/products` já aplica.
+      .find({ status: "active", type: "course" }, { projection: { slug: 1, level: 1, "pricing.price": 1 } })
+      .toArray();
+
+    const cursos: CursoDoCatalogo[] = docs
+      .filter((d) => typeof d.slug === "string")
+      .map((d) => ({
+        slug: d.slug as string,
+        level: (d.level as string) ?? "",
+        // ⚠️ O preço mora em `pricing.price`, não em `price`. Lendo `d.price`
+        // todo curso viria com preço 0 e o filtro `price > 0` esvaziaria o
+        // pool inteiro — falha silenciosa e total.
+        price: Number((d.pricing as { price?: number } | undefined)?.price ?? 0),
+      }));
+
+    if (!cursos.length) return null;
+    _catalogoCache = { cursos, fetchedAt: Date.now() };
+    return cursos;
+  } catch (err) {
+    console.error("[monthly-offers] catálogo do banco falhou, usando a lista estática:", err);
+    return null;
+  }
+}
+
 function getPaidCoursesByLevel(level: PoolLevel) {
-  return allCourses.filter((course) => getNormalizedLevel(course) === level && course.price > 0);
+  const doBanco = _catalogoCache && Date.now() - _catalogoCache.fetchedAt < CACHE_TTL
+    ? _catalogoCache.cursos
+    : null;
+
+  const fonte: Array<{ slug: string; level: string; price: number; isFree?: boolean }> =
+    doBanco ?? (allCourses as unknown as Array<{ slug: string; level: string; price: number; isFree?: boolean }>);
+
+  return fonte.filter(
+    (course) => getNormalizedLevel(course as unknown as CourseData) === level && course.price > 0,
+  ) as unknown as CourseData[];
 }
 
 // Synchronous fallback — deterministic algorithm (always works, no DB needed)
@@ -174,6 +253,13 @@ export async function getMonthlyCourseOfferSetAsync(referenceDate: Date = new Da
   const monthKey = buildMonthKey(referenceDate);
   const override = await fetchMonthlyOverride(monthKey);
   if (override) return override;
+
+  // ⚠️ O catálogo é buscado ANTES de calcular, e não em paralelo: o algoritmo
+  // é síncrono e lê `_catalogoCache` no momento em que roda. Disparar a busca
+  // sem esperar faria a primeira chamada de cada janela de cache sortear pela
+  // lista estática e a seguinte sortear pelo banco — dois pools diferentes
+  // para o mesmo mês, alternando conforme o cache.
+  await fetchCatalogo();
   return computeAlgorithmicOfferSet(referenceDate);
 }
 

@@ -10,7 +10,7 @@ import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
-import { saldoDe, garantirBoasVindas } from "@/lib/creditos";
+import { saldoDe, garantirCreditos } from "@/lib/creditos";
 import { montarOrcamento, calibrar, type IdOpcao } from "@/lib/atelie";
 import { MINIMA_CONFIANCA, primeiroCapituloUtil } from "@/lib/atelie-servidor";
 
@@ -57,9 +57,18 @@ export async function GET(request: NextRequest) {
 
     // O Ateliê é a primeira tela que fala de crédito, então é aqui que o
     // crédito de boas-vindas precisa existir — mostrar saldo zero para quem
-    // nunca recebeu seria pedir dinheiro antes de dar o primeiro passo.
-    const ganhou = await garantirBoasVindas(String(user._id));
-    if (ganhou) user.credits = { ...(user.credits || {}), balance: (user.credits?.balance || 0) + ganhou };
+    // nunca recebeu seria pedir dinheiro antes de dar o primeiro passo. E é
+    // aqui também que o ciclo do assinante vira, pelo mesmo motivo.
+    //
+    // ⚠️ Relê o documento em vez de somar o que foi concedido: o refill mensal
+    // **repõe** o saldo (`$set`), não soma. Somar mostraria 800 para um Expert
+    // que tinha 400 e virou o ciclo — o dobro do que ele tem para gastar, e a
+    // conta só bateria de novo depois que o gasto falhasse.
+    const ganhou = await garantirCreditos(String(user._id));
+    if (ganhou) {
+      const fresco = await User.findById(user._id).select("credits");
+      if (fresco?.credits) user.credits = fresco.credits;
+    }
 
     const client = await getMongoClient();
     const produto = await client

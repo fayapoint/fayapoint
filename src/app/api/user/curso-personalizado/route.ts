@@ -9,7 +9,7 @@ import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
-import { debitar, saldoDe, custoDe } from "@/lib/creditos";
+import { debitar, saldoParaGastar, custoDe } from "@/lib/creditos";
 import { MINIMA_CONFIANCA, impressao, escreverCamada } from "@/lib/atelie-servidor";
 
 export const dynamic = "force-dynamic";
@@ -230,7 +230,7 @@ export async function POST(request: NextRequest) {
         });
     const pendentes = listaPendente.length;
 
-    const saldo = saldoDe(user);
+    const saldo = await saldoParaGastar(String(user._id));
     const custoPrevisto = custoDe("custom_course_chapter", pendentes);
     if (pendentes > 0 && saldo.total < custoPrevisto) {
       return NextResponse.json(

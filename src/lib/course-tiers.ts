@@ -459,30 +459,79 @@ export function getQuizCertificatePrice(
 /**
  * Map Portuguese course level strings to standardized CourseLevel
  */
+/**
+ * O nível do curso, reduzido às quatro faixas que as cotas conhecem.
+ *
+ * ## O vocabulário real do banco (medido em 03/08/2026, 22 cursos ativos)
+ *
+ * `Todos os níveis` (6) · `Intermediário` (4) · `Iniciante a Intermediário` (4)
+ * · `Iniciante` (3) · `Avançado` (3) · `Iniciante a Avançado` (1) ·
+ * `Intermediário a Avançado` (1). Nos rascunhos aparece ainda `beginner`, em
+ * inglês.
+ *
+ * ⚠️ Correção de registro: o handoff de 03/08 dizia que "Todos os níveis não
+ * mapeia em cota nenhuma". Medido, mapeia — cai em `beginner` pela cláusula
+ * abaixo. O defeito real era outro, e é o que esta função passou a tratar.
+ *
+ * ## A regra das FAIXAS: vale o piso, não o teto
+ *
+ * O defeito: `Iniciante a Avançado` era classificado como `advanced`, porque
+ * `includes('avançado')` era testado antes de `includes('iniciante')`. Um curso
+ * que anuncia começar do zero ficava fora da cota de quem está começando — e
+ * `Iniciante a Intermediário`, que é a mesma ideia, caía em `beginner`. Duas
+ * faixas equivalentes, dois destinos opostos.
+ *
+ * A faixa passa a valer pelo PISO. O que a cota decide é "esta pessoa consegue
+ * COMEÇAR este curso", e quem escreveu "Iniciante a Avançado" está dizendo
+ * exatamente que dá para começar do zero. Classificar pelo teto transformava a
+ * promessa da vitrine em cadeado.
+ *
+ * ⚠️ Isto MOVE dois cursos de faixa: `leonardo-ai-criacao-visual`
+ * (Iniciante a Avançado) e `claude-ia-segura` (Intermediário a Avançado) saem
+ * de `advanced` para `beginner` e `intermediate`. É mudança visível de acesso
+ * nos planos com cota — está aqui como decisão consciente, não como efeito
+ * colateral, e cabe ao Ricardo mantê-la ou reverter.
+ *
+ * ## A ordem dos testes é a regra
+ *
+ * Piso primeiro (do mais baixo para o mais alto), depois os valores simples.
+ * Inverter a ordem reintroduz o defeito sem que nenhum teste perceba.
+ */
 export function normalizeCourseLevel(levelString: string): CourseLevel {
-  const normalized = levelString.toLowerCase();
+  const normalized = String(levelString ?? '').toLowerCase().trim();
 
   if (normalized.includes('grátis') || normalized.includes('gratuito') || normalized === 'free') {
     return 'free';
   }
-  if (
-    normalized.includes('avançado') ||
-    normalized === 'advanced' ||
-    normalized.includes('intermediário a avançado')
-  ) {
+
+  // ── Faixas: o piso manda ────────────────────────────────────────────────
+  // "Iniciante a X" começa no iniciante, seja X o que for.
+  if (normalized.includes('iniciante a ')) {
+    return 'beginner';
+  }
+  if (normalized.includes('intermediário a ') || normalized.includes('intermediario a ')) {
+    return 'intermediate';
+  }
+
+  // ── Valores simples ─────────────────────────────────────────────────────
+  if (normalized.includes('avançado') || normalized.includes('avancado') || normalized === 'advanced') {
     return 'advanced';
   }
-  if (normalized === 'intermediário' || normalized === 'intermediate') {
+  if (normalized === 'intermediário' || normalized === 'intermediario' || normalized === 'intermediate') {
     return 'intermediate';
   }
   if (
     normalized.includes('iniciante') ||
     normalized.includes('todos os níveis') ||
+    normalized.includes('todos os niveis') ||
     normalized === 'beginner' ||
     normalized === 'all'
   ) {
     return 'beginner';
   }
+
+  // Vocabulário novo que ninguém previu cai no mais aberto: um curso invisível
+  // por causa de um rótulo desconhecido é pior que um curso aberto demais.
   return 'beginner';
 }
 

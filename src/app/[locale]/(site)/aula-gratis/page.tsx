@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import {
-  PlayCircle, CheckCircle, ArrowRight, BookOpen, Clock, Award,
+  CheckCircle, ArrowRight, BookOpen, Clock, Award,
   Sparkles, Brain, Zap, Target, ChevronDown, ChevronUp, MessageCircle,
   Lightbulb, Copy, FileText
 } from "lucide-react";
@@ -323,7 +323,14 @@ export default function FreeClassPage() {
                           ? "bg-gradient-to-br from-amber-500 to-yellow-600" 
                           : "bg-secondary"
                       }`}>
-                        {isExpanded ? <BookOpen size={24} className="text-white" /> : <PlayCircle size={24} className="text-white" />}
+                        {/* ⚠️ Era `PlayCircle` quando fechado. Estas aulas são de
+                            TEXTO — expandem para conteúdo escrito, e o próprio
+                            rótulo ao lado diz "12 min leitura". Um botão de play
+                            prometia vídeo e entregava parágrafo, três vezes na
+                            mesma tela. O estado aberto/fechado já é dito pelo
+                            fundo âmbar e pela seta à direita; o ícone é para
+                            dizer o que a aula É. */}
+                        {isExpanded ? <BookOpen size={24} className="text-white" /> : <FileText size={24} className="text-white" />}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-1">

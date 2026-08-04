@@ -10,6 +10,7 @@ import {
   resolvePlan,
   SubscriptionPlan,
 } from '@/lib/course-tiers';
+import { garantirCreditos } from '@/lib/creditos';
 
 /**
  * GET /api/credits
@@ -23,6 +24,13 @@ export async function GET() {
     }
 
     await dbConnect();
+
+    // As duas concessões automáticas ANTES de ler o documento — senão a
+    // primeira visita do mês mostraria o saldo velho e o crédito novo só
+    // apareceria no F5. Ver `garantirRefillMensal` em lib/creditos: é a leitura
+    // do saldo que faz o ciclo virar, porque não existe cron.
+    await garantirCreditos(authUser.id);
+
     const user = await User.findById(authUser.id);
     if (!user) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
