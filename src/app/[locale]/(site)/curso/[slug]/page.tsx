@@ -5,6 +5,7 @@ import { allCourses } from "@/data/courses";
 import { getProductBySlug } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { schemaCurso, schemaTrilha } from "@/lib/structured-data";
+import { ogDaCapa } from "@/lib/capa-og";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -49,6 +50,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: `/curso/${slug}`,
     title,
     description,
+    // A capa do curso vira o cartão de compartilhamento. Antes daqui, os 27
+    // cursos apontavam para `/images/courses/<slug>-og.jpg`, um caminho sem
+    // nenhum arquivo por trás — todo link colado no WhatsApp mostrava o OG
+    // genérico do site.
+    image: ogDaCapa(product?.thumbnail),
   });
 }
 
@@ -97,6 +103,7 @@ export default async function Page({ params }: Props) {
       aulas: product?.metrics?.lessons,
       preco: product?.pricing?.price,
       moeda: product?.pricing?.currency,
+      imagem: ogDaCapa(product?.thumbnail),
     }),
     schemaTrilha(locale, [
       { nome: "Início", caminho: "" },

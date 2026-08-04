@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { formatEditorialDate } from "@/lib/editorial-verification";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 import FaixaDoAluno, { useAcessoDoAluno, temAcessoTotal } from "./FaixaDoAluno";
+import { CapaDoCurso } from "@/components/courses/CapaDoCurso";
 
 export default function CourseSalesPage({
   initialProduct = null,
@@ -43,7 +44,6 @@ export default function CourseSalesPage({
   const [loading, setLoading] = useState(!initialProduct);
   const [expandedModules, setExpandedModules] = useState<number[]>([1]);
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
-  const [showTrailer, setShowTrailer] = useState(false);
   const locale = useLocale();
 
   // Quem está olhando. `null` para visitante e enquanto a resposta não chega —
@@ -254,6 +254,24 @@ export default function CourseSalesPage({
       <main className="pt-20">
         {/* HERO SECTION - Above the Fold */}
         <section className="relative bg-gradient-to-b from-amber-900/30 via-black to-black py-12 overflow-hidden">
+          {/* A própria capa do curso, ampliada e desfocada, como atmosfera do
+              topo. Vinte e sete páginas de venda tinham exatamente o mesmo fundo
+              — a mesma grade de pontos roxos —, então nenhuma delas parecia ser
+              sobre coisa alguma. Aqui cada curso passa a ter a cor da arte dele
+              (o couro marrom do WhatsApp, o navy do OpenClaw) sem custar nenhum
+              arquivo novo: é a imagem que a página já ia baixar de qualquer
+              jeito, e o `aria-hidden` a mantém fora do leitor de tela. */}
+          {product.thumbnail && (
+            <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+              <img
+                src={product.thumbnail}
+                alt=""
+                className="w-full h-full object-cover scale-125 blur-3xl opacity-25"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-black" />
+            </div>
+          )}
+
           {/* Background Animation */}
           <div className="absolute inset-0 opacity-30">
             <div className="absolute inset-0" style={{
@@ -462,80 +480,36 @@ export default function CourseSalesPage({
               <div className="lg:col-span-1">
                 <div className="sticky top-24">
                   <Card className="bg-card/50 backdrop-blur border-2 border-amber-500/50 p-6 shadow-2xl shadow-amber-500/20">
-                    {/* Video Preview */}
-                    <div
-                      className="relative aspect-video rounded-lg mb-6 group cursor-pointer overflow-hidden"
-                      onClick={() => product.trailer && setShowTrailer(true)}
-                    >
-                      {/* Thumbnail background or gradient fallback */}
-                      {(product.thumbnail || product.seo?.ogImage) ? (
-                        <>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={product.thumbnail || product.seo?.ogImage}
-                            alt={product.name}
-                            className="absolute inset-0 w-full h-full object-cover"
-                            loading="eager"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                        </>
-                      ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-amber-600 to-yellow-700" />
-                      )}
-                      {product.trailer && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <motion.div
-                            whileHover={{ scale: 1.1 }}
-                            className="w-20 h-20 rounded-full bg-white/20 backdrop-blur flex items-center justify-center shadow-2xl shadow-black/30"
-                          >
-                            <Play className="text-white ml-1" size={32} />
-                          </motion.div>
-                        </div>
-                      )}
-                      <div className="absolute top-3 right-3 bg-black/70 px-3 py-1 rounded-full text-sm font-semibold">
-                        {t("sidebar.freePreview")}
-                      </div>
-                      <div className="absolute bottom-3 left-3 bg-black/70 px-3 py-1 rounded-full text-sm">
+                    {/* A CAPA, na proporção dela.
+                        Aqui havia uma caixa `aspect-video` com `object-cover`
+                        por cima de uma capa 720×1040: o navegador cortava fora
+                        66% da altura e sobrava uma tira do meio do livro — sem
+                        título, sem lombada, sem se parecer com um livro. Era a
+                        única imagem da página de venda inteira, e era essa.
+
+                        O botão de play saiu junto, e não por gosto: os 25
+                        `product.trailer` são animações das capas ANTIGAS, e o
+                        título nelas está estropiado — "Open'ehк" no lugar de
+                        OpenClaw, "ChateFll Do Zero" no lugar de ChatGPT do Zero
+                        (conferido quadro a quadro em 04/08/2026). Chamar aquilo
+                        de "Preview Gratuito" ao lado de R$ 79 custa mais caro do
+                        que não ter vídeo nenhum. Quem tem loop novo da capa vê o
+                        livro respirando aqui mesmo; os outros veem o livro
+                        parado, que já é bonito. */}
+                    <div className="relative mb-6 mx-auto w-full max-w-[248px]">
+                      <CapaDoCurso
+                        slug={product.slug}
+                        thumbnail={product.thumbnail || product.seo?.ogImage}
+                        alt={product.name}
+                        modo="auto"
+                        eager
+                        className="rounded-lg shadow-2xl shadow-black/60 ring-1 ring-amber-500/20"
+                      />
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/75 backdrop-blur px-3 py-1 rounded-full text-sm whitespace-nowrap">
                         <Clock className="inline mr-1" size={14} />
                         {product.metrics.duration}
                       </div>
                     </div>
-
-                    {/* Video Trailer Modal */}
-                    <AnimatePresence>
-                      {showTrailer && product.trailer && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-                          onClick={() => setShowTrailer(false)}
-                        >
-                          <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="relative w-full max-w-4xl aspect-video rounded-xl overflow-hidden shadow-2xl"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <video
-                              src={product.trailer}
-                              autoPlay
-                              loop
-                              muted
-                              playsInline
-                              className="w-full h-full object-cover"
-                            />
-                            <button
-                              onClick={() => setShowTrailer(false)}
-                              className="absolute top-3 right-3 w-10 h-10 rounded-full bg-black/60 flex items-center justify-center hover:bg-black/80 transition-colors"
-                            >
-                              <X className="text-white" size={20} />
-                            </button>
-                          </motion.div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
 
                     {/* Launch Price Banner */}
                     {effectiveDiscount > 0 && (
@@ -853,8 +827,15 @@ export default function CourseSalesPage({
 
               {/* CTA */}
               <div className="mt-12 text-center">
+                {/* `whitespace-normal` e o padding menor no celular não são
+                    enfeite: o `Button` nasce com `whitespace-nowrap`, e "Sim,
+                    Quero Dominar Tudo Isso Agora" numa linha só media 378px num
+                    aparelho de 375. Como o botão não cabia, o DOCUMENTO INTEIRO
+                    passava a ter 394px de largura — e aí tudo que é `w-full`
+                    (o cabeçalho, a barra fixa de baixo) esticava junto e
+                    aparecia cortado ao rolar. Um botão empurrava a página toda. */}
                 <Button
-                  className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-12 py-6 text-lg"
+                  className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-6 sm:px-12 py-6 text-base sm:text-lg whitespace-normal max-w-full h-auto"
                   size="lg"
                   onClick={handlePrimaryCourseAction}
                 >

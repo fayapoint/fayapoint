@@ -26,6 +26,12 @@ export function generatePageMetadata({
   const fullPath = `/${locale}${path}`;
   const canonicalUrl = `${SITE_URL}${fullPath}`;
 
+  // A capa do curso mora no Cloudinary, não em `public/`. Sem esta linha o
+  // prefixo do domínio era colado na frente da URL absoluta e saía
+  // `https://fayai.com.brhttps://res.cloudinary.com/...` — um OG quebrado que
+  // nenhum build acusa, porque é só uma string.
+  const imageUrl = image.startsWith("http") ? image : `${SITE_URL}${image}`;
+
   /**
    * O `hreflang="en"` saiu — e a razão é medida, não estética.
    *
@@ -56,8 +62,8 @@ export function generatePageMetadata({
       locale: locale === "en" ? "en_US" : "pt_BR",
       ...(title && { title }),
       ...(description && { description }),
-      images: [{ 
-        url: `${SITE_URL}${image}`,
+      images: [{
+        url: imageUrl,
         width: 1200,
         height: 630,
         alt: title || "FayAi",
@@ -67,7 +73,7 @@ export function generatePageMetadata({
       card: "summary_large_image",
       ...(title && { title }),
       ...(description && { description }),
-      images: [`${SITE_URL}${image}`],
+      images: [imageUrl],
     },
   };
 }

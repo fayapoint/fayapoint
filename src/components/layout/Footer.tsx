@@ -123,14 +123,19 @@ export function Footer() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={scrollToTop}
-            className="fixed bottom-24 right-8 z-50 group"
+            /* No celular são TRÊS controles flutuantes no mesmo canto — este
+               foguete, o selo "Voltar ao cubo" e a barra fixa de compra. Com 56px
+               e 32px de margem o foguete caía em cima do texto do card de preço.
+               Menor e mais encostado na borda no celular; no desktop, onde há
+               espaço de sobra, nada muda. */
+            className="fixed bottom-28 right-3 sm:bottom-24 sm:right-8 z-50 group"
           >
             <div className="relative">
               {/* Glow effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full blur-lg opacity-60 group-hover:opacity-100 transition-opacity" />
               
               {/* Button */}
-              <div className="relative w-14 h-14 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full flex items-center justify-center shadow-2xl border border-white/20">
+              <div className="relative w-11 h-11 sm:w-14 sm:h-14 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-full flex items-center justify-center shadow-2xl border border-white/20">
                 <motion.div
                   animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

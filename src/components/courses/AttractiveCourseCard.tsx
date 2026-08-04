@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/products";
 import { useLocale } from "next-intl";
 import { formatEditorialDate } from "@/lib/editorial-verification";
+import { CapaDoCurso } from "@/components/courses/CapaDoCurso";
 
 interface AttractiveCourseCardProps {
   product: Product;
@@ -100,12 +101,14 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                ilustração. Ricardo, 03/08/2026: *"As capas atuais que você gerou
                ficam muito cortadas quando utilizadas na página de cursos"*.
                `aspect-[720/1040]` é a proporção do arquivo: corte zero. */
-            <div className="relative overflow-hidden aspect-[720/1040]">
-              <img
-                src={product.thumbnail}
+            <div className="relative overflow-hidden">
+              {/* O livro parado — e, nos cursos que já têm loop, o mesmo livro
+                  respirando quando o mouse entra no card. O alinhamento entre a
+                  imagem retrato e o vídeo quadrado mora em `CapaDoCurso`. */}
+              <CapaDoCurso
+                slug={product.slug}
+                thumbnail={product.thumbnail}
                 alt={product.name}
-                className="w-full h-full object-cover"
-                loading="lazy"
               />
 
               {/* Badges */}

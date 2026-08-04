@@ -41,6 +41,8 @@ export interface DadosCurso {
   aulas?: number;
   preco?: number;
   moeda?: string;
+  /** URL absoluta da capa. O resultado rico de curso mostra imagem quando há. */
+  imagem?: string;
 }
 
 export function schemaCurso(c: DadosCurso) {
@@ -55,6 +57,7 @@ export function schemaCurso(c: DadosCurso) {
     url,
     provider: ORGANIZACAO,
     inLanguage: c.locale === "en" ? "en" : "pt-BR",
+    ...(c.imagem && { image: c.imagem }),
     ...(c.nivel && { educationalLevel: c.nivel }),
     // `hasCourseInstance` é obrigatório para o resultado rico de cursos.
     hasCourseInstance: {

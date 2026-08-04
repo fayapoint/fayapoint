@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Product } from "@/lib/products";
 import { AttractiveCourseCard } from "@/components/courses/AttractiveCourseCard";
+import { CapaDoCurso } from "@/components/courses/CapaDoCurso";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import {
@@ -326,12 +327,12 @@ export default function CoursesCatalog({
               <div className="grid gap-0 lg:grid-cols-[auto_1.3fr_0.9fr] lg:items-center">
                 {/* Course Cover Thumbnail */}
                 {monthlyOffers.freeCourse.thumbnail && (
-                  <div className="hidden lg:block w-48 h-full overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={monthlyOffers.freeCourse.thumbnail}
+                  <div className="hidden lg:flex w-56 items-center justify-center p-5">
+                    <CapaDoCurso
+                      slug={monthlyOffers.freeCourse.slug}
+                      thumbnail={monthlyOffers.freeCourse.thumbnail}
                       alt={monthlyOffers.freeCourse.name}
-                      className="w-full h-full object-cover"
+                      className="w-full rounded-lg shadow-xl shadow-black/50 ring-1 ring-emerald-500/20"
                     />
                   </div>
                 )}
@@ -442,11 +443,22 @@ export default function CoursesCatalog({
                   <Card className="overflow-hidden border-2 border-yellow-500/50 hover:border-yellow-400 transition-all bg-gradient-to-br from-gray-900 via-gray-900 to-yellow-900/20 hover:shadow-2xl hover:shadow-yellow-500/20">
                     <div className="grid md:grid-cols-3 gap-0">
                       {/* Image/Visual Section */}
-                      <div className="relative bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center overflow-hidden">
+                      {/* O fundo era laranja chapado e a capa vinha esticada com
+                          `h-full object-cover` — a altura da célula é ditada pela
+                          coluna de texto ao lado, então o livro deformava junto.
+                          Agora a capa entra na proporção dela, centrada, sobre o
+                          navy da marca. */}
+                      <div className="relative bg-gradient-to-br from-amber-900/25 via-black to-black flex items-center justify-center overflow-hidden p-6">
                         {featured.thumbnail ? (
                           <>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={featured.thumbnail} alt={featured.name} className="w-full h-full object-cover" />
+                            <CapaDoCurso
+                              slug={featured.slug}
+                              thumbnail={featured.thumbnail}
+                              alt={featured.name}
+                              modo="auto"
+                              eager
+                              className="w-full max-w-[300px] rounded-xl shadow-2xl shadow-black/60 ring-1 ring-amber-500/20"
+                            />
                             <div className="absolute bottom-4 left-4">
                               <Badge className="bg-yellow-400 text-black font-bold">
                                 {t("featured.bestseller")}
