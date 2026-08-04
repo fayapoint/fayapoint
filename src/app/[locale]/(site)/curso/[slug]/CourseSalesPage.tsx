@@ -25,6 +25,7 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { formatEditorialDate } from "@/lib/editorial-verification";
 import { getClientAuthHeaders } from "@/lib/client-auth";
+import FaixaDoAluno, { useAcessoDoAluno, temAcessoTotal } from "./FaixaDoAluno";
 
 export default function CourseSalesPage({
   initialProduct = null,
@@ -44,6 +45,11 @@ export default function CourseSalesPage({
   const [expandedFaqs, setExpandedFaqs] = useState<number[]>([]);
   const [showTrailer, setShowTrailer] = useState(false);
   const locale = useLocale();
+
+  // Quem está olhando. `null` para visitante e enquanto a resposta não chega —
+  // e nesse caso a página se comporta exatamente como sempre se comportou.
+  const acesso = useAcessoDoAluno(slug);
+  const jaTemOCurso = temAcessoTotal(acesso);
 
   // O curso chega pronto do servidor (`initialProduct`) e só caímos no fetch se
   // ele faltar — banco fora do ar, essencialmente.
@@ -185,7 +191,20 @@ export default function CourseSalesPage({
     }
   };
 
+  /**
+   * Quem já tem o curso não é mandado para o carrinho — é mandado para o
+   * curso.
+   *
+   * Cobre de uma vez os quatro botões desta página (barra lateral, duas
+   * seções e a barra fixa do celular), que antes despejavam no carrinho um
+   * item que o assinante já paga. Vale também para quem está matriculado.
+   */
   const handlePrimaryCourseAction = () => {
+    if (jaTemOCurso) {
+      router.push(`/${locale}/portal/learn/${product.slug}`);
+      return;
+    }
+
     if (isFreeCourseOfMonth) {
       void handleFreeCourseClaim();
       return;
@@ -208,6 +227,11 @@ export default function CourseSalesPage({
   };
 
   const handleSecondaryCourseAction = () => {
+    if (jaTemOCurso) {
+      router.push(`/${locale}/portal/learn/${product.slug}`);
+      return;
+    }
+
     if (isFreeCourseOfMonth) {
       void handleFreeCourseClaim();
       return;
@@ -250,6 +274,10 @@ export default function CourseSalesPage({
                   <ChevronRight size={14} />
                   <span className="text-amber-400">{product.categoryPrimary}</span>
                 </div>
+
+                {/* Quem já é aluno é reconhecido AQUI, antes de qualquer preço.
+                    Some sozinha para visitante — o HTML público não muda. */}
+                <FaixaDoAluno slug={product.slug} locale={locale} preco={product.pricing.price} acesso={acesso} />
 
                 {/* Badges */}
                 <div className="flex flex-wrap items-center gap-3 mb-6">
@@ -599,13 +627,15 @@ export default function CourseSalesPage({
                         size="lg"
                         onClick={handlePrimaryCourseAction}
                       >
-                        {isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
-                        {isFreeCourseOfMonth
-                          ? (isPtBr ? "Liberar grátis" : "Unlock free")
-                          : t("sidebar.buyNow")}
+                        {jaTemOCurso ? <PlayCircle className="mr-2" size={20} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
+                        {jaTemOCurso
+                          ? (isPtBr ? "Ler agora" : "Read now")
+                          : isFreeCourseOfMonth
+                            ? (isPtBr ? "Liberar grátis" : "Unlock free")
+                            : t("sidebar.buyNow")}
                       </Button>
-                      
-                      {!isFreeCourseOfMonth && (
+
+                      {!isFreeCourseOfMonth && !jaTemOCurso && (
                         <Button
                           variant="outline"
                           className="w-full border-2 border-amber-500 text-amber-400 hover:bg-amber-500/10"
@@ -1082,20 +1112,35 @@ export default function CourseSalesPage({
       <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-card/95 backdrop-blur border-t border-amber-500/50 p-4 z-50">
         <div className="flex items-center justify-between gap-4">
           <div>
-            {effectiveOriginalPrice > effectivePrice && (
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground line-through text-sm">R$ {effectiveOriginalPrice.toLocaleString()}</span>
-                <Badge className="bg-red-500 text-white text-xs">-{effectiveDiscount}%</Badge>
+            {/* Preço nenhum para quem já paga: no celular esta barra fica
+                colada na faixa "você já paga por este curso", e um valor em
+                âmbar ao lado dela é a contradição em dois dedos de tela. */}
+            {jaTemOCurso ? (
+              <div className="text-sm font-bold text-amber-400">
+                {isPtBr ? "Incluído no seu plano" : "Included in your plan"}
               </div>
+            ) : (
+              <>
+                {effectiveOriginalPrice > effectivePrice && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground line-through text-sm">R$ {effectiveOriginalPrice.toLocaleString()}</span>
+                    <Badge className="bg-red-500 text-white text-xs">-{effectiveDiscount}%</Badge>
+                  </div>
+                )}
+                <div className="text-xl font-bold text-amber-400">R$ {effectivePrice.toLocaleString()}</div>
+              </>
             )}
-            <div className="text-xl font-bold text-amber-400">R$ {effectivePrice.toLocaleString()}</div>
           </div>
           <Button
             className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-6"
             onClick={handlePrimaryCourseAction}
           >
-            {isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}
-            {isFreeCourseOfMonth ? (isPtBr ? "Liberar grátis" : "Unlock free") : t("mobileCta.buy")}
+            {jaTemOCurso ? <PlayCircle className="mr-2" size={18} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}
+            {jaTemOCurso
+              ? (isPtBr ? "Ler agora" : "Read now")
+              : isFreeCourseOfMonth
+                ? (isPtBr ? "Liberar grátis" : "Unlock free")
+                : t("mobileCta.buy")}
           </Button>
         </div>
       </div>
