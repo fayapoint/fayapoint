@@ -110,8 +110,30 @@ const ARTE_POR_CATEGORIA: Record<Categoria, string> = {
   "Produtividade": "/inventando/arte/cat-produtividade.webp",
 };
 
+/**
+ * A arte PRÓPRIA de cada microcurso.
+ *
+ * A economia de sete peças por categoria (explicada acima) tinha um custo que só
+ * apareceu com a seção cheia: são 16 microcursos para 7 artes, e "Modelos" tem
+ * quatro. Numa grade de nove cards, o mesmo cérebro roxo aparecia três vezes
+ * lado a lado, e a paleta de "Imagem" duas. O visitante não lê isso como
+ * identidade de categoria — lê como catálogo pobre.
+ *
+ * Cada arte aqui mostra o que AQUELA lição faz: o prisma que recebe três feixes
+ * e emite um, a folha que se abre em camadas, a moeda que equilibra a torre. Os
+ * prompts exatos estão em `D:\fayai\site-imagens\inventando\PROMPTS.md`.
+ *
+ * Quem não tiver arte própria cai na da categoria — a seção nunca fica sem
+ * imagem enquanto o lote não fecha.
+ */
+const ARTE_POR_MICROCURSO: Record<string, string> = {};
+
 export function capaDe(m: Microcurso): string {
-  return ARTE_POR_CATEGORIA[m.categoria] ?? "/inventando/arte/microcurso.webp";
+  return (
+    ARTE_POR_MICROCURSO[m.slug] ??
+    ARTE_POR_CATEGORIA[m.categoria] ??
+    "/inventando/arte/microcurso.webp"
+  );
 }
 
 /**
