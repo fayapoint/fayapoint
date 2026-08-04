@@ -11,6 +11,7 @@ import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { debitar, saldoParaGastar, custoDe } from "@/lib/creditos";
 import { MINIMA_CONFIANCA, impressao, escreverCamada } from "@/lib/atelie-servidor";
+import { podePersonalizar, motivoSemPersonalizacao } from "@/lib/curso-personalizavel";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -139,6 +140,16 @@ export async function POST(request: NextRequest) {
     const curso = typeof body.curso === "string" ? body.curso.trim() : "";
     const refazer = body.refazer === true;
     if (!curso) return NextResponse.json({ error: "curso é obrigatório" }, { status: 400 });
+
+    // O livro sagrado não se reescreve — nem por URL montada à mão. Esta é a
+    // rota que chama o modelo e debita o crédito, então é aqui que a recusa
+    // precisa acontecer, antes de qualquer gasto.
+    if (!podePersonalizar(curso)) {
+      return NextResponse.json(
+        { error: motivoSemPersonalizacao(curso) || "Este curso não aceita personalização" },
+        { status: 403 },
+      );
+    }
 
     /**
      * ⚠️ Só personaliza curso que a pessoa PODE LER (03/08/2026).

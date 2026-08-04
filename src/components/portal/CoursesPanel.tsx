@@ -15,6 +15,7 @@ import type { VagasSimultaneas } from "@/lib/vagas-simultaneas";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
 import { TrilhoParallax } from "@/components/biblioteca/TrilhoParallax";
 import { LivroDosCursos, TituloDoLivro } from "@/components/biblioteca/LivroDosCursos";
+import { podePersonalizar } from "@/lib/curso-personalizavel";
 
 interface CourseProgressCard {
   _id: string;
@@ -610,7 +611,8 @@ export function CoursesPanel({
                 // curso bloqueado, "personalize este curso" seria vender o
                 // segundo andar de uma casa sem porta.
                 atelie:
-                  course.isEnrolled || course.estado === "disponivel" || course.estado === "gratis"
+                  (course.isEnrolled || course.estado === "disponivel" || course.estado === "gratis") &&
+                  podePersonalizar(course.slug)
                     ? { href: `/curso/${course.slug}/meu`, rotulo: "Com a minha cara" }
                     : undefined,
                 acao:

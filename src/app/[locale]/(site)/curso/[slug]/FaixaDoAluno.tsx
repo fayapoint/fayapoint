@@ -8,6 +8,7 @@ import { ArrowRight, BookOpen, Check, Crown, Loader2, PlayCircle, Wand2 } from "
 import { Button } from "@/components/ui/button";
 import { TIER_CONFIGS, resolvePlan, type SubscriptionPlan } from "@/lib/course-tiers";
 import { getClientAuthHeaders } from "@/lib/client-auth";
+import { podePersonalizar, motivoSemPersonalizacao } from "@/lib/curso-personalizavel";
 
 /**
  * A faixa que reconhece quem já é aluno (03/08/2026).
@@ -160,12 +161,14 @@ export default function FaixaDoAluno({
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            <Link href={`/${locale}/curso/${slug}/meu`}>
-              <Button variant="outline" className="border-amber-400/40 text-amber-200 hover:bg-amber-500/10">
-                <Wand2 size={16} className="mr-1.5" />
-                Personalizar
-              </Button>
-            </Link>
+            {podePersonalizar(slug) && (
+              <Link href={`/${locale}/curso/${slug}/meu`}>
+                <Button variant="outline" className="border-amber-400/40 text-amber-200 hover:bg-amber-500/10">
+                  <Wand2 size={16} className="mr-1.5" />
+                  Personalizar
+                </Button>
+              </Link>
+            )}
             <Link href={`/${locale}/portal/learn/${slug}`}>
               <Button className="bg-cyan-500 font-bold text-black hover:bg-cyan-400">
                 <PlayCircle size={16} className="mr-1.5" />
@@ -190,9 +193,13 @@ export default function FaixaDoAluno({
             </p>
             <p className="mt-0.5 text-xs text-muted-foreground">
               Você já paga por este curso — não precisa comprar de novo.{" "}
-              <Link href={`/${locale}/curso/${slug}/meu`} className="font-semibold text-amber-300 hover:underline">
-                Pode até reescrevê-lo para o seu negócio →
-              </Link>
+              {podePersonalizar(slug) ? (
+                <Link href={`/${locale}/curso/${slug}/meu`} className="font-semibold text-amber-300 hover:underline">
+                  Pode até reescrevê-lo para o seu negócio →
+                </Link>
+              ) : (
+                <span className="text-muted-foreground">{motivoSemPersonalizacao(slug)}</span>
+              )}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

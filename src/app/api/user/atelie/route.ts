@@ -13,6 +13,7 @@ import { montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { saldoDe, garantirCreditos } from "@/lib/creditos";
 import { montarOrcamento, calibrar, type IdOpcao } from "@/lib/atelie";
 import { MINIMA_CONFIANCA, primeiroCapituloUtil } from "@/lib/atelie-servidor";
+import { podePersonalizar, motivoSemPersonalizacao } from "@/lib/curso-personalizavel";
 
 export const dynamic = "force-dynamic";
 
@@ -209,6 +210,16 @@ export async function POST(request: NextRequest) {
     const curso = typeof body.curso === "string" ? body.curso.trim() : "";
     const refazer = body.refazer === true;
     if (!curso) return NextResponse.json({ error: "curso é obrigatório" }, { status: 400 });
+
+    // A trava do livro sagrado tem de estar na ROTA, não só no botão. Esconder o
+    // link não impede um POST montado à mão, e é este endpoint que chama o
+    // modelo, gasta crédito e grava a amostra.
+    if (!podePersonalizar(curso)) {
+      return NextResponse.json(
+        { error: motivoSemPersonalizacao(curso) || "Este curso não aceita personalização" },
+        { status: 403 },
+      );
+    }
 
     const persona = (user.socialPersona || {}) as unknown as PersonaProfunda;
     const dossie = montarDossie(persona, { nome: user.name, temFoto: !!user.image, avatar: user.image });

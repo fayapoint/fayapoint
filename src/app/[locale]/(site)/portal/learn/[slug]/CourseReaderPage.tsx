@@ -54,6 +54,7 @@ import {
 } from "@/lib/editorial-verification";
 import { useTabHiddenAtMount } from "@/hooks/useTabHiddenAtMount";
 import { usePostHog } from "posthog-js/react";
+import { mediaLocalDoCurso } from "@/lib/curso-media-local";
 
 /* ═══════════════════════════════════════════════════════════
    Types
@@ -110,11 +111,13 @@ type CourseContentDto = {
 
 /* ─── Content Forge Media Types ─── */
 type MediaAsset = {
-  source?: string; // "youtube" | "cloudinary" | "url"
+  source?: string; // "youtube" | "cloudinary" | "url" | "local"
   url?: string;
   publicId?: string;
   videoId?: string;
   caption?: string;
+  /** O mesmo quadro animado, quando a cena tem versão em movimento. */
+  loop?: string;
 };
 
 type ChapterMediaData = {
@@ -289,6 +292,117 @@ function optimizeCloudinaryUrl(src: string, width?: number): string {
    Renders hero image, video, audio from Content Forge metadata
    ═══════════════════════════════════════════════════════════ */
 
+/**
+ * Junta a arte do disco com a mídia curada no Content Forge, campo a campo.
+ *
+ * Trocar o capítulo inteiro pelo que vem do banco parece o certo e não é. No
+ * `chatgpt-zero`, o banco tem 15 dos 31 capítulos e cada um com **2** imagens de
+ * galeria; o disco tem os 31 com **seis a oito** cenas cada, e as legendas. Uma
+ * substituição por capítulo trocaria seis cenas por duas — o banco ganharia
+ * justamente por ter menos.
+ *
+ * Então: vídeo, áudio e NotebookLM só existem no banco e passam direto; o herói
+ * do banco vence quando há; e a galeria fica sendo a UNIÃO das duas, sem repetir
+ * URL, com a mais rica na frente.
+ */
+function fundirMedia(
+  local: Record<string, ChapterMediaData>,
+  doBanco: Record<string, ChapterMediaData>,
+): Record<string, ChapterMediaData> {
+  const saida: Record<string, ChapterMediaData> = { ...local };
+
+  for (const [chave, b] of Object.entries(doBanco)) {
+    const l = local[chave];
+    if (!l) {
+      saida[chave] = b;
+      continue;
+    }
+    const galeriaLocal = l.gallery || [];
+    const galeriaBanco = b.gallery || [];
+    const maior = galeriaLocal.length >= galeriaBanco.length ? galeriaLocal : galeriaBanco;
+    const menor = maior === galeriaLocal ? galeriaBanco : galeriaLocal;
+    const vistas = new Set(maior.map(g => g.url));
+
+    saida[chave] = {
+      ...l,
+      ...b,
+      heroImage: b.heroImage?.url ? b.heroImage : l.heroImage,
+      gallery: [...maior, ...menor.filter(g => g.url && !vistas.has(g.url))],
+    };
+  }
+
+  return saida;
+}
+
+/**
+ * Uma cena do capítulo — parada, e em movimento quando existe o quadro animado.
+ *
+ * Metade das cenas da biblioteca local tem um `.webm` irmão do `.webp`. Tocar
+ * seis vídeos ao abrir um capítulo seria um desperdício (e um capítulo tem seis
+ * cenas), então o vídeo só é BAIXADO no hover — `preload="none"` — e some quando
+ * o mouse sai. Quem nunca passar o mouse não paga um byte.
+ */
+function CenaDoCapitulo({ asset, indice }: { asset: MediaAsset; indice: number }) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [tocando, setTocando] = useState(false);
+
+  const entrar = () => {
+    const v = video.current;
+    if (!v) return;
+    v.play().then(() => setTocando(true)).catch(() => {});
+  };
+  const sair = () => {
+    const v = video.current;
+    if (!v) return;
+    v.pause();
+    setTocando(false);
+  };
+
+  return (
+    <figure
+      className="relative rounded-2xl overflow-hidden ring-1 ring-[rgba(var(--reader-tint),0.06)] shadow-lg shadow-black/20"
+      onMouseEnter={entrar}
+      onMouseLeave={sair}
+    >
+      <div className="relative">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={asset.source === "cloudinary" ? optimizeCloudinaryUrl(asset.url || "", 800) : asset.url || ""}
+          alt={asset.caption || `Imagem ${indice + 1}`}
+          className="w-full h-auto object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        {asset.loop && (
+          <video
+            ref={video}
+            src={asset.loop}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden="true"
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
+              tocando ? "opacity-100" : "opacity-0",
+            )}
+          />
+        )}
+        {asset.loop && !tocando && (
+          <span className="absolute bottom-2 right-2 rounded-full bg-black/65 px-2 py-0.5 text-[10px] font-medium text-white/80 backdrop-blur">
+            passe o mouse
+          </span>
+        )}
+      </div>
+      {asset.caption && (
+        <figcaption className="px-4 py-2 text-xs text-[rgba(var(--reader-tint),0.3)] italic bg-black/20">
+          {asset.caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; chapterTitle: string }) {
   const videoAsset = media.video;
   const heroAsset = media.heroImage;
@@ -376,21 +490,7 @@ function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; 
           galleryAssets.length === 1 ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"
         )}>
           {galleryAssets.map((img, idx) => (
-            <div key={idx} className="rounded-2xl overflow-hidden ring-1 ring-[rgba(var(--reader-tint),0.06)] shadow-lg shadow-black/20">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={img.source === "cloudinary"
-                  ? optimizeCloudinaryUrl(img.url || "", 800)
-                  : img.url || ""}
-                alt={img.caption || `Imagem ${idx + 1}`}
-                className="w-full h-auto object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              {img.caption && (
-                <p className="px-4 py-2 text-xs text-[rgba(var(--reader-tint),0.3)] italic bg-black/20">{img.caption}</p>
-              )}
-            </div>
+            <CenaDoCapitulo key={idx} asset={img} indice={idx} />
           ))}
         </div>
       )}
@@ -1347,12 +1447,25 @@ export default function CourseReaderPage() {
           });
         }
 
-        // 4. Fetch chapter media from Content Forge (non-blocking)
+        // 4. A arte do capítulo — do disco primeiro, do Content Forge por cima.
+        //
+        // A do disco entra ANTES da rede porque ela já está no bundle: o
+        // capítulo abre ilustrado no primeiro quadro, sem esperar resposta
+        // nenhuma. São 1.474 arquivos em `public/cursos/media/` que ficaram
+        // seis cursos inteiros sem aparecer para ninguém, porque nada apontava
+        // para a pasta.
+        //
+        // A do banco vem depois e VENCE onde existir: se alguém curou mídia no
+        // Content Forge para um capítulo, é ela que manda. O disco fica sendo
+        // o piso, não o teto.
+        const local = mediaLocalDoCurso(slug);
+        if (Object.keys(local).length) setChapterMediaMap(local);
+
         fetch(`/api/courses/${slug}/media`)
           .then(res => res.ok ? res.json() : null)
           .then((data: CourseMediaResponse | null) => {
             if (data?.success && data.mediaByIndex) {
-              setChapterMediaMap(data.mediaByIndex);
+              setChapterMediaMap(anterior => fundirMedia(anterior, data.mediaByIndex));
             }
           })
           .catch(() => { /* Media fetch is non-critical */ });

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import AteliePainel from "./AteliePainel";
+import { podePersonalizar } from "@/lib/curso-personalizavel";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -30,5 +32,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { locale, slug } = await params;
+
+  // O livro sagrado não passa pelo Ateliê, e a trava tem de estar AQUI também,
+  // não só nos botões: esconder o link não fecha a porta para quem digita a URL
+  // — e esta rota gera conteúdo, gasta crédito e grava no banco. Quem chegar
+  // aqui volta para a página do curso.
+  if (!podePersonalizar(slug)) {
+    redirect(`/${locale}/curso/${slug}`);
+  }
+
   return <AteliePainel slug={slug} locale={locale} />;
 }
