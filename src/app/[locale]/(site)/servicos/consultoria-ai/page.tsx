@@ -8,6 +8,7 @@ import { ScheduleConsultationButton } from "@/components/consultation/ScheduleCo
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AIConsultingToolbox } from "@/components/services/AIConsultingToolbox";
+import { ServicoHeroLoop } from "@/components/services/ServicoHeroLoop";
 import Script from "next/script";
 
 const faqItems = [
@@ -106,7 +107,8 @@ export default async function AIConsultingPage({
       </Script>
       <main>
         {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      <section className="relative isolate pt-32 pb-20 px-4 overflow-hidden">
+        <ServicoHeroLoop slug="consultoria-ai" />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
         
         <div className="container mx-auto max-w-6xl relative">

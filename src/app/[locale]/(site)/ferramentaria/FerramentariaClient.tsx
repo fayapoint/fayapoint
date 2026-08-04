@@ -37,6 +37,23 @@ type Props = {
 /** 42 = o dourado da casa, usado quando a marca é preto-e-branco. */
 const MATIZ_PADRAO = 42;
 
+/**
+ * Os verbos que já têm o gesto gravado em `public/ferramentaria/verbos/`.
+ *
+ * É uma lista explícita, e não uma tentativa de carregar o arquivo para todos:
+ * um `<video>` apontando para um `.webm` que não existe deixa um 404 no console
+ * e um retângulo preto no ladrilho. Ao gravar o loop dos quatro que faltam
+ * (desenhar, compor, automatizar, apresentar), acrescente o slug aqui.
+ */
+const VERBOS_COM_LOOP = new Set([
+  "conversar",
+  "programar",
+  "filmar",
+  "escrever",
+  "organizar",
+  "construir",
+]);
+
 function matizDe(hsl: [number, number, number] | null) {
   return hsl ? hsl[0] : MATIZ_PADRAO;
 }
@@ -124,6 +141,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
           {verbos.map((v) => {
             const ativo = verboAtivo === v.slug;
             const quantas = ferramentas.filter((f) => f.verbo.slug === v.slug).length;
+            const temLoop = VERBOS_COM_LOOP.has(v.slug);
 
             return (
               <button
@@ -131,6 +149,14 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
                 type="button"
                 onClick={() => filtrarPor(ativo ? null : v.slug)}
                 aria-pressed={ativo}
+                onMouseEnter={(e) => {
+                  const vid = e.currentTarget.querySelector("video");
+                  if (vid) void vid.play().catch(() => {});
+                }}
+                onMouseLeave={(e) => {
+                  const vid = e.currentTarget.querySelector("video");
+                  if (vid) { vid.pause(); vid.currentTime = 0; }
+                }}
                 className="group relative overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 style={{
                   borderColor: ativo
@@ -142,6 +168,24 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
                   transform: ativo ? "translateY(-2px)" : undefined,
                 }}
               >
+                {/* O gesto do verbo, em movimento — só toca no hover (ver
+                    VERBOS_COM_LOOP). Fica atrás do brilho e do texto, com
+                    opacidade baixa: é atmosfera, não conteúdo, e o rótulo
+                    precisa continuar legível por cima. */}
+                {temLoop && (
+                  <video
+                    aria-hidden
+                    muted
+                    loop
+                    playsInline
+                    preload="none"
+                    poster={`/ferramentaria/verbos/${v.slug}-loop.webp`}
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-35 motion-reduce:hidden"
+                  >
+                    <source src={`/ferramentaria/verbos/${v.slug}-loop.webm`} type="video/webm" />
+                  </video>
+                )}
+
                 {/* Brilho que sobe no hover */}
                 <span
                   aria-hidden

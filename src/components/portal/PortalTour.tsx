@@ -32,6 +32,7 @@ const STEPS: { art: string; video?: string; cor: string; titulo: string; texto: 
   },
   {
     art: "/portal/trail/primeira-conquista.webp",
+    video: "/portal/trail/primeira-conquista-loop.webm",
     cor: "#a3e635",
     titulo: "Jogue, conquiste, repita",
     texto: "Desafios diários, conquistas, ranking e recompensas. Tudo com XP real — aprenda IA fazendo, não assistindo.",

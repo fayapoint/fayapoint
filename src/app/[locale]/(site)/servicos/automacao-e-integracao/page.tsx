@@ -6,6 +6,7 @@ import { ScheduleConsultationButton } from "@/components/consultation/ScheduleCo
 import { ServiceBuilderSection } from "@/components/home/ServiceBuilderSection";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AutomationToolbox } from "@/components/services/AutomationToolbox";
+import { ServicoHeroLoop } from "@/components/services/ServicoHeroLoop";
 import { ArrowRight, CheckCircle2, CircuitBoard, Gauge, Link2, Workflow, BadgeCheck } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -189,8 +190,9 @@ export default async function AutomationIntegrationPage({
       </Script>
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center justify-center p-5 rounded-2xl bg-orange-500/10 mb-6">
+        <div className="relative isolate overflow-hidden rounded-3xl px-4 py-10 max-w-5xl mx-auto text-center mb-16">
+          <ServicoHeroLoop slug="automacao-e-integracao" />
+          <div className="inline-flex items-center justify-center p-5 rounded-2xl bg-orange-500/10 mb-6 relative">
             <Workflow className="w-12 h-12 text-orange-500" />
           </div>
           <p className="text-sm uppercase tracking-[0.3em] text-orange-400 mb-4">

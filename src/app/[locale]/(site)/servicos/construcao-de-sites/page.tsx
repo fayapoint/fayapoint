@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ServicoHeroLoop } from "@/components/services/ServicoHeroLoop";
 import {
   CheckCircle,
   ArrowRight,
@@ -247,7 +248,8 @@ export default async function WebsiteBuildingPage({
         {JSON.stringify(faqLd)}
       </Script>
       <main>
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        <section className="relative isolate pt-32 pb-20 px-4 overflow-hidden">
+          <ServicoHeroLoop slug="construcao-de-sites" />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/10 pointer-events-none" />
           <div className="container mx-auto max-w-6xl relative">
             <div className="text-center max-w-4xl mx-auto">
