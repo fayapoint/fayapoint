@@ -105,6 +105,7 @@ type CourseContentDto = {
   contentUpdatedAt?: string | null;
   lessonContentCoverage?: LessonContentCoverage;
   editorialVerification?: EditorialVerification | null;
+  capitulosPersonalizados?: number;
 };
 
 /* ─── Content Forge Media Types ─── */
@@ -957,6 +958,8 @@ export default function CourseReaderPage() {
     contentUpdatedAt: string | null;
     lessonContentCoverage: LessonContentCoverage | null;
     editorialVerification: EditorialVerification | null;
+    /** Capítulos deste curso que já têm camada personalizada para este aluno. */
+    capitulosPersonalizados: number;
   } | null>(null);
 
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
@@ -1340,6 +1343,7 @@ export default function CourseReaderPage() {
             contentUpdatedAt: contentData.contentUpdatedAt ?? null,
             lessonContentCoverage: contentData.lessonContentCoverage ?? null,
             editorialVerification: contentData.editorialVerification ?? null,
+            capitulosPersonalizados: contentData.capitulosPersonalizados ?? 0,
           });
         }
 
@@ -2422,6 +2426,38 @@ export default function CourseReaderPage() {
                       media={currentChapterMedia}
                       chapterTitle={currentChapter.title}
                     />
+                  )}
+
+                  {/**
+                   * O convite ao Ateliê, no único lugar onde ele se explica
+                   * sozinho (03/08/2026).
+                   *
+                   * Quem está aqui está lendo, neste segundo, exatamente o
+                   * texto genérico que a personalização substituiria. Nenhuma
+                   * outra tela do site consegue argumentar tão bem — e é por
+                   * isso que a faixa some assim que o aluno personaliza: ela
+                   * não é publicidade, é a resposta para uma pergunta que ele
+                   * está fazendo agora.
+                   */}
+                  {contentMeta?.capitulosPersonalizados === 0 && (
+                    <Link
+                      href={`/${locale}/curso/${slug}/meu`}
+                      className="group mb-8 flex items-center gap-3 rounded-xl border border-amber-400/25 bg-amber-500/[0.05] px-4 py-3 no-underline transition-colors hover:border-amber-400/50 hover:bg-amber-500/[0.09]"
+                    >
+                      <Sparkles size={16} className="shrink-0 text-amber-400" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[13px] font-bold text-amber-200">
+                          Este capítulo pode começar falando do SEU negócio
+                        </span>
+                        <span className="block text-[11.5px] leading-snug text-[var(--reader-fg)]/45">
+                          Veja uma amostra grátis de como ele ficaria com a sua cara — sem gastar crédito.
+                        </span>
+                      </span>
+                      <ChevronRight
+                        size={16}
+                        className="shrink-0 text-amber-400/60 transition-transform group-hover:translate-x-0.5"
+                      />
+                    </Link>
                   )}
 
                   <div

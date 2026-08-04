@@ -36,10 +36,46 @@ export async function getContentFacts(): Promise<Map<string, string>> {
   return facts;
 }
 
-/** Substitui `{{fact:chave}}` pelos valores do registry. Token desconhecido fica visível para diagnóstico. */
+/**
+ * Substitui `{{fact:chave}}` pelos valores do registry.
+ *
+ * ## ⚠️ Token desconhecido é APAGADO, não exibido (03/08/2026)
+ *
+ * Até hoje esta função devolvia o token cru quando a chave não existia, "para
+ * diagnóstico". A intenção era boa e o efeito era o contrário: os seis
+ * chamadores são o leitor do aluno, a prévia pública e três prompts de modelo.
+ * Não há diagnóstico nenhum nessa lista — só gente pagando e o Googlebot. O
+ * diagnóstico ia parar na tela de quem comprou o curso.
+ *
+ * Medido no catálogo em 03/08: 236 tokens, **2 sem chave no registry**
+ * (`{{fact:token}}` e `{{fact:meta-precos}}`, os dois no `ia-no-whatsapp`),
+ * aparecendo crus no meio de uma frase para o aluno. É pouco e é o suficiente
+ * — a mesma classe de vazamento que a prévia teve, e que custou uma sessão.
+ *
+ * Agora o texto sai limpo e o aviso vai para o log do servidor, que é onde
+ * diagnóstico deve morar. Apagar deixa a frase capenga em vez de quebrada, e
+ * capenga o leitor perdoa como erro de digitação — chave entre chaves duplas,
+ * não.
+ *
+ * ⚠️ Apagar NÃO conserta o texto: as duas frases do `ia-no-whatsapp` foram
+ * escritas contando com um valor que nunca existiu e precisam ser reescritas
+ * pelo laço. Esta função só impede que o defeito seja servido.
+ */
 export function applyContentFacts(text: string, facts: Map<string, string>): string {
   if (!text || !text.includes('{{fact:')) return text;
-  return text.replace(/\{\{fact:([a-z0-9-]+)\}\}/g, (raw, key) => facts.get(key) ?? raw);
+  const ausentes: string[] = [];
+  const saida = text.replace(/\s*\{\{fact:([a-z0-9-]+)\}\}/g, (raw, key: string) => {
+    const valor = facts.get(key);
+    if (valor !== undefined) return raw.replace(`{{fact:${key}}}`, valor);
+    ausentes.push(key);
+    return '';
+  });
+  if (ausentes.length) {
+    console.warn(
+      `[content-facts] ${ausentes.length} token(s) sem chave no registry, removidos do texto servido: ${[...new Set(ausentes)].join(', ')}`,
+    );
+  }
+  return saida;
 }
 
 /** Conveniência: busca o registry e aplica. */

@@ -113,6 +113,8 @@ export async function GET(
       editorialVerification: normalizeEditorialVerification(
         product.editorialVerification as Record<string, unknown> | null | undefined
       ),
+      /** Quantos capítulos deste curso já têm camada personalizada. */
+      capitulosPersonalizados: 0,
     };
 
     // ── Try to get authenticated user ──
@@ -222,6 +224,11 @@ export async function GET(
         })
           .select('capitulo abertura exemplo tarefa')
           .lean();
+        // Quantos capítulos ESTE aluno já tem personalizados. Vai no payload
+        // para o leitor poder oferecer o Ateliê a quem lê o texto genérico —
+        // é o único lugar do site onde a pessoa está, neste segundo, vendo
+        // exatamente aquilo que a personalização melhoraria.
+        payload.capitulosPersonalizados = camadas.length;
         if (camadas.length) {
           payload.content = injetarCamada(
             payload.content,

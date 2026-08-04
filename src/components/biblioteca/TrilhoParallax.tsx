@@ -37,7 +37,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Clock, Layers, Loader2, PlayCircle, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface ItemTrilho {
@@ -67,7 +67,7 @@ export interface ItemTrilho {
    */
   estado?: {
     rotulo: string;
-    tom: "acervo" | "disponivel" | "upgrade" | "concluido" | "gratis";
+    tom: "acervo" | "disponivel" | "fila" | "upgrade" | "concluido" | "gratis";
   };
   /** Ação direta no card — hoje só "Liberar no plano". */
   acao?: {
@@ -75,11 +75,24 @@ export interface ItemTrilho {
     aoClicar: () => void;
     carregando?: boolean;
   };
+  /**
+   * O atalho para o Ateliê (03/08/2026).
+   *
+   * É link, e não botão com `onClick`, porque leva para outra página: link
+   * abre em nova aba com o meio do mouse, aparece no histórico e funciona com
+   * o teclado sem nada extra. A personalização é o coração do site e passou
+   * quase um mês invisível — o lugar dela é no card de cada curso, não numa
+   * aba escondida do perfil.
+   */
+  atelie?: { href: string; rotulo: string };
 }
 
 const TONS_ESTADO: Record<NonNullable<ItemTrilho["estado"]>["tom"], string> = {
   acervo: "border-cyan-400/30 bg-cyan-500/15 text-cyan-200",
   disponivel: "border-emerald-400/30 bg-emerald-500/15 text-emerald-200",
+  // Âmbar, e não o fúcsia do upgrade: "espere uma vaga" é aviso, não cadeado
+  // de pagamento, e a cor não pode dizer o contrário do texto.
+  fila: "border-amber-400/30 bg-amber-500/15 text-amber-200",
   upgrade: "border-fuchsia-400/30 bg-fuchsia-500/15 text-fuchsia-200",
   concluido: "border-amber-400/30 bg-amber-500/15 text-amber-200",
   gratis: "border-emerald-300/40 bg-emerald-400/20 text-emerald-100",
@@ -588,6 +601,23 @@ export function TrilhoParallax({
                   )}
                   {item.acao.rotulo}
                 </button>
+              )}
+
+              {item.atelie && (
+                <Link
+                  href={item.atelie.href}
+                  onClick={(e) => {
+                    // Arrastar o trilho não pode virar navegação. É a mesma
+                    // guarda do botão acima — o `percorrido` mede quantos
+                    // pixels o ponteiro andou desde que encostou no card.
+                    if (percorrido.current > 8) e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  className="pointer-events-auto relative z-[2] mt-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-200 transition-colors hover:bg-amber-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+                >
+                  <Wand2 size={12} />
+                  {item.atelie.rotulo}
+                </Link>
               )}
             </span>
           </div>

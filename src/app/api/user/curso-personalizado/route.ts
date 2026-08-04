@@ -1,16 +1,16 @@
-import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 import UserCourseLayer from "@/models/UserCourseLayer";
 import { getAuthUser } from "@/lib/auth";
 import { getMongoClient } from "@/lib/products";
-import { resolvePlan } from "@/lib/course-tiers";
+import { CREDIT_COSTS, TIER_CONFIGS, resolvePlan } from "@/lib/course-tiers";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
-import { blocoDePersona, montarDossie, type PersonaProfunda } from "@/lib/persona";
-import { generate } from "@/lib/ai/provider";
+import { montarDossie, type PersonaProfunda } from "@/lib/persona";
+import { debitar, saldoDe, custoDe } from "@/lib/creditos";
+import { MINIMA_CONFIANCA, impressao, escreverCamada } from "@/lib/atelie-servidor";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -29,27 +29,10 @@ export const maxDuration = 300;
  * de `MINIMA_CONFIANCA` a rota recusa e devolve o que falta preencher — o
  * painel do dossiê usa essa lista para pedir exatamente aquilo.
  */
-const MINIMA_CONFIANCA = 35;
-
-/**
- * Impressão curta do trecho que gerou a camada.
- *
- * Não precisa ser criptográfica — só precisa mudar quando o capítulo muda, e
- * caber num campo indexável. `createHash` do Node serve e não traz dependência.
- */
-function impressao(texto: string): string {
-  return createHash("sha1").update(texto).digest("hex").slice(0, 16);
-}
-
-const SISTEMA =
-  "Você adapta material didático de IA ao contexto REAL de um aluno brasileiro. " +
-  "Responda SEMPRE em JSON válido com as chaves abertura, exemplo e tarefa. " +
-  "Regras invioláveis: " +
-  "(1) português do Brasil, segunda pessoa, falando COM o aluno; " +
-  "(2) cite o ramo e a rotina dele de forma concreta — nada de 'sua empresa' genérico; " +
-  "(3) não invente fatos sobre ferramentas nem números de mercado; números do exemplo devem ser plausíveis e declarados como exemplo; " +
-  "(4) abertura em até 2 frases, exemplo em até 5 frases, tarefa em 1 frase executável hoje; " +
-  "(5) nada de saudação, título ou markdown de cabeçalho — só o texto.";
+// ⚠️ A trava, o hash e o prompt saíram deste arquivo em 03/08 e moram em
+// `lib/atelie-servidor.ts`. O motivo é o Ateliê: a amostra grátis precisa usar
+// o MESMO prompt da geração paga, senão ela vira propaganda enganosa — mostra
+// um texto e entrega outro depois do gasto de créditos.
 
 export async function GET(request: NextRequest) {
   try {
@@ -139,18 +122,50 @@ export async function POST(request: NextRequest) {
     const user = await User.findById(authUser.id);
     if (!user) return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
 
-    const plano = resolvePlan(user.subscription?.plan || "free");
-    if (plano !== "expert" && user.role !== "admin") {
-      return NextResponse.json(
-        { error: "O curso personalizado é exclusivo do plano Expert" },
-        { status: 403 }
-      );
-    }
-
+    /**
+     * ⚠️ Deixou de ser exclusivo do Expert em 03/08/2026.
+     *
+     * Trancar a personalização num plano fazia duas coisas ruins ao mesmo
+     * tempo. Tirava do Explorador e do Profissional a única razão de existir
+     * dos créditos que eles já pagam — 100 e 300 por mês que não compravam
+     * nada que valesse a pena. E dava ao Expert de graça aquilo que devia ser
+     * a prova de valor do produto, esvaziando o motivo de subir de plano.
+     *
+     * Agora quem manda é o CRÉDITO. Todo mundo pode personalizar; o plano
+     * decide quanto cabe por mês. É o laço que o Ricardo desenhou: crédito
+     * útil puxa tier maior, e tier maior não precisa mais trancar leitura.
+     */
     const body = await request.json().catch(() => ({}));
     const curso = typeof body.curso === "string" ? body.curso.trim() : "";
     const refazer = body.refazer === true;
     if (!curso) return NextResponse.json({ error: "curso é obrigatório" }, { status: 400 });
+
+    /**
+     * ⚠️ Só personaliza curso que a pessoa PODE LER (03/08/2026).
+     *
+     * Nasceu junto com a paridade crédito↔real. O plano gratuito passou a
+     * receber 30 créditos de boas-vindas, e sem esta guarda ele gastaria os 30
+     * reescrevendo trinta capítulos dos quais só consegue abrir três. Seria
+     * vender o segundo andar de uma casa sem escada — e com o dinheiro dele.
+     *
+     * A régua é a matrícula (ou o plano que lê tudo), a mesma que o
+     * `GET /api/courses/access` usa para liberar o leitor. Quem comprou o curso
+     * avulso é matriculado pelo webhook, então entra por aqui também.
+     */
+    const temNoAcervo = (user.enrolledCourses || []).some(
+      (c: { courseSlug: string; isActive: boolean }) => c.courseSlug === curso && c.isActive,
+    );
+    const planoLeTudo = TIER_CONFIGS[resolvePlan(user.subscription?.plan || "free")].limits.unlimited;
+    if (!temNoAcervo && !planoLeTudo && user.role !== "admin") {
+      return NextResponse.json(
+        {
+          error:
+            "Este curso ainda não está no seu acervo. Adicione-o primeiro — personalizar capítulos que você não pode abrir gastaria crédito à toa.",
+          precisaAcervo: true,
+        },
+        { status: 403 },
+      );
+    }
 
     const persona = (user.socialPersona || {}) as unknown as PersonaProfunda;
     const dossie = montarDossie(persona, { nome: user.name, temFoto: !!user.image, avatar: user.image });
@@ -191,97 +206,109 @@ export async function POST(request: NextRequest) {
     );
     const versao = persona.personaVersion || 0;
 
-    const contexto = blocoDePersona(persona, "curso");
-    // Uma leitura do registry para o laço inteiro — ele já tem cache de 5 min,
-    // mas buscar por capítulo seria pedir a mesma coisa 30 vezes.
+    /**
+     * ── A portaria: confere o orçamento ANTES de acionar o modelo ──────────
+     *
+     * A caixa registradora (`debitar`) roda no fim, sobre o que foi realmente
+     * escrito. Mas se ninguém conferisse o saldo antes, um aluno com zero
+     * crédito dispararia trinta chamadas de modelo e pagaria nada — nós é que
+     * pagaríamos a conta.
+     *
+     * A conta é feita sobre os capítulos que FALTAM, não sobre o curso inteiro:
+     * quem já gerou 30 e volta para atualizar 4 depois de aprofundar o perfil
+     * paga 4. Cobrar os 30 de novo transformaria "melhorei meu perfil" numa
+     * punição, e é justamente esse o comportamento que queremos premiar.
+     */
+    const aulas = capitulos.filter((c) => c.numero !== null);
+    const listaPendente = refazer
+      ? aulas
+      : aulas.filter((cap) => {
+          const anterior = jaTem.get(cap.indice);
+          if (anterior === undefined) return true;
+          if (anterior.versao < versao) return true;
+          return anterior.hash !== impressao(cap.corpo.slice(0, 2600));
+        });
+    const pendentes = listaPendente.length;
+
+    const saldo = saldoDe(user);
+    const custoPrevisto = custoDe("custom_course_chapter", pendentes);
+    if (pendentes > 0 && saldo.total < custoPrevisto) {
+      return NextResponse.json(
+        {
+          error: `Este curso custa ${custoPrevisto} créditos (${pendentes} capítulos × ${CREDIT_COSTS.custom_course_chapter}) e você tem ${saldo.total}.`,
+          creditosNecessarios: custoPrevisto,
+          creditosDisponiveis: saldo.total,
+          faltam: custoPrevisto - saldo.total,
+          capitulosPendentes: pendentes,
+        },
+        { status: 402 },
+      );
+    }
+
+    /**
+     * ── O LOTE: por que isto não escreve o curso inteiro de uma vez ────────
+     *
+     * ⚠️ Medido em 03/08/2026, com cronômetro: **20 segundos por capítulo**.
+     * Um curso de 30 capítulos levava **dez minutos** numa requisição só —
+     * contra `maxDuration = 300`. A conta não fechava nem no melhor cenário: a
+     * função morria na metade, o aluno via a aba girar por cinco minutos e
+     * recebia um erro de rede, sem saber que metade do curso tinha sido
+     * escrita e cobrada.
+     *
+     * Duas mudanças resolvem, e as duas são necessárias:
+     *
+     * 1. **Lote pequeno.** Cada requisição escreve no máximo `limite`
+     *    capítulos e devolve quantos ainda faltam. O cliente chama de novo até
+     *    zerar. Nenhuma requisição chega perto do teto, e fechar a aba no meio
+     *    não perde nada — a idempotência retoma de onde parou.
+     * 2. **Dentro do lote, em paralelo.** Os capítulos de um lote não dependem
+     *    uns dos outros: são chamadas independentes ao modelo, com a mesma
+     *    persona. Em série, quatro capítulos custam 80s; juntos, 20s. É a
+     *    diferença entre três minutos e dez para o curso inteiro.
+     *
+     * ⚠️ **O padrão é 2, e o número foi medido, não escolhido.** Com
+     * cronômetro, em 03/08: lote de 2 → **12s**; lote de 4 → **41s**. O salto
+     * é desproporcional porque o provedor estrangula acima de duas chamadas
+     * simultâneas, então o lote maior compra pouca velocidade e paga caro em
+     * risco: 41s passa do teto de função síncrona de várias hospedagens (a
+     * Netlify corta em 26s), e o corte apareceria só em produção, como
+     * capítulo faltando sem erro nenhum na tela.
+     *
+     * Com 2, um curso de 30 capítulos leva ~3 minutos no total, a barra anda a
+     * cada 12 segundos e nenhuma requisição chega perto de qualquer limite.
+     * Se um dia o provedor ficar mais rápido, subir este número é a única
+     * mudança necessária — mas meça antes.
+     */
+    const limite = Math.min(8, Math.max(1, Number(body.limite) || 2));
+    const loteAtual = listaPendente.slice(0, limite);
+
+    // Uma leitura do registry para o lote inteiro — ele já tem cache de 5 min,
+    // mas buscar por capítulo seria pedir a mesma coisa quatro vezes.
     const fatos = await getContentFacts();
-    let geradas = 0;
-    let puladas = 0;
+    const puladas = aulas.length - pendentes;
     const erros: string[] = [];
 
-    for (const cap of capitulos) {
-      // Bloco sem número é a capa do curso, não uma aula. Gerar camada para ele
-      // gastava uma chamada e escrevia "por que ESTE capítulo importa" em cima
-      // do título do curso.
-      if (cap.numero === null) continue;
+    const resultados = await Promise.allSettled(
+      loteAtual.map(async (cap) => {
+        const trecho = cap.corpo.slice(0, 2600);
+        // O hash fica sobre o texto CRU, com os `{{fact:…}}` no lugar. Se
+        // resolvesse antes de hashear, cada atualização do registry mudaria a
+        // impressão de todos os capítulos e mandaria regerar a camada de todos
+        // os alunos — uma conta de LLM por trocar o nome de um modelo.
+        const hash = impressao(trecho);
+        // Já o que vai para o modelo é resolvido: ele não deve ver token, e
+        // muito menos copiar um para dentro do texto que o aluno lê.
+        const trechoResolvido = applyContentFacts(trecho, fatos);
 
-      const trecho = cap.corpo.slice(0, 2600);
-      // O hash fica sobre o texto CRU, com os `{{fact:…}}` no lugar. Se
-      // resolvesse antes de hashear, cada atualização do registry mudaria a
-      // impressão de todos os capítulos e mandaria regerar a camada de todos
-      // os alunos — uma conta de LLM por trocar o nome de um modelo.
-      const hash = impressao(trecho);
-      // Já o que vai para o modelo é resolvido: ele não deve ver token, e
-      // muito menos copiar um para dentro do texto que o aluno lê.
-      const trechoResolvido = applyContentFacts(trecho, fatos);
-      const anterior = jaTem.get(cap.indice);
-      if (!refazer && anterior !== undefined && anterior.versao >= versao && anterior.hash === hash) {
-        puladas++;
-        continue;
-      }
-
-      try {
-        const pedir = async (reforco: boolean) => {
-          const res = await generate({
-            // Barato primeiro, caro só quando o barato falha — a mesma ordem
-            // que o curso ensina. O tier budget entrega JSON com uma chave
-            // vazia em ~13% dos capítulos mesmo com o reforço no prompt;
-            // escalar só nesses casos custa quase nada e fecha o buraco.
-            tier: reforco ? "premium" : "budget",
-            json: true,
-            // 700 apertava quando o exemplo vinha completo; o modelo entregava
-            // JSON válido com `exemplo` vazio em ~1 de cada 4 capítulos.
-            // 02/08: subiu de 1000 para 3000 junto com a troca para o DeepSeek
-            // V4 — ele raciocina antes de responder e o pensamento sai do
-            // mesmo orçamento, então 1000 devolveria `content` vazio.
-            maxTokens: 3000,
-            temperature: 0.7,
-            messages: [
-              { role: "system", content: SISTEMA },
-              {
-                role: "user",
-                content:
-                  `ALUNO:\n${contexto}\n\n` +
-                  `CURSO: ${produto.name || curso}\n` +
-                  `CAPÍTULO ${cap.numero}: ${cap.titulo}\n\n` +
-                  // O capítulo inteiro estouraria o contexto num curso longo; o
-                  // começo carrega a tese, que é o que a camada precisa amarrar.
-                  `TRECHO DO CAPÍTULO:\n${trechoResolvido}\n\n` +
-                  `Escreva as três peças para ESTE aluno neste capítulo.` +
-                  (reforco
-                    ? `\n\nATENÇÃO: a tentativa anterior veio com alguma das três chaves vazia. ` +
-                      `As três — abertura, exemplo e tarefa — precisam vir preenchidas.`
-                    : ""),
-              },
-            ],
-          });
-          // ⚠️ Nem todo modelo honra `response_format: json_object` do mesmo
-          // jeito. O tier premium devolve o JSON dentro de ```json … ```, e o
-          // `JSON.parse` cru recusa — o que transformou o escalonamento numa
-          // regressão: 4 falhas viraram 12. A cerca sai antes de interpretar.
-          const cru = String(res.content || "")
-            .trim()
-            .replace(/^```(?:json)?\s*/i, "")
-            .replace(/```\s*$/, "");
-          const d = JSON.parse(cru);
-          return {
-            abertura: String(d.abertura || "").trim(),
-            exemplo: String(d.exemplo || "").trim(),
-            tarefa: String(d.tarefa || "").trim(),
-            model: res.model,
-          };
-        };
-
-        let dados = await pedir(false);
-        // A checagem antiga só reprovava se as TRÊS viessem vazias, então uma
-        // camada sem `exemplo` — a peça mais valiosa — passava direto e era
-        // gravada. Medido em 02/08: 8 de 31 capítulos sem exemplo.
-        if (!dados.abertura || !dados.exemplo || !dados.tarefa) {
-          dados = await pedir(true);
-        }
-        const { abertura, exemplo, tarefa } = dados;
-        if (!abertura || !exemplo || !tarefa) throw new Error("camada incompleta após 2 tentativas");
-        const res = { model: dados.model };
+        // O prompt, o reforço e a cerca de ```json``` moram em
+        // `atelie-servidor.ts` — os mesmos que a amostra grátis usa.
+        const { abertura, exemplo, tarefa, model } = await escreverCamada({
+          persona,
+          nomeDoCurso: String(produto.name || curso),
+          numero: cap.numero ?? 1,
+          titulo: cap.titulo,
+          trecho: trechoResolvido,
+        });
 
         await UserCourseLayer.updateOne(
           { userId: String(user._id), courseSlug: curso, capitulo: cap.indice },
@@ -293,25 +320,64 @@ export async function POST(request: NextRequest) {
               tarefa,
               personaVersion: versao,
               hashCapitulo: hash,
-              modelUsed: res.model,
+              modelUsed: model,
               generatedAt: new Date(),
             },
           },
-          { upsert: true }
+          { upsert: true },
         );
-        geradas++;
-      } catch (err) {
+      }),
+    );
+
+    resultados.forEach((r, i) => {
+      if (r.status === "rejected") {
         // `cap.numero` e não `indice + 1`: com o preâmbulo pulado, o índice
         // deixou de casar com o número que o aluno vê.
-        erros.push(`cap ${cap.numero}: ${err instanceof Error ? err.message : "erro"}`);
+        const cap = loteAtual[i];
+        erros.push(`cap ${cap.numero}: ${r.reason instanceof Error ? r.reason.message : "erro"}`);
       }
+    });
+
+    const geradas = resultados.filter((r) => r.status === "fulfilled").length;
+    // O que sobra para as próximas chamadas. Os que falharam continuam
+    // pendentes de propósito: o cliente tenta de novo no lote seguinte, e
+    // capítulo que não foi escrito não foi cobrado.
+    const restantes = pendentes - geradas;
+
+    /**
+     * ── A caixa registradora: cobra o que foi ESCRITO ─────────────────────
+     *
+     * Depois do laço, e sobre `geradas` — não sobre o que foi pedido. Se o
+     * modelo falhar no capítulo 12 de 30, o aluno paga 11 e os erros voltam na
+     * resposta. É a única ordem honesta: cobrar antes obrigaria a devolver
+     * crédito depois, e estorno é a parte que sempre quebra.
+     *
+     * A portaria lá em cima já garantiu que o saldo cobre o pior caso, então
+     * este débito não falha por falta — mas se falhar, o `ok: false` viaja na
+     * resposta em vez de derrubar a geração que já foi entregue.
+     */
+    let cobranca: { gasto: number; restante: number } | null = null;
+    if (geradas > 0) {
+      const r = await debitar(
+        String(user._id),
+        "custom_course_chapter",
+        geradas,
+        `Curso personalizado: ${produto.name || curso} (${geradas} ${geradas === 1 ? "capítulo" : "capítulos"})`,
+      );
+      if (r.ok) cobranca = { gasto: r.gasto, restante: r.restante };
     }
 
     return NextResponse.json({
       geradas,
       puladas,
-      capitulos: capitulos.length,
+      restantes,
+      /** O total de aulas, para o cliente desenhar "12 de 30". */
+      capitulos: aulas.length,
+      /** Quantas já estão prontas somando o que já existia. */
+      prontas: aulas.length - restantes,
       confianca: dossie.confianca,
+      creditosGastos: cobranca?.gasto ?? 0,
+      creditosRestantes: cobranca?.restante ?? saldo.total,
       erros: erros.length ? erros : undefined,
     });
   } catch (error) {
