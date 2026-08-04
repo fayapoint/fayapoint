@@ -628,7 +628,7 @@ export function TrilhoParallax({
           <div
             key={`${item.slug}-${i}`}
             data-card
-            className="group relative h-[330px] w-[228px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0d16] sm:h-[440px] sm:w-[306px]"
+            className="group/card group relative h-[330px] w-[228px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0d16] shadow-[0_18px_50px_-24px_rgba(0,0,0,.95)] transition-[border-color,box-shadow] duration-300 hover:border-amber-400/35 hover:shadow-[0_24px_60px_-22px_rgba(245,192,78,.28)] sm:h-[440px] sm:w-[306px]"
           >
             {/* O link cobre o card inteiro em vez de envolvê-lo.
                 É o que permite o botão de ação viver POR CIMA da capa: um
@@ -695,23 +695,59 @@ export function TrilhoParallax({
                 dourado gravado na capa — o unico lugar onde o nome do curso
                 aparece DENTRO da ilustracao. Agora o livro tem os 62% de cima
                 inteiros e limpos, e a informacao vive nos 38% de baixo. */}
+            {/* ⚠️ O esfumado tem SEIS paradas de propósito.
+                Com três (`from/via/to`), o navegador interpola rápido demais e
+                nasce uma faixa horizontal visível cortando a capa ao meio — o
+                véu deixava de ser sombra e virava uma laje encostada na arte.
+                A curva longa abaixo faz a mesma escuridão chegar sem borda. */}
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-[#05060a] via-[#05060a]/94 to-transparent"
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%]"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(5,6,10,.97) 0%, rgba(5,6,10,.93) 16%, rgba(5,6,10,.78) 34%, rgba(5,6,10,.46) 54%, rgba(5,6,10,.18) 74%, rgba(5,6,10,0) 100%)",
+              }}
             />
 
-            <span className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-2 p-4 sm:p-5">
+            {/* Um brilho quente rente à base, atrás do vidro: é ele que dá o
+                calor de vitrine e separa o painel do fundo preto chapado. */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 opacity-70 transition-opacity duration-500 group-hover/card:opacity-100"
+              style={{
+                background:
+                  "radial-gradient(120% 100% at 50% 100%, rgba(245,192,78,.20), rgba(167,139,250,.10) 45%, transparent 72%)",
+              }}
+            />
+
+            {/* A PRATELEIRA DE VIDRO.
+                O texto ficava direto sobre a ilustração, e por mais escuro que
+                fosse o véu ele continuava disputando com a arte. Um painel de
+                vidro fosco resolve as duas coisas: `backdrop-blur` desmancha o
+                que está atrás, então a leitura para de depender de o pixel de
+                trás ser escuro, e o filete claro no topo mais a sombra funda
+                fazem o painel POUSAR sobre a capa em vez de manchá-la. */}
+            <span
+              className="pointer-events-none absolute inset-x-2.5 bottom-2.5 flex flex-col gap-2 rounded-2xl border-t border-white/[0.14] bg-white/[0.055] p-3.5 backdrop-blur-md backdrop-saturate-150 sm:inset-x-3 sm:bottom-3 sm:p-4"
+              style={{
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,.14), 0 -1px 0 rgba(255,255,255,.05), 0 18px 40px -16px rgba(0,0,0,.9)",
+              }}
+            >
               <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-widest text-white/45">
                 {item.ferramenta && <span>{item.ferramenta}</span>}
                 {item.nivel && <span>· {item.nivel}</span>}
               </span>
 
-              <span className="text-base font-bold leading-snug text-white sm:text-lg">
+              <span
+                className="line-clamp-2 text-[15px] font-bold leading-snug text-white sm:text-lg"
+                style={{ textShadow: "0 1px 12px rgba(0,0,0,.75)" }}
+              >
                 {item.titulo}
               </span>
 
               {item.resumo && (
-                <span className="line-clamp-2 text-xs leading-relaxed text-white/55">
+                <span className="line-clamp-2 text-xs leading-relaxed text-white/60">
                   {item.resumo}
                 </span>
               )}

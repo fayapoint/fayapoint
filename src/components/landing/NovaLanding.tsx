@@ -62,6 +62,38 @@ export interface FeaturedCourse {
   discount: number;
   /** Nota de preço (ex.: valor simbólico que só cobre o processamento do pagamento) */
   priceNote?: string;
+  /**
+   * A capa VERSIONADA que está no banco.
+   *
+   * ⚠️ Sem isto o trilho montava a URL na mão, sem o `v<timestamp>` — e o CDN do
+   * Cloudinary continuava servindo a capa antiga do cache mesmo depois de a nova
+   * ter sido publicada. A home ficou dias mostrando um catálogo que já não
+   * existia enquanto a página de venda, que lê o `thumbnail` do banco, já
+   * mostrava o certo. O `thumbnail` traz a versão; a versão fura o cache.
+   */
+  thumbnail?: string | null;
+  /** Reescrito do zero — é o que o selo "revisados aula por aula" promete. */
+  revisado?: boolean;
+}
+
+/**
+ * A capa do curso, servida leve — a partir da URL versionada do banco.
+ *
+ * O `thumbnail` já aponta para o arquivo certo, com o `v<timestamp>` que fura o
+ * cache do CDN. Aqui só é injetada a transformação de entrega (largura, formato
+ * e qualidade) logo depois do `/upload/`, preservando a versão. Montar a URL do
+ * zero era o que fazia a home mostrar capa antiga.
+ */
+function capaDoTrilho(c: FeaturedCourse): string {
+  const RECORTE = "w_720,q_82,f_auto";
+  const t = c.thumbnail;
+  const i = t ? t.indexOf("/image/upload/") : -1;
+  if (t && i !== -1) {
+    const corte = i + "/image/upload/".length;
+    return `${t.slice(0, corte)}${RECORTE}/${t.slice(corte)}`;
+  }
+  const nuvem = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dfd7iigzq";
+  return `https://res.cloudinary.com/${nuvem}/image/upload/${RECORTE}/fayai/courses/${c.slug}/capa-v2`;
 }
 
 export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]; featuredCourses?: FeaturedCourse[] }) {
@@ -85,7 +117,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         slug: c.slug,
         titulo: c.name,
         resumo: c.shortDescription,
-        capa: `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dfd7iigzq"}/image/upload/w_720,q_82,f_auto/fayai/courses/${c.slug}/capa-v2`,
+        capa: capaDoTrilho(c),
         href: comIdioma(`/curso/${c.slug}`, locale),
         ferramenta: c.tool,
         nivel: c.level,
@@ -93,6 +125,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         duracao: c.duration,
         preco: c.price,
         precoDe: c.originalPrice,
+        // O selo verde marca os cursos reescritos do zero. Sem ele, o trilho
+        // com o catálogo inteiro faria a promessa da seção valer para os 22 —
+        // e ela vale para 6.
+        ...(c.revisado ? { estado: { rotulo: "Reescrito do zero", tom: "disponivel" as const } } : {}),
       })),
     [featuredCourses, locale],
   );
@@ -770,9 +806,16 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 cursos" e travava a vitrine em quatro: destacar um curso novo
                 fazia a frase mentir — o mesmo defeito das capas com o título
                 assado no pixel. Agora acrescentar destaque é só mexer no banco. */}
+            {/* ⚠️ Duas contagens, e as duas saem do array.
+                A frase dizia "Os N cursos que já reescrevemos do zero" com N =
+                o trilho inteiro. Quando o trilho passou de 6 para o catálogo
+                ativo, a mesma frase passaria a atribuir a 22 cursos um trabalho
+                feito em 6 — a contagem automática, que existia para a frase
+                nunca mentir, mentiria por outro caminho. */}
             <p className="text-sm text-white/55 mb-3 max-w-xl">
-              Os {featuredCourses.length} cursos que já reescrevemos do zero — conteúdo, exemplos e
-              mídia atualizados. O ponto de partida certo, sem enrolação.
+              Os {featuredCourses.filter((c) => c.revisado).length} primeiros foram reescritos do
+              zero — conteúdo, exemplos e mídia atualizados. Depois deles, o catálogo inteiro:{" "}
+              {featuredCourses.length} cursos.
             </p>
           </div>
 
@@ -785,6 +828,79 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           <TrilhoParallax itens={itensDoTrilho} />
       </section>
       )}
+
+      {/* ============================== O CURSO COM A SUA CARA ==============================
+          A coisa mais rara que o FayAI faz não aparecia na primeira página.
+          O Ateliê reescreve cada capítulo com o negócio, o vocabulário e os
+          exemplos de quem está lendo — e até hoje só quem já estava dentro do
+          portal descobria isso. Um visitante que chegasse na home via mais um
+          catálogo de cursos, igual a qualquer outro. */}
+      <section className="relative px-4 sm:px-8 pb-3 shrink-0">
+        <div aria-hidden className="fx-orb" style={{ width: 320, height: 320, left: "10%", top: -50, background: "radial-gradient(circle, rgba(245,192,78,.32), transparent 65%)", animation: "fx-drift-b 13s ease-in-out infinite" }} />
+        <div aria-hidden className="fx-orb" style={{ width: 260, height: 260, right: "8%", top: 20, background: "radial-gradient(circle, rgba(167,139,250,.32), transparent 65%)", animation: "fx-drift-a 15s ease-in-out infinite" }} />
+
+        <div className="relative max-w-5xl mx-auto">
+          <div
+            className="relative overflow-hidden rounded-3xl border border-amber-400/25 p-5 sm:p-7"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(245,192,78,.10) 0%, rgba(10,12,20,.86) 42%, rgba(167,139,250,.10) 100%)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,.10), 0 24px 60px -30px rgba(245,192,78,.35)",
+            }}
+          >
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
+                O CURSO QUE VIRA <span style={{ color: GOLD }}>O SEU</span>
+              </h3>
+              <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-amber-300/80">
+                <Sparkles size={13} /> só aqui
+              </span>
+            </div>
+
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65">
+              Conte o que você faz. Cada capítulo é <strong className="text-white/90">reescrito</strong> com
+              os seus exemplos, o seu vocabulário e o seu negócio — não é um resumo nem um prefácio
+              personalizado: é o curso inteiro na sua realidade.
+            </p>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              {[
+                { n: "1", t: "Escolha o curso", d: "Qualquer um do catálogo que você já pode abrir." },
+                { n: "2", t: "Fale do seu negócio", d: "O que você vende, para quem, com que palavras." },
+                { n: "3", t: "Leia a sua versão", d: "Os exemplos passam a ser do seu dia, capítulo a capítulo." },
+              ].map((p) => (
+                <div key={p.n} className="glass rounded-2xl px-4 py-3.5">
+                  <span
+                    className="inline-flex h-6 w-6 items-center justify-center rounded-lg text-xs font-black text-black"
+                    style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)` }}
+                  >
+                    {p.n}
+                  </span>
+                  <p className="mt-2 text-sm font-bold text-white">{p.t}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-white/50">{p.d}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <Link
+                href={rota("/cursos")}
+                className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-black transition-opacity hover:opacity-90"
+                style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
+              >
+                <Sparkles size={15} />
+                Ver com a minha cara
+                <ArrowRight size={15} />
+              </Link>
+              {/* A gratuidade da amostra é o que tira o medo de clicar, então
+                  ela é dita AQUI e não depois do login. */}
+              <span className="text-xs text-white/50">
+                A amostra do primeiro capítulo é <strong className="text-white/75">grátis</strong> — sem gastar crédito.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ============================== IA HOJE ============================== */}
       <section className="relative px-4 sm:px-8 pb-3 shrink-0">
