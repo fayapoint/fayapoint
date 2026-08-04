@@ -194,8 +194,26 @@ function normalizeProduct(product: unknown): Product {
     ...safeProduct,
     detailedCurriculum,
     lessonContentCoverage,
+    /**
+     * ⚠️ Passa o PRODUTO, não o slug (03/08/2026).
+     *
+     * Com string, `getCourseMonthlyOfferMeta` cai em `getCourseBySlug` — a
+     * lista estática de 18 cursos — e devolve `null` para todo curso que só
+     * existe no banco. `monthlyOffer: null` viaja no payload da API e quem o
+     * consome lê como "nenhum plano tem acesso": a página de venda e a vitrine
+     * pública passavam a tratar o curso lançado na véspera como bloqueado.
+     *
+     * O produto já traz `level` e `pricing.price` — é tudo de que a função
+     * precisa para responder pelo nível, sem consultar arquivo nenhum.
+     */
     monthlyOffer:
-      safeProduct.type === 'course' ? getCourseMonthlyOfferMeta(safeProduct.slug) : null,
+      safeProduct.type === 'course'
+        ? getCourseMonthlyOfferMeta({
+            slug: safeProduct.slug,
+            level: safeProduct.level,
+            price: safeProduct.pricing?.price,
+          })
+        : null,
     editorialVerification: normalizeEditorialVerification(
       safeProduct.editorialVerification
     ),

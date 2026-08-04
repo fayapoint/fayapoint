@@ -180,7 +180,10 @@ export function DashboardHome({
       .map(c => ({
         ...c,
         normalizedLevel: getNormalizedLevel(c),
-        monthlyOffer: getCourseMonthlyOfferMeta(c.slug),
+        // Passa o CURSO, não o slug: com string estas funções voltam a
+        // consultar a lista estática e devolvem `null` para curso que só
+        // existe no banco — que os consumidores leem como "bloqueado".
+        monthlyOffer: getCourseMonthlyOfferMeta(c),
       }));
   }, [enrolledSlugs, userCourses]);
 
@@ -211,7 +214,7 @@ export function DashboardHome({
       if (fromCatalog) return fromCatalog;
       // If user is already enrolled, find in allCourses
       const fromAll = allCourses.find(c => c.slug === apiFreeCourseSlug);
-      if (fromAll) return { ...fromAll, normalizedLevel: getNormalizedLevel(fromAll), monthlyOffer: getCourseMonthlyOfferMeta(fromAll.slug) };
+      if (fromAll) return { ...fromAll, normalizedLevel: getNormalizedLevel(fromAll), monthlyOffer: getCourseMonthlyOfferMeta(fromAll) };
     }
     return algorithmicFreeCourse;
   }, [apiFreeCourseSlug, availableCatalog, algorithmicFreeCourse]);
@@ -221,14 +224,14 @@ export function DashboardHome({
   const freeSlug = apiFreeCourseSlug || algorithmicFreeCourse?.slug;
   const suggestedCourses = useMemo(() => {
     return availableCatalog
-      .filter(c => c.slug !== freeSlug && canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
+      .filter(c => c.slug !== freeSlug && canPlanAccessMonthlyOffer(tierConfig.slug, c))
       .slice(0, 4);
   }, [availableCatalog, tierConfig, freeSlug]);
 
   // Locked courses (need upgrade)
   const lockedCourses = useMemo(() => {
     return availableCatalog
-      .filter(c => c.monthlyOffer?.includedInPool && c.slug !== freeSlug && !canPlanAccessMonthlyOffer(tierConfig.slug, c.slug))
+      .filter(c => c.monthlyOffer?.includedInPool && c.slug !== freeSlug && !canPlanAccessMonthlyOffer(tierConfig.slug, c))
       .slice(0, 2);
   }, [availableCatalog, tierConfig, freeSlug]);
 

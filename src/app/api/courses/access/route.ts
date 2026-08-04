@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import Order from '@/models/Order';
+import CourseProgress from '@/models/CourseProgress';
 import { getAuthUser } from '@/lib/auth';
 import {
   TIER_CONFIGS,
@@ -10,6 +11,7 @@ import {
   resolvePlan,
 } from '@/lib/course-tiers';
 import { isCourseFreeThisMonth } from '@/lib/monthly-course-offers';
+import { calcularVagasSimultaneas } from '@/lib/vagas-simultaneas';
 import { allCourses } from '@/data/courses';
 import { getMongoClient } from '@/lib/products';
 
@@ -34,6 +36,18 @@ interface AccessResponse {
   canUpgrade: boolean;
   coursePrice: number | null;
   courseTitle: string | null;
+  /**
+   * Já está no acervo, e quanto já andou.
+   *
+   * Existe para a página de venda parar de tratar assinante como visitante
+   * (03/08/2026). Ricardo: *"quando estamos logados e na home, se eu clico em
+   * curso, sou tratado como um usuário qualquer, e sou encaminhado para a
+   * mesma página de venda que um usuário deslogado"*. Sem estes dois campos, a
+   * página só saberia se PODE ler — não se JÁ começou, que é a diferença entre
+   * "Comprar agora" e "Continuar de onde parou".
+   */
+  enrolled: boolean;
+  progressPercent: number | null;
 }
 
 /**
@@ -89,6 +103,14 @@ export async function GET(request: Request) {
         slots,
         activeEnrollments,
         plan: userPlan,
+        // O teto de cursos ABERTOS ao mesmo tempo, calculado pela mesma função
+        // que o `POST /api/courses/enroll` usa para negar. Vai para a
+        // biblioteca para que ela não ofereça matrícula que o servidor recusa.
+        vagasSimultaneas: await calcularVagasSimultaneas(
+          authUser.id,
+          userPlan,
+          enrolledCourses,
+        ),
       });
     }
 
@@ -96,6 +118,11 @@ export async function GET(request: Request) {
     const courseData = allCourses.find((c) => c.slug === slug);
     const coursePrice = courseData?.price ?? null;
     const courseTitle = courseData?.title ?? null;
+
+    // Declarados aqui, antes dos ramos, para que TODAS as respostas os
+    // carreguem — inclusive as de visitante, onde valem os padrões.
+    let enrolled = false;
+    let progressPercent: number | null = null;
 
     // ── Not logged in → free preview ──
     if (!authUser) {
@@ -108,6 +135,8 @@ export async function GET(request: Request) {
         canUpgrade: true,
         coursePrice,
         courseTitle,
+        enrolled,
+        progressPercent,
       };
       return NextResponse.json(response);
     }
@@ -126,6 +155,8 @@ export async function GET(request: Request) {
         canUpgrade: true,
         coursePrice,
         courseTitle,
+        enrolled,
+        progressPercent,
       };
       return NextResponse.json(response);
     }
@@ -133,6 +164,17 @@ export async function GET(request: Request) {
     const userPlan = resolvePlan(user.subscription?.plan || 'free');
     const tierConfig = TIER_CONFIGS[userPlan];
     const enrolledCourses = user.enrolledCourses || [];
+
+    // Matrícula e progresso, antes de qualquer ramo de acesso: são os campos
+    // que deixam a página de venda dizer "continuar de onde parou" em vez de
+    // "comprar agora" para quem já está no curso.
+    enrolled = enrolledCourses.some(
+      (c: { courseSlug: string; isActive: boolean }) => c.courseSlug === slug && c.isActive,
+    );
+    const progresso = await CourseProgress.findOne({ userId: authUser.id, courseId: slug })
+      .select('progressPercent')
+      .lean<{ progressPercent?: number } | null>();
+    progressPercent = typeof progresso?.progressPercent === 'number' ? progresso.progressPercent : null;
 
     // ── Admin / Instructor → full access ──
     if (user.role === 'admin' || user.role === 'instructor') {
@@ -145,6 +187,8 @@ export async function GET(request: Request) {
         canUpgrade: false,
         coursePrice,
         courseTitle,
+        enrolled,
+        progressPercent,
       };
       return NextResponse.json(response);
     }
@@ -160,6 +204,8 @@ export async function GET(request: Request) {
         canUpgrade: userPlan !== 'expert',
         coursePrice,
         courseTitle,
+        enrolled,
+        progressPercent,
       };
       return NextResponse.json(response);
     }
@@ -175,18 +221,15 @@ export async function GET(request: Request) {
         canUpgrade: userPlan !== 'expert',
         coursePrice,
         courseTitle,
+        enrolled,
+        progressPercent,
       };
       return NextResponse.json(response);
     }
 
     // ── Check active enrollment ──
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const isEnrolled = enrolledCourses.some(
-      (c: { courseSlug: string; isActive: boolean }) =>
-        c.courseSlug === slug && c.isActive
-    );
-
-    if (isEnrolled) {
+    // (já calculada acima, junto do progresso, para valer em todos os ramos)
+    if (enrolled) {
       const response: AccessResponse = {
         access: 'full',
         freeChapters: FREE_CHAPTER_LIMIT,
@@ -196,6 +239,8 @@ export async function GET(request: Request) {
         canUpgrade: userPlan !== 'expert',
         coursePrice,
         courseTitle,
+        enrolled,
+        progressPercent,
       };
       return NextResponse.json(response);
     }
@@ -241,6 +286,8 @@ export async function GET(request: Request) {
         canUpgrade: userPlan !== 'expert',
         coursePrice,
         courseTitle,
+        enrolled,
+        progressPercent,
       };
       return NextResponse.json(response);
     }
@@ -254,6 +301,8 @@ export async function GET(request: Request) {
       reason: 'free_preview',
       plan: userPlan,
       canUpgrade: true,
+      enrolled,
+      progressPercent,
       coursePrice,
       courseTitle,
     };

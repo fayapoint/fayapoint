@@ -71,6 +71,7 @@ import { getCourseBySlug, CourseData, allCourses, getNormalizedLevel } from "@/d
 import { toast } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { TIER_CONFIGS, SubscriptionPlan, EnrollmentSlots, resolvePlan } from "@/lib/course-tiers";
+import type { VagasSimultaneas } from "@/lib/vagas-simultaneas";
 import { STUDIO_MODELS, planAtLeast, type StudioModel as StudioModelType } from "@/lib/studio-models";
 
 // Components
@@ -272,6 +273,9 @@ export default function PortalPage() {
   const [plan, setPlan] = useState("free");
   const [enrollmentSlots, setEnrollmentSlots] = useState<EnrollmentSlots | null>(null);
   const [enrolledSlugs, setEnrolledSlugs] = useState<string[]>([]);
+  // O teto de cursos abertos ao mesmo tempo, vindo do servidor. A biblioteca
+  // usa para não oferecer matrícula que o `enroll` recusaria com 409.
+  const [vagasSimultaneas, setVagasSimultaneas] = useState<VagasSimultaneas | null>(null);
   const [isEnrolling, setIsEnrolling] = useState<string | null>(null);
 
   // AI Gen State
@@ -331,11 +335,13 @@ export default function PortalPage() {
       if (res.status === 401) {
         setEnrollmentSlots(null);
         setEnrolledSlugs([]);
+        setVagasSimultaneas(null);
         return;
       }
       if (res.ok) {
         const data = await res.json();
         setEnrollmentSlots(data.slots);
+        setVagasSimultaneas(data.vagasSimultaneas ?? null);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setEnrolledSlugs(data.activeEnrollments?.map((e: any) => e.courseSlug) || []);
       }
@@ -848,6 +854,7 @@ export default function PortalPage() {
                 <CoursesPanel
                   tierConfig={tierConfig}
                   enrollmentSlots={enrollmentSlots}
+                  vagasSimultaneas={vagasSimultaneas}
                   userCourses={userCourses}
                   enrolledSlugs={enrolledSlugs}
                   isEnrolling={isEnrolling}

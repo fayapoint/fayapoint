@@ -10,7 +10,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { allCourses, getNormalizedLevel, type CourseData } from "@/data/courses";
-import type { EnrollmentSlots, TierConfig } from "@/lib/course-tiers";
+import { matriculaEhGratuita, type EnrollmentSlots, type TierConfig } from "@/lib/course-tiers";
+import type { VagasSimultaneas } from "@/lib/vagas-simultaneas";
 import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/monthly-course-offers";
 import { TrilhoParallax } from "@/components/biblioteca/TrilhoParallax";
 import { LivroDosCursos, TituloDoLivro } from "@/components/biblioteca/LivroDosCursos";
@@ -32,6 +33,8 @@ interface CourseProgressCard {
 interface CoursesPanelProps {
   tierConfig: TierConfig;
   enrollmentSlots: EnrollmentSlots | null;
+  /** Vem do servidor, pela mesma função que o `enroll` usa para negar. */
+  vagasSimultaneas?: VagasSimultaneas | null;
   userCourses: CourseProgressCard[];
   enrolledSlugs: string[];
   isEnrolling: string | null;
@@ -131,21 +134,32 @@ function getCourseThumbnailFallback(slug: string): string | undefined {
  * justamente isso que ninguém conseguia ler, porque as duas seções saíam da
  * mesma origem. Numa lista só, o estado tem que estar escrito no card.
  */
-type EstadoDoCurso = "acervo" | "disponivel" | "upgrade" | "concluido" | "gratis";
+type EstadoDoCurso = "acervo" | "disponivel" | "fila" | "upgrade" | "concluido" | "gratis";
 
 /** A ordem do trilho: o que dá para usar agora vem antes do que custa. */
 const PESO_ESTADO: Record<EstadoDoCurso, number> = {
   acervo: 0,
   gratis: 1,
   disponivel: 2,
-  upgrade: 3,
-  concluido: 4,
+  fila: 3,
+  upgrade: 4,
+  concluido: 5,
 };
 
 const ROTULOS_ESTADO: Record<EstadoDoCurso, { curto: string; filtro: string }> = {
   acervo: { curto: "No acervo", filtro: "No acervo" },
   gratis: { curto: "Grátis no mês", filtro: "Grátis" },
   disponivel: { curto: "Incluído no seu plano", filtro: "Disponíveis" },
+  /**
+   * ⚠️ "Vaga ocupada" NÃO é "exige upgrade", e a diferença é o ponto.
+   *
+   * O plano cobre o curso; o que falta é vaga, e a saída é de graça — terminar
+   * um dos que estão abertos. Escrever "upgrade" aqui pediria dinheiro por
+   * algo que a pessoa já comprou, que é exatamente a frustração que esta
+   * sessão está desfazendo. O `enroll` já responde assim desde 03/08
+   * (`upgradeRequired: false`); o card passou a concordar com ele.
+   */
+  fila: { curto: "Conclua um para abrir vaga", filtro: "Aguardando vaga" },
   upgrade: { curto: "Exige upgrade", filtro: "Exigem upgrade" },
   concluido: { curto: "Concluído", filtro: "Concluídos" },
 };
@@ -153,6 +167,7 @@ const ROTULOS_ESTADO: Record<EstadoDoCurso, { curto: string; filtro: string }> =
 export function CoursesPanel({
   tierConfig,
   enrollmentSlots,
+  vagasSimultaneas,
   userCourses,
   enrolledSlugs,
   isEnrolling,
@@ -183,96 +198,137 @@ export function CoursesPanel({
   }, []);
 
   /**
-   * Cursos que só existem no banco.
+   * O catálogo, com o BANCO mandando.
    *
-   * ⚠️ Defeito corrigido em 02/08/2026, relatado pelo Ricardo: "o curso novo de
-   * criação de imagem e o de whatsapp não aparecem na biblioteca de cursos".
+   * ── A história desta função, porque ela já foi consertada pela metade duas
+   *    vezes (02/08 e 03/08) e voltou ────────────────────────────────────────
    *
-   * A causa: esta biblioteca listava `allCourses`, a lista ESTÁTICA em
-   * `@/data/courses` — 18 cursos congelados no arquivo. O banco tinha 21. Os
-   * quatro cursos produzidos pelo laço (`ia-para-criar-videos`, `ia-producao`,
-   * `rag-knowledge`, `aprenda-a-usar-...-dia-a-dia`) nasciam invisíveis para o
-   * aluno logado, porque ninguém os acrescentou ao arquivo à mão.
+   * A biblioteca listava `allCourses`, a lista ESTÁTICA em `@/data/courses` —
+   * 18 cursos escritos à mão. O banco tem 27. Em 02/08 acrescentamos os cursos
+   * que só existem no banco; em 03/08 o `POST /api/courses/enroll` parou de
+   * responder 404 para eles. Mas a lista estática continuou sendo a dona dos
+   * FATOS COMERCIAIS dos 18 que ela conhece, e é daí que veio a terceira
+   * encarnação do mesmo defeito:
    *
-   * O banco é a fonte da verdade (o sitemap já tratava assim desde 19/07). A
-   * lista estática continua entrando porque carrega metadados ricos que o
-   * produto no banco não tem — módulos, depoimentos, FAQ.
+   *   `primeiras-automacoes` está no arquivo com `isFree: true, price: 0`.
+   *   No banco custa **R$29**. O card anunciava "Gratuito", e `price: 0` fazia
+   *   `getNormalizedLevel` devolver nível `free` — que, até o conserto de hoje
+   *   em `getCourseMonthlyOfferMeta`, era lido como "nenhum plano pode".
+   *   Resultado: o curso de entrada aparecia ao mesmo tempo GRATUITO e
+   *   EXIGINDO UPGRADE, e o preço era mentira nos dois casos.
+   *
+   * Agora a divisão é explícita e não se negocia mais card a card:
+   *
+   * | quem | manda em |
+   * |---|---|
+   * | banco | existir, preço, nível, duração, aulas, nota, alunos |
+   * | arquivo estático | módulos, depoimentos, bônus, FAQ, título de venda |
+   *
+   * **O banco manda inclusive em EXISTIR**: `/api/products` filtra
+   * `status: 'active'`, então curso em rascunho some do portal sozinho. Era o
+   * vazamento que o handoff de 03/08 registrou — `banana-dev-deploy-ia` está
+   * em `draft` no banco e aparecia no portal com "Liberar no plano" só porque
+   * mora no arquivo estático.
+   *
+   * `null` enquanto o banco não responde (ou se falhar): aí vale a lista
+   * estática inteira, porque banco fora do ar não pode esvaziar a biblioteca.
    */
-  const [cursosDoBanco, setCursosDoBanco] = useState<CourseData[]>([]);
+  const [cursosDoBanco, setCursosDoBanco] = useState<CourseData[] | null>(null);
   useEffect(() => {
     fetch("/api/products?type=course&limit=200", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         const lista: unknown[] = data?.products ?? data?.data ?? (Array.isArray(data) ? data : []);
-        const conhecidos = new Set(allCourses.map((c) => c.slug));
+        const estaticoPorSlug = new Map(allCourses.map((c) => [c.slug, c]));
 
-        const novos = lista
+        const fundidos = lista
           .map((p) => p as Record<string, unknown>)
-          .filter((p) => typeof p.slug === "string" && !conhecidos.has(p.slug as string))
+          .filter((p) => typeof p.slug === "string")
           .map((p) => {
-            // ⚠️ O preço mora em `pricing.price`, não em `price`.
-            //
-            // Lendo `p.price` (que não existe no documento) o preço caía em 0,
-            // e `getNormalizedLevel` trata preço 0 como nível **free**: os
-            // cursos novos apareciam etiquetados "Gratuito" — um curso de R$79
-            // anunciado como grátis dentro do portal. O servidor nunca foi
-            // enganado (o `enroll` lê `pricing.price` direto do banco), mas a
-            // etiqueta prometia o que a matrícula ia negar.
+            const slug = p.slug as string;
+            const estatico = estaticoPorSlug.get(slug);
+
+            // ⚠️ O preço mora em `pricing.price`, não em `price` (defeito de
+            // 03/08). Lendo `p.price`, que não existe no documento, o preço
+            // caía em 0 e o curso de R$79 era anunciado como grátis.
             const pricing = (p.pricing ?? {}) as Record<string, unknown>;
             const metrics = (p.metrics ?? {}) as Record<string, unknown>;
             const copy = (p.copy ?? {}) as Record<string, unknown>;
+            const preco = typeof pricing.price === "number" ? pricing.price : estatico?.price ?? 0;
 
             return {
-              // Só os campos que a grade usa. O resto do `CourseData` fica
-              // com o padrão — curso do banco não tem módulo nem depoimento.
-              id: 0,
-              slug: p.slug as string,
-              title: (p.shortName as string) || (p.name as string) || (p.slug as string),
-              subtitle: (p.subtitle as string) || "",
-              tool: (p.tool as string) || "IA",
-              category: (p.categoryPrimary as string) || "IA Generativa",
-              level: (p.level as string) || "Iniciante",
-              duration: (metrics.duration as string) || (p.duration as string) || "",
+              // A base é o estático quando ele existe — é lá que moram módulos,
+              // depoimentos, bônus e FAQ, que o produto no banco não tem.
+              ...(estatico ?? ({ id: 0, modules: [], testimonials: [], bonuses: [], faqs: [] } as unknown as CourseData)),
+
+              slug,
+              // O título de venda do arquivo é copy trabalhada ("Primeiras
+              // Automações: Transforme Seu Trabalho…"); o `shortName` do banco
+              // é o nome curto do card. Preferir o do arquivo evita trocar o
+              // título de 18 cursos de uma vez por um efeito colateral.
+              title: estatico?.title || (p.shortName as string) || (p.name as string) || slug,
+              tool: (p.tool as string) || estatico?.tool || "IA",
+              category: (p.categoryPrimary as string) || estatico?.category || "IA Generativa",
+
+              // ── daqui para baixo, o banco manda ──
+              level: (p.level as string) || estatico?.level || "Iniciante",
+              price: preco,
+              // ⚠️ `isFree` do arquivo tem que MORRER quando o banco cobra.
+              // Sem esta linha, `getNormalizedLevel` continua devolvendo `free`
+              // para o `primeiras-automacoes` e o preço de R$29 não aparece.
+              isFree: preco === 0,
+              originalPrice: (pricing.originalPrice as number) ?? estatico?.originalPrice ?? 0,
+              duration: (metrics.duration as string) || estatico?.duration || "",
               totalLessons:
-                (p.contentChapters as number) || (metrics.lessons as number) || 0,
-              price: (pricing.price as number) ?? (p.price as number) ?? 0,
-              originalPrice: (pricing.originalPrice as number) ?? 0,
-              rating: (metrics.rating as number) ?? 0,
-              students: (metrics.students as number) ?? 0,
+                (p.contentChapters as number) || (metrics.lessons as number) || estatico?.totalLessons || 0,
+              rating: (metrics.rating as number) ?? estatico?.rating ?? 0,
+              students: (metrics.students as number) ?? estatico?.students ?? 0,
               shortDescription:
                 (copy.shortDescription as string) ||
-                (p.shortDescription as string) ||
+                estatico?.shortDescription ||
                 (copy.subheadline as string) ||
                 (p.description as string) ||
                 "",
-              modules: [],
-              testimonials: [],
-              bonuses: [],
-              faqs: [],
             } as unknown as CourseData;
           });
 
-        if (novos.length) setCursosDoBanco(novos);
+        if (fundidos.length) setCursosDoBanco(fundidos);
       })
       .catch(() => {
-        // Banco fora do ar não pode esvaziar a biblioteca — sem os novos, mas
-        // com os 18 estáticos, ainda é uma página útil.
+        // Banco fora do ar: `cursosDoBanco` fica `null` e a lista estática
+        // segura a biblioteca. Página incompleta é melhor que página vazia.
       });
   }, []);
 
   const courseCatalog = useMemo(() => {
-    return [...allCourses, ...cursosDoBanco].map((course) => {
+    return (cursosDoBanco ?? allCourses).map((course) => {
       const normalizedLevel = getNormalizedLevel(course);
       const isEnrolled = enrolledSlugs.includes(course.slug);
       const canAccessLevel = tierConfig.canAccessLevel(normalizedLevel);
-      const monthlyOffer = getCourseMonthlyOfferMeta(course.slug);
+      /**
+       * ⚠️ Passa o CURSO, não o slug — a mesma armadilha que o `enroll` já
+       * documenta desde 03/08.
+       *
+       * Com string, estas duas funções voltam a consultar `getCourseBySlug`,
+       * que só conhece os 18 do arquivo, e devolvem `null`/`false` para todo
+       * curso que só existe no banco. Eram CINCO cursos marcados "Exige
+       * upgrade" para o Ricardo — `ia-producao`, `ia-no-whatsapp`,
+       * `ia-para-criar-videos`, `rag-knowledge` e o do dia a dia — enquanto o
+       * servidor os matricularia sem reclamar. O conserto de 03/08 chegou ao
+       * `enroll` e não chegou aqui.
+       */
+      const monthlyOffer = getCourseMonthlyOfferMeta(course);
+      const canAccessThisMonth = canPlanAccessMonthlyOffer(tierConfig.slug, course);
+
       const slotCategory = normalizedLevel === "free" || normalizedLevel === "beginner" ? "beginner" : normalizedLevel;
       const slotsForLevel = enrollmentSlots?.[slotCategory as keyof EnrollmentSlots] ?? null;
       const hasAvailableSlot = tierConfig.limits.unlimited || !slotsForLevel || slotsForLevel.available > 0;
-      const canAccessThisMonth = canPlanAccessMonthlyOffer(tierConfig.slug, course.slug);
       const isFreeMonthlyCourse = apiFreeCourseSlug
         ? course.slug === apiFreeCourseSlug
         : Boolean(monthlyOffer?.isFreeCourseOfMonth);
+      // A MESMA regra do servidor (`isFreeEnrollment` no `enroll`), agora numa
+      // função só — ver `matriculaEhGratuita`.
+      const ehGratuito = matriculaEhGratuita(normalizedLevel, course.price);
 
       return {
         ...course,
@@ -283,7 +339,10 @@ export function CoursesPanel({
         hasAvailableSlot,
         canAccessThisMonth,
         isFreeMonthlyCourse,
-        canEnroll: !isEnrolled && (isFreeMonthlyCourse || (canAccessLevel && hasAvailableSlot && canAccessThisMonth)),
+        ehGratuito,
+        canEnroll:
+          !isEnrolled &&
+          (isFreeMonthlyCourse || ehGratuito || (canAccessLevel && hasAvailableSlot && canAccessThisMonth)),
       };
     });
   }, [enrolledSlugs, enrollmentSlots, tierConfig, apiFreeCourseSlug, cursosDoBanco]);
@@ -324,21 +383,66 @@ export function CoursesPanel({
     return m;
   }, [userCourses]);
 
+  /**
+   * Todas as vagas ocupadas?
+   *
+   * `undefined` (servidor ainda não respondeu, ou respondeu sem o campo) conta
+   * como TEM vaga: na dúvida, oferecer e deixar o servidor negar com a
+   * mensagem certa é melhor que esconder matrícula de quem pode fazê-la.
+   */
+  const semVaga = vagasSimultaneas ? vagasSimultaneas.disponiveis <= 0 : false;
+
+  /**
+   * ⚠️ Vaga cheia significa coisas DIFERENTES conforme o plano — e confundir as
+   * duas foi um erro que este arquivo chegou a cometer.
+   *
+   * Num plano com cota (Explorador, Profissional), a matrícula é o que abre o
+   * curso: sem vaga, a pessoa realmente não lê, e "conclua um para abrir vaga"
+   * é a verdade inteira.
+   *
+   * No Expert não é. Desde a decisão de 03/08 ele tem `limits.unlimited`, e
+   * `GET /api/courses/access` devolve `access: 'full'` a qualquer curso para
+   * quem tem plano ilimitado — matriculado ou não. A vaga governa o ACERVO (o
+   * que entra na estante, gera progresso e leva ao certificado), não a
+   * leitura. Marcar "aguardando vaga" nos dezessete cursos que ele pode abrir
+   * agora seria trocar o cadeado falso de ontem por um aviso falso hoje.
+   *
+   * Então: quem lê tudo continua vendo "Incluído no seu plano" e entra no
+   * curso pelo card. O que some é só o botão de adicionar ao acervo — e o
+   * badge do topo explica por quê, uma vez, em vez de dezessete.
+   */
+  const vagaBloqueiaLeitura = semVaga && !tierConfig.limits.unlimited;
+
   const catalogoComEstado = useMemo(() => {
     return courseCatalog
       .map((course) => {
         const progresso = progressoPorSlug.get(course.slug);
         const estado: EstadoDoCurso =
-          course.isFreeMonthlyCourse && !course.isEnrolled
+          (course.isFreeMonthlyCourse || course.ehGratuito) && !course.isEnrolled
             ? "gratis"
             : course.isEnrolled
               ? (progresso ?? 0) >= 100
                 ? "concluido"
                 : "acervo"
               : course.canEnroll
-                ? "disponivel"
+                ? vagaBloqueiaLeitura
+                  ? "fila"
+                  : "disponivel"
                 : "upgrade";
-        return { ...course, progresso, estado };
+
+        /**
+         * Dois motivos diferentes para não custar nada, e só um deles expira.
+         *
+         * O curso ELEITO do mês volta a ser pago na virada — "no mês" é o
+         * aviso de que a janela fecha. Um curso que simplesmente não cobra não
+         * tem janela, e escrever "no mês" nele inventaria uma urgência falsa.
+         */
+        const rotulo =
+          estado === "gratis" && !course.isFreeMonthlyCourse
+            ? "Grátis"
+            : ROTULOS_ESTADO[estado].curto;
+
+        return { ...course, progresso, estado, rotulo };
       })
       .sort((a, b) => {
         // Ordem: o que dá para usar agora primeiro, o que exige dinheiro
@@ -348,7 +452,7 @@ export function CoursesPanel({
         }
         return a.title.localeCompare(b.title);
       });
-  }, [courseCatalog, progressoPorSlug]);
+  }, [courseCatalog, progressoPorSlug, vagaBloqueiaLeitura]);
 
   const [filtro, setFiltro] = useState<"todos" | EstadoDoCurso>("todos");
 
@@ -405,10 +509,27 @@ export function CoursesPanel({
               <Badge className="border-amber-400/30 bg-amber-500/10 text-amber-200 text-[10px]">
                 Plano {tierConfig.displayName}
               </Badge>
-              {!tierConfig.limits.unlimited && enrollmentSlots && (
-                <Badge className="border-border bg-secondary text-white/80 text-[10px]">
-                  {totalSlotsAvailable} vaga{totalSlotsAvailable === 1 ? "" : "s"} livre
-                  {totalSlotsAvailable === 1 ? "" : "s"}
+              {/**
+               * A vaga que o badge mostra é a SIMULTÂNEA, não a cota do mês.
+               *
+               * A cota mensal virou `Infinity` no Expert (ele lê o acervo
+               * inteiro), então o badge antigo sumia justamente para quem mais
+               * precisa saber por que não consegue abrir o quinto curso. O teto
+               * simultâneo vale para todos os planos e é o único que ainda
+               * segura alguém — é esse que merece o espaço.
+               */}
+              {vagasSimultaneas && (
+                <Badge
+                  className={cn(
+                    "text-[10px]",
+                    vagasSimultaneas.disponiveis > 0
+                      ? "border-border bg-secondary text-white/80"
+                      : "border-amber-400/30 bg-amber-500/10 text-amber-200",
+                  )}
+                >
+                  {vagasSimultaneas.disponiveis > 0
+                    ? `${vagasSimultaneas.disponiveis} de ${vagasSimultaneas.limite} vaga${vagasSimultaneas.limite === 1 ? "" : "s"} livre${vagasSimultaneas.disponiveis === 1 ? "" : "s"}`
+                    : `${vagasSimultaneas.limite} cursos abertos — conclua um para abrir vaga`}
                 </Badge>
               )}
             </div>
@@ -444,7 +565,7 @@ export function CoursesPanel({
             abrir esta tela é "o que eu posso usar?", não "o que é
             intermediário?". */}
         <div className="mb-4 flex gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {(["todos", "acervo", "disponivel", "gratis", "upgrade", "concluido"] as const)
+          {(["todos", "acervo", "disponivel", "gratis", "fila", "upgrade", "concluido"] as const)
             .filter((chave) => chave === "todos" || (contagens[chave] ?? 0) > 0)
             .map((chave) => (
               <button
@@ -484,9 +605,20 @@ export function CoursesPanel({
                 aulas: course.totalLessons || undefined,
                 duracao: course.duration || undefined,
                 progresso: course.isEnrolled ? (course.progresso ?? 0) : undefined,
-                estado: { rotulo: ROTULOS_ESTADO[course.estado].curto, tom: course.estado },
+                estado: { rotulo: course.rotulo, tom: course.estado },
+                // O Ateliê só aparece em curso que a pessoa PODE abrir. Num
+                // curso bloqueado, "personalize este curso" seria vender o
+                // segundo andar de uma casa sem porta.
+                atelie:
+                  course.isEnrolled || course.estado === "disponivel" || course.estado === "gratis"
+                    ? { href: `/curso/${course.slug}/meu`, rotulo: "Com a minha cara" }
+                    : undefined,
                 acao:
-                  !course.isEnrolled && course.canEnroll
+                  // Sem vaga não há botão, em plano nenhum: o `enroll` recusa
+                  // a matrícula com 409 antes mesmo de olhar o preço, então
+                  // oferecê-la seria prometer o que o servidor nega. Quem lê
+                  // tudo continua entrando pelo card; o badge do topo explica.
+                  !course.isEnrolled && course.canEnroll && !semVaga
                     ? {
                         rotulo: course.estado === "gratis" ? "Liberar grátis" : "Liberar no plano",
                         aoClicar: () => onEnroll(course.slug),

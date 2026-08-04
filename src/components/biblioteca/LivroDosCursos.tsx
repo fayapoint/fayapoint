@@ -310,8 +310,17 @@ export function TituloDoLivro({ quantos }: { quantos: number }) {
       </div>
       <div className="min-w-0">
         <h3 className="truncate text-base font-bold">Seus cursos</h3>
+        {/**
+         * "na estante", e não "no acervo".
+         *
+         * O trilho abaixo tem um filtro chamado "No acervo", que conta só as
+         * MATRÍCULAS. Este livro conta quem tem matrícula OU progresso — quem
+         * abriu o curso já aparece aqui. São dois números legitimamente
+         * diferentes, e usar a mesma palavra nos dois punha "6 no acervo" logo
+         * acima de "No acervo 5" na mesma tela.
+         */}
         <p className="text-xs text-muted-foreground">
-          {quantos} no acervo · folheie com as setas ou arrastando
+          {quantos} na estante · folheie com as setas ou arrastando
         </p>
       </div>
     </div>

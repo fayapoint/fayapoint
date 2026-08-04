@@ -113,14 +113,43 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
       advanced: 0,
       unlimited: false,
     },
-    monthlyCredits: 0,
+    /**
+     * ── A ESCADA DE CRÉDITOS (03/08/2026) ─────────────────────────────────
+     *
+     * A regra, em uma frase que cabe na página de preços: **cada real da sua
+     * assinatura vira crédito com bônus — e quanto maior o plano, maior o
+     * bônus.**
+     *
+     * | plano | paga/mês | recebe | multiplicador | dá para personalizar |
+     * |---|---|---|---|---|
+     * | Gratuito | R$0 | **50** (uma vez) | boas-vindas | 1 curso de entrada inteiro (25 capítulos) |
+     * | Explorador | R$57 | **100** | **1,75×** | ~3 cursos medianos |
+     * | Profissional | R$97 | **200** | **2,06×** | ~6 cursos medianos |
+     * | Expert | R$167 | **400** | **2,40×** | ~12 cursos medianos |
+     *
+     * ⚠️ O teto do Expert é decisão do Ricardo e tem faixa: *"no plano expert o
+     * valor deve ser algo em torno de 2 a 3× o valor da assinatura"*. 400 sobre
+     * 167 dá 2,40× — dentro da faixa, com folga dos dois lados. **Se mexer no
+     * preço do plano, mexa aqui junto**, senão o multiplicador escorrega sem
+     * ninguém perceber.
+     *
+     * O gratuito recebe **50, uma vez** (não por mês). É a promessa que o
+     * Ricardo pediu — *"no plano gratuito, o usuário ganha o equivalente para
+     * criar um curso"* — e a R$2 o capítulo isso é um curso de até 25
+     * capítulos, que cobre a maior parte do catálogo. Vale só depois que o
+     * curso está no acervo dele: o `POST /api/user/curso-personalizado` recusa
+     * personalizar curso que a pessoa não pode abrir, para o crédito de
+     * boas-vindas não virar dinheiro queimado em capítulo trancado.
+     */
+    monthlyCredits: 50,
     purchaseDiscount: 0,
     quizDiscount: 0,
     canAccessLevel: (level) => level === 'free',
     features: [
-      '1 curso aberto por vez',
+      '50 créditos de boas-vindas (= R$50)',
+      'Dá para personalizar um curso inteiro',
       '3 capítulos grátis por curso',
-      'Acesso limitado para experimentar',
+      '1 curso aberto por vez',
     ],
   },
   explorador: {
@@ -135,6 +164,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
       advanced: 0,
       unlimited: false,
     },
+    /** R$57 viram 57 + 43 de bônus (75%). ~6 cursos medianos personalizados. */
     monthlyCredits: 100,
     purchaseDiscount: 0.10,
     quizDiscount: 0.10,
@@ -142,7 +172,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     features: [
       '2 cursos abertos ao mesmo tempo',
       '3 cursos iniciantes por mês',
-      '100 créditos/mês para IA',
+      '100 créditos/mês (= R$100, com 75% de bônus)',
       '10% de desconto em certificações',
       '10% de desconto na compra de cursos avulsos',
       'Certificados verificáveis online',
@@ -161,7 +191,8 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
       advanced: 1,
       unlimited: false,
     },
-    monthlyCredits: 300,
+    /** R$97 viram 97 + 103 de bônus (106%). ~12 cursos medianos. */
+    monthlyCredits: 200,
     purchaseDiscount: 0.20,
     quizDiscount: 0.20,
     canAccessLevel: () => true,
@@ -170,7 +201,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
       '5 cursos iniciantes por mês',
       '2 cursos intermediários por mês',
       '1 curso avançado por mês',
-      '300 créditos/mês para IA',
+      '200 créditos/mês (= R$200, com 106% de bônus)',
       '20% de desconto em certificações',
       '20% de desconto na compra de cursos avulsos',
       'Suporte prioritário',
@@ -183,22 +214,45 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     slug: 'expert',
     monthlyPrice: 167,
     yearlyPrice: 1670,     // ~R$139.17/mês (2 meses grátis)
+    /**
+     * ── O Expert lê o acervo INTEIRO (03/08/2026) ─────────────────────────
+     *
+     * Ricardo, assinante do plano máximo, batendo em "Exige upgrade":
+     * *"eu estar com o plano melhor do site, o expert, e não conseguir ver os
+     * cursos novos... fica sendo muito frustrante"* — e upgrade para ONDE, se
+     * não existe degrau acima do Expert? O rótulo apontava para uma porta que
+     * não existe.
+     *
+     * A escassez não foi removida, foi MOVIDA. A decisão original (assinar não
+     * é ler tudo) continua valendo para Explorador e Profissional, e o que o
+     * Expert paga passa a comprar duas coisas melhores que um cadeado de
+     * leitura:
+     *
+     *   1. o CERTIFICADO, que nenhum plano dá de graça — exige concluir as
+     *      aulas, passar no quiz e pagar a taxa (aqui com 50% de desconto).
+     *      Certificado que vem junto com a assinatura não vale nada na parede;
+     *   2. a PERSONALIZAÇÃO, que se paga em créditos — e é o que faz os 800
+     *      créditos/mês deixarem de ser número morto.
+     *
+     * `CURSOS_SIMULTANEOS` continua valendo e não é afrouxado por isto: o teto
+     * de 4 cursos abertos ao mesmo tempo é outra conversa ("termine um"), não
+     * um pedido de dinheiro. Ler tudo, sim; ler tudo AO MESMO TEMPO, não.
+     */
     limits: {
-      beginner: 7,
-      intermediate: 4,
-      advanced: 3,
-      unlimited: false,
+      beginner: Infinity,
+      intermediate: Infinity,
+      advanced: Infinity,
+      unlimited: true,
     },
-    monthlyCredits: 800,
+    /** R$167 viram 167 + 233 de bônus (140%). ~25 cursos medianos — o catálogo tem 22. */
+    monthlyCredits: 400,
     purchaseDiscount: 0.50,
     quizDiscount: 0.50,
     canAccessLevel: () => true,
     features: [
+      'Acervo completo — todos os cursos, sem cadeado',
       '4 cursos abertos ao mesmo tempo',
-      '7 cursos iniciantes por mês',
-      '4 cursos intermediários por mês',
-      '3 cursos avançados por mês',
-      '800 créditos/mês para IA',
+      '400 créditos/mês (= R$400, com 140% de bônus)',
       '50% de desconto em certificações',
       '50% de desconto na compra de cursos avulsos',
       'Suporte VIP + conteúdo exclusivo',
@@ -258,12 +312,95 @@ export const COURSE_LEVEL_HIERARCHY: Record<CourseLevel, number> = {
 
 // ─── Credit System ───────────────────────────────────────
 
+/**
+ * ═══════════════════════════════════════════════════════════
+ * 1 CRÉDITO = R$ 1,00  (decisão do Ricardo, 03/08/2026)
+ * ═══════════════════════════════════════════════════════════
+ *
+ * Antes, os créditos eram um número sem lastro: 800 no Expert, 50 para
+ * personalizar um curso, pacotes a R$0,18–0,30 por crédito. Ninguém — nem nós —
+ * conseguia dizer se 50 créditos era caro ou barato, porque não havia com o quê
+ * comparar. Ricardo: *"ao invés de inventar um número qualquer baseado em nada,
+ * quero que seja dinheiro de verdade."*
+ *
+ * Com a paridade, todo preço deste arquivo vira uma frase em português que o
+ * aluno confere sozinho: "personalizar este curso custa 16 créditos" é
+ * "custa R$16", e ele sabe na hora se vale.
+ *
+ * ## Preço de VENDA, nunca preço de custo
+ *
+ * O custo real de um capítulo personalizado é **R$0,002** (DeepSeek V4 flash a
+ * US$0,09/0,18 por milhão, ~1.600 tokens de entrada e ~1.200 de saída, medido
+ * em 03/08). Esse número **não** é a base do preço, e a regra é do Ricardo:
+ * *"não interessa o quanto custa para nós, até porque todo meu investimento de
+ * tempo de 3 anos neste projeto e todos os custos que tenho devem ser
+ * embutidos... nossos custos devem ser justos mas não absolutamente a preço de
+ * banana."*
+ *
+ * O que o aluno compra não é uma chamada de API: é um catálogo curado, três
+ * anos de trabalho e um curso que passa a falar do negócio dele. O preço reflete
+ * isso. A margem alta não é oportunismo — é o que financia o que já existe.
+ *
+ * ## As contas que sustentam os números abaixo
+ *
+ * Catálogo medido em 03/08: 22 cursos ativos, 451 capítulos. Menor curso 13
+ * capítulos, mediana 16, média 20,5, maior 30. Preço médio de curso: R$91.
+ */
+export const CREDITO_EM_REAIS = 1;
+
 export const CREDIT_COSTS = {
-  quiz_attempt: 10,
-  certificate_generation: 20,
-  ai_chat_message: 1,
-  image_generation: 5,
+  /**
+   * R$5 por tentativa. O quiz é o portão do certificado e precisa custar o
+   * suficiente para não virar tentativa e erro — mas menos que o certificado,
+   * senão errar uma vez sai mais caro que passar.
+   */
+  quiz_attempt: 5,
+  /** R$15, além do quiz. O certificado é verificável e não vem com o plano. */
+  certificate_generation: 15,
+  /**
+   * ZERO — o assistente entra no plano, não no crédito.
+   *
+   * Com a paridade, cobrar 1 crédito por mensagem viraria R$1 por mensagem, o
+   * que é absurdo para uma conversa. E cobrar frações quebraria a legibilidade
+   * que a paridade existe para criar. Conversa é volume; crédito aqui é para
+   * ENTREGA (um capítulo, uma imagem, um certificado).
+   */
+  ai_chat_message: 0,
+  /** R$3 por imagem gerada no seu contexto. */
+  image_generation: 3,
+  /**
+   * ⚠️ Preço FIXO, de quando a personalização era um botão só (27/07). Um curso
+   * de 5 capítulos e um de 30 custavam o mesmo — e o de 30 dá seis vezes mais
+   * trabalho ao modelo. Continua exportado porque rotas antigas o citam, mas o
+   * Ateliê cobra por capítulo (abaixo).
+   */
   custom_course_generation: 50,
+  /**
+   * **R$2 por capítulo escrito** — o preço central do site.
+   *
+   * Com o catálogo medido, sai: curso de entrada (13 capítulos) **R$26**,
+   * mediano (16) **R$32**, médio (20,5) **R$41**, o maior (30) **R$60**.
+   * Contra um preço médio de curso de R$91, personalizar custa de 28% a 66% do
+   * curso — é um segundo produto, não um acessório, e o preço diz isso.
+   *
+   * ⚠️ Começou em R$1 e subiu no mesmo dia, por instrução do Ricardo: a R$1 o
+   * curso inteiro saía por R$16 e ficava mais barato que o almoço, o que
+   * desvaloriza a única coisa que só nós fazemos.
+   *
+   * A cobrança é por capítulo ESCRITO, não por capítulo pedido: se o modelo
+   * falhar no capítulo 12, o aluno paga 11. Ver `debitar` em `lib/creditos.ts`.
+   */
+  custom_course_chapter: 2,
+  /**
+   * **R$40, uma vez.** O caderno de personagem são 6 a 8 imagens do mesmo
+   * rosto em ângulos diferentes — a R$3 a imagem já seriam R$18 a R$24 só de
+   * geração, e o que se compra aqui é a CONSISTÊNCIA, que é o caro. É o insumo
+   * sem o qual "curso com o SEU rosto" não passa de promessa.
+   *
+   * Cobrado uma vez porque serve para todas as imagens seguintes — cobrar por
+   * uso puniria justamente quem usa.
+   */
+  character_sheet: 40,
 } as const;
 
 export type CreditAction = keyof typeof CREDIT_COSTS;
@@ -276,11 +413,21 @@ export interface CreditPack {
   savings: string;       // e.g. "23% economia"
 }
 
+/**
+ * Os pacotes, na paridade.
+ *
+ * ⚠️ O desconto mudou de LUGAR e isso é o ponto. Antes o pacote grande baixava
+ * o preço do crédito (R$0,18 contra R$0,30), o que só funcionava porque o
+ * crédito não valia nada definido — três preços diferentes para a mesma coisa.
+ * Com 1 crédito = R$1 fixo, baixar o preço do crédito quebraria a paridade que
+ * torna tudo legível. Então o volume passa a dar **crédito de bônus**: você
+ * paga R$100 e recebe 115. O desconto existe, e a régua continua de pé.
+ */
 export const CREDIT_PACKS: CreditPack[] = [
-  { id: 'pack-50',   credits: 50,   priceReais: 15,  expiresInDays: 90, savings: '' },
-  { id: 'pack-150',  credits: 150,  priceReais: 35,  expiresInDays: 90, savings: '23% economia' },
-  { id: 'pack-500',  credits: 500,  priceReais: 99,  expiresInDays: 90, savings: '34% economia' },
-  { id: 'pack-1000', credits: 1000, priceReais: 179, expiresInDays: 90, savings: '40% economia' },
+  { id: 'pack-30',  credits: 30,  priceReais: 30,  expiresInDays: 90, savings: '' },
+  { id: 'pack-100', credits: 115, priceReais: 100, expiresInDays: 90, savings: '+15 de bônus' },
+  { id: 'pack-250', credits: 300, priceReais: 250, expiresInDays: 90, savings: '+50 de bônus' },
+  { id: 'pack-500', credits: 650, priceReais: 500, expiresInDays: 90, savings: '+150 de bônus' },
 ];
 
 // ─── Monthly Rotating Pool ───────────────────────────────
@@ -337,6 +484,25 @@ export function normalizeCourseLevel(levelString: string): CourseLevel {
     return 'beginner';
   }
   return 'beginner';
+}
+
+/**
+ * A matrícula neste curso é gratuita?
+ *
+ * ⚠️ Existe para que a BIBLIOTECA e o SERVIDOR respondam a mesma coisa.
+ *
+ * O `POST /api/courses/enroll` já decidia assim (`isFreeEnrollment`) e
+ * matriculava sem cobrar nem consumir vaga. A biblioteca decidia por outro
+ * caminho — nível + vaga + rotação do mês — e chegava ao contrário: etiquetava
+ * **"Exige upgrade"** num curso que o servidor liberaria sem discutir. Regra
+ * duplicada é regra que diverge; agora é uma função só, chamada dos dois lados.
+ *
+ * `price === 0` fica explícito (e não `!price`) para que preço AUSENTE não
+ * vire curso grátis por omissão — o erro cairia para o lado de dar de graça o
+ * que é pago.
+ */
+export function matriculaEhGratuita(level: CourseLevel, price?: number): boolean {
+  return level === 'free' || price === 0;
 }
 
 // ─── Enrollment Slots ────────────────────────────────────

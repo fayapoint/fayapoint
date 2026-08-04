@@ -10,9 +10,9 @@ import {
   calculateEnrollmentSlots,
   getUpgradeSuggestion,
   resolvePlan,
-  limiteSimultaneo,
   TIER_CONFIGS,
 } from '@/lib/course-tiers';
+import { calcularVagasSimultaneas } from '@/lib/vagas-simultaneas';
 import { getCourseBySlug, allCourses, type CourseData } from '@/data/courses';
 import { canPlanAccessMonthlyOffer, getMonthlyCourseOfferSetAsync } from '@/lib/monthly-course-offers';
 import { getMongoClient } from '@/lib/products';
@@ -167,21 +167,11 @@ export async function POST(request: Request) {
     // Contá-los faria o cliente que mais gasta perder acesso ao que a
     // assinatura promete, que é o oposto do que este limite existe para fazer.
     // A compra, aliás, nem passa por aqui: ela é cumprida pelo webhook.
-    const ativos = enrolledCourses.filter(
-      (c: { isActive: boolean; source?: string }) =>
-        c.isActive && (c.source ?? 'subscription') === 'subscription',
-    );
-    const slugsAtivos = ativos.map((c: { courseSlug: string }) => c.courseSlug);
-    const concluidos = await CourseProgress.find({
-      userId,
-      courseId: { $in: slugsAtivos },
-      isCompleted: true,
-    })
-      .select('courseId')
-      .lean<Array<{ courseId: string }>>();
-    const slugsConcluidos = new Set(concluidos.map((p) => p.courseId));
-    const emAndamento = slugsAtivos.filter((s: string) => !slugsConcluidos.has(s));
-    const limite = limiteSimultaneo(userPlan);
+    // A contagem mora em `calcularVagasSimultaneas` para que a BIBLIOTECA leia
+    // o mesmo número e pare de oferecer botão que este bloco recusa.
+    const vagas = await calcularVagasSimultaneas(userId, userPlan, enrolledCourses);
+    const emAndamento = vagas.cursosEmAndamento;
+    const limite = vagas.limite;
 
     if (emAndamento.length >= limite) {
       return NextResponse.json(

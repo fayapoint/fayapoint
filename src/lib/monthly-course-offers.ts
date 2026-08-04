@@ -261,6 +261,35 @@ export function getCourseMonthlyOfferMeta(
     };
   }
 
+  /**
+   * Curso de nível `free` — aberto a todo mundo, inclusive a quem não assina.
+   *
+   * ⚠️ Defeito corrigido em 03/08/2026 (noite). `poolLevel` só aceitava
+   * beginner/intermediate/advanced, então o `free` caía no `return null` de
+   * baixo — e `canPlanAccessMonthlyOffer` lê `null` como "nenhum plano pode".
+   * O curso mais aberto do catálogo era o único que a biblioteca marcava
+   * **"Exige upgrade"**: `primeiras-automacoes` (`isFree: true`) aparecia assim
+   * para o Ricardo, assinante Expert.
+   *
+   * O servidor nunca concordou com isso. O `POST /api/courses/enroll` decide
+   * `isFreeEnrollment` ANTES de chegar aqui e matricula normalmente. Era a
+   * etiqueta negando o que a matrícula concedia — o espelho exato do defeito
+   * de 03/08, em que a etiqueta prometia o que a matrícula negava.
+   */
+  if (level === "free") {
+    return {
+      monthKey: offerSet.monthKey,
+      startsAt: offerSet.startsAt,
+      endsAt: offerSet.endsAt,
+      // Não é o curso grátis ELEITO do mês (esse é o `freeCourseSlug` acima) —
+      // é um curso que simplesmente não cobra. Os dois liberam; só um expira.
+      isFreeCourseOfMonth: false,
+      includedInPool: true,
+      poolLevel: "beginner",
+      availablePlans: ["free", "explorador", "profissional", "expert"],
+    };
+  }
+
   const poolLevel = level === "beginner" || level === "intermediate" || level === "advanced" ? level : null;
   if (!poolLevel) return null;
 
