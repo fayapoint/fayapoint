@@ -108,7 +108,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ChevronDown, Clock, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Award, ChevronDown, Clock, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface ItemTrilho {
@@ -229,6 +229,17 @@ const FORCA_BORDA = 1.7;
 
 /** Um quadro a 60Hz, em ms. É a unidade em que as constantes acima foram medidas. */
 const QUADRO_60HZ = 1000 / 60;
+
+/**
+ * Quantos pixels o ponteiro pode andar e o gesto ainda contar como clique.
+ *
+ * Era o número 8 solto em quatro lugares. Virou constante porque agora ele
+ * decide DUAS coisas que precisam concordar: se o clique navega e se a captura
+ * de ponteiro é pedida. Se as duas usassem limiares diferentes existiria uma
+ * faixa de pixels em que o gesto captura o ponteiro (roubando o `click`) mas
+ * ainda se considera clique — e o link não levaria a lugar nenhum.
+ */
+const LIMIAR_ARRASTO = 8;
 
 /**
  * Teto do passo de tempo.
@@ -690,6 +701,9 @@ export function TrilhoParallax({
 
   /* ── Gestos ──────────────────────────────────────────────────────────── */
 
+  /** A captura do ponteiro já foi pedida neste gesto? Ver `aoDescer`. */
+  const capturado = useRef(false);
+
   const inicioX = useRef(0);
   const inicioScroll = useRef(0);
   const ultimoX = useRef(0);
@@ -739,15 +753,23 @@ export function TrilhoParallax({
     ultimoT.current = performance.now();
     velocidade.current = 0;
     if (temporizador.current) clearTimeout(temporizador.current);
-    // Captura do ponteiro: o arrasto continua funcionando com o cursor fora do
-    // trilho, e o `pointerup` chega mesmo que ele suba sobre outro elemento.
-    // Sem isso, sair um pixel para cima no meio do gesto cortava o movimento
-    // pela metade — era o `onPointerLeave` fazendo as vezes de `pointerup`.
-    try {
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    } catch {
-      /* navegador sem captura: o arrasto ainda funciona dentro do trilho */
-    }
+    /* ⚠️ A CAPTURA DO PONTEIRO NÃO ACONTECE MAIS AQUI — e é por isso que o
+       clique voltou a navegar.
+
+       Ricardo, 05/08/2026: *"quando clicamos no curso ele não vai para o
+       curso"*.
+
+       A causa: `setPointerCapture` no `pointerdown` faz o navegador **redirecionar
+       o `click`** para o elemento que capturou. O `pointerdown` e o `pointerup`
+       passavam a ter como alvo a FAIXA, e o `click` é despachado no ancestral
+       comum dos dois — a faixa, nunca o `<a>` do card. O link continuava lá,
+       válido e focável; simplesmente nunca recebia o clique.
+
+       A captura continua sendo necessária para o arrasto (sem ela, sair um
+       pixel para cima no meio do gesto corta o movimento pela metade). A saída
+       é pedi-la TARDE: só quando o ponteiro já andou o bastante para aquilo ser
+       um arrasto de verdade, e não um clique. Ver `aoMover`. */
+    capturado.current = false;
   };
 
   const aoMover = (e: React.PointerEvent) => {
@@ -760,6 +782,19 @@ export function TrilhoParallax({
     if (!el) return;
     const dx = inicioX.current - e.clientX;
     percorrido.current = Math.max(percorrido.current, Math.abs(dx));
+
+    // A captura chega AQUI, e só depois do limiar: até 8px o gesto ainda pode
+    // virar clique, e capturar antes disso rouba o `click` do link (ver
+    // `aoDescer`). Passado o limiar já é arrasto declarado, e aí a captura é
+    // o que impede o gesto de morrer se o cursor sair da faixa.
+    if (!capturado.current && percorrido.current > LIMIAR_ARRASTO) {
+      try {
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        capturado.current = true;
+      } catch {
+        /* navegador sem captura: o arrasto ainda funciona dentro do trilho */
+      }
+    }
     const max = Math.max(0, total.current - visivel.current);
     const novo = Math.max(0, Math.min(inicioScroll.current + dx, max));
     alvo.current = novo;
@@ -784,12 +819,13 @@ export function TrilhoParallax({
     acordado.current = true;
     if (!arrastando.current) return;
     arrastando.current = false;
-    if (e) {
+    if (e && capturado.current) {
       try {
         (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
       } catch {
         /* já solto */
       }
+      capturado.current = false;
     }
     encaixar();
   };
@@ -913,7 +949,7 @@ export function TrilhoParallax({
             corte seco por uma dissolução. É ele também que faz o próximo curso
             "surgir" da borda quando o cursor puxa o trilho pela ponta, em vez
             de ele aparecer atravessando uma guilhotina. */}
-      <div className="trilho-moldura relative mx-4 rounded-[28px] sm:mx-8">
+      <div className="trilho-moldura relative mx-2 rounded-2xl sm:mx-8 sm:rounded-[28px]">
         <span aria-hidden className="trilho-chao pointer-events-none absolute inset-x-10 bottom-0 h-px" />
         <div
           ref={trilho}
@@ -928,7 +964,7 @@ export function TrilhoParallax({
           onPointerUp={aoSubir}
           onPointerCancel={aoSubir}
           onPointerLeave={aoSairPonteiro}
-          className="trilho-faixa flex cursor-grab gap-3 overflow-x-hidden px-4 pb-4 pt-4 active:cursor-grabbing sm:px-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+          className="trilho-faixa flex cursor-grab gap-2 overflow-x-hidden px-2 pb-3 pt-3 active:cursor-grabbing sm:gap-3 sm:px-5 sm:pb-4 sm:pt-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
           style={{
           scrollBehavior: "auto",
           opacity: pronto ? 1 : 0,
@@ -970,7 +1006,23 @@ export function TrilhoParallax({
 
                A proporção (0,6955) foi mantida para o recorte da capa
                continuar valendo; ver a conta em `DESLOC_MAX`. */
-            className="trilho-card group/card group relative h-[302px] w-[210px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0d16] shadow-[0_18px_50px_-24px_rgba(0,0,0,.95)] sm:h-[365px] sm:w-[254px]"
+            /* ⚠️ 112×162 no celular (era 210×302). Ricardo, 05/08/2026:
+               *"temos apenas 1 livro na tela, devemos diminuir o suficiente
+               para em mobile termos pelo menos 3"*.
+
+               ⚠️ A conta tem de sair da MEDIDA, não da aritmética de cabeça.
+               Calculando à mão eu cheguei a 112px ("393 menos mx-2 menos px-2 =
+               361"), e no aparelho couberam dois. O que faltava na conta: a
+               seção da home tem o próprio `px-4`, então a moldura nasce com
+               345px e a faixa entrega **327px úteis**, não 361.
+
+               Com 327: 3×100 + 2×8 = 316. Três cards inteiros e o quarto
+               espiando. Medido no build, não estimado.
+
+               Para o card caber nessa largura, a GAVETA saiu do celular — ver o
+               bloco `.trilho-detalhes` em globals.css. Era ela que cobria o
+               livro. */
+            className="trilho-card group/card group relative h-[145px] w-[100px] shrink-0 overflow-hidden rounded-xl border border-white/10 bg-[#0b0d16] shadow-[0_18px_50px_-24px_rgba(0,0,0,.95)] sm:h-[365px] sm:w-[254px] sm:rounded-2xl"
           >
             {/* O link cobre o card inteiro em vez de envolvê-lo.
                 É o que permite o botão de ação viver POR CIMA da capa: um
@@ -989,19 +1041,27 @@ export function TrilhoParallax({
               draggable={false}
               onClick={(e) => {
                 // Arrastar não navega.
-                if (percorrido.current > 8) e.preventDefault();
+                if (percorrido.current > LIMIAR_ARRASTO) e.preventDefault();
               }}
               className="absolute inset-0 z-[1] rounded-2xl"
             />
 
+            {/* ⚠️ NO CELULAR O SELO É UM PONTO, NÃO UMA FRASE.
+                Num card de 100px, "Conteúdo atualizado" quebrava em duas linhas
+                e cobria o canto superior do livro — que é exatamente a parte
+                que a redução do card existia para libertar. O ponto guarda o
+                sinal (a cor já distingue acervo, disponível, fila, upgrade,
+                concluído e grátis) sem gastar largura, e o rótulo por extenso
+                volta assim que há espaço para ele. O texto continua no DOM, em
+                `sr-only`, para quem usa leitor de tela. */}
             {item.estado && (
               <span
                 className={cn(
-                  "pointer-events-none absolute left-3 top-3 z-[2] rounded-full border px-2 py-0.5 text-[10px] font-bold backdrop-blur-sm sm:left-4 sm:top-4",
+                  "pointer-events-none absolute left-1.5 top-1.5 z-[2] h-2.5 w-2.5 rounded-full border backdrop-blur-sm sm:left-4 sm:top-4 sm:h-auto sm:w-auto sm:px-2 sm:py-0.5 sm:text-[10px] sm:font-bold",
                   TONS_ESTADO[item.estado.tom],
                 )}
               >
-                {item.estado.rotulo}
+                <span className="sr-only sm:not-sr-only">{item.estado.rotulo}</span>
               </span>
             )}
 
@@ -1100,7 +1160,7 @@ export function TrilhoParallax({
                 painel continua levando ao curso. */}
             <span
               data-prateleira
-              className="trilho-prateleira pointer-events-auto absolute inset-x-2.5 bottom-2.5 z-[2] flex flex-col rounded-2xl border-t border-white/[0.14] bg-white/[0.055] p-3.5 backdrop-blur-md backdrop-saturate-150 sm:inset-x-3 sm:bottom-3 sm:p-4"
+              className="trilho-prateleira pointer-events-auto absolute inset-x-1.5 bottom-1.5 z-[2] flex flex-col rounded-lg border-t border-white/[0.14] bg-white/[0.055] p-1.5 backdrop-blur-md backdrop-saturate-150 sm:inset-x-3 sm:bottom-3 sm:rounded-2xl sm:p-4"
               /* A "sombrinha" pedida, e ela tem três camadas de propósito:
                  o anel interno de 1px que fecha o contorno do vidro por
                  dentro, o filete claro no topo que dá a aresta iluminada, e a
@@ -1124,7 +1184,7 @@ export function TrilhoParallax({
                 tabIndex={-1}
                 draggable={false}
                 onClick={(e) => {
-                  if (percorrido.current > 8) e.preventDefault();
+                  if (percorrido.current > LIMIAR_ARRASTO) e.preventDefault();
                 }}
                 className="absolute inset-0 rounded-2xl"
               />
@@ -1133,7 +1193,7 @@ export function TrilhoParallax({
                   Duas linhas de título cabem sempre; um nome curto sobra espaço
                   em vez de encolher o card, porque um trilho onde cada card
                   fecha numa altura diferente lê como defeito de alinhamento. */}
-              <span className="relative z-[1] flex h-[42px] items-start gap-2.5 sm:h-[50px]">
+              <span className="relative z-[1] flex h-[26px] items-start gap-1 sm:h-[50px] sm:gap-2.5">
                 {/* A MARCA — um filete de ouro à esquerda do título.
                     Ricardo, 05/08/2026: *"ainda falta um flair no card que tem
                     o título, ainda está bem simplesinho … uma sombrinha, uma
@@ -1144,15 +1204,15 @@ export function TrilhoParallax({
                     ecoa a lombada do livro que está logo acima, na capa. É
                     vertical por isso — uma bolinha ou um ícone seriam adorno;
                     uma lombada é a mesma linguagem da ilustração. */}
-                <span aria-hidden className="trilho-marca mt-[3px] block w-[3px] shrink-0 rounded-full sm:mt-1" />
+                <span aria-hidden className="trilho-marca mt-[2px] block w-[2px] shrink-0 rounded-full sm:mt-1 sm:w-[3px]" />
 
                 <Link
                   href={item.href}
                   draggable={false}
                   onClick={(e) => {
-                    if (percorrido.current > 8) e.preventDefault();
+                    if (percorrido.current > LIMIAR_ARRASTO) e.preventDefault();
                   }}
-                  className="line-clamp-2 flex-1 text-[14px] font-bold leading-snug text-white outline-none sm:text-[16.5px] focus-visible:underline focus-visible:decoration-amber-400 focus-visible:underline-offset-4"
+                  className="line-clamp-2 flex-1 text-[9.5px] font-bold leading-[1.15] text-white outline-none sm:text-[15px] sm:leading-snug focus-visible:underline focus-visible:decoration-amber-400 focus-visible:underline-offset-4"
                   style={{ textShadow: "0 1px 12px rgba(0,0,0,.75), 0 0 24px rgba(0,0,0,.5)" }}
                 >
                   {item.titulo}
@@ -1170,7 +1230,7 @@ export function TrilhoParallax({
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (percorrido.current > 8) return;
+                    if (percorrido.current > LIMIAR_ARRASTO) return;
                     setAbertoEm((a) => (a === i ? null : i));
                   }}
                   className="trilho-alavanca pointer-events-auto relative z-[2] -mr-1 -mt-1 shrink-0 rounded-full p-1.5 text-white/55 transition-transform duration-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
@@ -1194,19 +1254,19 @@ export function TrilhoParallax({
                   sem isto, o botão do Ateliê seria coberto por ele. */}
               <span className="trilho-detalhes relative z-[1]">
                 <span>
-                  <span className="flex flex-col gap-2 pt-2">
-              <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-widest text-white/45">
+                  <span className="flex flex-col gap-1 pt-0.5 sm:gap-2 sm:pt-2">
+              <span className="hidden flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-widest text-white/45 sm:flex">
                 {item.ferramenta && <span>{item.ferramenta}</span>}
                 {item.nivel && <span>· {item.nivel}</span>}
               </span>
 
               {item.resumo && (
-                <span className="line-clamp-2 text-xs leading-relaxed text-white/60">
+                <span className="hidden line-clamp-2 text-xs leading-relaxed text-white/60 sm:block">
                   {item.resumo}
                 </span>
               )}
 
-              <span className="mt-0.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-white/50">
+              <span className="mt-0.5 hidden flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-white/50 sm:flex">
                 {typeof item.aulas === "number" && (
                   <span className="inline-flex items-center gap-1">
                     <Layers size={11} /> {item.aulas} aulas
@@ -1220,17 +1280,37 @@ export function TrilhoParallax({
               </span>
 
               {typeof item.progresso === "number" ? (
+                /* ⚠️ CONCLUÍDO é um terceiro estado, não "continuar com 100%".
+                   Ricardo, 05/08/2026: *"quando vejo no meu acervo um curso que
+                   já completei, não vejo distinção alguma, ele simplesmente me
+                   diz para continuar de onde parei, mesmo eu já tendo o
+                   certificado"*.
+
+                   A condição era `progresso > 0`, que é verdadeira em 100% — o
+                   card mostrava "Continuar · 100%", uma frase que se contradiz
+                   sozinha e faz a pessoa achar que o sistema perdeu o
+                   progresso dela. O número já estava certo; era a palavra ao
+                   lado que mentia. */
                 <span className="mt-1 block">
                   <span className="flex items-center justify-between text-[11px] text-white/55">
-                    <span className="inline-flex items-center gap-1 text-emerald-300">
-                      <PlayCircle size={12} />
-                      {item.progresso > 0 ? "Continuar" : "Começar"}
-                    </span>
+                    {item.progresso >= 100 ? (
+                      <span className="inline-flex items-center gap-1 font-bold text-amber-300">
+                        <Award size={12} /> Concluído
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-emerald-300">
+                        <PlayCircle size={12} />
+                        {item.progresso > 0 ? "Continuar" : "Começar"}
+                      </span>
+                    )}
                     <span className="tabular-nums">{item.progresso}%</span>
                   </span>
-                  <span className="mt-1 block h-1 w-full overflow-hidden rounded-full bg-white/12">
+                  <span className="mt-0.5 block h-1 w-full overflow-hidden rounded-full bg-white/12 sm:mt-1">
                     <span
-                      className="block h-full rounded-full bg-emerald-400"
+                      className={cn(
+                        "block h-full rounded-full",
+                        item.progresso >= 100 ? "bg-amber-400" : "bg-emerald-400",
+                      )}
                       style={{ width: `${Math.max(2, item.progresso)}%` }}
                     />
                   </span>
@@ -1238,11 +1318,11 @@ export function TrilhoParallax({
               ) : (
                 typeof item.preco === "number" && (
                   <span className="mt-1 flex items-baseline gap-2">
-                    <span className="text-lg font-extrabold text-[#f5c04e]">
+                    <span className="text-[12px] font-extrabold leading-none text-[#f5c04e] sm:text-lg">
                       R$ {item.preco}
                     </span>
                     {item.precoDe ? (
-                      <span className="text-xs text-white/35 line-through">R$ {item.precoDe}</span>
+                      <span className="hidden text-xs text-white/35 line-through sm:inline">R$ {item.precoDe}</span>
                     ) : null}
                   </span>
                 )
@@ -1254,11 +1334,11 @@ export function TrilhoParallax({
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (percorrido.current > 8) return;
+                    if (percorrido.current > LIMIAR_ARRASTO) return;
                     item.acao!.aoClicar();
                   }}
                   disabled={item.acao.carregando}
-                  className="pointer-events-auto relative z-[2] mt-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 px-3 py-2 text-xs font-bold text-black transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+                  className="pointer-events-auto relative z-[2] mt-1 hidden items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 sm:inline-flex px-3 py-2 text-xs font-bold text-black transition-opacity hover:opacity-90 disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
                 >
                   {item.acao.carregando ? (
                     <Loader2 size={12} className="animate-spin" />
@@ -1276,10 +1356,10 @@ export function TrilhoParallax({
                     // Arrastar o trilho não pode virar navegação. É a mesma
                     // guarda do botão acima — o `percorrido` mede quantos
                     // pixels o ponteiro andou desde que encostou no card.
-                    if (percorrido.current > 8) e.preventDefault();
+                    if (percorrido.current > LIMIAR_ARRASTO) e.preventDefault();
                     e.stopPropagation();
                   }}
-                  className="pointer-events-auto relative z-[2] mt-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-200 transition-colors hover:bg-amber-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+                  className="pointer-events-auto relative z-[2] mt-1 hidden items-center justify-center gap-1.5 rounded-lg border border-amber-400/40 sm:inline-flex bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-200 transition-colors hover:bg-amber-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
                 >
                   <Wand2 size={12} />
                   {item.atelie.rotulo}

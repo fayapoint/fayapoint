@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { CartaoDeCreditos } from "@/components/portal/CartaoDeCreditos";
 import {
   User,
   CreditCard,
@@ -887,6 +888,11 @@ export default function AccountPage() {
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-6 mt-6"
               >
+                {/* Os créditos vêm ANTES do plano: quem abre esta aba com uma
+                    dúvida de crédito não deveria ter de rolar por comparação de
+                    planos para encontrar o próprio saldo. */}
+                <CartaoDeCreditos />
+
                 {/* Current Plan */}
                 <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
                   <div className="flex items-center justify-between mb-4 gap-2">

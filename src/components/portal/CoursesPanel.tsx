@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 // A lista encolheu junto com o painel: das onze seções de antes sobraram três,
 // e com elas foram embora dezoito ícones que ninguém mais desenha.
-import { Award, BookOpen, Crown, Filter, Sparkles } from "lucide-react";
+import { Award, BookOpen, Crown, Filter, Loader2, LogOut, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,8 @@ import { canPlanAccessMonthlyOffer, getCourseMonthlyOfferMeta } from "@/lib/mont
 import { TrilhoParallax } from "@/components/biblioteca/TrilhoParallax";
 import { LivroDosCursos, TituloDoLivro } from "@/components/biblioteca/LivroDosCursos";
 import { podePersonalizar } from "@/lib/curso-personalizavel";
+import { getClientAuthHeaders } from "@/lib/client-auth";
+import { toast } from "react-hot-toast";
 
 interface CourseProgressCard {
   _id: string;
@@ -174,6 +176,39 @@ export function CoursesPanel({
   isEnrolling,
   onEnroll,
 }: CoursesPanelProps) {
+  /**
+   * Qual curso está sendo liberado agora. Ver o painel de vagas mais abaixo.
+   *
+   * ⚠️ `location.reload()` no fim, e de propósito. As vagas são calculadas no
+   * SERVIDOR (`calcularVagasSimultaneas`) e chegam aqui como prop — o mesmo
+   * número que o `enroll` usa para negar. Mexer no estado local faria a tela
+   * dizer "1 vaga livre" enquanto o servidor continua contando o antigo até a
+   * próxima leitura, e o botão de liberar voltaria a receber 409. Recarregar é
+   * feio e é honesto: a tela passa a mostrar o que o servidor sabe.
+   */
+  const [saindoDe, setSaindoDe] = useState<string | null>(null);
+
+  const liberarVaga = async (courseSlug: string) => {
+    setSaindoDe(courseSlug);
+    try {
+      const r = await fetch(`/api/courses/enroll?courseSlug=${encodeURIComponent(courseSlug)}`, {
+        method: "DELETE",
+        headers: getClientAuthHeaders(),
+      });
+      if (!r.ok) {
+        const corpo = await r.json().catch(() => ({}));
+        toast.error(corpo?.error || "Não foi possível liberar a vaga agora.");
+        setSaindoDe(null);
+        return;
+      }
+      toast.success("Vaga liberada. Seu progresso continua salvo.");
+      window.location.reload();
+    } catch {
+      toast.error("Não foi possível liberar a vaga agora.");
+      setSaindoDe(null);
+    }
+  };
+
   const startedCourses = useMemo(
     () =>
       [...userCourses].sort((a, b) => {
@@ -530,11 +565,63 @@ export function CoursesPanel({
                 >
                   {vagasSimultaneas.disponiveis > 0
                     ? `${vagasSimultaneas.disponiveis} de ${vagasSimultaneas.limite} vaga${vagasSimultaneas.limite === 1 ? "" : "s"} livre${vagasSimultaneas.disponiveis === 1 ? "" : "s"}`
-                    : `${vagasSimultaneas.limite} cursos abertos — conclua um para abrir vaga`}
+                    : `${vagasSimultaneas.limite} cursos abertos — conclua um ou saia de um`}
                 </Badge>
               )}
             </div>
           </div>
+
+          {/* ── SAIR DE UM CURSO PARA LIBERAR A VAGA ──────────────────────────
+              Ricardo, 05/08/2026: *"tive um problema tentando ver outro curso
+              pois cheguei num limite de 4 abertos, mas não tenho como parar de
+              ler 1 de maneira nenhuma, e isso fica muito estranho, ser forçado
+              a concluir mesmo que eu não queira"*.
+
+              ⚠️ O `DELETE /api/courses/enroll` EXISTE desde sempre e funciona —
+              e a mensagem de recusa do `POST` já dizia *"conclua um deles — ou
+              saia de um"*. O que nunca existiu foi alguém que chamasse o
+              `DELETE`: nenhum arquivo em `src/` referenciava esse método. O
+              site prometia uma saída pela qual não havia porta.
+
+              Ela aparece só quando as vagas acabam. Um botão de "sair do curso"
+              visível o tempo todo convida a desistir de algo que a pessoa está
+              lendo; aqui ele é a resposta a um bloqueio que ela acabou de
+              encontrar. Sair não apaga progresso nenhum — o `DELETE` só desliga
+              `isActive`, e voltar restaura tudo. Por isso o aviso diz isso: sem
+              essa frase, ninguém clica. */}
+          {vagasSimultaneas && vagasSimultaneas.disponiveis <= 0 && (
+            <div className="mt-3 rounded-xl border border-amber-400/25 bg-amber-500/[0.06] p-3">
+              <p className="text-xs text-amber-100/90">
+                Suas {vagasSimultaneas.limite} vagas estão ocupadas. Você pode{" "}
+                <strong className="font-bold">sair de um curso</strong> para abrir espaço — o
+                progresso fica salvo e volta inteiro quando você reabrir.
+              </p>
+              <div className="mt-2.5 flex flex-wrap gap-2">
+                {vagasSimultaneas.cursosEmAndamento.map((slug) => {
+                  // O slug do curso mora em `details.slug`, não na raiz do
+                  // card — e quando falta, o próprio slug serve de rótulo.
+                  const titulo =
+                    userCourses.find((c) => c.details?.slug === slug)?.details?.title ?? slug;
+                  return (
+                    <button
+                      key={slug}
+                      type="button"
+                      disabled={saindoDe === slug}
+                      onClick={() => liberarVaga(slug)}
+                      className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-[11px] font-semibold text-white/80 transition-colors hover:border-amber-400/50 hover:text-white disabled:opacity-50"
+                    >
+                      {saindoDe === slug ? (
+                        <Loader2 size={11} className="animate-spin" />
+                      ) : (
+                        <LogOut size={11} />
+                      )}
+                      <span className="truncate">Sair de “{titulo}”</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <LivroDosCursos cursos={cursosDoLivro} />
         </Card>

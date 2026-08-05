@@ -27,6 +27,7 @@ import {
   Share2,
   Gamepad2,
 } from "lucide-react";
+import { SaldoDeCreditos } from "@/components/portal/SaldoDeCreditos";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -150,6 +151,11 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-amber-400 font-bold">Lv.{stats.level}</span>
               </div>
+              {/* O saldo entra AQUI porque foi aqui que o Ricardo procurou por
+                  ele em 05/08/2026 e não achou — ao lado do nível, no menu que
+                  lista tudo o que a conta tem. Ver `SaldoDeCreditos`. */}
+              <div className="h-4 w-px bg-border" />
+              <SaldoDeCreditos compacto />
             </div>
             <button
               onClick={() => setIsMoreOpen(false)}

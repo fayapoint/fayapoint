@@ -103,28 +103,68 @@ export function VideoIntroCurso({
             className="aspect-video w-full object-cover"
           />
 
-          {/* O escurecimento existe para o texto, e só onde há texto: a metade
-              de cima do quadro fica limpa, que é onde a câmera do vídeo
-              costuma pousar o assunto. */}
+          {/* ── A PROTEÇÃO DO TEXTO ────────────────────────────────────────
+              Ricardo, 05/08/2026: *"o texto em cima do vídeo no desktop dá pra
+              ler, mas se tivermos um vídeo com o fundo claro ficará bem difícil
+              de ler, precisamos também de uma forma de proteger"*.
+
+              O degradê sozinho não protege: ele escurece uma QUANTIDADE fixa,
+              e um quadro claro atravessa qualquer quantidade fixa. São três
+              camadas, e cada uma cobre o que a anterior não cobre:
+
+              1. o degradê, que dá a base e o acabamento;
+              2. `backdrop-filter: brightness(.55) saturate(.9)` na faixa do
+                 texto — este é o que resolve o caso do vídeo claro, porque
+                 escurece **o que estiver atrás**, seja lá o que for, em vez de
+                 pintar preto por cima;
+              3. `text-shadow` na própria letra, que sobrevive mesmo se as duas
+                 primeiras falharem num navegador sem `backdrop-filter`.
+
+              Só a última é garantida em todo lugar, e é por isso que ela
+              existe. */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0"
+            className="pointer-events-none absolute inset-x-0 bottom-0 top-1/3"
             style={{
               background:
-                "linear-gradient(to top, rgba(3,4,8,.92) 0%, rgba(3,4,8,.7) 22%, rgba(3,4,8,.25) 46%, transparent 70%)",
+                "linear-gradient(to top, rgba(3,4,8,.94) 0%, rgba(3,4,8,.74) 26%, rgba(3,4,8,.3) 58%, transparent 100%)",
+              backdropFilter: "brightness(.55) saturate(.9)",
+              WebkitBackdropFilter: "brightness(.55) saturate(.9)",
+              maskImage: "linear-gradient(to top, #000 0%, #000 42%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to top, #000 0%, #000 42%, transparent 100%)",
             }}
           />
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-8">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-300/80">
+          {/* ⚠️ NO CELULAR O TEXTO NÃO FICA POR CIMA — ele desce para o corpo.
+              Ricardo: *"no celular fica bem estranho, como você pode ver nas
+              imagens"*. E estava: num aparelho de 393px o vídeo tem 221px de
+              altura e a chamada do curso ocupa SETE linhas. O bloco era
+              `absolute`, então ele não empurrava nada — simplesmente
+              atravessava o vídeo inteiro e saía pelos dois lados, cobrindo a
+              arte e ficando ilegível sobre ela.
+
+              Sobrepor texto a imagem só funciona quando há área sobrando, e num
+              retângulo de 221px não há. No celular fica só o rótulo e o
+              título; a chamada vai para baixo do vídeo, onde tem largura. */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 sm:p-8">
+            <div className="min-w-0">
+              <p
+                className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300/90 sm:text-[11px]"
+                style={{ textShadow: "0 1px 10px rgba(0,0,0,.9)" }}
+              >
                 Uma olhada por dentro
               </p>
-              <h2 className="mt-1 text-xl font-bold leading-tight text-white sm:text-3xl">
+              <h2
+                className="mt-1 line-clamp-2 text-lg font-bold leading-tight text-white sm:text-3xl"
+                style={{ textShadow: "0 2px 16px rgba(0,0,0,.92), 0 0 40px rgba(0,0,0,.6)" }}
+              >
                 {titulo}
               </h2>
               {chamada && (
-                <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-white/65">
+                <p
+                  className="mt-1.5 hidden max-w-xl text-sm leading-relaxed text-white/80 sm:line-clamp-2 sm:block"
+                  style={{ textShadow: "0 1px 12px rgba(0,0,0,.95)" }}
+                >
                   {chamada}
                 </p>
               )}
@@ -134,12 +174,19 @@ export function VideoIntroCurso({
               type="button"
               onClick={alternar}
               aria-label={tocando ? "Pausar o vídeo" : "Tocar o vídeo"}
-              className="pointer-events-auto shrink-0 rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-md transition-colors hover:border-amber-400/60 hover:bg-amber-400/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+              className="pointer-events-auto shrink-0 rounded-full border border-white/20 bg-white/10 p-2.5 text-white backdrop-blur-md transition-colors hover:border-amber-400/60 hover:bg-amber-400/15 sm:p-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               {tocando ? <Pause size={18} /> : <Play size={18} />}
             </button>
           </div>
         </div>
+
+        {/* A chamada, no celular, embaixo do vídeo e com a largura inteira. */}
+        {chamada && (
+          <p className="mx-auto mt-3 max-w-5xl text-sm leading-relaxed text-white/60 sm:hidden">
+            {chamada}
+          </p>
+        )}
       </div>
     </section>
   );

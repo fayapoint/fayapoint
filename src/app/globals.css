@@ -1256,31 +1256,78 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
   transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* `focus-within` fora da consulta de mídia, e de propósito: quem navega por
-   teclado alcança os botões que vivem DENTRO da gaveta, e o foco neles é o que
-   abre a gaveta. Se esta regra morasse junto com o `:hover`, o teclado ficaria
-   preso num botão invisível em qualquer aparelho sem mouse. */
-[data-card]:focus-within .trilho-detalhes,
+/* ⚠️ `:has(:focus-visible)`, NÃO `:focus-within` (05/08/2026).
+   Ricardo: *"temos uma reação não perfeita quando clicamos para arrastar ao
+   invés de simplesmente usar o hover, onde o card com o título aumenta e fica
+   aumentado até darmos outro clique"*.
+
+   Era o `:focus-within`. Clicar num card dá foco ao link dentro da prateleira,
+   e `:focus-within` não distingue foco de MOUSE de foco de TECLADO — a gaveta
+   abria e ficava aberta até o foco sair, o que só acontecia no próximo clique
+   em outro lugar. O trilho ficava com uma gaveta travada no meio.
+
+   `:focus-visible` é exatamente essa distinção: o navegador só o aplica quando
+   o foco veio de teclado (ou de um gesto que mereça indicação visível). Quem
+   navega por Tab continua alcançando os botões dentro da gaveta; quem clica com
+   o mouse não fica com nada preso.
+
+   O `:has()` é necessário porque quem recebe o foco é um DESCENDENTE do card e
+   quem abre é outro descendente — não há relação de irmão entre eles. */
+[data-card]:has(:focus-visible) .trilho-detalhes,
 [data-card][data-aberto="true"] .trilho-detalhes {
   grid-template-rows: 1fr;
   opacity: 1;
 }
-[data-card]:focus-within .trilho-veu,
+[data-card]:has(:focus-visible) .trilho-veu,
 [data-card][data-aberto="true"] .trilho-veu {
   height: 62%;
 }
 
-/* No toque não existe `hover`, então quem abre a gaveta é a SELEÇÃO: o card
-   que estiver no centro da faixa. Ricardo, 05/08/2026: *"se estivermos pensando
-   no celular, a mecânica de arrastar ou selecionar e aí o card se expandir faz
-   mais sentido por não haver o hover"*. O atributo é escrito direto no DOM pelo
-   laço de animação — ver `aplicarSelecao` em TrilhoParallax. */
-[data-card][data-selecionado="true"] .trilho-detalhes {
-  grid-template-rows: 1fr;
-  opacity: 1;
+/* ── NO CELULAR NÃO EXISTE MAIS GAVETA ──────────────────────────────────────
+   Ricardo, 05/08/2026: *"no mobile o card fica muito grande quando aumentado e
+   nunca vemos o livro do curso, pois sempre que arrastamos ela maximiza e cobre
+   tudo, e a seta para minimizar não funciona"*.
+
+   Os três defeitos eram o mesmo defeito. A gaveta abria por SELEÇÃO (o card do
+   centro), e o conteúdo dela — ferramenta, nível, resumo, aulas, duração, preço
+   e até dois botões — passava de 60% da altura do card. O livro, que é o motivo
+   de o card existir, ficava atrás dela o tempo todo, porque arrastar sempre
+   deixa ALGUM card no centro. E a seta não fechava nada: ela desligava o
+   `data-aberto`, mas o `data-selecionado` continuava ligado e mantinha a gaveta
+   aberta — a pessoa clicava e não acontecia nada.
+
+   A correção não é ajustar a altura: é aceitar que num card de 112px de largura
+   a gaveta não cabe. No celular o painel mostra o que é decisão de compra — o
+   nome e o preço — e nada mais. Quem quiser o resto toca e vai para o curso,
+   que é o gesto que a pessoa quer fazer de qualquer jeito.
+
+   Então: a "gaveta" fica permanentemente aberta e o conteúdo alto some por
+   `hidden sm:block` no componente. Sem estado, sem seta, sem nada para travar. */
+@media (max-width: 639px) {
+  .trilho-detalhes {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: none;
+  }
+  .trilho-veu {
+    height: 46%;
+  }
+  /* A seta sai junto: ela existia para fechar uma gaveta que não existe mais. */
+  .trilho-alavanca {
+    display: none;
+  }
 }
-[data-card][data-selecionado="true"] .trilho-veu {
-  height: 62%;
+
+/* Acima de 640px a seleção continua valendo — é o que serve tablet em modo
+   retrato, onde há espaço para a gaveta e ainda não há `hover`. */
+@media (min-width: 640px) {
+  [data-card][data-selecionado="true"] .trilho-detalhes {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  [data-card][data-selecionado="true"] .trilho-veu {
+    height: 62%;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

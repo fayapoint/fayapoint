@@ -218,12 +218,22 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
             {typeof curso.progresso === "number" && (
               <div className="mb-3">
                 <div className="flex items-center justify-between text-[11px] text-white/55">
-                  <span>{curso.progresso > 0 ? "Seu progresso" : "Ainda não começou"}</span>
+                  {/* ⚠️ Concluído é um terceiro estado — ver a mesma correção em
+                      TrilhoParallax. "Seu progresso · 100%" ao lado de um botão
+                      escrito "Continuar de onde parou" faz quem já tem o
+                      certificado achar que o sistema perdeu o histórico dele. */}
+                  <span className={curso.progresso >= 100 ? "font-bold text-amber-300" : undefined}>
+                    {curso.progresso >= 100
+                      ? "Curso concluído"
+                      : curso.progresso > 0
+                        ? "Seu progresso"
+                        : "Ainda não começou"}
+                  </span>
                   <span className="tabular-nums">{curso.progresso}%</span>
                 </div>
                 <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-white/10">
                   <div
-                    className="h-full rounded-full bg-emerald-400 transition-[width] duration-500"
+                    className={`h-full rounded-full transition-[width] duration-500 ${curso.progresso >= 100 ? "bg-amber-400" : "bg-emerald-400"}`}
                     style={{ width: `${Math.min(100, Math.max(0, curso.progresso))}%` }}
                   />
                 </div>
@@ -235,7 +245,11 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
               className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-bold text-black transition-colors hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               <PlayCircle size={16} />
-              {curso.progresso && curso.progresso > 0 ? "Continuar de onde parou" : "Começar o curso"}
+              {typeof curso.progresso === "number" && curso.progresso >= 100
+                ? "Revisar o curso"
+                : curso.progresso && curso.progresso > 0
+                  ? "Continuar de onde parou"
+                  : "Começar o curso"}
             </Link>
           </div>
 
