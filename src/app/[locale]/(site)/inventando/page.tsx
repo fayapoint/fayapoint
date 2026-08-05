@@ -90,6 +90,21 @@ export default async function InventandoHub({ params, searchParams }: Props) {
             sizes="100vw"
             className="object-cover opacity-30"
           />
+          {/* O mesmo herói, respirando.
+              Ricardo, 04/08: *"dentro de inventando … não tem vídeo"*. O vídeo
+              fica POR CIMA da imagem, não no lugar dela: se ele não carregar —
+              rede ruim, formato não suportado, arquivo ainda não gerado — o que
+              sobra é exatamente o herói de antes, e ninguém vê buraco. */}
+          <video
+            src="/inventando/hero-loop.webm"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover opacity-30"
+          />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background" />
         </div>
 

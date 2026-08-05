@@ -1,5 +1,6 @@
 "use client";
 
+import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Briefcase, MapPin, Clock, Heart, Zap, Users, Coffee, Laptop } from "lucide-react";
@@ -50,6 +51,14 @@ export default function CareersPage() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("title")}</h1>
             <p className="text-xl text-muted-foreground">{t("description")}</p>
           </motion.div>
+
+          {/* O caminho que se abre — `CAR-01-caminho`, gerado em 03/08 e parado
+              desde então porque nenhuma rota o referenciava. */}
+          <FaixaDeVideo
+            src="/carreiras/hero-loop.webm"
+            poster="/carreiras/hero-loop.webp"
+            className="mx-auto mt-10 max-w-4xl"
+          />
         </section>
 
         {/* Benefits */}

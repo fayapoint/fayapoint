@@ -19,7 +19,14 @@
  * exatamente por cima do seu próprio quadro. Com `cover` o vídeo cresceria 44% e
  * decaparia o título dourado no hover — o defeito que a capa estática evita.
  */
-const LOOPS: Record<string, string> = {
+/**
+ * Os OITO da primeira noite, cujo arquivo tem nome de assunto e não de slug.
+ *
+ * Este mapa existe só para eles. Os loops gerados a partir de 05/08/2026 saem
+ * batizados com o slug do curso — `<slug>.webm` — justamente para não precisar
+ * de tradução. Ver `LOOPS_POR_SLUG` abaixo.
+ */
+const APELIDOS: Record<string, string> = {
   "automacao-n8n": "automacao-n8n",
   "autoresearch-singularity": "autoresearch-singularity",
   "banana-dev-deploy-ia": "banana-dev",
@@ -28,6 +35,23 @@ const LOOPS: Record<string, string> = {
   "ia-no-whatsapp": "ia-no-whatsapp",
   "ia-sem-filtro-por-claude": "ia-sem-filtro",
   "n8n-automacao-avancada": "n8n",
+};
+
+/**
+ * Os loops nascidos com o nome do próprio slug (05/08/2026 em diante).
+ *
+ * ⚠️ A lista continua sendo EXPLÍCITA, e isso é de propósito. A tentação é
+ * devolver `/cursos/capa-loop/${slug}.webm` para todo mundo e deixar o
+ * navegador descobrir se existe — mas um `<video>` que aponta para um 404
+ * **não quebra a página**: ele some em silêncio, e ninguém percebe que 19
+ * cursos deixaram de respirar. Um curso só entra aqui depois que o arquivo
+ * está no disco.
+ */
+const LOOPS_POR_SLUG: string[] = [];
+
+const LOOPS: Record<string, string> = {
+  ...APELIDOS,
+  ...Object.fromEntries(LOOPS_POR_SLUG.map((s) => [s, s])),
 };
 
 export type CapaLoop = { video: string; poster: string };

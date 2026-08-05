@@ -48,6 +48,20 @@ function HeroSection() {
     <section ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
       {/* Background */}
       <div className="absolute inset-0">
+        {/* O fio — `OQF-01-fio`, gerado em 03/08 e sem nenhuma rota apontando
+            para ele até hoje. Fica ATRÁS do degradê e dos orbes, então some
+            sem deixar buraco se não carregar. */}
+        <video
+          src="/landing/o-que-fazemos-loop.webm"
+          poster="/landing/o-que-fazemos-loop.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-25"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-amber-900/30 via-background to-background" />
         <motion.div
           className="absolute top-20 left-10 w-[500px] h-[500px] bg-amber-500/20 rounded-full blur-[150px]"

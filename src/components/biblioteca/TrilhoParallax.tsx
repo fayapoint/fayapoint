@@ -66,7 +66,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Clock, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, Clock, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface ItemTrilho {
@@ -201,6 +201,16 @@ export function TrilhoParallax({
   const percorrido = useRef(0);
 
   const [pronto, setPronto] = useState(false);
+  /**
+   * Qual card está com a gaveta aberta POR TOQUE.
+   *
+   * O `hover` não passa por aqui — ele é resolvido em CSS puro
+   * (`[data-card]:hover .trilho-detalhes`), e tem de ser: um `useState` no
+   * hover re-renderizaria os 66 cards do trilho a cada passada do mouse, e
+   * este componente existe justamente porque cada escrita a mais por quadro
+   * aparece no dedo. O estado só carrega o caso que o CSS não alcança.
+   */
+  const [abertoEm, setAbertoEm] = useState<number | null>(null);
   const idTrilho = useId();
 
   // Sem itens suficientes o laço infinito não faz sentido — repetir 4 cards
@@ -628,6 +638,7 @@ export function TrilhoParallax({
           <div
             key={`${item.slug}-${i}`}
             data-card
+            data-aberto={abertoEm === i ? "true" : undefined}
             className="group/card group relative h-[330px] w-[228px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0d16] shadow-[0_18px_50px_-24px_rgba(0,0,0,.95)] transition-[border-color,box-shadow] duration-300 hover:border-amber-400/35 hover:shadow-[0_24px_60px_-22px_rgba(245,192,78,.28)] sm:h-[440px] sm:w-[306px]"
           >
             {/* O link cobre o card inteiro em vez de envolvê-lo.
@@ -702,7 +713,7 @@ export function TrilhoParallax({
                 A curva longa abaixo faz a mesma escuridão chegar sem borda. */}
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%]"
+              className="trilho-veu pointer-events-none absolute inset-x-0 bottom-0"
               style={{
                 background:
                   "linear-gradient(to top, rgba(5,6,10,.97) 0%, rgba(5,6,10,.93) 16%, rgba(5,6,10,.78) 34%, rgba(5,6,10,.46) 54%, rgba(5,6,10,.18) 74%, rgba(5,6,10,0) 100%)",
@@ -728,22 +739,53 @@ export function TrilhoParallax({
                 trás ser escuro, e o filete claro no topo mais a sombra funda
                 fazem o painel POUSAR sobre a capa em vez de manchá-la. */}
             <span
-              className="pointer-events-none absolute inset-x-2.5 bottom-2.5 flex flex-col gap-2 rounded-2xl border-t border-white/[0.14] bg-white/[0.055] p-3.5 backdrop-blur-md backdrop-saturate-150 sm:inset-x-3 sm:bottom-3 sm:p-4"
+              className="pointer-events-none absolute inset-x-2.5 bottom-2.5 flex flex-col rounded-2xl border-t border-white/[0.14] bg-white/[0.055] p-3.5 backdrop-blur-md backdrop-saturate-150 sm:inset-x-3 sm:bottom-3 sm:p-4"
               style={{
                 boxShadow:
                   "inset 0 1px 0 rgba(255,255,255,.14), 0 -1px 0 rgba(255,255,255,.05), 0 18px 40px -16px rgba(0,0,0,.9)",
               }}
             >
+              {/* O CABEÇALHO — altura fixa, e é isto que dá a "altura padrão".
+                  Duas linhas de título cabem sempre; um nome curto sobra espaço
+                  em vez de encolher o card, porque um trilho onde cada card
+                  fecha numa altura diferente lê como defeito de alinhamento. */}
+              <span className="flex h-[42px] items-start gap-2 sm:h-[52px]">
+                <span
+                  className="line-clamp-2 flex-1 text-[15px] font-bold leading-snug text-white sm:text-lg"
+                  style={{ textShadow: "0 1px 12px rgba(0,0,0,.75)" }}
+                >
+                  {item.titulo}
+                </span>
+
+                {/* A alavanca só existe onde não há mouse. No celular não
+                    acontece `hover`, e o toque já é do link que leva ao curso —
+                    sequestrar o primeiro toque para abrir a gaveta faria a
+                    pessoa tocar duas vezes para navegar, que é pior do que o
+                    problema que estamos consertando. */}
+                <button
+                  type="button"
+                  aria-expanded={abertoEm === i}
+                  aria-label={abertoEm === i ? "Recolher detalhes" : "Ver detalhes"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (percorrido.current > 8) return;
+                    setAbertoEm((a) => (a === i ? null : i));
+                  }}
+                  className="trilho-alavanca pointer-events-auto relative z-[2] -mr-1 -mt-1 shrink-0 rounded-full p-1.5 text-white/55 transition-transform duration-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+                  style={{ transform: abertoEm === i ? "rotate(180deg)" : "none" }}
+                >
+                  <ChevronDown size={16} />
+                </button>
+              </span>
+
+              {/* A GAVETA. Tudo o que não é o nome do curso mora aqui dentro. */}
+              <span className="trilho-detalhes">
+                <span>
+                  <span className="flex flex-col gap-2 pt-2">
               <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-widest text-white/45">
                 {item.ferramenta && <span>{item.ferramenta}</span>}
                 {item.nivel && <span>· {item.nivel}</span>}
-              </span>
-
-              <span
-                className="line-clamp-2 text-[15px] font-bold leading-snug text-white sm:text-lg"
-                style={{ textShadow: "0 1px 12px rgba(0,0,0,.75)" }}
-              >
-                {item.titulo}
               </span>
 
               {item.resumo && (
@@ -831,6 +873,9 @@ export function TrilhoParallax({
                   {item.atelie.rotulo}
                 </Link>
               )}
+                  </span>
+                </span>
+              </span>
             </span>
           </div>
         ))}

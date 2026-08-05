@@ -1213,3 +1213,138 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
   html[data-virada-livro] ::view-transition-new(pagina-esquerda),
   html[data-virada-livro] ::view-transition-new(pagina-direita) { animation: none; }
 }
+
+/* ── O card do trilho é RETRÁTIL ────────────────────────────────────────────
+   Ricardo, 04/08/2026: *"como é estático, em muitos casos tampo quase o livro
+   todo, e fica ainda pior no celular"*. E era verdade — a prateleira de vidro
+   media a soma do que tivesse dentro (ferramenta, título, resumo, aulas, preço,
+   e até dois botões), então num curso com Ateliê ela subia até 70% do card e o
+   livro que a capa existe para mostrar ficava atrás dela.
+
+   Agora o painel tem DUAS partes: um cabeçalho de altura fixa, que é só o nome
+   do curso e nunca muda de tamanho — daí a "altura padrão" pedida, igual em
+   todos os cards, com resumo curto ou comprido, com botão ou sem — e um corpo
+   que só existe quando alguém demonstra interesse.
+
+   ⚠️ A altura anima por `grid-template-rows: 0fr → 1fr`, não por `max-height`.
+   `max-height` exige um palpite: chuta-se um teto e, se o conteúdo passar dele,
+   ele corta; se ficar muito abaixo, a animação "espera" a diferença e sai lenta
+   no fim. `0fr → 1fr` mede o conteúdo real de cada card — e eles são desiguais
+   de propósito. O filho PRECISA de `min-height: 0`, senão o conteúdo se recusa
+   a encolher abaixo do tamanho natural e a linha de grade nunca chega a zero.
+
+   O easing é `cubic-bezier(.22,1,.36,1)` (ease-out-quint): sai rápido e chega
+   devagar, que é a curva com que uma gaveta bem feita para. */
+.trilho-detalhes {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+}
+.trilho-detalhes > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* O véu escuro acompanha o painel. Sem isto, a sombra de 62% continuava
+   apagando o título gravado na capa mesmo com a gaveta fechada — o card ficaria
+   menor mas a arte continuaria abafada, que é metade do problema. */
+.trilho-veu {
+  height: 34%;
+  transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* `focus-within` fora da consulta de mídia, e de propósito: quem navega por
+   teclado alcança os botões que vivem DENTRO da gaveta, e o foco neles é o que
+   abre a gaveta. Se esta regra morasse junto com o `:hover`, o teclado ficaria
+   preso num botão invisível em qualquer aparelho sem mouse. */
+[data-card]:focus-within .trilho-detalhes,
+[data-card][data-aberto="true"] .trilho-detalhes {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+[data-card]:focus-within .trilho-veu,
+[data-card][data-aberto="true"] .trilho-veu {
+  height: 62%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-card]:hover .trilho-detalhes {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  [data-card]:hover .trilho-veu {
+    height: 62%;
+  }
+  /* Onde existe mouse, a alavanca é ruído: o hover já faz o trabalho. */
+  .trilho-alavanca {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trilho-detalhes,
+  .trilho-veu {
+    transition-duration: 1ms;
+  }
+}
+
+/* ── O fundo vivo do topo da página de curso ────────────────────────────────
+   Ricardo, 05/08/2026: *"quero que gere três novas para cada curso, onde elas
+   vão fundir entre elas e criar uma sensação de constante movimento mas de
+   leve e alternar com zoom bem lento"*.
+
+   São três camadas empilhadas. Cada uma fica visível ~7s, atravessa ~2,4s de
+   fusão e some — num ciclo de 27s, com atrasos de -9s e -18s para as três
+   nunca coincidirem. Por cima disso, um zoom de 44s que vai e volta
+   (`alternate`), lento o bastante para não ser percebido como animação: o que
+   se percebe é que a imagem *não está parada*.
+
+   ⚠️ Por que CSS puro e não JavaScript: este bloco fica no TOPO da página de
+   venda, acima da dobra. Uma animação por JS aqui depende de hidratação, e
+   nesta mesma página uma animação de entrada por JS já falhou em silêncio e
+   deixou 14 elementos invisíveis. Keyframes não dependem de nada.
+
+   ⚠️ `will-change` NÃO é declarado de propósito. Seriam três camadas de
+   composição do tamanho da tela seguradas para sempre, na primeira coisa que
+   a pessoa carrega. O ganho de suavidade num zoom de 44s é nulo. */
+@keyframes fundo-curso-troca {
+  0%,
+  26% {
+    opacity: 1;
+  }
+  35%,
+  91% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fundo-curso-zoom {
+  from {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1.26);
+  }
+}
+
+.fundo-curso-camada {
+  animation:
+    fundo-curso-troca 27s ease-in-out infinite,
+    fundo-curso-zoom 44s ease-in-out infinite alternate;
+}
+
+/* Quem pediu menos movimento fica com a primeira imagem, parada. */
+@media (prefers-reduced-motion: reduce) {
+  .fundo-curso-camada {
+    animation: none;
+  }
+  .fundo-curso-camada:not(:first-child) {
+    opacity: 0;
+  }
+}

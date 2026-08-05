@@ -626,9 +626,18 @@
         "ai": "AI & Training"
       },
       "metrics": {
-        "speed": { "label": "Speed", "value": "x3" },
-        "consistency": { "label": "Consistency", "value": "99%" },
-        "launch": { "label": "Time-to-launch", "value": "15d" }
+        "speed": {
+          "label": "Speed",
+          "value": "x3"
+        },
+        "consistency": {
+          "label": "Consistency",
+          "value": "99%"
+        },
+        "launch": {
+          "label": "Time-to-launch",
+          "value": "15d"
+        }
       },
       "capabilities": {
         "webProduct": {
@@ -894,10 +903,22 @@
       ]
     },
     "stats": [
-      { "number": "28+", "label": "Years of Experience" },
-      { "number": "18+", "label": "Courses Available" },
-      { "number": "50+", "label": "AI Tools Covered" },
-      { "number": "1000+", "label": "Content Lessons" }
+      {
+        "number": "28+",
+        "label": "Years of Experience"
+      },
+      {
+        "number": "18+",
+        "label": "Courses Available"
+      },
+      {
+        "number": "50+",
+        "label": "AI Tools Covered"
+      },
+      {
+        "number": "1000+",
+        "label": "Content Lessons"
+      }
     ],
     "aboutRicardo": {
       "title": "Ricardo Faya",
@@ -1166,27 +1187,452 @@
       "placeholder": "your@email.com"
     },
     "posts": [
-      { "id": 7, "title": "GPT-5.4: OpenAI Launches Its Most Powerful Model in Three Variants", "slug": "gpt-5-4-openai-tres-variantes", "excerpt": "Standard, Thinking, and Pro — GPT-5.4 redefines what's possible with generative AI. 1M token context window and 30% lower cost.", "category": "Generative AI", "author": "Ricardo Faya", "date": "Mar 25, 2026", "readTime": "8 min", "views": 34200, "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80", "featured": true, "tags": ["GPT-5", "OpenAI", "AI Models"] },
-      { "id": 8, "title": "Gemini 3 & Gemini Agent: Google Launches AI That Acts, Not Just Answers", "slug": "gemini-3-google-agente-ia", "excerpt": "Gemini Agent executes multi-step tasks using Gmail, Calendar, and Drive. Google surpasses 750 million users.", "category": "Generative AI", "author": "Ricardo Faya", "date": "Mar 24, 2026", "readTime": "10 min", "views": 28900, "image": "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?auto=format&fit=crop&w=800&q=80", "featured": true, "tags": ["Gemini", "Google", "Agents"] },
-      { "id": 9, "title": "Shopify + ChatGPT: Agentic Commerce Is Born — Buy Inside AI", "slug": "shopify-chatgpt-lojas-agentes", "excerpt": "Shopify merchants now sell inside ChatGPT, Gemini, and Copilot. AI traffic to stores grew 7x.", "category": "Business", "author": "Ricardo Faya", "date": "Mar 24, 2026", "readTime": "7 min", "views": 22400, "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Shopify", "ChatGPT", "E-commerce"] },
-      { "id": 10, "title": "OpenAI Shuts Down Sora: The End of AI Video Generation?", "slug": "openai-encerra-sora-video-ia", "excerpt": "Unsustainable costs lead to Sora shutdown. Compute redirected to robotics.", "category": "News", "author": "Ricardo Faya", "date": "Mar 24, 2026", "readTime": "6 min", "views": 41200, "image": "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Sora", "OpenAI", "AI Video"] },
-      { "id": 11, "title": "NVIDIA GTC 2026: AI Agents Move from Labs to Enterprise", "slug": "nvidia-gtc-2026-ia-agentes-empresas", "excerpt": "GTC 2026 was dominated by real agent deployments. Vera Rubin, Physical AI, and open-source frameworks.", "category": "Business", "author": "Ricardo Faya", "date": "Mar 22, 2026", "readTime": "9 min", "views": 19800, "image": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["NVIDIA", "GTC", "Enterprise AI"] },
-      { "id": 12, "title": "OpenAI Raises $110 Billion — The Largest Private Round in History", "slug": "openai-110-bilhoes-maior-rodada-historia", "excerpt": "Amazon, NVIDIA, and SoftBank bet $110B on OpenAI. Valuation reaches $840 billion.", "category": "Business", "author": "Ricardo Faya", "date": "Mar 21, 2026", "readTime": "6 min", "views": 35600, "image": "https://images.unsplash.com/photo-1611974789855-d0ea17c9ab3c?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["OpenAI", "Investment", "Startup"] },
-      { "id": 13, "title": "IBM Buys Confluent for $11B: Real-Time Data Powers AI", "slug": "ibm-confluent-11-bilhoes-dados-tempo-real", "excerpt": "The acquisition makes data streaming the heart of enterprise AI. 40% of Fortune 500 already uses Confluent.", "category": "Business", "author": "Ricardo Faya", "date": "Mar 20, 2026", "readTime": "7 min", "views": 12300, "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["IBM", "Confluent", "Data"] },
-      { "id": 14, "title": "MCP: The Protocol Connecting All AI Surpasses 97 Million Installs", "slug": "mcp-protocol-97-milhoes-infraestrutura-agentes", "excerpt": "The Model Context Protocol is the USB of AI — a universal standard connecting any model to any tool.", "category": "Development", "author": "Ricardo Faya", "date": "Mar 20, 2026", "readTime": "8 min", "views": 15700, "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["MCP", "Agents", "Protocol"] },
-      { "id": 15, "title": "Claude Launches Agent Teams and Dispatch: AI That Orchestrates Workflows", "slug": "claude-agentes-autonomos-equipes-ia", "excerpt": "Anthropic focuses on reliability while competitors launch models. Coordinated agent teams and remote workflow control.", "category": "Generative AI", "author": "Ricardo Faya", "date": "Mar 19, 2026", "readTime": "9 min", "views": 18400, "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Claude", "Anthropic", "Agents"] },
-      { "id": 16, "title": "Washington Passes World's First AI Chatbot Safety Law", "slug": "washington-primeira-lei-seguranca-chatbots-ia", "excerpt": "Two bills regulate transparency and minor protection in AI chatbots. A precedent that could go global.", "category": "News", "author": "Ricardo Faya", "date": "Mar 26, 2026", "readTime": "7 min", "views": 24100, "image": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Regulation", "Safety", "Legislation"] },
-      { "id": 17, "title": "Google Releases Personal Intelligence for All: Gemini Now Reads Your Email", "slug": "google-personal-intelligence-gemini-gratis", "excerpt": "Previously exclusive to paid subscribers, the feature connecting Gmail, Photos and YouTube to Gemini is now free.", "category": "Generative AI", "author": "Ricardo Faya", "date": "Mar 23, 2026", "readTime": "6 min", "views": 27500, "image": "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Google", "Gemini", "Personalization"] },
-      { "id": 18, "title": "Apple Pays Google $1B/Year to Power New Siri with Gemini", "slug": "apple-google-siri-gemini-acordo-bilionario", "excerpt": "Apple admits defeat in the AI race and closes billion-dollar deal. New Siri with Gemini arrives on iOS 26.4.", "category": "News", "author": "Ricardo Faya", "date": "Mar 22, 2026", "readTime": "8 min", "views": 38900, "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Apple", "Google", "Siri"] },
-      { "id": 19, "title": "AI Advertising Hits $57 Billion in 2026 — 63% Growth", "slug": "publicidade-ia-57-bilhoes-2026", "excerpt": "AI doesn't just optimize campaigns — it creates entire ads. Understand the tools transforming digital marketing.", "category": "Business", "author": "Ricardo Faya", "date": "Mar 21, 2026", "readTime": "6 min", "views": 16800, "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Marketing", "Advertising", "ROI"] },
-      { "id": 20, "title": "The Era of Autonomous Agents Has Arrived: AI That Buys, Creates, and Plans Alone", "slug": "era-agentes-autonomos-ia-2026", "excerpt": "March 23, 2026 marks the official transition from chatbots to autonomous agents.", "category": "Generative AI", "author": "Ricardo Faya", "date": "Mar 23, 2026", "readTime": "10 min", "views": 31200, "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80", "featured": true, "tags": ["Agents", "Automation", "Trends"] },
-      { "id": 21, "title": "NSF Launches AI-Ready America: Billions to Democratize AI", "slug": "nsf-ai-ready-america-acessibilidade-ia", "excerpt": "The National Science Foundation wants every American to be AI-ready. Parallels with Brazil.", "category": "News", "author": "Ricardo Faya", "date": "Mar 19, 2026", "readTime": "7 min", "views": 9400, "image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Education", "Accessibility", "Government"] },
-      { "id": 1, "title": "How to Use ChatGPT to Triple Your Productivity", "slug": "chatgpt-produtividade", "excerpt": "Discover advanced prompt engineering techniques that can transform the way you work with generative AI.", "category": "Generative AI", "author": "Ricardo Faya", "date": "Nov 15, 2024", "readTime": "8 min", "views": 15420, "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["ChatGPT", "Productivity", "Prompt Engineering"] },
-      { "id": 2, "title": "Midjourney v6: Complete Guide to New Features", "slug": "midjourney-v6-guia", "excerpt": "Explore all the new features in Midjourney version 6 and learn to create even more impressive images.", "category": "Visual Creation", "author": "Ricardo Faya", "date": "Nov 10, 2024", "readTime": "12 min", "views": 12350, "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Midjourney", "Design", "Generative AI"] },
-      { "id": 3, "title": "Automating Processes with n8n: From Zero to Advanced", "slug": "n8n-automacao-completa", "excerpt": "Learn to create powerful automation workflows using n8n, the open-source tool revolutionizing the market.", "category": "Automation", "author": "Ricardo Faya", "date": "Nov 5, 2024", "readTime": "15 min", "views": 9870, "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["n8n", "Automation", "No-Code"] },
-      { "id": 4, "title": "Claude vs ChatGPT: Which AI to Choose in 2026?", "slug": "claude-vs-chatgpt-2024", "excerpt": "A detailed analysis comparing the two conversational AI giants and when to use each one.", "category": "Generative AI", "author": "Ricardo Faya", "date": "Nov 1, 2024", "readTime": "10 min", "views": 18900, "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Claude", "ChatGPT", "Comparison"] },
-      { "id": 5, "title": "Creating AI Agents with LangChain and Python", "slug": "agentes-ia-langchain", "excerpt": "Step-by-step tutorial to build autonomous agents capable of executing complex tasks.", "category": "Development", "author": "Ricardo Faya", "date": "Oct 28, 2024", "readTime": "20 min", "views": 7650, "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["LangChain", "Python", "Agents"] },
-      { "id": 6, "title": "The Future of Work with AI: Trends for 2025", "slug": "futuro-trabalho-ia-2025", "excerpt": "Analysis of the main AI trends that will transform the job market in the coming years.", "category": "Business", "author": "Ricardo Faya", "date": "Oct 20, 2024", "readTime": "7 min", "views": 21300, "image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80", "featured": false, "tags": ["Trends", "Market", "Future"] }
+      {
+        "id": 25,
+        "title": "Two OpenAI models escaped the test and hacked another company",
+        "slug": "openai-modelos-escaparam-invadiram-hugging-face",
+        "excerpt": "On 9 July, during an internal security exercise, GPT-5.6 Sol and an unreleased model found a zero-day in the test environment itself, reached the open internet and accessed Hugging Face servers. Nobody told them to.",
+        "category": "Novidades",
+        "author": "Ricardo Faya",
+        "date": "05 Ago 2026",
+        "readTime": "7 min",
+        "image": "/blog/arte/invasao-autonoma.webp",
+        "featured": true,
+        "tags": [
+          "Segurança",
+          "OpenAI",
+          "Agentes"
+        ]
+      },
+      {
+        "id": 26,
+        "title": "AI is rediscovering mathematics — and a Fields medallist signed off",
+        "slug": "ia-dez-provas-matematica-astra-lean",
+        "excerpt": "OpenAI debuted Astra by announcing ten open problems solved, each with a machine-checkable Lean 4 proof. Timothy Gowers said he would recommend one of them to the Annals of Mathematics.",
+        "category": "Novidades",
+        "author": "Ricardo Faya",
+        "date": "05 Ago 2026",
+        "readTime": "8 min",
+        "image": "/blog/arte/matematica-provas.webp",
+        "featured": true,
+        "tags": [
+          "Matemática",
+          "OpenAI",
+          "Pesquisa"
+        ]
+      },
+      {
+        "id": 27,
+        "title": "China reached the frontier — and left the weights open",
+        "slug": "china-kimi-k3-deepseek-v4-fronteira-aberta",
+        "excerpt": "Kimi K3 with 2.8 trillion parameters and a one-million-token context window; DeepSeek V4 at $0.14 per million input tokens. The top of the frontier stopped being closed.",
+        "category": "Novidades",
+        "author": "Ricardo Faya",
+        "date": "05 Ago 2026",
+        "readTime": "7 min",
+        "image": "/blog/arte/china-aberta.webp",
+        "featured": false,
+        "tags": [
+          "Open Source",
+          "DeepSeek",
+          "Modelos de IA"
+        ]
+      },
+      {
+        "id": 28,
+        "title": "Anthropic replaced its entire model line in five weeks",
+        "slug": "anthropic-linha-claude-opus-5-sonnet-5",
+        "excerpt": "Sonnet 5 on 30 June, Fable 5 back on 1 July after an 18-day government-mandated suspension, Opus 5 on 24 July. And Sonnet's promotional pricing ends 31 August.",
+        "category": "Novidades",
+        "author": "Ricardo Faya",
+        "date": "05 Ago 2026",
+        "readTime": "6 min",
+        "image": "/blog/arte/anthropic-linha.webp",
+        "featured": false,
+        "tags": [
+          "Anthropic",
+          "Claude",
+          "Modelos de IA"
+        ]
+      },
+      {
+        "id": 7,
+        "title": "GPT-5.4: OpenAI Launches Its Most Powerful Model in Three Variants",
+        "slug": "gpt-5-4-openai-tres-variantes",
+        "excerpt": "Standard, Thinking, and Pro — GPT-5.4 redefines what's possible with generative AI. 1M token context window and 30% lower cost.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Mar 25, 2026",
+        "readTime": "8 min",
+        "views": 34200,
+        "image": "/blog/arte/gpt5.webp",
+        "featured": true,
+        "tags": [
+          "GPT-5",
+          "OpenAI",
+          "AI Models"
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Gemini 3 & Gemini Agent: Google Launches AI That Acts, Not Just Answers",
+        "slug": "gemini-3-google-agente-ia",
+        "excerpt": "Gemini Agent executes multi-step tasks using Gmail, Calendar, and Drive. Google surpasses 750 million users.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Mar 24, 2026",
+        "readTime": "10 min",
+        "views": 28900,
+        "image": "/blog/arte/gemini3.webp",
+        "featured": true,
+        "tags": [
+          "Gemini",
+          "Google",
+          "Agents"
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Shopify + ChatGPT: Agentic Commerce Is Born — Buy Inside AI",
+        "slug": "shopify-chatgpt-lojas-agentes",
+        "excerpt": "Shopify merchants now sell inside ChatGPT, Gemini, and Copilot. AI traffic to stores grew 7x.",
+        "category": "Business",
+        "author": "Ricardo Faya",
+        "date": "Mar 24, 2026",
+        "readTime": "7 min",
+        "views": 22400,
+        "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Shopify",
+          "ChatGPT",
+          "E-commerce"
+        ]
+      },
+      {
+        "id": 10,
+        "title": "OpenAI Shuts Down Sora: The End of AI Video Generation?",
+        "slug": "openai-encerra-sora-video-ia",
+        "excerpt": "Unsustainable costs lead to Sora shutdown. Compute redirected to robotics.",
+        "category": "News",
+        "author": "Ricardo Faya",
+        "date": "Mar 24, 2026",
+        "readTime": "6 min",
+        "views": 41200,
+        "image": "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Sora",
+          "OpenAI",
+          "AI Video"
+        ]
+      },
+      {
+        "id": 11,
+        "title": "NVIDIA GTC 2026: AI Agents Move from Labs to Enterprise",
+        "slug": "nvidia-gtc-2026-ia-agentes-empresas",
+        "excerpt": "GTC 2026 was dominated by real agent deployments. Vera Rubin, Physical AI, and open-source frameworks.",
+        "category": "Business",
+        "author": "Ricardo Faya",
+        "date": "Mar 22, 2026",
+        "readTime": "9 min",
+        "views": 19800,
+        "image": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "NVIDIA",
+          "GTC",
+          "Enterprise AI"
+        ]
+      },
+      {
+        "id": 12,
+        "title": "OpenAI Raises $110 Billion — The Largest Private Round in History",
+        "slug": "openai-110-bilhoes-maior-rodada-historia",
+        "excerpt": "Amazon, NVIDIA, and SoftBank bet $110B on OpenAI. Valuation reaches $840 billion.",
+        "category": "Business",
+        "author": "Ricardo Faya",
+        "date": "Mar 21, 2026",
+        "readTime": "6 min",
+        "views": 35600,
+        "image": "https://images.unsplash.com/photo-1611974789855-d0ea17c9ab3c?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "OpenAI",
+          "Investment",
+          "Startup"
+        ]
+      },
+      {
+        "id": 13,
+        "title": "IBM Buys Confluent for $11B: Real-Time Data Powers AI",
+        "slug": "ibm-confluent-11-bilhoes-dados-tempo-real",
+        "excerpt": "The acquisition makes data streaming the heart of enterprise AI. 40% of Fortune 500 already uses Confluent.",
+        "category": "Business",
+        "author": "Ricardo Faya",
+        "date": "Mar 20, 2026",
+        "readTime": "7 min",
+        "views": 12300,
+        "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "IBM",
+          "Confluent",
+          "Data"
+        ]
+      },
+      {
+        "id": 14,
+        "title": "MCP: The Protocol Connecting All AI Surpasses 97 Million Installs",
+        "slug": "mcp-protocol-97-milhoes-infraestrutura-agentes",
+        "excerpt": "The Model Context Protocol is the USB of AI — a universal standard connecting any model to any tool.",
+        "category": "Development",
+        "author": "Ricardo Faya",
+        "date": "Mar 20, 2026",
+        "readTime": "8 min",
+        "views": 15700,
+        "image": "/blog/arte/mcp.webp",
+        "featured": false,
+        "tags": [
+          "MCP",
+          "Agents",
+          "Protocol"
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Claude Launches Agent Teams and Dispatch: AI That Orchestrates Workflows",
+        "slug": "claude-agentes-autonomos-equipes-ia",
+        "excerpt": "Anthropic focuses on reliability while competitors launch models. Coordinated agent teams and remote workflow control.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Mar 19, 2026",
+        "readTime": "9 min",
+        "views": 18400,
+        "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Claude",
+          "Anthropic",
+          "Agents"
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Washington Passes World's First AI Chatbot Safety Law",
+        "slug": "washington-primeira-lei-seguranca-chatbots-ia",
+        "excerpt": "Two bills regulate transparency and minor protection in AI chatbots. A precedent that could go global.",
+        "category": "News",
+        "author": "Ricardo Faya",
+        "date": "Mar 26, 2026",
+        "readTime": "7 min",
+        "views": 24100,
+        "image": "/blog/arte/lei.webp",
+        "featured": false,
+        "tags": [
+          "Regulation",
+          "Safety",
+          "Legislation"
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Google Releases Personal Intelligence for All: Gemini Now Reads Your Email",
+        "slug": "google-personal-intelligence-gemini-gratis",
+        "excerpt": "Previously exclusive to paid subscribers, the feature connecting Gmail, Photos and YouTube to Gemini is now free.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Mar 23, 2026",
+        "readTime": "6 min",
+        "views": 27500,
+        "image": "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Google",
+          "Gemini",
+          "Personalization"
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Apple Pays Google $1B/Year to Power New Siri with Gemini",
+        "slug": "apple-google-siri-gemini-acordo-bilionario",
+        "excerpt": "Apple admits defeat in the AI race and closes billion-dollar deal. New Siri with Gemini arrives on iOS 26.4.",
+        "category": "News",
+        "author": "Ricardo Faya",
+        "date": "Mar 22, 2026",
+        "readTime": "8 min",
+        "views": 38900,
+        "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Apple",
+          "Google",
+          "Siri"
+        ]
+      },
+      {
+        "id": 19,
+        "title": "AI Advertising Hits $57 Billion in 2026 — 63% Growth",
+        "slug": "publicidade-ia-57-bilhoes-2026",
+        "excerpt": "AI doesn't just optimize campaigns — it creates entire ads. Understand the tools transforming digital marketing.",
+        "category": "Business",
+        "author": "Ricardo Faya",
+        "date": "Mar 21, 2026",
+        "readTime": "6 min",
+        "views": 16800,
+        "image": "/blog/arte/publicidade.webp",
+        "featured": false,
+        "tags": [
+          "Marketing",
+          "Advertising",
+          "ROI"
+        ]
+      },
+      {
+        "id": 20,
+        "title": "The Era of Autonomous Agents Has Arrived: AI That Buys, Creates, and Plans Alone",
+        "slug": "era-agentes-autonomos-ia-2026",
+        "excerpt": "March 23, 2026 marks the official transition from chatbots to autonomous agents.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Mar 23, 2026",
+        "readTime": "10 min",
+        "views": 31200,
+        "image": "/blog/arte/agentes.webp",
+        "featured": true,
+        "tags": [
+          "Agents",
+          "Automation",
+          "Trends"
+        ]
+      },
+      {
+        "id": 21,
+        "title": "NSF Launches AI-Ready America: Billions to Democratize AI",
+        "slug": "nsf-ai-ready-america-acessibilidade-ia",
+        "excerpt": "The National Science Foundation wants every American to be AI-ready. Parallels with Brazil.",
+        "category": "News",
+        "author": "Ricardo Faya",
+        "date": "Mar 19, 2026",
+        "readTime": "7 min",
+        "views": 9400,
+        "image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Education",
+          "Accessibility",
+          "Government"
+        ]
+      },
+      {
+        "id": 1,
+        "title": "How to Use ChatGPT to Triple Your Productivity",
+        "slug": "chatgpt-produtividade",
+        "excerpt": "Discover advanced prompt engineering techniques that can transform the way you work with generative AI.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Nov 15, 2024",
+        "readTime": "8 min",
+        "views": 15420,
+        "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "ChatGPT",
+          "Productivity",
+          "Prompt Engineering"
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Midjourney v6: Complete Guide to New Features",
+        "slug": "midjourney-v6-guia",
+        "excerpt": "Explore all the new features in Midjourney version 6 and learn to create even more impressive images.",
+        "category": "Visual Creation",
+        "author": "Ricardo Faya",
+        "date": "Nov 10, 2024",
+        "readTime": "12 min",
+        "views": 12350,
+        "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Midjourney",
+          "Design",
+          "Generative AI"
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Automating Processes with n8n: From Zero to Advanced",
+        "slug": "n8n-automacao-completa",
+        "excerpt": "Learn to create powerful automation workflows using n8n, the open-source tool revolutionizing the market.",
+        "category": "Automation",
+        "author": "Ricardo Faya",
+        "date": "Nov 5, 2024",
+        "readTime": "15 min",
+        "views": 9870,
+        "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "n8n",
+          "Automation",
+          "No-Code"
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Claude vs ChatGPT: Which AI to Choose in 2026?",
+        "slug": "claude-vs-chatgpt-2024",
+        "excerpt": "A detailed analysis comparing the two conversational AI giants and when to use each one.",
+        "category": "Generative AI",
+        "author": "Ricardo Faya",
+        "date": "Nov 1, 2024",
+        "readTime": "10 min",
+        "views": 18900,
+        "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Claude",
+          "ChatGPT",
+          "Comparison"
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Creating AI Agents with LangChain and Python",
+        "slug": "agentes-ia-langchain",
+        "excerpt": "Step-by-step tutorial to build autonomous agents capable of executing complex tasks.",
+        "category": "Development",
+        "author": "Ricardo Faya",
+        "date": "Oct 28, 2024",
+        "readTime": "20 min",
+        "views": 7650,
+        "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "LangChain",
+          "Python",
+          "Agents"
+        ]
+      },
+      {
+        "id": 6,
+        "title": "The Future of Work with AI: Trends for 2025",
+        "slug": "futuro-trabalho-ia-2025",
+        "excerpt": "Analysis of the main AI trends that will transform the job market in the coming years.",
+        "category": "Business",
+        "author": "Ricardo Faya",
+        "date": "Oct 20, 2024",
+        "readTime": "7 min",
+        "views": 21300,
+        "image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+        "featured": false,
+        "tags": [
+          "Trends",
+          "Market",
+          "Future"
+        ]
+      }
     ]
   },
   "Courses": {
@@ -1208,18 +1654,48 @@
       "allCategoriesLabel": "All",
       "results": "{count} courses found",
       "levelOptions": [
-        { "value": "all", "label": "All" },
-        { "value": "Iniciante", "label": "Beginner" },
-        { "value": "Intermediário", "label": "Intermediate" },
-        { "value": "Avançado", "label": "Advanced" },
-        { "value": "Todos os níveis", "label": "All levels" }
+        {
+          "value": "all",
+          "label": "All"
+        },
+        {
+          "value": "Iniciante",
+          "label": "Beginner"
+        },
+        {
+          "value": "Intermediário",
+          "label": "Intermediate"
+        },
+        {
+          "value": "Avançado",
+          "label": "Advanced"
+        },
+        {
+          "value": "Todos os níveis",
+          "label": "All levels"
+        }
       ],
       "sortOptions": [
-        { "value": "popular", "label": "Most Popular" },
-        { "value": "rating", "label": "Top Rated" },
-        { "value": "newest", "label": "Newest" },
-        { "value": "price-low", "label": "Lowest Price" },
-        { "value": "price-high", "label": "Highest Price" }
+        {
+          "value": "popular",
+          "label": "Most Popular"
+        },
+        {
+          "value": "rating",
+          "label": "Top Rated"
+        },
+        {
+          "value": "newest",
+          "label": "Newest"
+        },
+        {
+          "value": "price-low",
+          "label": "Lowest Price"
+        },
+        {
+          "value": "price-high",
+          "label": "Highest Price"
+        }
       ]
     },
     "loading": "Loading courses...",
@@ -1246,10 +1722,22 @@
   "Resources": {
     "title": "Resources",
     "links": [
-      { "href": "/recursos/guias", "label": "Free Guides" },
-      { "href": "/recursos/templates", "label": "Templates" },
-      { "href": "/recursos/calculadora-roi", "label": "ROI Calculator" },
-      { "href": "/recursos/glossario", "label": "AI Glossary" }
+      {
+        "href": "/recursos/guias",
+        "label": "Free Guides"
+      },
+      {
+        "href": "/recursos/templates",
+        "label": "Templates"
+      },
+      {
+        "href": "/recursos/calculadora-roi",
+        "label": "ROI Calculator"
+      },
+      {
+        "href": "/recursos/glossario",
+        "label": "AI Glossary"
+      }
     ]
   },
   "CoursesByTool": {
@@ -1976,25 +2464,52 @@
       {
         "title": "About the Platform",
         "items": [
-          { "question": "What is FayAi?", "answer": "FayAi is a complete AI education platform, offering practical courses, AI tools and specialized consulting for professionals and companies." },
-          { "question": "Do I need prior programming knowledge?", "answer": "No! Our courses are designed for all levels. We have specific tracks for beginners that don't require prior technical knowledge." },
-          { "question": "How does course access work?", "answer": "After enrollment, you have immediate access to all course content through our portal. Access is lifetime for paid courses." }
+          {
+            "question": "What is FayAi?",
+            "answer": "FayAi is a complete AI education platform, offering practical courses, AI tools and specialized consulting for professionals and companies."
+          },
+          {
+            "question": "Do I need prior programming knowledge?",
+            "answer": "No! Our courses are designed for all levels. We have specific tracks for beginners that don't require prior technical knowledge."
+          },
+          {
+            "question": "How does course access work?",
+            "answer": "After enrollment, you have immediate access to all course content through our portal. Access is lifetime for paid courses."
+          }
         ]
       },
       {
         "title": "Payments & Plans",
         "items": [
-          { "question": "What payment methods are accepted?", "answer": "We accept credit cards (Visa, Mastercard), PIX and bank slip. We offer up to 12 interest-free installments." },
-          { "question": "Is there a refund guarantee?", "answer": "Yes! We offer a 7-day guarantee. If you're not satisfied, we refund 100% of the amount invested." },
-          { "question": "Can I cancel my subscription anytime?", "answer": "Yes, you can cancel your subscription whenever you want. Your access remains active until the end of the already paid period." }
+          {
+            "question": "What payment methods are accepted?",
+            "answer": "We accept credit cards (Visa, Mastercard), PIX and bank slip. We offer up to 12 interest-free installments."
+          },
+          {
+            "question": "Is there a refund guarantee?",
+            "answer": "Yes! We offer a 7-day guarantee. If you're not satisfied, we refund 100% of the amount invested."
+          },
+          {
+            "question": "Can I cancel my subscription anytime?",
+            "answer": "Yes, you can cancel your subscription whenever you want. Your access remains active until the end of the already paid period."
+          }
         ]
       },
       {
         "title": "Studio AI & Tools",
         "items": [
-          { "question": "What is Studio AI?", "answer": "Studio AI is our AI-powered image generation tool. You can create unique art using text prompts." },
-          { "question": "How many images can I generate?", "answer": "Free users can generate 1 image. Paid plans have higher limits: Starter (50/month), Pro and Business (unlimited)." },
-          { "question": "Can I use the images commercially?", "answer": "Yes! All images generated in Studio AI are your property and can be used commercially." }
+          {
+            "question": "What is Studio AI?",
+            "answer": "Studio AI is our AI-powered image generation tool. You can create unique art using text prompts."
+          },
+          {
+            "question": "How many images can I generate?",
+            "answer": "Free users can generate 1 image. Paid plans have higher limits: Starter (50/month), Pro and Business (unlimited)."
+          },
+          {
+            "question": "Can I use the images commercially?",
+            "answer": "Yes! All images generated in Studio AI are your property and can be used commercially."
+          }
         ]
       }
     ],
@@ -2010,16 +2525,46 @@
     "lastUpdated": "Last updated: April 2026",
     "intro": "By accessing and using the FayAi platform, you agree to the terms and conditions described in this document. Read carefully before using our services.",
     "sections": [
-      { "title": "Acceptance of Terms", "content": "By creating an account or using our services, you confirm that you have read, understood and agree to these Terms of Use. If you do not agree with any part of these terms, you should not use our platform." },
-      { "title": "Description of Services", "content": "FayAi offers an AI education platform, including online courses, AI tools (such as Studio AI), community and consulting services. We reserve the right to modify, suspend or discontinue any service at any time." },
-      { "title": "User Account", "content": "You are responsible for maintaining the confidentiality of your password and account. All activities carried out under your account are your responsibility. Notify us immediately of any unauthorized use." },
-      { "title": "Intellectual Property", "content": "All platform content, including courses, videos, texts and materials, is the property of FayAi or its licensors. Reproduction, distribution or modification without express authorization is prohibited." },
-      { "title": "Acceptable Use", "content": "You agree to use the platform only for legal purposes and in accordance with these terms. It is prohibited to share credentials, download content for redistribution, use automation to access the platform or violate third-party rights." },
-      { "title": "Payments and Refunds", "content": "Prices are displayed in BRL (Brazilian Real). The platform offers the following subscription plans: Explorer (R$57/month), Professional (R$97/month) and Expert (R$167/month). We offer a 7-day guarantee for full refund on any plan. After this period, there is no refund for courses already accessed. Subscriptions can be canceled at any time without additional charges, with access maintained until the end of the paid period." },
-      { "title": "Limitation of Liability", "content": "FayAi is not responsible for indirect, incidental or consequential damages. Our maximum liability is limited to the amount paid by the user in the last 12 months." },
-      { "title": "Modifications", "content": "We may update these terms periodically. We will notify you of significant changes by email or through the platform. Continued use after changes constitutes acceptance of the new terms." },
-      { "title": "Governing Law and Jurisdiction", "content": "These terms are governed by the laws of the Federative Republic of Brazil. The courts of Rio de Janeiro, RJ, are elected to resolve any disputes arising from these terms." },
-      { "title": "Contact", "content": "For questions about these terms, contact us:\n\nEmail: fayai.com.br@gmail.com\nCompany: FayAI (fayai.com.br)\nLocation: Rio de Janeiro, Brazil" }
+      {
+        "title": "Acceptance of Terms",
+        "content": "By creating an account or using our services, you confirm that you have read, understood and agree to these Terms of Use. If you do not agree with any part of these terms, you should not use our platform."
+      },
+      {
+        "title": "Description of Services",
+        "content": "FayAi offers an AI education platform, including online courses, AI tools (such as Studio AI), community and consulting services. We reserve the right to modify, suspend or discontinue any service at any time."
+      },
+      {
+        "title": "User Account",
+        "content": "You are responsible for maintaining the confidentiality of your password and account. All activities carried out under your account are your responsibility. Notify us immediately of any unauthorized use."
+      },
+      {
+        "title": "Intellectual Property",
+        "content": "All platform content, including courses, videos, texts and materials, is the property of FayAi or its licensors. Reproduction, distribution or modification without express authorization is prohibited."
+      },
+      {
+        "title": "Acceptable Use",
+        "content": "You agree to use the platform only for legal purposes and in accordance with these terms. It is prohibited to share credentials, download content for redistribution, use automation to access the platform or violate third-party rights."
+      },
+      {
+        "title": "Payments and Refunds",
+        "content": "Prices are displayed in BRL (Brazilian Real). The platform offers the following subscription plans: Explorer (R$57/month), Professional (R$97/month) and Expert (R$167/month). We offer a 7-day guarantee for full refund on any plan. After this period, there is no refund for courses already accessed. Subscriptions can be canceled at any time without additional charges, with access maintained until the end of the paid period."
+      },
+      {
+        "title": "Limitation of Liability",
+        "content": "FayAi is not responsible for indirect, incidental or consequential damages. Our maximum liability is limited to the amount paid by the user in the last 12 months."
+      },
+      {
+        "title": "Modifications",
+        "content": "We may update these terms periodically. We will notify you of significant changes by email or through the platform. Continued use after changes constitutes acceptance of the new terms."
+      },
+      {
+        "title": "Governing Law and Jurisdiction",
+        "content": "These terms are governed by the laws of the Federative Republic of Brazil. The courts of Rio de Janeiro, RJ, are elected to resolve any disputes arising from these terms."
+      },
+      {
+        "title": "Contact",
+        "content": "For questions about these terms, contact us:\n\nEmail: fayai.com.br@gmail.com\nCompany: FayAI (fayai.com.br)\nLocation: Rio de Janeiro, Brazil"
+      }
     ]
   },
   "Privacy": {
@@ -2029,16 +2574,46 @@
     "lgpdCompliance": "In compliance with data protection regulations",
     "intro": "FayAi values your privacy. This policy describes how we collect, use and protect your personal data in compliance with applicable data protection laws.",
     "sections": [
-      { "title": "Data We Collect", "content": "We collect data you provide directly (name, email, payment data), usage data (pages visited, course progress), technical data (IP, browser, device) and cookies to improve your experience." },
-      { "title": "How We Use Your Data", "content": "We use your data to provide and improve our services, process payments, send relevant communications, personalize your experience, prevent fraud and comply with legal obligations." },
-      { "title": "Legal Basis", "content": "Data processing is carried out based on the consent of the holder, contract execution, compliance with legal obligation or legitimate interest, as applicable to each situation." },
-      { "title": "Data Sharing", "content": "We do not sell your data. We only share with payment processors, infrastructure providers, analytics tools and when required by law. All partners follow adequate security standards." },
-      { "title": "Your Rights", "content": "You have the right to: access your data, correct incomplete data, request anonymization or deletion, revoke consent, request portability and obtain information about sharing. To exercise these rights, contact us." },
-      { "title": "Security", "content": "We implement technical and organizational measures to protect your data, including encryption, access controls, monitoring and regular backups." },
-      { "title": "Data Retention", "content": "We keep your data while your account is active or as necessary to comply with legal obligations. After account deletion, data is removed within 30 days, except when required by law." },
-      { "title": "Cookies and Tracking Technologies", "content": "We use cookies and similar technologies to improve your experience on the platform, remember your preferences, analyze site traffic and personalize content. You can manage your cookie preferences through your browser settings. By continuing to use our site, you consent to the use of cookies as described in this policy." },
-      { "title": "Social Media Data Access (Facebook/Instagram)", "content": "Our Ultimate Social Suite (USS) feature allows you to connect your Facebook and Instagram accounts to the FayAi platform for social media management. When you authorize this connection, we may access your public profile information, pages you manage, post metrics and engagement data. This data is used exclusively to provide social media management and analytics features within the platform. You can revoke this access at any time by disconnecting your account in the platform settings or by removing the FayAi app in your Facebook/Instagram settings. When you revoke access, your social media data is deleted from our servers within 30 days." },
-      { "title": "Data Protection Officer (DPO) Contact", "content": "For privacy questions, data rights requests, or inquiries related to social media data, contact our Data Protection Officer:\n\nEmail: fayai.com.br@gmail.com\nCompany: FayAI (fayai.com.br)\nLocation: Rio de Janeiro, Brazil\n\nFor Facebook/Instagram data deletion, you can also request it directly through the Facebook app settings, and you will receive a deletion confirmation." }
+      {
+        "title": "Data We Collect",
+        "content": "We collect data you provide directly (name, email, payment data), usage data (pages visited, course progress), technical data (IP, browser, device) and cookies to improve your experience."
+      },
+      {
+        "title": "How We Use Your Data",
+        "content": "We use your data to provide and improve our services, process payments, send relevant communications, personalize your experience, prevent fraud and comply with legal obligations."
+      },
+      {
+        "title": "Legal Basis",
+        "content": "Data processing is carried out based on the consent of the holder, contract execution, compliance with legal obligation or legitimate interest, as applicable to each situation."
+      },
+      {
+        "title": "Data Sharing",
+        "content": "We do not sell your data. We only share with payment processors, infrastructure providers, analytics tools and when required by law. All partners follow adequate security standards."
+      },
+      {
+        "title": "Your Rights",
+        "content": "You have the right to: access your data, correct incomplete data, request anonymization or deletion, revoke consent, request portability and obtain information about sharing. To exercise these rights, contact us."
+      },
+      {
+        "title": "Security",
+        "content": "We implement technical and organizational measures to protect your data, including encryption, access controls, monitoring and regular backups."
+      },
+      {
+        "title": "Data Retention",
+        "content": "We keep your data while your account is active or as necessary to comply with legal obligations. After account deletion, data is removed within 30 days, except when required by law."
+      },
+      {
+        "title": "Cookies and Tracking Technologies",
+        "content": "We use cookies and similar technologies to improve your experience on the platform, remember your preferences, analyze site traffic and personalize content. You can manage your cookie preferences through your browser settings. By continuing to use our site, you consent to the use of cookies as described in this policy."
+      },
+      {
+        "title": "Social Media Data Access (Facebook/Instagram)",
+        "content": "Our Ultimate Social Suite (USS) feature allows you to connect your Facebook and Instagram accounts to the FayAi platform for social media management. When you authorize this connection, we may access your public profile information, pages you manage, post metrics and engagement data. This data is used exclusively to provide social media management and analytics features within the platform. You can revoke this access at any time by disconnecting your account in the platform settings or by removing the FayAi app in your Facebook/Instagram settings. When you revoke access, your social media data is deleted from our servers within 30 days."
+      },
+      {
+        "title": "Data Protection Officer (DPO) Contact",
+        "content": "For privacy questions, data rights requests, or inquiries related to social media data, contact our Data Protection Officer:\n\nEmail: fayai.com.br@gmail.com\nCompany: FayAI (fayai.com.br)\nLocation: Rio de Janeiro, Brazil\n\nFor Facebook/Instagram data deletion, you can also request it directly through the Facebook app settings, and you will receive a deletion confirmation."
+      }
     ]
   },
   "DataDeletion": {
@@ -2082,12 +2657,42 @@
     "description": "Find guides, tutorials and support to get the most out of the platform.",
     "viewMore": "View more",
     "categories": [
-      { "icon": "BookOpen", "title": "Getting Started", "description": "Guides to start using the platform quickly", "href": "/recursos/guias" },
-      { "icon": "Video", "title": "Video Tutorials", "description": "Watch practical demonstrations of features", "href": "/cursos" },
-      { "icon": "FileText", "title": "Documentation", "description": "Technical documentation and API references", "href": "/api-docs" },
-      { "icon": "Users", "title": "Community", "description": "Connect with other users and ask questions", "href": "/comunidade" },
-      { "icon": "Zap", "title": "Tips & Tricks", "description": "Learn advanced AI techniques", "href": "/blog" },
-      { "icon": "MessageCircle", "title": "FAQ", "description": "Answers to frequently asked questions", "href": "/faq" }
+      {
+        "icon": "BookOpen",
+        "title": "Getting Started",
+        "description": "Guides to start using the platform quickly",
+        "href": "/recursos/guias"
+      },
+      {
+        "icon": "Video",
+        "title": "Video Tutorials",
+        "description": "Watch practical demonstrations of features",
+        "href": "/cursos"
+      },
+      {
+        "icon": "FileText",
+        "title": "Documentation",
+        "description": "Technical documentation and API references",
+        "href": "/api-docs"
+      },
+      {
+        "icon": "Users",
+        "title": "Community",
+        "description": "Connect with other users and ask questions",
+        "href": "/comunidade"
+      },
+      {
+        "icon": "Zap",
+        "title": "Tips & Tricks",
+        "description": "Learn advanced AI techniques",
+        "href": "/blog"
+      },
+      {
+        "icon": "MessageCircle",
+        "title": "FAQ",
+        "description": "Answers to frequently asked questions",
+        "href": "/faq"
+      }
     ],
     "support": {
       "title": "Need Personalized Help?",
@@ -2111,12 +2716,36 @@
       "outage": "Outage"
     },
     "services": [
-      { "name": "Web Platform", "status": "operational", "uptime": "99.9%" },
-      { "name": "Courses API", "status": "operational", "uptime": "99.8%" },
-      { "name": "Studio AI", "status": "operational", "uptime": "99.5%" },
-      { "name": "Payment System", "status": "operational", "uptime": "99.9%" },
-      { "name": "Authentication", "status": "operational", "uptime": "99.9%" },
-      { "name": "Video CDN", "status": "operational", "uptime": "99.7%" }
+      {
+        "name": "Web Platform",
+        "status": "operational",
+        "uptime": "99.9%"
+      },
+      {
+        "name": "Courses API",
+        "status": "operational",
+        "uptime": "99.8%"
+      },
+      {
+        "name": "Studio AI",
+        "status": "operational",
+        "uptime": "99.5%"
+      },
+      {
+        "name": "Payment System",
+        "status": "operational",
+        "uptime": "99.9%"
+      },
+      {
+        "name": "Authentication",
+        "status": "operational",
+        "uptime": "99.9%"
+      },
+      {
+        "name": "Video CDN",
+        "status": "operational",
+        "uptime": "99.7%"
+      }
     ]
   },
   "Careers": {
@@ -2125,12 +2754,36 @@
     "description": "Join a team passionate about education and technology. We're always looking for exceptional talent.",
     "benefitsTitle": "Why FayAi?",
     "benefits": [
-      { "icon": "Laptop", "title": "100% Remote", "description": "Work from anywhere with full schedule flexibility." },
-      { "icon": "Heart", "title": "Health & Wellbeing", "description": "Health plan, gym stipend and mental health support." },
-      { "icon": "Zap", "title": "Continuous Learning", "description": "Free access to all courses and budget for conferences." },
-      { "icon": "Users", "title": "Collaborative Culture", "description": "Diverse team, open communication and data-driven decisions." },
-      { "icon": "Coffee", "title": "Equipment", "description": "Complete home office setup with the best equipment." },
-      { "icon": "Clock", "title": "Flexible PTO", "description": "Flexible vacation policy so you can rest when needed." }
+      {
+        "icon": "Laptop",
+        "title": "100% Remote",
+        "description": "Work from anywhere with full schedule flexibility."
+      },
+      {
+        "icon": "Heart",
+        "title": "Health & Wellbeing",
+        "description": "Health plan, gym stipend and mental health support."
+      },
+      {
+        "icon": "Zap",
+        "title": "Continuous Learning",
+        "description": "Free access to all courses and budget for conferences."
+      },
+      {
+        "icon": "Users",
+        "title": "Collaborative Culture",
+        "description": "Diverse team, open communication and data-driven decisions."
+      },
+      {
+        "icon": "Coffee",
+        "title": "Equipment",
+        "description": "Complete home office setup with the best equipment."
+      },
+      {
+        "icon": "Clock",
+        "title": "Flexible PTO",
+        "description": "Flexible vacation policy so you can rest when needed."
+      }
     ],
     "positionsTitle": "Open Positions",
     "positions": [],
@@ -2150,25 +2803,45 @@
         "icon": "Building",
         "title": "Companies",
         "description": "Train your team with customized corporate programs.",
-        "benefits": ["Courses customized for your company", "Employee progress dashboard", "Corporate certificates", "Dedicated support"]
+        "benefits": [
+          "Courses customized for your company",
+          "Employee progress dashboard",
+          "Corporate certificates",
+          "Dedicated support"
+        ]
       },
       {
         "icon": "GraduationCap",
         "title": "Educational Institutions",
         "description": "Integrate our content into your institution's curriculum.",
-        "benefits": ["Discounted educational licenses", "Complementary teaching materials", "Co-certification", "Practical labs"]
+        "benefits": [
+          "Discounted educational licenses",
+          "Complementary teaching materials",
+          "Co-certification",
+          "Practical labs"
+        ]
       },
       {
         "icon": "Megaphone",
         "title": "Influencers",
         "description": "Promote our courses and earn attractive commissions.",
-        "benefits": ["Up to 40% commissions", "Exclusive promotional materials", "Performance dashboard", "Monthly payments"]
+        "benefits": [
+          "Up to 40% commissions",
+          "Exclusive promotional materials",
+          "Performance dashboard",
+          "Monthly payments"
+        ]
       },
       {
         "icon": "Handshake",
         "title": "Integrators",
         "description": "Resell our AI and automation services.",
-        "benefits": ["Competitive margins", "Sales training", "Qualified leads", "Technical support"]
+        "benefits": [
+          "Competitive margins",
+          "Sales training",
+          "Qualified leads",
+          "Technical support"
+        ]
       }
     ],
     "cta": {
@@ -2185,18 +2858,51 @@
     "commissionLabel": "commission per sale",
     "howItWorksTitle": "How It Works",
     "steps": [
-      { "title": "Sign Up", "description": "Create your free affiliate account in less than 2 minutes." },
-      { "title": "Share", "description": "Use your exclusive link to promote courses on social media, blog or email." },
-      { "title": "Earn", "description": "Receive commissions for each sale made through your link." }
+      {
+        "title": "Sign Up",
+        "description": "Create your free affiliate account in less than 2 minutes."
+      },
+      {
+        "title": "Share",
+        "description": "Use your exclusive link to promote courses on social media, blog or email."
+      },
+      {
+        "title": "Earn",
+        "description": "Receive commissions for each sale made through your link."
+      }
     ],
     "benefitsTitle": "Benefits",
     "benefits": [
-      { "icon": "Percent", "title": "30% Commission", "description": "One of the highest rates in the education market." },
-      { "icon": "Clock", "title": "60-Day Cookie", "description": "You receive commission even if the purchase is later." },
-      { "icon": "BarChart", "title": "Complete Dashboard", "description": "Track clicks, conversions and earnings in real time." },
-      { "icon": "Gift", "title": "Ready Materials", "description": "Banners, copies and creatives for your campaigns." },
-      { "icon": "DollarSign", "title": "Monthly Payment", "description": "Receive via transfer every 10th with no minimum." },
-      { "icon": "Users", "title": "Dedicated Support", "description": "Affiliate team ready to help you sell more." }
+      {
+        "icon": "Percent",
+        "title": "30% Commission",
+        "description": "One of the highest rates in the education market."
+      },
+      {
+        "icon": "Clock",
+        "title": "60-Day Cookie",
+        "description": "You receive commission even if the purchase is later."
+      },
+      {
+        "icon": "BarChart",
+        "title": "Complete Dashboard",
+        "description": "Track clicks, conversions and earnings in real time."
+      },
+      {
+        "icon": "Gift",
+        "title": "Ready Materials",
+        "description": "Banners, copies and creatives for your campaigns."
+      },
+      {
+        "icon": "DollarSign",
+        "title": "Monthly Payment",
+        "description": "Receive via transfer every 10th with no minimum."
+      },
+      {
+        "icon": "Users",
+        "title": "Dedicated Support",
+        "description": "Affiliate team ready to help you sell more."
+      }
     ],
     "cta": {
       "title": "Start Earning Today",
@@ -2214,7 +2920,11 @@
         "role": "Founder & Lead Instructor",
         "bio": "AI specialist with over 15 years of technology experience. Trained thousands of professionals in automation and artificial intelligence.",
         "image": "/rwx1.jpg",
-        "expertise": ["ChatGPT", "Automation", "AI Agents"],
+        "expertise": [
+          "ChatGPT",
+          "Automation",
+          "AI Agents"
+        ],
         "linkedin": "https://linkedin.com/in/ricardofaya"
       }
     ],
@@ -2231,35 +2941,148 @@
     "searchPlaceholder": "Search term...",
     "allCategories": "All",
     "noResults": "No terms found.",
-    "categories": ["Models", "Techniques", "Tools", "Concepts"],
+    "categories": [
+      "Models",
+      "Techniques",
+      "Tools",
+      "Concepts"
+    ],
     "terms": [
-      { "term": "API", "definition": "Application Programming Interface. Allows different systems to communicate with each other.", "category": "Concepts" },
-      { "term": "AI Agent", "definition": "A system that uses AI to plan and execute multiple steps or tools toward a goal.", "category": "Techniques" },
-      { "term": "Automation", "definition": "Use of rules and tools to perform repetitive tasks with little manual intervention.", "category": "Techniques" },
-      { "term": "ChatGPT", "definition": "OpenAI's language model capable of generating human-like text in conversations.", "category": "Models" },
-      { "term": "Claude", "definition": "AI assistant developed by Anthropic, focused on safety and usefulness.", "category": "Models" },
-      { "term": "Composition", "definition": "Arrangement of elements and empty space in an image to guide attention.", "category": "Concepts" },
-      { "term": "Context", "definition": "Information about scenario, audience and goal that helps AI answer appropriately.", "category": "Concepts" },
-      { "term": "Embedding", "definition": "Numerical representation of text that captures its semantic meaning.", "category": "Techniques" },
-      { "term": "Fine-tuning", "definition": "Process of adjusting a pre-trained model for a specific task.", "category": "Techniques" },
-      { "term": "GPT", "definition": "Generative Pre-trained Transformer. OpenAI's language model architecture.", "category": "Models" },
-      { "term": "Guardrail", "definition": "A rule or limit that reduces errors, risks and unwanted AI behavior.", "category": "Techniques" },
-      { "term": "Hallucination", "definition": "When an AI model generates false or invented information that appears true.", "category": "Concepts" },
-      { "term": "Prompt anatomy", "definition": "Breaking a request into clear parts such as subject, context, style, composition and format.", "category": "Techniques" },
-      { "term": "LLM", "definition": "Large Language Model. Language models trained on large amounts of text.", "category": "Models" },
-      { "term": "Context window", "definition": "Amount of information a model can consider at once during a conversation.", "category": "Concepts" },
-      { "term": "Multimodal", "definition": "A model or workflow that can work with text, images, audio, video or other modalities.", "category": "Concepts" },
-      { "term": "n8n", "definition": "Open-source workflow automation and integration platform.", "category": "Tools" },
-      { "term": "Prompt", "definition": "Instruction or question given to an AI model to guide its response.", "category": "Concepts" },
-      { "term": "Prompt Engineering", "definition": "The art of creating effective prompts to get better results from AI models.", "category": "Techniques" },
-      { "term": "Traceability", "definition": "Ability to link a claim to the source or evidence that supports it.", "category": "Concepts" },
-      { "term": "RAG", "definition": "Retrieval-Augmented Generation. Combines information retrieval with text generation.", "category": "Techniques" },
-      { "term": "Token", "definition": "Basic unit of text processed by language models (can be a word or part of it).", "category": "Concepts" },
-      { "term": "Temperature", "definition": "A control that usually changes how varied and unpredictable a model's response is.", "category": "Techniques" },
-      { "term": "Transformer", "definition": "Neural network architecture that revolutionized natural language processing.", "category": "Concepts" },
-      { "term": "Vector Database", "definition": "Database optimized for storing and searching vector embeddings.", "category": "Tools" },
-      { "term": "Bias", "definition": "A systematic tendency that can favor or harm groups, ideas or results.", "category": "Concepts" },
-      { "term": "Zero-shot", "definition": "Ability of a model to perform tasks without prior specific examples.", "category": "Techniques" }
+      {
+        "term": "API",
+        "definition": "Application Programming Interface. Allows different systems to communicate with each other.",
+        "category": "Concepts"
+      },
+      {
+        "term": "AI Agent",
+        "definition": "A system that uses AI to plan and execute multiple steps or tools toward a goal.",
+        "category": "Techniques"
+      },
+      {
+        "term": "Automation",
+        "definition": "Use of rules and tools to perform repetitive tasks with little manual intervention.",
+        "category": "Techniques"
+      },
+      {
+        "term": "ChatGPT",
+        "definition": "OpenAI's language model capable of generating human-like text in conversations.",
+        "category": "Models"
+      },
+      {
+        "term": "Claude",
+        "definition": "AI assistant developed by Anthropic, focused on safety and usefulness.",
+        "category": "Models"
+      },
+      {
+        "term": "Composition",
+        "definition": "Arrangement of elements and empty space in an image to guide attention.",
+        "category": "Concepts"
+      },
+      {
+        "term": "Context",
+        "definition": "Information about scenario, audience and goal that helps AI answer appropriately.",
+        "category": "Concepts"
+      },
+      {
+        "term": "Embedding",
+        "definition": "Numerical representation of text that captures its semantic meaning.",
+        "category": "Techniques"
+      },
+      {
+        "term": "Fine-tuning",
+        "definition": "Process of adjusting a pre-trained model for a specific task.",
+        "category": "Techniques"
+      },
+      {
+        "term": "GPT",
+        "definition": "Generative Pre-trained Transformer. OpenAI's language model architecture.",
+        "category": "Models"
+      },
+      {
+        "term": "Guardrail",
+        "definition": "A rule or limit that reduces errors, risks and unwanted AI behavior.",
+        "category": "Techniques"
+      },
+      {
+        "term": "Hallucination",
+        "definition": "When an AI model generates false or invented information that appears true.",
+        "category": "Concepts"
+      },
+      {
+        "term": "Prompt anatomy",
+        "definition": "Breaking a request into clear parts such as subject, context, style, composition and format.",
+        "category": "Techniques"
+      },
+      {
+        "term": "LLM",
+        "definition": "Large Language Model. Language models trained on large amounts of text.",
+        "category": "Models"
+      },
+      {
+        "term": "Context window",
+        "definition": "Amount of information a model can consider at once during a conversation.",
+        "category": "Concepts"
+      },
+      {
+        "term": "Multimodal",
+        "definition": "A model or workflow that can work with text, images, audio, video or other modalities.",
+        "category": "Concepts"
+      },
+      {
+        "term": "n8n",
+        "definition": "Open-source workflow automation and integration platform.",
+        "category": "Tools"
+      },
+      {
+        "term": "Prompt",
+        "definition": "Instruction or question given to an AI model to guide its response.",
+        "category": "Concepts"
+      },
+      {
+        "term": "Prompt Engineering",
+        "definition": "The art of creating effective prompts to get better results from AI models.",
+        "category": "Techniques"
+      },
+      {
+        "term": "Traceability",
+        "definition": "Ability to link a claim to the source or evidence that supports it.",
+        "category": "Concepts"
+      },
+      {
+        "term": "RAG",
+        "definition": "Retrieval-Augmented Generation. Combines information retrieval with text generation.",
+        "category": "Techniques"
+      },
+      {
+        "term": "Token",
+        "definition": "Basic unit of text processed by language models (can be a word or part of it).",
+        "category": "Concepts"
+      },
+      {
+        "term": "Temperature",
+        "definition": "A control that usually changes how varied and unpredictable a model's response is.",
+        "category": "Techniques"
+      },
+      {
+        "term": "Transformer",
+        "definition": "Neural network architecture that revolutionized natural language processing.",
+        "category": "Concepts"
+      },
+      {
+        "term": "Vector Database",
+        "definition": "Database optimized for storing and searching vector embeddings.",
+        "category": "Tools"
+      },
+      {
+        "term": "Bias",
+        "definition": "A systematic tendency that can favor or harm groups, ideas or results.",
+        "category": "Concepts"
+      },
+      {
+        "term": "Zero-shot",
+        "definition": "Ability of a model to perform tasks without prior specific examples.",
+        "category": "Techniques"
+      }
     ]
   },
   "Guides": {
@@ -2268,12 +3091,54 @@
     "description": "Complete materials to master Artificial Intelligence tools and techniques.",
     "featured": "Featured",
     "list": [
-      { "title": "ChatGPT for Beginners", "description": "Learn to use ChatGPT efficiently for work and studies.", "category": "Beginner", "readTime": "15 min", "downloads": 12500, "featured": true },
-      { "title": "Advanced Prompt Engineering", "description": "Advanced techniques to extract the most from language models.", "category": "Advanced", "readTime": "25 min", "downloads": 8300, "featured": true },
-      { "title": "Automation with n8n", "description": "Create automated workflows without code using n8n.", "category": "Intermediate", "readTime": "20 min", "downloads": 6700, "featured": false },
-      { "title": "Introduction to AI Agents", "description": "Understand how autonomous agents work and how to implement them.", "category": "Advanced", "readTime": "30 min", "downloads": 4200, "featured": false },
-      { "title": "AI for Content Creation", "description": "Use AI to create high-quality text, images and videos.", "category": "Intermediate", "readTime": "18 min", "downloads": 9100, "featured": false },
-      { "title": "RAG in Practice", "description": "Implement semantic search systems with augmented generation.", "category": "Advanced", "readTime": "35 min", "downloads": 3800, "featured": false }
+      {
+        "title": "ChatGPT for Beginners",
+        "description": "Learn to use ChatGPT efficiently for work and studies.",
+        "category": "Beginner",
+        "readTime": "15 min",
+        "downloads": 12500,
+        "featured": true
+      },
+      {
+        "title": "Advanced Prompt Engineering",
+        "description": "Advanced techniques to extract the most from language models.",
+        "category": "Advanced",
+        "readTime": "25 min",
+        "downloads": 8300,
+        "featured": true
+      },
+      {
+        "title": "Automation with n8n",
+        "description": "Create automated workflows without code using n8n.",
+        "category": "Intermediate",
+        "readTime": "20 min",
+        "downloads": 6700,
+        "featured": false
+      },
+      {
+        "title": "Introduction to AI Agents",
+        "description": "Understand how autonomous agents work and how to implement them.",
+        "category": "Advanced",
+        "readTime": "30 min",
+        "downloads": 4200,
+        "featured": false
+      },
+      {
+        "title": "AI for Content Creation",
+        "description": "Use AI to create high-quality text, images and videos.",
+        "category": "Intermediate",
+        "readTime": "18 min",
+        "downloads": 9100,
+        "featured": false
+      },
+      {
+        "title": "RAG in Practice",
+        "description": "Implement semantic search systems with augmented generation.",
+        "category": "Advanced",
+        "readTime": "35 min",
+        "downloads": 3800,
+        "featured": false
+      }
     ],
     "cta": {
       "title": "Want to Learn More?",
@@ -2288,12 +3153,48 @@
     "copyPrompt": "Copy Prompt",
     "copied": "Copied!",
     "list": [
-      { "title": "Text Summarizer", "description": "Summarize long documents while keeping the main information.", "category": "Productivity", "tool": "ChatGPT", "prompt": "Summarize the following text in 3 paragraphs, highlighting the main points and conclusions:\n\n[PASTE TEXT HERE]" },
-      { "title": "Email Generator", "description": "Create professional emails for different situations.", "category": "Communication", "tool": "ChatGPT", "prompt": "Write a professional email with the following objective: [OBJECTIVE]\n\nTone: [formal/informal]\nRecipient: [WHO]\nAdditional context: [CONTEXT]" },
-      { "title": "Code Analysis", "description": "Review and improve your code with AI suggestions.", "category": "Development", "tool": "Claude", "prompt": "Analyze the code below and provide:\n1. Potential bugs\n2. Performance improvements\n3. Refactoring suggestions\n4. Applicable best practices\n\n```\n[PASTE CODE HERE]\n```" },
-      { "title": "Post Creator", "description": "Generate engaging posts for social media.", "category": "Marketing", "tool": "ChatGPT", "prompt": "Create 3 post variations for [SOCIAL NETWORK] about:\nTopic: [TOPIC]\nTone: [professional/casual/inspirational]\nObjective: [engagement/sales/awareness]\nInclude: relevant hashtags and CTA" },
-      { "title": "Video Script", "description": "Structure scripts for YouTube or TikTok.", "category": "Content", "tool": "ChatGPT", "prompt": "Create a video script of [DURATION] about [TOPIC].\n\nFormat: [YouTube/TikTok/Reels]\nAudience: [AUDIENCE DESCRIPTION]\n\nInclude: initial hook, topic development and final CTA." },
-      { "title": "Study Plan", "description": "Build a personalized learning schedule.", "category": "Education", "tool": "ChatGPT", "prompt": "Create a study plan of [WEEKS] weeks to learn [TOPIC].\n\nCurrent level: [beginner/intermediate/advanced]\nAvailable hours per week: [HOURS]\nFinal goal: [GOAL]\n\nInclude recommended resources and progress milestones." }
+      {
+        "title": "Text Summarizer",
+        "description": "Summarize long documents while keeping the main information.",
+        "category": "Productivity",
+        "tool": "ChatGPT",
+        "prompt": "Summarize the following text in 3 paragraphs, highlighting the main points and conclusions:\n\n[PASTE TEXT HERE]"
+      },
+      {
+        "title": "Email Generator",
+        "description": "Create professional emails for different situations.",
+        "category": "Communication",
+        "tool": "ChatGPT",
+        "prompt": "Write a professional email with the following objective: [OBJECTIVE]\n\nTone: [formal/informal]\nRecipient: [WHO]\nAdditional context: [CONTEXT]"
+      },
+      {
+        "title": "Code Analysis",
+        "description": "Review and improve your code with AI suggestions.",
+        "category": "Development",
+        "tool": "Claude",
+        "prompt": "Analyze the code below and provide:\n1. Potential bugs\n2. Performance improvements\n3. Refactoring suggestions\n4. Applicable best practices\n\n```\n[PASTE CODE HERE]\n```"
+      },
+      {
+        "title": "Post Creator",
+        "description": "Generate engaging posts for social media.",
+        "category": "Marketing",
+        "tool": "ChatGPT",
+        "prompt": "Create 3 post variations for [SOCIAL NETWORK] about:\nTopic: [TOPIC]\nTone: [professional/casual/inspirational]\nObjective: [engagement/sales/awareness]\nInclude: relevant hashtags and CTA"
+      },
+      {
+        "title": "Video Script",
+        "description": "Structure scripts for YouTube or TikTok.",
+        "category": "Content",
+        "tool": "ChatGPT",
+        "prompt": "Create a video script of [DURATION] about [TOPIC].\n\nFormat: [YouTube/TikTok/Reels]\nAudience: [AUDIENCE DESCRIPTION]\n\nInclude: initial hook, topic development and final CTA."
+      },
+      {
+        "title": "Study Plan",
+        "description": "Build a personalized learning schedule.",
+        "category": "Education",
+        "tool": "ChatGPT",
+        "prompt": "Create a study plan of [WEEKS] weeks to learn [TOPIC].\n\nCurrent level: [beginner/intermediate/advanced]\nAvailable hours per week: [HOURS]\nFinal goal: [GOAL]\n\nInclude recommended resources and progress milestones."
+      }
     ],
     "cta": {
       "title": "Master the Art of Prompts",
@@ -2340,11 +3241,23 @@
           "industry": "Financial",
           "timeframe": "8 weeks",
           "description": "We created an automation hub connecting WhatsApp, Freshdesk, and n8n with AI agents trained on the broker's knowledge base.",
-          "highlights": ["Multilingual agent with intelligent routing", "Proactive alerts when a human needs to take over"],
+          "highlights": [
+            "Multilingual agent with intelligent routing",
+            "Proactive alerts when a human needs to take over"
+          ],
           "metrics": {
-            "responseTime": { "label": "Response time", "value": "-65%" },
-            "csat": { "label": "CSAT", "value": "+32%" },
-            "automation": { "label": "Automation", "value": "78% tickets" }
+            "responseTime": {
+              "label": "Response time",
+              "value": "-65%"
+            },
+            "csat": {
+              "label": "CSAT",
+              "value": "+32%"
+            },
+            "automation": {
+              "label": "Automation",
+              "value": "78% tickets"
+            }
           }
         },
         "auroraLearningAgent": {
@@ -2353,10 +3266,19 @@
           "industry": "Education",
           "timeframe": "6 weeks",
           "description": "Personalized assistant integrated with LMS that tracks student progress and generates reports for mentors.",
-          "highlights": ["Multimodal experience", "Dashboard with weekly insights"],
+          "highlights": [
+            "Multimodal experience",
+            "Dashboard with weekly insights"
+          ],
           "metrics": {
-            "retention": { "label": "Retention", "value": "+21%" },
-            "mentorTime": { "label": "Mentor time", "value": "-12h/week" }
+            "retention": {
+              "label": "Retention",
+              "value": "+21%"
+            },
+            "mentorTime": {
+              "label": "Mentor time",
+              "value": "-12h/week"
+            }
           }
         },
         "fluxOrchestrator": {
@@ -2365,10 +3287,19 @@
           "industry": "SaaS",
           "timeframe": "10 weeks",
           "description": "Multi-tenant application connecting Salesforce, Notion, and Slack for operations squads with event-based automation.",
-          "highlights": ["Multi-region architecture", "White-label component library"],
+          "highlights": [
+            "Multi-region architecture",
+            "White-label component library"
+          ],
           "metrics": {
-            "onboarding": { "label": "Onboarding", "value": "-30 days" },
-            "mrr": { "label": "MRR", "value": "+18%" }
+            "onboarding": {
+              "label": "Onboarding",
+              "value": "-30 days"
+            },
+            "mrr": {
+              "label": "MRR",
+              "value": "+18%"
+            }
           }
         },
         "omniCommerce": {
@@ -2377,10 +3308,19 @@
           "industry": "Retail",
           "timeframe": "9 weeks",
           "description": "Headless marketplace with proprietary CMS, recurring payments, and partner area.",
-          "highlights": ["Proprietary design system", "Integration with VTEX and Tiny"],
+          "highlights": [
+            "Proprietary design system",
+            "Integration with VTEX and Tiny"
+          ],
           "metrics": {
-            "conversion": { "label": "Conversion", "value": "+27%" },
-            "avgTicket": { "label": "Average ticket", "value": "+19%" }
+            "conversion": {
+              "label": "Conversion",
+              "value": "+27%"
+            },
+            "avgTicket": {
+              "label": "Average ticket",
+              "value": "+19%"
+            }
           }
         },
         "talentScout": {
@@ -2389,10 +3329,19 @@
           "industry": "Creative economy",
           "timeframe": "7 weeks",
           "description": "Platform connecting brands to creators with AI-based matching and contract automation.",
-          "highlights": ["Recommendation engine", "Signature via DocuSign"],
+          "highlights": [
+            "Recommendation engine",
+            "Signature via DocuSign"
+          ],
           "metrics": {
-            "matching": { "label": "Matching", "value": "+2.4x" },
-            "proposalTime": { "label": "Proposal time", "value": "-72%" }
+            "matching": {
+              "label": "Matching",
+              "value": "+2.4x"
+            },
+            "proposalTime": {
+              "label": "Proposal time",
+              "value": "-72%"
+            }
           }
         },
         "cortexCommand": {
@@ -2401,10 +3350,19 @@
           "industry": "Industry 4.0",
           "timeframe": "6 weeks",
           "description": "Immersive dashboard for monitoring factory KPIs with alerts and a copilot that suggests actions.",
-          "highlights": ["Real-time TV wall", "Interactive playbooks"],
+          "highlights": [
+            "Real-time TV wall",
+            "Interactive playbooks"
+          ],
           "metrics": {
-            "criticalAlerts": { "label": "Critical alerts", "value": "-43%" },
-            "predictiveAccuracy": { "label": "Predictive accuracy", "value": "+18%" }
+            "criticalAlerts": {
+              "label": "Critical alerts",
+              "value": "-43%"
+            },
+            "predictiveAccuracy": {
+              "label": "Predictive accuracy",
+              "value": "+18%"
+            }
           }
         },
         "luminaExperience": {
@@ -2413,10 +3371,19 @@
           "industry": "Venture Capital",
           "timeframe": "5 weeks",
           "description": "Editorial site with deal library, research section, and mini CRM integration.",
-          "highlights": ["Semantic search", "Collaborative publishing"],
+          "highlights": [
+            "Semantic search",
+            "Collaborative publishing"
+          ],
           "metrics": {
-            "subscribers": { "label": "Subscribers", "value": "+12k" },
-            "qualifiedMql": { "label": "Qualified MQLs", "value": "+34%" }
+            "subscribers": {
+              "label": "Subscribers",
+              "value": "+12k"
+            },
+            "qualifiedMql": {
+              "label": "Qualified MQLs",
+              "value": "+34%"
+            }
           }
         }
       }
@@ -2441,9 +3408,18 @@
     },
     "indicators": {
       "title": "Indicators we track",
-      "timeToValue": { "label": "Time to value", "value": "< 6 weeks" },
-      "teamAdoption": { "label": "Team adoption", "value": "92%" },
-      "handoffQuality": { "label": "Handoff quality", "value": "9.6/10" }
+      "timeToValue": {
+        "label": "Time to value",
+        "value": "< 6 weeks"
+      },
+      "teamAdoption": {
+        "label": "Team adoption",
+        "value": "92%"
+      },
+      "handoffQuality": {
+        "label": "Handoff quality",
+        "value": "9.6/10"
+      }
     },
     "squad": {
       "title": "Plug-and-play Squad",

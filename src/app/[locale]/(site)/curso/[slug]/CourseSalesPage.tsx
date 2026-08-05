@@ -27,6 +27,9 @@ import { formatEditorialDate } from "@/lib/editorial-verification";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 import FaixaDoAluno, { useAcessoDoAluno, temAcessoTotal } from "./FaixaDoAluno";
 import { CapaDoCurso } from "@/components/courses/CapaDoCurso";
+import { CenaDoCurso } from "@/components/courses/CenaDoCurso";
+import { FundoDoCurso } from "@/components/courses/FundoDoCurso";
+import { VideoIntroCurso } from "@/components/courses/VideoIntroCurso";
 
 export default function CourseSalesPage({
   initialProduct = null,
@@ -261,19 +264,22 @@ export default function CourseSalesPage({
               (o couro marrom do WhatsApp, o navy do OpenClaw) sem custar nenhum
               arquivo novo: é a imagem que a página já ia baixar de qualquer
               jeito, e o `aria-hidden` a mantém fora do leitor de tela. */}
-          {product.thumbnail && (
-            <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-              <img
-                src={product.thumbnail}
-                alt=""
-                className="w-full h-full object-cover scale-125 blur-3xl opacity-25"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-black" />
-            </div>
-          )}
+          {/* ⚠️ 05/08/2026 — a fonte deste fundo MUDOU: era a capa, agora é a
+              cena 1 do próprio curso, com a capa só como reserva.
+              A capa é o mesmo livro em todas as 27 páginas, com a mesma
+              iluminação de estúdio; borrada, ela virava quase o mesmo halo
+              escuro em toda parte. A cena é a única imagem que fala do
+              ASSUNTO, e mesmo borrada ela carrega a paleta daquele assunto.
+              A dissolução dos cantos e o véu de contraste moram no
+              componente — ver o comentário lá, principalmente o motivo de a
+              máscara ser radial e não linear. */}
+          <FundoDoCurso slug={slug} reserva={product.thumbnail} />
 
           {/* Background Animation */}
-          <div className="absolute inset-0 opacity-30">
+          {/* A grade de pontos foi de 30% para 12%: com a cena borrada atrás,
+              ela deixou de ser o único fundo e passou a ser ruído por cima de
+              uma imagem que já tem textura. */}
+          <div className="absolute inset-0 opacity-[0.12]">
             <div className="absolute inset-0" style={{
               backgroundImage: 'radial-gradient(circle, purple 1px, transparent 1px)',
               backgroundSize: '50px 50px'
@@ -688,6 +694,16 @@ export default function CourseSalesPage({
           </div>
         </section>
 
+        {/* VÍDEO DE ABERTURA — logo depois do herói, e por quê.
+            É o primeiro respiro da página: sai do bloco de preço e prova, e
+            mostra o assunto em movimento antes de pedir mais leitura. Some
+            sozinho nos cursos que ainda não têm vídeo. */}
+        <VideoIntroCurso
+          slug={slug}
+          titulo={product.name}
+          chamada={product.copy?.shortDescription}
+        />
+
         {/* PROBLEM AGITATION SECTION */}
         <section className="py-16 bg-gradient-to-b from-black to-gray-900">
           <div className="container mx-auto px-4">
@@ -735,6 +751,9 @@ export default function CourseSalesPage({
                 })}
               </h2>
             </div>
+
+            {/* Cena 1 — o "depois", antes da lista que o descreve em palavras. */}
+            <CenaDoCurso slug={slug} indice={0} className="mb-12" />
 
             <div className="max-w-5xl mx-auto">
               <div className="grid md:grid-cols-2 gap-8">
@@ -806,6 +825,11 @@ export default function CourseSalesPage({
                 {t("whatYouLearn.subtitle")}
               </p>
 
+              {/* Cena 2 — a habilidade em uso, no meio da lista do que se
+                  aprende. É a cena que mais trabalha: a lista é abstrata e a
+                  imagem é a única coisa concreta desta seção. */}
+              <CenaDoCurso slug={slug} indice={1} className="mb-12" />
+
               <div className="grid md:grid-cols-2 gap-6">
                 {product.copy.benefits.map((benefit, i) => (
                   <motion.div
@@ -862,6 +886,9 @@ export default function CourseSalesPage({
               <p className="text-xl text-muted-foreground text-center mb-12">
                 {t("curriculum.subtitle")}
               </p>
+
+              {/* Cena 3 — a jornada, antes da lista de módulos. */}
+              <CenaDoCurso slug={slug} indice={2} className="mb-12" />
 
               <div className="space-y-6">
                 {product.curriculum.modules.map((module) => (

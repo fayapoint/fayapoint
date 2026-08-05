@@ -20,7 +20,16 @@ type BlogPost = {
   author: string;
   date: string;
   readTime: string;
-  views: number;
+  /**
+   * Opcional de propósito (05/08/2026).
+   *
+   * Era obrigatório, e por isso todo post novo precisava chegar com um número
+   * de visualizações — que ninguém mede e portanto ninguém pode escrever sem
+   * inventar. Um contador inventado ao lado de uma notícia com fonte contamina
+   * a notícia: quem desconfia do número passa a desconfiar do texto. Agora o
+   * selo só aparece onde existe número de verdade.
+   */
+  views?: number;
   image: string;
   featured: boolean;
   tags: string[];
@@ -110,18 +119,41 @@ export default function BlogPostView() {
   }
 
   const heroImage = content?.heroImage || post.image;
+  /**
+   * O topo em movimento, onde existe vídeo.
+   *
+   * Dois vídeos de blog estavam prontos em disco desde 03/08 e entravam no
+   * deploy sem nenhuma rota apontando para eles. O pôster continua sendo a
+   * arte parada, então quem chega com rede lenta vê a mesma coisa de antes —
+   * o vídeo é acréscimo, nunca requisito.
+   */
+  const heroVideo = content?.heroVideo;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="pt-16 md:pt-20 pb-16">
         {/* Hero */}
         <div className="relative w-full h-[40vh] md:h-[50vh] overflow-hidden">
-          <img
-            src={heroImage}
-            alt={post.title}
-            className="w-full h-full object-cover"
-            loading="eager"
-          />
+          {heroVideo ? (
+            <video
+              src={heroVideo}
+              poster={heroImage}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label={post.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <img
+              src={heroImage}
+              alt={post.title}
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="container mx-auto max-w-4xl">
@@ -147,7 +179,9 @@ export default function BlogPostView() {
             <span className="flex items-center gap-1.5"><User size={14} /> {post.author}</span>
             <span className="flex items-center gap-1.5"><Calendar size={14} /> {post.date}</span>
             <span className="flex items-center gap-1.5"><Clock size={14} /> {post.readTime}</span>
-            <span className="flex items-center gap-1.5"><Eye size={14} /> {post.views.toLocaleString(locale)}</span>
+            {typeof post.views === "number" && (
+              <span className="flex items-center gap-1.5"><Eye size={14} /> {post.views.toLocaleString(locale)}</span>
+            )}
             <button
               onClick={() => navigator.share?.({ title: post.title, url: window.location.href }).catch(() => {})}
               className="ml-auto flex items-center gap-1.5 hover:text-amber-400 transition"

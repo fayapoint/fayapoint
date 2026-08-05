@@ -1,5 +1,6 @@
 "use client";
 
+import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -291,6 +292,19 @@ export default function FreeClassPage() {
                 <span>{isPtBr ? "Templates inclusos" : "Templates included"}</span>
               </div>
             </div>
+
+            {/* `FREE-01-copo`, pronto desde 03/08 e sem rota nenhuma até hoje.
+                ⚠️ Ele fica NO TOPO, e não ao lado de uma aula. As três aulas
+                são de TEXTO — a página inteira diz "minutos de leitura" — e
+                esta tela já teve o problema de prometer vídeo e entregar
+                parágrafo: os ícones de play foram retirados justamente por
+                isso. Um vídeo de abertura ambienta; um vídeo por aula
+                mentiria de novo. */}
+            <FaixaDeVideo
+              src="/landing/aula-gratis/topico-01.webm"
+              poster="/landing/aula-gratis/topico-01.webp"
+              className="mx-auto mt-10 max-w-3xl"
+            />
           </div>
         </section>
 

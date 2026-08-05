@@ -1,5 +1,6 @@
 "use client";
 
+import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { 
@@ -52,6 +53,13 @@ export default function HelpCenterPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
           </motion.div>
+
+          {/* A boia — `AJU-01-boia`. Estava pronto e sem destino no código. */}
+          <FaixaDeVideo
+            src="/ajuda/hero-loop.webm"
+            poster="/ajuda/hero-loop.webp"
+            className="mx-auto mt-10 max-w-4xl"
+          />
         </section>
 
         {/* Quick Links */}

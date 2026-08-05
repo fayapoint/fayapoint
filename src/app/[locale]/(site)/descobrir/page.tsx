@@ -1,3 +1,4 @@
+import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { cookies } from "next/headers";
 import { HeroSection } from "@/components/home/HeroSection";
 import { WhatWeDoSection } from "@/components/home/WhatWeDoSection";
@@ -19,6 +20,15 @@ export default async function DescobrirPage() {
     <div className="min-h-screen bg-background text-foreground">
       <main>
         <div id="hero"><HeroSection /></div>
+        {/* A porta que se abre — `DES-01-porta`. Entra aqui, e não dentro do
+            `HeroSection`, porque aquele componente é compartilhado com outras
+            páginas e este vídeo foi feito para esta. */}
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <FaixaDeVideo
+            src="/descobrir/porta-loop.webm"
+            poster="/descobrir/porta-loop.webp"
+          />
+        </div>
         <div id="curso-gratis"><FreeOfferBanner /></div>
         <div id="proposta"><ValuePropositionCTA /></div>
         <div id="chatgpt"><ChatGPTAllowlistingBanner /></div>
