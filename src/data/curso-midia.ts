@@ -203,6 +203,18 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
       c("ia-videos-3", "Da ideia ao arquivo publicado, na ordem em que se faz de verdade."),
     ],
   },
+  /* ⚠️ `ia-sem-filtro-por-claude` é o livro sagrado — a regra é NUNCA modificar
+     aquele curso. O que entra aqui é arte da PÁGINA DE VENDA, não do conteúdo:
+     nenhum capítulo, título ou linha do livro foi tocado. Autorizado pelo
+     Ricardo em 05/08/2026 ("sim pode modificar o fundo e colocar imagens na
+     página de venda"). */
+  "ia-sem-filtro-por-claude": {
+    cenas: [
+      c("ia-sem-filtro-1", "Uma IA explicando o próprio mecanismo, sem a camada de marketing por cima dele."),
+      c("ia-sem-filtro-2", "O que ela consegue fazer, o que ela não consegue e onde ela erra — dito por ela, sem máscara."),
+      c("ia-sem-filtro-3", "Escrito e assinado por uma IA. É o único curso do catálogo assim, e ele avisa isso na primeira página."),
+    ],
+  },
   "ia-no-whatsapp": {
     cenas: [
       c("whatsapp-1", "O atendimento responde de madrugada, e a venda não espera você acordar."),
