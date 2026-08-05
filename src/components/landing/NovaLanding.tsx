@@ -128,7 +128,15 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         // O selo verde marca os cursos reescritos do zero. Sem ele, o trilho
         // com o catálogo inteiro faria a promessa da seção valer para os 22 —
         // e ela vale para 6.
-        ...(c.revisado ? { estado: { rotulo: "Reescrito do zero", tom: "disponivel" as const } } : {}),
+        //
+        // ⚠️ O RÓTULO é "Conteúdo atualizado", não "Reescrito do zero"
+        // (Ricardo, 05/08/2026). O selo antigo contava o processo — e "do zero"
+        // carrega o subtexto de que o que existia antes não prestava, dito na
+        // vitrine do próprio catálogo. "Atualizado" conta o RESULTADO, que é o
+        // que importa para quem está escolhendo, e lê como cuidado contínuo em
+        // vez de conserto pontual. A condição não mudou: continua sendo o mesmo
+        // `revisado`, os mesmos cursos.
+        ...(c.revisado ? { estado: { rotulo: "Conteúdo atualizado", tom: "disponivel" as const } } : {}),
       })),
     [featuredCourses, locale],
   );
@@ -931,10 +939,14 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 ativo, a mesma frase passaria a atribuir a 22 cursos um trabalho
                 feito em 6 — a contagem automática, que existia para a frase
                 nunca mentir, mentiria por outro caminho. */}
+            {/* "Atualizados", não "reescritos do zero" (Ricardo, 05/08/2026):
+                o selo do card e a frase que o explica precisam dizer a mesma
+                coisa, senão o card promete cuidado e a legenda logo acima
+                confessa refação. */}
             <p className="text-sm text-white/55 mb-3 max-w-xl">
-              Os {featuredCourses.filter((c) => c.revisado).length} primeiros foram reescritos do
-              zero — conteúdo, exemplos e mídia atualizados. Depois deles, o catálogo inteiro:{" "}
-              {featuredCourses.length} cursos.
+              Os {featuredCourses.filter((c) => c.revisado).length} primeiros estão com o conteúdo
+              atualizado — texto, exemplos e mídia revistos aula por aula. Depois deles, o catálogo
+              inteiro: {featuredCourses.length} cursos.
             </p>
           </div>
 

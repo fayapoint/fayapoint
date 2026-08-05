@@ -64,6 +64,7 @@ const c = (arquivo: string, legenda: string): CenaDoCurso => ({
 
 const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
   "chatgpt-masterclass": {
+    intro: { video: "/cursos/intro/chatgpt-masterclass.webm", poster: "/cursos/intro/chatgpt-masterclass.webp" },
     cenas: [
       c("chatgpt-masterclass-1", "O mesmo dia de trabalho, entregue em três peças limpas — e o monte de rascunho que sobrava deixa de existir."),
       c("chatgpt-masterclass-2", "Um pedido vago entra; quatro ajustes depois, sai a resposta que você queria. O curso é sobre esses quatro ajustes."),
@@ -71,6 +72,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "n8n-automacao-avancada": {
+    intro: { video: "/cursos/intro/n8n-automacao-avancada.webm", poster: "/cursos/intro/n8n-automacao-avancada.webp" },
     cenas: [
       c("n8n-avancada-1", "O processo continua rodando depois que você fecha o computador. A cadeira ao lado fica vazia de propósito."),
       c("n8n-avancada-2", "Ramificar, tratar o erro e reunir de novo: é o que separa um fluxo de brinquedo de um fluxo de produção."),
@@ -78,6 +80,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "make-integracao-total": {
+    intro: { video: "/cursos/intro/make-integracao-total.webm", poster: "/cursos/intro/make-integracao-total.webp" },
     cenas: [
       c("make-1", "Centenas de aplicativos, e um fio só passando por todos eles."),
       c("make-2", "O dado sai de um formato e entra em outro sem ninguém digitar nada no meio."),
@@ -85,6 +88,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "leonardo-ai-criacao-visual": {
+    intro: { video: "/cursos/intro/leonardo-ai-criacao-visual.webm", poster: "/cursos/intro/leonardo-ai-criacao-visual.webp" },
     cenas: [
       c("leonardo-1", "Do rascunho bruto à peça pronta para o cliente, sem passar por um estúdio."),
       c("leonardo-2", "O mesmo pedido, quatro acabamentos. Controle de estilo é isto, e é aprendível."),
@@ -92,6 +96,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "gemini-ia-google": {
+    intro: { video: "/cursos/intro/gemini-ia-google.webm", poster: "/cursos/intro/gemini-ia-google.webp" },
     cenas: [
       c("gemini-1", "Texto, imagem, vídeo e código entrando na mesma conversa — e saindo como uma resposta só."),
       c("gemini-2", "Ele não lê uma coisa de cada vez: olha tudo junto. É o que multimodal nativo quer dizer."),
@@ -99,6 +104,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "midjourney-arte-profissional": {
+    intro: { video: "/cursos/intro/midjourney-arte-profissional.webm", poster: "/cursos/intro/midjourney-arte-profissional.webp" },
     cenas: [
       c("midjourney-1", "Um acervo com assinatura visual, não um punhado de imagens soltas."),
       c("midjourney-2", "Um parâmetro muda e a imagem inteira muda de temperamento. Saber qual é o curso."),
@@ -106,6 +112,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "claude-ia-segura": {
+    intro: { video: "/cursos/intro/claude-ia-segura.webm", poster: "/cursos/intro/claude-ia-segura.webp" },
     cenas: [
       c("claude-segura-1", "Documentos longos lidos por inteiro, com a passagem exata devolvida — não um resumo do meio."),
       c("claude-segura-2", "Ele ajuda até onde deve e para onde não deve. Saber onde fica essa linha é metade do curso."),
@@ -113,6 +120,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia": {
+    intro: { video: "/cursos/intro/aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia.webm", poster: "/cursos/intro/aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia.webp" },
     cenas: [
       c("dia-a-dia-1", "Três tarefas do seu dia resolvidas antes de o café esfriar."),
       c("dia-a-dia-2", "Você pede em português comum; ela devolve o passo a passo. Não tem truque escondido."),
@@ -120,6 +128,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "prompt-engineering": {
+    intro: { video: "/cursos/intro/prompt-engineering.webm", poster: "/cursos/intro/prompt-engineering.webp" },
     cenas: [
       c("prompt-eng-1", "Mesmo modelo, mesmo dia, mesma pergunta: o que muda o resultado é o pedido."),
       c("prompt-eng-2", "Papel, contexto, exemplo e limite — o esqueleto que faz um prompt parar de falhar."),
@@ -127,6 +136,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "chatgpt-zero": {
+    intro: { video: "/cursos/intro/chatgpt-zero.webm", poster: "/cursos/intro/chatgpt-zero.webp" },
     cenas: [
       c("chatgpt-zero-1", "O primeiro dia sem a sensação de estar fazendo errado."),
       c("chatgpt-zero-2", "Pedir bem é uma habilidade curta de aprender — e é a que mais rende."),
@@ -134,6 +144,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "primeiras-automacoes": {
+    intro: { video: "/cursos/intro/primeiras-automacoes.webm", poster: "/cursos/intro/primeiras-automacoes.webp" },
     cenas: [
       c("primeiras-automacoes-1", "A tarefa que você repetia toda semana passa a acontecer sem você."),
       c("primeiras-automacoes-2", "Gatilho, condição e ação. Automação é isto, e a primeira cabe numa tarde."),
@@ -141,6 +152,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "rag-knowledge": {
+    intro: { video: "/cursos/intro/rag-knowledge.webm", poster: "/cursos/intro/rag-knowledge.webp" },
     cenas: [
       c("rag-1", "A resposta não vem da memória do modelo: vem dos três documentos seus que ela foi buscar."),
       c("rag-2", "Cada trecho vira um ponto num espaço, e a pergunta cai perto dos vizinhos certos. É o que um índice vetorial faz."),
@@ -148,6 +160,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "crie-agentes-de-ia-autonomos": {
+    intro: { video: "/cursos/intro/crie-agentes-de-ia-autonomos.webm", poster: "/cursos/intro/crie-agentes-de-ia-autonomos.webp" },
     cenas: [
       c("agentes-1", "Ele escolhe o próximo passo sozinho — e quem desenha os limites da escolha é você."),
       c("agentes-2", "Pensar, escolher a ferramenta, usar e voltar a pensar. O laço do agente é este, e cabe num diagrama."),
@@ -155,6 +168,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "ia-producao": {
+    intro: { video: "/cursos/intro/ia-producao.webm", poster: "/cursos/intro/ia-producao.webp" },
     cenas: [
       c("ia-producao-1", "O mesmo modelo rodando igual na sua máquina e no servidor. É para isso que o contêiner existe."),
       c("ia-producao-2", "A carga cresce e a infraestrutura cresce junto, sem ninguém acordar de madrugada."),
@@ -162,6 +176,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "openclaw-ia-open-source": {
+    intro: { video: "/cursos/intro/openclaw-ia-open-source.webm", poster: "/cursos/intro/openclaw-ia-open-source.webp" },
     cenas: [
       c("openclaw-1", "O modelo roda na sua máquina, e o dado não sai dela. Nenhum cabo deixando a sala."),
       c("openclaw-2", "Trocar de modelo passa a ser trocar uma peça, não refazer o projeto."),
@@ -169,6 +184,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "claude-cowork-colaboracao": {
+    intro: { video: "/cursos/intro/claude-cowork-colaboracao.webm", poster: "/cursos/intro/claude-cowork-colaboracao.webp" },
     cenas: [
       c("cowork-1", "Não é uma ferramenta que você usa: é alguém com quem você trabalha, dos dois lados da mesa."),
       c("cowork-2", "A conversa produz uma peça de verdade — e ela continua editável depois."),
@@ -176,6 +192,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "perplexity-pesquisa-inteligente": {
+    intro: { video: "/cursos/intro/perplexity-pesquisa-inteligente.webm", poster: "/cursos/intro/perplexity-pesquisa-inteligente.webp" },
     cenas: [
       c("perplexity-1", "Toda resposta vem amarrada às fontes que a sustentam. Se o fio some, a resposta não vale."),
       c("perplexity-2", "Ele traz três respostas certas em vez de dez páginas de links."),
@@ -183,6 +200,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "chatgpt-allowlisting": {
+    intro: { video: "/cursos/intro/chatgpt-allowlisting.webm", poster: "/cursos/intro/chatgpt-allowlisting.webp" },
     cenas: [
       c("allowlisting-1", "Quando alguém pergunta à IA, é o seu site que ela cita — e o do vizinho fica no escuro."),
       c("allowlisting-2", "Um arquivo de permissão decide se a IA entra no seu site ou passa direto."),
@@ -190,6 +208,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "autoresearch-singularity": {
+    intro: { video: "/cursos/intro/autoresearch-singularity.webm", poster: "/cursos/intro/autoresearch-singularity.webp" },
     cenas: [
       c("autoresearch-1", "A cada volta ela sai melhor do que entrou — e a volta seguinte já começa de um degrau acima."),
       c("autoresearch-2", "Medir, mudar, medir de novo. O laço é o método, e ele é mais simples do que parece."),
@@ -197,6 +216,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "ia-para-criar-videos": {
+    intro: { video: "/cursos/intro/ia-para-criar-videos.webm", poster: "/cursos/intro/ia-para-criar-videos.webp" },
     cenas: [
       c("ia-videos-1", "Roteiro, imagem, voz e corte saindo da mesma mesa, na mesma tarde."),
       c("ia-videos-2", "A imagem parada ganha movimento — é nesse instante que vira vídeo."),
@@ -209,6 +229,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
      Ricardo em 05/08/2026 ("sim pode modificar o fundo e colocar imagens na
      página de venda"). */
   "ia-sem-filtro-por-claude": {
+    intro: { video: "/cursos/intro/ia-sem-filtro-por-claude.webm", poster: "/cursos/intro/ia-sem-filtro-por-claude.webp" },
     cenas: [
       c("ia-sem-filtro-1", "Uma IA explicando o próprio mecanismo, sem a camada de marketing por cima dele."),
       c("ia-sem-filtro-2", "O que ela consegue fazer, o que ela não consegue e onde ela erra — dito por ela, sem máscara."),
@@ -216,6 +237,7 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     ],
   },
   "ia-no-whatsapp": {
+    intro: { video: "/cursos/intro/ia-no-whatsapp.webm", poster: "/cursos/intro/ia-no-whatsapp.webp" },
     cenas: [
       c("whatsapp-1", "O atendimento responde de madrugada, e a venda não espera você acordar."),
       c("whatsapp-2", "Fluxo é isto: cada resposta leva à pergunta certa seguinte, e só a ela."),
@@ -236,18 +258,60 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
  * Os arquivos são `public/cursos/fundo/<slug>-1.webp` a `-3.webp`.
  */
 const COM_FUNDO: string[] = [
+  "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+  "autoresearch-singularity",
   "chatgpt-allowlisting",
   "chatgpt-masterclass",
+  "chatgpt-zero",
   "claude-cowork-colaboracao",
   "claude-ia-segura",
   "crie-agentes-de-ia-autonomos",
   "gemini-ia-google",
+  "ia-no-whatsapp",
+  "ia-para-criar-videos",
+  "ia-producao",
+  "ia-sem-filtro-por-claude",
   "leonardo-ai-criacao-visual",
   "make-integracao-total",
   "midjourney-arte-profissional",
   "n8n-automacao-avancada",
+  "openclaw-ia-open-source",
+  "perplexity-pesquisa-inteligente",
+  "primeiras-automacoes",
   "prompt-engineering",
+  "rag-knowledge",
 ];
+
+/* ── Como os seis cursos de 05/08 foram identificados ───────────────────────
+ *
+ * As 21 fotografias que faltavam já estavam geradas na conta do Higgsfield —
+ * mas o Higgsfield não guarda o nome do curso, só o prompt. E casar por tema
+ * ("a sala de arquivo deve ser o curso de RAG") é o tipo de palpite que não dá
+ * erro nenhum: dá uma página de venda ilustrando o curso do lado.
+ *
+ * O caminho usado foi ANCORAR. As 42 fotografias que já estavam no disco foram
+ * medidas por assinatura de imagem contra as 59 geradas, e casaram todas com
+ * distância entre 0,5 e 4,6 — contra 196 a 333 nas não casadas. Isso fixou 42
+ * posições numa lista ordenada por carimbo de tempo, e as 17 restantes caíram
+ * em seis blocos consecutivos de 7 em 7 segundos, cada bloco com o assunto de
+ * um curso.
+ *
+ * O bloco do `aprenda-a-usar…-dia-a-dia` é a prova de que a leitura está certa:
+ * ele tem TRÊS fotos, e a terceira (`-3`) já estava no disco e casou com
+ * distância 0,8. As outras duas do mesmo bloco só podiam ser a 1 e a 2, na
+ * ordem em que foram geradas — e é essa mesma ordem que vale nos outros cinco.
+ *
+ * **Os 22 estão completos desde 05/08/2026.** As sete últimas fotografias (do
+ * `autoresearch-singularity`, `ia-para-criar-videos`, `ia-producao`,
+ * `perplexity-pesquisa-inteligente` e `primeiras-automacoes`) não existiam na
+ * conta e foram geradas de propósito, com prompt escrito para cada curso —
+ * então elas são as únicas cujo dono nunca esteve em dúvida.
+ *
+ * ⚠️ A regra dos TRÊS arquivos continua valendo para sempre. Um `<img>` que
+ * aponta para um 404 não quebra a página: ele some em silêncio, e o topo passa
+ * a piscar em branco a cada 9 segundos sem ninguém entender por quê. Curso novo
+ * só entra aqui depois que `-1`, `-2` e `-3` estão no disco.
+ */
 
 /** As três fotografias do topo, na ordem em que se atravessam. */
 export function fundosDoCurso(slug: string): string[] {

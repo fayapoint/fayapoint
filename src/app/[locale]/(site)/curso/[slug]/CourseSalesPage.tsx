@@ -30,6 +30,7 @@ import { CapaDoCurso } from "@/components/courses/CapaDoCurso";
 import { CenaDoCurso } from "@/components/courses/CenaDoCurso";
 import { FundoDoCurso } from "@/components/courses/FundoDoCurso";
 import { VideoIntroCurso } from "@/components/courses/VideoIntroCurso";
+import { AssinaturaFayai } from "@/components/marca/AssinaturaFayai";
 
 export default function CourseSalesPage({
   initialProduct = null,
@@ -408,17 +409,12 @@ export default function CourseSalesPage({
                   </div>
                 </div>
 
-                {/* Instructor Quick Info */}
-                <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-amber-900/30 to-yellow-900/30 rounded-lg border border-amber-500/30">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-2xl font-bold">
-                    RF
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">{t("instructor.createdBy")}</div>
-                    <div className="font-bold text-lg">Ricardo Faya</div>
-                    <div className="text-sm text-muted-foreground">{locale === 'pt-BR' ? 'Especialista em IA e Automação' : 'AI & Automation Specialist'} • {locale === 'pt-BR' ? 'Instrutor Principal' : 'Lead Instructor'}</div>
-                  </div>
-                </div>
+                {/* A assinatura da casa.
+                    Saiu o cartão de degradê âmbar com o avatar "RF" e três
+                    linhas de cargo: ele tinha o mesmo peso visual do preço numa
+                    página onde o preço é a decisão, e repetia o mesmo nome em
+                    22 páginas. Ver o porquê inteiro em `AssinaturaFayai`. */}
+                <AssinaturaFayai locale={locale} />
 
                 {/* Quick Course Highlights - Fills the gap */}
                 <div className="mt-8 grid grid-cols-2 gap-4">
@@ -435,6 +431,24 @@ export default function CourseSalesPage({
                     </div>
                   ))}
                 </div>
+
+                {/* CENA 1 — a primeira imagem sobe para a dobra.
+                    Ricardo, 05/08/2026: *"acho que ficou um espaço grande sem
+                    nenhuma imagem, portanto gostaria de mover a primeira que
+                    está bem abaixo, para onde a seta verde aponta"*. A seta
+                    apontava exatamente para cá: entre a grade de números e os
+                    "Resultados Garantidos".
+
+                    Medido na página do `openclaw` em produção antes da
+                    mudança: as três cenas viviam em y=2726, y=4044 e y=5564 de
+                    uma página de ~7000px. Elas existiam, respondiam 200 e
+                    ninguém as via — quem decide comprar decide na primeira
+                    tela, e a primeira tela era texto e números.
+
+                    As de baixo andaram uma casa (0→1→2); a seção do currículo
+                    ficou sem figura de propósito, porque ela já tem a própria
+                    ilustração — a lista de módulos. */}
+                <CenaDoCurso slug={slug} indice={0} className="mt-8" />
 
                 {/* Key Outcomes Preview */}
                 <div className="mt-8 p-6 bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl border border-green-500/30">
@@ -752,8 +766,9 @@ export default function CourseSalesPage({
               </h2>
             </div>
 
-            {/* Cena 1 — o "depois", antes da lista que o descreve em palavras. */}
-            <CenaDoCurso slug={slug} indice={0} className="mb-12" />
+            {/* Cena 2 — o "depois", antes da lista que o descreve em palavras.
+                (Era a cena 1 até 05/08; ela subiu para o herói.) */}
+            <CenaDoCurso slug={slug} indice={1} className="mb-12" />
 
             <div className="max-w-5xl mx-auto">
               <div className="grid md:grid-cols-2 gap-8">
@@ -825,10 +840,10 @@ export default function CourseSalesPage({
                 {t("whatYouLearn.subtitle")}
               </p>
 
-              {/* Cena 2 — a habilidade em uso, no meio da lista do que se
+              {/* Cena 3 — a habilidade em uso, no meio da lista do que se
                   aprende. É a cena que mais trabalha: a lista é abstrata e a
                   imagem é a única coisa concreta desta seção. */}
-              <CenaDoCurso slug={slug} indice={1} className="mb-12" />
+              <CenaDoCurso slug={slug} indice={2} className="mb-12" />
 
               <div className="grid md:grid-cols-2 gap-6">
                 {product.copy.benefits.map((benefit, i) => (
@@ -887,8 +902,11 @@ export default function CourseSalesPage({
                 {t("curriculum.subtitle")}
               </p>
 
-              {/* Cena 3 — a jornada, antes da lista de módulos. */}
-              <CenaDoCurso slug={slug} indice={2} className="mb-12" />
+              {/* ⚠️ Sem cena aqui desde 05/08. As três subiram uma casa quando a
+                  primeira foi para o herói, e esta seção é a que menos sente:
+                  a lista de módulos JÁ é a ilustração do currículo — cada
+                  módulo aberto mostra o que tem dentro. Repetir uma quarta
+                  imagem antes dela empurraria a lista para baixo da dobra. */}
 
               <div className="space-y-6">
                 {product.curriculum.modules.map((module) => (

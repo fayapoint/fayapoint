@@ -26,10 +26,25 @@ const gravar = process.argv.includes("--gravar");
 
 /* ── 1. Os loops de capa ──────────────────────────────────────────────────── */
 
+/**
+ * O que já vive no `APELIDOS` de `capa-loop.ts` e não deve ser repetido aqui.
+ *
+ * ⚠️ São DOIS nomes por curso, e é por isso que a lista parece redundante: o
+ * SLUG (a chave do mapa) e o NOME DO ARQUIVO no disco (o valor). Quatro loops
+ * antigos foram gravados com nome curto — `claude.webm` para `claude-ia-segura`,
+ * `n8n.webm` para `n8n-automacao-avancada` — e este script lê o DISCO. Listar
+ * só os slugs deixava `claude`, `n8n`, `banana-dev` e `ia-sem-filtro` entrarem
+ * em `LOOPS_POR_SLUG` como se fossem cursos. Não quebrava nada (nenhum curso
+ * tem esses slugs, então ninguém os consultaria), mas punha quatro cursos
+ * fantasmas numa lista cuja única razão de existir é ser a verdade do disco.
+ */
 const APELIDOS_JA_MAPEADOS = [
+  // slugs
   "automacao-n8n", "autoresearch-singularity", "banana-dev-deploy-ia",
   "chatgpt-zero", "claude-ia-segura", "ia-no-whatsapp",
   "ia-sem-filtro-por-claude", "n8n-automacao-avancada",
+  // os nomes curtos com que esses mesmos loops foram gravados
+  "banana-dev", "claude", "ia-sem-filtro", "n8n",
 ];
 
 const capaLoop = "src/lib/capa-loop.ts";

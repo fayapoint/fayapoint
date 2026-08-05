@@ -110,7 +110,16 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
             {tags.map((t) => (
               <Link
                 key={t}
-                href={`/noticias?tag=${encodeURIComponent(t)}`}
+                /* ⚠️ COM o prefixo de idioma. Sem ele, cada um dos 8 chips
+                   custava um 308 por clique — medido em produção em
+                   05/08/2026: `/noticias?tag=MODELOS` → 308 →
+                   `/pt-BR/noticias?tag=MODELOS`.
+
+                   É o defeito que o comentário no topo desta mesma função
+                   existe para evitar, e ele passou porque o chip é o único
+                   link da página montado à mão: todos os outros já usam
+                   `/${locale}/…`. Ver [[reference_seo_armadilhas_locale]]. */
+                href={`/${locale}/noticias?tag=${encodeURIComponent(t)}`}
                 className="rounded-full px-4 py-1.5 text-xs font-bold border transition-colors"
                 style={
                   tag === t

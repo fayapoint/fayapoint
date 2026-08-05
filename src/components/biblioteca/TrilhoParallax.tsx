@@ -62,6 +62,48 @@
  * ⚠️ Ao mexer aqui: se precisar de uma medida nova, tire-a em `medir()`. Uma
  * única chamada de `getBoundingClientRect()` dentro do laço traz o problema 1
  * de volta inteiro, e ele não aparece em nenhum teste — só no dedo.
+ *
+ * ── A ampliação por proximidade (05/08/2026) ───────────────────────────────
+ *
+ * Ricardo: *"eu tinha imaginado um carrossel exatamente igual o do mac, onde
+ * temos um aumento de escala onde estamos com o mouse … a estética deles
+ * ficarem do tamanho certo apenas no selecionado e os demais dão uma diminuída
+ * gradual"*.
+ *
+ * É o Dock do macOS, e a curva é uma gaussiana sobre a distância entre o
+ * ponteiro e o centro de cada card. Quatro decisões que não são óbvias:
+ *
+ * **1. O card MAIOR é o tamanho natural — ninguém passa de `scale(1)`.** A
+ * tentação é ampliar o card sob o cursor acima de 1. Não dá: a faixa é
+ * `overflow-x: hidden`, e pela especificação do CSS um eixo escondido força o
+ * outro a `auto` — o card que crescesse além da caixa seria CORTADO em cima e
+ * ainda ganharia uma barra de rolagem vertical. Então o repouso é 0,955 e o
+ * foco é 1,0: o contraste aparece, e nada nunca sai da caixa.
+ *
+ * **2. A escala mora no CARD, o parallax mora na CAPA.** São dois `transform`
+ * em elementos diferentes de propósito. Somá-los no mesmo elemento faria a
+ * ampliação multiplicar o deslocamento do parallax, e a capa abriria borda
+ * vazia justo no card que está sendo olhado.
+ *
+ * **3. O `z-index` acompanha a escala.** Sem isso o card ampliado passa por
+ * baixo do vizinho e o realce vira defeito de recorte.
+ *
+ * **4. O laço continua podendo dormir.** A parada de 03/08 (três comparações e
+ * sai) valia só para o scroll. Agora ela também espera as escalas assentarem, e
+ * o ponteiro acorda o laço escrevendo um `ref` — não um `useState`, que
+ * re-renderizaria os 66 cards a cada pixel do mouse.
+ *
+ * ── O que abre a gaveta mudou ──────────────────────────────────────────────
+ *
+ * Ricardo: *"o fato de fazermos o hover no card inteiro todo não deve acionar
+ * o aumento do card explicativo, tornando assim menos intromissivo, e dando
+ * maior controle e mantendo a estética"*.
+ *
+ * O gatilho deixou de ser o card e passou a ser a PRATELEIRA de vidro. Passar
+ * por cima da capa amplia e não abre nada; a gaveta só responde a quem desce
+ * até o painel. E a prateleira cresce para CIMA (está ancorada em `bottom`),
+ * então o cursor que a abriu continua dentro dela — se ela crescesse para
+ * baixo, sairia de debaixo do cursor e a gaveta piscaria em laço.
  */
 
 import Link from "next/link";
@@ -136,7 +178,54 @@ const FORCA_ENCAIXE = 0.08;
 
 /** A folga do parallax. Ver a conta no laço de animação antes de mudar. */
 const ESCALA_CAPA = 1.05;
-const DESLOC_MAX = 7;
+/**
+ * ⚠️ Caiu de 7 para 6 em 05/08/2026, junto com o card (306→272px de largura).
+ *
+ * A regra que o comentário do laço deixou escrita: **a folga lateral tem de ser
+ * MAIOR que o deslocamento máximo**. A folga é `largura × (ESCALA_CAPA-1) / 2`.
+ * Com 306px eram 7,65px e 7 cabia com sobra de 0,65px. Com 272px são **6,8px**
+ * — e 7 passaria a raspar a borda, abrindo uma fresta vazia de meio pixel do
+ * lado para onde a capa desliza. 6 devolve 0,8px de sobra.
+ *
+ * Na vertical: 272/0,6955 = 391px de altura, e a escala come 9,8px no topo. O
+ * título gravado na capa começa a ~23px do topo do card nesta proporção, então
+ * continua sobrando margem.
+ */
+const DESLOC_MAX = 6;
+
+/* ── A ampliação por proximidade ───────────────────────────────────────────
+   ⚠️ ESCALA_FOCO nunca passa de 1. Ver a decisão 1 do cabeçalho: a faixa é
+   `overflow-x: hidden`, e o CSS transforma o eixo vertical em `auto` — um card
+   acima de 1 seria cortado no topo e ganharia barra de rolagem. */
+const ESCALA_FOCO = 1;
+/** Todo mundo em repouso. A diferença para o foco é o que se percebe. */
+const ESCALA_REPOUSO = 0.955;
+/** O vizinho distante do cursor. É a "diminuída gradual" pedida. */
+const ESCALA_LONGE = 0.9;
+/** O alcance da gaussiana, em larguras de card. */
+const RAIO_FOCO = 1.45;
+/** Quão rápido a escala persegue o alvo. Medido por quadro a 60Hz. */
+const SUAVIZACAO_ESCALA = 0.18;
+/** Abaixo disto a escala é considerada assentada e o laço pode dormir. */
+const ESCALA_PARADA = 0.0012;
+/** O afundamento do card enquanto o dedo está em cima. É o "clicar não fade". */
+const ESCALA_PRESSAO = 0.972;
+
+/* ── O avanço nas pontas ───────────────────────────────────────────────────
+   Ricardo: *"quando chegamos em uma das pontas hovering, o próximo curso já
+   aparece, isso em ambos os lados fará com que a navegação fique bem mais
+   intuitiva"*. A faixa sensível é medida a partir da borda visível e a força
+   cresce ao QUADRADO da proximidade: o começo é quase imperceptível e só a
+   ponta mesmo puxa de verdade — linear dispara cedo demais e o trilho anda
+   sozinho quando ninguém pediu. */
+const BORDA_SENSIVEL = 116;
+/**
+ * Medido no build: com 2,4 o trilho andava ~1080px/s com o cursor colado na
+ * borda — três cards e meio por segundo, rápido demais para LER o que passa.
+ * 1,7 dá ~700px/s no extremo, e a queda quadrática deixa quase parado a meio
+ * caminho da faixa sensível.
+ */
+const FORCA_BORDA = 1.7;
 
 /** Um quadro a 60Hz, em ms. É a unidade em que as constantes acima foram medidas. */
 const QUADRO_60HZ = 1000 / 60;
@@ -190,6 +279,31 @@ export function TrilhoParallax({
   const visivel = useRef(0);
   const total = useRef(0);
   const conjunto = useRef(0);
+  /** A borda esquerda da faixa na janela — converte `clientX` em coordenada de trilho. */
+  const esqTrilho = useRef(0);
+
+  /* ── A ampliação ─────────────────────────────────────────────────────── */
+
+  /** A escala DESENHADA de cada card. Persegue o alvo, nunca salta. */
+  const escala = useRef<number[]>([]);
+  /**
+   * Onde o ponteiro está, em px a partir da borda esquerda VISÍVEL da faixa.
+   * `null` = nenhum ponteiro em cima, e aí todo mundo volta ao repouso.
+   */
+  const ponteiro = useRef<number | null>(null);
+  /** Índice do card sob o dedo. Só para o afundamento do clique. */
+  const pressionado = useRef<number | null>(null);
+  /** Onde não há `hover`, o card do CENTRO é o selecionado, e ele abre a gaveta. */
+  const temHover = useRef(true);
+  const selecionado = useRef(-1);
+  /**
+   * Um pedido de quadro vindo de fora do laço (mouse, toque, foco).
+   *
+   * ⚠️ `ref` e não `useState`: o ponteiro escreve isto a cada pixel, e um
+   * estado aqui re-renderizaria os 66 cards do trilho em cada movimento do
+   * mouse — que é exatamente o defeito que o conserto de 03/08 removeu.
+   */
+  const acordado = useRef(true);
 
   const alvo = useRef(0);
   const atual = useRef(0);
@@ -235,12 +349,20 @@ export function TrilhoParallax({
     if (desloc.current.length !== cards.current.length) {
       desloc.current = new Array(cards.current.length).fill(0);
     }
+    if (escala.current.length !== cards.current.length) {
+      escala.current = new Array(cards.current.length).fill(ESCALA_REPOUSO);
+    }
 
     const origem = el.offsetLeft;
     pos.current = cards.current.map((c) => c.offsetLeft - origem);
     larg.current = cards.current.map((c) => c.offsetWidth);
     visivel.current = el.clientWidth;
     total.current = el.scrollWidth;
+    // A ÚNICA `getBoundingClientRect` do componente, e ela mora aqui pelo mesmo
+    // motivo que todas as outras medidas: é o que converte o `clientX` do mouse
+    // em coordenada de trilho, e lê-la no `pointermove` (que dispara a 120Hz)
+    // traria de volta o layout síncrono forçado por outro caminho.
+    esqTrilho.current = el.getBoundingClientRect().left;
 
     // A largura de um conjunto é a distância entre o primeiro card e o
     // primeiro card do clone seguinte — exata, e sem depender do `gap`.
@@ -288,6 +410,8 @@ export function TrilhoParallax({
 
     // Respeita quem pediu menos movimento: sem parallax, sem inércia.
     const menosMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Onde não há mouse, quem manda é o card do centro — ver `aplicarSelecao`.
+    temHover.current = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     /**
      * Liga e desliga o `will-change` das capas visíveis.
@@ -309,6 +433,14 @@ export function TrilhoParallax({
 
     let quadro = 0;
     let anterior = performance.now();
+    /**
+     * Alguma escala ainda está a caminho do alvo?
+     *
+     * Calculada no fim de cada passagem e lida no começo da seguinte — é o que
+     * deixa o laço dormir quando o Dock assentou, sem congelá-lo no meio de uma
+     * ampliação.
+     */
+    let escalaViva = true;
 
     const animar = (agora: number) => {
       const c = trilho.current;
@@ -319,6 +451,25 @@ export function TrilhoParallax({
       const dt = Math.min(agora - anterior, PASSO_MAX_MS);
       anterior = agora;
       const passo = dt / QUADRO_60HZ;
+
+      /* O AVANÇO NAS PONTAS.
+         Com o cursor perto de uma borda, o trilho anda sozinho e o próximo
+         curso aparece. A força cresce ao quadrado da proximidade: no começo da
+         faixa é quase nada, e só a ponta puxa de verdade.
+
+         Só com mouse: no toque não existe "pairar sobre a ponta", e no celular
+         isso viraria um trilho que anda enquanto o dedo está parado nele. */
+      if (temHover.current && ponteiro.current !== null && !arrastando.current && !menosMovimento) {
+        const p = ponteiro.current;
+        const larguraVista = visivel.current;
+        if (p < BORDA_SENSIVEL) {
+          const forca = 1 - Math.max(0, p) / BORDA_SENSIVEL;
+          velocidade.current -= forca * forca * FORCA_BORDA * passo;
+        } else if (p > larguraVista - BORDA_SENSIVEL) {
+          const forca = 1 - Math.max(0, larguraVista - p) / BORDA_SENSIVEL;
+          velocidade.current += forca * forca * FORCA_BORDA * passo;
+        }
+      }
 
       if (!arrastando.current) {
         alvo.current += velocidade.current * passo;
@@ -331,7 +482,16 @@ export function TrilhoParallax({
 
       // Parado é parado: sem isto o quadro reescrevia 66 transformações para
       // sempre, segurando as camadas de composição e o rádio da GPU acesos.
-      if (!arrastando.current && velocidade.current === 0 && Math.abs(alvo.current - atual.current) < 0.05) {
+      //
+      // ⚠️ A parada agora tem DUAS condições. Até 04/08 bastava o scroll estar
+      // quieto — mas as escalas do Dock continuam se movendo com o trilho
+      // imóvel (basta o mouse atravessar a faixa), e sair do quadro cedo
+      // congelaria a ampliação no meio do caminho. `escalaViva` é o segundo
+      // portão, e `acordado` é como o mouse pede um quadro sem re-renderizar
+      // nada.
+      const paradoNoEixo =
+        !arrastando.current && velocidade.current === 0 && Math.abs(alvo.current - atual.current) < 0.05;
+      if (paradoNoEixo && !escalaViva && !acordado.current) {
         if (atual.current !== alvo.current) {
           atual.current = alvo.current;
           c.scrollLeft = atual.current;
@@ -340,6 +500,7 @@ export function TrilhoParallax({
         quadro = requestAnimationFrame(animar);
         return;
       }
+      acordado.current = false;
       marcarAtivo(true);
 
       // O laço infinito: salta um conjunto inteiro sem que nada pisque.
@@ -403,6 +564,99 @@ export function TrilhoParallax({
         }
       }
 
+      /* ── O DOCK ───────────────────────────────────────────────────────────
+         A escala de cada card sai de uma gaussiana sobre a distância entre o
+         ponteiro e o centro daquele card. Sem ponteiro, todo mundo volta ao
+         repouso; no toque, o card mais próximo do centro é o "selecionado" e
+         recebe o foco inteiro.
+
+         Continua valendo a regra da casa: NENHUMA leitura de layout daqui para
+         baixo. Só aritmética sobre as medidas de `medir()` e escrita de estilo. */
+      {
+        const suaveEsc = suavePorTempo(SUAVIZACAO_ESCALA, passo);
+        const centroVista = atual.current + visivel.current / 2;
+        const ponteiroNoTrilho = ponteiro.current === null ? null : atual.current + ponteiro.current;
+        const bordaEsq = atual.current - 400;
+        const bordaDir = atual.current + visivel.current + 400;
+
+        // Sem mouse: quem está mais perto do centro é o selecionado, e é ele
+        // que abre a gaveta. Ricardo: *"se estivermos pensando no celular, a
+        // mecânica de arrastar ou selecionar e aí o card se expandir faz mais
+        // sentido por não haver o hover"*.
+        let novoSelecionado = -1;
+        if (!temHover.current) {
+          let menor = Infinity;
+          for (let i = 0; i < pos.current.length; i++) {
+            const d = Math.abs(centroVista - (pos.current[i] + larg.current[i] / 2));
+            if (d < menor) {
+              menor = d;
+              novoSelecionado = i;
+            }
+          }
+          if (novoSelecionado !== selecionado.current) {
+            // Escrita direta no DOM, e só nos DOIS que mudaram — trocar isto
+            // por estado re-renderizaria os 66 cards a cada card que passa.
+            const antes = cards.current[selecionado.current];
+            if (antes) antes.removeAttribute("data-selecionado");
+            const agora2 = cards.current[novoSelecionado];
+            if (agora2) agora2.setAttribute("data-selecionado", "true");
+            selecionado.current = novoSelecionado;
+          }
+        }
+
+        escalaViva = false;
+        const largRef = larg.current[0] || 300;
+        const raio = largRef * RAIO_FOCO;
+
+        for (let i = 0; i < cards.current.length; i++) {
+          const card = cards.current[i];
+          if (!card) continue;
+          const esq = pos.current[i];
+          const larguraCard = larg.current[i];
+          const foraDaVista = esq + larguraCard < bordaEsq || esq > bordaDir;
+
+          // O alvo: 0 = longe/repouso, 1 = é este que está sendo olhado.
+          let foco = 0;
+          if (!foraDaVista && !menosMovimento) {
+            if (ponteiroNoTrilho !== null) {
+              const d = (ponteiroNoTrilho - (esq + larguraCard / 2)) / raio;
+              foco = Math.exp(-d * d);
+            } else if (!temHover.current && i === novoSelecionado) {
+              foco = 1;
+            }
+          }
+
+          // Sem ponteiro E com mouse disponível, ninguém está em foco: o alvo é
+          // o repouso liso. Com foco, a curva vai de LONGE (vizinho distante) a
+          // FOCO (o card sob o cursor) — é a "diminuída gradual" pedida.
+          // ⚠️ `menosMovimento` entra AQUI e não só no cálculo do foco. Sem
+          // isso, quem pediu menos movimento receberia `foco = 0` para todos e
+          // o trilho inteiro encolheria para ESCALA_LONGE — a acessibilidade
+          // devolvendo um catálogo miniaturizado em vez de um catálogo parado.
+          const semFoco =
+            menosMovimento ||
+            (ponteiroNoTrilho === null && (temHover.current || novoSelecionado < 0));
+          let alvoEscala = semFoco
+            ? ESCALA_REPOUSO
+            : ESCALA_LONGE + (ESCALA_FOCO - ESCALA_LONGE) * foco;
+          if (pressionado.current === i) alvoEscala *= ESCALA_PRESSAO;
+
+          const anteriorEsc = escala.current[i] ?? ESCALA_REPOUSO;
+          const nova = lerp(anteriorEsc, alvoEscala, suaveEsc);
+          escala.current[i] = nova;
+          if (Math.abs(nova - alvoEscala) > ESCALA_PARADA) escalaViva = true;
+
+          if (foraDaVista) continue;
+          card.style.transform = `scale(${nova.toFixed(4)})`;
+          // O card ampliado tem de passar POR CIMA do vizinho, senão o realce
+          // vira recorte. 100 é o piso para não brigar com as setas da faixa.
+          card.style.zIndex = String(Math.round(nova * 100));
+          // `--foco` é o que o CSS usa para acender a luz na borda e o filete
+          // de ouro da prateleira. Ver `.trilho-*` em globals.css.
+          card.style.setProperty("--foco", foco.toFixed(3));
+        }
+      }
+
       quadro = requestAnimationFrame(animar);
     };
     quadro = requestAnimationFrame(animar);
@@ -441,11 +695,42 @@ export function TrilhoParallax({
   const ultimoX = useRef(0);
   const ultimoT = useRef(0);
 
+  /**
+   * Onde o ponteiro está, e um pedido de quadro.
+   *
+   * ⚠️ `esqTrilho` vem de `medir()` e NÃO é lido aqui. `pointermove` dispara a
+   * até 120Hz; uma `getBoundingClientRect()` neste ponto traria de volta o
+   * layout síncrono forçado que o conserto de 03/08 removeu — pelo caminho do
+   * mouse em vez do caminho do quadro.
+   */
+  const registrarPonteiro = (clientX: number) => {
+    ponteiro.current = clientX - esqTrilho.current;
+    acordado.current = true;
+  };
+
+  const aoSairPonteiro = () => {
+    ponteiro.current = null;
+    pressionado.current = null;
+    acordado.current = true;
+  };
+
   const aoDescer = (e: React.PointerEvent) => {
     // Botão do meio e direito não arrastam: o do meio é "abrir em nova aba" e
     // sequestrá-lo tira do visitante o gesto mais útil que um trilho de links
     // tem.
     if (e.button !== 0 && e.pointerType === "mouse") return;
+
+    // O afundamento do clique. Ricardo: *"quando clicamos não fade"* — o card
+    // não dava resposta nenhuma ao toque, e um card que não afunda parece
+    // travado no instante em que a pessoa mais precisa de confirmação.
+    //
+    // `closest` é leitura de ÁRVORE, não de layout: percorre pais, não força
+    // reflow. E acontece uma vez por clique, não por quadro.
+    const alvoCard = (e.target as HTMLElement | null)?.closest?.("[data-card]");
+    pressionado.current = alvoCard ? cards.current.indexOf(alvoCard as HTMLElement) : null;
+    if (pressionado.current === -1) pressionado.current = null;
+    registrarPonteiro(e.clientX);
+
     arrastando.current = true;
     percorrido.current = 0;
     inicioX.current = e.clientX;
@@ -466,6 +751,10 @@ export function TrilhoParallax({
   };
 
   const aoMover = (e: React.PointerEvent) => {
+    // A ampliação segue o mouse mesmo sem arrasto — é o caso comum, e é ele
+    // que faz o Dock existir. Por isso esta linha vem ANTES do `return`.
+    registrarPonteiro(e.clientX);
+
     if (!arrastando.current) return;
     const el = trilho.current;
     if (!el) return;
@@ -489,6 +778,10 @@ export function TrilhoParallax({
   };
 
   const aoSubir = (e?: React.PointerEvent) => {
+    // O afundamento solta SEMPRE, mesmo que o arrasto já tenha sido cancelado —
+    // senão um card fica preso a 0,97 até a próxima passagem do mouse.
+    pressionado.current = null;
+    acordado.current = true;
     if (!arrastando.current) return;
     arrastando.current = false;
     if (e) {
@@ -602,20 +895,41 @@ export function TrilhoParallax({
         </div>
       </div>
 
-      <div
-        ref={trilho}
-        id={idTrilho}
-        role="region"
-        aria-roledescription="carrossel"
-        aria-label={titulo || "Cursos"}
-        tabIndex={0}
-        onKeyDown={aoTeclar}
-        onPointerDown={aoDescer}
-        onPointerMove={aoMover}
-        onPointerUp={aoSubir}
-        onPointerCancel={aoSubir}
-        className="flex cursor-grab gap-4 overflow-x-hidden px-4 pb-3 active:cursor-grabbing sm:px-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
-        style={{
+      {/* ── A MOLDURA ─────────────────────────────────────────────────────
+          Ricardo, 05/08/2026: *"também fica feio e duro a forma que eles
+          nascem, deveria ter algo que delimitasse e não desse a impressão de
+          estarem jogados"*.
+
+          E era isso mesmo: os cards flutuavam direto sobre o fundo da home,
+          sem nada dizendo onde o trilho começa e onde acaba — no meio de uma
+          seção que ainda tem dois orbes de luz atrás. Sem um limite, cada card
+          lia como um objeto solto, e o conjunto não lia como uma prateleira.
+
+          São três peças, e cada uma faz um trabalho:
+          · o painel de fio de luz, que dá a caixa;
+          · o CHÃO — uma linha de luz rente à base, que faz os cards pousarem
+            sobre alguma coisa em vez de pairarem;
+          · e o esmaecimento nas duas pontas (no `mask` da faixa), que troca o
+            corte seco por uma dissolução. É ele também que faz o próximo curso
+            "surgir" da borda quando o cursor puxa o trilho pela ponta, em vez
+            de ele aparecer atravessando uma guilhotina. */}
+      <div className="trilho-moldura relative mx-4 rounded-[28px] sm:mx-8">
+        <span aria-hidden className="trilho-chao pointer-events-none absolute inset-x-10 bottom-0 h-px" />
+        <div
+          ref={trilho}
+          id={idTrilho}
+          role="region"
+          aria-roledescription="carrossel"
+          aria-label={titulo || "Cursos"}
+          tabIndex={0}
+          onKeyDown={aoTeclar}
+          onPointerDown={aoDescer}
+          onPointerMove={aoMover}
+          onPointerUp={aoSubir}
+          onPointerCancel={aoSubir}
+          onPointerLeave={aoSairPonteiro}
+          className="trilho-faixa flex cursor-grab gap-3 overflow-x-hidden px-4 pb-4 pt-4 active:cursor-grabbing sm:px-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+          style={{
           scrollBehavior: "auto",
           opacity: pronto ? 1 : 0,
           transition: "opacity .35s",
@@ -639,23 +953,46 @@ export function TrilhoParallax({
             key={`${item.slug}-${i}`}
             data-card
             data-aberto={abertoEm === i ? "true" : undefined}
-            className="group/card group relative h-[330px] w-[228px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0d16] shadow-[0_18px_50px_-24px_rgba(0,0,0,.95)] transition-[border-color,box-shadow] duration-300 hover:border-amber-400/35 hover:shadow-[0_24px_60px_-22px_rgba(245,192,78,.28)] sm:h-[440px] sm:w-[306px]"
+            /* ⚠️ SEM `transition` no `transform`: quem move a escala é o laço
+               de animação, quadro a quadro, com suavização por tempo. Uma
+               transição CSS por cima disputaria com ele e o card ficaria
+               sempre um pouco atrás do cursor — o defeito exato que o Dock não
+               pode ter. As outras propriedades continuam com transição. */
+            /* 254×365 no desktop (era 306×440). Ricardo, 05/08/2026:
+               *"poderíamos diminuir um pouco o tamanho para caber 4"*.
+
+               ⚠️ A conta tem de incluir TRÊS descontos, e foi por esquecer os
+               dois últimos que a primeira tentativa (272px) ainda mostrou só
+               três cards a 1280: a margem da moldura (`mx-8` = 64), o respiro
+               interno da faixa (`px-5` = 40) e a barra de rolagem da janela
+               (~15). Numa tela de 1200 sobram ~1081px úteis, e 4×254 + 3×12 de
+               intervalo dá 1052 — quatro cards inteiros com 29px de folga.
+
+               A proporção (0,6955) foi mantida para o recorte da capa
+               continuar valendo; ver a conta em `DESLOC_MAX`. */
+            className="trilho-card group/card group relative h-[302px] w-[210px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0d16] shadow-[0_18px_50px_-24px_rgba(0,0,0,.95)] sm:h-[365px] sm:w-[254px]"
           >
             {/* O link cobre o card inteiro em vez de envolvê-lo.
                 É o que permite o botão de ação viver POR CIMA da capa: um
                 <button> dentro de um <a> é HTML inválido, e o navegador
-                desmonta a árvore de um jeito que o clique some. */}
+                desmonta a árvore de um jeito que o clique some.
+
+                ⚠️ Desde 05/08 ele é `aria-hidden` e não recebe foco: quem
+                anuncia e recebe o teclado é o TÍTULO, dentro da prateleira.
+                Com três links para o mesmo curso no mesmo card, expor todos
+                faria o leitor de tela ler o catálogo três vezes. Este aqui
+                continua existindo porque é ele que faz a CAPA ser clicável. */}
             <Link
               href={item.href}
+              aria-hidden
+              tabIndex={-1}
               draggable={false}
               onClick={(e) => {
                 // Arrastar não navega.
                 if (percorrido.current > 8) e.preventDefault();
               }}
-              className="absolute inset-0 z-[1] rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
-            >
-              <span className="sr-only">{item.titulo}</span>
-            </Link>
+              className="absolute inset-0 z-[1] rounded-2xl"
+            />
 
             {item.estado && (
               <span
@@ -681,8 +1018,8 @@ export function TrilhoParallax({
               // "aparece vazio no meio do movimento" do handoff.
               loading={i < itens.length ? "eager" : "lazy"}
               decoding="async"
-              width={306}
-              height={440}
+              width={254}
+              height={365}
               className="pointer-events-none absolute inset-0 h-full w-full object-cover"
               style={{ transform: `scale(${ESCALA_CAPA})` }}
               onError={(e) => {
@@ -731,6 +1068,18 @@ export function TrilhoParallax({
               }}
             />
 
+            {/* ── A LUZ DA BORDA ────────────────────────────────────────────
+                Ricardo: *"podíamos ter um mini reflexo ou uma luz em alguns
+                pontos da borda do que está aumentado"*.
+
+                Não é uma borda acesa por inteiro — isso viraria contorno de
+                néon. São dois pontos de luz especular: um no canto superior
+                esquerdo e outro na base à direita, como um objeto de vidro
+                pegando duas fontes de luz da sala. A intensidade sai de
+                `--foco`, o mesmo número que decide a escala, então a luz nasce
+                junto com a ampliação em vez de piscar num limiar. */}
+            <span aria-hidden className="trilho-luz pointer-events-none absolute inset-0 rounded-2xl" />
+
             {/* A PRATELEIRA DE VIDRO.
                 O texto ficava direto sobre a ilustração, e por mais escuro que
                 fosse o véu ele continuava disputando com a arte. Um painel de
@@ -738,24 +1087,76 @@ export function TrilhoParallax({
                 que está atrás, então a leitura para de depender de o pixel de
                 trás ser escuro, e o filete claro no topo mais a sombra funda
                 fazem o painel POUSAR sobre a capa em vez de manchá-la. */}
+            {/* ⚠️ `pointer-events-auto` e `z-[2]`, e é AQUI que mora a mudança
+                de 05/08: a prateleira é o GATILHO da gaveta, no lugar do card
+                inteiro. Ricardo: *"o fato de fazermos o hover no card inteiro
+                todo não deve acionar o aumento do card explicativo"*.
+
+                Para receber `:hover` a prateleira precisa estar ACIMA do link
+                que cobre o card — `pointer-events` não atravessa empilhamento.
+                E como ela passa a cobrir os 38% de baixo, o link de card
+                inteiro deixaria de valer ali; por isso a prateleira ganha o
+                próprio link de fundo, logo abaixo. Clicar em qualquer ponto do
+                painel continua levando ao curso. */}
             <span
-              className="pointer-events-none absolute inset-x-2.5 bottom-2.5 flex flex-col rounded-2xl border-t border-white/[0.14] bg-white/[0.055] p-3.5 backdrop-blur-md backdrop-saturate-150 sm:inset-x-3 sm:bottom-3 sm:p-4"
+              data-prateleira
+              className="trilho-prateleira pointer-events-auto absolute inset-x-2.5 bottom-2.5 z-[2] flex flex-col rounded-2xl border-t border-white/[0.14] bg-white/[0.055] p-3.5 backdrop-blur-md backdrop-saturate-150 sm:inset-x-3 sm:bottom-3 sm:p-4"
+              /* A "sombrinha" pedida, e ela tem três camadas de propósito:
+                 o anel interno de 1px que fecha o contorno do vidro por
+                 dentro, o filete claro no topo que dá a aresta iluminada, e a
+                 sombra funda por baixo — é ela que faz o painel POUSAR sobre a
+                 capa em vez de manchá-la. Sem o anel, o painel se dissolvia
+                 nas laterais e só tinha borda em cima. */
               style={{
                 boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,.14), 0 -1px 0 rgba(255,255,255,.05), 0 18px 40px -16px rgba(0,0,0,.9)",
+                  "inset 0 0 0 1px rgba(255,255,255,.055), inset 0 1px 0 rgba(255,255,255,.16), 0 -1px 0 rgba(255,255,255,.05), 0 14px 34px -12px rgba(0,0,0,.92), 0 2px 10px -4px rgba(0,0,0,.7)",
               }}
             >
+              {/* O link de fundo da prateleira.
+                  `aria-hidden` + `tabIndex={-1}`: são três caminhos para o
+                  mesmo curso no mesmo card (a capa, o painel e o título), e um
+                  leitor de tela que anunciasse os três leria o catálogo em
+                  triplicado. Só o TÍTULO é o link exposto — que é também o
+                  texto que descreve o destino. */}
+              <Link
+                href={item.href}
+                aria-hidden
+                tabIndex={-1}
+                draggable={false}
+                onClick={(e) => {
+                  if (percorrido.current > 8) e.preventDefault();
+                }}
+                className="absolute inset-0 rounded-2xl"
+              />
+
               {/* O CABEÇALHO — altura fixa, e é isto que dá a "altura padrão".
                   Duas linhas de título cabem sempre; um nome curto sobra espaço
                   em vez de encolher o card, porque um trilho onde cada card
                   fecha numa altura diferente lê como defeito de alinhamento. */}
-              <span className="flex h-[42px] items-start gap-2 sm:h-[52px]">
-                <span
-                  className="line-clamp-2 flex-1 text-[15px] font-bold leading-snug text-white sm:text-lg"
-                  style={{ textShadow: "0 1px 12px rgba(0,0,0,.75)" }}
+              <span className="relative z-[1] flex h-[42px] items-start gap-2.5 sm:h-[50px]">
+                {/* A MARCA — um filete de ouro à esquerda do título.
+                    Ricardo, 05/08/2026: *"ainda falta um flair no card que tem
+                    o título, ainda está bem simplesinho … uma sombrinha, uma
+                    linha tipo divider, alguns elementos"*.
+
+                    Ela faz duas coisas de uma vez: dá um ponto de partida para
+                    o olho (o título deixa de flutuar no canto do painel) e
+                    ecoa a lombada do livro que está logo acima, na capa. É
+                    vertical por isso — uma bolinha ou um ícone seriam adorno;
+                    uma lombada é a mesma linguagem da ilustração. */}
+                <span aria-hidden className="trilho-marca mt-[3px] block w-[3px] shrink-0 rounded-full sm:mt-1" />
+
+                <Link
+                  href={item.href}
+                  draggable={false}
+                  onClick={(e) => {
+                    if (percorrido.current > 8) e.preventDefault();
+                  }}
+                  className="line-clamp-2 flex-1 text-[14px] font-bold leading-snug text-white outline-none sm:text-[16.5px] focus-visible:underline focus-visible:decoration-amber-400 focus-visible:underline-offset-4"
+                  style={{ textShadow: "0 1px 12px rgba(0,0,0,.75), 0 0 24px rgba(0,0,0,.5)" }}
                 >
                   {item.titulo}
-                </span>
+                </Link>
 
                 {/* A alavanca só existe onde não há mouse. No celular não
                     acontece `hover`, e o toque já é do link que leva ao curso —
@@ -777,10 +1178,21 @@ export function TrilhoParallax({
                 >
                   <ChevronDown size={16} />
                 </button>
+
+                {/* O DIVISOR. Fica no PÉ do cabeçalho, posicionado — se fosse
+                    um elemento no fluxo, somaria altura e quebraria a "altura
+                    padrão" de 42/50px que é a razão de o cabeçalho existir.
+
+                    Ele é curto e centrado em vez de correr de ponta a ponta:
+                    uma linha que atravessa o painel inteiro corta o card em
+                    dois; uma que morre antes das bordas separa sem dividir. */}
+                <span aria-hidden className="trilho-divisor pointer-events-none absolute inset-x-0 bottom-0 h-px" />
               </span>
 
-              {/* A GAVETA. Tudo o que não é o nome do curso mora aqui dentro. */}
-              <span className="trilho-detalhes">
+              {/* A GAVETA. Tudo o que não é o nome do curso mora aqui dentro.
+                  `relative` para ficar acima do link de fundo da prateleira —
+                  sem isto, o botão do Ateliê seria coberto por ele. */}
+              <span className="trilho-detalhes relative z-[1]">
                 <span>
                   <span className="flex flex-col gap-2 pt-2">
               <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-widest text-white/45">
@@ -878,7 +1290,8 @@ export function TrilhoParallax({
               </span>
             </span>
           </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

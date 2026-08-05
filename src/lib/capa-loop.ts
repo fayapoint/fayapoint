@@ -47,7 +47,18 @@ const APELIDOS: Record<string, string> = {
  * cursos deixaram de respirar. Um curso só entra aqui depois que o arquivo
  * está no disco.
  */
-const LOOPS_POR_SLUG: string[] = [];
+const LOOPS_POR_SLUG: string[] = [
+  "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+  "chatgpt-allowlisting",
+  "claude-cowork-colaboracao",
+  "crie-agentes-de-ia-autonomos",
+  "gemini-ia-google",
+  "ia-producao",
+  "midjourney-arte-profissional",
+  "openclaw-ia-open-source",
+  "perplexity-pesquisa-inteligente",
+  "rag-knowledge",
+];
 
 const LOOPS: Record<string, string> = {
   ...APELIDOS,

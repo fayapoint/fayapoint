@@ -1270,12 +1270,38 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
   height: 62%;
 }
 
+/* No toque não existe `hover`, então quem abre a gaveta é a SELEÇÃO: o card
+   que estiver no centro da faixa. Ricardo, 05/08/2026: *"se estivermos pensando
+   no celular, a mecânica de arrastar ou selecionar e aí o card se expandir faz
+   mais sentido por não haver o hover"*. O atributo é escrito direto no DOM pelo
+   laço de animação — ver `aplicarSelecao` em TrilhoParallax. */
+[data-card][data-selecionado="true"] .trilho-detalhes {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+[data-card][data-selecionado="true"] .trilho-veu {
+  height: 62%;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  [data-card]:hover .trilho-detalhes {
+  /* ⚠️ O GATILHO É A PRATELEIRA, NÃO O CARD (05/08/2026).
+     Ricardo: *"o fato de fazermos o hover no card inteiro todo não deve
+     acionar o aumento do card explicativo, tornando assim menos intromissivo,
+     e dando maior controle e mantendo a estética"*.
+
+     Antes, atravessar o trilho com o mouse abria e fechava seis gavetas pelo
+     caminho — o catálogo inteiro se mexia sozinho enquanto a pessoa só queria
+     chegar do outro lado. Agora passar por cima da CAPA só amplia; a gaveta
+     espera quem desça até o painel.
+
+     A prateleira cresce para CIMA (está ancorada em `bottom`), então o cursor
+     que a abriu continua dentro dela. Se crescesse para baixo, sairia de
+     debaixo do cursor, fecharia, voltaria a crescer — e piscaria em laço. */
+  [data-prateleira]:hover .trilho-detalhes {
     grid-template-rows: 1fr;
     opacity: 1;
   }
-  [data-card]:hover .trilho-veu {
+  [data-card]:has([data-prateleira]:hover) .trilho-veu {
     height: 62%;
   }
   /* Onde existe mouse, a alavanca é ruído: o hover já faz o trabalho. */
@@ -1288,6 +1314,223 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
   .trilho-detalhes,
   .trilho-veu {
     transition-duration: 1ms;
+  }
+}
+
+/* ── A MOLDURA DO TRILHO ────────────────────────────────────────────────────
+   Ricardo, 05/08/2026: *"também fica feio e duro a forma que eles nascem,
+   deveria ter algo que delimitasse e não desse a impressão de estarem
+   jogados"*.
+
+   O painel é quase invisível de propósito: 3,5% de branco e um fio de luz no
+   topo. Ele não precisa ser visto — precisa ser SENTIDO como limite. Um painel
+   com contraste de verdade competiria com os cards, que são o assunto. */
+.trilho-moldura {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.035) 0%,
+    rgba(255, 255, 255, 0.012) 38%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -40px 60px -50px rgba(0, 0, 0, 0.9);
+}
+
+/* O CHÃO. Uma única linha de luz rente à base — é ela que faz os cards
+   pousarem sobre alguma coisa em vez de pairarem no vazio. Custa um pixel. */
+.trilho-chao {
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(245, 192, 78, 0.22) 22%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(245, 192, 78, 0.22) 78%,
+    transparent
+  );
+}
+
+/* O esmaecimento das duas pontas: o corte seco vira dissolução, e o próximo
+   curso SURGE da borda em vez de atravessar uma guilhotina.
+
+   ⚠️ O `mask` fica na FAIXA e não em cada card. Na faixa é uma única camada de
+   composição; por card seriam 66. */
+.trilho-faixa {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 42px,
+    #000 calc(100% - 42px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 42px,
+    #000 calc(100% - 42px),
+    transparent 100%
+  );
+}
+
+/* ── O CARD, E A LUZ QUE ELE PEGA ───────────────────────────────────────────
+   `--foco` vai de 0 a 1 e é escrito pelo laço de animação — o MESMO número que
+   decide a escala. Tudo o que acende aqui nasce junto com a ampliação, em vez
+   de piscar quando cruza um limiar de `:hover`.
+
+   ⚠️ `transform` NÃO tem transição: quem o move é o laço, quadro a quadro. Uma
+   transição CSS por cima deixaria o card sempre um passo atrás do cursor. */
+.trilho-card {
+  --foco: 0;
+  transform-origin: center center;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+  border-color: rgba(255, 255, 255, calc(0.1 + 0.16 * var(--foco)));
+  box-shadow:
+    0 18px 50px -24px rgba(0, 0, 0, 0.95),
+    0 24px 60px -22px rgba(245, 192, 78, calc(0.3 * var(--foco)));
+}
+
+/* ── O MINI REFLEXO NA BORDA ────────────────────────────────────────────────
+   Ricardo: *"podíamos ter um mini reflexo ou uma luz em alguns pontos da borda
+   do que está aumentado"*.
+
+   Dois pontos, não a borda inteira: uma borda acesa por completo vira contorno
+   de néon e achata o objeto. Dois brilhos — um alto à esquerda, outro baixo à
+   direita — leem como vidro pegando duas fontes de luz da sala, e é isso que
+   dá volume.
+
+   A técnica é `mask` de gradiente sobre uma borda desenhada por `inset` shadow:
+   a luz existe só onde a máscara deixa. */
+.trilho-luz {
+  opacity: var(--foco);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    inset 0 0 18px -6px rgba(245, 192, 78, 0.7);
+  -webkit-mask-image:
+    radial-gradient(60% 42% at 14% 4%, #000 0%, transparent 72%),
+    radial-gradient(48% 34% at 88% 96%, #000 0%, transparent 74%);
+  mask-image:
+    radial-gradient(60% 42% at 14% 4%, #000 0%, transparent 72%),
+    radial-gradient(48% 34% at 88% 96%, #000 0%, transparent 74%);
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+}
+
+/* ── O QUE FALTAVA NA PRATELEIRA EM REPOUSO ─────────────────────────────────
+   Ricardo: *"a transparência e o material estão legais, o blur está
+   funcionando, mas quando eles estão em repouso, realmente falta algo, e esse
+   algo carrega pra quando ele aumenta"*.
+
+   O que faltava era a ARESTA. O painel tinha material e não tinha desenho:
+   nada dizia onde ele começa. O `::before` é um fio de ouro no topo da
+   prateleira — presente sempre, em 30%, e é ele que "carrega" para a
+   ampliação, subindo a 100% com `--foco` em vez de aparecer do nada.
+
+   ⚠️ `::before` e não uma `<span>` a mais: são 66 cards no DOM, e um elemento
+   extra por card é 66 nós por um filete de 1px. */
+.trilho-prateleira::before {
+  content: "";
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  top: -1px;
+  height: 1px;
+  border-radius: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(245, 192, 78, 0.9) 30%,
+    rgba(255, 245, 220, 1) 50%,
+    rgba(245, 192, 78, 0.9) 70%,
+    transparent
+  );
+  opacity: calc(0.3 + 0.7 * var(--foco));
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  /* ⚠️ `z-index: 0` explícito nos dois pseudos, e o conteúdo em `z-[1]`.
+     Sem isto eles são caixas POSICIONADAS que vêm por último na árvore, e o
+     `::after` (um clarão branco de 16%) seria pintado POR CIMA do título e do
+     preço — o painel ganharia desenho e perderia a leitura. */
+  z-index: 0;
+}
+
+/* ── A MARCA E O DIVISOR ────────────────────────────────────────────────────
+   Ricardo, 05/08/2026: *"ainda falta um flair no card que tem o título, ainda
+   está bem simplesinho, um design ali é necessário, uma sombrinha, uma linha
+   tipo divider, alguns elementos que faça ficar mais bonito"*.
+
+   O painel tinha MATERIAL (vidro, blur, transparência) e não tinha DESENHO —
+   e material sem desenho lê como caixa, não como peça. São três traços, e
+   nenhum deles é enfeite solto:
+
+   · a MARCA, o filete vertical de ouro à esquerda do título, que dá ao olho um
+     ponto de partida e ecoa a lombada do livro logo acima;
+   · o DIVISOR, a hairline no pé do cabeçalho, que separa o nome do curso do
+     resto sem esperar a gaveta abrir — em repouso ele é o único traço que diz
+     que existe mais coisa ali dentro;
+   · a SOMBRA sob o texto, que descola o título do vidro.
+
+   Os três acendem com `--foco`, como todo o resto: nascem junto com a
+   ampliação em vez de piscar num limiar. */
+.trilho-marca {
+  /* A altura acompanha a primeira linha do título, não as duas: encostada na
+     linha de cima ela lê como marca; do tamanho do bloco, lê como borda. */
+  height: 15px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 240, 205, 0.95),
+    rgba(245, 192, 78, 0.85) 55%,
+    rgba(245, 192, 78, 0.25)
+  );
+  box-shadow: 0 0 10px rgba(245, 192, 78, calc(0.25 + 0.55 * var(--foco)));
+  opacity: calc(0.62 + 0.38 * var(--foco));
+  transition: opacity 0.35s ease;
+}
+@media (min-width: 640px) {
+  .trilho-marca {
+    height: 17px;
+  }
+}
+
+.trilho-divisor {
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.16) 18%,
+    rgba(245, 192, 78, calc(0.16 + 0.3 * var(--foco))) 50%,
+    rgba(255, 255, 255, 0.16) 82%,
+    transparent
+  );
+  opacity: calc(0.55 + 0.45 * var(--foco));
+  transition: opacity 0.35s ease;
+}
+
+/* O segundo golpe de luz: um clarão baixo e largo dentro do vidro, que só
+   aparece de verdade no card ampliado. É o "reflexo" pedido, agora POR DENTRO
+   do material — junto com o fio da aresta, é o que faz o painel parecer vidro
+   grosso em vez de um retângulo translúcido. */
+.trilho-prateleira::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    120% 90% at 22% 0%,
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0.03) 42%,
+    transparent 72%
+  );
+  opacity: calc(0.35 + 0.65 * var(--foco));
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trilho-card {
+    transform: none !important;
   }
 }
 
@@ -1310,17 +1553,27 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
    ⚠️ `will-change` NÃO é declarado de propósito. Seriam três camadas de
    composição do tamanho da tela seguradas para sempre, na primeira coisa que
    a pessoa carrega. O ganho de suavidade num zoom de 44s é nulo. */
+/* ⚠️ O PICO É `var(--fundo-opacidade)`, NÃO `1`.
+   Uma animação de `opacity` SOBRESCREVE a opacidade declarada no elemento —
+   ela não multiplica. Enquanto o pico era `1`, a `opacity: .3` que o
+   componente escrevia inline valia só para o caso de UMA camada (o degrau de
+   degradação); os 17 cursos com as três fotografias chegavam a 100% a cada
+   ciclo, e o único freio era o desfoque de 34px.
+
+   Foi o que fez o ajuste de 05/08 ser perigoso: baixar o desfoque para 9px sem
+   mexer aqui deixaria a foto em opacidade cheia por baixo do título. Agora o
+   número mora num só lugar e os dois caminhos concordam. */
 @keyframes fundo-curso-troca {
   0%,
   26% {
-    opacity: 1;
+    opacity: var(--fundo-opacidade, 0.5);
   }
   35%,
   91% {
     opacity: 0;
   }
   100% {
-    opacity: 1;
+    opacity: var(--fundo-opacidade, 0.5);
   }
 }
 
