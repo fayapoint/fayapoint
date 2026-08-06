@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
 import { ProjetosPage } from "@/components/landing/ProjetosPage";
+import { generatePageMetadata, ROUTE_SEO } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Projetos FayAI — uma vida dedicada à tecnologia",
-  description:
-    "Do 386 à inteligência artificial: cursos, Ultimate Social Suite, WorldForge Studio, visão computacional de futebol, copiloto de games e o app de música sincronizada Som em Bando. Conheça os projetos e a história de Ricardo Faya.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = ROUTE_SEO["/projetos"][locale === "en" ? "en" : "pt-BR"];
+  return generatePageMetadata({
+    locale,
+    path: "/projetos",
+    title: copy.title,
+    description: copy.description,
+  });
+}
 
 export default function Projetos() {
   return <ProjetosPage />;

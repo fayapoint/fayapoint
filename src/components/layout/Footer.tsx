@@ -98,13 +98,13 @@ export function Footer() {
 
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(data?.error || "Erro ao enviar");
+        throw new Error(data?.error || t("newsletterError"));
       }
 
       setNewsletterEmail("");
-      toast.success("Inscrição realizada!");
+      toast.success(t("newsletterSuccess"));
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Erro ao enviar";
+      const message = error instanceof Error ? error.message : t("newsletterError");
       toast.error(message);
     } finally {
       setNewsletterLoading(false);

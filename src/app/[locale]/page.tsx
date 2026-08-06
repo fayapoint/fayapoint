@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { NovaLanding } from "@/components/landing/NovaLanding";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 import { getAiNews } from "@/lib/ai-news";
-import { getAllProducts } from "@/lib/products";
+import { getAllProducts, paraIdiomaLista } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { ORDEM_POR_VARIACAO_DE_CAPA } from "@/data/ordem-variacao-capas";
 
@@ -27,11 +27,17 @@ export async function generateMetadata({
   return { alternates };
 }
 
-export default async function Home() {
-  const [{ items }, courses] = await Promise.all([
-    getAiNews(3),
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const [{ items }, brutos] = await Promise.all([
+    getAiNews(3, locale),
     getAllProducts({ type: "course" }),
   ]);
+  const courses = paraIdiomaLista(brutos, locale);
 
   // O trilho da home: os 6 destaques na frente, e depois o resto do catálogo
   // ativo na ordem de maior variação visual entre as capas.

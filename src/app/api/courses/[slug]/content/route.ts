@@ -4,7 +4,7 @@ import User from '@/models/User';
 import CourseProgress from '@/models/CourseProgress';
 import Order from '@/models/Order';
 import { getAuthUser } from '@/lib/auth';
-import { getMongoClient } from '@/lib/products';
+import { getConteudoTraduzido, getMongoClient } from '@/lib/products';
 import { SubscriptionPlan, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
 import Course from '@/models/Course';
 import { isCourseFreeThisMonth } from '@/lib/monthly-course-offers';
@@ -58,6 +58,12 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
+
+    // O idioma da LEITURA. A rota é chamada pelo leitor do portal, que é client
+    // component: o locale vem na query, porque uma rota de API não tem prefixo
+    // de idioma na URL para deduzi-lo. Ausente, é português — o original.
+    const locale = new URL(request.url).searchParams.get('locale') ?? 'pt-BR';
+
     await dbConnect();
 
     const course = await Course.findOne({ slug })
@@ -80,6 +86,7 @@ export async function GET(
             name: 1,
             slug: 1,
             detailedCurriculum: 1,
+            'i18n.en.name': 1,
             contentChapters: 1,
             contentUpdatedAt: 1,
             editorialVerification: 1,
@@ -94,9 +101,15 @@ export async function GET(
       );
     }
 
-    const sanitizedContent = sanitizeCourseContent(
-      typeof product.courseContent === 'string' ? product.courseContent : 'Conteúdo em breve...'
-    );
+    // O corpo traduzido mora em `conteudoTraduzido`, fora do produto. Sem
+    // tradução (ou em português) isto devolve `null` e o original é servido.
+    const traduzido = await getConteudoTraduzido(slug, locale);
+    const markdown =
+      traduzido?.courseContent ??
+      (typeof product.courseContent === 'string' ? product.courseContent : null);
+    const nomeTraduzido = (product.i18n as { en?: { name?: string } } | undefined)?.en?.name;
+
+    const sanitizedContent = sanitizeCourseContent(markdown ?? 'Conteúdo em breve...');
 
     // Fatos voláteis ({{fact:...}} → valor atual do registry) — o motor de
     // autoresearch atualiza o registry e todos os cursos ficam atuais na hora
@@ -104,8 +117,13 @@ export async function GET(
 
     const payload = {
       content: resolvedContent || 'Conteúdo em breve...',
-      title: product.name || course?.title || slug,
-      modules: product.detailedCurriculum || fallbackDetailedCurriculum,
+      title:
+        (locale.toLowerCase().startsWith('en') ? nomeTraduzido : null) ||
+        product.name ||
+        course?.title ||
+        slug,
+      modules:
+        traduzido?.detailedCurriculum || product.detailedCurriculum || fallbackDetailedCurriculum,
       slug: product.slug || slug,
       contentChapters: countCourseContentChapters(resolvedContent),
       contentUpdatedAt: product.contentUpdatedAt || null,

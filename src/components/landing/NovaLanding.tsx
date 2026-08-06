@@ -3,12 +3,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
-import { useLocale } from "next-intl";
+import { tagIntl } from "@/lib/idioma";
+import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Copy, Check, ArrowRight, ArrowUpRight, X, GraduationCap, Wrench, Rocket, BookOpen, Gamepad2, BadgeCheck, Clock, PlayCircle } from "lucide-react";
 import {
-  MAGIC_EXAMPLES,
-  CATEGORIES,
+  categoriasDoIdioma,
+  exemplosDoIdioma,
   XP_PER_EXAMPLE,
   XP_BONUS_ACERTO,
   FREE_EXAMPLES_LIMIT,
@@ -98,6 +99,14 @@ function capaDoTrilho(c: FeaturedCourse): string {
 
 export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]; featuredCourses?: FeaturedCourse[] }) {
   const locale = useLocale();
+  const t = useTranslations("Landing");
+  // O banco do minigame tem uma versão por idioma, com os MESMOS `id` — a arte
+  // da cena e o crédito de XP no servidor são por `id`, não por texto.
+  const CATEGORIES = categoriasDoIdioma(locale);
+  const MAGIC_EXAMPLES = exemplosDoIdioma(locale);
+  // Marcadores de destaque reaproveitados pelas frases ricas (t.rich).
+  const destaque = (c: import("react").ReactNode) => <span style={{ color: GOLD }}>{c}</span>;
+  const forte = (c: import("react").ReactNode) => <strong className="text-white/95">{c}</strong>;
   // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
   // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
   const rota = (h: string) => comIdioma(h, locale);
@@ -136,9 +145,9 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         // que importa para quem está escolhendo, e lê como cuidado contínuo em
         // vez de conserto pontual. A condição não mudou: continua sendo o mesmo
         // `revisado`, os mesmos cursos.
-        ...(c.revisado ? { estado: { rotulo: "Conteúdo atualizado", tom: "disponivel" as const } } : {}),
+        ...(c.revisado ? { estado: { rotulo: t("featured.stateLabel"), tom: "disponivel" as const } } : {}),
       })),
-    [featuredCourses, locale],
+    [featuredCourses, locale, t],
   );
   const [stage, setStage] = useState<Stage>("pick");
   const [category, setCategory] = useState<ExampleCategory | null>(null);
@@ -186,7 +195,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           const res = await r.json().catch(() => null);
           localStorage.setItem("fayai_landing", JSON.stringify({ ...data, claimed: true }));
           if (res?.claimed && !cancelled) {
-            setCreditMsg(`+${res.xp} XP da sua jornada anterior creditados na sua conta ✨`);
+            setCreditMsg(t("xpCreditedPrevious", { xp: res.xp }));
             setTimeout(() => setCreditMsg(null), 4200);
           }
         }
@@ -302,7 +311,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               playedIds: [...(a?.playedIds ?? []), current.id],
               trail: a?.trail,
             }));
-            setCreditMsg(`+${res.xp} XP creditados na sua conta ✨`);
+            setCreditMsg(t("xpCredited", { xp: res.xp }));
             setTimeout(() => setCreditMsg(null), 3200);
             // Portal reflete sem F5: atualiza contexto + localStorage
             if (user) {
@@ -370,6 +379,12 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
     }));
   }, [burst]);
 
+  // Sufixos costurados na frase do acerto. Vivem fora do JSX porque a mesma
+  // dupla entra em duas mensagens diferentes, e porque string vazia é o estado
+  // normal (sem combo, deslogado) — não é ausência de tradução.
+  const comboSufixo = combo > 1 ? t("combo", { n: combo }) : "";
+  const contaSufixo = logged ? t("onAccount") : "";
+
   const progressDots = useMemo(
     () => Array.from({ length: FREE_EXAMPLES_LIMIT }, (_, i) => i < seenIds.length),
     [seenIds.length]
@@ -430,7 +445,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             <Sparkles size={15} />
             <span>
               {logged && account ? `Nv ${account.level} · ` : ""}
-              {pillXp.toLocaleString("pt-BR")} XP
+              {pillXp.toLocaleString(tagIntl(locale))} XP
             </span>
             <AnimatePresence>
               {xpPop && (
@@ -453,13 +468,15 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               className="fx-shine flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
               style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
             >
-              <span className="hidden sm:inline">Oi, {(user.name || "aluno").split(" ")[0]}!</span>
-              <span>Meu Portal</span>
+              <span className="hidden sm:inline">
+                {t("greeting", { name: (user.name || t("studentFallback")).split(" ")[0] })}
+              </span>
+              <span>{t("myPortal")}</span>
               <ArrowRight size={15} />
             </Link>
           ) : (
             <Link href={rota("/login")} className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
-              Entrar
+              {t("signIn")}
             </Link>
           )}
         </div>
@@ -490,33 +507,34 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     ))}
                   </span>
                   <span className="text-sm font-bold">
-                    Continuar minha trilha{" "}
+                    {t("continueTrail")}{" "}
                     <span style={{ color: GOLD }}>
-                      ({account.trail.done} de {account.trail.total})
+                      {t("trailProgress", { done: account.trail.done, total: account.trail.total })}
                     </span>
                   </span>
                   <ArrowRight size={15} className="text-white/50 group-hover:text-white transition-colors" />
                 </Link>
               )}
               <h1 className="text-4xl sm:text-6xl md:text-7xl leading-[0.95] tracking-wide" style={bebas}>
-                O QUE A <span style={{ color: GOLD }}>IA</span> FAZ POR VOCÊ
-                <br />
-                EM{" "}
-                <span
-                  style={{
-                    background: "linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6)",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    color: "transparent",
-                  }}
-                >
-                  30 SEGUNDOS
-                </span>
-                ?
+                {t.rich("heroTitle", {
+                  destaque,
+                  br: () => <br />,
+                  gradiente: (c) => (
+                    <span
+                      style={{
+                        background: "linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6)",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                      }}
+                    >
+                      {c}
+                    </span>
+                  ),
+                })}
               </h1>
               <p className="mt-4 text-base sm:text-lg text-white/65 max-w-xl mx-auto">
-                Escolha um pedaço da sua vida. A gente mostra a mágica — e o passo a passo para
-                você repetir agora, de graça.
+                {t("heroSubtitle")}
               </p>
 
               <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -570,7 +588,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               {/* fechar */}
               <button
                 onClick={closeCard}
-                aria-label="Fechar e voltar às categorias"
+                aria-label={t("closeCard")}
                 className="absolute top-4 right-4 rounded-full p-2 text-white/50 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               >
                 <X size={20} />
@@ -591,7 +609,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 </div>
                 {logged ? (
                   <span className="shrink-0 mt-2 text-[11px] font-bold text-white/45 whitespace-nowrap">
-                    {playedIds.length}/{MAGIC_EXAMPLES.length} jogados
+                    {t("played", { done: playedIds.length, total: MAGIC_EXAMPLES.length })}
                   </span>
                 ) : (
                   <div className="flex gap-1.5 shrink-0 mt-2">
@@ -641,9 +659,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               {!revealed ? (
                 <div className="mt-6">
                   <p className="text-sm font-extrabold uppercase tracking-wider" style={{ color: accent }}>
-                    {treino
-                      ? "🎓 Modo treino — este exemplo já rendeu XP na sua conta"
-                      : `🎯 Seu palpite vale +${XP_BONUS_ACERTO} XP`}
+                    {treino ? t("trainingMode") : t("guessWorth", { xp: XP_BONUS_ACERTO })}
                   </p>
                   <p className="mt-1 text-base sm:text-lg font-bold">{current.quiz.question}</p>
                   <div className="mt-3 space-y-2">
@@ -678,16 +694,24 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     >
                       {guess === current.quiz.answer
                         ? treino
-                          ? `🎯 ACERTOU! Modo treino — XP já creditado antes${combo > 1 ? ` · combo x${combo}` : ""}`
-                          : `🎯 ACERTOU! +${XP_PER_EXAMPLE + XP_BONUS_ACERTO} XP${logged ? " na sua conta" : ""}${combo > 1 ? ` · combo x${combo}` : ""}`
+                          ? t("correctTraining", { combo: comboSufixo })
+                          : t("correct", {
+                              xp: XP_PER_EXAMPLE + XP_BONUS_ACERTO,
+                              conta: contaSufixo,
+                              combo: comboSufixo,
+                            })
                         : treino
-                          ? `✨ Quase! A resposta era: ${current.quiz.options[current.quiz.answer]} · modo treino`
-                          : `✨ Quase! A resposta era: ${current.quiz.options[current.quiz.answer]} · +${XP_PER_EXAMPLE} XP${logged ? " na sua conta" : ""}`}
+                          ? t("closeTraining", { answer: current.quiz.options[current.quiz.answer] })
+                          : t("closeMiss", {
+                              answer: current.quiz.options[current.quiz.answer],
+                              xp: XP_PER_EXAMPLE,
+                              conta: contaSufixo,
+                            })}
                     </div>
                   )}
                   <div className="rounded-2xl p-4" style={{ border: `2px solid ${accent}77`, background: "#0c0e1d" }}>
                     <p className="text-xs font-extrabold uppercase tracking-wider mb-1.5" style={{ color: accent }}>
-                      ✨ O resultado
+                      {t("resultLabel")}
                     </p>
                     <p className="text-sm sm:text-base leading-relaxed">{current.result}</p>
                   </div>
@@ -695,7 +719,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   <div className="rounded-2xl p-4 border-2 border-white/10" style={{ background: "#0c0e1d" }}>
                     <div className="flex items-center justify-between mb-1.5">
                       <p className="text-xs font-extrabold text-white/45 uppercase tracking-wider">
-                        🪄 A receita — cole no ChatGPT, Claude ou Gemini
+                        {t("recipeLabel")}
                       </p>
                       <button
                         onClick={copyPrompt}
@@ -703,14 +727,14 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         style={{ color: GOLD }}
                       >
                         {copied ? <Check size={14} /> : <Copy size={14} />}
-                        {copied ? "Copiado!" : "Copiar"}
+                        {copied ? t("copied") : t("copy")}
                       </button>
                     </div>
                     <p className="text-xs sm:text-sm text-white/60 leading-relaxed">{current.prompt}</p>
                   </div>
 
                   <p className="text-xs sm:text-sm text-white/60">
-                    <span className="font-bold text-white">Na sua vida:</span> {current.apply}
+                    <span className="font-bold text-white">{t("inYourLife")}</span> {current.apply}
                   </p>
 
                   {!limitReached ? (
@@ -722,13 +746,13 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         className="fx-shine flex-1 rounded-2xl py-3.5 font-extrabold flex items-center justify-center gap-2 cursor-pointer text-[#1a1405]"
                         style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.3)", color: "#241a05" }}
                       >
-                        Próxima mágica <ArrowRight size={18} />
+                        {t("nextMagic")} <ArrowRight size={18} />
                       </motion.button>
                       <button
                         onClick={closeCard}
                         className="flex-1 rounded-2xl border-2 border-white/15 py-3.5 font-semibold text-white/60 hover:text-white hover:border-white/35 transition-colors cursor-pointer"
                       >
-                        Trocar categoria
+                        {t("switchCategory")}
                       </button>
                     </div>
                   ) : logged ? (
@@ -738,18 +762,15 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                       style={{ border: `2.5px solid ${GOLD}`, background: "rgba(245,192,78,.08)" }}
                     >
                       <p className="text-2xl sm:text-3xl tracking-wide" style={bebas}>
-                        🏆 VOCÊ EXPLOROU TODAS AS MÁGICAS!
+                        {t("allExplored")}
                       </p>
-                      <p className="mt-1.5 text-sm text-white/65">
-                        Cada XP está guardado na sua conta. A trilha continua no seu portal —
-                        cursos, desafios e o Arcade da IA esperam por você.
-                      </p>
+                      <p className="mt-1.5 text-sm text-white/65">{t("allExploredBody")}</p>
                       <Link
                         href={rota("/portal")}
                         className="fx-magic fx-shine mt-4 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
                         style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
                       >
-                        Continuar no meu Portal <ArrowRight size={18} />
+                        {t("continueInPortal")} <ArrowRight size={18} />
                       </Link>
                     </motion.div>
                   ) : (
@@ -759,18 +780,15 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                       style={{ border: `2.5px solid ${GOLD}`, background: "rgba(245,192,78,.08)" }}
                     >
                       <p className="text-2xl sm:text-3xl tracking-wide" style={bebas}>
-                        🏆 VOCÊ GANHOU <span style={{ color: GOLD }}>{xp} XP</span>!
+                        {t.rich("youEarned", { destaque, xp })}
                       </p>
-                      <p className="mt-1.5 text-sm text-white/65">
-                        Crie sua conta grátis para continuar — seus XP vão com você, e a próxima
-                        mágica é personalizada para a sua vida.
-                      </p>
+                      <p className="mt-1.5 text-sm text-white/65">{t("youEarnedBody")}</p>
                       <Link
                         href={rota("/registro")}
                         className="fx-magic fx-shine mt-4 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
                         style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, boxShadow: "0 10px 30px rgba(245,192,78,.35)", color: "#241a05" }}
                       >
-                        Continuar grátis <ArrowRight size={18} />
+                        {t("continueFree")} <ArrowRight size={18} />
                       </Link>
                     </motion.div>
                   )}
@@ -807,10 +825,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               <div className="order-2 lg:order-1">
             <div className="flex items-baseline gap-3 flex-wrap">
               <h3 className="text-2xl sm:text-4xl tracking-wide" style={bebas}>
-                O ÚNICO CURSO QUE É <span style={{ color: GOLD }}>REESCRITO PARA VOCÊ</span>
+                {t.rich("atelie.title", { destaque })}
               </h3>
               <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-amber-300/80">
-                <Sparkles size={13} /> só aqui
+                <Sparkles size={13} /> {t("atelie.badge")}
               </span>
             </div>
 
@@ -821,17 +839,14 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 lê, e isso tem de estar dito com todas as letras na primeira
                 página, não descoberto três cliques adentro do portal. */}
             <p className="mt-2 max-w-2xl text-sm sm:text-base leading-relaxed text-white/70">
-              Conte o que você faz. Cada capítulo é <strong className="text-white/95">reescrito
-              inteiro</strong> com os seus exemplos, o seu vocabulário e o seu negócio — não é um
-              resumo, não é um prefácio personalizado, não é a mesma aula com o seu nome no topo.
-              É o curso inteiro na sua realidade.
+              {t.rich("atelie.body", { forte })}
             </p>
 
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               {[
-                { n: "1", t: "Escolha o curso", d: "Qualquer um do catálogo que você já pode abrir." },
-                { n: "2", t: "Fale do seu negócio", d: "O que você vende, para quem, com que palavras." },
-                { n: "3", t: "Leia a sua versão", d: "Os exemplos passam a ser do seu dia, capítulo a capítulo." },
+                { n: "1", t: t("atelie.step1Title"), d: t("atelie.step1Desc") },
+                { n: "2", t: t("atelie.step2Title"), d: t("atelie.step2Desc") },
+                { n: "3", t: t("atelie.step3Title"), d: t("atelie.step3Desc") },
               ].map((p) => (
                 <div key={p.n} className="glass rounded-2xl px-4 py-3.5">
                   <span
@@ -853,13 +868,13 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
               >
                 <Sparkles size={15} />
-                Ver com a minha cara
+                {t("atelie.cta")}
                 <ArrowRight size={15} />
               </Link>
               {/* A gratuidade da amostra é o que tira o medo de clicar, então
                   ela é dita AQUI e não depois do login. */}
               <span className="text-xs text-white/50">
-                A amostra do primeiro capítulo é <strong className="text-white/75">grátis</strong> — sem gastar crédito.
+                {t.rich("atelie.free", { forte: (c) => <strong className="text-white/75">{c}</strong> })}
               </span>
             </div>
               </div>
@@ -890,8 +905,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     }}
                   />
                   <span className="pointer-events-none absolute inset-x-0 bottom-0 p-4 text-xs leading-relaxed text-white/75">
-                    O mesmo capítulo, reescrito para uma confeitaria, um escritório de contabilidade
-                    e uma clínica.
+                    {t("atelie.videoCaption")}
                   </span>
                 </div>
               </div>
@@ -923,10 +937,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           <div className="relative max-w-5xl mx-auto">
             <div className="flex items-baseline gap-3 mb-1 flex-wrap">
               <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
-                COMECE POR <span style={{ color: GOLD }}>AQUI</span>
+                {t.rich("featured.title", { destaque })}
               </h3>
               <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-lime-300/80">
-                <BadgeCheck size={13} /> revisados aula por aula
+                <BadgeCheck size={13} /> {t("featured.badge")}
               </span>
             </div>
             {/* A contagem sai do array, não da mão. Estava escrita como "Os 4
@@ -944,9 +958,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 coisa, senão o card promete cuidado e a legenda logo acima
                 confessa refação. */}
             <p className="text-sm text-white/55 mb-3 max-w-xl">
-              Os {featuredCourses.filter((c) => c.revisado).length} primeiros estão com o conteúdo
-              atualizado — texto, exemplos e mídia revistos aula por aula. Depois deles, o catálogo
-              inteiro: {featuredCourses.length} cursos.
+              {t("featured.body", {
+                revisados: featuredCourses.filter((c) => c.revisado).length,
+                total: featuredCourses.length,
+              })}
             </p>
           </div>
 
@@ -968,10 +983,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         <div className="relative max-w-5xl mx-auto">
           <div className="flex items-baseline gap-3 mb-2.5">
             <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
-              BLOG IA <span style={{ color: GOLD }}>HOJE</span>
+              {t.rich("news.title", { destaque })}
             </h3>
             <span className="text-[11px] uppercase tracking-wider text-white/40">
-              {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long" })}
+              {new Date().toLocaleDateString(tagIntl(locale), { day: "2-digit", month: "long" })}
             </span>
           </div>
           <div className="grid sm:grid-cols-3 gap-3">
@@ -1009,7 +1024,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     {item.source && (
                       <span className="block mt-2 text-[10px] font-semibold uppercase tracking-wider text-white/35">
                         {item.source}
-                        {item.date ? ` · ${new Date(item.date).toLocaleDateString("pt-BR")}` : ""}
+                        {item.date ? ` · ${new Date(item.date).toLocaleDateString(tagIntl(locale))}` : ""}
                       </span>
                     )}
                   </span>
@@ -1029,11 +1044,11 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           <div id="wpp-acoplado" className="empty:hidden mb-3" />
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             {[
-              { href: "/cursos", icon: GraduationCap, label: "Cursos", desc: "18 cursos com certificado", color: "#38bdf8" },
-              { href: "/arcade", icon: Gamepad2, label: "Arcade", desc: "5 jogos grátis, sem cadastro", color: "#f5c04e" },
-              { href: "/ferramentas", icon: Wrench, label: "Ferramentas", desc: "100+ ferramentas de IA", color: "#a78bfa" },
-              { href: "/projetos", icon: Rocket, label: "Projetos", desc: "O ecossistema FayAI e a história por trás", color: "#f472b6" },
-              { href: "/noticias", icon: BookOpen, label: "Blog IA Hoje", desc: "Notícias e guias de IA todo dia", color: "#a3e635" },
+              { href: "/cursos", icon: GraduationCap, label: t("links.courses"), desc: t("links.coursesDesc"), color: "#38bdf8" },
+              { href: "/arcade", icon: Gamepad2, label: t("links.arcade"), desc: t("links.arcadeDesc"), color: "#f5c04e" },
+              { href: "/ferramentas", icon: Wrench, label: t("links.tools"), desc: t("links.toolsDesc"), color: "#a78bfa" },
+              { href: "/projetos", icon: Rocket, label: t("links.projects"), desc: t("links.projectsDesc"), color: "#f472b6" },
+              { href: "/noticias", icon: BookOpen, label: t("links.blog"), desc: t("links.blogDesc"), color: "#a3e635" },
             ].map(({ href, icon: Icon, label, desc, color }) => (
               <Link
                 key={href}
@@ -1054,7 +1069,9 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             ))}
           </div>
           <p className="mt-3 text-center text-[11px] text-white/35">
-            © {new Date().getFullYear()} FayAI — aprenda IA fazendo, não assistindo.
+            {/* String, não número: o ICU formata número com separador de
+                milhar e o ano viraria "2.026". */}
+            {t("copyright", { year: String(new Date().getFullYear()) })}
           </p>
         </div>
       </footer>

@@ -284,6 +284,10 @@ export default async function middleware(request: NextRequest) {
   if (
     pathname === "/robots.txt" ||
     pathname === "/sitemap.xml" ||
+    // O mapa para motores de resposta. Sem esta linha ele levaria 308 para
+    // `/pt-BR/llms.txt`, que nao existe — e a convencao e que o arquivo mora na
+    // RAIZ. Um 404 aqui e um mapa que ninguem le.
+    pathname === "/llms.txt" ||
     pathname === "/google302d853608efe717.html" // Search Console verification
   ) {
     return NextResponse.next();
@@ -723,8 +727,16 @@ export default async function middleware(request: NextRequest) {
 
     if (!authToken) {
       // No token - redirect to login with redirect param
+      //
+      // ⚠️ O prefixo de idioma PRECISA sobreviver ao redirecionamento. Escrito
+      // como `/login` puro, o destino não tem locale: o middleware roda de novo,
+      // cai no bloco `!hasLocalePrefix` e manda para `/pt-BR/login`, porque sem
+      // cookie o padrão é português. Medido em 06/08/2026 no build local: quem
+      // pedia `/en/portal` deslogado aterrissava numa tela de login inteira em
+      // português. Dois redirecionamentos, e o idioma escolhido perdido no meio
+      // — o mesmo descasamento de prefixo de [[reference_seo_armadilhas_locale]].
       const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = "/login";
+      loginUrl.pathname = hasLocalePrefix ? `/${segments[0]}/login` : "/login";
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }

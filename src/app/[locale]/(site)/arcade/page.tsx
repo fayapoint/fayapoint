@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PublicArcade } from "@/components/landing/PublicArcade";
-import { generatePageMetadata } from "@/lib/metadata";
+import { generatePageMetadata, ROUTE_SEO } from "@/lib/metadata";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -14,13 +14,13 @@ interface Props {
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const copy = ROUTE_SEO["/arcade"][locale === "en" ? "en" : "pt-BR"];
 
   return generatePageMetadata({
     locale,
     path: "/arcade",
-    title: "Arcade Grátis — Jogue Sem Cadastro | FayAi",
-    description:
-      "Experimente 5 minigames de IA generativa da FayAi sem precisar criar conta. Monte prompts, separe verdade de mito e mais.",
+    title: copy.title,
+    description: copy.description,
   });
 }
 

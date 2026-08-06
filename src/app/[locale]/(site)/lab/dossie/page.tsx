@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { montarDossie } from "@/lib/persona";
+import { ROUTE_SEO } from "@/lib/metadata";
 import BancadaDossie from "./BancadaDossie";
 
 /**
@@ -13,10 +14,18 @@ import BancadaDossie from "./BancadaDossie";
  *
  * Fica fora do índice e fora do sitemap de propósito.
  */
-export const metadata: Metadata = {
-  title: "Bancada do dossiê — FayAI",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = ROUTE_SEO["/lab/dossie"][locale === "en" ? "en" : "pt-BR"];
+  return {
+    title: copy.title,
+    robots: { index: false, follow: false },
+  };
+}
 
 export const dynamic = "force-static";
 

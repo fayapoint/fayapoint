@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Gamepad2, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { usePostHog } from "posthog-js/react";
 import { PromptBuilderGame } from "@/components/portal/PromptBuilderGame";
 import { VerdadeOuMito } from "@/components/portal/games/VerdadeOuMito";
@@ -37,19 +38,18 @@ interface Jogo {
  * código não fazia. Cada linha agora diz o que a mão vai fazer, porque é isso
  * que diferencia um jogo do outro na hora de escolher.
  */
-const JOGOS: Jogo[] = [
-  { id: "monte-o-prompt", titulo: "Monte o Prompt", desc: "A receita dos 5 ingredientes de uma imagem profissional.", cor: "#f472b6" },
-  { id: "verdade-ou-mito", titulo: "Verdade ou Mito?", desc: "60 segundos no relógio. Deslize rápido e emende acertos.", cor: "#38bdf8" },
-  { id: "qual-prompt", titulo: "Qual Prompt Gerou Isto?", desc: "A imagem entra borrada. Adivinhe antes de ficar nítida.", cor: "#a78bfa" },
-  { id: "batalha-prompts", titulo: "Batalha de Prompts", desc: "Você tem 500 fichas. Aposte no prompt que vence.", cor: "#fb923c" },
-  { id: "caca-prompt", titulo: "Caça ao Prompt Perdido", desc: "Arraste os ingredientes certos e desvie dos intrusos.", cor: "#a3e635" },
+/** Ordem e cor. Titulo e descricao vem de `PublicArcade.games.<id>`. */
+const JOGOS: { id: PublicGameId; cor: string }[] = [
+  { id: "monte-o-prompt", cor: "#f472b6" },
+  { id: "verdade-ou-mito", cor: "#38bdf8" },
+  { id: "qual-prompt", cor: "#a78bfa" },
+  { id: "batalha-prompts", cor: "#fb923c" },
+  { id: "caca-prompt", cor: "#a3e635" },
 ];
 
-const TITULOS: Record<PublicGameId, string> = Object.fromEntries(
-  JOGOS.map((j) => [j.id, j.titulo])
-) as Record<PublicGameId, string>;
-
 export function PublicArcade() {
+  const t = useTranslations("PublicArcade");
+  const titulo = (id: PublicGameId) => t(`games.${id}.titulo`);
   const posthog = usePostHog();
   const [jogo, setJogo] = useState<PublicGameId | null>(null);
 
@@ -86,12 +86,11 @@ export function PublicArcade() {
         <div className="mb-8 text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-1.5 text-sm font-medium text-amber-400">
             <Gamepad2 size={16} />
-            Arcade grátis — sem cadastro
+            {t("badge")}
           </div>
-          <h1 className="text-3xl font-extrabold sm:text-4xl">Experimente antes de criar sua conta</h1>
+          <h1 className="text-3xl font-extrabold sm:text-4xl">{t("title")}</h1>
           <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
-            Os mesmos jogos de dentro da plataforma FayAi, jogáveis agora — dá um gostinho real do que você
-            aprende aqui.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -109,19 +108,19 @@ export function PublicArcade() {
                 onClick={closeGame}
                 className="mb-4 flex items-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
               >
-                <ArrowLeft size={15} /> Voltar para os jogos
+                <ArrowLeft size={15} /> {t("back")}
               </button>
               <div className="overflow-hidden rounded-2xl border border-border bg-card">
                 <ArcadeVisual
                   gameId={jogo}
-                  alt={`Arte animada do jogo ${TITULOS[jogo]}`}
+                  alt={t("artAlt", { titulo: titulo(jogo) })}
                   active
                   eager
                   className="aspect-[16/5] border-b border-border"
                   imageClassName="transition-transform duration-700 hover:scale-[1.02]"
                 />
                 <div className="p-4 md:p-6">
-                  <h2 className="mb-4 text-lg font-bold">{TITULOS[jogo]}</h2>
+                  <h2 className="mb-4 text-lg font-bold">{titulo(jogo)}</h2>
                   {jogo === "monte-o-prompt" && <PromptBuilderGame />}
                   {jogo === "verdade-ou-mito" && <VerdadeOuMito />}
                   {jogo === "qual-prompt" && <QualPrompt />}
@@ -147,15 +146,15 @@ export function PublicArcade() {
                 >
                   <ArcadeVisual
                     gameId={j.id}
-                    alt={`Arte animada do jogo ${j.titulo}`}
+                    alt={t("artAlt", { titulo: titulo(j.id) })}
                     className="aspect-[16/10]"
                     imageClassName="transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="p-4">
                     <h3 className="text-base font-bold" style={{ color: j.cor }}>
-                      {j.titulo}
+                      {titulo(j.id)}
                     </h3>
-                    <p className="mt-1 text-sm text-muted-foreground">{j.desc}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{t(`games.${j.id}.desc`)}</p>
                   </div>
                 </button>
               ))}
@@ -165,17 +164,16 @@ export function PublicArcade() {
 
         <div className="mx-auto mt-12 max-w-lg rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6 text-center">
           <Sparkles className="mx-auto mb-2 text-amber-400" size={22} />
-          <h3 className="text-lg font-bold">Gostou? Isso é só o começo.</h3>
+          <h3 className="text-lg font-bold">{t("ctaTitle")}</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Crie sua conta grátis e desbloqueie cursos completos, o jogo de Palpite em 30 Segundos com XP de
-            verdade, certificados e muito mais.
+            {t("ctaBody")}
           </p>
           <Link
             href="/registro"
             onClick={() => posthog?.capture("public_arcade_signup_cta_click")}
             className="mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 font-bold text-black transition-colors hover:bg-amber-400"
           >
-            Criar conta grátis <ArrowRight size={16} />
+            {t("ctaButton")} <ArrowRight size={16} />
           </Link>
         </div>
       </div>

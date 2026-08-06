@@ -112,6 +112,7 @@ const PLANS = [
     href: "/checkout/profissional",
     highlighted: true,
     badge: "Mais Popular",
+    badgeEn: "Most Popular",
     gradient: "from-amber-500 to-yellow-600",
     features: {
       "Curso grátis do mês": true,
@@ -160,6 +161,30 @@ const PLANS = [
 ] as const;
 
 const FEATURE_KEYS = Object.keys(PLANS[0].features) as (keyof typeof PLANS[0]["features"])[];
+
+/**
+ * O rótulo inglês de cada linha da tabela de comparação.
+ *
+ * As CHAVES de `features` continuam em português porque são o que amarra plano
+ * e recurso — renomeá-las obrigaria a mexer nos quatro planos e em qualquer
+ * lugar que leia `plan.features["..."]`. O que a pessoa lê passa por aqui.
+ *
+ * ⚠️ Chave nova em `features` sem entrada aqui aparece em português no site em
+ * inglês. É o comportamento certo (ver `escolher` em @/lib/idioma): melhor a
+ * linha aparecer na língua errada do que sumir da tabela.
+ */
+const FEATURE_LABELS_EN: Record<string, string> = {
+  "Curso grátis do mês": "Free course of the month",
+  "Certificado na oferta do mês": "Certificate on the monthly offer",
+  "3 capítulos de prévia em outros cursos": "3 preview chapters in other courses",
+  "Cursos iniciantes/mês": "Beginner courses/mo",
+  "Cursos intermediários/mês": "Intermediate courses/mo",
+  "Cursos avançados/mês": "Advanced courses/mo",
+  "Créditos IA/mês": "AI credits/mo",
+  "Desconto em certificações": "Discount on certifications",
+  "Suporte prioritário": "Priority support",
+  "Conteúdo antecipado": "Early access to content",
+};
 
 const FAQ_ITEMS_PT = [
   { q: "Posso cancelar a qualquer momento?", a: "Sim. Sem fidelidade, sem multa. Seu acesso continua até o fim do ciclo pago." },
@@ -350,7 +375,7 @@ export default function PricingPage() {
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                           <span className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
                             <Star className="w-3 h-3 inline mr-1" />
-                            {plan.badge}
+                            {isPt ? plan.badge : (plan as { badgeEn?: string }).badgeEn ?? plan.badge}
                           </span>
                         </div>
                       )}
@@ -485,7 +510,9 @@ export default function PricingPage() {
                 <tbody>
                   {FEATURE_KEYS.map((feature, idx) => (
                     <tr key={feature} className={idx % 2 === 0 ? "bg-card/20" : ""}>
-                      <td className="p-4 text-sm text-muted-foreground border-b border-border/30">{feature}</td>
+                      <td className="p-4 text-sm text-muted-foreground border-b border-border/30">
+                        {isPt ? feature : FEATURE_LABELS_EN[feature] ?? feature}
+                      </td>
                       {PLANS.map((plan) => {
                         const val = plan.features[feature];
                         return (

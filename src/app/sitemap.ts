@@ -11,18 +11,37 @@ const SITE_URL =
   "https://fayai.com.br";
 
 /**
- * Só pt-BR entra no sitemap.
+ * As DUAS árvores entram no sitemap desde 06/08/2026.
  *
- * A árvore `/en/` existe como rota, mas serve o MESMO texto em português —
- * verificado em 27/07/2026. Anunciar 64 cópias ao Google num domínio novo
- * gastava metade do orçamento de rastreamento com duplicata e ainda dava a
- * ele a chance de escolher a versão errada como canônica. O `site:` mostrava
- * exatamente isso: páginas indexadas em `/cursos` e `/blog` com título antigo
- * em inglês, e o aviso de resultados "bastante semelhantes" omitidos.
+ * `en` tinha saído em 27/07 porque a árvore existia como rota mas servia o
+ * MESMO texto em português. Anunciar 64 cópias ao Google num domínio novo
+ * gastava metade do orçamento de rastreamento com duplicata e ainda dava a ele
+ * a chance de eleger a versão errada como canônica — o `site:` mostrava
+ * exatamente isso, páginas indexadas com título antigo em inglês e o aviso de
+ * resultados "bastante semelhantes" omitidos.
  *
- * Quando existir tradução de verdade, `en` volta para cá — junto com ela.
+ * A condição para voltar era existir tradução, e agora existe. Mas a volta não
+ * é só acrescentar o locale à lista: cada entrada declara `alternates.languages`
+ * apontando para a sua irmã. Sem isso o Google vê 64 pares de páginas parecidas
+ * e escolhe uma; com isso ele entende que são a mesma página em duas línguas e
+ * mostra a certa para cada pessoa.
+ *
+ * ⚠️ A declaração precisa bater com o `<link rel="alternate">` que
+ * `generatePageMetadata` emite no HTML. Divergir entre sitemap e página faz o
+ * Google descartar os dois sinais.
  */
-const LOCALES = ["pt-BR"] as const;
+const LOCALES = ["pt-BR", "en"] as const;
+
+/** O par de idiomas de um caminho, no formato que o sitemap do Next espera. */
+function alternates(path: string) {
+  return {
+    languages: {
+      "pt-BR": url(`/pt-BR${path}`),
+      en: url(`/en${path}`),
+      "x-default": url(`/pt-BR${path}`),
+    },
+  };
+}
 
 // O sitemap consulta o banco (cursos ativos + artigos do blog), então precisa
 // ser revalidado — antes era uma função síncrona congelada no build, e cada
@@ -149,6 +168,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const p of staticPaths) {
       entries.push({
         url: url(`/${locale}${p}`),
+        alternates: alternates(p),
         lastModified: now,
         changeFrequency: p === "" ? "daily" : "weekly",
         priority: p === "" ? 1 : 0.7,
@@ -158,6 +178,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const p of secondaryPaths) {
       entries.push({
         url: url(`/${locale}${p}`),
+        alternates: alternates(p),
         lastModified: now,
         changeFrequency: "monthly",
         priority: p.startsWith("/termos") || p.startsWith("/privacidade") || p.startsWith("/exclusao") ? 0.3 : 0.5,
@@ -167,6 +188,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const slug of toolSlugs) {
       entries.push({
         url: url(`/${locale}/ferramentas/${slug}`),
+        alternates: alternates(`/ferramentas/${slug}`),
         lastModified: now,
         changeFrequency: "monthly",
         priority: 0.5,
@@ -191,6 +213,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const m of microcursos) {
       entries.push({
         url: url(`/${locale}/inventando/${m.slug}`),
+        alternates: alternates(`/inventando/${m.slug}`),
         lastModified: new Date(m.publicadoEm),
         changeFrequency: "monthly",
         priority: 0.75,
@@ -200,6 +223,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const slug of courseSlugs) {
       entries.push({
         url: url(`/${locale}/curso/${slug}`),
+        alternates: alternates(`/curso/${slug}`),
         lastModified: now,
         changeFrequency: "monthly",
         priority: 0.6,
@@ -211,6 +235,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // que é copy comercial. Prioridade acima de propósito.
       entries.push({
         url: url(`/${locale}/curso/${slug}/previa`),
+        alternates: alternates(`/curso/${slug}/previa`),
         lastModified: now,
         changeFrequency: "monthly",
         priority: 0.7,
@@ -224,6 +249,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // /noticias/<slug> é a URL canônica e a que o hub linka internamente;
         // /blog/<slug> é rota legada que renderiza a listagem genérica.
         url: url(`/${locale}/noticias/${article.slug}`),
+        alternates: alternates(`/noticias/${article.slug}`),
         lastModified: Number.isNaN(published.valueOf()) ? now : published,
         changeFrequency: "monthly",
         priority: 0.8,

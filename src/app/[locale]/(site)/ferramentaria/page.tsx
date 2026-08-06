@@ -29,9 +29,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: "/ferramentaria",
     // O nome da seção é "Ferramentaria", mas o título carrega as palavras que as
     // pessoas de fato buscam — o nome sozinho não casa com busca nenhuma.
-    title: `Ferramentaria — as ${totalFerramentas} ferramentas de IA que valem seu tempo | FayAI`,
+    title:
+      locale === "en"
+        ? `Toolshed — the ${totalFerramentas} AI tools worth your time | FayAI`
+        : `Ferramentaria — as ${totalFerramentas} ferramentas de IA que valem seu tempo | FayAI`,
     description:
-      "Filmar, programar, desenhar, compor: as ferramentas de IA organizadas pelo que você quer criar, com ficha, preço e curso de cada uma.",
+      locale === "en"
+        ? "Filming, coding, drawing, composing: AI tools organised by what you want to make, each with a profile, a price and a course."
+        : "Filmar, programar, desenhar, compor: as ferramentas de IA organizadas pelo que você quer criar, com ficha, preço e curso de cada uma.",
   });
 }
 
@@ -46,7 +51,11 @@ export default async function FerramentariaPage({ params }: Props) {
     name: "Ferramentaria — ferramentas de IA",
     description:
       "Catálogo de ferramentas de inteligência artificial organizado por objetivo.",
-    inLanguage: "pt-BR",
+    // O JSON-LD declara o idioma DA PAGINA, e a mesma rota serve as duas
+    // arvores. Cravado em "pt-BR", `/en/...` anunciava ao Google conteudo
+    // portugues numa URL que agora e inglesa — e idioma declarado errado
+    // vale menos que idioma nao declarado.
+    inLanguage: locale === "en" ? "en" : "pt-BR",
     isPartOf: { "@type": "WebSite", name: "FayAI", url: "https://fayai.com.br" },
     mainEntity: {
       "@type": "ItemList",
@@ -55,7 +64,7 @@ export default async function FerramentariaPage({ params }: Props) {
         "@type": "ListItem",
         position: i + 1,
         name: f.nome,
-        url: `https://fayai.com.br/pt-BR/ferramentas/${f.slug}`,
+        url: `https://fayai.com.br/${locale}/ferramentas/${f.slug}`,
       })),
     },
   };

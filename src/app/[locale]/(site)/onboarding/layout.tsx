@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ROUTE_SEO } from "@/lib/metadata";
 
 /**
  * `onboarding` fora do índice.
@@ -13,10 +14,18 @@ import type { Metadata } from "next";
  * a LER a instrução que manda removê-la. Para tirar do índice é preciso
  * deixar rastrear e dizer noindex.
  */
-export const metadata: Metadata = {
-  title: "Primeiros passos | FayAI",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = ROUTE_SEO["/onboarding"][locale === "en" ? "en" : "pt-BR"];
+  return {
+    title: copy.title,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;

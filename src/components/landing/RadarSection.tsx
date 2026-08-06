@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   Radar,
   Youtube,
@@ -19,7 +19,7 @@ import {
   BookOpenText,
   ChevronRight,
 } from "lucide-react";
-import { NICHOS, NICHO_PADRAO, type TermoRadar } from "@/data/landing/radar-nichos";
+import { NICHOS, NICHO_PADRAO, nichoDoIdioma, type TermoRadar } from "@/data/landing/radar-nichos";
 import { toposPorFonte, larguraBarra, type ToposPorFonte } from "@/data/landing/radar-barra";
 import {
   rankearIa,
@@ -86,10 +86,14 @@ interface ItemTrend {
 
 type Camada = "mundo" | "ia";
 
-const FONTES: { id: FonteId; label: string; icon: typeof Search; desc: string }[] = [
-  { id: "web", label: "Google", icon: Search, desc: "demanda de busca" },
-  { id: "yt", label: "YouTube", icon: Youtube, desc: "demanda de vídeo" },
-  { id: "noticias", label: "Notícias de hoje", icon: Newspaper, desc: "o tema está no noticiário" },
+/**
+ * As três fontes do IA Trend. Rótulo e descrição vêm das mensagens
+ * (`RadarSection.source*`); aqui fica só o que não é texto.
+ */
+const FONTES: { id: FonteId; chave: "Web" | "Yt" | "News"; icon: typeof Search }[] = [
+  { id: "web", chave: "Web", icon: Search },
+  { id: "yt", chave: "Yt", icon: Youtube },
+  { id: "noticias", chave: "News", icon: Newspaper },
 ];
 
 const TERMOS_VISIVEIS = 6;
@@ -109,6 +113,7 @@ const SEED = seedBruto as unknown as RadarSeed;
 
 export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
   const locale = useLocale();
+  const t = useTranslations("RadarSection");
   // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
   // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
   const rota = (h: string) => comIdioma(h, locale);
@@ -323,18 +328,18 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
         {/* ------------------------------ cabeçalho ------------------------------ */}
         <div className="flex items-baseline gap-3 flex-wrap">
           <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
-            RADAR <span style={{ color: GOLD }}>FAYAI</span>
+            {t.rich("title", { destaque: (c) => <span style={{ color: GOLD }}>{c}</span> })}
           </h3>
           <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-white/40">
             <Radar size={13} />
             {medindo ? (
               <>
-                <Loader2 size={11} className="animate-spin" /> medindo
+                <Loader2 size={11} className="animate-spin" /> {t("measuring")}
               </>
             ) : camada === "mundo" ? (
-              "em alta agora"
+              t("hotNow")
             ) : (
-              "demanda de busca"
+              t("searchDemand")
             )}
           </span>
         </div>
@@ -344,8 +349,8 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
         <div className="inline-flex rounded-2xl p-1 gap-1 border border-white/10 bg-white/[0.04]">
           {(
             [
-              { id: "mundo" as const, label: "World Trend", icon: Globe2 },
-              { id: "ia" as const, label: "IA Trend", icon: Sparkles },
+              { id: "mundo" as const, label: t("tabWorld"), icon: Globe2 },
+              { id: "ia" as const, label: t("tabAi"), icon: Sparkles },
             ]
           ).map(({ id, label, icon: Icon }) => {
             const on = camada === id;
@@ -377,23 +382,14 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
           href={rota("/radar")}
           className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-white/45 hover:text-white transition-colors"
         >
-          Abrir o radar completo <ArrowUpRight size={12} />
+          {t("openFull")} <ArrowUpRight size={12} />
         </Link>
         </div>
 
         <p className="mt-2 mb-3 text-sm text-white/55 max-w-2xl">
-          {camada === "mundo" ? (
-            <>
-              O que o mundo está procurando <strong className="text-white/80">agora</strong>, lugar
-              por lugar. Gire o planeta, clique numa região e desça até o estado — cada assunto vem
-              com o link da fonte que o explica.
-            </>
-          ) : (
-            <>
-              O recorte de <strong className="text-white/80">inteligência artificial</strong>: o que
-              o Brasil digita no Google e no YouTube, por profissão. Medido, não opinado.
-            </>
-          )}
+          {t.rich(camada === "mundo" ? "introWorld" : "introAi", {
+            forte: (c) => <strong className="text-white/80">{c}</strong>,
+          })}
         </p>
 
         {/* -------------------------- globo + painel ----------------------------- */}
@@ -439,13 +435,13 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
               {/* zoom */}
               <div className="absolute right-2 top-2 flex flex-col gap-1">
                 {[
-                  { i: Plus, d: 0.72, t: "Aproximar" },
-                  { i: Minus, d: 1.38, t: "Afastar" },
-                ].map(({ i: Icone, d, t }) => (
+                  { i: Plus, d: 0.72, rotulo: t("zoomIn") },
+                  { i: Minus, d: 1.38, rotulo: t("zoomOut") },
+                ].map(({ i: Icone, d, rotulo }) => (
                   <button
-                    key={t}
-                    title={t}
-                    aria-label={t}
+                    key={rotulo}
+                    title={rotulo}
+                    aria-label={rotulo}
                     onClick={() => setZoom((z) => Math.min(2.6, Math.max(0.22, z * d)))}
                     className="grid place-items-center w-8 h-8 rounded-xl border border-white/15 bg-black/40 backdrop-blur-sm text-white/70 hover:text-white hover:border-white/35 transition-colors cursor-pointer"
                   >
@@ -480,12 +476,12 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
               ))}
               <span className="ml-auto text-white/25">
                 {lugar.degrau === "mundo"
-                  ? "clique num país"
+                  ? t("hintCountry")
                   : lugar.id === "BR"
-                    ? "clique numa região"
+                    ? t("hintRegion")
                     : lugar.degrau === "regiao"
-                      ? "clique num estado"
-                      : "arraste para girar"}
+                      ? t("hintState")
+                      : t("hintDrag")}
               </span>
             </div>
           </div>
@@ -611,10 +607,12 @@ function PainelMundo({
   medindo: boolean;
   onVerIa: () => void;
 }) {
+  const t = useTranslations("RadarSection");
+
   if (!itens.length) {
     return (
       <div className="glass rounded-2xl p-5 text-sm text-white/55">
-        {medindo ? "Medindo o que está em alta aqui…" : "Sem sinal para este lugar agora."}
+        {medindo ? t("measuringHere") : t("noSignal")}
       </div>
     );
   }
@@ -657,7 +655,7 @@ function PainelMundo({
           )}
           {primeiro.veiculo && (
             <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-white/40 group-hover:text-white/70 transition-colors">
-              {primeiro.veiculo} · ver detalhes
+              {primeiro.veiculo} · {t("seeDetails")}
             </span>
           )}
         </span>
@@ -698,7 +696,7 @@ function PainelMundo({
                   {it.titulo}
                 </span>
                 <span className="block text-[10px] text-white/35">
-                  {it.fonte === "leitura" ? "lido na Wikipédia" : "buscado no Google"} ·{" "}
+                  {it.fonte === "leitura" ? t("readOnWikipedia") : t("searchedOnGoogle")} ·{" "}
                   {it.volumeRotulo}
                   {it.lugares?.length ? ` · ${it.lugares.join(" ")}` : ""}
                 </span>
@@ -717,7 +715,7 @@ function PainelMundo({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                aria-label={`Abrir em ${it.veiculo ?? "fonte"}`}
+                aria-label={t("openOn", { veiculo: it.veiculo ?? t("sourceFallback") })}
                 className="relative shrink-0 grid place-items-center w-6 h-6 rounded-lg text-white/20 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <ArrowUpRight size={12} />
@@ -730,8 +728,9 @@ function PainelMundo({
 
       <div className="mt-2.5 flex items-start gap-2 text-[11px] leading-relaxed text-white/35">
         <span>
-          Buscas em alta do Google Trends e artigos mais lidos da Wikipédia, medidos{" "}
-          <span style={{ color: lugar.cor }}>{noLugar(lugar)}</span>. Cada linha leva à fonte.
+          {t.rich("worldFootnote", {
+            lugar: () => <span style={{ color: lugar.cor }}>{noLugar(lugar)}</span>,
+          })}
         </span>
       </div>
 
@@ -741,9 +740,7 @@ function PainelMundo({
         style={{ background: "linear-gradient(135deg, #a78bfa, #7c6bf0)", color: "#0c0e1d" }}
       >
         <Sparkles size={15} />
-        {comIa > 0
-          ? `${comIa} destes assuntos falam de IA — ver o mundo em IA`
-          : "Ver o que o mundo consome de IA"}
+        {comIa > 0 ? t("ctaAiWithCount", { n: comIa }) : t("ctaAi")}
       </button>
     </div>
   );
@@ -775,13 +772,15 @@ function PainelIa({
   onLargar: () => void;
 }) {
   const locale = useLocale();
+  const t = useTranslations("RadarSection");
   const rota = (h: string) => comIdioma(h, locale);
-  const nicho = NICHOS.find((n) => n.id === nichoId) ?? NICHOS[0];
+  const nicho = nichoDoIdioma(NICHOS.find((n) => n.id === nichoId) ?? NICHOS[0], locale);
 
   return (
     <div>
       <div className="flex gap-1.5 overflow-x-auto sm:flex-wrap sm:overflow-visible pb-2 -mx-1 px-1" role="tablist">
-        {NICHOS.map((n) => {
+        {NICHOS.map((bruto) => {
+          const n = nichoDoIdioma(bruto, locale);
           const on = n.id === nichoId;
           return (
             <button
@@ -804,9 +803,11 @@ function PainelIa({
 
       <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/30 mr-1">
-          Fontes
+          {t("sources")}
         </span>
-        {FONTES.map(({ id, label, icon: Icon, desc }) => {
+        {FONTES.map(({ id, chave, icon: Icon }) => {
+          const label = t(`source${chave}`);
+          const desc = t(`source${chave}Desc`);
           const on = fontes.has(id);
           return (
             <button
@@ -829,9 +830,7 @@ function PainelIa({
       </div>
 
       {linhas.length === 0 ? (
-        <div className="glass rounded-2xl p-5 text-sm text-white/55">
-          Nenhum termo sobrevive a essa combinação. Religue o Google ou o YouTube.
-        </div>
+        <div className="glass rounded-2xl p-5 text-sm text-white/55">{t("noTerms")}</div>
       ) : (
         <ol className="space-y-1">
           {linhas.map((l, i) => (
@@ -843,7 +842,7 @@ function PainelIa({
                 onMouseLeave={onLargar}
                 onFocus={() => onEspiar(l)}
                 onBlur={onLargar}
-                aria-label={`Ver detalhe de ${l.termo}`}
+                aria-label={t("termDetail", { termo: l.termo })}
                 className="glass glass-hover w-full text-left rounded-xl px-3 py-2 relative overflow-hidden cursor-pointer"
               >
                 <span
@@ -865,11 +864,11 @@ function PainelIa({
                     <p className="text-[13px] font-bold leading-snug break-words">{l.termo}</p>
                     <p className="text-[10px] text-white/35">
                       {l.canais === "web+yt"
-                        ? "Google e YouTube"
+                        ? t("channelBoth")
                         : l.canais === "yt"
-                          ? "só YouTube — demanda de vídeo"
-                          : "só Google"}
-                      {l.naNoticia && fontes.has("noticias") ? " · nas notícias de hoje" : ""} ·{" "}
+                          ? t("channelYt")
+                          : t("channelWeb")}
+                      {l.naNoticia && fontes.has("noticias") ? t("inTodaysNews") : ""} ·{" "}
                       {l.formato}
                     </p>
                   </div>
@@ -893,7 +892,7 @@ function PainelIa({
         style={{ border: `1px solid ${nicho.cor}44`, background: `${nicho.cor}0d` }}
       >
         <p className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest mb-1" style={{ color: nicho.cor }}>
-          <BookOpenText size={12} /> Como a FayAI ajuda quem é {nicho.label.toLowerCase()}
+          <BookOpenText size={12} /> {t("bridgeTitle", { nicho: nicho.label.toLowerCase() })}
         </p>
         <p className="text-xs text-white/65 leading-relaxed">{nicho.ponte.texto}</p>
         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -912,9 +911,7 @@ function PainelIa({
 
       {/* Dizer que o dado é real basta. A metodologia inteira na tela roubava
           a atenção do que a seção tem de valioso, que é o dado. */}
-      <p className="mt-2 text-[11px] text-white/30">
-        Medido agora no autocomplete do Google e do YouTube.
-      </p>
+      <p className="mt-2 text-[11px] text-white/30">{t("methodNote")}</p>
     </div>
   );
 }

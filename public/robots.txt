@@ -306,3 +306,14 @@ Disallow: /
 # SITEMAP
 # =============================================================================
 Sitemap: https://fayai.com.br/sitemap.xml
+
+# =============================================================================
+# LLMS.TXT — o mapa do site para motores de resposta
+#
+# Liberar o rastreio resolve metade do problema; a outra metade e o motor
+# DESCOBRIR o que existe aqui sem ter que inferir de HTML cheio de menu e
+# rodape. /llms.txt e gerado do banco a cada hora, entao nunca aponta para
+# curso que saiu do ar.
+# =============================================================================
+# LLMs: https://fayai.com.br/llms.txt
+

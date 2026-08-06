@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CourseSalesPage from "./CourseSalesPage";
 import { allCourses } from "@/data/courses";
-import { getProductBySlug } from "@/lib/products";
+import { getProductBySlug, paraIdioma } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { schemaCurso, schemaTrilha } from "@/lib/structured-data";
 import { ogDaCapa } from "@/lib/capa-og";
+import { AvisoTraducao } from "@/components/courses/AvisoTraducao";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -30,7 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // curso ausente dela caía no genérico "Curso - FayAi AI Academy", que era o
   // caso de rag-knowledge, ia-producao e aprenda-a-usar-ia-no-dia-a-dia — três
   // páginas jogando fora o maior sinal de relevância que existe (21/07).
-  const product = await getProductBySlug(slug).catch(() => null);
+  const bruto = await getProductBySlug(slug).catch(() => null);
+  const product = bruto ? paraIdioma(bruto, locale) : null;
   const course = allCourses.find((c) => c.slug === slug);
 
   const title =
@@ -72,7 +74,11 @@ export default async function Page({ params }: Props) {
   let product = null;
   let bancoRespondeu = true;
   try {
-    product = await getProductBySlug(slug);
+    const bruto = await getProductBySlug(slug);
+    // Nome, resumo, benefícios, módulos e FAQ no idioma da URL. `i18n` sai da
+    // saída — a página de venda é Client Component e levaria as duas versões
+    // do texto inteiro para o navegador.
+    product = bruto ? paraIdioma(bruto, locale) : null;
   } catch {
     bancoRespondeu = false;
   }
@@ -121,6 +127,7 @@ export default async function Page({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }}
         />
       ))}
+      <AvisoTraducao slug={slug} locale={locale} />
       <CourseSalesPage initialProduct={product} />
     </>
   );

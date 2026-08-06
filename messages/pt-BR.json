@@ -106,7 +106,9 @@
       "cases": "Casos",
       "pricing": "Preços",
       "quickActions": "Ações Rápidas",
-      "viewDashboard": "Ver Painel"
+      "viewDashboard": "Ver Painel",
+      "toolshed": "Ferramentaria",
+      "inventing": "Inventando"
     },
     "menus": {
       "courses": {
@@ -175,7 +177,9 @@
     "buttons": {
       "signIn": "Entrar",
       "startFree": "Começar Grátis",
-      "signOut": "Sair"
+      "signOut": "Sair",
+      "openMenu": "Abrir menu",
+      "closeMenu": "Fechar menu"
     },
     "auth": {
       "greeting": "Olá, {name}!"
@@ -221,7 +225,9 @@
     "bottom": {
       "rights": "© 2026 FayAi. Todos os direitos reservados.",
       "paymentsLabel": "Pagamento Seguro:"
-    }
+    },
+    "newsletterError": "Erro ao enviar",
+    "newsletterSuccess": "Inscrição realizada!"
   },
   "Home": {
     "Hero": {
@@ -3951,6 +3957,340 @@
     "toast": {
       "addedToCart": "Curso adicionado ao carrinho!",
       "added": "Adicionado ao carrinho!"
+    }
+  },
+  "Landing": {
+    "greeting": "Oi, {name}!",
+    "studentFallback": "aluno",
+    "myPortal": "Meu Portal",
+    "signIn": "Entrar",
+    "continueTrail": "Continuar minha trilha",
+    "trailProgress": "({done} de {total})",
+    "heroTitle": "O QUE A <destaque>IA</destaque> FAZ POR VOCÊ<br></br>EM <gradiente>30 SEGUNDOS</gradiente>?",
+    "heroSubtitle": "Escolha um pedaço da sua vida. A gente mostra a mágica — e o passo a passo para você repetir agora, de graça.",
+    "closeCard": "Fechar e voltar às categorias",
+    "played": "{done}/{total} jogados",
+    "trainingMode": "🎓 Modo treino — este exemplo já rendeu XP na sua conta",
+    "guessWorth": "🎯 Seu palpite vale +{xp} XP",
+    "correctTraining": "🎯 ACERTOU! Modo treino — XP já creditado antes{combo}",
+    "correct": "🎯 ACERTOU! +{xp} XP{conta}{combo}",
+    "onAccount": " na sua conta",
+    "combo": " · combo x{n}",
+    "closeTraining": "✨ Quase! A resposta era: {answer} · modo treino",
+    "closeMiss": "✨ Quase! A resposta era: {answer} · +{xp} XP{conta}",
+    "resultLabel": "✨ O resultado",
+    "recipeLabel": "🪄 A receita — cole no ChatGPT, Claude ou Gemini",
+    "copied": "Copiado!",
+    "copy": "Copiar",
+    "inYourLife": "Na sua vida:",
+    "nextMagic": "Próxima mágica",
+    "switchCategory": "Trocar categoria",
+    "allExplored": "🏆 VOCÊ EXPLOROU TODAS AS MÁGICAS!",
+    "allExploredBody": "Cada XP está guardado na sua conta. A trilha continua no seu portal — cursos, desafios e o Arcade da IA esperam por você.",
+    "continueInPortal": "Continuar no meu Portal",
+    "youEarned": "🏆 VOCÊ GANHOU <destaque>{xp} XP</destaque>!",
+    "youEarnedBody": "Crie sua conta grátis para continuar — seus XP vão com você, e a próxima mágica é personalizada para a sua vida.",
+    "continueFree": "Continuar grátis",
+    "xpCreditedPrevious": "+{xp} XP da sua jornada anterior creditados na sua conta ✨",
+    "xpCredited": "+{xp} XP creditados na sua conta ✨",
+    "atelie": {
+      "title": "O ÚNICO CURSO QUE É <destaque>REESCRITO PARA VOCÊ</destaque>",
+      "badge": "só aqui",
+      "body": "Conte o que você faz. Cada capítulo é <forte>reescrito inteiro</forte> com os seus exemplos, o seu vocabulário e o seu negócio — não é um resumo, não é um prefácio personalizado, não é a mesma aula com o seu nome no topo. É o curso inteiro na sua realidade.",
+      "step1Title": "Escolha o curso",
+      "step1Desc": "Qualquer um do catálogo que você já pode abrir.",
+      "step2Title": "Fale do seu negócio",
+      "step2Desc": "O que você vende, para quem, com que palavras.",
+      "step3Title": "Leia a sua versão",
+      "step3Desc": "Os exemplos passam a ser do seu dia, capítulo a capítulo.",
+      "cta": "Ver com a minha cara",
+      "free": "A amostra do primeiro capítulo é <forte>grátis</forte> — sem gastar crédito.",
+      "videoCaption": "O mesmo capítulo, reescrito para uma confeitaria, um escritório de contabilidade e uma clínica."
+    },
+    "featured": {
+      "title": "COMECE POR <destaque>AQUI</destaque>",
+      "badge": "revisados aula por aula",
+      "body": "Os {revisados} primeiros estão com o conteúdo atualizado — texto, exemplos e mídia revistos aula por aula. Depois deles, o catálogo inteiro: {total} cursos.",
+      "stateLabel": "Conteúdo atualizado"
+    },
+    "news": {
+      "title": "BLOG IA <destaque>HOJE</destaque>"
+    },
+    "links": {
+      "courses": "Cursos",
+      "coursesDesc": "18 cursos com certificado",
+      "arcade": "Arcade",
+      "arcadeDesc": "5 jogos grátis, sem cadastro",
+      "tools": "Ferramentas",
+      "toolsDesc": "100+ ferramentas de IA",
+      "projects": "Projetos",
+      "projectsDesc": "O ecossistema FayAI e a história por trás",
+      "blog": "Blog IA Hoje",
+      "blogDesc": "Notícias e guias de IA todo dia"
+    },
+    "copyright": "© {year} FayAI — aprenda IA fazendo, não assistindo."
+  },
+  "ArcadeShowcase": {
+    "title": "JOGUE <destaque>AGORA</destaque>",
+    "badge": "sem cadastro, sem instalar",
+    "body": "Cinco jogos, cinco gestos diferentes. Você aprende IA jogando — e leva o conceito na cabeça sem ter lido uma aula.",
+    "seeAll": "Ver o arcade completo",
+    "artAlt": "Arte do jogo {titulo}",
+    "games": {
+      "verdade-ou-mito": {
+        "titulo": "Verdade ou Mito?",
+        "verbo": "Deslize",
+        "gancho": "60s no relógio. Errou, perde tempo."
+      },
+      "qual-prompt": {
+        "titulo": "Qual Prompt Gerou Isto?",
+        "verbo": "Deduza",
+        "gancho": "A imagem foca aos poucos. Acerte antes."
+      },
+      "batalha-prompts": {
+        "titulo": "Batalha de Prompts",
+        "verbo": "Aposte",
+        "gancho": "500 fichas. Dá pra ir all-in."
+      },
+      "caca-prompt": {
+        "titulo": "Caça ao Prompt Perdido",
+        "verbo": "Monte",
+        "gancho": "Arraste as peças. Cuidado com o intruso."
+      },
+      "monte-o-prompt": {
+        "titulo": "Monte o Prompt",
+        "verbo": "Construa",
+        "gancho": "Os 5 ingredientes de uma imagem boa."
+      }
+    }
+  },
+  "RadarSection": {
+    "title": "RADAR <destaque>FAYAI</destaque>",
+    "measuring": "medindo",
+    "hotNow": "em alta agora",
+    "searchDemand": "demanda de busca",
+    "tabWorld": "World Trend",
+    "tabAi": "IA Trend",
+    "openFull": "Abrir o radar completo",
+    "introWorld": "O que o mundo está procurando <forte>agora</forte>, lugar por lugar. Gire o planeta, clique numa região e desça até o estado — cada assunto vem com o link da fonte que o explica.",
+    "introAi": "O recorte de <forte>inteligência artificial</forte>: o que o Brasil digita no Google e no YouTube, por profissão. Medido, não opinado.",
+    "zoomIn": "Aproximar",
+    "zoomOut": "Afastar",
+    "hintCountry": "clique num país",
+    "hintRegion": "clique numa região",
+    "hintState": "clique num estado",
+    "hintDrag": "arraste para girar",
+    "measuringHere": "Medindo o que está em alta aqui…",
+    "noSignal": "Sem sinal para este lugar agora.",
+    "seeDetails": "ver detalhes",
+    "readOnWikipedia": "lido na Wikipédia",
+    "searchedOnGoogle": "buscado no Google",
+    "openOn": "Abrir em {veiculo}",
+    "sourceFallback": "fonte",
+    "worldFootnote": "Buscas em alta do Google Trends e artigos mais lidos da Wikipédia, medidos <lugar></lugar>. Cada linha leva à fonte.",
+    "ctaAiWithCount": "{n} destes assuntos falam de IA — ver o mundo em IA",
+    "ctaAi": "Ver o que o mundo consome de IA",
+    "sources": "Fontes",
+    "sourceWeb": "Google",
+    "sourceWebDesc": "demanda de busca",
+    "sourceYt": "YouTube",
+    "sourceYtDesc": "demanda de vídeo",
+    "sourceNews": "Notícias de hoje",
+    "sourceNewsDesc": "o tema está no noticiário",
+    "noTerms": "Nenhum termo sobrevive a essa combinação. Religue o Google ou o YouTube.",
+    "termDetail": "Ver detalhe de {termo}",
+    "channelBoth": "Google e YouTube",
+    "channelYt": "só YouTube — demanda de vídeo",
+    "channelWeb": "só Google",
+    "inTodaysNews": " · nas notícias de hoje",
+    "bridgeTitle": "Como a FayAI ajuda quem é {nicho}",
+    "methodNote": "Medido agora no autocomplete do Google e do YouTube."
+  },
+  "WhatsApp": {
+    "brand": "WhatsApp FayAi",
+    "title": "Converse com nossa equipe",
+    "subtitle": "Tire dúvidas sobre planos, curso grátis do mês, matrícula e certificação.",
+    "close": "Fechar WhatsApp",
+    "humanTitle": "Atendimento humano",
+    "humanBody": "Abra uma conversa já com o contexto certo para continuar no WhatsApp sem atrito.",
+    "dockTitle": "Acoplar ao fim da página",
+    "dockAria": "Acoplar o atendimento ao fim da página",
+    "openAria": "Abrir WhatsApp",
+    "kicker": "Atendimento",
+    "quick1": "Olá! Quero entender qual plano faz mais sentido para mim.",
+    "quick2": "Olá! Quero liberar o curso grátis do mês e conhecer a plataforma.",
+    "quick3": "Olá! Quero ajuda para escolher meus cursos e certificações deste mês."
+  },
+  "Trilho": {
+    "previous": "Anterior",
+    "next": "Próximo",
+    "lessons": "{n} aulas",
+    "done": "Concluído",
+    "continue": "Continuar",
+    "start": "Começar"
+  },
+  "ToolsDirectory": {
+    "title": "Diretório de Ferramentas de IA",
+    "subtitle": "Descubra, compare e aprenda as principais ferramentas de IA do mercado",
+    "bridgeTitle": "Ferramenta recém-lançada não está aqui?",
+    "bridgeBody": "Os lançamentos da semana viram microcursos curtos, com passo a passo em português.",
+    "bridgeCta": "Ver microcursos",
+    "searchPlaceholder": "Buscar por nome, fornecedor ou tag...",
+    "category": "Categoria",
+    "allCategories": "Todas",
+    "price": "Preço",
+    "allPrices": "Todos",
+    "sort": "Ordenar",
+    "sortPopular": "Mais Popular",
+    "sortRating": "Melhor Avaliado",
+    "sortAz": "A-Z",
+    "found": "{n} ferramentas encontradas",
+    "vendor": "Fornecedor:",
+    "details": "Ver detalhes",
+    "relatedCourses": "Cursos relacionados",
+    "pricing": {
+      "Gratuito": "Gratuito",
+      "Freemium": "Freemium",
+      "Open Source": "Open Source",
+      "Pago": "Pago"
+    }
+  },
+  "ToolPage": {
+    "metaTitle": "{tool} - Guia Completo e Cursos | FayAi",
+    "metaTitleFallback": "Ferramenta de IA | FayAi",
+    "metaDescription": "{description} Aprenda a usar {tool} com cursos práticos e tutoriais. {category} | {vendor}",
+    "metaDescriptionFallback": "Aprenda a usar ferramentas de IA com cursos práticos e tutoriais da FayAi.",
+    "notFound": "Ferramenta não encontrada",
+    "notFoundBody": "Verifique o endereço ou explore o diretório.",
+    "backToDirectory": "Voltar ao Diretório",
+    "forYou": "Para Você",
+    "forEntrepreneurs": "Para Empreendedores",
+    "forCompanies": "Para Empresas",
+    "overview": "Visão Geral",
+    "useCases": "Casos de Uso",
+    "gettingStarted": "Como começar",
+    "integrations": "Integrações",
+    "popularIntegrations": "Integrações populares",
+    "promptsSoon": "Prompts em breve.",
+    "bestPractices": "Boas práticas",
+    "quickSummary": "Resumo Rápido",
+    "price": "Preço:",
+    "rating": "Avaliação:",
+    "coursesPitch": "Cursos com projetos do mundo real, templates e certificado.",
+    "seeCourses": "Ver cursos",
+    "officialDocs": "Documentação Oficial",
+    "about": "Sobre {tool}",
+    "seeRelatedCourses": "Ver Cursos Relacionados",
+    "watchFreeLesson": "Assistir Aula Grátis",
+    "tabOverview": "Visão Geral",
+    "tabGetting": "Primeiros Passos",
+    "tabIntegrations": "Integrações",
+    "tabPrompts": "Prompts",
+    "tabCourses": "Cursos",
+    "tabFaq": "FAQ",
+    "capabilities": "Capacidades",
+    "recommendedPrompts": "Prompts Recomendados",
+    "noRelatedCourses": "Sem cursos relacionados no momento.",
+    "commonPitfalls": "Armadilhas comuns",
+    "startFreeWith": "Comece Grátis com {tool}",
+    "startFreeBody": "Assista nossa aula gratuita e descubra como usar {tool} para transformar seu trabalho e aumentar sua produtividade.",
+    "seeAllCourses": "Ver Todos os Cursos",
+    "category": "Categoria:",
+    "vendor": "Fornecedor:",
+    "learnPractically": "Aprenda {tool} de forma prática",
+    "wantACourse": "Quer um curso de {tool}?",
+    "wantACourseBody": "Ainda não temos um curso específico? Solicite e nós criamos! Conte-nos o que você precisa aprender.",
+    "requestViaWhatsApp": "Solicitar Curso via WhatsApp",
+    "whatsAppMessage": "Olá! Gostaria de solicitar um curso sobre {tool}. Tenho interesse em aprender mais sobre essa ferramenta."
+  },
+  "PublicArcade": {
+    "badge": "Arcade grátis — sem cadastro",
+    "title": "Experimente antes de criar sua conta",
+    "subtitle": "Os mesmos jogos de dentro da plataforma FayAi, jogáveis agora — dá um gostinho real do que você aprende aqui.",
+    "back": "Voltar para os jogos",
+    "artAlt": "Arte animada do jogo {titulo}",
+    "ctaTitle": "Gostou? Isso é só o começo.",
+    "ctaBody": "Crie sua conta grátis e desbloqueie cursos completos, o jogo de Palpite em 30 Segundos com XP de verdade, certificados e muito mais.",
+    "ctaButton": "Criar conta grátis",
+    "games": {
+      "monte-o-prompt": {
+        "titulo": "Monte o Prompt",
+        "desc": "A receita dos 5 ingredientes de uma imagem profissional."
+      },
+      "verdade-ou-mito": {
+        "titulo": "Verdade ou Mito?",
+        "desc": "60 segundos no relógio. Deslize rápido e emende acertos."
+      },
+      "qual-prompt": {
+        "titulo": "Qual Prompt Gerou Isto?",
+        "desc": "A imagem entra borrada. Adivinhe antes de ficar nítida."
+      },
+      "batalha-prompts": {
+        "titulo": "Batalha de Prompts",
+        "desc": "Você tem 500 fichas. Aposte no prompt que vence."
+      },
+      "caca-prompt": {
+        "titulo": "Caça ao Prompt Perdido",
+        "desc": "Arraste os ingredientes certos e desvie dos intrusos."
+      }
+    }
+  },
+  "TranslationNotice": {
+    "title": "Este livro foi escrito em português.",
+    "body": "O texto original é do Claude, em português. Esta edição em inglês é uma tradução automática revisada — a voz é a mesma, as palavras não são exatamente as que ele escolheu."
+  },
+  "NewsHub": {
+    "title": "BLOG IA <destaque>HOJE</destaque>",
+    "intro": "As notícias de IA que importam — selecionadas e explicadas todos os dias para quem está aprendendo no Brasil. Sempre com o link da fonte original.",
+    "all": "Todas",
+    "featured": "DESTAQUE",
+    "source": "Fonte: {source}",
+    "empty": "Nenhuma notícia nesta categoria ainda — o agente publica todo dia às 7h.",
+    "home": "Início",
+    "illustration": "Ilustração: FayAI Studio",
+    "sourceImage": " · imagem da fonte",
+    "more": "MAIS DO <destaque>BLOG IA HOJE</destaque>",
+    "originalStory": "Matéria original",
+    "originalSource": "fonte original",
+    "readOn": "Ler em {source}",
+    "breadcrumb": "IA Hoje"
+  },
+  "ServicesHub": {
+    "listName": "Serviços FayAI",
+    "listDescription": "Consultoria em IA, automação e integração, construção de sites, SEO local e edição de vídeo.",
+    "eyebrow": "O que a FayAI entrega",
+    "title": "Serviços de IA, automação e presença digital",
+    "subtitle": "Cinco frentes, um objetivo: colocar Inteligência Artificial para trabalhar dentro do seu negócio — do diagnóstico à operação rodando sozinha.",
+    "seeService": "Ver o serviço",
+    "ctaTitle": "Não sabe por onde começar?",
+    "ctaBody": "Uma conversa de diagnóstico costuma bastar para saber qual das cinco frentes devolve resultado primeiro no seu caso.",
+    "seeCases": "Ver casos reais",
+    "items": {
+      "consultoria-ai": {
+        "eyebrow": "Consultoria",
+        "title": "Consultoria em Inteligência Artificial",
+        "description": "Diagnóstico, implementação de ChatGPT, automação com IA, análise de dados e treinamento de equipes — com meta de ROI em 90 dias."
+      },
+      "automacao-e-integracao": {
+        "eyebrow": "Automação",
+        "title": "Automação e Integração de Sistemas",
+        "description": "Processos automatizados e sistemas conversando entre si com n8n, Make, Zapier e APIs sob medida. Menos trabalho manual, menos erro."
+      },
+      "construcao-de-sites": {
+        "eyebrow": "Desenvolvimento",
+        "title": "Construção de Sites e Aplicativos Web",
+        "description": "Sites modernos, responsivos e otimizados para busca com Next.js e React: landing pages, e-commerce, sistemas web e aplicativos sob medida."
+      },
+      "seo-local": {
+        "eyebrow": "Visibilidade",
+        "title": "SEO Local e Google Meu Negócio",
+        "description": "Otimização para buscas locais e Google Meu Negócio: mais visibilidade no Maps, avaliações positivas e clientes da sua região."
+      },
+      "edicao-de-video": {
+        "eyebrow": "Conteúdo",
+        "title": "Edição de Vídeo Profissional com IA",
+        "description": "Edição para YouTube, Instagram, TikTok e corporativo: cortes inteligentes, legendas automáticas, color grading e motion graphics."
+      }
     }
   }
 }

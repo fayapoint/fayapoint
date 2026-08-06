@@ -109,6 +109,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Award, ChevronDown, Clock, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 export interface ItemTrilho {
@@ -272,6 +273,7 @@ export function TrilhoParallax({
   titulo?: string;
   subtitulo?: string;
 }) {
+  const t = useTranslations("Trilho");
   const trilho = useRef<HTMLDivElement>(null);
   const cards = useRef<HTMLElement[]>([]);
   const imagens = useRef<HTMLElement[]>([]);
@@ -913,7 +915,7 @@ export function TrilhoParallax({
           <button
             type="button"
             onClick={() => empurrar(-1)}
-            aria-label="Anterior"
+            aria-label={t("previous")}
             aria-controls={idTrilho}
             className="rounded-full border border-white/15 bg-white/5 p-2 text-white/70 transition-colors hover:border-white/35 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
           >
@@ -922,7 +924,7 @@ export function TrilhoParallax({
           <button
             type="button"
             onClick={() => empurrar(1)}
-            aria-label="Próximo"
+            aria-label={t("next")}
             aria-controls={idTrilho}
             className="rounded-full border border-white/15 bg-white/5 p-2 text-white/70 transition-colors hover:border-white/35 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
           >
@@ -1269,7 +1271,7 @@ export function TrilhoParallax({
               <span className="mt-0.5 hidden flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-white/50 sm:flex">
                 {typeof item.aulas === "number" && (
                   <span className="inline-flex items-center gap-1">
-                    <Layers size={11} /> {item.aulas} aulas
+                    <Layers size={11} /> {t("lessons", { n: item.aulas })}
                   </span>
                 )}
                 {item.duracao && (
@@ -1295,12 +1297,12 @@ export function TrilhoParallax({
                   <span className="flex items-center justify-between text-[11px] text-white/55">
                     {item.progresso >= 100 ? (
                       <span className="inline-flex items-center gap-1 font-bold text-amber-300">
-                        <Award size={12} /> Concluído
+                        <Award size={12} /> {t("done")}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-emerald-300">
                         <PlayCircle size={12} />
-                        {item.progresso > 0 ? "Continuar" : "Começar"}
+                        {item.progresso > 0 ? t("continue") : t("start")}
                       </span>
                     )}
                     <span className="tabular-nums">{item.progresso}%</span>

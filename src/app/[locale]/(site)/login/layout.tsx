@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ROUTE_SEO } from "@/lib/metadata";
 
 /**
  * `login` fora do índice.
@@ -12,11 +13,24 @@ import type { Metadata } from "next";
  * no robots.txt pode seguir indexada só pela URL, porque o Google nunca chega
  * a LER a instrução que manda removê-la. Para tirar do índice é preciso
  * deixar rastrear e dizer noindex.
+ *
+ * ⚠️ O título passou a depender do idioma em 06/08/2026. Era `const metadata`,
+ * que é estático e não enxerga `params` — então `/en/login` servia "Entrar" na
+ * aba. `robots` continua idêntico: `follow: false` é escolha desta página e
+ * não vem do helper de rota.
  */
-export const metadata: Metadata = {
-  title: "Entrar | FayAI",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = ROUTE_SEO["/login"][locale === "en" ? "en" : "pt-BR"];
+  return {
+    title: copy.title,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;

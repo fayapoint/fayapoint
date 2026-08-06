@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import {
   ChevronRight,
   MessageCircle,
@@ -13,11 +14,12 @@ import {
 
 const phoneNumber = "5521971908530";
 
-const quickMessages = [
-  "Olá! Quero entender qual plano faz mais sentido para mim.",
-  "Olá! Quero liberar o curso grátis do mês e conhecer a plataforma.",
-  "Olá! Quero ajuda para escolher meus cursos e certificações deste mês.",
-];
+/**
+ * As três mensagens prontas. O TEXTO vem das mensagens (`WhatsApp.quick1..3`)
+ * porque é ele que entra no WhatsApp — quem lê o site em inglês precisa abrir a
+ * conversa em inglês, senão o primeiro contato já sai errado.
+ */
+const CHAVES_RAPIDAS = ["quick1", "quick2", "quick3"] as const;
 
 const CHAVE_ACOPLADO = "fayai:whatsapp-acoplado";
 /**
@@ -90,6 +92,7 @@ function useEscolhaAcoplado(): [boolean, () => void] {
 }
 
 export function WhatsAppButton() {
+  const t = useTranslations("WhatsApp");
   const [isOpen, setIsOpen] = useState(false);
   const rodapeAVista = useRodapeAVista();
   const [escolheuAcoplar, acoplar] = useEscolhaAcoplado();
@@ -104,11 +107,14 @@ export function WhatsAppButton() {
 
   const links = useMemo(
     () =>
-      quickMessages.map((message) => ({
-        message,
-        href: `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
-      })),
-    []
+      CHAVES_RAPIDAS.map((chave) => {
+        const message = t(chave);
+        return {
+          message,
+          href: `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+        };
+      }),
+    [t]
   );
 
   const conteudo = (
@@ -138,10 +144,10 @@ export function WhatsAppButton() {
                   <MessageCircle className="h-5 w-5 text-green-300" />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-green-200/80">WhatsApp FayAi</p>
-                  <h3 className="mt-1 text-lg font-bold text-white">Converse com nossa equipe</h3>
+                  <p className="text-xs uppercase tracking-[0.2em] text-green-200/80">{t("brand")}</p>
+                  <h3 className="mt-1 text-lg font-bold text-white">{t("title")}</h3>
                   <p className="mt-1 text-sm leading-6 text-green-50/75">
-                    Tire dúvidas sobre planos, curso grátis do mês, matrícula e certificação.
+                    {t("subtitle")}
                   </p>
                 </div>
               </div>
@@ -149,7 +155,7 @@ export function WhatsAppButton() {
                 type="button"
                 onClick={() => setIsOpen(false)}
                 className="rounded-full border border-border bg-secondary p-2 text-white/70 transition hover:bg-white/10 hover:text-white"
-                aria-label="Fechar WhatsApp"
+                aria-label={t("close")}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -163,9 +169,9 @@ export function WhatsAppButton() {
                   <UserRound className="h-4 w-4 text-white/80" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white">Atendimento humano</p>
+                  <p className="text-sm font-semibold text-white">{t("humanTitle")}</p>
                   <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                    Abra uma conversa já com o contexto certo para continuar no WhatsApp sem atrito.
+                    {t("humanBody")}
                   </p>
                 </div>
               </div>
@@ -205,8 +211,8 @@ export function WhatsAppButton() {
               acoplar();
               setIsOpen(false);
             }}
-            title="Acoplar ao fim da página"
-            aria-label="Acoplar o atendimento ao fim da página"
+            title={t("dockTitle")}
+            aria-label={t("dockAria")}
             className="absolute -left-2 -top-2 z-10 grid h-7 w-7 place-items-center rounded-full border border-white/15 bg-[#0b1220] text-white/60 shadow-lg transition hover:text-white hover:border-white/35"
           >
             <X className="h-3.5 w-3.5" />
@@ -219,14 +225,14 @@ export function WhatsAppButton() {
           className={`group flex items-center gap-3 rounded-full border border-green-400/20 bg-[linear-gradient(135deg,rgba(22,163,74,0.95),rgba(20,184,166,0.92))] px-5 py-3 text-white shadow-[0_18px_50px_rgba(22,163,74,0.28)] transition hover:scale-[1.02] ${
             acoplado ? "w-full justify-center" : ""
           }`}
-          aria-label="Abrir WhatsApp"
+          aria-label={t("openAria")}
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
             <MessageCircle className="h-5 w-5" />
           </div>
           <div className={acoplado ? "text-left" : "hidden text-left sm:block"}>
-            <div className="text-xs uppercase tracking-[0.18em] text-white/75">Atendimento</div>
-            <div className="text-sm font-semibold">WhatsApp FayAi</div>
+            <div className="text-xs uppercase tracking-[0.18em] text-white/75">{t("kicker")}</div>
+            <div className="text-sm font-semibold">{t("brand")}</div>
           </div>
         </button>
       </div>

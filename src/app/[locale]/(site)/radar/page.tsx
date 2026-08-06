@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { RadarPagina } from "@/components/radar/RadarPagina";
-import { generatePageMetadata } from "@/lib/metadata";
+import { generatePageMetadata, ROUTE_SEO } from "@/lib/metadata";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -18,13 +18,13 @@ interface Props {
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const copy = ROUTE_SEO["/radar"][locale === "en" ? "en" : "pt-BR"];
 
   return generatePageMetadata({
     locale,
     path: "/radar",
-    title: "Radar FayAI — o que o Brasil e o mundo estão procurando agora",
-    description:
-      "Tendências medidas, não estimadas: buscas em alta do Google por estado, artigos mais lidos da Wikipédia e a demanda real de inteligência artificial no autocomplete do Google e do YouTube.",
+    title: copy.title,
+    description: copy.description,
   });
 }
 

@@ -1,0 +1,3072 @@
+{
+  "napkin-ai": {
+    "title": "Napkin AI",
+    "category": "Visualization",
+    "description": "Transform text into diagrams, infographics, and explanatory visuals automatically with AI.",
+    "detailedDescription": "Napkin AI turns any text into professional explanatory visuals like diagrams, flowcharts, infographics, and illustrations. Paste a paragraph or document and the AI automatically generates multiple visual options to communicate the information. Ideal for turning complex concepts into clear visuals for presentations, posts, and documentation.",
+    "impactForIndividuals": [
+      "📊 Turn texts into diagrams in seconds",
+      "🎨 Professional visuals without design skills",
+      "📱 Perfect for posts and presentations"
+    ],
+    "impactForEntrepreneurs": [
+      "📈 Infographics for content marketing",
+      "📋 Visualize business processes and flows",
+      "⚡ Visual content for social media quickly"
+    ],
+    "impactForCompanies": [
+      "📊 Automated visual technical documentation",
+      "👥 Communicate strategies with clear visuals",
+      "🎯 Visual training material"
+    ],
+    "features": [
+      "Automatic text to diagram",
+      "Multiple visual styles",
+      "Infographics and flowcharts",
+      "High-resolution export"
+    ],
+    "gettingStarted": [
+      "Go to napkin.ai and create an account",
+      "Paste or type the text you want to visualize",
+      "Choose from the generated visual options",
+      "Customize colors and style and export"
+    ],
+    "useCases": [
+      "Diagrams for technical documentation",
+      "Infographics for content marketing",
+      "Process flowcharts",
+      "Visuals for presentations and slides"
+    ],
+    "bestPractices": [
+      "Structure the text in clear topics for better visuals",
+      "Use it to complement presentations with diagrams",
+      "Export as SVG for maximum quality"
+    ],
+    "pitfalls": [
+      "Complex visuals may need manual adjustments",
+      "Visual style may be limited in options"
+    ],
+    "prompts": [
+      {
+        "title": "Process Diagram",
+        "content": "Create a visual diagram of the [process] process, showing the steps: [step 1] -> [step 2] -> [step 3], with decisions and branches."
+      }
+    ]
+  },
+  "chatgpt": {
+    "title": "ChatGPT",
+    "category": "Conversational AI",
+    "description": "Conversational assistant for text, code, and automation. Ideal for productivity, support, and prototyping.",
+    "detailedDescription": "ChatGPT is the most revolutionary AI tool today. With text understanding and generation capabilities that rival humans, ChatGPT completely transforms how we work, learn, and create. From writing flawless emails to developing complex code, from data analysis to creative content creation, ChatGPT is your 24/7 personal assistant that never gets tired and is always ready to help. With plugins, custom GPTs, and integration with thousands of tools, the possibilities are literally endless.",
+    "impactForIndividuals": [
+      "🚀 Save 20+ hours per week by automating repetitive tasks",
+      "💰 Increase your salary by up to 40% with new AI skills",
+      "📚 Learn any subject 5x faster with personalized tutoring",
+      "✍️ Write 10x faster while maintaining professional quality",
+      "💡 Develop projects that once seemed impossible",
+      "🧠 Solve complex problems with advanced AI assistance"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Launch products 10x faster with AI assistance",
+      "💵 Reduce operational costs by up to 70% with automation",
+      "📈 Create sales copy that converts 3x more",
+      "🤖 Automate support while maintaining personalization",
+      "💡 Generate validated and innovative business ideas",
+      "📊 Analyze market and competition in minutes"
+    ],
+    "impactForCompanies": [
+      "📊 Increase team productivity by up to 300%",
+      "⏱️ Cut development time in half",
+      "🤖 Automate processes that cost thousands in hours",
+      "📄 Improve documentation and communication quality",
+      "🧠 Create an intelligent knowledge base",
+      "🏆 Stay competitive in an AI-driven market"
+    ],
+    "features": [
+      "Text generation and review",
+      "Help with code and documentation",
+      "Memory and custom instructions",
+      "API integration"
+    ],
+    "gettingStarted": [
+      "Create a free ChatGPT account",
+      "Set your Custom Instructions",
+      "Save prompts and create themed collections",
+      "Test models and parameters (temperature, system prompt)"
+    ],
+    "useCases": [
+      "Customer service and support",
+      "Content creation and marketing",
+      "Code generation and review",
+      "Research and information analysis"
+    ],
+    "bestPractices": [
+      "Be specific about persona, goal, and output format",
+      "Give examples (few-shot) and evaluation criteria",
+      "Use numbered steps for structured reasoning",
+      "Create reusable prompts per process"
+    ],
+    "pitfalls": [
+      "Hallucinations without source verification",
+      "Vague instructions lead to generic responses",
+      "Lack of historical context without memory"
+    ],
+    "prompts": [
+      {
+        "title": "Content Brief",
+        "content": "You are a content strategist. Generate a detailed brief on [topic] for [audience], including goals, H2/H3 structure, and CTAs."
+      },
+      {
+        "title": "Code Refactoring",
+        "content": "Act as a senior engineer. Refactor the following code for readability, testing, and performance:```[code]```"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "ChatGPT Masterclass",
+        "level": "All"
+      },
+      {
+        "title": "Prompt Engineering Avançado",
+        "level": "Intermediate"
+      }
+    ]
+  },
+  "claude": {
+    "title": "Claude",
+    "category": "Conversational AI",
+    "description": "AI focused on safety and extensive context windows. Excellent for document analysis and programming.",
+    "detailedDescription": "Claude is the safest and most capable AI for complex tasks. With 100k+ token context windows, it can analyze lengthy documents while maintaining exceptional accuracy.",
+    "impactForIndividuals": [
+      "📚 Analyze 200+ page documents instantly",
+      "💻 Code 5x faster with pair programming",
+      "🔍 Uncover hidden insights in complex data"
+    ],
+    "impactForEntrepreneurs": [
+      "📄 Analyze contracts and proposals instantly",
+      "💡 Develop strategies with deep analysis",
+      "💻 Build MVPs with advanced code generation"
+    ],
+    "impactForCompanies": [
+      "📊 Process textual big data with precision",
+      "⚖️ Automate legal analysis and compliance",
+      "💻 Accelerate software development 3x"
+    ],
+    "features": [
+      "Long context",
+      "Strong reasoning",
+      "Tools/funcalls",
+      "Safety-focused"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Test Claude models",
+      "Configure tool use",
+      "Integrate with your workflow (API)"
+    ],
+    "useCases": [
+      "Contract analysis",
+      "Research summarization",
+      "Code review",
+      "Internal assistant"
+    ],
+    "bestPractices": [
+      "Break tasks into steps",
+      "Use doc snippets",
+      "Reinforce quality criteria"
+    ],
+    "pitfalls": [
+      "Timeouts with large files",
+      "Cost/latency in huge contexts"
+    ],
+    "prompts": [
+      {
+        "title": "Document Analysis",
+        "content": "You are a legal analyst. Read the contract below and generate a summary with risks, deadlines, and critical clauses:```[excerpts]```"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Claude for Devs",
+        "level": "Advanced"
+      }
+    ]
+  },
+  "gemini": {
+    "title": "Gemini",
+    "category": "Conversational AI",
+    "description": "Multimodal AI with Google ecosystem integration (Docs, Drive).",
+    "detailedDescription": "Gemini is Google's multimodal AI that understands text, images, video and code simultaneously, with seamless Google Workspace integration.",
+    "impactForIndividuals": [
+      "🧠 Process multimodal information 10x faster",
+      "📊 Analyze complex data in Sheets instantly",
+      "📝 Write professional documents 5x faster"
+    ],
+    "impactForEntrepreneurs": [
+      "💼 Automate the entire workflow with Google Workspace + AI",
+      "📊 Analyze market and competition in minutes",
+      "🎯 Build strategies based on visual and textual data"
+    ],
+    "impactForCompanies": [
+      "🏢 Boost productivity with AI across Google Workspace",
+      "📊 Process visual and textual big data simultaneously",
+      "🤖 Automate document and media analysis"
+    ],
+    "features": [
+      "Multimodal",
+      "Google integration",
+      "Tools"
+    ],
+    "gettingStarted": [
+      "Activate Gemini",
+      "Test multimodal prompts",
+      "Integrate with Apps Script"
+    ],
+    "useCases": [
+      "Meeting summaries",
+      "Assistance with spreadsheets",
+      "Image generation"
+    ],
+    "bestPractices": [
+      "Define formats (tables)",
+      "Combine text and images"
+    ],
+    "pitfalls": [
+      "Regional limits",
+      "APIs in evolution"
+    ],
+    "prompts": [
+      {
+        "title": "Meeting Summary",
+        "content": "Summarize this transcript with decisions and those responsible:```[text]```"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Google Gemini Essential",
+        "level": "Beginner"
+      }
+    ]
+  },
+  "perplexity": {
+    "title": "Perplexity",
+    "category": "Research",
+    "description": "Research with verifiable sources and objective answers.",
+    "detailedDescription": "Perplexity revolutionizes online research by combining AI with real-time verifiable sources, always providing accurate information with citations.",
+    "impactForIndividuals": [
+      "🔍 Become an expert in any subject 10x faster",
+      "📚 Drastically accelerate academic research",
+      "📰 Stay up to date without spending hours reading"
+    ],
+    "impactForEntrepreneurs": [
+      "🔍 Analyze market and competition in minutes",
+      "📊 Identify trends before competitors",
+      "💡 Validate ideas with real data quickly"
+    ],
+    "impactForCompanies": [
+      "📊 Democratize access to information in the company",
+      "🔍 Accelerate R&D and innovation 5x",
+      "💰 Reduce costs with external consultancies"
+    ],
+    "features": [
+      "Citations",
+      "Timeliness",
+      "Collections"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Search with follow-ups",
+      "Save collections"
+    ],
+    "useCases": [
+      "Market research",
+      "Systematic review",
+      "News tracking"
+    ],
+    "bestPractices": [
+      "Ask for links and dates",
+      "Iterate with follow-ups"
+    ],
+    "pitfalls": [
+      "Sources behind paywalls",
+      "Limits on long queries"
+    ],
+    "prompts": [
+      {
+        "title": "Guided Research",
+        "content": "Do a review on [topic] with reliable sources, dates, and a critical summary."
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Advanced Research with AI",
+        "level": "Beginner"
+      }
+    ]
+  },
+  "midjourney": {
+    "title": "Midjourney",
+    "category": "Image",
+    "description": "High-end image generation for art and design.",
+    "detailedDescription": "Midjourney is the most powerful AI tool for artistic creation, capable of generating professional-grade artwork in minutes.",
+    "impactForIndividuals": [
+      "🎨 Become a digital artist without years of practice",
+      "💰 Build a digital art business (R$ 5k–50k/month)",
+      "🖼️ Produce a world-class portfolio fast"
+    ],
+    "impactForEntrepreneurs": [
+      "🎨 Cut costs on designers and illustrators",
+      "📸 Create a unique visual identity for your brand",
+      "📱 Generate unlimited, original visual content"
+    ],
+    "impactForCompanies": [
+      "💵 Save millions on visual production",
+      "🎨 Keep brand consistency at scale",
+      "📊 Produce entire campaigns in-house"
+    ],
+    "features": [
+      "Styles",
+      "Parameters",
+      "Consistency"
+    ],
+    "gettingStarted": [
+      "Subscribe",
+      "Join Discord",
+      "Test basic prompts",
+      "Explore styles"
+    ],
+    "useCases": [
+      "Art direction",
+      "Branding",
+      "Visual concepts"
+    ],
+    "bestPractices": [
+      "Use visual references",
+      "Control parameters"
+    ],
+    "pitfalls": [
+      "Ethical style concerns",
+      "Character consistency"
+    ],
+    "prompts": [
+      {
+        "title": "Cinematic Style",
+        "content": "[subject], cinematic lighting, 35mm, depth of field, --ar 3:2 --v 6 --stylize 400"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Midjourney Masterclass",
+        "level": "Intermediate"
+      }
+    ]
+  },
+  "stable-diffusion": {
+    "title": "Stable Diffusion",
+    "category": "Image",
+    "description": "Open-source pipeline for image generation with high control.",
+    "detailedDescription": "Stable Diffusion is the most powerful open-source solution for image generation, offering total control over the creative process.",
+    "impactForIndividuals": [
+      "🎨 Create art with no credit limits",
+      "💻 Learn generative AI in depth",
+      "🔧 Customize models for specific needs"
+    ],
+    "impactForEntrepreneurs": [
+      "💰 Zero cost after initial setup",
+      "🎯 Full control over generation",
+      "🚀 Create unique products with custom models"
+    ],
+    "impactForCompanies": [
+      "🔒 Keep data and images private",
+      "💵 Eliminate recurring API costs",
+      "🎨 Develop proprietary models"
+    ],
+    "features": [
+      "Checkpoint models",
+      "LoRAs",
+      "ControlNet"
+    ],
+    "gettingStarted": [
+      "Install Automatic1111 or ComfyUI",
+      "Download models",
+      "Test ControlNet"
+    ],
+    "useCases": [
+      "Design",
+      "Product",
+      "Procedural art"
+    ],
+    "bestPractices": [
+      "Manage versions",
+      "Document seeds"
+    ],
+    "pitfalls": [
+      "Complex setup",
+      "GPU usage"
+    ],
+    "prompts": [
+      {
+        "title": "Product",
+        "content": "photo of [product], studio lighting, 8k, ultra-detailed, --seed 1234"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Stable Diffusion Essential",
+        "level": "Intermediate"
+      }
+    ]
+  },
+  "leonardo": {
+    "title": "Leonardo AI",
+    "category": "Image",
+    "description": "Practical tool for generating images with presets and ready-made models.",
+    "detailedDescription": "Leonardo AI democratizes professional visual creation with an intuitive interface and specialized models for scaled production.",
+    "impactForIndividuals": [
+      "🎨 Create professional art easily",
+      "💰 Side income with design (R$ 3k-15k/month)",
+      "🚀 Produce 100x more visual content"
+    ],
+    "impactForEntrepreneurs": [
+      "📸 Eliminate product photography costs",
+      "🛍️ Create complete catalogs quickly",
+      "💰 Reduce creation costs by 90%"
+    ],
+    "impactForCompanies": [
+      "💵 Save on massive visual production",
+      "⚡ Drastically accelerate time-to-market",
+      "🎨 Maintain visual consistency at scale"
+    ],
+    "features": [
+      "Presets",
+      "Canvas",
+      "Custom models"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Use presets",
+      "Adjust parameters"
+    ],
+    "useCases": [
+      "E-commerce",
+      "Social media",
+      "Thumbnail"
+    ],
+    "bestPractices": [
+      "Iterate variations",
+      "Preset library"
+    ],
+    "pitfalls": [
+      "Credit limits"
+    ],
+    "prompts": [
+      {
+        "title": "Packshots",
+        "content": "[product], white background, high-key, soft shadows"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Leonardo AI for Creators",
+        "level": "Beginner"
+      }
+    ]
+  },
+  "n8n": {
+    "title": "n8n",
+    "category": "Automation",
+    "description": "Visual automation with nodes, webhooks, and integrations.",
+    "detailedDescription": "n8n is the most powerful and flexible automation tool, giving you total freedom to build any automation you can imagine.",
+    "impactForIndividuals": [
+      "💼 Become a highly valued specialist (R$ 10k-25k)",
+      "⚡ Eliminate 90% of repetitive manual work",
+      "🏢 Build your own automation consultancy"
+    ],
+    "impactForEntrepreneurs": [
+      "⚙️ Run your business with 10x less effort",
+      "📈 Scale without proportionally increasing costs",
+      "🤖 Create automated digital products"
+    ],
+    "impactForCompanies": [
+      "💵 Save millions in operational costs",
+      "⏰ Shrink processes from days to minutes",
+      "🔄 Integrate legacy systems with modern technologies"
+    ],
+    "features": [
+      "Self-host",
+      "Nodes",
+      "Webhooks"
+    ],
+    "gettingStarted": [
+      "Create account/cloud or docker",
+      "Build your first workflow",
+      "Test webhooks"
+    ],
+    "useCases": [
+      "Marketing automation",
+      "Ops",
+      "Chatbots"
+    ],
+    "bestPractices": [
+      "Version your workflows",
+      "Log and retries"
+    ],
+    "pitfalls": [
+      "Instance maintenance",
+      "Rate limits"
+    ],
+    "relatedCourses": [
+      {
+        "title": "Automation with n8n",
+        "level": "Intermediate"
+      }
+    ]
+  },
+  "make": {
+    "title": "Make",
+    "category": "Automation",
+    "description": "Visual automation with hundreds of integrations.",
+    "detailedDescription": "Make (formerly Integromat) offers intuitive visual automation with a drag-and-drop interface to connect hundreds of applications without code.",
+    "impactForIndividuals": [
+      "⚡ Automate tasks and free up 15+ hours per week",
+      "💰 Create an automation side business (R$ 5k-15k/month)",
+      "🎯 Become a sought-after specialist in the market"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Launch and scale businesses with full automation",
+      "💸 Reduce operational costs by 60%",
+      "📊 Integrate all your tools seamlessly"
+    ],
+    "impactForCompanies": [
+      "💰 Save hundreds of thousands annually",
+      "⚡ Accelerate processes from days to minutes",
+      "🔗 Integrate systems without custom development"
+    ],
+    "features": [
+      "Scenarios",
+      "Integrations"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Build scenario",
+      "Test triggers"
+    ],
+    "useCases": [
+      "Reports",
+      "CRM",
+      "Leads"
+    ],
+    "bestPractices": [
+      "Error handling",
+      "Pagination"
+    ],
+    "pitfalls": [
+      "Costs per operation"
+    ],
+    "relatedCourses": [
+      {
+        "title": "Make: Total Integration",
+        "level": "Beginner"
+      }
+    ]
+  },
+  "zapier": {
+    "title": "Zapier",
+    "category": "Automation",
+    "description": "Simple automation for SaaS apps.",
+    "detailedDescription": "Zapier is the most popular automation platform, connecting thousands of apps with a simple and intuitive interface.",
+    "impactForIndividuals": [
+      "⚡ Automate tasks without technical knowledge",
+      "⏰ Save 10+ hours per week",
+      "🔗 Connect all your favorite apps"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Automate operations quickly",
+      "💰 Reduce operational costs",
+      "📊 Integrate business tools"
+    ],
+    "impactForCompanies": [
+      "💵 Reduce integration costs",
+      "⚡ Implement automations quickly",
+      "🔗 Connect diverse systems"
+    ],
+    "features": [
+      "Zaps",
+      "Triggers",
+      "Multi-step"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Connect apps",
+      "Create first Zap"
+    ],
+    "useCases": [
+      "Leads",
+      "Notifications",
+      "Spreadsheets"
+    ],
+    "bestPractices": [
+      "Name zaps clearly",
+      "Document dependencies"
+    ],
+    "pitfalls": [
+      "Task limits"
+    ]
+  },
+  "flowise": {
+    "title": "Flowise",
+    "category": "Low-code",
+    "description": "Build chatbots and LLM pipelines with a visual interface.",
+    "detailedDescription": "Flowise lets you create complex AI applications visually, connecting LLMs, vector databases, and tools without coding.",
+    "impactForIndividuals": [
+      "🤖 Build professional chatbots easily",
+      "💡 Develop AI applications without coding",
+      "📚 Learn LLM architecture hands-on"
+    ],
+    "impactForEntrepreneurs": [
+      "🤖 Launch AI products fast",
+      "💰 Create custom AI solutions",
+      "🚀 Prototype and validate AI ideas"
+    ],
+    "impactForCompanies": [
+      "🤖 Implement AI without a specialized team",
+      "💵 Cut AI development costs",
+      "🔧 Build internal AI solutions quickly"
+    ],
+    "features": [
+      "Canvas",
+      "LLM chains",
+      "Connectors"
+    ],
+    "gettingStarted": [
+      "Spin up an instance",
+      "Assemble a chain",
+      "Test a provider"
+    ],
+    "useCases": [
+      "FAQ bots",
+      "RAG",
+      "Smart forms"
+    ],
+    "bestPractices": [
+      "Save versions",
+      "Monitor latency"
+    ],
+    "pitfalls": [
+      "Deployment complexity"
+    ]
+  },
+  "dall-e": {
+    "title": "DALL-E 3",
+    "category": "Visual Creation",
+    "description": "Photorealistic image generator integrated with ChatGPT.",
+    "detailedDescription": "DALL-E 3 is OpenAI's most advanced image generator, fully integrated with ChatGPT. Create stunning images from text descriptions with photorealistic quality.",
+    "impactForIndividuals": [
+      "🎨 Create professional images instantly",
+      "💰 Eliminate designer costs for simple projects",
+      "🚀 Visualize ideas immediately"
+    ],
+    "impactForEntrepreneurs": [
+      "📸 Create marketing visuals quickly",
+      "🎨 Prototype visual concepts",
+      "📈 Generate unlimited visual content"
+    ],
+    "impactForCompanies": [
+      "🎨 Fast visual production for presentations",
+      "📊 Instant visual concepts",
+      "🚀 Agile visual marketing"
+    ],
+    "features": [
+      "HD generation",
+      "Integrated with ChatGPT",
+      "Multiple styles",
+      "Editing"
+    ],
+    "gettingStarted": [
+      "Use ChatGPT Plus",
+      "Describe the image",
+      "Iterate with refinements"
+    ],
+    "useCases": [
+      "Visual marketing",
+      "Product concepts",
+      "Illustrations"
+    ],
+    "bestPractices": [
+      "Be specific",
+      "Use visual references",
+      "Iterate"
+    ],
+    "pitfalls": [
+      "Generation limits",
+      "Limited fine control"
+    ],
+    "prompts": [
+      {
+        "title": "Product",
+        "content": "Create a professional product photo of [produto], studio lighting, white background, high detail, commercial photography style"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "ChatGPT Masterclass",
+        "level": "All"
+      }
+    ]
+  },
+  "runwayml": {
+    "title": "RunwayML",
+    "category": "Visual Creation",
+    "description": "Creative AI tools for professional-grade video and image.",
+    "detailedDescription": "RunwayML revolutionizes video creation with AI, offering everything from text-to-video generation to advanced AI-powered editing.",
+    "impactForIndividuals": [
+      "🎬 Create professional videos without technical expertise",
+      "💰 Start a career in AI video production",
+      "🚀 Produce content 10x faster"
+    ],
+    "impactForEntrepreneurs": [
+      "📹 Create video campaigns without a production company",
+      "💵 Save thousands on production",
+      "📱 Generate content for all platforms"
+    ],
+    "impactForCompanies": [
+      "🎬 Produce videos in-house",
+      "💰 Cut production costs by 80%",
+      "⚡ Drastically accelerate time-to-market"
+    ],
+    "features": [
+      "Gen-2 video",
+      "Frame interpolation",
+      "Motion brush",
+      "Inpainting"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Explore Gen-2",
+      "Test motion tracking"
+    ],
+    "useCases": [
+      "Video marketing",
+      "Motion graphics",
+      "VFX"
+    ],
+    "bestPractices": [
+      "Plan your takes",
+      "Use references",
+      "Iterate progressively"
+    ],
+    "pitfalls": [
+      "Limited credits",
+      "Temporal consistency"
+    ],
+    "prompts": [
+      {
+        "title": "Product Video",
+        "content": "Cinematic product reveal of [product], slow motion, dramatic lighting, 4k"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "AI Video: RunwayML",
+        "level": "Intermediate"
+      }
+    ]
+  },
+  "elevenlabs": {
+    "title": "ElevenLabs",
+    "category": "Audio",
+    "description": "Ultra-realistic voice synthesis with voice cloning and multiple languages.",
+    "detailedDescription": "ElevenLabs delivers the most realistic AI voice on the market, indistinguishable from human voices, with cloning and multi-language support.",
+    "impactForIndividuals": [
+      "🎙️ Create audiobooks and podcasts professionally",
+      "💰 Monetize audio content creation",
+      "🗣️ Clone your own voice at scale"
+    ],
+    "impactForEntrepreneurs": [
+      "📢 Create ads and videos with professional voiceover",
+      "💵 Eliminate voice actor costs",
+      "🌍 Expand into multiple languages"
+    ],
+    "impactForCompanies": [
+      "🎧 Produce training and courses at scale",
+      "💰 Save millions on voiceover",
+      "🌍 Localize content globally"
+    ],
+    "features": [
+      "Voice cloning",
+      "Multi-language",
+      "Emotional control",
+      "API"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Test voices",
+      "Clone voice",
+      "Adjust parameters"
+    ],
+    "useCases": [
+      "Audiobooks",
+      "Dubbing",
+      "Virtual assistants",
+      "Podcasts"
+    ],
+    "bestPractices": [
+      "Provide clean audio for cloning",
+      "Adjust speed and emotion"
+    ],
+    "pitfalls": [
+      "Character limits",
+      "Ethical concerns around cloning"
+    ],
+    "relatedCourses": [
+      {
+        "title": "Audio with AI: ElevenLabs",
+        "level": "Beginner"
+      }
+    ]
+  },
+  "suno": {
+    "title": "Suno",
+    "category": "Audio",
+    "description": "Complete AI music generation – lyrics, melody, vocals, and instrumentation.",
+    "detailedDescription": "Suno revolutionizes music creation by enabling the generation of complete, professional, and original songs from simple text descriptions.",
+    "impactForIndividuals": [
+      "🎵 Create complete songs without instruments",
+      "💰 Start a music career with AI",
+      "🎧 Produce unlimited original soundtracks"
+    ],
+    "impactForEntrepreneurs": [
+      "🎬 Create royalty-free soundtracks for videos",
+      "💵 Eliminate costs for licensed music",
+      "🎵 Produce unique jingles and brand tracks"
+    ],
+    "impactForCompanies": [
+      "🎵 Unlimited in-house music production",
+      "💰 Zero royalty costs",
+      "🎧 Custom music for your brand"
+    ],
+    "features": [
+      "Text-to-music",
+      "Custom lyrics",
+      "Multiple genres",
+      "Extensions"
+    ],
+    "gettingStarted": [
+      "Create account",
+      "Describe the style",
+      "Customize lyrics",
+      "Generate variations"
+    ],
+    "useCases": [
+      "Video soundtracks",
+      "Jingles",
+      "Background music",
+      "Podcasts"
+    ],
+    "bestPractices": [
+      "Be specific about the genre",
+      "Provide lyrics or themes",
+      "Generate multiple versions"
+    ],
+    "pitfalls": [
+      "Complex copyright issues",
+      "Variable quality"
+    ],
+    "prompts": [
+      {
+        "title": "Jingle",
+        "content": "Upbeat corporate jingle, 30 seconds, professional, energetic, about [brand]"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "AI Music: Suno",
+        "level": "Beginner"
+      }
+    ]
+  },
+  "github-copilot": {
+    "title": "GitHub Copilot",
+    "category": "Code",
+    "description": "AI-powered programming assistant built into VS Code and popular IDEs.",
+    "detailedDescription": "GitHub Copilot transforms programming by delivering real-time, contextual code suggestions, dramatically accelerating development.",
+    "impactForIndividuals": [
+      "💻 Code 55% faster, proven",
+      "💰 Boost your salary by becoming a 10x dev",
+      "📚 Learn new languages 5x faster"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Ship products 2x faster",
+      "💵 Cut costs on your tech team",
+      "💡 Execute ideas without a large team"
+    ],
+    "impactForCompanies": [
+      "⚡ Increase dev productivity by 55%",
+      "💰 180% ROI in 12 months",
+      "🏆 Attract and retain tech talent"
+    ],
+    "features": [
+      "Code completion",
+      "Built-in chat",
+      "Multi-language",
+      "Auto docs"
+    ],
+    "gettingStarted": [
+      "Install the extension",
+      "Authenticate",
+      "Set your preferences",
+      "Accept suggestions"
+    ],
+    "useCases": [
+      "Fullstack development",
+      "Testing",
+      "Refactoring",
+      "Documentation"
+    ],
+    "bestPractices": [
+      "Review suggestions critically",
+      "Use chat for context",
+      "Set up keybindings"
+    ],
+    "pitfalls": [
+      "Over-reliance",
+      "Generated code security",
+      "Code licenses"
+    ],
+    "prompts": [
+      {
+        "title": "Function with Tests",
+        "content": "/tests - generate a function for [task] with full test coverage"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "GitHub Copilot Pro",
+        "level": "Intermediate"
+      }
+    ]
+  },
+  "cursor": {
+    "title": "Cursor",
+    "category": "Code",
+    "description": "Native AI IDE - the future of programming with AI integrated from the start.",
+    "detailedDescription": "Cursor is the revolutionary IDE built from scratch with AI at its core, offering an unparalleled AI-assisted programming experience.",
+    "impactForIndividuals": [
+      "💻 Code at the speed of thought",
+      "🚀 Build projects once impossible",
+      "📚 Master any tech stack fast"
+    ],
+    "impactForEntrepreneurs": [
+      "⚡ Develop MVPs in days, not months",
+      "💰 Cut development costs by 70%",
+      "🎯 Iterate and validate ideas 10x faster"
+    ],
+    "impactForCompanies": [
+      "💻 Transform engineering productivity",
+      "🏆 Maintain technological competitiveness",
+      "⚡ Drastically accelerate time-to-market"
+    ],
+    "features": [
+      "Composer (multi-file edit)",
+      "Contextual chat",
+      "Terminal AI",
+      "Codebase understanding"
+    ],
+    "gettingStarted": [
+      "Download Cursor",
+      "Import VS Code settings",
+      "Explore Composer",
+      "Use Cmd+K"
+    ],
+    "useCases": [
+      "Rapid development",
+      "Massive refactoring",
+      "Debugging",
+      "Architecture"
+    ],
+    "bestPractices": [
+      "Use Composer for multi-file changes",
+      "Index the codebase",
+      "Configure AI rules"
+    ],
+    "pitfalls": [
+      "API cost",
+      "Feature learning curve"
+    ],
+    "prompts": [
+      {
+        "title": "Complete Refactoring",
+        "content": "@codebase refactor architecture to [pattern] while keeping functionality"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Cursor: New Era of Code",
+        "level": "Advanced"
+      }
+    ]
+  },
+  "notebooklm": {
+    "title": "NotebookLM",
+    "category": "Productivity",
+    "description": "Google's research assistant that works with your documents.",
+    "detailedDescription": "NotebookLM is Google's revolutionary research assistant that deeply understands your documents and sources, providing precise insights.",
+    "impactForIndividuals": [
+      "📚 Process books and papers 10x faster",
+      "🎓 Drastically accelerate academic research",
+      "💡 Extract insights from complex documents"
+    ],
+    "impactForEntrepreneurs": [
+      "📊 Analyze business documents instantly",
+      "💡 Extract competitive insights quickly",
+      "📝 Generate research-based content"
+    ],
+    "impactForCompanies": [
+      "📚 Democratize documented knowledge",
+      "🔍 Accelerate onboarding and training",
+      "💰 Reduce document analysis time"
+    ],
+    "features": [
+      "Source grounding",
+      "Audio overviews",
+      "Citation tracking",
+      "Multi-source"
+    ],
+    "gettingStarted": [
+      "Access NotebookLM",
+      "Upload sources",
+      "Ask questions",
+      "Generate audio overview"
+    ],
+    "useCases": [
+      "Academic research",
+      "Contract analysis",
+      "Learning",
+      "Content research"
+    ],
+    "bestPractices": [
+      "Organize sources by project",
+      "Use citations",
+      "Generate summaries"
+    ],
+    "pitfalls": [
+      "Limited to provided sources",
+      "No internet access"
+    ],
+    "prompts": [
+      {
+        "title": "Deep Analysis",
+        "content": "Analyze all documents and identify the top 5 insights about [topic] with citations"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "NotebookLM for Research"
+      }
+    ]
+  },
+  "pika-labs": {
+    "title": "Pika Labs",
+    "category": "Visual Creation",
+    "description": "High-quality AI video generation from text and images.",
+    "detailedDescription": "Pika Labs democratizes AI video creation, enabling professional video generation from text descriptions or images.",
+    "impactForIndividuals": [
+      "🎬 Create videos without equipment or expertise",
+      "💰 Start an AI video production business",
+      "🚀 Produce unlimited social media content"
+    ],
+    "impactForEntrepreneurs": [
+      "📹 Create video ads in-house",
+      "💵 Eliminate production costs",
+      "📱 Generate content for all platforms"
+    ],
+    "impactForCompanies": [
+      "🎬 Massive in-house video production",
+      "💰 Reduce video marketing costs",
+      "⚡ Test campaigns quickly"
+    ],
+    "features": [
+      "Text-to-video",
+      "Image-to-video",
+      "Video extension",
+      "Camera controls"
+    ],
+    "gettingStarted": [
+      "Access Discord/Web",
+      "Describe the video",
+      "Adjust parameters",
+      "Refine the result"
+    ],
+    "useCases": [
+      "Social media",
+      "Ads",
+      "Concept videos",
+      "Animations"
+    ],
+    "bestPractices": [
+      "Be specific about movement",
+      "Use image-to-video for control",
+      "Iterate progressively"
+    ],
+    "pitfalls": [
+      "Limited credits",
+      "Consistency between frames"
+    ],
+    "prompts": [
+      {
+        "title": "Product in Action",
+        "content": "[product] being used, smooth camera movement, professional lighting, 3 seconds"
+      }
+    ],
+    "relatedCourses": [
+      {
+        "title": "Pika: AI Videos",
+        "level": "Beginner"
+      }
+    ]
+  },
+  "meta-ai": {
+    "title": "Meta AI",
+    "category": "Conversational AI",
+    "description": "Meta's open-source Llama models, available for free via meta.ai and for download.",
+    "detailedDescription": "Meta AI offers the Llama model family, which are among the most powerful open-source LLMs on the market. Llama 3 competes directly with GPT-4 and Claude on a wide range of tasks, with the advantage of being able to run locally or on your own infrastructure. Accessible for free through the meta.ai website or integrated into WhatsApp, Instagram, and Facebook.",
+    "impactForIndividuals": [
+      "🆓 Free access to high-quality AI with no subscription",
+      "📱 Built into the WhatsApp and Instagram you already use",
+      "🔓 Open models that can be run locally"
+    ],
+    "impactForEntrepreneurs": [
+      "💰 Zero cost to get started with conversational AI",
+      "🏗️ Llama models can be customized for your business",
+      "🌐 No vendor lock-in because it's open source"
+    ],
+    "impactForCompanies": [
+      "🔒 On-premise deployment for sensitive data with Llama",
+      "⚡ Fine-tuning models for specific use cases",
+      "📊 No API costs for internal use with your own infrastructure"
+    ],
+    "features": [
+      "Llama 3 with up to 405B parameters",
+      "Free access via meta.ai",
+      "Integration with WhatsApp and Instagram",
+      "Open-weight models available for download"
+    ],
+    "gettingStarted": [
+      "Go to meta.ai in your browser",
+      "Log in with your Meta account",
+      "Start chatting right away",
+      "For advanced use, download the models at llama.meta.com"
+    ],
+    "useCases": [
+      "Free personal assistant via WhatsApp",
+      "Research and information summarization",
+      "Text and code generation",
+      "Foundation for custom AI applications"
+    ],
+    "bestPractices": [
+      "Use meta.ai for day-to-day tasks at no cost",
+      "Consider local Llama for total privacy",
+      "Explore the different model sizes for your use case"
+    ],
+    "pitfalls": [
+      "Features may vary by region",
+      "Web version is less mature than ChatGPT"
+    ],
+    "prompts": [
+      {
+        "title": "Quick Summary",
+        "content": "Summarize the key points about [topic] in 5 clear and objective bullet points"
+      }
+    ]
+  },
+  "mistral": {
+    "title": "Mistral AI",
+    "category": "Conversational AI",
+    "description": "European AI company with efficient, open-weight models, a reference in performance per parameter.",
+    "detailedDescription": "Mistral AI is the leading European AI company, known for creating extremely efficient models that compete with much larger ones. Mistral Large rivals GPT-4, while smaller models like Mistral 7B offer excellent cost-effectiveness. It stands out for its open-weight approach and compliance with European data regulations.",
+    "impactForIndividuals": [
+      "🚀 Fast and efficient models for daily use",
+      "🇪🇺 European alternative with a focus on privacy",
+      "💬 Free Le Chat for AI conversations"
+    ],
+    "impactForEntrepreneurs": [
+      "💰 API with excellent cost-effectiveness",
+      "🔧 Smaller models that run on affordable hardware",
+      "📋 Native GDPR compliance"
+    ],
+    "impactForCompanies": [
+      "🏢 Sovereign option for European companies",
+      "⚡ Mixtral MoE for high performance at lower cost",
+      "🔒 On-premise deployment available"
+    ],
+    "features": [
+      "Mistral Large for complex tasks",
+      "Mixtral with Mixture of Experts architecture",
+      "Le Chat as a free interface",
+      "API compatible with OpenAI format"
+    ],
+    "gettingStarted": [
+      "Go to chat.mistral.ai to use Le Chat for free",
+      "Create an account on the Mistral platform",
+      "Get an API key at console.mistral.ai",
+      "Integrate using the Python SDK or REST API"
+    ],
+    "useCases": [
+      "Enterprise chatbot with European compliance",
+      "Processing documents in multiple languages",
+      "Efficient code generation",
+      "Data analysis with specialized models"
+    ],
+    "bestPractices": [
+      "Use Mistral Small for simple tasks and save money",
+      "Mixtral is ideal for balancing cost and quality",
+      "Leverage OpenAI format compatibility for easy migration"
+    ],
+    "pitfalls": [
+      "Smaller ecosystem than OpenAI and Google",
+      "Le Chat still evolving compared to ChatGPT"
+    ],
+    "prompts": [
+      {
+        "title": "Multilingual Analysis",
+        "content": "Analyze the following text in [idioma] and provide a detailed summary in Portuguese: [texto]"
+      }
+    ]
+  },
+  "grok": {
+    "title": "Grok",
+    "category": "Conversational AI",
+    "description": "xAI's AI by Elon Musk, integrated with X/Twitter with access to real-time information.",
+    "detailedDescription": "Grok is the AI model from xAI, Elon Musk's company, with direct, real-time access to X (Twitter) posts. It stands out for having an \"uncensored\" mode and being able to answer about events that just happened. Grok 2 competes with the best models on the market in reasoning and text generation.",
+    "impactForIndividuals": [
+      "📰 Answers based on real-time X info",
+      "🎭 Fun mode with more irreverent responses",
+      "🆓 Free access with limit on X"
+    ],
+    "impactForEntrepreneurs": [
+      "📊 Real-time trend monitoring",
+      "🐦 Built-in X sentiment analysis",
+      "✍️ Social media content generation"
+    ],
+    "impactForCompanies": [
+      "📈 Market intelligence with real-time X data",
+      "🔍 Brand mention analysis",
+      "🤖 API for product integration"
+    ],
+    "features": [
+      "Real-time access to X posts",
+      "Image generation with Aurora",
+      "Fun mode vs Regular mode",
+      "Grok 2 with advanced reasoning"
+    ],
+    "gettingStarted": [
+      "Go to grok.x.ai or use it through the X app",
+      "Log in with your X account",
+      "Choose between Fun or Regular mode",
+      "For the API, go to console.x.ai"
+    ],
+    "useCases": [
+      "Researching recent news and events",
+      "Analyzing social media trends",
+      "Generating content with an informal tone",
+      "Summarizing X discussions on a topic"
+    ],
+    "bestPractices": [
+      "Leverage the real-time access for recent news",
+      "Use Fun mode for creative content",
+      "Combine with X data for trend analysis"
+    ],
+    "pitfalls": [
+      "May reflect biases from X content",
+      "Integration ecosystem still limited"
+    ],
+    "prompts": [
+      {
+        "title": "Trending Now",
+        "content": "What are the main discussions happening on X right now about [topic]? Summarize the most relevant points of view."
+      }
+    ]
+  },
+  "deepseek": {
+    "title": "DeepSeek",
+    "category": "Conversational AI",
+    "description": "Chinese AI lab with cutting-edge open source models, including DeepSeek-R1 with advanced reasoning.",
+    "detailedDescription": "DeepSeek is a Chinese lab that shocked the market with models that rival the world's best at far lower costs. DeepSeek-V3 competes with GPT-4 in general benchmarks, while DeepSeek-R1 introduced chain-of-thought reasoning comparable to OpenAI's o1. All models are open source and can be run locally.",
+    "impactForIndividuals": [
+      "🧠 Free advanced reasoning with R1",
+      "🆓 Unlimited use at chat.deepseek.com",
+      "💻 Open source models to run locally"
+    ],
+    "impactForEntrepreneurs": [
+      "💰 API up to 95% cheaper than GPT-4",
+      "🔓 No dependency on US providers",
+      "🏗️ Free fine-tuning with no license restrictions"
+    ],
+    "impactForCompanies": [
+      "⚡ Dramatically lower cost at scale",
+      "🔒 Fully private deployment with open source models",
+      "🧪 Reasoning models for complex engineering tasks"
+    ],
+    "features": [
+      "DeepSeek-V3 for general tasks",
+      "DeepSeek-R1 with reasoning chain",
+      "API with very competitive pricing",
+      "100% open source models"
+    ],
+    "gettingStarted": [
+      "Go to chat.deepseek.com for free use",
+      "Enable 'DeepThink' mode for deep reasoning",
+      "For API, sign up at platform.deepseek.com",
+      "For local use, download via Ollama or Hugging Face"
+    ],
+    "useCases": [
+      "Solving complex math and logic problems",
+      "Programming and code debugging",
+      "Deep document analysis",
+      "Open source alternative for enterprise applications"
+    ],
+    "bestPractices": [
+      "Use R1 for problems that require step-by-step reasoning",
+      "V3 is better for quick everyday tasks",
+      "Run locally with Ollama for total privacy"
+    ],
+    "pitfalls": [
+      "Server in China may have high latency from Brazil",
+      "Censorship on topics politically sensitive to China"
+    ],
+    "prompts": [
+      {
+        "title": "Deep Reasoning",
+        "content": "Think step by step and solve: [complex problem]. Show your full reasoning before giving the final answer."
+      }
+    ]
+  },
+  "cohere": {
+    "title": "Cohere",
+    "category": "Conversational AI",
+    "description": "Enterprise NLP platform focused on RAG, embeddings, and semantic search for companies.",
+    "detailedDescription": "Cohere is an enterprise-focused AI platform, with highlights on Retrieval-Augmented Generation (RAG), high-quality embeddings, and semantic search. The Command R+ model is optimized for tasks involving long documents and precise citations. Ideal for businesses needing AI connected to internal knowledge bases.",
+    "impactForIndividuals": [
+      "📚 Powerful semantic search across documents",
+      "🔗 Answers with source citations",
+      "🆓 Generous free tier to experiment"
+    ],
+    "impactForEntrepreneurs": [
+      "📄 Ready-to-use RAG to connect to your data",
+      "🔍 High-quality embeddings for search",
+      "💰 Affordable pricing for startups"
+    ],
+    "impactForCompanies": [
+      "🏢 Focused on enterprise security and compliance",
+      "📊 Connect AI to internal knowledge bases",
+      "🌐 Native multilingual support in 100+ languages"
+    ],
+    "features": [
+      "Command R+ for advanced RAG",
+      "High-quality multilingual embeddings",
+      "Rerank to improve search results",
+      "Text classification at scale"
+    ],
+    "gettingStarted": [
+      "Create an account at dashboard.cohere.com",
+      "Get your free API key",
+      "Try the playground to test models",
+      "Integrate via Python SDK or REST API"
+    ],
+    "useCases": [
+      "Smart search in internal documentation",
+      "Chatbot with RAG over a knowledge base",
+      "Automatic support ticket classification",
+      "Reranking of existing search results"
+    ],
+    "bestPractices": [
+      "Use Embed to create high-quality vector stores",
+      "Command R+ with RAG for answers with citations",
+      "Rerank improves any existing search system"
+    ],
+    "pitfalls": [
+      "Less versatile than ChatGPT for general use",
+      "Learning curve to implement RAG correctly"
+    ],
+    "prompts": [
+      {
+        "title": "RAG with Citations",
+        "content": "Based on the provided documents, answer: [pergunta]. Cite the specific sources for each statement."
+      }
+    ]
+  },
+  "jasper": {
+    "title": "Jasper AI",
+    "category": "Marketing",
+    "description": "AI marketing platform that generates on-brand content at scale for teams.",
+    "detailedDescription": "Jasper is the leading AI platform for marketing teams, focused on keeping brand voice and identity consistent. It lets you create complete campaigns, blog posts, emails, ads and social media content with AI trained on your company’s tone. It has ready-made templates for dozens of marketing formats.",
+    "impactForIndividuals": [
+      "✍️ Create professional marketing content quickly",
+      "📝 50+ templates for different formats",
+      "🎯 Conversion-optimized content"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Scale content production without hiring a team",
+      "🎨 Maintain brand consistency across all content",
+      "📊 Complete campaigns generated in minutes"
+    ],
+    "impactForCompanies": [
+      "👥 Team collaboration with brand control",
+      "🔒 Configurable and consistent brand voice",
+      "📈 Integration with your existing marketing stack"
+    ],
+    "features": [
+      "Brand Voice to maintain a consistent tone",
+      "50+ marketing templates",
+      "Integrated multi-channel campaigns",
+      "Chrome extension"
+    ],
+    "gettingStarted": [
+      "Go to jasper.ai and start the 7-day trial",
+      "Set up your Brand Voice with content samples",
+      "Choose a template for your content type",
+      "Generate, edit and publish"
+    ],
+    "useCases": [
+      "SEO-optimized blog posts",
+      "Ad copy for Google and Meta",
+      "Marketing emails and nurturing sequences",
+      "Social media content at scale"
+    ],
+    "bestPractices": [
+      "Configure Brand Voice with at least 5 content examples",
+      "Use specific templates instead of free-form text",
+      "Always review and humanize the generated content"
+    ],
+    "pitfalls": [
+      "Higher price compared to using ChatGPT directly",
+      "Content can become generic without a good Brand Voice setup"
+    ],
+    "prompts": [
+      {
+        "title": "SEO Blog",
+        "content": "Write a blog article about [topic] targeting the keyword [keyword], in a [brand tone] tone, 1500 words with SEO-optimized subheadings."
+      }
+    ]
+  },
+  "copy-ai": {
+    "title": "Copy.ai",
+    "category": "Marketing",
+    "description": "A copy automation platform for sales and marketing with AI workflows.",
+    "detailedDescription": "Copy.ai evolved from a copy generator into a full go-to-market automation platform with AI. It allows you to create workflows that automate prospecting, lead enrichment, sales email personalization, and marketing content generation. It offers a generous free tier with 2.000 words per month.",
+    "impactForIndividuals": [
+      "✍️ Generate persuasive copy in seconds",
+      "🆓 2.000 free words per month",
+      "📋 Templates for dozens of formats"
+    ],
+    "impactForEntrepreneurs": [
+      "📧 Automate personalized sales emails",
+      "🔄 Automated go-to-market workflows",
+      "💰 Lower content production costs"
+    ],
+    "impactForCompanies": [
+      "⚙️ Full sales pipeline automation",
+      "👥 Team collaboration with approvals",
+      "📊 AI lead enrichment and scoring"
+    ],
+    "features": [
+      "GTM automation workflows",
+      "90+ copy templates",
+      "Lead enrichment",
+      "Outreach personalization at scale"
+    ],
+    "gettingStarted": [
+      "Create a free account at copy.ai",
+      "Explore templates by category",
+      "Set up a workflow for your use case",
+      "Connect your tools via integrations"
+    ],
+    "useCases": [
+      "Personalized sales emails at scale",
+      "E-commerce product descriptions",
+      "Copy for landing pages and ads",
+      "Outbound prospecting automation"
+    ],
+    "bestPractices": [
+      "Use workflows to automate repetitive tasks",
+      "Personalize outputs with real lead data",
+      "Test different tones to find what converts best"
+    ],
+    "pitfalls": [
+      "Very limited word count on free tier",
+      "Advanced workflows require a paid plan"
+    ],
+    "prompts": [
+      {
+        "title": "Sales Email",
+        "content": "Write a sales email for a [job title] at a [industry] company introducing [product/service] focused on the problem of [main pain point]."
+      }
+    ]
+  },
+  "grammarly": {
+    "title": "Grammarly",
+    "category": "Writing",
+    "description": "AI writing assistant that corrects grammar, tone, and clarity on any platform.",
+    "detailedDescription": "Grammarly is the world's most popular writing assistant, used by over 30 million people. It goes far beyond grammar correction: it analyzes tone, clarity, engagement, and delivery. With built-in generative AI, it now also rewrites entire texts and suggests content improvements. Works practically anywhere you type.",
+    "impactForIndividuals": [
+      "📝 Write without errors in English and other languages",
+      "🎯 Automatically adjust the tone of your text",
+      "🌐 Works across emails, docs, social media, and more"
+    ],
+    "impactForEntrepreneurs": [
+      "✉️ Professional and persuasive emails, automatically",
+      "📄 Error-free documents and proposals",
+      "⏱️ Save time on proofreading"
+    ],
+    "impactForCompanies": [
+      "👥 Standardize the team's written communication",
+      "📊 Team-level writing analytics",
+      "🔒 Grammarly Business with enterprise-grade controls"
+    ],
+    "features": [
+      "Real-time grammar correction",
+      "Tone and clarity analysis",
+      "Generative AI for rewriting",
+      "Extension for Chrome, Word, and more"
+    ],
+    "gettingStarted": [
+      "Install the Chrome extension from grammarly.com",
+      "Create your free account",
+      "Start writing on any site — Grammarly appears automatically",
+      "Upgrade to Premium for advanced suggestions"
+    ],
+    "useCases": [
+      "Proofreading professional emails",
+      "Improving articles and blog posts",
+      "Adjusting tone for different audiences",
+      "Correcting academic texts"
+    ],
+    "bestPractices": [
+      "Set your communication goals for personalized suggestions",
+      "Use tone analysis before sending important emails",
+      "Review suggestions before auto-accepting"
+    ],
+    "pitfalls": [
+      "Limited Portuguese support — best in English",
+      "Generative AI suggestions only in Premium"
+    ],
+    "prompts": [
+      {
+        "title": "Professional Rewrite",
+        "content": "Rewrite this text with a more professional and direct tone, keeping the main message: [text]"
+      }
+    ]
+  },
+  "gamma": {
+    "title": "Gamma",
+    "category": "Presentations",
+    "description": "Create presentations, documents and websites with AI in minutes, no design skills needed.",
+    "detailedDescription": "Gamma revolutionizes presentation creation by using AI to generate full slides from a prompt or document. Unlike PowerPoint, Gamma creates responsive visual content that works as a presentation, document, or web page. AI suggests layout, images, and structure, allowing you to create professional decks in minutes.",
+    "impactForIndividuals": [
+      "🎨 Beautiful presentations without design skills",
+      "⚡ Full deck generated in 2 minutes",
+      "📱 Responsive content that works on any screen"
+    ],
+    "impactForEntrepreneurs": [
+      "📊 Professional pitch decks quickly",
+      "📄 Visually impactful business proposals",
+      "🔗 Share as a link - no file attachments"
+    ],
+    "impactForCompanies": [
+      "👥 Standardize company presentations",
+      "📈 Interactive reports with data",
+      "🌐 Internal web pages without a developer"
+    ],
+    "features": [
+      "AI presentation generation",
+      "Professional templates",
+      "Import documents and PDFs",
+      "Viewer engagement analytics"
+    ],
+    "gettingStarted": [
+      "Go to gamma.app and create a free account",
+      "Describe your presentation in a prompt",
+      "Choose a visual theme",
+      "Edit and customize the generated slides"
+    ],
+    "useCases": [
+      "Pitch decks for investors",
+      "Project presentations for clients",
+      "Monthly performance reports",
+      "Visual summaries of long documents"
+    ],
+    "bestPractices": [
+      "Provide a detailed outline for best results",
+      "Use document import to turn texts into presentations",
+      "Customize the theme for your brand"
+    ],
+    "pitfalls": [
+      "Limited credits on the free plan",
+      "Less fine control than PowerPoint for complex layouts"
+    ],
+    "prompts": [
+      {
+        "title": "Pitch Deck Startup",
+        "content": "Create a pitch presentation for investors of the startup [name] that solves [problem] for [target audience] with the product [product description]."
+      }
+    ]
+  },
+  "tome": {
+    "title": "Tome",
+    "category": "Presentations",
+    "description": "AI storytelling platform to create visual narratives and interactive presentations.",
+    "detailedDescription": "Tome combines AI with storytelling to create presentations that tell engaging stories. It generates complete narratives with text, images, and layout from a simple prompt. It focuses on modern visual communication with interactive pages instead of traditional slides, ideal for sales and marketing teams.",
+    "impactForIndividuals": [
+      "📖 Turn ideas into visual narratives",
+      "🎬 Effortless professional storytelling",
+      "⚡ Presentations generated in seconds"
+    ],
+    "impactForEntrepreneurs": [
+      "🎯 Business proposals that tell a story",
+      "📊 More engaging data presentations",
+      "🚀 High-impact visual communication"
+    ],
+    "impactForCompanies": [
+      "👥 Standardize your team's sales narrative",
+      "📈 Interactive decks with analytics",
+      "🎨 Consistent branding across all presentations"
+    ],
+    "features": [
+      "AI narrative generation",
+      "Integrated AI-generated images",
+      "Adaptive and interactive layout",
+      "Viewing analytics"
+    ],
+    "gettingStarted": [
+      "Go to tome.app and create an account",
+      "Describe your story or goal in a prompt",
+      "Review and edit the generated narrative",
+      "Share via link or export"
+    ],
+    "useCases": [
+      "Sales narrative for prospects",
+      "Strategy presentations",
+      "Product one-pagers",
+      "Visual executive summaries"
+    ],
+    "bestPractices": [
+      "Focus on the story you want to tell, not on the slides",
+      "Use prompts with context about the audience",
+      "Edit to add data and specifics for your case"
+    ],
+    "pitfalls": [
+      "May generate generic content without enough context",
+      "Non-traditional format may confuse conservative audiences"
+    ],
+    "prompts": [
+      {
+        "title": "Sales Narrative",
+        "content": "Create a sales narrative for [product] showing how it solves the [pain] problem for [customer profile], with impact data."
+      }
+    ]
+  },
+  "beautiful-ai": {
+    "title": "Beautiful.ai",
+    "category": "Presentations",
+    "description": "Intelligent slide design that adjusts the layout automatically as you add content.",
+    "detailedDescription": "Beautiful.ai uses intelligent design rules to create professional presentations automatically. Unlike other tools, the layout dynamically adapts as you add content, maintaining perfect proportions and alignment. With built-in generative AI, it can also create entire slides from prompts.",
+    "impactForIndividuals": [
+      "🎨 Slides always look great automatically",
+      "⏱️ Create presentations 10x faster",
+      "📐 Professional design without technical knowledge"
+    ],
+    "impactForEntrepreneurs": [
+      "📊 Presentations that look like they were made by a design agency",
+      "🏷️ Templates with your custom branding",
+      "🔄 Reuse and adapt decks quickly"
+    ],
+    "impactForCompanies": [
+      "👥 Shared company template library",
+      "🔒 Centralized brand control",
+      "📈 Integrations with corporate tools"
+    ],
+    "features": [
+      "Smart Slides with automatic layout",
+      "Generative AI for slide creation",
+      "Professional template library",
+      "Brand control and team library"
+    ],
+    "gettingStarted": [
+      "Go to beautiful.ai and start your free trial",
+      "Choose a template or start with AI",
+      "Add content and watch the layout adapt",
+      "Export as PDF or PowerPoint"
+    ],
+    "useCases": [
+      "Standardized corporate presentations",
+      "Professional business proposals",
+      "Reports with charts and data",
+      "Internal training sessions"
+    ],
+    "bestPractices": [
+      "Start with Smart Slide Templates for quick results",
+      "Set up your brand kit first for consistency",
+      "Use the built-in charts instead of importing images"
+    ],
+    "pitfalls": [
+      "No permanent free plan",
+      "Less layout flexibility than PowerPoint"
+    ],
+    "prompts": [
+      {
+        "title": "Corporate Presentation",
+        "content": "Create a presentation about [topic] with 10 slides including: cover, agenda, context, problem, solution, benefits, roadmap, team, investment, and next steps."
+      }
+    ]
+  },
+  "synthesia": {
+    "title": "Synthesia",
+    "category": "Video with AI",
+    "description": "Create videos with realistic AI avatars in 150+ languages without a camera or studio.",
+    "detailedDescription": "Synthesia is the leading platform for creating videos with AI avatars, used by 50.000+ companies including half of the Fortune 100. It lets you create professional videos by simply typing a script - the AI generates a realistic virtual presenter that speaks in 150+ languages with perfect lip sync. Ideal for training, internal communications, and marketing.",
+    "impactForIndividuals": [
+      "🎥 Create professional videos without appearing on camera",
+      "🌍 Automatically translate videos into 150+ languages",
+      "⚡ Videos ready in minutes, not days"
+    ],
+    "impactForEntrepreneurs": [
+      "📚 Scalable and editable video training",
+      "💰 Elimination of video production costs",
+      "🔄 Update videos by just changing the text"
+    ],
+    "impactForCompanies": [
+      "👥 Corporate training in multiple languages",
+      "📢 Internal communication personalized by department",
+      "🎯 Standardized onboarding videos"
+    ],
+    "features": [
+      "160+ pre-built realistic avatars",
+      "Custom avatars with your own appearance",
+      "150+ languages with lip sync",
+      "Professional video templates"
+    ],
+    "gettingStarted": [
+      "Go to synthesia.io and create an account",
+      "Choose an avatar and template",
+      "Type or paste your script",
+      "Generate the video and download it"
+    ],
+    "useCases": [
+      "Corporate training and compliance",
+      "Onboarding videos for new employees",
+      "Internal video communications",
+      "Multilingual product tutorials"
+    ],
+    "bestPractices": [
+      "Write short, direct scripts - 1 topic per video",
+      "Use slides and graphics to complement the avatar",
+      "Test different avatars to find the best one for your brand"
+    ],
+    "pitfalls": [
+      "Price can be high for individual use",
+      "Avatars still have an 'uncanny valley' feel at times"
+    ],
+    "prompts": [
+      {
+        "title": "Training Script",
+        "content": "Create a 2-minute script for a training video about [topic], with a professional yet approachable tone, divided into 3 sections: introduction, main content, and summary."
+      }
+    ]
+  },
+  "heygen": {
+    "title": "HeyGen",
+    "category": "AI Video",
+    "description": "Generation of videos with ultra-realistic AI avatars, video translation, and voice cloning.",
+    "detailedDescription": "HeyGen is an AI video platform that stands out for the visual quality of its avatars and its existing video translation feature. It lets you create avatars from a 2-minute recording and translate videos while preserving your original voice in other languages with lip syncing. It competes directly with Synthesia at more affordable prices.",
+    "impactForIndividuals": [
+      "🎭 Create a digital avatar of yourself for videos",
+      "🗣️ Clone your voice for content at scale",
+      "🌐 Translate your videos into any language"
+    ],
+    "impactForEntrepreneurs": [
+      "📹 Marketing videos without a production crew",
+      "🔄 Translate content for international markets",
+      "⚡ Rapidly prototype product videos"
+    ],
+    "impactForCompanies": [
+      "👤 Standardized corporate avatars",
+      "🌍 Video localization for global teams",
+      "📊 CRM integration for personalized videos"
+    ],
+    "features": [
+      "Ultra-realistic avatars with expressions",
+      "Video translation with voice cloning",
+      "Personalized avatar from 2-minute video",
+      "Real-time avatar streaming"
+    ],
+    "gettingStarted": [
+      "Create a free account at heygen.com",
+      "Choose an avatar or create your own",
+      "Type your script and select the language",
+      "Generate the video and share"
+    ],
+    "useCases": [
+      "Personalized sales videos",
+      "Content translation and localization",
+      "Virtual brand spokesperson",
+      "Customer support videos"
+    ],
+    "bestPractices": [
+      "Record 2 minutes of video with good lighting to create your avatar",
+      "Use video translation to expand international audience",
+      "Combine avatar with slides for educational content"
+    ],
+    "pitfalls": [
+      "Free plan credits are limited",
+      "Personalized avatar requires a Business plan"
+    ],
+    "prompts": [
+      {
+        "title": "Sales Video",
+        "content": "Create a 60-second script for a sales video for [produto] highlighting: the problem it solves, how it works, its unique advantage, and a call-to-action."
+      }
+    ]
+  },
+  "descript": {
+    "title": "Descript",
+    "category": "Video Editing",
+    "description": "Edit video and audio as easily as editing text — delete words and the video adjusts itself.",
+    "detailedDescription": "Descript revolutionized video and audio editing by letting you edit media as if it were a text document. AI automatically transcribes the content, and when you delete or move words in the transcription, the corresponding video/audio is automatically edited. It includes \"uhm\" removal, eye contact correction, and AI-powered content generation.",
+    "impactForIndividuals": [
+      "✂️ Edit video by deleting text — no complex timeline",
+      "🎙️ High-quality automatic transcription",
+      "👁️ AI eye contact correction"
+    ],
+    "impactForEntrepreneurs": [
+      "📹 5x faster video content production",
+      "🎧 Podcast edited in minutes",
+      "📱 Automatic social media clips"
+    ],
+    "impactForCompanies": [
+      "👥 Anyone on the team can edit video",
+      "📝 Automatic transcriptions and subtitles",
+      "🔄 Multi-channel content repurposing"
+    ],
+    "features": [
+      "Text-based video editing",
+      "Automatic transcription in 20+ languages",
+      "Filler word removal",
+      "Built-in screen recording"
+    ],
+    "gettingStarted": [
+      "Download Descript at descript.com",
+      "Import a video or make a recording",
+      "Edit the transcription to edit the video",
+      "Export in your desired formats"
+    ],
+    "useCases": [
+      "Podcast and interview editing",
+      "Clip creation for social media",
+      "Tutorial videos with screen recording",
+      "Automatic content subtitling"
+    ],
+    "bestPractices": [
+      "Use the transcription to quickly find the best moments",
+      "Automatically remove filler words before editing",
+      "Export in multiple formats for different platforms"
+    ],
+    "pitfalls": [
+      "Portuguese transcription accuracy is lower than English",
+      "Advanced features require a Pro plan"
+    ],
+    "prompts": [
+      {
+        "title": "Podcast Script",
+        "content": "Create a podcast episode script about [topic] with: a hook introduction (30s), development with 3 main points, and a conclusion with a call-to-action."
+      }
+    ]
+  },
+  "kling": {
+    "title": "Kling AI",
+    "category": "Video Generation",
+    "description": "AI video generation by Kuaishou, rival to Sora with high-quality videos up to 2 minutes.",
+    "detailedDescription": "Kling AI is a video generation model from the Chinese giant Kuaishou that impressed the market by rivaling OpenAI's Sora. It generates videos up to 2 minutes in 1080p with realistic physics, cinematic camera movements, and impressive temporal consistency. It supports both text-to-video and image-to-video with advanced motion control.",
+    "impactForIndividuals": [
+      "🎬 Cinematic videos from text",
+      "📸 Animate your photos with image-to-video",
+      "⏱️ Videos up to 2 minutes with consistency"
+    ],
+    "impactForEntrepreneurs": [
+      "🎥 Video content for marketing without filming",
+      "💡 Rapid prototyping of visual concepts",
+      "💰 Video production at a fraction of the cost"
+    ],
+    "impactForCompanies": [
+      "📹 Product videos with cinematic quality",
+      "🎨 Creative concepts visualized quickly",
+      "🔄 Fast iteration on visual content"
+    ],
+    "features": [
+      "Videos up to 2 minutes in 1080p",
+      "Text-to-video and image-to-video",
+      "Camera and motion control",
+      "Realistic physics and dynamics"
+    ],
+    "gettingStarted": [
+      "Go to klingai.com and create an account",
+      "Describe the scene you want to generate",
+      "Adjust duration and quality settings",
+      "Generate and download the video"
+    ],
+    "useCases": [
+      "Concept videos for marketing campaigns",
+      "Visualization of creative ideas",
+      "Content for social media",
+      "Animated storyboarding"
+    ],
+    "bestPractices": [
+      "Be detailed in describing the scene and camera movement",
+      "Use image-to-video for greater control over the result",
+      "Generate multiple variations and select the best one"
+    ],
+    "pitfalls": [
+      "Generation queue can be long during peak hours",
+      "Results with people may have facial inconsistencies"
+    ],
+    "prompts": [
+      {
+        "title": "Cinematic Scene",
+        "content": "Cinematic shot of [cena], smooth camera dolly movement, golden hour lighting, shallow depth of field, 4K quality"
+      }
+    ]
+  },
+  "luma": {
+    "title": "Luma Dream Machine",
+    "category": "Video Generation",
+    "description": "AI-powered video generation and 3D reconstruction, specialized in realistic scenes and 3D objects.",
+    "detailedDescription": "Luma AI offers Dream Machine for video generation and advanced 3D reconstruction tools from photos. Dream Machine generates high-quality videos with realistic physics and fluid motion. The NeRF/Gaussian Splatting technology allows you to create navigable 3D scenes from photos or videos, something unique in the market.",
+    "impactForIndividuals": [
+      "🎬 Generate realistic videos from text or image",
+      "📦 Create 3D models from photos",
+      "🆓 Free daily generations"
+    ],
+    "impactForEntrepreneurs": [
+      "🛍️ 3D product visualization from photos",
+      "🎥 AI-powered marketing videos",
+      "💡 Visual prototyping of concepts"
+    ],
+    "impactForCompanies": [
+      "🏗️ 3D reconstruction of spaces and products",
+      "📹 Video content at scale",
+      "🔧 API for pipeline integration"
+    ],
+    "features": [
+      "Dream Machine for text/image-to-video",
+      "3D reconstruction from photos",
+      "Gaussian Splatting for interactive scenes",
+      "API for developers"
+    ],
+    "gettingStarted": [
+      "Go to lumalabs.ai and create an account",
+      "Choose between video or 3D",
+      "For video: describe the scene or upload an image",
+      "For 3D: upload photos from different angles of the object"
+    ],
+    "useCases": [
+      "Video generation for social media",
+      "3D digitization of products",
+      "Virtual tour of spaces",
+      "Visual effects for productions"
+    ],
+    "bestPractices": [
+      "For 3D, capture 20-50 photos from different angles",
+      "Use image-to-video to maintain visual consistency",
+      "Combine with video editing for polished final results"
+    ],
+    "pitfalls": [
+      "3D reconstruction requires many well-captured photos",
+      "Long videos may lose consistency"
+    ],
+    "prompts": [
+      {
+        "title": "Product Video",
+        "content": "[produto] rotating slowly on a clean white surface, studio lighting, smooth camera orbit, professional product photography style"
+      }
+    ]
+  },
+  "replit": {
+    "title": "Replit",
+    "category": "Development",
+    "description": "Online IDE with AI that lets you build, run, and deploy full applications in the browser.",
+    "detailedDescription": "Replit is a full browser-based IDE with built-in AI that lets you create full-stack apps without setting up a local environment. The Replit Agent can build entire applications from natural language descriptions, including database, authentication, and deployment. It supports 50+ languages with real-time collaboration and one-click deploy.",
+    "impactForIndividuals": [
+      "💻 Code from anywhere, no install needed",
+      "🤖 AI that builds whole apps for you",
+      "🚀 One-click deploy"
+    ],
+    "impactForEntrepreneurs": [
+      "⚡ Prototype ideas in hours, not weeks",
+      "🌐 Production-ready apps without DevOps",
+      "💰 Zero upfront infrastructure costs"
+    ],
+    "impactForCompanies": [
+      "👥 Real-time code collaboration",
+      "🎓 Developer onboarding without setup",
+      "🔒 Replit Teams for your team"
+    ],
+    "features": [
+      "Replit Agent for AI creation",
+      "50+ programming languages",
+      "Built-in database",
+      "Automatic deployment with a public URL"
+    ],
+    "gettingStarted": [
+      "Go to replit.com and create an account",
+      "Describe the app you want to build to the Agent",
+      "Or pick a template and start coding",
+      "Click Deploy when you're ready"
+    ],
+    "useCases": [
+      "Fast idea prototyping",
+      "Learning programming projects",
+      "Hackathons and proof of concepts",
+      "Simple internal tools"
+    ],
+    "bestPractices": [
+      "Use the Agent for scaffolding, then refine manually",
+      "Leverage the built-in database for MVPs",
+      "Set up secrets for sensitive environment variables"
+    ],
+    "pitfalls": [
+      "Limited performance on the free tier",
+      "Complex apps may experience latency on shared servers"
+    ],
+    "prompts": [
+      {
+        "title": "AI-powered app",
+        "content": "Create a web app using [framework] that [main feature], with user authentication, a database for [data], and a modern UI with [style]."
+      }
+    ]
+  },
+  "v0": {
+    "title": "v0",
+    "category": "Development",
+    "description": "UI component generator with Vercel AI using React, Tailwind, and shadcn/ui.",
+    "detailedDescription": "v0 is Vercel's AI tool that generates complete UI components from text descriptions or images. It produces React code with Tailwind CSS and production-ready shadcn/ui components. The generated code quality is exceptional, with responsiveness, accessibility, and best practices automatically included.",
+    "impactForIndividuals": [
+      "🎨 Create professional interfaces by describing them in text",
+      "📸 Convert screenshots into functional code",
+      "⚡ Components ready to copy and use"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Quality frontend without hiring a designer",
+      "💰 Prototype interfaces in minutes",
+      "📱 Automatically responsive components"
+    ],
+    "impactForCompanies": [
+      "👥 Accelerate your team's UI development",
+      "📐 Consistent code with shadcn/ui",
+      "🔧 Customizable, high-quality components"
+    ],
+    "features": [
+      "UI generation from text",
+      "Screenshot-to-code",
+      "shadcn/ui and Tailwind components",
+      "Real-time interactive preview"
+    ],
+    "gettingStarted": [
+      "Go to v0.dev",
+      "Describe the interface you want or upload an image",
+      "Iterate with additional instructions",
+      "Copy the generated code to your project"
+    ],
+    "useCases": [
+      "Rapid UI prototyping",
+      "Converting Figma designs into code",
+      "Generating reusable components",
+      "Landing pages and dashboards"
+    ],
+    "bestPractices": [
+      "Be specific about layout, colors, and functionality",
+      "Send reference screenshots for closer results",
+      "Use iterations to refine the generated component"
+    ],
+    "pitfalls": [
+      "Code may need adjustments for complex projects",
+      "Limited to React/Next.js and Tailwind"
+    ],
+    "prompts": [
+      {
+        "title": "Dashboard Component",
+        "content": "Create a dashboard with a navigation sidebar, a header with search and notifications, metric cards with charts, and a data table with pagination. Dark theme, responsive."
+      }
+    ]
+  },
+  "lovable": {
+    "title": "Lovable",
+    "category": "Development",
+    "description": "Generate complete full-stack applications from natural language descriptions.",
+    "detailedDescription": "Lovable (formerly GPT Engineer) lets you create complete web applications by describing what you want in natural language. The AI generates frontend, backend, database, and authentication automatically, with one-click deployment. It stands out by generating real, functional apps—not just prototypes—with clean, editable code.",
+    "impactForIndividuals": [
+      "🏗️ Create complete apps without knowing how to code",
+      "⚡ From idea to deployment in minutes",
+      "🔧 Editable code — not low-code"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Functional MVP in hours, not months",
+      "💰 No upfront development team cost",
+      "🔄 Iterate quickly with market feedback"
+    ],
+    "impactForCompanies": [
+      "⚡ Ultra-fast prototyping of new ideas",
+      "👥 Empower non-technical teams to build tools",
+      "📊 Internal tools without a dev backlog"
+    ],
+    "features": [
+      "AI-powered full-stack generation",
+      "Integrated Supabase for backend",
+      "One-click deployment",
+      "GitHub sync for version control"
+    ],
+    "gettingStarted": [
+      "Go to lovable.dev and create an account",
+      "Describe the application you want to create",
+      "Review and iterate with additional instructions",
+      "Connect to Supabase for backend and deploy"
+    ],
+    "useCases": [
+      "Startup MVPs",
+      "Internal tools for teams",
+      "Landing pages with functionality",
+      "Dashboards and admin panels"
+    ],
+    "bestPractices": [
+      "Start with a detailed description of what you want",
+      "Iterate in small steps instead of asking for everything at once",
+      "Connect to GitHub to keep code history"
+    ],
+    "pitfalls": [
+      "Very complex apps may need manual refinement",
+      "Dependence on Supabase for backend functionality"
+    ],
+    "prompts": [
+      {
+        "title": "SaaS MVP",
+        "content": "Create a SaaS for [functionality] with: login page, user dashboard with [metrics], core [action] functionality, and settings page. Modern, responsive design."
+      }
+    ]
+  },
+  "bolt": {
+    "title": "Bolt.new",
+    "category": "Development",
+    "description": "Full-stack web app builder with AI that runs entirely in the browser via WebContainers.",
+    "detailedDescription": "StackBlitz's Bolt.new lets you create, run, and deploy complete web applications directly in the browser using WebContainers. The AI installs dependencies, configures frameworks, and writes full-stack code in real time. It stands out by requiring no server — everything runs locally in the browser with a real Node.js environment, delivering speed and privacy.",
+    "impactForIndividuals": [
+      "🌐 Build apps right in the browser with nothing to install",
+      "⚡ Instant execution with no servers",
+      "🔧 Real Node.js running in the browser"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 From prompt to working app in minutes",
+      "💻 Zero server costs during development",
+      "📱 Works on any device with a browser"
+    ],
+    "impactForCompanies": [
+      "🔒 Code runs locally — your data never leaves the browser",
+      "👥 Share projects via URL",
+      "⚡ Faster prototyping than any IDE"
+    ],
+    "features": [
+      "WebContainers with Node.js in the browser",
+      "Supports React, Vue, Svelte, Astro, and more",
+      "Real-time npm package installation",
+      "Built-in deploy with Netlify"
+    ],
+    "gettingStarted": [
+      "Go to bolt.new",
+      "Describe the app you want to build",
+      "Watch the AI build and run the app in real time",
+      "Deploy when you're happy with it"
+    ],
+    "useCases": [
+      "Rapid web app prototyping",
+      "Experimenting with frameworks and libraries",
+      "Interactive demos for clients",
+      "Quick web tools"
+    ],
+    "bestPractices": [
+      "Use for MVPs and prototypes before moving to a local IDE",
+      "Leverage browser execution for fast iterations",
+      "Export the code to GitHub as the project matures"
+    ],
+    "pitfalls": [
+      "Very large apps can become sluggish in the browser",
+      "Not all npm packages work inside WebContainers"
+    ],
+    "prompts": [
+      {
+        "title": "Complete React App",
+        "content": "Create a React app with TypeScript that [functionality], using Tailwind for styling, React Router for navigation, and localStorage for data persistence."
+      }
+    ]
+  },
+  "windsurf": {
+    "title": "Windsurf",
+    "category": "Development",
+    "description": "AI-powered IDE by Codeium, a direct competitor to Cursor focused on code flow.",
+    "detailedDescription": "Windsurf (formerly Codeium Editor) is an IDE built on top of VS Code with AI deeply integrated into the development flow. Cascade, its AI agent, understands the full project context and can make changes across multiple files at once. It offers smart autocomplete, codebase chat, and automatic refactoring.",
+    "impactForIndividuals": [
+      "💻 Free IDE with more generous AI than Cursor",
+      "🧠 AI that understands the entire project context",
+      "⚡ Ultra-fast autocomplete"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Accelerated development with Cascade agent",
+      "💰 More generous free tier than competitors",
+      "🔧 Easy transition from VS Code"
+    ],
+    "impactForCompanies": [
+      "👥 Standardized IDE with AI for the team",
+      "🔒 Option to keep code off the cloud",
+      "📊 Support for any language and framework"
+    ],
+    "features": [
+      "Cascade – multi-file AI agent",
+      "Project-context autocomplete",
+      "Built-in codebase chat",
+      "Compatible with VS Code extensions"
+    ],
+    "gettingStarted": [
+      "Download Windsurf at codeium.com/windsurf",
+      "Install and open your project",
+      "Use Cmd/Ctrl+L for AI chat",
+      "Press Tab to accept autocomplete suggestions"
+    ],
+    "useCases": [
+      "Daily development with AI assistance",
+      "Large-scale code refactoring",
+      "Debugging with project context",
+      "Learning new frameworks"
+    ],
+    "bestPractices": [
+      "Use Cascade for changes that touch multiple files",
+      "Configure project context for better suggestions",
+      "Combine autocomplete with chat for maximum productivity"
+    ],
+    "pitfalls": [
+      "Still newer and less mature than Cursor",
+      "Some VS Code extensions may have compatibility issues"
+    ],
+    "prompts": [
+      {
+        "title": "Refactoring",
+        "content": "Refactor this code to follow SOLID principles, extract repeated logic into utility functions, and add full TypeScript typing."
+      }
+    ]
+  },
+  "notion-ai": {
+    "title": "Notion AI",
+    "category": "Productivity",
+    "description": "AI integrated into Notion that writes, summarizes, translates, and organizes information in your workspace.",
+    "detailedDescription": "Notion AI brings artificial intelligence directly into the Notion workspace, allowing you to generate, summarize, translate, and improve content without leaving the tool. The key difference is the AI's access to your entire workspace context—it can find information scattered across pages, databases, and docs, acting like an assistant that knows your whole company.",
+    "impactForIndividuals": [
+      "✍️ Write and improve texts without leaving Notion",
+      "🔍 Find any information in your workspace with AI",
+      "📝 Automatic summaries of long pages"
+    ],
+    "impactForEntrepreneurs": [
+      "📋 Documentation generated and organized automatically",
+      "🧠 AI that knows the full context of your business",
+      "⏱️ Automation of repetitive writing tasks"
+    ],
+    "impactForCompanies": [
+      "🏢 AI-searchable knowledge base",
+      "👥 Accelerates the whole team’s content production",
+      "🔒 Data protected within Notion"
+    ],
+    "features": [
+      "Q&A across the entire workspace",
+      "Text generation and editing",
+      "Automatic page summarization",
+      "Built-in translation"
+    ],
+    "gettingStarted": [
+      "Enable Notion AI in workspace settings",
+      "Press Space on any page to activate AI",
+      "Use /ai to access specific functions",
+      "Ask questions about your workspace in search"
+    ],
+    "useCases": [
+      "Summarize long meeting notes",
+      "Generate documentation drafts",
+      "Find information scattered throughout the workspace",
+      "Translate content into other languages"
+    ],
+    "bestPractices": [
+      "Organize your workspace well so the AI can find information",
+      "Use Q&A for onboarding new members",
+      "Combine with templates for standardized documentation"
+    ],
+    "pitfalls": [
+      "Additional cost per member on Notion",
+      "Answers depend on how well your workspace is organized"
+    ],
+    "prompts": [
+      {
+        "title": "Meeting Summary",
+        "content": "Summarize the notes from this meeting into: decisions made, action items with owners and deadlines, and open topics for the next meeting."
+      }
+    ]
+  },
+  "microsoft-copilot": {
+    "title": "Microsoft Copilot",
+    "category": "Productivity",
+    "description": "AI integrated with Microsoft 365 that helps in Word, Excel, PowerPoint, Teams, and Outlook.",
+    "detailedDescription": "Microsoft Copilot brings generative AI to the entire Microsoft 365 ecosystem. In Word, it writes and edits documents. In Excel, it analyzes data and creates formulas. In PowerPoint, it generates complete presentations. In Teams, it summarizes meetings and suggests actions. In Outlook, it drafts emails. All connected to Microsoft Graph with context from your corporate data.",
+    "impactForIndividuals": [
+      "📝 Word that writes documents for you",
+      "📊 Excel that analyzes data and creates formulas with AI",
+      "📧 Emails drafted automatically in Outlook"
+    ],
+    "impactForEntrepreneurs": [
+      "📑 Presentations generated in minutes in PowerPoint",
+      "🤝 Automatic meeting summaries in Teams",
+      "⏱️ Hours saved on routine tasks"
+    ],
+    "impactForCompanies": [
+      "🏢 AI with corporate data context via Graph",
+      "🔒 Microsoft enterprise security and compliance",
+      "👥 Increased productivity across the organization"
+    ],
+    "features": [
+      "Copilot in Word, Excel, PowerPoint, Teams, Outlook",
+      "Microsoft Graph for corporate context",
+      "Copilot Studio for customization",
+      "Integrated chat across all apps"
+    ],
+    "gettingStarted": [
+      "Check if your Microsoft 365 license includes Copilot",
+      "Activate Copilot in admin settings",
+      "Open any Office app and click the Copilot icon",
+      "Start with simple tasks like summarizing or drafting"
+    ],
+    "useCases": [
+      "Draft documents and proposals in Word",
+      "Analyze complex spreadsheets in Excel",
+      "Create presentations from documents",
+      "Summarize long email threads"
+    ],
+    "bestPractices": [
+      "Organize your files in SharePoint for better context",
+      "Use references to specific files in prompts",
+      "Combine Copilot across different apps for complete workflows"
+    ],
+    "pitfalls": [
+      "Requires Microsoft 365 Business/Enterprise license + add-on",
+      "Quality depends on the organization of corporate data"
+    ],
+    "prompts": [
+      {
+        "title": "Excel Data Analysis",
+        "content": "Analyze this spreadsheet and identify: main trends, outliers, and create a graph that best represents the evolution of [metric] over time."
+      }
+    ]
+  },
+  "google-workspace-ai": {
+    "title": "Google Workspace AI",
+    "category": "Productivity",
+    "description": "Gemini integrated into Google Docs, Sheets, Slides, Gmail, and Meet for AI-powered productivity.",
+    "detailedDescription": "Google Workspace AI integrates Gemini directly into the Google tools you already use. In Docs, it helps you write and format. In Sheets, it generates formulas and analyzes data. In Slides, it creates presentations with AI-generated images. In Gmail, it drafts smart replies. In Meet, it automatically generates meeting summaries and transcriptions.",
+    "impactForIndividuals": [
+      "📝 Gemini assisting directly in Google Docs",
+      "📊 Automatic formulas and analysis in Sheets",
+      "📧 Smart email replies in Gmail"
+    ],
+    "impactForEntrepreneurs": [
+      "🖼️ AI-generated images in Slides",
+      "🤝 Automatic transcriptions in Meet",
+      "⚡ Productivity across the entire Google ecosystem"
+    ],
+    "impactForCompanies": [
+      "🔒 Protected data within the Google Cloud ecosystem",
+      "👥 AI available for the entire organization",
+      "📋 Compliance with corporate policies"
+    ],
+    "features": [
+      "Gemini in Docs, Sheets, Slides, Gmail, Meet",
+      "Image generation in Slides",
+      "Meet summaries and transcriptions",
+      "Smart organization in Drive"
+    ],
+    "gettingStarted": [
+      "Make sure Gemini is enabled in the Google Workspace Admin",
+      "Open any Google app and look for the Gemini icon",
+      "In Docs, use 'Help me write' to generate text",
+      "In Sheets, use 'Help me organize' for analysis"
+    ],
+    "useCases": [
+      "Drafting documents and emails",
+      "Data analysis in spreadsheets",
+      "Presentations with AI-generated content",
+      "Video conference summaries"
+    ],
+    "bestPractices": [
+      "Use '@' to reference Drive files in prompts",
+      "Leverage Meet transcriptions for documentation",
+      "Combine Sheets with Gemini for quick data analysis"
+    ],
+    "pitfalls": [
+      "Features vary by license type",
+      "Gemini in Workspace is still less mature than Microsoft Copilot"
+    ],
+    "prompts": [
+      {
+        "title": "Spreadsheet Analysis",
+        "content": "Analyze the data in this spreadsheet and create a summary including: key metrics, identified trends, and 3 data-driven recommendations."
+      }
+    ]
+  },
+  "canva": {
+    "title": "Canva",
+    "category": "Design",
+    "description": "Design platform with Magic AI tools to create any type of visual content.",
+    "detailedDescription": "Canva is the world's most accessible design platform, now supercharged with AI. The Magic tools include image generation (Magic Media), background removal (Magic Eraser), image expansion, AI-assisted writing (Magic Write), and transforming designs across formats. With 100+ million users, it's the standard for design without technical knowledge.",
+    "impactForIndividuals": [
+      "🎨 Professional design without technical skill",
+      "🪄 Magic Eraser removes backgrounds and objects",
+      "📱 Templates for any social media format"
+    ],
+    "impactForEntrepreneurs": [
+      "📋 Brand Kit to maintain visual consistency",
+      "📊 Presentations, posts, and materials in minutes",
+      "👥 Team collaboration in real time"
+    ],
+    "impactForCompanies": [
+      "🏢 Canva for Teams with brand control",
+      "📁 Shared asset library",
+      "🔒 Approvals and granular permissions"
+    ],
+    "features": [
+      "Magic Media for image generation",
+      "Magic Write for AI-powered text",
+      "Magic Eraser and Background Remover",
+      "100.000+ professional templates"
+    ],
+    "gettingStarted": [
+      "Create a free account at canva.com",
+      "Choose the format for your design",
+      "Select a template or start from scratch",
+      "Use Magic AI tools to speed up your work"
+    ],
+    "useCases": [
+      "Social media posts",
+      "Presentations and pitch decks",
+      "Print and digital marketing materials",
+      "Short videos for Reels and TikTok"
+    ],
+    "bestPractices": [
+      "Set up your Brand Kit first for consistency",
+      "Use Magic Resize to adapt designs between formats",
+      "Explore templates before creating from scratch"
+    ],
+    "pitfalls": [
+      "Many good features are exclusive to Pro",
+      "Designs can look 'generic' without customization"
+    ],
+    "prompts": [
+      {
+        "title": "Instagram post",
+        "content": "Create an Instagram post design about [topic] with: catchy title, 3 main points, call-to-action, and a modern look using [brand colors] colors."
+      }
+    ]
+  },
+  "figma": {
+    "title": "Figma",
+    "category": "Design",
+    "description": "Collaborative UI/UX design tool with AI features for prototyping and design systems.",
+    "detailedDescription": "Figma is the industry standard tool for interface design, used by product teams worldwide. With real-time collaboration, powerful design systems, and interactive prototyping, it allows designers and developers to work together. Recent AI features include automatic layout generation and design suggestions.",
+    "impactForIndividuals": [
+      "🎨 Professional interface design in the browser",
+      "🆓 Generous free plan for personal use",
+      "📱 No-code interactive prototyping"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Prototype your product before building it",
+      "👥 Collaborate with designers in real time",
+      "🔗 Seamless handoff to developers"
+    ],
+    "impactForCompanies": [
+      "📐 Scalable Design Systems for teams",
+      "👥 Real-time collaboration with the entire product team",
+      "🔧 Dev Mode to ease implementation"
+    ],
+    "features": [
+      "Collaborative interface design",
+      "Interactive prototyping",
+      "Design Systems and components",
+      "Dev Mode for developers"
+    ],
+    "gettingStarted": [
+      "Create a free account at figma.com",
+      "Explore community templates",
+      "Create your first frame sized for the device",
+      "Use Auto Layout for responsive designs"
+    ],
+    "useCases": [
+      "Web and mobile interface design",
+      "User flow prototyping",
+      "Corporate Design Systems",
+      "Collaboration between design and development"
+    ],
+    "bestPractices": [
+      "Use Auto Layout in all components",
+      "Create and maintain a Design System from the start",
+      "Use variables for light/dark themes"
+    ],
+    "pitfalls": [
+      "Learning curve for advanced features",
+      "Performance can drop with very large files"
+    ],
+    "prompts": [
+      {
+        "title": "Design System Setup",
+        "content": "Create the structure of a Design System with: color palette (primary, secondary, neutrals), typography (headings, body, caption), spacing (4, 8, 12, 16, 24, 32, 48px), and base components (button, input, card)."
+      }
+    ]
+  },
+  "adobe-firefly": {
+    "title": "Adobe Firefly",
+    "category": "Design",
+    "description": "Adobe's generative AI for creating images, text effects, and photo editing that's commercially safe.",
+    "detailedDescription": "Adobe Firefly is Adobe's generative AI model, trained exclusively on licensed content (Adobe Stock, public domain). This makes it the only commercially safe option for corporate use, with no risk of copyright infringement. Integrated into Photoshop, Illustrator, and Express, it lets you generate images, expand photos, remove objects, and create text effects.",
+    "impactForIndividuals": [
+      "🎨 Image generation safe for commercial use",
+      "✨ Text effects and artistic styles",
+      "📸 AI-powered photo editing in Photoshop"
+    ],
+    "impactForEntrepreneurs": [
+      "✅ No copyright risk — trained on licensed content",
+      "🖼️ Professional images for marketing",
+      "🔧 Integrated into the Adobe workflow"
+    ],
+    "impactForCompanies": [
+      "🔒 Artist compensation via Content Credentials",
+      "📋 Guaranteed legal compliance",
+      "🎨 Integrated into the entire Adobe Creative Cloud suite"
+    ],
+    "features": [
+      "Commercially safe text-to-image",
+      "Generative Fill in Photoshop",
+      "Generative Expand to enlarge images",
+      "AI-powered text effects"
+    ],
+    "gettingStarted": [
+      "Go to firefly.adobe.com",
+      "Log in with an Adobe ID",
+      "Describe the image you want to generate",
+      "Refine using style and structure controls"
+    ],
+    "useCases": [
+      "Images for marketing and advertising",
+      "Editing and expanding product photos",
+      "Mockups and creative concepts",
+      "Typographic effects for branding"
+    ],
+    "bestPractices": [
+      "Use for commercial content where copyright matters",
+      "Combine with Photoshop for advanced editing",
+      "Leverage style controls for consistent results"
+    ],
+    "pitfalls": [
+      "Artistic quality falls short of Midjourney in some styles",
+      "Limited monthly credits on the free plan"
+    ],
+    "prompts": [
+      {
+        "title": "Image for Marketing",
+        "content": "Professional product photography of [produto] on [cenario], warm lighting, high quality, commercial style, clean background"
+      }
+    ]
+  },
+  "ideogram": {
+    "title": "Ideogram",
+    "category": "Image Generation",
+    "description": "AI image generation that excels at perfectly rendering text within images.",
+    "detailedDescription": "Ideogram is an AI image generator that solved one of the field's biggest problems: rendering readable and correct text inside images. While DALL-E and Midjourney often misspell letters and words, Ideogram generates logos, posters, covers, and signage with perfect text. Ideal for designers who need mockups with real text.",
+    "impactForIndividuals": [
+      "🔤 Perfect text in AI-generated images",
+      "🎨 Various typography and poster styles",
+      "🆓 Generous daily free generations"
+    ],
+    "impactForEntrepreneurs": [
+      "🏷️ Logos and branding with correct text",
+      "📱 Marketing mockups with real text",
+      "🎯 Posters and banners ready to use"
+    ],
+    "impactForCompanies": [
+      "📋 Marketing materials with accurate text",
+      "🎨 Visual concepts with correct branding",
+      "⚡ Fast visual prototyping for campaigns"
+    ],
+    "features": [
+      "Perfect text rendering in images",
+      "Multiple art styles",
+      "High-quality text-to-image",
+      "Image editing and variation"
+    ],
+    "gettingStarted": [
+      "Go to ideogram.ai and create an account",
+      "Describe the image including the desired text",
+      "Choose the visual style",
+      "Generate and iterate until you get the ideal result"
+    ],
+    "useCases": [
+      "Logos and conceptual visual identity",
+      "Posters and banners with text",
+      "Book covers and thumbnails",
+      "Packaging and signage mockups"
+    ],
+    "bestPractices": [
+      "Put the desired text in quotes in the prompt",
+      "Specify the desired typographic style",
+      "Use for initial mockups before finalizing in a design tool"
+    ],
+    "pitfalls": [
+      "Less versatile than Midjourney for images without text",
+      "Composition control still limited compared to competitors"
+    ],
+    "prompts": [
+      {
+        "title": "Logo with Text",
+        "content": "A modern minimalist logo design with the text \"[brand name]\" in elegant sans-serif font, clean background, professional branding style"
+      }
+    ]
+  },
+  "hugging-face": {
+    "title": "Hugging Face",
+    "category": "AI Infrastructure",
+    "description": "The GitHub of AI models - central repository for models, datasets, and spaces for ML.",
+    "detailedDescription": "Hugging Face is the central platform for the AI and machine learning community, with 500,000+ models, 100,000+ datasets, and thousands of demos (Spaces). It's where researchers and companies publish models like Llama, Mistral, and Stable Diffusion. The Transformers library makes it easy to use any model with just a few lines of code. Essential for any AI developer.",
+    "impactForIndividuals": [
+      "🤗 Free access to 500,000+ AI models",
+      "📚 Ready-to-use datasets for ML projects",
+      "🎮 Interactive demos to try out models"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Pre-trained models to speed up development",
+      "💰 Free Inference API for prototyping",
+      "🔓 Open source models with no licensing costs"
+    ],
+    "impactForCompanies": [
+      "🏢 Private hub for corporate models",
+      "🔧 Inference Endpoints for production deployment",
+      "📊 AutoTrain for no-code fine-tuning"
+    ],
+    "features": [
+      "Hub with 500,000+ models",
+      "Transformers library",
+      "Inference API",
+      "Spaces for interactive demos"
+    ],
+    "gettingStarted": [
+      "Create a free account at huggingface.co",
+      "Explore models by task (text, image, audio)",
+      "Use the Inference API to test models",
+      "Install the library: pip install transformers"
+    ],
+    "useCases": [
+      "Download and use open source models",
+      "Fine-tuning models for your domain",
+      "Deploying models in production",
+      "AI research and experimentation"
+    ],
+    "bestPractices": [
+      "Use model cards to understand each model's limitations",
+      "Start with smaller models for prototyping",
+      "Explore Spaces to see models in action before integrating"
+    ],
+    "pitfalls": [
+      "The number of models can be overwhelming",
+      "Quality varies greatly among community models"
+    ],
+    "prompts": [
+      {
+        "title": "Model Search",
+        "content": "I need a model for [task] that runs on [hardware]. Which models on Hugging Face do you recommend considering [specific requirement]?"
+      }
+    ]
+  },
+  "langchain": {
+    "title": "LangChain",
+    "category": "AI Infrastructure",
+    "description": "Open source framework for building applications with LLMs - RAG, agents, chains, and memory.",
+    "detailedDescription": "LangChain is the most popular framework for building applications with language models. It provides abstractions to connect LLMs to data sources (RAG), create autonomous agents, chain multiple calls (chains), and manage conversation memory. With LangSmith for observability and LangGraph for complex agents, it's the complete ecosystem for AI development.",
+    "impactForIndividuals": [
+      "🔧 Standard framework for LLM apps",
+      "📚 Extensive documentation and examples",
+      "🆓 Open source and free"
+    ],
+    "impactForEntrepreneurs": [
+      "🏗️ Build chatbots with RAG quickly",
+      "🔌 Connect any LLM to any data source",
+      "🚀 From prototype to production with LangServe"
+    ],
+    "impactForCompanies": [
+      "📊 LangSmith for production monitoring",
+      "🤖 LangGraph for complex enterprise agents",
+      "🔒 Secure deployment with LangServe"
+    ],
+    "features": [
+      "Chains to orchestrate LLMs",
+      "RAG with any vector store",
+      "Agents with customizable tools",
+      "LangSmith for observability"
+    ],
+    "gettingStarted": [
+      "Install: pip install langchain",
+      "Set up your chosen LLM's API key",
+      "Follow the quickstart in the documentation",
+      "Build your first chain or RAG pipeline"
+    ],
+    "useCases": [
+      "Chatbot with RAG on company documents",
+      "Autonomous agents that use tools",
+      "Text processing pipelines",
+      "Conversational applications with memory"
+    ],
+    "bestPractices": [
+      "Use LCEL (LangChain Expression Language) for chains",
+      "Implement LangSmith from the start for debugging",
+      "Start simple and add complexity gradually"
+    ],
+    "pitfalls": [
+      "Abstractions can hide complexity and make debugging harder",
+      "API changes frequently between versions"
+    ],
+    "prompts": [
+      {
+        "title": "RAG Pipeline",
+        "content": "Create a RAG pipeline with LangChain that: loads documents from [source], creates embeddings, stores them in [vector store], and answers questions with source citations."
+      }
+    ]
+  },
+  "vercel-ai": {
+    "title": "Vercel",
+    "category": "AI Infrastructure",
+    "description": "Frontend cloud platform with AI SDK for building web applications with integrated AI.",
+    "detailedDescription": "Vercel is the leading deployment platform for frontend applications, creator of Next.js. Vercel's AI SDK simplifies integrating LLMs into web apps with streaming, tool calling, and ready-made UI components. It combines instant deployment with edge computing and AI tools, making it the default choice for React/Next.js developers who want to add AI.",
+    "impactForIndividuals": [
+      "🚀 Deploy sites and apps with a git push",
+      "🤖 AI SDK to integrate AI easily",
+      "⚡ Edge computing for global performance"
+    ],
+    "impactForEntrepreneurs": [
+      "💰 Generous free tier to get started",
+      "🌐 Automatic global CDN",
+      "📱 Preview deploys for every PR"
+    ],
+    "impactForCompanies": [
+      "🏢 Enterprise with SLA and support",
+      "🔒 Security and compliance",
+      "📊 Integrated analytics and monitoring"
+    ],
+    "features": [
+      "AI SDK with streaming and tool calling",
+      "Automatic deploy via Git",
+      "Edge Functions and Middleware",
+      "Preview Deployments"
+    ],
+    "gettingStarted": [
+      "Connect your GitHub repository at vercel.com",
+      "Import the project with automatic framework detection",
+      "Every push triggers an automatic deploy",
+      "Use AI SDK: npm install ai"
+    ],
+    "useCases": [
+      "Deploy Next.js applications",
+      "AI-powered apps using AI SDK",
+      "Landing pages and marketing sites",
+      "Serverless APIs at the edge"
+    ],
+    "bestPractices": [
+      "Use AI SDK for streaming LLM responses",
+      "Leverage ISR for frequently changing content",
+      "Set up Preview Deployments for PR reviews"
+    ],
+    "pitfalls": [
+      "Costs can rise quickly with high traffic",
+      "Vendor lock-in with Vercel-specific features"
+    ],
+    "prompts": [
+      {
+        "title": "Chat with AI SDK",
+        "content": "Create a chat component using Vercel AI SDK with response streaming, support for multiple models (OpenAI, Anthropic), and persistent conversation history."
+      }
+    ]
+  },
+  "supabase": {
+    "title": "Supabase",
+    "category": "AI Infrastructure",
+    "description": "Open-source alternative to Firebase with PostgreSQL, auth, storage, and built-in AI functions.",
+    "detailedDescription": "Supabase is the open-source alternative to Firebase, built on PostgreSQL. It offers database, authentication, storage, edge functions, and real-time subscriptions. With the pgvector extension, it enables semantic search and RAG directly in the database. The perfect combination of backend-as-a-service with AI capabilities, being the favorite choice of startups and modern projects.",
+    "impactForIndividuals": [
+      "🆓 Full backend on the free tier",
+      "📊 Real PostgreSQL, not a proprietary database",
+      "⚡ From zero to backend in minutes"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Full MVP without a backend engineer",
+      "🔐 Ready-to-use authentication with social login",
+      "💾 Integrated file storage"
+    ],
+    "impactForCompanies": [
+      "🔓 Open source – no vendor lock-in",
+      "📈 PostgreSQL scale for enterprise data",
+      "🤖 pgvector for vector search and RAG"
+    ],
+    "features": [
+      "PostgreSQL with visual dashboard",
+      "Authentication with 20+ providers",
+      "Storage with built-in CDN",
+      "Edge Functions in Deno/TypeScript"
+    ],
+    "gettingStarted": [
+      "Create a project at supabase.com",
+      "Use the dashboard to create tables",
+      "Integrate with supabase-js in the frontend",
+      "Configure authentication and RLS (Row Level Security)"
+    ],
+    "useCases": [
+      "Backend for web and mobile apps",
+      "Semantic search with pgvector",
+      "Real-time features like chat and notifications",
+      "Automatic REST APIs over PostgreSQL"
+    ],
+    "bestPractices": [
+      "Configure RLS (Row Level Security) from the start",
+      "Use migrations for schema versioning",
+      "Leverage pgvector for AI features"
+    ],
+    "pitfalls": [
+      "Free tier has connection and storage limits",
+      "Self-hosting requires DevOps knowledge"
+    ],
+    "prompts": [
+      {
+        "title": "Schema with RLS",
+        "content": "Create a Supabase schema for [application] with tables for [entities], relationships, and RLS policies that ensure users only see their own data."
+      }
+    ]
+  },
+  "pinecone": {
+    "title": "Pinecone",
+    "category": "Database",
+    "description": "Leading vector database for AI applications with semantic search at scale.",
+    "detailedDescription": "Pinecone is the most popular vector database for AI applications, optimized for storing and querying embeddings at high speed. Essential for RAG (Retrieval-Augmented Generation), semantic search, and recommendation systems. Fully managed, scales automatically, and delivers millisecond search even with billions of vectors.",
+    "impactForIndividuals": [
+      "🔍 Powerful semantic search for AI projects",
+      "🆓 Free tier with 100K vectors",
+      "⚡ Setup in minutes, no infrastructure"
+    ],
+    "impactForEntrepreneurs": [
+      "🤖 Foundation for chatbots with RAG",
+      "📊 Personalized recommendations for users",
+      "💰 Scalable without managing servers"
+    ],
+    "impactForCompanies": [
+      "📈 Billions of vectors with millisecond search",
+      "🔒 SOC 2 and enterprise compliance",
+      "🌐 Multi-region deployment for global latency"
+    ],
+    "features": [
+      "Millisecond vector search",
+      "Automatic scaling",
+      "Metadata filtering",
+      "Namespaces for organization"
+    ],
+    "gettingStarted": [
+      "Create a free account at pinecone.io",
+      "Create an index with the dimension of your embeddings",
+      "Use the Python SDK: pip install pinecone-client",
+      "Upsert vectors and start searching"
+    ],
+    "useCases": [
+      "RAG for intelligent chatbots",
+      "Semantic search across documents",
+      "Recommendation systems",
+      "Duplicate detection and similarity"
+    ],
+    "bestPractices": [
+      "Choose the correct embedding dimension for your model",
+      "Use metadata to filter results",
+      "Implement hybrid search combining vector and keyword"
+    ],
+    "pitfalls": [
+      "Costs can grow with vector volume",
+      "Vendor lock-in as it is proprietary"
+    ],
+    "prompts": [
+      {
+        "title": "RAG Pipeline",
+        "content": "Set up a RAG pipeline with Pinecone: generate embeddings from [documents] with [model], store them in Pinecone, and retrieve the top-5 most relevant results for each user query."
+      }
+    ]
+  },
+  "slack-ai": {
+    "title": "Slack",
+    "category": "Communication",
+    "description": "Corporate communication platform with AI features for summaries, search, and automation.",
+    "detailedDescription": "Slack is the standard communication platform for tech teams, now with integrated AI. Slack AI summarizes long conversations, answers questions about message history, and suggests replies. With Workflow Builder, automations can be created without code. Integration with thousands of apps and AI bots makes Slack the central productivity hub.",
+    "impactForIndividuals": [
+      "💬 Communication organized by channels and topics",
+      "🔍 Smart search across entire history",
+      "🤖 Summaries of channels you missed"
+    ],
+    "impactForEntrepreneurs": [
+      "⚡ No-code automations with Workflow Builder",
+      "🔌 Integrations with 2,000+ tools",
+      "📱 Async and sync communication"
+    ],
+    "impactForCompanies": [
+      "🏢 Slack AI for enterprise summaries and search",
+      "🔒 Enterprise-grade encryption and compliance",
+      "📊 Team collaboration analytics"
+    ],
+    "features": [
+      "Slack AI for summaries and Q&A",
+      "No-code Workflow Builder",
+      "Channels, threads, and huddles",
+      "2,000+ app integrations"
+    ],
+    "gettingStarted": [
+      "Create a workspace at slack.com",
+      "Invite your team",
+      "Organize channels by project, team, or topic",
+      "Install relevant integrations (GitHub, Jira, etc.)"
+    ],
+    "useCases": [
+      "Team communication organized by channels",
+      "Business workflow automations",
+      "Integration of alerts and notifications from tools",
+      "Central hub for AI bots"
+    ],
+    "bestPractices": [
+      "Use threads to keep conversations organized",
+      "Set up Workflow Builder for repetitive processes",
+      "Integrate tools to centralize notifications"
+    ],
+    "pitfalls": [
+      "Can become noisy without good channel organization",
+      "Slack AI available only on paid plans"
+    ],
+    "prompts": [
+      {
+        "title": "Workflow Automation",
+        "content": "Create a workflow in Slack that: [trigger], collects information via form about [data], sends to [channel/person], and logs in [external tool]."
+      }
+    ]
+  },
+  "discord": {
+    "title": "Discord",
+    "category": "Communication",
+    "description": "Popular community platform among developers and AI communities.",
+    "detailedDescription": "Discord has become the standard platform for AI, development, and tech communities. Midjourney, Stable Diffusion, LangChain and hundreds of AI projects use Discord as their main community and support hub. With powerful bots, voice and text channels, forum threads, and integrations, it's where the AI community meets to collaborate and share knowledge.",
+    "impactForIndividuals": [
+      "🤝 Access to the world's most active AI communities",
+      "🤖 AI bots directly in chats",
+      "📚 Community support and learning"
+    ],
+    "impactForEntrepreneurs": [
+      "👥 Build a community around your product",
+      "🔔 Customer support via community",
+      "📊 Direct feedback from engaged users"
+    ],
+    "impactForCompanies": [
+      "🏢 Developer relations and technical community",
+      "🤖 Custom AI bots for automation",
+      "📋 Forum threads for collaborative documentation"
+    ],
+    "features": [
+      "Text and voice channels",
+      "Powerful bots and integrations",
+      "Forum threads for organized discussions",
+      "Stage channels for events"
+    ],
+    "gettingStarted": [
+      "Download Discord at discord.com",
+      "Join AI community servers (Midjourney, Hugging Face, etc.)",
+      "Explore channels and join discussions",
+      "To create a community: create a server and set up channels"
+    ],
+    "useCases": [
+      "Participate in AI and tech communities",
+      "Use AI bots like Midjourney directly",
+      "Product support and feedback",
+      "Online events and workshops"
+    ],
+    "bestPractices": [
+      "Join the official servers of the AI tools you use",
+      "Use forum threads for detailed questions",
+      "Configure notifications to avoid being overwhelmed"
+    ],
+    "pitfalls": [
+      "Can be confusing for newcomers with many servers",
+      "No enterprise features like Slack"
+    ],
+    "prompts": [
+      {
+        "title": "Community Setup",
+        "content": "Define the channel structure for a Discord server about [topic]: welcome channels, rules, themed categories, help channels, and integration with relevant bots."
+      }
+    ]
+  },
+  "claude-code": {
+    "title": "Claude Code",
+    "category": "Development",
+    "description": "Anthropic's AI coding agent that runs directly in your terminal with full access to your project.",
+    "detailedDescription": "Claude Code is Anthropic's official programming agent that runs directly in the terminal. Unlike AI-enhanced IDEs, Claude Code has full file system access, can run commands, execute tests, make commits, and manage deployments. With up to 200K tokens of context, it understands entire projects and makes coordinated changes across multiple files. It's the most powerful coding assistant available.",
+    "impactForIndividuals": [
+      "🖥️ AI in the terminal with full project access",
+      "🧠 200K-token context to understand large codebases",
+      "⚡ Edits, tests, and commits code autonomously"
+    ],
+    "impactForEntrepreneurs": [
+      "🚀 Accelerated development with an autonomous agent",
+      "🔧 Debugging, refactoring, and features with a single command",
+      "💻 Works with any language and framework"
+    ],
+    "impactForCompanies": [
+      "👥 Multiply developer productivity",
+      "📊 Integrations with GitHub, CI/CD, and team tools",
+      "🔒 Code runs locally in your environment"
+    ],
+    "features": [
+      "Autonomous terminal agent",
+      "Coordinated editing of multiple files",
+      "Executes commands and tests",
+      "Integrated Git and GitHub"
+    ],
+    "gettingStarted": [
+      "Install: npm install -g @anthropic-ai/claude-code",
+      "Set your Anthropic API key",
+      "Navigate to your project folder",
+      "Run 'claude' and describe what you want to do"
+    ],
+    "useCases": [
+      "Developing complex features",
+      "Debugging and bug investigation",
+      "Large-scale code refactoring",
+      "Code review and quality improvements"
+    ],
+    "bestPractices": [
+      "Use CLAUDE.md to provide project context",
+      "Start with specific, well-defined tasks",
+      "Always review changes before committing"
+    ],
+    "pitfalls": [
+      "Requires a paid Anthropic API key",
+      "Can consume many tokens in large projects"
+    ],
+    "prompts": [
+      {
+        "title": "Complete Feature",
+        "content": "Implement [feature] following the project's existing patterns. Include tests, handle errors appropriately, and commit with a descriptive message."
+      }
+    ]
+  }
+}

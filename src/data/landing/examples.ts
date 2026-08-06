@@ -3,6 +3,10 @@
 // colando o prompt no ChatGPT/Claude/Gemini — a ponte entre a vida dela e a IA.
 // O loop de autoresearch/CRO vai expandir e rankear este banco depois.
 
+import { ehIngles } from "@/lib/idioma";
+
+import { CATEGORIES_EN, MAGIC_EXAMPLES_EN } from "./examples.en";
+
 export type ExampleCategory = "trabalho" | "estudos" | "criar" | "dia-a-dia";
 
 export interface MagicExample {
@@ -163,6 +167,24 @@ export const MAGIC_EXAMPLES: MagicExample[] = [
     },
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Seleção por idioma
+//
+// O banco em inglês mora em `examples.en.ts` com os MESMOS `id`. A tradução é
+// aditiva: este arquivo continua sendo o original em português, e nada aqui
+// mudou para o inglês existir.
+// ---------------------------------------------------------------------------
+
+/** As 4 categorias do minigame, no idioma pedido. */
+export function categoriasDoIdioma(locale: string) {
+  return ehIngles(locale) ? CATEGORIES_EN : CATEGORIES;
+}
+
+/** O banco de exemplos no idioma pedido — mesma ordem, mesmos `id`. */
+export function exemplosDoIdioma(locale: string): MagicExample[] {
+  return ehIngles(locale) ? MAGIC_EXAMPLES_EN : MAGIC_EXAMPLES;
+}
 
 export const XP_PER_EXAMPLE = 50;
 export const XP_BONUS_ACERTO = 25;

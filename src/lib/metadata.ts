@@ -33,17 +33,29 @@ export function generatePageMetadata({
   const imageUrl = image.startsWith("http") ? image : `${SITE_URL}${image}`;
 
   /**
-   * O `hreflang="en"` saiu — e a razão é medida, não estética.
+   * O `hreflang="en"` VOLTOU em 06/08/2026, junto com a tradução de verdade.
    *
-   * A árvore `/en/` serve o MESMO conteúdo em português: em 27/07/2026,
-   * `/en/noticias` respondia com `<title>Blog IA Hoje — notícias e guias…`.
-   * Declarar essa URL como a versão inglesa é dizer ao Google uma coisa que
-   * não é verdade, e o efeito prático é ele escolher sozinho qual das duas
-   * cópias mostrar. O `site:` do domínio confirmava o estrago: resultados em
-   * inglês para páginas que hoje são portuguesas, e o aviso de que entradas
-   * "bastante semelhantes" tinham sido omitidas.
+   * Ele tinha saído em 27/07 por uma razão medida: a árvore `/en/` servia o
+   * mesmo conteúdo em português — `/en/noticias` respondia com
+   * `<title>Blog IA Hoje — notícias e guias…`. Declarar aquilo como "a versão
+   * inglesa" era dizer ao Google uma coisa falsa, e o efeito prático foi ele
+   * escolher sozinho qual das duas cópias mostrar: o `site:` do domínio
+   * trazia resultados em inglês para páginas portuguesas, com o aviso de que
+   * entradas "bastante semelhantes" tinham sido omitidas.
    *
-   * Quando existir tradução de verdade, o alternativo volta — junto com ela.
+   * A condição para voltar era exatamente essa: existir tradução. Agora
+   * existe — interface, catálogo dos 27 cursos, corpo das aulas, as 56 fichas
+   * de ferramenta e as matérias do blog.
+   *
+   * ⚠️ `x-default` continua apontando para pt-BR, e isso é deliberado: o
+   * site é brasileiro, o acesso é majoritariamente do Brasil, e `x-default` é
+   * para quem o Google não consegue classificar. Ele não significa "idioma
+   * principal" — significa "quando nenhum dos outros serve".
+   *
+   * ⚠️ A declaração precisa ser RECÍPROCA para valer. Como as duas árvores
+   * usam este mesmo helper e o mesmo `path`, cada página aponta para a outra
+   * automaticamente. Mudar isto de lugar sem manter a reciprocidade faz o
+   * Google descartar o par inteiro, em silêncio.
    */
   return {
     ...(title && { title }),
@@ -53,6 +65,7 @@ export function generatePageMetadata({
       languages: {
         "x-default": `${SITE_URL}/pt-BR${path}`,
         "pt-BR": `${SITE_URL}/pt-BR${path}`,
+        en: `${SITE_URL}/en${path}`,
       },
     },
     openGraph: {
@@ -170,6 +183,119 @@ type RouteSeoEntry = {
  * bilíngue não é decorativo.
  */
 export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
+  /**
+   * As 9 rotas abaixo entraram em 06/08/2026, na tradução do site para inglês.
+   *
+   * Elas JÁ tinham título e descrição próprios — só que escritos à mão, em
+   * português, dentro da própria página. O efeito no `/en` era o pior dos dois
+   * mundos: a página renderizava em inglês e se anunciava em português na aba
+   * do navegador, no resultado de busca e no cartão compartilhado. Trazer para
+   * cá não muda uma vírgula do que o pt-BR serve; só dá ao inglês o par que
+   * faltava.
+   */
+  "/arcade": {
+    "pt-BR": {
+      title: "Arcade Grátis — Jogue Sem Cadastro | FayAi",
+      description:
+        "Experimente 5 minigames de IA generativa da FayAi sem precisar criar conta. Monte prompts, separe verdade de mito e mais.",
+    },
+    en: {
+      title: "Free Arcade — Play Without Signing Up | FayAi",
+      description:
+        "Try FayAi's 5 generative-AI mini-games without creating an account. Build prompts, tell truth from myth and more.",
+    },
+  },
+  "/inventando": {
+    "pt-BR": {
+      title: "Inventando — microcursos grátis de ferramentas de IA | FayAI",
+      description:
+        "Cada ferramenta de IA que aparece nos lançamentos vira um microcurso curto e ilustrado em português: o que é, como usar e onde ela falha. A primeira aula é grátis.",
+    },
+    en: {
+      title: "Inventing — free micro-courses on AI tools | FayAI",
+      description:
+        "Every AI tool that shows up in the launches becomes a short, illustrated micro-course: what it is, how to use it and where it falls apart. The first lesson is free.",
+    },
+  },
+  "/lab/3d": {
+    "pt-BR": {
+      title: "Bancada 3D — FayAI",
+      description: "Laboratório interno de peças 3D da FayAI.",
+    },
+    en: {
+      title: "3D Workbench — FayAI",
+      description: "FayAI's internal workbench for 3D pieces.",
+    },
+    noindex: true,
+  },
+  "/lab/dossie": {
+    "pt-BR": {
+      title: "Bancada do dossiê — FayAI",
+      description: "Laboratório interno do dossiê de persona da FayAI.",
+    },
+    en: {
+      title: "Dossier workbench — FayAI",
+      description: "FayAI's internal workbench for the persona dossier.",
+    },
+    noindex: true,
+  },
+  "/login": {
+    "pt-BR": { title: "Entrar | FayAI", description: "Acesse a sua conta FayAI." },
+    en: { title: "Sign in | FayAI", description: "Access your FayAI account." },
+    noindex: true,
+  },
+  "/noticias": {
+    "pt-BR": {
+      title: "Blog IA Hoje — notícias e guias de inteligência artificial | FayAI",
+      description:
+        "As notícias de IA que importam para brasileiros, selecionadas e explicadas todos os dias pela FayAI — com link para a fonte original.",
+    },
+    en: {
+      title: "AI Blog Today — artificial intelligence news and guides | FayAI",
+      description:
+        "The AI news that matters, picked and explained every day by FayAI — always with a link to the original source.",
+    },
+  },
+  "/onboarding": {
+    "pt-BR": {
+      title: "Primeiros passos | FayAI",
+      description: "Monte a sua trilha de IA em poucos minutos.",
+    },
+    en: {
+      title: "Getting started | FayAI",
+      description: "Build your AI learning trail in a few minutes.",
+    },
+    noindex: true,
+  },
+  "/projetos": {
+    "pt-BR": {
+      title: "Projetos FayAI — uma vida dedicada à tecnologia",
+      description:
+        "Do 386 à inteligência artificial: cursos, Ultimate Social Suite, WorldForge Studio, visão computacional de futebol, copiloto de games e o app de música sincronizada Som em Bando. Conheça os projetos e a história de Ricardo Faya.",
+    },
+    en: {
+      title: "FayAI Projects — a life spent on technology",
+      description:
+        "From the 386 to artificial intelligence: courses, Ultimate Social Suite, WorldForge Studio, football computer vision, a games copilot and Som em Bando, the synced-music app. The projects, and Ricardo Faya's story behind them.",
+    },
+  },
+  "/radar": {
+    "pt-BR": {
+      title: "Radar FayAI — o que o Brasil e o mundo estão procurando agora",
+      description:
+        "Tendências medidas, não estimadas: buscas em alta do Google por estado, artigos mais lidos da Wikipédia e a demanda real de inteligência artificial no autocomplete do Google e do YouTube.",
+    },
+    en: {
+      title: "FayAI Radar — what Brazil and the world are searching for right now",
+      description:
+        "Trends that are measured, not estimated: Google's rising searches by state, the most-read Wikipedia articles, and real artificial-intelligence demand in Google and YouTube autocomplete.",
+    },
+  },
+  "/registro": {
+    "pt-BR": { title: "Criar conta | FayAI", description: "Crie a sua conta gratuita na FayAI." },
+    en: { title: "Create account | FayAI", description: "Create your free FayAI account." },
+    noindex: true,
+  },
   "/afiliados": {
     "pt-BR": {
       title: "Programa de Afiliados — 30% de comissão | FayAI",

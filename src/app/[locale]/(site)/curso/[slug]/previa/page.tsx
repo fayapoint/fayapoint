@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getAllProducts, type Product } from "@/lib/products";
+import {
+  getProductBySlug,
+  getAllProducts,
+  paraIdioma,
+  paraIdiomaLista,
+  produtoCompletoNoIdioma,
+  type Product,
+} from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { schemaEmenta, schemaTrilha } from "@/lib/structured-data";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { montarPrevia } from "@/lib/curso-previa";
 import { resolveContentFacts } from "@/lib/content-facts";
+import { AvisoTraducao } from "@/components/courses/AvisoTraducao";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -49,7 +57,8 @@ export const revalidate = 900;
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
-  const product = await getProductBySlug(slug).catch(() => null);
+  const bruto = await getProductBySlug(slug).catch(() => null);
+  const product = bruto ? paraIdioma(bruto, locale) : null;
   if (!product) {
     return generatePageMetadata({
       locale,
@@ -80,7 +89,11 @@ export default async function PreviaPage({ params }: Props) {
   let product = null;
   let bancoRespondeu = true;
   try {
-    product = await getProductBySlug(slug);
+    const bruto = await getProductBySlug(slug);
+    // A prévia MOSTRA um capítulo inteiro — precisa do corpo traduzido, não só
+    // da vitrine. `produtoCompletoNoIdioma` busca na coleção separada; sem
+    // tradução, devolve o português e a página continua funcionando.
+    product = bruto ? await produtoCompletoNoIdioma(bruto, locale) : null;
   } catch {
     bancoRespondeu = false;
   }
@@ -101,7 +114,10 @@ export default async function PreviaPage({ params }: Props) {
   const preco = product.pricing?.price;
 
   // Sem isto a prévia é um beco: entra tráfego, lê, e não tem para onde ir.
-  const catalogo = await getAllProducts({ type: "course", limit: 200 }).catch(() => []);
+  const catalogo = paraIdiomaLista(
+    await getAllProducts({ type: "course", limit: 200 }).catch(() => []),
+    locale,
+  );
   const vizinhos = relacionados(catalogo, product);
 
   const dados = [
@@ -206,6 +222,7 @@ export default async function PreviaPage({ params }: Props) {
             <p className="mb-6 text-sm text-white/50">
               Este é o capítulo completo, igual ao que está dentro do curso — texto, imagens e vídeos.
             </p>
+            <AvisoTraducao slug={slug} locale={locale} />
             <article
               className="curso-previa-conteudo"
               dangerouslySetInnerHTML={{ __html: previa.amostra.html }}

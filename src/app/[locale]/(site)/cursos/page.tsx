@@ -1,4 +1,4 @@
-import { getAllProducts, paraVitrine } from "@/lib/products";
+import { getAllProducts, paraIdiomaLista, paraVitrine } from "@/lib/products";
 import CoursesCatalog from "./CoursesCatalog";
 import IndicePrevias from "@/components/courses/IndicePrevias";
 
@@ -34,7 +34,9 @@ export default async function Page({
    * 4,3 MB — com o TEXTO DAS AULAS dos 22 cursos dentro, legível sem login.
    * Ver `CAMPOS_FORA_DA_VITRINE` em `@/lib/products`.
    */
-  const paraCards = paraVitrine(products);
+  // A ORDEM importa: traduzir primeiro, reduzir depois. `paraVitrine` apaga o
+  // `i18n`, entao inverter deixaria a vitrine inglesa em portugues.
+  const paraCards = paraVitrine(paraIdiomaLista(products, locale));
 
   return (
     <>

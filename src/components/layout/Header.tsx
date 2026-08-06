@@ -260,7 +260,7 @@ export function Header() {
                       ? "text-primary"
                       : "text-foreground/90 hover:text-primary"
                   )}>
-                    Ferramentaria
+                    {t("nav.toolshed")}
                   </Link>
                 </NavigationMenuItem>
 
@@ -275,7 +275,7 @@ export function Header() {
                       ? "text-primary"
                       : "text-foreground/90 hover:text-primary"
                   )}>
-                    Inventando
+                    {t("nav.inventing")}
                   </Link>
                 </NavigationMenuItem>
 
@@ -332,7 +332,7 @@ export function Header() {
             <button
               className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95 transition-all"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-label={mobileMenuOpen ? t("buttons.closeMenu") : t("buttons.openMenu")}
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
@@ -398,7 +398,7 @@ export function Header() {
           <div className="px-4 py-5 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
             {/* Quick Actions */}
             <div className="pb-4 flex items-center justify-between border-b border-border">
-              <span className="text-sm text-muted-foreground font-medium">Quick Actions</span>
+              <span className="text-sm text-muted-foreground font-medium">{t("nav.quickActions")}</span>
               <div className="flex items-center gap-2">
                 <NavCart />
                 <LocaleSwitcher />
@@ -487,7 +487,7 @@ export function Header() {
                     </div>
                     <div>
                       <p className="font-medium text-foreground">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">View Dashboard</p>
+                      <p className="text-sm text-muted-foreground">{t("nav.viewDashboard")}</p>
                     </div>
                   </Link>
                   <Button 

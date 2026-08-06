@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
 import { SEED_NEWS, type AiNewsItem } from "@/data/landing/seed-news";
+import { ehIngles, IDIOMA_PADRAO } from "@/lib/idioma";
 
 export interface AiNewsArticle extends AiNewsItem {
   body?: string[]; // parágrafos da análise FayAI
@@ -148,18 +149,32 @@ export function artForTag(tag: string, seedIndex = 0, seedKey = ""): string {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mapDoc(d: any, i: number): AiNewsArticle {
+function mapDoc(d: any, i: number, locale = IDIOMA_PADRAO): AiNewsArticle {
   const tag = String(d.tag ?? "IA HOJE");
+
+  // A tradução mora em `i18n.en` dentro da própria matéria, gerada por
+  // `scripts/i18n/noticias.mjs`. Campo a campo, e o que falta cai no português:
+  // matéria publicada hoje pelo agente aparece no `/en` na hora — em português,
+  // que é feio mas verdadeiro — e melhora quando o tradutor passa. Nunca fica
+  // em branco.
+  //
+  // ⚠️ `tag` NÃO é traduzida aqui: ela é a chave do pool de capas
+  // (`artForTag`) e do filtro por editoria do hub. O rótulo em inglês sai das
+  // mensagens, na tela.
+  const en = ehIngles(locale) ? (d.i18n?.en ?? {}) : {};
+
   return {
     slug: String(d.slug ?? d._id),
     tag,
-    title: String(d.title ?? ""),
-    summary: String(d.summary ?? ""),
+    title: String(en.title || d.title || ""),
+    summary: String(en.summary || d.summary || ""),
     url: d.url ? String(d.url) : undefined,
     source: d.source ? String(d.source) : undefined,
     image: d.image ? String(d.image) : artForTag(tag, i, String(d.slug ?? '')),
     date: d.publishedAt ? new Date(d.publishedAt).toISOString() : undefined,
-    body: Array.isArray(d.body) ? d.body.map(String) : undefined,
+    body: Array.isArray(en.body) && en.body.length
+      ? en.body.map(String)
+      : Array.isArray(d.body) ? d.body.map(String) : undefined,
     sourceImage: d.sourceImage ? String(d.sourceImage) : undefined,
   };
 }
@@ -168,7 +183,10 @@ function mapDoc(d: any, i: number): AiNewsArticle {
  * Notícias do dia para a landing (últimas 48h, fallback nas seeds).
  * Cards da home linkam para /noticias/[slug] quando o item veio do agente.
  */
-export async function getAiNews(limit = 3): Promise<{ items: AiNewsArticle[]; live: boolean }> {
+export async function getAiNews(
+  limit = 3,
+  locale = IDIOMA_PADRAO,
+): Promise<{ items: AiNewsArticle[]; live: boolean }> {
   try {
     await dbConnect();
     const db = mongoose.connection.db;
@@ -183,14 +201,14 @@ export async function getAiNews(limit = 3): Promise<{ items: AiNewsArticle[]; li
       .toArray();
 
     if (docs.length === 0) return { items: SEED_NEWS.slice(0, limit), live: false };
-    return { live: true, items: docs.map((d, i) => ({ ...mapDoc(d, i), url: `/noticias/${d.slug}` })) };
+    return { live: true, items: docs.map((d, i) => ({ ...mapDoc(d, i, locale), url: `/noticias/${d.slug}` })) };
   } catch {
     return { items: SEED_NEWS.slice(0, limit), live: false };
   }
 }
 
 /** Hub /noticias — histórico (até um trimestre). */
-export async function getAllNews(limit = 60): Promise<AiNewsArticle[]> {
+export async function getAllNews(limit = 60, locale = IDIOMA_PADRAO): Promise<AiNewsArticle[]> {
   try {
     await dbConnect();
     const db = mongoose.connection.db;
@@ -201,19 +219,19 @@ export async function getAllNews(limit = 60): Promise<AiNewsArticle[]> {
       .sort({ publishedAt: -1 })
       .limit(limit)
       .toArray();
-    return docs.map(mapDoc);
+    return docs.map((d, i) => mapDoc(d, i, locale));
   } catch {
     return [];
   }
 }
 
-export async function getNewsBySlug(slug: string): Promise<AiNewsArticle | null> {
+export async function getNewsBySlug(slug: string, locale = IDIOMA_PADRAO): Promise<AiNewsArticle | null> {
   try {
     await dbConnect();
     const db = mongoose.connection.db;
     if (!db) return null;
     const doc = await db.collection("ainews").findOne({ slug });
-    return doc ? mapDoc(doc, 0) : null;
+    return doc ? mapDoc(doc, 0, locale) : null;
   } catch {
     return null;
   }

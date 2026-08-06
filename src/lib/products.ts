@@ -14,6 +14,7 @@ import {
   type LessonContentCoverage,
 } from '@/lib/editorial-verification';
 import { getCourseMonthlyOfferMeta, type CourseMonthlyOfferMeta } from '@/lib/monthly-course-offers';
+import { ehIngles } from '@/lib/idioma';
 
 const DEFAULT_MONGODB_URI = '';
 
@@ -251,6 +252,12 @@ const CAMPOS_FORA_DA_VITRINE = [
   'courseContent',
   'detailedCurriculum',
   'canonModels',
+  // A tradução inglesa do produto. Depois que `paraIdioma` resolveu o idioma,
+  // ela é peso morto — e mandá-la junto faria a vitrine viajar com o catálogo
+  // inteiro DUAS vezes, uma em cada língua. Rede de segurança: mesmo que
+  // alguém esqueça o `paraIdioma`, este campo nunca atravessa a fronteira do
+  // Client Component.
+  'i18n',
 ] as const;
 
 /**
@@ -267,6 +274,164 @@ export function paraVitrine(produtos: Product[]): Product[] {
     for (const campo of CAMPOS_FORA_DA_VITRINE) delete copia[campo];
     return copia as unknown as Product;
   });
+}
+
+// ---------------------------------------------------------------------------
+// IDIOMA
+// ---------------------------------------------------------------------------
+
+/**
+ * O produto no idioma pedido.
+ *
+ * A tradução vive em `i18n.en` DENTRO do próprio documento, gerada por
+ * `scripts/i18n/cursos-catalogo.mjs`. Subdocumento e não coleção paralela
+ * porque toda leitura de produto já traz o documento inteiro: uma coleção
+ * separada obrigaria um segundo `find` em cada uma das dezenas de rotas que
+ * leem produto, e a primeira que esquecesse voltaria a servir português.
+ *
+ * (O corpo das AULAS é outra história e mora fora — ver
+ * `getConteudoTraduzido`. Lá o campo tem centenas de KB por curso, e enfiá-lo
+ * no produto faria toda leitura de catálogo carregar o curso inteiro.)
+ *
+ * ⚠️ A junção é PROFUNDA e campo a campo, e o que falta cai no português.
+ * Isso é o que permite traduzir por partes: um curso com só metade dos campos
+ * traduzidos aparece inteiro, metade em cada língua — nunca com buracos.
+ *
+ * ⚠️ `i18n` é apagado na saída. Depois de resolvido o idioma ele é peso morto,
+ * e deixá-lo faria a página de venda viajar com as duas versões do texto.
+ */
+export function paraIdioma<T extends Product>(produto: T, locale: string): T {
+  if (!ehIngles(locale)) {
+    const semI18n = { ...(produto as Record<string, unknown>) };
+    delete semI18n.i18n;
+    return semI18n as unknown as T;
+  }
+
+  const traducao = (produto as Record<string, unknown>).i18n as
+    | { en?: Record<string, unknown> }
+    | undefined;
+
+  const juntado = fundir(
+    produto as unknown as Record<string, unknown>,
+    traducao?.en ?? {},
+  );
+  delete juntado.i18n;
+  return juntado as unknown as T;
+}
+
+/** `paraIdioma` para uma lista. */
+export function paraIdiomaLista<T extends Product>(produtos: T[], locale: string): T[] {
+  return produtos.map((p) => paraIdioma(p, locale));
+}
+
+/**
+ * O CORPO do curso traduzido — markdown das aulas e currículo detalhado.
+ *
+ * Mora na coleção `conteudoTraduzido`, e não dentro do produto, porque são
+ * ~250 KB por curso. No documento do produto, toda leitura de catálogo passaria
+ * a carregar o curso inteiro em duas línguas — o mesmo caminho que fez a
+ * `/cursos` servir 4,40 MB de texto de aula no HTML público.
+ *
+ * Devolve `null` quando não há tradução (ou quando o idioma é português), e o
+ * chamador segue com o campo original. Falha de banco também devolve `null`:
+ * uma queda aqui tem que degradar para o curso em português, nunca para tela
+ * vazia.
+ */
+export async function getConteudoTraduzido(
+  slug: string,
+  locale: string,
+): Promise<{ courseContent?: string; detailedCurriculum?: Product['detailedCurriculum'] } | null> {
+  if (!ehIngles(locale)) return null;
+
+  return getOrSet(
+    `conteudo:en:${slug}`,
+    async () => {
+      try {
+        const client = await getMongoClient();
+        const doc = await client
+          .db('fayapointProdutos')
+          .collection('conteudoTraduzido')
+          .findOne(
+            { slug, locale: 'en' },
+            { projection: { _id: 0, courseContent: 1, detailedCurriculum: 1 } },
+          );
+        return doc ? (doc as { courseContent?: string; detailedCurriculum?: Product['detailedCurriculum'] }) : null;
+      } catch {
+        return null;
+      }
+    },
+    CACHE_TTL.PRODUCTS,
+  );
+}
+
+/**
+ * O produto com o corpo já no idioma pedido.
+ *
+ * Junta `paraIdioma` (vitrine, do subdocumento) com `getConteudoTraduzido`
+ * (corpo, da coleção separada). É o que as rotas de LEITURA de aula devem usar
+ * — a vitrine não precisa disto e não deve pagar a consulta.
+ */
+export async function produtoCompletoNoIdioma<T extends Product>(
+  produto: T,
+  locale: string,
+): Promise<T> {
+  const base = paraIdioma(produto, locale);
+  const corpo = await getConteudoTraduzido(produto.slug, locale);
+  if (!corpo) return base;
+  return {
+    ...base,
+    ...(corpo.courseContent ? { courseContent: corpo.courseContent } : {}),
+    ...(corpo.detailedCurriculum ? { detailedCurriculum: corpo.detailedCurriculum } : {}),
+  };
+}
+
+/**
+ * Junção profunda: o inglês vence onde existe, o português preenche o resto.
+ *
+ * Arrays são fundidos por ÍNDICE, não substituídos. Um módulo com título
+ * traduzido e descrição faltando mantém a descrição em português em vez de
+ * perder o campo — e um array inglês mais curto que o português (tradução
+ * interrompida no meio) não apaga os itens que sobram.
+ */
+function fundir(
+  pt: Record<string, unknown>,
+  en: Record<string, unknown>,
+): Record<string, unknown> {
+  const saida: Record<string, unknown> = { ...pt };
+
+  for (const [chave, valorEn] of Object.entries(en)) {
+    if (valorEn === null || valorEn === undefined) continue;
+    if (typeof valorEn === "string" && valorEn.trim() === "") continue;
+
+    const valorPt = pt[chave];
+
+    if (Array.isArray(valorPt) && Array.isArray(valorEn)) {
+      saida[chave] = valorPt.map((itemPt, i) => {
+        const itemEn = valorEn[i];
+        if (itemEn === undefined) return itemPt;
+        if (
+          itemPt && typeof itemPt === "object" && !Array.isArray(itemPt) &&
+          itemEn && typeof itemEn === "object" && !Array.isArray(itemEn)
+        ) {
+          return fundir(itemPt as Record<string, unknown>, itemEn as Record<string, unknown>);
+        }
+        return itemEn;
+      });
+      continue;
+    }
+
+    if (
+      valorPt && typeof valorPt === "object" && !Array.isArray(valorPt) &&
+      valorEn && typeof valorEn === "object" && !Array.isArray(valorEn)
+    ) {
+      saida[chave] = fundir(valorPt as Record<string, unknown>, valorEn as Record<string, unknown>);
+      continue;
+    }
+
+    saida[chave] = valorEn;
+  }
+
+  return saida;
 }
 
 // Get all active products (CACHED: 10 minutes)

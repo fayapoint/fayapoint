@@ -21,6 +21,10 @@
  * Então a ponte é escrita à mão por nicho, dizendo exatamente o que ajuda e
  * por quê, sem inventar um curso que não fizemos.
  */
+import { ehIngles } from "@/lib/idioma";
+
+import { NICHOS_EN } from "./radar-nichos.en";
+
 export interface Ponte {
   /** A frase honesta: o que temos, o que não temos, e por que ainda serve. */
   texto: string;
@@ -167,6 +171,29 @@ export const NICHO_PADRAO = "geral";
 
 export function getNicho(id: string | null | undefined): Nicho {
   return NICHOS.find((n) => n.id === id) ?? NICHOS[0];
+}
+
+/**
+ * O mesmo nicho com o texto de tela no idioma pedido.
+ *
+ * `id`, `cor` e `sementes` NUNCA mudam: as sementes são as consultas que medem
+ * o autocomplete brasileiro, e traduzi-las mediria outra coisa. Só a
+ * apresentação vira inglês. Falta de tradução cai no português — ver `escolher`
+ * em `@/lib/idioma`.
+ */
+export function nichoDoIdioma(n: Nicho, locale: string): Nicho {
+  if (!ehIngles(locale)) return n;
+  const en = NICHOS_EN[n.id];
+  if (!en) return n;
+  return {
+    ...n,
+    label: en.label,
+    chamada: en.chamada,
+    ponte: {
+      texto: en.ponte.texto,
+      cursos: n.ponte.cursos.map((c) => ({ slug: c.slug, nome: en.ponte.cursos[c.slug] ?? c.nome })),
+    },
+  };
 }
 
 /** Um termo medido, já pontuado. */

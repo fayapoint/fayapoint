@@ -6,8 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Star, CheckCircle, LinkIcon, BookOpen, Rocket, Shield, AlertTriangle, User, Building2, TrendingUp, MessageCircle } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { toolsData } from "@/data/tools-complete";
+import { fichaDoIdioma } from "@/data/tools-idioma";
 import { generatePageMetadata } from "@/lib/metadata";
+import { tagIntl } from "@/lib/idioma";
 
 type Tool = {
   title?: string;
@@ -171,15 +174,22 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
-  const tool = toolsMap[slug];
+  const bruta = toolsMap[slug];
+  const tool = bruta ? fichaDoIdioma(slug, bruta, locale) : bruta;
+  const t = await getTranslations({ locale, namespace: "ToolPage" });
 
   const title = tool?.title
-    ? `${tool.title} - Guia Completo e Cursos | FayAi`
-    : "Ferramenta de IA | FayAi";
-  
-  const description = tool?.description 
-    ? `${tool.description} Aprenda a usar ${tool.title} com cursos práticos e tutoriais. ${tool.category} | ${tool.vendor}`
-    : "Aprenda a usar ferramentas de IA com cursos práticos e tutoriais da FayAi.";
+    ? t("metaTitle", { tool: tool.title })
+    : t("metaTitleFallback");
+
+  const description = tool?.description
+    ? t("metaDescription", {
+        description: tool.description,
+        tool: tool.title ?? "",
+        category: tool.category ?? "",
+        vendor: tool.vendor ?? "",
+      })
+    : t("metaDescriptionFallback");
 
   return generatePageMetadata({
     locale,
@@ -189,9 +199,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const tool = toolsMap[slug];
+export default async function ToolPage({ params }: PageProps) {
+  const { locale, slug } = await params;
+  const bruta = toolsMap[slug];
+  // A ficha JA no idioma: titulo, resumo, capacidades, casos de uso, prompts.
+  // `vendor`, `pricing`, `rating`, `integrations` e `docUrl` ficam como estao —
+  // sao nome de produto, numero e URL.
+  const tool = bruta ? fichaDoIdioma(slug, bruta, locale) : bruta;
+  const t = await getTranslations({ locale, namespace: "ToolPage" });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -199,10 +214,10 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         <div className="container mx-auto px-4">
           {!tool ? (
             <div className="text-center py-20">
-              <h1 className="text-3xl font-bold mb-2">Ferramenta não encontrada</h1>
-              <p className="text-muted-foreground mb-6">Verifique o endereço ou explore o diretório.</p>
+              <h1 className="text-3xl font-bold mb-2">{t("notFound")}</h1>
+              <p className="text-muted-foreground mb-6">{t("notFoundBody")}</p>
               <Link href="/ferramentas">
-                <Button className="bg-amber-600 hover:bg-amber-700">Voltar ao Diretório</Button>
+                <Button className="bg-amber-600 hover:bg-amber-700">{t("backToDirectory")}</Button>
               </Link>
             </div>
           ) : (
@@ -234,7 +249,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                       <span className="flex items-center gap-1 text-sm"><Star className="text-yellow-400" size={18} /> {tool.rating}</span>
                       {tool.docUrl && (
                         <Link href={tool.docUrl} target="_blank" className="text-amber-400 hover:text-amber-300 text-sm flex items-center gap-1">
-                          <LinkIcon size={14} /> Documentação Oficial
+                          <LinkIcon size={14} /> {t("officialDocs")}
                         </Link>
                       )}
                     </div>
@@ -245,7 +260,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
               <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                   <Card className="p-6 backdrop-blur border-border">
-                    <h2 className="text-xl font-semibold mb-3">Sobre {tool.title}</h2>
+                    <h2 className="text-xl font-semibold mb-3">{t("about", { tool: tool.title ?? "" })}</h2>
                     <p className="text-muted-foreground mb-4">{tool.description}</p>
                     {tool.detailedDescription && (
                       <p className="text-muted-foreground text-sm">{tool.detailedDescription}</p>
@@ -253,7 +268,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                     <div className="mt-6 flex gap-3">
                       <Link href={`/cursos?search=${encodeURIComponent(tool.title ?? '')}`}>
                         <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800">
-                          Ver Cursos Relacionados
+                          {t("seeRelatedCourses")}
                         </Button>
                       </Link>
                       <Link href="/aula-gratis">
@@ -271,7 +286,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                         <Card className="p-4 backdrop-blur border-amber-500/20">
                           <div className="flex items-center gap-2 mb-3">
                             <User className="text-amber-400" size={20} />
-                            <h3 className="font-semibold">Para Você</h3>
+                            <h3 className="font-semibold">{t("forYou")}</h3>
                           </div>
                           <ul className="space-y-2">
                             {(tool.impactForIndividuals || []).slice(0, 3).map((impact: string, i: number) => (
@@ -284,7 +299,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                         <Card className="p-4 backdrop-blur border-amber-500/20">
                           <div className="flex items-center gap-2 mb-3">
                             <TrendingUp className="text-amber-400" size={20} />
-                            <h3 className="font-semibold">Para Empreendedores</h3>
+                            <h3 className="font-semibold">{t("forEntrepreneurs")}</h3>
                           </div>
                           <ul className="space-y-2">
                             {(tool.impactForEntrepreneurs || []).slice(0, 3).map((impact: string, i: number) => (
@@ -297,7 +312,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                         <Card className="p-4 backdrop-blur border-amber-500/20">
                           <div className="flex items-center gap-2 mb-3">
                             <Building2 className="text-amber-400" size={20} />
-                            <h3 className="font-semibold">Para Empresas</h3>
+                            <h3 className="font-semibold">{t("forCompanies")}</h3>
                           </div>
                           <ul className="space-y-2">
                             {(tool.impactForCompanies || []).slice(0, 3).map((impact: string, i: number) => (
@@ -311,18 +326,18 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
                   <Tabs defaultValue="overview" className="space-y-6">
                     <TabsList className="bg-popover/50 border border-border">
-                      <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-                      <TabsTrigger value="getting">Primeiros Passos</TabsTrigger>
-                      <TabsTrigger value="integrations">Integrações</TabsTrigger>
-                      <TabsTrigger value="prompts">Prompts</TabsTrigger>
-                      <TabsTrigger value="courses">Cursos</TabsTrigger>
-                      <TabsTrigger value="faq">FAQ</TabsTrigger>
+                      <TabsTrigger value="overview">{t("tabOverview")}</TabsTrigger>
+                      <TabsTrigger value="getting">{t("tabGetting")}</TabsTrigger>
+                      <TabsTrigger value="integrations">{t("tabIntegrations")}</TabsTrigger>
+                      <TabsTrigger value="prompts">{t("tabPrompts")}</TabsTrigger>
+                      <TabsTrigger value="courses">{t("tabCourses")}</TabsTrigger>
+                      <TabsTrigger value="faq">{t("tabFaq")}</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="overview">
                       <div className="grid md:grid-cols-2 gap-6">
                         <Card className="p-6 backdrop-blur border-border">
-                          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><Rocket size={18} /> Capacidades</h3>
+                          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><Rocket size={18} /> {t("capabilities")}</h3>
                           <ul className="space-y-2">
                             {(tool.features || []).map((f: string, i: number) => (
                               <li key={i} className="flex items-center gap-2"><CheckCircle className="text-green-400" size={18} /> {f}</li>
@@ -330,7 +345,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                           </ul>
                         </Card>
                         <Card className="p-6 backdrop-blur border-border">
-                          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><BookOpen size={18} /> Casos de Uso</h3>
+                          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><BookOpen size={18} /> {t("useCases")}</h3>
                           <ul className="space-y-2">
                             {(tool.useCases || []).map((u: string, i: number) => (
                               <li key={i} className="list-disc list-inside text-muted-foreground">{u}</li>
@@ -342,7 +357,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
                     <TabsContent value="getting">
                       <Card className="p-6 backdrop-blur border-border">
-                        <h3 className="text-xl font-semibold mb-4">Como começar</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t("gettingStarted")}</h3>
                         <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
                           {(tool.gettingStarted || []).map((s: string, i: number) => (<li key={i}>{s}</li>))}
                         </ol>
@@ -351,7 +366,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
                     <TabsContent value="integrations">
                       <Card className="p-6 backdrop-blur border-border">
-                        <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><LinkIcon size={18} /> Integrações</h3>
+                        <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><LinkIcon size={18} /> {t("integrations")}</h3>
                         <div className="flex flex-wrap gap-2">
                           {(tool.integrations || []).map((name: string) => (
                             <Badge key={name} variant="outline" className="border-amber-500/30">{name}</Badge>
@@ -362,10 +377,10 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
                     <TabsContent value="prompts">
                       <Card className="p-6 backdrop-blur border-border">
-                        <h3 className="text-xl font-semibold mb-4">Prompts Recomendados</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t("recommendedPrompts")}</h3>
                         <div className="space-y-4">
                           {(tool.prompts?.length ?? 0) === 0 && (
-                            <p className="text-muted-foreground">Prompts em breve.</p>
+                            <p className="text-muted-foreground">{t("promptsSoon")}</p>
                           )}
                           {(tool.prompts || []).map((p: {title: string; content: string}, i: number) => (
                             <div key={i} className="border border-border rounded-lg p-4">
@@ -380,14 +395,14 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                     <TabsContent value="courses">
                       <div className="grid md:grid-cols-2 gap-6">
                         {(tool.relatedCourses?.length ?? 0) === 0 && (
-                          <Card className="p-6 backdrop-blur border-border">Sem cursos relacionados no momento.</Card>
+                          <Card className="p-6 backdrop-blur border-border">{t("noRelatedCourses")}</Card>
                         )}
                         {(tool.relatedCourses || []).map((c: {slug: string; title: string; level: string; price: number}) => (
                           <Link key={c.slug} href={`/curso/${c.slug}`}>
                             <Card className="p-6 backdrop-blur border-border hover:bg-card/80 transition">
                               <Badge variant="outline" className="mb-2 text-xs">{c.level}</Badge>
                               <h4 className="font-semibold">{c.title}</h4>
-                              <p className="text-sm text-muted-foreground mt-2">R$ {c.price.toLocaleString("pt-BR")}</p>
+                              <p className="text-sm text-muted-foreground mt-2">R$ {c.price.toLocaleString(tagIntl(locale))}</p>
                             </Card>
                           </Link>
                         ))}
@@ -397,13 +412,13 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                     <TabsContent value="faq">
                       <div className="grid md:grid-cols-2 gap-6">
                         <Card className="p-6 backdrop-blur border-border">
-                          <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><Shield size={18} /> Boas práticas</h3>
+                          <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><Shield size={18} /> {t("bestPractices")}</h3>
                           <ul className="space-y-2 text-muted-foreground">
                             {(tool.bestPractices || []).map((b: string, i: number) => (<li key={i} className="list-disc list-inside">{b}</li>))}
                           </ul>
                         </Card>
                         <Card className="p-6 backdrop-blur border-border">
-                          <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><AlertTriangle size={18} /> Armadilhas comuns</h3>
+                          <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><AlertTriangle size={18} /> {t("commonPitfalls")}</h3>
                           <ul className="space-y-2 text-muted-foreground">
                             {(tool.pitfalls || []).map((p: string, i: number) => (<li key={i} className="list-disc list-inside">{p}</li>))}
                           </ul>
@@ -414,9 +429,9 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
                   {/* Free Class CTA Banner */}
                   <Card className="p-8 bg-gradient-to-r from-amber-600/20 via-primary/10 to-amber-600/20 border-amber-500/30 text-center">
-                    <h3 className="text-2xl font-bold mb-2">Comece Grátis com {tool.title}</h3>
+                    <h3 className="text-2xl font-bold mb-2">{t("startFreeWith", { tool: tool.title ?? "" })}</h3>
                     <p className="text-muted-foreground mb-4 max-w-lg mx-auto">
-                      Assista nossa aula gratuita e descubra como usar {tool.title} para transformar seu trabalho e aumentar sua produtividade.
+                      {t("startFreeBody", { tool: tool.title ?? "" })}
                     </p>
                     <div className="flex justify-center gap-4 flex-wrap">
                       <Link href="/aula-gratis">
@@ -426,7 +441,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                       </Link>
                       <Link href={`/cursos?search=${encodeURIComponent(tool.title ?? '')}`}>
                         <Button size="lg" variant="outline" className="border-amber-500 text-amber-400 hover:bg-amber-500/10">
-                          Ver Todos os Cursos
+                          {t("seeAllCourses")}
                         </Button>
                       </Link>
                     </div>
@@ -435,16 +450,16 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
                 <div className="space-y-6">
                   <Card className="p-6 backdrop-blur border-border">
-                    <h3 className="text-lg font-semibold mb-3">Resumo Rápido</h3>
+                    <h3 className="text-lg font-semibold mb-3">{t("quickSummary")}</h3>
                     <div className="space-y-2 text-sm text-muted-foreground">
-                      <div>Categoria: <span className="text-gray-100">{tool.category}</span></div>
-                      <div>Fornecedor: <span className="text-gray-100">{tool.vendor}</span></div>
-                      <div>Preço: <span className="text-gray-100">{tool.pricing}</span></div>
-                      <div>Avaliação: <span className="text-gray-100">{tool.rating}</span></div>
+                      <div>{t("category")} <span className="text-gray-100">{tool.category}</span></div>
+                      <div>{t("vendor")} <span className="text-gray-100">{tool.vendor}</span></div>
+                      <div>{t("price")} <span className="text-gray-100">{tool.pricing}</span></div>
+                      <div>{t("rating")} <span className="text-gray-100">{tool.rating}</span></div>
                     </div>
                     <Separator className="my-4 bg-border" />
                     <div className="space-y-2">
-                      <h4 className="font-semibold">Integrações populares</h4>
+                      <h4 className="font-semibold">{t("popularIntegrations")}</h4>
                       <div className="flex flex-wrap gap-2">
                         {(tool.integrations || []).slice(0, 6).map((i: string) => (
                           <Badge key={i} variant="outline" className="border-amber-500/30">{i}</Badge>
@@ -454,10 +469,10 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                   </Card>
 
                   <Card className="p-6 bg-gradient-to-br from-primary/15 to-accent/10 border-amber-500/30">
-                    <h3 className="text-xl font-semibold mb-2">Aprenda {tool.title} de forma prática</h3>
-                    <p className="text-muted-foreground mb-4">Cursos com projetos do mundo real, templates e certificado.</p>
+                    <h3 className="text-xl font-semibold mb-2">{t("learnPractically", { tool: tool.title ?? "" })}</h3>
+                    <p className="text-muted-foreground mb-4">{t("coursesPitch")}</p>
                     <Link href={`/cursos?search=${encodeURIComponent(tool.title ?? '')}`}>
-                      <Button className="bg-amber-600 hover:bg-amber-700">Ver cursos</Button>
+                      <Button className="bg-amber-600 hover:bg-amber-700">{t("seeCourses")}</Button>
                     </Link>
                   </Card>
 
@@ -465,18 +480,18 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
                   <Card className="p-6 border-border bg-gradient-to-br from-card to-secondary/30">
                     <div className="flex items-center gap-2 mb-3">
                       <MessageCircle className="text-green-400" size={20} />
-                      <h3 className="text-lg font-semibold">Quer um curso de {tool.title}?</h3>
+                      <h3 className="text-lg font-semibold">{t("wantACourse", { tool: tool.title ?? "" })}</h3>
                     </div>
                     <p className="text-muted-foreground text-sm mb-4">
-                      Ainda não temos um curso específico? Solicite e nós criamos! Conte-nos o que você precisa aprender.
+                      {t("wantACourseBody")}
                     </p>
                     <Link
-                      href={`https://wa.me/5511999999999?text=${encodeURIComponent(`Olá! Gostaria de solicitar um curso sobre ${tool.title}. Tenho interesse em aprender mais sobre essa ferramenta.`)}`}
+                      href={`https://wa.me/5511999999999?text=${encodeURIComponent(t("whatsAppMessage", { tool: tool.title ?? "" }))}`}
                       target="_blank"
                     >
                       <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
                         <MessageCircle className="mr-2" size={16} />
-                        Solicitar Curso via WhatsApp
+                        {t("requestViaWhatsApp")}
                       </Button>
                     </Link>
                     <Link href="/contato" className="block mt-2">

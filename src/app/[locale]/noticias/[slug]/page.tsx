@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getNewsBySlug, getAllNews, extraArtsFor } from "@/lib/ai-news";
 import { ExperienceNav } from "@/components/layout/ExperienceNav";
 import { schemaMateria, schemaTrilha } from "@/lib/structured-data";
+import { getTranslations } from "next-intl/server";
 
 export const revalidate = 900;
 
@@ -43,7 +44,7 @@ function capaSocial(image?: string): string {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, locale } = await params;
-  const item = await getNewsBySlug(slug);
+  const item = await getNewsBySlug(slug, locale);
   if (!item) return {};
 
   // canonical PRÓPRIO é obrigatório aqui: o layout de [locale] declara
@@ -83,10 +84,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function NoticiaPage({ params }: Props) {
   const { slug, locale } = await params;
-  const item = await getNewsBySlug(slug);
+  const item = await getNewsBySlug(slug, locale);
   if (!item) notFound();
+  const t = await getTranslations({ locale, namespace: "NewsHub" });
 
-  const others = (await getAllNews(7)).filter((n) => n.slug !== slug).slice(0, 3);
+  const others = (await getAllNews(7, locale)).filter((n) => n.slug !== slug).slice(0, 3);
   const paragraphs = item.body && item.body.length > 0 ? item.body : [item.summary];
   const [artA, artB] = extraArtsFor(slug);
 
@@ -105,8 +107,10 @@ export default async function NoticiaPage({ params }: Props) {
       imagem: capaSocial(item.image),
     }),
     schemaTrilha(locale, [
-      { nome: "Início", caminho: "" },
-      { nome: "IA Hoje", caminho: "/noticias" },
+      { nome: t("home"), caminho: "" },
+      // A trilha e TEXTO PURO (JSON-LD), nao JSX: a chave rica do titulo
+      // traria as tags. `breadcrumb` e a versao lisa da mesma frase.
+      { nome: t("breadcrumb"), caminho: "/noticias" },
       { nome: item.title, caminho: `/noticias/${slug}` },
     ]),
   ];
@@ -180,14 +184,14 @@ export default async function NoticiaPage({ params }: Props) {
                 <figure className="glass rounded-2xl overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={artA} alt="" loading="lazy" className="w-full object-cover" style={{ aspectRatio: "16 / 8" }} />
-                  <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">Ilustração: FayAI Studio</figcaption>
+                  <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">{t("illustration")}</figcaption>
                 </figure>
               )}
               {i === 2 && paragraphs.length > 3 && (
                 <figure className="glass rounded-2xl overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={artB} alt="" loading="lazy" className="w-full object-cover" style={{ aspectRatio: "16 / 8" }} />
-                  <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">Ilustração: FayAI Studio</figcaption>
+                  <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">{t("illustration")}</figcaption>
                 </figure>
               )}
             </div>
@@ -196,7 +200,7 @@ export default async function NoticiaPage({ params }: Props) {
             <figure className="glass rounded-2xl overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={artB} alt="" loading="lazy" className="w-full object-cover" style={{ aspectRatio: "16 / 8" }} />
-              <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">Ilustração: FayAI Studio</figcaption>
+              <figcaption className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">{t("illustration")}</figcaption>
             </figure>
           )}
         </div>
@@ -212,15 +216,15 @@ export default async function NoticiaPage({ params }: Props) {
             {item.sourceImage && (
               <span className="block relative overflow-hidden rounded-xl shrink-0 w-28 sm:w-36" style={{ aspectRatio: "16 / 10" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.sourceImage} alt={`Imagem original: ${item.source ?? "fonte"}`} className="absolute inset-0 w-full h-full object-cover" />
+                <img src={item.sourceImage} alt={t("source", { source: item.source ?? "" })} className="absolute inset-0 w-full h-full object-cover" />
               </span>
             )}
             <span className="min-w-0">
               <span className="block text-[10px] font-extrabold uppercase tracking-widest text-white/40">
-                Matéria original{item.sourceImage ? " · imagem da fonte" : ""}
+                {t("originalStory")}{item.sourceImage ? t("sourceImage") : ""}
               </span>
               <span className="block mt-1 text-sm font-bold" style={{ color: GOLD }}>
-                Ler em {item.source ?? "fonte original"} ↗
+                {t("readOn", { source: item.source ?? t("originalSource") })} ↗
               </span>
             </span>
           </a>
@@ -231,7 +235,7 @@ export default async function NoticiaPage({ params }: Props) {
       {others.length > 0 && (
         <section className="px-4 sm:px-8 pb-16 max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl tracking-wide mb-4" style={bebas}>
-            MAIS DO <span style={{ color: GOLD }}>BLOG IA HOJE</span>
+            {t.rich("more", { destaque: (c: React.ReactNode) => <span style={{ color: GOLD }}>{c}</span> })}
           </h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {others.map((n) => (

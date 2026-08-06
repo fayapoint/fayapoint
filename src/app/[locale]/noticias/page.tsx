@@ -3,17 +3,26 @@ import Link from "next/link";
 import { getAllNews } from "@/lib/ai-news";
 import { SEED_NEWS } from "@/data/landing/seed-news";
 import { ExperienceNav } from "@/components/layout/ExperienceNav";
+import { generatePageMetadata, ROUTE_SEO } from "@/lib/metadata";
+import { getTranslations } from "next-intl/server";
 
 // canonical explícito: sem ele o hub herda o canonical da home declarado no
 // layout de [locale] e some do índice do Google (mesmo bug das matérias).
-export const metadata: Metadata = {
-  title: "Blog IA Hoje — notícias e guias de inteligência artificial | FayAI",
-  description:
-    "As notícias de IA que importam para brasileiros, selecionadas e explicadas todos os dias pela FayAI — com link para a fonte original.",
-  alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://fayai.com.br"}/pt-BR/noticias`,
-  },
-};
+//
+// ⚠️ Era `const metadata`, que é estático: `/en/noticias` servia o título em
+// português E a canônica apontando para `/pt-BR/noticias` — ou seja, a versão
+// inglesa declarava a portuguesa como a original dela. Agora cada idioma
+// aponta para si mesmo.
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = ROUTE_SEO["/noticias"][locale === "en" ? "en" : "pt-BR"];
+  return generatePageMetadata({
+    locale,
+    path: "/noticias",
+    title: copy.title,
+    description: copy.description,
+  });
+}
 
 export const revalidate = 900;
 
@@ -30,7 +39,8 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
   // todos eles chegam na matéria depois de um 308.
   const { locale } = await params;
   const { tag } = await searchParams;
-  const all = await getAllNews(60);
+  const t = await getTranslations({ locale, namespace: "NewsHub" });
+  const all = await getAllNews(60, locale);
   const tags = [...new Set(all.map((n) => n.tag))].slice(0, 8);
   const filtered = tag ? all.filter((n) => n.tag === tag) : all;
   const [featured, ...rest] = filtered;
@@ -84,13 +94,12 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e1d] via-[#0c0e1d]/40 to-transparent" />
           <div className="absolute bottom-0 left-0 p-5 sm:p-7">
             <h1 className="text-5xl sm:text-7xl tracking-wide leading-[0.95]" style={bebas}>
-              BLOG IA <span style={{ color: GOLD }}>HOJE</span>
+              {t.rich("title", { destaque: (c) => <span style={{ color: GOLD }}>{c}</span> })}
             </h1>
           </div>
         </div>
         <p className="text-base sm:text-lg text-white/65 max-w-2xl">
-          As notícias de IA que importam — selecionadas e explicadas todos os dias para quem está
-          aprendendo no Brasil. Sempre com o link da fonte original.
+          {t("intro")}
         </p>
 
         {/* Chips de categoria (mix do blog antigo) */}
@@ -105,7 +114,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
                   : { borderColor: "rgba(255,255,255,.2)", color: "rgba(255,255,255,.7)" }
               }
             >
-              Todas
+              {t("all")}
             </Link>
             {tags.map((t) => (
               <Link
@@ -145,7 +154,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
             <span className="block p-6 sm:p-8">
               <span className="flex items-center gap-3">
                 <span className="text-[10px] font-extrabold uppercase tracking-widest rounded-full px-2.5 py-1" style={{ background: GOLD, color: "#241a05" }}>
-                  DESTAQUE
+                  {t("featured")}
                 </span>
                 <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{featured.tag}</span>
               </span>
@@ -155,7 +164,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
               <span className="block mt-3 text-sm sm:text-base text-white/60 leading-relaxed">{featured.summary}</span>
               {featured.source && (
                 <span className="block mt-4 text-[10px] font-semibold uppercase tracking-wider text-white/35">
-                  Fonte: {featured.source}
+                  {t("source", { source: featured.source })}
                   {featured.date ? ` · ${new Date(featured.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long" })}` : ""}
                 </span>
               )}
@@ -186,7 +195,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
                   <span className="block mt-1.5 text-base font-bold leading-snug">{item.title}</span>
                   <span className="block mt-1.5 text-sm text-white/55 leading-relaxed line-clamp-3">{item.summary}</span>
                   {item.source && (
-                    <span className="block mt-2.5 text-[10px] font-semibold uppercase tracking-wider text-white/35">Fonte: {item.source}</span>
+                    <span className="block mt-2.5 text-[10px] font-semibold uppercase tracking-wider text-white/35">{t("source", { source: item.source })}</span>
                   )}
                 </span>
               </Link>
@@ -197,7 +206,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
 
       {filtered.length === 0 && (
         <section className="px-4 sm:px-8 pb-10 max-w-6xl mx-auto">
-          <p className="text-white/50">Nenhuma notícia nesta categoria ainda — o agente publica todo dia às 7h.</p>
+          <p className="text-white/50">{t("empty")}</p>
         </section>
       )}
 

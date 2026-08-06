@@ -18,7 +18,7 @@
 
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { ArrowRight, Gamepad2 } from "lucide-react";
 import { ArcadeVisual } from "@/components/portal/ArcadeVisual";
@@ -26,55 +26,22 @@ import { useReducedMotion } from "@/lib/arcade/engine";
 
 const GOLD = "#f5c04e";
 
-interface ShowcaseGame {
-  id: string;
-  titulo: string;
-  /** O gesto — é o que diferencia um jogo do outro */
-  verbo: string;
-  gancho: string;
-  cor: string;
-}
-
-const GAMES: ShowcaseGame[] = [
-  {
-    id: "verdade-ou-mito",
-    titulo: "Verdade ou Mito?",
-    verbo: "Deslize",
-    gancho: "60s no relógio. Errou, perde tempo.",
-    cor: "#38bdf8",
-  },
-  {
-    id: "qual-prompt",
-    titulo: "Qual Prompt Gerou Isto?",
-    verbo: "Deduza",
-    gancho: "A imagem foca aos poucos. Acerte antes.",
-    cor: "#a78bfa",
-  },
-  {
-    id: "batalha-prompts",
-    titulo: "Batalha de Prompts",
-    verbo: "Aposte",
-    gancho: "500 fichas. Dá pra ir all-in.",
-    cor: "#fb923c",
-  },
-  {
-    id: "caca-prompt",
-    titulo: "Caça ao Prompt Perdido",
-    verbo: "Monte",
-    gancho: "Arraste as peças. Cuidado com o intruso.",
-    cor: "#a3e635",
-  },
-  {
-    id: "monte-o-prompt",
-    titulo: "Monte o Prompt",
-    verbo: "Construa",
-    gancho: "Os 5 ingredientes de uma imagem boa.",
-    cor: "#f472b6",
-  },
+/**
+ * Só o que NÃO é texto mora aqui: o id (que vira deep-link e chave da arte) e a
+ * cor. Título, verbo e gancho vêm de `ArcadeShowcase.games.<id>` nas mensagens
+ * — a ordem dos cards é a ordem deste array.
+ */
+const GAMES: { id: string; cor: string }[] = [
+  { id: "verdade-ou-mito", cor: "#38bdf8" },
+  { id: "qual-prompt", cor: "#a78bfa" },
+  { id: "batalha-prompts", cor: "#fb923c" },
+  { id: "caca-prompt", cor: "#a3e635" },
+  { id: "monte-o-prompt", cor: "#f472b6" },
 ];
 
 export function ArcadeShowcase() {
   const locale = useLocale();
+  const t = useTranslations("ArcadeShowcase");
   // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
   // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
   const rota = (h: string) => comIdioma(h, locale);
@@ -113,19 +80,18 @@ export function ArcadeShowcase() {
             className="text-xl sm:text-2xl tracking-wide"
             style={{ fontFamily: "var(--font-bebas), sans-serif" }}
           >
-            JOGUE <span style={{ color: GOLD }}>AGORA</span>
+            {t.rich("title", { destaque: (c) => <span style={{ color: GOLD }}>{c}</span> })}
           </h3>
           <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-lime-300/80">
-            <Gamepad2 size={13} /> sem cadastro, sem instalar
+            <Gamepad2 size={13} /> {t("badge")}
           </span>
         </div>
-        <p className="text-sm text-white/55 mb-3 max-w-xl">
-          Cinco jogos, cinco gestos diferentes. Você aprende IA jogando —
-          e leva o conceito na cabeça sem ter lido uma aula.
-        </p>
+        <p className="text-sm text-white/55 mb-3 max-w-xl">{t("body")}</p>
 
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-          {GAMES.map((game, i) => (
+          {GAMES.map((game, i) => {
+            const titulo = t(`games.${game.id}.titulo`);
+            return (
             <motion.div
               key={game.id}
               initial={reduced ? false : { opacity: 0, y: 14 }}
@@ -146,7 +112,7 @@ export function ArcadeShowcase() {
                 <div className="relative">
                   <ArcadeVisual
                     gameId={game.id as never}
-                    alt={`Arte do jogo ${game.titulo}`}
+                    alt={t("artAlt", { titulo })}
                     className="aspect-[16/10]"
                     imageClassName="transition-transform duration-500 group-hover:scale-105"
                   />
@@ -160,23 +126,26 @@ export function ArcadeShowcase() {
                       letterSpacing: ".04em",
                     }}
                   >
-                    {game.verbo.toUpperCase()}
+                    {t(`games.${game.id}.verbo`).toUpperCase()}
                   </span>
                 </div>
                 <div className="p-2.5">
-                  <p className="text-[13px] font-bold leading-tight">{game.titulo}</p>
-                  <p className="mt-1 text-[11px] leading-snug text-white/45">{game.gancho}</p>
+                  <p className="text-[13px] font-bold leading-tight">{titulo}</p>
+                  <p className="mt-1 text-[11px] leading-snug text-white/45">
+                    {t(`games.${game.id}.gancho`)}
+                  </p>
                 </div>
               </Link>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
         <Link
           href={rota("/arcade")}
           className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-white/55 transition-colors hover:text-white"
         >
-          Ver o arcade completo <ArrowRight size={13} />
+          {t("seeAll")} <ArrowRight size={13} />
         </Link>
       </div>
     </section>

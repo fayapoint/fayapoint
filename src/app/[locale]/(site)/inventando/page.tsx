@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Crown, Clock, ArrowRight, Check, Sparkles } from "lucide-react";
 import { capaDe, getCategorias, microcursosOrdenados } from "@/data/microcursos";
-import { generatePageMetadata } from "@/lib/metadata";
+import { generatePageMetadata, ROUTE_SEO } from "@/lib/metadata";
 import { TIER_CONFIGS } from "@/lib/course-tiers";
 
 type Props = {
@@ -44,11 +44,14 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     // para outro conteúdo é descartada pelo Google.
     path: pagina > 1 ? `/inventando?p=${pagina}` : "/inventando",
     title:
-      pagina > 1
-        ? `Inventando — microcursos de IA, página ${pagina} | FayAI`
-        : "Inventando — microcursos grátis de ferramentas de IA | FayAI",
-    description:
-      "Cada ferramenta de IA que aparece nos lançamentos vira um microcurso curto e ilustrado em português: o que é, como usar e onde ela falha. A primeira aula é grátis.",
+      locale === "en"
+        ? pagina > 1
+          ? `Inventing — AI micro-courses, page ${pagina} | FayAI`
+          : ROUTE_SEO["/inventando"].en.title
+        : pagina > 1
+          ? `Inventando — microcursos de IA, página ${pagina} | FayAI`
+          : ROUTE_SEO["/inventando"]["pt-BR"].title,
+    description: ROUTE_SEO["/inventando"][locale === "en" ? "en" : "pt-BR"].description,
     image: "/inventando/arte/microcurso.webp",
   });
 }

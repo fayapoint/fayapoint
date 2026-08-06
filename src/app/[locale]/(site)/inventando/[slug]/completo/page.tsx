@@ -68,7 +68,11 @@ export default async function MicrocursoPage({ params }: Props) {
     name: microcurso.titulo,
     description: microcurso.resumo,
     datePublished: microcurso.publicadoEm,
-    inLanguage: "pt-BR",
+    // O JSON-LD declara o idioma DA PAGINA, e a mesma rota serve as duas
+    // arvores. Cravado em "pt-BR", `/en/...` anunciava ao Google conteudo
+    // portugues numa URL que agora e inglesa — e idioma declarado errado
+    // vale menos que idioma nao declarado.
+    inLanguage: locale === "en" ? "en" : "pt-BR",
     learningResourceType: "Microcurso",
     educationalLevel: microcurso.nivel,
     teaches: microcurso.ferramenta,
