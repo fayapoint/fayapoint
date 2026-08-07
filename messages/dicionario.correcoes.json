@@ -1,8 +1,6 @@
 {
   "_leia": "Correções À MÃO do dicionário de interface, aplicadas DEPOIS da tradução automática por scripts/i18n/interface.mjs. Sobrevivem a --refazer, que é a razão de existirem num arquivo separado em vez de editadas direto no dicionario.en.json.",
-
   "_porqueIssoEPermanente": "O dicionário é chaveado pela frase ISOLADA, então o tradutor nunca vê a tela. Isso é uma escolha de projeto (ver src/i18n/dicionario.ts) e o preço dela é este: palavra curta com dois sentidos sai no sentido errado, e sai com cara de acerto. Não é defeito do modelo — é falta de contexto, e quem tem o contexto é quem olha a tela. Toda entrada aqui precisa dizer ONDE aparece.",
-
   "correcoes": {
     "Boa noite": {
       "en": "Good evening",
@@ -28,9 +26,18 @@
       "en": "RESEARCH",
       "_onde": "selo de status dos cartões do Ecossistema (STATUS_LABEL em src/data/landing/projects.ts)",
       "_porque": "\"SEARCH\" é buscar. O selo diz que o projeto está em fase de pesquisa, ao lado de NO AR e CONSTRUINDO."
+    },
+    "O caminho, passo a passo": {
+      "en": "The path, step by step",
+      "_onde": "legenda do slot de mídia 'fluxo' no leitor de curso (LEGENDA em src/lib/curso-media-local.ts)",
+      "_porque": "Não é erro de tradução: a frase NUNCA foi extraída. O extrator varre ponto de render em .tsx e argumento de T(); estas 8 legendas moram num Record<string,string> de um .ts de lib, que não é nenhum dos dois. Saíam 6 em inglês e 2 em português na MESMA fileira de figuras."
+    },
+    "Antes de seguir": {
+      "en": "Before moving on",
+      "_onde": "legenda do slot de mídia 'checklist' no leitor de curso (mesmo Record acima)",
+      "_porque": "Mesma causa. 'Before you continue' também serve; 'Before moving on' é o que se lê antes de virar a página."
     }
   },
-
   "naoTraduzir": {
     "Som em Bando": "Nome do aplicativo, não descrição. O automático deu \"Sound in Groups\". A prova de que é nome: o próprio texto em INGLÊS do site já o mantém — src/lib/metadata.ts diz \"Som em Bando, the synced-music app\". Marca não se traduz, nem quando a marca é uma frase em português."
   }
