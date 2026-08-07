@@ -28,6 +28,7 @@ import {
   MousePointerClick,
   Play,
   Settings2,
+  Languages,
   Sparkles,
   AlertTriangle,
   Trophy,
@@ -1399,8 +1400,18 @@ export default function CourseReaderPage() {
         //    content from the public product endpoint or handle gracefully.
         let contentData: CourseContentDto | null = null;
 
+        // ⚠️ O `?locale=` NÃO é enfeite: sem ele a API assume pt-BR e devolve o
+        // curso em português para quem está lendo em /en. A tradução do corpo
+        // já existia (coleção `conteudoTraduzido`, que a prévia usa desde
+        // sempre) — o leitor é que nunca pediu. Uma rota de API não tem prefixo
+        // de idioma na URL, então o idioma tem que viajar na query; esquecer
+        // disso não dá erro, não dá 404, só entrega a língua errada.
+        // São QUATRO caminhos de busca aqui (com token, 401, 403, sem token).
+        // Esta constante existe para que não seja possível consertar três.
+        const urlConteudo = `/api/courses/${slug}/content?locale=${encodeURIComponent(locale)}`;
+
         if (token) {
-          const contentRes = await fetch(`/api/courses/${slug}/content`, {
+          const contentRes = await fetch(urlConteudo, {
             headers: authHeaders,
             credentials: "include",
           });
@@ -1409,7 +1420,7 @@ export default function CourseReaderPage() {
             // Token expired — for limited access, continue without content auth
             if (accessData.access === "limited") {
               // Try without auth for free preview
-              const publicRes = await fetch(`/api/courses/${slug}/content`);
+              const publicRes = await fetch(urlConteudo);
               if (publicRes.ok) {
                 contentData = await publicRes.json();
               }
@@ -1424,7 +1435,7 @@ export default function CourseReaderPage() {
             // This can happen for free users. For limited, show what we can.
             if (accessData.access === "limited") {
               // Try fetching without strict auth check
-              const publicRes = await fetch(`/api/courses/${slug}/content`);
+              const publicRes = await fetch(urlConteudo);
               if (publicRes.ok) {
                 contentData = await publicRes.json();
               }
@@ -1438,7 +1449,7 @@ export default function CourseReaderPage() {
           }
         } else {
           // No token — try to fetch content anyway (some APIs may allow it for preview)
-          const contentRes = await fetch(`/api/courses/${slug}/content`);
+          const contentRes = await fetch(urlConteudo);
           if (contentRes.ok) {
             contentData = await contentRes.json();
           }
@@ -2173,6 +2184,53 @@ export default function CourseReaderPage() {
             <span className="text-[10px] font-bold text-violet-400 tabular-nums">
               {currentChapterIndex + 1}/{chapters.length}
             </span>
+          </div>
+
+          {/*
+            Troca de idioma DENTRO do leitor.
+
+            O leitor é tela cheia: some o cabeçalho do site, e com ele o único
+            seletor de idioma que existia. Quem entrava por /en e caía num
+            capítulo em português não tinha o que clicar — e, por definição, não
+            conseguia ler a instrução que explicaria o caminho.
+
+            Por isso "PT | EN" e não um menu: são os dois códigos escritos, o
+            ativo aceso. Não depende de ler nenhuma palavra, em nenhum idioma.
+            `title`/`aria-label` vão nas DUAS línguas pelo mesmo motivo.
+          */}
+          <div
+            className="flex items-center rounded-xl bg-[rgba(var(--reader-tint),0.03)] border border-[rgba(var(--reader-tint),0.05)] overflow-hidden"
+            role="group"
+            aria-label="Idioma do curso / Course language"
+          >
+            <Languages size={13} className="ml-2 mr-0.5 text-[rgba(var(--reader-tint),0.35)] shrink-0" aria-hidden />
+            {(["pt-BR", "en"] as const).map((cod) => {
+              const ativo = cod === "en" ? !isPtBr : isPtBr;
+              const rotulo = cod === "en" ? "EN" : "PT";
+              return (
+                <button
+                  key={cod}
+                  type="button"
+                  onClick={() => {
+                    if (ativo) return;
+                    // Rota nova = remontagem = o conteúdo é buscado de novo, já
+                    // com o `?locale=` certo. O capítulo volta pelo progresso
+                    // salvo, que é por curso e não por idioma.
+                    router.push(`/${cod}/portal/learn/${slug}`);
+                  }}
+                  aria-pressed={ativo}
+                  title={cod === "en" ? "Read in English" : "Ler em português"}
+                  className={cn(
+                    "px-2 py-1.5 text-[11px] font-bold tabular-nums transition-all duration-200",
+                    ativo
+                      ? "text-violet-300 bg-violet-500/15"
+                      : "text-[rgba(var(--reader-tint),0.35)] hover:text-[rgba(var(--reader-tint),0.7)] hover:bg-[rgba(var(--reader-tint),0.05)]"
+                  )}
+                >
+                  {rotulo}
+                </button>
+              );
+            })}
           </div>
 
           <Popover>
