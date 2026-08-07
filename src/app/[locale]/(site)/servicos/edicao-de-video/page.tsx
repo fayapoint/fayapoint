@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -190,6 +191,7 @@ export default async function VideoEditingPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const T = await obterT(locale);
   const t = await getTranslations("Home.Services.video-editing");
   const isEn = locale === "en";
 
@@ -237,7 +239,8 @@ export default async function VideoEditingPage({
             <div className="text-center max-w-4xl mx-auto">
               <Badge className="mb-6 px-4 py-2 text-sm font-medium" variant="secondary">
                 <Sparkles className="w-4 h-4 mr-2 inline" />
-                Conteúdo que causa impacto
+                
+                {T("Conteúdo que causa impacto")}
               </Badge>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance leading-tight">
                 {t("title")}
@@ -251,25 +254,26 @@ export default async function VideoEditingPage({
                   className="text-lg px-8 py-6 group"
                   source="video-editing-hero"
                 >
-                  Montar pipeline de conteúdo
+                  
+                  {T("Montar pipeline de conteúdo")}
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </ScheduleConsultationButton>
                 <a href="#toolbox">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                    {isEn ? "Use the free tools" : "Usar ferramentas grátis"}
+                    {isEn ? "Use the free tools" : T("Usar ferramentas grátis")}
                   </Button>
                 </a>
               </div>
               <div className="mt-4">
                 <Link href="/contato" className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">
-                  {isEn ? "Get portfolio" : "Receber portfólio"}
+                  {isEn ? "Get portfolio" : T("Receber portfólio")}
                 </Link>
               </div>
               <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
-                {["Sem estoque", "Pacotes mensais", "Time híbrido (humano + IA)"].map((item) => (
+                {[T("Sem estoque"), "Pacotes mensais", T("Time híbrido (humano + IA)")].map((item) => (
                   <div key={item} className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>{item}</span>
+                    <span>{T(item)}</span>
                   </div>
                 ))}
               </div>
@@ -291,8 +295,8 @@ export default async function VideoEditingPage({
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
                     <benefit.icon className="w-6 h-6" />
                   </div>
-                  <div className="text-3xl md:text-4xl font-bold mb-2">{benefit.stat}</div>
-                  <div className="text-sm text-muted-foreground">{benefit.label}</div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">{T(benefit.stat)}</div>
+                  <div className="text-sm text-muted-foreground">{T(benefit.label)}</div>
                 </div>
               ))}
             </div>
@@ -302,9 +306,10 @@ export default async function VideoEditingPage({
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Estúdio completo, zero atrito</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Estúdio completo, zero atrito")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Operamos como o time de vídeo que cria, versiona, publica e mede o desempenho do seu conteúdo.
+                
+                {T("Operamos como o time de vídeo que cria, versiona, publica e mede o desempenho do seu conteúdo.")}
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -313,8 +318,8 @@ export default async function VideoEditingPage({
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                     <service.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+                  <h3 className="text-xl font-semibold mb-3">{T(service.title)}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{T(service.description)}</p>
                 </Card>
               ))}
             </div>
@@ -324,17 +329,18 @@ export default async function VideoEditingPage({
         <section className="py-20 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Nossa cadência</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Nossa cadência")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Processos em sprints semanais, com quadros de acompanhamento e feedback instantâneo.
+                
+                {T("Processos em sprints semanais, com quadros de acompanhamento e feedback instantâneo.")}
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {processSteps.map((item) => (
                 <div key={item.title} className="relative">
-                  <div className="text-6xl font-bold text-primary/10 mb-4">{item.step}</div>
-                  <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                  <div className="text-6xl font-bold text-primary/10 mb-4">{T(item.step)}</div>
+                  <h3 className="text-xl font-semibold mb-3">{T(item.title)}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{T(item.description)}</p>
                 </div>
               ))}
             </div>
@@ -348,7 +354,8 @@ export default async function VideoEditingPage({
                 Brands e creators que confiam
               </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Medimos tempo de produção, performance e impacto em comunidade em cada projeto.
+                
+                {T("Medimos tempo de produção, performance e impacto em comunidade em cada projeto.")}
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -359,10 +366,10 @@ export default async function VideoEditingPage({
                       <Sparkles key={index} className="w-5 h-5 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-lg mb-6 leading-relaxed text-pretty">“{testimonial.quote}”</p>
+                  <p className="text-lg mb-6 leading-relaxed text-pretty">“{T(testimonial.quote)}”</p>
                   <div>
-                    <div className="font-semibold">{testimonial.author}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                    <div className="font-semibold">{T(testimonial.author)}</div>
+                    <div className="text-sm text-muted-foreground">{T(testimonial.role)}</div>
                   </div>
                 </Card>
               ))}
@@ -373,9 +380,10 @@ export default async function VideoEditingPage({
         <section className="py-20 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Planos sob medida</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Planos sob medida")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Escolha o formato ideal para seu volume de produção e canais prioridade.
+                
+                {T("Escolha o formato ideal para seu volume de produção e canais prioridade.")}
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
@@ -387,14 +395,14 @@ export default async function VideoEditingPage({
                   {pkg.featured && (
                     <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">Preferido</Badge>
                   )}
-                  <div className="text-sm font-semibold text-primary mb-2">{pkg.tier}</div>
-                  <h3 className="text-2xl font-bold mb-4">{pkg.title}</h3>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">{pkg.description}</p>
+                  <div className="text-sm font-semibold text-primary mb-2">{T(pkg.tier)}</div>
+                  <h3 className="text-2xl font-bold mb-4">{T(pkg.title)}</h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">{T(pkg.description)}</p>
                   <ul className="space-y-3 mb-8">
                     {pkg.highlights.map((item) => (
                       <li key={item} className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{item}</span>
+                        <span className="text-sm">{T(item)}</span>
                       </li>
                     ))}
                   </ul>
@@ -405,12 +413,12 @@ export default async function VideoEditingPage({
                       source={`video-editing-package-${pkg.tier.toLowerCase()}`}
                       showCompanyRole
                     >
-                      {pkg.cta.label}
+                      {T(pkg.cta.label)}
                     </ScheduleConsultationButton>
                   ) : (
                     <Link href={pkg.cta.href}>
                       <Button className="w-full" variant={pkg.featured ? "default" : "outline"}>
-                        {pkg.cta.label}
+                        {T(pkg.cta.label)}
                       </Button>
                     </Link>
                   )}
@@ -426,15 +434,15 @@ export default async function VideoEditingPage({
               <Badge variant="secondary" className="mb-3">FAQ</Badge>
               <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
               <p className="text-muted-foreground mt-3">
-                {isEn ? "Clear answers before you book." : "Respostas rápidas antes de agendar."}
+                {isEn ? "Clear answers before you book." : T("Respostas rápidas antes de agendar.")}
               </p>
             </div>
 
             <Accordion type="single" collapsible className="w-full">
               {faqItems.map((f) => (
                 <AccordionItem key={f.q} value={f.q}>
-                  <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+                  <AccordionTrigger className="text-left">{T(f.q)}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{T(f.a)}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
@@ -445,9 +453,10 @@ export default async function VideoEditingPage({
           <div className="container mx-auto max-w-4xl">
             <Card className="p-12 text-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
               <Rocket className="w-16 h-16 mx-auto mb-6 text-primary" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">Pronto para o próximo corte?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">{T("Pronto para o próximo corte?")}</h2>
               <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-                Em menos de 7 dias montamos um sprint piloto com guidelines, exemplos e calendário aprovado.
+                
+                {T("Em menos de 7 dias montamos um sprint piloto com guidelines, exemplos e calendário aprovado.")}
               </p>
               <ScheduleConsultationButton
                 size="lg"
@@ -455,24 +464,26 @@ export default async function VideoEditingPage({
                 source="video-editing-final"
                 showCompanyRole
               >
-                Planejar produção agora
+                
+                {T("Planejar produção agora")}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </ScheduleConsultationButton>
               <p className="text-sm text-muted-foreground mt-6">
-                Inclui diagnóstico gratuito • roadmap de 30 dias • squad dedicado
+                
+                {T("Inclui diagnóstico gratuito • roadmap de 30 dias • squad dedicado")}
               </p>
             </Card>
           </div>
         </section>
 
         <ServiceCartProvider>
-          <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+          <Suspense fallback={<div className="py-20 text-center">{T("Carregando construtor...")}</div>}>
             <ServiceBuilderSection
               serviceSlug="video-production"
               restrictToServiceSlug
               badgeLabel="Configurar pipeline"
-              title="Monte seu estúdio sob demanda"
-              subtitle="Combine story design, captação, edição, motion e pós para criar um pacote perfeito para sua operação."
+              title={T("Monte seu estúdio sob demanda")}
+              subtitle={T("Combine story design, captação, edição, motion e pós para criar um pacote perfeito para sua operação.")}
               sectionId="video-builder"
               showServiceTabs={false}
               source="video-editing-builder"
@@ -484,8 +495,8 @@ export default async function VideoEditingPage({
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-sm font-medium">{isEn ? "Video content plan" : "Plano de conteúdo"}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+            <p className="text-sm font-medium">{isEn ? "Video content plan" : T("Plano de conteúdo")}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
           </div>
           <a href="#toolbox">
             <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>

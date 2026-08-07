@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
@@ -41,6 +42,7 @@ interface TrailNode {
 }
 
 export function TrailMap({ stats, achievementsCount, userCourses, onTabChange }: TrailMapProps) {
+  const T = useT();
   const reduce = useReducedMotion();
   const tabHiddenAtMount = useTabHiddenAtMount();
   const skipEntrance = reduce || tabHiddenAtMount;
@@ -67,7 +69,7 @@ export function TrailMap({ stats, achievementsCount, userCourses, onTabChange }:
   return (
     <div className="rounded-2xl border border-border bg-card p-4">
       <div className="flex items-baseline justify-between mb-4">
-        <h3 className="text-base font-bold">Seu caminho para dominar IA</h3>
+        <h3 className="text-base font-bold">{T("Seu caminho para dominar IA")}</h3>
         <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#f5c04e" }}>
           {doneCount} de {nodes.length} passos
         </span>
@@ -112,15 +114,16 @@ export function TrailMap({ stats, achievementsCount, userCourses, onTabChange }:
           const label = (
             <span className="block mt-2 w-[108px] text-center">
               <span className={cn("block text-[12px] font-bold leading-tight", isFuture ? "text-muted-foreground" : "text-foreground")}>
-                {n.titulo}
+                {T(n.titulo)}
               </span>
-              <span className="block mt-0.5 text-[10px] text-muted-foreground leading-snug">{n.desc}</span>
+              <span className="block mt-0.5 text-[10px] text-muted-foreground leading-snug">{T(n.desc)}</span>
               {isCurrent && (
                 <span
                   className="inline-block mt-1 text-[9px] font-extrabold uppercase tracking-widest rounded-full px-2 py-0.5"
                   style={{ background: `${n.cor}22`, color: n.cor }}
                 >
-                  você está aqui
+                  
+                  {T("você está aqui")}
                 </span>
               )}
             </span>

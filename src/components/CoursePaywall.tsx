@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -39,6 +40,7 @@ export function CoursePaywall({
   locale = "pt-BR",
   previewText,
 }: CoursePaywallProps) {
+  const T = useT();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export function CoursePaywall({
           <div className="relative mb-8 overflow-hidden rounded-2xl">
             <div className="p-6 bg-white/[0.02] border border-white/[0.04] rounded-2xl">
               <p className="text-white/20 text-sm leading-relaxed line-clamp-3 blur-[2px] select-none">
-                {previewText}
+                {T(previewText)}
               </p>
             </div>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#12131c]/60 to-[#12131c]/95" />
@@ -94,9 +96,9 @@ export function CoursePaywall({
           Continue aprendendo
         </h3>
         <p className="text-white/40 text-sm mb-8 max-w-md">
-          Desbloqueie todos os capitulos de{" "}
-          <span className="text-white/60 font-medium">{courseName}</span> e
-          acelere seu aprendizado.
+          
+          {T("Desbloqueie todos os capitulos de")}{" "}
+          <span className="text-white/60 font-medium">{T(courseName)}</span>  {T("e\n          acelere seu aprendizado.")}
         </p>
 
         {/* CTA Buttons */}
@@ -116,7 +118,8 @@ export function CoursePaywall({
                 variant="outline"
                 className="w-full h-12 rounded-xl border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] text-white/80 font-semibold text-sm transition-all duration-300"
               >
-                Compre este curso por {priceLabel}
+                
+                {T("Compre este curso por")} {T(priceLabel)}
               </Button>
             </Link>
           )}
@@ -130,7 +133,7 @@ export function CoursePaywall({
               className="flex items-center gap-2.5 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]"
             >
               <b.icon size={15} className="text-violet-400/70 flex-shrink-0" />
-              <span className="text-xs text-white/50">{b.text}</span>
+              <span className="text-xs text-white/50">{T(b.text)}</span>
             </div>
           ))}
         </div>
@@ -139,14 +142,16 @@ export function CoursePaywall({
         <div className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/10">
           <ShieldCheck size={16} className="text-emerald-400/70" />
           <span className="text-xs font-medium text-emerald-400/70">
-            Garantia de 7 dias — devolucao sem perguntas
+            
+            {T("Garantia de 7 dias — devolucao sem perguntas")}
           </span>
         </div>
 
         {/* Login link */}
         {!plan && (
           <p className="text-center mt-6 text-xs text-white/25">
-            Ja tem uma conta?{" "}
+            
+            {T("Ja tem uma conta?")}{" "}
             <Link
               href={`/${locale}/login`}
               className="text-violet-400/70 hover:text-violet-400 underline underline-offset-2 transition-colors"

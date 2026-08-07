@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -50,6 +51,7 @@ const realScenarios = [
 ];
 
 export default function ChatGPTAllowlistingPage() {
+  const T = useT();
   const router = useRouter();
   const { addItem } = useServiceCart();
   const { isLoggedIn } = useUser();
@@ -88,7 +90,7 @@ export default function ChatGPTAllowlistingPage() {
       price: course.price,
       slug: course.slug
     });
-    toast.success("Curso adicionado ao carrinho!");
+    toast.success(T("Curso adicionado ao carrinho!"));
     if (buyNow) {
       if (isLoggedIn) router.push('/checkout/cart');
       else router.push('/onboarding');
@@ -132,16 +134,19 @@ export default function ChatGPTAllowlistingPage() {
                   </Badge>
                   <Badge className="bg-white/10 text-white/80 border-white/20 px-3 py-1">
                     <Shield className="mr-1" size={14} />
-                    Garantia 30 dias
+                    
+                    {T("Garantia 30 dias")}
                   </Badge>
                 </div>
 
                 {/* Powerful Headline */}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] tracking-tight">
-                  O ChatGPT está <br/>
+                  
+                  {T("O ChatGPT está")} <br/>
                   <span className="relative">
                     <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                      recomendando seu concorrente
+                      
+                      {T("recomendando seu concorrente")}
                     </span>
                     <motion.span 
                       className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-cyan-400 rounded-full"
@@ -151,12 +156,13 @@ export default function ChatGPTAllowlistingPage() {
                     />
                   </span>
                   <br/>
-                  <span className="text-white/90">enquanto você está invisível.</span>
+                  <span className="text-white/90">{T("enquanto você está invisível.")}</span>
                 </h1>
 
                 {/* Compelling Subheadline */}
                 <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-xl">
-                  200 milhões de pessoas perguntam ao ChatGPT todos os dias. Quando alguém pergunta sobre <strong className="text-white">seu nicho</strong>, você é citado ou ignorado?
+                  
+                  {T("200 milhões de pessoas perguntam ao ChatGPT todos os dias. Quando alguém pergunta sobre")} <strong className="text-white">{T("seu nicho")}</strong>{T(", você é citado ou ignorado?")}
                 </p>
 
                 {/* Primary CTA */}
@@ -171,7 +177,8 @@ export default function ChatGPTAllowlistingPage() {
                   </Button>
                   <div className="flex items-center gap-2 text-muted-foreground text-sm">
                     <Shield size={16} className="text-green-500" />
-                    Garantia de 30 dias
+                    
+                    {T("Garantia de 30 dias")}
                   </div>
                 </div>
 
@@ -180,7 +187,7 @@ export default function ChatGPTAllowlistingPage() {
                   <div className="flex -space-x-3">
                     {[...Array(5)].map((_, i) => (
                       <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-blue-500 border-2 border-black flex items-center justify-center text-xs font-bold">
-                        {['RF', 'JC', 'PA', 'CT', 'BO'][i]}
+                        {T(['RF', 'JC', 'PA', 'CT', 'BO'][i])}
                       </div>
                     ))}
                   </div>
@@ -190,7 +197,7 @@ export default function ChatGPTAllowlistingPage() {
                         <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
-                    <p className="text-sm text-muted-foreground">+{course.students} profissionais já configuraram</p>
+                    <p className="text-sm text-muted-foreground">+{course.students}  {T("profissionais já configuraram")}</p>
                   </div>
                 </div>
               </div>
@@ -213,7 +220,7 @@ export default function ChatGPTAllowlistingPage() {
                         <MessageSquare size={16} className="text-white" />
                       </div>
                       <div className="bg-[#343541] rounded-lg p-3 text-sm text-gray-200">
-                        {realScenarios[activeScenario].question}
+                        {T(realScenarios[activeScenario].question)}
                       </div>
                     </div>
                     
@@ -227,7 +234,7 @@ export default function ChatGPTAllowlistingPage() {
                         <Bot size={16} className="text-white" />
                       </div>
                       <div className="bg-[#343541] rounded-lg p-3 text-sm text-gray-200 border-l-2 border-green-500">
-                        {realScenarios[activeScenario].with}
+                        {T(realScenarios[activeScenario].with)}
                       </div>
                     </motion.div>
                   </div>
@@ -245,7 +252,7 @@ export default function ChatGPTAllowlistingPage() {
                         }`}
                       >
                         <scenario.icon size={14} />
-                        <span className="hidden sm:inline">{scenario.persona.split(' ')[0]}</span>
+                        <span className="hidden sm:inline">{T(scenario.persona.split(' ')[0])}</span>
                       </button>
                     ))}
                   </div>
@@ -264,7 +271,8 @@ export default function ChatGPTAllowlistingPage() {
                       onClick={() => addToCart(true)}
                       className="w-full bg-green-500 hover:bg-green-400 text-black font-bold py-6 text-lg transition-all hover:scale-[1.02]"
                     >
-                      Dominar AEO Agora
+                      
+                      {T("Dominar AEO Agora")}
                       <ArrowRight className="ml-2" size={20} />
                     </Button>
 
@@ -275,7 +283,8 @@ export default function ChatGPTAllowlistingPage() {
                       </div>
                       <div className="p-2 bg-secondary/50 rounded">
                         <Zap size={14} className="mx-auto mb-1 text-green-500" />
-                        Vitalício
+                        
+                        {T("Vitalício")}
                       </div>
                       <div className="p-2 bg-secondary/50 rounded">
                         <Shield size={14} className="mx-auto mb-1 text-green-500" />
@@ -303,17 +312,18 @@ export default function ChatGPTAllowlistingPage() {
               >
                 <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 mb-6 px-4 py-2">
                   <Lightbulb className="mr-2" size={16} />
-                  O Novo Paradigma do Marketing Digital
+                  
+                  {T("O Novo Paradigma do Marketing Digital")}
                 </Badge>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
-                  Bem-vindo à era do{" "}
+                  
+                  {T("Bem-vindo à era do")}{" "}
                   <span className="bg-gradient-to-r from-blue-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
                     AEO
                   </span>
                 </h2>
                 <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  <strong className="text-white">Answer Engine Optimization</strong> é a evolução natural do SEO. 
-                  Enquanto o SEO tradicional te coloca nos resultados de busca, o AEO te coloca <em>dentro da resposta</em>.
+                  <strong className="text-white">Answer Engine Optimization</strong>  {T("é a evolução natural do SEO. \r\n                  Enquanto o SEO tradicional te coloca nos resultados de busca, o AEO te coloca")} <em>dentro da resposta</em>.
                 </p>
               </motion.div>
             </div>
@@ -335,25 +345,25 @@ export default function ChatGPTAllowlistingPage() {
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold text-muted-foreground">SEO Tradicional</h3>
-                      <p className="text-sm text-muted-foreground">O que você já conhece</p>
+                      <p className="text-sm text-muted-foreground">{T("O que você já conhece")}</p>
                     </div>
                   </div>
                   <ul className="space-y-4">
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Você aparece em uma <strong className="text-muted-foreground">lista de 10 links</strong></span>
+                      <span>{T("Você aparece em uma")} <strong className="text-muted-foreground">lista de 10 links</strong></span>
                     </li>
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Usuário precisa <strong className="text-muted-foreground">clicar e navegar</strong></span>
+                      <span>{T("Usuário precisa")} <strong className="text-muted-foreground">clicar e navegar</strong></span>
                     </li>
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Competição por <strong className="text-muted-foreground">posição no ranking</strong></span>
+                      <span>{T("Competição por")} <strong className="text-muted-foreground">{T("posição no ranking")}</strong></span>
                     </li>
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <div className="mt-1.5 w-2 h-2 rounded-full bg-gray-600 flex-shrink-0" />
-                      <span>Resultados genéricos e <strong className="text-muted-foreground">impessoais</strong></span>
+                      <span>{T("Resultados genéricos e")} <strong className="text-muted-foreground">impessoais</strong></span>
                     </li>
                   </ul>
                 </div>
@@ -374,21 +384,21 @@ export default function ChatGPTAllowlistingPage() {
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">AEO: O Futuro</h3>
-                      <p className="text-sm text-green-400/70">O que você vai dominar</p>
+                      <p className="text-sm text-green-400/70">{T("O que você vai dominar")}</p>
                     </div>
                   </div>
                   <ul className="space-y-4">
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
-                      <span>Você é <strong className="text-white">A resposta direta</strong>, não um link</span>
+                      <span>{T("Você é")} <strong className="text-white">A resposta direta</strong>{T(", não um link")}</span>
                     </li>
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
-                      <span>IA <strong className="text-white">recomenda e cita</strong> você automaticamente</span>
+                      <span>IA <strong className="text-white">recomenda e cita</strong>  {T("você automaticamente")}</span>
                     </li>
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
-                      <span>Competição por <strong className="text-white">ser a fonte confiável</strong></span>
+                      <span>{T("Competição por")} <strong className="text-white">{T("ser a fonte confiável")}</strong></span>
                     </li>
                     <li className="flex items-start gap-3 text-muted-foreground">
                       <Check className="mt-0.5 text-green-500 flex-shrink-0" size={18} />
@@ -412,11 +422,11 @@ export default function ChatGPTAllowlistingPage() {
               </div>
               <div className="text-center p-6 bg-card/50 border border-border rounded-xl">
                 <div className="text-4xl font-bold text-blue-400 mb-2">200M+</div>
-                <div className="text-sm text-muted-foreground">usuários ativos no ChatGPT</div>
+                <div className="text-sm text-muted-foreground">{T("usuários ativos no ChatGPT")}</div>
               </div>
               <div className="text-center p-6 bg-card/50 border border-border rounded-xl">
                 <div className="text-4xl font-bold text-amber-400 mb-2">95%</div>
-                <div className="text-sm text-muted-foreground">dos sites bloqueiam IA sem saber</div>
+                <div className="text-sm text-muted-foreground">{T("dos sites bloqueiam IA sem saber")}</div>
               </div>
               <div className="text-center p-6 bg-card/50 border border-border rounded-xl">
                 <div className="text-4xl font-bold text-yellow-400 mb-2">0%</div>
@@ -432,14 +442,17 @@ export default function ChatGPTAllowlistingPage() {
             <div className="max-w-4xl mx-auto text-center mb-16">
               <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-6 px-4 py-2">
                 <Target className="mr-2" size={16} />
-                Cenários Reais de Mercado
+                
+                {T("Cenários Reais de Mercado")}
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                O que muda quando você está{" "}
-                <span className="text-green-400">visível</span>?
+                
+                {T("O que muda quando você está")}{" "}
+                <span className="text-green-400">{T("visível")}</span>?
               </h2>
               <p className="text-xl text-muted-foreground">
-                Veja como profissionais de diferentes áreas transformaram suas conversões com AEO
+                
+                {T("Veja como profissionais de diferentes áreas transformaram suas conversões com AEO")}
               </p>
             </div>
 
@@ -458,21 +471,21 @@ export default function ChatGPTAllowlistingPage() {
                     <div className="p-8 bg-card/80 relative">
                       <div className="absolute top-4 left-4">
                         <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
-                          <EyeOff size={12} className="mr-1" /> SEM Allowlisting
+                          <EyeOff size={12} className="mr-1" />  {T("SEM Allowlisting")}
                         </Badge>
                       </div>
                       <div className="pt-8">
                         <div className="flex items-center gap-3 mb-4">
                           <scenario.icon className="text-muted-foreground" size={24} />
-                          <span className="font-bold text-muted-foreground">{scenario.persona}</span>
+                          <span className="font-bold text-muted-foreground">{T(scenario.persona)}</span>
                         </div>
                         <div className="mb-4 p-3 bg-secondary rounded-lg text-sm text-muted-foreground">
-                          <span className="text-muted-foreground">Usuário pergunta:</span><br/>
-                          &quot;{scenario.question}&quot;
+                          <span className="text-muted-foreground">{T("Usuário pergunta:")}</span><br/>
+                          &quot;{T(scenario.question)}&quot;
                         </div>
                         <div className="flex items-start gap-2">
                           <X className="text-red-500 flex-shrink-0 mt-0.5" size={18} />
-                          <p className="text-muted-foreground">{scenario.without}</p>
+                          <p className="text-muted-foreground">{T(scenario.without)}</p>
                         </div>
                       </div>
                     </div>
@@ -481,21 +494,21 @@ export default function ChatGPTAllowlistingPage() {
                     <div className="p-8 bg-gradient-to-br from-green-900/20 to-black relative border-l border-border">
                       <div className="absolute top-4 left-4">
                         <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                          <Eye size={12} className="mr-1" /> COM AEO
+                          <Eye size={12} className="mr-1" />  {T("COM AEO")}
                         </Badge>
                       </div>
                       <div className="pt-8">
                         <div className="flex items-center gap-3 mb-4">
                           <scenario.icon className="text-green-500" size={24} />
-                          <span className="font-bold text-white">{scenario.persona}</span>
+                          <span className="font-bold text-white">{T(scenario.persona)}</span>
                         </div>
                         <div className="mb-4 p-3 bg-black/50 rounded-lg text-sm text-muted-foreground border border-green-500/20">
                           <span className="text-green-500">ChatGPT responde:</span><br/>
-                          &quot;{scenario.with}&quot;
+                          &quot;{T(scenario.with)}&quot;
                         </div>
                         <div className="flex items-center gap-2">
                           <TrendingUp className="text-green-500" size={18} />
-                          <span className="font-bold text-green-400">{scenario.result}</span>
+                          <span className="font-bold text-green-400">{T(scenario.result)}</span>
                         </div>
                       </div>
                     </div>
@@ -524,10 +537,12 @@ export default function ChatGPTAllowlistingPage() {
             <div className="grid lg:grid-cols-2 gap-16 items-start max-w-6xl mx-auto">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                  O que você vai dominar
+                  
+                  {T("O que você vai dominar")}
                 </h2>
                 <p className="text-muted-foreground mb-8 text-lg">
-                  Um passo a passo técnico e estratégico para colocar seu site dentro do cérebro das IAs mais avançadas do mundo.
+                  
+                  {T("Um passo a passo técnico e estratégico para colocar seu site dentro do cérebro das IAs mais avançadas do mundo.")}
                 </p>
                 
                 <div className="space-y-4">
@@ -541,7 +556,7 @@ export default function ChatGPTAllowlistingPage() {
                           <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-muted-foreground group-hover:bg-green-900 group-hover:text-green-400 transition-colors">
                             {module.id}
                           </div>
-                          <span className="font-semibold text-left">{module.title}</span>
+                          <span className="font-semibold text-left">{T(module.title)}</span>
                         </div>
                         {expandedModules.includes(module.id) ? (
                           <ChevronUp className="text-muted-foreground" />
@@ -553,7 +568,7 @@ export default function ChatGPTAllowlistingPage() {
                         <div className="p-4 pl-16 text-muted-foreground bg-black/50 border-x border-b border-border rounded-b-lg text-sm">
                           <ul className="space-y-2 list-disc pl-4">
                             {module.topics.map((topic, idx) => (
-                              <li key={idx}>{topic}</li>
+                              <li key={idx}>{T(topic)}</li>
                             ))}
                           </ul>
                         </div>
@@ -567,7 +582,8 @@ export default function ChatGPTAllowlistingPage() {
                 <div className="bg-gradient-to-br from-green-900/20 to-blue-900/20 border border-border rounded-2xl p-8">
                   <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
                     <Gift className="text-green-400" />
-                    Bônus Inclusos
+                    
+                    {T("Bônus Inclusos")}
                   </h3>
                   <div className="space-y-6">
                     {course.bonuses?.map((bonus, i) => (
@@ -576,8 +592,8 @@ export default function ChatGPTAllowlistingPage() {
                           <CheckCircle className="text-green-500 w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-white">{bonus.title}</h4>
-                          <p className="text-sm text-muted-foreground">{bonus.description}</p>
+                          <h4 className="font-bold text-white">{T(bonus.title)}</h4>
+                          <p className="text-sm text-muted-foreground">{T(bonus.description)}</p>
                           <div className="text-xs text-green-400 mt-1 font-mono">
                             Valor: R$ {bonus.value}
                           </div>
@@ -586,12 +602,13 @@ export default function ChatGPTAllowlistingPage() {
                     ))}
                   </div>
                   <div className="mt-8 pt-6 border-t border-border text-center">
-                    <div className="text-sm text-muted-foreground mb-1">Valor Total dos Bônus</div>
+                    <div className="text-sm text-muted-foreground mb-1">{T("Valor Total dos Bônus")}</div>
                     <div className="text-3xl font-bold text-green-400">
                       R$ {totalBonusValue}
                     </div>
                     <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
-                      GRÁTIS COM O CURSO
+                      
+                      {T("GRÁTIS COM O CURSO")}
                     </div>
                   </div>
                 </div>
@@ -607,26 +624,29 @@ export default function ChatGPTAllowlistingPage() {
             <div className="max-w-4xl mx-auto text-center mb-16">
               <Badge className="bg-green-500/20 text-green-400 border-green-500/30 mb-6 px-4 py-2">
                 <Shield className="mr-2" size={16} />
-                Por que este curso
+                
+                {T("Por que este curso")}
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Curso <span className="text-green-400">único no Brasil</span> sobre AEO
+                
+                {T("Curso")} <span className="text-green-400">{T("único no Brasil")}</span>  {T("sobre AEO")}
               </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                O primeiro curso em português que ensina como posicionar seu site nas respostas de IAs como ChatGPT, Perplexity e Gemini.
+                
+                {T("O primeiro curso em português que ensina como posicionar seu site nas respostas de IAs como ChatGPT, Perplexity e Gemini.")}
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {[
-                { title: "Conteúdo Técnico Real", desc: "Configuração passo a passo de Cloudflare, robots.txt, schema markup e verificação de assinatura OpenAI.", icon: "🔧" },
-                { title: "Estratégia Completa", desc: "Da otimização técnica à criação de conteúdo que IAs priorizam — cobrimos todo o funil.", icon: "📊" },
-                { title: "Garantia de 30 dias", desc: "Se o curso não entregar o que promete, devolvemos 100% do valor. Sem perguntas.", icon: "🛡️" },
+                { title: T("Conteúdo Técnico Real"), desc: T("Configuração passo a passo de Cloudflare, robots.txt, schema markup e verificação de assinatura OpenAI."), icon: "🔧" },
+                { title: T("Estratégia Completa"), desc: T("Da otimização técnica à criação de conteúdo que IAs priorizam — cobrimos todo o funil."), icon: "📊" },
+                { title: T("Garantia de 30 dias"), desc: T("Se o curso não entregar o que promete, devolvemos 100% do valor. Sem perguntas."), icon: "🛡️" },
               ].map((item, i) => (
                 <Card key={i} className="bg-card/80 border-border p-6 hover:border-green-500/30 transition-all">
-                  <div className="text-3xl mb-4">{item.icon}</div>
-                  <h3 className="font-bold text-white text-lg mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground text-sm">{item.desc}</p>
+                  <div className="text-3xl mb-4">{T(item.icon)}</div>
+                  <h3 className="font-bold text-white text-lg mb-2">{T(item.title)}</h3>
+                  <p className="text-muted-foreground text-sm">{T(item.desc)}</p>
                 </Card>
               ))}
             </div>
@@ -645,14 +665,15 @@ export default function ChatGPTAllowlistingPage() {
               {/* Value Stack */}
               <div className="text-center mb-12">
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                  Você vai receber <span className="text-green-400">tudo isso</span>:
+                  
+                  {T("Você vai receber")} <span className="text-green-400">tudo isso</span>:
                 </h2>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4 mb-12">
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-muted-foreground">Curso completo de AEO (8+ horas)</span>
+                  <span className="text-muted-foreground">{T("Curso completo de AEO (8+ horas)")}</span>
                   <span className="ml-auto text-muted-foreground line-through text-sm">R$ 997</span>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
@@ -677,7 +698,7 @@ export default function ChatGPTAllowlistingPage() {
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-muted-foreground">Atualizações vitalícias</span>
+                  <span className="text-muted-foreground">{T("Atualizações vitalícias")}</span>
                   <span className="ml-auto text-muted-foreground line-through text-sm">∞</span>
                 </div>
               </div>
@@ -698,26 +719,28 @@ export default function ChatGPTAllowlistingPage() {
                       <span className="text-5xl md:text-6xl font-bold text-white">R$ {course.price}</span>
                       <Badge className="bg-red-500 text-white border-0 text-lg px-3 py-1">-{discount}%</Badge>
                     </div>
-                    <p className="text-green-400 text-sm mt-2">Economia de R$ {savings} + R$ {totalBonusValue} em bônus</p>
+                    <p className="text-green-400 text-sm mt-2">Economia de R$ {savings} + R$ {totalBonusValue}  {T("em bônus")}</p>
                   </div>
 
                   <Button 
                     onClick={() => addToCart(true)}
                     className="w-full bg-green-500 hover:bg-green-400 text-black font-bold py-8 text-xl shadow-[0_0_40px_rgba(34,197,94,0.4)] hover:shadow-[0_0_60px_rgba(34,197,94,0.6)] transition-all"
                   >
-                    Dominar AEO Agora
+                    
+                    {T("Dominar AEO Agora")}
                     <ArrowRight className="ml-2 w-6 h-6" />
                   </Button>
 
                   <div className="mt-6 flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
-                    <span className="flex items-center gap-2"><Shield size={16} className="text-green-500" /> 30 dias de garantia</span>
+                    <span className="flex items-center gap-2"><Shield size={16} className="text-green-500" />  {T("30 dias de garantia")}</span>
                     <span className="flex items-center gap-2"><Lock size={16} className="text-green-500" /> Pagamento seguro</span>
                   </div>
                 </Card>
 
                 {/* Final Trust */}
                 <p className="text-center text-muted-foreground text-sm mt-8 max-w-md mx-auto">
-                  Seu site pode continuar invisível para milhões de usuários de IA, ou você pode agir agora e ser encontrado. A escolha é sua.
+                  
+                  {T("Seu site pode continuar invisível para milhões de usuários de IA, ou você pode agir agora e ser encontrado. A escolha é sua.")}
                 </p>
               </div>
             </div>

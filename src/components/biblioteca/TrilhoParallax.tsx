@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * O trilho horizontal com parallax — a biblioteca da home e do dashboard.
@@ -273,6 +274,7 @@ export function TrilhoParallax({
   titulo?: string;
   subtitulo?: string;
 }) {
+  const T = useT();
   const t = useTranslations("Trilho");
   const trilho = useRef<HTMLDivElement>(null);
   const cards = useRef<HTMLElement[]>([]);
@@ -908,8 +910,8 @@ export function TrilhoParallax({
           opcional; o controle, não. */}
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3 px-4 sm:px-8">
         <div>
-          {titulo && <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{titulo}</h2>}
-          {subtitulo && <p className="mt-1 text-sm text-white/50">{subtitulo}</p>}
+          {titulo && <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{T(titulo)}</h2>}
+          {subtitulo && <p className="mt-1 text-sm text-white/50">{T(subtitulo)}</p>}
         </div>
         <div className="ml-auto flex gap-2">
           <button
@@ -958,7 +960,7 @@ export function TrilhoParallax({
           id={idTrilho}
           role="region"
           aria-roledescription="carrossel"
-          aria-label={titulo || "Cursos"}
+          aria-label={titulo || T("Cursos")}
           tabIndex={0}
           onKeyDown={aoTeclar}
           onPointerDown={aoDescer}
@@ -1063,7 +1065,7 @@ export function TrilhoParallax({
                   TONS_ESTADO[item.estado.tom],
                 )}
               >
-                <span className="sr-only sm:not-sr-only">{item.estado.rotulo}</span>
+                <span className="sr-only sm:not-sr-only">{T(item.estado.rotulo)}</span>
               </span>
             )}
 
@@ -1217,7 +1219,7 @@ export function TrilhoParallax({
                   className="line-clamp-2 flex-1 text-[9.5px] font-bold leading-[1.15] text-white outline-none sm:text-[15px] sm:leading-snug focus-visible:underline focus-visible:decoration-amber-400 focus-visible:underline-offset-4"
                   style={{ textShadow: "0 1px 12px rgba(0,0,0,.75), 0 0 24px rgba(0,0,0,.5)" }}
                 >
-                  {item.titulo}
+                  {T(item.titulo)}
                 </Link>
 
                 {/* A alavanca só existe onde não há mouse. No celular não
@@ -1228,7 +1230,7 @@ export function TrilhoParallax({
                 <button
                   type="button"
                   aria-expanded={abertoEm === i}
-                  aria-label={abertoEm === i ? "Recolher detalhes" : "Ver detalhes"}
+                  aria-label={abertoEm === i ? "Recolher detalhes" : T("Ver detalhes")}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1258,13 +1260,13 @@ export function TrilhoParallax({
                 <span>
                   <span className="flex flex-col gap-1 pt-0.5 sm:gap-2 sm:pt-2">
               <span className="hidden flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-widest text-white/45 sm:flex">
-                {item.ferramenta && <span>{item.ferramenta}</span>}
-                {item.nivel && <span>· {item.nivel}</span>}
+                {item.ferramenta && <span>{T(item.ferramenta)}</span>}
+                {item.nivel && <span>· {T(item.nivel)}</span>}
               </span>
 
               {item.resumo && (
                 <span className="hidden line-clamp-2 text-xs leading-relaxed text-white/60 sm:block">
-                  {item.resumo}
+                  {T(item.resumo)}
                 </span>
               )}
 
@@ -1276,7 +1278,7 @@ export function TrilhoParallax({
                 )}
                 {item.duracao && (
                   <span className="inline-flex items-center gap-1">
-                    <Clock size={11} /> {item.duracao}
+                    <Clock size={11} /> {T(item.duracao)}
                   </span>
                 )}
               </span>
@@ -1347,7 +1349,7 @@ export function TrilhoParallax({
                   ) : (
                     <Sparkles size={12} />
                   )}
-                  {item.acao.rotulo}
+                  {T(item.acao.rotulo)}
                 </button>
               )}
 
@@ -1364,7 +1366,7 @@ export function TrilhoParallax({
                   className="pointer-events-auto relative z-[2] mt-1 hidden items-center justify-center gap-1.5 rounded-lg border border-amber-400/40 sm:inline-flex bg-amber-500/10 px-3 py-2 text-xs font-bold text-amber-200 transition-colors hover:bg-amber-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
                 >
                   <Wand2 size={12} />
-                  {item.atelie.rotulo}
+                  {T(item.atelie.rotulo)}
                 </Link>
               )}
                   </span>

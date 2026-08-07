@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,6 +29,7 @@ function MarqueeRow({
   speed?: number;
   onImageClick: (img: Creation, idx: number) => void;
 }) {
+  const T = useT();
   // Triple the images to ensure seamless loop
   const tripleImages = [...images, ...images, ...images];
   
@@ -50,7 +52,7 @@ function MarqueeRow({
           >
             <img
               src={img.imageUrl}
-              alt={img.prompt}
+              alt={T(img.prompt)}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -94,6 +96,7 @@ function ImageLightbox({
   onClose: () => void;
   onNavigate: (idx: number) => void;
 }) {
+  const T = useT();
   const image = images[currentIndex];
   
   useEffect(() => {
@@ -133,7 +136,7 @@ function ImageLightbox({
         <div className="relative flex-1 flex items-center justify-center">
           <img
             src={image.imageUrl}
-            alt={image.prompt}
+            alt={T(image.prompt)}
             className="max-w-full max-h-[70vh] object-contain rounded-xl"
           />
           
@@ -154,11 +157,11 @@ function ImageLightbox({
         
         {/* Image info */}
         <div className="mt-4 p-4 bg-secondary rounded-xl backdrop-blur-sm">
-          <p className="text-white font-medium line-clamp-2 mb-2">{image.prompt}</p>
+          <p className="text-white font-medium line-clamp-2 mb-2">{T(image.prompt)}</p>
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <User size={14} />
-              <span>{image.userName}</span>
+              <span>{T(image.userName)}</span>
             </div>
             <div className="flex items-center gap-4">
               {image.likes !== undefined && (
@@ -192,6 +195,7 @@ function ImageLightbox({
 }
 
 export function CommunityGallery() {
+  const T = useT();
   const t = useTranslations("CommunityGallery");
   const [creations, setCreations] = useState<Creation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -308,11 +312,11 @@ export function CommunityGallery() {
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-medium rounded-full transition-all shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
             >
               <Sparkles size={18} />
-              {t("cta") || "Criar Minha Arte"}
+              {t("cta") || T("Criar Minha Arte")}
               <ExternalLink size={16} />
             </Link>
             <p className="text-muted-foreground text-xs mt-3">
-              {creations.length}+ {t("imagesCreated") || "imagens criadas pela comunidade"}
+              {creations.length}+ {t("imagesCreated") || T("imagens criadas pela comunidade")}
             </p>
           </motion.div>
         )}

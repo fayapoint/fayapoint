@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
@@ -23,6 +24,7 @@ const generateParticles = () => {
 };
 
 export function CTASection() {
+  const T = useT();
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
   const [mounted, setMounted] = useState(false);
@@ -209,8 +211,8 @@ export function CTASection() {
               >
                 <Card className="p-6 bg-card/50 border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 text-center">
                   <Icon className="w-10 h-10 text-primary mx-auto mb-3" />
-                  <h4 className="font-bold text-foreground mb-1">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                  <h4 className="font-bold text-foreground mb-1">{T(item.title)}</h4>
+                  <p className="text-sm text-muted-foreground">{T(item.description)}</p>
                 </Card>
               </motion.div>
             );

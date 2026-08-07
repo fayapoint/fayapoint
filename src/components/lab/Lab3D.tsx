@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -33,6 +34,7 @@ const CUSTO_COR: Record<string, string> = {
 };
 
 export function Lab3D() {
+  const T = useT();
   const [fundoClaro, setFundoClaro] = useState(false);
 
   return (
@@ -47,9 +49,8 @@ export function Lab3D() {
             BANCADA <span style={{ color: GOLD }}>3D</span>
           </h1>
           <p className="mt-1 text-sm max-w-2xl" style={{ opacity: 0.6 }}>
-            As opções lado a lado, no mesmo tamanho e no mesmo fundo. Passe o cursor em cada uma —
-            é girando que elas se diferenciam. Nenhuma está no site ainda, exceto a marcada como
-            atual.
+            
+            {T("As opções lado a lado, no mesmo tamanho e no mesmo fundo. Passe o cursor em cada uma —\r\n            é girando que elas se diferenciam. Nenhuma está no site ainda, exceto a marcada como\r\n            atual.")}
           </p>
         </header>
 
@@ -68,7 +69,8 @@ export function Lab3D() {
 
         <section className="mt-6">
           <h2 className="text-xl tracking-wide mb-3" style={bebas}>
-            LOGO — 3 OPÇÕES
+            
+            {T("LOGO — 3 OPÇÕES")}
           </h2>
 
           <div className="grid gap-4 md:grid-cols-3">
@@ -86,7 +88,7 @@ export function Lab3D() {
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-lg tracking-wide" style={bebas}>
-                      {r.nome}
+                      {T(r.nome)}
                     </span>
                     <span className="flex items-center gap-1.5">
                       {atual && (
@@ -100,9 +102,9 @@ export function Lab3D() {
                       <span
                         className="rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
                         style={{ background: `${CUSTO_COR[r.custo]}22`, color: CUSTO_COR[r.custo] }}
-                        title="Custo de GPU — importa para decidir se a técnica se espalha pelo site"
+                        title={T("Custo de GPU — importa para decidir se a técnica se espalha pelo site")}
                       >
-                        GPU {r.custo}
+                        GPU {T(r.custo)}
                       </span>
                     </span>
                   </div>
@@ -117,7 +119,7 @@ export function Lab3D() {
                   </div>
 
                   <p className="mt-3 text-[12px] leading-relaxed flex-1" style={{ opacity: 0.62 }}>
-                    {r.tese}
+                    {T(r.tese)}
                   </p>
                 </div>
               );
@@ -125,14 +127,14 @@ export function Lab3D() {
           </div>
 
           <p className="mt-3 text-[11px] flex items-center gap-1.5" style={{ opacity: 0.4 }}>
-            <MousePointer2 size={12} /> Sem cursor em cima, cada uma se demonstra sozinha em
-            intervalos irregulares — é o comportamento real do header, não uma prévia.
+            <MousePointer2 size={12} />  {T("Sem cursor em cima, cada uma se demonstra sozinha em\r\n            intervalos irregulares — é o comportamento real do header, não uma prévia.")}
           </p>
         </section>
 
         <section className="mt-10">
           <h2 className="text-xl tracking-wide mb-3" style={bebas}>
-            ÍCONES DO DASHBOARD — FAMÍLIA ESCOLHIDA
+            
+            {T("ÍCONES DO DASHBOARD — FAMÍLIA ESCOLHIDA")}
           </h2>
           <IconesLab />
         </section>
@@ -142,7 +144,8 @@ export function Lab3D() {
           className="mt-8 inline-flex items-center gap-1.5 text-[12px] font-bold transition-opacity hover:opacity-100"
           style={{ opacity: 0.45 }}
         >
-          voltar para a home <ArrowUpRight size={13} />
+          
+          {T("voltar para a home")} <ArrowUpRight size={13} />
         </Link>
       </div>
     </div>

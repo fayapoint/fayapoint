@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
@@ -269,6 +270,7 @@ export default function PODDesignEditor({
   onCancel,
   initialSettings,
 }: PODDesignEditorProps) {
+  const T = useT();
   const [settings, setSettings] = useState<DesignSettings>({
     ...defaultSettings,
     ...initialSettings,
@@ -364,7 +366,7 @@ export default function PODDesignEditor({
           </div>
           <div>
             <h2 className="text-base md:text-lg font-bold text-white">Editor de Design</h2>
-            <p className="text-[11px] text-muted-foreground">Preview realista — veja como ficará impresso</p>
+            <p className="text-[11px] text-muted-foreground">{T("Preview realista — veja como ficará impresso")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -443,7 +445,7 @@ export default function PODDesignEditor({
 
             {/* Help bar */}
             <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-white/40">
-              <span className="flex items-center gap-1"><Move size={12} /> Arraste para mover</span>
+              <span className="flex items-center gap-1"><Move size={12} />  {T("Arraste para mover")}</span>
               <span><kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px]">↑↓←→</kbd> Ajuste fino</span>
               <span><kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px]">+/-</kbd> Escala</span>
             </div>
@@ -466,7 +468,7 @@ export default function PODDesignEditor({
                 {coveragePercent}%
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mb-3">100% = preenche toda a área de impressão</p>
+            <p className="text-[10px] text-muted-foreground mb-3">{T("100% = preenche toda a área de impressão")}</p>
             <Slider
               value={[settings.scale * 100]}
               onValueChange={([v]) => updateSetting('scale', v / 100)}
@@ -487,7 +489,7 @@ export default function PODDesignEditor({
                   )}
                   onClick={() => updateSetting('scale', p.value)}
                 >
-                  {p.name}
+                  {T(p.name)}
                 </Button>
               ))}
             </div>
@@ -497,7 +499,8 @@ export default function PODDesignEditor({
           <Card className="bg-secondary border-border p-4">
             <h4 className="font-semibold mb-2 flex items-center gap-2 text-sm text-white">
               <Target size={14} className="text-amber-400" />
-              Posição
+              
+              {T("Posição")}
             </h4>
             <div className="grid grid-cols-3 gap-2 mb-3">
               {positionPresets.map((p) => (
@@ -512,7 +515,7 @@ export default function PODDesignEditor({
                   )}
                   onClick={() => { updateSetting('x', p.x); updateSetting('y', p.y); }}
                 >
-                  {p.name}
+                  {T(p.name)}
                 </Button>
               ))}
             </div>
@@ -547,7 +550,8 @@ export default function PODDesignEditor({
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-semibold flex items-center gap-2 text-sm text-white">
                 <RotateCw size={14} className="text-amber-400" />
-                Rotação
+                
+                {T("Rotação")}
               </h4>
               <span className="text-sm text-amber-400 font-mono">{settings.rotation}°</span>
             </div>
@@ -608,7 +612,7 @@ export default function PODDesignEditor({
             className="w-full border-border"
             onClick={() => setSettings(defaultSettings)}
           >
-            <RefreshCw size={14} className="mr-1.5" /> Resetar para Padrão
+            <RefreshCw size={14} className="mr-1.5" />  {T("Resetar para Padrão")}
           </Button>
 
           {/* Info */}
@@ -616,7 +620,7 @@ export default function PODDesignEditor({
             <div className="flex items-start gap-2">
               <AlertCircle size={14} className="text-amber-400 shrink-0 mt-0.5" />
               <p className="text-[11px] text-muted-foreground leading-relaxed">
-                <span className="font-medium text-white">Preview realista</span> — Esta simulação mostra como o design ficará impresso no tecido, com sombras e textura do produto real. A área tracejada é o limite de impressão.
+                <span className="font-medium text-white">Preview realista</span>  {T("— Esta simulação mostra como o design ficará impresso no tecido, com sombras e textura do produto real. A área tracejada é o limite de impressão.")}
               </p>
             </div>
           </Card>

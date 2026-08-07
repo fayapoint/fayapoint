@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -92,6 +93,7 @@ const QUESTIONS: FishQuestion[] = [
 const STORAGE_KEY = "fayai_fisher_answered";
 
 export function PersonaFisher({ source }: { source: string }) {
+  const T = useT();
   const [visible, setVisible] = useState(false);
   const [sent, setSent] = useState(false);
 
@@ -149,15 +151,15 @@ export function PersonaFisher({ source }: { source: string }) {
         >
           <button
             onClick={dismiss}
-            aria-label="Agora não"
+            aria-label={T("Agora não")}
             className="absolute top-2.5 right-2.5 rounded-full p-1 text-white/40 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X size={14} />
           </button>
           <p className="text-[11px] font-extrabold uppercase tracking-widest text-violet-300 flex items-center gap-1.5">
-            <Sparkles size={12} /> Rapidinho — deixa tudo mais seu
+            <Sparkles size={12} />  {T("Rapidinho — deixa tudo mais seu")}
           </p>
-          <p className="mt-1.5 text-sm font-bold text-foreground">{question.question}</p>
+          <p className="mt-1.5 text-sm font-bold text-foreground">{T(question.question)}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {question.options.map((op) => (
               <button
@@ -166,8 +168,8 @@ export function PersonaFisher({ source }: { source: string }) {
                 onClick={() => answer(op.signals)}
                 className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm font-semibold hover:border-violet-400/60 hover:bg-violet-500/15 transition-colors cursor-pointer disabled:opacity-50"
               >
-                <span className="mr-1.5">{op.emoji}</span>
-                {op.label}
+                <span className="mr-1.5">{T(op.emoji)}</span>
+                {T(op.label)}
               </button>
             ))}
           </div>

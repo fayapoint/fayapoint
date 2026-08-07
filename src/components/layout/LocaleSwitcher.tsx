@@ -1,9 +1,7 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
-import { useTransition } from "react";
 import { Check, Globe } from "lucide-react";
-import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,54 +9,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { IDIOMAS, useTrocarIdioma } from "@/lib/trocar-idioma";
 
-const locales = [
-  { code: "pt-BR", label: "Português (BR)", short: "PT" },
-  { code: "en", label: "English", short: "EN" },
-];
-
-const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
-
+/**
+ * O seletor do cabeçalho do site. A mecânica mora em `useTrocarIdioma` porque a
+ * home e o portal têm cabeçalho próprio e precisam da mesma decisão com outro
+ * visual (ver `BotaoIdioma`).
+ */
 export function LocaleSwitcher() {
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isPending, startTransition] = useTransition();
+  const T = useT();
+  const { locale, trocar, pendente } = useTrocarIdioma();
 
-  const current = locales.find((item) => item.code === locale) ?? {
+  const atual = IDIOMAS.find((item) => item.code === locale) ?? {
     code: locale,
     label: locale,
     short: locale.toUpperCase(),
-  };
-
-  const buildLocalizedPath = (currentPath: string, nextLocale: string) => {
-    const cleaned = currentPath.split("?")[0];
-    const segments = cleaned.split("/").filter(Boolean);
-    if (segments.length > 0 && locales.some((item) => item.code === segments[0])) {
-      segments[0] = nextLocale;
-    } else {
-      segments.unshift(nextLocale);
-    }
-    const nextPath = `/${segments.join("/")}`;
-    const query = currentPath.includes("?") ? currentPath.slice(currentPath.indexOf("?")) : "";
-    return `${nextPath}${query}`;
-  };
-
-  const handleSelect = (nextLocale: string) => {
-    if (nextLocale === locale) return;
-
-    startTransition(() => {
-      try {
-        document.cookie = `NEXT_LOCALE=${nextLocale}; path=/; max-age=${ONE_YEAR_SECONDS}`;
-        window.localStorage.setItem("preferredLocale", nextLocale);
-      } catch {
-        // noop - storage not available (SSR or private mode)
-      }
-
-      const targetPath = buildLocalizedPath(pathname ?? "/", nextLocale);
-      router.replace(targetPath);
-      router.refresh();
-    });
   };
 
   return (
@@ -67,21 +32,25 @@ export function LocaleSwitcher() {
         <Button
           variant="ghost"
           size="sm"
-          disabled={isPending}
+          disabled={pendente}
+          aria-label={atual.code === "en" ? "Change language" : "Trocar idioma"}
           className="flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground"
         >
           <Globe className="h-4 w-4" />
-          <span className="font-semibold tracking-wide">{current.short}</span>
+          <span className="font-semibold tracking-wide">{T(atual.short)}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[180px]">
-        {locales.map((item) => (
+        {IDIOMAS.map((item) => (
           <DropdownMenuItem
             key={item.code}
-            onClick={() => handleSelect(item.code)}
+            onClick={() => trocar(item.code)}
             className="flex items-center justify-between gap-2"
           >
-            <span>{item.label}</span>
+            {/* O nome do idioma NÃO se traduz: cada um aparece na própria
+                língua. Quem procura o português procura "Português", não
+                "Portuguese" — endônimo é a regra de qualquer seletor de idioma. */}
+            <span>{T(item.label)}</span>
             {item.code === locale && <Check className="h-4 w-4 text-primary" />}
           </DropdownMenuItem>
         ))}

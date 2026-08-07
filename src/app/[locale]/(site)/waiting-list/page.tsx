@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -7,6 +8,7 @@ import { CheckCircle, Gift, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function WaitingListPage() {
+  const T = useT();
   const router = useRouter();
 
   useEffect(() => {
@@ -37,16 +39,18 @@ export default function WaitingListPage() {
           className="w-full max-w-2xl p-8 space-y-8 bg-card/50 backdrop-blur-xl border border-green-500/50 rounded-2xl shadow-2xl shadow-green-500/20"
         >
           <CheckCircle className="mx-auto h-16 w-16 text-green-400" />
-          <h1 className="text-4xl font-bold tracking-tight text-white">Parabéns! Você está na lista!</h1>
-          <p className="mt-4 text-xl text-muted-foreground">Você garantiu seu lugar na vanguarda da revolução da IA. Em breve, você receberá um e-mail com mais informações e um presente especial de boas-vindas.</p>
+          <h1 className="text-4xl font-bold tracking-tight text-white">{T("Parabéns! Você está na lista!")}</h1>
+          <p className="mt-4 text-xl text-muted-foreground">{T("Você garantiu seu lugar na vanguarda da revolução da IA. Em breve, você receberá um e-mail com mais informações e um presente especial de boas-vindas.")}</p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button onClick={() => router.push('/cursos')} className="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-yellow-700 text-white font-bold">
               <Sparkles className="mr-2 h-5 w-5" />
-              Explorar Cursos
+              
+              {T("Explorar Cursos")}
             </Button>
             <Button onClick={() => router.push('/comunidade')} variant="outline" className="w-full sm:w-auto">
               <Gift className="mr-2 h-5 w-5" />
-              Conheça a Comunidade
+              
+              {T("Conheça a Comunidade")}
             </Button>
           </div>
         </motion.div>

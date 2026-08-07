@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -176,6 +177,7 @@ export function CoursesPanel({
   isEnrolling,
   onEnroll,
 }: CoursesPanelProps) {
+  const T = useT();
   /**
    * Qual curso está sendo liberado agora. Ver o painel de vagas mais abaixo.
    *
@@ -201,10 +203,10 @@ export function CoursesPanel({
         setSaindoDe(null);
         return;
       }
-      toast.success("Vaga liberada. Seu progresso continua salvo.");
+      toast.success(T("Vaga liberada. Seu progresso continua salvo."));
       window.location.reload();
     } catch {
-      toast.error("Não foi possível liberar a vaga agora.");
+      toast.error(T("Não foi possível liberar a vaga agora."));
       setSaindoDe(null);
     }
   };
@@ -543,7 +545,8 @@ export function CoursesPanel({
             <TituloDoLivro quantos={cursosDoLivro.length} />
             <div className="flex flex-wrap gap-1.5">
               <Badge className="border-amber-400/30 bg-amber-500/10 text-amber-200 text-[10px]">
-                Plano {tierConfig.displayName}
+                
+                {T("Plano")} {T(tierConfig.displayName)}
               </Badge>
               {/**
                * A vaga que o badge mostra é a SIMULTÂNEA, não a cota do mês.
@@ -592,9 +595,9 @@ export function CoursesPanel({
           {vagasSimultaneas && vagasSimultaneas.disponiveis <= 0 && (
             <div className="mt-3 rounded-xl border border-amber-400/25 bg-amber-500/[0.06] p-3">
               <p className="text-xs text-amber-100/90">
-                Suas {vagasSimultaneas.limite} vagas estão ocupadas. Você pode{" "}
-                <strong className="font-bold">sair de um curso</strong> para abrir espaço — o
-                progresso fica salvo e volta inteiro quando você reabrir.
+                
+                {T("Suas")} {vagasSimultaneas.limite}  {T("vagas estão ocupadas. Você pode")}{" "}
+                <strong className="font-bold">{T("sair de um curso")}</strong>  {T("para abrir espaço — o\r\n                progresso fica salvo e volta inteiro quando você reabrir.")}
               </p>
               <div className="mt-2.5 flex flex-wrap gap-2">
                 {vagasSimultaneas.cursosEmAndamento.map((slug) => {
@@ -615,7 +618,7 @@ export function CoursesPanel({
                       ) : (
                         <LogOut size={11} />
                       )}
-                      <span className="truncate">Sair de “{titulo}”</span>
+                      <span className="truncate">{T("Sair de “")}{T(titulo)}”</span>
                     </button>
                   );
                 })}
@@ -628,9 +631,10 @@ export function CoursesPanel({
       ) : (
         <Card className="border-border bg-gradient-to-br from-card via-emerald-950/20 to-card p-5 text-center">
           <BookOpen size={22} className="mx-auto mb-2 text-emerald-300" />
-          <h3 className="text-base font-bold">Sua estante ainda está vazia</h3>
+          <h3 className="text-base font-bold">{T("Sua estante ainda está vazia")}</h3>
           <p className="mt-1 text-xs text-muted-foreground">
-            Escolha um curso abaixo para abrir o primeiro livro do seu acervo.
+            
+            {T("Escolha um curso abaixo para abrir o primeiro livro do seu acervo.")}
           </p>
         </Card>
       )}
@@ -642,9 +646,9 @@ export function CoursesPanel({
             <Sparkles size={15} className="text-white" />
           </div>
           <div className="min-w-0">
-            <h3 className="truncate text-base font-bold">Todos os cursos</h3>
+            <h3 className="truncate text-base font-bold">{T("Todos os cursos")}</h3>
             <p className="text-xs text-muted-foreground">
-              {catalogoComEstado.length} no catálogo · cada card diz em que pé está
+              {catalogoComEstado.length}  {T("no catálogo · cada card diz em que pé está")}
             </p>
           </div>
         </div>
@@ -653,7 +657,7 @@ export function CoursesPanel({
             abrir esta tela é "o que eu posso usar?", não "o que é
             intermediário?". */}
         <div className="mb-4 flex gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {(["todos", "acervo", "disponivel", "gratis", "fila", "upgrade", "concluido"] as const)
+          {([T("todos"), "acervo", "disponivel", "gratis", "fila", "upgrade", "concluido"] as const)
             .filter((chave) => chave === "todos" || (contagens[chave] ?? 0) > 0)
             .map((chave) => (
               <button
@@ -666,7 +670,7 @@ export function CoursesPanel({
                     : "border border-border bg-secondary text-muted-foreground hover:text-white",
                 )}
               >
-                {chave === "todos" ? "Todos" : ROTULOS_ESTADO[chave].filtro}
+                {chave === T("todos") ? T("Todos") : ROTULOS_ESTADO[chave].filtro}
                 <span className="ml-1.5 text-[9px] opacity-70">{contagens[chave] ?? 0}</span>
               </button>
             ))}
@@ -720,7 +724,7 @@ export function CoursesPanel({
         ) : (
           <div className="py-6 text-center">
             <Filter size={20} className="mx-auto mb-2 text-muted-foreground" />
-            <p className="text-xs text-muted-foreground">Nenhum curso neste estado</p>
+            <p className="text-xs text-muted-foreground">{T("Nenhum curso neste estado")}</p>
           </div>
         )}
       </Card>
@@ -733,11 +737,11 @@ export function CoursesPanel({
               <Award size={15} className="text-white" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-base font-bold">Certificação</h3>
+              <h3 className="text-base font-bold">{T("Certificação")}</h3>
               <p className="mt-0.5 text-xs text-muted-foreground">
                 {certificateDiscountPercent > 0
                   ? `Certificado verificável ao concluir qualquer curso, com ${certificateDiscountPercent}% de desconto no plano ${tierConfig.displayName}.`
-                  : "Certificado verificável ao concluir qualquer curso."}
+                  : T("Certificado verificável ao concluir qualquer curso.")}
               </p>
             </div>
           </div>
@@ -748,7 +752,7 @@ export function CoursesPanel({
                 size="sm"
                 className="gap-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-xs font-bold text-black hover:from-yellow-600 hover:to-orange-600"
               >
-                <Crown size={12} /> Mais cursos e mais vagas
+                <Crown size={12} />  {T("Mais cursos e mais vagas")}
               </Button>
             </Link>
           )}

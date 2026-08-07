@@ -1,7 +1,9 @@
+import { useT } from "@/i18n/dicionario";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 export default function ResourcesIndexPage() {
+  const T = useT();
   const t = useTranslations("Resources");
   const links = t.raw("links") as { href: string; label: string }[];
 
@@ -14,7 +16,7 @@ export default function ResourcesIndexPage() {
             {links.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="text-amber-400">
-                  {link.label}
+                  {T(link.label)}
                 </Link>
               </li>
             ))}

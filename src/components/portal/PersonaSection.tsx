@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -147,6 +148,7 @@ function OptionTile({
   selected: boolean;
   onToggle: () => void;
 }) {
+  const T = useT();
   const [imgOk, setImgOk] = useState(true);
   const src = `/portal/persona/opts/${dim}-${option.key}.webp`;
 
@@ -167,7 +169,7 @@ function OptionTile({
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={src}
-          alt={option.label}
+          alt={T(option.label)}
           loading="lazy"
           decoding="async"
           onError={() => setImgOk(false)}
@@ -180,12 +182,12 @@ function OptionTile({
       ) : (
         <div className={cn("absolute inset-0 bg-gradient-to-br", option.grad)}>
           <span className="absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 text-3xl sm:text-4xl drop-shadow">
-            {option.emoji}
+            {T(option.emoji)}
           </span>
         </div>
       )}
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-2.5 pb-2 pt-6">
-        <p className="text-[11px] sm:text-xs font-bold text-white leading-tight">{option.label}</p>
+        <p className="text-[11px] sm:text-xs font-bold text-white leading-tight">{T(option.label)}</p>
       </div>
       {selected && (
         <span className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-violet-500 shadow-lg">
@@ -197,6 +199,7 @@ function OptionTile({
 }
 
 export function PersonaSection() {
+  const T = useT();
   const [persona, setPersona] = useState<SocialPersona | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -274,12 +277,12 @@ export function PersonaSection() {
       if (res.ok) {
         setPersona(data.socialPersona);
         setDirty(false);
-        toast.success("Persona salva — o site agora te conhece melhor ✨");
+        toast.success(T("Persona salva — o site agora te conhece melhor ✨"));
       } else {
         toast.error(data.error || "Erro ao salvar persona");
       }
     } catch {
-      toast.error("Sem conexão — tente de novo");
+      toast.error(T("Sem conexão — tente de novo"));
     } finally {
       setSaving(false);
     }
@@ -297,7 +300,7 @@ export function PersonaSection() {
   if (loading) {
     return (
       <Card className="bg-card border-border p-6 flex items-center gap-3 text-muted-foreground">
-        <Loader2 size={18} className="animate-spin" /> Carregando sua persona…
+        <Loader2 size={18} className="animate-spin" />  {T("Carregando sua persona…")}
       </Card>
     );
   }
@@ -310,7 +313,8 @@ export function PersonaSection() {
       <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
         <h3 className="text-base md:text-lg font-semibold flex items-center gap-2">
           <Users className="text-violet-400 shrink-0" />
-          Sua Persona
+          
+          {T("Sua Persona")}
         </h3>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
@@ -333,12 +337,13 @@ export function PersonaSection() {
             )}
           >
             {saving ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
-            {dirty ? "Salvar persona" : "Salvo"}
+            {dirty ? T("Salvar persona") : T("Salvo")}
           </button>
         </div>
       </div>
       <p className="text-xs text-muted-foreground mb-5">
-        Escolha o que combina com você — cursos, exemplos e o gerador de conteúdo usam isso para falar a sua língua.
+        
+        {T("Escolha o que combina com você — cursos, exemplos e o gerador de conteúdo usam isso para falar a sua língua.")}
       </p>
 
       <div className="space-y-6">
@@ -354,9 +359,9 @@ export function PersonaSection() {
               <div className="flex items-baseline justify-between gap-2 mb-2">
                 <p className="text-sm font-bold flex items-center gap-1.5">
                   <Icon size={14} className="text-violet-400" />
-                  {dim.title}
+                  {T(dim.title)}
                 </p>
-                <p className="text-[11px] text-muted-foreground">{dim.hint}</p>
+                <p className="text-[11px] text-muted-foreground">{T(dim.hint)}</p>
               </div>
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
                 {dim.options.map((option) => (
@@ -375,9 +380,9 @@ export function PersonaSection() {
                     key={k}
                     onClick={() => toggle(dim, k)}
                     className="rounded-full border border-violet-400/50 bg-violet-500/15 px-2.5 py-0.5 text-[11px] font-bold text-violet-200 cursor-pointer"
-                    title="Clique para remover"
+                    title={T("Clique para remover")}
                   >
-                    {k} ×
+                    {T(k)} ×
                   </button>
                 ))}
                 <Input
@@ -401,7 +406,7 @@ export function PersonaSection() {
       {(learned.length > 0 || persona.writingStyle || persona.audienceInsights) && (
         <div className="mt-6 rounded-xl border border-violet-500/20 bg-violet-500/[0.06] p-4">
           <p className="text-xs font-extrabold uppercase tracking-widest text-violet-300 flex items-center gap-1.5">
-            <Sparkles size={12} /> O que o site já aprendeu sobre você
+            <Sparkles size={12} />  {T("O que o site já aprendeu sobre você")}
           </p>
           {learned.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1.5">
@@ -410,19 +415,19 @@ export function PersonaSection() {
                   key={item}
                   className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[11px] font-semibold text-white/70"
                 >
-                  {item}
+                  {T(item)}
                 </span>
               ))}
             </div>
           )}
           {persona.writingStyle && (
             <p className="mt-2 text-xs text-muted-foreground">
-              <strong className="text-white/70">Estilo de escrita:</strong> {persona.writingStyle}
+              <strong className="text-white/70">Estilo de escrita:</strong> {T(persona.writingStyle)}
             </p>
           )}
           {persona.audienceInsights && (
             <p className="mt-1 text-xs text-muted-foreground">
-              <strong className="text-white/70">Seu público:</strong> {persona.audienceInsights}
+              <strong className="text-white/70">{T("Seu público:")}</strong> {T(persona.audienceInsights)}
             </p>
           )}
         </div>

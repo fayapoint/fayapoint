@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
@@ -37,6 +38,7 @@ export function VideoIntroCurso({
   titulo: string;
   chamada?: string;
 }) {
+  const T = useT();
   const intro = midiaDoCurso(slug).intro;
   const video = useRef<HTMLVideoElement>(null);
   const caixa = useRef<HTMLDivElement>(null);
@@ -158,14 +160,14 @@ export function VideoIntroCurso({
                 className="mt-1 line-clamp-2 text-lg font-bold leading-tight text-white sm:text-3xl"
                 style={{ textShadow: "0 2px 16px rgba(0,0,0,.92), 0 0 40px rgba(0,0,0,.6)" }}
               >
-                {titulo}
+                {T(titulo)}
               </h2>
               {chamada && (
                 <p
                   className="mt-1.5 hidden max-w-xl text-sm leading-relaxed text-white/80 sm:line-clamp-2 sm:block"
                   style={{ textShadow: "0 1px 12px rgba(0,0,0,.95)" }}
                 >
-                  {chamada}
+                  {T(chamada)}
                 </p>
               )}
             </div>
@@ -173,7 +175,7 @@ export function VideoIntroCurso({
             <button
               type="button"
               onClick={alternar}
-              aria-label={tocando ? "Pausar o vídeo" : "Tocar o vídeo"}
+              aria-label={tocando ? T("Pausar o vídeo") : T("Tocar o vídeo")}
               className="pointer-events-auto shrink-0 rounded-full border border-white/20 bg-white/10 p-2.5 text-white backdrop-blur-md transition-colors hover:border-amber-400/60 hover:bg-amber-400/15 sm:p-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               {tocando ? <Pause size={18} /> : <Play size={18} />}
@@ -184,7 +186,7 @@ export function VideoIntroCurso({
         {/* A chamada, no celular, embaixo do vídeo e com a largura inteira. */}
         {chamada && (
           <p className="mx-auto mt-3 max-w-5xl text-sm leading-relaxed text-white/60 sm:hidden">
-            {chamada}
+            {T(chamada)}
           </p>
         )}
       </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TrendingUp, TrendingDown, Minus, Sparkles, Table2, LineChart } from "lucide-react";
@@ -48,6 +49,7 @@ function rotuloDia(dia: string) {
 }
 
 export function HistoricoTendencia({ corNicho }: { corNicho: string }) {
+  const T = useT();
   const [dado, setDado] = useState<LeituraRadar | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [tabela, setTabela] = useState(false);
@@ -75,11 +77,9 @@ export function HistoricoTendencia({ corNicho }: { corNicho: string }) {
         A LINHA DO <span style={{ color: corNicho }}>TEMPO</span>
       </h2>
       <p className="mb-3 max-w-2xl text-sm text-white/50">
-        Quantas pessoas abriram cada verbete de IA na{" "}
-        <strong className="text-white/75">Wikipédia em português</strong>, dia a dia. O que
-        interessa é a <strong className="text-white/75">inclinação</strong> — tema que sobe
-        rápido tem janela curta e rende matéria hoje; linha estável é conteúdo que não perde
-        a validade. É <em>leitura</em>, não busca: mede quem foi atrás de entender o assunto.
+        
+        {T("Quantas pessoas abriram cada verbete de IA na")}{" "}
+        <strong className="text-white/75">{T("Wikipédia em português")}</strong>{T(", dia a dia. O que\r\n        interessa é a")} <strong className="text-white/75">{T("inclinação")}</strong>  {T("— tema que sobe\r\n        rápido tem janela curta e rende matéria hoje; linha estável é conteúdo que não perde\r\n        a validade. É")} <em>leitura</em>{T(", não busca: mede quem foi atrás de entender o assunto.")}
       </p>
 
       <div className="glass rounded-2xl p-4">
@@ -96,7 +96,7 @@ export function HistoricoTendencia({ corNicho }: { corNicho: string }) {
                 }`}
                 style={{ background: dias === d ? corNicho : "rgba(255,255,255,.06)" }}
               >
-                {d} dias
+                {d}  {T("dias")}
               </button>
             ))}
           </div>
@@ -106,7 +106,7 @@ export function HistoricoTendencia({ corNicho }: { corNicho: string }) {
             className="ml-auto flex cursor-pointer items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-[11px] font-bold text-white/55 transition-colors hover:text-white/85"
           >
             {tabela ? <LineChart size={12} /> : <Table2 size={12} />}
-            {tabela ? "Ver gráfico" : "Ver tabela"}
+            {tabela ? T("Ver gráfico") : T("Ver tabela")}
           </button>
         </div>
 
@@ -147,6 +147,7 @@ function Esqueleto() {
  * não que o Radar quebrou.
  */
 function SerieCurta({ dado }: { dado: LeituraRadar | null }) {
+  const T = useT();
   const guardados = dado?.dias.length ?? 0;
 
   return (
@@ -155,13 +156,12 @@ function SerieCurta({ dado }: { dado: LeituraRadar | null }) {
         <Sparkles className="mx-auto mb-3 h-6 w-6" style={{ color: "#c98500" }} />
         <p className="text-sm font-semibold text-white/80">
           {guardados === 0
-            ? "A Wikipédia não respondeu agora"
-            : `Só ${guardados} ${guardados === 1 ? "dia devolvido" : "dias devolvidos"}`}
+            ? T("A Wikipédia não respondeu agora")
+            : `Só ${guardados} ${guardados === 1 ? T("dia devolvido") : T("dias devolvidos")}`}
         </p>
         <p className="mx-auto mt-1.5 max-w-md text-[12px] leading-relaxed text-white/45">
-          Esta série vem da API de pageviews da Wikimedia, que é pública e gratuita.
-          Quando ela não responde, o painel prefere dizer isso a desenhar uma linha
-          no chão — linha zerada e “não medimos” são coisas diferentes.
+          
+          {T("Esta série vem da API de pageviews da Wikimedia, que é pública e gratuita.\r\n          Quando ela não responde, o painel prefere dizer isso a desenhar uma linha\r\n          no chão — linha zerada e “não medimos” são coisas diferentes.")}
         </p>
       </div>
     </div>
@@ -392,6 +392,7 @@ function Grafico({ dado, foco }: { dado: LeituraRadar; foco: number | null }) {
 }
 
 function Balao({ dado, i, x, largura }: { dado: LeituraRadar; i: number; x: number; largura: number }) {
+  const T = useT();
   const daDireita = x > largura * 0.55;
   const linhas = dado.series
     .map((s, si) => ({ s, si, v: s.pontos[i]?.leituras }))
@@ -411,13 +412,13 @@ function Balao({ dado, i, x, largura }: { dado: LeituraRadar; i: number; x: numb
         {rotuloDia(dado.dias[i])}
       </p>
       {linhas.length === 0 ? (
-        <p style={{ color: TINTA.apagada }}>sem medição</p>
+        <p style={{ color: TINTA.apagada }}>{T("sem medição")}</p>
       ) : (
         linhas.map(({ s, si, v }) => (
           <p key={s.rotulo} className="flex items-center gap-1.5 leading-snug">
             <span className="h-[2px] w-3 shrink-0 rounded-full" style={{ background: SERIE_CORES[si] }} />
             <span className="truncate capitalize" style={{ color: TINTA.secundaria }}>
-              {s.rotulo}
+              {T(s.rotulo)}
             </span>
             <span className="ml-auto font-bold tabular-nums" style={{ color: TINTA.principal }}>
               {v}
@@ -438,6 +439,7 @@ function Legenda({
   foco: number | null;
   setFoco: (n: number | null) => void;
 }) {
+  const T = useT();
   return (
     <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
       {dado.series.map((s, i) => (
@@ -451,7 +453,7 @@ function Legenda({
             style={{ opacity: foco !== null && foco !== i ? 0.4 : 1, color: TINTA.secundaria }}
           >
             <span className="h-[3px] w-4 shrink-0 rounded-full" style={{ background: SERIE_CORES[i] }} />
-            <span className="capitalize">{s.rotulo}</span>
+            <span className="capitalize">{T(s.rotulo)}</span>
           </button>
         </li>
       ))}
@@ -461,6 +463,7 @@ function Legenda({
 
 /** Os deltas em texto — a leitura que o gráfico sugere, dita em número. */
 function Movimentos({ series }: { series: SerieLeitura[] }) {
+  const T = useT();
   return (
     <div className="mt-4 grid gap-1.5 border-t border-white/[0.07] pt-3 sm:grid-cols-2 lg:grid-cols-3">
       {series.map((s, i) => {
@@ -473,7 +476,7 @@ function Movimentos({ series }: { series: SerieLeitura[] }) {
           <div key={s.rotulo} className="flex items-center gap-2 rounded-lg bg-white/[0.03] px-2.5 py-1.5">
             <span className="h-[3px] w-3 shrink-0 rounded-full" style={{ background: SERIE_CORES[i] }} />
             <span className="min-w-0 flex-1 truncate text-[11px] capitalize" style={{ color: TINTA.secundaria }}>
-              {s.rotulo}
+              {T(s.rotulo)}
             </span>
             {/* Percentual, e o sinal explícito: "12" sozinho podia ser lido como
                 doze leituras. É variação da última semana contra a anterior. */}
@@ -491,10 +494,11 @@ function Movimentos({ series }: { series: SerieLeitura[] }) {
 
 /** A mesma série sem depender de cor nenhuma. */
 function Tabela({ dado }: { dado: LeituraRadar }) {
+  const T = useT();
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-[11px]">
-        <caption className="sr-only">Score de cada termo por dia medido</caption>
+        <caption className="sr-only">{T("Score de cada termo por dia medido")}</caption>
         <thead>
           <tr className="border-b border-white/10">
             <th scope="col" className="py-1.5 pr-3 text-left font-bold" style={{ color: TINTA.apagada }}>
@@ -511,7 +515,7 @@ function Tabela({ dado }: { dado: LeituraRadar }) {
           {dado.series.map((s) => (
             <tr key={s.rotulo} className="border-b border-white/[0.05]">
               <th scope="row" className="max-w-[170px] truncate py-1.5 pr-3 text-left font-medium capitalize" style={{ color: TINTA.secundaria }}>
-                {s.rotulo}
+                {T(s.rotulo)}
               </th>
               {s.pontos.map((p) => (
                 <td key={p.dia} className="px-1.5 py-1.5 text-right tabular-nums" style={{ color: p.leituras === null ? TINTA.apagada : TINTA.principal }}>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -84,6 +85,7 @@ type ServiceCopy = {
 };
 
 export function ServicesCarousel() {
+  const T = useT();
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.Services");
@@ -165,7 +167,7 @@ export function ServicesCarousel() {
                     {serviceCopy.bullets.map((item) => (
                       <li key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
                         <CheckCircle2 className={`w-4 h-4 mt-1 ${styles.icon}`} />
-                        <span>{item}</span>
+                        <span>{T(item)}</span>
                       </li>
                     ))}
                   </ul>

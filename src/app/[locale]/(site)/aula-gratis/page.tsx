@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { useState } from "react";
@@ -252,6 +253,7 @@ This mini-course covered the fundamentals. To master advanced techniques like ch
 ];
 
 export default function FreeClassPage() {
+  const T = useT();
   const locale = useLocale();
   const isPtBr = locale === "pt-BR";
   const [expandedLesson, setExpandedLesson] = useState<number>(1);
@@ -264,18 +266,18 @@ export default function FreeClassPage() {
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 bg-green-500/20 text-green-400 border-green-500/30 px-4 py-2 text-sm">
               <Sparkles className="mr-2 inline" size={14} />
-              {isPtBr ? "100% Gratuito — Sem Cadastro" : "100% Free — No Signup Required"}
+              {isPtBr ? T("100% Gratuito — Sem Cadastro") : "100% Free — No Signup Required"}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
                 {isPtBr 
-                  ? "Mini-Curso Grátis: IA na Prática" 
+                  ? T("Mini-Curso Grátis: IA na Prática") 
                   : "Free Mini-Course: AI in Practice"}
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               {isPtBr
-                ? "3 aulas práticas com conteúdo real para você começar a usar Inteligência Artificial hoje. Leia, aplique e veja resultados imediatos."
+                ? T("3 aulas práticas com conteúdo real para você começar a usar Inteligência Artificial hoje. Leia, aplique e veja resultados imediatos.")
                 : "3 practical lessons with real content to start using Artificial Intelligence today. Read, apply, and see immediate results."}
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
@@ -285,7 +287,7 @@ export default function FreeClassPage() {
               </div>
               <div className="flex items-center gap-2">
                 <BookOpen size={16} className="text-amber-400" />
-                <span>3 {isPtBr ? "aulas completas" : "complete lessons"}</span>
+                <span>3 {isPtBr ? T("aulas completas") : "complete lessons"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Copy size={16} className="text-amber-400" />
@@ -351,10 +353,10 @@ export default function FreeClassPage() {
                           <Badge variant="secondary" className="text-xs">
                             {isPtBr ? `Aula ${lesson.id}` : `Lesson ${lesson.id}`}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">{duration}</span>
+                          <span className="text-xs text-muted-foreground">{T(duration)}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
-                        <p className="text-sm text-muted-foreground">{desc}</p>
+                        <h3 className="text-lg font-bold text-white mb-1">{T(title)}</h3>
+                        <p className="text-sm text-muted-foreground">{T(desc)}</p>
                       </div>
                       <div className="flex-shrink-0 text-muted-foreground">
                         {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -376,8 +378,8 @@ export default function FreeClassPage() {
                               <div key={i} className="mb-4">
                                 {parts.map((part, j) => (
                                   j % 2 === 1 
-                                    ? <strong key={j} className="text-white">{part}</strong>
-                                    : <span key={j} className="text-muted-foreground">{part}</span>
+                                    ? <strong key={j} className="text-white">{T(part)}</strong>
+                                    : <span key={j} className="text-muted-foreground">{T(part)}</span>
                                 ))}
                               </div>
                             );
@@ -413,13 +415,13 @@ export default function FreeClassPage() {
                       <div className="p-4 bg-amber-900/20 rounded-lg border border-amber-500/20">
                         <h4 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-2">
                           <Lightbulb size={16} />
-                          {isPtBr ? "Pontos-chave desta aula:" : "Key takeaways:"}
+                          {isPtBr ? T("Pontos-chave desta aula:") : "Key takeaways:"}
                         </h4>
                         <ul className="space-y-2">
                           {(isPtBr ? lesson.topics : lesson.topicsEn).map((topic, i) => (
                             <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                               <CheckCircle size={14} className="text-green-400 mt-0.5 flex-shrink-0" />
-                              {topic}
+                              {T(topic)}
                             </li>
                           ))}
                         </ul>
@@ -438,19 +440,19 @@ export default function FreeClassPage() {
             <Card className="bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30 p-8">
               <h2 className="text-2xl font-bold mb-6 text-center">
                 {isPtBr 
-                  ? "Depois dessas 3 aulas, você vai saber:" 
+                  ? T("Depois dessas 3 aulas, você vai saber:") 
                   : "After these 3 lessons, you'll know:"}
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {[
-                  { icon: Brain, text: isPtBr ? "Como a IA generativa funciona de verdade" : "How generative AI really works" },
-                  { icon: Target, text: isPtBr ? "Criar prompts profissionais com a fórmula CRIE" : "Create professional prompts with the CRIE formula" },
-                  { icon: Zap, text: isPtBr ? "Automatizar 3 tarefas reais do seu dia a dia" : "Automate 3 real daily tasks" },
-                  { icon: FileText, text: isPtBr ? "Usar templates prontos para email, conteúdo e análise" : "Use ready-made templates for email, content and analysis" },
+                  { icon: Brain, text: isPtBr ? T("Como a IA generativa funciona de verdade") : "How generative AI really works" },
+                  { icon: Target, text: isPtBr ? T("Criar prompts profissionais com a fórmula CRIE") : "Create professional prompts with the CRIE formula" },
+                  { icon: Zap, text: isPtBr ? T("Automatizar 3 tarefas reais do seu dia a dia") : "Automate 3 real daily tasks" },
+                  { icon: FileText, text: isPtBr ? T("Usar templates prontos para email, conteúdo e análise") : "Use ready-made templates for email, content and analysis" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 p-3 bg-black/30 rounded-lg">
                     <item.icon className="text-amber-400 flex-shrink-0" size={20} />
-                    <span className="text-gray-200 text-sm">{item.text}</span>
+                    <span className="text-gray-200 text-sm">{T(item.text)}</span>
                   </div>
                 ))}
               </div>
@@ -464,25 +466,25 @@ export default function FreeClassPage() {
             <Card className="bg-card/50 border-border p-8 md:p-12">
               <h2 className="text-3xl font-bold mb-4">
                 {isPtBr 
-                  ? "Quer ir além dos fundamentos?" 
+                  ? T("Quer ir além dos fundamentos?") 
                   : "Want to go beyond the fundamentals?"}
               </h2>
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
                 {isPtBr
-                  ? "Este mini-curso cobre o essencial. Nos cursos completos, você domina técnicas avançadas de prompt engineering, automação com n8n e Make, criação de conteúdo com IA e muito mais — tudo com projetos práticos."
+                  ? T("Este mini-curso cobre o essencial. Nos cursos completos, você domina técnicas avançadas de prompt engineering, automação com n8n e Make, criação de conteúdo com IA e muito mais — tudo com projetos práticos.")
                   : "This mini-course covers the essentials. In the full courses, you master advanced prompt engineering, automation with n8n and Make, AI content creation and more — all with practical projects."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/cursos">
                   <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-8 py-6 text-lg">
-                    {isPtBr ? "Ver Cursos Completos" : "See Full Courses"}
+                    {isPtBr ? T("Ver Cursos Completos") : "See Full Courses"}
                     <ArrowRight className="ml-2" size={20} />
                   </Button>
                 </Link>
                 <Link href="https://wa.me/5521971908530">
                   <Button variant="outline" className="border-green-500 text-green-400 hover:bg-green-500/10 px-8 py-6 text-lg">
                     <MessageCircle className="mr-2" size={20} />
-                    {isPtBr ? "Tirar Dúvidas no WhatsApp" : "Ask Questions on WhatsApp"}
+                    {isPtBr ? T("Tirar Dúvidas no WhatsApp") : "Ask Questions on WhatsApp"}
                   </Button>
                 </Link>
               </div>

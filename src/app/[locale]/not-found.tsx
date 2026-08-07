@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import Link from "next/link";
 
 /**
@@ -16,6 +17,7 @@ const ROTAS = [
 ];
 
 export default function NotFound() {
+  const T = useT();
   return (
     <div
       className="min-h-dvh flex flex-col items-center justify-center px-4 py-16 text-[#f3f1ff]"
@@ -32,10 +34,12 @@ export default function NotFound() {
         404
       </p>
       <h1 className="mt-3 text-3xl sm:text-4xl tracking-wide text-center" style={bebas}>
-        ESSA PÁGINA SE PERDEU NA MÁGICA
+        
+        {T("ESSA PÁGINA SE PERDEU NA MÁGICA")}
       </h1>
       <p className="mt-2 text-sm sm:text-base text-white/60 text-center max-w-md">
-        Mas você não precisa se perder junto — escolha um caminho:
+        
+        {T("Mas você não precisa se perder junto — escolha um caminho:")}
       </p>
 
       <nav className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 w-full max-w-4xl">
@@ -53,7 +57,7 @@ export default function NotFound() {
             <span className="block text-lg tracking-wide" style={{ ...bebas, color: r.cor }}>
               {r.titulo.toUpperCase()}
             </span>
-            <span className="block mt-1 text-[12px] text-white/55">{r.desc}</span>
+            <span className="block mt-1 text-[12px] text-white/55">{T(r.desc)}</span>
           </Link>
         ))}
       </nav>

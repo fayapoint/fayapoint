@@ -77,3 +77,6 @@ _capas_novas/_teste/
 _capas_novas/mascote/
 _capas_novas/pessoa/
 _capas_novas/telas/
+
+# rascunho de sessão (scripts de auditoria/estado). Não é fonte.
+_tmp/

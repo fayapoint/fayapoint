@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useCallback } from "react";
 import type { FaceConfig } from "./cube-data";
@@ -20,6 +21,7 @@ interface CubeFaceProps {
 }
 
 export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
+  const T = useT();
   const { face, icon, title, subtitle, phantom, route, routeLabel, content } = config;
   const [hovered, setHovered] = useState(false);
 
@@ -93,7 +95,7 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
         onClick={handleClick}
       >
         <div className={s.faceImageContent}>
-          <img src={content.src} alt={content.alt} className={s.faceImage} />
+          <img src={content.src} alt={T(content.alt)} className={s.faceImage} />
         </div>
         {route && (
           <button
@@ -103,18 +105,18 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
               event.stopPropagation();
               handleClick();
             }}
-            aria-label={routeLabel || "Entrar"}
+            aria-label={routeLabel || T("Entrar")}
           >
             <span className={s.facePortalCore} />
             <span className={s.facePortalOrbit} />
-            <span className={s.facePortalText}>{routeLabel || "Entrar"}</span>
+            <span className={s.facePortalText}>{routeLabel || T("Entrar")}</span>
           </button>
         )}
         {/* Hover tooltip */}
-        {route && <div style={tooltipStyle}>↗ {routeLabel || "Entrar"}</div>}
+        {route && <div style={tooltipStyle}>↗ {routeLabel || T("Entrar")}</div>}
         {/* Glow ring on hover */}
         <div style={glowStyle} />
-        <span className={s.facePhantom}>{phantom}</span>
+        <span className={s.facePhantom}>{T(phantom)}</span>
       </div>
     );
   }
@@ -128,16 +130,16 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
       onClick={handleClick}
     >
       <div className={s.faceContent}>
-        <div className={s.faceIcon}>{icon}</div>
-        <div className={s.faceTitle}>{title}</div>
-        <div className={s.faceSubtitle}>{subtitle}</div>
+        <div className={s.faceIcon}>{T(icon)}</div>
+        <div className={s.faceTitle}>{T(title)}</div>
+        <div className={s.faceSubtitle}>{T(subtitle)}</div>
 
         {content.type === "grid" && (
           <div className={s.faceGrid}>
             {content.items.map((item, i) => (
               <div key={i} className={s.faceGridItem}>
-                <div className={s.faceGridItemNum}>{item.num}</div>
-                <div className={s.faceGridItemLabel}>{item.label}</div>
+                <div className={s.faceGridItemNum}>{T(item.num)}</div>
+                <div className={s.faceGridItemLabel}>{T(item.label)}</div>
               </div>
             ))}
           </div>
@@ -148,14 +150,14 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
             <div className={s.certHeader}>FAYAPOINT</div>
             <div className={s.certSubheader}>Academia de Tecnologia & IA</div>
             <div className={s.certDivider} />
-            <div className={s.certLabel}>Certificado de Conclusao</div>
-            <div className={s.certName}>{content.name}</div>
-            <div className={s.certCourse}>{content.course}</div>
+            <div className={s.certLabel}>{T("Certificado de Conclusao")}</div>
+            <div className={s.certName}>{T(content.name)}</div>
+            <div className={s.certCourse}>{T(content.course)}</div>
             <div className={s.certSeal}>🏅</div>
             <div className={s.certMeta}>
-              <span>Avaliacao: {content.score}</span>
+              <span>Avaliacao: {T(content.score)}</span>
               <span>•</span>
-              <span>{content.code}</span>
+              <span>{T(content.code)}</span>
             </div>
             <div className={s.certFooter}>
               <span>Ricardo Faya</span>
@@ -168,7 +170,7 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
           <div className={s.faceServiceList}>
             {content.items.map((item, i) => (
               <div key={i} className={s.faceServiceItem}>
-                <span className={s.faceServiceArrow}>→</span> {item}
+                <span className={s.faceServiceArrow}>→</span> {T(item)}
               </div>
             ))}
           </div>
@@ -176,8 +178,8 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
 
         {content.type === "cta" && (
           <div className={s.faceCtaContent}>
-            <div className={s.faceCtaLabel}>{content.label}</div>
-            <div className={s.faceCtaUrl}>{content.url}</div>
+            <div className={s.faceCtaLabel}>{T(content.label)}</div>
+            <div className={s.faceCtaUrl}>{T(content.url)}</div>
           </div>
         )}
       </div>
@@ -190,19 +192,19 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
             event.stopPropagation();
             handleClick();
           }}
-          aria-label={routeLabel || "Entrar"}
+          aria-label={routeLabel || T("Entrar")}
         >
           <span className={s.facePortalCore} />
           <span className={s.facePortalOrbit} />
-          <span className={s.facePortalText}>{routeLabel || "Entrar"}</span>
+          <span className={s.facePortalText}>{routeLabel || T("Entrar")}</span>
         </button>
       )}
 
       {/* Hover tooltip */}
-      {route && <div style={tooltipStyle}>↗ {routeLabel || "Entrar"}</div>}
+      {route && <div style={tooltipStyle}>↗ {routeLabel || T("Entrar")}</div>}
       {/* Glow ring on hover */}
       <div style={glowStyle} />
-      <span className={s.facePhantom}>{phantom}</span>
+      <span className={s.facePhantom}>{T(phantom)}</span>
     </div>
   );
 }

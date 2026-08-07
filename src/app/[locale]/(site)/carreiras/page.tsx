@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { useTranslations } from "next-intl";
@@ -29,6 +30,7 @@ const benefitIcons: Record<string, React.ComponentType<{ className?: string }>> 
 };
 
 export default function CareersPage() {
+  const T = useT();
   const t = useTranslations("Careers");
   const benefits = t.raw("benefits") as Benefit[];
   const positions = t.raw("positions") as Position[];
@@ -77,8 +79,8 @@ export default function CareersPage() {
                   className="bg-secondary border border-border rounded-xl p-6"
                 >
                   <Icon className="w-10 h-10 text-amber-400 mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
-                  <p className="text-muted-foreground text-sm">{benefit.description}</p>
+                  <h3 className="text-lg font-semibold mb-2">{T(benefit.title)}</h3>
+                  <p className="text-muted-foreground text-sm">{T(benefit.description)}</p>
                 </motion.div>
               );
             })}
@@ -102,16 +104,16 @@ export default function CareersPage() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                       <h3 className="text-xl font-semibold group-hover:text-amber-400 transition-colors">
-                        {position.title}
+                        {T(position.title)}
                       </h3>
-                      <p className="text-amber-400 text-sm">{position.department}</p>
+                      <p className="text-amber-400 text-sm">{T(position.department)}</p>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <MapPin size={14} /> {position.location}
+                        <MapPin size={14} /> {T(position.location)}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock size={14} /> {position.type}
+                        <Clock size={14} /> {T(position.type)}
                       </span>
                     </div>
                   </div>

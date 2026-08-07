@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -63,6 +64,7 @@ export default function DesignEditor({
   onLayersChange,
   className,
 }: DesignEditorProps) {
+  const T = useT();
   // State
   const [layers, setLayers] = useState<DesignLayer[]>(initialLayers);
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
@@ -259,7 +261,7 @@ export default function DesignEditor({
         {/* Print Positions */}
         {availablePositions.length > 1 && (
           <Card className="bg-secondary border-border p-4">
-            <h4 className="font-semibold mb-3">Posição de Impressão</h4>
+            <h4 className="font-semibold mb-3">{T("Posição de Impressão")}</h4>
             <div className="flex flex-wrap gap-2">
               {availablePositions.map(pos => (
                 <Button
@@ -289,7 +291,8 @@ export default function DesignEditor({
           
           {layers.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Nenhuma camada ainda.<br />Adicione texto ou imagem.
+              
+              {T("Nenhuma camada ainda.")}<br />Adicione texto ou imagem.
             </p>
           ) : (
             <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
@@ -468,7 +471,7 @@ export default function DesignEditor({
                           whiteSpace: "pre-wrap",
                         }}
                       >
-                        {(layer as TextLayer).text}
+                        {T((layer as TextLayer).text)}
                       </div>
                     ) : (
                       <img
@@ -521,7 +524,7 @@ export default function DesignEditor({
                       }}
                       onBlur={editingText === selectedLayerId ? saveTextEdit : undefined}
                       className="bg-secondary border-border min-h-[80px]"
-                      placeholder="Digite seu texto..."
+                      placeholder={T("Digite seu texto...")}
                     />
                   </Card>
 
@@ -542,7 +545,7 @@ export default function DesignEditor({
                         <SelectContent className="bg-card border-border">
                           {AVAILABLE_FONTS.map(font => (
                             <SelectItem key={font.id} value={font.id}>
-                              <span style={{ fontFamily: font.family }}>{font.name}</span>
+                              <span style={{ fontFamily: font.family }}>{T(font.name)}</span>
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -579,7 +582,7 @@ export default function DesignEditor({
                             <SelectContent className="bg-card border-border">
                               {FONT_SIZE_PRESETS.map(s => (
                                 <SelectItem key={s.value} value={String(s.value)}>
-                                  {s.name} ({s.label})
+                                  {T(s.name)} ({T(s.label)})
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -689,7 +692,7 @@ export default function DesignEditor({
                             toast.success(`Efeito "${effect.name}" aplicado`);
                           }}
                         >
-                          {effect.name}
+                          {T(effect.name)}
                         </Button>
                       ))}
                     </div>
@@ -701,12 +704,13 @@ export default function DesignEditor({
               <Card className="bg-secondary border-border p-4">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
                   <Move size={16} className="text-amber-400" />
-                  Posição & Transformação
+                  
+                  {T("Posição & Transformação")}
                 </h4>
                 <div className="space-y-4">
                   {/* Quick Positions */}
                   <div>
-                    <Label className="text-xs text-muted-foreground">Posição Rápida</Label>
+                    <Label className="text-xs text-muted-foreground">{T("Posição Rápida")}</Label>
                     <div className="grid grid-cols-3 gap-1 mt-1">
                       {Object.entries(POSITION_PRESETS).slice(0, 9).map(([key, preset]) => (
                         <Button
@@ -716,7 +720,7 @@ export default function DesignEditor({
                           className="border-border text-xs px-2"
                           onClick={() => updateLayer(selectedLayerId!, { x: preset.x, y: preset.y })}
                         >
-                          {preset.name.split(" ")[0]}
+                          {T(preset.name.split(" ")[0])}
                         </Button>
                       ))}
                     </div>
@@ -777,7 +781,7 @@ export default function DesignEditor({
                           className="flex-1 border-border text-xs px-1"
                           onClick={() => updateLayer(selectedLayerId!, { scale: s.value })}
                         >
-                          {s.label}
+                          {T(s.label)}
                         </Button>
                       ))}
                     </div>
@@ -786,7 +790,7 @@ export default function DesignEditor({
                   {/* Rotation */}
                   <div>
                     <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                      <span>Rotação</span>
+                      <span>{T("Rotação")}</span>
                       <span>{selectedLayer.angle}°</span>
                     </div>
                     <Slider
@@ -806,7 +810,7 @@ export default function DesignEditor({
                           className="flex-1 border-border text-xs px-1"
                           onClick={() => updateLayer(selectedLayerId!, { angle: a.value })}
                         >
-                          {a.label}
+                          {T(a.label)}
                         </Button>
                       ))}
                     </div>
@@ -822,7 +826,7 @@ export default function DesignEditor({
             >
               <Layers size={48} className="mb-4 opacity-50" />
               <p className="text-center">
-                Selecione uma camada<br />para editar suas propriedades
+                Selecione uma camada<br />{T("para editar suas propriedades")}
               </p>
             </motion.div>
           )}

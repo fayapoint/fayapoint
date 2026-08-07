@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -209,6 +210,7 @@ function formatBRL(value: number) {
 }
 
 export default function PricingPage() {
+  const T = useT();
   const locale = useLocale();
   const { user } = useUser();
   const isPt = locale === "pt-BR";
@@ -234,18 +236,18 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-4xl relative text-center">
             <Badge className="mb-5 px-4 py-2 bg-amber-500/10 border-amber-500/20 text-amber-300" variant="outline">
               <Sparkles className="w-4 h-4 mr-2" />
-              {isPt ? "Preços transparentes" : "Transparent pricing"}
+              {isPt ? T("Preços transparentes") : "Transparent pricing"}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-5 tracking-tight">
               {isPt ? (
-                <>Comece grátis.{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">Escale quando quiser.</span></>
+                <>{T("Comece grátis.")}{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">{T("Escale quando quiser.")}</span></>
               ) : (
                 <>Start free.{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">Scale when ready.</span></>
               )}
             </h1>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               {isPt
-                ? "Todo mês um curso completo fica aberto para qualquer conta — com certificado incluso. Assine para desbloquear mais cursos, créditos de IA e descontos."
+                ? T("Todo mês um curso completo fica aberto para qualquer conta — com certificado incluso. Assine para desbloquear mais cursos, créditos de IA e descontos.")
                 : "Every month one full course opens for any account — certificate included. Subscribe to unlock more courses, AI credits and discounts."}
             </p>
 
@@ -280,7 +282,7 @@ export default function PricingPage() {
             <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                {isPt ? "Garantia 7 dias" : "7-day guarantee"}
+                {isPt ? T("Garantia 7 dias") : "7-day guarantee"}
               </div>
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-400" />
@@ -288,11 +290,11 @@ export default function PricingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-blue-400" />
-                {isPt ? "PIX, Cartão ou Boleto" : "PIX, Card or Boleto"}
+                {isPt ? T("PIX, Cartão ou Boleto") : "PIX, Card or Boleto"}
               </div>
               <div className="flex items-center gap-2">
                 <X className="w-4 h-4 text-red-400" />
-                {isPt ? "Cancele quando quiser" : "Cancel anytime"}
+                {isPt ? T("Cancele quando quiser") : "Cancel anytime"}
               </div>
             </div>
           </div>
@@ -311,30 +313,30 @@ export default function PricingPage() {
                         <Gift className="h-4 w-4 text-emerald-400" />
                       </div>
                       <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">
-                        {isPt ? "Grátis este mês" : "Free this month"}
+                        {isPt ? T("Grátis este mês") : "Free this month"}
                       </span>
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold mb-2">{monthlyOffers.freeCourse.name}</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2">{T(monthlyOffers.freeCourse.name)}</h2>
                     <p className="text-muted-foreground mb-4">
                       {isPt
-                        ? "Curso completo com certificado incluso. Sem cadastrar cartão. Sem pegadinha."
+                        ? T("Curso completo com certificado incluso. Sem cadastrar cartão. Sem pegadinha.")
                         : "Full course with certificate included. No card required. No catch."}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20">
-                        <Award className="w-3 h-3 mr-1" /> {isPt ? "Certificado grátis" : "Free certificate"}
+                        <Award className="w-3 h-3 mr-1" /> {isPt ? T("Certificado grátis") : "Free certificate"}
                       </Badge>
                       <Badge variant="secondary" className="bg-secondary text-muted-foreground border-border">
-                        <BookOpen className="w-3 h-3 mr-1" /> {monthlyOffers.freeCourse.metrics.lessons} {isPt ? "aulas" : "lessons"}
+                        <BookOpen className="w-3 h-3 mr-1" /> {monthlyOffers.freeCourse.metrics.lessons} {isPt ? T("aulas") : "lessons"}
                       </Badge>
                       <Badge variant="secondary" className="bg-secondary text-muted-foreground border-border">
-                        <Clock className="w-3 h-3 mr-1" /> {monthlyOffers.freeCourse.metrics.duration}
+                        <Clock className="w-3 h-3 mr-1" /> {T(monthlyOffers.freeCourse.metrics.duration)}
                       </Badge>
                     </div>
                   </div>
                   <Link href={`/curso/${monthlyOffers.freeCourse.slug}`}>
                     <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-8 shadow-lg shadow-emerald-500/20">
-                      {isPt ? "Começar grátis" : "Start free"}
+                      {isPt ? T("Começar grátis") : "Start free"}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -397,11 +399,11 @@ export default function PricingPage() {
                           <div>
                             <span className="text-4xl font-bold">{formatBRL(price)}</span>
                             <span className="text-muted-foreground ml-1">
-                              /{cycle === "yearly" ? (isPt ? "ano" : "year") : (isPt ? "mês" : "month")}
+                              /{cycle === "yearly" ? (isPt ? T("ano") : "year") : (isPt ? T("mês") : "month")}
                             </span>
                             {monthlyEquivalent && (
                               <p className="text-sm text-emerald-400 mt-1">
-                                = {formatBRL(monthlyEquivalent)}/{isPt ? "mês" : "mo"}
+                                = {formatBRL(monthlyEquivalent)}/{isPt ? T("mês") : "mo"}
                                 {savings > 0 && (
                                   <span className="ml-2 text-xs bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                                     {isPt ? "Economia" : "Save"} {formatBRL(savings)}
@@ -479,10 +481,10 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-3">
-                {isPt ? "Compare os planos em detalhe" : "Compare plans in detail"}
+                {isPt ? T("Compare os planos em detalhe") : "Compare plans in detail"}
               </h2>
               <p className="text-muted-foreground">
-                {isPt ? "Tudo o que cada plano inclui, sem letra miúda." : "Everything each plan includes, no fine print."}
+                {isPt ? T("Tudo o que cada plano inclui, sem letra miúda.") : "Everything each plan includes, no fine print."}
               </p>
             </div>
 
@@ -501,7 +503,7 @@ export default function PricingPage() {
                         <br />
                         <span className="text-xs text-muted-foreground">
                           {plan.monthlyPrice === 0 ? "R$0" : formatBRL(cycle === "yearly" ? plan.yearlyPrice : plan.monthlyPrice)}
-                          /{cycle === "yearly" ? (isPt ? "ano" : "yr") : (isPt ? "mês" : "mo")}
+                          /{cycle === "yearly" ? (isPt ? T("ano") : "yr") : (isPt ? T("mês") : "mo")}
                         </span>
                       </th>
                     ))}
@@ -511,7 +513,12 @@ export default function PricingPage() {
                   {FEATURE_KEYS.map((feature, idx) => (
                     <tr key={feature} className={idx % 2 === 0 ? "bg-card/20" : ""}>
                       <td className="p-4 text-sm text-muted-foreground border-b border-border/30">
-                        {isPt ? feature : FEATURE_LABELS_EN[feature] ?? feature}
+                        {/* O mapa curado manda; o dicionário é a rede embaixo.
+                            Sem ela, chave nova em `features` cai em português —
+                            e caiu: "Desconto em cursos avulsos" e "Consultoria
+                            mensal" ficaram de fora do mapa e apareceram em
+                            português na tabela inglesa. */}
+                        {isPt ? feature : FEATURE_LABELS_EN[feature] ?? T(feature)}
                       </td>
                       {PLANS.map((plan) => {
                         const val = plan.features[feature];
@@ -524,7 +531,7 @@ export default function PricingPage() {
                             ) : val === false ? (
                               <span className="text-gray-600">—</span>
                             ) : (
-                              <span className="text-sm font-semibold text-white">{val}</span>
+                              <span className="text-sm font-semibold text-white">{T(val)}</span>
                             )}
                           </td>
                         );
@@ -542,20 +549,20 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-3">
-                {isPt ? "Como funciona o catálogo mensal" : "How the monthly catalog works"}
+                {isPt ? T("Como funciona o catálogo mensal") : "How the monthly catalog works"}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 {isPt
-                  ? "Todo dia 1 o catálogo atualiza. Você escolhe quais cursos da vitrine quer ocupar nas vagas do seu plano."
+                  ? T("Todo dia 1 o catálogo atualiza. Você escolhe quais cursos da vitrine quer ocupar nas vagas do seu plano.")
                   : "On the 1st of every month the catalog refreshes. You pick which showcase courses fill your plan slots."}
               </p>
             </div>
             <div className="grid md:grid-cols-4 gap-5">
               {[
-                { icon: Gift, color: "emerald", title: isPt ? "Curso grátis" : "Free course", desc: isPt ? "1 curso completo aberto para qualquer conta, com certificado." : "1 full course open to any account, with certificate." },
-                { icon: BookOpen, color: "blue", title: isPt ? "10 iniciantes" : "10 beginner", desc: isPt ? "Disponíveis na rotação mensal para Explorador, Profissional e Expert." : "Available in the monthly rotation for Explorer, Professional, Expert." },
-                { icon: Zap, color: "amber", title: isPt ? "8 intermediários" : "8 intermediate", desc: isPt ? "Acessíveis para Profissional e Expert. Explorador pode comprar avulso." : "Accessible for Professional and Expert. Explorer can buy individually." },
-                { icon: Award, color: "amber", title: isPt ? "5 avançados" : "5 advanced", desc: isPt ? "Reservados para Profissional (1 vaga) e Expert (3 vagas)." : "Reserved for Professional (1 slot) and Expert (3 slots)." },
+                { icon: Gift, color: "emerald", title: isPt ? T("Curso grátis") : "Free course", desc: isPt ? T("1 curso completo aberto para qualquer conta, com certificado.") : "1 full course open to any account, with certificate." },
+                { icon: BookOpen, color: "blue", title: isPt ? "10 iniciantes" : "10 beginner", desc: isPt ? T("Disponíveis na rotação mensal para Explorador, Profissional e Expert.") : "Available in the monthly rotation for Explorer, Professional, Expert." },
+                { icon: Zap, color: "amber", title: isPt ? T("8 intermediários") : "8 intermediate", desc: isPt ? T("Acessíveis para Profissional e Expert. Explorador pode comprar avulso.") : "Accessible for Professional and Expert. Explorer can buy individually." },
+                { icon: Award, color: "amber", title: isPt ? T("5 avançados") : "5 advanced", desc: isPt ? T("Reservados para Profissional (1 vaga) e Expert (3 vagas).") : "Reserved for Professional (1 slot) and Expert (3 slots)." },
               ].map((item, i) => (
                 <motion.div
                   key={i}
@@ -568,8 +575,8 @@ export default function PricingPage() {
                   <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/10 flex items-center justify-center mb-4`}>
                     <item.icon className={`w-5 h-5 text-${item.color}-400`} />
                   </div>
-                  <h3 className="font-bold mb-2">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  <h3 className="font-bold mb-2">{T(item.title)}</h3>
+                  <p className="text-sm text-muted-foreground">{T(item.desc)}</p>
                 </motion.div>
               ))}
             </div>
@@ -585,14 +592,14 @@ export default function PricingPage() {
               </h2>
               <p className="text-muted-foreground">
                 {isPt
-                  ? "Escolha como pagar. Todas as opções com proteção completa dos seus dados."
+                  ? T("Escolha como pagar. Todas as opções com proteção completa dos seus dados.")
                   : "Choose how to pay. All options with complete data protection."}
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { icon: QrCode, name: "PIX", desc: isPt ? "Aprovação imediata" : "Instant approval", color: "emerald" },
-                { icon: CreditCard, name: isPt ? "Cartão de Crédito" : "Credit Card", desc: isPt ? "Até 12x sem juros" : "Up to 12x interest-free", color: "amber" },
+                { icon: QrCode, name: "PIX", desc: isPt ? T("Aprovação imediata") : "Instant approval", color: "emerald" },
+                { icon: CreditCard, name: isPt ? T("Cartão de Crédito") : "Credit Card", desc: isPt ? T("Até 12x sem juros") : "Up to 12x interest-free", color: "amber" },
                 { icon: FileText, name: "Boleto", desc: isPt ? "5% de desconto" : "5% discount", color: "blue" },
                 { icon: ShieldCheck, name: "MercadoPago", desc: isPt ? "Checkout seguro" : "Secure checkout", color: "cyan" },
               ].map((method) => (
@@ -600,8 +607,8 @@ export default function PricingPage() {
                   <div className={`w-12 h-12 rounded-xl bg-${method.color}-500/10 flex items-center justify-center mx-auto mb-3`}>
                     <method.icon className={`w-6 h-6 text-${method.color}-400`} />
                   </div>
-                  <h4 className="font-semibold mb-1">{method.name}</h4>
-                  <p className="text-xs text-muted-foreground">{method.desc}</p>
+                  <h4 className="font-semibold mb-1">{T(method.name)}</h4>
+                  <p className="text-xs text-muted-foreground">{T(method.desc)}</p>
                 </div>
               ))}
             </div>
@@ -612,11 +619,11 @@ export default function PricingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                {isPt ? "Gateways certificados" : "Certified gateways"}
+                {isPt ? T("Gateways certificados") : "Certified gateways"}
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                {isPt ? "Sem armazenamento de cartão" : "No card storage"}
+                {isPt ? T("Sem armazenamento de cartão") : "No card storage"}
               </div>
             </div>
           </div>
@@ -629,7 +636,7 @@ export default function PricingPage() {
               <div className="flex -space-x-2">
                 {["bg-amber-500", "bg-emerald-500", "bg-blue-500", "bg-amber-500", "bg-yellow-500"].map((bg, i) => (
                   <div key={i} className={`w-10 h-10 rounded-full ${bg} border-2 border-gray-900 flex items-center justify-center text-xs font-bold text-white`}>
-                    {["RF", "AS", "MK", "JL", "PT"][i]}
+                    {T(["RF", "AS", "MK", "JL", "PT"][i])}
                   </div>
                 ))}
               </div>
@@ -643,7 +650,7 @@ export default function PricingPage() {
             </div>
             <p className="text-lg text-muted-foreground italic max-w-xl mx-auto">
               {isPt
-                ? "&ldquo;Comecei pelo curso grátis do mês e em uma semana já tinha assinado o Profissional. O conteúdo é prático e atualizado.&rdquo;"
+                ? T("&ldquo;Comecei pelo curso grátis do mês e em uma semana já tinha assinado o Profissional. O conteúdo é prático e atualizado.&rdquo;")
                 : "&ldquo;I started with the free monthly course and within a week I subscribed to Professional. The content is practical and up-to-date.&rdquo;"}
             </p>
           </div>
@@ -663,7 +670,7 @@ export default function PricingPage() {
                   className="w-full text-left rounded-2xl border border-border/50 bg-card/30 p-5 transition-all hover:border-border/50"
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <h3 className="font-semibold">{item.q}</h3>
+                    <h3 className="font-semibold">{T(item.q)}</h3>
                     <ChevronDown className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform ${expandedFaq === i ? "rotate-180" : ""}`} />
                   </div>
                   <AnimatePresence>
@@ -674,7 +681,7 @@ export default function PricingPage() {
                         exit={{ height: 0, opacity: 0 }}
                         className="text-sm text-muted-foreground mt-3 overflow-hidden"
                       >
-                        {item.a}
+                        {T(item.a)}
                       </motion.p>
                     )}
                   </AnimatePresence>
@@ -689,23 +696,23 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-3xl text-center">
             <div className="rounded-3xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 via-gray-900/80 to-violet-500/5 p-10 md:p-14 backdrop-blur-sm">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {isPt ? "Pronto para dominar IA?" : "Ready to master AI?"}
+                {isPt ? T("Pronto para dominar IA?") : "Ready to master AI?"}
               </h2>
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 {isPt
-                  ? "Comece pelo curso grátis do mês. Se gostar, assine. Se não gostar, não pague nada."
+                  ? T("Comece pelo curso grátis do mês. Se gostar, assine. Se não gostar, não pague nada.")
                   : "Start with the free course of the month. If you like it, subscribe. If not, pay nothing."}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href={monthlyOffers?.freeCourse ? `/curso/${monthlyOffers.freeCourse.slug}` : "/registro"}>
                   <Button size="lg" className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-violet-700 text-white font-bold px-8 shadow-lg shadow-amber-500/20">
-                    {isPt ? "Começar grátis" : "Start free"}
+                    {isPt ? T("Começar grátis") : "Start free"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="#planos">
                   <Button size="lg" variant="outline" className="border-border text-muted-foreground hover:bg-secondary px-8">
-                    {isPt ? "Ver planos" : "See plans"}
+                    {isPt ? T("Ver planos") : "See plans"}
                   </Button>
                 </Link>
               </div>
@@ -721,10 +728,11 @@ export default function PricingPage() {
 // ─── Feature Row Component ────────────────────────────────────────────────────
 
 function Feature({ text, highlight }: { text: string; highlight?: boolean }) {
+  const T = useT();
   return (
     <li className="flex items-start gap-2.5 text-sm">
       <CheckCircle2 className={`w-4 h-4 mt-0.5 shrink-0 ${highlight ? "text-emerald-400" : "text-muted-foreground"}`} />
-      <span className={highlight ? "text-white font-medium" : "text-muted-foreground"}>{text}</span>
+      <span className={highlight ? "text-white font-medium" : "text-muted-foreground"}>{T(text)}</span>
     </li>
   );
 }

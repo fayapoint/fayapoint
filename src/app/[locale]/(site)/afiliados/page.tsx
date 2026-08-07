@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -26,6 +27,7 @@ const benefitIcons: Record<string, React.ComponentType<{ className?: string }>> 
 };
 
 export default function AffiliatesPage() {
+  const T = useT();
   const t = useTranslations("Affiliates");
   const benefits = t.raw("benefits") as Benefit[];
   const steps = t.raw("steps") as Step[];
@@ -73,8 +75,8 @@ export default function AffiliatesPage() {
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl font-bold">
                   {idx + 1}
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                <p className="text-muted-foreground">{step.description}</p>
+                <h3 className="text-xl font-semibold mb-2">{T(step.title)}</h3>
+                <p className="text-muted-foreground">{T(step.description)}</p>
               </motion.div>
             ))}
           </div>
@@ -96,8 +98,8 @@ export default function AffiliatesPage() {
                   className="bg-secondary border border-border rounded-xl p-6"
                 >
                   <Icon className="w-10 h-10 text-green-400 mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
-                  <p className="text-muted-foreground text-sm">{benefit.description}</p>
+                  <h3 className="text-lg font-semibold mb-2">{T(benefit.title)}</h3>
+                  <p className="text-muted-foreground text-sm">{T(benefit.description)}</p>
                 </motion.div>
               );
             })}

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -65,6 +66,7 @@ const STATUS_STYLE: Record<Post["status"], { label: string; cls: string; icon: t
 };
 
 export default function SocialComposer() {
+  const T = useT();
   const token = typeof window !== "undefined" ? localStorage.getItem("fayai_token") || "" : "";
   const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
@@ -123,7 +125,7 @@ export default function SocialComposer() {
 
   const generateWithAI = async () => {
     if (!topic.trim()) {
-      toast.error("Diga o tema do post para a IA");
+      toast.error(T("Diga o tema do post para a IA"));
       return;
     }
     setGenerating(true);
@@ -144,7 +146,7 @@ export default function SocialComposer() {
         toast.error(data?.error || "A IA não conseguiu gerar agora");
       }
     } catch {
-      toast.error("Erro de rede ao gerar");
+      toast.error(T("Erro de rede ao gerar"));
     } finally {
       setGenerating(false);
     }
@@ -168,7 +170,7 @@ export default function SocialComposer() {
         toast.error(data?.error || "Não deu para criar a imagem agora");
       }
     } catch {
-      toast.error("Erro de rede ao criar imagem");
+      toast.error(T("Erro de rede ao criar imagem"));
     } finally {
       setCreatingImage(false);
     }
@@ -176,19 +178,19 @@ export default function SocialComposer() {
 
   const createPost = async (mode: "now" | "schedule") => {
     if (!selected) {
-      toast.error("Conecte uma conta na aba Contas primeiro");
+      toast.error(T("Conecte uma conta na aba Contas primeiro"));
       return;
     }
     if (!content.trim()) {
-      toast.error("Escreva (ou gere) o conteúdo do post");
+      toast.error(T("Escreva (ou gere) o conteúdo do post"));
       return;
     }
     if (selected.platform === "instagram" && !mediaUrl.trim()) {
-      toast.error("O Instagram exige uma imagem — cole a URL da mídia");
+      toast.error(T("O Instagram exige uma imagem — cole a URL da mídia"));
       return;
     }
     if (mode === "schedule" && !scheduledFor) {
-      toast.error("Escolha data e hora do agendamento");
+      toast.error(T("Escolha data e hora do agendamento"));
       return;
     }
 
@@ -232,7 +234,7 @@ export default function SocialComposer() {
       setScheduledFor("");
       await load();
     } catch {
-      toast.error("Erro de rede");
+      toast.error(T("Erro de rede"));
     } finally {
       setSending(null);
     }
@@ -247,7 +249,7 @@ export default function SocialComposer() {
       else toast.error(data?.error || "Falha ao publicar");
       await load();
     } catch {
-      toast.error("Erro de rede");
+      toast.error(T("Erro de rede"));
     } finally {
       setPublishingId(null);
     }
@@ -256,7 +258,7 @@ export default function SocialComposer() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12 text-muted-foreground">
-        <Loader2 className="h-5 w-5 animate-spin mr-2" /> Carregando publicador…
+        <Loader2 className="h-5 w-5 animate-spin mr-2" />  {T("Carregando publicador…")}
       </div>
     );
   }
@@ -272,10 +274,10 @@ export default function SocialComposer() {
       {semConta && (
         <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-4 text-center">
           <Share2 className="mx-auto mb-2 h-8 w-8 text-amber-400/70" />
-          <p className="font-semibold text-foreground">Nenhuma conta pronta para publicar</p>
+          <p className="font-semibold text-foreground">{T("Nenhuma conta pronta para publicar")}</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Você pode escrever e gerar aqui do mesmo jeito. Para publicar direto, conecte Facebook + Instagram
-            na aba <span className="font-semibold text-amber-400">Contas</span>.
+            
+            {T("Você pode escrever e gerar aqui do mesmo jeito. Para publicar direto, conecte Facebook + Instagram\r\n            na aba")} <span className="font-semibold text-amber-400">Contas</span>.
           </p>
         </div>
       )}
@@ -306,13 +308,13 @@ export default function SocialComposer() {
       {/* Gerar com IA */}
       <div className="rounded-xl border border-violet-500/25 bg-violet-500/5 p-4">
         <p className="text-xs font-bold uppercase tracking-wider text-violet-300 mb-2 flex items-center gap-1.5">
-          <Sparkles className="h-3.5 w-3.5" /> Gerar com IA (usa sua persona)
+          <Sparkles className="h-3.5 w-3.5" />  {T("Gerar com IA (usa sua persona)")}
         </p>
         <div className="flex flex-col sm:flex-row gap-2">
           <input
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            placeholder="Tema — ex.: dica de ChatGPT para pequenos negócios"
+            placeholder={T("Tema — ex.: dica de ChatGPT para pequenos negócios")}
             className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-violet-400/60"
           />
           <Button
@@ -334,7 +336,7 @@ export default function SocialComposer() {
           onChange={(e) => setContent(e.target.value)}
           rows={5}
           maxLength={5000}
-          placeholder="Escreva seu post aqui…"
+          placeholder={T("Escreva seu post aqui…")}
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-amber-400/60 resize-y"
         />
         <div className="grid gap-3 sm:grid-cols-2">
@@ -349,7 +351,7 @@ export default function SocialComposer() {
             <input
               value={mediaUrl}
               onChange={(e) => setMediaUrl(e.target.value)}
-              placeholder={selected?.platform === "instagram" ? "URL da imagem (obrigatória no IG)" : "URL da imagem (opcional)"}
+              placeholder={selected?.platform === "instagram" ? T("URL da imagem (obrigatória no IG)") : "URL da imagem (opcional)"}
               className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-amber-400/60"
             />
           </div>
@@ -357,7 +359,7 @@ export default function SocialComposer() {
         {mediaPrompt && (
           <div className="flex flex-wrap items-center gap-2 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2">
             <p className="flex-1 min-w-[180px] text-[11px] text-muted-foreground line-clamp-2">
-              <strong className="text-amber-300">Imagem sugerida pela IA:</strong> {mediaPrompt}
+              <strong className="text-amber-300">{T("Imagem sugerida pela IA:")}</strong> {T(mediaPrompt)}
             </p>
             <button
               onClick={createImageFromPrompt}
@@ -365,14 +367,14 @@ export default function SocialComposer() {
               className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 px-3.5 py-1.5 text-[11px] font-extrabold text-black hover:from-amber-400 hover:to-yellow-400 transition-colors cursor-pointer disabled:opacity-60"
             >
               {creatingImage ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ImageIcon className="h-3.5 w-3.5" />}
-              {mediaUrl ? "Recriar imagem" : "Criar imagem"}
+              {mediaUrl ? "Recriar imagem" : T("Criar imagem")}
             </button>
           </div>
         )}
         {mediaUrl && (
           <div className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={mediaUrl} alt="Mídia do post" className="h-14 w-14 rounded-lg object-cover ring-1 ring-amber-400/40" />
+            <img src={mediaUrl} alt={T("Mídia do post")} className="h-14 w-14 rounded-lg object-cover ring-1 ring-amber-400/40" />
             <span className="text-[11px] text-muted-foreground">Imagem anexada ao post</span>
           </div>
         )}
@@ -384,11 +386,12 @@ export default function SocialComposer() {
         <Button
           onClick={() => createPost("now")}
           disabled={sending !== null || semConta}
-          title={semConta ? "Conecte uma conta na aba Contas para publicar" : undefined}
+          title={semConta ? T("Conecte uma conta na aba Contas para publicar") : undefined}
           className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-bold hover:from-amber-400 hover:to-yellow-400"
         >
           {sending === "now" ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Send className="h-4 w-4 mr-1.5" />}
-          Publicar agora
+          
+          {T("Publicar agora")}
         </Button>
         <div className="flex flex-1 gap-2">
           <input
@@ -412,7 +415,7 @@ export default function SocialComposer() {
       {/* Histórico */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-bold text-foreground">Seus posts</p>
+          <p className="text-sm font-bold text-foreground">{T("Seus posts")}</p>
           <button
             onClick={load}
             className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
@@ -425,7 +428,8 @@ export default function SocialComposer() {
             {/* eslint-disable-next-line @next/next/no-img-element -- primeiro post §12 */}
             <img src="/fx/primeiro-post.webp" alt="" aria-hidden className="mx-auto mb-2 h-20 w-32 rounded-xl object-cover opacity-90" />
             <p className="text-sm text-muted-foreground">
-              Nenhum post ainda — o primeiro está a um clique de distância.
+              
+              {T("Nenhum post ainda — o primeiro está a um clique de distância.")}
             </p>
           </div>
         ) : (
@@ -438,10 +442,10 @@ export default function SocialComposer() {
                 <div key={p._id} className="flex items-start gap-3 rounded-xl border border-border bg-secondary/40 p-3">
                   <Icon className="h-4 w-4 mt-1 text-muted-foreground shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-foreground line-clamp-2">{p.content}</p>
+                    <p className="text-sm text-foreground line-clamp-2">{T(p.content)}</p>
                     <div className="mt-1.5 flex flex-wrap items-center gap-2">
                       <Badge className={cn("text-[10px] border", st.cls)}>
-                        <StIcon className="h-3 w-3 mr-1" /> {st.label}
+                        <StIcon className="h-3 w-3 mr-1" /> {T(st.label)}
                       </Badge>
                       {p.status === "scheduled" && p.scheduledFor && (
                         <span className="text-[11px] text-muted-foreground">

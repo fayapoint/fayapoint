@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * A galeria da comunidade, dentro do dashboard.
@@ -52,6 +53,7 @@ const FAIXAS = 4;
 const VELOCIDADES = [14, 20, 11, 17];
 
 export function GaleriaPanel() {
+  const T = useT();
   const [criacoes, setCriacoes] = useState<Criacao[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [aberta, setAberta] = useState<Criacao | null>(null);
@@ -82,7 +84,7 @@ export function GaleriaPanel() {
     return (
       <Card className="border-border bg-card p-10 text-center">
         <Loader2 className="mx-auto animate-spin text-amber-400" size={22} />
-        <p className="mt-3 text-xs text-muted-foreground">Carregando a galeria…</p>
+        <p className="mt-3 text-xs text-muted-foreground">{T("Carregando a galeria…")}</p>
       </Card>
     );
   }
@@ -91,9 +93,10 @@ export function GaleriaPanel() {
     return (
       <Card className="border-border bg-card p-10 text-center">
         <Images className="mx-auto text-muted-foreground" size={22} />
-        <p className="mt-3 text-sm font-semibold">A galeria ainda está vazia</p>
+        <p className="mt-3 text-sm font-semibold">{T("A galeria ainda está vazia")}</p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Gere a primeira imagem no Studio AI e ela aparece aqui.
+          
+          {T("Gere a primeira imagem no Studio AI e ela aparece aqui.")}
         </p>
       </Card>
     );
@@ -108,7 +111,7 @@ export function GaleriaPanel() {
         <div className="min-w-0">
           <h3 className="truncate text-base font-bold">Galeria da comunidade</h3>
           <p className="text-xs text-muted-foreground">
-            {criacoes.length} criações · passe o cursor para parar, clique para ver o prompt
+            {criacoes.length}  {T("criações · passe o cursor para parar, clique para ver o prompt")}
           </p>
         </div>
       </div>
@@ -158,6 +161,7 @@ function Faixa({
   pausada: boolean;
   aoEscolher: (c: Criacao) => void;
 }) {
+  const T = useT();
   const trilho = useRef<HTMLDivElement>(null);
   const deslocamento = useRef(0);
 
@@ -220,13 +224,13 @@ function Faixa({
             { }
             <img
               src={c.imageUrl}
-              alt={c.prompt?.slice(0, 80) || "Criação da comunidade"}
+              alt={c.prompt?.slice(0, 80) || T("Criação da comunidade")}
               loading="lazy"
               draggable={false}
               className="h-full w-full object-cover"
             />
             <span className="pointer-events-none absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/85 to-transparent px-2 pb-1.5 pt-4 text-left text-[9px] text-white/70 opacity-0 transition-opacity group-hover:opacity-100">
-              {c.userName}
+              {T(c.userName)}
             </span>
           </button>
         ))}
@@ -236,6 +240,7 @@ function Faixa({
 }
 
 function Lightbox({ criacao, aoFechar }: { criacao: Criacao; aoFechar: () => void }) {
+  const T = useT();
   useEffect(() => {
     const aoTeclar = (e: KeyboardEvent) => e.key === "Escape" && aoFechar();
     window.addEventListener("keydown", aoTeclar);
@@ -248,14 +253,14 @@ function Lightbox({ criacao, aoFechar }: { criacao: Criacao; aoFechar: () => voi
       onClick={aoFechar}
       role="dialog"
       aria-modal="true"
-      aria-label="Criação da comunidade"
+      aria-label={T("Criação da comunidade")}
     >
       <div
         className="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-[#0b0d16]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-3 border-b border-white/10 p-3">
-          <p className="truncate text-sm font-semibold text-white">{criacao.userName}</p>
+          <p className="truncate text-sm font-semibold text-white">{T(criacao.userName)}</p>
           <button
             type="button"
             onClick={aoFechar}
@@ -266,11 +271,11 @@ function Lightbox({ criacao, aoFechar }: { criacao: Criacao; aoFechar: () => voi
           </button>
         </div>
         { }
-        <img src={criacao.imageUrl} alt={criacao.prompt} className="w-full" />
+        <img src={criacao.imageUrl} alt={T(criacao.prompt)} className="w-full" />
         {criacao.prompt && (
           <div className="p-4">
             <p className="text-[10px] font-bold uppercase tracking-widest text-white/35">Prompt</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-white/70">{criacao.prompt}</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-white/70">{T(criacao.prompt)}</p>
           </div>
         )}
       </div>

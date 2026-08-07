@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -90,6 +91,7 @@ export function ProfilePanel({
   totalAchievements = 0,
   onUserUpdate,
 }: ProfilePanelProps) {
+  const T = useT();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -142,7 +144,7 @@ export function ProfilePanel({
         throw new Error(data.error || 'Erro ao salvar');
       }
 
-      toast.success('Perfil atualizado com sucesso!');
+      toast.success(T("Perfil atualizado com sucesso!"));
       onUserUpdate?.(data.user);
       setIsEditing(false);
     } catch (error) {
@@ -189,7 +191,7 @@ export function ProfilePanel({
             {/* User Info */}
             <div className="flex-1 min-w-0 pt-4">
               <div className="flex items-center gap-2 md:gap-3 mb-2 min-w-0">
-                <h2 className="text-xl md:text-2xl font-bold truncate">{user.name}</h2>
+                <h2 className="text-xl md:text-2xl font-bold truncate">{T(user.name)}</h2>
                 {!isEditing && (
                   <Button
                     variant="ghost"
@@ -204,14 +206,15 @@ export function ProfilePanel({
                   href="/portal/conta"
                   className="ml-auto shrink-0 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-white hover:border-amber-400/40 transition-colors"
                 >
-                  Configurações da conta
+                  
+                  {T("Configurações da conta")}
                 </a>
               </div>
-              <p className="text-muted-foreground mb-3 text-sm md:text-base truncate">{user.email}</p>
+              <p className="text-muted-foreground mb-3 text-sm md:text-base truncate">{T(user.email)}</p>
               
               {user.profile?.bio && !isEditing && (
                 <p className="text-muted-foreground text-sm max-w-xl mb-4">
-                  {user.profile.bio}
+                  {T(user.profile.bio)}
                 </p>
               )}
 
@@ -220,19 +223,19 @@ export function ProfilePanel({
                 {user.profile?.company && (
                   <div className="flex items-center gap-2 text-muted-foreground min-w-0">
                     <Building2 size={14} className="shrink-0" />
-                    <span className="truncate">{user.profile.company}</span>
+                    <span className="truncate">{T(user.profile.company)}</span>
                   </div>
                 )}
                 {user.profile?.position && (
                   <div className="flex items-center gap-2 text-muted-foreground min-w-0">
                     <Briefcase size={14} className="shrink-0" />
-                    <span className="truncate">{user.profile.position}</span>
+                    <span className="truncate">{T(user.profile.position)}</span>
                   </div>
                 )}
                 {user.profile?.location && (
                   <div className="flex items-center gap-2 text-muted-foreground min-w-0">
                     <MapPin size={14} className="shrink-0" />
-                    <span className="truncate">{user.profile.location}</span>
+                    <span className="truncate">{T(user.profile.location)}</span>
                   </div>
                 )}
               </div>
@@ -245,13 +248,13 @@ export function ProfilePanel({
                   <span className="text-xl font-bold text-amber-400">{stats.level}</span>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">Nível</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider">{T("Nível")}</p>
                   <p className="font-semibold">{stats.xp} XP</p>
                 </div>
               </div>
               <Progress value={stats.levelProgress} className="h-2 bg-gray-700" />
               <p className="text-xs text-muted-foreground mt-2 text-right">
-                {stats.xpToNextLevel - stats.xp} XP para o próximo nível
+                {stats.xpToNextLevel - stats.xp}  {T("XP para o próximo nível")}
               </p>
             </div>
           </div>
@@ -265,12 +268,12 @@ export function ProfilePanel({
           animate={{ opacity: 1, y: 0 }}
         >
           <Card className="bg-card border-border p-4 md:p-6">
-            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6">Editar Perfil</h3>
+            <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6">{T("Editar Perfil")}</h3>
 
             <div className="grid md:grid-cols-2 gap-4 md:gap-6">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="name">Nome</Label>
+                  <Label htmlFor="name">{T("Nome")}</Label>
                   <Input
                     id="name"
                     value={formData.name}
@@ -286,7 +289,7 @@ export function ProfilePanel({
                     value={formData.bio}
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                     className="bg-secondary border-border min-h-[100px]"
-                    placeholder="Conte um pouco sobre você..."
+                    placeholder={T("Conte um pouco sobre você...")}
                   />
                 </div>
 
@@ -298,7 +301,7 @@ export function ProfilePanel({
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                       className="bg-secondary border-border"
-                      placeholder="Sua empresa"
+                      placeholder={T("Sua empresa")}
                     />
                   </div>
                   <div>
@@ -308,7 +311,7 @@ export function ProfilePanel({
                       value={formData.position}
                       onChange={(e) => setFormData({ ...formData, position: e.target.value })}
                       className="bg-secondary border-border"
-                      placeholder="Seu cargo"
+                      placeholder={T("Seu cargo")}
                     />
                   </div>
                 </div>
@@ -316,13 +319,13 @@ export function ProfilePanel({
 
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="location">Localização</Label>
+                  <Label htmlFor="location">{T("Localização")}</Label>
                   <Input
                     id="location"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="bg-secondary border-border"
-                    placeholder="Cidade, País"
+                    placeholder={T("Cidade, País")}
                   />
                 </div>
                 
@@ -371,7 +374,8 @@ export function ProfilePanel({
                 ) : (
                   <>
                     <Save className="w-4 h-4 mr-2" />
-                    Salvar
+                    
+                    {T("Salvar")}
                   </>
                 )}
               </Button>
@@ -390,7 +394,7 @@ export function ProfilePanel({
             </div>
             <div className="min-w-0">
               <p className="text-xl md:text-2xl font-bold">{stats.streak}</p>
-              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">Dias seguidos</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">{T("Dias seguidos")}</p>
             </div>
           </div>
         </Card>
@@ -416,7 +420,7 @@ export function ProfilePanel({
             </div>
             <div className="min-w-0">
               <p className="text-xl md:text-2xl font-bold">{totalAchievements}</p>
-              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">Conquistas</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">{T("Conquistas")}</p>
             </div>
           </div>
         </Card>
@@ -443,7 +447,7 @@ export function ProfilePanel({
         <div className="flex items-center justify-between mb-4 md:mb-6 gap-2">
           <h3 className="text-base md:text-lg font-semibold flex items-center gap-2">
             <Trophy className="text-yellow-400 shrink-0" />
-            <span className="truncate">Conquistas por Nível</span>
+            <span className="truncate">{T("Conquistas por Nível")}</span>
           </h3>
           <span className="text-xs md:text-sm text-muted-foreground whitespace-nowrap shrink-0">
             {totalAchievements}/{achievements.length}
@@ -470,7 +474,7 @@ export function ProfilePanel({
                   {count}
                 </p>
                 <p className={cn("text-[9px] md:text-xs uppercase tracking-wider", count > 0 ? "text-white/80" : "text-gray-600")}>
-                  {tier}
+                  {T(tier)}
                 </p>
               </div>
             );
@@ -483,7 +487,8 @@ export function ProfilePanel({
         <Card className="bg-card border-border p-4 md:p-6 overflow-hidden">
           <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2">
             <Award className="text-amber-400 shrink-0" />
-            Conquistas Recentes
+            
+            {T("Conquistas Recentes")}
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
@@ -505,7 +510,7 @@ export function ProfilePanel({
                       {ACHIEVEMENT_NAMES[achievement.id]?.name || achievement.id.replace(/_/g, " ")}
                     </p>
                     <p className="text-[10px] md:text-xs text-muted-foreground capitalize">
-                      {achievement.tier} · +{achievement.xpReward} XP
+                      {T(achievement.tier)} · +{achievement.xpReward} XP
                     </p>
                   </div>
                 </div>

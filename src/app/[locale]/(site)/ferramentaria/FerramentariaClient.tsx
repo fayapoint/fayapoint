@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -86,6 +87,7 @@ function varMatiz(h: number): React.CSSProperties {
 const POR_PAGINA = 12;
 
 export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
+  const T = useT();
   const [verboAtivo, setVerboAtivo] = useState<string | null>(null);
   const [busca, setBusca] = useState("");
   const [pagina, setPagina] = useState(1);
@@ -134,7 +136,8 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
       {/* ── Os verbos ────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6" aria-labelledby="verbos-titulo">
         <h2 id="verbos-titulo" className="sr-only">
-          O que você quer inventar
+          
+          {T("O que você quer inventar")}
         </h2>
 
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
@@ -199,7 +202,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
                     className={`block text-[15px] font-semibold tracking-tight transition-colors ${ativo ? "tinta-marca" : ""}`}
                     style={ativo ? varMatiz(v.matiz) : undefined}
                   >
-                    {v.label}
+                    {T(v.label)}
                   </span>
                   <span className="mt-0.5 block text-[11px] text-muted-foreground">
                     {quantas} ferramenta{quantas === 1 ? "" : "s"}
@@ -227,7 +230,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
                   className="h-px w-8 shrink-0"
                   style={{ background: `hsl(${verboSelecionado.matiz} 70% 55%)` }}
                 />
-                {verboSelecionado.descricao}
+                {T(verboSelecionado.descricao)}
                 <button
                   type="button"
                   onClick={() => filtrarPor(null)}
@@ -255,7 +258,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
               type="search"
               value={busca}
               onChange={(e) => buscarPor(e.target.value)}
-              placeholder="ChatGPT, Runway, automação…"
+              placeholder={T("ChatGPT, Runway, automação…")}
               className="w-full rounded-xl border border-border bg-card/60 py-2.5 pl-10 pr-4 text-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary/60"
             />
           </label>
@@ -273,7 +276,8 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
         {filtradas.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border py-16 text-center">
             <p className="text-muted-foreground">
-              Nada com esse nome por aqui.
+              
+              {T("Nada com esse nome por aqui.")}
             </p>
             <button
               type="button"
@@ -283,7 +287,8 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
               }}
               className="mt-3 text-sm text-primary underline underline-offset-4"
             >
-              Ver as {ferramentas.length} ferramentas
+              
+              {T("Ver as")} {ferramentas.length} ferramentas
             </button>
           </div>
         ) : (
@@ -302,14 +307,15 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
 
         {/* ── Paginação ──────────────────────────────────────────────── */}
         {totalPaginas > 1 && (
-          <nav aria-label="Paginação" className="mt-10 flex flex-wrap items-center justify-center gap-2">
+          <nav aria-label={T("Paginação")} className="mt-10 flex flex-wrap items-center justify-center gap-2">
             <button
               type="button"
               onClick={() => setPagina((n) => Math.max(1, n - 1))}
               disabled={paginaAtual === 1}
               className="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Anterior
+              
+              {T("Anterior")}
             </button>
 
             {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((n) => (
@@ -335,7 +341,8 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
               disabled={paginaAtual === totalPaginas}
               className="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/30 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Próxima
+              
+              {T("Próxima")}
             </button>
           </nav>
         )}
@@ -355,6 +362,7 @@ function Hero({
   total: number;
   semMovimento: boolean;
 }) {
+  const T = useT();
   const [indice, setIndice] = useState(0);
   const areaRef = useRef<HTMLDivElement>(null);
 
@@ -432,15 +440,14 @@ function Hero({
               className="tinta-marca text-[clamp(1.25rem,3.5vw,2.25rem)] font-light tracking-tight"
               style={varMatiz(atual.matiz)}
             >
-              {atual.complemento}
+              {T(atual.complemento)}
             </motion.p>
           </AnimatePresence>
         </div>
 
         <p className="mt-7 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-          Diretório de ferramenta é lista morta. Aqui elas estão organizadas
-          pelo que você quer <em className="not-italic text-foreground">fazer</em> —
-          e cada uma tem ficha, curso e o caminho para começar.
+          
+          {T("Diretório de ferramenta é lista morta. Aqui elas estão organizadas\r\n          pelo que você quer")} <em className="not-italic text-foreground">{T("fazer")}</em>  {T("—\r\n          e cada uma tem ficha, curso e o caminho para começar.")}
         </p>
       </div>
     </header>
@@ -460,6 +467,7 @@ function Cartao({
   indice: number;
   semMovimento: boolean;
 }) {
+  const T = useT();
   return (
     <motion.li
       initial={semMovimento ? false : { opacity: 0, y: 12 }}
@@ -533,7 +541,7 @@ function Cartao({
           <span className="min-w-0 flex-1">
             <span className="flex items-baseline gap-2">
               <span className="truncate text-[17px] font-semibold tracking-tight">
-                {f.nome}
+                {T(f.nome)}
               </span>
               <ArrowUpRight
                 aria-hidden
@@ -541,7 +549,7 @@ function Cartao({
               />
             </span>
             <span className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="truncate">{f.fabricante}</span>
+              <span className="truncate">{T(f.fabricante)}</span>
               <span aria-hidden>·</span>
               <span className="inline-flex shrink-0 items-center gap-1">
                 <Star aria-hidden className="h-3 w-3 fill-current text-primary" />
@@ -552,7 +560,7 @@ function Cartao({
         </div>
 
         <p className="relative mt-3.5 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-          {f.descricao}
+          {T(f.descricao)}
         </p>
 
         <div className="relative mt-4 flex flex-wrap items-center gap-1.5">
@@ -563,10 +571,10 @@ function Cartao({
               background: tinta(f.hsl, 100, 55, 0.16),
             }}
           >
-            {f.verbo.label}
+            {T(f.verbo.label)}
           </span>
           <span className="rounded-full border border-border px-2.5 py-0.5 text-[11px] text-muted-foreground">
-            {f.preco}
+            {T(f.preco)}
           </span>
         </div>
       </Link>

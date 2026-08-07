@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
@@ -111,6 +112,7 @@ const TOM_CALIBRE: Record<Dados["persona"]["calibre"], { cor: string; barra: str
 };
 
 export default function AteliePainel({ slug, locale }: { slug: string; locale: string }) {
+  const T = useT();
   const router = useRouter();
   const [dados, setDados] = useState<Dados | null>(null);
   const [erro, setErro] = useState<string | null>(null);
@@ -136,7 +138,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
       }
       setDados(d);
     } catch {
-      setErro("Erro de rede");
+      setErro(T("Erro de rede"));
     }
   }, [slug, locale, escolhidas, router]);
 
@@ -159,9 +161,9 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         return;
       }
       await buscar();
-      if (!d.reaproveitada) toast.success("Pronto — este é o seu capítulo 📘");
+      if (!d.reaproveitada) toast.success(T("Pronto — este é o seu capítulo 📘"));
     } catch {
-      toast.error("Erro de rede");
+      toast.error(T("Erro de rede"));
     } finally {
       setGerandoAmostra(false);
     }
@@ -212,7 +214,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
           break;
         }
         if (r.status === 422) {
-          toast.error("Complete o perfil primeiro — role até o medidor.");
+          toast.error(T("Complete o perfil primeiro — role até o medidor."));
           break;
         }
         if (!r.ok) {
@@ -229,7 +231,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         // restando: o lote inteiro falhou, e insistir só queimaria chamadas.
         if (!d.restantes) break;
         if (!d.geradas) {
-          toast.error("Alguns capítulos não puderam ser escritos agora.");
+          toast.error(T("Alguns capítulos não puderam ser escritos agora."));
           break;
         }
       }
@@ -245,7 +247,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
       }
       await buscar();
     } catch {
-      toast.error("Erro de rede");
+      toast.error(T("Erro de rede"));
     } finally {
       setGerando(false);
     }
@@ -273,9 +275,10 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
   if (erro) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <p className="text-lg font-bold">{erro}</p>
+        <p className="text-lg font-bold">{T(erro)}</p>
         <Link href={`/${locale}/curso/${slug}`} className="mt-4 inline-block text-amber-400 hover:underline">
-          Voltar para o curso
+          
+          {T("Voltar para o curso")}
         </Link>
       </div>
     );
@@ -304,33 +307,31 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
     <div className="mx-auto max-w-5xl px-4 pb-24 pt-24 sm:px-6">
       {/* ═══ HERÓI ═══ */}
       <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
-        <Link href={`/${locale}/cursos`} className="hover:text-white">Cursos</Link>
+        <Link href={`/${locale}/cursos`} className="hover:text-white">{T("Cursos")}</Link>
         <ChevronRight size={14} />
-        <Link href={`/${locale}/curso/${curso.slug}`} className="hover:text-white">{curso.titulo}</Link>
+        <Link href={`/${locale}/curso/${curso.slug}`} className="hover:text-white">{T(curso.titulo)}</Link>
         <ChevronRight size={14} />
-        <span className="text-amber-400">O seu</span>
+        <span className="text-amber-400">{T("O seu")}</span>
       </div>
 
       <div className="grid gap-6 rounded-3xl border border-amber-400/25 bg-gradient-to-br from-amber-500/[0.09] via-transparent to-violet-500/[0.06] p-5 sm:p-7 md:grid-cols-[150px_1fr]">
         {curso.capa && (
           <div className="relative mx-auto aspect-[720/1040] w-[150px] overflow-hidden rounded-xl shadow-2xl shadow-black/60 md:mx-0">
-            <Image src={curso.capa} alt={curso.titulo} fill className="object-cover" sizes="150px" unoptimized />
+            <Image src={curso.capa} alt={T(curso.titulo)} fill className="object-cover" sizes="150px" unoptimized />
           </div>
         )}
         <div className="min-w-0">
           <Badge className="mb-2 border-amber-400/30 bg-amber-500/15 text-[10px] text-amber-200">
-            <Wand2 size={11} className="mr-1" /> ATELIÊ
+            <Wand2 size={11} className="mr-1" />  {T("ATELIÊ")}
           </Badge>
           <h1 className="text-2xl font-black leading-tight sm:text-3xl">
-            O <span className="text-amber-400">seu</span> {curso.titulo}
+            O <span className="text-amber-400">{T("seu")}</span> {T(curso.titulo)}
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Os {curso.capitulos} capítulos deste curso, reescritos para o seu negócio — cada um com uma
-            abertura, um exemplo e uma tarefa no seu contexto. A aula original continua intacta: a
-            camada envolve o conteúdo, não o substitui.
+            Os {curso.capitulos}  {T("capítulos deste curso, reescritos para o seu negócio — cada um com uma\n            abertura, um exemplo e uma tarefa no seu contexto. A aula original continua intacta: a\n            camada envolve o conteúdo, não o substitui.")}
           </p>
           <p className="mt-3 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs italic text-white/70">
-            {persona.resumo}
+            {T(persona.resumo)}
           </p>
         </div>
       </div>
@@ -348,12 +349,13 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         {!amostra ? (
           <div className="rounded-2xl border border-dashed border-amber-400/30 bg-amber-500/[0.04] p-6 text-center sm:p-10">
             <p className="mx-auto max-w-lg text-sm text-muted-foreground">
-              Escrevemos o capítulo{" "}
+              
+              {T("Escrevemos o capítulo")}{" "}
               <strong className="text-white">
                 {dados.amostraDisponivel?.titulo || "de amostra"}
               </strong>{" "}
-              com o que já sabemos sobre você, e mostramos lado a lado com o original. Depois você
-              decide se vale.
+              
+              {T("com o que já sabemos sobre você, e mostramos lado a lado com o original. Depois você\n              decide se vale.")}
             </p>
             <Button
               onClick={() => gerarAmostra(false)}
@@ -363,11 +365,11 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
             >
               {gerandoAmostra ? (
                 <>
-                  <Loader2 size={17} className="mr-2 animate-spin" /> Escrevendo o seu capítulo…
+                  <Loader2 size={17} className="mr-2 animate-spin" />  {T("Escrevendo o seu capítulo…")}
                 </>
               ) : (
                 <>
-                  <Wand2 size={17} className="mr-2" /> Ver com a minha cara — grátis
+                  <Wand2 size={17} className="mr-2" />  {T("Ver com a minha cara — grátis")}
                 </>
               )}
             </Button>
@@ -378,30 +380,32 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                  Como todo mundo lê
+                  
+                  {T("Como todo mundo lê")}
                 </p>
-                <p className="text-sm leading-relaxed text-white/55">{amostra.original}…</p>
+                <p className="text-sm leading-relaxed text-white/55">{T(amostra.original)}…</p>
               </div>
 
               <div className="rounded-2xl border border-amber-400/30 bg-gradient-to-br from-amber-500/[0.08] to-transparent p-4">
                 <p className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-300">
-                  <Sparkles size={12} /> Como VOCÊ vai ler
+                  <Sparkles size={12} />  {T("Como VOCÊ vai ler")}
                 </p>
                 {/* Os três rótulos são exatamente os que `montarBloco` injeta no
                     leitor. A amostra tem que parecer o produto, não um cartaz
                     sobre o produto. */}
                 <div className="space-y-3 text-sm leading-relaxed">
-                  <Peca emoji="🎯" titulo="Por que isto muda o seu jogo" texto={amostra.abertura} />
-                  <Peca emoji="🧩" titulo="No seu contexto" texto={amostra.exemplo} />
-                  <Peca emoji="✍️" titulo="Sua vez" texto={amostra.tarefa} />
+                  <Peca emoji="🎯" titulo="Por que isto muda o seu jogo" texto={T(amostra.abertura)} />
+                  <Peca emoji="🧩" titulo="No seu contexto" texto={T(amostra.exemplo)} />
+                  <Peca emoji="✍️" titulo="Sua vez" texto={T(amostra.tarefa)} />
                 </div>
               </div>
             </div>
 
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2">
               <p className="text-[11px] text-muted-foreground">
-                Escrito com <strong className="text-white">{amostra.confianca}%</strong> de você
-                {amostra.confianca < 75 && " — quanto mais eu souber, mais específico isso fica"}.
+                
+                {T("Escrito com")} <strong className="text-white">{amostra.confianca}%</strong>  {T("de você")}
+                {amostra.confianca < 75 && T(" — quanto mais eu souber, mais específico isso fica")}.
               </p>
               {amostra.envelheceu && (
                 <Button
@@ -412,7 +416,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   className="border-amber-400/40 text-amber-200 hover:bg-amber-500/10"
                 >
                   {gerandoAmostra ? <Loader2 size={13} className="mr-1.5 animate-spin" /> : <Wand2 size={13} className="mr-1.5" />}
-                  Seu perfil mudou — refazer de graça
+                  
+                  {T("Seu perfil mudou — refazer de graça")}
                 </Button>
               )}
             </div>
@@ -433,12 +438,12 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         <div className={cn("rounded-2xl border p-4 sm:p-5", tom.cor)}>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-base font-black">{persona.titulo}</p>
-              <p className="mt-1 max-w-xl text-xs leading-relaxed opacity-80">{persona.frase}</p>
+              <p className="text-base font-black">{T(persona.titulo)}</p>
+              <p className="mt-1 max-w-xl text-xs leading-relaxed opacity-80">{T(persona.frase)}</p>
             </div>
             <div className="shrink-0 text-right">
               <p className="text-3xl font-black tabular-nums">{persona.confianca}%</p>
-              <p className="text-[10px] uppercase tracking-wider opacity-70">{persona.qualidade}</p>
+              <p className="text-[10px] uppercase tracking-wider opacity-70">{T(persona.qualidade)}</p>
             </div>
           </div>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/40">
@@ -446,7 +451,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
           </div>
           {!podePersonalizar && (
             <p className="mt-2 text-[11px] opacity-80">
-              Mínimo para personalizar: {persona.minima}%. Faltam {persona.minima - persona.confianca} pontos.
+              
+              {T("Mínimo para personalizar:")} {persona.minima}%. Faltam {persona.minima - persona.confianca}  {T("pontos.")}
             </p>
           )}
         </div>
@@ -458,8 +464,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
               <div key={d.id} className="rounded-xl border border-border bg-card/60 p-3.5">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-bold">{d.titulo}</p>
-                    <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{d.paraQue}</p>
+                    <p className="truncate text-sm font-bold">{T(d.titulo)}</p>
+                    <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{T(d.paraQue)}</p>
                   </div>
                   <span className="shrink-0 text-sm font-black tabular-nums text-white/70">{d.confianca}%</span>
                 </div>
@@ -492,13 +498,13 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   <div className="mt-2.5 border-t border-white/5 pt-2">
                     {d.faltando.map((f) => (
                       <div key={f.campo} className="mb-1.5 last:mb-0">
-                        <p className="text-[11.5px] font-semibold text-white/85">{f.pergunta}</p>
-                        <p className="text-[10.5px] leading-snug text-muted-foreground">{f.ganho}</p>
+                        <p className="text-[11.5px] font-semibold text-white/85">{T(f.pergunta)}</p>
+                        <p className="text-[10.5px] leading-snug text-muted-foreground">{T(f.ganho)}</p>
                       </div>
                     ))}
                     {ganho > 0 && (
                       <p className="mt-1 text-[10px] font-bold text-violet-300">
-                        Completar isto vale +{ganho} pontos de precisão
+                        Completar isto vale +{ganho}  {T("pontos de precisão")}
                       </p>
                     )}
                   </div>
@@ -510,7 +516,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
 
         <Link href={`/${locale}/portal?tab=social`}>
           <Button variant="outline" className="mt-4 w-full border-violet-400/40 text-violet-200 hover:bg-violet-500/10" size="lg">
-            Responder no Perfil Social
+            
+            {T("Responder no Perfil Social")}
             <ArrowRight size={16} className="ml-2" />
           </Button>
         </Link>
@@ -561,20 +568,21 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
 
                 <span className="min-w-0 flex-1">
                   <span className="flex flex-wrap items-center gap-2">
-                    <strong className="text-sm">{item.titulo}</strong>
+                    <strong className="text-sm">{T(item.titulo)}</strong>
                     {item.emBreve && (
                       <Badge className="border-white/15 bg-white/5 text-[9px] text-white/60">Em breve</Badge>
                     )}
                     {item.jaFeito && !item.emBreve && (
                       <Badge className="border-emerald-400/30 bg-emerald-500/10 text-[9px] text-emerald-300">
-                        Já feito
+                        
+                        {T("Já feito")}
                       </Badge>
                     )}
                   </span>
                   <span className="mt-0.5 block text-[11.5px] leading-snug text-muted-foreground">
-                    {item.descricao}
+                    {T(item.descricao)}
                   </span>
-                  <span className="mt-1 block text-[10.5px] text-white/45">{item.conta}</span>
+                  <span className="mt-1 block text-[10.5px] text-white/45">{T(item.conta)}</span>
                 </span>
 
                 <span className="shrink-0 text-right">
@@ -583,7 +591,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   </span>
                   {!item.jaFeito && (
                     <span className="block text-[9px] uppercase tracking-wider text-muted-foreground">
-                      créditos
+                      
+                      {T("créditos")}
                     </span>
                   )}
                 </span>
@@ -596,9 +605,9 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         <div className="mt-4 rounded-2xl border border-border bg-card p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Seu saldo</p>
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{T("Seu saldo")}</p>
               <p className="text-xl font-black tabular-nums">
-                {creditos.saldo} <span className="text-xs font-normal text-muted-foreground">créditos</span>
+                {creditos.saldo} <span className="text-xs font-normal text-muted-foreground">{T("créditos")}</span>
               </p>
               {/* 1 crédito = R$1. Repetir o valor em reais ao lado do número é
                   o que torna o preço julgável — "32 créditos" não diz nada a
@@ -610,7 +619,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
             </div>
             <ArrowRight size={18} className="hidden text-muted-foreground sm:block" />
             <div className="text-right">
-              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Este curso</p>
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{T("Este curso")}</p>
               <p className={cn("text-xl font-black tabular-nums", faltamCreditos > 0 ? "text-rose-300" : "text-emerald-300")}>
                 −{total}
               </p>
@@ -622,15 +631,14 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
 
           {!dados.podeGastar && (
             <p className="mt-3 rounded-lg border border-amber-400/25 bg-amber-500/[0.07] px-3 py-2 text-[11px] text-amber-200">
-              Este curso ainda não está no seu acervo. Adicione-o primeiro — personalizar capítulos
-              que você não consegue abrir gastaria seu crédito à toa.
+              
+              {T("Este curso ainda não está no seu acervo. Adicione-o primeiro — personalizar capítulos\n              que você não consegue abrir gastaria seu crédito à toa.")}
             </p>
           )}
 
           {camada.capitulos > 0 && !camada.completo && (
             <p className="mt-3 rounded-lg border border-cyan-400/20 bg-cyan-500/[0.06] px-3 py-2 text-[11px] text-cyan-200">
-              {camada.capitulos} de {orcamento.capitulos} capítulos já estão no seu contexto — você só
-              paga pelos que faltam.
+              {camada.capitulos} de {orcamento.capitulos}  {T("capítulos já estão no seu contexto — você só\n              paga pelos que faltam.")}
             </p>
           )}
 
@@ -643,10 +651,10 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                 />
               </div>
               <p className="mt-1.5 text-center text-[11px] text-muted-foreground">
-                Escrevendo o seu curso —{" "}
+                
+                {T("Escrevendo o seu curso —")}{" "}
                 <strong className="text-white/80">{Math.round((progresso / 100) * Math.max(1, orcamento.capitulos - camada.capitulos))} de{" "}
-                {Math.max(1, orcamento.capitulos - camada.capitulos)}</strong> capítulos. Pode fechar a
-                aba: o que já foi escrito fica salvo e você retoma daqui.
+                {Math.max(1, orcamento.capitulos - camada.capitulos)}</strong>  {T("capítulos. Pode fechar a\n                aba: o que já foi escrito fica salvo e você retoma daqui.")}
               </p>
             </div>
           )}
@@ -657,34 +665,37 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                 <Link href={`/${locale}/portal/learn/${curso.slug}`}>
                   <Button className="w-full bg-gradient-to-r from-cyan-500 to-teal-500 font-extrabold text-black" size="lg">
                     <BookOpen size={17} className="mr-2" />
-                    Seu curso está pronto — ler agora
+                    
+                    {T("Seu curso está pronto — ler agora")}
                   </Button>
                 </Link>
               ) : !podePersonalizar ? (
                 <div className="rounded-xl border border-rose-400/25 bg-rose-500/[0.06] p-3 text-center">
                   <p className="text-xs font-bold text-rose-200">
-                    Primeiro me conte um pouco mais sobre você
+                    
+                    {T("Primeiro me conte um pouco mais sobre você")}
                   </p>
                   <p className="mt-1 text-[11px] text-muted-foreground">
-                    Faltam {persona.minima - persona.confianca} pontos. O medidor acima mostra quais
-                    respostas rendem mais — normalmente duas bastam.
+                    Faltam {persona.minima - persona.confianca}  {T("pontos. O medidor acima mostra quais\n                    respostas rendem mais — normalmente duas bastam.")}
                   </p>
                 </div>
               ) : faltamCreditos > 0 ? (
                 <div className="rounded-xl border border-amber-400/25 bg-amber-500/[0.06] p-3 text-center">
                   <p className="text-xs font-bold text-amber-200">
-                    Faltam {faltamCreditos} créditos para este curso
+                    Faltam {faltamCreditos}  {T("créditos para este curso")}
                   </p>
                   <div className="mt-2 flex flex-wrap justify-center gap-2">
                     <Link href={`/${locale}/portal?tab=rewards`}>
                       <Button size="sm" variant="outline" className="border-amber-400/40 text-amber-200">
-                        Comprar créditos
+                        
+                        {T("Comprar créditos")}
                       </Button>
                     </Link>
                     {dados.plano !== "expert" && (
                       <Link href={`/${locale}/precos`}>
                         <Button size="sm" variant="outline" className="border-violet-400/40 text-violet-200">
-                          Ver planos com mais créditos
+                          
+                          {T("Ver planos com mais créditos")}
                         </Button>
                       </Link>
                     )}
@@ -705,13 +716,15 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   size="lg"
                 >
                   <Zap size={18} className="mr-2" />
-                  Escrever o meu curso — {total} créditos (R$ {total})
+                  
+                  {T("Escrever o meu curso —")} {total}  {T("créditos (R$")} {total})
                 </Button>
               )}
 
               {custoTexto && !custoTexto.jaFeito && podePersonalizar && faltamCreditos === 0 && !camada.completo && (
                 <p className="text-center text-[10.5px] text-muted-foreground">
-                  Você paga só pelos capítulos que forem escritos. Se algum falhar, ele não é cobrado.
+                  
+                  {T("Você paga só pelos capítulos que forem escritos. Se algum falhar, ele não é cobrado.")}
                 </p>
               )}
             </div>
@@ -735,6 +748,7 @@ function Cabecalho({
   titulo: string;
   sub: string;
 }) {
+  const T = useT();
   return (
     <div className="mb-3 flex items-center gap-2.5">
       <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br", cor)}>
@@ -743,22 +757,23 @@ function Cabecalho({
       <div className="min-w-0">
         <h2 className="text-lg font-black leading-tight">
           <span className="mr-1.5 text-muted-foreground">{numero}.</span>
-          {titulo}
+          {T(titulo)}
         </h2>
-        <p className="text-[11.5px] leading-snug text-muted-foreground">{sub}</p>
+        <p className="text-[11.5px] leading-snug text-muted-foreground">{T(sub)}</p>
       </div>
     </div>
   );
 }
 
 function Peca({ emoji, titulo, texto }: { emoji: string; titulo: string; texto: string }) {
+  const T = useT();
   if (!texto) return null;
   return (
     <div className="border-l-2 border-amber-400/40 pl-3">
       <p className="text-[11px] font-bold text-amber-200">
-        {emoji} {titulo}
+        {T(emoji)} {T(titulo)}
       </p>
-      <p className="mt-0.5 text-[13px] leading-relaxed text-white/85">{texto}</p>
+      <p className="mt-0.5 text-[13px] leading-relaxed text-white/85">{T(texto)}</p>
     </div>
   );
 }

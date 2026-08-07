@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { Sparkles, ChevronRight } from "lucide-react";
@@ -18,6 +19,7 @@ import type { Dossie } from "@/lib/persona";
  * é decoração.
  */
 export function CartaoPersona({ onAbrir }: { onAbrir: () => void }) {
+  const T = useT();
   const [dossie, setDossie] = useState<Dossie | null>(null);
 
   useEffect(() => {
@@ -83,25 +85,26 @@ export function CartaoPersona({ onAbrir }: { onAbrir: () => void }) {
 
         <div className="min-w-0 flex-1">
           <h3 className="flex flex-wrap items-center gap-2 text-base font-bold">
-            <Sparkles size={15} className="text-violet-400" /> Sua Persona
+            <Sparkles size={15} className="text-violet-400" />  {T("Sua Persona")}
             {dossie && (
               <span className="rounded-full border border-violet-500/40 px-2 py-[1px] text-[10px] font-extrabold uppercase tracking-wider text-violet-300">
-                te conheço {conf}% · {dossie.qualidade}
+                
+                {T("te conheço")} {conf}% · {T(dossie.qualidade)}
               </span>
             )}
           </h3>
 
           {proxima ? (
             <p className="mt-1 text-sm leading-snug text-muted-foreground">
-              <strong className="text-foreground">{proxima.faltando[0].pergunta}</strong>
+              <strong className="text-foreground">{T(proxima.faltando[0].pergunta)}</strong>
               <br />
-              <span className="text-[12px] text-muted-foreground/80">↳ {proxima.faltando[0].ganho}</span>
+              <span className="text-[12px] text-muted-foreground/80">↳ {T(proxima.faltando[0].ganho)}</span>
             </p>
           ) : (
             <p className="mt-0.5 text-sm leading-snug text-muted-foreground">
               {dossie
-                ? "Seu retrato está completo — o conteúdo sai na sua voz."
-                : "Cada jogo e leitura ensina o site a te conhecer — e molda o conteúdo para você."}
+                ? T("Seu retrato está completo — o conteúdo sai na sua voz.")
+                : T("Cada jogo e leitura ensina o site a te conhecer — e molda o conteúdo para você.")}
             </p>
           )}
         </div>
@@ -110,7 +113,7 @@ export function CartaoPersona({ onAbrir }: { onAbrir: () => void }) {
           className="hidden shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-extrabold text-[#241a05] transition-opacity group-hover:opacity-90 sm:inline-flex"
           style={{ background: "linear-gradient(135deg, #a78bfa, #c4b5fd)" }}
         >
-          {proxima ? "Responder" : "Abrir"} <ChevronRight size={14} />
+          {proxima ? "Responder" : T("Abrir")} <ChevronRight size={14} />
         </span>
       </div>
 

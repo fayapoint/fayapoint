@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -13,6 +14,7 @@ import s from "./cube.module.css";
 import Link from "next/link";
 
 function NavDot({ index, active, label, onClick }: { index: number; active: boolean; label: string; onClick: () => void }) {
+  const T = useT();
   const [hovered, setHovered] = useState(false);
   return (
     <button
@@ -44,13 +46,14 @@ function NavDot({ index, active, label, onClick }: { index: number; active: bool
           padding: "0.2rem 0.5rem",
         }}
       >
-        {label}
+        {T(label)}
       </span>
     </button>
   );
 }
 
 export function CubeHomepage() {
+  const T = useT();
   const router = useRouter();
   const pathname = usePathname();
   const { user, isLoggedIn, mounted } = useUser();
@@ -254,14 +257,14 @@ export function CubeHomepage() {
           <div className={s.navLinks}>
             <button type="button" className={s.navLinkButton} onClick={() => scrollToSection(0)}>Cubo</button>
             <Link href={localizeRoute("/descobrir")} className={s.navLink}>Descobrir</Link>
-            <Link href={localizeRoute("/cursos")} className={s.navLink}>Cursos</Link>
-            <Link href={localizeRoute("/certificacoes")} className={s.navLink}>Certificados</Link>
-            <Link href={localizeRoute("/servicos")} className={s.navLink}>Serviços</Link>
-            <Link href={localizeRoute("/precos")} className={s.navLink}>Preços</Link>
+            <Link href={localizeRoute("/cursos")} className={s.navLink}>{T("Cursos")}</Link>
+            <Link href={localizeRoute("/certificacoes")} className={s.navLink}>{T("Certificados")}</Link>
+            <Link href={localizeRoute("/servicos")} className={s.navLink}>{T("Serviços")}</Link>
+            <Link href={localizeRoute("/precos")} className={s.navLink}>{T("Preços")}</Link>
             <Link href={localizeRoute("/noticias")} className={s.navLink}>Blog</Link>
             <Link href={localizeRoute("/portal")} className={s.navLink}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
             <Link href={isLoggedIn ? "/portal" : "/registro"} className={s.navCta}>
-              {isLoggedIn ? "Continuar" : "Comece Grátis"}
+              {isLoggedIn ? "Continuar" : T("Comece Grátis")}
             </Link>
           </div>
           <button
@@ -278,13 +281,13 @@ export function CubeHomepage() {
       {mobileMenuOpen && (
         <div className={s.mobileMenu}>
           <Link href={localizeRoute("/descobrir")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Descobrir</Link>
-          <Link href={localizeRoute("/cursos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Cursos</Link>
-          <Link href={localizeRoute("/certificacoes")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Certificados</Link>
-          <Link href={localizeRoute("/servicos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Serviços</Link>
-          <Link href={localizeRoute("/precos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>Preços</Link>
+          <Link href={localizeRoute("/cursos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{T("Cursos")}</Link>
+          <Link href={localizeRoute("/certificacoes")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{T("Certificados")}</Link>
+          <Link href={localizeRoute("/servicos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{T("Serviços")}</Link>
+          <Link href={localizeRoute("/precos")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{T("Preços")}</Link>
           <Link href={localizeRoute("/portal")} className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>{isLoggedIn ? "Minha Jornada" : "Portal"}</Link>
           <Link href={isLoggedIn ? "/portal" : "/registro"} className={s.navCta} onClick={() => setMobileMenuOpen(false)} style={{ marginTop: "0.5rem", textAlign: "center" }}>
-            {isLoggedIn ? "Continuar" : "Comece Grátis"}
+            {isLoggedIn ? "Continuar" : T("Comece Grátis")}
           </Link>
         </div>
       )}
@@ -292,9 +295,9 @@ export function CubeHomepage() {
       {/* Logged-in journey panel */}
       {mounted && isLoggedIn && (
         <div className={s.userDock}>
-          <div className={s.userDockEyebrow}>Sua jornada FayAI</div>
-          <div className={s.userDockTitle}>{firstName}, pronto para continuar?</div>
-          <div className={s.userDockMeta}>{journeyLabel}</div>
+          <div className={s.userDockEyebrow}>{T("Sua jornada FayAI")}</div>
+          <div className={s.userDockTitle}>{T(firstName)}{T(", pronto para continuar?")}</div>
+          <div className={s.userDockMeta}>{T(journeyLabel)}</div>
           <div className={s.userDockActions}>
             <button type="button" onClick={() => handleNavigate("/portal")} className={s.userDockPrimary}>
               Dashboard
@@ -312,7 +315,7 @@ export function CubeHomepage() {
         <div className={s.progressBar}>
           <div className={s.progressFill} style={{ width: `${pct}%` }} />
         </div>
-        <div className={s.hudFace}>{faceName}</div>
+        <div className={s.hudFace}>{T(faceName)}</div>
         <div className={s.hudHint}>
           {activeSection < N - 1 ? "↓ scroll" : ""}
         </div>
@@ -325,7 +328,7 @@ export function CubeHomepage() {
             key={i}
             index={i}
             active={i === activeSection}
-            label={FACE_NAMES[i]}
+            label={T(FACE_NAMES[i])}
             onClick={() => scrollToSection(i)}
           />
         ))}
@@ -339,7 +342,7 @@ export function CubeHomepage() {
       {/* Face caption (bottom center) */}
       <div className={s.faceCaption}>
         <div className={s.faceCaptionNum}>{String(activeSection + 1).padStart(2, "0")}</div>
-        <div className={s.faceCaptionName}>{faceName}</div>
+        <div className={s.faceCaptionName}>{T(faceName)}</div>
       </div>
 
       {activeFace && hitRoute && (
@@ -356,7 +359,7 @@ export function CubeHomepage() {
       {/* Keyboard hint */}
       <div className={s.keyboardHint}>
         <span>←→ navegar</span>
-        <span>↵ entrar</span>
+        <span>{T("↵ entrar")}</span>
       </div>
 
       <div className={s.mobileActionRail}>

@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -201,6 +202,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ToolPage({ params }: PageProps) {
   const { locale, slug } = await params;
+  const T = await obterT(locale);
   const bruta = toolsMap[slug];
   // A ficha JA no idioma: titulo, resumo, capacidades, casos de uso, prompts.
   // `vendor`, `pricing`, `rating`, `integrations` e `docUrl` ficam como estao —
@@ -239,12 +241,12 @@ export default async function ToolPage({ params }: PageProps) {
                   )}
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-3">
-                      <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/50">{tool.category}</Badge>
-                      <Badge variant="outline">{tool.vendor}</Badge>
-                      <Badge className="bg-green-600/20 text-green-400 border-green-500/50">{tool.pricing}</Badge>
+                      <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/50">{T(tool.category)}</Badge>
+                      <Badge variant="outline">{T(tool.vendor)}</Badge>
+                      <Badge className="bg-green-600/20 text-green-400 border-green-500/50">{T(tool.pricing)}</Badge>
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-bold mb-2">{tool.title}</h1>
-                    <p className="text-muted-foreground text-lg max-w-2xl">{tool.description}</p>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-2">{T(tool.title)}</h1>
+                    <p className="text-muted-foreground text-lg max-w-2xl">{T(tool.description)}</p>
                     <div className="flex items-center gap-4 mt-4">
                       <span className="flex items-center gap-1 text-sm"><Star className="text-yellow-400" size={18} /> {tool.rating}</span>
                       {tool.docUrl && (
@@ -261,9 +263,9 @@ export default async function ToolPage({ params }: PageProps) {
                 <div className="lg:col-span-2 space-y-6">
                   <Card className="p-6 backdrop-blur border-border">
                     <h2 className="text-xl font-semibold mb-3">{t("about", { tool: tool.title ?? "" })}</h2>
-                    <p className="text-muted-foreground mb-4">{tool.description}</p>
+                    <p className="text-muted-foreground mb-4">{T(tool.description)}</p>
                     {tool.detailedDescription && (
-                      <p className="text-muted-foreground text-sm">{tool.detailedDescription}</p>
+                      <p className="text-muted-foreground text-sm">{T(tool.detailedDescription)}</p>
                     )}
                     <div className="mt-6 flex gap-3">
                       <Link href={`/cursos?search=${encodeURIComponent(tool.title ?? '')}`}>
@@ -273,7 +275,8 @@ export default async function ToolPage({ params }: PageProps) {
                       </Link>
                       <Link href="/aula-gratis">
                         <Button variant="outline" className="border-amber-500 text-amber-400 hover:bg-amber-500/10">
-                          Assistir Aula Grátis
+                          
+                          {T("Assistir Aula Grátis")}
                         </Button>
                       </Link>
                     </div>
@@ -290,7 +293,7 @@ export default async function ToolPage({ params }: PageProps) {
                           </div>
                           <ul className="space-y-2">
                             {(tool.impactForIndividuals || []).slice(0, 3).map((impact: string, i: number) => (
-                              <li key={i} className="text-xs text-muted-foreground">{impact}</li>
+                              <li key={i} className="text-xs text-muted-foreground">{T(impact)}</li>
                             ))}
                           </ul>
                         </Card>
@@ -303,7 +306,7 @@ export default async function ToolPage({ params }: PageProps) {
                           </div>
                           <ul className="space-y-2">
                             {(tool.impactForEntrepreneurs || []).slice(0, 3).map((impact: string, i: number) => (
-                              <li key={i} className="text-xs text-muted-foreground">{impact}</li>
+                              <li key={i} className="text-xs text-muted-foreground">{T(impact)}</li>
                             ))}
                           </ul>
                         </Card>
@@ -316,7 +319,7 @@ export default async function ToolPage({ params }: PageProps) {
                           </div>
                           <ul className="space-y-2">
                             {(tool.impactForCompanies || []).slice(0, 3).map((impact: string, i: number) => (
-                              <li key={i} className="text-xs text-muted-foreground">{impact}</li>
+                              <li key={i} className="text-xs text-muted-foreground">{T(impact)}</li>
                             ))}
                           </ul>
                         </Card>
@@ -340,7 +343,7 @@ export default async function ToolPage({ params }: PageProps) {
                           <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><Rocket size={18} /> {t("capabilities")}</h3>
                           <ul className="space-y-2">
                             {(tool.features || []).map((f: string, i: number) => (
-                              <li key={i} className="flex items-center gap-2"><CheckCircle className="text-green-400" size={18} /> {f}</li>
+                              <li key={i} className="flex items-center gap-2"><CheckCircle className="text-green-400" size={18} /> {T(f)}</li>
                             ))}
                           </ul>
                         </Card>
@@ -348,7 +351,7 @@ export default async function ToolPage({ params }: PageProps) {
                           <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><BookOpen size={18} /> {t("useCases")}</h3>
                           <ul className="space-y-2">
                             {(tool.useCases || []).map((u: string, i: number) => (
-                              <li key={i} className="list-disc list-inside text-muted-foreground">{u}</li>
+                              <li key={i} className="list-disc list-inside text-muted-foreground">{T(u)}</li>
                             ))}
                           </ul>
                         </Card>
@@ -359,7 +362,7 @@ export default async function ToolPage({ params }: PageProps) {
                       <Card className="p-6 backdrop-blur border-border">
                         <h3 className="text-xl font-semibold mb-4">{t("gettingStarted")}</h3>
                         <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
-                          {(tool.gettingStarted || []).map((s: string, i: number) => (<li key={i}>{s}</li>))}
+                          {(tool.gettingStarted || []).map((s: string, i: number) => (<li key={i}>{T(s)}</li>))}
                         </ol>
                       </Card>
                     </TabsContent>
@@ -369,7 +372,7 @@ export default async function ToolPage({ params }: PageProps) {
                         <h3 className="text-xl font-semibold mb-4 flex items-center gap-2"><LinkIcon size={18} /> {t("integrations")}</h3>
                         <div className="flex flex-wrap gap-2">
                           {(tool.integrations || []).map((name: string) => (
-                            <Badge key={name} variant="outline" className="border-amber-500/30">{name}</Badge>
+                            <Badge key={name} variant="outline" className="border-amber-500/30">{T(name)}</Badge>
                           ))}
                         </div>
                       </Card>
@@ -384,8 +387,8 @@ export default async function ToolPage({ params }: PageProps) {
                           )}
                           {(tool.prompts || []).map((p: {title: string; content: string}, i: number) => (
                             <div key={i} className="border border-border rounded-lg p-4">
-                              <h4 className="font-semibold mb-2">{p.title}</h4>
-                              <pre className="text-sm whitespace-pre-wrap text-muted-foreground">{p.content}</pre>
+                              <h4 className="font-semibold mb-2">{T(p.title)}</h4>
+                              <pre className="text-sm whitespace-pre-wrap text-muted-foreground">{T(p.content)}</pre>
                             </div>
                           ))}
                         </div>
@@ -400,8 +403,8 @@ export default async function ToolPage({ params }: PageProps) {
                         {(tool.relatedCourses || []).map((c: {slug: string; title: string; level: string; price: number}) => (
                           <Link key={c.slug} href={`/curso/${c.slug}`}>
                             <Card className="p-6 backdrop-blur border-border hover:bg-card/80 transition">
-                              <Badge variant="outline" className="mb-2 text-xs">{c.level}</Badge>
-                              <h4 className="font-semibold">{c.title}</h4>
+                              <Badge variant="outline" className="mb-2 text-xs">{T(c.level)}</Badge>
+                              <h4 className="font-semibold">{T(c.title)}</h4>
                               <p className="text-sm text-muted-foreground mt-2">R$ {c.price.toLocaleString(tagIntl(locale))}</p>
                             </Card>
                           </Link>
@@ -414,13 +417,13 @@ export default async function ToolPage({ params }: PageProps) {
                         <Card className="p-6 backdrop-blur border-border">
                           <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><Shield size={18} /> {t("bestPractices")}</h3>
                           <ul className="space-y-2 text-muted-foreground">
-                            {(tool.bestPractices || []).map((b: string, i: number) => (<li key={i} className="list-disc list-inside">{b}</li>))}
+                            {(tool.bestPractices || []).map((b: string, i: number) => (<li key={i} className="list-disc list-inside">{T(b)}</li>))}
                           </ul>
                         </Card>
                         <Card className="p-6 backdrop-blur border-border">
                           <h3 className="text-xl font-semibold mb-2 flex items-center gap-2"><AlertTriangle size={18} /> {t("commonPitfalls")}</h3>
                           <ul className="space-y-2 text-muted-foreground">
-                            {(tool.pitfalls || []).map((p: string, i: number) => (<li key={i} className="list-disc list-inside">{p}</li>))}
+                            {(tool.pitfalls || []).map((p: string, i: number) => (<li key={i} className="list-disc list-inside">{T(p)}</li>))}
                           </ul>
                         </Card>
                       </div>
@@ -436,7 +439,8 @@ export default async function ToolPage({ params }: PageProps) {
                     <div className="flex justify-center gap-4 flex-wrap">
                       <Link href="/aula-gratis">
                         <Button size="lg" className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800">
-                          Assistir Aula Grátis
+                          
+                          {T("Assistir Aula Grátis")}
                         </Button>
                       </Link>
                       <Link href={`/cursos?search=${encodeURIComponent(tool.title ?? '')}`}>
@@ -452,9 +456,9 @@ export default async function ToolPage({ params }: PageProps) {
                   <Card className="p-6 backdrop-blur border-border">
                     <h3 className="text-lg font-semibold mb-3">{t("quickSummary")}</h3>
                     <div className="space-y-2 text-sm text-muted-foreground">
-                      <div>{t("category")} <span className="text-gray-100">{tool.category}</span></div>
-                      <div>{t("vendor")} <span className="text-gray-100">{tool.vendor}</span></div>
-                      <div>{t("price")} <span className="text-gray-100">{tool.pricing}</span></div>
+                      <div>{t("category")} <span className="text-gray-100">{T(tool.category)}</span></div>
+                      <div>{t("vendor")} <span className="text-gray-100">{T(tool.vendor)}</span></div>
+                      <div>{t("price")} <span className="text-gray-100">{T(tool.pricing)}</span></div>
                       <div>{t("rating")} <span className="text-gray-100">{tool.rating}</span></div>
                     </div>
                     <Separator className="my-4 bg-border" />
@@ -462,7 +466,7 @@ export default async function ToolPage({ params }: PageProps) {
                       <h4 className="font-semibold">{t("popularIntegrations")}</h4>
                       <div className="flex flex-wrap gap-2">
                         {(tool.integrations || []).slice(0, 6).map((i: string) => (
-                          <Badge key={i} variant="outline" className="border-amber-500/30">{i}</Badge>
+                          <Badge key={i} variant="outline" className="border-amber-500/30">{T(i)}</Badge>
                         ))}
                       </div>
                     </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
@@ -170,6 +171,7 @@ function HeroSection() {
 
 // Mission section
 function MissionSection() {
+  const T = useT();
   const t = useTranslations("WhatWeDo.Mission");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -228,8 +230,8 @@ function MissionSection() {
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center mb-4">
                   <value.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{value.title}</h3>
-                <p className="text-sm text-muted-foreground">{value.description}</p>
+                <h3 className="text-lg font-semibold text-white mb-2">{T(value.title)}</h3>
+                <p className="text-sm text-muted-foreground">{T(value.description)}</p>
               </motion.div>
             ))}
           </div>
@@ -240,6 +242,7 @@ function MissionSection() {
 }
 
 function PipelineSection() {
+  const T = useT();
   const t = useTranslations("WhatWeDo.Pipeline");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-120px" });
@@ -293,7 +296,7 @@ function PipelineSection() {
                     key={metric}
                     className="text-xs px-3 py-1 rounded-full bg-white/10 text-white/80 border border-border"
                   >
-                    {metric}
+                    {T(metric)}
                   </span>
                 ))}
               </div>
@@ -306,6 +309,7 @@ function PipelineSection() {
 }
 
 function OutcomesSection() {
+  const T = useT();
   const t = useTranslations("WhatWeDo.Outcomes");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-120px" });
@@ -340,9 +344,9 @@ function OutcomesSection() {
                 transition={{ duration: 0.6, delay: idx * 0.08 }}
                 className="rounded-2xl border border-border bg-secondary p-6 flex flex-col gap-3 hover:border-emerald-500/30 transition-colors"
               >
-                <div className="text-xs uppercase tracking-[0.2em] text-emerald-400/80">{card.title}</div>
-                <div className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{card.value}</div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
+                <div className="text-xs uppercase tracking-[0.2em] text-emerald-400/80">{T(card.title)}</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{T(card.value)}</div>
+                <p className="text-sm text-muted-foreground leading-relaxed">{T(card.description)}</p>
               </motion.div>
             )
           )}
@@ -353,6 +357,7 @@ function OutcomesSection() {
 }
 
 function StacksSection() {
+  const T = useT();
   const t = useTranslations("WhatWeDo.Stacks");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-120px" });
@@ -402,7 +407,7 @@ function StacksSection() {
                 {t.raw(`columns.${col.key}.items`).map((item: string) => (
                   <div key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-1" />
-                    <span>{item}</span>
+                    <span>{T(item)}</span>
                   </div>
                 ))}
               </div>
@@ -426,6 +431,7 @@ function PillarDetailSection({
   };
   index: number;
 }) {
+  const T = useT();
   const t = useTranslations(`WhatWeDo.Pillars.${pillar.id}`);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -468,8 +474,8 @@ function PillarDetailSection({
                     <feature.icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white mb-1">{feature.title}</h4>
-                    <p className="text-sm text-muted-foreground">{feature.description}</p>
+                    <h4 className="font-semibold text-white mb-1">{T(feature.title)}</h4>
+                    <p className="text-sm text-muted-foreground">{T(feature.description)}</p>
                   </div>
                 </motion.div>
               ))}
@@ -559,6 +565,7 @@ function PillarDetailSection({
 
 // Process section
 function ProcessSection() {
+  const T = useT();
   const t = useTranslations("WhatWeDo.Process");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -609,7 +616,7 @@ function ProcessSection() {
 
               {/* Number */}
               <div className="text-6xl font-bold text-white/5 absolute -top-4 left-1/2 -translate-x-1/2">
-                {step.number}
+                {T(step.number)}
               </div>
 
               <h3 className="text-xl font-semibold text-white mb-2">{t(`steps.${i}.title`)}</h3>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -112,6 +113,7 @@ const SEED = seedBruto as unknown as RadarSeed;
 // ---------------------------------------------------------------------------
 
 export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
+  const T = useT();
   const locale = useLocale();
   const t = useTranslations("RadarSection");
   // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
@@ -372,7 +374,7 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
                 }
               >
                 <Icon size={13} />
-                {label}
+                {T(label)}
               </button>
             );
           })}
@@ -440,8 +442,8 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
                 ].map(({ i: Icone, d, rotulo }) => (
                   <button
                     key={rotulo}
-                    title={rotulo}
-                    aria-label={rotulo}
+                    title={T(rotulo)}
+                    aria-label={T(rotulo)}
                     onClick={() => setZoom((z) => Math.min(2.6, Math.max(0.22, z * d)))}
                     className="grid place-items-center w-8 h-8 rounded-xl border border-white/15 bg-black/40 backdrop-blur-sm text-white/70 hover:text-white hover:border-white/35 transition-colors cursor-pointer"
                   >
@@ -470,7 +472,7 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
                     className="font-bold hover:underline cursor-pointer"
                     style={{ color: l.id === lugarId ? l.cor : "rgba(255,255,255,.45)" }}
                   >
-                    {l.nome}
+                    {T(l.nome)}
                   </button>
                 </span>
               ))}
@@ -541,6 +543,7 @@ function FaixaDeLugares({
   onSobCursor: (id: string | null) => void;
   onIr: (id: string) => void;
 }) {
+  const T = useT();
   // No degrau de estado mostramos os irmãos, não os filhos (estado não tem).
   const base = lugar.degrau === "estado" ? (lugar.pai ?? lugar.id) : lugar.id;
   const filhos = useMemo(() => filhosDe(base), [base]);
@@ -570,7 +573,7 @@ function FaixaDeLugares({
               color: aceso ? l.cor : "rgba(255,255,255,.55)",
             }}
           >
-            {l.nome}
+            {T(l.nome)}
           </button>
         );
       })}
@@ -607,6 +610,7 @@ function PainelMundo({
   medindo: boolean;
   onVerIa: () => void;
 }) {
+  const T = useT();
   const t = useTranslations("RadarSection");
 
   if (!itens.length) {
@@ -643,19 +647,19 @@ function PainelMundo({
         <span className="relative block">
           <span className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest">
             <span style={{ color: lugar.cor }}>#1 {noLugar(lugar)}</span>
-            <span className="text-white/35">{primeiro.volumeRotulo}</span>
+            <span className="text-white/35">{T(primeiro.volumeRotulo)}</span>
           </span>
           <span className="block mt-1 text-lg sm:text-xl font-bold leading-snug capitalize">
-            {primeiro.titulo}
+            {T(primeiro.titulo)}
           </span>
           {primeiro.contexto && (
             <span className="block mt-1.5 text-xs text-white/60 leading-relaxed line-clamp-2">
-              {primeiro.contexto}
+              {T(primeiro.contexto)}
             </span>
           )}
           {primeiro.veiculo && (
             <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-white/40 group-hover:text-white/70 transition-colors">
-              {primeiro.veiculo} · {t("seeDetails")}
+              {T(primeiro.veiculo)} · {t("seeDetails")}
             </span>
           )}
         </span>
@@ -693,11 +697,11 @@ function PainelMundo({
               </span>
               <span className="relative min-w-0 flex-1">
                 <span className="block text-[13px] font-bold leading-snug truncate capitalize">
-                  {it.titulo}
+                  {T(it.titulo)}
                 </span>
                 <span className="block text-[10px] text-white/35">
                   {it.fonte === "leitura" ? t("readOnWikipedia") : t("searchedOnGoogle")} ·{" "}
-                  {it.volumeRotulo}
+                  {T(it.volumeRotulo)}
                   {it.lugares?.length ? ` · ${it.lugares.join(" ")}` : ""}
                 </span>
               </span>
@@ -771,6 +775,7 @@ function PainelIa({
   onEspiar: (l: LinhaIa) => void;
   onLargar: () => void;
 }) {
+  const T = useT();
   const locale = useLocale();
   const t = useTranslations("RadarSection");
   const rota = (h: string) => comIdioma(h, locale);
@@ -795,7 +800,7 @@ function PainelIa({
                   : { borderColor: "rgba(255,255,255,.12)", color: "rgba(255,255,255,.5)" }
               }
             >
-              {n.label}
+              {T(n.label)}
             </button>
           );
         })}
@@ -814,7 +819,7 @@ function PainelIa({
               key={id}
               onClick={() => alternarFonte(id)}
               aria-pressed={on}
-              title={desc}
+              title={T(desc)}
               className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold border transition-colors cursor-pointer"
               style={
                 on
@@ -823,7 +828,7 @@ function PainelIa({
               }
             >
               <Icon size={11} />
-              {label}
+              {T(label)}
             </button>
           );
         })}
@@ -861,7 +866,7 @@ function PainelIa({
                     {i + 1}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px] font-bold leading-snug break-words">{l.termo}</p>
+                    <p className="text-[13px] font-bold leading-snug break-words">{T(l.termo)}</p>
                     <p className="text-[10px] text-white/35">
                       {l.canais === "web+yt"
                         ? t("channelBoth")
@@ -869,7 +874,7 @@ function PainelIa({
                           ? t("channelYt")
                           : t("channelWeb")}
                       {l.naNoticia && fontes.has("noticias") ? t("inTodaysNews") : ""} ·{" "}
-                      {l.formato}
+                      {T(l.formato)}
                     </p>
                   </div>
                   <span
@@ -894,7 +899,7 @@ function PainelIa({
         <p className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest mb-1" style={{ color: nicho.cor }}>
           <BookOpenText size={12} /> {t("bridgeTitle", { nicho: nicho.label.toLowerCase() })}
         </p>
-        <p className="text-xs text-white/65 leading-relaxed">{nicho.ponte.texto}</p>
+        <p className="text-xs text-white/65 leading-relaxed">{T(nicho.ponte.texto)}</p>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {nicho.ponte.cursos.map((c) => (
             <Link
@@ -903,7 +908,7 @@ function PainelIa({
               className="inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-[11px] font-bold border transition-colors hover:bg-white/10"
               style={{ borderColor: `${nicho.cor}55`, color: "#f3f1ff" }}
             >
-              {c.nome} <ArrowUpRight size={11} />
+              {T(c.nome)} <ArrowUpRight size={11} />
             </Link>
           ))}
         </div>

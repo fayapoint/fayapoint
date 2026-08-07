@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -97,6 +98,7 @@ const toolsMenu = [
 ];
 
 export function Header() {
+  const T = useT();
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -486,7 +488,7 @@ export function Header() {
                       <UserCircle size={24} className="text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground">{user.name}</p>
+                      <p className="font-medium text-foreground">{T(user.name)}</p>
                       <p className="text-sm text-muted-foreground">{t("nav.viewDashboard")}</p>
                     </div>
                   </Link>

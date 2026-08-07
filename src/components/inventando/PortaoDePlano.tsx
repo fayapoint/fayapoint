@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import Link from "next/link";
 import { Lock, Check, Crown, ArrowRight } from "lucide-react";
 import type { AcessoMicrocurso } from "@/lib/inventando-acesso";
@@ -49,6 +50,7 @@ export function AulasTrancadas({
   acesso: AcessoMicrocurso;
   locale: string;
 }) {
+  const T = useT();
   if (titulos.length === 0) return null;
 
   const destinoCta = acesso.autenticado ? `/${locale}/precos` : `/${locale}/registro`;
@@ -64,9 +66,9 @@ export function AulasTrancadas({
           >
             <Lock aria-hidden className="h-4 w-4 shrink-0 text-white/30" />
             <span className="flex-1 text-[15px] font-medium text-white/45">
-              {aula.titulo}
+              {T(aula.titulo)}
             </span>
-            <span className="shrink-0 text-xs text-white/25">{aula.duracao}</span>
+            <span className="shrink-0 text-xs text-white/25">{T(aula.duracao)}</span>
           </li>
         ))}
       </ul>
@@ -77,7 +79,8 @@ export function AulasTrancadas({
           <div className="flex items-center gap-2">
             <Crown aria-hidden className="h-4 w-4 text-[#f5c04e]" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#f5c04e]">
-              Conteúdo do plano Expert
+              
+              {T("Conteúdo do plano Expert")}
             </span>
           </div>
 
@@ -88,24 +91,23 @@ export function AulasTrancadas({
             {acesso.aulasBloqueadas === acesso.totalAulas
               ? `As ${acesso.totalAulas} aulas deste microcurso estão fechadas`
               : `Faltam ${acesso.aulasBloqueadas} ${
-                  acesso.aulasBloqueadas === 1 ? "aula" : "aulas"
+                  acesso.aulasBloqueadas === 1 ? T("aula") : T("aulas")
                 } para você concluir`}
           </h2>
 
           <p className="mt-2.5 max-w-2xl text-[15px] leading-relaxed text-white/65">
             {acesso.plano === "free" ? (
               <>
-                Você está vendo a ficha da ferramenta — o que ela é e o que ela
-                não faz. O passo a passo, os critérios de escolha e o que fazer
-                com ela ficam no microcurso, e o microcurso completo é do{" "}
+                
+                {T("Você está vendo a ficha da ferramenta — o que ela é e o que ela\n                não faz. O passo a passo, os critérios de escolha e o que fazer\n                com ela ficam no microcurso, e o microcurso completo é do")}{" "}
                 <strong className="text-white">Expert</strong>.
               </>
             ) : (
               <>
-                Seu plano{" "}
-                <strong className="text-white">{acesso.planoNome}</strong> abre{" "}
-                {acesso.aulasLiberadas} de {acesso.totalAulas} aulas. O
-                microcurso inteiro — em todas as ferramentas da seção — é do{" "}
+                
+                {T("Seu plano")}{" "}
+                <strong className="text-white">{T(acesso.planoNome)}</strong> abre{" "}
+                {acesso.aulasLiberadas} de {acesso.totalAulas}  {T("aulas. O\n                microcurso inteiro — em todas as ferramentas da seção — é do")}{" "}
                 <strong className="text-white">Expert</strong>.
               </>
             )}
@@ -152,14 +154,15 @@ export function AulasTrancadas({
                           : "block text-sm font-semibold text-white/75"
                       }
                     >
-                      {rotulo.nome}
+                      {T(rotulo.nome)}
                       {atual && (
                         <span className="ml-2 rounded-full border border-white/20 px-2 py-0.5 text-[10px] font-normal uppercase tracking-wide text-white/55">
-                          seu plano
+                          
+                          {T("seu plano")}
                         </span>
                       )}
                     </span>
-                    <span className="block text-xs text-white/45">{rotulo.abre}</span>
+                    <span className="block text-xs text-white/45">{T(rotulo.abre)}</span>
                   </span>
                 </li>
               );
@@ -173,7 +176,7 @@ export function AulasTrancadas({
             >
               {acesso.autenticado
                 ? `Assinar o Expert — R$ ${PRECO_EXPERT}/mês`
-                : "Criar conta e ver os planos"}
+                : T("Criar conta e ver os planos")}
               <ArrowRight aria-hidden className="h-4 w-4" />
             </Link>
 
@@ -182,16 +185,16 @@ export function AulasTrancadas({
                 href={`/${locale}/login`}
                 className="text-sm text-white/55 transition-colors hover:text-white"
               >
-                Já tenho conta
+                
+                {T("Já tenho conta")}
               </Link>
             )}
           </div>
 
           {acesso.proximoPlano && acesso.proximoPlano !== "expert" && (
             <p className="mt-4 text-xs leading-relaxed text-white/40">
-              O {acesso.proximoPlanoNome} (R$ {acesso.proximoPlanoPreco}/mês) abre{" "}
-              {acesso.aulasNoProximoPlano} de {acesso.totalAulas} aulas. Só o Expert
-              abre todas — e vale para todos os microcursos da seção.
+              O {T(acesso.proximoPlanoNome)} (R$ {acesso.proximoPlanoPreco}/mês) abre{" "}
+              {acesso.aulasNoProximoPlano} de {acesso.totalAulas}  {T("aulas. Só o Expert\n              abre todas — e vale para todos os microcursos da seção.")}
             </p>
           )}
         </div>

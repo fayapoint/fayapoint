@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
@@ -30,6 +31,7 @@ export interface ExperienceCrumb {
 }
 
 export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
+  const T = useT();
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
   const { user, isLoggedIn, mounted } = useUser();
@@ -47,7 +49,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
               href={rota(l.href)}
               className="text-sm font-semibold text-white/60 hover:text-white transition-colors"
             >
-              {l.label}
+              {T(l.label)}
             </Link>
           ))}
         </nav>
@@ -57,13 +59,14 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
             className="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity shrink-0"
             style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
           >
-            <span className="hidden sm:inline">Oi, {(user.name || "aluno").split(" ")[0]}!</span>
+            <span className="hidden sm:inline">Oi, {T((user.name || T("aluno")).split(" ")[0])}!</span>
             <span>Meu Portal</span>
             <ArrowRight size={15} />
           </Link>
         ) : (
           <Link href={rota("/login")} className="text-sm font-semibold text-white/60 hover:text-white transition-colors shrink-0">
-            Entrar
+            
+            {T("Entrar")}
           </Link>
         )}
       </header>
@@ -76,7 +79,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
             href={rota(l.href)}
             className="text-[13px] font-semibold text-white/55 hover:text-white transition-colors whitespace-nowrap"
           >
-            {l.label}
+            {T(l.label)}
           </Link>
         ))}
       </nav>
@@ -84,10 +87,10 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
       {crumb && (
         <nav aria-label="breadcrumb" className="flex items-center gap-1.5 px-4 sm:px-8 pt-1 max-w-6xl mx-auto text-[13px]">
           <Link href={rota(crumb.href)} className="font-semibold text-white/50 hover:text-white transition-colors">
-            {crumb.label}
+            {T(crumb.label)}
           </Link>
           <ChevronRight size={13} className="text-white/30 shrink-0" />
-          <span className="font-semibold text-white/80 truncate">{crumb.current}</span>
+          <span className="font-semibold text-white/80 truncate">{T(crumb.current)}</span>
         </nav>
       )}
     </div>

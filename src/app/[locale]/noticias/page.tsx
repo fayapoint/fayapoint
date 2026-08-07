@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllNews } from "@/lib/ai-news";
@@ -38,6 +39,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
   // O hub das notícias distribui ~40 links internos. Sem o prefixo de idioma
   // todos eles chegam na matéria depois de um 308.
   const { locale } = await params;
+  const T = await obterT(locale);
   const { tag } = await searchParams;
   const t = await getTranslations({ locale, namespace: "NewsHub" });
   const all = await getAllNews(60, locale);
@@ -136,7 +138,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
                     : { borderColor: "rgba(255,255,255,.2)", color: "rgba(255,255,255,.7)" }
                 }
               >
-                {t}
+                {T(t)}
               </Link>
             ))}
           </div>
@@ -149,19 +151,19 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
           <Link href={`/${locale}/noticias/${featured.slug}`} className="glass glass-hover nimg feat rounded-3xl overflow-hidden block">
             <span className="fimg block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={featured.image ?? "/landing/tags/tendencia.webp"} alt={featured.title} className="absolute inset-0 w-full h-full object-cover" />
+              <img src={featured.image ?? "/landing/tags/tendencia.webp"} alt={T(featured.title)} className="absolute inset-0 w-full h-full object-cover" />
             </span>
             <span className="block p-6 sm:p-8">
               <span className="flex items-center gap-3">
                 <span className="text-[10px] font-extrabold uppercase tracking-widest rounded-full px-2.5 py-1" style={{ background: GOLD, color: "#241a05" }}>
                   {t("featured")}
                 </span>
-                <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{featured.tag}</span>
+                <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{T(featured.tag)}</span>
               </span>
               <span className="block mt-3 text-2xl sm:text-4xl tracking-wide leading-tight" style={bebas}>
-                {featured.title}
+                {T(featured.title)}
               </span>
-              <span className="block mt-3 text-sm sm:text-base text-white/60 leading-relaxed">{featured.summary}</span>
+              <span className="block mt-3 text-sm sm:text-base text-white/60 leading-relaxed">{T(featured.summary)}</span>
               {featured.source && (
                 <span className="block mt-4 text-[10px] font-semibold uppercase tracking-wider text-white/35">
                   {t("source", { source: featured.source })}
@@ -181,19 +183,19 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
               <Link key={item.slug} href={`/${locale}/noticias/${item.slug}`} className="glass glass-hover nimg group rounded-2xl overflow-hidden block">
                 <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.image ?? "/landing/tags/tendencia.webp"} alt={item.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                  <img src={item.image ?? "/landing/tags/tendencia.webp"} alt={T(item.title)} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
                 </span>
                 <span className="block p-4">
                   <span className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{item.tag}</span>
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{T(item.tag)}</span>
                     {item.date && (
                       <span className="text-[10px] text-white/40">
                         {new Date(item.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}
                       </span>
                     )}
                   </span>
-                  <span className="block mt-1.5 text-base font-bold leading-snug">{item.title}</span>
-                  <span className="block mt-1.5 text-sm text-white/55 leading-relaxed line-clamp-3">{item.summary}</span>
+                  <span className="block mt-1.5 text-base font-bold leading-snug">{T(item.title)}</span>
+                  <span className="block mt-1.5 text-sm text-white/55 leading-relaxed line-clamp-3">{T(item.summary)}</span>
                   {item.source && (
                     <span className="block mt-2.5 text-[10px] font-semibold uppercase tracking-wider text-white/35">{t("source", { source: item.source })}</span>
                   )}
@@ -213,19 +215,19 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
       {/* Guias rápidos (conteúdo evergreen) */}
       <section className="px-4 sm:px-8 pb-16 max-w-6xl mx-auto">
         <h2 className="text-2xl sm:text-3xl tracking-wide mb-4" style={bebas}>
-          GUIAS <span style={{ color: GOLD }}>RÁPIDOS</span>
+          GUIAS <span style={{ color: GOLD }}>{T("RÁPIDOS")}</span>
         </h2>
         <div className="grid sm:grid-cols-3 gap-4">
           {SEED_NEWS.map((g) => (
             <Link key={g.slug} href={g.url ?? "/cursos"} className="glass glass-hover group rounded-2xl overflow-hidden block">
               <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={g.image ?? "/landing/tags/voce-sabia.webp"} alt={g.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                <img src={g.image ?? "/landing/tags/voce-sabia.webp"} alt={T(g.title)} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
               </span>
               <span className="block p-4">
-                <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{g.tag}</span>
-                <span className="block mt-1 text-sm font-bold leading-snug">{g.title}</span>
-                <span className="block mt-1.5 text-xs text-white/55 leading-relaxed line-clamp-2">{g.summary}</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{T(g.tag)}</span>
+                <span className="block mt-1 text-sm font-bold leading-snug">{T(g.title)}</span>
+                <span className="block mt-1.5 text-xs text-white/55 leading-relaxed line-clamp-2">{T(g.summary)}</span>
               </span>
             </Link>
           ))}
@@ -233,7 +235,7 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
       </section>
 
       <footer className="px-4 sm:px-8 pb-6 text-center text-[11px] text-white/35">
-        © {new Date().getFullYear()} FayAI — aprenda IA fazendo, não assistindo.
+        © {new Date().getFullYear()}  {T("FayAI — aprenda IA fazendo, não assistindo.")}
       </footer>
     </div>
   );

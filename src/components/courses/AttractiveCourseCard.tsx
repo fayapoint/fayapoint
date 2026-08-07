@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -49,6 +50,7 @@ const courseStyles: Record<string, { gradient: string; icon: React.ComponentType
 };
 
 export function AttractiveCourseCard({ product, index }: AttractiveCourseCardProps) {
+  const T = useT();
   const style = courseStyles[product.slug] || courseStyles['default'];
   const Icon = style.icon;
   const locale = useLocale();
@@ -108,7 +110,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <CapaDoCurso
                 slug={product.slug}
                 thumbnail={product.thumbnail}
-                alt={product.name}
+                alt={T(product.name)}
               />
 
               {/* Badges */}
@@ -116,19 +118,19 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 {isNew && (
                   <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
                     <Zap size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? 'Novo' : 'New'}</span>
+                    <span className="font-bold">{isPtBr ? T("Novo") : 'New'}</span>
                   </Badge>
                 )}
                 {isFreeCourseOfMonth && (
                   <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
                     <Sparkles size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? 'Grátis no mês' : 'Free this month'}</span>
+                    <span className="font-bold">{isPtBr ? T("Grátis no mês") : 'Free this month'}</span>
                   </Badge>
                 )}
                 {isAdvanced && (
                   <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
                     <Award size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? 'Avançado' : 'Advanced'}</span>
+                    <span className="font-bold">{isPtBr ? T("Avançado") : 'Advanced'}</span>
                   </Badge>
                 )}
               </div>
@@ -173,19 +175,19 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 {isNew && (
                   <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
                     <Zap size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? 'Novo' : 'New'}</span>
+                    <span className="font-bold">{isPtBr ? T("Novo") : 'New'}</span>
                   </Badge>
                 )}
                 {isFreeCourseOfMonth && (
                   <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
                     <Sparkles size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? 'Grátis no mês' : 'Free this month'}</span>
+                    <span className="font-bold">{isPtBr ? T("Grátis no mês") : 'Free this month'}</span>
                   </Badge>
                 )}
                 {isAdvanced && (
                   <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
                     <Award size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? 'Avançado' : 'Advanced'}</span>
+                    <span className="font-bold">{isPtBr ? T("Avançado") : 'Advanced'}</span>
                   </Badge>
                 )}
               </div>
@@ -206,21 +208,21 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             {/* Category & Tool */}
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-amber-400 border-amber-400/50 bg-amber-400/10">
-                {product.categoryPrimary}
+                {T(product.categoryPrimary)}
               </Badge>
               <Badge variant="outline" className="text-muted-foreground">
-                {product.tool}
+                {T(product.tool)}
               </Badge>
             </div>
 
             {/* Title */}
             <h3 className="text-xl font-bold leading-tight group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-amber-400 group-hover:to-yellow-400 group-hover:bg-clip-text transition-all duration-300">
-              {product.name}
+              {T(product.name)}
             </h3>
 
             {/* Description */}
             <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
-              {product.copy.shortDescription}
+              {T(product.copy.shortDescription)}
             </p>
 
             {/* ⚠️ 03/08/2026: este selo dizia "Revisado em … com GPT-5.4 /
@@ -232,7 +234,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-white">
                 <ShieldCheck size={15} className="text-emerald-400" />
-                <span>{isPtBr ? "Curso escrito por inteiro" : "Fully written course"}</span>
+                <span>{isPtBr ? T("Curso escrito por inteiro") : "Fully written course"}</span>
               </div>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 {isPtBr
@@ -252,32 +254,32 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-center gap-1.5">
                 <Play className="text-amber-400" size={16} />
                 <span className="font-semibold text-white">
-                  {product.metrics.lessons} {isPtBr ? 'aulas' : 'lessons'}
+                  {product.metrics.lessons} {isPtBr ? T("aulas") : 'lessons'}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="text-blue-400" size={16} />
-                <span>{product.metrics.duration}</span>
+                <span>{T(product.metrics.duration)}</span>
               </div>
             </div>
 
             {/* What's Included */}
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                {isPtBr ? 'Este curso inclui:' : 'This course includes:'}
+                {isPtBr ? T("Este curso inclui:") : 'This course includes:'}
               </p>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{product.metrics.lessons} {isPtBr ? 'aulas' : 'lessons'}</span>
+                  <span>{product.metrics.lessons} {isPtBr ? T("aulas") : 'lessons'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{isPtBr ? 'Certificado' : 'Certificate'}</span>
+                  <span>{isPtBr ? T("Certificado") : 'Certificate'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{isPtBr ? 'Acesso vitalício' : 'Lifetime access'}</span>
+                  <span>{isPtBr ? T("Acesso vitalício") : 'Lifetime access'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
@@ -302,14 +304,14 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                     {discount > 0 && (
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
                         {isFreeCourseOfMonth
-                          ? (isPtBr ? 'Certificado incluso' : 'Certificate included')
+                          ? (isPtBr ? T("Certificado incluso") : 'Certificate included')
                           : isPtBr ? `Economize ${discount}%` : `Save ${discount}%`}
                       </Badge>
                     )}
                   </div>
                   {isFreeCourseOfMonth ? (
                     <p className="text-xs text-emerald-300 mt-1">
-                      {isPtBr ? "Curso grátis do mês" : "Free course of the month"}
+                      {isPtBr ? T("Curso grátis do mês") : "Free course of the month"}
                     </p>
                   ) : (
                     <p className="text-xs text-muted-foreground mt-1">
@@ -324,8 +326,8 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               >
                 <span>
                   {isFreeCourseOfMonth
-                    ? (isPtBr ? "Liberar grátis" : "Unlock free")
-                    : isPtBr ? 'Ver Curso Completo' : 'View Full Course'}
+                    ? (isPtBr ? T("Liberar grátis") : "Unlock free")
+                    : isPtBr ? T("Ver Curso Completo") : 'View Full Course'}
                 </span>
                 <Play size={18} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
               </Button>
@@ -334,7 +336,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground pt-2">
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />
-                  <span>{isPtBr ? '7 dias garantia' : '7-day guarantee'}</span>
+                  <span>{isPtBr ? T("7 dias garantia") : '7-day guarantee'}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />

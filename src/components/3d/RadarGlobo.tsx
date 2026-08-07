@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
@@ -1110,6 +1111,7 @@ export function RadarGlobo({
   desviado = false,
   onDestacar,
 }: RadarGloboProps) {
+  const T = useT();
   const acesos = useMemo(
     () => new Set(destacado == null ? [] : Array.isArray(destacado) ? destacado : [destacado]),
     [destacado]
@@ -1316,7 +1318,7 @@ export function RadarGlobo({
                 className="absolute left-0 top-0 text-[10px] font-extrabold tracking-widest text-white"
                 style={{ opacity: 0, textShadow: "0 1px 3px rgba(0,0,0,.85)" }}
               >
-                {id}
+                {T(id)}
               </span>
             );
           })}
@@ -1327,7 +1329,7 @@ export function RadarGlobo({
           sempre acessível, e não custa uma fonte extra. */}
       {nomeSob && (
         <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-2 rounded-full px-3 py-1 text-[11px] font-bold bg-black/55 backdrop-blur-sm text-white/90">
-          {nomeSob}
+          {T(nomeSob)}
         </div>
       )}
     </div>

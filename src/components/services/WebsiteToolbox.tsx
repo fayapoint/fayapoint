@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +27,7 @@ function titleCase(input: string) {
 }
 
 export function WebsiteToolbox({ locale }: { locale: Locale }) {
+  const T = useT();
   const isEn = locale === "en";
 
   const [businessName, setBusinessName] = useState("");
@@ -274,7 +276,7 @@ export function WebsiteToolbox({ locale }: { locale: Locale }) {
           <p className="text-muted-foreground mt-2">
             {isEn
               ? "Generate a conversion-focused homepage blueprint and capture leads with attribution."
-              : "Gere um blueprint de homepage focada em conversão e capture leads com atribuição."}
+              : T("Gere um blueprint de homepage focada em conversão e capture leads com atribuição.")}
           </p>
         </div>
         <div className="rounded-2xl border border-border bg-background/60 px-5 py-4">
@@ -290,24 +292,24 @@ export function WebsiteToolbox({ locale }: { locale: Locale }) {
         <div className="md:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Business" : "Negócio"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? "Business" : T("Negócio")}</label>
               <Input className="mt-2" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder={isEn ? "Example: VoltPay" : "Ex: VoltPay"} />
             </div>
             <div>
               <label className="text-sm text-muted-foreground">{isEn ? "Niche" : "Nicho"}</label>
-              <Input className="mt-2" value={niche} onChange={(e) => setNiche(e.target.value)} placeholder={isEn ? "Example: local clinic" : "Ex: clínica local"} />
+              <Input className="mt-2" value={niche} onChange={(e) => setNiche(e.target.value)} placeholder={isEn ? "Example: local clinic" : T("Ex: clínica local")} />
             </div>
             <div>
               <label className="text-sm text-muted-foreground">{isEn ? "Offer" : "Oferta"}</label>
-              <Input className="mt-2" value={primaryOffer} onChange={(e) => setPrimaryOffer(e.target.value)} placeholder={isEn ? "Example: free diagnosis" : "Ex: diagnóstico grátis"} />
+              <Input className="mt-2" value={primaryOffer} onChange={(e) => setPrimaryOffer(e.target.value)} placeholder={isEn ? "Example: free diagnosis" : T("Ex: diagnóstico grátis")} />
             </div>
             <div>
               <label className="text-sm text-muted-foreground">{isEn ? "Goal" : "Objetivo"}</label>
               <Input className="mt-2" value={primaryGoal} onChange={(e) => setPrimaryGoal(e.target.value)} />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm text-muted-foreground">{isEn ? "Domain (optional)" : "Domínio (opcional)"}</label>
-              <Input className="mt-2" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder={isEn ? "example.com" : "exemplo.com"} />
+              <label className="text-sm text-muted-foreground">{isEn ? "Domain (optional)" : T("Domínio (opcional)")}</label>
+              <Input className="mt-2" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder={isEn ? T("example.com") : T("exemplo.com")} />
             </div>
           </div>
 
@@ -388,7 +390,7 @@ export function WebsiteToolbox({ locale }: { locale: Locale }) {
                   <p className="font-semibold">{isEn ? "Inputs" : "Entradas"}</p>
                   <div className="mt-4 grid gap-3">
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Pages" : "Páginas"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Pages" : T("Páginas")}</label>
                       <Input type="number" min={1} value={String(pagesCount)} onChange={(e) => setPagesCount(Number(e.target.value) || 1)} />
                     </div>
                     <div className="grid gap-2">
@@ -396,15 +398,15 @@ export function WebsiteToolbox({ locale }: { locale: Locale }) {
                       <Input type="number" min={1} value={String(languagesCount)} onChange={(e) => setLanguagesCount(Number(e.target.value) || 1)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Integrations" : "Integrações"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Integrations" : T("Integrações")}</label>
                       <Input type="number" min={0} value={String(integrationsCount)} onChange={(e) => setIntegrationsCount(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Traffic/month" : "Tráfego/mês"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Traffic/month" : T("Tráfego/mês")}</label>
                       <Input type="number" min={0} value={String(monthlyTraffic)} onChange={(e) => setMonthlyTraffic(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Conversion (0-1)" : "Conversão (0-1)"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Conversion (0-1)" : T("Conversão (0-1)")}</label>
                       <Input type="number" step="0.01" min={0} max={1} value={String(conversionRate)} onChange={(e) => setConversionRate(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
@@ -421,18 +423,18 @@ export function WebsiteToolbox({ locale }: { locale: Locale }) {
                       <p className="text-2xl font-bold mt-1">{estimate.weeks}</p>
                     </div>
                     <div className="rounded-xl border border-border bg-background/60 p-4">
-                      <p className="text-xs text-muted-foreground">{isEn ? "Leads/mo" : "Leads/mês"}</p>
+                      <p className="text-xs text-muted-foreground">{isEn ? "Leads/mo" : T("Leads/mês")}</p>
                       <p className="text-2xl font-bold mt-1">{estimate.leads}</p>
                     </div>
                     <div className="rounded-xl border border-border bg-background/60 p-4 col-span-2">
-                      <p className="text-xs text-muted-foreground">{isEn ? "Revenue/mo" : "Receita/mês"}</p>
+                      <p className="text-xs text-muted-foreground">{isEn ? "Revenue/mo" : T("Receita/mês")}</p>
                       <p className="text-2xl font-bold mt-1">R$ {estimate.revenue}</p>
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground mt-4">
                     {isEn
                       ? "Estimate for decision-making only. We'll validate in the diagnosis call."
-                      : "Estimativa para decisão. Validamos no diagnóstico."}
+                      : T("Estimativa para decisão. Validamos no diagnóstico.")}
                   </p>
                 </div>
               </div>
@@ -441,26 +443,26 @@ export function WebsiteToolbox({ locale }: { locale: Locale }) {
         </div>
 
         <div className="rounded-2xl border border-border bg-background/60 p-5">
-          <p className="font-semibold">{isEn ? "Send me the report" : "Me envia o relatório"}</p>
+          <p className="font-semibold">{isEn ? "Send me the report" : T("Me envia o relatório")}</p>
           <p className="text-sm text-muted-foreground mt-2">
             {isEn
               ? "Enter your email to save this blueprint + next steps."
-              : "Informe seu email para salvar este blueprint + próximos passos."}
+              : T("Informe seu email para salvar este blueprint + próximos passos.")}
           </p>
 
           <div className="mt-4 grid gap-3">
-            <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? "you@company.com" : "voce@empresa.com"} />
+            <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? T("you@company.com") : T("voce@empresa.com")} />
             <Button onClick={sendLead} disabled={!leadEmail || sending} className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600">
-              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : "Salvar + enviar")}
+              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : T("Salvar + enviar"))}
             </Button>
             <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(report)}>
               <Clipboard className="w-4 h-4" />
-              {isEn ? "Copy report" : "Copiar relatório"}
+              {isEn ? "Copy report" : T("Copiar relatório")}
             </Button>
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-background/50 p-4">
-            <p className="text-sm font-medium">{isEn ? "Preview" : "Prévia"}</p>
+            <p className="text-sm font-medium">{isEn ? "Preview" : T("Prévia")}</p>
             <Textarea value={report} readOnly className="mt-3 min-h-[220px]" />
           </div>
         </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -101,6 +102,7 @@ export default function FaixaDoAluno({
   preco: number;
   acesso: Acesso | null;
 }) {
+  const T = useT();
   const router = useRouter();
   const [matriculando, setMatriculando] = useState(false);
 
@@ -128,10 +130,10 @@ export default function FaixaDoAluno({
         toast.error(d?.error || "Não deu para adicionar agora");
         return;
       }
-      toast.success("Curso adicionado ao seu acervo 📚");
+      toast.success(T("Curso adicionado ao seu acervo 📚"));
       router.push(`/${locale}/portal/learn/${slug}`);
     } catch {
-      toast.error("Erro de rede");
+      toast.error(T("Erro de rede"));
     } finally {
       setMatriculando(false);
     }
@@ -146,10 +148,10 @@ export default function FaixaDoAluno({
             <p className="flex items-center gap-1.5 text-sm font-bold text-cyan-200">
               <BookOpen size={15} />
               {progresso >= 100
-                ? "Você concluiu este curso"
+                ? T("Você concluiu este curso")
                 : progresso > 0
-                  ? "Você já começou este curso"
-                  : "Este curso já está no seu acervo"}
+                  ? T("Você já começou este curso")
+                  : T("Este curso já está no seu acervo")}
             </p>
             {progresso > 0 && progresso < 100 && (
               <div className="mt-2 flex items-center gap-2">
@@ -172,7 +174,7 @@ export default function FaixaDoAluno({
             <Link href={`/${locale}/portal/learn/${slug}`}>
               <Button className="bg-cyan-500 font-bold text-black hover:bg-cyan-400">
                 <PlayCircle size={16} className="mr-1.5" />
-                {progresso > 0 ? "Continuar de onde parei" : "Começar agora"}
+                {progresso > 0 ? T("Continuar de onde parei") : T("Começar agora")}
               </Button>
             </Link>
           </div>
@@ -189,13 +191,16 @@ export default function FaixaDoAluno({
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 text-sm font-bold text-amber-200">
               <Crown size={15} />
-              Incluído no seu plano {tier.displayName}
+              
+              {T("Incluído no seu plano")} {T(tier.displayName)}
             </p>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Você já paga por este curso — não precisa comprar de novo.{" "}
+              
+              {T("Você já paga por este curso — não precisa comprar de novo.")}{" "}
               {podePersonalizar(slug) ? (
                 <Link href={`/${locale}/curso/${slug}/meu`} className="font-semibold text-amber-300 hover:underline">
-                  Pode até reescrevê-lo para o seu negócio →
+                  
+                  {T("Pode até reescrevê-lo para o seu negócio →")}
                 </Link>
               ) : (
                 <span className="text-muted-foreground">{motivoSemPersonalizacao(slug)}</span>
@@ -205,7 +210,8 @@ export default function FaixaDoAluno({
           <div className="flex flex-wrap gap-2">
             <Link href={`/${locale}/portal/learn/${slug}`}>
               <Button className="bg-gradient-to-r from-amber-500 to-yellow-500 font-bold text-black hover:opacity-90">
-                Ler agora
+                
+                {T("Ler agora")}
                 <ArrowRight size={16} className="ml-1.5" />
               </Button>
             </Link>
@@ -240,7 +246,8 @@ export default function FaixaDoAluno({
     <div className="mb-6 rounded-2xl border border-violet-400/30 bg-gradient-to-r from-violet-500/10 to-transparent p-4 sm:p-5">
       <p className="flex items-center gap-1.5 text-sm font-bold text-violet-200">
         <Crown size={15} />
-        Olá de novo — seu plano é o {tier.displayName}
+        
+        {T("Olá de novo — seu plano é o")} {T(tier.displayName)}
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
         {desconto > 0
@@ -251,7 +258,7 @@ export default function FaixaDoAluno({
           <>
             {" "}
             <span className="line-through opacity-60">R$ {preco}</span>{" "}
-            <span>({Math.round(desconto * 100)}% de desconto já aplicado no checkout)</span>
+            <span>({Math.round(desconto * 100)}{T("% de desconto já aplicado no checkout)")}</span>
           </>
         )}
         .
@@ -259,7 +266,8 @@ export default function FaixaDoAluno({
       <div className="mt-3 flex flex-wrap gap-2">
         <Link href={`/${locale}/precos`}>
           <Button variant="outline" className="border-violet-400/40 text-violet-200 hover:bg-violet-500/10">
-            Ver o que o Expert libera
+            
+            {T("Ver o que o Expert libera")}
           </Button>
         </Link>
       </div>

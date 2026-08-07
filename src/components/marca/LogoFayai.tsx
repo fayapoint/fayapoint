@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -56,6 +57,7 @@ export function LogoFayai({
   /** Qual das três leituras usar. O padrão é a que está no ar. */
   variante?: VarianteLogo;
 }) {
+  const T = useT();
   const [fase, setFase] = useState<Fase>("plano");
   const [demo, setDemo] = useState(false);
   /** Desloca o ponto de partida do giro a cada aparição. */
@@ -160,7 +162,7 @@ export function LogoFayai({
           transitionDuration: fase === "3d" ? "180ms" : `${MS_SAIDA}ms`,
         }}
       >
-        {texto}
+        {T(texto)}
       </span>
 
       {/* Folga para o volume girar sem ser recortado. `pointer-events-none` e

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -30,6 +31,7 @@ interface MonthlyOffersResponse {
 }
 
 export function FreeOfferBanner() {
+  const T = useT();
   const t = useTranslations("Home.FreeOffer");
   const locale = useLocale();
   const isPtBr = locale === "pt-BR";
@@ -140,7 +142,7 @@ export function FreeOfferBanner() {
                   <span>
                     {freeCourse
                       ? isPtBr
-                        ? "Uma oferta real para o usuário sentir o valor da academia"
+                        ? T("Uma oferta real para o usuário sentir o valor da academia")
                         : "A real offer that lets users feel the value of the academy"
                       : t("title1")}
                   </span>{" "}
@@ -165,16 +167,16 @@ export function FreeOfferBanner() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                        {isPtBr ? "Oferta do mês" : "Monthly offer"}
+                        {isPtBr ? T("Oferta do mês") : "Monthly offer"}
                       </p>
                       <h3 className="mt-2 text-2xl font-bold text-white">
-                        {freeCourse?.name || (isPtBr ? "Rotação automática ativa" : "Automatic rotation active")}
+                        {freeCourse?.name || (isPtBr ? T("Rotação automática ativa") : "Automatic rotation active")}
                       </h3>
                     </div>
                     <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-right">
                       <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
-                      <p className="text-3xl font-black text-white">GRÁTIS</p>
-                      <p className="text-[10px] text-emerald-200/60">sem cobrança</p>
+                      <p className="text-3xl font-black text-white">{T("GRÁTIS")}</p>
+                      <p className="text-[10px] text-emerald-200/60">{T("sem cobrança")}</p>
                     </div>
                   </div>
 
@@ -187,8 +189,8 @@ export function FreeOfferBanner() {
                         <Gift className="mr-2 h-5 w-5" />
                         {freeCourse
                           ? isLoggedIn
-                            ? (isPtBr ? "Liberar curso grátis do mês" : "Unlock free course of the month")
-                            : (isPtBr ? "Criar conta e aproveitar" : "Create account and get started")
+                            ? (isPtBr ? T("Liberar curso grátis do mês") : "Unlock free course of the month")
+                            : (isPtBr ? T("Criar conta e aproveitar") : "Create account and get started")
                           : t("cta")}
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
@@ -196,7 +198,7 @@ export function FreeOfferBanner() {
                     <p className="flex items-center text-sm text-muted-foreground">
                       {freeCourse
                         ? isPtBr
-                          ? "Sem cobrança. Acesso vitalício ao curso completo."
+                          ? T("Sem cobrança. Acesso vitalício ao curso completo.")
                           : "No charge. Lifetime access to the full course."
                         : t("noCreditCard")}
                     </p>
@@ -219,10 +221,10 @@ export function FreeOfferBanner() {
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <h3 className="text-sm font-semibold text-foreground">{benefit.title}</h3>
+                        <h3 className="text-sm font-semibold text-foreground">{T(benefit.title)}</h3>
                         <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
                       </div>
-                      <p className="mt-1 text-xs text-muted-foreground">{benefit.desc}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{T(benefit.desc)}</p>
                     </div>
                   </motion.div>
                 ))}

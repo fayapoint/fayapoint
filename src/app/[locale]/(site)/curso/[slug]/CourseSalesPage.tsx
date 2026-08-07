@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
@@ -37,6 +38,7 @@ export default function CourseSalesPage({
 }: {
   initialProduct?: Product | null;
 }) {
+  const T = useT();
   const params = useParams();
   const slug = params.slug as string;
   const router = useRouter();
@@ -297,7 +299,7 @@ export default function CourseSalesPage({
                   <ChevronRight size={14} />
                   <Link href="/cursos" className="hover:text-white">{t("breadcrumb.courses")}</Link>
                   <ChevronRight size={14} />
-                  <span className="text-amber-400">{product.categoryPrimary}</span>
+                  <span className="text-amber-400">{T(product.categoryPrimary)}</span>
                 </div>
 
                 {/* Quem já é aluno é reconhecido AQUI, antes de qualquer preço.
@@ -309,7 +311,7 @@ export default function CourseSalesPage({
                   {isFreeCourseOfMonth && (
                     <Badge className="bg-gradient-to-r from-emerald-400 to-green-500 text-black border-0">
                       <Gift className="mr-1" size={14} />
-                      {isPtBr ? "Curso grátis do mês" : "Free course of the month"}
+                      {isPtBr ? T("Curso grátis do mês") : "Free course of the month"}
                     </Badge>
                   )}
                   {product.metrics.students > 100 && (
@@ -321,24 +323,24 @@ export default function CourseSalesPage({
                   <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0">
                     <Timer className="mr-1" size={14} />
                     {isFreeCourseOfMonth
-                      ? (isPtBr ? 'Acesso aberto no mês' : 'Monthly open access')
-                      : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
+                      ? (isPtBr ? T("Acesso aberto no mês") : 'Monthly open access')
+                      : locale === 'pt-BR' ? T("Preço de Lançamento") : 'Launch Price'}
                   </Badge>
                   <Badge className="bg-gray-700 text-muted-foreground border-0">
-                    {product.level}
+                    {T(product.level)}
                   </Badge>
                 </div>
 
                 {/* Headline - Outcome Focused */}
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                   <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
-                    {product.name}
+                    {T(product.name)}
                   </span>
                 </h1>
 
                 {/* Subheadline - Mechanism */}
                 <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
-                  {product.copy.subheadline}
+                  {T(product.copy.subheadline)}
                 </p>
 
                 {/* Course Info Bar */}
@@ -359,22 +361,22 @@ export default function CourseSalesPage({
                     <PlayCircle className="text-amber-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.lessons}</div>
-                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? 'Aulas' : 'Lessons'}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("Aulas") : 'Lessons'}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
                     <Clock className="text-blue-400" size={20} />
                     <div>
-                      <div className="font-bold text-lg">{product.metrics.duration}</div>
-                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? 'de conteúdo' : 'of content'}</div>
+                      <div className="font-bold text-lg">{T(product.metrics.duration)}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("de conteúdo") : 'of content'}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
                     <Award className="text-green-400" size={20} />
                     <div>
-                      <div className="font-bold text-lg">{locale === 'pt-BR' ? 'Certificado' : 'Certificate'}</div>
+                      <div className="font-bold text-lg">{locale === 'pt-BR' ? T("Certificado") : 'Certificate'}</div>
                       <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? 'Incluso' : 'Included'}</div>
                     </div>
                   </div>
@@ -393,7 +395,7 @@ export default function CourseSalesPage({
                           Ficam os números que ele confere abrindo o curso. */}
                       <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
                         <BadgeCheck size={16} />
-                        <span>{isPtBr ? 'Curso escrito por inteiro' : 'Fully written course'}</span>
+                        <span>{isPtBr ? T("Curso escrito por inteiro") : 'Fully written course'}</span>
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">
                         {isPtBr
@@ -421,13 +423,13 @@ export default function CourseSalesPage({
                   {[
                     { icon: PlayCircle, value: `${product.metrics.lessons}`, label: t("stats.videoLessons") },
                     { icon: Clock, value: product.metrics.duration, label: t("stats.ofContent") },
-                    { icon: BookOpen, value: `${product.curriculum?.moduleCount || '10'}`, label: locale === 'pt-BR' ? 'Módulos' : 'Modules' },
+                    { icon: BookOpen, value: `${product.curriculum?.moduleCount || '10'}`, label: locale === 'pt-BR' ? T("Módulos") : 'Modules' },
                     { icon: Award, value: t("stats.certificate"), label: t("stats.ofCompletion") }
                   ].map((item, i) => (
                     <div key={i} className="p-4 bg-secondary/50 rounded-lg border border-border text-center">
                       <item.icon className="mx-auto mb-2 text-amber-400" size={24} />
-                      <div className="font-bold text-lg">{item.value}</div>
-                      <div className="text-xs text-muted-foreground">{item.label}</div>
+                      <div className="font-bold text-lg">{T(item.value)}</div>
+                      <div className="text-xs text-muted-foreground">{T(item.label)}</div>
                     </div>
                   ))}
                 </div>
@@ -458,16 +460,16 @@ export default function CourseSalesPage({
                   </h3>
                   <div className="space-y-3">
                     {(product.copy.benefits.slice(0, 4) || [
-                      "Domine ChatGPT do básico ao avançado",
+                      T("Domine ChatGPT do básico ao avançado"),
                       "Automatize tarefas e economize tempo",
-                      "Crie conteúdo profissional com IA",
-                      "Aumente sua produtividade em 10x"
+                      T("Crie conteúdo profissional com IA"),
+                      T("Aumente sua produtividade em 10x")
                     ]).map((benefit, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
                           <Check className="text-green-400" size={14} />
                         </div>
-                        <span className="text-muted-foreground text-sm">{benefit}</span>
+                        <span className="text-muted-foreground text-sm">{T(benefit)}</span>
                       </div>
                     ))}
                   </div>
@@ -488,7 +490,7 @@ export default function CourseSalesPage({
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <item.icon className="text-amber-400 flex-shrink-0" size={18} />
-                        <span className="text-muted-foreground text-sm">{item.text}</span>
+                        <span className="text-muted-foreground text-sm">{T(item.text)}</span>
                       </div>
                     ))}
                   </div>
@@ -520,14 +522,14 @@ export default function CourseSalesPage({
                       <CapaDoCurso
                         slug={product.slug}
                         thumbnail={product.thumbnail || product.seo?.ogImage}
-                        alt={product.name}
+                        alt={T(product.name)}
                         modo="auto"
                         eager
                         className="rounded-lg shadow-2xl shadow-black/60 ring-1 ring-amber-500/20"
                       />
                       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/75 backdrop-blur px-3 py-1 rounded-full text-sm whitespace-nowrap">
                         <Clock className="inline mr-1" size={14} />
-                        {product.metrics.duration}
+                        {T(product.metrics.duration)}
                       </div>
                     </div>
 
@@ -538,21 +540,21 @@ export default function CourseSalesPage({
                           <Sparkles className="text-green-400" size={18} />
                           <span className="font-bold text-green-400">
                             {isFreeCourseOfMonth
-                              ? (isPtBr ? 'Curso grátis do mês' : 'Free course of the month')
+                              ? (isPtBr ? T("Curso grátis do mês") : 'Free course of the month')
                               : product.pricing.note
-                                ? (isPtBr ? 'Preço simbólico' : 'Symbolic price')
-                                : locale === 'pt-BR' ? 'Preço de Lançamento' : 'Launch Price'}
+                                ? (isPtBr ? T("Preço simbólico") : 'Symbolic price')
+                                : locale === 'pt-BR' ? T("Preço de Lançamento") : 'Launch Price'}
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground">
                           {isFreeCourseOfMonth
                             ? (isPtBr
-                                ? 'Oferta mensal liberada para qualquer usuário logado, com certificado incluso.'
+                                ? T("Oferta mensal liberada para qualquer usuário logado, com certificado incluso.")
                                 : 'Monthly offer unlocked for any logged-in user, including the certificate.')
                             : product.pricing.note
                               ? product.pricing.note
                               : locale === 'pt-BR'
-                              ? 'Aproveite o preço especial de lançamento. O valor aumentará em breve.'
+                              ? T("Aproveite o preço especial de lançamento. O valor aumentará em breve.")
                               : 'Take advantage of the special launch price. Price will increase soon.'}
                         </p>
                       </div>
@@ -578,14 +580,14 @@ export default function CourseSalesPage({
                       {isFreeCourseOfMonth ? (
                         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-muted-foreground">
                           {isPtBr
-                            ? "Acesso completo liberado neste mês para qualquer usuário logado, com certificado incluído."
+                            ? T("Acesso completo liberado neste mês para qualquer usuário logado, com certificado incluído.")
                             : "Full access is unlocked this month for any logged-in user, including the certificate."}
                         </div>
                       ) : product.pricing.note ? (
                         // Preço simbólico (ex.: chatgpt-zero R$5): nota honesta no
                         // lugar de parcelamento/economia — 12x de R$0,42 soaria ridículo.
                         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-muted-foreground">
-                          {product.pricing.note}
+                          {T(product.pricing.note)}
                         </div>
                       ) : (
                         <>
@@ -612,7 +614,7 @@ export default function CourseSalesPage({
                         className="block w-full rounded-lg border border-emerald-500/40 bg-emerald-500/5 px-4 py-3 text-center text-sm font-medium text-emerald-300 transition hover:bg-emerald-500/10"
                       >
                         {isPtBr
-                          ? "Ler um capítulo inteiro de graça →"
+                          ? T("Ler um capítulo inteiro de graça →")
                           : "Read a full chapter for free →"}
                       </Link>
 
@@ -623,9 +625,9 @@ export default function CourseSalesPage({
                       >
                         {jaTemOCurso ? <PlayCircle className="mr-2" size={20} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
                         {jaTemOCurso
-                          ? (isPtBr ? "Ler agora" : "Read now")
+                          ? (isPtBr ? T("Ler agora") : "Read now")
                           : isFreeCourseOfMonth
-                            ? (isPtBr ? "Liberar grátis" : "Unlock free")
+                            ? (isPtBr ? T("Liberar grátis") : "Unlock free")
                             : t("sidebar.buyNow")}
                       </Button>
 
@@ -646,7 +648,7 @@ export default function CourseSalesPage({
                       <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
                         <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
                           <BadgeCheck size={15} />
-                          <span>{isPtBr ? 'Atualizado para o cenário atual' : 'Updated for the current landscape'}</span>
+                          <span>{isPtBr ? T("Atualizado para o cenário atual") : 'Updated for the current landscape'}</span>
                         </div>
                         {/* O canon de modelos saiu daqui em 03/08/2026 — ver o
                             bloco de verificação mais acima. Anunciar quais
@@ -674,7 +676,7 @@ export default function CourseSalesPage({
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-sm">
                           <Check className="text-green-400 flex-shrink-0" size={16} />
-                          <span>{item}</span>
+                          <span>{T(item)}</span>
                         </div>
                       ))}
                     </div>
@@ -738,7 +740,7 @@ export default function CourseSalesPage({
                     className="flex items-start gap-3 p-4 bg-red-900/10 border border-red-500/30 rounded-lg"
                   >
                     <X className="text-red-400 flex-shrink-0 mt-1" size={20} />
-                    <p className="text-muted-foreground">{problem}</p>
+                    <p className="text-muted-foreground">{T(problem)}</p>
                   </motion.div>
                 ))}
               </div>
@@ -783,7 +785,7 @@ export default function CourseSalesPage({
                     {(t.raw("transformation.beforeItems") as string[]).map((item: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <X className="text-red-400 flex-shrink-0 mt-1" size={20} />
-                        <span className="text-muted-foreground">{item}</span>
+                        <span className="text-muted-foreground">{T(item)}</span>
                       </li>
                     ))}
                   </ul>
@@ -800,7 +802,7 @@ export default function CourseSalesPage({
                     {(t.raw("transformation.afterItems") as string[]).map((item: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <Check className="text-green-400 flex-shrink-0 mt-1" size={20} />
-                        <span className="text-white font-semibold">{item}</span>
+                        <span className="text-white font-semibold">{T(item)}</span>
                       </li>
                     ))}
                   </ul>
@@ -810,16 +812,16 @@ export default function CourseSalesPage({
               {/* Transformation Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
                 {[
-                  { value: `${product.metrics.lessons}`, label: locale === 'pt-BR' ? 'Aulas Práticas' : 'Practical Lessons' },
-                  { value: product.metrics.duration, label: locale === 'pt-BR' ? 'De Conteúdo' : 'Of Content' },
-                  { value: `${product.curriculum?.moduleCount || 10}`, label: locale === 'pt-BR' ? 'Módulos Completos' : 'Complete Modules' },
-                  { value: locale === 'pt-BR' ? '7 dias' : '7 days', label: locale === 'pt-BR' ? 'Garantia Total' : 'Full Guarantee' }
+                  { value: `${product.metrics.lessons}`, label: locale === 'pt-BR' ? T("Aulas Práticas") : 'Practical Lessons' },
+                  { value: product.metrics.duration, label: locale === 'pt-BR' ? T("De Conteúdo") : 'Of Content' },
+                  { value: `${product.curriculum?.moduleCount || 10}`, label: locale === 'pt-BR' ? T("Módulos Completos") : 'Complete Modules' },
+                  { value: locale === 'pt-BR' ? T("7 dias") : '7 days', label: locale === 'pt-BR' ? 'Garantia Total' : 'Full Guarantee' }
                 ].map((stat, i) => (
                   <div key={i} className="text-center p-6 bg-black/50 rounded-lg border border-amber-500/30">
                     <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">
-                      {stat.value}
+                      {T(stat.value)}
                     </div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    <div className="text-sm text-muted-foreground">{T(stat.label)}</div>
                   </div>
                 ))}
               </div>
@@ -858,7 +860,7 @@ export default function CourseSalesPage({
                       <CheckCircle className="text-white" size={20} />
                     </div>
                     <div>
-                      <p className="text-lg font-semibold mb-1">{benefit}</p>
+                      <p className="text-lg font-semibold mb-1">{T(benefit)}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -916,13 +918,13 @@ export default function CourseSalesPage({
                       className="w-full flex items-center justify-between p-6 hover:bg-amber-500/10 transition"
                     >
                       <div className="flex items-center gap-3 text-left">
-                        <span className="text-xl font-semibold">{module.title}</span>
+                        <span className="text-xl font-semibold">{T(module.title)}</span>
                         <Badge variant="outline" className="text-xs border-amber-500/50 text-amber-400">
                           {module.lessons} {t("curriculum.lessons")}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm text-muted-foreground">{module.duration}</span>
+                        <span className="text-sm text-muted-foreground">{T(module.duration)}</span>
                         {expandedModules.includes(module.id) ? (
                           <ChevronUp size={20} className="text-amber-400" />
                         ) : (
@@ -933,7 +935,7 @@ export default function CourseSalesPage({
 
                     {expandedModules.includes(module.id) && (
                       <div className="border-t border-amber-500/20 p-6 text-left">
-                        <p className="text-muted-foreground mb-4">{module.description}</p>
+                        <p className="text-muted-foreground mb-4">{T(module.description)}</p>
                       </div>
                     )}
                   </div>
@@ -974,9 +976,9 @@ export default function CourseSalesPage({
                       <Gift className="text-white" size={24} />
                     </div>
                     <div>
-                      <p className="text-lg font-semibold mb-1">{bonus.title}</p>
+                      <p className="text-lg font-semibold mb-1">{T(bonus.title)}</p>
                       <p className="text-muted-foreground mb-2">{t("bonuses.value", { currency: "R$", amount: bonus.value.toLocaleString() })}</p>
-                      <p className="text-muted-foreground text-sm">{bonus.description}</p>
+                      <p className="text-muted-foreground text-sm">{T(bonus.description)}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -1018,8 +1020,8 @@ export default function CourseSalesPage({
                         <span className="font-bold text-white">{testimonial.name.split(' ').map(n => n[0]).join('')}</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold">{testimonial.name}</h4>
-                        <p className="text-sm text-muted-foreground">{testimonial.role}{testimonial.company && `, ${testimonial.company}`}</p>
+                        <h4 className="font-semibold">{T(testimonial.name)}</h4>
+                        <p className="text-sm text-muted-foreground">{T(testimonial.role)}{testimonial.company && `, ${testimonial.company}`}</p>
                       </div>
                     </div>
                     <div className="flex mb-3">
@@ -1027,8 +1029,8 @@ export default function CourseSalesPage({
                         <Star key={j} className="text-yellow-400 fill-yellow-400 mr-1" size={16} />
                       ))}
                     </div>
-                    <p className="text-muted-foreground mb-3 italic">&ldquo;{testimonial.comment}&rdquo;</p>
-                    <p className="text-amber-400 text-sm font-semibold">{testimonial.impact}</p>
+                    <p className="text-muted-foreground mb-3 italic">&ldquo;{T(testimonial.comment)}&rdquo;</p>
+                    <p className="text-amber-400 text-sm font-semibold">{T(testimonial.impact)}</p>
                   </motion.div>
                 ))}
               </div>
@@ -1057,7 +1059,7 @@ export default function CourseSalesPage({
                       onClick={() => toggleFaq(i)}
                       className="w-full flex items-center justify-between p-6 hover:bg-amber-500/10 transition text-left"
                     >
-                      <span className="font-semibold text-lg pr-4">{faq.question}</span>
+                      <span className="font-semibold text-lg pr-4">{T(faq.question)}</span>
                       {expandedFaqs.includes(i) ? (
                         <ChevronUp size={20} className="text-amber-400 flex-shrink-0" />
                       ) : (
@@ -1072,7 +1074,7 @@ export default function CourseSalesPage({
                           exit={{ height: 0, opacity: 0 }}
                           className="border-t border-amber-500/20"
                         >
-                          <p className="p-6 text-muted-foreground">{faq.answer}</p>
+                          <p className="p-6 text-muted-foreground">{T(faq.answer)}</p>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -1110,7 +1112,7 @@ export default function CourseSalesPage({
                 >
                   {isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
                   {isFreeCourseOfMonth
-                    ? (isPtBr ? "Liberar curso grátis do mês" : "Unlock free course of the month")
+                    ? (isPtBr ? T("Liberar curso grátis do mês") : "Unlock free course of the month")
                     : t("finalCta.enrollNow", { currency: "R$", price: product.pricing.price.toLocaleString() })}
                 </Button>
               </div>
@@ -1143,7 +1145,7 @@ export default function CourseSalesPage({
                 âmbar ao lado dela é a contradição em dois dedos de tela. */}
             {jaTemOCurso ? (
               <div className="text-sm font-bold text-amber-400">
-                {isPtBr ? "Incluído no seu plano" : "Included in your plan"}
+                {isPtBr ? T("Incluído no seu plano") : "Included in your plan"}
               </div>
             ) : (
               <>
@@ -1163,9 +1165,9 @@ export default function CourseSalesPage({
           >
             {jaTemOCurso ? <PlayCircle className="mr-2" size={18} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}
             {jaTemOCurso
-              ? (isPtBr ? "Ler agora" : "Read now")
+              ? (isPtBr ? T("Ler agora") : "Read now")
               : isFreeCourseOfMonth
-                ? (isPtBr ? "Liberar grátis" : "Unlock free")
+                ? (isPtBr ? T("Liberar grátis") : "Unlock free")
                 : t("mobileCta.buy")}
           </Button>
         </div>

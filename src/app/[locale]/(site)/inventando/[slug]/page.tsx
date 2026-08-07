@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -53,6 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function MicrocursoGratisPage({ params }: Props) {
   const { locale, slug } = await params;
+  const T = await obterT(locale);
   const m = getMicrocurso(slug);
   if (!m) notFound();
 
@@ -112,19 +114,20 @@ export default async function MicrocursoGratisPage({ params }: Props) {
           <nav aria-label="Trilha" className="mb-5 text-xs text-white/60">
             <Link href={`/${locale}/inventando`} className="transition-colors hover:text-white">Inventando</Link>
             <span className="mx-2" aria-hidden>/</span>
-            <span className="text-white/80">{m.categoria}</span>
+            <span className="text-white/80">{T(m.categoria)}</span>
           </nav>
 
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
-              {m.categoria}
+              {T(m.categoria)}
             </span>
             <span className="rounded-full border border-white/20 bg-black/30 px-3 py-1 text-xs text-white/80 backdrop-blur">
-              {m.acesso}
+              {T(m.acesso)}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-400/15 px-3 py-1 text-xs font-medium text-emerald-300 backdrop-blur">
               <Check aria-hidden className="h-3 w-3" />
-              Microcurso grátis
+              
+              {T("Microcurso grátis")}
             </span>
             {/* "Patrocinado na fonte" dizia, sem querer, que existe uma fonte
                 externa — e ainda por cima que ela estava vendendo. Vira um
@@ -132,7 +135,8 @@ export default async function MicrocursoGratisPage({ params }: Props) {
             {m.patrocinado && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-amber-400/15 px-3 py-1 text-xs text-amber-200 backdrop-blur">
                 <Megaphone aria-hidden className="h-3 w-3" />
-                Divulgação paga do fabricante
+                
+                {T("Divulgação paga do fabricante")}
               </span>
             )}
           </div>
@@ -144,16 +148,16 @@ export default async function MicrocursoGratisPage({ params }: Props) {
               </span>
             )}
             <h1 className="text-3xl font-bold leading-tight tracking-tight text-white drop-shadow-lg sm:text-[2.6rem]">
-              {m.titulo}
+              {T(m.titulo)}
             </h1>
           </div>
 
-          <p className="mt-4 text-lg leading-relaxed text-white/75">{m.subtitulo}</p>
+          <p className="mt-4 text-lg leading-relaxed text-white/75">{T(m.subtitulo)}</p>
 
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/55">
-            <span className="inline-flex items-center gap-1.5"><Tag aria-hidden className="h-3.5 w-3.5" />{m.fabricante}</span>
-            <span className="inline-flex items-center gap-1.5"><Signal aria-hidden className="h-3.5 w-3.5" />{m.nivel}</span>
-            <span className="inline-flex items-center gap-1.5"><Clock aria-hidden className="h-3.5 w-3.5" />{m.duracao}</span>
+            <span className="inline-flex items-center gap-1.5"><Tag aria-hidden className="h-3.5 w-3.5" />{T(m.fabricante)}</span>
+            <span className="inline-flex items-center gap-1.5"><Signal aria-hidden className="h-3.5 w-3.5" />{T(m.nivel)}</span>
+            <span className="inline-flex items-center gap-1.5"><Clock aria-hidden className="h-3.5 w-3.5" />{T(m.duracao)}</span>
           </div>
         </div>
       </header>
@@ -162,7 +166,7 @@ export default async function MicrocursoGratisPage({ params }: Props) {
         <section className="space-y-4">
           {m.oQueE.map((p, i) => (
             <p key={i} className="text-[16px] leading-relaxed text-foreground/80">
-              <Negrito texto={p} />
+              <Negrito texto={T(p)} />
             </p>
           ))}
         </section>
@@ -173,7 +177,7 @@ export default async function MicrocursoGratisPage({ params }: Props) {
             {m.porQueImporta.map((item, i) => (
               <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-foreground/75">
                 <span aria-hidden className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                <span><Negrito texto={item} /></span>
+                <span><Negrito texto={T(item)} /></span>
               </li>
             ))}
           </ul>
@@ -191,15 +195,16 @@ export default async function MicrocursoGratisPage({ params }: Props) {
             <div className="mb-5 flex items-baseline justify-between gap-4">
               <h2 className="text-xl font-bold tracking-tight">
                 <span className="mr-2 text-primary">1.</span>
-                {primeiraAula.titulo}
+                {T(primeiraAula.titulo)}
               </h2>
-              <span className="shrink-0 text-xs text-muted-foreground">{primeiraAula.duracao}</span>
+              <span className="shrink-0 text-xs text-muted-foreground">{T(primeiraAula.duracao)}</span>
             </div>
             <div className="relative rounded-2xl border border-border bg-card/40 p-5 sm:p-6">
               <Secoes secoes={amostraDaAula} />
               {temMaisNaAula && (
                 <div className="mt-5 border-t border-border pt-4 text-sm text-muted-foreground">
-                  O passo a passo desta aula continua no microcurso.
+                  
+                  {T("O passo a passo desta aula continua no microcurso.")}
                 </div>
               )}
             </div>
@@ -207,12 +212,12 @@ export default async function MicrocursoGratisPage({ params }: Props) {
         )}
 
         <section className="mt-10">
-          <h2 className="mb-4 text-lg font-semibold">Ficha técnica</h2>
+          <h2 className="mb-4 text-lg font-semibold">{T("Ficha técnica")}</h2>
           <dl className="overflow-hidden rounded-2xl border border-border">
             {fichaPublica.map((linha, i) => (
               <div key={i} className="flex flex-col gap-1 border-b border-border px-4 py-3 last:border-0 sm:flex-row sm:gap-4">
-                <dt className="shrink-0 text-xs uppercase tracking-wide text-muted-foreground sm:w-44 sm:pt-0.5">{linha.rotulo}</dt>
-                <dd className="text-[15px] text-foreground/80">{linha.valor}</dd>
+                <dt className="shrink-0 text-xs uppercase tracking-wide text-muted-foreground sm:w-44 sm:pt-0.5">{T(linha.rotulo)}</dt>
+                <dd className="text-[15px] text-foreground/80">{T(linha.valor)}</dd>
               </div>
             ))}
           </dl>
@@ -228,12 +233,12 @@ export default async function MicrocursoGratisPage({ params }: Props) {
               Continue no microcurso completo
             </p>
             <h2 className="mt-2.5 text-2xl font-bold leading-snug sm:text-3xl">
-              Você leu a abertura de {m.aulas.length} aulas
+              
+              {T("Você leu a abertura de")} {m.aulas.length}  {T("aulas")}
             </h2>
             <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-              O microcurso traz o passo a passo completo, os critérios de escolha,
-              onde a ferramenta falha, para quem ela realmente serve — e, no Expert,
-              o endereço oficial para começar hoje.
+              
+              {T("O microcurso traz o passo a passo completo, os critérios de escolha,\r\n              onde a ferramenta falha, para quem ela realmente serve — e, no Expert,\r\n              o endereço oficial para começar hoje.")}
             </p>
 
             {demais.length > 0 && (
@@ -241,8 +246,8 @@ export default async function MicrocursoGratisPage({ params }: Props) {
                 {demais.map((a, i) => (
                   <li key={i} className="flex items-center gap-3 rounded-xl border border-border bg-background/60 px-4 py-3 backdrop-blur">
                     <Lock aria-hidden className="h-4 w-4 shrink-0 text-muted-foreground/60" />
-                    <span className="flex-1 text-[15px] font-medium text-foreground/60">{a.titulo}</span>
-                    <span className="shrink-0 text-xs text-muted-foreground/50">{a.duracao}</span>
+                    <span className="flex-1 text-[15px] font-medium text-foreground/60">{T(a.titulo)}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground/50">{T(a.duracao)}</span>
                   </li>
                 ))}
               </ul>
@@ -252,7 +257,8 @@ export default async function MicrocursoGratisPage({ params }: Props) {
               href={`/${locale}/inventando/${slug}/completo`}
               className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             >
-              Ver o microcurso completo
+              
+              {T("Ver o microcurso completo")}
               <ArrowRight aria-hidden className="h-4 w-4" />
             </Link>
           </div>
@@ -269,20 +275,19 @@ export default async function MicrocursoGratisPage({ params }: Props) {
         <section className="mt-12 rounded-2xl border border-border bg-card/40 p-5">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
             <ShieldCheck aria-hidden className="h-4 w-4 text-emerald-400" />
-            Como apuramos
+            
+            {T("Como apuramos")}
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            Acompanhamos os lançamentos direto nas fontes primárias, transcrevemos o que
-            é demonstrado, conferimos cada nome e cada número contra a documentação
-            oficial do fabricante e reescrevemos em português — com o que a ferramenta{" "}
-            <strong className="font-medium text-foreground/80">não</strong> faz junto,
-            que é a parte que o anúncio omite.
+            
+            {T("Acompanhamos os lançamentos direto nas fontes primárias, transcrevemos o que\r\n            é demonstrado, conferimos cada nome e cada número contra a documentação\r\n            oficial do fabricante e reescrevemos em português — com o que a ferramenta")}{" "}
+            <strong className="font-medium text-foreground/80">{T("não")}</strong>  {T("faz junto,\r\n            que é a parte que o anúncio omite.")}
           </p>
         </section>
 
         {relacionados.length > 0 && (
           <section className="mt-10">
-            <h2 className="mb-4 text-lg font-semibold">Continue por aqui</h2>
+            <h2 className="mb-4 text-lg font-semibold">{T("Continue por aqui")}</h2>
             <div className="grid gap-3 sm:grid-cols-3">
               {relacionados.map((rel) => (
                 <Link
@@ -294,8 +299,8 @@ export default async function MicrocursoGratisPage({ params }: Props) {
                     <Image src={capaDe(rel)} alt="" fill sizes="(max-width: 640px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   </span>
                   <span className="block p-3.5">
-                    <span className="block text-[13px] font-medium leading-snug text-foreground/85">{rel.titulo}</span>
-                    <span className="mt-1 block text-[11px] text-muted-foreground">{rel.categoria} · {rel.duracao}</span>
+                    <span className="block text-[13px] font-medium leading-snug text-foreground/85">{T(rel.titulo)}</span>
+                    <span className="mt-1 block text-[11px] text-muted-foreground">{T(rel.categoria)} · {T(rel.duracao)}</span>
                   </span>
                 </Link>
               ))}

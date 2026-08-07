@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -48,6 +49,7 @@ const ROTULOS: Record<string, string> = {
 };
 
 export function CartaoDeCreditos() {
+  const T = useT();
   const [d, setD] = useState<Resposta | null>(null);
   const [erro, setErro] = useState(false);
 
@@ -75,7 +77,8 @@ export function CartaoDeCreditos() {
       <div className="mb-4 flex items-center justify-between gap-2">
         <h3 className="flex items-center gap-2 text-base font-semibold md:text-lg">
           <Coins size={17} className="text-amber-400" />
-          Seus créditos
+          
+          {T("Seus créditos")}
         </h3>
         {d && (
           <span className="text-3xl font-extrabold tabular-nums text-amber-300 md:text-4xl">
@@ -86,14 +89,14 @@ export function CartaoDeCreditos() {
 
       {!d ? (
         <div className="flex items-center gap-2 py-2 text-sm text-muted-foreground">
-          <Loader2 size={14} className="animate-spin" /> Carregando saldo…
+          <Loader2 size={14} className="animate-spin" />  {T("Carregando saldo…")}
         </div>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <div className="rounded-lg border border-border bg-secondary/40 p-3">
               <div className="text-lg font-bold tabular-nums">{d.monthlyBalance}</div>
-              <div className="text-[11px] text-muted-foreground">do plano</div>
+              <div className="text-[11px] text-muted-foreground">{T("do plano")}</div>
             </div>
             <div className="rounded-lg border border-border bg-secondary/40 p-3">
               <div className="text-lg font-bold tabular-nums">{d.purchasedBalance}</div>
@@ -101,7 +104,7 @@ export function CartaoDeCreditos() {
             </div>
             <div className="col-span-2 rounded-lg border border-border bg-secondary/40 p-3 sm:col-span-1">
               <div className="text-lg font-bold tabular-nums">{d.monthlyAllocation}</div>
-              <div className="text-[11px] text-muted-foreground">renovam por mês</div>
+              <div className="text-[11px] text-muted-foreground">{T("renovam por mês")}</div>
             </div>
           </div>
 
@@ -111,13 +114,15 @@ export function CartaoDeCreditos() {
               isso, quem passa um mês sem entrar acha que perdeu o crédito. */}
           {d.lastRefillDate && (
             <p className="mt-3 text-xs text-muted-foreground">
-              Última renovação em{" "}
+              
+              {T("Última renovação em")}{" "}
               {new Date(d.lastRefillDate).toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
               })}
-              . Os créditos do plano voltam ao teto todo mês; os comprados não vencem junto.
+              
+              {T(". Os créditos do plano voltam ao teto todo mês; os comprados não vencem junto.")}
             </p>
           )}
 
@@ -131,7 +136,7 @@ export function CartaoDeCreditos() {
                   .filter(([k]) => typeof d.costs?.[k] === "number")
                   .map(([k, rotulo]) => (
                     <li key={k} className="flex items-center justify-between gap-3 text-sm">
-                      <span className="min-w-0 truncate text-muted-foreground">{rotulo}</span>
+                      <span className="min-w-0 truncate text-muted-foreground">{T(rotulo)}</span>
                       <span className="shrink-0 font-bold tabular-nums text-amber-300">
                         {d.costs![k]}
                       </span>
@@ -145,7 +150,7 @@ export function CartaoDeCreditos() {
             href="/portal?tab=courses"
             className="mt-4 inline-flex items-center gap-2 rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-sm font-bold text-amber-200 transition-colors hover:bg-amber-500/20"
           >
-            <Wand2 size={14} /> Usar no Ateliê
+            <Wand2 size={14} />  {T("Usar no Ateliê")}
           </Link>
         </>
       )}

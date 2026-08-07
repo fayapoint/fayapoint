@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
@@ -5,6 +6,7 @@ import { useTranslations } from "next-intl";
 type Tool = string;
 
 export default function CoursesByToolPage() {
+  const T = useT();
   const t = useTranslations("CoursesByTool");
   const tools = t.raw("tools") as Tool[];
   const formatSlug = (value: string) => value.toLowerCase().replace(/\s+/g, "-");
@@ -18,7 +20,7 @@ export default function CoursesByToolPage() {
             {tools.map((tool) => (
               <Link key={tool} href={`/cursos/${formatSlug(tool)}`}>
                 <Card className="p-6 bg-secondary border-border hover:bg-white/10 transition cursor-pointer">
-                  <h3 className="text-xl font-semibold">{tool}</h3>
+                  <h3 className="text-xl font-semibold">{T(tool)}</h3>
                   <p className="text-muted-foreground text-sm">{t("cta", { tool })}</p>
                 </Card>
               </Link>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -36,19 +37,20 @@ type BlogPost = {
 };
 
 function SectionRenderer({ section }: { section: BlogSection }) {
+  const T = useT();
   const [imgError, setImgError] = useState(false);
 
   switch (section.type) {
     case "paragraph":
       return (
         <p className="text-base md:text-lg leading-relaxed text-foreground/85 mb-6">
-          {section.content}
+          {T(section.content)}
         </p>
       );
     case "heading":
       return (
         <h2 className="text-xl md:text-2xl font-bold text-foreground mt-10 mb-4">
-          {section.content}
+          {T(section.content)}
         </h2>
       );
     case "image":
@@ -64,7 +66,7 @@ function SectionRenderer({ section }: { section: BlogSection }) {
           />
           {section.caption && (
             <figcaption className="px-4 py-3 text-sm text-muted-foreground bg-card/50 border-t border-border">
-              {section.caption}
+              {T(section.caption)}
             </figcaption>
           )}
         </figure>
@@ -72,7 +74,7 @@ function SectionRenderer({ section }: { section: BlogSection }) {
     case "quote":
       return (
         <blockquote className="my-8 border-l-4 border-amber-500 bg-amber-500/5 rounded-r-2xl px-6 py-5 italic text-foreground/80">
-          <p className="text-base md:text-lg leading-relaxed">{section.content}</p>
+          <p className="text-base md:text-lg leading-relaxed">{T(section.content)}</p>
         </blockquote>
       );
     case "list":
@@ -81,7 +83,7 @@ function SectionRenderer({ section }: { section: BlogSection }) {
           {section.items?.map((item, i) => (
             <li key={i} className="flex items-start gap-3 text-base text-foreground/85">
               <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
-              <span className="leading-relaxed">{item}</span>
+              <span className="leading-relaxed">{T(item)}</span>
             </li>
           ))}
         </ul>
@@ -92,6 +94,7 @@ function SectionRenderer({ section }: { section: BlogSection }) {
 }
 
 export default function BlogPostView() {
+  const T = useT();
   const params = useParams();
   const slug = typeof params?.slug === "string" ? params.slug : "";
   const t = useTranslations("Blog");
@@ -107,10 +110,10 @@ export default function BlogPostView() {
       <div className="min-h-screen bg-background text-foreground">
         <main className="pt-24 pb-12">
           <div className="container mx-auto px-4 max-w-3xl text-center">
-            <h1 className="text-4xl font-bold mb-6">Artigo não encontrado</h1>
-            <p className="text-muted-foreground mb-8">O artigo que você procura não existe ou foi removido.</p>
+            <h1 className="text-4xl font-bold mb-6">{T("Artigo não encontrado")}</h1>
+            <p className="text-muted-foreground mb-8">{T("O artigo que você procura não existe ou foi removido.")}</p>
             <Link href={`/${locale}/blog`}>
-              <Button><ArrowLeft size={16} className="mr-2" /> Voltar ao Blog</Button>
+              <Button><ArrowLeft size={16} className="mr-2" />  {T("Voltar ao Blog")}</Button>
             </Link>
           </div>
         </main>
@@ -143,13 +146,13 @@ export default function BlogPostView() {
               loop
               playsInline
               preload="metadata"
-              aria-label={post.title}
+              aria-label={T(post.title)}
               className="w-full h-full object-cover"
             />
           ) : (
             <img
               src={heroImage}
-              alt={post.title}
+              alt={T(post.title)}
               className="w-full h-full object-cover"
               loading="eager"
             />
@@ -158,16 +161,16 @@ export default function BlogPostView() {
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="container mx-auto max-w-4xl">
               <Link href={`/${locale}/blog`} className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white mb-4 transition">
-                <ArrowLeft size={16} /> Voltar ao blog
+                <ArrowLeft size={16} />  {T("Voltar ao blog")}
               </Link>
-              <Badge className="mb-3 bg-amber-500/90 text-black border-0">{post.category}</Badge>
+              <Badge className="mb-3 bg-amber-500/90 text-black border-0">{T(post.category)}</Badge>
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="text-3xl md:text-4xl lg:text-5xl font-black leading-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
                 style={{ textShadow: "0 2px 16px rgba(0,0,0,0.4), 0 4px 32px rgba(0,0,0,0.2)" }}
               >
-                {post.title}
+                {T(post.title)}
               </motion.h1>
             </div>
           </div>
@@ -176,9 +179,9 @@ export default function BlogPostView() {
         {/* Meta bar */}
         <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-20">
           <div className="container mx-auto max-w-4xl px-6 py-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><User size={14} /> {post.author}</span>
-            <span className="flex items-center gap-1.5"><Calendar size={14} /> {post.date}</span>
-            <span className="flex items-center gap-1.5"><Clock size={14} /> {post.readTime}</span>
+            <span className="flex items-center gap-1.5"><User size={14} /> {T(post.author)}</span>
+            <span className="flex items-center gap-1.5"><Calendar size={14} /> {T(post.date)}</span>
+            <span className="flex items-center gap-1.5"><Clock size={14} /> {T(post.readTime)}</span>
             {typeof post.views === "number" && (
               <span className="flex items-center gap-1.5"><Eye size={14} /> {post.views.toLocaleString(locale)}</span>
             )}
@@ -202,8 +205,8 @@ export default function BlogPostView() {
           ) : (
             <div className="text-center py-16">
               <BookOpen size={48} className="text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg text-muted-foreground">Conteúdo completo em breve.</p>
-              <p className="text-sm text-muted-foreground mt-2">Este artigo está sendo preparado por nossa equipe editorial.</p>
+              <p className="text-lg text-muted-foreground">{T("Conteúdo completo em breve.")}</p>
+              <p className="text-sm text-muted-foreground mt-2">{T("Este artigo está sendo preparado por nossa equipe editorial.")}</p>
             </div>
           )}
 
@@ -213,7 +216,7 @@ export default function BlogPostView() {
               <Tag size={16} className="text-muted-foreground" />
               {post.tags.map((tag) => (
                 <Badge key={tag} variant="outline" className="border-amber-500/30 text-muted-foreground">
-                  {tag}
+                  {T(tag)}
                 </Badge>
               ))}
             </div>
@@ -221,11 +224,12 @@ export default function BlogPostView() {
 
           {/* CTA */}
           <div className="mt-10 rounded-2xl bg-gradient-to-r from-amber-600/20 to-yellow-600/10 border border-amber-500/20 p-6 md:p-8 text-center">
-            <h3 className="text-xl font-bold mb-2">Quer dominar IA na prática?</h3>
-            <p className="text-muted-foreground mb-4">Acesse nossos cursos de IA e automação. Comece grátis — sem cartão de crédito.</p>
+            <h3 className="text-xl font-bold mb-2">{T("Quer dominar IA na prática?")}</h3>
+            <p className="text-muted-foreground mb-4">{T("Acesse nossos cursos de IA e automação. Comece grátis — sem cartão de crédito.")}</p>
             <Link href="/registro">
               <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 text-white">
-                Começar Grátis Agora
+                
+                {T("Começar Grátis Agora")}
               </Button>
             </Link>
           </div>
@@ -242,14 +246,14 @@ export default function BlogPostView() {
                     <div className="aspect-video overflow-hidden">
                       <img
                         src={rp.image}
-                        alt={rp.title}
+                        alt={T(rp.title)}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
                     </div>
                     <div className="p-4">
-                      <h4 className="font-semibold text-sm line-clamp-2 group-hover:text-amber-400 transition">{rp.title}</h4>
-                      <p className="text-xs text-muted-foreground mt-2">{rp.date} · {rp.readTime}</p>
+                      <h4 className="font-semibold text-sm line-clamp-2 group-hover:text-amber-400 transition">{T(rp.title)}</h4>
+                      <p className="text-xs text-muted-foreground mt-2">{T(rp.date)} · {T(rp.readTime)}</p>
                     </div>
                   </div>
                 </Link>

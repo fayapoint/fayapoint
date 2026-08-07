@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
@@ -58,6 +59,7 @@ const projectCollections: CollectionItem[] = [
 const deliveryPillarKeys = ["blueprint", "execution", "operation"] as const;
 
 export default function CasesPage() {
+  const T = useT();
   const t = useTranslations("Cases");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,7 +111,7 @@ export default function CasesPage() {
               {impactMetrics.map((metric) => (
                 <Card key={metric.labelKey} className="bg-card/70 border-border/60 p-6">
                   <metric.icon className="w-6 h-6 text-primary mb-4" />
-                  <p className="text-3xl font-semibold">{metric.value}</p>
+                  <p className="text-3xl font-semibold">{T(metric.value)}</p>
                   <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground mt-2">
                     {t(`metrics.${metric.labelKey}`)}
                   </p>
@@ -174,7 +176,7 @@ export default function CasesPage() {
                             {highlights.map((highlight, idx) => (
                               <li key={idx} className="flex items-start gap-2">
                                 <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-1" />
-                                <span>{highlight}</span>
+                                <span>{T(highlight)}</span>
                               </li>
                             ))}
                           </ul>
@@ -193,7 +195,7 @@ export default function CasesPage() {
                           <div className="flex flex-wrap gap-2 text-xs text-muted-foreground mt-auto">
                             {project.stack.map((tool) => (
                               <span key={tool} className="px-3 py-1 rounded-full border border-border/60">
-                                {tool}
+                                {T(tool)}
                               </span>
                             ))}
                           </div>

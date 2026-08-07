@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -70,6 +71,7 @@ const categories = [
 ];
 
 export function CourseCategoriesSection() {
+  const T = useT();
   const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.CourseCategories");
   const locale = useLocale();
@@ -114,7 +116,7 @@ export function CourseCategoriesSection() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  {isPtBr ? "Verificação editorial" : "Editorial verification"}
+                  {isPtBr ? T("Verificação editorial") : "Editorial verification"}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {isPtBr ? `Revisado em ${verifiedAtLabel}.` : `Reviewed on ${verifiedAtLabel}.`}
@@ -139,7 +141,7 @@ export function CourseCategoriesSection() {
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {isPtBr
-                    ? "Cada curso é reescrito quando a ferramenta muda"
+                    ? T("Cada curso é reescrito quando a ferramenta muda")
                     : "Every course is rewritten when the tool changes"}
                 </p>
               </div>
@@ -153,11 +155,11 @@ export function CourseCategoriesSection() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  {isPtBr ? "Critério de publicação" : "Publishing standard"}
+                  {isPtBr ? T("Critério de publicação") : "Publishing standard"}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {isPtBr
-                    ? "Fontes oficiais recentes e cobertura real por aula."
+                    ? T("Fontes oficiais recentes e cobertura real por aula.")
                     : "Recent official sources and real lesson-by-lesson coverage."}
                 </p>
               </div>
@@ -188,7 +190,7 @@ export function CourseCategoriesSection() {
                       size="sm" 
                       className="group-hover:text-primary transition"
                     >
-                      {exploreLabel} <ArrowRight className="ml-1 w-4 h-4" />
+                      {T(exploreLabel)} <ArrowRight className="ml-1 w-4 h-4" />
                     </Button>
                   </div>
                 </Card>

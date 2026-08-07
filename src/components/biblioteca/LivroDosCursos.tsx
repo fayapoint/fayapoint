@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * O livro que se folheia — os cursos em que o aluno está matriculado.
@@ -59,6 +60,7 @@ export interface CursoDoLivro {
 const DURACAO_MS = 700;
 
 export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
+  const T = useT();
   const [indice, setIndice] = useState(0);
   const virando = useRef(false);
   const [anunciar, setAnunciar] = useState("");
@@ -156,14 +158,14 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
     <section
       className="relative"
       aria-roledescription="livro"
-      aria-label="Seus cursos, folheáveis"
+      aria-label={T("Seus cursos, folheáveis")}
       tabIndex={0}
       onKeyDown={aoTeclar}
       {...aoTocar}
       style={{ perspective: "1800px" }}
     >
       <p aria-live="polite" className="sr-only">
-        {anunciar}
+        {T(anunciar)}
       </p>
 
       <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-white/10 bg-[#0b0d16] shadow-[0_1.5rem_2rem_rgba(0,0,0,.35)] md:grid-cols-[1.05fr_1fr]">
@@ -187,28 +189,28 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
           <div className="relative min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300/70">
               {`Curso ${indice + 1} de ${total}`}
-              {etiqueta && <span className="text-white/35"> · {etiqueta}</span>}
+              {etiqueta && <span className="text-white/35"> · {T(etiqueta)}</span>}
             </p>
 
             <h3 className="mt-3 text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
-              {curso.titulo}
+              {T(curso.titulo)}
             </h3>
 
             <span aria-hidden className="mt-4 block h-px w-16 bg-gradient-to-r from-amber-300/70 to-transparent" />
 
             {curso.resumo && (
-              <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/55">{curso.resumo}</p>
+              <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/55">{T(curso.resumo)}</p>
             )}
 
             <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-white/45">
               {typeof curso.aulas === "number" && curso.aulas > 0 && (
                 <span className="inline-flex items-center gap-1">
-                  <Layers size={11} /> {curso.aulas} aulas
+                  <Layers size={11} /> {curso.aulas}  {T("aulas")}
                 </span>
               )}
               {curso.duracao && (
                 <span className="inline-flex items-center gap-1">
-                  <Clock size={11} /> {curso.duracao}
+                  <Clock size={11} /> {T(curso.duracao)}
                 </span>
               )}
             </div>
@@ -224,10 +226,10 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
                       certificado achar que o sistema perdeu o histórico dele. */}
                   <span className={curso.progresso >= 100 ? "font-bold text-amber-300" : undefined}>
                     {curso.progresso >= 100
-                      ? "Curso concluído"
+                      ? T("Curso concluído")
                       : curso.progresso > 0
-                        ? "Seu progresso"
-                        : "Ainda não começou"}
+                        ? T("Seu progresso")
+                        : T("Ainda não começou")}
                   </span>
                   <span className="tabular-nums">{curso.progresso}%</span>
                 </div>
@@ -246,10 +248,10 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
             >
               <PlayCircle size={16} />
               {typeof curso.progresso === "number" && curso.progresso >= 100
-                ? "Revisar o curso"
+                ? T("Revisar o curso")
                 : curso.progresso && curso.progresso > 0
-                  ? "Continuar de onde parou"
-                  : "Começar o curso"}
+                  ? T("Continuar de onde parou")
+                  : T("Começar o curso")}
             </Link>
           </div>
 
@@ -281,11 +283,12 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
           type="button"
           onClick={() => virar(-1)}
           disabled={noComeco}
-          aria-label="Curso anterior"
+          aria-label={T("Curso anterior")}
           className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/70 transition-colors hover:border-white/35 hover:text-white disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
         >
           <ChevronLeft size={14} />
-          Anterior
+          
+          {T("Anterior")}
         </button>
 
         <div className="flex items-center gap-1.5" aria-hidden>
@@ -304,10 +307,11 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
           type="button"
           onClick={() => virar(1)}
           disabled={noFim}
-          aria-label="Próximo curso"
+          aria-label={T("Próximo curso")}
           className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/70 transition-colors hover:border-white/35 hover:text-white disabled:pointer-events-none disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
         >
-          Próximo
+          
+          {T("Próximo")}
           <ChevronRight size={14} />
         </button>
       </div>
@@ -317,13 +321,14 @@ export function LivroDosCursos({ cursos }: { cursos: CursoDoLivro[] }) {
 
 /** O cabeçalho da seção, para o painel não precisar repetir a marcação. */
 export function TituloDoLivro({ quantos }: { quantos: number }) {
+  const T = useT();
   return (
     <div className="mb-3 flex items-center gap-2">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-600">
         <BookOpen size={15} className="text-white" />
       </div>
       <div className="min-w-0">
-        <h3 className="truncate text-base font-bold">Seus cursos</h3>
+        <h3 className="truncate text-base font-bold">{T("Seus cursos")}</h3>
         {/**
          * "na estante", e não "no acervo".
          *
@@ -334,7 +339,7 @@ export function TituloDoLivro({ quantos }: { quantos: number }) {
          * acima de "No acervo 5" na mesma tela.
          */}
         <p className="text-xs text-muted-foreground">
-          {quantos} na estante · folheie com as setas ou arrastando
+          {quantos}  {T("na estante · folheie com as setas ou arrastando")}
         </p>
       </div>
     </div>

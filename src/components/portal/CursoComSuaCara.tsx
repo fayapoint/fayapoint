@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -32,6 +33,7 @@ interface CursoDoAluno {
 }
 
 export default function CursoComSuaCara({ token }: { token: string }) {
+  const T = useT();
   const [cursos, setCursos] = useState<CursoDoAluno[]>([]);
   const [carregando, setCarregando] = useState(true);
 
@@ -60,11 +62,11 @@ export default function CursoComSuaCara({ token }: { token: string }) {
   return (
     <div className="rounded-xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.07] to-transparent p-4">
       <h4 className="flex items-center gap-1.5 text-sm font-bold text-foreground">
-        <Sparkles size={14} className="text-amber-400" /> Seu curso, com a sua cara
+        <Sparkles size={14} className="text-amber-400" />  {T("Seu curso, com a sua cara")}
       </h4>
       <p className="mt-1 text-[11.5px] leading-snug text-muted-foreground">
-        Tudo o que você respondeu aqui vira abertura, exemplo e tarefa dentro dos seus cursos. Veja
-        uma amostra grátis antes de gastar qualquer crédito.
+        
+        {T("Tudo o que você respondeu aqui vira abertura, exemplo e tarefa dentro dos seus cursos. Veja\r\n        uma amostra grátis antes de gastar qualquer crédito.")}
       </p>
 
       <div className="mt-3 space-y-1.5">
@@ -75,7 +77,7 @@ export default function CursoComSuaCara({ token }: { token: string }) {
             className="flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-2 text-[12px] font-semibold transition-colors hover:border-amber-400/40 hover:bg-amber-500/[0.06]"
           >
             <BookOpen size={13} className="shrink-0 text-amber-400/80" />
-            <span className="min-w-0 flex-1 truncate">{c.titulo}</span>
+            <span className="min-w-0 flex-1 truncate">{T(c.titulo)}</span>
             <ArrowRight size={13} className="shrink-0 text-muted-foreground" />
           </Link>
         ))}
@@ -83,7 +85,8 @@ export default function CursoComSuaCara({ token }: { token: string }) {
 
       {cursos.length > 4 && (
         <p className="mt-2 text-[10.5px] text-muted-foreground">
-          e mais {cursos.length - 4} — todos personalizáveis pela página de cada curso.
+          
+          {T("e mais")} {cursos.length - 4}  {T("— todos personalizáveis pela página de cada curso.")}
         </p>
       )}
     </div>

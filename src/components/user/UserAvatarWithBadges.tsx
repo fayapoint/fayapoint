@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -112,6 +113,7 @@ export function UserAvatarWithBadges({
   onClick,
   editable = false,
 }: UserAvatarWithBadgesProps) {
+  const T = useT();
   const [isHovered, setIsHovered] = useState(false);
   const sizeConfig = SIZES[size];
   
@@ -147,10 +149,10 @@ export function UserAvatarWithBadges({
         >
           <Avatar className={cn(sizeConfig.avatar, "border-2 border-border")}>
             {user.image ? (
-              <AvatarImage src={user.image} alt={user.name} className="object-cover" />
+              <AvatarImage src={user.image} alt={T(user.name)} className="object-cover" />
             ) : null}
             <AvatarFallback className="bg-gradient-to-br from-amber-500 to-yellow-600 text-white font-bold">
-              {initials}
+              {T(initials)}
             </AvatarFallback>
           </Avatar>
 
@@ -216,7 +218,7 @@ export function UserAvatarWithBadges({
                           {achievement.id.replace(/_/g, " ")}
                         </p>
                         <p className="text-xs text-muted-foreground capitalize">
-                          {achievement.tier} • +{achievement.xpReward} XP
+                          {T(achievement.tier)} • +{achievement.xpReward} XP
                         </p>
                       </div>
                     </TooltipContent>
@@ -256,6 +258,7 @@ export function UserAvatarSimple({
   rank?: number;
   className?: string;
 }) {
+  const T = useT();
   const sizeConfig = SIZES[size];
   const initials = user.name?.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) || "US";
 
@@ -269,10 +272,10 @@ export function UserAvatarSimple({
     <div className={cn("relative inline-flex", className)}>
       <Avatar className={cn(sizeConfig.avatar, "border-2 border-border")}>
         {user.image ? (
-          <AvatarImage src={user.image} alt={user.name} className="object-cover" />
+          <AvatarImage src={user.image} alt={T(user.name)} className="object-cover" />
         ) : null}
         <AvatarFallback className="bg-gradient-to-br from-amber-500 to-yellow-600 text-white font-bold text-xs">
-          {initials}
+          {T(initials)}
         </AvatarFallback>
       </Avatar>
 

@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -41,6 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function MicrocursoPage({ params }: Props) {
   const { locale, slug } = await params;
+  const T = await obterT(locale);
   const microcurso = getMicrocurso(slug);
 
   // Sem microcurso, sem página. Devolver 200 com "não encontrado" é a
@@ -111,7 +113,7 @@ export default async function MicrocursoPage({ params }: Props) {
             href={`/${locale}/inventando/${slug}`}
             className="transition-colors hover:text-white/70"
           >
-            {microcurso.ferramenta}
+            {T(microcurso.ferramenta)}
           </Link>
           <span className="mx-2" aria-hidden>
             /
@@ -123,39 +125,40 @@ export default async function MicrocursoPage({ params }: Props) {
         <header>
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-[#f5c04e]/30 bg-[#f5c04e]/10 px-3 py-1 text-xs font-medium text-[#f5c04e]">
-              {microcurso.categoria}
+              {T(microcurso.categoria)}
             </span>
             <span className="rounded-full border border-white/12 px-3 py-1 text-xs text-white/55">
-              {microcurso.acesso}
+              {T(microcurso.acesso)}
             </span>
             {microcurso.patrocinado && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs text-amber-200">
                 <Megaphone aria-hidden className="h-3 w-3" />
-                Divulgação paga do fabricante
+                
+                {T("Divulgação paga do fabricante")}
               </span>
             )}
           </div>
 
           <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-            {microcurso.titulo}
+            {T(microcurso.titulo)}
           </h1>
-          <p className="mt-3 text-lg leading-relaxed text-white/60">{microcurso.subtitulo}</p>
+          <p className="mt-3 text-lg leading-relaxed text-white/60">{T(microcurso.subtitulo)}</p>
 
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/45">
             <span className="inline-flex items-center gap-1.5">
               <Tag aria-hidden className="h-3.5 w-3.5" />
-              {microcurso.fabricante}
+              {T(microcurso.fabricante)}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Signal aria-hidden className="h-3.5 w-3.5" />
-              {microcurso.nivel}
+              {T(microcurso.nivel)}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Clock aria-hidden className="h-3.5 w-3.5" />
-              {microcurso.duracao} de leitura
+              {T(microcurso.duracao)} de leitura
             </span>
             <span>
-              {acesso.aulasLiberadas} de {acesso.totalAulas} aulas liberadas
+              {acesso.aulasLiberadas} de {acesso.totalAulas}  {T("aulas liberadas")}
             </span>
           </div>
         </header>
@@ -177,7 +180,7 @@ export default async function MicrocursoPage({ params }: Props) {
         <section className="mt-9 space-y-4">
           {visivel.oQueE.map((p, i) => (
             <p key={i} className="text-[15px] leading-relaxed text-white/75">
-              <Negrito texto={p} />
+              <Negrito texto={T(p)} />
             </p>
           ))}
         </section>
@@ -193,21 +196,21 @@ export default async function MicrocursoPage({ params }: Props) {
                   className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#f5c04e]"
                 />
                 <span>
-                  <Negrito texto={item} />
+                  <Negrito texto={T(item)} />
                 </span>
               </li>
             ))}
           </ul>
           {!acesso.vePorQueImportaCompleto && (
             <p className="mt-3 text-xs text-white/35">
-              + {microcurso.porQueImporta.length - 1} pontos nos planos pagos.
+              + {microcurso.porQueImporta.length - 1}  {T("pontos nos planos pagos.")}
             </p>
           )}
         </section>
 
         {/* Ficha técnica — livre: é dado público da ferramenta */}
         <section className="mt-8">
-          <h2 className="mb-4 text-lg font-semibold">Ficha técnica</h2>
+          <h2 className="mb-4 text-lg font-semibold">{T("Ficha técnica")}</h2>
           <dl className="overflow-hidden rounded-xl border border-white/10">
             {microcurso.ficha.map((linha, i) => (
               <div
@@ -215,9 +218,9 @@ export default async function MicrocursoPage({ params }: Props) {
                 className="flex flex-col gap-1 border-b border-white/8 px-4 py-3 last:border-0 sm:flex-row sm:gap-4"
               >
                 <dt className="shrink-0 text-xs uppercase tracking-wide text-white/40 sm:w-44 sm:pt-0.5">
-                  {linha.rotulo}
+                  {T(linha.rotulo)}
                 </dt>
-                <dd className="text-[15px] text-white/75">{linha.valor}</dd>
+                <dd className="text-[15px] text-white/75">{T(linha.valor)}</dd>
               </div>
             ))}
           </dl>
@@ -234,9 +237,9 @@ export default async function MicrocursoPage({ params }: Props) {
                     <div className="mb-4 flex items-baseline justify-between gap-4">
                       <h3 className="text-base font-semibold text-white">
                         <span className="mr-2 text-[#f5c04e]">{i + 1}.</span>
-                        {aula.titulo}
+                        {T(aula.titulo)}
                       </h3>
-                      <span className="shrink-0 text-xs text-white/35">{aula.duracao}</span>
+                      <span className="shrink-0 text-xs text-white/35">{T(aula.duracao)}</span>
                     </div>
                     <Secoes secoes={aula.secoes} />
                   </div>
@@ -250,7 +253,7 @@ export default async function MicrocursoPage({ params }: Props) {
 
           {visivel.praQuemServe.length > 0 && (
             <section className="mt-10">
-              <h2 className="mb-4 text-lg font-semibold">Para quem isso serve</h2>
+              <h2 className="mb-4 text-lg font-semibold">{T("Para quem isso serve")}</h2>
               <ul className="space-y-2.5">
                 {visivel.praQuemServe.map((item, i) => (
                   <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-white/75">
@@ -259,7 +262,7 @@ export default async function MicrocursoPage({ params }: Props) {
                       className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400/70"
                     />
                     <span>
-                      <Negrito texto={item} />
+                      <Negrito texto={T(item)} />
                     </span>
                   </li>
                 ))}
@@ -269,7 +272,7 @@ export default async function MicrocursoPage({ params }: Props) {
 
           {visivel.limites.length > 0 && (
             <section className="mt-10">
-              <h2 className="mb-4 text-lg font-semibold">O que ela ainda não faz</h2>
+              <h2 className="mb-4 text-lg font-semibold">{T("O que ela ainda não faz")}</h2>
               <ul className="space-y-2.5">
                 {visivel.limites.map((item, i) => (
                   <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-white/75">
@@ -278,7 +281,7 @@ export default async function MicrocursoPage({ params }: Props) {
                       className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-rose-400/60"
                     />
                     <span>
-                      <Negrito texto={item} />
+                      <Negrito texto={T(item)} />
                     </span>
                   </li>
                 ))}
@@ -288,7 +291,7 @@ export default async function MicrocursoPage({ params }: Props) {
 
           {visivel.proximosPassos.length > 0 && (
             <section className="mt-10">
-              <h2 className="mb-4 text-lg font-semibold">Próximos passos</h2>
+              <h2 className="mb-4 text-lg font-semibold">{T("Próximos passos")}</h2>
               <div className="grid gap-2.5">
                 {visivel.proximosPassos.map((passo, i) => (
                   <Link
@@ -297,7 +300,7 @@ export default async function MicrocursoPage({ params }: Props) {
                     className="group flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 transition-colors hover:border-white/25"
                   >
                     <span className="text-[15px] text-white/75 group-hover:text-white">
-                      {passo.texto}
+                      {T(passo.texto)}
                     </span>
                     <ExternalLink
                       aria-hidden
@@ -322,13 +325,12 @@ export default async function MicrocursoPage({ params }: Props) {
         <section className="mt-12 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
           <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80">
             <ShieldCheck aria-hidden className="h-4 w-4 text-emerald-400/80" />
-            Como apuramos
+            
+            {T("Como apuramos")}
           </h2>
           <p className="text-sm leading-relaxed text-white/55">
-            Acompanhamos os lançamentos direto nas fontes primárias, transcrevemos o
-            que é demonstrado, conferimos cada nome e cada número contra a
-            documentação oficial do fabricante e reescrevemos em português — com os
-            limites da ferramenta junto, que é a parte que o anúncio omite.
+            
+            {T("Acompanhamos os lançamentos direto nas fontes primárias, transcrevemos o\r\n            que é demonstrado, conferimos cada nome e cada número contra a\r\n            documentação oficial do fabricante e reescrevemos em português — com os\r\n            limites da ferramenta junto, que é a parte que o anúncio omite.")}
           </p>
 
           {visivel.linkOficial ? (
@@ -340,15 +342,17 @@ export default async function MicrocursoPage({ params }: Props) {
                 className="inline-flex items-center gap-2 rounded-lg border border-[#f5c04e]/40 bg-[#f5c04e]/10 px-3.5 py-2 text-xs font-medium text-[#f5c04e] transition-colors hover:bg-[#f5c04e]/20"
               >
                 <Crown aria-hidden className="h-3.5 w-3.5" />
-                Ir para a {visivel.ferramenta}
+                
+                {T("Ir para a")} {T(visivel.ferramenta)}
                 <ExternalLink aria-hidden className="h-3.5 w-3.5" />
               </a>
-              <span className="text-xs text-white/35">liberado pelo seu plano Expert</span>
+              <span className="text-xs text-white/35">{T("liberado pelo seu plano Expert")}</span>
             </div>
           ) : (
             <p className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs text-white/40">
               <Lock aria-hidden className="h-3.5 w-3.5" />
-              O endereço oficial da {visivel.ferramenta} abre no plano Expert
+              
+              {T("O endereço oficial da")} {T(visivel.ferramenta)}  {T("abre no plano Expert")}
             </p>
           )}
         </section>
@@ -356,7 +360,7 @@ export default async function MicrocursoPage({ params }: Props) {
         {/* Relacionados — distribuição de links internos */}
         {relacionados.length > 0 && (
           <section className="mt-10">
-            <h2 className="mb-4 text-lg font-semibold">Continue por aqui</h2>
+            <h2 className="mb-4 text-lg font-semibold">{T("Continue por aqui")}</h2>
             <div className="grid gap-2.5">
               {relacionados.map((rel) => (
                 <Link
@@ -365,10 +369,10 @@ export default async function MicrocursoPage({ params }: Props) {
                   className="group rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 transition-colors hover:border-white/25"
                 >
                   <span className="block text-[15px] font-medium text-white/80 group-hover:text-white">
-                    {rel.titulo}
+                    {T(rel.titulo)}
                   </span>
                   <span className="mt-0.5 block text-xs text-white/40">
-                    {rel.categoria} · {rel.fabricante} · {rel.duracao}
+                    {T(rel.categoria)} · {T(rel.fabricante)} · {T(rel.duracao)}
                   </span>
                 </Link>
               ))}

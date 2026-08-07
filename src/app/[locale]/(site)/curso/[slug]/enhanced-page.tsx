@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
@@ -19,6 +20,7 @@ import { toast } from "react-hot-toast";
 import { getCourseBySlug } from "@/data/courses";
 
 export default function EnhancedCoursePage() {
+  const T = useT();
   const params = useParams();
   const course = getCourseBySlug(params.slug as string);
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
@@ -29,10 +31,11 @@ export default function EnhancedCoursePage() {
       <div className="min-h-screen bg-background text-foreground">
         <main className="pt-24 pb-12">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl font-bold mb-4">Curso não encontrado</h1>
+            <h1 className="text-4xl font-bold mb-4">{T("Curso não encontrado")}</h1>
             <Link href="/cursos">
               <Button className="bg-amber-600 hover:bg-amber-700">
-                Ver todos os cursos
+                
+                {T("Ver todos os cursos")}
               </Button>
             </Link>
           </div>
@@ -44,7 +47,7 @@ export default function EnhancedCoursePage() {
   const discount = Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100);
 
   const handleEnroll = () => {
-    toast.success("Redirecionando para checkout...");
+    toast.success(T("Redirecionando para checkout..."));
     // Implement checkout logic
   };
 
@@ -62,10 +65,10 @@ export default function EnhancedCoursePage() {
             >
               <div className="flex items-center gap-3">
                 <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/50">
-                  {course.category}
+                  {T(course.category)}
                 </Badge>
                 <Badge variant="outline">
-                  {course.level}
+                  {T(course.level)}
                 </Badge>
                 {discount > 0 && (
                   <Badge className="bg-red-600/20 text-red-400 border-red-500/50">
@@ -75,11 +78,11 @@ export default function EnhancedCoursePage() {
               </div>
               
               <h1 className="text-4xl lg:text-5xl font-bold">
-                {course.title}
+                {T(course.title)}
               </h1>
               
               <p className="text-xl text-muted-foreground">
-                {course.subtitle}
+                {T(course.subtitle)}
               </p>
               
               <div className="flex flex-wrap gap-4 text-sm">
@@ -89,20 +92,20 @@ export default function EnhancedCoursePage() {
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock size={18} />
-                  {course.duration}
+                  {T(course.duration)}
                 </span>
                 <span className="flex items-center gap-1">
                   <BookOpen size={18} />
-                  {course.totalLessons} aulas
+                  {course.totalLessons}  {T("aulas")}
                 </span>
                 <span className="flex items-center gap-1">
                   <Calendar size={18} />
-                  Atualizado: {course.lastUpdated}
+                  Atualizado: {T(course.lastUpdated)}
                 </span>
               </div>
               
               <p className="text-muted-foreground">
-                {course.shortDescription}
+                {T(course.shortDescription)}
               </p>
             </motion.div>
             
@@ -133,25 +136,30 @@ export default function EnhancedCoursePage() {
                     className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-lg py-6"
                   >
                     <ShoppingCart className="mr-2" />
-                    Comprar Agora
+                    
+                    {T("Comprar Agora")}
                   </Button>
                   
                   <div className="space-y-3 text-sm">
                     <p className="flex items-center gap-2">
                       <CheckCircle className="text-green-400" size={18} />
-                      Acesso vitalício
+                      
+                      {T("Acesso vitalício")}
                     </p>
                     <p className="flex items-center gap-2">
                       <CheckCircle className="text-green-400" size={18} />
-                      Certificado de conclusão
+                      
+                      {T("Certificado de conclusão")}
                     </p>
                     <p className="flex items-center gap-2">
                       <CheckCircle className="text-green-400" size={18} />
-                      30 dias de garantia
+                      
+                      {T("30 dias de garantia")}
                     </p>
                     <p className="flex items-center gap-2">
                       <CheckCircle className="text-green-400" size={18} />
-                      Suporte direto com instrutor
+                      
+                      {T("Suporte direto com instrutor")}
                     </p>
                   </div>
                   
@@ -159,7 +167,7 @@ export default function EnhancedCoursePage() {
                   
                   <div className="text-center text-sm text-muted-foreground">
                     <p>🔒 Compra 100% segura</p>
-                    <p className="mt-2">✅ Satisfação garantida ou seu dinheiro de volta</p>
+                    <p className="mt-2">{T("✅ Satisfação garantida ou seu dinheiro de volta")}</p>
                   </div>
                 </div>
               </Card>
@@ -172,19 +180,19 @@ export default function EnhancedCoursePage() {
       <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
-            Impacto Transformador do {course.tool}
+            Impacto Transformador do {T(course.tool)}
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="p-6 bg-card/50 border-amber-500/20">
               <div className="flex items-center gap-3 mb-4">
                 <User className="text-amber-400" size={24} />
-                <h3 className="text-xl font-semibold">Para Você</h3>
+                <h3 className="text-xl font-semibold">{T("Para Você")}</h3>
               </div>
               <ul className="space-y-3">
                 {course.impactForIndividuals.slice(0, 6).map((impact, i) => (
                   <li key={i} className="text-sm text-muted-foreground">
-                    {impact}
+                    {T(impact)}
                   </li>
                 ))}
               </ul>
@@ -193,12 +201,12 @@ export default function EnhancedCoursePage() {
             <Card className="p-6 bg-card/50 border-amber-500/20">
               <div className="flex items-center gap-3 mb-4">
                 <Rocket className="text-amber-400" size={24} />
-                <h3 className="text-xl font-semibold">Para Empreendedores</h3>
+                <h3 className="text-xl font-semibold">{T("Para Empreendedores")}</h3>
               </div>
               <ul className="space-y-3">
                 {course.impactForEntrepreneurs.slice(0, 6).map((impact, i) => (
                   <li key={i} className="text-sm text-muted-foreground">
-                    {impact}
+                    {T(impact)}
                   </li>
                 ))}
               </ul>
@@ -207,12 +215,12 @@ export default function EnhancedCoursePage() {
             <Card className="p-6 bg-card/50 border-amber-500/20">
               <div className="flex items-center gap-3 mb-4">
                 <Building2 className="text-amber-400" size={24} />
-                <h3 className="text-xl font-semibold">Para Empresas</h3>
+                <h3 className="text-xl font-semibold">{T("Para Empresas")}</h3>
               </div>
               <ul className="space-y-3">
                 {course.impactForCompanies.slice(0, 6).map((impact, i) => (
                   <li key={i} className="text-sm text-muted-foreground">
-                    {impact}
+                    {T(impact)}
                   </li>
                 ))}
               </ul>
@@ -225,11 +233,11 @@ export default function EnhancedCoursePage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <Card className="p-8 bg-card/50 border-amber-500/20">
-            <h2 className="text-2xl font-bold mb-6">Sobre o Curso</h2>
+            <h2 className="text-2xl font-bold mb-6">{T("Sobre o Curso")}</h2>
             <div className="prose prose-invert max-w-none">
               {course.fullDescription.split('\n\n').map((paragraph, i) => (
                 <p key={i} className="text-muted-foreground mb-4">
-                  {paragraph}
+                  {T(paragraph)}
                 </p>
               ))}
             </div>
@@ -241,7 +249,8 @@ export default function EnhancedCoursePage() {
       <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
-            O Que Você Vai Aprender
+            
+            {T("O Que Você Vai Aprender")}
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -254,7 +263,7 @@ export default function EnhancedCoursePage() {
                 className="flex items-start gap-3"
               >
                 <CheckCircle className="text-green-400 mt-1 flex-shrink-0" size={20} />
-                <span className="text-muted-foreground">{item}</span>
+                <span className="text-muted-foreground">{T(item)}</span>
               </motion.div>
             ))}
           </div>
@@ -265,7 +274,8 @@ export default function EnhancedCoursePage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
-            Conteúdo do Curso
+            
+            {T("Conteúdo do Curso")}
           </h2>
           
           <div className="space-y-4 max-w-4xl mx-auto">
@@ -278,14 +288,15 @@ export default function EnhancedCoursePage() {
                   <div className="flex items-center justify-between">
                     <div className="text-left">
                       <h3 className="text-lg font-semibold">
-                        Módulo {module.id}: {module.title}
+                        
+                        {T("Módulo")} {module.id}: {T(module.title)}
                       </h3>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {module.description}
+                        {T(module.description)}
                       </p>
                       <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                        <span>{module.duration}</span>
-                        <span>{module.lessons} aulas</span>
+                        <span>{T(module.duration)}</span>
+                        <span>{module.lessons}  {T("aulas")}</span>
                       </div>
                     </div>
                     {expandedModule === module.id ? (
@@ -306,7 +317,7 @@ export default function EnhancedCoursePage() {
                       {module.topics.map((topic, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
                           <PlayCircle size={16} className="text-amber-400" />
-                          {topic}
+                          {T(topic)}
                         </li>
                       ))}
                     </ul>
@@ -345,19 +356,19 @@ export default function EnhancedCoursePage() {
                   </div>
                   
                   <p className="text-muted-foreground mb-4">
-                    &ldquo;{testimonial.comment}&rdquo;
+                    &ldquo;{T(testimonial.comment)}&rdquo;
                   </p>
                   
                   {testimonial.impact && (
                     <p className="text-green-400 text-sm mb-4 font-semibold">
-                      ✨ {testimonial.impact}
+                      ✨ {T(testimonial.impact)}
                     </p>
                   )}
                   
                   <div className="mt-auto">
-                    <p className="font-semibold">{testimonial.name}</p>
+                    <p className="font-semibold">{T(testimonial.name)}</p>
                     <p className="text-sm text-muted-foreground">
-                      {testimonial.role}
+                      {T(testimonial.role)}
                       {testimonial.company && ` - ${testimonial.company}`}
                     </p>
                   </div>
@@ -373,15 +384,16 @@ export default function EnhancedCoursePage() {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center">
-              🎁 Bônus Exclusivos
+              
+              {T("🎁 Bônus Exclusivos")}
             </h2>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {course.bonuses.map((bonus, i) => (
                 <Card key={i} className="p-6 bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30">
                   <Gift className="text-amber-400 mb-3" size={24} />
-                  <h3 className="font-semibold mb-2">{bonus.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-3">{bonus.description}</p>
+                  <h3 className="font-semibold mb-2">{T(bonus.title)}</h3>
+                  <p className="text-sm text-muted-foreground mb-3">{T(bonus.description)}</p>
                   <p className="text-lg font-bold text-amber-400">
                     Valor: R$ {bonus.value}
                   </p>
@@ -391,7 +403,8 @@ export default function EnhancedCoursePage() {
             
             <div className="text-center mt-8">
               <p className="text-2xl font-bold text-amber-400">
-                Total em Bônus: R$ {course.bonuses.reduce((sum, b) => sum + b.value, 0).toLocaleString('pt-BR')}
+                
+                {T("Total em Bônus: R$")} {course.bonuses.reduce((sum, b) => sum + b.value, 0).toLocaleString('pt-BR')}
               </p>
             </div>
           </div>
@@ -412,7 +425,7 @@ export default function EnhancedCoursePage() {
                   onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
                   className="w-full flex items-center justify-between text-left"
                 >
-                  <h3 className="font-semibold pr-4">{faq.question}</h3>
+                  <h3 className="font-semibold pr-4">{T(faq.question)}</h3>
                   {expandedFaq === i ? (
                     <ChevronUp className="text-amber-400 flex-shrink-0" />
                   ) : (
@@ -426,7 +439,7 @@ export default function EnhancedCoursePage() {
                     animate={{ opacity: 1, height: "auto" }}
                     className="mt-4 text-muted-foreground"
                   >
-                    {faq.answer}
+                    {T(faq.answer)}
                   </motion.div>
                 )}
               </Card>
@@ -439,10 +452,12 @@ export default function EnhancedCoursePage() {
       <section className="py-20 bg-gradient-to-r from-amber-900 to-yellow-900">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6">
-            Pronto para Transformar Sua Vida?
+            
+            {T("Pronto para Transformar Sua Vida?")}
           </h2>
           <p className="text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
-            Junte-se a mais de {course.students.toLocaleString()} alunos que já estão dominando {course.tool}
+            
+            {T("Junte-se a mais de")} {course.students.toLocaleString()}  {T("alunos que já estão dominando")} {T(course.tool)}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -452,7 +467,8 @@ export default function EnhancedCoursePage() {
               className="bg-white text-amber-900 hover:bg-gray-100 text-lg px-8 py-6"
             >
               <ShoppingCart className="mr-2" />
-              Garantir Minha Vaga Agora
+              
+              {T("Garantir Minha Vaga Agora")}
             </Button>
             <div className="text-left">
               <p className="text-3xl font-bold">
@@ -469,11 +485,13 @@ export default function EnhancedCoursePage() {
           <div className="flex flex-wrap gap-6 justify-center text-sm">
             <span className="flex items-center gap-2">
               <Shield className="text-green-400" />
-              30 dias de garantia
+              
+              {T("30 dias de garantia")}
             </span>
             <span className="flex items-center gap-2">
               <Award className="text-yellow-400" />
-              Certificado incluído
+              
+              {T("Certificado incluído")}
             </span>
             <span className="flex items-center gap-2">
               <Users className="text-blue-400" />

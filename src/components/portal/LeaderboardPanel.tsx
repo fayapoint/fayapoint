@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import { Crown, Medal, Trophy, TrendingUp, Zap, Flame } from "lucide-react";
@@ -35,11 +36,12 @@ const PLAN_LABEL: Record<string, string> = {
 
 /* Avatar com foto real quando existir (o campo image era ignorado) */
 function RankAvatar({ user, className }: { user: LeaderboardUser; className?: string }) {
+  const T = useT();
   return user.image ? (
     /* eslint-disable-next-line @next/next/no-img-element */
     <img
       src={user.image}
-      alt={user.name}
+      alt={T(user.name)}
       className={cn("rounded-full object-cover", className)}
     />
   ) : (
@@ -68,6 +70,7 @@ const RANK_STYLES: Record<number, { bg: string; icon: React.ReactNode; glow: str
 };
 
 export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
+  const T = useT();
   return (
     <div className="space-y-4 md:space-y-6 min-w-0 overflow-hidden">
       {/* Header — arte contextual §12 */}
@@ -82,11 +85,11 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
             </div>
             <span className="truncate">Ranking Semanal</span>
           </h2>
-          <p className="text-muted-foreground text-xs md:text-sm mt-1 truncate">Compete com outros alunos e ganhe XP extra!</p>
+          <p className="text-muted-foreground text-xs md:text-sm mt-1 truncate">{T("Compete com outros alunos e ganhe XP extra!")}</p>
         </div>
 
         <Card className="relative bg-amber-500/10 border-amber-500/30 px-3 py-1.5 md:px-4 md:py-2 shrink-0">
-          <p className="text-[10px] md:text-xs text-muted-foreground">Sua posição</p>
+          <p className="text-[10px] md:text-xs text-muted-foreground">{T("Sua posição")}</p>
           <p className="text-xl md:text-2xl font-bold text-amber-400">#{userRank}</p>
         </Card>
       </Card>
@@ -142,8 +145,8 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                 </div>
 
                 <h3 className={cn("font-bold truncate", isFirst ? "text-sm md:text-lg" : "text-xs md:text-sm")}>
-                  {user.name}
-                  {user.isCurrentUser && <span className="text-amber-400 ml-1 text-[10px] md:text-sm">(você)</span>}
+                  {T(user.name)}
+                  {user.isCurrentUser && <span className="text-amber-400 ml-1 text-[10px] md:text-sm">{T("(você)")}</span>}
                 </h3>
 
                 <div className="flex items-center justify-center gap-1 md:gap-2 mt-1 md:mt-2 flex-wrap">
@@ -208,13 +211,13 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1 md:gap-2 min-w-0">
-                  <span className="font-semibold text-sm md:text-base truncate">{user.name}</span>
-                  {user.isCurrentUser && <Badge className="bg-amber-500 text-[10px] md:text-xs shrink-0">Você</Badge>}
+                  <span className="font-semibold text-sm md:text-base truncate">{T(user.name)}</span>
+                  {user.isCurrentUser && <Badge className="bg-amber-500 text-[10px] md:text-xs shrink-0">{T("Você")}</Badge>}
                   {user.plan !== 'free' && (
                     <Crown size={12} className="text-yellow-400 shrink-0" />
                   )}
                 </div>
-                <p className="text-[10px] md:text-xs text-muted-foreground">Nível {user.level}</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">{T("Nível")} {user.level}</p>
               </div>
 
               <div className="text-right shrink-0">
@@ -222,7 +225,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                   <Zap className="text-yellow-400" size={14} />
                   <span className="font-bold text-sm md:text-base">{user.weeklyXp.toLocaleString()}</span>
                 </div>
-                <p className="text-[10px] md:text-xs text-muted-foreground hidden sm:block">XP esta semana</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground hidden sm:block">{T("XP esta semana")}</p>
               </div>
             </motion.div>
           ))}
@@ -236,11 +239,12 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm md:text-base">Você</span>
-                <Badge className="bg-amber-500 text-[10px] shrink-0">Sua posição</Badge>
+                <span className="font-semibold text-sm md:text-base">{T("Você")}</span>
+                <Badge className="bg-amber-500 text-[10px] shrink-0">{T("Sua posição")}</Badge>
               </div>
               <p className="text-[10px] md:text-xs text-muted-foreground">
-                Ganhe XP em aulas, quizzes e minigames para subir no ranking
+                
+                {T("Ganhe XP em aulas, quizzes e minigames para subir no ranking")}
               </p>
             </div>
           </div>

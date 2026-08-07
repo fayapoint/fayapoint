@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { XCircle, CheckCircle, ArrowRight, Sparkles, Zap, AlertCircle, TrendingDown, X, TrendingUp, CheckCircle2 } from "lucide-react";
@@ -7,6 +8,7 @@ import { useRef } from "react";
 import { useTranslations } from "next-intl";
 
 export function FeaturesSection() {
+  const T = useT();
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -59,7 +61,7 @@ export function FeaturesSection() {
               <div className="relative backdrop-blur-sm bg-secondary border border-border rounded-full px-5 py-2 flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-yellow-400" />
                 <span className="text-sm font-medium bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                  {badge}
+                  {T(badge)}
                 </span>
               </div>
             </div>
@@ -67,11 +69,11 @@ export function FeaturesSection() {
           
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-red-400 to-green-400 bg-clip-text text-transparent">
-              {title}
+              {T(title)}
             </span>
           </h2>
           <p className="text-xl text-muted-foreground">
-            {description}
+            {T(description)}
           </p>
         </motion.div>
 
@@ -93,7 +95,7 @@ export function FeaturesSection() {
                 <TrendingDown className="text-red-400" size={28} />
               </motion.div>
               <h3 className="text-2xl font-bold text-red-400">
-                {withoutTitle}
+                {T(withoutTitle)}
               </h3>
             </div>
             
@@ -121,7 +123,7 @@ export function FeaturesSection() {
                     >
                       <X className="text-red-400 mt-1 flex-shrink-0" size={20} />
                     </motion.div>
-                    <span className="text-gray-800 dark:text-gray-200 font-medium">{problem}</span>
+                    <span className="text-gray-800 dark:text-gray-200 font-medium">{T(problem)}</span>
                   </div>
                 </motion.div>
               ))}
@@ -145,7 +147,7 @@ export function FeaturesSection() {
                 <TrendingUp className="text-green-400" size={28} />
               </motion.div>
               <h3 className="text-2xl font-bold text-green-400">
-                {withTitle}
+                {T(withTitle)}
               </h3>
               <motion.div
                 animate={{ scale: [1, 1.3, 1] }}
@@ -187,7 +189,7 @@ export function FeaturesSection() {
                     >
                       <CheckCircle2 className="text-green-400 mt-1 flex-shrink-0" size={20} />
                     </motion.div>
-                    <span className="text-gray-800 dark:text-gray-200 font-medium">{solution}</span>
+                    <span className="text-gray-800 dark:text-gray-200 font-medium">{T(solution)}</span>
                     <motion.div
                       className="absolute -right-2 -top-2"
                       initial={{ opacity: 0, scale: 0 }}

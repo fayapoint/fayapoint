@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -43,6 +44,7 @@ export function ProfileAvatarEditor({
   onAvatarUpdate,
   className,
 }: ProfileAvatarEditorProps) {
+  const T = useT();
   const [isOpen, setIsOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -54,13 +56,13 @@ export function ProfileAvatarEditor({
     // Validate file type
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!validTypes.includes(file.type)) {
-      toast.error('Formato inválido. Use JPG, PNG, WebP ou GIF.');
+      toast.error(T("Formato inválido. Use JPG, PNG, WebP ou GIF."));
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('Imagem muito grande. Máximo 5MB.');
+      toast.error(T("Imagem muito grande. Máximo 5MB."));
       return;
     }
 
@@ -125,7 +127,7 @@ export function ProfileAvatarEditor({
         throw new Error(data.error || 'Erro ao fazer upload');
       }
 
-      toast.success('Avatar atualizado com sucesso!');
+      toast.success(T("Avatar atualizado com sucesso!"));
       onAvatarUpdate?.(data.imageUrl);
       handleClose();
     } catch (error) {
@@ -156,7 +158,7 @@ export function ProfileAvatarEditor({
         throw new Error(data.error || 'Erro ao remover avatar');
       }
 
-      toast.success('Avatar removido com sucesso!');
+      toast.success(T("Avatar removido com sucesso!"));
       onAvatarUpdate?.(null);
       handleClose();
     } catch (error) {
@@ -205,7 +207,8 @@ export function ProfileAvatarEditor({
           <DialogHeader>
             <DialogTitle className="text-xl">Editar Avatar</DialogTitle>
             <DialogDescription>
-              Faça upload de uma nova foto de perfil ou remova a atual.
+              
+              {T("Faça upload de uma nova foto de perfil ou remova a atual.")}
             </DialogDescription>
           </DialogHeader>
 
@@ -267,7 +270,7 @@ export function ProfileAvatarEditor({
                     className="space-y-2"
                   >
                     <Upload className="w-12 h-12 mx-auto text-amber-400" />
-                    <p className="text-amber-400 font-medium">Solte aqui!</p>
+                    <p className="text-amber-400 font-medium">{T("Solte aqui!")}</p>
                   </motion.div>
                 ) : (
                   <motion.div
@@ -279,10 +282,11 @@ export function ProfileAvatarEditor({
                   >
                     <Upload className="w-10 h-10 mx-auto text-muted-foreground" />
                     <p className="text-muted-foreground">
-                      Arraste uma imagem ou <span className="text-amber-400 font-medium">clique para selecionar</span>
+                      Arraste uma imagem ou <span className="text-amber-400 font-medium">{T("clique para selecionar")}</span>
                     </p>
                     <p className="text-xs text-gray-600">
-                      JPG, PNG, WebP ou GIF • Máximo 5MB
+                      
+                      {T("JPG, PNG, WebP ou GIF • Máximo 5MB")}
                     </p>
                   </motion.div>
                 )}
@@ -302,7 +306,7 @@ export function ProfileAvatarEditor({
                   </div>
                   <div>
                     <p className="text-sm font-medium truncate max-w-[200px]">
-                      {selectedFile.name}
+                      {T(selectedFile.name)}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
@@ -365,7 +369,8 @@ export function ProfileAvatarEditor({
                     ) : (
                       <>
                         <Check className="w-4 h-4 mr-2" />
-                        Salvar
+                        
+                        {T("Salvar")}
                       </>
                     )}
                   </Button>
@@ -377,8 +382,8 @@ export function ProfileAvatarEditor({
             <div className="flex items-start gap-2 text-xs text-muted-foreground bg-secondary/50 rounded-lg p-3">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
               <p>
-                Para melhores resultados, use uma imagem quadrada com seu rosto centralizado.
-                A imagem será redimensionada automaticamente.
+                
+                {T("Para melhores resultados, use uma imagem quadrada com seu rosto centralizado.\n                A imagem será redimensionada automaticamente.")}
               </p>
             </div>
           </div>

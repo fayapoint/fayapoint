@@ -1,4 +1,6 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
+import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
@@ -83,6 +85,7 @@ const MORE_NAV_ITEMS = [
 ];
 
 export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileBottomNavProps) {
+  const T = useT();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const pathname = usePathname();
   const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en");
@@ -198,11 +201,11 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
                           ? "bg-yellow-500 text-black" 
                           : "bg-amber-500 text-white"
                       )}>
-                        {item.badge}
+                        {T(item.badge)}
                       </span>
                     )}
                   </div>
-                  <span className="text-xs font-medium">{item.label}</span>
+                  <span className="text-xs font-medium">{T(item.label)}</span>
                 </button>
               );
             })}
@@ -221,7 +224,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
             <Link href={accountHref} className="min-w-0">
               <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-secondary rounded-xl text-muted-foreground hover:bg-white/10 transition">
                 <UserCog size={18} />
-                <span className="text-sm truncate">Minha Conta</span>
+                <span className="text-sm truncate">{T("Minha Conta")}</span>
               </button>
             </Link>
             <Link href={settingsHref} className="min-w-0">
@@ -230,6 +233,11 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
                 <span className="text-sm truncate">Config</span>
               </button>
             </Link>
+            {/* No celular a barra lateral não existe, então este é o único
+                lugar do portal onde o seletor de idioma cabe. */}
+            <div className="col-span-2 flex justify-center pt-1">
+              <BotaoIdioma />
+            </div>
           </div>
         </motion.div>
       )}
@@ -267,7 +275,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
                   />
                 )}
                 <item.icon size={19} className={isActive ? "scale-110" : ""} />
-                <span className="text-[9px] font-medium leading-none truncate max-w-full">{item.label}</span>
+                <span className="text-[9px] font-medium leading-none truncate max-w-full">{T(item.label)}</span>
               </button>
             );
           })}
@@ -299,7 +307,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
               />
             )}
             <Menu size={19} className={isMoreOpen ? "scale-110" : ""} />
-            <span className="text-[9px] font-medium leading-none">Mais</span>
+            <span className="text-[9px] font-medium leading-none">{T("Mais")}</span>
           </button>
         </div>
       </nav>

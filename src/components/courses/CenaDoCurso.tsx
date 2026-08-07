@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { cenaDoCurso } from "@/data/curso-midia";
 
@@ -23,6 +24,7 @@ export function CenaDoCurso({
   indice: number;
   className?: string;
 }) {
+  const T = useT();
   const cena = cenaDoCurso(slug, indice);
   if (!cena) return null;
 
@@ -42,7 +44,7 @@ export function CenaDoCurso({
         {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, servida pela CDN sem otimizador */}
         <img
           src={cena.src}
-          alt={cena.legenda}
+          alt={T(cena.legenda)}
           width={1376}
           height={768}
           loading="lazy"
@@ -62,7 +64,7 @@ export function CenaDoCurso({
         />
       </div>
       <figcaption className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
-        {cena.legenda}
+        {T(cena.legenda)}
       </figcaption>
     </figure>
   );

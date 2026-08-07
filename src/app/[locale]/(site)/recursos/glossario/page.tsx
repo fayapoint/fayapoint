@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -17,6 +18,7 @@ function termSlug(term: string) {
 }
 
 export default function GlossaryPage() {
+  const T = useT();
   const t = useTranslations("Glossary");
   const terms = t.raw("terms") as Term[];
   const categories = t.raw("categories") as string[];
@@ -93,7 +95,7 @@ export default function GlossaryPage() {
                     selectedCategory === cat ? "bg-amber-600 text-white" : "bg-secondary text-muted-foreground hover:bg-white/10"
                   }`}
                 >
-                  {cat}
+                  {T(cat)}
                 </button>
               ))}
             </div>
@@ -110,7 +112,7 @@ export default function GlossaryPage() {
             <div className="space-y-8">
               {sortedLetters.map(letter => (
                 <div key={letter}>
-                  <h2 className="text-3xl font-bold text-amber-400 mb-4 sticky top-24 bg-black py-2">{letter}</h2>
+                  <h2 className="text-3xl font-bold text-amber-400 mb-4 sticky top-24 bg-black py-2">{T(letter)}</h2>
                   <div className="space-y-4">
                     {groupedTerms[letter].map((term, idx) => (
                       <motion.div
@@ -124,11 +126,11 @@ export default function GlossaryPage() {
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div>
-                            <h3 className="text-lg font-semibold text-white">{term.term}</h3>
-                            <p className="text-muted-foreground mt-1">{term.definition}</p>
+                            <h3 className="text-lg font-semibold text-white">{T(term.term)}</h3>
+                            <p className="text-muted-foreground mt-1">{T(term.definition)}</p>
                           </div>
                           <span className="text-xs px-2 py-1 bg-amber-500/20 text-amber-300 rounded-full whitespace-nowrap">
-                            {term.category}
+                            {T(term.category)}
                           </span>
                         </div>
                       </motion.div>

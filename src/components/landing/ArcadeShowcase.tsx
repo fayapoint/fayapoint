@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * VITRINE DO ARCADE na home (24/07/2026).
@@ -40,6 +41,7 @@ const GAMES: { id: string; cor: string }[] = [
 ];
 
 export function ArcadeShowcase() {
+  const T = useT();
   const locale = useLocale();
   const t = useTranslations("ArcadeShowcase");
   // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
@@ -130,7 +132,7 @@ export function ArcadeShowcase() {
                   </span>
                 </div>
                 <div className="p-2.5">
-                  <p className="text-[13px] font-bold leading-tight">{titulo}</p>
+                  <p className="text-[13px] font-bold leading-tight">{T(titulo)}</p>
                   <p className="mt-1 text-[11px] leading-snug text-white/45">
                     {t(`games.${game.id}.gancho`)}
                   </p>

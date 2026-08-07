@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
@@ -29,6 +30,7 @@ const categoryMap: Record<string, string> = {
 };
 
 export default function CoursesByCategoryPage() {
+  const T = useT();
   const params = useParams<{ category: string }>();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("popular");
@@ -57,8 +59,8 @@ export default function CoursesByCategoryPage() {
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           <div className="mb-8 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-3">{pageTitle}</h1>
-            <p className="text-muted-foreground">Cursos organizados por categoria</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-3">{T(pageTitle)}</h1>
+            <p className="text-muted-foreground">{T("Cursos organizados por categoria")}</p>
           </div>
 
           <div className="bg-popover/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-border">
@@ -80,11 +82,11 @@ export default function CoursesByCategoryPage() {
                   <SelectValue placeholder="Ordenar por" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="popular">Mais Popular</SelectItem>
+                  <SelectItem value="popular">{T("Mais Popular")}</SelectItem>
                   <SelectItem value="rating">Melhor Avaliado</SelectItem>
-                  <SelectItem value="price-low">Menor Preço</SelectItem>
-                  <SelectItem value="price-high">Maior Preço</SelectItem>
-                  <SelectItem value="students">Mais Alunos</SelectItem>
+                  <SelectItem value="price-low">{T("Menor Preço")}</SelectItem>
+                  <SelectItem value="price-high">{T("Maior Preço")}</SelectItem>
+                  <SelectItem value="students">{T("Mais Alunos")}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -107,15 +109,15 @@ export default function CoursesByCategoryPage() {
                     <div className={`${viewMode === "list" ? "w-64" : ""} relative`}>
                       <div className="aspect-video bg-gradient-to-br from-amber-600 to-yellow-700 relative">
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <Badge className="bg-black/40">{pageTitle}</Badge>
+                          <Badge className="bg-black/40">{T(pageTitle)}</Badge>
                         </div>
                       </div>
                     </div>
                     <div className="p-6 flex-1">
-                      <h3 className="text-lg font-semibold mb-2 group-hover:text-amber-400 transition">{course.title}</h3>
-                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{course.description}</p>
+                      <h3 className="text-lg font-semibold mb-2 group-hover:text-amber-400 transition">{T(course.title)}</h3>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{T(course.description)}</p>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                        <span className="flex items-center gap-1"><Clock size={16} />{course.duration}</span>
+                        <span className="flex items-center gap-1"><Clock size={16} />{T(course.duration)}</span>
                         <span className="flex items-center gap-1"><Users size={16} />{course.students.toLocaleString("pt-BR")}</span>
                         <span className="flex items-center gap-1"><Star size={16} className="text-yellow-400" />{course.rating}</span>
                       </div>

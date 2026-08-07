@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import Link from "next/link";
 import type { Product } from "@/lib/products";
 
@@ -27,6 +28,7 @@ export default function IndicePrevias({
   produtos: Product[];
   locale: string;
 }) {
+  const T = useT();
   const cursos = produtos
     .filter((p) => p.slug && (p.name || p.shortName))
     .sort((a, b) => (a.name || "").localeCompare(b.name || "", "pt-BR"));
@@ -40,11 +42,12 @@ export default function IndicePrevias({
     >
       <div className="container mx-auto px-4">
         <h2 id="indice-previas" className="text-2xl font-semibold text-white">
-          Leia um capítulo antes de pagar
+          
+          {T("Leia um capítulo antes de pagar")}
         </h2>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60">
-          Cada curso tem uma prévia aberta, sem cadastro: a ementa completa, capítulo a capítulo,
-          e um capítulo inteiro para você julgar a profundidade do material com os próprios olhos.
+          
+          {T("Cada curso tem uma prévia aberta, sem cadastro: a ementa completa, capítulo a capítulo,\n          e um capítulo inteiro para você julgar a profundidade do material com os próprios olhos.")}
         </p>
 
         <ul className="mt-8 grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -62,7 +65,7 @@ export default function IndicePrevias({
                 </span>
                 {typeof c.metrics?.lessons === "number" && c.metrics.lessons > 0 && (
                   <span className="shrink-0 text-xs text-white/35">
-                    {c.metrics.lessons} aulas
+                    {c.metrics.lessons}  {T("aulas")}
                   </span>
                 )}
               </Link>

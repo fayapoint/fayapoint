@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -223,6 +224,7 @@ function formatCurrency(value: number): string {
 // ============================================================================
 
 export default function AccountPage() {
+  const T = useT();
   const router = useRouter();
   const params = useParams();
   const locale = typeof params?.locale === "string" ? params.locale : "pt-BR";
@@ -339,7 +341,7 @@ export default function AccountPage() {
       });
     } catch (error) {
       console.error("Error fetching account:", error);
-      toast.error("Erro ao carregar dados da conta");
+      toast.error(T("Erro ao carregar dados da conta"));
     }
   }, [locale, logout]);
 
@@ -435,7 +437,7 @@ export default function AccountPage() {
         });
       }
 
-      toast.success("Perfil atualizado com sucesso!");
+      toast.success(T("Perfil atualizado com sucesso!"));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Erro ao salvar perfil");
     } finally {
@@ -445,12 +447,12 @@ export default function AccountPage() {
 
   const handleChangePassword = async () => {
     if (passwordForm.new !== passwordForm.confirm) {
-      toast.error("As senhas não coincidem");
+      toast.error(T("As senhas não coincidem"));
       return;
     }
 
     if (passwordForm.new.length < 6) {
-      toast.error("A nova senha deve ter pelo menos 6 caracteres");
+      toast.error(T("A nova senha deve ter pelo menos 6 caracteres"));
       return;
     }
 
@@ -498,7 +500,7 @@ export default function AccountPage() {
 
       if (!res.ok) throw new Error("Erro ao salvar preferências");
 
-      toast.success("Preferências salvas com sucesso!");
+      toast.success(T("Preferências salvas com sucesso!"));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Erro ao salvar preferências");
     } finally {
@@ -558,9 +560,10 @@ export default function AccountPage() {
     return (
       <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-muted-foreground mb-4">Erro ao carregar conta</p>
+          <p className="text-muted-foreground mb-4">{T("Erro ao carregar conta")}</p>
           <Button onClick={() => router.push("/portal")} variant="outline">
-            Voltar ao Portal
+            
+            {T("Voltar ao Portal")}
           </Button>
         </div>
       </div>
@@ -592,7 +595,7 @@ export default function AccountPage() {
             {account.image ? (
               <img
                 src={account.image}
-                alt={account.name}
+                alt={T(account.name)}
                 className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-border shrink-0"
               />
             ) : (
@@ -601,9 +604,9 @@ export default function AccountPage() {
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <h1 className="text-lg md:text-xl font-bold truncate">{account.name}</h1>
+              <h1 className="text-lg md:text-xl font-bold truncate">{T(account.name)}</h1>
               <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                <span className="text-xs md:text-sm text-muted-foreground truncate">{account.email}</span>
+                <span className="text-xs md:text-sm text-muted-foreground truncate">{T(account.email)}</span>
                 <Badge className={cn("text-xs shrink-0", PLAN_COLORS[currentPlan])}>
                   <PlanIcon size={12} className="mr-1" />
                   {currentPlan.toUpperCase()}
@@ -615,7 +618,8 @@ export default function AccountPage() {
             href="/portal?tab=profile"
             className="relative shrink-0 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-white hover:border-amber-400/40 transition-colors"
           >
-            Meu Perfil
+            
+            {T("Meu Perfil")}
           </a>
           </div>
         </div>
@@ -628,14 +632,14 @@ export default function AccountPage() {
               className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <User size={16} className="mr-1.5 shrink-0" />
-              <span className="hidden sm:inline truncate">Perfil</span>
+              <span className="hidden sm:inline truncate">{T("Perfil")}</span>
             </TabsTrigger>
             <TabsTrigger
               value="assinatura"
               className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <CreditCard size={16} className="mr-1.5 shrink-0" />
-              <span className="hidden sm:inline truncate">Assinatura</span>
+              <span className="hidden sm:inline truncate">{T("Assinatura")}</span>
             </TabsTrigger>
             <TabsTrigger
               value="seguranca"
@@ -649,7 +653,7 @@ export default function AccountPage() {
               className="flex-1 min-w-0 sm:min-w-[80px] data-[state=active]:bg-amber-600/20 data-[state=active]:text-amber-400 text-muted-foreground"
             >
               <Award size={16} className="mr-1.5 shrink-0" />
-              <span className="hidden sm:inline truncate">Certificados</span>
+              <span className="hidden sm:inline truncate">{T("Certificados")}</span>
             </TabsTrigger>
             <TabsTrigger
               value="preferencias"
@@ -677,7 +681,7 @@ export default function AccountPage() {
                     {account.image ? (
                       <img
                         src={account.image}
-                        alt={account.name}
+                        alt={T(account.name)}
                         className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-border shrink-0"
                       />
                     ) : (
@@ -686,10 +690,11 @@ export default function AccountPage() {
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-semibold text-base md:text-lg truncate">{account.name}</h3>
-                      <p className="text-sm text-muted-foreground truncate">{account.email}</p>
+                      <h3 className="font-semibold text-base md:text-lg truncate">{T(account.name)}</h3>
+                      <p className="text-sm text-muted-foreground truncate">{T(account.email)}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Membro desde {formatDate(account.createdAt)}
+                        
+                        {T("Membro desde")} {formatDate(account.createdAt)}
                       </p>
                     </div>
                   </div>
@@ -697,11 +702,11 @@ export default function AccountPage() {
 
                 {/* Profile Form */}
                 <Card className="p-4 md:p-6 bg-card border-border space-y-4 md:space-y-5 min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-2">Informações Pessoais</h3>
+                  <h3 className="text-base md:text-lg font-semibold mb-2">{T("Informações Pessoais")}</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Nome</Label>
+                      <Label className="text-muted-foreground">{T("Nome")}</Label>
                       <Input
                         value={profileForm.name}
                         onChange={(e) =>
@@ -727,7 +732,7 @@ export default function AccountPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, bio: e.target.value })
                       }
-                      placeholder="Conte um pouco sobre você..."
+                      placeholder={T("Conte um pouco sobre você...")}
                       className="bg-secondary border-border text-white min-h-[100px] resize-none"
                     />
                   </div>
@@ -765,7 +770,7 @@ export default function AccountPage() {
                         onChange={(e) =>
                           setProfileForm({ ...profileForm, company: e.target.value })
                         }
-                        placeholder="Nome da empresa"
+                        placeholder={T("Nome da empresa")}
                         className="bg-secondary border-border text-white"
                       />
                     </div>
@@ -776,14 +781,14 @@ export default function AccountPage() {
                         onChange={(e) =>
                           setProfileForm({ ...profileForm, position: e.target.value })
                         }
-                        placeholder="Seu cargo atual"
+                        placeholder={T("Seu cargo atual")}
                         className="bg-secondary border-border text-white"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-muted-foreground">Localização</Label>
+                    <Label className="text-muted-foreground">{T("Localização")}</Label>
                     <Input
                       value={profileForm.location}
                       onChange={(e) =>
@@ -822,7 +827,7 @@ export default function AccountPage() {
                           className="bg-amber-500/20 text-amber-300 border-amber-500/30 px-3 py-1 cursor-pointer hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 transition-colors"
                           onClick={() => handleRemoveTag("skills", skill)}
                         >
-                          {skill}
+                          {T(skill)}
                           <X size={12} className="ml-1.5" />
                         </Badge>
                       ))}
@@ -854,7 +859,7 @@ export default function AccountPage() {
                           className="bg-blue-500/20 text-blue-300 border-blue-500/30 px-3 py-1 cursor-pointer hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 transition-colors"
                           onClick={() => handleRemoveTag("interests", interest)}
                         >
-                          {interest}
+                          {T(interest)}
                           <X size={12} className="ml-1.5" />
                         </Badge>
                       ))}
@@ -873,7 +878,7 @@ export default function AccountPage() {
                   ) : (
                     <Save size={20} className="mr-2" />
                   )}
-                  {savingProfile ? "Salvando..." : "Salvar Perfil"}
+                  {savingProfile ? "Salvando..." : T("Salvar Perfil")}
                 </Button>
               </motion.div>
             </TabsContent>
@@ -896,7 +901,7 @@ export default function AccountPage() {
                 {/* Current Plan */}
                 <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
                   <div className="flex items-center justify-between mb-4 gap-2">
-                    <h3 className="text-base md:text-lg font-semibold">Plano Atual</h3>
+                    <h3 className="text-base md:text-lg font-semibold">{T("Plano Atual")}</h3>
                     <Badge className={cn("text-sm px-3 py-1", PLAN_COLORS[currentPlan])}>
                       <PlanIcon size={14} className="mr-1.5" />
                       {currentPlan.toUpperCase()}
@@ -908,7 +913,7 @@ export default function AccountPage() {
                       <div className="flex justify-between text-sm gap-2">
                         <span className="text-muted-foreground shrink-0">Valor</span>
                         <span className="font-medium text-right truncate">
-                          {formatCurrency(subscriptionData.subscription.value)}/{subscriptionData.subscription.cycle === "monthly" ? "mês" : subscriptionData.subscription.cycle === "yearly" ? "ano" : subscriptionData.subscription.cycle}
+                          {formatCurrency(subscriptionData.subscription.value)}/{subscriptionData.subscription.cycle === "monthly" ? T("mês") : subscriptionData.subscription.cycle === "yearly" ? T("ano") : subscriptionData.subscription.cycle}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm gap-2">
@@ -926,7 +931,7 @@ export default function AccountPage() {
                       </div>
                       {subscriptionData.subscription.nextDueDate && (
                         <div className="flex justify-between text-sm gap-2">
-                          <span className="text-muted-foreground shrink-0">Próxima cobrança</span>
+                          <span className="text-muted-foreground shrink-0">{T("Próxima cobrança")}</span>
                           <span className="text-right truncate">{formatDate(subscriptionData.subscription.nextDueDate)}</span>
                         </div>
                       )}
@@ -936,7 +941,7 @@ export default function AccountPage() {
                           <span className="flex items-center gap-1.5 min-w-0 justify-end">
                             <CreditCard size={14} className="text-muted-foreground shrink-0" />
                             {subscriptionData.subscription.billingType === "credit_card" && subscriptionData.subscription.creditCardLastFour
-                              ? `${subscriptionData.subscription.creditCardBrand || "Cartão"} **** ${subscriptionData.subscription.creditCardLastFour}`
+                              ? `${subscriptionData.subscription.creditCardBrand || T("Cartão")} **** ${subscriptionData.subscription.creditCardLastFour}`
                               : subscriptionData.subscription.billingType === "pix"
                                 ? "PIX"
                                 : subscriptionData.subscription.billingType === "boleto"
@@ -949,22 +954,24 @@ export default function AccountPage() {
                   ) : (
                     <p className="text-muted-foreground text-sm">
                       {currentPlan === "free"
-                        ? "Você está no plano gratuito. Faça upgrade para desbloquear mais recursos!"
-                        : "Nenhuma assinatura ativa encontrada."}
+                        ? T("Você está no plano gratuito. Faça upgrade para desbloquear mais recursos!")
+                        : T("Nenhuma assinatura ativa encontrada.")}
                     </p>
                   )}
 
                   {account.subscription?.status === "cancelled" && (
                     <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                      <p className="text-yellow-400 text-sm font-medium">Assinatura cancelada</p>
+                      <p className="text-yellow-400 text-sm font-medium">{T("Assinatura cancelada")}</p>
                       <p className="text-yellow-400/70 text-xs mt-1">
-                        Seu acesso continua ativo até o fim do período atual.
+                        
+                        {T("Seu acesso continua ativo até o fim do período atual.")}
                       </p>
                       <Button
                         className="mt-3 bg-yellow-600 hover:bg-yellow-700 text-black font-semibold"
                         size="sm"
                       >
-                        Reativar Assinatura
+                        
+                        {T("Reativar Assinatura")}
                       </Button>
                     </div>
                   )}
@@ -973,7 +980,7 @@ export default function AccountPage() {
                 {/* Plan Comparison */}
                 {subscriptionData?.plans && (
                   <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                    <h3 className="text-base md:text-lg font-semibold mb-4">Comparar Planos</h3>
+                    <h3 className="text-base md:text-lg font-semibold mb-4">{T("Comparar Planos")}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                       {subscriptionData.plans.map((plan) => {
                         const isCurrentPlan = plan.id === currentPlan;
@@ -990,11 +997,11 @@ export default function AccountPage() {
                           >
                             <div className="flex items-center gap-2 mb-2">
                               <PIcon size={18} className={isCurrentPlan ? "text-amber-400" : "text-muted-foreground"} />
-                              <span className="font-semibold">{plan.name}</span>
+                              <span className="font-semibold">{T(plan.name)}</span>
                             </div>
                             <div className="mb-3">
                               <span className="text-xl md:text-2xl font-bold">
-                                {plan.monthlyPrice === 0 ? "Grátis" : formatCurrency(plan.monthlyPrice)}
+                                {plan.monthlyPrice === 0 ? T("Grátis") : formatCurrency(plan.monthlyPrice)}
                               </span>
                               {plan.monthlyPrice > 0 && (
                                 <span className="text-sm text-muted-foreground">/mês</span>
@@ -1004,13 +1011,14 @@ export default function AccountPage() {
                               {plan.features.map((feature, i) => (
                                 <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                                   <Check size={14} className="text-green-400 mt-0.5 shrink-0" />
-                                  {feature}
+                                  {T(feature)}
                                 </li>
                               ))}
                             </ul>
                             {isCurrentPlan ? (
                               <div className="text-center py-2 bg-amber-500/20 rounded-lg text-amber-400 text-sm font-medium">
-                                Seu plano atual
+                                
+                                {T("Seu plano atual")}
                               </div>
                             ) : plan.id !== "free" ? (
                               <Button
@@ -1021,8 +1029,8 @@ export default function AccountPage() {
                                 {currentPlan === "free" ||
                                   (subscriptionData.plans.findIndex(p => p.id === plan.id) >
                                     subscriptionData.plans.findIndex(p => p.id === currentPlan))
-                                  ? "Fazer Upgrade"
-                                  : "Alterar Plano"}
+                                  ? T("Fazer Upgrade")
+                                  : T("Alterar Plano")}
                               </Button>
                             ) : null}
                           </div>
@@ -1048,10 +1056,10 @@ export default function AccountPage() {
                 <Card className="relative p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
                   <img src="/portal/conta/seguranca.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-24 w-40 object-cover opacity-35" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
-                  <h3 className="relative text-base md:text-lg font-semibold mb-4">Alterar Senha</h3>
+                  <h3 className="relative text-base md:text-lg font-semibold mb-4">{T("Alterar Senha")}</h3>
                   <div className="space-y-4 max-w-md">
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Senha atual</Label>
+                      <Label className="text-muted-foreground">{T("Senha atual")}</Label>
                       <div className="relative">
                         <Input
                           type={showPasswords.current ? "text" : "password"}
@@ -1059,7 +1067,7 @@ export default function AccountPage() {
                           onChange={(e) =>
                             setPasswordForm({ ...passwordForm, current: e.target.value })
                           }
-                          placeholder="Digite sua senha atual"
+                          placeholder={T("Digite sua senha atual")}
                           className="bg-secondary border-border text-white pr-10"
                         />
                         <button
@@ -1075,7 +1083,7 @@ export default function AccountPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Nova senha</Label>
+                      <Label className="text-muted-foreground">{T("Nova senha")}</Label>
                       <div className="relative">
                         <Input
                           type={showPasswords.new ? "text" : "password"}
@@ -1083,7 +1091,7 @@ export default function AccountPage() {
                           onChange={(e) =>
                             setPasswordForm({ ...passwordForm, new: e.target.value })
                           }
-                          placeholder="Mínimo 6 caracteres"
+                          placeholder={T("Mínimo 6 caracteres")}
                           className="bg-secondary border-border text-white pr-10"
                         />
                         <button
@@ -1099,7 +1107,7 @@ export default function AccountPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Confirmar nova senha</Label>
+                      <Label className="text-muted-foreground">{T("Confirmar nova senha")}</Label>
                       <div className="relative">
                         <Input
                           type={showPasswords.confirm ? "text" : "password"}
@@ -1107,7 +1115,7 @@ export default function AccountPage() {
                           onChange={(e) =>
                             setPasswordForm({ ...passwordForm, confirm: e.target.value })
                           }
-                          placeholder="Repita a nova senha"
+                          placeholder={T("Repita a nova senha")}
                           className="bg-secondary border-border text-white pr-10"
                         />
                         <button
@@ -1121,7 +1129,7 @@ export default function AccountPage() {
                         </button>
                       </div>
                       {passwordForm.confirm && passwordForm.new !== passwordForm.confirm && (
-                        <p className="text-red-400 text-xs">As senhas não coincidem</p>
+                        <p className="text-red-400 text-xs">{T("As senhas não coincidem")}</p>
                       )}
                     </div>
 
@@ -1135,7 +1143,7 @@ export default function AccountPage() {
                       ) : (
                         <Shield size={16} className="mr-2" />
                       )}
-                      {savingPassword ? "Alterando..." : "Alterar Senha"}
+                      {savingPassword ? "Alterando..." : T("Alterar Senha")}
                     </Button>
                   </div>
                 </Card>
@@ -1167,7 +1175,7 @@ export default function AccountPage() {
                       </div>
                       <div>
                         <p className="font-medium">Google</p>
-                        <p className="text-sm text-muted-foreground">Login com Google</p>
+                        <p className="text-sm text-muted-foreground">{T("Login com Google")}</p>
                       </div>
                     </div>
                     <Badge variant="outline" className="border-green-500/50 text-green-400">
@@ -1178,15 +1186,17 @@ export default function AccountPage() {
 
                 {/* Active Sessions */}
                 <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-2">Sessões Ativas</h3>
+                  <h3 className="text-base md:text-lg font-semibold mb-2">{T("Sessões Ativas")}</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Gerencie os dispositivos onde sua conta está conectada.
+                    
+                    {T("Gerencie os dispositivos onde sua conta está conectada.")}
                   </p>
                   <div className="p-4 bg-secondary/30 rounded-lg border border-border/50 text-center">
                     <Monitor size={32} className="mx-auto text-muted-foreground mb-2" />
                     <p className="text-muted-foreground text-sm">Recurso em breve</p>
                     <p className="text-muted-foreground text-xs mt-1">
-                      O gerenciamento de sessões estará disponível em uma atualização futura.
+                      
+                      {T("O gerenciamento de sessões estará disponível em uma atualização futura.")}
                     </p>
                   </div>
                 </Card>
@@ -1197,7 +1207,8 @@ export default function AccountPage() {
                   <img src="/portal/conta/privacidade.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-24 w-40 object-cover opacity-30" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
                   <h3 className="relative text-base md:text-lg font-semibold text-red-400 mb-2">Zona de Perigo</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.
+                    
+                    {T("Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.")}
                   </p>
                   <Button
                     variant="outline"
@@ -1205,7 +1216,8 @@ export default function AccountPage() {
                     className="border-red-500/50 text-red-400 hover:bg-red-500/10 hover:text-red-300"
                   >
                     <Trash2 size={16} className="mr-2" />
-                    Excluir minha conta
+                    
+                    {T("Excluir minha conta")}
                   </Button>
                 </Card>
               </motion.div>
@@ -1235,10 +1247,10 @@ export default function AccountPage() {
                             </div>
                             <div className="min-w-0 flex-1">
                               <h4 className="font-semibold text-sm line-clamp-1 truncate">
-                                {cert.courseTitle}
+                                {T(cert.courseTitle)}
                               </h4>
                               <p className="text-xs text-muted-foreground">
-                                {cert.courseCategory} - {cert.courseLevel}
+                                {T(cert.courseCategory)} - {T(cert.courseLevel)}
                               </p>
                             </div>
                           </div>
@@ -1250,9 +1262,9 @@ export default function AccountPage() {
                             <span className="text-right truncate">{formatDate(cert.issuedAt)}</span>
                           </div>
                           <div className="flex justify-between gap-2">
-                            <span className="text-muted-foreground shrink-0">Certificado</span>
+                            <span className="text-muted-foreground shrink-0">{T("Certificado")}</span>
                             <span className="font-mono text-xs text-amber-400 truncate min-w-0">
-                              {cert.certificateNumber}
+                              {T(cert.certificateNumber)}
                             </span>
                           </div>
                           {cert.quizScore > 0 && (
@@ -1304,14 +1316,16 @@ export default function AccountPage() {
                     <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Award size={32} className="text-amber-400" />
                     </div>
-                    <h3 className="text-lg font-semibold mb-2">Nenhum certificado ainda</h3>
+                    <h3 className="text-lg font-semibold mb-2">{T("Nenhum certificado ainda")}</h3>
                     <p className="text-muted-foreground text-sm mb-4 max-w-md mx-auto">
-                      Complete um curso e passe no quiz final para ganhar seu certificado digital verificável!
+                      
+                      {T("Complete um curso e passe no quiz final para ganhar seu certificado digital verificável!")}
                     </p>
                     <Link href="/portal">
                       <Button className="bg-amber-600 hover:bg-amber-700">
                         <BookOpen size={16} className="mr-2" />
-                        Explorar Cursos
+                        
+                        {T("Explorar Cursos")}
                       </Button>
                     </Link>
                   </Card>
@@ -1331,7 +1345,7 @@ export default function AccountPage() {
               >
                 {/* Theme */}
                 <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-4">Aparência</h3>
+                  <h3 className="text-base md:text-lg font-semibold mb-4">{T("Aparência")}</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       { id: "light", label: "Claro", icon: Sun },
@@ -1349,7 +1363,7 @@ export default function AccountPage() {
                         )}
                       >
                         <Icon size={24} />
-                        <span className="text-sm font-medium">{label}</span>
+                        <span className="text-sm font-medium">{T(label)}</span>
                       </button>
                     ))}
                   </div>
@@ -1360,7 +1374,7 @@ export default function AccountPage() {
                   <h3 className="text-base md:text-lg font-semibold mb-4">Idioma</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
-                      { id: "pt-BR", label: "Português", flag: "🇧🇷" },
+                      { id: "pt-BR", label: T("Português"), flag: "🇧🇷" },
                       { id: "en", label: "English", flag: "🇺🇸" },
                       { id: "es", label: "Español", flag: "🇪🇸" },
                     ].map(({ id, label, flag }) => (
@@ -1374,8 +1388,8 @@ export default function AccountPage() {
                             : "border-border bg-secondary/50 text-muted-foreground hover:border-gray-600"
                         )}
                       >
-                        <span className="text-lg">{flag}</span>
-                        <span className="text-sm font-medium">{label}</span>
+                        <span className="text-lg">{T(flag)}</span>
+                        <span className="text-sm font-medium">{T(label)}</span>
                       </button>
                     ))}
                   </div>
@@ -1385,31 +1399,31 @@ export default function AccountPage() {
                 <Card className="relative p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
                   <img src="/portal/conta/notificacoes.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-24 w-40 object-cover opacity-35" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
-                  <h3 className="relative text-base md:text-lg font-semibold mb-4">Notificações</h3>
+                  <h3 className="relative text-base md:text-lg font-semibold mb-4">{T("Notificações")}</h3>
                   <div className="space-y-4">
                     {[
                       {
                         key: "email" as const,
                         label: "Email",
-                        description: "Receber notificações por email",
+                        description: T("Receber notificações por email"),
                         icon: Mail,
                       },
                       {
                         key: "push" as const,
                         label: "Push",
-                        description: "Notificações no navegador",
+                        description: T("Notificações no navegador"),
                         icon: Bell,
                       },
                       {
                         key: "marketing" as const,
                         label: "Marketing",
-                        description: "Ofertas e promoções",
+                        description: T("Ofertas e promoções"),
                         icon: Megaphone,
                       },
                       {
                         key: "courseUpdates" as const,
-                        label: "Atualizações de cursos",
-                        description: "Novos conteúdos e aulas",
+                        label: T("Atualizações de cursos"),
+                        description: T("Novos conteúdos e aulas"),
                         icon: BookOpen,
                       },
                       {
@@ -1426,8 +1440,8 @@ export default function AccountPage() {
                         <div className="flex items-center gap-3 min-w-0 flex-1">
                           <Icon size={18} className="text-muted-foreground shrink-0" />
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-medium truncate">{label}</p>
-                            <p className="text-xs text-muted-foreground truncate">{description}</p>
+                            <p className="text-sm font-medium truncate">{T(label)}</p>
+                            <p className="text-xs text-muted-foreground truncate">{T(description)}</p>
                           </div>
                         </div>
                         <Switch
@@ -1446,12 +1460,12 @@ export default function AccountPage() {
 
                 {/* Playback Speed */}
                 <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-4">Reprodução</h3>
+                  <h3 className="text-base md:text-lg font-semibold mb-4">{T("Reprodução")}</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Play size={18} className="text-muted-foreground" />
-                        <span className="text-sm">Velocidade padrão</span>
+                        <span className="text-sm">{T("Velocidade padrão")}</span>
                       </div>
                       <Badge variant="outline" className="border-amber-500/50 text-amber-400 font-mono">
                         {prefsForm.playbackSpeed}x
@@ -1484,7 +1498,7 @@ export default function AccountPage() {
                   ) : (
                     <Save size={20} className="mr-2" />
                   )}
-                  {savingPrefs ? "Salvando..." : "Salvar Preferências"}
+                  {savingPrefs ? "Salvando..." : T("Salvar Preferências")}
                 </Button>
               </motion.div>
             </TabsContent>
@@ -1498,15 +1512,17 @@ export default function AccountPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-400">
               <AlertTriangle size={20} />
-              Excluir Conta
+              
+              {T("Excluir Conta")}
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              Esta ação é irreversível. Todos os seus dados, cursos, certificados e progresso serão permanentemente excluídos.
+              
+              {T("Esta ação é irreversível. Todos os seus dados, cursos, certificados e progresso serão permanentemente excluídos.")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-2">
             <p className="text-sm text-muted-foreground">
-              Digite <strong className="text-red-400">EXCLUIR</strong> para confirmar:
+              Digite <strong className="text-red-400">EXCLUIR</strong>  {T("para confirmar:")}
             </p>
             <Input
               value={deleteConfirmText}

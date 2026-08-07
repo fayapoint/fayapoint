@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
@@ -160,6 +161,7 @@ export function DashboardHome({
   onTabChange,
   enrolledSlugs = [],
 }: DashboardHomeProps) {
+  const T = useT();
   const greeting = getGreeting();
   const firstName = user.name?.split(" ")[0] || "Aluno";
 
@@ -292,7 +294,7 @@ export function DashboardHome({
               <div>
                 <div className="flex items-center gap-2 min-w-0">
                   <h1 className="text-xl md:text-2xl font-extrabold tracking-tight truncate">
-                    {greeting}, {firstName} 👋
+                    {T(greeting)}, {T(firstName)} 👋
                   </h1>
                   {stats.streak > 0 && (
                     <div className="flex items-center gap-1 bg-orange-500/10 border border-orange-500/20 rounded-full px-2 py-0.5">
@@ -343,11 +345,11 @@ export function DashboardHome({
         <div className="flex gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {[
             { icon: Wand2, label: "Studio AI", tab: "studio", gradient: "from-amber-600 to-yellow-500" },
-            { icon: BookOpen, label: "Cursos", tab: "courses", gradient: "from-emerald-600 to-teal-500", count: hasStartedCourses ? userCourses.length : undefined },
-            { icon: Palette, label: "Loja POD", tab: "pod-store", gradient: "from-indigo-600 to-violet-500" },
-            { icon: Target, label: "Desafios", tab: "challenges", gradient: "from-orange-600 to-amber-500", done: dailyChallenge?.completed },
+            { icon: BookOpen, label: T("Cursos"), tab: "courses", gradient: "from-emerald-600 to-teal-500", count: hasStartedCourses ? userCourses.length : undefined },
+            { icon: Palette, label: T("Loja POD"), tab: "pod-store", gradient: "from-indigo-600 to-violet-500" },
+            { icon: Target, label: T("Desafios"), tab: "challenges", gradient: "from-orange-600 to-amber-500", done: dailyChallenge?.completed },
             { icon: Bot, label: "Assistente", tab: "assistant", gradient: "from-cyan-600 to-blue-500", proOnly: true },
-            { icon: Store, label: "Loja", tab: "store", gradient: "from-blue-600 to-yellow-600" },
+            { icon: Store, label: T("Loja"), tab: "store", gradient: "from-blue-600 to-yellow-600" },
           ].map((a) => (
             <button
               key={a.tab}
@@ -360,7 +362,7 @@ export function DashboardHome({
               <div className={cn("w-6 h-6 rounded-full bg-gradient-to-br flex items-center justify-center", a.gradient)}>
                 <a.icon size={12} className="text-white" />
               </div>
-              <span className="text-sm font-semibold text-muted-foreground whitespace-nowrap">{a.label}</span>
+              <span className="text-sm font-semibold text-muted-foreground whitespace-nowrap">{T(a.label)}</span>
               {a.count && <Badge className="bg-emerald-500/20 text-emerald-400 border-0 text-[9px] h-4 px-1.5">{a.count}</Badge>}
               {a.done && <Badge className="bg-green-500/20 text-green-400 border-0 text-[9px] h-4 px-1">✓</Badge>}
               {a.proOnly && !isPro && <Lock size={10} className="text-yellow-400 ml-0.5" />}
@@ -403,7 +405,7 @@ export function DashboardHome({
       <div className="rounded-2xl border border-border bg-card p-4">
         <div className="flex items-baseline justify-between mb-3">
           <h3 className="text-base font-bold">Ecossistema FayAI</h3>
-          <Link href="/projetos" className="text-[12px] font-semibold text-[var(--primary)] hover:opacity-80">Ver todos ›</Link>
+          <Link href="/projetos" className="text-[12px] font-semibold text-[var(--primary)] hover:opacity-80">{T("Ver todos ›")}</Link>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1">
           {FAY_PROJECTS.map((proj) => (
@@ -415,12 +417,12 @@ export function DashboardHome({
             >
               <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={proj.image} alt={proj.name} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <img src={proj.image} alt={T(proj.name)} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
               </span>
               <span className="block px-2.5 py-2">
-                <span className="block text-[12px] font-bold truncate">{proj.name}</span>
+                <span className="block text-[12px] font-bold truncate">{T(proj.name)}</span>
                 <span className="block text-[10px] font-semibold uppercase tracking-wider" style={{ color: proj.accent }}>
-                  {STATUS_LABEL[proj.status]}
+                  {T(STATUS_LABEL[proj.status])}
                 </span>
               </span>
             </Link>
@@ -458,19 +460,19 @@ export function DashboardHome({
                     <div className="flex items-center justify-between">
                       <h3 className="text-base font-bold text-white">Studio AI</h3>
                       {!hasCreatedImages && (
-                        <Badge className="bg-green-500/90 text-white border-0 text-[8px] font-bold px-1.5 animate-pulse">NOVO</Badge>
+                        <Badge className="bg-green-500/90 text-white border-0 text-[8px] font-bold px-1.5 animate-pulse">{T("NOVO")}</Badge>
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">
                       {hasCreatedImages
                         ? `${stats.imagesGenerated} imagens criadas. Gemini, Flux e mais modelos.`
-                        : "Transforme ideias em imagens com IA. Fotorealista, Anime, 3D e mais."}
+                        : T("Transforme ideias em imagens com IA. Fotorealista, Anime, 3D e mais.")}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 mt-2">
                     <Button size="sm" className="bg-gradient-to-r from-amber-600 to-yellow-700 gap-1 font-bold h-7 text-xs px-3">
                       <Wand2 size={12} />
-                      {hasCreatedImages ? "Criar" : "Começar"}
+                      {hasCreatedImages ? T("Criar") : T("Começar")}
                     </Button>
                     <ChevronRight size={14} className="text-muted-foreground group-hover:text-amber-400 transition" />
                   </div>
@@ -498,10 +500,10 @@ export function DashboardHome({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="text-sm font-bold">Desafio Diário</h4>
+                    <h4 className="text-sm font-bold">{T("Desafio Diário")}</h4>
                     <span className="text-[9px] font-bold text-yellow-400 flex items-center gap-0.5"><Zap size={9} />+{dailyChallenge?.reward || 50} XP</span>
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">{dailyChallengeGuide.title}</p>
+                  <p className="text-xs text-muted-foreground truncate">{T(dailyChallengeGuide.title)}</p>
                 </div>
                 {dailyChallenge?.completed ? (
                   <Badge className="bg-green-500/15 text-green-400 border-green-500/30 text-[9px] shrink-0">✓</Badge>
@@ -522,7 +524,7 @@ export function DashboardHome({
                   <Flame size={15} className="text-orange-400" fill="currentColor" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-bold">Streak · {stats.streak} dias</h4>
+                  <h4 className="text-sm font-bold">Streak · {stats.streak}  {T("dias")}</h4>
                   <p className="text-xs text-muted-foreground/70">{stats.streak >= 7 ? `Recorde: ${stats.longestStreak}` : "Continue aprendendo!"}</p>
                 </div>
               </div>
@@ -548,9 +550,9 @@ export function DashboardHome({
           <motion.div variants={itemVariants}>
             <div className="grid grid-cols-3 gap-2">
               {[
-                { icon: Palette, label: "Loja POD", tab: "pod-store", color: "text-indigo-400", bg: "bg-indigo-500/10", badge: "NOVO" },
-                { icon: Award, label: "Certificados", tab: "certificates", color: "text-teal-400", bg: "bg-teal-500/10" },
-                { icon: Star, label: "Conquistas", tab: "achievements", color: "text-yellow-400", bg: "bg-yellow-500/10", count: `${gamification?.totalAchievements || 0}/${gamification?.achievements?.length || 0}` },
+                { icon: Palette, label: T("Loja POD"), tab: "pod-store", color: "text-indigo-400", bg: "bg-indigo-500/10", badge: T("NOVO") },
+                { icon: Award, label: T("Certificados"), tab: "certificates", color: "text-teal-400", bg: "bg-teal-500/10" },
+                { icon: Star, label: T("Conquistas"), tab: "achievements", color: "text-yellow-400", bg: "bg-yellow-500/10", count: `${gamification?.totalAchievements || 0}/${gamification?.achievements?.length || 0}` },
               ].map((item) => (
                 <button
                   key={item.tab}
@@ -560,9 +562,9 @@ export function DashboardHome({
                   <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", item.bg)}>
                     <item.icon size={14} className={item.color} />
                   </div>
-                  <span className="text-xs text-muted-foreground group-hover:text-white transition-colors font-medium">{item.label}</span>
-                  {item.badge && <Badge className="bg-indigo-500/10 text-indigo-400 border-0 text-[9px] h-4 px-1.5">{item.badge}</Badge>}
-                  {item.count && <span className="text-[10px] text-muted-foreground/70">{item.count}</span>}
+                  <span className="text-xs text-muted-foreground group-hover:text-white transition-colors font-medium">{T(item.label)}</span>
+                  {item.badge && <Badge className="bg-indigo-500/10 text-indigo-400 border-0 text-[9px] h-4 px-1.5">{T(item.badge)}</Badge>}
+                  {item.count && <span className="text-[10px] text-muted-foreground/70">{T(item.count)}</span>}
                 </button>
               ))}
             </div>
@@ -581,12 +583,13 @@ export function DashboardHome({
                     <BookOpen size={15} className="text-white" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-base font-bold truncate">Sua Jornada</h3>
+                    <h3 className="text-base font-bold truncate">{T("Sua Jornada")}</h3>
                     <p className="text-xs text-muted-foreground truncate">{hasStartedCourses ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} na sua jornada` : "Comece a aprender"}</p>
                   </div>
                 </div>
                 <button onClick={() => onTabChange("courses")} className="text-[10px] text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-0.5">
-                  Ver todos <ChevronRight size={12} />
+                  
+                  {T("Ver todos")} <ChevronRight size={12} />
                 </button>
               </div>
 
@@ -610,10 +613,10 @@ export function DashboardHome({
                         <Progress value={course.progressPercent} className="h-1 bg-secondary" />
                         <div className="flex items-center justify-between mt-1.5">
                           <p className="text-xs text-muted-foreground/70 flex items-center gap-1">
-                            {course.details?.tool && <span className="text-muted-foreground">{course.details.tool}</span>}
+                            {course.details?.tool && <span className="text-muted-foreground">{T(course.details.tool)}</span>}
                           </p>
                           <p className="text-xs text-emerald-400/70 flex items-center gap-0.5">
-                            <PlayCircle size={10} /> {course.progressPercent > 0 ? "Continuar" : "Começar"}
+                            <PlayCircle size={10} /> {course.progressPercent > 0 ? "Continuar" : T("Começar")}
                           </p>
                         </div>
                       </div>
@@ -624,9 +627,9 @@ export function DashboardHome({
                 <div className="text-center py-4">
                   {/* eslint-disable-next-line @next/next/no-img-element -- vazio inspirador §12 */}
                   <img src="/fx/vazio-inspirador.webp" alt="" aria-hidden className="mx-auto mb-2 h-20 w-32 rounded-xl object-cover opacity-90" />
-                  <p className="text-xs text-muted-foreground mb-2">Nenhum curso iniciado</p>
+                  <p className="text-xs text-muted-foreground mb-2">{T("Nenhum curso iniciado")}</p>
                   <Button size="sm" onClick={() => onTabChange("courses")} className="bg-emerald-600 hover:bg-emerald-500 gap-1 text-xs h-7">
-                    <Rocket size={12} /> Explorar Cursos
+                    <Rocket size={12} />  {T("Explorar Cursos")}
                   </Button>
                 </div>
               )}
@@ -642,12 +645,13 @@ export function DashboardHome({
                       <Gift size={15} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold">Oferta do Mês</h3>
-                      <p className="text-xs text-muted-foreground">Curso completo grátis neste mês</p>
+                      <h3 className="text-base font-bold">{T("Oferta do Mês")}</h3>
+                      <p className="text-xs text-muted-foreground">{T("Curso completo grátis neste mês")}</p>
                     </div>
                   </div>
                   <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20 text-[9px]">
-                    Certificado incluso
+                    
+                    {T("Certificado incluso")}
                   </Badge>
                 </div>
 
@@ -657,14 +661,14 @@ export function DashboardHome({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <h4 className="text-sm font-semibold text-white truncate">{freeCourseOfMonth.title}</h4>
-                      <p className="mt-1 text-[11px] text-muted-foreground line-clamp-2">{freeCourseOfMonth.shortDescription}</p>
+                      <h4 className="text-sm font-semibold text-white truncate">{T(freeCourseOfMonth.title)}</h4>
+                      <p className="mt-1 text-[11px] text-muted-foreground line-clamp-2">{T(freeCourseOfMonth.shortDescription)}</p>
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-300 shrink-0">GRÁTIS</span>
+                    <span className="text-[10px] font-bold text-emerald-300 shrink-0">{T("GRÁTIS")}</span>
                   </div>
                   <div className="mt-3 flex items-center justify-between text-[10px] text-muted-foreground">
-                    <span>{freeCourseOfMonth.duration}</span>
-                    <span>{freeCourseOfMonth.totalLessons} aulas</span>
+                    <span>{T(freeCourseOfMonth.duration)}</span>
+                    <span>{freeCourseOfMonth.totalLessons}  {T("aulas")}</span>
                   </div>
                 </button>
               </Card>
@@ -681,8 +685,8 @@ export function DashboardHome({
                       <Sparkles size={15} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold">Catálogo do seu plano neste mês</h3>
-                      <p className="text-xs text-muted-foreground">O que já está incluído agora no plano {tierConfig.displayName}</p>
+                      <h3 className="text-base font-bold">{T("Catálogo do seu plano neste mês")}</h3>
+                      <p className="text-xs text-muted-foreground">{T("O que já está incluído agora no plano")} {T(tierConfig.displayName)}</p>
                     </div>
                   </div>
                 </div>
@@ -699,15 +703,15 @@ export function DashboardHome({
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <h4 className="text-sm font-semibold text-muted-foreground truncate group-hover/sug:text-white transition-colors">{course.title}</h4>
+                            <h4 className="text-sm font-semibold text-muted-foreground truncate group-hover/sug:text-white transition-colors">{T(course.title)}</h4>
                             <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", levelColors[course.normalizedLevel])}>
-                              {levelLabels[course.normalizedLevel]}
+                              {T(levelLabels[course.normalizedLevel])}
                             </Badge>
                           </div>
-                          <p className="text-xs text-muted-foreground/70 truncate mt-0.5">{course.shortDescription}</p>
+                          <p className="text-xs text-muted-foreground/70 truncate mt-0.5">{T(course.shortDescription)}</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-[10px] text-muted-foreground/70 flex items-center gap-0.5"><Clock size={9} />{course.duration}</span>
-                            <span className="text-[10px] text-muted-foreground/70 flex items-center gap-0.5"><BarChart2 size={9} />{course.totalLessons} aulas</span>
+                            <span className="text-[10px] text-muted-foreground/70 flex items-center gap-0.5"><Clock size={9} />{T(course.duration)}</span>
+                            <span className="text-[10px] text-muted-foreground/70 flex items-center gap-0.5"><BarChart2 size={9} />{course.totalLessons}  {T("aulas")}</span>
                           </div>
                         </div>
                       </div>
@@ -724,22 +728,22 @@ export function DashboardHome({
               <Card className="border-yellow-500/10 bg-card p-3.5">
                 <div className="flex items-center gap-2 mb-2">
                   <Lock size={13} className="text-yellow-400" />
-                  <h4 className="text-xs font-bold text-muted-foreground">Exigem upgrade neste mês</h4>
+                  <h4 className="text-xs font-bold text-muted-foreground">{T("Exigem upgrade neste mês")}</h4>
                 </div>
                 <div className="space-y-1.5">
                   {lockedCourses.map((course) => (
                     <div key={course.slug} className="flex items-center gap-2 p-2 rounded-lg bg-secondary opacity-60">
                       <Lock size={10} className="text-muted-foreground/70 shrink-0" />
-                      <span className="text-[10px] text-muted-foreground truncate flex-1">{course.title}</span>
+                      <span className="text-[10px] text-muted-foreground truncate flex-1">{T(course.title)}</span>
                       <Badge className={cn("text-[8px] h-3.5 px-1 border-0 shrink-0", levelColors[course.normalizedLevel])}>
-                        {levelLabels[course.normalizedLevel]}
+                        {T(levelLabels[course.normalizedLevel])}
                       </Badge>
                     </div>
                   ))}
                 </div>
                 <Link href="/precos">
                   <Button size="sm" className="w-full mt-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold gap-1 text-[10px] h-7">
-                    <Crown size={11} /> Ver Planos
+                    <Crown size={11} />  {T("Ver Planos")}
                   </Button>
                 </Link>
               </Card>
@@ -764,7 +768,7 @@ export function DashboardHome({
                   </div>
                   <div>
                     <h4 className="text-sm font-bold">Ranking</h4>
-                    <p className="text-xs text-muted-foreground">#{leaderboard?.userRank || "-"} posição</p>
+                    <p className="text-xs text-muted-foreground">#{leaderboard?.userRank || "-"}  {T("posição")}</p>
                   </div>
                 </div>
                 <ChevronRight size={14} className="text-muted-foreground group-hover:text-yellow-400 transition" />
@@ -776,7 +780,7 @@ export function DashboardHome({
                       idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-amber-200 text-black" : "bg-amber-700 text-white"
                     )}>{idx + 1}</span>
                     <span className="text-[10px] text-muted-foreground truncate flex-1">
-                      {u.name}{u.isCurrentUser && <span className="text-amber-400 ml-1">(você)</span>}
+                      {u.name}{u.isCurrentUser && <span className="text-amber-400 ml-1">{T("(você)")}</span>}
                     </span>
                     <span className="text-[9px] text-muted-foreground/70 tabular-nums">{u.weeklyXp} XP</span>
                   </div>
@@ -803,7 +807,7 @@ export function DashboardHome({
                     {!isPro && <Badge className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-[8px] gap-0.5"><Crown size={8} /> PRO</Badge>}
                   </div>
                   <p className="text-xs text-muted-foreground truncate">
-                    {isPro ? (hasUsedAssistant ? `${stats.aiChats} conversas` : "Tire dúvidas com seu tutor IA") : "Desbloqueie com plano Pro"}
+                    {isPro ? (hasUsedAssistant ? `${stats.aiChats} conversas` : T("Tire dúvidas com seu tutor IA")) : T("Desbloqueie com plano Pro")}
                   </p>
                 </div>
                 <ChevronRight size={14} className="text-muted-foreground group-hover:text-cyan-400 transition shrink-0" />
@@ -828,7 +832,7 @@ export function DashboardHome({
                   <div className="flex items-center gap-1">
                     <Zap size={10} className="text-yellow-400" />
                     <span className="text-xs font-bold text-yellow-400">{stats.xp} XP</span>
-                    <span className="text-[9px] text-muted-foreground/70">disponíveis</span>
+                    <span className="text-[9px] text-muted-foreground/70">{T("disponíveis")}</span>
                   </div>
                 </div>
                 {!isPro ? (
@@ -848,10 +852,11 @@ export function DashboardHome({
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                     <ShoppingBag size={15} className="text-white" />
                   </div>
-                  <h4 className="text-sm font-bold">Loja</h4>
+                  <h4 className="text-sm font-bold">{T("Loja")}</h4>
                 </div>
                 <button onClick={() => onTabChange("store")} className="text-[10px] text-blue-400 hover:text-blue-300 font-medium flex items-center gap-0.5">
-                  Ver tudo <ChevronRight size={12} />
+                  
+                  {T("Ver tudo")} <ChevronRight size={12} />
                 </button>
               </div>
               {storeProducts.length > 0 ? (
@@ -864,7 +869,7 @@ export function DashboardHome({
                     >
                       <div className="relative w-full aspect-square bg-secondary/50 overflow-hidden">
                         {product.thumbnail ? (
-                          <img src={product.thumbnail} alt={product.name} className="w-full h-full object-cover group-hover/prod:scale-110 transition-transform duration-500" />
+                          <img src={product.thumbnail} alt={T(product.name)} className="w-full h-full object-cover group-hover/prod:scale-110 transition-transform duration-500" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center"><ShoppingBag size={20} className="text-muted-foreground" /></div>
                         )}
@@ -873,7 +878,7 @@ export function DashboardHome({
                         )}
                       </div>
                       <div className="p-2">
-                        <h5 className="text-[10px] font-medium text-muted-foreground line-clamp-1">{product.name}</h5>
+                        <h5 className="text-[10px] font-medium text-muted-foreground line-clamp-1">{T(product.name)}</h5>
                         <span className="text-[11px] font-bold text-blue-400">{formatPrice(product.price)}</span>
                       </div>
                     </div>
@@ -890,7 +895,7 @@ export function DashboardHome({
             <div className="grid grid-cols-2 gap-2">
               {[
                 { icon: Download, label: "Recursos", tab: "resources", color: "text-green-400", bg: "bg-green-500/10" },
-                { icon: Users, label: "Meu Perfil", tab: "profile", color: "text-yellow-400", bg: "bg-yellow-500/10" },
+                { icon: Users, label: T("Meu Perfil"), tab: "profile", color: "text-yellow-400", bg: "bg-yellow-500/10" },
               ].map((item) => (
                 <button
                   key={item.tab}
@@ -900,7 +905,7 @@ export function DashboardHome({
                   <div className={cn("w-6 h-6 rounded-md flex items-center justify-center shrink-0", item.bg)}>
                     <item.icon size={11} className={item.color} />
                   </div>
-                  <span className="text-xs text-muted-foreground group-hover:text-white transition-colors font-medium">{item.label}</span>
+                  <span className="text-xs text-muted-foreground group-hover:text-white transition-colors font-medium">{T(item.label)}</span>
                 </button>
               ))}
             </div>
@@ -920,13 +925,14 @@ export function DashboardHome({
                 </div>
                 <div>
                   <h3 className="font-bold text-sm">Desbloqueie Todo o Potencial</h3>
-                  <p className="text-[11px] text-muted-foreground">AI Assistant, modelos premium, cursos avançados e mais.</p>
+                  <p className="text-[11px] text-muted-foreground">{T("AI Assistant, modelos premium, cursos avançados e mais.")}</p>
                 </div>
               </div>
               <Link href="/precos">
                 <Button size="sm" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold px-4 shadow-xl shadow-orange-500/20 gap-1 text-xs h-8 shrink-0">
                   <TrendingUp size={13} />
-                  Ver Planos
+                  
+                  {T("Ver Planos")}
                 </Button>
               </Link>
             </div>

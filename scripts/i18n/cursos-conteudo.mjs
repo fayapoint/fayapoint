@@ -189,13 +189,38 @@ async function main() {
     if (pedacos.length) {
       const mapa = {};
       pedacos.forEach((p, i) => { mapa[`p${i}`] = p; });
-      // `limite` alto: os pedaços já vêm cortados por capítulo, e o motor só
-      // agrupa. 9500 mantém um pedaço por chamada na maioria dos casos.
-      const { saida, custo } = await traduzirMapa(mapa, {
-        modelo: MODELOS.volume,
-        limite: 9500,
-        paralelo,
-      });
+
+      /**
+       * O lote inteiro de uma vez; e, se ele morrer, pedaço por pedaço.
+       *
+       * ⚠️ Isto existe por uma queda real: um pedaço sozinho estourou o teto de
+       * saída, o motor tentou partir o lote, viu que o lote tinha UMA chave, e
+       * deixou o erro subir. O erro matou o processo — e levou junto os 15
+       * cursos que ainda não tinham sido traduzidos naquela rodada. Um pedaço
+       * ruim não pode custar a fila; ele fica em português e o resto anda.
+       */
+      let saida = {};
+      let custo = 0;
+      try {
+        // `limite` alto: os pedaços já vêm cortados por capítulo, e o motor só
+        // agrupa. 9500 mantém um pedaço por chamada na maioria dos casos.
+        ({ saida, custo } = await traduzirMapa(mapa, {
+          modelo: MODELOS.volume,
+          limite: 9500,
+          paralelo,
+        }));
+      } catch (e) {
+        console.warn(`   ⚠ lote caiu (${e.message}) — indo pedaço a pedaço`);
+        for (const [k, v] of Object.entries(mapa)) {
+          try {
+            const r = await traduzirMapa({ [k]: v }, { modelo: MODELOS.volume, limite: 999999 });
+            Object.assign(saida, r.saida);
+            custo += r.custo;
+          } catch (e2) {
+            console.warn(`   ⚠ ${k} não traduzido (${e2.message})`);
+          }
+        }
+      }
       custoTotal += custo;
 
       const traduzidosPorPedaco = [];
@@ -209,13 +234,20 @@ async function main() {
         // vezes; a segunda tentativa sobe para o modelo caro, que erra menos.
         for (let t = 0; problema && t < 2; t++) {
           console.warn(`   ↻ pedaço ${i} (${problema}) — tentativa ${t + 2}`);
-          const r = await traduzirMapa(
-            { [`p${i}`]: pt },
-            { modelo: t === 0 ? MODELOS.volume : MODELOS.vitrine, limite: 999999 },
-          );
-          custoTotal += r.custo;
-          en = r.saida[`p${i}`];
-          problema = conferir(pt, en);
+          try {
+            const r = await traduzirMapa(
+              { [`p${i}`]: pt },
+              { modelo: t === 0 ? MODELOS.volume : MODELOS.vitrine, limite: 999999 },
+            );
+            custoTotal += r.custo;
+            en = r.saida[`p${i}`];
+            problema = conferir(pt, en);
+          } catch (e) {
+            // Mesma razão do lote acima: a repetição é a última chance do
+            // pedaço, não da fila. Falhou, fica em português.
+            console.warn(`   ⚠ repetição do pedaço ${i} falhou (${e.message})`);
+            break;
+          }
         }
 
         if (problema) {

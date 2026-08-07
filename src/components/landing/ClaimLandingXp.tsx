@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { Sparkles, X } from "lucide-react";
@@ -9,6 +10,7 @@ import { Sparkles, X } from "lucide-react";
  * credita via /api/gate/claim-xp e celebra com um banner discreto.
  */
 export function ClaimLandingXp() {
+  const T = useT();
   const [msg, setMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export function ClaimLandingXp() {
       {/* eslint-disable-next-line @next/next/no-img-element -- nível-up §12 */}
       <img src="/fx/nivel-up.webp" alt="" aria-hidden className="h-12 w-12 shrink-0 rounded-xl object-cover" />
       <Sparkles size={20} className="shrink-0" />
-      <p className="text-sm font-bold leading-snug">🏆 {msg}</p>
+      <p className="text-sm font-bold leading-snug">🏆 {T(msg)}</p>
       <button
         onClick={() => setMsg(null)}
         aria-label="Fechar"

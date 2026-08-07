@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -317,6 +318,7 @@ function MockupGallery({
   isLoading?: boolean;
   onClose?: () => void;
 }) {
+  const T = useT();
   // Generate labels for mockups based on position or index
   const getMockupLabel = (mockup: { position?: string; isDefault?: boolean }, index: number): string => {
     if (mockup.position) {
@@ -359,7 +361,7 @@ function MockupGallery({
       <div className="flex flex-col items-center justify-center h-64 bg-secondary rounded-xl">
         <Loader2 className="animate-spin text-amber-500 mb-3" size={48} />
         <p className="text-amber-400 font-medium">Gerando mockups profissionais...</p>
-        <p className="text-xs text-muted-foreground mt-1">Printify está processando seu design</p>
+        <p className="text-xs text-muted-foreground mt-1">{T("Printify está processando seu design")}</p>
       </div>
     );
   }
@@ -554,6 +556,7 @@ interface PODStorePanelProps {
 }
 
 export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
+  const T = useT();
   // isCompact can be used for responsive layout adjustments
   void isCompact;
   // POD Provider selection - Printify or Prodigi
@@ -624,7 +627,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         headers: getClientAuthHeaders(),
       });
       if (res.ok) { const data = await res.json(); setProducts(data.products || []); setStats(data.stats); }
-    } catch (e) { console.error("Error:", e); toast.error("Erro ao carregar produtos"); }
+    } catch (e) { console.error("Error:", e); toast.error(T("Erro ao carregar produtos")); }
     finally { setIsLoading(false); }
   }, [statusFilter]);
 
@@ -648,7 +651,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
           setBlueprints(allBps.slice(0, 24));
         }
       }
-    } catch (e) { console.error("Error:", e); toast.error("Erro ao carregar catálogo"); }
+    } catch (e) { console.error("Error:", e); toast.error(T("Erro ao carregar catálogo")); }
     finally { setIsFetchingBlueprints(false); }
   }, []);
 
@@ -710,7 +713,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         setOrders(data.orders || []);
         setOrderStats(data.stats);
       }
-    } catch (e) { console.error("Error:", e); toast.error("Erro ao carregar pedidos"); }
+    } catch (e) { console.error("Error:", e); toast.error(T("Erro ao carregar pedidos")); }
     finally { setIsLoadingOrders(false); }
   }, []);
 
@@ -726,7 +729,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         const data = await res.json();
         setEarningsData(data);
       }
-    } catch (e) { console.error("Error:", e); toast.error("Erro ao carregar ganhos"); }
+    } catch (e) { console.error("Error:", e); toast.error(T("Erro ao carregar ganhos")); }
     finally { setIsLoadingEarnings(false); }
   }, []);
 
@@ -742,7 +745,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       });
       if (res.ok) {
         const data = await res.json();
-        toast.success("Produto publicado na loja!");
+        toast.success(T("Produto publicado na loja!"));
         fetchProducts();
         if (data.data?.storeUrl) {
           toast.success(`Disponível em: ${data.data.storeUrl}`, { duration: 5000 });
@@ -751,7 +754,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         const err = await res.json();
         toast.error(err.error || "Erro ao publicar");
       }
-    } catch (e) { console.error("Error:", e); toast.error("Erro ao publicar"); }
+    } catch (e) { console.error("Error:", e); toast.error(T("Erro ao publicar")); }
     finally { setIsPublishing(null); }
   }, [fetchProducts]);
 
@@ -771,7 +774,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
     // Clear existing mockups when new file is selected
     if (printifyMockups.length > 0) {
       setPrintifyMockups([]);
-      toast("Novo design selecionado - gere novos mockups", { icon: "🎨" });
+      toast(T("Novo design selecionado - gere novos mockups"), { icon: "🎨" });
     }
   };
 
@@ -845,7 +848,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
           setMockupShopId(data.shopId);
           toast.success(`${data.mockups.length} mockups gerados!`);
         } else {
-          toast.error("Nenhum mockup retornado");
+          toast.error(T("Nenhum mockup retornado"));
         }
       } else {
         const err = await res.json();
@@ -853,7 +856,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       }
     } catch (error) {
       console.error("Mockup generation error:", error);
-      toast.error("Erro ao conectar com Printify");
+      toast.error(T("Erro ao conectar com Printify"));
     } finally {
       setIsGeneratingMockups(false);
     }
@@ -914,13 +917,13 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
   };
 
   const createProduct = async (publish: boolean = false) => {
-    if (!selectedBlueprint || !selectedProvider || !designPreview) { toast.error("Preencha todos os campos"); return; }
+    if (!selectedBlueprint || !selectedProvider || !designPreview) { toast.error(T("Preencha todos os campos")); return; }
     const userXP = userData?.progress?.xp || 0;
     if (publish && userXP < MIN_XP_TO_PUBLISH) { toast.error(`Precisa ${MIN_XP_TO_PUBLISH} XP para publicar. Atual: ${userXP}`); return; }
     setIsCreating(true);
     try {
       let designUrl = uploadedDesignUrl;
-      if (!designUrl && designFile) { designUrl = await uploadDesign(); if (!designUrl) { toast.error("Erro no upload"); setIsCreating(false); return; } setUploadedDesignUrl(designUrl); }
+      if (!designUrl && designFile) { designUrl = await uploadDesign(); if (!designUrl) { toast.error(T("Erro no upload")); setIsCreating(false); return; } setUploadedDesignUrl(designUrl); }
       // Use Printify mockups if available, otherwise use blueprint images
       const mockupUrls = printifyMockups.length > 0 
         ? printifyMockups.map(m => m.src) 
@@ -954,7 +957,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         const data = await res.json();
         if (publish && data.product?._id) {
           // Publish to Printify and create StoreProduct
-          toast.loading("Publicando no Printify e na loja...");
+          toast.loading(T("Publicando no Printify e na loja..."));
           const publishRes = await fetch("/api/pod/publish", {
             method: "POST", 
             credentials: "include",
@@ -964,7 +967,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
           toast.dismiss();
           if (publishRes.ok) {
             const publishData = await publishRes.json();
-            toast.success("Produto publicado na loja!", { duration: 5000 });
+            toast.success(T("Produto publicado na loja!"), { duration: 5000 });
             if (publishData.data?.storeUrl) {
               toast.success(`URL: ${publishData.data.storeUrl}`, { duration: 8000 });
             }
@@ -974,11 +977,11 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
             // Still saved as draft
           }
         } else {
-          toast.success("Salvo como rascunho!");
+          toast.success(T("Salvo como rascunho!"));
         }
         resetCreateWizard(); setActiveTab("products"); fetchProducts();
       } else { const err = await res.json(); toast.error(err.error || "Erro"); }
-    } catch (e) { console.error(e); toast.error("Erro ao criar"); }
+    } catch (e) { console.error(e); toast.error(T("Erro ao criar")); }
     finally { setIsCreating(false); }
   };
 
@@ -991,7 +994,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         body: JSON.stringify({ productId, ...updates }),
       });
       if (res.ok) { toast.success("Atualizado"); fetchProducts(); setEditingProduct(null); setSelectedProduct(null); }
-    } catch (e) { console.error(e); toast.error("Erro"); }
+    } catch (e) { console.error(e); toast.error(T("Erro")); }
   };
 
   const deleteProduct = async (productId: string) => {
@@ -1002,15 +1005,15 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         credentials: "include",
         headers: getClientAuthHeaders(),
       });
-      if (res.ok) { toast.success("Excluído"); fetchProducts(); }
-    } catch (e) { console.error(e); toast.error("Erro"); }
+      if (res.ok) { toast.success(T("Excluído")); fetchProducts(); }
+    } catch (e) { console.error(e); toast.error(T("Erro")); }
   };
 
   const publishProduct = async (productId: string) => {
     const userXP = userData?.progress?.xp || 0;
     if (userXP < MIN_XP_TO_PUBLISH) { toast.error(`Precisa ${MIN_XP_TO_PUBLISH} XP. Atual: ${userXP}`); return; }
     try {
-      toast.loading("Publicando no Printify e na loja...");
+      toast.loading(T("Publicando no Printify e na loja..."));
       const res = await fetch("/api/pod/publish", {
         method: "POST",
         credentials: "include",
@@ -1020,7 +1023,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
       toast.dismiss();
       if (res.ok) {
         const data = await res.json();
-        toast.success("Produto publicado na loja!", { duration: 5000 });
+        toast.success(T("Produto publicado na loja!"), { duration: 5000 });
         if (data.data?.storeUrl) {
           toast.success(`URL: ${data.data.storeUrl}`, { duration: 8000 });
         }
@@ -1029,7 +1032,7 @@ export default function PODStorePanel({ isCompact }: PODStorePanelProps) {
         const err = await res.json();
         toast.error(err.error || "Erro ao publicar");
       }
-    } catch (e) { console.error(e); toast.error("Erro ao publicar"); }
+    } catch (e) { console.error(e); toast.error(T("Erro ao publicar")); }
   };
 
   const resetCreateWizard = () => {
@@ -1154,6 +1157,7 @@ function PODPanelContent(props: {
   isLoadingEarnings: boolean; fetchEarnings: () => void;
   publishToStore: (id: string) => void; isPublishing: string | null;
 }) {
+  const T = useT();
   const { activeTab, setActiveTab, isLoading, products, stats, searchQuery, setSearchQuery, statusFilter, setStatusFilter,
     selectedProduct, setSelectedProduct, editingProduct, setEditingProduct, createStep, setCreateStep,
     blueprintSearch, setBlueprintSearch, selectedCategory, setSelectedCategory, blueprints, selectedBlueprint,
@@ -1172,15 +1176,15 @@ function PODPanelContent(props: {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 mb-4 md:mb-6">
         <div className="min-w-0">
-          <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2"><Store className="text-amber-400 shrink-0" /><span className="truncate">Minha Loja POD</span></h1>
-          <p className="text-muted-foreground text-xs md:text-sm">Crie produtos personalizados com Printify</p>
+          <h1 className="text-xl md:text-2xl font-bold flex items-center gap-2"><Store className="text-amber-400 shrink-0" /><span className="truncate">{T("Minha Loja POD")}</span></h1>
+          <p className="text-muted-foreground text-xs md:text-sm">{T("Crie produtos personalizados com Printify")}</p>
         </div>
         <div className="flex items-center gap-2 md:gap-3">
           <Badge variant="outline" className={cn("border-border text-xs shrink-0", canPublish ? "text-green-400" : "text-yellow-400")}>
             <Trophy size={14} className="mr-1" />{userXP} XP {!canPublish && `/ ${MIN_XP_TO_PUBLISH}`}
           </Badge>
           <Button size="sm" className="bg-amber-600 hover:bg-amber-700 shrink-0" onClick={() => { setActiveTab("create"); resetCreateWizard(); }}>
-            <Plus size={16} className="mr-1 md:mr-2" /><span className="hidden sm:inline">Criar </span>Produto
+            <Plus size={16} className="mr-1 md:mr-2" /><span className="hidden sm:inline">{T("Criar")} </span>Produto
           </Button>
         </div>
       </div>
@@ -1191,7 +1195,7 @@ function PODPanelContent(props: {
           <Package size={16} className="mr-2" />Produtos
         </Button>
         <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "create" ? "border-amber-500 text-amber-400" : "border-transparent text-muted-foreground")} onClick={() => { setActiveTab("create"); if (blueprints.length === 0) fetchBlueprints(); }}>
-          <Sparkles size={16} className="mr-2" />Criar
+          <Sparkles size={16} className="mr-2" />{T("Criar")}
         </Button>
         <Button variant="ghost" size="sm" className={cn("rounded-none border-b-2 shrink-0", activeTab === "orders" ? "border-amber-500 text-amber-400" : "border-transparent text-muted-foreground")} onClick={() => setActiveTab("orders")}>
           <Receipt size={16} className="mr-2" />Pedidos
@@ -1227,7 +1231,7 @@ function PODPanelContent(props: {
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-40 bg-secondary border-border"><Filter size={16} className="mr-2" /><SelectValue placeholder="Status" /></SelectTrigger>
                 <SelectContent className="bg-card border-border text-white">
-                  <SelectItem value="all">Todos</SelectItem><SelectItem value="draft">Rascunhos</SelectItem><SelectItem value="active">Ativos</SelectItem><SelectItem value="paused">Pausados</SelectItem>
+                  <SelectItem value="all">{T("Todos")}</SelectItem><SelectItem value="draft">Rascunhos</SelectItem><SelectItem value="active">Ativos</SelectItem><SelectItem value="paused">Pausados</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1242,8 +1246,8 @@ function PODPanelContent(props: {
               </div>
             ) : (
               <Card className="bg-secondary border-border p-6 md:p-12 text-center">
-                <Package size={48} className="mx-auto mb-4 text-gray-600" /><h3 className="text-lg md:text-xl font-semibold mb-2">Nenhum produto</h3><p className="text-muted-foreground text-sm mb-6">Crie seu primeiro produto!</p>
-                <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setActiveTab("create"); fetchBlueprints(); }}><Plus size={16} className="mr-2" />Criar Produto</Button>
+                <Package size={48} className="mx-auto mb-4 text-gray-600" /><h3 className="text-lg md:text-xl font-semibold mb-2">{T("Nenhum produto")}</h3><p className="text-muted-foreground text-sm mb-6">{T("Crie seu primeiro produto!")}</p>
+                <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setActiveTab("create"); fetchBlueprints(); }}><Plus size={16} className="mr-2" />{T("Criar Produto")}</Button>
               </Card>
             )}
           </motion.div>
@@ -1278,7 +1282,7 @@ function PODPanelContent(props: {
                 <div className="flex items-center gap-2 md:gap-3"><Clock className="text-orange-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.pending || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Pendentes</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-3 md:p-4 overflow-hidden">
-                <div className="flex items-center gap-2 md:gap-3"><Package className="text-blue-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.inProduction || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Produção</p></div></div>
+                <div className="flex items-center gap-2 md:gap-3"><Package className="text-blue-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.inProduction || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">{T("Produção")}</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-3 md:p-4 overflow-hidden">
                 <div className="flex items-center gap-2 md:gap-3"><Truck className="text-amber-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-lg md:text-2xl font-bold">{orderStats?.shipped || 0}</p><p className="text-[10px] md:text-xs text-muted-foreground">Enviados</p></div></div>
@@ -1303,7 +1307,7 @@ function PODPanelContent(props: {
                           <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg bg-secondary flex items-center justify-center shrink-0"><Package className="text-gray-600" /></div>
                         )}
                         <div className="min-w-0">
-                          <p className="font-semibold text-sm">#{order.orderNumber}</p>
+                          <p className="font-semibold text-sm">#{T(order.orderNumber)}</p>
                           <p className="text-xs md:text-sm text-muted-foreground truncate">{order.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</p>
                           <p className="text-xs text-muted-foreground">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</p>
                         </div>
@@ -1311,7 +1315,7 @@ function PODPanelContent(props: {
                       <div className="flex items-center gap-4">
                         <div className="text-right">
                           <p className="font-bold text-green-400">{formatCurrency(order.totalCreatorCommission)}</p>
-                          <p className="text-xs text-muted-foreground">Comissão</p>
+                          <p className="text-xs text-muted-foreground">{T("Comissão")}</p>
                         </div>
                         <Badge className={cn(
                           order.status === 'delivered' && 'bg-green-600',
@@ -1321,8 +1325,8 @@ function PODPanelContent(props: {
                           ['cancelled', 'refunded'].includes(order.status) && 'bg-red-600',
                         )}>
                           {order.status === 'delivered' && 'Entregue'}
-                          {order.status === 'shipped' && 'Enviado'}
-                          {order.status === 'in_production' && 'Produção'}
+                          {order.status === 'shipped' && T("Enviado")}
+                          {order.status === 'in_production' && T("Produção")}
                           {['pending', 'confirmed', 'processing'].includes(order.status) && 'Pendente'}
                           {['cancelled', 'refunded'].includes(order.status) && 'Cancelado'}
                         </Badge>
@@ -1334,8 +1338,8 @@ function PODPanelContent(props: {
             ) : (
               <Card className="bg-secondary border-border p-6 md:p-12 text-center">
                 <Receipt size={48} className="mx-auto mb-4 text-gray-600" />
-                <h3 className="text-lg md:text-xl font-semibold mb-2">Nenhum pedido ainda</h3>
-                <p className="text-muted-foreground text-sm mb-6">Quando seus produtos forem vendidos, os pedidos aparecerão aqui</p>
+                <h3 className="text-lg md:text-xl font-semibold mb-2">{T("Nenhum pedido ainda")}</h3>
+                <p className="text-muted-foreground text-sm mb-6">{T("Quando seus produtos forem vendidos, os pedidos aparecerão aqui")}</p>
               </Card>
             )}
 
@@ -1358,10 +1362,10 @@ function PODPanelContent(props: {
                 <div className="flex items-center gap-2 md:gap-3"><Clock className="text-yellow-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.pendingEarnings || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Pendente</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 p-3 md:p-4 overflow-hidden">
-                <div className="flex items-center gap-2 md:gap-3"><CreditCard className="text-blue-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.paidEarnings || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Já Sacado</p></div></div>
+                <div className="flex items-center gap-2 md:gap-3"><CreditCard className="text-blue-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.paidEarnings || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">{T("Já Sacado")}</p></div></div>
               </Card>
               <Card className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-amber-500/30 p-3 md:p-4 overflow-hidden">
-                <div className="flex items-center gap-2 md:gap-3"><Wallet className="text-amber-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">Disponível</p></div></div>
+                <div className="flex items-center gap-2 md:gap-3"><Wallet className="text-amber-400 shrink-0" size={20} /><div className="min-w-0"><p className="text-base md:text-2xl font-bold truncate">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p><p className="text-[10px] md:text-xs text-muted-foreground">{T("Disponível")}</p></div></div>
               </Card>
             </div>
 
@@ -1371,16 +1375,16 @@ function PODPanelContent(props: {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {/* Commission Info */}
                 <Card className="bg-secondary border-border p-4 md:p-6 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2"><TrendingUp className="text-green-400 shrink-0" />Sua Comissão</h3>
+                  <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2"><TrendingUp className="text-green-400 shrink-0" />{T("Sua Comissão")}</h3>
                   <div className="space-y-3 md:space-y-4">
                     <div className="flex items-center justify-between p-3 md:p-4 bg-green-500/10 rounded-lg">
                       <div>
-                        <p className="text-xs md:text-sm text-muted-foreground">Taxa de Comissão</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">{T("Taxa de Comissão")}</p>
                         <p className="text-2xl md:text-3xl font-bold text-green-400">{earningsData?.summary.commissionRate || 70}%</p>
                       </div>
                       <div className="text-right">
                         <p className="text-xs md:text-sm text-muted-foreground">do lucro</p>
-                        <p className="text-[10px] md:text-xs text-muted-foreground">(Preço - Custo)</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground">{T("(Preço - Custo)")}</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3 md:gap-4 text-center">
@@ -1401,9 +1405,9 @@ function PODPanelContent(props: {
                   <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4 flex items-center gap-2"><Wallet className="text-amber-400 shrink-0" />Saque</h3>
                   <div className="space-y-3 md:space-y-4">
                     <div className="p-3 md:p-4 bg-amber-500/10 rounded-lg text-center">
-                      <p className="text-xs md:text-sm text-muted-foreground mb-1">Disponível para Saque</p>
+                      <p className="text-xs md:text-sm text-muted-foreground mb-1">{T("Disponível para Saque")}</p>
                       <p className="text-2xl md:text-4xl font-bold text-amber-400 truncate">{formatCurrency(earningsData?.summary.availableForPayout || 0)}</p>
-                      <p className="text-[10px] md:text-xs text-muted-foreground mt-2">Mínimo: {formatCurrency(earningsData?.summary.minPayoutAmount || 50)}</p>
+                      <p className="text-[10px] md:text-xs text-muted-foreground mt-2">{T("Mínimo:")} {formatCurrency(earningsData?.summary.minPayoutAmount || 50)}</p>
                     </div>
                     <Button 
                       className="w-full bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
@@ -1412,7 +1416,7 @@ function PODPanelContent(props: {
                       <CreditCard size={16} className="mr-2" />
                       {earningsData?.summary.canRequestPayout ? 'Solicitar Saque' : `Mínimo R$ ${earningsData?.summary.minPayoutAmount || 50}`}
                     </Button>
-                    <p className="text-xs text-muted-foreground text-center">Saques processados em até 5 dias úteis via PIX</p>
+                    <p className="text-xs text-muted-foreground text-center">{T("Saques processados em até 5 dias úteis via PIX")}</p>
                   </div>
                 </Card>
 
@@ -1423,7 +1427,7 @@ function PODPanelContent(props: {
                     <div className="flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-2">
                       {earningsData.monthlyBreakdown.map((m) => (
                         <div key={m.month} className="flex-1 min-w-[80px] text-center p-3 bg-secondary rounded-lg">
-                          <p className="text-xs text-muted-foreground">{m.month}</p>
+                          <p className="text-xs text-muted-foreground">{T(m.month)}</p>
                           <p className="font-bold text-green-400">{formatCurrency(m.commission)}</p>
                         </div>
                       ))}
@@ -1458,6 +1462,7 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
   publishProduct: (id: string) => void; canPublish: boolean; formatCurrency: (v: number) => string;
   publishToStore?: (id: string) => void; isPublishing?: string | null;
 }) {
+  const T = useT();
   const statusInfo = STATUS_CONFIG[product.status];
   const StatusIcon = statusInfo.icon;
   const CategoryIcon = CATEGORY_ICONS[product.category] || Package;
@@ -1468,26 +1473,26 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="group relative">
       <Card className="bg-secondary border-border overflow-hidden hover:border-amber-500/50 transition-all">
         <div className="relative aspect-square bg-gradient-to-br from-gray-800 to-card">
-          {product.primaryMockup ? <img src={product.primaryMockup} alt={product.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><CategoryIcon size={48} className="text-gray-600" /></div>}
-          <Badge className={cn("absolute top-2 left-2 text-[10px]", statusInfo.color, "text-white")}><StatusIcon size={10} className="mr-1" />{statusInfo.label}</Badge>
-          {isInStore && <Badge className="absolute top-9 left-2 bg-green-600 text-white text-[10px]"><Store size={10} className="mr-1" />Na Loja</Badge>}
+          {product.primaryMockup ? <img src={product.primaryMockup} alt={T(product.title)} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><CategoryIcon size={48} className="text-gray-600" /></div>}
+          <Badge className={cn("absolute top-2 left-2 text-[10px]", statusInfo.color, "text-white")}><StatusIcon size={10} className="mr-1" />{T(statusInfo.label)}</Badge>
+          {isInStore && <Badge className="absolute top-9 left-2 bg-green-600 text-white text-[10px]"><Store size={10} className="mr-1" />{T("Na Loja")}</Badge>}
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <DropdownMenu>
               <DropdownMenuTrigger asChild><Button size="icon" variant="secondary" className="h-8 w-8"><MoreVertical size={16} /></Button></DropdownMenuTrigger>
               <DropdownMenuContent className="bg-card border-border text-white">
-                <DropdownMenuItem onClick={() => setSelectedProduct(product)}><Eye size={14} className="mr-2" />Ver</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedProduct(product)}><Eye size={14} className="mr-2" />{T("Ver")}</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setEditingProduct(product)}><Edit size={14} className="mr-2" />Editar</DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-secondary" />
                 {product.status === "draft" && <DropdownMenuItem onClick={() => publishProduct(product._id)} className={!canPublish ? "opacity-50" : ""}><Send size={14} className="mr-2" />{canPublish ? "Publicar" : `${MIN_XP_TO_PUBLISH} XP`}</DropdownMenuItem>}
                 {product.status === "active" && !isInStore && publishToStore && (
                   <DropdownMenuItem onClick={() => publishToStore(product._id)} disabled={isPublishingThis}>
                     {isPublishingThis ? <Loader2 size={14} className="mr-2 animate-spin" /> : <Store size={14} className="mr-2" />}
-                    {isPublishingThis ? "Publicando..." : "Publicar na Loja"}
+                    {isPublishingThis ? "Publicando..." : T("Publicar na Loja")}
                   </DropdownMenuItem>
                 )}
                 {isInStore && (
                   <DropdownMenuItem className="text-green-400" onClick={() => window.open(`/loja`, '_blank')}>
-                    <ExternalLink size={14} className="mr-2" />Ver na Loja
+                    <ExternalLink size={14} className="mr-2" />{T("Ver na Loja")}
                   </DropdownMenuItem>
                 )}
                 {product.status === "active" && <DropdownMenuItem onClick={() => updateProduct(product._id, { status: "paused" })}><Pause size={14} className="mr-2" />Pausar</DropdownMenuItem>}
@@ -1499,7 +1504,7 @@ function ProductCard({ product, setSelectedProduct, setEditingProduct, updatePro
           </div>
         </div>
         <div className="p-3 md:p-4 space-y-2 min-w-0">
-          <h3 className="font-semibold text-sm truncate">{product.title}</h3>
+          <h3 className="font-semibold text-sm truncate">{T(product.title)}</h3>
           <div className="flex items-center justify-between gap-1 min-w-0">
             <span className="text-sm md:text-lg font-bold text-green-400 truncate">{formatCurrency(product.suggestedPrice)}</span>
             <span className="text-[10px] md:text-xs text-muted-foreground shrink-0">Custo: {formatCurrency(product.baseCost)}</span>
@@ -1538,6 +1543,7 @@ function CreateWizard(props: {
   designScale: 'small' | 'medium' | 'large' | 'fill'; setDesignScale: (s: 'small' | 'medium' | 'large' | 'fill') => void;
   designPosition: 'top' | 'center' | 'bottom'; setDesignPosition: (p: 'top' | 'center' | 'bottom') => void;
 }) {
+  const T = useT();
   const { step, setStep, blueprintSearch, setBlueprintSearch, selectedCategory, setSelectedCategory, blueprints,
     selectedBlueprint, setSelectedBlueprint, providers, selectedProvider, setSelectedProvider, variants,
     selectedVariants, setSelectedVariants, designPreview, setDesignPreview, productTitle, setProductTitle, productDescription,
@@ -1605,8 +1611,8 @@ function CreateWizard(props: {
       <div className="relative pb-24">
         {/* Header */}
         <div className="text-center mb-4 md:mb-6">
-          <h2 className="text-xl md:text-2xl font-bold mb-2">Escolha o Produto Base</h2>
-          <p className="text-muted-foreground text-sm">Selecione o tipo de produto que deseja criar</p>
+          <h2 className="text-xl md:text-2xl font-bold mb-2">{T("Escolha o Produto Base")}</h2>
+          <p className="text-muted-foreground text-sm">{T("Selecione o tipo de produto que deseja criar")}</p>
         </div>
 
         {/* Search */}
@@ -1642,7 +1648,7 @@ function CreateWizard(props: {
                 fetchBlueprints(selectedCategory === cat.key ? undefined : cat.key); 
               }}
             >
-              <cat.icon size={14} className="mr-1" />{cat.label}
+              <cat.icon size={14} className="mr-1" />{T(cat.label)}
             </Button>
           ))}
         </div>
@@ -1704,7 +1710,7 @@ function CreateWizard(props: {
                       {bp.images?.[0] ? (
                         <img 
                           src={bp.images[0]} 
-                          alt={bp.title} 
+                          alt={T(bp.title)} 
                           className="w-full h-full object-cover"
                           loading="lazy"
                         />
@@ -1720,8 +1726,8 @@ function CreateWizard(props: {
                       )}
                     </div>
                     <div className="p-3">
-                      <h4 className="font-medium text-sm truncate">{bp.title}</h4>
-                      <p className="text-xs text-muted-foreground truncate">{bp.brand}</p>
+                      <h4 className="font-medium text-sm truncate">{T(bp.title)}</h4>
+                      <p className="text-xs text-muted-foreground truncate">{T(bp.brand)}</p>
                     </div>
                   </Card>
                 </motion.div>
@@ -1747,9 +1753,9 @@ function CreateWizard(props: {
         ) : (
           <Card className="bg-secondary border-border p-6 md:p-12 text-center">
             <Package size={48} className="mx-auto mb-4 text-gray-600" />
-            <h3 className="text-lg font-semibold mb-2">Nenhum produto encontrado</h3>
+            <h3 className="text-lg font-semibold mb-2">{T("Nenhum produto encontrado")}</h3>
             <p className="text-muted-foreground mb-4">Tente outra categoria ou termo de busca</p>
-            <Button onClick={() => fetchBlueprints()}>Carregar Catálogo</Button>
+            <Button onClick={() => fetchBlueprints()}>{T("Carregar Catálogo")}</Button>
           </Card>
         )}
 
@@ -1770,15 +1776,16 @@ function CreateWizard(props: {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-medium truncate">{selectedBlueprint.title}</p>
-                    <p className="text-xs text-muted-foreground">{selectedBlueprint.brand}</p>
+                    <p className="font-medium truncate">{T(selectedBlueprint.title)}</p>
+                    <p className="text-xs text-muted-foreground">{T(selectedBlueprint.brand)}</p>
                   </div>
                 </div>
                 <Button 
                   className="bg-amber-600 hover:bg-amber-700 shrink-0" 
                   onClick={() => { setStep(2); fetchProviders(selectedBlueprint.id); }}
                 >
-                  Próximo: Fornecedor
+                  
+                  {T("Próximo: Fornecedor")}
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
               </div>
@@ -1792,15 +1799,15 @@ function CreateWizard(props: {
   if (step === 2) {
     return (
       <div className="space-y-6">
-        <Button variant="ghost" onClick={() => setStep(1)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
-        <div className="text-center"><h2 className="text-xl md:text-2xl font-bold mb-2">Escolha o Fornecedor</h2><p className="text-muted-foreground text-sm truncate">Quem produzirá seu {selectedBlueprint?.title}</p></div>
+        <Button variant="ghost" onClick={() => setStep(1)}><ChevronLeft size={16} className="mr-2" />{T("Voltar")}</Button>
+        <div className="text-center"><h2 className="text-xl md:text-2xl font-bold mb-2">{T("Escolha o Fornecedor")}</h2><p className="text-muted-foreground text-sm truncate">{T("Quem produzirá seu")} {T(selectedBlueprint?.title)}</p></div>
         {isFetchingProviders ? <div className="flex justify-center py-12"><Loader2 className="animate-spin text-amber-500" size={40} /></div>
         : providers.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 max-w-4xl mx-auto">
-            {providers.map((p) => (<Card key={p.id} className={cn("bg-secondary border-border p-4 cursor-pointer transition-all hover:border-amber-500/50", selectedProvider?.id === p.id && "ring-2 ring-amber-500")} onClick={() => setSelectedProvider(p)}><h4 className="font-semibold mb-2">{p.title}</h4><p className="text-sm text-muted-foreground flex items-center gap-1"><Globe size={14} />{p.location?.country || "Global"}</p></Card>))}
+            {providers.map((p) => (<Card key={p.id} className={cn("bg-secondary border-border p-4 cursor-pointer transition-all hover:border-amber-500/50", selectedProvider?.id === p.id && "ring-2 ring-amber-500")} onClick={() => setSelectedProvider(p)}><h4 className="font-semibold mb-2">{T(p.title)}</h4><p className="text-sm text-muted-foreground flex items-center gap-1"><Globe size={14} />{p.location?.country || "Global"}</p></Card>))}
           </div>
-        ) : <Card className="bg-secondary border-border p-6 md:p-12 text-center"><AlertCircle size={48} className="mx-auto mb-4 text-yellow-500" /><h3 className="text-lg font-semibold">Nenhum fornecedor</h3></Card>}
-        {selectedProvider && <div className="flex justify-center"><Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setStep(3); fetchVariants(selectedBlueprint!.id, selectedProvider.id); }}>Próximo: Upload<ArrowRight size={16} className="ml-2" /></Button></div>}
+        ) : <Card className="bg-secondary border-border p-6 md:p-12 text-center"><AlertCircle size={48} className="mx-auto mb-4 text-yellow-500" /><h3 className="text-lg font-semibold">{T("Nenhum fornecedor")}</h3></Card>}
+        {selectedProvider && <div className="flex justify-center"><Button className="bg-amber-600 hover:bg-amber-700" onClick={() => { setStep(3); fetchVariants(selectedBlueprint!.id, selectedProvider.id); }}>{T("Próximo: Upload")}<ArrowRight size={16} className="ml-2" /></Button></div>}
       </div>
     );
   }
@@ -1831,7 +1838,7 @@ function CreateWizard(props: {
     if (!uploadedDesignUrl) {
       const url = await uploadDesign();
       if (!url) {
-        toast.error("Erro no upload do design");
+        toast.error(T("Erro no upload do design"));
         return;
       }
       setUploadedDesignUrl(url);
@@ -1843,11 +1850,11 @@ function CreateWizard(props: {
   if (step === 3) {
     return (
       <div className="space-y-6 pb-24">
-        <Button variant="ghost" onClick={() => setStep(2)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
+        <Button variant="ghost" onClick={() => setStep(2)}><ChevronLeft size={16} className="mr-2" />{T("Voltar")}</Button>
         <div className="text-center">
-          <h2 className="text-xl md:text-2xl font-bold mb-2">Escolha seu Design</h2>
-          <p className="text-muted-foreground text-sm">Faça upload, use suas criações ou escolha da galeria pública</p>
-          <p className="text-xs text-amber-400/80 mt-1">💡 Para melhor resultado, use PNG com fundo transparente (sem fundo preto/branco)</p>
+          <h2 className="text-xl md:text-2xl font-bold mb-2">{T("Escolha seu Design")}</h2>
+          <p className="text-muted-foreground text-sm">{T("Faça upload, use suas criações ou escolha da galeria pública")}</p>
+          <p className="text-xs text-amber-400/80 mt-1">{T("💡 Para melhor resultado, use PNG com fundo transparente (sem fundo preto/branco)")}</p>
         </div>
         
         <div className="max-w-5xl mx-auto">
@@ -1858,8 +1865,8 @@ function CreateWizard(props: {
               <div className="flex gap-1 p-1 bg-secondary rounded-lg">
                 {[
                   { id: 'upload', label: 'Upload', icon: Upload },
-                  { id: 'creations', label: 'Minhas Criações', icon: Sparkles },
-                  { id: 'uploads', label: 'Meus Uploads', icon: ImageIcon },
+                  { id: 'creations', label: T("Minhas Criações"), icon: Sparkles },
+                  { id: 'uploads', label: T("Meus Uploads"), icon: ImageIcon },
                   { id: 'public', label: 'Galeria', icon: Globe },
                 ].map((tab) => (
                   <button
@@ -1873,7 +1880,7 @@ function CreateWizard(props: {
                     )}
                   >
                     <tab.icon size={14} />
-                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="hidden sm:inline">{T(tab.label)}</span>
                   </button>
                 ))}
               </div>
@@ -1901,10 +1908,10 @@ function CreateWizard(props: {
                   ) : (
                     <>
                       <Upload size={48} className="mx-auto mb-4 text-amber-400" />
-                      <h3 className="font-semibold mb-2">Arraste seu design aqui</h3>
-                      <p className="text-sm text-muted-foreground mb-4">PNG, JPG, SVG até 50MB</p>
+                      <h3 className="font-semibold mb-2">{T("Arraste seu design aqui")}</h3>
+                      <p className="text-sm text-muted-foreground mb-4">{T("PNG, JPG, SVG até 50MB")}</p>
                       <Button className="bg-amber-600 hover:bg-amber-700">
-                        <ImageIcon size={16} className="mr-2" />Escolher Arquivo
+                        <ImageIcon size={16} className="mr-2" />{T("Escolher Arquivo")}
                       </Button>
                     </>
                   )}
@@ -1919,7 +1926,8 @@ function CreateWizard(props: {
                   onClick={() => setShowAdvancedEditor(true)}
                 >
                   <Wand2 size={16} className="mr-2" />
-                  Modo Avançado: Adicionar Texto, Camadas e Posicionamento
+                  
+                  {T("Modo Avançado: Adicionar Texto, Camadas e Posicionamento")}
                 </Button>
               )}
 
@@ -1947,15 +1955,15 @@ function CreateWizard(props: {
                         >
                           <img 
                             src={img.imageUrl} 
-                            alt={img.prompt} 
+                            alt={T(img.prompt)} 
                             className="w-full h-full object-cover"
                             loading="lazy"
                           />
                           {/* Overlay */}
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
-                            <p className="text-xs text-white line-clamp-2">{img.prompt}</p>
+                            <p className="text-xs text-white line-clamp-2">{T(img.prompt)}</p>
                             {designTab === 'public' && img.userName && (
-                              <p className="text-xs text-muted-foreground mt-1">por {img.userName}</p>
+                              <p className="text-xs text-muted-foreground mt-1">por {T(img.userName)}</p>
                             )}
                           </div>
                           {/* Selection indicator */}
@@ -1971,12 +1979,12 @@ function CreateWizard(props: {
                     <Card className="bg-secondary border-border p-8 text-center">
                       <ImageIcon size={40} className="mx-auto mb-3 text-gray-600" />
                       <p className="text-muted-foreground mb-2">
-                        {designTab === 'creations' && "Nenhuma criação encontrada"}
-                        {designTab === 'uploads' && "Nenhum upload encontrado"}
+                        {designTab === 'creations' && T("Nenhuma criação encontrada")}
+                        {designTab === 'uploads' && T("Nenhum upload encontrado")}
                         {designTab === 'public' && "Galeria vazia"}
                       </p>
                       {designTab === 'creations' && (
-                        <p className="text-sm text-muted-foreground">Crie imagens no Studio AI para usar aqui</p>
+                        <p className="text-sm text-muted-foreground">{T("Crie imagens no Studio AI para usar aqui")}</p>
                       )}
                     </Card>
                   )}
@@ -1987,7 +1995,8 @@ function CreateWizard(props: {
               <div className="mt-4 space-y-4">
                 <h4 className="font-semibold flex items-center gap-2">
                   <Package size={18} className="text-amber-400" />
-                  Variantes Disponíveis
+                  
+                  {T("Variantes Disponíveis")}
                 </h4>
                 <div className="space-y-2 max-h-40 overflow-y-auto bg-secondary rounded-lg p-3">
                   {isFetchingVariants ? (
@@ -2012,7 +2021,7 @@ function CreateWizard(props: {
                           }} 
                           className="rounded border-border text-amber-500" 
                         />
-                        <span className="text-sm">{v.title}</span>
+                        <span className="text-sm">{T(v.title)}</span>
                       </div>
                     </label>
                   ))}
@@ -2023,7 +2032,8 @@ function CreateWizard(props: {
                   <Card className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 border-amber-500/30 p-4">
                     <h5 className="font-semibold text-sm mb-3 flex items-center gap-2">
                       <DollarSign size={16} className="text-green-400" />
-                      Resumo do Preço
+                      
+                      {T("Resumo do Preço")}
                     </h5>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between text-muted-foreground">
@@ -2035,12 +2045,12 @@ function CreateWizard(props: {
                         <span>Incluso</span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
-                        <span>Sua margem ({MARGIN_PERCENTAGE}%)</span>
+                        <span>{T("Sua margem (")}{MARGIN_PERCENTAGE}%)</span>
                         <span className="text-green-400">+{formatCurrency(sellingPrice - baseCost)}</span>
                       </div>
                       <div className="h-px bg-gray-700 my-2" />
                       <div className="flex justify-between font-bold text-lg">
-                        <span>Preço de Venda</span>
+                        <span>{T("Preço de Venda")}</span>
                         <span className="text-green-400">{formatCurrency(sellingPrice)}</span>
                       </div>
                     </div>
@@ -2048,12 +2058,12 @@ function CreateWizard(props: {
                     {/* Delivery Info */}
                     <div className="mt-3 pt-3 border-t border-border flex items-center gap-2 text-xs text-muted-foreground">
                       <Truck size={14} />
-                      <span>Entrega: {BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias úteis para o Brasil</span>
+                      <span>Entrega: {BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max}  {T("dias úteis para o Brasil")}</span>
                     </div>
                     
                     {/* Profit Highlight */}
                     <div className="mt-3 p-2 bg-green-500/10 rounded-lg text-center">
-                      <p className="text-xs text-muted-foreground">Seu lucro por venda</p>
+                      <p className="text-xs text-muted-foreground">{T("Seu lucro por venda")}</p>
                       <p className="text-lg md:text-xl font-bold text-green-400 truncate">{formatCurrency(sellingPrice - baseCost)}</p>
                     </div>
                   </Card>
@@ -2104,7 +2114,7 @@ function CreateWizard(props: {
                         </div>
                         <div className="text-center">
                           <p className="text-sm font-semibold text-white">Gerando mockups profissionais...</p>
-                          <p className="text-xs text-muted-foreground mt-1">Printify está renderizando seu produto</p>
+                          <p className="text-xs text-muted-foreground mt-1">{T("Printify está renderizando seu produto")}</p>
                         </div>
                         <div className="flex gap-1.5">
                           {[0, 1, 2, 3].map(i => (
@@ -2132,7 +2142,8 @@ function CreateWizard(props: {
                         onClick={() => setShowDesignEditor(true)}
                       >
                         <Settings size={16} className="mr-2" />
-                        Editar Posição do Design
+                        
+                        {T("Editar Posição do Design")}
                         {designSettings && (
                           <Badge variant="secondary" className="ml-2 text-xs">
                             Customizado
@@ -2161,7 +2172,7 @@ function CreateWizard(props: {
                                 : "bg-secondary text-muted-foreground hover:bg-white/10"
                             )}
                           >
-                            {opt.label}
+                            {T(opt.label)}
                           </button>
                         ))}
                       </div>
@@ -2185,7 +2196,7 @@ function CreateWizard(props: {
                             if (url) {
                               generatePrintifyMockups(url);
                             } else {
-                              toast.error("Erro no upload do design");
+                              toast.error(T("Erro no upload do design"));
                             }
                           }}
                         >
@@ -2216,18 +2227,18 @@ function CreateWizard(props: {
                   {/* Info Card - only show when no mockups (MockupGallery has its own info) */}
                   {printifyMockups.length === 0 && (
                     <Card className="bg-secondary border-border p-4">
-                      <h5 className="font-semibold mb-1">{selectedBlueprint.title}</h5>
-                      <p className="text-sm text-muted-foreground mb-3">{selectedBlueprint.brand}</p>
+                      <h5 className="font-semibold mb-1">{T(selectedBlueprint.title)}</h5>
+                      <p className="text-sm text-muted-foreground mb-3">{T(selectedBlueprint.brand)}</p>
                       
                       {designPreview ? (
                         <div className="flex items-center gap-2 text-emerald-400 text-sm">
                           <Sparkles size={16} />
-                          <span>Mockup profissional será gerado automaticamente</span>
+                          <span>{T("Mockup profissional será gerado automaticamente")}</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 text-muted-foreground text-sm">
                           <AlertCircle size={16} />
-                          <span>Faça upload do seu design para começar</span>
+                          <span>{T("Faça upload do seu design para começar")}</span>
                         </div>
                       )}
                     </Card>
@@ -2314,9 +2325,10 @@ function CreateWizard(props: {
                   <div className="min-w-0">
                     <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
                       <Layers size={20} className="text-amber-400 shrink-0" />
-                      Editor Avançado
+                      
+                      {T("Editor Avançado")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">Adicione texto, camadas e posicione com precisão</p>
+                    <p className="text-muted-foreground text-sm">{T("Adicione texto, camadas e posicione com precisão")}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button 
@@ -2334,7 +2346,7 @@ function CreateWizard(props: {
                         if (printifyMockups.length > 0) {
                           setMockupsOutdated(true);
                         }
-                        toast.success("Design salvo!");
+                        toast.success(T("Design salvo!"));
                         setShowAdvancedEditor(false);
                       }}
                     >
@@ -2387,11 +2399,12 @@ function CreateWizard(props: {
                   </div>
                   <div>
                     <p className="font-medium">{selectedVariants.length} variante(s)</p>
-                    <p className="text-xs text-muted-foreground">{printifyMockups.length > 0 ? 'Mockups prontos!' : 'Pronto para configurar preços'}</p>
+                    <p className="text-xs text-muted-foreground">{printifyMockups.length > 0 ? 'Mockups prontos!' : T("Pronto para configurar preços")}</p>
                   </div>
                 </div>
                 <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => setStep(4)}>
-                  Próximo: Preços
+                  
+                  {T("Próximo: Preços")}
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
               </div>
@@ -2405,10 +2418,10 @@ function CreateWizard(props: {
   // Step 4: Pricing & Final Review
   return (
     <div className="space-y-6 pb-24">
-      <Button variant="ghost" onClick={() => setStep(3)}><ChevronLeft size={16} className="mr-2" />Voltar</Button>
+      <Button variant="ghost" onClick={() => setStep(3)}><ChevronLeft size={16} className="mr-2" />{T("Voltar")}</Button>
       <div className="text-center">
-        <h2 className="text-xl md:text-2xl font-bold mb-2">Finalize Seu Produto</h2>
-        <p className="text-muted-foreground text-sm">Configure título, descrição e preço de venda</p>
+        <h2 className="text-xl md:text-2xl font-bold mb-2">{T("Finalize Seu Produto")}</h2>
+        <p className="text-muted-foreground text-sm">{T("Configure título, descrição e preço de venda")}</p>
       </div>
       
       <div className="max-w-5xl mx-auto">
@@ -2417,7 +2430,8 @@ function CreateWizard(props: {
           <div className="md:col-span-2 space-y-4">
             <h4 className="font-semibold flex items-center gap-2">
               <Sparkles size={18} className="text-amber-400" />
-              Seu Produto Final
+              
+              {T("Seu Produto Final")}
             </h4>
             
             {/* Main Mockup - Use Printify mockups if available */}
@@ -2449,12 +2463,12 @@ function CreateWizard(props: {
               <div className="flex items-center gap-2 text-sm">
                 <Package size={14} className="text-muted-foreground" />
                 <span className="text-muted-foreground">Produto:</span>
-                <span className="font-medium">{selectedBlueprint?.title}</span>
+                <span className="font-medium">{T(selectedBlueprint?.title)}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Globe size={14} className="text-muted-foreground" />
                 <span className="text-muted-foreground">Fornecedor:</span>
-                <span className="font-medium">{selectedProvider?.title}</span>
+                <span className="font-medium">{T(selectedProvider?.title)}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Shirt size={14} className="text-muted-foreground" />
@@ -2480,15 +2494,15 @@ function CreateWizard(props: {
                   <div className="w-8 h-8 md:w-10 md:h-10 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-1 md:mb-2">
                     <Truck size={14} className="text-green-400" />
                   </div>
-                  <p className="text-xs md:text-sm font-medium truncate">{BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max} dias</p>
-                  <p className="text-[10px] md:text-xs text-muted-foreground truncate">Entrega para Brasil</p>
+                  <p className="text-xs md:text-sm font-medium truncate">{BRAZIL_SHIPPING_DAYS.min}-{BRAZIL_SHIPPING_DAYS.max}  {T("dias")}</p>
+                  <p className="text-[10px] md:text-xs text-muted-foreground truncate">{T("Entrega para Brasil")}</p>
                 </div>
                 <div className="overflow-hidden">
                   <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-1 md:mb-2">
                     <CheckCircle size={14} className="text-blue-400" />
                   </div>
                   <p className="text-xs md:text-sm font-medium truncate">Sob Demanda</p>
-                  <p className="text-[10px] md:text-xs text-muted-foreground truncate">Feito quando vendido</p>
+                  <p className="text-[10px] md:text-xs text-muted-foreground truncate">{T("Feito quando vendido")}</p>
                 </div>
               </div>
             </Card>
@@ -2496,7 +2510,7 @@ function CreateWizard(props: {
             {/* Title & Description */}
             <div className="space-y-4">
               <div>
-                <Label className="text-base font-semibold mb-2 block">Título do Produto</Label>
+                <Label className="text-base font-semibold mb-2 block">{T("Título do Produto")}</Label>
                 <Input 
                   value={productTitle} 
                   onChange={(e) => setProductTitle(e.target.value)} 
@@ -2505,13 +2519,13 @@ function CreateWizard(props: {
                 />
               </div>
               <div>
-                <Label className="text-base font-semibold mb-2 block">Descrição</Label>
+                <Label className="text-base font-semibold mb-2 block">{T("Descrição")}</Label>
                 <Textarea 
                   value={productDescription} 
                   onChange={(e) => setProductDescription(e.target.value)} 
                   className="bg-secondary border-border" 
                   rows={4} 
-                  placeholder="Descreva seu produto..."
+                  placeholder={T("Descreva seu produto...")}
                 />
               </div>
             </div>
@@ -2520,7 +2534,8 @@ function CreateWizard(props: {
             <Card className="bg-gradient-to-br from-amber-900/30 to-yellow-900/20 border-amber-500/30 p-4 md:p-6 space-y-4 overflow-hidden">
               <h3 className="font-semibold flex items-center gap-2 text-base md:text-lg">
                 <DollarSign size={20} className="text-green-400 shrink-0" />
-                Definir Preços
+                
+                {T("Definir Preços")}
               </h3>
               <div className="grid grid-cols-2 gap-3 md:gap-4">
                 <div>
@@ -2531,17 +2546,17 @@ function CreateWizard(props: {
                     onChange={(e) => setBaseCost(parseFloat(e.target.value) || 0)} 
                     className="bg-secondary border-border h-12 text-lg font-semibold" 
                   />
-                  <p className="text-xs text-muted-foreground mt-1">Custo de produção</p>
+                  <p className="text-xs text-muted-foreground mt-1">{T("Custo de produção")}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground text-sm">Preço Venda (R$)</Label>
+                  <Label className="text-muted-foreground text-sm">{T("Preço Venda (R$)")}</Label>
                   <Input 
                     type="number" 
                     value={sellingPrice} 
                     onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)} 
                     className="bg-secondary border-border h-12 text-lg font-semibold" 
                   />
-                  <p className="text-xs text-muted-foreground mt-1">Preço para cliente</p>
+                  <p className="text-xs text-muted-foreground mt-1">{T("Preço para cliente")}</p>
                 </div>
               </div>
               
@@ -2576,7 +2591,7 @@ function CreateWizard(props: {
                 {canPublish ? <Trophy className="text-green-400" size={24} /> : <Lock className="text-yellow-400" size={24} />}
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold">{canPublish ? "Você pode publicar!" : "XP Necessário para Publicar"}</h4>
+                <h4 className="font-semibold">{canPublish ? T("Você pode publicar!") : T("XP Necessário para Publicar")}</h4>
                 <p className="text-sm text-muted-foreground">
                   {canPublish 
                     ? `Você tem ${userXP} XP (mínimo: ${MIN_XP_TO_PUBLISH})`
@@ -2601,7 +2616,8 @@ function CreateWizard(props: {
                 disabled={isCreating || !productTitle}
               >
                 {isCreating ? <Loader2 className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />}
-                Salvar Rascunho
+                
+                {T("Salvar Rascunho")}
               </Button>
               <Button 
                 className={cn(
@@ -2631,6 +2647,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
   product: PODProduct; onClose: () => void; setEditingProduct: (p: PODProduct) => void;
   publishProduct: (id: string) => void; canPublish: boolean; formatCurrency: (v: number) => string;
 }) {
+  const T = useT();
   const [showQR, setShowQR] = useState(false);
   const [copied, setCopied] = useState(false);
   const statusInfo = STATUS_CONFIG[product.status];
@@ -2646,7 +2663,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
       setCopied(true);
       toast.success("Link copiado!");
       setTimeout(() => setCopied(false), 2000);
-    } catch { toast.error("Erro ao copiar"); }
+    } catch { toast.error(T("Erro ao copiar")); }
   };
 
   const downloadQRCode = () => {
@@ -2747,20 +2764,20 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
           {/* Right: Product Info */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Badge className={cn(statusInfo.color, "text-white")}>{statusInfo.label}</Badge>
+              <Badge className={cn(statusInfo.color, "text-white")}>{T(statusInfo.label)}</Badge>
               <Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button>
             </div>
             
-            <h2 className="text-xl md:text-2xl font-bold line-clamp-2">{product.title}</h2>
-            {product.shortDescription && <p className="text-muted-foreground text-sm line-clamp-2">{product.shortDescription}</p>}
-            <p className="text-muted-foreground text-sm line-clamp-4">{product.description}</p>
+            <h2 className="text-xl md:text-2xl font-bold line-clamp-2">{T(product.title)}</h2>
+            {product.shortDescription && <p className="text-muted-foreground text-sm line-clamp-2">{T(product.shortDescription)}</p>}
+            <p className="text-muted-foreground text-sm line-clamp-4">{T(product.description)}</p>
             
             {/* Tags */}
             {product.tags && product.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {product.tags.map((tag, i) => (
                   <Badge key={i} variant="outline" className="border-border text-muted-foreground">
-                    <Hash size={12} className="mr-1" />{tag}
+                    <Hash size={12} className="mr-1" />{T(tag)}
                   </Badge>
                 ))}
               </div>
@@ -2769,7 +2786,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
             {/* Pricing */}
             <div className="bg-secondary rounded-lg p-3 md:p-4 space-y-2 overflow-hidden">
               <div className="flex justify-between gap-2">
-                <span className="text-muted-foreground text-sm">Preço de Venda</span>
+                <span className="text-muted-foreground text-sm">{T("Preço de Venda")}</span>
                 <span className="text-lg md:text-xl font-bold text-green-400 truncate">{formatCurrency(product.suggestedPrice)}</span>
               </div>
               <div className="flex justify-between text-sm">
@@ -2790,7 +2807,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
               <Card className="bg-secondary p-2 md:p-3 border-border overflow-hidden">
                 <Eye size={18} className="mx-auto mb-1 text-blue-400" />
                 <p className="font-bold text-sm md:text-base">{product.views}</p>
-                <p className="text-[10px] md:text-xs text-muted-foreground">Visualizações</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">{T("Visualizações")}</p>
               </Card>
               <Card className="bg-secondary p-2 md:p-3 border-border overflow-hidden">
                 <ShoppingBag size={18} className="mx-auto mb-1 text-green-400" />
@@ -2812,7 +2829,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
                 ) : (
                   <ToggleLeft size={18} className="text-muted-foreground" />
                 )}
-                <span className="text-muted-foreground">Minha Loja</span>
+                <span className="text-muted-foreground">{T("Minha Loja")}</span>
               </div>
               <div className="flex items-center gap-2">
                 {product.showInMarketplace ? (
@@ -2847,6 +2864,7 @@ function DetailModal({ product, onClose, setEditingProduct, publishProduct, canP
 
 // Enhanced Edit Modal with Full Product Management
 function EditModal({ product, onClose, updateProduct }: { product: PODProduct; onClose: () => void; updateProduct: (id: string, u: Partial<PODProduct>) => void }) {
+  const T = useT();
   const [activeTab, setActiveTab] = useState<'info' | 'pricing' | 'visibility' | 'share'>('info');
   const [isSaving, setIsSaving] = useState(false);
   
@@ -2905,7 +2923,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
       setCopied(true);
       toast.success("Link copiado!");
       setTimeout(() => setCopied(false), 2000);
-    } catch { toast.error("Erro ao copiar"); }
+    } catch { toast.error(T("Erro ao copiar")); }
   };
 
   const downloadQRCode = () => {
@@ -2947,7 +2965,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
             )}
             <div className="min-w-0">
               <h2 className="text-base md:text-lg font-bold">Editar Produto</h2>
-              <p className="text-xs text-muted-foreground truncate">{product.templateName}</p>
+              <p className="text-xs text-muted-foreground truncate">{T(product.templateName)}</p>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}><X size={20} /></Button>
@@ -2967,7 +2985,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
               )}
             >
               <tab.icon size={16} />
-              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="hidden sm:inline">{T(tab.label)}</span>
             </button>
           ))}
         </div>
@@ -2977,7 +2995,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
           {activeTab === 'info' && (
             <div className="space-y-5">
               <div>
-                <Label className="text-muted-foreground">Título do Produto</Label>
+                <Label className="text-muted-foreground">{T("Título do Produto")}</Label>
                 <Input 
                   value={title} 
                   onChange={(e) => setTitle(e.target.value)} 
@@ -2987,31 +3005,31 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
               </div>
               
               <div>
-                <Label className="text-muted-foreground">Descrição Curta</Label>
+                <Label className="text-muted-foreground">{T("Descrição Curta")}</Label>
                 <Input 
                   value={shortDescription} 
                   onChange={(e) => setShortDescription(e.target.value)} 
                   className="bg-secondary border-border mt-1.5" 
-                  placeholder="Uma linha de destaque sobre o produto"
+                  placeholder={T("Uma linha de destaque sobre o produto")}
                   maxLength={150}
                 />
                 <p className="text-xs text-muted-foreground mt-1">{shortDescription.length}/150 caracteres</p>
               </div>
               
               <div>
-                <Label className="text-muted-foreground">Descrição Completa</Label>
+                <Label className="text-muted-foreground">{T("Descrição Completa")}</Label>
                 <Textarea 
                   value={description} 
                   onChange={(e) => setDescription(e.target.value)} 
                   className="bg-secondary border-border mt-1.5" 
                   rows={4}
-                  placeholder="Descreva seu produto em detalhes..."
+                  placeholder={T("Descreva seu produto em detalhes...")}
                 />
               </div>
               
               <div>
                 <Label className="text-muted-foreground">Tags</Label>
-                <p className="text-xs text-muted-foreground mb-2">Adicione até 10 tags para ajudar na busca</p>
+                <p className="text-xs text-muted-foreground mb-2">{T("Adicione até 10 tags para ajudar na busca")}</p>
                 <div className="flex gap-2 mb-2">
                   <Input 
                     value={tagInput}
@@ -3027,13 +3045,13 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag, i) => (
                     <Badge key={i} variant="secondary" className="bg-amber-500/20 text-amber-300 pr-1">
-                      <Hash size={12} className="mr-1" />{tag}
+                      <Hash size={12} className="mr-1" />{T(tag)}
                       <button onClick={() => removeTag(tag)} className="ml-2 hover:text-red-400">
                         <X size={14} />
                       </button>
                     </Badge>
                   ))}
-                  {tags.length === 0 && <span className="text-muted-foreground text-sm">Nenhuma tag adicionada</span>}
+                  {tags.length === 0 && <span className="text-muted-foreground text-sm">{T("Nenhuma tag adicionada")}</span>}
                 </div>
               </div>
             </div>
@@ -3044,12 +3062,12 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
               <Card className="bg-secondary border-border p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <DollarSign size={20} className="text-green-400" />
-                  <span className="font-medium">Definir Preço de Venda</span>
+                  <span className="font-medium">{T("Definir Preço de Venda")}</span>
                 </div>
                 
                 <div className="space-y-4">
                   <div>
-                    <Label className="text-muted-foreground">Preço de Venda (R$)</Label>
+                    <Label className="text-muted-foreground">{T("Preço de Venda (R$)")}</Label>
                     <Input 
                       type="number" 
                       value={price} 
@@ -3058,7 +3076,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                       step="0.01"
                       min={product.baseCost}
                     />
-                    <p className="text-xs text-muted-foreground mt-1">Preço mínimo: {(product.baseCost).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{T("Preço mínimo:")} {(product.baseCost).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 md:gap-4 pt-4 border-t border-border">
@@ -3067,7 +3085,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                       <p className="text-base md:text-lg font-medium truncate">{product.baseCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                     </div>
                     <div className="overflow-hidden">
-                      <span className="text-muted-foreground text-xs md:text-sm">Seu Lucro</span>
+                      <span className="text-muted-foreground text-xs md:text-sm">{T("Seu Lucro")}</span>
                       <p className={cn("text-base md:text-lg font-bold truncate", profit >= 0 ? "text-green-400" : "text-red-400")}>
                         {profit.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                       </p>
@@ -3078,7 +3096,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Margem de Lucro</span>
                       <span className={cn("text-xl md:text-2xl font-bold", parseFloat(margin) >= 30 ? "text-green-400" : parseFloat(margin) >= 15 ? "text-yellow-400" : "text-red-400")}>
-                        {margin}%
+                        {T(margin)}%
                       </span>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
@@ -3140,7 +3158,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
               <Card className="bg-secondary border-border p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Globe size={20} className="text-amber-400" />
-                  <span className="font-medium">Onde exibir seu produto</span>
+                  <span className="font-medium">{T("Onde exibir seu produto")}</span>
                 </div>
                 
                 <div className="space-y-4">
@@ -3148,8 +3166,8 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                     <div className="flex items-center gap-3">
                       <Store size={20} className="text-blue-400" />
                       <div>
-                        <p className="font-medium">Minha Loja</p>
-                        <p className="text-xs text-muted-foreground">Visível na sua loja pessoal</p>
+                        <p className="font-medium">{T("Minha Loja")}</p>
+                        <p className="text-xs text-muted-foreground">{T("Visível na sua loja pessoal")}</p>
                       </div>
                     </div>
                     <button
@@ -3165,7 +3183,7 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                       <Globe size={20} className="text-amber-400" />
                       <div>
                         <p className="font-medium">Marketplace FayAi</p>
-                        <p className="text-xs text-muted-foreground">Visível para todos os usuários</p>
+                        <p className="text-xs text-muted-foreground">{T("Visível para todos os usuários")}</p>
                       </div>
                     </div>
                     <button
@@ -3207,7 +3225,8 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
                     />
                   </div>
                   <p className="text-sm text-muted-foreground text-center">
-                    Escaneie o QR Code para acessar a página do produto
+                    
+                    {T("Escaneie o QR Code para acessar a página do produto")}
                   </p>
                   <Button variant="outline" onClick={downloadQRCode} className="border-border">
                     <Download size={16} className="mr-2" />
@@ -3272,7 +3291,8 @@ function EditModal({ product, onClose, updateProduct }: { product: PODProduct; o
             disabled={isSaving}
           >
             {isSaving ? <Loader2 size={16} className="mr-2 animate-spin" /> : <Save size={16} className="mr-2" />}
-            Salvar Alterações
+            
+            {T("Salvar Alterações")}
           </Button>
         </div>
       </motion.div>

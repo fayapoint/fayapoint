@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import Image from "next/image";
 import { Mail, Phone, MapPin, CalendarDays } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -46,6 +47,7 @@ const iconMap = {
 };
 
 export default function ContactPage() {
+  const T = useT();
   const t = useTranslations("Contact");
   const hero = t.raw("hero") as ContactHero;
   const form = t.raw("form") as ContactForm;
@@ -59,7 +61,7 @@ export default function ContactPage() {
         <section className="relative py-20 overflow-hidden">
           <Image
             src="/rwx5.jpg"
-            alt={hero.imageAlt}
+            alt={T(hero.imageAlt)}
             fill
             priority
             sizes="100vw"
@@ -69,13 +71,13 @@ export default function ContactPage() {
 
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <p className="text-sm uppercase tracking-[0.3em] text-amber-200/80 mb-4">
-              {hero.badge}
+              {T(hero.badge)}
             </p>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              {hero.title}
+              {T(hero.title)}
             </h1>
             <p className="text-lg text-gray-100">
-              {hero.description}
+              {T(hero.description)}
             </p>
           </div>
         </section>
@@ -107,15 +109,15 @@ export default function ContactPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                 <Image
                   src="/rwx6.jpg"
-                  alt={highlight.imageAlt}
+                  alt={T(highlight.imageAlt)}
                   width={900}
                   height={700}
                   className="w-full h-full object-cover"
                   sizes="(min-width: 1024px) 40vw, 90vw"
                 />
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <p className="text-sm uppercase tracking-[0.4em] text-amber-200">{highlight.badge}</p>
-                  <p className="text-xl font-semibold">{highlight.title}</p>
+                  <p className="text-sm uppercase tracking-[0.4em] text-amber-200">{T(highlight.badge)}</p>
+                  <p className="text-xl font-semibold">{T(highlight.title)}</p>
                 </div>
               </div>
 
@@ -131,18 +133,18 @@ export default function ContactPage() {
                       <Icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">{item.label}</p>
+                      <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">{T(item.label)}</p>
                       {item.href ? (
                         <a
                           href={item.href}
                           className="text-lg font-semibold hover:text-primary transition"
                         >
-                          {item.value}
+                          {T(item.value)}
                         </a>
                       ) : (
-                        <p className="text-lg font-semibold">{item.value}</p>
+                        <p className="text-lg font-semibold">{T(item.value)}</p>
                       )}
-                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                      <p className="text-sm text-muted-foreground">{T(item.description)}</p>
                     </div>
                   </div>
                   );

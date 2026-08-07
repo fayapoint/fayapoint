@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * HUD compartilhado do Arcade (24/07/2026) — cronômetro, combo, placar e os
@@ -95,6 +96,7 @@ export function ComboMeter({ streak, multiplier }: { streak: number; multiplier:
 /* ------------------------------------------------------------------ */
 
 export function ScorePops({ events }: { events: ScoreEvent[] }) {
+  const T = useT();
   const reduced = useReducedMotion();
   if (reduced) return null;
 
@@ -112,7 +114,7 @@ export function ScorePops({ events }: { events: ScoreEvent[] }) {
             style={{ color: event.value >= 0 ? GOLD : ROSE }}
           >
             {event.value >= 0 ? `+${event.value}` : event.value}
-            {event.label && <span className="ml-1 text-xs font-bold opacity-80">{event.label}</span>}
+            {event.label && <span className="ml-1 text-xs font-bold opacity-80">{T(event.label)}</span>}
           </motion.span>
         ))}
       </AnimatePresence>
@@ -183,6 +185,7 @@ export function ShakeBox({
 /* ------------------------------------------------------------------ */
 
 export function StartCountdown({ value }: { value: number | null }) {
+  const T = useT();
   const reduced = useReducedMotion();
   return (
     <AnimatePresence>
@@ -202,7 +205,7 @@ export function StartCountdown({ value }: { value: number | null }) {
             className="text-7xl font-black"
             style={{ color: value === 0 ? LIME : GOLD }}
           >
-            {value === 0 ? "JÁ!" : value}
+            {value === 0 ? T("JÁ!") : value}
           </motion.span>
         </motion.div>
       )}

@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -148,6 +149,7 @@ export default async function AutomationIntegrationPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const T = await obterT(locale);
   const t = await getTranslations("Home.Services.automation");
   const isEn = locale === "en";
 
@@ -196,7 +198,8 @@ export default async function AutomationIntegrationPage({
             <Workflow className="w-12 h-12 text-orange-500" />
           </div>
           <p className="text-sm uppercase tracking-[0.3em] text-orange-400 mb-4">
-            Automação + Integração
+            
+            {T("Automação + Integração")}
           </p>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">{t("title")}</h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8">{t("description")}</p>
@@ -207,11 +210,12 @@ export default async function AutomationIntegrationPage({
               source="automation-hero"
               showCompanyRole
             >
-              Agendar diagnóstico gratuito <ArrowRight className="ml-2 w-5 h-5" />
+              
+              {T("Agendar diagnóstico gratuito")} <ArrowRight className="ml-2 w-5 h-5" />
             </ScheduleConsultationButton>
             <a href="#toolbox">
               <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                {isEn ? "Use the free tools" : "Usar ferramentas grátis"}
+                {isEn ? "Use the free tools" : T("Usar ferramentas grátis")}
               </Button>
             </a>
           </div>
@@ -219,15 +223,15 @@ export default async function AutomationIntegrationPage({
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <BadgeCheck className="w-5 h-5 text-emerald-500" />
-              <span>{isEn ? "No lock-in" : "Sem fidelidade"}</span>
+              <span>{isEn ? "No lock-in" : T("Sem fidelidade")}</span>
             </div>
             <div className="flex items-center gap-2">
               <BadgeCheck className="w-5 h-5 text-emerald-500" />
-              <span>{isEn ? "Observable + reliable" : "Observável + confiável"}</span>
+              <span>{isEn ? "Observable + reliable" : T("Observável + confiável")}</span>
             </div>
             <div className="flex items-center gap-2">
               <BadgeCheck className="w-5 h-5 text-emerald-500" />
-              <span>{isEn ? "UTM attribution" : "Atribuição por UTM"}</span>
+              <span>{isEn ? "UTM attribution" : T("Atribuição por UTM")}</span>
             </div>
           </div>
         </div>
@@ -239,8 +243,8 @@ export default async function AutomationIntegrationPage({
         <div className="grid gap-6 md:grid-cols-3 mb-16">
           {metrics.map((metric) => (
             <div key={metric.label} className="rounded-2xl border border-border bg-card/80 p-6">
-              <p className="text-sm uppercase tracking-wide text-muted-foreground">{metric.label}</p>
-              <p className="text-4xl font-bold mt-2">{metric.value}</p>
+              <p className="text-sm uppercase tracking-wide text-muted-foreground">{T(metric.label)}</p>
+              <p className="text-4xl font-bold mt-2">{T(metric.value)}</p>
             </div>
           ))}
         </div>
@@ -249,8 +253,8 @@ export default async function AutomationIntegrationPage({
           {highlights.map((highlight) => (
             <div key={highlight.title} className="rounded-2xl border border-border bg-card/60 p-6">
               <CheckCircle2 className="w-6 h-6 text-green-400 mb-4" />
-              <h3 className="text-xl font-semibold mb-3">{highlight.title}</h3>
-              <p className="text-muted-foreground">{highlight.description}</p>
+              <h3 className="text-xl font-semibold mb-3">{T(highlight.title)}</h3>
+              <p className="text-muted-foreground">{T(highlight.description)}</p>
             </div>
           ))}
         </div>
@@ -265,9 +269,9 @@ export default async function AutomationIntegrationPage({
               <div key={step.title} className="grid gap-6 md:grid-cols-[120px_1fr] items-start">
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <span className="text-3xl font-semibold text-orange-500">0{index + 1}</span>
-                  <span className="font-medium uppercase tracking-wide">{step.title}</span>
+                  <span className="font-medium uppercase tracking-wide">{T(step.title)}</span>
                 </div>
-                <p className="text-lg text-muted-foreground/90">{step.content}</p>
+                <p className="text-lg text-muted-foreground/90">{T(step.content)}</p>
               </div>
             ))}
           </div>
@@ -277,7 +281,7 @@ export default async function AutomationIntegrationPage({
           <div className="rounded-3xl border border-border bg-card/70 p-8">
             <div className="flex items-center gap-3 mb-6">
               <Link2 className="w-5 h-5 text-sky-400" />
-              <p className="text-sm uppercase tracking-[0.2em] text-sky-300">Integrações favoritas</p>
+              <p className="text-sm uppercase tracking-[0.2em] text-sky-300">{T("Integrações favoritas")}</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               {integrations.map((tool) => (
@@ -285,7 +289,7 @@ export default async function AutomationIntegrationPage({
                   key={tool}
                   className="rounded-2xl border border-border bg-background/60 px-4 py-5 text-center text-sm font-medium"
                 >
-                  {tool}
+                  {T(tool)}
                 </div>
               ))}
             </div>
@@ -294,13 +298,13 @@ export default async function AutomationIntegrationPage({
           <div className="rounded-3xl border border-border bg-card/70 p-8">
             <div className="flex items-center gap-3 mb-6">
               <Gauge className="w-5 h-5 text-lime-400" />
-              <p className="text-sm uppercase tracking-[0.2em] text-lime-300">Automação em ação</p>
+              <p className="text-sm uppercase tracking-[0.2em] text-lime-300">{T("Automação em ação")}</p>
             </div>
             <div className="space-y-6">
               {automations.map((automation) => (
                 <div key={automation.title} className="rounded-2xl border border-border/60 bg-background/50 p-5">
-                  <h3 className="text-lg font-semibold mb-2">{automation.title}</h3>
-                  <p className="text-muted-foreground text-sm">{automation.description}</p>
+                  <h3 className="text-lg font-semibold mb-2">{T(automation.title)}</h3>
+                  <p className="text-muted-foreground text-sm">{T(automation.description)}</p>
                 </div>
               ))}
             </div>
@@ -310,11 +314,11 @@ export default async function AutomationIntegrationPage({
         <div className="max-w-6xl mx-auto mb-20">
           <div className="text-center mb-10">
             <Badge variant="secondary" className="mb-4">{isEn ? "Packages" : "Pacotes"}</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Choose a plan" : "Escolha o plano ideal"}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Choose a plan" : T("Escolha o plano ideal")}</h2>
             <p className="text-muted-foreground mt-3">
               {isEn
                 ? "Start with quick wins, then scale with governance."
-                : "Comece com quick wins e escale com governança."}
+                : T("Comece com quick wins e escale com governança.")}
             </p>
           </div>
 
@@ -325,18 +329,18 @@ export default async function AutomationIntegrationPage({
                 className={`p-7 rounded-3xl border-border bg-card/70 ${p.featured ? "ring-2 ring-orange-500/40" : ""}`}
               >
                 <div className="flex items-center justify-between">
-                  <Badge variant={p.featured ? "default" : "secondary"}>{p.tier}</Badge>
+                  <Badge variant={p.featured ? "default" : "secondary"}>{T(p.tier)}</Badge>
                   {p.featured && (
-                    <Badge className="bg-orange-600">{isEn ? "Most popular" : "Mais escolhido"}</Badge>
+                    <Badge className="bg-orange-600">{isEn ? "Most popular" : T("Mais escolhido")}</Badge>
                   )}
                 </div>
-                <h3 className="text-2xl font-bold mt-5">{p.title}</h3>
-                <p className="text-muted-foreground mt-2">{p.description}</p>
+                <h3 className="text-2xl font-bold mt-5">{T(p.title)}</h3>
+                <p className="text-muted-foreground mt-2">{T(p.description)}</p>
                 <div className="mt-6 grid gap-3">
                   {p.highlights.map((h) => (
                     <div key={h} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5" />
-                      <p className="text-sm text-muted-foreground">{h}</p>
+                      <p className="text-sm text-muted-foreground">{T(h)}</p>
                     </div>
                   ))}
                 </div>
@@ -349,7 +353,7 @@ export default async function AutomationIntegrationPage({
                     {isEn ? "Book a call" : "Agendar conversa"}
                   </ScheduleConsultationButton>
                   <Link href="/precos">
-                    <Button variant="outline">{isEn ? "Pricing" : "Preços"}</Button>
+                    <Button variant="outline">{isEn ? "Pricing" : T("Preços")}</Button>
                   </Link>
                 </div>
               </Card>
@@ -362,28 +366,28 @@ export default async function AutomationIntegrationPage({
             <Badge variant="secondary" className="mb-3">FAQ</Badge>
             <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
             <p className="text-muted-foreground mt-3">
-              {isEn ? "Clear answers before you book." : "Respostas rápidas antes de agendar."}
+              {isEn ? "Clear answers before you book." : T("Respostas rápidas antes de agendar.")}
             </p>
           </div>
 
           <Accordion type="single" collapsible className="w-full">
             {faqItems.map((f) => (
               <AccordionItem key={f.q} value={f.q}>
-                <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+                <AccordionTrigger className="text-left">{T(f.q)}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{T(f.a)}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
         </div>
         
-        <Suspense fallback={<div className="py-20 text-center">Carregando construtor de serviços...</div>}>
+        <Suspense fallback={<div className="py-20 text-center">{T("Carregando construtor de serviços...")}</div>}>
           <ServiceBuilderSection
             serviceSlug="automation-ai"
             restrictToServiceSlug
             badgeLabel="Personalize sua automação"
-            title="Monte seu fluxo automatizado"
-            subtitle="Escolha mapeamento, implementações simples ou complexas, e agentes de IA conforme sua necessidade."
+            title={T("Monte seu fluxo automatizado")}
+            subtitle={T("Escolha mapeamento, implementações simples ou complexas, e agentes de IA conforme sua necessidade.")}
             sectionId="builder"
             showServiceTabs={false}
           />
@@ -393,8 +397,8 @@ export default async function AutomationIntegrationPage({
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-sm font-medium">{isEn ? "Automation diagnosis" : "Diagnóstico de automação"}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+            <p className="text-sm font-medium">{isEn ? "Automation diagnosis" : T("Diagnóstico de automação")}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
           </div>
           <a href="#toolbox">
             <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>

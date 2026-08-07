@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +22,7 @@ function parseLines(v: string) {
 }
 
 export function AIConsultingToolbox({ locale }: { locale: Locale }) {
+  const T = useT();
   const isEn = locale === "en";
 
   const [company, setCompany] = useState("");
@@ -196,7 +198,7 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
           <p className="text-muted-foreground mt-2">
             {isEn
               ? "Generate a roadmap, governance policy and agent spec without external tools."
-              : "Gere roadmap, política de governança e spec de agente sem ferramentas externas."}
+              : T("Gere roadmap, política de governança e spec de agente sem ferramentas externas.")}
           </p>
         </div>
         <div className="rounded-2xl border border-border bg-background/60 px-5 py-4">
@@ -236,7 +238,7 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
           <Tabs defaultValue="prioritize" className="mt-6">
             <TabsList className="w-full flex flex-wrap">
               <TabsTrigger value="prioritize" className="gap-2"><ListChecks className="w-4 h-4" />{isEn ? "Prioritize" : "Priorizar"}</TabsTrigger>
-              <TabsTrigger value="policy" className="gap-2"><Shield className="w-4 h-4" />{isEn ? "Policy" : "Política"}</TabsTrigger>
+              <TabsTrigger value="policy" className="gap-2"><Shield className="w-4 h-4" />{isEn ? "Policy" : T("Política")}</TabsTrigger>
               <TabsTrigger value="agent" className="gap-2"><Bot className="w-4 h-4" />{isEn ? "Agent spec" : "Spec de agente"}</TabsTrigger>
             </TabsList>
 
@@ -253,7 +255,7 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
 
             <TabsContent value="policy" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Governance policy" : "Política de governança"}</p>
+                <p className="font-semibold">{isEn ? "Governance policy" : T("Política de governança")}</p>
                 <Textarea className="mt-4 min-h-[240px]" readOnly value={policy} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(policy)}>
                   <Clipboard className="w-4 h-4" />
@@ -287,26 +289,26 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
         </div>
 
         <div className="rounded-2xl border border-border bg-background/60 p-5">
-          <p className="font-semibold">{isEn ? "Send me the report" : "Me envia o relatório"}</p>
+          <p className="font-semibold">{isEn ? "Send me the report" : T("Me envia o relatório")}</p>
           <p className="text-sm text-muted-foreground mt-2">
             {isEn
               ? "Enter your email to save this diagnosis + next steps."
-              : "Informe seu email para salvar o diagnóstico + próximos passos."}
+              : T("Informe seu email para salvar o diagnóstico + próximos passos.")}
           </p>
 
           <div className="mt-4 grid gap-3">
-            <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? "you@company.com" : "voce@empresa.com"} />
+            <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? T("you@company.com") : T("voce@empresa.com")} />
             <Button onClick={sendLead} disabled={!leadEmail || sending} className="bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600">
-              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : "Salvar + enviar")}
+              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : T("Salvar + enviar"))}
             </Button>
             <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(report)}>
               <Clipboard className="w-4 h-4" />
-              {isEn ? "Copy report" : "Copiar relatório"}
+              {isEn ? "Copy report" : T("Copiar relatório")}
             </Button>
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-background/50 p-4">
-            <p className="text-sm font-medium">{isEn ? "Preview" : "Prévia"}</p>
+            <p className="text-sm font-medium">{isEn ? "Preview" : T("Prévia")}</p>
             <Textarea value={report} readOnly className="mt-3 min-h-[220px]" />
           </div>
         </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
@@ -75,12 +76,13 @@ function MetricCard({
   title: string;
   value: string;
 }) {
+  const T = useT();
   return (
     <div className="rounded-2xl border border-border bg-secondary backdrop-blur-md p-4">
       <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-        {title}
+        {T(title)}
       </p>
-      <p className="text-2xl font-semibold text-foreground mt-2">{value}</p>
+      <p className="text-2xl font-semibold text-foreground mt-2">{T(value)}</p>
     </div>
   );
 }

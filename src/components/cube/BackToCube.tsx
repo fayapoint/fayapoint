@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useState, type MouseEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ import styles from "./back-to-cube.module.css";
  * Small FayAI 3D logo that returns to the cube with a zoom-out transition.
  */
 export function BackToCube() {
+  const T = useT();
   const router = useRouter();
   const pathname = usePathname();
   const [exiting, setExiting] = useState(false);
@@ -36,8 +38,8 @@ export function BackToCube() {
         href={cubeHref}
         onClick={handleBack}
         className={`${styles.logoBack} ${isPortal ? styles.logoBackPortal : styles.logoBackInner}`}
-        aria-label={locale === "en" ? "Back to the FayAI cube" : "Voltar ao cubo FayAI"}
-        title={locale === "en" ? "Back to the FayAI cube" : "Voltar ao cubo FayAI"}
+        aria-label={locale === "en" ? "Back to the FayAI cube" : T("Voltar ao cubo FayAI")}
+        title={locale === "en" ? "Back to the FayAI cube" : T("Voltar ao cubo FayAI")}
       >
         <span className={styles.logoStage} aria-hidden="true">
           <span className={styles.logoCube}>

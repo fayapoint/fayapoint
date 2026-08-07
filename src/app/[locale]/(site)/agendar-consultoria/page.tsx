@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { ScheduleMeetingForm } from "@/components/consultation/ScheduleMeetingFo
 import { useTranslations } from "next-intl";
 
 export default function ConsultPage() {
+  const T = useT();
   const t = useTranslations("Consultation");
 
   return (
@@ -27,7 +29,7 @@ export default function ConsultPage() {
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
               <p className="text-lg md:text-xl text-gray-100 mb-6">{t("description")}</p>
-              <p className="text-sm text-muted-foreground">Reservamos blocos de 30 minutos entre 9h e 18h (BRT). Após enviar, você será redirecionado para a agenda do Google com o próximo horário disponível.</p>
+              <p className="text-sm text-muted-foreground">{T("Reservamos blocos de 30 minutos entre 9h e 18h (BRT). Após enviar, você será redirecionado para a agenda do Google com o próximo horário disponível.")}</p>
             </div>
           </div>
         </section>
@@ -54,21 +56,21 @@ export default function ConsultPage() {
 
             <div className="bg-muted/40 border border-border rounded-3xl p-8 flex flex-col justify-between">
               <div>
-                <h2 className="text-2xl font-semibold mb-4">Como funciona</h2>
+                <h2 className="text-2xl font-semibold mb-4">{T("Como funciona")}</h2>
                 <ul className="space-y-4 text-muted-foreground">
                   <li>
-                    <span className="font-semibold text-foreground">1.</span> Validamos se você já está em nossa base para personalizar o atendimento.
+                    <span className="font-semibold text-foreground">1.</span>  {T("Validamos se você já está em nossa base para personalizar o atendimento.")}
                   </li>
                   <li>
-                    <span className="font-semibold text-foreground">2.</span> Calculamos automaticamente o próximo horário disponível na agenda compartilhada.
+                    <span className="font-semibold text-foreground">2.</span>  {T("Calculamos automaticamente o próximo horário disponível na agenda compartilhada.")}
                   </li>
                   <li>
-                    <span className="font-semibold text-foreground">3.</span> Abrimos a Google Agenda para você concluir o agendamento e ajustar o melhor horário.
+                    <span className="font-semibold text-foreground">3.</span>  {T("Abrimos a Google Agenda para você concluir o agendamento e ajustar o melhor horário.")}
                   </li>
                 </ul>
               </div>
               <div className="mt-8">
-                <p className="text-sm text-muted-foreground mb-3">Prefere falar direto com o time?</p>
+                <p className="text-sm text-muted-foreground mb-3">{T("Prefere falar direto com o time?")}</p>
                 <Button asChild variant="outline">
                   <a href="https://wa.me/5521971908530" target="_blank" rel="noreferrer">
                     WhatsApp Business

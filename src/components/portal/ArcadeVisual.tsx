@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -58,6 +59,7 @@ export function ArcadeVisual({
   video = true,
   eager = false,
 }: ArcadeVisualProps) {
+  const T = useT();
   const reduceMotion = useReducedMotion();
   const tabHiddenAtMount = useTabHiddenAtMount();
   const skipEntrance = reduceMotion || tabHiddenAtMount;
@@ -107,7 +109,7 @@ export function ArcadeVisual({
         <motion.img
           key={`${gameId}-${variant}`}
           src={variantPath(gameId, variant)}
-          alt={alt}
+          alt={T(alt)}
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : "auto"}
           initial={skipEntrance ? false : { opacity: 0, scale: 1.025 }}

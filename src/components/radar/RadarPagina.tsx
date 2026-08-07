@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -78,6 +79,7 @@ const SEED = seedBruto as unknown as RadarSeed;
 const REGIOES_BR = ["N", "NE", "SE", "S", "CO"] as const;
 
 export function RadarPagina() {
+  const T = useT();
   const [lugarId, setLugarId] = useState("BR");
   const [zoom, setZoom] = useState(1);
   const [sobCursor, setSobCursor] = useState<string | null>(null);
@@ -342,10 +344,9 @@ export function RadarPagina() {
               RADAR <span style={{ color: GOLD }}>FAYAI</span>
             </h1>
             <p className="mt-1 text-sm sm:text-base text-white/60 max-w-2xl">
-              O que o mundo está procurando agora, lugar por lugar — e o recorte de inteligência
-              artificial dentro disso. Tudo medido: buscas em alta do Google, artigos mais lidos da
-              Wikipédia e o autocomplete do Google e do YouTube.{" "}
-              <span className="text-white/40">Nenhum número aqui é estimado.</span>
+              
+              {T("O que o mundo está procurando agora, lugar por lugar — e o recorte de inteligência\r\n              artificial dentro disso. Tudo medido: buscas em alta do Google, artigos mais lidos da\r\n              Wikipédia e o autocomplete do Google e do YouTube.")}{" "}
+              <span className="text-white/40">{T("Nenhum número aqui é estimado.")}</span>
             </p>
             <span className="mt-2 inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-white/40">
               <Radar size={13} />
@@ -354,7 +355,7 @@ export function RadarPagina() {
                   <Loader2 size={11} className="animate-spin" /> medindo
                 </>
               ) : (
-                "em alta agora"
+                T("em alta agora")
               )}
             </span>
           </div>
@@ -385,7 +386,7 @@ export function RadarPagina() {
                     : { color: "rgba(255,255,255,.4)" }
                 }
               >
-                <Icone size={13} /> {label}
+                <Icone size={13} /> {T(label)}
               </button>
             );
           })}
@@ -431,8 +432,8 @@ export function RadarPagina() {
                 ].map(({ i: Icone, d, t }) => (
                   <button
                     key={t}
-                    title={t}
-                    aria-label={t}
+                    title={T(t)}
+                    aria-label={T(t)}
                     onClick={() => setZoom((z) => Math.min(2.6, Math.max(0.22, z * d)))}
                     className="grid place-items-center w-8 h-8 rounded-xl border border-white/15 bg-black/40 backdrop-blur-sm text-white/70 hover:text-white hover:border-white/35 transition-colors cursor-pointer"
                   >
@@ -464,7 +465,7 @@ export function RadarPagina() {
                         color: aceso ? l.cor : "rgba(255,255,255,.55)",
                       }}
                     >
-                      {l.nome}
+                      {T(l.nome)}
                     </button>
                   );
                 })}
@@ -480,7 +481,7 @@ export function RadarPagina() {
                     className="font-bold hover:underline cursor-pointer"
                     style={{ color: l.id === lugarId ? l.cor : "rgba(255,255,255,.45)" }}
                   >
-                    {l.nome}
+                    {T(l.nome)}
                   </button>
                 </span>
               ))}
@@ -509,7 +510,7 @@ export function RadarPagina() {
             </h2>
             {itens.length === 0 ? (
               <div className="glass rounded-2xl p-5 text-sm text-white/55">
-                {medindo ? "Medindo…" : "Sem sinal para este lugar agora."}
+                {medindo ? "Medindo…" : T("Sem sinal para este lugar agora.")}
               </div>
             ) : (
               <ol className="space-y-1">
@@ -543,16 +544,16 @@ export function RadarPagina() {
                       </span>
                       <span className="relative min-w-0 flex-1">
                         <span className="block text-sm font-bold leading-snug capitalize">
-                          {it.titulo}
+                          {T(it.titulo)}
                         </span>
                         {it.contexto && (
                           <span className="block text-[11px] text-white/50 leading-snug line-clamp-1">
-                            {it.contexto}
+                            {T(it.contexto)}
                           </span>
                         )}
                         <span className="block text-[10px] text-white/35 mt-0.5">
-                          {it.fonte === "leitura" ? "lido na Wikipédia" : "buscado no Google"} ·{" "}
-                          {it.volumeRotulo}
+                          {it.fonte === "leitura" ? T("lido na Wikipédia") : "buscado no Google"} ·{" "}
+                          {T(it.volumeRotulo)}
                           {it.lugares?.length ? ` · ${it.lugares.join(" ")}` : it.veiculo ? ` · ${it.veiculo}` : ""}
                         </span>
                       </span>
@@ -588,13 +589,12 @@ export function RadarPagina() {
         {/* --------------------------- comparação regional -------------------------- */}
         <section className="mt-10">
           <h2 className="text-xl tracking-wide" style={bebas}>
-            O BRASIL POR <span style={{ color: GOLD }}>REGIÃO</span>
+            O BRASIL POR <span style={{ color: GOLD }}>{T("REGIÃO")}</span>
           </h2>
           <p className="text-sm text-white/50 mb-3 max-w-2xl">
-            O assunto do momento em cada região, e em quantos estados dela ele aparece — que é
-            contagem de estados, não volume. As regiões estão em ordem geográfica de propósito:{" "}
-            <strong className="text-white/75">não dá para dizer qual procura mais</strong>, porque o
-            Google reporta o volume relativo à linha de base de cada lugar, não em escala comum.
+            
+            {T("O assunto do momento em cada região, e em quantos estados dela ele aparece — que é\r\n            contagem de estados, não volume. As regiões estão em ordem geográfica de propósito:")}{" "}
+            <strong className="text-white/75">{T("não dá para dizer qual procura mais")}</strong>{T(", porque o\r\n            Google reporta o volume relativo à linha de base de cada lugar, não em escala comum.")}
           </p>
           <div className="glass rounded-2xl p-4 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
             {porRegiao.map((r) => (
@@ -610,21 +610,21 @@ export function RadarPagina() {
                 }}
               >
                 <span className="block text-[11px] font-bold" style={{ color: r.cor }}>
-                  {r.nome}
+                  {T(r.nome)}
                 </span>
                 {r.medindo ? (
                   <span className="block mt-1 text-[11px] text-white/35">medindo…</span>
                 ) : (
                   <>
                     <span className="block mt-1 text-sm font-semibold leading-snug capitalize line-clamp-2">
-                      {r.topo}
+                      {T(r.topo)}
                     </span>
                     <span className="block mt-1 text-[10px] text-white/35">
                       {r.alcance > 0
                         ? `aparece em ${r.alcance} ${r.alcance === 1 ? "estado" : "estados"} de ${r.estados}`
                         : `medido nos ${r.estados} estados da região`}
                       {r.comIa > 0 && (
-                        <span className="text-violet-300/70"> · {r.comIa} sobre IA</span>
+                        <span className="text-violet-300/70"> · {r.comIa}  {T("sobre IA")}</span>
                       )}
                     </span>
                   </>
@@ -642,9 +642,8 @@ export function RadarPagina() {
             </span>
           </h2>
           <p className="text-sm text-white/50 mb-2 max-w-2xl">
-            O que o Brasil digita sobre inteligência artificial, por profissão. A leitura que
-            importa é o <strong className="text-white/75">canal</strong>: termo que só aparece no
-            YouTube é demanda de vídeo — onde um canal ganha antes de o site ranquear.
+            
+            {T("O que o Brasil digita sobre inteligência artificial, por profissão. A leitura que\r\n            importa é o")} <strong className="text-white/75">canal</strong>{T(": termo que só aparece no\r\n            YouTube é demanda de vídeo — onde um canal ganha antes de o site ranquear.")}
           </p>
 
           {/* Qual dos dois está na tela. A página afirma no rodapé que nada aqui
@@ -657,8 +656,8 @@ export function RadarPagina() {
               aria-hidden
             />
             {medidoAoVivo
-              ? "Medido agora, neste carregamento."
-              : "Medindo… no ar, o último retrato guardado."}
+              ? T("Medido agora, neste carregamento.")
+              : T("Medindo… no ar, o último retrato guardado.")}
           </p>
 
           <div className="flex gap-1.5 flex-wrap mb-3">
@@ -675,7 +674,7 @@ export function RadarPagina() {
                       : { borderColor: "rgba(255,255,255,.12)", color: "rgba(255,255,255,.5)" }
                   }
                 >
-                  {n.label}
+                  {T(n.label)}
                 </button>
               );
             })}
@@ -688,21 +687,21 @@ export function RadarPagina() {
                 n: canais.ambos,
                 cor: "#a3e635",
                 icone: Sparkles,
-                nota: "confirmado nos dois canais — o sinal mais confiável",
+                nota: T("confirmado nos dois canais — o sinal mais confiável"),
               },
               {
-                rotulo: "Só YouTube",
+                rotulo: T("Só YouTube"),
                 n: canais.yt,
                 cor: "#f472b6",
                 icone: Youtube,
-                nota: "demanda de VÍDEO que a busca web não mostra",
+                nota: T("demanda de VÍDEO que a busca web não mostra"),
               },
               {
-                rotulo: "Só Google",
+                rotulo: T("Só Google"),
                 n: canais.web,
                 cor: "#38bdf8",
                 icone: Search,
-                nota: "intenção de leitura — matéria e página",
+                nota: T("intenção de leitura — matéria e página"),
               },
             ]
               // Canal exclusivo com zero termos não ganha cartão. Ver a nota em
@@ -717,7 +716,7 @@ export function RadarPagina() {
                   className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest"
                   style={{ color: cor }}
                 >
-                  <Icone size={12} /> {rotulo}
+                  <Icone size={12} /> {T(rotulo)}
                 </p>
                 <p className="mt-1 text-3xl tabular-nums" style={{ ...bebas, color: cor }}>
                   {n}
@@ -731,7 +730,7 @@ export function RadarPagina() {
                     }}
                   />
                 </div>
-                <p className="mt-1.5 text-[11px] text-white/45 leading-snug">{nota}</p>
+                <p className="mt-1.5 text-[11px] text-white/45 leading-snug">{T(nota)}</p>
               </div>
             ))}
           </div>
@@ -740,8 +739,9 @@ export function RadarPagina() {
               espaço de um número que não existe. */}
           {canais.yt === 0 && canais.web === 0 && (
             <p className="mt-2 text-[12px] leading-snug text-white/40">
-              Nenhum termo exclusivo de um canal só neste recorte: os {canais.ambos} apareceram
-              no Google <em>e</em> no YouTube, que é a confirmação mais forte que este método dá.
+              
+              {T("Nenhum termo exclusivo de um canal só neste recorte: os")} {canais.ambos} apareceram
+              no Google <em>e</em>  {T("no YouTube, que é a confirmação mais forte que este método dá.")}
             </p>
           )}
 
@@ -754,9 +754,9 @@ export function RadarPagina() {
               className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest mb-1"
               style={{ color: nicho.cor }}
             >
-              <BookOpenText size={12} /> Como a FayAI ajuda quem é {nicho.label.toLowerCase()}
+              <BookOpenText size={12} />  {T("Como a FayAI ajuda quem é")} {nicho.label.toLowerCase()}
             </p>
-            <p className="text-sm text-white/70 leading-relaxed">{nicho.ponte.texto}</p>
+            <p className="text-sm text-white/70 leading-relaxed">{T(nicho.ponte.texto)}</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {nicho.ponte.cursos.map((c) => (
                 <Link
@@ -765,7 +765,7 @@ export function RadarPagina() {
                   className="inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-[11px] font-bold border transition-colors hover:bg-white/10"
                   style={{ borderColor: `${nicho.cor}55`, color: "#f3f1ff" }}
                 >
-                  {c.nome} <ArrowUpRight size={11} />
+                  {T(c.nome)} <ArrowUpRight size={11} />
                 </Link>
               ))}
             </div>
@@ -786,8 +786,7 @@ export function RadarPagina() {
             poderia ler "o Sudeste procura menos" e estar errado. */}
         <section className="mt-10 glass rounded-2xl p-4">
           <p className="text-[12px] text-white/55 leading-relaxed">
-            <strong className="text-white/75">Dados reais, medidos agora.</strong> Nada aqui é
-            estimado, e cada assunto leva à fonte que o publicou —{" "}
+            <strong className="text-white/75">{T("Dados reais, medidos agora.")}</strong>  {T("Nada aqui é\r\n            estimado, e cada assunto leva à fonte que o publicou —")}{" "}
             <a
               href="https://trends.google.com/trending?geo=BR"
               target="_blank"
@@ -803,7 +802,8 @@ export function RadarPagina() {
               rel="noopener noreferrer"
               className="underline decoration-white/25 hover:text-white transition-colors"
             >
-              Wikipédia
+              
+              {T("Wikipédia")}
             </a>{" "}
             e o autocomplete do Google e do YouTube.
           </p>
@@ -811,14 +811,14 @@ export function RadarPagina() {
             href="/"
             className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-bold text-white/45 hover:text-white transition-colors"
           >
-            <Globe2 size={13} /> voltar para a home
+            <Globe2 size={13} />  {T("voltar para a home")}
           </Link>
         </section>
 
         <p className="mt-6 text-center text-[11px] text-white/25">
           <Newspaper size={11} className="inline mr-1" />
-          Cada assunto leva ao veículo que o publicou. A FayAI não hospeda a notícia — aponta para
-          ela.
+          
+          {T("Cada assunto leva ao veículo que o publicou. A FayAI não hospeda a notícia — aponta para\r\n          ela.")}
         </p>
       </div>
     </div>
@@ -851,6 +851,7 @@ function RankingIa({
   onEspiar: (l: LinhaIa) => void;
   onLargar: () => void;
 }) {
+  const T = useT();
   const nicho = NICHOS.find((n) => n.id === nichoId) ?? NICHOS[0];
   const FONTES: { id: FonteId; label: string; icone: typeof Search; desc: string }[] = [
     { id: "web", label: "Google", icone: Search, desc: "demanda de busca" },
@@ -879,7 +880,7 @@ function RankingIa({
                   : { borderColor: "rgba(255,255,255,.12)", color: "rgba(255,255,255,.5)" }
               }
             >
-              {n.label}
+              {T(n.label)}
             </button>
           );
         })}
@@ -898,7 +899,7 @@ function RankingIa({
               key={id}
               onClick={() => alternarFonte(id)}
               aria-pressed={on}
-              title={desc}
+              title={T(desc)}
               className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold border transition-colors cursor-pointer"
               style={
                 on
@@ -907,7 +908,7 @@ function RankingIa({
               }
             >
               <Icone size={11} />
-              {label}
+              {T(label)}
             </button>
           );
         })}
@@ -915,7 +916,8 @@ function RankingIa({
 
       {linhas.length === 0 ? (
         <div className="glass rounded-2xl p-5 text-sm text-white/55">
-          Nenhum termo sobrevive a essa combinação. Religue o Google ou o YouTube.
+          
+          {T("Nenhum termo sobrevive a essa combinação. Religue o Google ou o YouTube.")}
         </div>
       ) : (
         <ol className="space-y-1">
@@ -947,14 +949,14 @@ function RankingIa({
                     {i + 1}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px] font-bold leading-snug break-words">{l.termo}</p>
+                    <p className="text-[13px] font-bold leading-snug break-words">{T(l.termo)}</p>
                     <p className="text-[10px] text-white/35">
                       {l.canais === "web+yt"
                         ? "Google e YouTube"
                         : l.canais === "yt"
-                          ? "só YouTube — demanda de vídeo"
-                          : "só Google"}{" "}
-                      · {l.formato}
+                          ? T("só YouTube — demanda de vídeo")
+                          : T("só Google")}{" "}
+                      · {T(l.formato)}
                     </p>
                   </div>
                   <span className="shrink-0 text-xs font-extrabold tabular-nums" style={{ color: nicho.cor }}>

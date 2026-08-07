@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * CAÇA AO PROMPT — verbo: MONTAR (construir com as mãos).
@@ -41,6 +42,7 @@ const SPEED_BONUS_WINDOW = 25; // segundos para ganhar bônus de rapidez
 type Phase = "idle" | "playing" | "checked" | "over";
 
 export function CacaPrompt() {
+  const T = useT();
   const { deck, rotate } = useRotatingDeck(PROMPT_HUNTS, ROUNDS, "fayai_seen_caca_prompt");
   const reduced = useReducedMotion();
 
@@ -180,19 +182,18 @@ export function CacaPrompt() {
             className="mx-auto mb-3 h-28 w-44 rounded-2xl border border-lime-400/25 object-cover"
           />
           <span className="inline-flex items-center gap-1.5 rounded-full bg-lime-400/12 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-lime-300">
-            <Hand size={12} /> {ROUNDS} caçadas
+            <Hand size={12} /> {ROUNDS}  {T("caçadas")}
           </span>
           <h3 className="mt-3 text-2xl font-black">Monte a receita</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Olhe a imagem e <strong className="text-lime-300">arraste</strong> cada ingrediente para
-            o slot certo. Cuidado: tem intruso no meio. Encaixe tudo certo e rápido para o bônus.
+            Olhe a imagem e <strong className="text-lime-300">arraste</strong>  {T("cada ingrediente para\r\n            o slot certo. Cuidado: tem intruso no meio. Encaixe tudo certo e rápido para o bônus.")}
           </p>
-          {high > 0 && <p className="mt-3 text-xs font-bold text-amber-300">Seu recorde: {high}</p>}
+          {high > 0 && <p className="mt-3 text-xs font-bold text-amber-300">{T("Seu recorde:")} {high}</p>}
           <button
             onClick={begin}
             className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-lime-400 to-lime-200 px-7 py-3 text-base font-black text-[#0c2a12] transition-transform hover:scale-[1.04]"
           >
-            <Play size={16} strokeWidth={3} /> Começar caçada
+            <Play size={16} strokeWidth={3} />  {T("Começar caçada")}
           </button>
         </motion.div>
       </div>
@@ -215,19 +216,20 @@ export function CacaPrompt() {
         />
         {isRecord && (
           <p className="relative mb-1 text-sm font-black uppercase tracking-widest text-lime-300">
-            ★ Novo recorde ★
+            
+            {T("★ Novo recorde ★")}
           </p>
         )}
         <p className="relative text-6xl font-black text-amber-400">{score}</p>
         <p className="relative mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-          {perfects} de {deck.length} receitas montadas sem erro
+          {perfects} de {deck.length}  {T("receitas montadas sem erro")}
           {high > 0 && !isRecord && ` · recorde: ${high}`}
         </p>
         <button
           onClick={begin}
           className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-6 py-2.5 text-sm font-black text-[#241a05] transition-transform hover:scale-[1.04]"
         >
-          <RefreshCw size={14} /> Novas caçadas
+          <RefreshCw size={14} />  {T("Novas caçadas")}
         </button>
         <div className="relative mx-auto mt-3 max-w-md text-left">
           <PersonaFisher source="caca-prompt" />
@@ -255,7 +257,8 @@ export function CacaPrompt() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0c0e1d]/90 via-[#0c0e1d]/55 to-[#0c0e1d]/25" />
         <div className="absolute inset-0 flex items-center justify-between px-4 text-[11px] font-bold uppercase tracking-widest text-white/90">
           <span>
-            Caçada {index + 1} de {deck.length}
+            
+            {T("Caçada")} {index + 1} de {deck.length}
           </span>
           <span className="text-amber-400">{score} pts</span>
         </div>
@@ -267,12 +270,12 @@ export function CacaPrompt() {
           <div className="relative aspect-[3/2] overflow-hidden rounded-2xl border border-lime-400/30">
             <img
               src={round.image}
-              alt="Resultado cujo prompt será reconstruído"
+              alt={T("Resultado cujo prompt será reconstruído")}
               className="h-full w-full object-cover"
               draggable={false}
             />
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{round.mission}</p>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{T(round.mission)}</p>
         </div>
 
         {/* Slots + bandeja */}
@@ -325,7 +328,7 @@ export function CacaPrompt() {
                   }}
                 >
                   <span className="w-16 shrink-0 text-[10px] font-black uppercase tracking-wider text-amber-300">
-                    {slotLabel}
+                    {T(slotLabel)}
                   </span>
                   {piece ? (
                     <motion.span
@@ -334,16 +337,16 @@ export function CacaPrompt() {
                       animate={{ scale: 1, opacity: 1 }}
                       className="text-[13px] font-semibold leading-snug"
                     >
-                      {piece.text}
+                      {T(piece.text)}
                     </motion.span>
                   ) : (
                     <span className="text-[12px] italic text-white/30">
-                      {held ? "toque para encaixar aqui" : "arraste um ingrediente"}
+                      {held ? T("toque para encaixar aqui") : "arraste um ingrediente"}
                     </span>
                   )}
                   {checked && wrong && (
                     <span className="ml-auto shrink-0 text-[10px] font-black uppercase text-rose-300">
-                      era: {shuffled.find((p) => p.id === round.answer[slotIndex])?.label}
+                      era: {T(shuffled.find((p) => p.id === round.answer[slotIndex])?.label)}
                     </span>
                   )}
                 </div>
@@ -379,7 +382,7 @@ export function CacaPrompt() {
                       color: held === piece.id ? "#f5c04e" : "rgba(255,255,255,.85)",
                     }}
                   >
-                    {piece.text}
+                    {T(piece.text)}
                   </motion.button>
                 ))}
               </AnimatePresence>
@@ -411,9 +414,9 @@ export function CacaPrompt() {
               animate={{ opacity: 1, y: 0 }}
               className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3"
             >
-              <p className="text-sm font-black text-amber-400">+{lastGain} pontos</p>
+              <p className="text-sm font-black text-amber-400">+{lastGain}  {T("pontos")}</p>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                {round.explanation}
+                {T(round.explanation)}
               </p>
               <div className="mt-1.5">
                 <VocabularyChip term={round.term} />
@@ -422,7 +425,7 @@ export function CacaPrompt() {
                 onClick={next}
                 className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-black text-[#241a05]"
               >
-                {index + 1 >= deck.length ? "Ver resultado" : "Próxima caçada"}{" "}
+                {index + 1 >= deck.length ? T("Ver resultado") : T("Próxima caçada")}{" "}
                 <ArrowRight size={14} />
               </button>
             </motion.div>

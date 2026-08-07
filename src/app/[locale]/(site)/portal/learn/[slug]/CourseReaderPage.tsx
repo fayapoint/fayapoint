@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
@@ -174,6 +175,7 @@ const READER_THEMES: { id: ReaderTheme; label: string; labelPt: string; swatch: 
    ═══════════════════════════════════════════════════════════ */
 
 function CodeCopyButton({ code }: { code: string }) {
+  const T = useT();
   const [copied, setCopied] = useState(false);
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(code).then(() => {
@@ -185,7 +187,7 @@ function CodeCopyButton({ code }: { code: string }) {
     <button
       onClick={handleCopy}
       className="absolute top-3 right-3 p-1.5 rounded-lg bg-[rgba(var(--reader-tint),0.06)] hover:bg-[rgba(var(--reader-tint),0.12)] border border-[rgba(var(--reader-tint),0.08)] text-[rgba(var(--reader-tint),0.4)] hover:text-[rgba(var(--reader-tint),0.7)] transition-all duration-200 opacity-0 group-hover:opacity-100 focus:opacity-100"
-      aria-label="Copiar código"
+      aria-label={T("Copiar código")}
     >
       {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
     </button>
@@ -208,6 +210,7 @@ function isYouTubeUrl(text: string): boolean {
 }
 
 function YouTubeEmbed({ videoId, title }: { videoId: string; title?: string }) {
+  const T = useT();
   const [isPlaying, setIsPlaying] = useState(false);
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
@@ -240,7 +243,7 @@ function YouTubeEmbed({ videoId, title }: { videoId: string; title?: string }) {
           </div>
           {title && (
             <div className="absolute bottom-4 left-4 right-4">
-              <p className="text-sm font-medium text-[rgba(var(--reader-tint),0.9)] line-clamp-2">{title}</p>
+              <p className="text-sm font-medium text-[rgba(var(--reader-tint),0.9)] line-clamp-2">{T(title)}</p>
             </div>
           )}
         </div>
@@ -343,6 +346,7 @@ function fundirMedia(
  * o mouse sai. Quem nunca passar o mouse não paga um byte.
  */
 function CenaDoCapitulo({ asset, indice }: { asset: MediaAsset; indice: number }) {
+  const T = useT();
   const video = useRef<HTMLVideoElement>(null);
   const [tocando, setTocando] = useState(false);
 
@@ -396,7 +400,7 @@ function CenaDoCapitulo({ asset, indice }: { asset: MediaAsset; indice: number }
       </div>
       {asset.caption && (
         <figcaption className="px-4 py-2 text-xs text-[rgba(var(--reader-tint),0.3)] italic bg-black/20">
-          {asset.caption}
+          {T(asset.caption)}
         </figcaption>
       )}
     </figure>
@@ -404,6 +408,7 @@ function CenaDoCapitulo({ asset, indice }: { asset: MediaAsset; indice: number }
 }
 
 function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; chapterTitle: string }) {
+  const T = useT();
   const videoAsset = media.video;
   const heroAsset = media.heroImage;
   const audioAsset = media.audio;
@@ -425,7 +430,7 @@ function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; 
     <div className="space-y-6 mb-10">
       {/* Video player */}
       {youtubeVideoId && (
-        <YouTubeEmbed videoId={youtubeVideoId} title={chapterTitle} />
+        <YouTubeEmbed videoId={youtubeVideoId} title={T(chapterTitle)} />
       )}
 
       {/* Non-YouTube video (direct URL or Cloudinary) */}
@@ -438,7 +443,8 @@ function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; 
               className="absolute inset-0 w-full h-full"
               poster={media.thumbnail?.url || undefined}
             >
-              Seu navegador não suporta vídeo.
+              
+              {T("Seu navegador não suporta vídeo.")}
             </video>
           </div>
         </div>
@@ -460,7 +466,7 @@ function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; 
             />
           </div>
           {heroAsset.caption && (
-            <p className="mt-3 text-center text-xs text-[rgba(var(--reader-tint),0.3)] italic">{heroAsset.caption}</p>
+            <p className="mt-3 text-center text-xs text-[rgba(var(--reader-tint),0.3)] italic">{T(heroAsset.caption)}</p>
           )}
         </div>
       )}
@@ -472,7 +478,7 @@ function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; 
             <Volume2 size={18} className="text-violet-400" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-[rgba(var(--reader-tint),0.6)] mb-1.5">Audio do capítulo</p>
+            <p className="text-xs font-medium text-[rgba(var(--reader-tint),0.6)] mb-1.5">{T("Audio do capítulo")}</p>
             <audio
               src={audioAsset.url}
               controls
@@ -611,6 +617,7 @@ function useRevealOnVisible<T extends HTMLElement>() {
 }
 
 function InlineMediaFigure({ media }: { media: InlineMediaMarker }) {
+  const T = useT();
   const { ref, revealed } = useRevealOnVisible<HTMLElement>();
   return (
     <figure
@@ -632,7 +639,7 @@ function InlineMediaFigure({ media }: { media: InlineMediaMarker }) {
       </div>
       {media.caption && (
         <figcaption className="mt-3 text-center text-xs text-[rgba(var(--reader-tint),0.35)] italic">
-          {media.caption}
+          {T(media.caption)}
         </figcaption>
       )}
     </figure>
@@ -640,6 +647,7 @@ function InlineMediaFigure({ media }: { media: InlineMediaMarker }) {
 }
 
 function InlineMediaVideo({ media }: { media: InlineMediaMarker }) {
+  const T = useT();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { ref, revealed } = useRevealOnVisible<HTMLElement>();
 
@@ -682,12 +690,12 @@ function InlineMediaVideo({ media }: { media: InlineMediaMarker }) {
           playsInline
           preload="none"
           className="w-full h-auto"
-          aria-label={media.caption || "Animação ilustrativa"}
+          aria-label={media.caption || T("Animação ilustrativa")}
         />
       </div>
       {media.caption && (
         <figcaption className="mt-3 text-center text-xs text-[rgba(var(--reader-tint),0.35)] italic">
-          {media.caption}
+          {T(media.caption)}
         </figcaption>
       )}
     </figure>
@@ -1042,6 +1050,7 @@ function getHeadingText(children: unknown): string {
    ═══════════════════════════════════════════════════════════ */
 
 export default function CourseReaderPage() {
+  const T = useT();
   const params = useParams();
   const slug = params.slug as string;
   const locale = (params.locale as string) || "pt-BR";
@@ -1316,7 +1325,7 @@ export default function CourseReaderPage() {
       progressPercent: Math.round((newCompleted.size / chapters.length) * 100),
       isCompleted: newCompleted.size >= chapters.length,
     });
-    toast.success("Capítulo concluído!");
+    toast.success(T("Capítulo concluído!"));
   }, [currentChapter, chapters.length, completedChapterIds, syncProgress]);
 
   const jumpToHeading = useCallback((headingId: string) => {
@@ -1521,7 +1530,7 @@ export default function CourseReaderPage() {
       } catch (err) {
         console.error(err);
         setError("error");
-        toast.error("Erro ao carregar conteudo do curso");
+        toast.error(T("Erro ao carregar conteudo do curso"));
       } finally {
         setProgressHydrated(true);
         setLoading(false);
@@ -1871,7 +1880,7 @@ export default function CourseReaderPage() {
                     }}
                     {...props}
                   >
-                    {codeString}
+                    {T(codeString)}
                   </SyntaxHighlighter>
                 </div>
               );
@@ -1901,7 +1910,7 @@ export default function CourseReaderPage() {
           <div className="relative group">
             {/* Language badge */}
             <span className="absolute top-3 left-4 text-[10px] font-semibold tracking-wider text-[rgba(var(--reader-tint),0.25)] uppercase select-none z-10">
-              {langLabel}
+              {T(langLabel)}
             </span>
             <CodeCopyButton code={codeString} />
             <SyntaxHighlighter
@@ -1924,7 +1933,7 @@ export default function CourseReaderPage() {
               }}
               {...props}
             >
-              {codeString}
+              {T(codeString)}
             </SyntaxHighlighter>
           </div>
         );
@@ -1954,7 +1963,7 @@ export default function CourseReaderPage() {
             />
             {caption && (
               <figcaption className="text-xs text-[var(--reader-caption)] italic text-center max-w-[90%] leading-relaxed">
-                {caption}
+                {T(caption)}
               </figcaption>
             )}
           </figure>
@@ -2045,7 +2054,7 @@ export default function CourseReaderPage() {
             <div className="absolute -inset-4 rounded-3xl bg-violet-500/10 blur-2xl animate-pulse" />
           </div>
           <div className="flex flex-col items-center gap-2.5">
-            <p className="text-sm font-medium text-[rgba(var(--reader-tint),0.5)]">Preparando sua leitura</p>
+            <p className="text-sm font-medium text-[rgba(var(--reader-tint),0.5)]">{T("Preparando sua leitura")}</p>
             <div className="flex gap-1">
               <div className="w-1.5 h-1.5 rounded-full bg-violet-400/60 animate-bounce [animation-delay:0ms]" />
               <div className="w-1.5 h-1.5 rounded-full bg-violet-400/40 animate-bounce [animation-delay:150ms]" />
@@ -2068,18 +2077,20 @@ export default function CourseReaderPage() {
             </div>
             <h1 className="text-xl sm:text-2xl font-bold mb-3 tracking-tight">Acesso Restrito</h1>
             <p className="text-[var(--reader-fg)]/35 mb-8 text-sm leading-relaxed">
-              Você precisa adquirir este curso ou fazer upgrade do seu plano para
-              acessar este conteúdo.
+              
+              {T("Você precisa adquirir este curso ou fazer upgrade do seu plano para\r\n              acessar este conteúdo.")}
             </p>
             <div className="flex flex-col gap-3">
               <Link href={`/${locale}/curso/${slug}`}>
                 <Button className="w-full h-11 bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500 rounded-xl font-medium shadow-lg shadow-violet-600/20">
-                  Ver Detalhes do Curso
+                  
+                  {T("Ver Detalhes do Curso")}
                 </Button>
               </Link>
               <Link href={`/${locale}/portal`}>
                 <Button variant="outline" className="w-full h-11 rounded-xl border-[rgba(var(--reader-tint),0.08)] bg-[rgba(var(--reader-tint),0.02)] hover:bg-[rgba(var(--reader-tint),0.05)] text-[rgba(var(--reader-tint),0.5)]">
-                  Voltar ao Portal
+                  
+                  {T("Voltar ao Portal")}
                 </Button>
               </Link>
             </div>
@@ -2095,10 +2106,11 @@ export default function CourseReaderPage() {
         <div className="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/15">
           <X className="text-red-400/70" size={24} />
         </div>
-        <p className="text-[rgba(var(--reader-tint),0.4)] text-sm">Ocorreu um erro ao carregar o curso.</p>
+        <p className="text-[rgba(var(--reader-tint),0.4)] text-sm">{T("Ocorreu um erro ao carregar o curso.")}</p>
         <Link href={`/${locale}/portal`}>
           <Button variant="outline" className="rounded-xl border-[rgba(var(--reader-tint),0.08)] bg-[rgba(var(--reader-tint),0.02)] hover:bg-[rgba(var(--reader-tint),0.05)] text-[rgba(var(--reader-tint),0.5)]">
-            Voltar ao Portal
+            
+            {T("Voltar ao Portal")}
           </Button>
         </Link>
       </div>
@@ -2141,7 +2153,7 @@ export default function CourseReaderPage() {
           </Link>
 
           <div className="min-w-0 flex-1">
-            <span className="truncate text-[13px] font-medium text-[rgba(var(--reader-tint),0.7)] block">{title}</span>
+            <span className="truncate text-[13px] font-medium text-[rgba(var(--reader-tint),0.7)] block">{T(title)}</span>
             <div className="flex items-center gap-2.5 mt-1">
               <div className="flex-1 h-[3px] bg-[rgba(var(--reader-tint),0.04)] rounded-full overflow-hidden">
                 <div
@@ -2171,7 +2183,8 @@ export default function CourseReaderPage() {
             <PopoverContent className="w-72 bg-[var(--reader-popover,#12131c)] border-[rgba(var(--reader-tint,255,255,255),0.06)] shadow-2xl shadow-black/50 p-0 rounded-2xl backdrop-blur-xl">
               <div className="p-4 border-b border-[rgba(var(--reader-tint),0.05)]">
                 <span className="text-sm font-semibold text-[rgba(var(--reader-tint),0.9)]">
-                  Preferências de Leitura
+                  
+                  {T("Preferências de Leitura")}
                 </span>
               </div>
               <div className="p-4 space-y-5">
@@ -2225,7 +2238,7 @@ export default function CourseReaderPage() {
                 </div>
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-[rgba(var(--reader-tint),0.4)]">Espaçamento entre linhas</span>
+                    <span className="text-xs text-[rgba(var(--reader-tint),0.4)]">{T("Espaçamento entre linhas")}</span>
                     <span className="text-[11px] font-mono text-violet-400/80 bg-violet-500/10 px-2 py-0.5 rounded-md">
                       {settings.lineHeight.toFixed(1)}
                     </span>
@@ -2264,7 +2277,8 @@ export default function CourseReaderPage() {
                   className="w-full bg-transparent border-[rgba(var(--reader-tint),0.06)] hover:bg-[rgba(var(--reader-tint),0.03)] text-[rgba(var(--reader-tint),0.4)] text-xs rounded-xl"
                   onClick={() => setSettings(DEFAULT_SETTINGS)}
                 >
-                  Resetar Padrões
+                  
+                  {T("Resetar Padrões")}
                 </Button>
               </div>
             </PopoverContent>
@@ -2322,7 +2336,7 @@ export default function CourseReaderPage() {
           {/* Sidebar header */}
           <div className="p-5 flex-shrink-0">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[rgba(var(--reader-tint),0.3)]">Conteúdo</h2>
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[rgba(var(--reader-tint),0.3)]">{T("Conteúdo")}</h2>
               <span className="text-xs font-bold text-violet-400 tabular-nums">{progressPercent}%</span>
             </div>
             <div className="relative h-[5px] bg-[rgba(var(--reader-tint),0.04)] rounded-full overflow-hidden mb-2.5">
@@ -2405,7 +2419,7 @@ export default function CourseReaderPage() {
                           : "text-[rgba(var(--reader-tint),0.5)] group-hover:text-[rgba(var(--reader-tint),0.7)]"
                       )}
                     >
-                      {chapter.title}
+                      {T(chapter.title)}
                     </p>
                     <span
                       className={cn(
@@ -2462,7 +2476,7 @@ export default function CourseReaderPage() {
                     </div>
                   </div>
                   <h1 className="text-xl sm:text-3xl lg:text-[2.25rem] font-bold text-[rgba(var(--reader-tint),0.4)] tracking-tight leading-[1.2]">
-                    {currentChapter.title}
+                    {T(currentChapter.title)}
                   </h1>
                 </div>
                 <div className="h-px bg-gradient-to-r from-transparent via-[rgba(var(--reader-tint),0.06)] to-transparent" />
@@ -2519,7 +2533,7 @@ export default function CourseReaderPage() {
                   </div>
 
                   <h1 className="text-xl sm:text-3xl lg:text-[2.25rem] font-bold text-[var(--reader-fg)]/95 tracking-tight leading-[1.2]">
-                    {currentChapter.title}
+                    {T(currentChapter.title)}
                   </h1>
                 </div>
 
@@ -2560,10 +2574,12 @@ export default function CourseReaderPage() {
                       <Sparkles size={16} className="shrink-0 text-amber-400" />
                       <span className="min-w-0 flex-1">
                         <span className="block text-[13px] font-bold text-amber-200">
-                          Este capítulo pode começar falando do SEU negócio
+                          
+                          {T("Este capítulo pode começar falando do SEU negócio")}
                         </span>
                         <span className="block text-[11.5px] leading-snug text-[var(--reader-fg)]/45">
-                          Veja uma amostra grátis de como ele ficaria com a sua cara — sem gastar crédito.
+                          
+                          {T("Veja uma amostra grátis de como ele ficaria com a sua cara — sem gastar crédito.")}
                         </span>
                       </span>
                       <ChevronRight
@@ -2614,7 +2630,7 @@ export default function CourseReaderPage() {
                           remarkPlugins={[remarkGfm]}
                           components={markdownComponents}
                         >
-                          {segment.content}
+                          {T(segment.content)}
                         </ReactMarkdown>
                       )
                     )}
@@ -2636,13 +2652,13 @@ export default function CourseReaderPage() {
                             Modo leitura
                           </p>
                           <p className="mt-1 text-sm font-semibold text-[rgba(var(--reader-tint),0.9)] line-clamp-2">
-                            {currentChapter.title}
+                            {T(currentChapter.title)}
                           </p>
                         </div>
                         <button
                           onClick={() => setSidebarOpen(true)}
                           className="w-9 h-9 rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[rgba(var(--reader-tint),0.04)] flex items-center justify-center text-[rgba(var(--reader-tint),0.65)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.07)] transition-all"
-                          aria-label="Mostrar sumário"
+                          aria-label={T("Mostrar sumário")}
                         >
                           <Menu size={15} />
                         </button>
@@ -2654,21 +2670,21 @@ export default function CourseReaderPage() {
                         <button
                           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                           className="flex h-11 items-center justify-center rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
-                          aria-label="Ir para o topo"
+                          aria-label={T("Ir para o topo")}
                         >
                           <ArrowUp size={15} />
                         </button>
                         <button
                           onClick={() => scrollViewportBy("up")}
                           className="flex h-11 items-center justify-center rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
-                          aria-label="Subir página"
+                          aria-label={T("Subir página")}
                         >
                           <ArrowDown size={15} className="rotate-180" />
                         </button>
                         <button
                           onClick={() => scrollViewportBy("down")}
                           className="flex h-11 items-center justify-center rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
-                          aria-label="Descer página"
+                          aria-label={T("Descer página")}
                         >
                           <ArrowDown size={15} />
                         </button>
@@ -2681,14 +2697,16 @@ export default function CourseReaderPage() {
                           className="flex h-11 items-center justify-center gap-2 rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] text-xs font-medium text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all disabled:opacity-35"
                         >
                           <ChevronLeft size={14} />
-                          Anterior
+                          
+                          {T("Anterior")}
                         </button>
                         <button
                           onClick={goToNextChapter}
                           disabled={currentChapterIndex >= chapters.length - 1}
                           className="flex h-11 items-center justify-center gap-2 rounded-2xl border border-violet-400/18 bg-violet-500/[0.08] text-xs font-medium text-violet-100 hover:bg-violet-500/[0.14] transition-all disabled:opacity-35"
                         >
-                          Próximo
+                          
+                          {T("Próximo")}
                           <ChevronRight size={14} />
                         </button>
                       </div>
@@ -2700,12 +2718,13 @@ export default function CourseReaderPage() {
                               <MousePointerClick size={14} className="text-cyan-300" />
                               <div>
                                 <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--reader-fg)]/35">
-                                  Seções
+                                  
+                                  {T("Seções")}
                                 </p>
                                 <p className="mt-1 text-xs text-[var(--reader-fg)]/72">
                                   {currentChapterSubheadings.length > 0
                                     ? `${currentChapterSubheadings.length} pontos neste capítulo`
-                                    : "Capítulo linear"}
+                                    : T("Capítulo linear")}
                                 </p>
                               </div>
                             </div>
@@ -2730,14 +2749,15 @@ export default function CourseReaderPage() {
                                     )}
                                   >
                                     <span className="block text-xs font-medium text-[var(--reader-fg)]/72 line-clamp-2">
-                                      {heading.title}
+                                      {T(heading.title)}
                                     </span>
                                   </button>
                                 ))}
                               </div>
                             ) : (
                               <div className="px-3 py-2 text-xs text-[var(--reader-fg)]/35">
-                                Este capítulo está mais linear. Use os atalhos acima para continuar a leitura.
+                                
+                                {T("Este capítulo está mais linear. Use os atalhos acima para continuar a leitura.")}
                               </div>
                             )}
                           </div>
@@ -2750,15 +2770,15 @@ export default function CourseReaderPage() {
                     <div className="px-4 py-3 border-b border-[rgba(var(--reader-tint),0.06)] bg-gradient-to-r from-amber-500/[0.16] via-fuchsia-500/[0.07] to-cyan-500/[0.08]">
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="text-[10px] uppercase tracking-[0.22em] text-[rgba(var(--reader-tint),0.45)]">Navegação rápida</p>
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-[rgba(var(--reader-tint),0.45)]">{T("Navegação rápida")}</p>
                           <p className="text-sm font-semibold text-[rgba(var(--reader-tint),0.9)] truncate">
-                            {currentChapter.title}
+                            {T(currentChapter.title)}
                           </p>
                         </div>
                         <button
                           onClick={() => setSidebarOpen(false)}
                           className="w-10 h-10 rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[rgba(var(--reader-tint),0.04)] flex items-center justify-center text-violet-300 hover:bg-[rgba(var(--reader-tint),0.08)] hover:text-[var(--reader-fg)] transition-all"
-                          aria-label="Recolher sumário"
+                          aria-label={T("Recolher sumário")}
                         >
                           <X size={16} />
                         </button>
@@ -2779,21 +2799,24 @@ export default function CourseReaderPage() {
                           className="flex items-center justify-center gap-2 rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] px-3 py-2.5 text-xs font-medium text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
                         >
                           <ChevronDown size={14} />
-                          Próxima dobra
+                          
+                          {T("Próxima dobra")}
                         </button>
                         <button
                           onClick={() => scrollViewportBy("up")}
                           className="flex items-center justify-center gap-2 rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] px-3 py-2.5 text-xs font-medium text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
                         >
                           <ArrowDown size={14} className="rotate-180" />
-                          Página acima
+                          
+                          {T("Página acima")}
                         </button>
                         <button
                           onClick={() => scrollViewportBy("down")}
                           className="flex items-center justify-center gap-2 rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] px-3 py-2.5 text-xs font-medium text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
                         >
                           <ArrowDown size={14} />
-                          Página abaixo
+                          
+                          {T("Página abaixo")}
                         </button>
                       </div>
 
@@ -2801,7 +2824,8 @@ export default function CourseReaderPage() {
                         <div className="flex items-center gap-2 px-2 pb-2">
                           <MousePointerClick size={14} className="text-cyan-300" />
                           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--reader-fg)]/35">
-                            Subtítulos
+                            
+                            {T("Subtítulos")}
                           </p>
                         </div>
                         <div className="max-h-[240px] overflow-y-auto pr-1">
@@ -2818,14 +2842,15 @@ export default function CourseReaderPage() {
                                   )}
                                 >
                                   <span className="block text-xs font-medium text-[var(--reader-fg)]/72 line-clamp-2">
-                                    {heading.title}
+                                    {T(heading.title)}
                                   </span>
                                 </button>
                               ))}
                             </div>
                           ) : (
                             <div className="px-3 py-2 text-xs text-[var(--reader-fg)]/35">
-                              Este capítulo está mais linear. Use os botões para continuar a leitura.
+                              
+                              {T("Este capítulo está mais linear. Use os botões para continuar a leitura.")}
                             </div>
                           )}
                         </div>
@@ -2839,14 +2864,14 @@ export default function CourseReaderPage() {
                   <button
                     onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     className="w-10 h-10 rounded-xl bg-[rgba(var(--reader-tint),0.05)] flex items-center justify-center text-[rgba(var(--reader-tint),0.6)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.1)] transition-all"
-                    aria-label="Voltar ao topo"
+                    aria-label={T("Voltar ao topo")}
                   >
                     <ArrowUp size={16} />
                   </button>
                   <button
                     onClick={() => scrollViewportBy("down")}
                     className="w-10 h-10 rounded-xl bg-[rgba(var(--reader-tint),0.05)] flex items-center justify-center text-[rgba(var(--reader-tint),0.6)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.1)] transition-all"
-                    aria-label="Descer página"
+                    aria-label={T("Descer página")}
                   >
                     <ArrowDown size={16} />
                   </button>
@@ -2855,7 +2880,7 @@ export default function CourseReaderPage() {
                     onClick={goToPrevChapter}
                     disabled={currentChapterIndex === 0}
                     className="w-10 h-10 rounded-xl bg-[rgba(var(--reader-tint),0.05)] flex items-center justify-center text-[rgba(var(--reader-tint),0.6)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.1)] transition-all disabled:opacity-30"
-                    aria-label="Capítulo anterior"
+                    aria-label={T("Capítulo anterior")}
                   >
                     <ChevronLeft size={16} />
                   </button>
@@ -2863,7 +2888,7 @@ export default function CourseReaderPage() {
                     onClick={goToNextChapter}
                     disabled={currentChapterIndex >= chapters.length - 1}
                     className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-violet-500/15 border border-violet-400/15 flex items-center justify-center text-[var(--reader-fg)] hover:from-amber-500/30 hover:to-violet-500/25 transition-all disabled:opacity-30"
-                    aria-label="Próximo capítulo"
+                    aria-label={T("Próximo capítulo")}
                   >
                     <ChevronRight size={16} />
                   </button>
@@ -2874,14 +2899,14 @@ export default function CourseReaderPage() {
                   <button
                     onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     className="w-12 h-12 rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[var(--reader-float)]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-[rgba(var(--reader-tint),0.8)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.08)] transition-all"
-                    aria-label="Voltar ao topo"
+                    aria-label={T("Voltar ao topo")}
                   >
                     <ArrowUp size={18} />
                   </button>
                   <button
                     onClick={() => scrollViewportBy("down")}
                     className="w-12 h-12 rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[var(--reader-float)]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-[rgba(var(--reader-tint),0.8)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.08)] transition-all"
-                    aria-label="Descer página"
+                    aria-label={T("Descer página")}
                   >
                     <ArrowDown size={18} />
                   </button>
@@ -2889,7 +2914,7 @@ export default function CourseReaderPage() {
                     onClick={goToPrevChapter}
                     disabled={currentChapterIndex === 0}
                     className="w-12 h-12 rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[var(--reader-float)]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-[rgba(var(--reader-tint),0.8)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.08)] transition-all disabled:opacity-35 disabled:hover:bg-[var(--reader-float)]/88"
-                    aria-label="Capítulo anterior"
+                    aria-label={T("Capítulo anterior")}
                   >
                     <ChevronLeft size={18} />
                   </button>
@@ -2897,7 +2922,7 @@ export default function CourseReaderPage() {
                     onClick={goToNextChapter}
                     disabled={currentChapterIndex >= chapters.length - 1}
                     className="w-12 h-12 rounded-2xl border border-violet-400/20 bg-gradient-to-br from-amber-500/[0.22] to-fuchsia-500/[0.16] backdrop-blur-2xl shadow-[0_12px_40px_rgba(92,55,222,0.28)] flex items-center justify-center text-[var(--reader-fg)] hover:from-amber-500/[0.28] hover:to-fuchsia-500/[0.22] transition-all disabled:opacity-35 disabled:shadow-none"
-                    aria-label="Próximo capítulo"
+                    aria-label={T("Próximo capítulo")}
                   >
                     <ChevronRight size={18} />
                   </button>
@@ -2919,7 +2944,8 @@ export default function CourseReaderPage() {
                       className="w-full mb-6 py-3.5 rounded-2xl border border-dashed border-emerald-500/20 bg-emerald-500/[0.02] hover:bg-emerald-500/[0.06] hover:border-emerald-500/30 text-emerald-400/60 hover:text-emerald-400 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2.5"
                     >
                       <CheckCircle2 size={17} />
-                      Marcar capítulo como concluído
+                      
+                      {T("Marcar capítulo como concluído")}
                     </button>
                   )}
 
@@ -2932,10 +2958,12 @@ export default function CourseReaderPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-[var(--reader-fg)]">
-                            Parabéns! Curso concluído!
+                            
+                            {T("Parabéns! Curso concluído!")}
                           </p>
                           <p className="text-xs text-[var(--reader-fg)]/35 mt-0.5">
-                            Você completou todos os {chapters.length} capítulos.
+                            
+                            {T("Você completou todos os")} {chapters.length}  {T("capítulos.")}
                           </p>
                         </div>
                       </div>
@@ -2945,10 +2973,12 @@ export default function CourseReaderPage() {
                           className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-[var(--reader-fg)] text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2.5 shadow-lg shadow-amber-600/20"
                         >
                           <Award size={18} />
-                          Fazer Avaliação e Receber Certificado
+                          
+                          {T("Fazer Avaliação e Receber Certificado")}
                         </button>
                         <p className="text-[11px] text-[var(--reader-fg)]/20 text-center mt-2">
-                          Responda perguntas sobre o conteúdo para receber seu certificado oficial
+                          
+                          {T("Responda perguntas sobre o conteúdo para receber seu certificado oficial")}
                         </p>
                       </div>
                     </div>
@@ -2966,10 +2996,11 @@ export default function CourseReaderPage() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <span className="text-[10px] uppercase tracking-wider text-[var(--reader-fg)]/18 block">
-                            Anterior
+                            
+                            {T("Anterior")}
                           </span>
                           <span className="text-xs sm:text-sm text-[rgba(var(--reader-tint),0.45)] group-hover:text-[rgba(var(--reader-tint),0.65)] truncate block mt-0.5 transition-colors">
-                            {chapters[currentChapterIndex - 1]?.title}
+                            {T(chapters[currentChapterIndex - 1]?.title)}
                           </span>
                         </div>
                       </button>
@@ -2995,7 +3026,7 @@ export default function CourseReaderPage() {
                             {isChapterLocked(currentChapterIndex + 1) ? "Premium" : "Proximo"}
                           </span>
                           <span className="text-xs sm:text-sm text-[var(--reader-fg)]/55 group-hover:text-[var(--reader-fg)]/85 truncate block mt-0.5 transition-colors">
-                            {chapters[currentChapterIndex + 1]?.title}
+                            {T(chapters[currentChapterIndex + 1]?.title)}
                           </span>
                         </div>
                         <div className={cn(
@@ -3015,7 +3046,8 @@ export default function CourseReaderPage() {
                       <div className="flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-emerald-500/[0.03] border border-emerald-500/10">
                         <Sparkles size={15} className="text-emerald-400/50" />
                         <span className="text-sm text-emerald-400/60 font-medium">
-                          Último capítulo
+                          
+                          {T("Último capítulo")}
                         </span>
                       </div>
                     )}
@@ -3028,7 +3060,8 @@ export default function CourseReaderPage() {
               <div className="text-center">
                 <BookOpen size={48} className="mx-auto mb-4 text-[var(--reader-fg)]/15" />
                 <p className="text-[rgba(var(--reader-tint),0.3)] text-sm">
-                  Nenhum conteúdo disponível
+                  
+                  {T("Nenhum conteúdo disponível")}
                 </p>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -124,6 +125,7 @@ export default async function LocalSEOPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const T = await obterT(locale);
   const t = await getTranslations("Home.Services.local-seo");
   const isEn = locale === "en";
 
@@ -182,11 +184,12 @@ export default async function LocalSEOPage({
                 source="local-seo-hero"
                 showCompanyRole
               >
-                Agendar diagnóstico gratuito <ArrowRight className="ml-2 w-5 h-5" />
+                
+                {T("Agendar diagnóstico gratuito")} <ArrowRight className="ml-2 w-5 h-5" />
               </ScheduleConsultationButton>
               <a href="#toolbox">
                 <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                  {isEn ? "Use the free tools" : "Usar ferramentas grátis"}
+                  {isEn ? "Use the free tools" : T("Usar ferramentas grátis")}
                 </Button>
               </a>
             </div>
@@ -194,15 +197,15 @@ export default async function LocalSEOPage({
             <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <BadgeCheck className="w-5 h-5 text-emerald-500" />
-                <span>{isEn ? "No lock-in" : "Sem fidelidade"}</span>
+                <span>{isEn ? "No lock-in" : T("Sem fidelidade")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <BadgeCheck className="w-5 h-5 text-emerald-500" />
-                <span>{isEn ? "Fast wins + compounding" : "Resultados rápidos + cumulativos"}</span>
+                <span>{isEn ? "Fast wins + compounding" : T("Resultados rápidos + cumulativos")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <BadgeCheck className="w-5 h-5 text-emerald-500" />
-                <span>{isEn ? "Playbooks + automation" : "Playbooks + automações"}</span>
+                <span>{isEn ? "Playbooks + automation" : T("Playbooks + automações")}</span>
               </div>
             </div>
           </div>
@@ -210,8 +213,8 @@ export default async function LocalSEOPage({
           <div className="grid gap-6 md:grid-cols-4 mb-16">
             {metrics.map((metric) => (
               <div key={metric.label} className="rounded-2xl border border-border bg-card/80 p-6">
-                <p className="text-sm uppercase tracking-wide text-muted-foreground">{metric.label}</p>
-                <p className="text-4xl font-bold mt-2">{metric.value}</p>
+                <p className="text-sm uppercase tracking-wide text-muted-foreground">{T(metric.label)}</p>
+                <p className="text-4xl font-bold mt-2">{T(metric.value)}</p>
               </div>
             ))}
           </div>
@@ -220,8 +223,8 @@ export default async function LocalSEOPage({
             {highlights.map((highlight) => (
               <div key={highlight.title} className="rounded-2xl border border-border bg-card/60 p-6">
                 <Star className="w-6 h-6 text-yellow-400 mb-4" />
-                <h3 className="text-xl font-semibold mb-3">{highlight.title}</h3>
-                <p className="text-muted-foreground">{highlight.description}</p>
+                <h3 className="text-xl font-semibold mb-3">{T(highlight.title)}</h3>
+                <p className="text-muted-foreground">{T(highlight.description)}</p>
               </div>
             ))}
           </div>
@@ -232,11 +235,11 @@ export default async function LocalSEOPage({
                 <TrendingUp className="w-5 h-5 text-blue-400" />
                 <p className="text-sm uppercase tracking-[0.2em] text-blue-300">{isEn ? "Outcome" : "Resultado"}</p>
               </div>
-              <h3 className="text-xl font-semibold">{isEn ? "More calls + WhatsApp" : "Mais ligações + WhatsApp"}</h3>
+              <h3 className="text-xl font-semibold">{isEn ? "More calls + WhatsApp" : T("Mais ligações + WhatsApp")}</h3>
               <p className="text-muted-foreground mt-2">
                 {isEn
                   ? "Rank for intent-heavy searches when people are ready to buy."
-                  : "Posicione para buscas com intenção quando a pessoa já quer comprar."}
+                  : T("Posicione para buscas com intenção quando a pessoa já quer comprar.")}
               </p>
             </Card>
 
@@ -249,7 +252,7 @@ export default async function LocalSEOPage({
               <p className="text-muted-foreground mt-2">
                 {isEn
                   ? "Automated requests + response playbook to protect reputation at scale."
-                  : "Pedidos automatizados + playbook de respostas para escalar reputação."}
+                  : T("Pedidos automatizados + playbook de respostas para escalar reputação.")}
               </p>
             </Card>
 
@@ -258,11 +261,11 @@ export default async function LocalSEOPage({
                 <Sparkles className="w-5 h-5 text-yellow-400" />
                 <p className="text-sm uppercase tracking-[0.2em] text-yellow-300">{isEn ? "Ops" : "Ops"}</p>
               </div>
-              <h3 className="text-xl font-semibold">{isEn ? "Repeatable playbooks" : "Playbooks replicáveis"}</h3>
+              <h3 className="text-xl font-semibold">{isEn ? "Repeatable playbooks" : T("Playbooks replicáveis")}</h3>
               <p className="text-muted-foreground mt-2">
                 {isEn
                   ? "Monthly sprints with clear metrics, tasks and deliverables."
-                  : "Sprints mensais com métricas, tarefas e entregáveis claros."}
+                  : T("Sprints mensais com métricas, tarefas e entregáveis claros.")}
               </p>
             </Card>
           </div>
@@ -270,16 +273,16 @@ export default async function LocalSEOPage({
           <div className="bg-card/50 border border-border rounded-3xl p-8 md:p-12 mb-20">
             <div className="flex items-center gap-3 mb-8">
               <Search className="w-6 h-6 text-blue-400" />
-              <p className="text-sm uppercase tracking-[0.2em] text-blue-300">Nossa Metodologia</p>
+              <p className="text-sm uppercase tracking-[0.2em] text-blue-300">{T("Nossa Metodologia")}</p>
             </div>
             <div className="grid gap-10">
               {processSteps.map((step, index) => (
                 <div key={step.title} className="grid gap-6 md:grid-cols-[120px_1fr] items-start">
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <span className="text-3xl font-semibold text-blue-500">0{index + 1}</span>
-                    <span className="font-medium uppercase tracking-wide">{step.title}</span>
+                    <span className="font-medium uppercase tracking-wide">{T(step.title)}</span>
                   </div>
-                  <p className="text-lg text-muted-foreground/90">{step.content}</p>
+                  <p className="text-lg text-muted-foreground/90">{T(step.content)}</p>
                 </div>
               ))}
             </div>
@@ -292,11 +295,11 @@ export default async function LocalSEOPage({
           <div className="max-w-6xl mx-auto mb-20">
             <div className="text-center mb-10">
               <Badge variant="secondary" className="mb-4">{isEn ? "Packages" : "Pacotes"}</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Choose a plan" : "Escolha o plano ideal"}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Choose a plan" : T("Escolha o plano ideal")}</h2>
               <p className="text-muted-foreground mt-3">
                 {isEn
                   ? "Start small, then scale with automation + governance."
-                  : "Comece pequeno e escale com automação + governança."}
+                  : T("Comece pequeno e escale com automação + governança.")}
               </p>
             </div>
 
@@ -307,18 +310,18 @@ export default async function LocalSEOPage({
                   className={`p-7 rounded-3xl border-border bg-card/70 ${p.featured ? "ring-2 ring-blue-500/40" : ""}`}
                 >
                   <div className="flex items-center justify-between">
-                    <Badge variant={p.featured ? "default" : "secondary"}>{p.tier}</Badge>
+                    <Badge variant={p.featured ? "default" : "secondary"}>{T(p.tier)}</Badge>
                     {p.featured && (
-                      <Badge className="bg-blue-600">{isEn ? "Most popular" : "Mais escolhido"}</Badge>
+                      <Badge className="bg-blue-600">{isEn ? "Most popular" : T("Mais escolhido")}</Badge>
                     )}
                   </div>
-                  <h3 className="text-2xl font-bold mt-5">{p.title}</h3>
-                  <p className="text-muted-foreground mt-2">{p.description}</p>
+                  <h3 className="text-2xl font-bold mt-5">{T(p.title)}</h3>
+                  <p className="text-muted-foreground mt-2">{T(p.description)}</p>
                   <div className="mt-6 grid gap-3">
                     {p.highlights.map((h) => (
                       <div key={h} className="flex items-start gap-3">
                         <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5" />
-                        <p className="text-sm text-muted-foreground">{h}</p>
+                        <p className="text-sm text-muted-foreground">{T(h)}</p>
                       </div>
                     ))}
                   </div>
@@ -331,7 +334,7 @@ export default async function LocalSEOPage({
                       {isEn ? "Book a call" : "Agendar conversa"}
                     </ScheduleConsultationButton>
                     <Link href="/precos">
-                      <Button variant="outline">{isEn ? "Pricing" : "Preços"}</Button>
+                      <Button variant="outline">{isEn ? "Pricing" : T("Preços")}</Button>
                     </Link>
                   </div>
                 </Card>
@@ -346,28 +349,28 @@ export default async function LocalSEOPage({
               <p className="text-muted-foreground mt-3">
                 {isEn
                   ? "Clear answers before you book." 
-                  : "Respostas rápidas antes de agendar."}
+                  : T("Respostas rápidas antes de agendar.")}
               </p>
             </div>
 
             <Accordion type="single" collapsible className="w-full">
               {faqItems.map((f) => (
                 <AccordionItem key={f.q} value={f.q}>
-                  <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+                  <AccordionTrigger className="text-left">{T(f.q)}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{T(f.a)}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
           </div>
         </div>
 
-        <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+        <Suspense fallback={<div className="py-20 text-center">{T("Carregando construtor...")}</div>}>
           <ServiceBuilderSection
             serviceSlug="local-seo"
             restrictToServiceSlug
             badgeLabel="Personalize seu pacote"
-            title="Domine sua região"
-            subtitle="Escolha os serviços de SEO Local ideais para o momento do seu negócio."
+            title={T("Domine sua região")}
+            subtitle={T("Escolha os serviços de SEO Local ideais para o momento do seu negócio.")}
             sectionId="builder"
             showServiceTabs={false}
           />
@@ -377,8 +380,8 @@ export default async function LocalSEOPage({
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-sm font-medium">{isEn ? "Local SEO diagnosis" : "Diagnóstico SEO Local"}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+            <p className="text-sm font-medium">{isEn ? "Local SEO diagnosis" : T("Diagnóstico SEO Local")}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
           </div>
           <ScheduleConsultationButton source="local-seo-sticky" className="px-4">
             {isEn ? "Book" : "Agendar"}

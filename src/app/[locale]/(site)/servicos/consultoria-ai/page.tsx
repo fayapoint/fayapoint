@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -41,6 +42,7 @@ export default async function AIConsultingPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const T = await obterT(locale);
   const t = await getTranslations("Home.Services.ai-consulting");
   const p = await getTranslations("AIConsultingPage");
 
@@ -137,7 +139,7 @@ export default async function AIConsultingPage({
               </ScheduleConsultationButton>
               <a href="#toolbox">
                 <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                  {isEn ? "Use the free tools" : "Usar ferramentas grátis"}
+                  {isEn ? "Use the free tools" : T("Usar ferramentas grátis")}
                 </Button>
               </a>
             </div>
@@ -262,10 +264,10 @@ export default async function AIConsultingPage({
                     <Star key={j} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-lg mb-6 leading-relaxed text-pretty">&quot;{testimonial.quote}&quot;</p>
+                <p className="text-lg mb-6 leading-relaxed text-pretty">&quot;{T(testimonial.quote)}&quot;</p>
                 <div>
-                  <div className="font-semibold">{testimonial.author}</div>
-                  <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                  <div className="font-semibold">{T(testimonial.author)}</div>
+                  <div className="text-sm text-muted-foreground">{T(testimonial.role)}</div>
                 </div>
               </Card>
             ))}
@@ -296,7 +298,7 @@ export default async function AIConsultingPage({
                 {(p.raw("packages.starter.features") as string[]).map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm">{item}</span>
+                    <span className="text-sm">{T(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -323,7 +325,7 @@ export default async function AIConsultingPage({
                 {(p.raw("packages.professional.features") as string[]).map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm">{item}</span>
+                    <span className="text-sm">{T(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -346,7 +348,7 @@ export default async function AIConsultingPage({
                 {(p.raw("packages.enterprise.features") as string[]).map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm">{item}</span>
+                    <span className="text-sm">{T(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -369,15 +371,15 @@ export default async function AIConsultingPage({
             <Badge variant="secondary" className="mb-3">FAQ</Badge>
             <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
             <p className="text-muted-foreground mt-3">
-              {isEn ? "Clear answers before you book." : "Respostas rápidas antes de agendar."}
+              {isEn ? "Clear answers before you book." : T("Respostas rápidas antes de agendar.")}
             </p>
           </div>
 
           <Accordion type="single" collapsible className="w-full">
             {faqItems.map((f) => (
               <AccordionItem key={f.q} value={f.q}>
-                <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+                <AccordionTrigger className="text-left">{T(f.q)}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{T(f.a)}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -411,7 +413,7 @@ export default async function AIConsultingPage({
         </div>
       </section>
 
-      <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+      <Suspense fallback={<div className="py-20 text-center">{T("Carregando construtor...")}</div>}>
         <ServiceBuilderSection
           serviceSlug="consulting"
           restrictToServiceSlug
@@ -427,8 +429,8 @@ export default async function AIConsultingPage({
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-sm font-medium">{isEn ? "AI diagnosis" : "Diagnóstico de IA"}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+            <p className="text-sm font-medium">{isEn ? "AI diagnosis" : T("Diagnóstico de IA")}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
           </div>
           <a href="#toolbox">
             <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>

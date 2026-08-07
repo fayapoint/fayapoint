@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
@@ -19,6 +20,7 @@ const testimonialMeta = [
 ];
 
 export function TestimonialsSection() {
+  const T = useT();
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
   const sectionRef = useRef(null);
@@ -196,7 +198,7 @@ export function TestimonialsSection() {
                   <div className="relative flex-grow mb-6">
                     <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-lg" />
                     <p className="relative text-foreground/90 italic leading-relaxed">
-                      &ldquo;{testimonial.content}&rdquo;
+                      &ldquo;{T(testimonial.content)}&rdquo;
                     </p>
                   </div>
                   
@@ -213,8 +215,8 @@ export function TestimonialsSection() {
                       </div>
                     </motion.div>
                     <div>
-                      <div className="font-semibold text-foreground">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                      <div className="font-semibold text-foreground">{T(testimonial.name)}</div>
+                      <div className="text-sm text-muted-foreground">{T(testimonial.role)}</div>
                     </div>
                   </div>
                   

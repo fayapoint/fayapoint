@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useRef, useState } from "react";
 import { loopDaCapa } from "@/lib/capa-loop";
@@ -37,6 +38,7 @@ export function CapaDoCurso({
   className?: string;
   eager?: boolean;
 }) {
+  const T = useT();
   const loop = loopDaCapa(slug);
   const video = useRef<HTMLVideoElement>(null);
   const caixa = useRef<HTMLDivElement>(null);
@@ -100,7 +102,7 @@ export function CapaDoCurso({
       {thumbnail ? (
         <img
           src={thumbnail}
-          alt={alt}
+          alt={T(alt)}
           className="absolute inset-0 w-full h-full object-cover"
           loading={eager ? "eager" : "lazy"}
         />

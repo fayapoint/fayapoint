@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
@@ -63,6 +64,7 @@ const interestOptions = [
 ];
 
 export default function OnboardingPage() {
+  const T = useT();
   const t = useTranslations("Onboarding");
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
@@ -131,7 +133,7 @@ export default function OnboardingPage() {
     if (isBotDetected) {
       console.warn('[SECURITY] Bot submission blocked');
       // Fake success to not tip off bots
-      toast.success('Conta criada com sucesso!');
+      toast.success(T("Conta criada com sucesso!"));
       setTimeout(() => router.push('/'), 2000);
       return;
     }
@@ -167,7 +169,7 @@ export default function OnboardingPage() {
         body: JSON.stringify({ ...webhookData, source: 'onboarding_v2' }),
       }).catch(() => {}); // Don't fail if webhook fails
       
-      toast.success('Conta criada com sucesso!');
+      toast.success(T("Conta criada com sucesso!"));
       router.push('/portal');
 
     } catch (error) {
@@ -305,6 +307,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
   error: string | null,
   t: Translator
 }) => {
+  const T = useT();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -346,9 +349,10 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
         >
           <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0" />
           <div className="flex-1">
-            <p className="text-yellow-200 text-sm">Este email já está cadastrado.</p>
+            <p className="text-yellow-200 text-sm">{T("Este email já está cadastrado.")}</p>
             <Link href="/login" className="text-yellow-400 hover:text-yellow-300 text-sm underline">
-              Clique aqui para fazer login
+              
+              {T("Clique aqui para fazer login")}
             </Link>
           </div>
         </motion.div>
@@ -361,7 +365,7 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
           className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg"
         >
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-          <p className="text-red-200 text-sm">{error}</p>
+          <p className="text-red-200 text-sm">{T(error)}</p>
         </motion.div>
       )}
       
@@ -409,7 +413,8 @@ const Step2 = ({ next, data, onChange, onEmailBlur, checkingUser, emailExists, e
       </div>
       
       <p className="text-xs text-center text-muted-foreground">
-        Já tem uma conta? <Link href="/login" className="text-amber-400 hover:text-amber-300 underline">Fazer login</Link>
+        
+        {T("Já tem uma conta?")} <Link href="/login" className="text-amber-400 hover:text-amber-300 underline">{T("Fazer login")}</Link>
       </p>
     </div>
   );
@@ -422,6 +427,7 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
   loading: boolean,
   t: Translator
 }) => {
+  const T = useT();
   const [selectedRoles, setSelectedRoles] = useState<string[]>(data.role ? data.role.split(',') : []);
   const [selectedInterests, setSelectedInterests] = useState<string[]>(data.interest ? data.interest.split(',') : []);
 
@@ -477,7 +483,7 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{option.emoji}</span>
+                <span className="text-2xl">{T(option.emoji)}</span>
                 <span className="font-medium text-sm">{t(`roles.${option.value}`)}</span>
               </div>
             </motion.button>
@@ -506,7 +512,7 @@ const Step3 = ({ submit, data, setFormData, loading, t }: {
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{option.emoji}</span>
+                <span className="text-2xl">{T(option.emoji)}</span>
                 <span className="font-medium text-sm">{t(`interests.${option.value}`)}</span>
               </div>
             </motion.button>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +19,7 @@ function moneyBR(n: number) {
 }
 
 export function AutomationToolbox({ locale }: { locale: Locale }) {
+  const T = useT();
   const isEn = locale === "en";
 
   const [processName, setProcessName] = useState(isEn ? "Lead routing" : "Roteamento de leads");
@@ -200,13 +202,13 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
           <p className="text-muted-foreground mt-2">
             {isEn
               ? "Generate an automation blueprint, ROI model and a spec to align your team fast."
-              : "Gere blueprint, modelo de ROI e uma spec para alinhar o time rápido."}
+              : T("Gere blueprint, modelo de ROI e uma spec para alinhar o time rápido.")}
           </p>
         </div>
         <div className="rounded-2xl border border-border bg-background/60 px-5 py-4">
           <div className="flex items-center gap-2 text-muted-foreground">
             <DollarSign className="w-4 h-4" />
-            <span className="text-sm">{isEn ? "ROI/mo" : "ROI/mês"}</span>
+            <span className="text-sm">{isEn ? "ROI/mo" : T("ROI/mês")}</span>
           </div>
           <div className="mt-1 text-3xl font-bold">{moneyBR(roi.total)}</div>
         </div>
@@ -243,15 +245,15 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
                   <p className="font-semibold">{isEn ? "Inputs" : "Entradas"}</p>
                   <div className="mt-4 grid gap-3">
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Hours saved / week" : "Horas salvas / semana"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Hours saved / week" : T("Horas salvas / semana")}</label>
                       <Input type="number" min={0} value={String(hoursSavedPerWeek)} onChange={(e) => setHoursSavedPerWeek(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Hourly cost (R$)" : "Custo hora (R$)"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Hourly cost (R$)" : T("Custo hora (R$)")}</label>
                       <Input type="number" min={0} value={String(hourlyCost)} onChange={(e) => setHourlyCost(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Error rate (0-1)" : "Taxa de erro (0-1)"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Error rate (0-1)" : T("Taxa de erro (0-1)")}</label>
                       <Input type="number" step="0.01" min={0} max={1} value={String(errorRate)} onChange={(e) => setErrorRate(Number(e.target.value) || 0)} />
                     </div>
                   </div>
@@ -261,7 +263,7 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
                   <p className="font-semibold">{isEn ? "Result" : "Resultado"}</p>
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <div className="rounded-xl border border-border bg-background/60 p-4">
-                      <p className="text-xs text-muted-foreground">{isEn ? "Hours/mo" : "Horas/mês"}</p>
+                      <p className="text-xs text-muted-foreground">{isEn ? "Hours/mo" : T("Horas/mês")}</p>
                       <p className="text-2xl font-bold mt-1">{roi.monthlyHours}</p>
                     </div>
                     <div className="rounded-xl border border-border bg-background/60 p-4">
@@ -283,7 +285,7 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
 
             <TabsContent value="blueprint" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{blueprint.title}</p>
+                <p className="font-semibold">{T(blueprint.title)}</p>
                 <Textarea className="mt-4 min-h-[220px]" readOnly value={blueprint.steps.map((s) => `- ${s}`).join("\n")} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(blueprint.steps.join("\n"))}>
                   <Clipboard className="w-4 h-4" />
@@ -298,7 +300,7 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
                   <p className="font-semibold">{isEn ? "Volume" : "Volume"}</p>
                   <div className="mt-4 grid gap-3">
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Events/day" : "Eventos/dia"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? "Events/day" : T("Eventos/dia")}</label>
                       <Input type="number" min={0} value={String(eventsPerDay)} onChange={(e) => setEventsPerDay(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
@@ -321,7 +323,7 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
 
             <TabsContent value="checklist" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Production checklist" : "Checklist de produção"}</p>
+                <p className="font-semibold">{isEn ? "Production checklist" : T("Checklist de produção")}</p>
                 <Textarea className="mt-4 min-h-[220px]" readOnly value={checklist} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(checklist)}>
                   <Clipboard className="w-4 h-4" />
@@ -333,26 +335,26 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
         </div>
 
         <div className="rounded-2xl border border-border bg-background/60 p-5">
-          <p className="font-semibold">{isEn ? "Send me the report" : "Me envia o relatório"}</p>
+          <p className="font-semibold">{isEn ? "Send me the report" : T("Me envia o relatório")}</p>
           <p className="text-sm text-muted-foreground mt-2">
             {isEn
               ? "Enter your email to save the blueprint + next steps."
-              : "Informe seu email para salvar o blueprint + próximos passos."}
+              : T("Informe seu email para salvar o blueprint + próximos passos.")}
           </p>
 
           <div className="mt-4 grid gap-3">
-            <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? "you@company.com" : "voce@empresa.com"} />
+            <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? T("you@company.com") : T("voce@empresa.com")} />
             <Button onClick={sendLead} disabled={!leadEmail || sending} className="bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600">
-              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : "Salvar + enviar")}
+              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : T("Salvar + enviar"))}
             </Button>
             <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(report)}>
               <Clipboard className="w-4 h-4" />
-              {isEn ? "Copy report" : "Copiar relatório"}
+              {isEn ? "Copy report" : T("Copiar relatório")}
             </Button>
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-background/50 p-4">
-            <p className="text-sm font-medium">{isEn ? "Preview" : "Prévia"}</p>
+            <p className="text-sm font-medium">{isEn ? "Preview" : T("Prévia")}</p>
             <Textarea value={report} readOnly className="mt-3 min-h-[220px]" />
           </div>
         </div>

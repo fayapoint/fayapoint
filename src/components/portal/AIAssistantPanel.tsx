@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -48,6 +49,7 @@ const SUGGESTED_PROMPTS = [
 ];
 
 export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelProps) {
+  const T = useT();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -180,12 +182,13 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
             Recurso PRO
           </Badge>
           <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
-            Upgrade para Pro para ter acesso ao assistente de IA personalizado.
-            Tire dúvidas, receba dicas e acelere seu aprendizado!
+            
+            {T("Upgrade para Pro para ter acesso ao assistente de IA personalizado.\r\n            Tire dúvidas, receba dicas e acelere seu aprendizado!")}
           </p>
           <Button className="bg-gradient-to-r from-amber-600 to-yellow-700">
             <Crown size={16} className="mr-2" />
-            Fazer Upgrade
+            
+            {T("Fazer Upgrade")}
           </Button>
         </Card>
       </div>
@@ -206,7 +209,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
               <span className="truncate">Assistente IA</span>
               <Badge className="bg-green-500/20 text-green-400 text-[10px] md:text-xs shrink-0">Online</Badge>
             </h2>
-            <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">Seu tutor pessoal de IA</p>
+            <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">{T("Seu tutor pessoal de IA")}</p>
           </div>
         </div>
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
@@ -262,7 +265,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
                       : "bg-amber-600 rounded-tr-sm"
                   )}
                 >
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  <p className="text-sm whitespace-pre-wrap">{T(message.content)}</p>
                   <p className="text-[10px] text-muted-foreground mt-1">
                     {message.timestamp.toLocaleTimeString("pt-BR", {
                       hour: "2-digit",
@@ -311,7 +314,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
         {/* Suggested Prompts */}
         {messages.length <= 1 && (
           <div className="px-3 md:px-4 pb-3 md:pb-4">
-            <p className="text-xs text-muted-foreground mb-2">Sugestões:</p>
+            <p className="text-xs text-muted-foreground mb-2">{T("Sugestões:")}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {SUGGESTED_PROMPTS.map((prompt, idx) => (
                 <button
@@ -323,7 +326,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
                     size={16}
                     className="text-amber-400 shrink-0 group-hover:scale-110 transition"
                   />
-                  <span className="text-xs text-muted-foreground line-clamp-2">{prompt.text}</span>
+                  <span className="text-xs text-muted-foreground line-clamp-2">{T(prompt.text)}</span>
                 </button>
               ))}
             </div>
@@ -339,7 +342,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Digite sua pergunta..."
+                placeholder={T("Digite sua pergunta...")}
                 className="bg-secondary border-border min-h-[48px] max-h-[120px] resize-none pr-12"
                 rows={1}
               />
@@ -365,7 +368,8 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
             </Button>
           </div>
           <p className="text-[10px] text-muted-foreground mt-2 text-center">
-            Pressione Enter para enviar • Shift + Enter para nova linha
+            
+            {T("Pressione Enter para enviar • Shift + Enter para nova linha")}
           </p>
         </div>
       </Card>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,6 +19,7 @@ import { PersonaFisher } from "@/components/portal/games/PersonaFisher";
  */
 
 export function PromptBuilderGame() {
+  const T = useT();
   const [escolhas, setEscolhas] = useState<Record<string, number>>({});
   const [copiado, setCopiado] = useState(false);
 
@@ -58,8 +60,8 @@ export function PromptBuilderGame() {
             Minigame: Monte o Prompt
           </h3>
           <p className="text-sm text-muted-foreground mt-0.5">
-            A diferença entre uma imagem amadora e uma profissional é a receita de 5 ingredientes.
-            Escolha um de cada e veja o prompt nascer — depois é só copiar e testar.
+            
+            {T("A diferença entre uma imagem amadora e uma profissional é a receita de 5 ingredientes.\r\n            Escolha um de cada e veja o prompt nascer — depois é só copiar e testar.")}
           </p>
         </div>
       </div>
@@ -71,7 +73,7 @@ export function PromptBuilderGame() {
               className="shrink-0 w-20 text-[11px] font-extrabold uppercase tracking-widest"
               style={{ color: ing.color }}
             >
-              {ing.label}
+              {T(ing.label)}
             </span>
             <div className="flex flex-wrap gap-2">
               {ing.options.map((op, idx) => {
@@ -86,7 +88,7 @@ export function PromptBuilderGame() {
                     )}
                       style={ativo ? { borderColor: ing.color, background: `${ing.color}1e`, color: ing.color } : undefined}
                   >
-                    {op.chip}
+                    {T(op.chip)}
                   </button>
                 );
               })}
@@ -109,9 +111,10 @@ export function PromptBuilderGame() {
             style={{ borderColor: "#f5c04e55", background: "rgba(245,192,78,.06)", boxShadow: "0 12px 34px -14px rgba(245,192,78,.35)" }}
           >
             <span className="block text-[10px] font-extrabold uppercase tracking-widest text-amber-400 mb-1.5">
-              Sua receita está pronta 🎉
+              
+              {T("Sua receita está pronta 🎉")}
             </span>
-            <p className="text-sm leading-relaxed">{prompt}</p>
+            <p className="text-sm leading-relaxed">{T(prompt)}</p>
             <VocabularyChip term={{ slug: "prompt", label: "prompt estruturado", definition: "Um pedido organizado em partes claras: assunto, estilo, paleta, composição e iluminação." }} />
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <button
@@ -130,7 +133,8 @@ export function PromptBuilderGame() {
                 Montar outra
               </button>
               <span className="text-[12px] text-muted-foreground">
-                Cole no Studio AI ou em qualquer gerador — a receita vale mais que a ferramenta.
+                
+                {T("Cole no Studio AI ou em qualquer gerador — a receita vale mais que a ferramenta.")}
               </span>
             </div>
             <PersonaFisher source="monte-prompt" />

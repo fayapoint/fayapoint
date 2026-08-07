@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -84,6 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function NoticiaPage({ params }: Props) {
   const { slug, locale } = await params;
+  const T = await obterT(locale);
   const item = await getNewsBySlug(slug, locale);
   if (!item) notFound();
   const t = await getTranslations({ locale, namespace: "NewsHub" });
@@ -150,26 +152,27 @@ export default async function NoticiaPage({ params }: Props) {
 
       <article className="px-4 sm:px-8 pt-6 pb-10 max-w-3xl mx-auto">
         <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>
-          {item.tag}
+          {T(item.tag)}
           {item.date &&
             ` · ${new Date(item.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}`}
         </span>
         <h1 className="mt-2 text-4xl sm:text-6xl tracking-wide leading-[0.95]" style={bebas}>
-          {item.title}
+          {T(item.title)}
         </h1>
-        <p className="mt-3 text-lg text-white/75 leading-relaxed font-medium">{item.summary}</p>
+        <p className="mt-3 text-lg text-white/75 leading-relaxed font-medium">{T(item.summary)}</p>
 
         {/* Arte da casa */}
         <div className="glass rounded-3xl overflow-hidden mt-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={item.image ?? "/landing/tags/tendencia.webp"}
-            alt={item.title}
+            alt={T(item.title)}
             className="w-full object-cover"
             style={{ aspectRatio: "16 / 9" }}
           />
           <p className="px-4 py-2 text-[10px] uppercase tracking-wider text-white/35">
-            Ilustração: FayAI Studio
+            
+            {T("Ilustração: FayAI Studio")}
           </p>
         </div>
 
@@ -178,7 +181,7 @@ export default async function NoticiaPage({ params }: Props) {
           {paragraphs.map((p, i) => (
             <div key={i} className="space-y-5">
               <p className={`leading-relaxed ${i === 0 ? "text-base sm:text-lg text-white/85" : "text-base text-white/70"}`}>
-                {p}
+                {T(p)}
               </p>
               {i === 0 && paragraphs.length > 1 && (
                 <figure className="glass rounded-2xl overflow-hidden">
@@ -242,11 +245,11 @@ export default async function NoticiaPage({ params }: Props) {
               <Link key={n.slug} href={`/${locale}/noticias/${n.slug}`} className="glass glass-hover group rounded-2xl overflow-hidden block">
                 <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={n.image ?? "/landing/tags/tendencia.webp"} alt={n.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                  <img src={n.image ?? "/landing/tags/tendencia.webp"} alt={T(n.title)} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
                 </span>
                 <span className="block p-3.5">
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{n.tag}</span>
-                  <span className="block mt-1 text-sm font-bold leading-snug">{n.title}</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>{T(n.tag)}</span>
+                  <span className="block mt-1 text-sm font-bold leading-snug">{T(n.title)}</span>
                 </span>
               </Link>
             ))}
@@ -255,7 +258,7 @@ export default async function NoticiaPage({ params }: Props) {
       )}
 
       <footer className="px-4 sm:px-8 pb-6 text-center text-[11px] text-white/35">
-        © {new Date().getFullYear()} FayAI — aprenda IA fazendo, não assistindo.
+        © {new Date().getFullYear()}  {T("FayAI — aprenda IA fazendo, não assistindo.")}
       </footer>
     </div>
     </>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { BookOpen, ExternalLink } from "lucide-react";
@@ -6,20 +7,22 @@ import { motion } from "framer-motion";
 import type { GameTerm } from "@/data/games/types";
 
 export function VocabularyChip({ term }: { term: GameTerm }) {
+  const T = useT();
   return (
     <details className="group mt-3 rounded-xl border border-violet-400/30 bg-violet-400/10 text-left">
       <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2 text-xs font-extrabold text-violet-200">
         <BookOpen size={14} />
-        <span>Palavra nova: {term.label}</span>
-        <span className="ml-auto text-[10px] font-semibold text-violet-200/60 group-open:hidden">toque para entender</span>
+        <span>{T("Palavra nova:")} {T(term.label)}</span>
+        <span className="ml-auto text-[10px] font-semibold text-violet-200/60 group-open:hidden">{T("toque para entender")}</span>
       </summary>
       <div className="border-t border-violet-400/20 px-3 py-2.5">
-        <p className="text-xs leading-relaxed text-muted-foreground">{term.definition}</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">{T(term.definition)}</p>
         <Link
           href={`/pt-BR/recursos/glossario?q=${encodeURIComponent(term.label)}#${term.slug}`}
           className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-violet-300 hover:text-violet-200"
         >
-          Ver no glossário <ExternalLink size={11} />
+          
+          {T("Ver no glossário")} <ExternalLink size={11} />
         </Link>
       </div>
     </details>

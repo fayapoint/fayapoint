@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -99,6 +100,7 @@ const LEVEL_LABEL: Record<string, string> = {
 type Stage = "intro" | "asking" | "guessing" | "right" | "fixing" | "done";
 
 export default function PersonaOracle({ onComplete }: { onComplete?: () => void }) {
+  const T = useT();
   const [stage, setStage] = useState<Stage>("intro");
   const [qIndex, setQIndex] = useState(0);
   const [scores, setScores] = useState<Record<Dim, Record<string, number>>>({ industry: {}, goal: {}, level: {} });
@@ -205,8 +207,8 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
             <div className="p-5">
               <h3 className="text-lg font-extrabold text-foreground">🔮 O Vidente</h3>
               <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-                Responda 5 perguntas rápidas e eu <strong className="text-violet-300">adivinho quem você é</strong> —
-                sem formulário chato. Se eu errar, você me corrige.
+                
+                {T("Responda 5 perguntas rápidas e eu")} <strong className="text-violet-300">{T("adivinho quem você é")}</strong>  {T("—\r\n                sem formulário chato. Se eu errar, você me corrige.")}
               </p>
               <button
                 onClick={() => setStage("asking")}
@@ -223,7 +225,7 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
             <p className="text-[11px] font-extrabold uppercase tracking-widest text-violet-300 flex items-center gap-1.5">
               <Sparkles size={12} /> Pergunta {qIndex + 1} de {QUESTIONS.length}
             </p>
-            <p className="mt-2 text-base font-bold text-foreground">{QUESTIONS[qIndex].text}</p>
+            <p className="mt-2 text-base font-bold text-foreground">{T(QUESTIONS[qIndex].text)}</p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               {QUESTIONS[qIndex].options.map((op) => (
                 <button
@@ -231,8 +233,8 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
                   onClick={() => pick(op)}
                   className="rounded-xl border border-white/12 bg-white/5 px-4 py-3 text-left text-sm font-semibold hover:border-violet-400/60 hover:bg-violet-500/15 transition-colors cursor-pointer"
                 >
-                  <span className="mr-2">{op.emoji}</span>
-                  {op.label}
+                  <span className="mr-2">{T(op.emoji)}</span>
+                  {T(op.label)}
                 </button>
               ))}
             </div>
@@ -248,9 +250,10 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
             <div className="p-5">
               <p className="text-[11px] font-extrabold uppercase tracking-widest text-violet-300">A bola de cristal diz…</p>
               <p className="mx-auto mt-2 max-w-md text-base font-bold text-foreground leading-relaxed">
-                Vejo alguém de <span className="text-violet-300">{INDUSTRY_LABEL[guess.industry]}</span>, que{" "}
-                <span className="text-amber-300">{LEVEL_LABEL[guess.level]}</span> com IA e sonha em{" "}
-                <span className="text-fuchsia-300">{GOAL_LABEL[guess.goal]}</span>. Acertei? 🔮
+                
+                {T("Vejo alguém de")} <span className="text-violet-300">{T(INDUSTRY_LABEL[guess.industry])}</span>, que{" "}
+                <span className="text-amber-300">{T(LEVEL_LABEL[guess.level])}</span>  {T("com IA e sonha em")}{" "}
+                <span className="text-fuchsia-300">{T(GOAL_LABEL[guess.goal])}</span>. Acertei? 🔮
               </p>
               <div className="mt-4 flex justify-center gap-3">
                 <button onClick={confirm} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-emerald-400 to-lime-400 px-5 py-2 text-sm font-extrabold text-[#12250a] cursor-pointer hover:opacity-90">
@@ -271,7 +274,7 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={art("acertou")} alt="O Vidente acertou" className="h-full w-full object-cover" />
             </div>
-            <p className="p-5 text-base font-extrabold text-foreground">🎯 Eu SABIA! Anotei tudo — seu portal agora te conhece melhor.</p>
+            <p className="p-5 text-base font-extrabold text-foreground">{T("🎯 Eu SABIA! Anotei tudo — seu portal agora te conhece melhor.")}</p>
           </motion.div>
         )}
 
@@ -283,7 +286,7 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
             </div>
             <div className="p-5 text-left">
               <p className="text-center text-sm font-bold text-foreground">Ops! Me ajuda a acertar:</p>
-              <p className="mt-3 text-[11px] font-extrabold uppercase tracking-widest text-violet-300">Sua área é…</p>
+              <p className="mt-3 text-[11px] font-extrabold uppercase tracking-widest text-violet-300">{T("Sua área é…")}</p>
               <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {Object.entries(INDUSTRY_LABEL).map(([k, label]) => (
                   <button
@@ -291,11 +294,11 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
                     onClick={() => setFixed((f) => ({ ...f, industry: k }))}
                     className={`rounded-full border px-3 py-1 text-xs font-bold transition-colors cursor-pointer ${(fixed.industry || guess.industry) === k ? "border-violet-400 bg-violet-500/25 text-violet-200" : "border-white/15 text-white/60 hover:text-white"}`}
                   >
-                    {label}
+                    {T(label)}
                   </button>
                 ))}
               </div>
-              <p className="mt-3 text-[11px] font-extrabold uppercase tracking-widest text-fuchsia-300">E seu sonho é…</p>
+              <p className="mt-3 text-[11px] font-extrabold uppercase tracking-widest text-fuchsia-300">{T("E seu sonho é…")}</p>
               <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {Object.entries(GOAL_LABEL).map(([k, label]) => (
                   <button
@@ -303,13 +306,13 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
                     onClick={() => setFixed((f) => ({ ...f, goal: k }))}
                     className={`rounded-full border px-3 py-1 text-xs font-bold transition-colors cursor-pointer ${(fixed.goal || guess.goal) === k ? "border-fuchsia-400 bg-fuchsia-500/25 text-fuchsia-200" : "border-white/15 text-white/60 hover:text-white"}`}
                   >
-                    {label}
+                    {T(label)}
                   </button>
                 ))}
               </div>
               <div className="mt-4 text-center">
                 <button onClick={applyFix} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 px-6 py-2 text-sm font-extrabold text-white cursor-pointer hover:opacity-90">
-                  <Check size={15} /> Agora sim
+                  <Check size={15} />  {T("Agora sim")}
                 </button>
               </div>
             </div>
@@ -318,10 +321,10 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
 
         {stage === "done" && (
           <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 text-center">
-            <p className="text-sm font-bold text-foreground">✨ Persona atualizada com o que o Vidente aprendeu.</p>
-            <p className="mt-1 text-xs text-muted-foreground">Isso deixa recomendações, desafios e o conteúdo do USS com a sua cara.</p>
+            <p className="text-sm font-bold text-foreground">{T("✨ Persona atualizada com o que o Vidente aprendeu.")}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{T("Isso deixa recomendações, desafios e o conteúdo do USS com a sua cara.")}</p>
             <button onClick={restart} className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 px-4 py-1.5 text-xs font-bold text-white/60 hover:text-white cursor-pointer transition-colors">
-              <RefreshCw size={12} /> Consultar de novo
+              <RefreshCw size={12} />  {T("Consultar de novo")}
             </button>
           </motion.div>
         )}

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -10,6 +11,7 @@ type Section = {
 };
 
 export default function PrivacyPage() {
+  const T = useT();
   const t = useTranslations("Privacy");
   const sections = t.raw("sections") as Section[];
 
@@ -54,9 +56,9 @@ export default function PrivacyPage() {
               {sections.map((section, idx) => (
                 <div key={idx} className="mb-8">
                   <h2 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
-                    <span className="text-green-400">{idx + 1}.</span> {section.title}
+                    <span className="text-green-400">{idx + 1}.</span> {T(section.title)}
                   </h2>
-                  <p className="text-muted-foreground whitespace-pre-line">{section.content}</p>
+                  <p className="text-muted-foreground whitespace-pre-line">{T(section.content)}</p>
                 </div>
               ))}
             </div>

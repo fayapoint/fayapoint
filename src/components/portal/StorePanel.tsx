@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -109,6 +110,7 @@ interface StorePanelProps {
 }
 
 export function StorePanel({ isCompact = false }: StorePanelProps) {
+  const T = useT();
   const { addItem, items } = useServiceCart();
   const [products, setProducts] = useState<StoreProduct[]>([]);
   const [featuredData, setFeaturedData] = useState<{
@@ -222,7 +224,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           {product.thumbnail ? (
             <img
               src={product.thumbnail}
-              alt={product.name}
+              alt={T(product.name)}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           ) : (
@@ -240,7 +242,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
             )}
             {product.isNewArrival && (
               <Badge className="bg-green-500/90 backdrop-blur text-white text-xs">
-                Novo
+                
+                {T("Novo")}
               </Badge>
             )}
             {product.isFeatured && (
@@ -279,19 +282,19 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
         {/* Info Section */}
         <div className={cn(compact ? "flex-1" : "")}>
           <p className="text-xs text-amber-400 font-medium mb-1">
-            {product.brand}
+            {T(product.brand)}
           </p>
           <h3 className={cn(
             "font-semibold group-hover:text-amber-400 transition line-clamp-2",
             compact ? "text-sm" : ""
           )}>
-            {product.name}
+            {T(product.name)}
           </h3>
           
           {!compact && (
             <>
               <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                {product.shortDescription}
+                {T(product.shortDescription)}
               </p>
               
               {/* Rating */}
@@ -365,11 +368,12 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
       <div className="flex items-center justify-between mb-3 md:mb-4">
         <h2 className="text-lg md:text-xl font-bold flex items-center gap-2 min-w-0 truncate">
           <Icon className={`text-${color}-400 shrink-0`} size={20} />
-          {title}
+          {T(title)}
         </h2>
         {showViewAll && onViewAll && (
           <Button variant="ghost" size="sm" onClick={onViewAll}>
-            Ver todos <ChevronRight size={16} />
+            
+            {T("Ver todos")} <ChevronRight size={16} />
           </Button>
         )}
       </div>
@@ -391,6 +395,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
     name: string; 
     count: number;
   }) => {
+  const T = useT();
     const Icon = CATEGORY_ICONS[id] || Package;
     return (
       <Card
@@ -406,7 +411,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
           </div>
           <div className="min-w-0">
             <h3 className="font-semibold text-sm md:text-base group-hover:text-amber-400 transition truncate">
-              {name}
+              {T(name)}
             </h3>
             <p className="text-xs text-muted-foreground">{count} produtos</p>
           </div>
@@ -417,6 +422,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
 
   // Product Detail Modal
   const ProductDetailModal = () => {
+  const T = useT();
     if (!selectedProduct) return null;
 
     return (
@@ -454,7 +460,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                     {selectedProduct.thumbnail ? (
                       <img
                         src={selectedProduct.thumbnail}
-                        alt={selectedProduct.name}
+                        alt={T(selectedProduct.name)}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -472,7 +478,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       )}
                       {selectedProduct.isNewArrival && (
                         <Badge className="bg-green-500/90 backdrop-blur text-white text-sm">
-                          Novo
+                          
+                          {T("Novo")}
                         </Badge>
                       )}
                       {selectedProduct.isFeatured && (
@@ -490,15 +497,15 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="outline" className="border-amber-500/50 text-amber-400">
-                        {selectedProduct.brand}
+                        {T(selectedProduct.brand)}
                       </Badge>
                       {selectedProduct.sku && (
                         <Badge variant="outline" className="border-border text-muted-foreground text-xs">
-                          SKU: {selectedProduct.sku}
+                          SKU: {T(selectedProduct.sku)}
                         </Badge>
                       )}
                     </div>
-                    <h2 className="text-xl md:text-3xl font-bold text-white mb-2 line-clamp-2">{selectedProduct.name}</h2>
+                    <h2 className="text-xl md:text-3xl font-bold text-white mb-2 line-clamp-2">{T(selectedProduct.name)}</h2>
                     
                     {/* Rating */}
                     <div className="flex flex-wrap items-center gap-2 md:gap-4">
@@ -532,13 +539,14 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       {formatPrice(selectedProduct.price)}
                     </p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Em até 12x de {formatPrice(selectedProduct.price / 12)} sem juros
+                      
+                      {T("Em até 12x de")} {formatPrice(selectedProduct.price / 12)}  {T("sem juros")}
                     </p>
                   </div>
 
                   {/* Description */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">Descrição</h3>
+                    <h3 className="text-lg font-semibold mb-2">{T("Descrição")}</h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {selectedProduct.fullDescription || selectedProduct.shortDescription}
                     </p>
@@ -549,7 +557,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                     <div>
                       <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                         <Info size={18} className="text-amber-400" />
-                        Especificações Técnicas
+                        
+                        {T("Especificações Técnicas")}
                       </h3>
                       <div className="grid gap-2">
                         {selectedProduct.specifications.map((spec, idx) => (
@@ -557,8 +566,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                             key={idx}
                             className="flex justify-between gap-2 p-3 rounded-xl bg-secondary border border-border min-w-0"
                           >
-                            <span className="text-muted-foreground text-sm shrink-0">{spec.key}</span>
-                            <span className="text-white font-medium text-sm truncate text-right">{spec.value}</span>
+                            <span className="text-muted-foreground text-sm shrink-0">{T(spec.key)}</span>
+                            <span className="text-white font-medium text-sm truncate text-right">{T(spec.value)}</span>
                           </div>
                         ))}
                       </div>
@@ -570,7 +579,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                     <div className="flex flex-wrap gap-2">
                       {selectedProduct.tags.map((tag) => (
                         <Badge key={tag} variant="outline" className="border-border text-muted-foreground">
-                          #{tag}
+                          #{T(tag)}
                         </Badge>
                       ))}
                     </div>
@@ -581,8 +590,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                     <div className="flex items-center gap-2 p-2 md:p-3 rounded-xl bg-secondary border border-border overflow-hidden">
                       <Truck size={18} className="text-green-400 shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-xs md:text-sm font-medium truncate">Frete Grátis</p>
-                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">Para todo Brasil</p>
+                        <p className="text-xs md:text-sm font-medium truncate">{T("Frete Grátis")}</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">{T("Para todo Brasil")}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 p-2 md:p-3 rounded-xl bg-secondary border border-border overflow-hidden">
@@ -602,8 +611,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                     <div className="flex items-center gap-2 p-2 md:p-3 rounded-xl bg-secondary border border-border overflow-hidden">
                       <Clock size={18} className="text-amber-400 shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-xs md:text-sm font-medium truncate">Envio Rápido</p>
-                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">Em até 24h</p>
+                        <p className="text-xs md:text-sm font-medium truncate">{T("Envio Rápido")}</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground truncate">{T("Em até 24h")}</p>
                       </div>
                     </div>
                   </div>
@@ -632,7 +641,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       disabled={selectedProduct.stock === 0}
                     >
                       <ShoppingCart size={20} className="mr-2" />
-                      {isInCart(selectedProduct._id) ? "Adicionar Mais" : "Adicionar ao Carrinho"}
+                      {isInCart(selectedProduct._id) ? T("Adicionar Mais") : T("Adicionar ao Carrinho")}
                     </Button>
                     {selectedProduct.externalUrl && (
                       <Button
@@ -663,10 +672,12 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
       <Card className="bg-gradient-to-r from-amber-900/50 to-yellow-900/50 border-amber-500/30 p-4 md:p-8 relative overflow-hidden">
         <div className="relative z-10">
           <h1 className="text-xl md:text-4xl font-bold mb-2">
-            Loja FayAi
+            
+            {T("Loja FayAi")}
           </h1>
           <p className="text-muted-foreground text-sm md:text-lg mb-4 md:mb-6 max-w-xl line-clamp-2">
-            Equipamentos premium para criadores de conteúdo, desenvolvedores e entusiastas de IA
+            
+            {T("Equipamentos premium para criadores de conteúdo, desenvolvedores e entusiastas de IA")}
           </p>
           <div className="flex gap-3 md:gap-4">
             <Button 
@@ -734,7 +745,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
       {/* Best Sellers */}
       {featuredData?.bestSellers && featuredData.bestSellers.length > 0 && (
         <ProductSection
-          title="Mais Vendidos"
+          title={T("Mais Vendidos")}
           icon={Star}
           products={featuredData.bestSellers}
           color="purple"
@@ -774,11 +785,11 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                 <ArrowUpDown size={16} />
               </SelectTrigger>
               <SelectContent className="bg-card/95 backdrop-blur-xl border-border text-white">
-                <SelectItem value="createdAt">Mais Recentes</SelectItem>
-                <SelectItem value="price-asc">Menor Preço</SelectItem>
-                <SelectItem value="price-desc">Maior Preço</SelectItem>
+                <SelectItem value="createdAt">{T("Mais Recentes")}</SelectItem>
+                <SelectItem value="price-asc">{T("Menor Preço")}</SelectItem>
+                <SelectItem value="price-desc">{T("Maior Preço")}</SelectItem>
                 <SelectItem value="rating">Melhor Avaliados</SelectItem>
-                <SelectItem value="sold">Mais Vendidos</SelectItem>
+                <SelectItem value="sold">{T("Mais Vendidos")}</SelectItem>
               </SelectContent>
             </Select>
             
@@ -823,7 +834,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               }}
             >
               <LayoutGrid size={20} />
-              <span className="text-[10px] font-medium">Todos</span>
+              <span className="text-[10px] font-medium">{T("Todos")}</span>
             </motion.button>
             
             {/* Category Icons */}
@@ -847,7 +858,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                 >
                   <IconComponent size={20} />
                   <span className="text-[10px] font-medium truncate max-w-[50px]">
-                    {cat.name.split(' ')[0]}
+                    {T(cat.name.split(' ')[0])}
                   </span>
                   {/* Count Badge */}
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[9px] rounded-full flex items-center justify-center">
@@ -919,7 +930,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       setSelectedSubcategory(null);
                     }}
                   >
-                    Todas
+                    
+                    {T("Todas")}
                   </button>
                   {filters && Object.entries(filters.categories).map(([id, cat]) => (
                     <button
@@ -935,7 +947,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                         setSelectedSubcategory(null);
                       }}
                     >
-                      <span>{cat.name}</span>
+                      <span>{T(cat.name)}</span>
                       <span className="text-muted-foreground">{filters.categoryCounts[id] || 0}</span>
                     </button>
                   ))}
@@ -956,7 +968,8 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                       )}
                       onClick={() => setSelectedSubcategory(null)}
                     >
-                      Todas
+                      
+                      {T("Todas")}
                     </button>
                     {filters.categories[selectedCategory].subcategories.map((sub) => (
                       <button
@@ -969,7 +982,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                         )}
                         onClick={() => setSelectedSubcategory(sub)}
                       >
-                        {sub}
+                        {T(sub)}
                       </button>
                     ))}
                   </div>
@@ -982,13 +995,13 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   <p className="text-sm font-medium text-muted-foreground mb-2">Marca</p>
                   <Select value={selectedBrand || "__all__"} onValueChange={(v) => setSelectedBrand(v === "__all__" ? null : v)}>
                     <SelectTrigger className="bg-secondary border-border">
-                      <SelectValue placeholder="Todas as marcas" />
+                      <SelectValue placeholder={T("Todas as marcas")} />
                     </SelectTrigger>
                     <SelectContent className="bg-card border-border text-white">
-                      <SelectItem value="__all__">Todas</SelectItem>
+                      <SelectItem value="__all__">{T("Todas")}</SelectItem>
                       {filters.brands.map((brand) => (
                         <SelectItem key={brand} value={brand}>
-                          {brand}
+                          {T(brand)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -1040,11 +1053,11 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border text-white">
-                  <SelectItem value="createdAt">Mais Recentes</SelectItem>
-                  <SelectItem value="price-asc">Menor Preço</SelectItem>
-                  <SelectItem value="price-desc">Maior Preço</SelectItem>
+                  <SelectItem value="createdAt">{T("Mais Recentes")}</SelectItem>
+                  <SelectItem value="price-asc">{T("Menor Preço")}</SelectItem>
+                  <SelectItem value="price-desc">{T("Maior Preço")}</SelectItem>
                   <SelectItem value="rating">Melhor Avaliados</SelectItem>
-                  <SelectItem value="sold">Mais Vendidos</SelectItem>
+                  <SelectItem value="sold">{T("Mais Vendidos")}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -1100,15 +1113,16 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
               setSearchQuery("");
             }}
           >
-            ← Voltar à Loja
+            
+            {T("← Voltar à Loja")}
           </Button>
           {selectedCategory && filters?.categories[selectedCategory] && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>{filters.categories[selectedCategory].name}</span>
+              <span>{T(filters.categories[selectedCategory].name)}</span>
               {selectedSubcategory && (
                 <>
                   <ChevronRight size={14} />
-                  <span>{selectedSubcategory}</span>
+                  <span>{T(selectedSubcategory)}</span>
                 </>
               )}
             </div>
@@ -1142,7 +1156,7 @@ export function StorePanel({ isCompact = false }: StorePanelProps) {
         ) : (
           <div className="text-center py-16">
             <Package size={64} className="mx-auto mb-4 text-gray-600" />
-            <h3 className="text-lg md:text-xl font-semibold mb-2">Nenhum produto encontrado</h3>
+            <h3 className="text-lg md:text-xl font-semibold mb-2">{T("Nenhum produto encontrado")}</h3>
             <p className="text-muted-foreground text-sm mb-6">
               Tente ajustar os filtros ou buscar por outros termos
             </p>

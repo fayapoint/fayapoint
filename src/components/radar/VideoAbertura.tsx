@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -23,6 +24,7 @@ import { useEffect, useRef, useState } from "react";
  *  - `prefers-reduced-motion` fica no primeiro quadro, parado.
  */
 export function VideoAbertura() {
+  const T = useT();
   const ref = useRef<HTMLVideoElement>(null);
   const [visivel, setVisivel] = useState(false);
   const [falhou, setFalhou] = useState(false);
@@ -112,7 +114,8 @@ export function VideoAbertura() {
         className="absolute left-3 bottom-2.5 text-[10px] uppercase tracking-widest"
         style={{ color: visivel ? "#f5c04e" : "#f5c04e88" }}
       >
-        medindo agora
+        
+        {T("medindo agora")}
       </span>
     </div>
   );

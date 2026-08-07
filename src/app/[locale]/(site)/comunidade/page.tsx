@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
@@ -41,6 +42,7 @@ interface Stats {
 }
 
 export default function CommunityPage() {
+  const T = useT();
   const t = useTranslations("Community");
   const [creations, setCreations] = useState<Creation[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
@@ -218,15 +220,15 @@ export default function CommunityPage() {
                   >
                     <img 
                       src={creation.imageUrl} 
-                      alt={creation.prompt}
+                      alt={T(creation.prompt)}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                      <p className="text-white text-sm font-medium line-clamp-2 mb-2">{creation.prompt}</p>
+                      <p className="text-white text-sm font-medium line-clamp-2 mb-2">{T(creation.prompt)}</p>
                       <div className="flex items-center gap-2 text-muted-foreground text-xs">
                         <User size={12} />
-                        <span>{creation.userName}</span>
+                        <span>{T(creation.userName)}</span>
                       </div>
                     </div>
                   </motion.div>
@@ -304,7 +306,7 @@ export default function CommunityPage() {
                     {creator.latestImage ? (
                       <img 
                         src={creator.latestImage} 
-                        alt={creator.userName}
+                        alt={T(creator.userName)}
                         className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
                       />
                     ) : (
@@ -316,7 +318,7 @@ export default function CommunityPage() {
                       <div className="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center mb-2 text-white font-bold">
                         {creator.userName?.charAt(0).toUpperCase() || '?'}
                       </div>
-                      <p className="text-white text-sm font-medium truncate w-full text-center">{creator.userName}</p>
+                      <p className="text-white text-sm font-medium truncate w-full text-center">{T(creator.userName)}</p>
                       <p className="text-amber-400 text-xs">{creator.count} {t("stats.creations").toLowerCase()}</p>
                     </div>
                   </div>
@@ -377,14 +379,14 @@ export default function CommunityPage() {
           >
             <img 
               src={selectedImage.imageUrl}
-              alt={selectedImage.prompt}
+              alt={T(selectedImage.prompt)}
               className="w-full h-auto max-h-[80vh] object-contain rounded-xl"
             />
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent rounded-b-xl">
-              <p className="text-white text-lg mb-2">{selectedImage.prompt}</p>
+              <p className="text-white text-lg mb-2">{T(selectedImage.prompt)}</p>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <User size={14} />
-                <span>{selectedImage.userName}</span>
+                <span>{T(selectedImage.userName)}</span>
                 <span className="text-gray-600">•</span>
                 <span>{new Date(selectedImage.createdAt).toLocaleDateString()}</span>
               </div>

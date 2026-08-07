@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -119,6 +120,7 @@ export function ServiceBuilderSection({
   sectionId = "builder",
   source,
 }: ServiceBuilderSectionProps) {
+  const T = useT();
   const t = useTranslations("ServiceBuilder");
   const badgeLabel = badgeLabelProp ?? t("badge");
   const { user, setUser, isLoggedIn } = useUser();
@@ -379,7 +381,7 @@ export function ServiceBuilderSection({
       <SectionDivider icon={Layers} />
       <div className="container mx-auto px-4">
         <div className="text-center max-w-4xl mx-auto mb-14">
-          <Badge className="mb-4">{badgeLabel}</Badge>
+          <Badge className="mb-4">{T(badgeLabel)}</Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             {title ?? t("title")}
           </h2>
@@ -391,7 +393,7 @@ export function ServiceBuilderSection({
         {loading && (
           <div className="text-center text-muted-foreground">{t("loading")}</div>
         )}
-        {error && (<div className="text-center text-destructive">{error}</div>)}
+        {error && (<div className="text-center text-destructive">{T(error)}</div>)}
 
         {!loading && !error && catalog.length > 0 && (
           <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
@@ -404,7 +406,7 @@ export function ServiceBuilderSection({
                       variant={service.slug === activeService ? "default" : "outline"}
                       onClick={() => setActiveService(service.slug)}
                     >
-                      {service.meta.name}
+                      {T(service.meta.name)}
                     </Button>
                   ))}
                 </div>
@@ -422,9 +424,9 @@ export function ServiceBuilderSection({
                     <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground mb-1">
                       {t("selectedService")}
                     </p>
-                    <h3 className="text-2xl font-semibold">{activeCatalog.meta.name}</h3>
+                    <h3 className="text-2xl font-semibold">{T(activeCatalog.meta.name)}</h3>
                     <p className="text-muted-foreground max-w-2xl">
-                      {activeCatalog.meta.description}
+                      {T(activeCatalog.meta.description)}
                     </p>
                   </div>
                 </div>
@@ -462,7 +464,7 @@ export function ServiceBuilderSection({
                       <AccordionTrigger className="hover:no-underline py-0 pb-4">
                         <div className="flex items-center gap-3">
                           <div className="w-2 h-2 rounded-full bg-primary" />
-                          <h4 className="text-lg font-semibold">{group.name}</h4>
+                          <h4 className="text-lg font-semibold">{T(group.name)}</h4>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -320,6 +321,7 @@ const methodColors: Record<string, string> = {
 };
 
 function CodeBlock({ code, language = "json" }: { code: string; language?: string }) {
+  const T = useT();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -331,7 +333,7 @@ function CodeBlock({ code, language = "json" }: { code: string; language?: strin
   return (
     <div className="relative group">
       <pre className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 overflow-x-auto text-sm">
-        <code className="text-zinc-300">{code}</code>
+        <code className="text-zinc-300">{T(code)}</code>
       </pre>
       <button
         onClick={handleCopy}
@@ -348,6 +350,7 @@ function CodeBlock({ code, language = "json" }: { code: string; language?: strin
 }
 
 function EndpointCard({ endpoint }: { endpoint: Endpoint }) {
+  const T = useT();
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -357,9 +360,9 @@ function EndpointCard({ endpoint }: { endpoint: Endpoint }) {
         className="w-full flex items-center gap-4 p-4 hover:bg-zinc-900/50 transition-colors text-left"
       >
         <Badge className={cn("font-mono text-xs px-2 py-1 border", methodColors[endpoint.method])}>
-          {endpoint.method}
+          {T(endpoint.method)}
         </Badge>
-        <code className="text-sm text-zinc-300 font-mono flex-1">{endpoint.path}</code>
+        <code className="text-sm text-zinc-300 font-mono flex-1">{T(endpoint.path)}</code>
         {endpoint.auth && (
           <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-400">
             <Lock className="w-3 h-3 mr-1" />
@@ -375,7 +378,7 @@ function EndpointCard({ endpoint }: { endpoint: Endpoint }) {
       
       {expanded && (
         <div className="border-t border-zinc-800 p-4 space-y-4 bg-zinc-900/30">
-          <p className="text-zinc-400">{endpoint.description}</p>
+          <p className="text-zinc-400">{T(endpoint.description)}</p>
           
           {endpoint.requestBody && (
             <div>
@@ -397,6 +400,7 @@ function EndpointCard({ endpoint }: { endpoint: Endpoint }) {
 }
 
 function CategorySection({ category }: { category: APICategory }) {
+  const T = useT();
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -409,8 +413,8 @@ function CategorySection({ category }: { category: APICategory }) {
           {category.icon}
         </div>
         <div className="flex-1 text-left">
-          <h2 className="text-xl font-semibold text-white">{category.title}</h2>
-          <p className="text-sm text-zinc-500">{category.description}</p>
+          <h2 className="text-xl font-semibold text-white">{T(category.title)}</h2>
+          <p className="text-sm text-zinc-500">{T(category.description)}</p>
         </div>
         <Badge variant="outline" className="text-xs">
           {category.endpoints.length} endpoints
@@ -434,6 +438,7 @@ function CategorySection({ category }: { category: APICategory }) {
 }
 
 export default function APIDocsPage() {
+  const T = useT();
   return (
     <div className="min-h-screen bg-background text-foreground">
       
@@ -446,11 +451,12 @@ export default function APIDocsPage() {
               API Reference
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Documentação da API
+              
+              {T("Documentação da API")}
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Integre os serviços da FayAi em suas aplicações. 
-              Nossa API RESTful oferece acesso a autenticação, cursos, IA generativa e muito mais.
+              
+              {T("Integre os serviços da FayAi em suas aplicações. \r\n              Nossa API RESTful oferece acesso a autenticação, cursos, IA generativa e muito mais.")}
             </p>
             
             <div className="flex flex-wrap gap-4">
@@ -461,7 +467,7 @@ export default function APIDocsPage() {
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 rounded-lg border border-zinc-800">
                 <Shield className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm">Autenticação:</span>
+                <span className="text-sm">{T("Autenticação:")}</span>
                 <code className="text-sm text-emerald-400 font-mono">Bearer Token (JWT)</code>
               </div>
             </div>
@@ -476,7 +482,8 @@ export default function APIDocsPage() {
               Quick Start
             </h2>
             <p className="text-muted-foreground mb-4">
-              Para começar, faça login e use o token retornado no header <code className="text-amber-400">Authorization</code>:
+              
+              {T("Para começar, faça login e use o token retornado no header")} <code className="text-amber-400">Authorization</code>:
             </p>
             <CodeBlock code={`// 1. Fazer login
 const response = await fetch('https://fayai.com.br/api/auth/login', {
@@ -510,7 +517,7 @@ const dashboard = await fetch('https://fayai.com.br/api/user/dashboard', {
                   className="flex items-center gap-2 px-3 py-2 bg-zinc-900 hover:bg-zinc-800 rounded-lg border border-zinc-800 transition-colors text-sm"
                 >
                   {cat.icon}
-                  {cat.title}
+                  {T(cat.title)}
                 </a>
               ))}
             </div>
@@ -535,24 +542,24 @@ const dashboard = await fetch('https://fayai.com.br/api/user/dashboard', {
                 <h3 className="font-medium text-zinc-300 mb-2">Free</h3>
                 <ul className="text-sm text-zinc-500 space-y-1">
                   <li>1 imagem total</li>
-                  <li>1 curso iniciante</li>
-                  <li>100 req/hora</li>
+                  <li>{T("1 curso iniciante")}</li>
+                  <li>{T("100 req/hora")}</li>
                 </ul>
               </div>
               <div className="p-4 bg-zinc-900 rounded-lg border border-amber-500/30">
                 <h3 className="font-medium text-amber-400 mb-2">Starter</h3>
                 <ul className="text-sm text-zinc-500 space-y-1">
-                  <li>50 imagens/mês</li>
-                  <li>3 cursos</li>
-                  <li>1000 req/hora</li>
+                  <li>{T("50 imagens/mês")}</li>
+                  <li>{T("3 cursos")}</li>
+                  <li>{T("1000 req/hora")}</li>
                 </ul>
               </div>
               <div className="p-4 bg-zinc-900 rounded-lg border border-amber-500/30">
                 <h3 className="font-medium text-amber-400 mb-2">Pro / Business</h3>
                 <ul className="text-sm text-zinc-500 space-y-1">
                   <li>Ilimitado</li>
-                  <li>Todos os cursos</li>
-                  <li>10000 req/hora</li>
+                  <li>{T("Todos os cursos")}</li>
+                  <li>{T("10000 req/hora")}</li>
                 </ul>
               </div>
             </div>
@@ -564,12 +571,14 @@ const dashboard = await fetch('https://fayai.com.br/api/user/dashboard', {
           <div className="max-w-4xl text-center">
             <h2 className="text-2xl font-semibold mb-4">Precisa de ajuda?</h2>
             <p className="text-muted-foreground mb-6">
-              Nossa equipe está pronta para ajudar com integrações e casos de uso avançados.
+              
+              {T("Nossa equipe está pronta para ajudar com integrações e casos de uso avançados.")}
             </p>
             <div className="flex justify-center gap-4">
               <Button asChild variant="outline">
                 <Link href="/contato">
-                  Falar com o time
+                  
+                  {T("Falar com o time")}
                 </Link>
               </Button>
               <Button asChild className="bg-gradient-to-r from-amber-600 to-yellow-700">

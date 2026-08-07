@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 /**
  * A assinatura da casa na página de venda.
  *
@@ -42,6 +43,7 @@ export function AssinaturaFayai({
   locale: string;
   className?: string;
 }) {
+  const T = useT();
   const isPtBr = locale === "pt-BR";
 
   return (
@@ -95,14 +97,15 @@ export function AssinaturaFayai({
 
         <div className="min-w-0 flex-1">
           <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300/70">
-            {isPtBr ? "Produção" : "Produced by"}
+            {isPtBr ? T("Produção") : "Produced by"}
           </div>
           <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
             <span className="text-[15px] font-bold leading-none text-white">
               FayAi
             </span>
             <span className="text-[11px] leading-none text-white/35">
-              fayai.com.br
+              
+              {T("fayai.com.br")}
             </span>
           </div>
           <p className="mt-1.5 text-xs leading-snug text-white/45">

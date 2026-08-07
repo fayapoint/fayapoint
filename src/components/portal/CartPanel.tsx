@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,6 +70,7 @@ const statusLabels: Record<string, string> = {
 };
 
 export function CartPanel() {
+  const T = useT();
   const router = useRouter();
   const { items, setItemQuantity, removeItem, clearCart, itemCount, cartTotal } = useServiceCart();
   const [activeTab, setActiveTab] = useState("cart");
@@ -150,7 +152,7 @@ export function CartPanel() {
       setAppliedCoupon({ code: "FAYA20", discount: 20 });
       toast.success("Cupom aplicado: 20% de desconto!");
     } else {
-      toast.error("Cupom inválido");
+      toast.error(T("Cupom inválido"));
     }
     setIsApplyingCoupon(false);
     setCouponCode("");
@@ -161,6 +163,7 @@ export function CartPanel() {
 
   // Cart Item Component
   const CartItemCard = ({ item }: { item: CartItem }) => {
+  const T = useT();
     const getTypeIcon = () => {
       if (item.id.startsWith("store-")) return <Store size={14} />;
       if (item.type === "course") return <BookOpen size={14} />;
@@ -189,7 +192,7 @@ export function CartPanel() {
             {/* Image */}
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-gradient-to-br from-gray-800 to-card flex-shrink-0 overflow-hidden">
               {item.image ? (
-                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                <img src={item.image} alt={T(item.name)} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <Package size={28} className="text-gray-600" />
@@ -205,7 +208,7 @@ export function CartPanel() {
                     {getTypeIcon()}
                     <span className="ml-1">{getTypeLabel()}</span>
                   </Badge>
-                  <h4 className="font-semibold text-sm line-clamp-2">{item.name}</h4>
+                  <h4 className="font-semibold text-sm line-clamp-2">{T(item.name)}</h4>
                 </div>
                 <button
                   onClick={() => {
@@ -240,7 +243,7 @@ export function CartPanel() {
                 <div className="text-right">
                   <p className="font-bold text-green-400">{formatPrice(item.price * item.quantity)}</p>
                   {item.quantity > 1 && (
-                    <p className="text-[10px] text-muted-foreground">{formatPrice(item.price)} cada</p>
+                    <p className="text-[10px] text-muted-foreground">{formatPrice(item.price)}  {T("cada")}</p>
                   )}
                 </div>
               </div>
@@ -262,8 +265,8 @@ export function CartPanel() {
             <Receipt size={20} className="text-green-400" />
           </div>
           <div>
-            <h3 className="font-bold">Resumo do Pedido</h3>
-            <p className="text-xs text-muted-foreground">{itemCount} itens no carrinho</p>
+            <h3 className="font-bold">{T("Resumo do Pedido")}</h3>
+            <p className="text-xs text-muted-foreground">{itemCount}  {T("itens no carrinho")}</p>
           </div>
         </div>
 
@@ -278,13 +281,13 @@ export function CartPanel() {
             )}
             {courseItems.length > 0 && (
               <div className="flex justify-between gap-2 text-muted-foreground">
-                <span className="flex items-center gap-1.5 min-w-0 truncate"><BookOpen size={14} className="shrink-0" /> Cursos ({courseItems.length})</span>
+                <span className="flex items-center gap-1.5 min-w-0 truncate"><BookOpen size={14} className="shrink-0" />  {T("Cursos (")}{courseItems.length})</span>
                 <span className="shrink-0">{formatPrice(courseItems.reduce((sum, i) => sum + i.price * i.quantity, 0))}</span>
               </div>
             )}
             {serviceItems.length > 0 && (
               <div className="flex justify-between gap-2 text-muted-foreground">
-                <span className="flex items-center gap-1.5 min-w-0 truncate"><Wrench size={14} className="shrink-0" /> Serviços ({serviceItems.length})</span>
+                <span className="flex items-center gap-1.5 min-w-0 truncate"><Wrench size={14} className="shrink-0" />  {T("Serviços (")}{serviceItems.length})</span>
                 <span className="shrink-0">{formatPrice(serviceItems.reduce((sum, i) => sum + i.price * i.quantity, 0))}</span>
               </div>
             )}
@@ -344,14 +347,14 @@ export function CartPanel() {
           )}
           <div className="flex justify-between text-sm text-muted-foreground">
             <span>Frete</span>
-            <span className="text-green-400">Grátis</span>
+            <span className="text-green-400">{T("Grátis")}</span>
           </div>
           <div className="flex justify-between pt-2 border-t border-border">
             <span className="font-semibold">Total</span>
             <span className="text-xl md:text-2xl font-bold text-green-400">{formatPrice(finalTotal)}</span>
           </div>
           <p className="text-[10px] text-muted-foreground text-right">
-            ou 12x de {formatPrice(finalTotal / 12)} sem juros
+            ou 12x de {formatPrice(finalTotal / 12)}  {T("sem juros")}
           </p>
         </div>
 
@@ -369,7 +372,8 @@ export function CartPanel() {
         <div className="grid grid-cols-2 gap-2 pt-4 border-t border-border">
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
             <Truck size={12} className="text-green-400" />
-            Frete Grátis
+            
+            {T("Frete Grátis")}
           </div>
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
             <Shield size={12} className="text-blue-400" />
@@ -381,7 +385,8 @@ export function CartPanel() {
           </div>
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
             <CreditCard size={12} className="text-yellow-400" />
-            12x sem juros
+            
+            {T("12x sem juros")}
           </div>
         </div>
       </div>
@@ -396,14 +401,14 @@ export function CartPanel() {
           <TabsList className="bg-secondary border border-border p-1 h-auto">
             <TabsTrigger value="cart" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 gap-1.5 md:gap-2 px-3 md:px-4 py-2 text-sm">
               <ShoppingCart size={16} className="shrink-0" />
-              <span className="truncate">Carrinho</span>
+              <span className="truncate">{T("Carrinho")}</span>
               {itemCount > 0 && (
                 <Badge className="bg-amber-500 text-white text-[10px] px-1.5 ml-1 shrink-0">{itemCount}</Badge>
               )}
             </TabsTrigger>
             <TabsTrigger value="history" className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 gap-1.5 md:gap-2 px-3 md:px-4 py-2 text-sm">
               <History size={16} className="shrink-0" />
-              <span className="truncate">Histórico</span>
+              <span className="truncate">{T("Histórico")}</span>
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -423,13 +428,15 @@ export function CartPanel() {
                 <div className="w-20 h-20 rounded-2xl bg-secondary border border-border flex items-center justify-center mb-4">
                   <ShoppingCart size={36} className="text-gray-600" />
                 </div>
-                <h2 className="text-lg md:text-xl font-bold mb-2">Carrinho Vazio</h2>
+                <h2 className="text-lg md:text-xl font-bold mb-2">{T("Carrinho Vazio")}</h2>
                 <p className="text-muted-foreground text-center max-w-sm mb-6">
-                  Explore nossa loja e adicione produtos, cursos e serviços ao seu carrinho!
+                  
+                  {T("Explore nossa loja e adicione produtos, cursos e serviços ao seu carrinho!")}
                 </p>
                 <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 rounded-xl">
                   <Sparkles size={16} className="mr-2" />
-                  Explorar Loja
+                  
+                  {T("Explorar Loja")}
                 </Button>
               </div>
             ) : (
@@ -442,7 +449,7 @@ export function CartPanel() {
                       variant="ghost"
                       size="sm"
                       className="text-red-400 hover:text-red-300 hover:bg-red-500/10 gap-2"
-                      onClick={() => { clearCart(); toast.success("Carrinho limpo"); }}
+                      onClick={() => { clearCart(); toast.success(T("Carrinho limpo")); }}
                     >
                       <Trash2 size={14} />
                       Limpar tudo
@@ -465,7 +472,7 @@ export function CartPanel() {
                   {courseItems.length > 0 && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-                        <BookOpen size={14} /> Cursos ({courseItems.length})
+                        <BookOpen size={14} />  {T("Cursos (")}{courseItems.length})
                       </h3>
                       <div className="space-y-3">
                         {courseItems.map(item => <CartItemCard key={item.id} item={item} />)}
@@ -477,7 +484,7 @@ export function CartPanel() {
                   {serviceItems.length > 0 && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-                        <Wrench size={14} /> Serviços ({serviceItems.length})
+                        <Wrench size={14} />  {T("Serviços (")}{serviceItems.length})
                       </h3>
                       <div className="space-y-3">
                         {serviceItems.map(item => <CartItemCard key={item.id} item={item} />)}
@@ -502,7 +509,7 @@ export function CartPanel() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between gap-2 mb-4">
-              <h2 className="text-base md:text-lg font-bold truncate">Histórico de Pedidos</h2>
+              <h2 className="text-base md:text-lg font-bold truncate">{T("Histórico de Pedidos")}</h2>
               <Button variant="outline" size="sm" className="border-border gap-1.5 md:gap-2 shrink-0" onClick={fetchOrders}>
                 <Download size={14} />
                 Atualizar
@@ -512,16 +519,17 @@ export function CartPanel() {
             {isLoadingOrders ? (
               <div className="flex flex-col items-center justify-center min-h-[30vh]">
                 <Loader2 className="w-8 h-8 animate-spin text-amber-400 mb-4" />
-                <p className="text-muted-foreground">Carregando pedidos...</p>
+                <p className="text-muted-foreground">{T("Carregando pedidos...")}</p>
               </div>
             ) : orders.length === 0 ? (
               <div className="flex flex-col items-center justify-center min-h-[30vh]">
                 <div className="w-20 h-20 rounded-2xl bg-secondary border border-border flex items-center justify-center mb-4">
                   <Receipt size={36} className="text-gray-600" />
                 </div>
-                <h2 className="text-lg md:text-xl font-bold mb-2">Nenhum Pedido</h2>
+                <h2 className="text-lg md:text-xl font-bold mb-2">{T("Nenhum Pedido")}</h2>
                 <p className="text-muted-foreground text-center max-w-sm">
-                  Você ainda não fez nenhum pedido. Explore nossa loja!
+                  
+                  {T("Você ainda não fez nenhum pedido. Explore nossa loja!")}
                 </p>
               </div>
             ) : (
@@ -560,7 +568,7 @@ export function CartPanel() {
                             {item.type === "product" ? <Package size={14} className="text-muted-foreground shrink-0" /> :
                              item.type === "course" ? <BookOpen size={14} className="text-muted-foreground shrink-0" /> :
                              <Wrench size={14} className="text-muted-foreground shrink-0" />}
-                            <span className="text-muted-foreground truncate">{item.name}</span>
+                            <span className="text-muted-foreground truncate">{T(item.name)}</span>
                             <span className="text-gray-600 shrink-0">x{item.quantity}</span>
                           </div>
                           <span className="text-muted-foreground shrink-0">{formatPrice(item.price * item.quantity)}</span>
@@ -572,7 +580,7 @@ export function CartPanel() {
                     <div className="flex gap-2 mt-3 md:mt-4 pt-3 md:pt-4 border-t border-border">
                       <Button variant="outline" size="sm" className="border-border gap-1.5 md:gap-2 flex-1 text-xs md:text-sm">
                         <Receipt size={14} className="shrink-0" />
-                        <span className="truncate">Ver Detalhes</span>
+                        <span className="truncate">{T("Ver Detalhes")}</span>
                       </Button>
                       <Button variant="outline" size="sm" className="border-border gap-2">
                         <Printer size={14} />

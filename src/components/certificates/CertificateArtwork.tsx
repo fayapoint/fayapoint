@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import { Award, ShieldCheck, Sparkles } from "lucide-react";
 
 type CertificateArtworkProps = {
@@ -54,6 +55,7 @@ export function CertificateArtwork({
   issuedAt,
   compact = false,
 }: CertificateArtworkProps) {
+  const T = useT();
   const theme = getTheme(courseSlug, courseTitle);
 
   return (
@@ -101,17 +103,17 @@ export function CertificateArtwork({
             className="rounded-full border px-2.5 py-1 text-[7px] font-bold tracking-[.18em]"
             style={{ color: theme.accent, borderColor: `rgba(${theme.glow}, .34)`, backgroundColor: `rgba(${theme.glow}, .09)` }}
           >
-            {theme.label}
+            {T(theme.label)}
           </span>
         </div>
 
         <div className="max-w-[88%]">
-          <p className="mb-2 text-[7px] font-semibold tracking-[.34em] text-white/40 sm:text-[9px]">CERTIFICADO DE CONCLUSÃO</p>
+          <p className="mb-2 text-[7px] font-semibold tracking-[.34em] text-white/40 sm:text-[9px]">{T("CERTIFICADO DE CONCLUSÃO")}</p>
           <h3 className={`${compact ? "text-xl sm:text-3xl" : "text-2xl sm:text-4xl"} font-black leading-none tracking-tight text-white`}>
-            {studentName}
+            {T(studentName)}
           </h3>
           <div className="mx-auto my-3 h-px w-20" style={{ background: `linear-gradient(90deg, transparent, ${theme.accent}, transparent)` }} />
-          <p className="line-clamp-2 text-[10px] font-semibold leading-snug text-white/75 sm:text-sm">{courseTitle}</p>
+          <p className="line-clamp-2 text-[10px] font-semibold leading-snug text-white/75 sm:text-sm">{T(courseTitle)}</p>
         </div>
 
         <div className="flex w-full items-end justify-between gap-4 text-left">
@@ -122,7 +124,7 @@ export function CertificateArtwork({
           <div className="flex items-center gap-2 text-right">
             <div>
               <p className="text-[6px] tracking-[.18em] text-white/30 sm:text-[7px]">REGISTRO DIGITAL</p>
-              <p className="mt-1 font-mono text-[7px] font-semibold sm:text-[9px]" style={{ color: theme.accent }}>{certificateNumber}</p>
+              <p className="mt-1 font-mono text-[7px] font-semibold sm:text-[9px]" style={{ color: theme.accent }}>{T(certificateNumber)}</p>
             </div>
             <ShieldCheck className="h-5 w-5" style={{ color: theme.accent }} />
           </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -15,6 +16,7 @@ type Template = {
 };
 
 export default function TemplatesPage() {
+  const T = useT();
   const t = useTranslations("Templates");
   const templates = t.raw("list") as Template[];
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
@@ -58,17 +60,17 @@ export default function TemplatesPage() {
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-orange-400 uppercase tracking-wide">{template.category}</span>
-                    <span className="text-xs px-2 py-1 bg-white/10 rounded-full">{template.tool}</span>
+                    <span className="text-xs text-orange-400 uppercase tracking-wide">{T(template.category)}</span>
+                    <span className="text-xs px-2 py-1 bg-white/10 rounded-full">{T(template.tool)}</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{template.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4">{template.description}</p>
+                  <h3 className="text-xl font-semibold mb-2">{T(template.title)}</h3>
+                  <p className="text-muted-foreground text-sm mb-4">{T(template.description)}</p>
                 </div>
                 
                 {/* Prompt Preview */}
                 <div className="bg-black/50 border-t border-border p-4">
                   <pre className="text-sm text-muted-foreground whitespace-pre-wrap line-clamp-3 mb-3 font-mono">
-                    {template.prompt}
+                    {T(template.prompt)}
                   </pre>
                   <button
                     onClick={() => copyToClipboard(template.prompt, idx)}

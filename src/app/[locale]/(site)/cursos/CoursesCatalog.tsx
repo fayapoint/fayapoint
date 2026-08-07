@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
@@ -63,6 +64,7 @@ export default function CoursesCatalog({
 }: {
   initialProducts?: Product[];
 }) {
+  const T = useT();
   const t = useTranslations("Courses");
   const locale = useLocale();
   const [products, setProducts] = useState<Product[]>(initialProducts);
@@ -192,7 +194,7 @@ export default function CoursesCatalog({
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl font-bold mb-4"
           >
-            {heroTitle}
+            {T(heroTitle)}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: -20 }}
@@ -200,7 +202,7 @@ export default function CoursesCatalog({
             transition={{ delay: 0.1 }}
             className="text-xl text-muted-foreground mb-8"
           >
-            {heroSubtitle}
+            {T(heroSubtitle)}
           </motion.p>
           
           {/* Stats */}
@@ -212,13 +214,13 @@ export default function CoursesCatalog({
           >
             <div>
               <p className="text-3xl font-bold text-amber-400">{loading ? '...' : totalCourses}</p>
-              <p className="text-muted-foreground">{statsLabels.courses}</p>
+              <p className="text-muted-foreground">{T(statsLabels.courses)}</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-amber-400">
                 {loading ? "..." : `${totalLessons}+`}
               </p>
-              <p className="text-muted-foreground">{statsLabels.lessons}</p>
+              <p className="text-muted-foreground">{T(statsLabels.lessons)}</p>
             </div>
           </motion.div>
           
@@ -233,7 +235,7 @@ export default function CoursesCatalog({
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <Input
                 type="text"
-                placeholder={searchPlaceholder}
+                placeholder={T(searchPlaceholder)}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-12 pr-4 py-3 bg-card border-border text-white"
@@ -250,7 +252,7 @@ export default function CoursesCatalog({
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">
-                  {isPtBr ? "Resultados para" : "Results for"}
+                  {isPtBr ? T("Resultados para") : "Results for"}
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold">
                   {isPtBr
@@ -314,7 +316,7 @@ export default function CoursesCatalog({
                 Ficam as duas garantias que não dependem de data. */}
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="text-blue-400" size={18} />
-              <span>{isPtBr ? "Conteúdo atualizado continuamente" : "Continuously updated content"}</span>
+              <span>{isPtBr ? T("Conteúdo atualizado continuamente") : "Continuously updated content"}</span>
             </div>
           </div>
         </div>
@@ -331,7 +333,7 @@ export default function CoursesCatalog({
                     <CapaDoCurso
                       slug={monthlyOffers.freeCourse.slug}
                       thumbnail={monthlyOffers.freeCourse.thumbnail}
-                      alt={monthlyOffers.freeCourse.name}
+                      alt={T(monthlyOffers.freeCourse.name)}
                       className="w-full rounded-lg shadow-xl shadow-black/50 ring-1 ring-emerald-500/20"
                     />
                   </div>
@@ -339,35 +341,35 @@ export default function CoursesCatalog({
                 <div className="p-6 md:p-8">
                   <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
                     <Sparkles className="h-3.5 w-3.5" />
-                    <span>{isPtBr ? "Curso grátis do mês" : "Free course of the month"}</span>
+                    <span>{isPtBr ? T("Curso grátis do mês") : "Free course of the month"}</span>
                   </div>
                   <h2 className="text-3xl font-bold text-white">
-                    {monthlyOffers.freeCourse.name}
+                    {T(monthlyOffers.freeCourse.name)}
                   </h2>
                   <p className="mt-3 max-w-3xl text-muted-foreground">
                     {isPtBr
-                      ? "Todo usuário pode testar a experiência completa da academia neste curso, incluindo progresso salvo e certificado liberado."
+                      ? T("Todo usuário pode testar a experiência completa da academia neste curso, incluindo progresso salvo e certificado liberado.")
                       : "Every user can test the full academy experience on this course, including saved progress and certificate access."}
                   </p>
                   <div className="mt-5 flex flex-wrap gap-2 text-sm text-muted-foreground">
                     <Badge className="bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
-                      {isPtBr ? "Certificado incluso" : "Certificate included"}
+                      {isPtBr ? T("Certificado incluso") : "Certificate included"}
                     </Badge>
                     {monthlyOffers.freeCourse.metrics?.lessons != null && (
                       <Badge className="bg-secondary text-gray-200 border-border">
-                        {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? "aulas" : "lessons"}
+                        {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? T("aulas") : "lessons"}
                       </Badge>
                     )}
                     {monthlyOffers.freeCourse.metrics?.duration && (
                       <Badge className="bg-secondary text-gray-200 border-border">
-                        {monthlyOffers.freeCourse.metrics.duration}
+                        {T(monthlyOffers.freeCourse.metrics.duration)}
                       </Badge>
                     )}
                   </div>
                   <div className="mt-6 flex flex-wrap items-center gap-4">
                     <Link href={`/curso/${monthlyOffers.freeCourse.slug}`}>
                       <Button className="bg-gradient-to-r from-emerald-500 to-green-500 text-black hover:from-emerald-400 hover:to-green-400">
-                        {isPtBr ? "Ver curso grátis" : "View free course"}
+                        {isPtBr ? T("Ver curso grátis") : "View free course"}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
@@ -386,7 +388,7 @@ export default function CoursesCatalog({
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.beginner.length}</p>
                     <p className="text-sm text-muted-foreground">
-                      {isPtBr ? "cursos iniciantes liberados neste mês" : "beginner courses unlocked this month"}
+                      {isPtBr ? T("cursos iniciantes liberados neste mês") : "beginner courses unlocked this month"}
                     </p>
                   </div>
                   <div className="rounded-2xl border border-border bg-secondary p-4">
@@ -395,7 +397,7 @@ export default function CoursesCatalog({
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.intermediate.length}</p>
                     <p className="text-sm text-muted-foreground">
-                      {isPtBr ? "intermediários no catálogo rotativo" : "intermediate courses in the rotating catalog"}
+                      {isPtBr ? T("intermediários no catálogo rotativo") : "intermediate courses in the rotating catalog"}
                     </p>
                   </div>
                   <div className="rounded-2xl border border-border bg-secondary p-4">
@@ -404,7 +406,7 @@ export default function CoursesCatalog({
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.advanced.length}</p>
                     <p className="text-sm text-muted-foreground">
-                      {isPtBr ? "avançados disponíveis para planos altos" : "advanced courses available for upper tiers"}
+                      {isPtBr ? T("avançados disponíveis para planos altos") : "advanced courses available for upper tiers"}
                     </p>
                   </div>
                 </div>
@@ -454,7 +456,7 @@ export default function CoursesCatalog({
                             <CapaDoCurso
                               slug={featured.slug}
                               thumbnail={featured.thumbnail}
-                              alt={featured.name}
+                              alt={T(featured.name)}
                               modo="auto"
                               eager
                               className="w-full max-w-[300px] rounded-xl shadow-2xl shadow-black/60 ring-1 ring-amber-500/20"
@@ -499,7 +501,7 @@ export default function CoursesCatalog({
                         </div>
                         <div className="flex flex-wrap gap-2 mb-4">
                           <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/50">
-                            {featured.categoryPrimary}
+                            {T(featured.categoryPrimary)}
                           </Badge>
                           <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
                             {featured.metrics.students.toLocaleString()}+ {t("featured.students")}
@@ -507,11 +509,11 @@ export default function CoursesCatalog({
                         </div>
 
                         <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                          {featured.name}
+                          {T(featured.name)}
                         </h3>
 
                         <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
-                          {featured.copy.shortDescription}
+                          {T(featured.copy.shortDescription)}
                         </p>
 
                         <div className="flex flex-wrap items-center gap-6 mb-6 text-sm">
@@ -522,7 +524,7 @@ export default function CoursesCatalog({
                           </div>
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Clock size={18} />
-                            <span>{featured.metrics.duration}</span>
+                            <span>{T(featured.metrics.duration)}</span>
                           </div>
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Users size={18} />
@@ -563,23 +565,23 @@ export default function CoursesCatalog({
             <div className="flex flex-wrap gap-3">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-[150px] bg-card border-border">
-                  <SelectValue placeholder={filtersLabels.categoryPlaceholder} />
+                  <SelectValue placeholder={T(filtersLabels.categoryPlaceholder)} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map(cat => (
-                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                    <SelectItem key={cat} value={cat}>{T(cat)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
                 <SelectTrigger className="w-[150px] bg-card border-border">
-                  <SelectValue placeholder={filtersLabels.levelPlaceholder} />
+                  <SelectValue placeholder={T(filtersLabels.levelPlaceholder)} />
                 </SelectTrigger>
                 <SelectContent>
                   {levelOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>
-                      {option.label}
+                      {T(option.label)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -587,12 +589,12 @@ export default function CoursesCatalog({
               
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[150px] bg-card border-border">
-                  <SelectValue placeholder={filtersLabels.sortPlaceholder} />
+                  <SelectValue placeholder={T(filtersLabels.sortPlaceholder)} />
                 </SelectTrigger>
                 <SelectContent>
                   {sortOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
-                      {option.label}
+                      {T(option.label)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -633,7 +635,7 @@ export default function CoursesCatalog({
           }>
             {loading ? (
               <div className="col-span-full text-center py-20">
-                <p className="text-muted-foreground text-lg">{loadingLabel}</p>
+                <p className="text-muted-foreground text-lg">{T(loadingLabel)}</p>
               </div>
             ) : (
               filteredCourses.map((product, index) => (
@@ -648,8 +650,8 @@ export default function CoursesCatalog({
           
           {!loading && filteredCourses.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-xl text-muted-foreground">{emptyStateTitle}</p>
-              <p className="text-muted-foreground mt-2">{emptyStateDescription}</p>
+              <p className="text-xl text-muted-foreground">{T(emptyStateTitle)}</p>
+              <p className="text-muted-foreground mt-2">{T(emptyStateDescription)}</p>
             </div>
           )}
         </div>

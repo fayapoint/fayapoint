@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -11,6 +12,7 @@ type Service = {
 };
 
 export default function StatusPage() {
+  const T = useT();
   const t = useTranslations("Status");
   const services = t.raw("services") as Service[];
 
@@ -75,14 +77,14 @@ export default function StatusPage() {
                   <div className="flex items-center gap-4">
                     <Icon className={config.color} size={24} />
                     <div>
-                      <h3 className="font-semibold">{service.name}</h3>
-                      <p className="text-sm text-muted-foreground">{config.label}</p>
+                      <h3 className="font-semibold">{T(service.name)}</h3>
+                      <p className="text-sm text-muted-foreground">{T(config.label)}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-muted-foreground flex items-center gap-1">
                       <Clock size={14} />
-                      {t("uptime")}: {service.uptime}
+                      {t("uptime")}: {T(service.uptime)}
                     </div>
                   </div>
                 </motion.div>

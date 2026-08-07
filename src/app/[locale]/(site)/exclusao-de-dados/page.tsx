@@ -1,10 +1,12 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Trash2, Mail, Clock, CheckCircle } from "lucide-react";
 
 export default function DataDeletionPage() {
+  const T = useT();
   const t = useTranslations("DataDeletion");
 
   return (
@@ -49,7 +51,8 @@ export default function DataDeletionPage() {
                   <div className="flex items-center gap-3 mb-2">
                     <Mail className="text-red-400" size={20} />
                     <span className="text-white font-semibold">
-                      fayai.com.br@gmail.com
+                      
+                      {T("fayai.com.br@gmail.com")}
                     </span>
                   </div>
                   <p className="text-muted-foreground text-sm">
@@ -71,7 +74,7 @@ export default function DataDeletionPage() {
                           size={18}
                           className="text-red-400 mt-1 shrink-0"
                         />
-                        <span className="text-muted-foreground">{item}</span>
+                        <span className="text-muted-foreground">{T(item)}</span>
                       </li>
                     )
                   )}

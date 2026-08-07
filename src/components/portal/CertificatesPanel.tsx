@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -46,6 +47,7 @@ interface CertificateItem {
 }
 
 export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string) => void }) {
+  const T = useT();
   const [certificates, setCertificates] = useState<CertificateItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState<string | null>(null);
@@ -83,7 +85,7 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
       });
 
       if (!res.ok) {
-        toast.error("Erro ao baixar certificado");
+        toast.error(T("Erro ao baixar certificado"));
         return;
       }
 
@@ -96,10 +98,10 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast.success("Certificado baixado com sucesso!");
+      toast.success(T("Certificado baixado com sucesso!"));
     } catch (e) {
       console.error("Download error:", e);
-      toast.error("Erro ao baixar certificado");
+      toast.error(T("Erro ao baixar certificado"));
     } finally {
       setDownloading(null);
     }
@@ -108,7 +110,7 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
   const copyVerificationCode = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
-    toast.success("Código copiado!");
+    toast.success(T("Código copiado!"));
     setTimeout(() => setCopiedCode(null), 2000);
   };
 
@@ -134,7 +136,7 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
           {/* eslint-disable-next-line @next/next/no-img-element -- carregando §12 */}
           <img src="/fx/carregando.webp" alt="" aria-hidden className="h-20 w-32 rounded-xl object-cover opacity-90" />
           <Loader2 className="w-8 h-8 animate-spin text-violet-400" />
-          <p className="text-sm text-white/40">Carregando certificados...</p>
+          <p className="text-sm text-white/40">{T("Carregando certificados...")}</p>
         </div>
       </div>
     );
@@ -149,9 +151,9 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
             <Award className="w-4 h-4 md:w-5 md:h-5 text-amber-400" />
           </div>
           <div className="min-w-0">
-            <h2 className="text-base md:text-lg font-bold text-white truncate">Meus Certificados</h2>
+            <h2 className="text-base md:text-lg font-bold text-white truncate">{T("Meus Certificados")}</h2>
             <p className="text-[10px] md:text-xs text-white/40">
-              {certificates.length} certificado{certificates.length !== 1 ? "s" : ""} emitido{certificates.length !== 1 ? "s" : ""}
+              {certificates.length}  {T("certificado")}{certificates.length !== 1 ? "s" : ""} emitido{certificates.length !== 1 ? "s" : ""}
             </p>
           </div>
         </div>
@@ -165,14 +167,14 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
             <img src="/fx/certificado-fx.webp" alt="" aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-20 object-cover opacity-40" style={{ WebkitMaskImage: "linear-gradient(to left, black 40%, transparent)", maskImage: "linear-gradient(to left, black 40%, transparent)" }} />
             <div className="relative flex items-center gap-1.5 md:gap-2 mb-1">
               <Trophy className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-400 shrink-0" />
-              <span className="text-[10px] md:text-xs text-white/40 truncate">Certificados</span>
+              <span className="text-[10px] md:text-xs text-white/40 truncate">{T("Certificados")}</span>
             </div>
             <p className="relative text-lg md:text-xl font-bold text-white">{certificates.length}</p>
           </Card>
           <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
             <div className="flex items-center gap-1.5 md:gap-2 mb-1">
               <Star className="w-3.5 h-3.5 md:w-4 md:h-4 text-violet-400 shrink-0" />
-              <span className="text-[10px] md:text-xs text-white/40 truncate">Média Quiz</span>
+              <span className="text-[10px] md:text-xs text-white/40 truncate">{T("Média Quiz")}</span>
             </div>
             <p className="text-lg md:text-xl font-bold text-white">
               {Math.round(certificates.reduce((acc, c) => acc + c.quizScore, 0) / certificates.length)}%
@@ -181,7 +183,7 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
           <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
             <div className="flex items-center gap-1.5 md:gap-2 mb-1">
               <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-emerald-400 shrink-0" />
-              <span className="text-[10px] md:text-xs text-white/40 truncate">Horas de Estudo</span>
+              <span className="text-[10px] md:text-xs text-white/40 truncate">{T("Horas de Estudo")}</span>
             </div>
             <p className="text-lg md:text-xl font-bold text-white">
               {certificates.reduce((acc, c) => acc + (c.totalStudyHours || 0), 0)}h
@@ -190,7 +192,7 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
           <Card className="bg-white/[0.02] border-white/[0.06] p-3 md:p-4 overflow-hidden">
             <div className="flex items-center gap-1.5 md:gap-2 mb-1">
               <BookOpen className="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-400 shrink-0" />
-              <span className="text-[10px] md:text-xs text-white/40 truncate">Capítulos</span>
+              <span className="text-[10px] md:text-xs text-white/40 truncate">{T("Capítulos")}</span>
             </div>
             <p className="text-lg md:text-xl font-bold text-white">
               {certificates.reduce((acc, c) => acc + (c.chaptersCompleted || 0), 0)}
@@ -206,13 +208,15 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
           <div className="relative grid items-center gap-7 lg:grid-cols-[1fr_.92fr]">
             <div>
               <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[.18em] text-amber-300">
-                <Sparkles className="h-3 w-3" /> Sua próxima conquista
+                <Sparkles className="h-3 w-3" />  {T("Sua próxima conquista")}
               </span>
               <h3 className="max-w-xl text-2xl font-black leading-tight text-white md:text-4xl">
-                Seu primeiro certificado está a <span className="text-amber-300">1 curso</span> de distância.
+                
+                {T("Seu primeiro certificado está a")} <span className="text-amber-300">{T("1 curso")}</span>  {T("de distância.")}
               </h3>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/50">
-                Conclua um curso, passe na avaliação e ganhe uma peça verificável com seu nome — pronta para currículo e LinkedIn.
+                
+                {T("Conclua um curso, passe na avaliação e ganhe uma peça verificável com seu nome — pronta para currículo e LinkedIn.")}
               </p>
               <Button
                 onClick={() => onTabChange?.("courses")}
@@ -275,15 +279,16 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                             </div>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             <span className="absolute bottom-2 right-2 rounded-full bg-black/60 px-2.5 py-1 text-[10px] font-bold text-amber-300 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
-                              Ver certificado
+                              
+                              {T("Ver certificado")}
                             </span>
                           </div>
                           <div className="flex items-start justify-between gap-2">
                             <h3 className="text-xs md:text-sm font-bold text-white leading-tight line-clamp-2 min-w-0">
-                              {cert.courseTitle}
+                              {T(cert.courseTitle)}
                             </h3>
                             <Badge className={cn("text-[9px] px-1.5 py-0.5 border flex-shrink-0", getLevelColor(cert.courseLevel))}>
-                              {cert.courseLevel}
+                              {T(cert.courseLevel)}
                             </Badge>
                           </div>
                           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-white/35">
@@ -296,9 +301,9 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                         <div className="p-4 sm:p-6">
                           <div className="mb-4 flex items-start justify-between gap-2">
                             <div className="min-w-0">
-                              <h3 className="text-sm md:text-base font-bold text-white leading-tight">{cert.courseTitle}</h3>
+                              <h3 className="text-sm md:text-base font-bold text-white leading-tight">{T(cert.courseTitle)}</h3>
                               <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-white/35">
-                                <span className="flex items-center gap-1"><Shield className="w-3 h-3" />{cert.certificateNumber}</span>
+                                <span className="flex items-center gap-1"><Shield className="w-3 h-3" />{T(cert.certificateNumber)}</span>
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{formatDate(cert.issuedAt)}</span>
                                 <span className="flex items-center gap-1"><Star className="w-3 h-3" />Quiz: {cert.quizScore}%</span>
                                 {cert.totalStudyHours > 0 && (
@@ -330,9 +335,9 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                           </motion.div>
 
                           <div className="flex items-center gap-2 mb-4 min-w-0 flex-wrap">
-                            <span className="text-[10px] text-white/25 uppercase tracking-wider shrink-0">Verificação:</span>
+                            <span className="text-[10px] text-white/25 uppercase tracking-wider shrink-0">{T("Verificação:")}</span>
                             <code className="text-[10px] md:text-xs font-mono text-amber-400/70 bg-amber-500/5 px-2 py-0.5 rounded truncate max-w-[200px] sm:max-w-none">
-                              {cert.verificationCode}
+                              {T(cert.verificationCode)}
                             </code>
                             <button
                               onClick={(e) => { e.stopPropagation(); copyVerificationCode(cert.verificationCode); }}
@@ -375,7 +380,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                               className="h-8 border-[#0a66c2]/40 bg-[#0a66c2]/10 hover:bg-[#0a66c2]/20 text-[#70b7ff] text-xs rounded-lg px-3"
                             >
                               <Linkedin className="w-3 h-3 mr-1.5" />
-                              Adicionar ao perfil
+                              
+                              {T("Adicionar ao perfil")}
                             </Button>
                             <Button
                               size="sm"
@@ -409,31 +415,33 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
           <Card className="bg-white/[0.02] border-white/[0.06] p-4 md:p-6 overflow-hidden">
             <h3 className="text-sm md:text-base font-bold text-white flex items-center gap-2 mb-4">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              Onde usar seu certificado
+              
+              {T("Onde usar seu certificado")}
             </h3>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl border border-[#0a66c2]/25 bg-[#0a66c2]/[0.06] p-4">
                 <Linkedin className="w-5 h-5 text-[#70b7ff] mb-2" />
-                <p className="text-xs font-bold text-white mb-1">Perfil do LinkedIn</p>
+                <p className="text-xs font-bold text-white mb-1">{T("Perfil do LinkedIn")}</p>
                 <p className="text-[11px] leading-relaxed text-white/45">
-                  Use &quot;Adicionar ao perfil&quot; no certificado expandido — ele entra na seção
-                  Licenças e certificados com link de verificação.
+                  {T(
+                    'Use "Adicionar ao perfil" no certificado expandido — ele entra na seção Licenças e certificados com link de verificação.',
+                  )}
                 </p>
               </div>
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-4">
                 <BookOpen className="w-5 h-5 text-emerald-400 mb-2" />
-                <p className="text-xs font-bold text-white mb-1">Currículo</p>
+                <p className="text-xs font-bold text-white mb-1">{T("Currículo")}</p>
                 <p className="text-[11px] leading-relaxed text-white/45">
-                  Baixe o PDF e cite o número do certificado na seção de formação —
-                  recrutadores podem conferir a autenticidade online.
+                  
+                  {T("Baixe o PDF e cite o número do certificado na seção de formação —\r\n                  recrutadores podem conferir a autenticidade online.")}
                 </p>
               </div>
               <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.05] p-4">
                 <Shield className="w-5 h-5 text-violet-400 mb-2" />
-                <p className="text-xs font-bold text-white mb-1">Verificação pública</p>
+                <p className="text-xs font-bold text-white mb-1">{T("Verificação pública")}</p>
                 <p className="text-[11px] leading-relaxed text-white/45">
-                  Cada certificado tem uma página pública de verificação — mande o link
-                  para qualquer pessoa confirmar que é seu.
+                  
+                  {T("Cada certificado tem uma página pública de verificação — mande o link\r\n                  para qualquer pessoa confirmar que é seu.")}
                 </p>
               </div>
             </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -45,6 +46,7 @@ type ValueItem = {
 };
 
 export default function AboutPage() {
+  const T = useT();
   const t = useTranslations("About");
 
   const heroHighlights = t.raw("hero.highlights") as string[];
@@ -96,7 +98,7 @@ export default function AboutPage() {
               <div className="flex flex-wrap justify-center gap-4">
                 {heroHighlights.map((highlight) => (
                   <Badge key={highlight} className="bg-white/10 border-white/30 text-gray-100">
-                    {highlight}
+                    {T(highlight)}
                   </Badge>
                 ))}
               </div>
@@ -119,8 +121,8 @@ export default function AboutPage() {
                     className="text-center"
                   >
                     <Icon className="w-8 h-8 mx-auto mb-2 text-amber-400" />
-                    <div className="text-3xl font-bold mb-1">{stat.number}</div>
-                    <div className="text-muted-foreground">{stat.label}</div>
+                    <div className="text-3xl font-bold mb-1">{T(stat.number)}</div>
+                    <div className="text-muted-foreground">{T(stat.label)}</div>
                   </motion.div>
                 );
               })}
@@ -183,7 +185,7 @@ export default function AboutPage() {
                 <h2 className="text-3xl font-bold mb-6">{t("aboutRicardo.title")}</h2>
                 <div className="space-y-4 text-muted-foreground">
                   {aboutParagraphs.map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
+                    <p key={index}>{T(paragraph)}</p>
                   ))}
                 </div>
 
@@ -193,7 +195,7 @@ export default function AboutPage() {
                   <div className="flex flex-wrap gap-2">
                     {certifications.map((cert) => (
                       <Badge key={cert} variant="outline" className="border-amber-500/50">
-                        {cert}
+                        {T(cert)}
                       </Badge>
                     ))}
                   </div>
@@ -227,15 +229,15 @@ export default function AboutPage() {
                   <div className="relative aspect-[4/3]">
                     <Image
                       src={image.src}
-                      alt={image.title}
+                      alt={T(image.title)}
                       fill
                       sizes="(min-width: 768px) 45vw, 90vw"
                       className="object-cover transition duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-6 left-6 right-6">
-                      <p className="text-sm uppercase tracking-wide text-amber-300 mb-1">{image.title}</p>
-                      <p className="text-lg font-semibold text-white">{image.description}</p>
+                      <p className="text-sm uppercase tracking-wide text-amber-300 mb-1">{T(image.title)}</p>
+                      <p className="text-lg font-semibold text-white">{T(image.description)}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -284,7 +286,7 @@ export default function AboutPage() {
                   
                   {/* Year */}
                   <div className="flex-shrink-0 w-20 text-right">
-                    <span className="text-amber-400 font-bold">{item.year}</span>
+                    <span className="text-amber-400 font-bold">{T(item.year)}</span>
                   </div>
                   
                   {/* Dot */}
@@ -292,8 +294,8 @@ export default function AboutPage() {
                   
                   {/* Content */}
                   <div className="flex-grow pb-8">
-                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    <p className="text-muted-foreground">{item.description}</p>
+                    <h3 className="text-xl font-semibold mb-2">{T(item.title)}</h3>
+                    <p className="text-muted-foreground">{T(item.description)}</p>
                   </div>
                 </motion.div>
               ))}
@@ -324,8 +326,8 @@ export default function AboutPage() {
                       <div className="text-amber-400 mb-4">
                         <Icon className="w-8 h-8" />
                       </div>
-                      <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-                      <p className="text-muted-foreground">{value.description}</p>
+                      <h3 className="text-xl font-semibold mb-2">{T(value.title)}</h3>
+                      <p className="text-muted-foreground">{T(value.description)}</p>
                     </Card>
                   </motion.div>
                 );

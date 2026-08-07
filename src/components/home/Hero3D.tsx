@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
@@ -36,6 +37,7 @@ if (typeof window !== "undefined") {
 }
 
 export function Hero3D() {
+  const T = useT();
   const { user, isLoggedIn, mounted: userMounted } = useUser();
   const t = useTranslations("Home.Hero");
   const locale = useLocale();
@@ -200,7 +202,7 @@ export function Hero3D() {
             className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight opacity-0"
           >
             <span className="inline-block text-white/90">
-              {headlinePrefix}{" "}
+              {T(headlinePrefix)}{" "}
             </span>
             <span className="relative inline-block">
               <span className="absolute inset-0 -z-10 blur-2xl opacity-60 bg-gradient-to-r from-amber-500/40 via-pink-500/40 to-cyan-500/40" />
@@ -289,9 +291,9 @@ export function Hero3D() {
                     </motion.div>
                     <div>
                       <div className="text-2xl font-bold text-white">
-                        {formatNumber.format(stat.value)}{stat.suffix}
+                        {formatNumber.format(stat.value)}{T(stat.suffix)}
                       </div>
-                      <div className="text-sm text-white/50 font-medium">{stat.label}</div>
+                      <div className="text-sm text-white/50 font-medium">{T(stat.label)}</div>
                     </div>
                   </div>
                 </div>

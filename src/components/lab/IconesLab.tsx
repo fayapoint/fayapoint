@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
@@ -155,6 +156,7 @@ const AMOSTRA = [
 ];
 
 function MenuDeExemplo() {
+  const T = useT();
   const [hover3d, setHover3d] = useState<string | null>(null);
 
   return (
@@ -176,7 +178,7 @@ function MenuDeExemplo() {
             />
             {hover3d === item.id && <IconeMenu3D slug={item.id} aceso />}
           </span>
-          <span className="flex-1 text-left text-sm font-medium">{item.label}</span>
+          <span className="flex-1 text-left text-sm font-medium">{T(item.label)}</span>
         </button>
       ))}
     </div>
@@ -184,6 +186,7 @@ function MenuDeExemplo() {
 }
 
 export function IconesLab() {
+  const T = useT();
   const caixas = useRef<Caixas>(new Map());
   const [aceso, setAceso] = useState<string | null>(null);
   // A tela compartilhada só monta depois dos cartões: sem os retângulos ela
@@ -194,7 +197,8 @@ export function IconesLab() {
   if (ICONES_3D.length === 0) {
     return (
       <p className="text-sm text-white/45">
-        Nenhuma malha publicada ainda — rode <code>scripts/icones3d/publicar.py</code>.
+        
+        {T("Nenhuma malha publicada ainda — rode")} <code>scripts/icones3d/publicar.py</code>.
       </p>
     );
   }
@@ -204,18 +208,16 @@ export function IconesLab() {
   return (
     <div>
       <p className="text-sm text-white/55 max-w-2xl mb-4">
-        As peças que estão no menu do portal — família{" "}
-        <strong className="text-white/75">sólida</strong>, escolhida por ser a única em que nenhuma
-        das dezessete passa de 120 KB (o facetado tinha uma de 340, o emblema uma de 207). No portal
-        elas aparecem <strong className="text-white/75">no hover</strong>: a leitura padrão continua
-        sendo o ícone vetorial.
+        
+        {T("As peças que estão no menu do portal — família")}{" "}
+        <strong className="text-white/75">{T("sólida")}</strong>{T(", escolhida por ser a única em que nenhuma\n        das dezessete passa de 120 KB (o facetado tinha uma de 340, o emblema uma de 207). No portal\n        elas aparecem")} <strong className="text-white/75">no hover</strong>{T(": a leitura padrão continua\n        sendo o ícone vetorial.")}
       </p>
 
       <div className="mb-5 flex flex-wrap items-start gap-4">
         <MenuDeExemplo />
         <p className="text-[12px] text-white/45 leading-relaxed max-w-xs pt-1">
-          É assim que aparece no portal: passe o cursor e o vetorial dá lugar à peça. Só um item
-          desenha por vez — o cursor está sobre um só, e é isso que mantém{" "}
+          
+          {T("É assim que aparece no portal: passe o cursor e o vetorial dá lugar à peça. Só um item\n          desenha por vez — o cursor está sobre um só, e é isso que mantém")}{" "}
           <strong className="text-white/70">um contexto WebGL</strong> no menu inteiro em vez de
           dezessete.
         </p>
@@ -234,7 +236,7 @@ export function IconesLab() {
           >
             <div className="flex items-baseline justify-between gap-2">
               <span className="text-sm tracking-wide" style={bebas}>
-                {icone.slug}
+                {T(icone.slug)}
               </span>
               <span className="text-[10px] text-white/25">{icone.opcoes[0].kb} KB</span>
             </div>
@@ -253,10 +255,8 @@ export function IconesLab() {
       </div>
 
       <p className="mt-3 text-[11px] text-white/35">
-        {ICONES_3D.length} peças · {total} KB no total. A grade inteira usa{" "}
-        <strong className="text-white/55">uma única tela WebGL</strong>, com as peças posicionadas
-        em pixels sobre os cartões — com uma tela por cartão, medido aqui, 5 dos 11 contextos vinham
-        perdidos e os cartões apareciam vazios.
+        {ICONES_3D.length}  {T("peças ·")} {total} KB no total. A grade inteira usa{" "}
+        <strong className="text-white/55">{T("uma única tela WebGL")}</strong>{T(", com as peças posicionadas\n        em pixels sobre os cartões — com uma tela por cartão, medido aqui, 5 dos 11 contextos vinham\n        perdidos e os cartões apareciam vazios.")}
       </p>
     </div>
   );

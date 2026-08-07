@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -175,6 +176,7 @@ function StudioModelCard({
   locked: boolean;
   onSelect: () => void;
 }) {
+  const T = useT();
   const [imgOk, setImgOk] = useState(true);
   return (
     <button
@@ -195,7 +197,7 @@ function StudioModelCard({
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={`/portal/studio/${model.id}.webp`}
-            alt={model.name}
+            alt={T(model.name)}
             loading="lazy"
             onError={() => setImgOk(false)}
             className="absolute inset-0 h-full w-full object-cover"
@@ -205,19 +207,19 @@ function StudioModelCard({
         )}
         {model.badge && (
           <span className="absolute left-1.5 top-1.5 rounded-full bg-black/60 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-amber-300 backdrop-blur-sm">
-            {model.badge}
+            {T(model.badge)}
           </span>
         )}
         {locked && (
           <span className="absolute right-1.5 top-1.5 rounded-full bg-black/60 px-2 py-0.5 text-[9px] font-extrabold uppercase text-white/80 backdrop-blur-sm">
-            {model.minPlan}+
+            {T(model.minPlan)}+
           </span>
         )}
       </div>
       <div className="p-2.5">
-        <p className="text-xs font-bold truncate">{model.name}</p>
-        <p className="text-[10px] text-muted-foreground truncate">{model.description}</p>
-        <p className="mt-1 text-[10px] leading-snug text-muted-foreground/80 line-clamp-2">{model.uso}</p>
+        <p className="text-xs font-bold truncate">{T(model.name)}</p>
+        <p className="text-[10px] text-muted-foreground truncate">{T(model.description)}</p>
+        <p className="mt-1 text-[10px] leading-snug text-muted-foreground/80 line-clamp-2">{T(model.uso)}</p>
       </div>
     </button>
   );
@@ -240,6 +242,7 @@ const RATIOS = [
 ];
 
 export default function PortalPage() {
+  const T = useT();
   const t = useTranslations("Portal");
   const router = useRouter();
   const params = useParams();
@@ -379,7 +382,7 @@ export default function PortalPage() {
         return;
       }
 
-      toast.success("Matrícula realizada com sucesso!");
+      toast.success(T("Matrícula realizada com sucesso!"));
       setEnrolledSlugs((prev) => [...prev, courseSlug]);
       
       // Refresh slots
@@ -389,7 +392,7 @@ export default function PortalPage() {
       router.push(`/${locale}/portal/learn/${courseSlug}`);
     } catch (error) {
       console.error("Enrollment error:", error);
-      toast.error("Erro ao matricular no curso");
+      toast.error(T("Erro ao matricular no curso"));
     } finally {
       setIsEnrolling(null);
     }
@@ -526,7 +529,7 @@ export default function PortalPage() {
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Carregando seu dashboard...</p>
+          <p className="text-muted-foreground">{T("Carregando seu dashboard...")}</p>
         </div>
       </div>
     );
@@ -545,21 +548,21 @@ export default function PortalPage() {
             <div className="w-16 h-16 rounded-full bg-amber-600/20 flex items-center justify-center">
               <Lock className="w-8 h-8 text-amber-400" />
             </div>
-            <h1 className="text-2xl font-bold">{t("loginRequired") || "Login necessário"}</h1>
-            <p className="text-muted-foreground">{t("loginRequiredDesc") || "Faça login para acessar seu portal do aluno."}</p>
+            <h1 className="text-2xl font-bold">{t("loginRequired") || T("Login necessário")}</h1>
+            <p className="text-muted-foreground">{t("loginRequiredDesc") || T("Faça login para acessar seu portal do aluno.")}</p>
             <div className="flex gap-3">
               <Button
                 onClick={() => router.push(`/${locale}/login`)}
                 className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-600 text-white px-8"
               >
-                {t("loginButton") || "Entrar"}
+                {t("loginButton") || T("Entrar")}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => router.push("/")}
                 className="border-white/20 text-white hover:bg-secondary"
               >
-                {t("homeButton") || "Página Inicial"}
+                {t("homeButton") || T("Página Inicial")}
               </Button>
             </div>
           </div>
@@ -573,7 +576,7 @@ export default function PortalPage() {
         <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
           <div className="flex flex-col items-center gap-4 max-w-md text-center px-4">
             <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-muted-foreground">Instabilidade momentânea ao carregar seus dados.</p>
+            <p className="text-muted-foreground">{T("Instabilidade momentânea ao carregar seus dados.")}</p>
             <Button
               variant="outline"
               onClick={() => window.location.reload()}
@@ -590,7 +593,7 @@ export default function PortalPage() {
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Carregando...</p>
+          <p className="text-muted-foreground">{T("Carregando...")}</p>
         </div>
       </div>
     );
@@ -687,22 +690,22 @@ export default function PortalPage() {
           <div>
             <h1 className="text-lg font-semibold" style={{ fontFamily: "var(--font-bebas), sans-serif", letterSpacing: "0.08em", fontSize: "1.4rem" }}>
               {activeTab === "dashboard" && "Dashboard"}
-              {activeTab === "pod-store" && "Minha Loja POD"}
-              {activeTab === "store" && "Loja Tech"}
-              {activeTab === "cart" && "Carrinho"}
-              {activeTab === "profile" && "Meu Perfil"}
-              {activeTab === "courses" && "Meus Cursos"}
-              {activeTab === "certificates" && "Certificados"}
-              {activeTab === "social" && "Perfil Social"}
+              {activeTab === "pod-store" && T("Minha Loja POD")}
+              {activeTab === "store" && T("Loja Tech")}
+              {activeTab === "cart" && T("Carrinho")}
+              {activeTab === "profile" && T("Meu Perfil")}
+              {activeTab === "courses" && T("Meus Cursos")}
+              {activeTab === "certificates" && T("Certificados")}
+              {activeTab === "social" && T("Perfil Social")}
               {activeTab === "studio" && "Studio AI"}
               {activeTab === "assistant" && "Assistente IA"}
-              {activeTab === "achievements" && "Conquistas"}
+              {activeTab === "achievements" && T("Conquistas")}
               {activeTab === "leaderboard" && "Ranking"}
-              {activeTab === "challenges" && "Desafios"}
+              {activeTab === "challenges" && T("Desafios")}
               {activeTab === "games" && "Arcade da IA"}
               {activeTab === "galeria" && "Galeria"}
               {activeTab === "resources" && "Recursos"}
-              {activeTab === "history" && "Histórico"}
+              {activeTab === "history" && T("Histórico")}
               {activeTab === "rewards" && "Recompensas"}
             </h1>
           </div>
@@ -713,7 +716,7 @@ export default function PortalPage() {
               <div className="flex items-center gap-2 text-sm">
                 <Flame className="text-orange-400" size={18} />
                 <span className="font-semibold">{stats.streak}</span>
-                <span className="text-muted-foreground">dias</span>
+                <span className="text-muted-foreground">{T("dias")}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Zap className="text-yellow-400" size={18} />
@@ -915,7 +918,8 @@ export default function PortalPage() {
                         <Sparkles className="text-amber-400 shrink-0" /> Studio AI Pro
                       </h2>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Crie imagens incríveis com inteligência artificial
+                        
+                        {T("Crie imagens incríveis com inteligência artificial")}
                       </p>
                     </div>
                     {imageQuota && (
@@ -945,7 +949,7 @@ export default function PortalPage() {
                   <div className="mb-4 flex flex-wrap items-center gap-2">
                     <label className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
                       <ImageIcon size={13} />
-                      {referenceImage ? "Trocar referência" : "Usar imagem de referência"}
+                      {referenceImage ? T("Trocar referência") : T("Usar imagem de referência")}
                       <input
                         type="file"
                         accept="image/*"
@@ -965,11 +969,12 @@ export default function PortalPage() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={referenceImage}
-                          alt="Referência"
+                          alt={T("Referência")}
                           className="h-9 w-9 rounded-lg object-cover ring-1 ring-amber-400/40"
                         />
                         <span className="text-[11px] text-muted-foreground">
-                          Mantém o personagem/estilo desta imagem (usa Nano Banana Pro)
+                          
+                          {T("Mantém o personagem/estilo desta imagem (usa Nano Banana Pro)")}
                         </span>
                         <button
                           onClick={() => setReferenceImage(null)}
@@ -995,7 +1000,7 @@ export default function PortalPage() {
                         )}
                       >
                         <s.icon size={24} />
-                        <span className="text-xs font-medium whitespace-nowrap">{s.name}</span>
+                        <span className="text-xs font-medium whitespace-nowrap">{T(s.name)}</span>
                       </button>
                     ))}
                   </div>
@@ -1015,7 +1020,7 @@ export default function PortalPage() {
                         onClick={() => setAspectRatio(r.id)}
                       >
                         <r.icon size={20} className="mr-2" />
-                        {r.name}
+                        {T(r.name)}
                       </Button>
                     ))}
                   </div>
@@ -1023,7 +1028,7 @@ export default function PortalPage() {
                   {/* Prompt Input */}
                   <div className="relative">
                     <Textarea
-                      placeholder="Descreva a imagem que você quer criar..."
+                      placeholder={T("Descreva a imagem que você quer criar...")}
                       className="bg-secondary border-border min-h-[120px] text-base md:text-lg p-3 md:p-4 resize-none pb-16 md:pb-4 md:pr-32"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
@@ -1076,7 +1081,7 @@ export default function PortalPage() {
                             )}
                           </div>
                           <p className="text-base md:text-xl font-medium mb-2">
-                            {isGenerating ? "Criando sua imagem..." : "Prévia da Imagem"}
+                            {isGenerating ? T("Criando sua imagem...") : T("Prévia da Imagem")}
                           </p>
                           <p className="text-sm opacity-60">
                             Digite um prompt e clique em Gerar
@@ -1090,7 +1095,7 @@ export default function PortalPage() {
                     {myCreations.length > 0 && (
                       <Card className="bg-secondary border-border p-4 max-h-[600px] overflow-hidden">
                         <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
-                          <ImageIcon size={18} /> Minhas Criações
+                          <ImageIcon size={18} />  {T("Minhas Criações")}
                         </h3>
                         <div className="grid grid-cols-2 gap-3 overflow-y-auto max-h-[500px]">
                           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
@@ -1194,14 +1199,15 @@ export default function PortalPage() {
               >
                 <Card className="bg-secondary border-border p-4 md:p-6 min-w-0 overflow-hidden">
                   <div className="flex items-center justify-between mb-4 md:mb-6 gap-3">
-                    <h2 className="text-lg md:text-xl font-semibold truncate">Seus Recursos</h2>
+                    <h2 className="text-lg md:text-xl font-semibold truncate">{T("Seus Recursos")}</h2>
                     <Badge className={cn(
                       "px-3 py-1",
                       isPro 
                         ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-black" 
                         : "bg-muted"
                     )}>
-                      Plano {plan.toUpperCase()}
+                      
+                      {T("Plano")} {plan.toUpperCase()}
                     </Badge>
                   </div>
 
@@ -1223,12 +1229,12 @@ export default function PortalPage() {
                             <Lock className="text-red-400" size={20} />
                           )}
                           {resource.limit && (
-                            <Badge variant="outline">{resource.limit}</Badge>
+                            <Badge variant="outline">{T(resource.limit)}</Badge>
                           )}
                         </div>
-                        <h3 className="font-medium">{resource.name}</h3>
+                        <h3 className="font-medium">{T(resource.name)}</h3>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {resource.available ? "Disponível" : "Requer upgrade"}
+                          {resource.available ? T("Disponível") : "Requer upgrade"}
                         </p>
                       </Card>
                     ))}
@@ -1239,16 +1245,19 @@ export default function PortalPage() {
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div className="min-w-0">
                           <h3 className="font-bold text-base md:text-lg mb-1">
-                            Desbloqueie Todos os Recursos
+                            
+                            {T("Desbloqueie Todos os Recursos")}
                           </h3>
                           <p className="text-sm text-muted-foreground">
-                            Upgrade para Pro e tenha acesso ilimitado a todos os recursos!
+                            
+                            {T("Upgrade para Pro e tenha acesso ilimitado a todos os recursos!")}
                           </p>
                         </div>
                         <Link href="/precos" className="shrink-0">
                           <Button className="bg-gradient-to-r from-amber-600 to-yellow-700">
                             <Crown size={16} className="mr-2" />
-                            Ver Planos
+                            
+                            {T("Ver Planos")}
                           </Button>
                         </Link>
                       </div>
@@ -1269,7 +1278,7 @@ export default function PortalPage() {
               >
                 <Card className="bg-secondary border-border p-4 md:p-6 min-w-0 overflow-hidden">
                   <h2 className="text-lg md:text-xl font-semibold mb-4 flex items-center gap-2">
-                    <ShoppingBag size={20} className="shrink-0" /> Carrinho Atual
+                    <ShoppingBag size={20} className="shrink-0" />  {T("Carrinho Atual")}
                   </h2>
                   <div className="space-y-3 md:space-y-4">
                     {Object.keys(cartItems).length > 0 ? (
@@ -1283,9 +1292,9 @@ export default function PortalPage() {
                               <Star size={20} className="text-yellow-500" />
                             </div>
                             <div className="min-w-0">
-                              <h4 className="font-medium text-sm md:text-base truncate">{item.name}</h4>
+                              <h4 className="font-medium text-sm md:text-base truncate">{T(item.name)}</h4>
                               <p className="text-sm text-muted-foreground">
-                                {item.type === "service" ? "Serviço" : "Curso"}
+                                {item.type === "service" ? T("Serviço") : T("Curso")}
                               </p>
                             </div>
                           </div>
@@ -1298,7 +1307,7 @@ export default function PortalPage() {
                         </div>
                       ))
                     ) : (
-                      <p className="text-muted-foreground italic">Carrinho vazio</p>
+                      <p className="text-muted-foreground italic">{T("Carrinho vazio")}</p>
                     )}
                   </div>
                   {cartTotal > 0 && (
@@ -1317,7 +1326,7 @@ export default function PortalPage() {
                 </Card>
 
                 <Card className="bg-secondary border-border p-4 md:p-6 min-w-0 overflow-hidden">
-                  <h2 className="text-lg md:text-xl font-semibold mb-4">Histórico de Pedidos</h2>
+                  <h2 className="text-lg md:text-xl font-semibold mb-4">{T("Histórico de Pedidos")}</h2>
                   <div className="space-y-3">
                     {orders.length > 0 ? (
                       orders.map((order) => {
@@ -1361,8 +1370,8 @@ export default function PortalPage() {
                                 >
                                   {order.status === "pending" ? "Pendente" :
                                    order.status === "processing" ? "Processando" :
-                                   order.status === "completed" ? "Concluído" :
-                                   order.status === "shipped" ? "Enviado" :
+                                   order.status === "completed" ? T("Concluído") :
+                                   order.status === "shipped" ? T("Enviado") :
                                    order.status === "delivered" ? "Entregue" :
                                    order.status}
                                 </Badge>
@@ -1401,10 +1410,10 @@ export default function PortalPage() {
                                               )}
                                             </div>
                                             <div className="min-w-0">
-                                              <p className="font-medium text-sm truncate">{item.name}</p>
+                                              <p className="font-medium text-sm truncate">{T(item.name)}</p>
                                               <p className="text-xs text-muted-foreground">
                                                 {item.type === "product" ? "Produto" :
-                                                 item.type === "course" ? "Curso" : "Serviço"}
+                                                 item.type === "course" ? T("Curso") : T("Serviço")}
                                                 {item.quantity > 1 && ` × ${item.quantity}`}
                                               </p>
                                             </div>
@@ -1429,7 +1438,7 @@ export default function PortalPage() {
                         );
                       })
                     ) : (
-                      <p className="text-muted-foreground text-center py-4">Nenhum pedido encontrado</p>
+                      <p className="text-muted-foreground text-center py-4">{T("Nenhum pedido encontrado")}</p>
                     )}
                   </div>
                 </Card>
@@ -1454,14 +1463,15 @@ export default function PortalPage() {
                             <Gift size={32} className="text-yellow-400 hidden md:block" />
                           </div>
                           <div className="min-w-0">
-                            <h2 className="text-xl md:text-2xl font-bold">Loja de Recompensas</h2>
+                            <h2 className="text-xl md:text-2xl font-bold">{T("Loja de Recompensas")}</h2>
                             <p className="text-sm text-muted-foreground">
-                              Troque seus pontos por prêmios exclusivos!
+                              
+                              {T("Troque seus pontos por prêmios exclusivos!")}
                             </p>
                           </div>
                         </div>
                         <div className="sm:ml-auto text-left sm:text-right shrink-0">
-                          <p className="text-sm text-muted-foreground">Seu saldo</p>
+                          <p className="text-sm text-muted-foreground">{T("Seu saldo")}</p>
                           <p className="text-2xl md:text-3xl font-bold text-yellow-400">
                             {stats.xp} <span className="text-base md:text-lg">XP</span>
                           </p>
@@ -1471,9 +1481,9 @@ export default function PortalPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                       {[
-                        { name: "1 Mês Extra Pro", xp: 5000, icon: Crown },
+                        { name: T("1 Mês Extra Pro"), xp: 5000, icon: Crown },
                         { name: "Mentoria 1:1 (30min)", xp: 10000, icon: MessageSquare },
-                        { name: "Curso Exclusivo", xp: 15000, icon: BookOpen },
+                        { name: T("Curso Exclusivo"), xp: 15000, icon: BookOpen },
                         { name: "Badge VIP", xp: 2000, icon: Star },
                         { name: "Streak Freeze x3", xp: 500, icon: Flame },
                         { name: "Download Pack Templates", xp: 1000, icon: Download },
@@ -1482,7 +1492,7 @@ export default function PortalPage() {
                           <div className="w-14 h-14 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4">
                             <reward.icon size={28} className="text-yellow-400" />
                           </div>
-                          <h3 className="font-bold text-base md:text-lg mb-2 truncate">{reward.name}</h3>
+                          <h3 className="font-bold text-base md:text-lg mb-2 truncate">{T(reward.name)}</h3>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1 text-yellow-400">
                               <Zap size={16} />
@@ -1511,19 +1521,20 @@ export default function PortalPage() {
                         <Gift size={32} className="text-yellow-400 md:hidden" />
                         <Gift size={40} className="text-yellow-400 hidden md:block" />
                       </div>
-                      <h2 className="text-xl md:text-2xl font-bold mb-2">Loja de Recompensas</h2>
+                      <h2 className="text-xl md:text-2xl font-bold mb-2">{T("Loja de Recompensas")}</h2>
                       <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 mb-4">
                         <Crown size={12} className="mr-1" />
                         Recurso PRO
                       </Badge>
                       <p className="text-muted-foreground mb-6">
-                        Upgrade para Pro para acessar a loja de recompensas e trocar seu XP
-                        por prêmios exclusivos!
+                        
+                        {T("Upgrade para Pro para acessar a loja de recompensas e trocar seu XP\r\n                        por prêmios exclusivos!")}
                       </p>
                       <Link href="/precos">
                         <Button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black">
                           <Crown size={16} className="mr-2" />
-                          Fazer Upgrade
+                          
+                          {T("Fazer Upgrade")}
                         </Button>
                       </Link>
                     </Card>

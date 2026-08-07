@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * BATALHA DE PROMPTS — verbo: APOSTAR (arriscar com convicção).
@@ -43,6 +44,7 @@ const STAKES = [
 type Phase = "idle" | "betting" | "revealed" | "over";
 
 export function BatalhaPrompts() {
+  const T = useT();
   const { deck, rotate } = useRotatingDeck(PROMPT_BATTLES, ROUNDS, "fayai_seen_batalha_prompts");
   const reduced = useReducedMotion();
 
@@ -129,20 +131,20 @@ export function BatalhaPrompts() {
           <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/12 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-amber-300">
             <Swords size={12} /> {ROUNDS} duelos
           </span>
-          <h3 className="mt-3 text-2xl font-black">Aposte na sua leitura</h3>
+          <h3 className="mt-3 text-2xl font-black">{T("Aposte na sua leitura")}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Você começa com <strong className="text-amber-300">{START_BANK} fichas</strong>. Em cada
-            duelo, decida <strong>quanto arriscar</strong> e aponte o prompt vencedor. Acertou, dobra
+            
+            {T("Você começa com")} <strong className="text-amber-300">{START_BANK} fichas</strong>{T(". Em cada\r\n            duelo, decida")} <strong>quanto arriscar</strong> e aponte o prompt vencedor. Acertou, dobra
             a aposta. Errou, perde. Zerou, acabou.
           </p>
           {high > 0 && (
-            <p className="mt-3 text-xs font-bold text-amber-300">Sua melhor banca: {high} fichas</p>
+            <p className="mt-3 text-xs font-bold text-amber-300">{T("Sua melhor banca:")} {high} fichas</p>
           )}
           <button
             onClick={begin}
             className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-7 py-3 text-base font-black text-[#241a05] transition-transform hover:scale-[1.04]"
           >
-            <Play size={16} strokeWidth={3} /> Abrir a mesa
+            <Play size={16} strokeWidth={3} />  {T("Abrir a mesa")}
           </button>
         </motion.div>
       </div>
@@ -175,17 +177,17 @@ export function BatalhaPrompts() {
         </p>
         <p className="relative mt-1 mx-auto max-w-sm text-sm text-muted-foreground">
           {broke
-            ? "Você quebrou — mas cada aposta perdida mostrou um critério novo."
+            ? T("Você quebrou — mas cada aposta perdida mostrou um critério novo.")
             : profit > 0
               ? `Saiu no lucro: ${profit} fichas acima da entrada.`
-              : "Sobreviveu à mesa. O olho para prompt afia com o tempo."}
+              : T("Sobreviveu à mesa. O olho para prompt afia com o tempo.")}
           {high > 0 && ` · recorde: ${high}`}
         </p>
         <button
           onClick={begin}
           className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-6 py-2.5 text-sm font-black text-[#241a05] transition-transform hover:scale-[1.04]"
         >
-          <RefreshCw size={14} /> Nova mesa
+          <RefreshCw size={14} />  {T("Nova mesa")}
         </button>
         <div className="relative mx-auto mt-3 max-w-md text-left">
           <PersonaFisher source="batalha-prompts" />
@@ -241,7 +243,7 @@ export function BatalhaPrompts() {
             Tarefa
           </span>
           <br />
-          <span className="font-bold">{round.task}</span>
+          <span className="font-bold">{T(round.task)}</span>
         </p>
       </div>
 
@@ -264,7 +266,7 @@ export function BatalhaPrompts() {
                   color: active ? "#f5c04e" : "rgba(255,255,255,.6)",
                 }}
               >
-                {option.label}
+                {T(option.label)}
               </button>
             );
           })}
@@ -319,12 +321,12 @@ export function BatalhaPrompts() {
                   color: "#241a05",
                 }}
               >
-                {letter}
+                {T(letter)}
               </span>
-              <p className="text-[13px] leading-relaxed">{text}</p>
+              <p className="text-[13px] leading-relaxed">{T(text)}</p>
               {revealed && isWinner && (
                 <p className="mt-2 text-[10px] font-black uppercase tracking-wider text-lime-400">
-                  vencedor · {round.criterion}
+                  vencedor · {T(round.criterion)}
                 </p>
               )}
             </motion.button>
@@ -350,7 +352,7 @@ export function BatalhaPrompts() {
             >
               {won ? `Ganhou ${wager} fichas` : `Perdeu ${wager} fichas`}
             </p>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{round.why}</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{T(round.why)}</p>
             <div className="mt-1.5">
               <VocabularyChip term={round.term} />
             </div>
@@ -359,10 +361,10 @@ export function BatalhaPrompts() {
               className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-black text-[#241a05]"
             >
               {bank <= 0
-                ? "Ver resultado"
+                ? T("Ver resultado")
                 : index + 1 >= deck.length
                   ? "Encerrar mesa"
-                  : "Próximo duelo"}{" "}
+                  : T("Próximo duelo")}{" "}
               <ArrowRight size={14} />
             </button>
           </motion.div>
@@ -372,7 +374,7 @@ export function BatalhaPrompts() {
       <p className="mt-2 text-center text-[11px] text-muted-foreground">
         {revealed
           ? `Pico da banca: ${peak} fichas`
-          : "Escolha o quanto arriscar e aponte o vencedor"}
+          : T("Escolha o quanto arriscar e aponte o vencedor")}
       </p>
     </div>
   );

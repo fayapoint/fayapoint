@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -207,6 +208,7 @@ export default async function WebsiteBuildingPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const T = await obterT(locale);
   const t = await getTranslations("Home.Services.website-building");
   const isEn = locale === "en";
 
@@ -254,7 +256,8 @@ export default async function WebsiteBuildingPage({
           <div className="container mx-auto max-w-6xl relative">
             <div className="text-center max-w-4xl mx-auto">
               <Badge className="mb-6 px-4 py-2 text-sm font-medium" variant="secondary">
-                Sites ultra-performáticos
+                
+                {T("Sites ultra-performáticos")}
               </Badge>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance leading-tight">
                 {t("title")}
@@ -278,10 +281,10 @@ export default async function WebsiteBuildingPage({
                 </Link>
               </div>
               <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
-                {["Stack moderna", "Squad plug-and-play", "Time to value < 30 dias"].map((item) => (
+                {["Stack moderna", "Squad plug-and-play", T("Time to value < 30 dias")].map((item) => (
                   <div key={item} className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span>{item}</span>
+                    <span>{T(item)}</span>
                   </div>
                 ))}
               </div>
@@ -295,15 +298,15 @@ export default async function WebsiteBuildingPage({
               <Badge variant="secondary" className="mb-3">FAQ</Badge>
               <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
               <p className="text-muted-foreground mt-3">
-                {isEn ? "Clear answers before you start." : "Respostas rápidas antes de começar."}
+                {isEn ? "Clear answers before you start." : T("Respostas rápidas antes de começar.")}
               </p>
             </div>
 
             <Accordion type="single" collapsible className="w-full">
               {faqItems.map((f) => (
                 <AccordionItem key={f.q} value={f.q}>
-                  <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+                  <AccordionTrigger className="text-left">{T(f.q)}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{T(f.a)}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
@@ -324,8 +327,8 @@ export default async function WebsiteBuildingPage({
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
                     <stat.icon className="w-6 h-6" />
                   </div>
-                  <div className="text-3xl md:text-4xl font-bold mb-2">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">{T(stat.value)}</div>
+                  <div className="text-sm text-muted-foreground">{T(stat.label)}</div>
                 </div>
               ))}
             </div>
@@ -337,7 +340,8 @@ export default async function WebsiteBuildingPage({
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Do discovery ao go-live</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Sites que combinam velocidade, SEO, integrações e storytelling para converter.
+                
+                {T("Sites que combinam velocidade, SEO, integrações e storytelling para converter.")}
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -346,8 +350,8 @@ export default async function WebsiteBuildingPage({
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                     <item.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                  <h3 className="text-xl font-semibold mb-3">{T(item.title)}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{T(item.description)}</p>
                 </Card>
               ))}
             </div>
@@ -359,7 +363,8 @@ export default async function WebsiteBuildingPage({
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Trabalhos recentes</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Seleção de produtos digitais lançados pela squad FayAi — landing pages, portais e lojas completos.
+                
+                {T("Seleção de produtos digitais lançados pela squad FayAi — landing pages, portais e lojas completos.")}
               </p>
             </div>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -379,7 +384,7 @@ export default async function WebsiteBuildingPage({
                       <p className="text-sm uppercase tracking-widest text-muted-foreground mb-2">
                         Website / Produto digital
                       </p>
-                      <h3 className="text-xl font-semibold">{work.title}</h3>
+                      <h3 className="text-xl font-semibold">{T(work.title)}</h3>
                     </div>
                     {work.images.length > 1 && (
                       <div className="grid grid-cols-3 gap-3">
@@ -406,15 +411,16 @@ export default async function WebsiteBuildingPage({
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Processo co-criativo</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Cada sprint traz entregas navegáveis, documentação viva e indicadores claros.
+                
+                {T("Cada sprint traz entregas navegáveis, documentação viva e indicadores claros.")}
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {processSteps.map((step) => (
                 <div key={step.title} className="relative">
-                  <div className="text-6xl font-bold text-primary/10 mb-4">{step.step}</div>
-                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{step.description}</p>
+                  <div className="text-6xl font-bold text-primary/10 mb-4">{T(step.step)}</div>
+                  <h3 className="text-xl font-semibold mb-3">{T(step.title)}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{T(step.description)}</p>
                 </div>
               ))}
             </div>
@@ -426,10 +432,10 @@ export default async function WebsiteBuildingPage({
             <div className="grid md:grid-cols-2 gap-8">
               {testimonials.map((testimonial) => (
                 <Card key={testimonial.author} className="p-8 border-border bg-card">
-                  <p className="text-lg mb-6 leading-relaxed text-pretty">“{testimonial.quote}”</p>
+                  <p className="text-lg mb-6 leading-relaxed text-pretty">“{T(testimonial.quote)}”</p>
                   <div>
-                    <div className="font-semibold">{testimonial.author}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                    <div className="font-semibold">{T(testimonial.author)}</div>
+                    <div className="text-sm text-muted-foreground">{T(testimonial.role)}</div>
                   </div>
                 </Card>
               ))}
@@ -440,9 +446,10 @@ export default async function WebsiteBuildingPage({
         <section className="py-20 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Formatos flexíveis</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Formatos flexíveis")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Escolha o pacote certo para o estágio do seu produto digital.
+                
+                {T("Escolha o pacote certo para o estágio do seu produto digital.")}
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
@@ -451,15 +458,15 @@ export default async function WebsiteBuildingPage({
                   key={pkg.title}
                   className={`p-8 border ${pkg.featured ? "border-primary shadow-lg relative" : "border-border"} bg-card`}
                 >
-                  {pkg.featured && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">Mais pedido</Badge>}
-                  <div className="text-sm font-semibold text-primary mb-2">{pkg.tier}</div>
-                  <h3 className="text-2xl font-bold mb-4">{pkg.title}</h3>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">{pkg.description}</p>
+                  {pkg.featured && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">{T("Mais pedido")}</Badge>}
+                  <div className="text-sm font-semibold text-primary mb-2">{T(pkg.tier)}</div>
+                  <h3 className="text-2xl font-bold mb-4">{T(pkg.title)}</h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">{T(pkg.description)}</p>
                   <ul className="space-y-3 mb-8">
                     {pkg.highlights.map((item) => (
                       <li key={item} className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{item}</span>
+                        <span className="text-sm">{T(item)}</span>
                       </li>
                     ))}
                   </ul>
@@ -470,12 +477,12 @@ export default async function WebsiteBuildingPage({
                       source={`website-building-package-${pkg.tier.toLowerCase()}`}
                       showCompanyRole
                     >
-                      {pkg.cta.label}
+                      {T(pkg.cta.label)}
                     </ScheduleConsultationButton>
                   ) : (
                     <Link href={pkg.cta.href}>
                       <Button className="w-full" variant={pkg.featured ? "default" : "outline"}>
-                        {pkg.cta.label}
+                        {T(pkg.cta.label)}
                       </Button>
                     </Link>
                   )}
@@ -489,9 +496,10 @@ export default async function WebsiteBuildingPage({
           <div className="container mx-auto max-w-4xl">
             <Card className="p-12 text-center bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
               <Rocket className="w-16 h-16 mx-auto mb-6 text-primary" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">Pronto para lançar?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">{T("Pronto para lançar?")}</h2>
               <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl mx-auto">
-                Em 48 horas entregamos blueprint, cronograma e estimativa de investimento para seu novo site.
+                
+                {T("Em 48 horas entregamos blueprint, cronograma e estimativa de investimento para seu novo site.")}
               </p>
               <ScheduleConsultationButton
                 size="lg"
@@ -502,18 +510,18 @@ export default async function WebsiteBuildingPage({
                 Agendar blueprint
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </ScheduleConsultationButton>
-              <p className="text-sm text-muted-foreground mt-6">Inclui sessão estratégica + entregáveis em PDF</p>
+              <p className="text-sm text-muted-foreground mt-6">{T("Inclui sessão estratégica + entregáveis em PDF")}</p>
             </Card>
           </div>
         </section>
 
-        <Suspense fallback={<div className="py-20 text-center">Carregando construtor...</div>}>
+        <Suspense fallback={<div className="py-20 text-center">{T("Carregando construtor...")}</div>}>
           <ServiceBuilderSection
             serviceSlug="website-full"
             restrictToServiceSlug
             badgeLabel="Personalize seu projeto"
-            title="Monte seu site sob medida"
-            subtitle="Escolha discovery, UX/UI, desenvolvimento, QA e suporte conforme a maturidade do seu produto digital."
+            title={T("Monte seu site sob medida")}
+            subtitle={T("Escolha discovery, UX/UI, desenvolvimento, QA e suporte conforme a maturidade do seu produto digital.")}
             sectionId="builder"
             showServiceTabs={false}
           />
@@ -524,7 +532,7 @@ export default async function WebsiteBuildingPage({
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
             <p className="text-sm font-medium">{isEn ? "Website blueprint" : "Blueprint do site"}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : "Grátis + acionável"}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
           </div>
           <a href="#toolbox">
             <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>

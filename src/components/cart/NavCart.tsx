@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import { ShoppingCart, X, Trash2 } from "lucide-react";
@@ -19,6 +20,7 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 });
 
 export function NavCart() {
+  const T = useT();
   const { itemCount, items, clearCart, removeItem, cartTotal } = useServiceCart();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +41,7 @@ export function NavCart() {
       </PopoverTrigger>
       <PopoverContent className="w-96 p-4" align="end">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-sm">Seu Carrinho</h3>
+          <h3 className="font-bold text-sm">{T("Seu Carrinho")}</h3>
           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsOpen(false)}>
             <X className="w-3 h-3" />
           </Button>
@@ -47,7 +49,8 @@ export function NavCart() {
         
         {itemCount === 0 ? (
           <div className="text-center py-8 text-muted-foreground text-sm">
-            Seu carrinho está vazio.
+            
+            {T("Seu carrinho está vazio.")}
           </div>
         ) : (
           <div className="space-y-4">
@@ -56,10 +59,10 @@ export function NavCart() {
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex items-start justify-between gap-2 border-b border-border/50 pb-3 last:border-0">
                     <div className="flex-1">
-                      <p className="text-sm font-medium leading-none mb-1.5">{item.name}</p>
+                      <p className="text-sm font-medium leading-none mb-1.5">{T(item.name)}</p>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <Badge variant="outline" className="text-[10px] h-5 px-1.5">
-                          {item.type === 'course' ? 'Curso' : 'Serviço'}
+                          {item.type === 'course' ? T("Curso") : T("Serviço")}
                         </Badge>
                         <span>{item.quantity}x {currencyFormatter.format(item.price)}</span>
                       </div>

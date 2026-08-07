@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Sparkles, Wrench } from "lucide-react";
@@ -44,6 +45,7 @@ const TIMELINE = [
 ];
 
 export function ProjetosPage() {
+  const T = useT();
   return (
     <div
       className="min-h-dvh overflow-x-hidden text-[#f3f1ff]"
@@ -95,13 +97,13 @@ export function ProjetosPage() {
             PROJETOS <span style={{ color: GOLD }}>FAYAI</span>
           </h1>
           <p className="mt-4 text-base sm:text-lg text-white/70 max-w-2xl mx-auto">
-            Cada projeto abaixo é fruto de uma vida inteira dedicada à tecnologia — do 386 à
-            inteligência artificial, sem pular nenhum capítulo.
+            
+            {T("Cada projeto abaixo é fruto de uma vida inteira dedicada à tecnologia — do 386 à\r\n            inteligência artificial, sem pular nenhum capítulo.")}
           </p>
           <div className="glass rounded-3xl overflow-hidden mt-8">
             <img
               src="/landing/projetos-hero.webp"
-              alt="A jornada da tecnologia: do computador antigo à inteligência artificial"
+              alt={T("A jornada da tecnologia: do computador antigo à inteligência artificial")}
               className="w-full object-cover"
               style={{ aspectRatio: "21 / 9" }}
             />
@@ -120,22 +122,22 @@ export function ProjetosPage() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={p.image}
-                      alt={p.name}
+                      alt={T(p.name)}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                     <span
                       className="absolute top-3 right-3 z-[3] text-[10px] font-extrabold tracking-widest rounded-full px-2.5 py-1"
                       style={{ background: STATUS_COLOR[p.status], color: "#0c0e1d" }}
                     >
-                      {STATUS_LABEL[p.status]}
+                      {T(STATUS_LABEL[p.status])}
                     </span>
                   </span>
                   <span className="block p-5">
                     <span className="block text-2xl tracking-wide" style={{ ...bebas, color: p.accent }}>
-                      {p.name}
+                      {T(p.name)}
                     </span>
-                    <span className="block mt-0.5 text-sm font-bold text-white/85">{p.tagline}</span>
-                    <span className="block mt-2 text-sm text-white/60 leading-relaxed">{p.description}</span>
+                    <span className="block mt-0.5 text-sm font-bold text-white/85">{T(p.tagline)}</span>
+                    <span className="block mt-2 text-sm text-white/60 leading-relaxed">{T(p.description)}</span>
                     <span className="flex flex-wrap gap-1.5 mt-3">
                       {p.tags.map((t) => (
                         <span
@@ -143,7 +145,7 @@ export function ProjetosPage() {
                           className="text-[10px] font-bold uppercase tracking-wider rounded-full px-2 py-0.5 border"
                           style={{ borderColor: `${p.accent}55`, color: p.accent }}
                         >
-                          {t}
+                          {T(t)}
                         </span>
                       ))}
                     </span>
@@ -171,21 +173,22 @@ export function ProjetosPage() {
           <div className="flex items-center gap-3 mb-4">
             <Wrench size={22} style={{ color: GOLD }} />
             <h2 className="text-3xl sm:text-4xl tracking-wide" style={bebas}>
-              O QUE EU FAÇO <span style={{ color: GOLD }}>PARA VOCÊ</span>
+              
+              {T("O QUE EU FAÇO")} <span style={{ color: GOLD }}>{T("PARA VOCÊ")}</span>
             </h2>
           </div>
           <p className="text-sm sm:text-base text-white/60 max-w-2xl mb-6">
-            Tudo que existe nesses projetos — sites, automação, IA, vídeo — também está disponível
-            como serviço para a sua empresa, feito por quem constrói isso todos os dias.
+            
+            {T("Tudo que existe nesses projetos — sites, automação, IA, vídeo — também está disponível\r\n            como serviço para a sua empresa, feito por quem constrói isso todos os dias.")}
           </p>
           <div className="grid sm:grid-cols-3 gap-3">
             {SERVICES.map((s) => (
               <Link key={s.href} href={s.href} className="glass glass-hover group rounded-2xl p-4 block">
                 <span className="flex items-center justify-between">
-                  <span className="text-sm font-bold">{s.label}</span>
+                  <span className="text-sm font-bold">{T(s.label)}</span>
                   <ArrowUpRight size={14} className="text-white/30 group-hover:text-white/70 transition-colors" />
                 </span>
-                <span className="block mt-1 text-xs text-white/55 leading-relaxed">{s.desc}</span>
+                <span className="block mt-1 text-xs text-white/55 leading-relaxed">{T(s.desc)}</span>
               </Link>
             ))}
           </div>
@@ -202,9 +205,8 @@ export function ProjetosPage() {
             </h2>
           </div>
           <p className="text-sm sm:text-base text-white/60 max-w-2xl mb-8">
-            Ricardo Faya, carioca de 1976. Antes de a IA existir como a conhecemos, ele já estava
-            lá — em cada virada da tecnologia, aprendendo a ferramenta nova no dia em que ela
-            chegava. Esta é a história por trás do FayAI.
+            
+            {T("Ricardo Faya, carioca de 1976. Antes de a IA existir como a conhecemos, ele já estava\r\n            lá — em cada virada da tecnologia, aprendendo a ferramenta nova no dia em que ela\r\n            chegava. Esta é a história por trás do FayAI.")}
           </p>
           <div className="space-y-6">
             {TIMELINE.map((t, i) => (
@@ -215,16 +217,16 @@ export function ProjetosPage() {
               >
                 <div className="era-img">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={t.image} alt={t.era} className="absolute inset-0 w-full h-full object-cover" />
+                  <img src={t.image} alt={T(t.era)} className="absolute inset-0 w-full h-full object-cover" />
                 </div>
                 <div className="p-5 sm:p-7 flex flex-col justify-center">
                   <span className="text-[11px] font-extrabold tracking-widest" style={{ color: t.accent }}>
-                    {t.era}
+                    {T(t.era)}
                   </span>
                   <h3 className="mt-1 text-2xl sm:text-3xl tracking-wide" style={bebas}>
-                    {t.title}
+                    {T(t.title)}
                   </h3>
-                  <p className="mt-2 text-sm sm:text-base text-white/65 leading-relaxed">{t.text}</p>
+                  <p className="mt-2 text-sm sm:text-base text-white/65 leading-relaxed">{T(t.text)}</p>
                 </div>
               </div>
             ))}
@@ -234,10 +236,8 @@ export function ProjetosPage() {
           <div className="glass rounded-3xl p-6 sm:p-8 mt-6 text-center">
             <p className="text-sm sm:text-base text-white/70 leading-relaxed max-w-3xl mx-auto">
               <span className="font-bold text-white">Credenciais ao longo do caminho:</span>{" "}
-              Ciência da Computação (UNIVAP) · Técnico Cinematográfico registrado · Copa do Mundo e
-              Olimpíadas pela Fox · Editor-chefe na FGV · Transição SD→HD do Jockey Club · TV alemã
-              ZDF e ARD · Harvard ManageMentor · Certificações Google Cloud em IA Generativa, LLMs e
-              Prompt Design · Palestrante no RioWebSummit com o Ultimate Social Suite.
+              
+              {T("Ciência da Computação (UNIVAP) · Técnico Cinematográfico registrado · Copa do Mundo e\r\n              Olimpíadas pela Fox · Editor-chefe na FGV · Transição SD→HD do Jockey Club · TV alemã\r\n              ZDF e ARD · Harvard ManageMentor · Certificações Google Cloud em IA Generativa, LLMs e\r\n              Prompt Design · Palestrante no RioWebSummit com o Ultimate Social Suite.")}
             </p>
             <Link
               href="/agendar-consultoria"
@@ -251,7 +251,7 @@ export function ProjetosPage() {
       </section>
 
       <footer className="px-4 sm:px-8 pb-6 text-center text-[11px] text-white/35">
-        © {new Date().getFullYear()} FayAI — aprenda IA fazendo, não assistindo.
+        © {new Date().getFullYear()}  {T("FayAI — aprenda IA fazendo, não assistindo.")}
       </footer>
     </div>
   );

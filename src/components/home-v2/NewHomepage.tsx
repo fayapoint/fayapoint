@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -24,6 +25,7 @@ interface MonthlyOffer {
 
 // ─── Animated Counter ───────────────────────────────────────────
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const T = useT();
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const [inView, setInView] = useState(false);
@@ -55,7 +57,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
     return () => clearInterval(timer);
   }, [inView, target]);
 
-  return <span ref={ref}>{count}{suffix}</span>;
+  return <span ref={ref}>{count}{T(suffix)}</span>;
 }
 
 // ─── Service Cards Data ─────────────────────────────────────────
@@ -84,6 +86,7 @@ const services = [
 
 // ─── Main Homepage Component ────────────────────────────────────
 export function NewHomepage() {
+  const T = useT();
   const { user } = useUser();
   const [stats, setStats] = useState<HomepageStats | null>(null);
   const [monthlyOffer, setMonthlyOffer] = useState<MonthlyOffer | null>(null);
@@ -176,7 +179,8 @@ export function NewHomepage() {
               className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full bg-secondary border border-border text-sm text-slate-300"
             >
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              Grátis este mês: {freeCourse.title}
+              
+              {T("Grátis este mês:")} {T(freeCourse.title)}
             </motion.div>
           )}
 
@@ -189,7 +193,8 @@ export function NewHomepage() {
           >
             <span className="block text-white">Domine a IA.</span>
             <span className="block bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
-              Comece grátis.
+              
+              {T("Comece grátis.")}
             </span>
           </motion.h1>
 
@@ -200,9 +205,10 @@ export function NewHomepage() {
             transition={{ delay: 0.6 }}
             className="mt-6 text-lg md:text-xl text-slate-400 max-w-xl mx-auto leading-relaxed"
           >
-            {stats?.totalCourses || allCourses.length} cursos práticos.{" "}
-            {stats?.totalChapters || "256"} capítulos.{" "}
-            40+ ferramentas de IA. Um curso grátis todo mês.
+            {stats?.totalCourses || allCourses.length}  {T("cursos práticos.")}{" "}
+            {stats?.totalChapters || "256"}  {T("capítulos.")}{" "}
+            
+            {T("40+ ferramentas de IA. Um curso grátis todo mês.")}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -216,7 +222,7 @@ export function NewHomepage() {
               href={user ? "/portal" : "/registro"}
               className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-700 text-white font-semibold text-lg shadow-[0_0_40px_rgba(139,92,246,0.3)] hover:shadow-[0_0_60px_rgba(139,92,246,0.5)] transition-all hover:-translate-y-0.5"
             >
-              {user ? "Ir para o Portal" : "Começar Grátis"}
+              {user ? T("Ir para o Portal") : T("Começar Grátis")}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
@@ -224,7 +230,8 @@ export function NewHomepage() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-border text-white font-medium text-lg hover:bg-secondary transition-all"
             >
               <BookOpen className="w-5 h-5" />
-              Explorar cursos
+              
+              {T("Explorar cursos")}
             </Link>
           </motion.div>
 
@@ -235,7 +242,8 @@ export function NewHomepage() {
             transition={{ delay: 1 }}
             className="mt-6 text-sm text-slate-500"
           >
-            Sem cartão de crédito · Login com Google · 100% em português
+            
+            {T("Sem cartão de crédito · Login com Google · 100% em português")}
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
@@ -246,7 +254,8 @@ export function NewHomepage() {
               href="/descobrir#proposta"
               className="mt-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-amber-400 transition-colors"
             >
-              Conheça nossa proposta <ArrowRight className="w-3.5 h-3.5" />
+              
+              {T("Conheça nossa proposta")} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </motion.div>
         </div>
@@ -259,16 +268,16 @@ export function NewHomepage() {
           className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-10 md:gap-16 z-10"
         >
           {[
-            { value: stats?.totalCourses || allCourses.length, label: "Cursos", suffix: "" },
-            { value: stats?.totalChapters || 0, label: "Capítulos", suffix: "" },
+            { value: stats?.totalCourses || allCourses.length, label: T("Cursos"), suffix: "" },
+            { value: stats?.totalChapters || 0, label: T("Capítulos"), suffix: "" },
             { value: stats?.totalUsers || 0, label: "Alunos", suffix: "" },
-            { value: stats?.totalCertificates || 0, label: "Certificados", suffix: "" },
+            { value: stats?.totalCertificates || 0, label: T("Certificados"), suffix: "" },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <div className="text-2xl md:text-3xl font-extrabold text-white">
                 {s.value > 0 ? <AnimatedCounter target={s.value} suffix={s.suffix} /> : "—"}
               </div>
-              <div className="text-xs text-slate-500 mt-1">{s.label}</div>
+              <div className="text-xs text-slate-500 mt-1">{T(s.label)}</div>
             </div>
           ))}
         </motion.div>
@@ -299,31 +308,34 @@ export function NewHomepage() {
                 <div className="flex-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-semibold mb-4">
                     <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                    GRÁTIS ESTE MÊS
+                    
+                    {T("GRÁTIS ESTE MÊS")}
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold mb-3">{freeCourse.title}</h2>
-                  <p className="text-slate-400 text-lg mb-6 leading-relaxed">{freeCourse.shortDescription}</p>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-3">{T(freeCourse.title)}</h2>
+                  <p className="text-slate-400 text-lg mb-6 leading-relaxed">{T(freeCourse.shortDescription)}</p>
                   <div className="flex flex-wrap gap-4 text-sm text-slate-500 mb-6">
-                    <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {freeCourse.totalLessons} capítulos</span>
-                    <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {freeCourse.duration}</span>
-                    <span className="flex items-center gap-1"><Award className="w-4 h-4" /> Certificado incluso</span>
+                    <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {freeCourse.totalLessons}  {T("capítulos")}</span>
+                    <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {T(freeCourse.duration)}</span>
+                    <span className="flex items-center gap-1"><Award className="w-4 h-4" />  {T("Certificado incluso")}</span>
                   </div>
                   <Link
                     href={`/curso/${freeCourse.slug}`}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold shadow-lg hover:shadow-green-500/20 transition-all hover:-translate-y-0.5"
                   >
-                    Começar Agora — É Grátis
+                    
+                    {T("Começar Agora — É Grátis")}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
                 <div className="text-center flex-shrink-0">
                   <div className="text-7xl mb-2">🤖</div>
-                  <div className="text-sm text-slate-500">Sem cartão · Acesso completo</div>
+                  <div className="text-sm text-slate-500">{T("Sem cartão · Acesso completo")}</div>
                   <Link
                     href="/descobrir#curso-gratis"
                     className="mt-3 inline-flex items-center gap-1 text-xs text-slate-500 hover:text-green-400 transition-colors"
                   >
-                    Mais sobre a oferta <ArrowRight className="w-3 h-3" />
+                    
+                    {T("Mais sobre a oferta")} <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
               </div>
@@ -341,10 +353,11 @@ export function NewHomepage() {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400 mb-3">Nossos Cursos</p>
+            <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400 mb-3">{T("Nossos Cursos")}</p>
             <h2 className="text-4xl md:text-5xl font-bold">Aprenda por ferramenta</h2>
             <p className="mt-4 text-slate-400 text-lg max-w-lg mx-auto">
-              Cada curso cobre uma ferramenta de IA do zero ao avançado
+              
+              {T("Cada curso cobre uma ferramenta de IA do zero ao avançado")}
             </p>
           </motion.div>
 
@@ -368,7 +381,7 @@ export function NewHomepage() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={thumbUrl}
-                          alt={course.title}
+                          alt={T(course.title)}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           loading="lazy"
                         />
@@ -379,14 +392,14 @@ export function NewHomepage() {
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <div>
-                          <h3 className="font-semibold text-white group-hover:text-amber-300 transition-colors">{course.title}</h3>
-                          <p className="text-xs text-slate-500">{course.tool} · {course.level}</p>
+                          <h3 className="font-semibold text-white group-hover:text-amber-300 transition-colors">{T(course.title)}</h3>
+                          <p className="text-xs text-slate-500">{T(course.tool)} · {T(course.level)}</p>
                         </div>
                       </div>
-                      <p className="text-sm text-slate-400 line-clamp-2 mb-4">{course.shortDescription}</p>
+                      <p className="text-sm text-slate-400 line-clamp-2 mb-4">{T(course.shortDescription)}</p>
                       <div className="flex items-center justify-between text-xs text-slate-500">
-                        <span>{course.totalLessons} capítulos</span>
-                        <span>{course.duration}</span>
+                        <span>{course.totalLessons}  {T("capítulos")}</span>
+                        <span>{T(course.duration)}</span>
                         {course.rating > 0 && (
                           <span className="flex items-center gap-1">
                             <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
@@ -406,14 +419,16 @@ export function NewHomepage() {
               href="/cursos"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border text-white font-medium hover:bg-secondary transition-all"
             >
-              Ver todos os {allCourses.length} cursos
+              
+              {T("Ver todos os")} {allCourses.length}  {T("cursos")}
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/descobrir#cursos"
               className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-cyan-400 transition-colors"
             >
-              Ver por categorias e níveis <ArrowRight className="w-3.5 h-3.5" />
+              
+              {T("Ver por categorias e níveis")} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
@@ -428,10 +443,11 @@ export function NewHomepage() {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <p className="text-sm font-semibold uppercase tracking-widest text-yellow-400 mb-3">Serviços</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Além dos cursos</h2>
+            <p className="text-sm font-semibold uppercase tracking-widest text-yellow-400 mb-3">{T("Serviços")}</p>
+            <h2 className="text-4xl md:text-5xl font-bold">{T("Além dos cursos")}</h2>
             <p className="mt-4 text-slate-400 text-lg max-w-lg mx-auto">
-              Construímos, automatizamos e consultamos — tudo com IA
+              
+              {T("Construímos, automatizamos e consultamos — tudo com IA")}
             </p>
           </motion.div>
 
@@ -451,8 +467,8 @@ export function NewHomepage() {
                   <div className={`absolute inset-0 bg-gradient-to-br ${svc.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
                   <div className="relative z-10">
                     <svc.icon className="w-8 h-8 text-slate-400 group-hover:text-white mb-4 transition-colors" />
-                    <h3 className="text-xl font-bold mb-2">{svc.title}</h3>
-                    <p className="text-slate-400 text-sm">{svc.desc}</p>
+                    <h3 className="text-xl font-bold mb-2">{T(svc.title)}</h3>
+                    <p className="text-slate-400 text-sm">{T(svc.desc)}</p>
                   </div>
                 </Link>
               </motion.div>
@@ -463,7 +479,8 @@ export function NewHomepage() {
               href="/descobrir#servicos"
               className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-yellow-400 transition-colors"
             >
-              Conheça todos os nossos serviços <ArrowRight className="w-3.5 h-3.5" />
+              
+              {T("Conheça todos os nossos serviços")} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
@@ -482,7 +499,7 @@ export function NewHomepage() {
                 key={`${c.slug}-${i}`}
                 className="flex-shrink-0 px-5 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-sm text-slate-300 whitespace-nowrap"
               >
-                {c.tool}
+                {T(c.tool)}
               </div>
             ))}
           </div>
@@ -492,7 +509,8 @@ export function NewHomepage() {
             href="/descobrir#ferramentas"
             className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-amber-400 transition-colors"
           >
-            Explore todas as ferramentas <ArrowRight className="w-3.5 h-3.5" />
+            
+            {T("Explore todas as ferramentas")} <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </section>
@@ -507,29 +525,33 @@ export function NewHomepage() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Pronto para{" "}
+              
+              {T("Pronto para")}{" "}
               <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
                 dominar a IA?
               </span>
             </h2>
             <p className="text-slate-400 text-lg mb-8">
-              Crie sua conta grátis e comece a aprender em 2 minutos.
+              
+              {T("Crie sua conta grátis e comece a aprender em 2 minutos.")}
             </p>
             <Link
               href={user ? "/portal" : "/registro"}
               className="inline-flex items-center gap-2 px-10 py-5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-700 text-white font-bold text-lg shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:shadow-[0_0_80px_rgba(139,92,246,0.5)] transition-all hover:-translate-y-1"
             >
-              {user ? "Ir para o Portal" : "Criar Conta Grátis"}
+              {user ? T("Ir para o Portal") : T("Criar Conta Grátis")}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <p className="mt-4 text-sm text-slate-500">
-              Sem cartão · Login com Google · Cancele quando quiser
+              
+              {T("Sem cartão · Login com Google · Cancele quando quiser")}
             </p>
             <Link
               href="/descobrir#comece-agora"
               className="mt-4 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-cyan-400 transition-colors"
             >
-              Ver tudo que oferecemos <ArrowRight className="w-3.5 h-3.5" />
+              
+              {T("Ver tudo que oferecemos")} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </motion.div>
         </div>

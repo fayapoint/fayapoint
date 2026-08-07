@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
@@ -39,6 +40,7 @@ const VALORES_PRECO = ["Gratuito", "Freemium", "Open Source", "Pago"] as const;
 const TODOS = "__todos__";
 
 export default function ToolsPage() {
+  const T = useT();
   // Sem o prefixo, cada um dos 56 links da grade custa um 308 antes de abrir
   // a ficha da ferramenta. Ver [[reference_seo_armadilhas_locale]].
   const locale = useLocale();
@@ -188,18 +190,18 @@ export default function ToolsPage() {
               <motion.div key={tool.slug} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
                 <Card className="p-6 border-border hover:bg-card/80 transition group h-full">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge variant="outline" className="text-xs">{tool.category}</Badge>
+                    <Badge variant="outline" className="text-xs">{T(tool.category)}</Badge>
                     <Badge className="bg-amber-600/20 text-amber-400 border-amber-500/40 text-xs">{t(`pricing.${tool.pricing}`)}</Badge>
                   </div>
-                  <h3 className="text-xl font-semibold mb-1 group-hover:text-amber-400 transition">{tool.name}</h3>
-                  <p className="text-muted-foreground text-sm mb-3">{tool.description}</p>
+                  <h3 className="text-xl font-semibold mb-1 group-hover:text-amber-400 transition">{T(tool.name)}</h3>
+                  <p className="text-muted-foreground text-sm mb-3">{T(tool.description)}</p>
                   <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
                     <span className="flex items-center gap-1"><Star className="text-yellow-400" size={16} /> {tool.rating}</span>
-                    <span className="text-muted-foreground">{t("vendor")} <span className="text-muted-foreground">{tool.vendor}</span></span>
+                    <span className="text-muted-foreground">{t("vendor")} <span className="text-muted-foreground">{T(tool.vendor)}</span></span>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {tool.tags.map(tag => (
-                      <Badge key={tag} variant="outline" className="text-xs border-amber-500/30 text-muted-foreground"><Tag size={12} className="mr-1" /> {tag}</Badge>
+                      <Badge key={tag} variant="outline" className="text-xs border-amber-500/30 text-muted-foreground"><Tag size={12} className="mr-1" /> {T(tag)}</Badge>
                     ))}
                   </div>
                   <div className="flex gap-2">

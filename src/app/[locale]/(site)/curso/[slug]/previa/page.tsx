@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -83,6 +84,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PreviaPage({ params }: Props) {
   const { locale, slug } = await params;
+  const T = await obterT(locale);
 
   // Igual à página de vendas: distinguir "não existe" de "banco fora" evita
   // que uma queda do Mongo vire 404 em massa — e 404 remove do índice.
@@ -152,56 +154,60 @@ export default async function PreviaPage({ params }: Props) {
       <main className="mx-auto w-full max-w-3xl px-5 py-12 md:py-16">
         <nav aria-label="Trilha" className="mb-8 text-sm text-white/50">
           <Link href={`/${locale}/cursos`} className="hover:text-white/80">
-            Cursos
+            
+            {T("Cursos")}
           </Link>
           <span className="mx-2">/</span>
           <Link href={`/${locale}/curso/${slug}`} className="hover:text-white/80">
-            {nome}
+            {T(nome)}
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-white/70">Prévia</span>
+          <span className="text-white/70">{T("Prévia")}</span>
         </nav>
 
         <header className="mb-10">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-emerald-400/80">
-            Prévia gratuita · sem cadastro
+            
+            {T("Prévia gratuita · sem cadastro")}
           </p>
           <h1 className="text-3xl font-semibold leading-tight text-white md:text-4xl">
-            {nome}: ementa completa e um capítulo inteiro
+            {T(nome)}{T(": ementa completa e um capítulo inteiro")}
           </h1>
           {previa.intro.map((p, i) => (
             <p key={i} className="mt-4 text-white/70 leading-relaxed">
-              {p}
+              {T(p)}
             </p>
           ))}
           <p className="mt-6 text-sm text-white/50">
-            {previa.totalCapitulos} capítulos · {previa.modulos.length} módulos
+            {previa.totalCapitulos}  {T("capítulos ·")} {previa.modulos.length}  {T("módulos")}
             {product.metrics?.duration ? ` · ${product.metrics.duration}` : ""}
           </p>
         </header>
 
         <section aria-labelledby="ementa" className="mb-14">
           <h2 id="ementa" className="mb-6 text-2xl font-semibold text-white">
-            O que você aprende, capítulo a capítulo
+            
+            {T("O que você aprende, capítulo a capítulo")}
           </h2>
           <div className="space-y-8">
             {previa.modulos.map((mod) => (
               <div key={mod.numero} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 md:p-6">
                 <h3 className="text-lg font-semibold text-white">
-                  Módulo {mod.numero}: {mod.titulo}
+                  
+                  {T("Módulo")} {mod.numero}: {T(mod.titulo)}
                 </h3>
-                {mod.descricao && <p className="mt-1 text-sm text-white/60">{mod.descricao}</p>}
+                {mod.descricao && <p className="mt-1 text-sm text-white/60">{T(mod.descricao)}</p>}
                 <ol className="mt-5 space-y-5">
                   {mod.capitulos.map((cap) => (
                     <li key={cap.numero}>
                       <h4 className="text-[15px] font-medium text-white/90">
-                        {cap.numero}. {cap.titulo}
+                        {cap.numero}. {T(cap.titulo)}
                       </h4>
                       {cap.resumo.length > 0 && (
                         <ul className="mt-2 space-y-1.5 pl-4">
                           {cap.resumo.slice(0, 3).map((r, i) => (
                             <li key={i} className="list-disc text-sm leading-relaxed text-white/55">
-                              {r}
+                              {T(r)}
                             </li>
                           ))}
                         </ul>
@@ -217,10 +223,12 @@ export default async function PreviaPage({ params }: Props) {
         {previa.amostra && (
           <section aria-labelledby="amostra" className="mb-14">
             <h2 id="amostra" className="mb-2 text-2xl font-semibold text-white">
-              Capítulo {previa.amostra.numero} na íntegra
+              
+              {T("Capítulo")} {previa.amostra.numero}  {T("na íntegra")}
             </h2>
             <p className="mb-6 text-sm text-white/50">
-              Este é o capítulo completo, igual ao que está dentro do curso — texto, imagens e vídeos.
+              
+              {T("Este é o capítulo completo, igual ao que está dentro do curso — texto, imagens e vídeos.")}
             </p>
             <AvisoTraducao slug={slug} locale={locale} />
             <article
@@ -232,23 +240,25 @@ export default async function PreviaPage({ params }: Props) {
 
         <aside className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.04] p-6 text-center">
           <p className="text-lg font-medium text-white">
-            Continue nos outros {previa.totalCapitulos - 1} capítulos
+            Continue nos outros {previa.totalCapitulos - 1}  {T("capítulos")}
           </p>
           <p className="mt-2 text-sm text-white/60">
-            Acesso vitalício, atualizações incluídas e certificado ao concluir.
+            
+            {T("Acesso vitalício, atualizações incluídas e certificado ao concluir.")}
           </p>
           <Link
             href={`/${locale}/curso/${slug}`}
             className="mt-5 inline-block rounded-xl bg-emerald-400 px-6 py-3 font-medium text-black transition hover:bg-emerald-300"
           >
-            {typeof preco === "number" ? `Garantir por R$ ${preco}` : "Ver o curso completo"}
+            {typeof preco === "number" ? `Garantir por R$ ${preco}` : T("Ver o curso completo")}
           </Link>
         </aside>
 
         {vizinhos.length > 0 && (
           <section aria-labelledby="relacionados" className="mt-14">
             <h2 id="relacionados" className="mb-5 text-xl font-semibold text-white">
-              Prévias de cursos parecidos
+              
+              {T("Prévias de cursos parecidos")}
             </h2>
             <ul className="grid gap-3 sm:grid-cols-3">
               {vizinhos.map((v) => (
@@ -258,7 +268,7 @@ export default async function PreviaPage({ params }: Props) {
                     className="block h-full rounded-xl border border-white/10 bg-white/[0.02] p-4 transition hover:border-emerald-400/30 hover:bg-white/[0.04]"
                   >
                     <span className="block text-[15px] font-medium leading-snug text-white/90">
-                      {v.name}
+                      {T(v.name)}
                     </span>
                     {v.copy?.shortDescription && (
                       <span className="mt-1.5 block text-xs leading-relaxed text-white/50">
@@ -274,7 +284,8 @@ export default async function PreviaPage({ params }: Props) {
               href={`/${locale}/cursos`}
               className="mt-5 inline-block text-sm text-emerald-400/80 underline-offset-4 hover:underline"
             >
-              Ver todos os cursos →
+              
+              {T("Ver todos os cursos →")}
             </Link>
           </section>
         )}

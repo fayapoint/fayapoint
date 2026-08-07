@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
@@ -50,6 +51,7 @@ type ModuleItem = { id: number; title: string; duration: string; lessons: number
 type ReviewLike = { name: string; rating: number; comment: string; role?: string; date?: string };
 
 export default function CoursePage() {
+  const T = useT();
   const params = useParams();
   const course = getCourseBySlug(params.slug as string);
   
@@ -239,7 +241,7 @@ const handleFavorite = () => {
 };
 
 const handleEnroll = () => {
-  toast.success("Redirecionando para checkout...");
+  toast.success(T("Redirecionando para checkout..."));
 };
 
 return (
@@ -260,17 +262,17 @@ return (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                   <Link href="/" className="hover:text-white">Home</Link>
                   <span>/</span>
-                  <Link href="/cursos" className="hover:text-white">Cursos</Link>
+                  <Link href="/cursos" className="hover:text-white">{T("Cursos")}</Link>
                   <span>/</span>
-                  <span>{courseData.category}</span>
+                  <span>{T(courseData.category)}</span>
                 </div>
 
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">
-                  {courseData.title}
+                  {T(courseData.title)}
                 </h1>
                 
                 <p className="text-xl text-muted-foreground mb-6">
-                  {courseData.subtitle}
+                  {T(courseData.subtitle)}
                 </p>
 
                 <div className="flex items-center gap-4 mb-6">
@@ -278,7 +280,7 @@ return (
                   <div className="flex items-center gap-1">
                     <Star className="text-yellow-400 fill-yellow-400" size={18} />
                     <span className="font-semibold">{courseData.rating}</span>
-                    <span className="text-muted-foreground">{testimonialsCount.toLocaleString("pt-BR")} avaliações</span>
+                    <span className="text-muted-foreground">{testimonialsCount.toLocaleString("pt-BR")}  {T("avaliações")}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Users size={18} className="text-muted-foreground" />
@@ -289,15 +291,17 @@ return (
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Globe size={16} />
-                    Português
+                    
+                    {T("Português")}
                   </span>
                   <span className="flex items-center gap-1">
                     <Calendar size={16} />
-                    Atualizado em {courseData.lastUpdated}
+                    Atualizado em {T(courseData.lastUpdated)}
                   </span>
                   <span className="flex items-center gap-1">
                     <Award size={16} />
-                    Certificado de conclusão
+                    
+                    {T("Certificado de conclusão")}
                   </span>
                 </div>
 
@@ -309,7 +313,7 @@ return (
                   <div>
                     <p className="text-sm text-muted-foreground">Instrutor</p>
                     <p className="font-semibold">Ricardo Faya</p>
-                    <p className="text-sm text-muted-foreground">50.000+ alunos • 20+ cursos</p>
+                    <p className="text-sm text-muted-foreground">{T("50.000+ alunos • 20+ cursos")}</p>
                   </div>
                 </div>
               </motion.div>
@@ -351,7 +355,8 @@ return (
                       size="lg"
                       onClick={handleEnroll}
                     >
-                      Comprar Agora
+                      
+                      {T("Comprar Agora")}
                     </Button>
                     <Button
                       variant="outline"
@@ -359,7 +364,7 @@ return (
                       onClick={handleAddToCart}
                     >
                       <ShoppingCart className="mr-2" size={18} />
-                      {isInCart ? "No Carrinho" : "Adicionar ao Carrinho"}
+                      {isInCart ? T("No Carrinho") : T("Adicionar ao Carrinho")}
                     </Button>
                     <div className="flex gap-2">
                       <Button
@@ -380,11 +385,11 @@ return (
                   {/* Features */}
                   <Separator className="my-6 bg-border" />
                   <div className="space-y-3">
-                    <h3 className="font-semibold mb-3">Este curso inclui:</h3>
+                    <h3 className="font-semibold mb-3">{T("Este curso inclui:")}</h3>
                     {(courseData.features || []).map((feature: string, i: number) => (
                       <div key={i} className="flex items-center gap-2 text-sm">
                         <CheckCircle className="text-green-400 flex-shrink-0" size={16} />
-                        <span>{feature}</span>
+                        <span>{T(feature)}</span>
                       </div>
                     ))}
                   </div>
@@ -401,21 +406,21 @@ return (
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-popover/50 border border-border">
-              <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-              <TabsTrigger value="curriculum">Conteúdo do Curso</TabsTrigger>
-              <TabsTrigger value="reviews">Avaliações</TabsTrigger>
+              <TabsTrigger value="overview">{T("Visão Geral")}</TabsTrigger>
+              <TabsTrigger value="curriculum">{T("Conteúdo do Curso")}</TabsTrigger>
+              <TabsTrigger value="reviews">{T("Avaliações")}</TabsTrigger>
               <TabsTrigger value="instructor">Instrutor</TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-8">
               <Card className="backdrop-blur border-border p-6">
-                <h2 className="text-2xl font-bold mb-4">O que você aprenderá</h2>
+                <h2 className="text-2xl font-bold mb-4">{T("O que você aprenderá")}</h2>
                 <div className="grid md:grid-cols-2 gap-4">
                   {(courseData.whatYouLearn || []).map((item: string, i: number) => (
                     <div key={i} className="flex items-start gap-3">
                       <CheckCircle className="text-green-400 mt-1 flex-shrink-0" size={20} />
-                      <span>{item}</span>
+                      <span>{T(item)}</span>
                     </div>
                   ))}
                 </div>
@@ -427,19 +432,19 @@ return (
                   {(courseData.requirements || []).map((req: string, i: number) => (
                     <li key={i} className="flex items-center gap-2">
                       <Target className="text-amber-400" size={16} />
-                      <span>{req}</span>
+                      <span>{T(req)}</span>
                     </li>
                   ))}
                 </ul>
               </Card>
 
               <Card className="backdrop-blur border-border p-6">
-                <h2 className="text-2xl font-bold mb-4">Para quem é este curso</h2>
+                <h2 className="text-2xl font-bold mb-4">{T("Para quem é este curso")}</h2>
                 <ul className="space-y-2">
                   {(courseData.targetAudience || []).map((audience: string, i: number) => (
                     <li key={i} className="flex items-center gap-2">
                       <Users className="text-blue-400" size={16} />
-                      <span>{audience}</span>
+                      <span>{T(audience)}</span>
                     </li>
                   ))}
                 </ul>
@@ -450,9 +455,9 @@ return (
             <TabsContent value="curriculum">
               <Card className="backdrop-blur border-border p-6">
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold mb-2">Conteúdo do Curso</h2>
+                  <h2 className="text-2xl font-bold mb-2">{T("Conteúdo do Curso")}</h2>
                   <p className="text-muted-foreground">
-                    {(courseData.modules || []).length} módulos • {(courseData.totalLessons || 0)} aulas • {(courseData.duration || '')} total
+                    {(courseData.modules || []).length}  {T("módulos •")} {(courseData.totalLessons || 0)}  {T("aulas •")} {(courseData.duration || '')} total
                   </p>
                 </div>
 
@@ -464,13 +469,13 @@ return (
                         className="w-full flex items-center justify-between p-4 hover:bg-popover/40 transition"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-lg font-semibold">{module.title}</span>
+                          <span className="text-lg font-semibold">{T(module.title)}</span>
                           <Badge variant="outline" className="text-xs">
-                            {Array.isArray(module.lessons) ? module.lessons.length : module.lessons} aulas
+                            {Array.isArray(module.lessons) ? module.lessons.length : module.lessons}  {T("aulas")}
                           </Badge>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm text-muted-foreground">{module.duration}</span>
+                          <span className="text-sm text-muted-foreground">{T(module.duration)}</span>
                           {expandedModules.includes(module.id) ? (
                             <ChevronUp size={20} />
                           ) : (
@@ -492,14 +497,15 @@ return (
                                 ) : (
                                   <Lock className="text-muted-foreground" size={18} />
                                 )}
-                                <span>{lesson.title}</span>
+                                <span>{T(lesson.title)}</span>
                                 {lesson.isFree && (
                                   <Badge className="bg-green-500/20 text-green-400 border-green-500/50 text-xs">
-                                    Grátis
+                                    
+                                    {T("Grátis")}
                                   </Badge>
                                 )}
                               </div>
-                              <span className="text-sm text-muted-foreground">{lesson.duration}</span>
+                              <span className="text-sm text-muted-foreground">{T(lesson.duration)}</span>
                             </div>
                           ))}
                         </div>
@@ -513,7 +519,7 @@ return (
             {/* Reviews Tab */}
             <TabsContent value="reviews">
               <Card className="backdrop-blur border-border p-6">
-                <h2 className="text-2xl font-bold mb-6">Avaliações dos Alunos</h2>
+                <h2 className="text-2xl font-bold mb-6">{T("Avaliações dos Alunos")}</h2>
                 <div className="grid md:grid-cols-3 gap-8 mb-8">
                   <div className="text-center">
                     <div className="text-5xl font-bold mb-2">{courseData.rating}</div>
@@ -522,7 +528,7 @@ return (
                         <Star key={i} className="text-yellow-400 fill-yellow-400" size={20} />
                       ))}
                     </div>
-                    <p className="text-muted-foreground">{testimonialsCount} avaliações</p>
+                    <p className="text-muted-foreground">{testimonialsCount}  {T("avaliações")}</p>
                   </div>
                 </div>
 
@@ -537,7 +543,7 @@ return (
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-4 mb-2">
-                            <span className="font-semibold">{review.name}</span>
+                            <span className="font-semibold">{T(review.name)}</span>
                             <div className="flex">
                               {[...Array(review.rating)].map((_, j) => (
                                 <Star key={j} className="text-yellow-400 fill-yellow-400" size={16} />
@@ -545,7 +551,7 @@ return (
                             </div>
                             <span className="text-sm text-muted-foreground">{review.role || review.date || ""}</span>
                           </div>
-                          <p className="text-muted-foreground">{review.comment}</p>
+                          <p className="text-muted-foreground">{T(review.comment)}</p>
                         </div>
                       </div>
                     </div>
@@ -553,7 +559,8 @@ return (
                 </div>
 
                 <Button variant="outline" className="w-full mt-6 border-border">
-                  Ver Mais Avaliações
+                  
+                  {T("Ver Mais Avaliações")}
                 </Button>
               </Card>
             </TabsContent>
@@ -567,12 +574,12 @@ return (
                   </div>
                   <div className="flex-1">
                     <h2 className="text-2xl font-bold mb-2">Ricardo Faya</h2>
-                    <p className="text-muted-foreground mb-4">Especialista em IA e Automação</p>
+                    <p className="text-muted-foreground mb-4">{T("Especialista em IA e Automação")}</p>
                     
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       <div>
                         <div className="text-2xl font-bold">4.9</div>
-                        <div className="text-sm text-muted-foreground">Avaliação</div>
+                        <div className="text-sm text-muted-foreground">{T("Avaliação")}</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold">50.000+</div>
@@ -580,17 +587,18 @@ return (
                       </div>
                       <div>
                         <div className="text-2xl font-bold">20+</div>
-                        <div className="text-sm text-muted-foreground">Cursos</div>
+                        <div className="text-sm text-muted-foreground">{T("Cursos")}</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold">28+</div>
-                        <div className="text-sm text-muted-foreground">Anos de Experiência</div>
+                        <div className="text-sm text-muted-foreground">{T("Anos de Experiência")}</div>
                       </div>
                     </div>
 
                     <Link href="/sobre">
                       <Button variant="outline" className="border-amber-500 text-amber-400 hover:bg-amber-500/10">
-                        Ver Perfil Completo
+                        
+                        {T("Ver Perfil Completo")}
                       </Button>
                     </Link>
                   </div>

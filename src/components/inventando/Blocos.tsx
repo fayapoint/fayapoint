@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/dicionario";
 import { Quote, AlertTriangle } from "lucide-react";
 import type { Secao } from "@/data/microcursos/tipos";
 
@@ -17,16 +18,17 @@ import type { Secao } from "@/data/microcursos/tipos";
  * a fonte passar a ser externa, isto precisa de sanitização.
  */
 export function Negrito({ texto }: { texto: string }) {
+  const T = useT();
   const partes = texto.split("**");
   return (
     <>
       {partes.map((parte, i) =>
         i % 2 === 1 ? (
           <strong key={i} className="font-semibold text-white">
-            {parte}
+            {T(parte)}
           </strong>
         ) : (
-          <span key={i}>{parte}</span>
+          <span key={i}>{T(parte)}</span>
         ),
       )}
     </>
@@ -34,11 +36,12 @@ export function Negrito({ texto }: { texto: string }) {
 }
 
 export function BlocoSecao({ secao }: { secao: Secao }) {
+  const T = useT();
   switch (secao.tipo) {
     case "paragrafo":
       return (
         <p className="text-[15px] leading-relaxed text-white/75">
-          <Negrito texto={secao.texto} />
+          <Negrito texto={T(secao.texto)} />
         </p>
       );
 
@@ -52,7 +55,7 @@ export function BlocoSecao({ secao }: { secao: Secao }) {
                 className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#f5c04e]"
               />
               <span>
-                <Negrito texto={item} />
+                <Negrito texto={T(item)} />
               </span>
             </li>
           ))}
@@ -71,7 +74,7 @@ export function BlocoSecao({ secao }: { secao: Secao }) {
                 {i + 1}
               </span>
               <span>
-                <Negrito texto={item} />
+                <Negrito texto={T(item)} />
               </span>
             </li>
           ))}
@@ -83,7 +86,7 @@ export function BlocoSecao({ secao }: { secao: Secao }) {
         <figure className="rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
           <Quote aria-hidden className="mb-2 h-4 w-4 text-[#f5c04e]/70" />
           <blockquote className="text-[15px] italic leading-relaxed text-white/80">
-            {secao.texto}
+            {T(secao.texto)}
           </blockquote>
           {/* Dizia "Fonte, aos 04:08". O minuto era o último rastro da origem
               que sobrou depois de 03/08/2026: junto com o texto da citação —
@@ -91,7 +94,8 @@ export function BlocoSecao({ secao }: { secao: Secao }) {
               O `minuto` continua no dado, para auditoria; a legenda agora
               atribui a fala a quem a fez, que é a informação útil ao leitor. */}
           <figcaption className="mt-2.5 text-xs text-white/45">
-            Da demonstração oficial
+            
+            {T("Da demonstração oficial")}
           </figcaption>
         </figure>
       );
@@ -101,7 +105,7 @@ export function BlocoSecao({ secao }: { secao: Secao }) {
         <div className="flex gap-3 rounded-xl border border-amber-400/25 bg-amber-400/[0.07] p-4">
           <AlertTriangle aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
           <p className="text-[14px] leading-relaxed text-amber-100/85">
-            <Negrito texto={secao.texto} />
+            <Negrito texto={T(secao.texto)} />
           </p>
         </div>
       );

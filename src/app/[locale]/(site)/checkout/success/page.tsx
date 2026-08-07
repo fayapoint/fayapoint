@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -18,6 +19,7 @@ import { getClientAuthHeaders } from "@/lib/client-auth";
 import confetti from "canvas-confetti";
 
 function CheckoutSuccessContent() {
+  const T = useT();
   const searchParams = useSearchParams();
   const router = useRouter();
   const orderNumber = searchParams.get("order");
@@ -101,7 +103,8 @@ function CheckoutSuccessContent() {
             
             <h1 className="text-4xl font-bold mb-2">Pagamento Confirmado!</h1>
             <p className="text-muted-foreground text-lg">
-              Obrigado pela sua compra. Seu pedido foi processado com sucesso.
+              
+              {T("Obrigado pela sua compra. Seu pedido foi processado com sucesso.")}
             </p>
           </div>
 
@@ -115,8 +118,8 @@ function CheckoutSuccessContent() {
             <div className="space-y-3">
               {orderNumber && (
                 <div className="flex justify-between items-center py-2 border-b border-border">
-                  <span className="text-muted-foreground">Número do Pedido</span>
-                  <span className="font-mono font-bold text-amber-400">{orderNumber}</span>
+                  <span className="text-muted-foreground">{T("Número do Pedido")}</span>
+                  <span className="font-mono font-bold text-amber-400">{T(orderNumber)}</span>
                 </div>
               )}
               
@@ -148,10 +151,10 @@ function CheckoutSuccessContent() {
                 <Mail className="w-5 h-5 text-amber-400" />
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Confirmação enviada por email</h3>
+                <h3 className="font-semibold mb-1">{T("Confirmação enviada por email")}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Enviamos um email com os detalhes do seu pedido e instruções de acesso. 
-                  Verifique também sua caixa de spam.
+                  
+                  {T("Enviamos um email com os detalhes do seu pedido e instruções de acesso. \n                  Verifique também sua caixa de spam.")}
                 </p>
               </div>
             </div>
@@ -159,16 +162,17 @@ function CheckoutSuccessContent() {
 
           {/* Next Steps */}
           <Card className="p-6 bg-card/50 border-border mb-6">
-            <h3 className="font-semibold mb-4">Próximos Passos</h3>
+            <h3 className="font-semibold mb-4">{T("Próximos Passos")}</h3>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                   <span className="text-xs font-bold text-amber-400">1</span>
                 </div>
                 <div>
-                  <p className="font-medium">Acesse seu Dashboard</p>
+                  <p className="font-medium">{T("Acesse seu Dashboard")}</p>
                   <p className="text-sm text-muted-foreground">
-                    Seus cursos e recursos já estão disponíveis no seu portal.
+                    
+                    {T("Seus cursos e recursos já estão disponíveis no seu portal.")}
                   </p>
                 </div>
               </div>
@@ -180,7 +184,8 @@ function CheckoutSuccessContent() {
                 <div>
                   <p className="font-medium">Comece a aprender</p>
                   <p className="text-sm text-muted-foreground">
-                    Explore os conteúdos e comece sua jornada de aprendizado.
+                    
+                    {T("Explore os conteúdos e comece sua jornada de aprendizado.")}
                   </p>
                 </div>
               </div>
@@ -192,7 +197,8 @@ function CheckoutSuccessContent() {
                 <div>
                   <p className="font-medium">Ganhe XP</p>
                   <p className="text-sm text-muted-foreground">
-                    Complete lições e desafios para subir de nível e ganhar recompensas.
+                    
+                    {T("Complete lições e desafios para subir de nível e ganhar recompensas.")}
                   </p>
                 </div>
               </div>
@@ -216,7 +222,8 @@ function CheckoutSuccessContent() {
                 onClick={() => router.push(`/pt-BR/receipt/${receiptId}`)}
               >
                 <FileText className="w-4 h-4 mr-2" />
-                Ver Comprovante
+                
+                {T("Ver Comprovante")}
               </Button>
             )}
 
@@ -226,15 +233,18 @@ function CheckoutSuccessContent() {
               onClick={() => router.push("/pt-BR/portal?tab=carrinho")}
             >
               <Download className="w-4 h-4 mr-2" />
-              Ver Meus Pedidos
+              
+              {T("Ver Meus Pedidos")}
             </Button>
           </div>
 
           {/* Support */}
           <p className="text-center text-sm text-muted-foreground mt-8">
-            Precisa de ajuda? Entre em contato pelo email{" "}
+            
+            {T("Precisa de ajuda? Entre em contato pelo email")}{" "}
             <a href="mailto:suporte@fayai.com.br" className="text-amber-400 hover:underline">
-              suporte@fayai.com.br
+              
+              {T("suporte@fayai.com.br")}
             </a>
           </p>
         </div>
@@ -245,13 +255,14 @@ function CheckoutSuccessContent() {
 
 // Loading fallback component
 function LoadingFallback() {
+  const T = useT();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-2xl flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <Loader2 className="w-12 h-12 text-amber-400 animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground">Carregando...</p>
+            <p className="text-muted-foreground">{T("Carregando...")}</p>
           </div>
         </div>
       </main>

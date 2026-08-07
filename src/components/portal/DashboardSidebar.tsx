@@ -1,4 +1,6 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
+import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -115,6 +117,7 @@ export function DashboardSidebar({
   isCollapsed: controlledCollapsed,
   onCollapsedChange
 }: DashboardSidebarProps) {
+  const T = useT();
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   /**
    * Quem está autorizado a desenhar em 3D agora.
@@ -181,9 +184,9 @@ export function DashboardSidebar({
           />
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <p className="font-semibold truncate">{user.name}</p>
+              <p className="font-semibold truncate">{T(user.name)}</p>
               {user.email && (
-                <p className="text-[11px] text-muted-foreground truncate" title={user.email}>{user.email}</p>
+                <p className="text-[11px] text-muted-foreground truncate" title={T(user.email)}>{T(user.email)}</p>
               )}
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="outline" className={cn(
@@ -209,7 +212,7 @@ export function DashboardSidebar({
                 <div className="w-6 h-6 bg-amber-500/20 rounded-full flex items-center justify-center">
                   <span className="text-xs font-bold text-amber-400">{stats.level}</span>
                 </div>
-                <span className="text-muted-foreground">Nível {stats.level}</span>
+                <span className="text-muted-foreground">{T("Nível")} {stats.level}</span>
               </div>
               <span className="text-xs text-muted-foreground">{stats.xp}/{stats.xpToNextLevel} XP</span>
             </div>
@@ -258,7 +261,7 @@ export function DashboardSidebar({
                 
                 {!isCollapsed && (
                   <>
-                    <span className="flex-1 text-left text-sm font-medium">{item.label}</span>
+                    <span className="flex-1 text-left text-sm font-medium">{T(item.label)}</span>
                     {item.badge && (
                       <Badge 
                         variant="outline" 
@@ -269,7 +272,7 @@ export function DashboardSidebar({
                             : "border-amber-500/50 text-amber-400"
                         )}
                       >
-                        {item.badge}
+                        {T(item.badge)}
                       </Badge>
                     )}
                     {isLocked && (
@@ -297,14 +300,16 @@ export function DashboardSidebar({
           <div className="p-4 bg-gradient-to-br from-amber-900/40 to-yellow-900/40 rounded-xl border border-amber-500/30">
             <div className="flex items-center gap-2 mb-2">
               <Crown className="text-yellow-400" size={18} />
-              <span className="font-semibold text-sm">Upgrade para Pro</span>
+              <span className="font-semibold text-sm">{T("Upgrade para Pro")}</span>
             </div>
             <p className="text-xs text-muted-foreground mb-3">
-              Desbloqueie recursos exclusivos, IA ilimitada e muito mais!
+              
+              {T("Desbloqueie recursos exclusivos, IA ilimitada e muito mais!")}
             </p>
             <Link href="/precos">
               <button className="w-full py-2 bg-gradient-to-r from-amber-600 to-yellow-700 rounded-lg text-sm font-semibold hover:from-amber-700 hover:to-yellow-800 transition">
-                Ver Planos
+                
+                {T("Ver Planos")}
               </button>
             </Link>
           </div>
@@ -313,6 +318,14 @@ export function DashboardSidebar({
 
       {/* Account & Settings Links */}
       <div className="p-2 border-t border-border space-y-1">
+        {/* O portal tem shell próprio — o SiteChrome pula `/portal` — então o
+            seletor do cabeçalho do site não chega aqui. Sem isto, o aluno que
+            entra em inglês fica preso no idioma com que a sessão começou. */}
+        {!isCollapsed && (
+          <div className="px-1 pb-1">
+            <BotaoIdioma className="w-fit" />
+          </div>
+        )}
         {/* Unificado 14/07: Minha Conta é a casa única (perfil, assinatura,
             segurança, certificados e preferências) — Configurações duplicava */}
         <Link href="/portal/conta">
@@ -321,7 +334,7 @@ export function DashboardSidebar({
             isCollapsed && "justify-center"
           )}>
             <UserCog size={20} />
-            {!isCollapsed && <span className="text-sm font-medium">Minha Conta</span>}
+            {!isCollapsed && <span className="text-sm font-medium">{T("Minha Conta")}</span>}
           </button>
         </Link>
         <Link href={cubeHref}>
@@ -332,7 +345,7 @@ export function DashboardSidebar({
             <Home size={20} className="shrink-0" />
             {!isCollapsed && (
               <>
-                <span className="flex-1 text-left text-sm font-medium">Ver o site</span>
+                <span className="flex-1 text-left text-sm font-medium">{T("Ver o site")}</span>
                 <ExternalLink size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
               </>
             )}

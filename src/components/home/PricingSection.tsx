@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -14,6 +15,7 @@ import {
 } from "@/lib/subscription-marketing";
 
 export function PricingSection() {
+  const T = useT();
   const t = useTranslations("Home.Pricing");
   const locale = useLocale();
   const plans = getSubscriptionMarketingPlans(locale);
@@ -50,10 +52,10 @@ export function PricingSection() {
             >
               <Card className="h-full border-border/60 bg-card/60 p-5 backdrop-blur">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-                  {fact.title}
+                  {T(fact.title)}
                 </p>
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {fact.description}
+                  {T(fact.description)}
                 </p>
               </Card>
             </motion.div>
@@ -119,15 +121,15 @@ export function PricingSection() {
                   >
                     <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 border-2 border-background bg-gradient-to-r from-primary to-accent px-4 text-primary-foreground shadow-2xl shadow-primary/50">
                       <Sparkles className="mr-1 inline h-3 w-3" />
-                      {plan.badge}
+                      {T(plan.badge)}
                       <Sparkles className="ml-1 inline h-3 w-3" />
                     </Badge>
                   </motion.div>
                 )}
 
                 <div>
-                  <h3 className="mb-2 text-2xl font-bold text-foreground">{plan.displayName}</h3>
-                  <p className="mb-6 text-muted-foreground">{plan.description}</p>
+                  <h3 className="mb-2 text-2xl font-bold text-foreground">{T(plan.displayName)}</h3>
+                  <p className="mb-6 text-muted-foreground">{T(plan.description)}</p>
 
                   <div className="mb-6">
                     <motion.span
@@ -136,9 +138,9 @@ export function PricingSection() {
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.2 + i * 0.1 }}
                     >
-                      {plan.priceLabel}
+                      {T(plan.priceLabel)}
                     </motion.span>
-                    <span className="text-muted-foreground">{plan.periodLabel}</span>
+                    <span className="text-muted-foreground">{T(plan.periodLabel)}</span>
                   </div>
 
                   <ul className="mb-8 space-y-3">
@@ -151,7 +153,7 @@ export function PricingSection() {
                         transition={{ delay: 0.3 + i * 0.1 + j * 0.05 }}
                       >
                         <CheckCircle2 className="mt-1 shrink-0 text-primary" size={20} />
-                        <span className="text-foreground/90">{feature}</span>
+                        <span className="text-foreground/90">{T(feature)}</span>
                       </motion.li>
                     ))}
                   </ul>
@@ -204,7 +206,7 @@ export function PricingSection() {
           </div>
           <p className="text-sm text-muted-foreground/70">
             {isPtBr
-              ? "Curso gratis do mes, rotacao mensal e certificacao usam a mesma regra mostrada nestes planos."
+              ? T("Curso gratis do mes, rotacao mensal e certificacao usam a mesma regra mostrada nestes planos.")
               : "The free course of the month, monthly rotation, and certification follow the same rules shown in these plans."}
           </p>
         </motion.div>

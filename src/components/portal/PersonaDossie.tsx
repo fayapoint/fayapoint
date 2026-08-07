@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -153,6 +154,7 @@ export default function PersonaDossie({
   onSalvo: (d: Dossie) => void;
   aoRecarregarFotos: () => void;
 }) {
+  const T = useT();
   const [aberta, setAberta] = useState<string | null>(null);
   const [salvando, setSalvando] = useState<string | null>(null);
   const [rascunho, setRascunho] = useState<Record<string, unknown>>({});
@@ -207,7 +209,7 @@ export default function PersonaDossie({
         });
         toast.success(data.xpAwarded > 0 ? `Anotado — +${data.xpAwarded} XP ✨` : "Anotado ✨");
       } catch {
-        toast.error("Erro de rede");
+        toast.error(T("Erro de rede"));
       } finally {
         setSalvando(null);
       }
@@ -316,7 +318,7 @@ export default function PersonaDossie({
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="O que eu sei de você"
+          aria-label={T("O que eu sei de você")}
           className="my-auto w-full max-w-2xl"
           onClick={(e) => e.stopPropagation()}
         >
@@ -338,6 +340,7 @@ function Cabecalho({
   ampliada: boolean;
   onAlternarTamanho: () => void;
 }) {
+  const T = useT();
   const raio = 26;
   const circ = 2 * Math.PI * raio;
 
@@ -345,7 +348,7 @@ function Cabecalho({
     <div className="relative p-4">
       <div className="flex items-start gap-2">
         <p className="flex items-center gap-1.5 text-[9px] font-extrabold uppercase tracking-[0.18em] text-amber-400">
-          <Sparkles size={10} /> o que eu sei de você
+          <Sparkles size={10} />  {T("o que eu sei de você")}
         </p>
 
         {/* O botão fica no canto oposto ao chanfro — ali o canto é reto e o
@@ -354,7 +357,7 @@ function Cabecalho({
           type="button"
           onClick={onAlternarTamanho}
           aria-pressed={ampliada}
-          aria-label={ampliada ? "Reduzir o dossiê" : "Ampliar o dossiê"}
+          aria-label={ampliada ? T("Reduzir o dossiê") : T("Ampliar o dossiê")}
           title={ampliada ? "Reduzir (Esc)" : "Ampliar e deixar reto"}
           className="-mr-1 -mt-1 ml-auto shrink-0 cursor-pointer rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/[0.07] hover:text-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
         >
@@ -386,13 +389,13 @@ function Cabecalho({
         </div>
 
         <div className="min-w-0">
-          <p className="text-[13px] font-bold capitalize text-foreground">{dossie.qualidade}</p>
-          <p className="text-[11px] leading-snug text-white/50">{QUALIDADE_NOTA[dossie.qualidade]}</p>
+          <p className="text-[13px] font-bold capitalize text-foreground">{T(dossie.qualidade)}</p>
+          <p className="text-[11px] leading-snug text-white/50">{T(QUALIDADE_NOTA[dossie.qualidade])}</p>
         </div>
       </div>
 
       <p className="mt-3 rounded-lg border border-white/[0.07] bg-white/[0.03] p-2.5 text-[12px] leading-snug text-white/70">
-        {dossie.resumo}
+        {T(dossie.resumo)}
       </p>
     </div>
   );
@@ -423,6 +426,7 @@ function Dimensao({
   token: string;
   aoRecarregarFotos: () => void;
 }) {
+  const T = useT();
   const Icone = ICONES[d.icone] || UserIcon;
 
   return (
@@ -437,7 +441,7 @@ function Dimensao({
         </span>
 
         <span className="min-w-0 flex-1">
-          <span className="block text-[12.5px] font-bold text-foreground">{d.titulo}</span>
+          <span className="block text-[12.5px] font-bold text-foreground">{T(d.titulo)}</span>
           <span className="mt-1 block h-[3px] w-full overflow-hidden rounded-full bg-white/[0.07]">
             <span
               className="block h-full rounded-full"
@@ -454,14 +458,14 @@ function Dimensao({
 
       {aberta && (
         <div className="px-4 pb-4">
-          <p className="mb-2.5 text-[11px] leading-snug text-white/45">{d.paraQue}</p>
+          <p className="mb-2.5 text-[11px] leading-snug text-white/45">{T(d.paraQue)}</p>
 
           {d.conhecido.length > 0 && (
             <dl className="mb-3 space-y-1.5 rounded-lg border p-2.5" style={{ borderColor: `${d.cor}2e`, background: `${d.cor}0a` }}>
               {d.conhecido.map((c) => (
                 <div key={c.rotulo} className="flex gap-2 text-[11.5px]">
-                  <dt className="w-[92px] shrink-0 font-bold uppercase tracking-wide text-white/35">{c.rotulo}</dt>
-                  <dd className="min-w-0 flex-1 text-white/75">{c.valor}</dd>
+                  <dt className="w-[92px] shrink-0 font-bold uppercase tracking-wide text-white/35">{T(c.rotulo)}</dt>
+                  <dd className="min-w-0 flex-1 text-white/75">{T(c.valor)}</dd>
                 </div>
               ))}
             </dl>
@@ -469,7 +473,7 @@ function Dimensao({
 
           {d.faltando.length === 0 ? (
             <p className="flex items-center gap-1.5 text-[11.5px] font-bold text-emerald-400">
-              <Check size={13} /> Nada faltando aqui.
+              <Check size={13} />  {T("Nada faltando aqui.")}
             </p>
           ) : (
             <div className="space-y-2.5">
@@ -524,13 +528,14 @@ function Lacuna({
   token: string;
   aoRecarregarFotos: () => void;
 }) {
+  const T = useT();
   const editor = EDITORES[campo];
   if (!editor) return null;
 
   const rotulo = (
     <>
-      <p className="text-[11.5px] font-bold leading-snug text-foreground">{pergunta}</p>
-      <p className="mt-0.5 text-[10.5px] leading-snug text-white/40">↳ {ganho}</p>
+      <p className="text-[11.5px] font-bold leading-snug text-foreground">{T(pergunta)}</p>
+      <p className="mt-0.5 text-[10.5px] leading-snug text-white/40">↳ {T(ganho)}</p>
     </>
   );
 
@@ -559,7 +564,7 @@ function Lacuna({
           <input
             value={(valor as string) || ""}
             onChange={(e) => setValor(e.target.value)}
-            placeholder={editor.dica}
+            placeholder={T(editor.dica)}
             className="w-full rounded-md border border-white/10 bg-black/30 px-2.5 py-1.5 text-[12px] text-foreground placeholder:text-white/25 focus:border-amber-400/60 focus:outline-none"
           />
         )}
@@ -569,7 +574,7 @@ function Lacuna({
             value={(valor as string) || ""}
             onChange={(e) => setValor(e.target.value)}
             rows={editor.linhas || 3}
-            placeholder={editor.dica}
+            placeholder={T(editor.dica)}
             className="w-full resize-y rounded-md border border-white/10 bg-black/30 px-2.5 py-1.5 text-[12px] leading-relaxed text-foreground placeholder:text-white/25 focus:border-amber-400/60 focus:outline-none"
           />
         )}
@@ -590,8 +595,8 @@ function Lacuna({
               className="w-full accent-amber-400"
             />
             <div className="flex justify-between text-[10px] text-white/35">
-              <span>{editor.esquerda}</span>
-              <span>{editor.direita}</span>
+              <span>{T(editor.esquerda)}</span>
+              <span>{T(editor.direita)}</span>
             </div>
           </div>
         )}
@@ -606,11 +611,11 @@ function Lacuna({
               onChange={(e) => setValor(Number(e.target.value))}
               className="w-20 rounded-md border border-white/10 bg-black/30 px-2.5 py-1.5 text-[12px] text-foreground focus:border-amber-400/60 focus:outline-none"
             />
-            <span className="text-[11px] text-white/45">{editor.sufixo}</span>
+            <span className="text-[11px] text-white/45">{T(editor.sufixo)}</span>
           </div>
         )}
 
-        {editor.tipo === "escolha" && (
+        {editor.tipo === T("escolha") && (
           <div className="flex flex-col gap-1.5">
             {Object.entries(editor.opcoes).map(([k, label]) => (
               <button
@@ -623,7 +628,7 @@ function Lacuna({
                     : { borderColor: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.6)" }
                 }
               >
-                {label}
+                {T(label)}
               </button>
             ))}
           </div>
@@ -637,7 +642,8 @@ function Lacuna({
         style={{ background: cor, color: "#161009" }}
       >
         {salvando ? <Loader2 size={11} className="animate-spin" /> : <Check size={11} />}
-        Salvar
+        
+        {T("Salvar")}
       </button>
     </div>
   );
@@ -658,6 +664,7 @@ function ListaDeItens({
   max: number;
   cor: string;
 }) {
+  const T = useT();
   const [texto, setTexto] = useState("");
 
   const adicionar = () => {
@@ -677,7 +684,7 @@ function ListaDeItens({
               className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold"
               style={{ background: `${cor}22`, color: cor }}
             >
-              {v}
+              {T(v)}
               <button onClick={() => setValor(valor.filter((x) => x !== v))} aria-label={`Remover ${v}`} className="cursor-pointer opacity-60 hover:opacity-100">
                 <X size={10} />
               </button>
@@ -696,7 +703,7 @@ function ListaDeItens({
                 adicionar();
               }
             }}
-            placeholder={dica}
+            placeholder={T(dica)}
             className="min-w-0 flex-1 rounded-md border border-white/10 bg-black/30 px-2.5 py-1.5 text-[12px] text-foreground placeholder:text-white/25 focus:border-amber-400/60 focus:outline-none"
           />
           <button
@@ -730,6 +737,7 @@ function VagaDeFoto({
   /** Na galeria o cartão já mostra a foto grande — repetir a miniatura polui. */
   semMiniatura?: boolean;
 }) {
+  const T = useT();
   const [enviando, setEnviando] = useState(false);
   const entrada = useRef<HTMLInputElement>(null);
   const foto = fotos.find((f) => f.tipo === vaga);
@@ -754,7 +762,7 @@ function VagaDeFoto({
       toast.success("Foto guardada 📸");
       aoRecarregar();
     } catch {
-      toast.error("Erro de rede");
+      toast.error(T("Erro de rede"));
     } finally {
       setEnviando(false);
     }
@@ -795,7 +803,7 @@ function VagaDeFoto({
         style={{ borderColor: `${cor}55`, color: cor }}
       >
         {enviando ? <Loader2 size={11} className="animate-spin" /> : <Upload size={11} />}
-        {foto ? "Trocar" : "Enviar"}
+        {foto ? "Trocar" : T("Enviar")}
       </button>
 
       {foto && foto.origem === "upload" && (
@@ -820,6 +828,7 @@ function VagaDeFoto({
 
 /** As quatro vagas em linha — usado na aba Persona, fora do dossiê. */
 export function GaleriaDeFotos({ fotos, token, aoRecarregar }: { fotos: FotoPersona[]; token: string; aoRecarregar: () => void }) {
+  const T = useT();
   const cores: Record<TipoFoto, string> = {
     perfil: "#f5c04e",
     profissional: "#38bdf8",
@@ -833,12 +842,13 @@ export function GaleriaDeFotos({ fotos, token, aoRecarregar }: { fotos: FotoPers
     <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
       <div className="mb-1 flex items-baseline justify-between gap-2">
         <h4 className="flex items-center gap-1.5 text-sm font-bold text-foreground">
-          <Camera size={14} className="text-pink-400" /> Seu rosto
+          <Camera size={14} className="text-pink-400" />  {T("Seu rosto")}
         </h4>
         <span className="text-[11px] text-white/40">{preenchidas} de 4</span>
       </div>
       <p className="mb-3 text-[11.5px] leading-snug text-white/45">
-        Cada vaga tem uma função. Sem foto sua, todo post nasce com banco de imagens — e banco de imagens não constrói marca pessoal.
+        
+        {T("Cada vaga tem uma função. Sem foto sua, todo post nasce com banco de imagens — e banco de imagens não constrói marca pessoal.")}
       </p>
 
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
@@ -852,16 +862,16 @@ export function GaleriaDeFotos({ fotos, token, aoRecarregar }: { fotos: FotoPers
               >
                 {foto ? (
                    
-                  <img src={foto.url} alt={ROTULO_FOTO[t].titulo} className="h-full w-full object-cover" />
+                  <img src={foto.url} alt={T(ROTULO_FOTO[t].titulo)} className="h-full w-full object-cover" />
                 ) : (
                   <Camera size={18} className="text-white/20" />
                 )}
               </div>
               <p className="text-[11px] font-bold" style={{ color: foto ? cores[t] : "rgba(255,255,255,.5)" }}>
-                {ROTULO_FOTO[t].titulo}
+                {T(ROTULO_FOTO[t].titulo)}
               </p>
               <p className="mt-0.5 text-[10px] leading-tight text-white/35">
-                {foto?.origem === "google" ? "veio da sua conta Google" : ROTULO_FOTO[t].para}
+                {foto?.origem === "google" ? T("veio da sua conta Google") : ROTULO_FOTO[t].para}
               </p>
               <VagaDeFoto vaga={t} fotos={fotos} token={token} aoRecarregar={aoRecarregar} cor={cores[t]} semMiniatura />
             </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
@@ -191,6 +192,7 @@ function CartaoComVolume({
   onEntrar: () => void;
   onSair: () => void;
 }) {
+  const T = useT();
   return (
     <motion.div
       whileTap={{ scale: 0.95 }}
@@ -203,10 +205,10 @@ function CartaoComVolume({
       onMouseLeave={onSair}
     >
       <span className="relative block">
-        <span className={cn(tamanhoEmoji, "block transition-opacity duration-200", aceso && "opacity-0")}>{item.emoji}</span>
+        <span className={cn(tamanhoEmoji, "block transition-opacity duration-200", aceso && "opacity-0")}>{T(item.emoji)}</span>
         {aceso && <IconePersona3D grupo={grupo} id={item.id} aceso />}
       </span>
-      <span className="text-center text-xs leading-tight">{item.label}</span>
+      <span className="text-center text-xs leading-tight">{T(item.label)}</span>
       {selecionado && <Check className="absolute right-1 top-1 h-4 w-4 text-amber-500" />}
     </motion.div>
   );
@@ -215,6 +217,7 @@ function CartaoComVolume({
 // ── Component ─────────────────────────────────────────────────────
 
 export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
+  const T = useT();
   const token = typeof window !== "undefined" ? localStorage.getItem("fayai_token") || "" : "";
   const [accounts, setAccounts] = useState<ConnectedAccount[]>([]);
   const [persona, setPersona] = useState<PersonaProfunda | null>(null);
@@ -357,7 +360,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         toast.error(data?.error || "Erro ao salvar perfil");
       }
     } catch {
-      toast.error("Erro de conexão");
+      toast.error(T("Erro de conexão"));
     } finally {
       setSaving(false);
     }
@@ -369,7 +372,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
       const res = await fetch("/api/social/analyze", { method: "POST", credentials: "include", headers });
       if (res.ok) setAnalysisResult(await res.json());
     } catch {
-      toast.error("Erro ao analisar");
+      toast.error(T("Erro ao analisar"));
     } finally {
       setAnalyzing(false);
     }
@@ -397,6 +400,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   // ── Persona Builder ───────────────────────────────────────────
 
   function PersonaBuilder() {
+  const T = useT();
     return (
       <div className="space-y-6">
         {/* Progress */}
@@ -416,7 +420,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.25 }}
           >
-            <h3 className="mb-4 text-xl font-bold text-foreground">{STEP_TITLES[step]}</h3>
+            <h3 className="mb-4 text-xl font-bold text-foreground">{T(STEP_TITLES[step])}</h3>
 
             {step === 0 && (
               <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
@@ -447,8 +451,8 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                     className={selectPill(tones.includes(item.id))}
                     onClick={() => setTones(toggle(tones, item.id, 3))}
                   >
-                    <span>{item.emoji}</span>
-                    <span>{item.label}</span>
+                    <span>{T(item.emoji)}</span>
+                    <span>{T(item.label)}</span>
                   </motion.div>
                 ))}
               </div>
@@ -483,8 +487,8 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                     className={selectPill(contentTypes.includes(item.id))}
                     onClick={() => setContentTypes(toggle(contentTypes, item.id, 3))}
                   >
-                    <span>{item.emoji}</span>
-                    <span>{item.label}</span>
+                    <span>{T(item.emoji)}</span>
+                    <span>{T(item.label)}</span>
                   </motion.div>
                 ))}
               </div>
@@ -504,9 +508,9 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                     )}
                     onClick={() => setLevel(item.id)}
                   >
-                    <span className="text-5xl">{item.emoji}</span>
-                    <span className="font-semibold text-foreground">{item.label}</span>
-                    <span className="text-center text-xs text-muted-foreground">{item.description}</span>
+                    <span className="text-5xl">{T(item.emoji)}</span>
+                    <span className="font-semibold text-foreground">{T(item.label)}</span>
+                    <span className="text-center text-xs text-muted-foreground">{T(item.description)}</span>
                   </motion.div>
                 ))}
               </div>
@@ -517,7 +521,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {/* Navigation */}
         <div className="flex items-center justify-between pt-2">
           <Button variant="ghost" size="sm" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>
-            <ArrowLeft className="mr-1 h-4 w-4" /> Voltar
+            <ArrowLeft className="mr-1 h-4 w-4" />  {T("Voltar")}
           </Button>
           {step < 4 ? (
             <Button
@@ -526,7 +530,8 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
               onClick={() => setStep((s) => s + 1)}
               className="bg-gradient-to-r from-amber-500 to-yellow-500 font-semibold text-black hover:from-amber-600 hover:to-yellow-600"
             >
-              Próximo <ChevronRight className="ml-1 h-4 w-4" />
+              
+              {T("Próximo")} <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           ) : (
             <Button
@@ -536,13 +541,15 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
               className="bg-gradient-to-r from-amber-500 to-yellow-500 font-semibold text-black hover:from-amber-600 hover:to-yellow-600"
             >
               {saving ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <Sparkles className="mr-1 h-4 w-4" />}
-              Salvar Perfil
+              
+              {T("Salvar Perfil")}
             </Button>
           )}
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
-          Selecione até {step === 4 ? "1 opção" : "3 opções"} — passe o cursor para ver em 3D
+          
+          {T("Selecione até")} {step === 4 ? T("1 opção") : T("3 opções")}  {T("— passe o cursor para ver em 3D")}
         </p>
       </div>
     );
@@ -551,12 +558,14 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   // ── Connect Accounts ──────────────────────────────────────────
 
   function ConnectAccounts() {
+  const T = useT();
     const porPlataforma = new Map(accounts.map((a) => [a.platform, a]));
 
     return (
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground">
-          Conecte suas redes sociais para desbloquear insights e automação inteligente.
+          
+          {T("Conecte suas redes sociais para desbloquear insights e automação inteligente.")}
         </p>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -580,10 +589,10 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-foreground">{p.name}</p>
+                  <p className="text-sm font-medium text-foreground">{T(p.name)}</p>
                   {conectado ? (
                     <p className="truncate text-xs text-muted-foreground">
-                      {acc.username}
+                      {T(acc.username)}
                       {acc.followers > 0 && ` · ${acc.followers.toLocaleString("pt-BR")} seguidores`}
                     </p>
                   ) : !p.available ? (
@@ -592,7 +601,8 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                   {soIdentidade && (
                     <p className="mt-0.5 flex items-start gap-1 text-[11px] leading-snug text-amber-400/80">
                       <Info className="mt-[1px] h-3 w-3 shrink-0" />
-                      Reconhecemos você por esta conta. Para publicar, falta só liberar a permissão — sem novo login.
+                      
+                      {T("Reconhecemos você por esta conta. Para publicar, falta só liberar a permissão — sem novo login.")}
                     </p>
                   )}
                 </div>
@@ -600,7 +610,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                 <div className="flex shrink-0 items-center gap-2">
                   {conectado && !soIdentidade ? (
                     <Badge className="border-green-500/30 bg-green-500/20 text-xs text-green-400">
-                      <ShieldCheck className="mr-1 h-3 w-3" /> Pronta para publicar
+                      <ShieldCheck className="mr-1 h-3 w-3" />  {T("Pronta para publicar")}
                     </Badge>
                   ) : conectado && soIdentidade ? (
                     <>
@@ -643,6 +653,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
   // ── Intelligence Dashboard ────────────────────────────────────
 
   function IntelligenceDashboard() {
+  const T = useT();
     if (!hasData) {
       return (
         <motion.div
@@ -651,9 +662,10 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           className="space-y-4 rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-yellow-500/5 p-8 text-center"
         >
           <Brain className="mx-auto h-12 w-12 text-amber-500" />
-          <h3 className="text-lg font-semibold text-foreground">Inteligência Social</h3>
+          <h3 className="text-lg font-semibold text-foreground">{T("Inteligência Social")}</h3>
           <p className="mx-auto max-w-md text-sm text-muted-foreground">
-            Conecte suas redes para descobrir insights incríveis sobre seu público e receba recomendações personalizadas de conteúdo.
+            
+            {T("Conecte suas redes para descobrir insights incríveis sobre seu público e receba recomendações personalizadas de conteúdo.")}
           </p>
         </motion.div>
       );
@@ -664,15 +676,15 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {/* Stats row */}
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {[
-            { label: "Audiência total", value: totalAudience.toLocaleString("pt-BR"), icon: Users, color: "text-blue-400" },
+            { label: T("Audiência total"), value: totalAudience.toLocaleString("pt-BR"), icon: Users, color: "text-blue-400" },
             { label: "Contas conectadas", value: accounts.length, icon: Share2, color: "text-green-400" },
-            { label: "Confiança da persona", value: `${dossie?.confianca ?? 0}%`, icon: Brain, color: "text-amber-400" },
-            { label: "Áreas", value: persona?.industry?.length ?? 0, icon: Target, color: "text-purple-400" },
+            { label: T("Confiança da persona"), value: `${dossie?.confianca ?? 0}%`, icon: Brain, color: "text-amber-400" },
+            { label: T("Áreas"), value: persona?.industry?.length ?? 0, icon: Target, color: "text-purple-400" },
           ].map((stat) => (
             <motion.div key={stat.label} whileHover={{ y: -2 }} className="space-y-1 rounded-xl border border-border bg-white/[0.03] p-4">
               <stat.icon className={cn("h-5 w-5", stat.color)} />
               <p className="text-xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
+              <p className="text-xs text-muted-foreground">{T(stat.label)}</p>
             </motion.div>
           ))}
         </div>
@@ -681,12 +693,12 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {persona?.contentThemes && persona.contentThemes.length > 0 && (
           <div className="space-y-2">
             <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <BarChart3 className="h-4 w-4 text-amber-400" /> Temas de Conteúdo
+              <BarChart3 className="h-4 w-4 text-amber-400" />  {T("Temas de Conteúdo")}
             </h4>
             <div className="flex flex-wrap gap-2">
               {persona.contentThemes.map((theme) => (
                 <Badge key={theme} variant="outline" className="border-amber-500/30 text-xs text-amber-400">
-                  {theme}
+                  {T(theme)}
                 </Badge>
               ))}
             </div>
@@ -697,9 +709,9 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {persona?.audienceInsights && (
           <div className="space-y-2 rounded-xl border border-border bg-white/[0.03] p-4">
             <h4 className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <Brain className="h-4 w-4 text-purple-400" /> O que já aprendemos sobre você
+              <Brain className="h-4 w-4 text-purple-400" />  {T("O que já aprendemos sobre você")}
             </h4>
-            <p className="text-sm leading-relaxed text-muted-foreground">{persona.audienceInsights}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">{T(persona.audienceInsights)}</p>
           </div>
         )}
 
@@ -715,7 +727,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             </>
           ) : (
             <>
-              <TrendingUp className="mr-2 h-4 w-4" /> Analisar Perfil
+              <TrendingUp className="mr-2 h-4 w-4" />  {T("Analisar Perfil")}
             </>
           )}
         </Button>
@@ -728,7 +740,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
             className="space-y-2 rounded-xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 to-yellow-500/5 p-4"
           >
             <h4 className="flex items-center gap-2 text-sm font-medium text-amber-400">
-              <Sparkles className="h-4 w-4" /> Resultado da Análise
+              <Sparkles className="h-4 w-4" />  {T("Resultado da Análise")}
             </h4>
             <p className="text-sm leading-relaxed text-muted-foreground">
               {analysisResult.summary ?? JSON.stringify(analysisResult)}
@@ -748,14 +760,14 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           <Share2 className="h-5 w-5 text-black" />
         </div>
         <div className="flex-1">
-          <h2 className="text-xl font-bold text-foreground">Perfil Social</h2>
+          <h2 className="text-xl font-bold text-foreground">{T("Perfil Social")}</h2>
           <p className="text-sm text-muted-foreground">
-            {user?.name ? `${user.name.split(" ")[0]}, quanto melhor eu te conhecer, mais o conteúdo vira seu` : "Monte sua identidade e conecte suas redes"}
+            {user?.name ? `${user.name.split(" ")[0]}, quanto melhor eu te conhecer, mais o conteúdo vira seu` : T("Monte sua identidade e conecte suas redes")}
           </p>
         </div>
         {dossie && (
           <Badge variant="outline" className="border-amber-500/40 text-amber-300">
-            <Brain className="mr-1.5 h-3.5 w-3.5" /> Te conheço {dossie.confianca}%
+            <Brain className="mr-1.5 h-3.5 w-3.5" />  {T("Te conheço")} {dossie.confianca}%
           </Badge>
         )}
       </div>
@@ -773,7 +785,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                 <Share2 className="mr-1.5 h-4 w-4" /> Contas
               </TabsTrigger>
               <TabsTrigger value="inteligencia" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-                <Brain className="mr-1.5 h-4 w-4" /> Inteligência
+                <Brain className="mr-1.5 h-4 w-4" />  {T("Inteligência")}
               </TabsTrigger>
               <TabsTrigger value="publicar" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
                 <Zap className="mr-1.5 h-4 w-4" /> Publicar
@@ -795,9 +807,10 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                   className="flex w-full items-center justify-between rounded-xl border border-border bg-[#2a251d] px-5 py-3.5 text-left transition-colors hover:border-amber-500/40 cursor-pointer"
                 >
                   <span>
-                    <span className="block text-sm font-bold text-foreground">Sua base está montada</span>
+                    <span className="block text-sm font-bold text-foreground">{T("Sua base está montada")}</span>
                     <span className="mt-0.5 block text-[11.5px] text-muted-foreground">
-                      Área, tom, objetivos, formatos e nível. Refinar o resto é no painel ao lado.
+                      
+                      {T("Área, tom, objetivos, formatos e nível. Refinar o resto é no painel ao lado.")}
                     </span>
                   </span>
                   <span className="ml-3 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/40 px-3 py-1 text-[11px] font-bold text-amber-300">
@@ -839,7 +852,8 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           {dossie && dossie.confianca < 100 && (
             <p className="mt-3 flex items-start gap-1.5 px-1 text-[11px] leading-snug text-muted-foreground">
               <BookOpen className="mt-[1px] h-3 w-3 shrink-0 text-amber-400" />
-              Cada resposta aqui muda o post <em>e</em> o conteúdo do seu curso — os exemplos são reescritos para o seu contexto.
+              
+              {T("Cada resposta aqui muda o post")} <em>e</em>  {T("o conteúdo do seu curso — os exemplos são reescritos para o seu contexto.")}
             </p>
           )}
         </aside>

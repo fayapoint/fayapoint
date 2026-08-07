@@ -71,9 +71,9 @@ Hard rules:
 
 Return ONLY the JSON object. No prose, no markdown fence around it.`;
 
-/** Uma chamada ao OpenRouter, com repetição em falha transitória. */
-async function chamar(modelo, conteudo, tentativa = 1) {
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+/** Só o pedido HTTP. Separado para a captura de erro de rede ficar legível. */
+async function fazerPedido(modelo, conteudo) {
+  return fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -112,6 +112,30 @@ async function chamar(modelo, conteudo, tentativa = 1) {
     }),
   });
 
+}
+
+/** Uma chamada ao OpenRouter, com repetição em falha transitória. */
+async function chamar(modelo, conteudo, tentativa = 1) {
+  let res;
+  try {
+    res = await fazerPedido(modelo, conteudo);
+  } catch (e) {
+    /**
+     * Queda de REDE, não resposta ruim: `fetch` lança antes de haver status.
+     *
+     * A fila dos capítulos morreu com `terminated` (socket derrubado pelo
+     * outro lado) depois de 40 minutos e 5 cursos prontos. Sem esta captura,
+     * uma piscada de rede joga fora a hora seguinte de trabalho — e o script
+     * roda por horas de propósito.
+     */
+    if (tentativa < 5) {
+      const espera = 3000 * tentativa;
+      console.warn(`   ↻ rede caiu (${e.message}), repetindo em ${espera}ms`);
+      await new Promise((r) => setTimeout(r, espera));
+      return chamar(modelo, conteudo, tentativa + 1);
+    }
+    throw e;
+  }
   if (!res.ok) {
     const txt = await res.text();
     if (tentativa < 4 && (res.status === 429 || res.status >= 500)) {

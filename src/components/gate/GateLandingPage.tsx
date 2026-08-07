@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
@@ -30,6 +31,7 @@ import { useTranslations } from "next-intl";
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
 
 export function GateLandingPage() {
+  const T = useT();
   const t = useTranslations("Gate");
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -376,8 +378,8 @@ export function GateLandingPage() {
                   className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-secondary backdrop-blur-sm"
                 >
                   <stat.icon className="w-4 h-4 text-amber-400" />
-                  <span className="font-bold text-white">{stat.value}</span>
-                  <span className="text-white/50 text-sm">{stat.label}</span>
+                  <span className="font-bold text-white">{T(stat.value)}</span>
+                  <span className="text-white/50 text-sm">{T(stat.label)}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -583,7 +585,7 @@ export function GateLandingPage() {
                         <div className="text-3xl sm:text-4xl font-mono font-bold text-white bg-secondary border border-border rounded-xl px-4 py-2 min-w-[70px]">
                           {mounted ? unit.val : "--"}
                         </div>
-                        <span className="text-xs text-white/40 mt-1">{unit.label}</span>
+                        <span className="text-xs text-white/40 mt-1">{T(unit.label)}</span>
                       </div>
                       {i < 2 && <span className="text-2xl font-bold text-white/20 mb-4">:</span>}
                     </div>

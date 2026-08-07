@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -20,6 +21,7 @@ const partnerIcons: Record<string, React.ComponentType<{ className?: string }>> 
 };
 
 export default function PartnershipsPage() {
+  const T = useT();
   const t = useTranslations("Partnerships");
   const partnerTypes = t.raw("types") as PartnerType[];
 
@@ -58,13 +60,13 @@ export default function PartnershipsPage() {
                   className="bg-secondary border border-border rounded-2xl p-8"
                 >
                   <Icon className="w-12 h-12 text-blue-400 mb-4" />
-                  <h3 className="text-2xl font-bold mb-3">{type.title}</h3>
-                  <p className="text-muted-foreground mb-6">{type.description}</p>
+                  <h3 className="text-2xl font-bold mb-3">{T(type.title)}</h3>
+                  <p className="text-muted-foreground mb-6">{T(type.description)}</p>
                   <ul className="space-y-3">
                     {type.benefits.map((benefit, bidx) => (
                       <li key={bidx} className="flex items-start gap-2 text-sm">
                         <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                        <span className="text-muted-foreground">{benefit}</span>
+                        <span className="text-muted-foreground">{T(benefit)}</span>
                       </li>
                     ))}
                   </ul>

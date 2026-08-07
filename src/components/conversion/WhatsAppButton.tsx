@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
@@ -92,6 +93,7 @@ function useEscolhaAcoplado(): [boolean, () => void] {
 }
 
 export function WhatsAppButton() {
+  const T = useT();
   const t = useTranslations("WhatsApp");
   const [isOpen, setIsOpen] = useState(false);
   const rodapeAVista = useRodapeAVista();
@@ -190,7 +192,7 @@ export function WhatsAppButton() {
                     <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/10">
                       <Sparkles className="h-4 w-4 text-green-300" />
                     </div>
-                    <span className="text-sm leading-5 text-white/85">{item.message}</span>
+                    <span className="text-sm leading-5 text-white/85">{T(item.message)}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-green-300 transition group-hover:translate-x-0.5" />
                 </a>

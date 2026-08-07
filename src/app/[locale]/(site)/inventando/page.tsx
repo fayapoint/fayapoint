@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -58,6 +59,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
 export default async function InventandoHub({ params, searchParams }: Props) {
   const { locale } = await params;
+  const T = await obterT(locale);
   const { categoria, p } = await searchParams;
 
   const categorias = getCategorias();
@@ -113,29 +115,29 @@ export default async function InventandoHub({ params, searchParams }: Props) {
 
         <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-16 sm:px-6 sm:pb-20 sm:pt-24">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            {microcursosOrdenados.length} microcursos · primeira aula sempre grátis
+            {microcursosOrdenados.length}  {T("microcursos · primeira aula sempre grátis")}
           </p>
           <h1 className="mt-5 text-[clamp(2.75rem,9vw,5.5rem)] font-bold leading-[0.95] tracking-tighter">
             Inventando
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Toda semana saem dezenas de ferramentas novas, quase sempre
-            anunciadas em inglês e em vídeos de meia hora. Aqui cada uma vira um
-            microcurso curto em português — o que é, como usar e onde falha —
-            conferido contra a documentação oficial do fabricante.
+            
+            {T("Toda semana saem dezenas de ferramentas novas, quase sempre\r\n            anunciadas em inglês e em vídeos de meia hora. Aqui cada uma vira um\r\n            microcurso curto em português — o que é, como usar e onde falha —\r\n            conferido contra a documentação oficial do fabricante.")}
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/35 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-400">
               <Check aria-hidden className="h-4 w-4" />
-              Primeira aula aberta, sem cadastro
+              
+              {T("Primeira aula aberta, sem cadastro")}
             </span>
             <Link
               href={`/${locale}/ferramentaria`}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/30"
             >
               <Sparkles aria-hidden className="h-4 w-4 text-primary" />
-              Ver o catálogo de ferramentas
+              
+              {T("Ver o catálogo de ferramentas")}
             </Link>
           </div>
         </div>
@@ -151,7 +153,8 @@ export default async function InventandoHub({ params, searchParams }: Props) {
               !categoria ? "border-foreground/35 bg-foreground/10" : "border-border text-muted-foreground hover:border-foreground/25",
             ].join(" ")}
           >
-            Todas ({microcursosOrdenados.length})
+            
+            {T("Todas (")}{microcursosOrdenados.length})
           </Link>
           {categorias.map((cat) => {
             const total = microcursosOrdenados.filter((m) => m.categoria === cat).length;
@@ -165,7 +168,7 @@ export default async function InventandoHub({ params, searchParams }: Props) {
                   ativa ? "border-foreground/35 bg-foreground/10" : "border-border text-muted-foreground hover:border-foreground/25",
                 ].join(" ")}
               >
-                {cat} ({total})
+                {T(cat)} ({total})
               </Link>
             );
           })}
@@ -188,31 +191,32 @@ export default async function InventandoHub({ params, searchParams }: Props) {
                 />
                 <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
                 <span className="absolute left-3 top-3 rounded-full border border-white/25 bg-black/45 px-2.5 py-0.5 text-[11px] font-medium text-white backdrop-blur">
-                  {m.categoria}
+                  {T(m.categoria)}
                 </span>
                 <span className="absolute bottom-3 left-3 right-3 flex items-center gap-2 text-[11px] text-white/85">
                   <Clock aria-hidden className="h-3 w-3" />
-                  {m.duracao}
+                  {T(m.duracao)}
                   <span aria-hidden>·</span>
-                  {m.aulas.length} aulas
+                  {m.aulas.length}  {T("aulas")}
                 </span>
               </Link>
 
               <div className="flex flex-1 flex-col p-4">
                 <Link href={`/${locale}/inventando/${m.slug}`}>
                   <h2 className="text-[16px] font-semibold leading-snug tracking-tight transition-colors group-hover:text-primary">
-                    {m.titulo}
+                    {T(m.titulo)}
                   </h2>
                 </Link>
                 <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {m.subtitulo}
+                  {T(m.subtitulo)}
                 </p>
 
                 <Link
                   href={`/${locale}/inventando/${m.slug}`}
                   className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
                 >
-                  Ver microcurso grátis
+                  
+                  {T("Ver microcurso grátis")}
                   <ArrowRight aria-hidden className="h-4 w-4" />
                 </Link>
               </div>
@@ -222,10 +226,11 @@ export default async function InventandoHub({ params, searchParams }: Props) {
 
         {/* ── Paginação ──────────────────────────────────────────────── */}
         {totalPaginas > 1 && (
-          <nav aria-label="Paginação" className="mt-10 flex flex-wrap items-center justify-center gap-2">
+          <nav aria-label={T("Paginação")} className="mt-10 flex flex-wrap items-center justify-center gap-2">
             {pagina > 1 && (
               <Link href={url({ p: pagina - 1 })} rel="prev" className="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/30">
-                Anterior
+                
+                {T("Anterior")}
               </Link>
             )}
             {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((n) => (
@@ -243,7 +248,8 @@ export default async function InventandoHub({ params, searchParams }: Props) {
             ))}
             {pagina < totalPaginas && (
               <Link href={url({ p: pagina + 1 })} rel="next" className="rounded-lg border border-border px-4 py-2 text-sm transition-colors hover:border-foreground/30">
-                Próxima
+                
+                {T("Próxima")}
               </Link>
             )}
           </nav>
@@ -255,20 +261,18 @@ export default async function InventandoHub({ params, searchParams }: Props) {
           <div className="relative p-6 sm:p-8">
             <div className="flex items-center gap-2">
               <Crown aria-hidden className="h-4 w-4 text-primary" />
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">Como funciona o acesso</h2>
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">{T("Como funciona o acesso")}</h2>
             </div>
             <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
-              A <strong className="text-foreground">primeira aula de todo microcurso é grátis</strong>, sem
-              cadastro. A versão completa — passo a passo, critérios de escolha, onde a
-              ferramenta falha — abre por plano, e{" "}
-              <strong className="text-foreground">o microcurso inteiro é do Expert</strong>.
+              A <strong className="text-foreground">{T("primeira aula de todo microcurso é grátis")}</strong>{T(", sem\r\n              cadastro. A versão completa — passo a passo, critérios de escolha, onde a\r\n              ferramenta falha — abre por plano, e")}{" "}
+              <strong className="text-foreground">{T("o microcurso inteiro é do Expert")}</strong>.
             </p>
             <ul className="mt-5 grid gap-2 text-sm sm:grid-cols-2">
               {[
-                ["Todos", "1ª aula, sempre aberta"],
-                ["Explorador", "2ª aula + limitações"],
-                ["Profissional", "3ª aula + para quem serve"],
-                ["Expert", "Tudo, em todos os microcursos"],
+                [T("Todos"), T("1ª aula, sempre aberta")],
+                ["Explorador", T("2ª aula + limitações")],
+                ["Profissional", T("3ª aula + para quem serve")],
+                ["Expert", T("Tudo, em todos os microcursos")],
               ].map(([nome, abre]) => {
                 const topo = nome === "Expert";
                 return (
@@ -276,15 +280,16 @@ export default async function InventandoHub({ params, searchParams }: Props) {
                     key={nome}
                     className={["flex items-baseline gap-2 rounded-lg border px-3 py-2", topo ? "border-primary/40 bg-primary/[0.07]" : "border-border bg-background/40"].join(" ")}
                   >
-                    <span className={topo ? "font-semibold text-primary" : "font-medium text-foreground/75"}>{nome}</span>
+                    <span className={topo ? "font-semibold text-primary" : "font-medium text-foreground/75"}>{T(nome)}</span>
                     <span className="text-muted-foreground">·</span>
-                    <span className="text-muted-foreground">{abre}</span>
+                    <span className="text-muted-foreground">{T(abre)}</span>
                   </li>
                 );
               })}
             </ul>
             <Link href={`/${locale}/precos`} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90">
-              Ver o plano Expert — R$ {TIER_CONFIGS.expert.monthlyPrice}/mês
+              
+              {T("Ver o plano Expert — R$")} {TIER_CONFIGS.expert.monthlyPrice}/mês
             </Link>
           </div>
         </section>

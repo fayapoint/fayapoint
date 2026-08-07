@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -87,6 +88,7 @@ const PAYMENT_ICONS: Record<string, string> = {
 // ─── Component ────────────────────────────────────────────────────────────
 
 export default function ReceiptPage() {
+  const T = useT();
   const params = useParams();
   const router = useRouter();
   const [receipt, setReceipt] = useState<Receipt | null>(null);
@@ -120,7 +122,7 @@ export default function ReceiptPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Carregando recibo...</div>
+        <div className="animate-pulse text-muted-foreground">{T("Carregando recibo...")}</div>
       </div>
     );
   }
@@ -128,10 +130,11 @@ export default function ReceiptPage() {
   if (error || !receipt) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-4">
-        <p className="text-red-400">{error || "Recibo não encontrado"}</p>
+        <p className="text-red-400">{error || T("Recibo não encontrado")}</p>
         <Button variant="outline" onClick={() => router.back()}>
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Voltar
+          
+          {T("Voltar")}
         </Button>
       </div>
     );
@@ -177,14 +180,16 @@ export default function ReceiptPage() {
             onClick={() => router.push("/pt-BR/portal")}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar ao Portal
+            
+            {T("Voltar ao Portal")}
           </Button>
           <Button
             onClick={handlePrint}
             className="bg-emerald-600 hover:bg-emerald-500 text-white"
           >
             <Download className="w-4 h-4 mr-2" />
-            Salvar como PDF
+            
+            {T("Salvar como PDF")}
           </Button>
         </div>
 
@@ -209,10 +214,10 @@ export default function ReceiptPage() {
                       </div>
                       <div>
                         <h1 className="text-2xl font-black text-white tracking-tight">FayAi</h1>
-                        <p className="text-sm text-white/70">Academia de Inteligência Artificial</p>
+                        <p className="text-sm text-white/70">{T("Academia de Inteligência Artificial")}</p>
                       </div>
                     </div>
-                    <p className="text-white/60 text-sm">fayai.com.br</p>
+                    <p className="text-white/60 text-sm">{T("fayai.com.br")}</p>
                   </div>
 
                   <div className="text-right">
@@ -232,7 +237,7 @@ export default function ReceiptPage() {
               <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-border">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">Comprovante</p>
-                  <p className="text-xl font-bold text-white">{receipt.receiptNumber}</p>
+                  <p className="text-xl font-bold text-white">{T(receipt.receiptNumber)}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">Data do pagamento</p>
@@ -244,14 +249,14 @@ export default function ReceiptPage() {
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Adquirido por</p>
-                  <p className="text-lg font-semibold text-white">{receipt.userName}</p>
-                  <p className="text-sm text-muted-foreground">{receipt.userEmail}</p>
+                  <p className="text-lg font-semibold text-white">{T(receipt.userName)}</p>
+                  <p className="text-sm text-muted-foreground">{T(receipt.userEmail)}</p>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Forma de pagamento</p>
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{PAYMENT_ICONS[receipt.paymentMethod] || "💰"}</span>
-                    <p className="text-sm text-muted-foreground">{receipt.paymentMethodLabel}</p>
+                    <p className="text-sm text-muted-foreground">{T(receipt.paymentMethodLabel)}</p>
                   </div>
                 </div>
               </div>
@@ -267,9 +272,9 @@ export default function ReceiptPage() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base font-bold text-white">{item.name}</h3>
+                          <h3 className="text-base font-bold text-white">{T(item.name)}</h3>
                           {item.description && (
-                            <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                            <p className="text-sm text-muted-foreground mt-1">{T(item.description)}</p>
                           )}
 
                           {/* Badges */}
@@ -277,19 +282,22 @@ export default function ReceiptPage() {
                             {item.lifetimeAccess && (
                               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-medium">
                                 <Infinity className="w-3 h-3" />
-                                Acesso vitalício
+                                
+                                {T("Acesso vitalício")}
                               </span>
                             )}
                             {item.certificateIncluded && (
                               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium">
                                 <Award className="w-3 h-3" />
-                                Certificado verificável
+                                
+                                {T("Certificado verificável")}
                               </span>
                             )}
                             {item.type === "subscription" && (
                               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium">
                                 <Star className="w-3 h-3" />
-                                Assinatura {receipt.planCycle === "yearly" ? "anual" : "mensal"}
+                                
+                                {T("Assinatura")} {receipt.planCycle === "yearly" ? "anual" : "mensal"}
                               </span>
                             )}
                           </div>
@@ -337,7 +345,8 @@ export default function ReceiptPage() {
               {(hasLifetimeAccess || hasCertificate) && (
                 <div className="rounded-2xl border border-emerald-500/15 bg-emerald-500/[0.04] p-6">
                   <h4 className="text-sm font-bold text-emerald-300 uppercase tracking-wider mb-4">
-                    O que está incluído na sua aquisição
+                    
+                    {T("O que está incluído na sua aquisição")}
                   </h4>
                   <div className="grid sm:grid-cols-2 gap-4">
                     {hasLifetimeAccess && (
@@ -346,9 +355,10 @@ export default function ReceiptPage() {
                           <Infinity className="w-4 h-4 text-emerald-400" />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-white">Acesso vitalício</p>
+                          <p className="text-sm font-semibold text-white">{T("Acesso vitalício")}</p>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            O conteúdo é seu para sempre. Sem prazo de expiração.
+                            
+                            {T("O conteúdo é seu para sempre. Sem prazo de expiração.")}
                           </p>
                         </div>
                       </div>
@@ -359,9 +369,10 @@ export default function ReceiptPage() {
                           <Award className="w-4 h-4 text-amber-400" />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-white">Certificado verificável</p>
+                          <p className="text-sm font-semibold text-white">{T("Certificado verificável")}</p>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            Ao completar, emita seu certificado com verificação pública.
+                            
+                            {T("Ao completar, emita seu certificado com verificação pública.")}
                           </p>
                         </div>
                       </div>
@@ -372,9 +383,10 @@ export default function ReceiptPage() {
                           <Clock className="w-4 h-4 text-cyan-400" />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-white">Atualizações incluídas</p>
+                          <p className="text-sm font-semibold text-white">{T("Atualizações incluídas")}</p>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            Todas as melhorias futuras do curso são suas automaticamente.
+                            
+                            {T("Todas as melhorias futuras do curso são suas automaticamente.")}
                           </p>
                         </div>
                       </div>
@@ -384,9 +396,10 @@ export default function ReceiptPage() {
                         <Shield className="w-4 h-4 text-amber-400" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-white">Garantia de 7 dias</p>
+                        <p className="text-sm font-semibold text-white">{T("Garantia de 7 dias")}</p>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          Não ficou satisfeito? Reembolso integral em até 7 dias.
+                          
+                          {T("Não ficou satisfeito? Reembolso integral em até 7 dias.")}
                         </p>
                       </div>
                     </div>
@@ -398,12 +411,13 @@ export default function ReceiptPage() {
               {isSubscription && receipt.planName && (
                 <div className="rounded-2xl border border-amber-500/15 bg-amber-500/[0.04] p-6">
                   <h4 className="text-sm font-bold text-amber-300 uppercase tracking-wider mb-3">
-                    Detalhes da assinatura
+                    
+                    {T("Detalhes da assinatura")}
                   </h4>
                   <div className="grid sm:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <p className="text-muted-foreground text-xs uppercase tracking-wider">Plano</p>
-                      <p className="text-white font-semibold mt-1">{receipt.planName}</p>
+                      <p className="text-muted-foreground text-xs uppercase tracking-wider">{T("Plano")}</p>
+                      <p className="text-white font-semibold mt-1">{T(receipt.planName)}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground text-xs uppercase tracking-wider">Ciclo</p>
@@ -414,7 +428,7 @@ export default function ReceiptPage() {
                     <div>
                       <p className="text-muted-foreground text-xs uppercase tracking-wider">Valor</p>
                       <p className="text-white font-semibold mt-1">
-                        {formatCurrency(receipt.total)}/{receipt.planCycle === "yearly" ? "ano" : "mês"}
+                        {formatCurrency(receipt.total)}/{receipt.planCycle === "yearly" ? T("ano") : T("mês")}
                       </p>
                     </div>
                   </div>
@@ -426,19 +440,17 @@ export default function ReceiptPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Shield className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">Pagamento processado com segurança</span>
+                    <span className="text-xs text-muted-foreground">{T("Pagamento processado com segurança")}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CreditCard className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">{receipt.paymentMethodLabel}</span>
+                    <span className="text-xs text-muted-foreground">{T(receipt.paymentMethodLabel)}</span>
                   </div>
                 </div>
 
                 <p className="text-[10px] text-gray-600 text-center leading-relaxed">
-                  Este comprovante de aquisição é emitido pela plataforma FayAi (fayai.com.br) e serve como
-                  registro da transação realizada. Este documento não constitui nota fiscal e não possui
-                  validade fiscal nos termos da legislação brasileira. CNPJ em processo de regularização.
-                  Em caso de dúvidas, entre em contato pelo suporte da plataforma.
+                  
+                  {T("Este comprovante de aquisição é emitido pela plataforma FayAi (fayai.com.br) e serve como\n                  registro da transação realizada. Este documento não constitui nota fiscal e não possui\n                  validade fiscal nos termos da legislação brasileira. CNPJ em processo de regularização.\n                  Em caso de dúvidas, entre em contato pelo suporte da plataforma.")}
                 </p>
               </div>
             </div>

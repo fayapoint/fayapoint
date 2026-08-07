@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -15,6 +16,7 @@ type Guide = {
 };
 
 export default function GuidesPage() {
+  const T = useT();
   const t = useTranslations("Guides");
   const guides = t.raw("list") as Guide[];
 
@@ -58,14 +60,14 @@ export default function GuidesPage() {
                 <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
                   <FileText className="text-blue-400" size={24} />
                 </div>
-                <span className="text-xs text-blue-400 uppercase tracking-wide">{guide.category}</span>
+                <span className="text-xs text-blue-400 uppercase tracking-wide">{T(guide.category)}</span>
                 <h3 className="text-xl font-semibold mt-2 mb-3 group-hover:text-blue-400 transition-colors">
-                  {guide.title}
+                  {T(guide.title)}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{guide.description}</p>
+                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{T(guide.description)}</p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
-                    <Clock size={14} /> {guide.readTime}
+                    <Clock size={14} /> {T(guide.readTime)}
                   </span>
                   <span className="flex items-center gap-1">
                     <Download size={14} /> {guide.downloads.toLocaleString()}

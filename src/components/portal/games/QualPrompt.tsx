@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * QUAL PROMPT GEROU ISTO? — verbo: DEDUZIR (perceber antes dos outros).
@@ -47,6 +48,7 @@ function pointsFor(progress: number): number {
 }
 
 export function QualPrompt() {
+  const T = useT();
   const { deck, rotate } = useRotatingDeck(PROMPT_ROUNDS, ROUND_COUNT, "fayai_seen_qual_prompt");
   const reduced = useReducedMotion();
 
@@ -150,18 +152,18 @@ export function QualPrompt() {
           <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-400/12 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-cyan-300">
             <Eye size={12} /> {ROUND_COUNT} imagens
           </span>
-          <h3 className="mt-3 text-2xl font-black">Adivinhe antes de ver</h3>
+          <h3 className="mt-3 text-2xl font-black">{T("Adivinhe antes de ver")}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Cada imagem entra <strong>borrada</strong> e vai focando. Quanto mais cedo você acertar o
-            prompt que a criou, mais pontos: <strong className="text-amber-300">{MAX_POINTS}</strong>{" "}
-            no escuro, <strong className="text-white/60">{MIN_POINTS}</strong> com tudo nítido.
+            
+            {T("Cada imagem entra")} <strong>borrada</strong>  {T("e vai focando. Quanto mais cedo você acertar o\r\n            prompt que a criou, mais pontos:")} <strong className="text-amber-300">{MAX_POINTS}</strong>{" "}
+            no escuro, <strong className="text-white/60">{MIN_POINTS}</strong>  {T("com tudo nítido.")}
           </p>
-          {high > 0 && <p className="mt-3 text-xs font-bold text-amber-300">Seu recorde: {high}</p>}
+          {high > 0 && <p className="mt-3 text-xs font-bold text-amber-300">{T("Seu recorde:")} {high}</p>}
           <button
             onClick={begin}
             className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-cyan-400 to-sky-300 px-7 py-3 text-base font-black text-[#04222b] transition-transform hover:scale-[1.04]"
           >
-            <Play size={16} strokeWidth={3} /> Começar
+            <Play size={16} strokeWidth={3} />  {T("Começar")}
           </button>
         </motion.div>
       </div>
@@ -178,7 +180,8 @@ export function QualPrompt() {
         <FxConfetti active={hits >= deck.length * 0.6} />
         {isRecord && (
           <p className="relative mb-1 text-sm font-black uppercase tracking-widest text-lime-300">
-            ★ Novo recorde ★
+            
+            {T("★ Novo recorde ★")}
           </p>
         )}
         <p className="relative text-6xl font-black text-amber-400">{score}</p>
@@ -190,7 +193,7 @@ export function QualPrompt() {
           onClick={begin}
           className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-6 py-2.5 text-sm font-black text-[#241a05] transition-transform hover:scale-[1.04]"
         >
-          <RefreshCw size={14} /> Jogar de novo
+          <RefreshCw size={14} />  {T("Jogar de novo")}
         </button>
         <div className="relative mx-auto mt-3 max-w-md text-left">
           <PersonaFisher source="qual-prompt" />
@@ -217,7 +220,7 @@ export function QualPrompt() {
             animate={{ scale: 1 }}
             className="rounded-full bg-amber-400/12 px-3 py-1 text-xs font-black text-amber-300"
           >
-            vale {livePoints} agora
+            vale {livePoints}  {T("agora")}
           </motion.span>
         ) : (
           <span className="text-xs font-black text-amber-400">{score} pts</span>
@@ -268,7 +271,7 @@ export function QualPrompt() {
               className="text-sm font-black uppercase tracking-widest"
               style={{ color: right ? "#a3e635" : "#f47276" }}
             >
-              {answer === -1 ? "Tempo!" : right ? `Acertou · +${gained}` : "Não era esse"}
+              {answer === -1 ? "Tempo!" : right ? `Acertou · +${gained}` : T("Não era esse")}
             </p>
           </motion.div>
         )}
@@ -317,7 +320,7 @@ export function QualPrompt() {
                   )}
                 </span>
               )}
-              <span>{option}</span>
+              <span>{T(option)}</span>
             </motion.button>
           );
         })}
@@ -331,7 +334,7 @@ export function QualPrompt() {
             animate={{ opacity: 1, y: 0 }}
             className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center"
           >
-            <p className="text-sm leading-relaxed text-muted-foreground">{round.lesson}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">{T(round.lesson)}</p>
             <div className="mt-1.5">
               <VocabularyChip term={round.term} />
             </div>
@@ -339,7 +342,7 @@ export function QualPrompt() {
               onClick={next}
               className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-black text-[#241a05]"
             >
-              {index + 1 >= deck.length ? "Ver resultado" : "Próxima imagem"}{" "}
+              {index + 1 >= deck.length ? T("Ver resultado") : T("Próxima imagem")}{" "}
               <ArrowRight size={14} />
             </button>
           </motion.div>
@@ -356,7 +359,7 @@ export function QualPrompt() {
             animate={{ opacity: 1, y: 0 }}
             className="mt-2 text-center text-[11px] text-cyan-300/80"
           >
-            Dica: {round.hint}
+            Dica: {T(round.hint)}
           </motion.p>
         )}
       </AnimatePresence>

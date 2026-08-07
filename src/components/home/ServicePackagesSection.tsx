@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import { Sparkles, Package, ArrowRight } from "lucide-react";
@@ -41,6 +42,7 @@ function splitDescription(description: string): string[] {
 }
 
 export function ServicePackagesSection() {
+  const T = useT();
   const { prices, loading, error } = useServicePrices("bundles");
   const locale = useLocale();
   const t = useTranslations("Home.ServicePackages");
@@ -64,7 +66,7 @@ export function ServicePackagesSection() {
         )}
 
         {error && (
-          <div className="text-center text-destructive">{error}</div>
+          <div className="text-center text-destructive">{T(error)}</div>
         )}
 
         {!loading && prices.length === 0 && !error && (
@@ -112,7 +114,7 @@ export function ServicePackagesSection() {
                     {splitDescription(getPricingDescriptionTranslation(pkg.description, pkg.unitLabel, locale)).map((item) => (
                       <div key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
                         <Sparkles className="w-4 h-4 text-primary mt-0.5" />
-                        <span>{item}</span>
+                        <span>{T(item)}</span>
                       </div>
                     ))}
                   </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -30,6 +31,7 @@ function applyTheme(next: string) {
 }
 
 export function ThemeSwitcher() {
+  const T = useT();
   const pathname = usePathname();
   const isEnglish = pathname?.split("/").includes("en");
   const options = useMemo(
@@ -86,7 +88,7 @@ export function ThemeSwitcher() {
         <SelectContent>
           {options.map((opt) => (
             <SelectItem key={opt.value} value={opt.value}>
-              {opt.label}
+              {T(opt.label)}
             </SelectItem>
           ))}
         </SelectContent>

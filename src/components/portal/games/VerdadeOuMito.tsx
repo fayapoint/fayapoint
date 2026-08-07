@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 /**
  * VERDADE OU MITO — verbo: DESLIZAR (reagir rápido sob pressão).
@@ -47,6 +48,7 @@ type Phase = "idle" | "countdown" | "playing" | "over";
 type CardResult = { statement: string; explanation: string; wasTrue: boolean };
 
 export function VerdadeOuMito() {
+  const T = useT();
   const { deck, rotate } = useRotatingDeck(TRUTH_CARDS, DECK_SIZE, "fayai_seen_verdade_mito");
   const reduced = useReducedMotion();
 
@@ -152,20 +154,20 @@ export function VerdadeOuMito() {
           <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/12 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-amber-300">
             <Zap size={12} /> 60 segundos
           </span>
-          <h3 className="mt-3 text-2xl font-black">Deslize rápido</h3>
+          <h3 className="mt-3 text-2xl font-black">{T("Deslize rápido")}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Arraste para a <strong className="text-lime-300">direita</strong> se for verdade, para a{" "}
-            <strong className="text-rose-300">esquerda</strong> se for mito. Acerto seguido vale mais,
-            erro custa {TIME_PENALTY} segundos.
+            
+            {T("Arraste para a")} <strong className="text-lime-300">direita</strong>  {T("se for verdade, para a")}{" "}
+            <strong className="text-rose-300">esquerda</strong>  {T("se for mito. Acerto seguido vale mais,\r\n            erro custa")} {TIME_PENALTY} segundos.
           </p>
           {high > 0 && (
-            <p className="mt-3 text-xs font-bold text-amber-300">Seu recorde: {high} pontos</p>
+            <p className="mt-3 text-xs font-bold text-amber-300">{T("Seu recorde:")} {high}  {T("pontos")}</p>
           )}
           <button
             onClick={begin}
             className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-7 py-3 text-base font-black text-[#241a05] transition-transform hover:scale-[1.04]"
           >
-            <Play size={16} strokeWidth={3} /> Começar
+            <Play size={16} strokeWidth={3} />  {T("Começar")}
           </button>
         </motion.div>
       </div>
@@ -185,12 +187,13 @@ export function VerdadeOuMito() {
             animate={{ scale: 1, opacity: 1 }}
             className="mb-1 text-sm font-black uppercase tracking-widest text-lime-300"
           >
-            ★ Novo recorde ★
+            
+            {T("★ Novo recorde ★")}
           </motion.p>
         )}
         <p className="text-6xl font-black text-amber-400">{score}</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          {hits} acerto{hits === 1 ? "" : "s"} · melhor sequência: {combo.best}
+          {hits} acerto{hits === 1 ? "" : "s"}  {T("· melhor sequência:")} {combo.best}
           {high > 0 && !isRecord && ` · recorde: ${high}`}
         </p>
 
@@ -204,12 +207,12 @@ export function VerdadeOuMito() {
                 key={i}
                 className="rounded-xl border border-rose-400/20 bg-rose-400/[0.06] p-3 text-sm"
               >
-                <p className="font-bold leading-snug">{miss.statement}</p>
+                <p className="font-bold leading-snug">{T(miss.statement)}</p>
                 <p className="mt-1 text-xs font-extrabold uppercase tracking-wider text-rose-300">
                   Era {miss.wasTrue ? "verdade" : "mito"}
                 </p>
                 <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                  {miss.explanation}
+                  {T(miss.explanation)}
                 </p>
               </div>
             ))}
@@ -220,7 +223,7 @@ export function VerdadeOuMito() {
           onClick={begin}
           className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-6 py-2.5 text-sm font-black text-[#241a05] transition-transform hover:scale-[1.04]"
         >
-          <RefreshCw size={14} /> Jogar de novo
+          <RefreshCw size={14} />  {T("Jogar de novo")}
         </button>
 
         <div className="mx-auto mt-3 max-w-md text-left">
@@ -294,7 +297,8 @@ export function VerdadeOuMito() {
         </button>
       </div>
       <p className="mt-2 text-center text-[11px] text-muted-foreground">
-        ou arraste a carta para o lado
+        
+        {T("ou arraste a carta para o lado")}
       </p>
     </div>
   );
@@ -315,6 +319,7 @@ function SwipeCard({
   reduced: boolean;
   flash: "hit" | "miss" | null;
 }) {
+  const T = useT();
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-260, 0, 260], [-14, 0, 14]);
   const trueOpacity = useTransform(x, [30, 130], [0, 1]);
@@ -380,7 +385,7 @@ function SwipeCard({
       )}
 
       <div className="flex h-[150px] flex-col justify-center px-5 text-center">
-        <p className="text-base font-bold leading-snug sm:text-lg">{card.statement}</p>
+        <p className="text-base font-bold leading-snug sm:text-lg">{T(card.statement)}</p>
         <div className="mt-2">
           <VocabularyChip term={card.term} />
         </div>

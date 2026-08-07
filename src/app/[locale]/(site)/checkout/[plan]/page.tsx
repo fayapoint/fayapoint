@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -253,6 +254,7 @@ interface EnrollmentResult { success?: boolean; error?: string; message?: string
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function CheckoutPage() {
+  const T = useT();
   const params = useParams();
   const router = useRouter();
   const planName = params.plan as string;
@@ -391,7 +393,7 @@ export default function CheckoutPage() {
       setCopied(true);
       toast.success("Copiado!");
       setTimeout(() => setCopied(false), 2000);
-    } catch { toast.error("Erro ao copiar"); }
+    } catch { toast.error(T("Erro ao copiar")); }
   };
 
   // ─── API Calls ──────────────────────────────────────────────────────
@@ -440,12 +442,12 @@ export default function CheckoutPage() {
   }, [paymentResult, checkPaymentStatus]);
 
   const handlePayment = async () => {
-    if (!name || !email) { toast.error("Preencha nome e email."); return; }
-    if (!isFreeCourseCheckout && (!cpfCnpj || cpfCnpj.replace(/\D/g, "").length < 11)) { toast.error("Informe CPF ou CNPJ válido."); return; }
-    if (isCartCheckout && cartItems.length === 0) { toast.error("Carrinho vazio."); return; }
+    if (!name || !email) { toast.error(T("Preencha nome e email.")); return; }
+    if (!isFreeCourseCheckout && (!cpfCnpj || cpfCnpj.replace(/\D/g, "").length < 11)) { toast.error(T("Informe CPF ou CNPJ válido.")); return; }
+    if (isCartCheckout && cartItems.length === 0) { toast.error(T("Carrinho vazio.")); return; }
     if (!isFreeCourseCheckout && selectedMethod === "credit_card" && !selectedCard) {
-      if (!cardNumber || !cardHolder || !cardExpiry || !cardCvv) { toast.error("Preencha os dados do cartão."); return; }
-      if (!postalCode || !addressNumber) { toast.error("Informe CEP e número."); return; }
+      if (!cardNumber || !cardHolder || !cardExpiry || !cardCvv) { toast.error(T("Preencha os dados do cartão.")); return; }
+      if (!postalCode || !addressNumber) { toast.error(T("Informe CEP e número.")); return; }
     }
     if (selectedMethod === "mercadopago" && !isFreeCourseCheckout && !cpfCnpj) {
       // CPF is optional for MP redirect
@@ -454,7 +456,7 @@ export default function CheckoutPage() {
     setLoading(true);
     try {
       const token = getClientBearerToken();
-      if (!isLoggedIn && !token) { toast.error("Faça login para continuar."); router.push("/pt-BR/login"); return; }
+      if (!isLoggedIn && !token) { toast.error(T("Faça login para continuar.")); router.push("/pt-BR/login"); return; }
 
       // Send identifiers and the displayed price snapshot. The server resolves
       // the actual name, availability and charge amount from its own catalog.
@@ -548,7 +550,7 @@ export default function CheckoutPage() {
         clearCart();
         router.push(`/pt-BR/checkout/success?order=${data.orderNumber}`);
       } else {
-        toast.success("Cobrança criada! Complete o pagamento.");
+        toast.success(T("Cobrança criada! Complete o pagamento."));
       }
     } catch (error) {
       console.error("Checkout error:", error);
@@ -574,7 +576,7 @@ export default function CheckoutPage() {
                 <Clock className="w-10 h-10 text-amber-600" />
               </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Aguardando Pagamento</h1>
-              <p className="text-muted-foreground">Pedido #{paymentResult.orderNumber}</p>
+              <p className="text-muted-foreground">Pedido #{T(paymentResult.orderNumber)}</p>
             </div>
 
             <div className="rounded-2xl border border-gray-200 bg-white shadow-xl shadow-gray-100/50 p-8">
@@ -583,7 +585,7 @@ export default function CheckoutPage() {
                 <div className="text-center space-y-6">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
                     <PixIcon3D active />
-                    <span className="font-semibold text-sm">Pague com PIX</span>
+                    <span className="font-semibold text-sm">{T("Pague com PIX")}</span>
                   </div>
 
                   <div className="bg-white p-6 rounded-2xl inline-block mx-auto shadow-lg border border-gray-100">
@@ -608,7 +610,7 @@ export default function CheckoutPage() {
                     {checkingStatus ? (
                       <><Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> Verificando pagamento...</>
                     ) : (
-                      <><Timer className="w-4 h-4 text-emerald-600" /> Confirmação automática em segundos</>
+                      <><Timer className="w-4 h-4 text-emerald-600" />  {T("Confirmação automática em segundos")}</>
                     )}
                   </div>
                 </div>
@@ -619,7 +621,7 @@ export default function CheckoutPage() {
                 <div className="text-center space-y-6">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-blue-700">
                     <FileText className="w-5 h-5" />
-                    <span className="font-semibold text-sm">Boleto Bancário</span>
+                    <span className="font-semibold text-sm">{T("Boleto Bancário")}</span>
                   </div>
 
                   <div className="text-3xl font-bold text-gray-900">
@@ -627,7 +629,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">Linha Digitável:</p>
+                    <p className="text-sm text-muted-foreground">{T("Linha Digitável:")}</p>
                     <div className="flex gap-2">
                       <input readOnly value={paymentResult.boletoData.digitableLine} className="flex-1 bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-700 text-sm font-mono" />
                       <Button onClick={() => copyToClipboard(paymentResult.boletoData!.digitableLine)} className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-4 shadow-md">
@@ -639,14 +641,14 @@ export default function CheckoutPage() {
                   <p className="text-sm text-muted-foreground">Vencimento: {new Date(paymentResult.boletoData.dueDate).toLocaleDateString("pt-BR")}</p>
 
                   <Button onClick={() => window.open(paymentResult.boletoData?.bankSlipUrl, "_blank")} className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-4 shadow-md">
-                    <FileText className="w-4 h-4 mr-2" /> Abrir Boleto PDF
+                    <FileText className="w-4 h-4 mr-2" />  {T("Abrir Boleto PDF")}
                   </Button>
                 </div>
               )}
 
               <div className="h-px bg-gray-100 my-6" />
               <div className="flex gap-4">
-                <Button variant="outline" className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl" onClick={() => setPaymentResult(null)}>Voltar</Button>
+                <Button variant="outline" className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl" onClick={() => setPaymentResult(null)}>{T("Voltar")}</Button>
                 <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md" onClick={() => router.push("/pt-BR/portal")}>Meu Portal</Button>
               </div>
             </div>
@@ -667,13 +669,14 @@ export default function CheckoutPage() {
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium mb-4">
               <Lock className="w-3.5 h-3.5" />
-              Checkout seguro com criptografia SSL 256-bit
+              
+              {T("Checkout seguro com criptografia SSL 256-bit")}
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {isFreeCourseCheckout ? "Liberar Acesso Gratuito" : "Finalizar Compra"}
             </h1>
             <p className="text-muted-foreground text-lg">
-              {isCartCheckout ? "Revise seus itens e finalize com segurança." : `Plano ${planInfo?.name || planName} — comece a aprender hoje.`}
+              {isCartCheckout ? T("Revise seus itens e finalize com segurança.") : `Plano ${planInfo?.name || planName} — comece a aprender hoje.`}
             </p>
           </div>
 
@@ -686,7 +689,8 @@ export default function CheckoutPage() {
                 <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <RefreshCw className="w-5 h-5 text-indigo-500" />
-                    Ciclo de Cobrança
+                    
+                    {T("Ciclo de Cobrança")}
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
                     <button type="button" onClick={() => setSubscriptionCycle("monthly")}
@@ -695,7 +699,7 @@ export default function CheckoutPage() {
                       }`}>
                       {subscriptionCycle === "monthly" && <div className="absolute top-3 right-3"><CheckCircle2 className="w-5 h-5 text-indigo-500" /></div>}
                       <span className="text-lg font-bold text-gray-900 block">{formatCurrency(planInfo.monthlyPrice)}</span>
-                      <span className="text-sm text-muted-foreground">por mês</span>
+                      <span className="text-sm text-muted-foreground">{T("por mês")}</span>
                     </button>
                     <button type="button" onClick={() => setSubscriptionCycle("yearly")}
                       className={`relative p-4 rounded-xl border-2 transition-all text-left ${
@@ -704,7 +708,7 @@ export default function CheckoutPage() {
                       {subscriptionCycle === "yearly" && <div className="absolute top-3 right-3"><CheckCircle2 className="w-5 h-5 text-emerald-500" /></div>}
                       <div className="absolute -top-2.5 right-3 px-2 py-0.5 bg-emerald-500 text-white text-xs font-bold rounded-full shadow-sm">Economize 17%</div>
                       <span className="text-lg font-bold text-gray-900 block">{formatCurrency(planInfo.yearlyPrice)}</span>
-                      <span className="text-sm text-muted-foreground">por ano ({formatCurrency(planInfo.yearlyPrice / 12)}/mês)</span>
+                      <span className="text-sm text-muted-foreground">{T("por ano (")}{formatCurrency(planInfo.yearlyPrice / 12)}/mês)</span>
                     </button>
                   </div>
                 </div>
@@ -716,17 +720,18 @@ export default function CheckoutPage() {
                   <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
                     <ShieldCheck className="w-4 h-4 text-indigo-600" />
                   </div>
-                  Seus Dados
+                  
+                  {T("Seus Dados")}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-5">Informações protegidas e não compartilhadas.</p>
+                <p className="text-sm text-muted-foreground mb-5">{T("Informações protegidas e não compartilhadas.")}</p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className={labelClass}>Nome completo *</label>
-                    <input className={inputClass} placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoggedIn} />
+                    <label className={labelClass}>{T("Nome completo *")}</label>
+                    <input className={inputClass} placeholder={T("Seu nome")} value={name} onChange={(e) => setName(e.target.value)} disabled={isLoggedIn} />
                   </div>
                   <div>
                     <label className={labelClass}>Email *</label>
-                    <input className={inputClass} placeholder="email@exemplo.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoggedIn} />
+                    <input className={inputClass} placeholder={T("email@exemplo.com")} value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoggedIn} />
                   </div>
                   <div>
                     <label className={labelClass}>{isFreeCourseCheckout ? "CPF ou CNPJ" : "CPF ou CNPJ *"}</label>
@@ -738,24 +743,24 @@ export default function CheckoutPage() {
                   </div>
                 </div>
                 {isLoggedIn && (
-                  <p className="text-xs text-emerald-600 flex items-center gap-1.5 mt-4 font-medium"><BadgeCheck className="w-4 h-4" /> Logado como {user?.name}</p>
+                  <p className="text-xs text-emerald-600 flex items-center gap-1.5 mt-4 font-medium"><BadgeCheck className="w-4 h-4" />  {T("Logado como")} {T(user?.name)}</p>
                 )}
               </div>
 
               {/* Payment Methods */}
               <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                  {isFreeCourseCheckout ? "Liberação do Acesso" : "Forma de Pagamento"}
+                  {isFreeCourseCheckout ? T("Liberação do Acesso") : "Forma de Pagamento"}
                 </h3>
-                {!isFreeCourseCheckout && <p className="text-sm text-muted-foreground mb-5">Escolha como prefere pagar.</p>}
+                {!isFreeCourseCheckout && <p className="text-sm text-muted-foreground mb-5">{T("Escolha como prefere pagar.")}</p>}
 
                 {isFreeCourseCheckout ? (
                   <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5 mt-4">
                     <div className="flex items-start gap-3">
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600"><Gift className="h-5 w-5" /></div>
                       <div>
-                        <p className="text-base font-semibold text-gray-900">Curso grátis do mês com certificado incluso</p>
-                        <p className="mt-1 text-sm text-muted-foreground">Sem pagamento. Ao confirmar, o curso é liberado imediatamente.</p>
+                        <p className="text-base font-semibold text-gray-900">{T("Curso grátis do mês com certificado incluso")}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">{T("Sem pagamento. Ao confirmar, o curso é liberado imediatamente.")}</p>
                       </div>
                     </div>
                   </div>
@@ -773,7 +778,7 @@ export default function CheckoutPage() {
                           <PixIcon3D active={selectedMethod === "pix"} />
                         </div>
                         <span className="text-sm font-semibold text-gray-900 block">PIX</span>
-                        <span className="text-xs text-emerald-600 font-medium">Aprovação imediata</span>
+                        <span className="text-xs text-emerald-600 font-medium">{T("Aprovação imediata")}</span>
                       </button>
 
                       {/* Boleto */}
@@ -798,8 +803,8 @@ export default function CheckoutPage() {
                         <div className="flex justify-center mb-2">
                           <CardIcon3D active={selectedMethod === "credit_card"} />
                         </div>
-                        <span className="text-sm font-semibold text-gray-900 block">Cartão</span>
-                        <span className="text-xs text-indigo-600 font-medium">Até 12x sem juros</span>
+                        <span className="text-sm font-semibold text-gray-900 block">{T("Cartão")}</span>
+                        <span className="text-xs text-indigo-600 font-medium">{T("Até 12x sem juros")}</span>
                       </button>
 
                       {/* MercadoPago */}
@@ -825,7 +830,8 @@ export default function CheckoutPage() {
                         <div className="flex flex-col gap-2">
                           <MercadoPagoLogo className="h-5" />
                           <p className="text-xs text-muted-foreground">
-                            Você será redirecionado para o ambiente seguro do MercadoPago para completar o pagamento com PIX, cartão de crédito, débito ou boleto.
+                            
+                            {T("Você será redirecionado para o ambiente seguro do MercadoPago para completar o pagamento com PIX, cartão de crédito, débito ou boleto.")}
                           </p>
                         </div>
                       </div>
@@ -837,22 +843,22 @@ export default function CheckoutPage() {
                         {/* Saved Cards */}
                         {savedCards.length > 0 && (
                           <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-600 mb-2"><Wallet className="w-4 h-4 inline mr-1.5 text-indigo-500" /> Cartões Salvos</label>
+                            <label className="block text-sm font-medium text-gray-600 mb-2"><Wallet className="w-4 h-4 inline mr-1.5 text-indigo-500" />  {T("Cartões Salvos")}</label>
                             <div className="space-y-2">
                               {savedCards.map((card) => (
                                 <button key={card.id} type="button" onClick={() => { setSelectedCard(selectedCard === card.id ? null : card.id); if (selectedCard !== card.id) { setCardNumber(""); setCardHolder(""); setCardExpiry(""); setCardCvv(""); } }}
                                   className={`w-full p-3 rounded-xl border-2 transition-all flex items-center justify-between ${selectedCard === card.id ? "border-indigo-400 bg-indigo-50/50 shadow-sm" : "border-gray-200 hover:border-gray-300"}`}>
                                   <div className="flex items-center gap-3">
                                     <CreditCard className="w-5 h-5 text-muted-foreground" />
-                                    <span className="font-mono text-gray-900">•••• {card.lastFour}</span>
-                                    <span className="text-xs text-muted-foreground capitalize">{card.brand}</span>
+                                    <span className="font-mono text-gray-900">•••• {T(card.lastFour)}</span>
+                                    <span className="text-xs text-muted-foreground capitalize">{T(card.brand)}</span>
                                   </div>
-                                  <span className="text-xs text-muted-foreground">{card.expiryMonth}/{card.expiryYear}</span>
+                                  <span className="text-xs text-muted-foreground">{T(card.expiryMonth)}/{T(card.expiryYear)}</span>
                                 </button>
                               ))}
                               <button type="button" onClick={() => setSelectedCard(null)}
                                 className={`w-full p-3 rounded-xl border-2 transition-all text-center ${!selectedCard ? "border-indigo-400 bg-indigo-50/50 shadow-sm" : "border-gray-200 hover:border-gray-300"}`}>
-                                <CreditCard className="w-4 h-4 inline mr-2 text-muted-foreground" /> <span className="text-gray-700">Usar outro cartão</span>
+                                <CreditCard className="w-4 h-4 inline mr-2 text-muted-foreground" /> <span className="text-gray-700">{T("Usar outro cartão")}</span>
                               </button>
                             </div>
                           </div>
@@ -862,12 +868,12 @@ export default function CheckoutPage() {
                         {!selectedCard && (
                           <div className="grid md:grid-cols-2 gap-4">
                             <div className="md:col-span-2">
-                              <label className={labelClass}>Número do Cartão *</label>
+                              <label className={labelClass}>{T("Número do Cartão *")}</label>
                               <input className={`${inputClass} font-mono`} placeholder="0000 0000 0000 0000" value={cardNumber} onChange={(e) => setCardNumber(formatCardNumber(e.target.value))} maxLength={19} />
                             </div>
                             <div className="md:col-span-2">
-                              <label className={labelClass}>Nome no Cartão *</label>
-                              <input className={`${inputClass} uppercase`} placeholder="NOME COMO ESTÁ NO CARTÃO" value={cardHolder} onChange={(e) => setCardHolder(e.target.value.toUpperCase())} />
+                              <label className={labelClass}>{T("Nome no Cartão *")}</label>
+                              <input className={`${inputClass} uppercase`} placeholder={T("NOME COMO ESTÁ NO CARTÃO")} value={cardHolder} onChange={(e) => setCardHolder(e.target.value.toUpperCase())} />
                             </div>
                             <div>
                               <label className={labelClass}>Validade *</label>
@@ -882,19 +888,19 @@ export default function CheckoutPage() {
                               <input className={inputClass} placeholder="00000-000" value={postalCode} onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2"))} maxLength={9} />
                             </div>
                             <div>
-                              <label className={labelClass}>Número *</label>
+                              <label className={labelClass}>{T("Número *")}</label>
                               <input className={inputClass} placeholder="123" value={addressNumber} onChange={(e) => setAddressNumber(e.target.value)} />
                             </div>
                             <div className="md:col-span-2">
                               <label className={labelClass}>Parcelas</label>
                               <select className={inputClass} value={installments} onChange={(e) => setInstallments(parseInt(e.target.value))}>
-                                {installmentOptions.map((opt) => <option key={opt.count} value={opt.count}>{opt.label}</option>)}
+                                {installmentOptions.map((opt) => <option key={opt.count} value={opt.count}>{T(opt.label)}</option>)}
                               </select>
                             </div>
                             <div className="md:col-span-2">
                               <label className="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" checked={saveCard} onChange={(e) => setSaveCard(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-indigo-500 focus:ring-indigo-500" />
-                                <span className="text-sm text-gray-600">Salvar cartão para compras futuras</span>
+                                <span className="text-sm text-gray-600">{T("Salvar cartão para compras futuras")}</span>
                               </label>
                             </div>
                           </div>
@@ -914,11 +920,11 @@ export default function CheckoutPage() {
                 {planInfo && !isCartCheckout && (
                   <div className="mb-6">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="text-3xl">{planInfo.emoji}</span>
+                      <span className="text-3xl">{T(planInfo.emoji)}</span>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900">Plano {planInfo.name}</h3>
+                        <h3 className="text-xl font-bold text-gray-900">{T("Plano")} {T(planInfo.name)}</h3>
                         {planInfo.badge && (
-                          <span className="text-xs bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full font-medium">{planInfo.badge}</span>
+                          <span className="text-xs bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full font-medium">{T(planInfo.badge)}</span>
                         )}
                       </div>
                     </div>
@@ -926,7 +932,7 @@ export default function CheckoutPage() {
                       {planInfo.features.map((f, i) => (
                         <div key={i} className="flex items-start gap-2 text-sm">
                           <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                          <span className="text-gray-600">{f}</span>
+                          <span className="text-gray-600">{T(f)}</span>
                         </div>
                       ))}
                     </div>
@@ -936,12 +942,12 @@ export default function CheckoutPage() {
                 {/* Cart Items */}
                 {isCartCheckout && cartItems.length > 0 && (
                   <div className="space-y-3 mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900">Seu Pedido</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{T("Seu Pedido")}</h3>
                     {cartItems.map((item) => (
                       <div key={item.id} className="flex justify-between items-start py-2">
                         <div>
-                          <p className="font-medium text-sm text-gray-900">{item.name}</p>
-                          <p className="text-xs text-muted-foreground">{item.type === "course" ? "Curso" : "Serviço"} x {item.quantity}</p>
+                          <p className="font-medium text-sm text-gray-900">{T(item.name)}</p>
+                          <p className="text-xs text-muted-foreground">{item.type === "course" ? T("Curso") : T("Serviço")} x {item.quantity}</p>
                         </div>
                         <span className="font-semibold text-sm text-gray-900">{formatCurrency(item.price * item.quantity)}</span>
                       </div>
@@ -959,7 +965,7 @@ export default function CheckoutPage() {
                   </div>
                   {isCartCheckout && courseDiscountAmount > 0 && (
                     <div className="flex justify-between items-center text-sm text-emerald-600">
-                      <span>Benefício do plano ({Math.round(activePurchaseDiscount * 100)}%)</span>
+                      <span>{T("Benefício do plano (")}{Math.round(activePurchaseDiscount * 100)}%)</span>
                       <span>-{formatCurrency(courseDiscountAmount)}</span>
                     </div>
                   )}
@@ -971,7 +977,7 @@ export default function CheckoutPage() {
                     </span>
                   </div>
                   {!isFreeCourseCheckout && selectedMethod === "credit_card" && installments > 1 && (
-                    <p className="text-sm text-muted-foreground text-center">ou {installments}x de {formatCurrency(total / installments)} sem juros</p>
+                    <p className="text-sm text-muted-foreground text-center">ou {installments}x de {formatCurrency(total / installments)}  {T("sem juros")}</p>
                   )}
                   {isSubscription && subscriptionCycle === "yearly" && planInfo && (
                     <div className="text-center">
@@ -995,7 +1001,7 @@ export default function CheckoutPage() {
                   {loading ? (
                     <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> {isFreeCourseCheckout ? "Liberando..." : selectedMethod === "mercadopago" ? "Redirecionando..." : "Processando..."}</>
                   ) : isFreeCourseCheckout ? (
-                    <><Gift className="w-5 h-5 mr-2" /> Liberar Acesso Grátis</>
+                    <><Gift className="w-5 h-5 mr-2" />  {T("Liberar Acesso Grátis")}</>
                   ) : selectedMethod === "mercadopago" ? (
                     <span className="flex items-center justify-center gap-2">
                       <ArrowRight className="w-5 h-5 shrink-0" />
@@ -1023,7 +1029,7 @@ export default function CheckoutPage() {
                       <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
                         <ShieldCheck className="w-4 h-4 text-emerald-600" />
                       </div>
-                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">Garantia 7 dias</span>
+                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">{T("Garantia 7 dias")}</span>
                     </div>
                     <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 border border-gray-100">
                       <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
@@ -1035,7 +1041,7 @@ export default function CheckoutPage() {
                       <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
                         <Award className="w-4 h-4 text-indigo-600" />
                       </div>
-                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">Certificado incluso</span>
+                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">{T("Certificado incluso")}</span>
                     </div>
                   </div>
                 </div>
@@ -1043,7 +1049,7 @@ export default function CheckoutPage() {
 
               {/* Trust & Processing Partners */}
               <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Processado com segurança por</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{T("Processado com segurança por")}</p>
                 <div className="flex items-center gap-5 mb-4">
                   <AsaasLogo className="h-5" />
                   <MercadoPagoLogo className="h-4" muted />
@@ -1052,15 +1058,15 @@ export default function CheckoutPage() {
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                    <span>Dados protegidos com criptografia de ponta a ponta</span>
+                    <span>{T("Dados protegidos com criptografia de ponta a ponta")}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Lock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                    <span>Não armazenamos dados do seu cartão</span>
+                    <span>{T("Não armazenamos dados do seu cartão")}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <RefreshCw className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                    <span>Cancele quando quiser, sem burocracia</span>
+                    <span>{T("Cancele quando quiser, sem burocracia")}</span>
                   </div>
                 </div>
               </div>

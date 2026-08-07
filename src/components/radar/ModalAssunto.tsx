@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -92,6 +93,7 @@ export function ModalAssunto({
   onFechar: () => void;
   onPin: () => void;
 }) {
+  const T = useT();
   const ehIa = assunto.fonte === "ia";
   const ehBusca = assunto.fonte === "busca";
   const ia = assunto.ia;
@@ -192,14 +194,14 @@ export function ModalAssunto({
                   style={{ color: cor }}
                 >
                   {ehIa ? <Sparkles size={10} /> : ehBusca ? <Search size={10} /> : <BookOpen size={10} />}
-                  {ehIa ? `demanda de IA · ${ia?.nicho ?? ""}` : `${ehBusca ? "em alta" : "mais lido"} · ${nomeDoLugar}`}
+                  {ehIa ? `demanda de IA · ${ia?.nicho ?? ""}` : `${ehBusca ? "em alta" : T("mais lido")} · ${nomeDoLugar}`}
                 </span>
                 <span className="flex items-center gap-0.5 shrink-0 -mt-0.5 -mr-0.5">
                   <button
                     onClick={onPin}
-                    aria-label={fixado ? "Soltar painel" : "Fixar painel"}
+                    aria-label={fixado ? T("Soltar painel") : T("Fixar painel")}
                     aria-pressed={fixado}
-                    title={fixado ? "Soltar — volta a sair sozinho" : "Fixar — não sai sozinho"}
+                    title={fixado ? T("Soltar — volta a sair sozinho") : T("Fixar — não sai sozinho")}
                     className="grid place-items-center w-6 h-6 rounded transition-colors cursor-pointer hover:bg-white/10"
                     style={{ color: fixado ? cor : "rgba(255,255,255,.4)" }}
                   >
@@ -216,7 +218,7 @@ export function ModalAssunto({
               </div>
 
               <h4 className="radar-peca mt-1 text-[19px] font-bold leading-[1.15] capitalize" style={{ ["--i" as string]: 1 } as React.CSSProperties}>
-                {assunto.titulo}
+                {T(assunto.titulo)}
               </h4>
 
               {/* o número, com a janela que faltava */}
@@ -235,7 +237,7 @@ export function ModalAssunto({
                   {ehIa ? "nota do radar" : ehBusca ? "buscas" : "leituras"}
                   <br />
                   <span className="inline-flex items-center gap-0.5 text-white/30">
-                    <Clock size={8} /> {ehIa ? "posição no autocomplete" : ehBusca ? "últimas 24h" : "ontem"}
+                    <Clock size={8} /> {ehIa ? T("posição no autocomplete") : ehBusca ? T("últimas 24h") : "ontem"}
                   </span>
                 </span>
                 {assunto.temIa && !ehIa && (
@@ -282,7 +284,8 @@ export function ModalAssunto({
                       className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
                       style={{ background: "#f5c04e26", color: "#f5c04e" }}
                     >
-                      no noticiário de hoje
+                      
+                      {T("no noticiário de hoje")}
                     </span>
                   )}
                   <span className="inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/35">
@@ -293,7 +296,7 @@ export function ModalAssunto({
 
               {assunto.contexto && (
                 <p className="radar-peca mt-2 text-[12px] text-white/65 leading-snug line-clamp-3" style={{ ["--i" as string]: 3 } as React.CSSProperties}>
-                  {assunto.contexto}
+                  {T(assunto.contexto)}
                 </p>
               )}
 
@@ -323,9 +326,9 @@ export function ModalAssunto({
                     className="flex items-center gap-1 text-[9px] font-extrabold uppercase tracking-widest mb-1"
                     style={{ color: cor }}
                   >
-                    <BookOpenText size={9} /> como a FayAI ajuda
+                    <BookOpenText size={9} />  {T("como a FayAI ajuda")}
                   </p>
-                  <p className="text-[11px] text-white/65 leading-snug line-clamp-3">{ia.ponte.texto}</p>
+                  <p className="text-[11px] text-white/65 leading-snug line-clamp-3">{T(ia.ponte.texto)}</p>
                   {ia.ponte.cursos.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-1">
                       {ia.ponte.cursos.slice(0, 2).map((c) => (
@@ -335,7 +338,7 @@ export function ModalAssunto({
                           className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold border transition-colors hover:bg-white/10"
                           style={{ borderColor: `${cor}55`, color: "#f3f1ff" }}
                         >
-                          {c.nome} <ArrowUpRight size={9} />
+                          {T(c.nome)} <ArrowUpRight size={9} />
                         </Link>
                       ))}
                     </div>
@@ -351,7 +354,7 @@ export function ModalAssunto({
                   className="radar-peca mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider transition-opacity hover:opacity-80"
                   style={{ ["--i" as string]: 5 } as React.CSSProperties}
                 >
-                  {ehIa ? "Ver no" : "Ler em"} {assunto.veiculo ?? "fonte"} <ArrowUpRight size={12} />
+                  {ehIa ? T("Ver no") : "Ler em"} {assunto.veiculo ?? "fonte"} <ArrowUpRight size={12} />
                 </a>
               )}
             </div>

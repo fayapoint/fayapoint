@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
@@ -33,6 +34,7 @@ export default function LoginPage() {
 }
 
 function LoginPageContent() {
+  const T = useT();
   const t = useTranslations("Login");
   const locale = useLocale();
   const searchParams = useSearchParams();
@@ -70,22 +72,22 @@ function LoginPageContent() {
     }
 
     if (authError === "config") {
-      toast.error("Google OAuth não está configurado corretamente.");
+      toast.error(T("Google OAuth não está configurado corretamente."));
       return;
     }
 
     if (authError === "timeout") {
-      toast.error("Google OAuth demorou demais para responder. Tente novamente.");
+      toast.error(T("Google OAuth demorou demais para responder. Tente novamente."));
       return;
     }
 
     if (authError === "userinfo") {
-      toast.error("Não foi possível obter os dados do usuário no Google.");
+      toast.error(T("Não foi possível obter os dados do usuário no Google."));
       return;
     }
 
     if (authError === "email_not_verified") {
-      toast.error("Seu email do Google precisa estar verificado.");
+      toast.error(T("Seu email do Google precisa estar verificado."));
     }
   }, [authError, googleError, googleErrorDescription]);
 

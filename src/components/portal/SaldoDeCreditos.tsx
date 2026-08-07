@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -42,6 +43,7 @@ export function SaldoDeCreditos({
   /** No cabeçalho do menu, ao lado do nível: só o número. */
   compacto?: boolean;
 }) {
+  const T = useT();
   const [saldo, setSaldo] = useState<number | null>(null);
   const [erro, setErro] = useState(false);
 
@@ -71,7 +73,7 @@ export function SaldoDeCreditos({
       <>
         <span className="tabular-nums font-bold text-amber-300">{saldo}</span>
         {!compacto && (
-          <span className="text-white/55">{saldo === 1 ? "crédito" : "créditos"}</span>
+          <span className="text-white/55">{saldo === 1 ? T("crédito") : T("créditos")}</span>
         )}
       </>
     );
@@ -80,7 +82,7 @@ export function SaldoDeCreditos({
     <Link
       href="/portal/creditos"
       className={`inline-flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-500/10 px-2.5 py-1 text-xs transition-colors hover:border-amber-400/50 hover:bg-amber-500/15 ${className}`}
-      title="Seus créditos — usados para personalizar capítulos no Ateliê"
+      title={T("Seus créditos — usados para personalizar capítulos no Ateliê")}
     >
       <Coins size={compacto ? 12 : 14} className="shrink-0 text-amber-400" />
       {conteudo}

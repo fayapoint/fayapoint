@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -25,6 +26,7 @@ import { useUser } from "@/contexts/UserContext";
 import { usePostHog } from "posthog-js/react";
 
 export default function RegisterPage() {
+  const T = useT();
   const t = useTranslations("Register");
   const benefits = t.raw("benefits") as string[];
   const router = useRouter();
@@ -168,7 +170,7 @@ export default function RegisterPage() {
                 className="flex items-center gap-3"
               >
                 <CheckCircle className="text-green-400" size={24} />
-                <span className="text-lg">{benefit}</span>
+                <span className="text-lg">{T(benefit)}</span>
               </motion.div>
             ))}
           </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -22,6 +23,7 @@ type FAQCategory = {
 };
 
 export default function FAQPage() {
+  const T = useT();
   const t = useTranslations("FAQ");
   const categories = t.raw("categories") as FAQCategory[];
 
@@ -55,7 +57,7 @@ export default function FAQPage() {
                 viewport={{ once: true }}
                 transition={{ delay: catIdx * 0.1 }}
               >
-                <h2 className="text-2xl font-bold mb-6 text-amber-400">{category.title}</h2>
+                <h2 className="text-2xl font-bold mb-6 text-amber-400">{T(category.title)}</h2>
                 <Accordion type="single" collapsible className="space-y-3">
                   {category.items.map((item, idx) => (
                     <AccordionItem 
@@ -64,10 +66,10 @@ export default function FAQPage() {
                       className="bg-secondary border border-border rounded-xl px-6 data-[state=open]:bg-white/10"
                     >
                       <AccordionTrigger className="text-left hover:no-underline py-5">
-                        <span className="font-medium">{item.question}</span>
+                        <span className="font-medium">{T(item.question)}</span>
                       </AccordionTrigger>
                       <AccordionContent className="text-muted-foreground pb-5">
-                        {item.answer}
+                        {T(item.answer)}
                       </AccordionContent>
                     </AccordionItem>
                   ))}

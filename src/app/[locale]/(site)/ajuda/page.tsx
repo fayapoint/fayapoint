@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { useTranslations } from "next-intl";
@@ -33,6 +34,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export default function HelpCenterPage() {
+  const T = useT();
   const t = useTranslations("HelpCenter");
   const categories = t.raw("categories") as HelpCategory[];
 
@@ -79,9 +81,9 @@ export default function HelpCenterPage() {
                     <div className="group h-full bg-secondary border border-border rounded-xl p-6 hover:bg-white/10 hover:border-amber-500/50 transition-all">
                       <Icon className="w-10 h-10 text-amber-400 mb-4" />
                       <h3 className="text-lg font-semibold mb-2 group-hover:text-amber-400 transition-colors">
-                        {category.title}
+                        {T(category.title)}
                       </h3>
-                      <p className="text-muted-foreground text-sm mb-4">{category.description}</p>
+                      <p className="text-muted-foreground text-sm mb-4">{T(category.description)}</p>
                       <span className="inline-flex items-center text-sm text-amber-400 group-hover:gap-2 transition-all">
                         {t("viewMore")} <ArrowRight size={14} className="ml-1" />
                       </span>

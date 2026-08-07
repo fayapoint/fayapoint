@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -193,6 +194,7 @@ const PortalTooltip = ({
   position: { x: number, y: number } | null, 
   onClose: () => void 
 }) => {
+  const T = useT();
   if (!position || !content) return null;
 
   return createPortal(
@@ -214,22 +216,23 @@ const PortalTooltip = ({
            <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-card border-t border-l border-gray-200/50 dark:border-border/50 transform rotate-45" />
 
           <div className="flex items-center gap-2 mb-2 relative z-10">
-            <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{content.name}</h4>
+            <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100">{T(content.name)}</h4>
             {content.category && (
               <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full font-semibold truncate max-w-[110px]">
-                {content.category}
+                {T(content.category)}
               </span>
             )}
           </div>
           {content.description && (
             <p className="text-xs text-muted-foreground dark:text-muted-foreground leading-relaxed line-clamp-2 mb-3 relative z-10">
-              {content.description}
+              {T(content.description)}
             </p>
           )}
           <div className="flex items-center gap-1.5 text-xs font-semibold text-primary relative z-10">
               {content.isInternal ? (
                 <>
-                  Ver detalhes
+                  
+                  {T("Ver detalhes")}
                   <motion.span
                     animate={{ x: [0, 3, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}

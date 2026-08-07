@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "react-hot-toast";
@@ -45,6 +46,7 @@ export function ScheduleMeetingForm({
   source = "calendar",
   onSuccess,
 }: ScheduleMeetingFormProps) {
+  const T = useT();
   const t = useTranslations("ScheduleMeeting");
   const { user, isLoggedIn } = useUser();
   const { items: cartItems, cartTotal, itemCount } = useServiceCart();
@@ -180,12 +182,12 @@ export function ScheduleMeetingForm({
   return (
     <form onSubmit={handleSubmit} className={cn("grid gap-5", className)}>
       {copy.badge ? (
-        <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-1">{copy.badge}</p>
+        <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-1">{T(copy.badge)}</p>
       ) : null}
       <div>
-        <h2 className="text-3xl font-semibold mb-1">{copy.title}</h2>
+        <h2 className="text-3xl font-semibold mb-1">{T(copy.title)}</h2>
         {copy.description ? (
-          <p className="text-muted-foreground text-sm">{copy.description}</p>
+          <p className="text-muted-foreground text-sm">{T(copy.description)}</p>
         ) : null}
       </div>
 
@@ -194,7 +196,8 @@ export function ScheduleMeetingForm({
         <div className="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg text-sm">
           <CheckCircle2 className="w-4 h-4 text-green-600" />
           <span className="text-green-700 dark:text-green-300">
-            Logado como <strong>{user.name}</strong>
+            
+            {T("Logado como")} <strong>{T(user.name)}</strong>
           </span>
         </div>
       )}
@@ -205,14 +208,14 @@ export function ScheduleMeetingForm({
           <div className="flex items-center gap-2 mb-3">
             <ShoppingCart className="w-5 h-5 text-purple-600" />
             <span className="font-semibold text-amber-700 dark:text-amber-300">
-              {itemCount} {itemCount === 1 ? 'item' : 'itens'} no carrinho
+              {itemCount} {itemCount === 1 ? 'item' : 'itens'}  {T("no carrinho")}
             </span>
           </div>
           <div className="space-y-2">
             {Object.values(cartItems).map(item => (
               <div key={item.id} className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">
-                  {item.name} <span className="text-xs">(x{item.quantity})</span>
+                  {T(item.name)} <span className="text-xs">(x{item.quantity})</span>
                 </span>
                 <span className="font-medium">
                   {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -231,7 +234,7 @@ export function ScheduleMeetingForm({
       )}
 
       <Input
-        placeholder={copy.fields.fullName}
+        placeholder={T(copy.fields.fullName)}
         value={formData.fullName}
         onChange={handleChange("fullName")}
         className="h-12"
@@ -239,7 +242,7 @@ export function ScheduleMeetingForm({
       />
       <Input
         type="email"
-        placeholder={copy.fields.email}
+        placeholder={T(copy.fields.email)}
         value={formData.email}
         onChange={handleChange("email")}
         className="h-12"
@@ -249,13 +252,13 @@ export function ScheduleMeetingForm({
       {showCompanyRole ? (
         <div className="grid sm:grid-cols-2 gap-4">
           <Input
-            placeholder={copy.fields.company}
+            placeholder={T(copy.fields.company)}
             value={formData.company}
             onChange={handleChange("company")}
             className="h-12"
           />
           <Input
-            placeholder={copy.fields.role}
+            placeholder={T(copy.fields.role)}
             value={formData.role}
             onChange={handleChange("role")}
             className="h-12"

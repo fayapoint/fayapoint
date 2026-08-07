@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,6 +25,7 @@ import { FxConfetti } from "@/components/portal/games/GameLearning";
 const catArt = (id: ExampleCategory) => `/landing/cats/${id}-v1.webp`;
 
 export function PalpiteGame() {
+  const T = useT();
   const posthog = usePostHog();
   const [playedIds, setPlayedIds] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -114,7 +116,8 @@ export function PalpiteGame() {
     return (
       <div>
         <p className="mb-3 text-sm text-muted-foreground">
-          Escolha um tema, veja a mágica e dê seu palpite — cada exemplo novo vale{" "}
+          
+          {T("Escolha um tema, veja a mágica e dê seu palpite — cada exemplo novo vale")}{" "}
           <span className="font-bold text-amber-400">+{XP_PER_EXAMPLE} XP</span>
           {" "}(+{XP_BONUS_ACERTO} se acertar).
         </p>
@@ -136,7 +139,7 @@ export function PalpiteGame() {
                 />
               </span>
               <span className="flex items-center justify-between gap-2 p-3">
-                <span className="text-sm font-bold">{cat.emoji} {cat.label}</span>
+                <span className="text-sm font-bold">{T(cat.emoji)} {T(cat.label)}</span>
                 {loaded && (
                   <span className="rounded-full bg-amber-400/10 px-2 py-0.5 text-[10px] font-bold text-amber-300">
                     {novosNaCategoria[cat.id] > 0 ? `${novosNaCategoria[cat.id]} novos` : "treino"}
@@ -163,7 +166,8 @@ export function PalpiteGame() {
         </button>
         {treino && (
           <span className="rounded-full bg-secondary px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">
-            Modo treino — XP já creditado antes
+            
+            {T("Modo treino — XP já creditado antes")}
           </span>
         )}
       </div>
@@ -174,13 +178,13 @@ export function PalpiteGame() {
             {/* eslint-disable-next-line @next/next/no-img-element -- cena-espelho §9 */}
             <img src={`/landing/scenes/${current.id}.webp`} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
           </div>
-          <p className="mt-2 text-center text-sm font-bold">{current.emoji} {current.title}</p>
+          <p className="mt-2 text-center text-sm font-bold">{T(current.emoji)} {T(current.title)}</p>
         </div>
 
         <div>
-          <p className="text-sm leading-relaxed text-muted-foreground">{current.hook}</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">{T(current.hook)}</p>
 
-          <p className="mt-4 text-xs font-extrabold uppercase tracking-widest text-amber-300">{current.quiz.question}</p>
+          <p className="mt-4 text-xs font-extrabold uppercase tracking-widest text-amber-300">{T(current.quiz.question)}</p>
           <div className="mt-2 space-y-2">
             {current.quiz.options.map((opt, i) => {
               const isAnswer = i === current.quiz.answer;
@@ -197,7 +201,7 @@ export function PalpiteGame() {
                   }}
                 >
                   {revealed && isAnswer && <Check size={14} className="mr-1.5 inline text-lime-400" />}
-                  {opt}
+                  {T(opt)}
                 </button>
               );
             })}
@@ -210,8 +214,8 @@ export function PalpiteGame() {
                   {acertou ? (treino ? "Acertou! (treino)" : `Acertou! +${XP_PER_EXAMPLE + XP_BONUS_ACERTO} XP`) : treino ? "Quase!" : `Quase! +${XP_PER_EXAMPLE} XP mesmo assim`}
                 </p>
                 <div className="mt-3 rounded-2xl border border-border bg-secondary/50 p-4">
-                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">O prompt que faz a mágica</p>
-                  <p className="mt-1.5 font-mono text-xs leading-relaxed text-foreground/90">{current.prompt}</p>
+                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">{T("O prompt que faz a mágica")}</p>
+                  <p className="mt-1.5 font-mono text-xs leading-relaxed text-foreground/90">{T(current.prompt)}</p>
                   <div className="mt-2 flex items-center gap-2">
                     <button
                       onClick={async () => {
@@ -229,9 +233,9 @@ export function PalpiteGame() {
                 </div>
                 <div className="mt-3 rounded-2xl border border-lime-400/20 bg-lime-400/5 p-4">
                   <p className="text-[10px] font-extrabold uppercase tracking-widest text-lime-300">O que a IA devolve</p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{current.result}</p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{T(current.result)}</p>
                 </div>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground"><Sparkles size={12} className="mr-1 inline text-amber-400" />{current.apply}</p>
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground"><Sparkles size={12} className="mr-1 inline text-amber-400" />{T(current.apply)}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <button
                     onClick={() => category && pick(category)}
@@ -253,7 +257,7 @@ export function PalpiteGame() {
           <AnimatePresence>
             {creditMsg && (
               <motion.p initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-3 text-sm font-bold text-amber-300">
-                {creditMsg}
+                {T(creditMsg)}
               </motion.p>
             )}
           </AnimatePresence>

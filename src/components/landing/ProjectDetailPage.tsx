@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
@@ -17,6 +18,7 @@ const STATUS_COLOR: Record<FayProject["status"], string> = {
 };
 
 export function ProjectDetailPage({ project, detail }: { project: FayProject; detail: ProjectDetail }) {
+  const T = useT();
   const base = `/landing/photos/${project.id}`;
   const gallery = detail.captions.map((caption, i) => ({ src: `${base}-g${i + 1}.webp`, caption }));
 
@@ -58,7 +60,7 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
       <section className="relative" style={{ height: "min(72vh, 640px)" }}>
         <div className="absolute inset-0 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${base}-hero.webp`} alt={project.name} className="kb w-full h-full object-cover" />
+          <img src={`${base}-hero.webp`} alt={T(project.name)} className="kb w-full h-full object-cover" />
           <div
             className="absolute inset-0"
             style={{
@@ -76,12 +78,12 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
               className="inline-block text-[10px] font-extrabold tracking-widest rounded-full px-3 py-1"
               style={{ background: STATUS_COLOR[project.status], color: "#0c0e1d" }}
             >
-              {STATUS_LABEL[project.status]}
+              {T(STATUS_LABEL[project.status])}
             </span>
             <h1 className="mt-3 text-5xl sm:text-7xl md:text-8xl leading-[0.9] tracking-wide" style={bebas}>
               {project.name.toUpperCase()}
             </h1>
-            <p className="mt-3 text-base sm:text-xl text-white/85 max-w-2xl font-medium">{detail.lead}</p>
+            <p className="mt-3 text-base sm:text-xl text-white/85 max-w-2xl font-medium">{T(detail.lead)}</p>
           </div>
         </div>
       </section>
@@ -91,7 +93,7 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
         <div className="max-w-3xl mx-auto space-y-5">
           {detail.story.map((p, i) => (
             <p key={i} className={`leading-relaxed ${i === 0 ? "text-lg sm:text-xl text-white/85" : "text-base text-white/65"}`}>
-              {p}
+              {T(p)}
             </p>
           ))}
         </div>
@@ -110,9 +112,9 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
                   >
                     <Check size={14} />
                   </span>
-                  <span className="text-sm font-bold">{f.title}</span>
+                  <span className="text-sm font-bold">{T(f.title)}</span>
                 </span>
-                <p className="mt-1.5 text-xs text-white/55 leading-relaxed">{f.desc}</p>
+                <p className="mt-1.5 text-xs text-white/55 leading-relaxed">{T(f.desc)}</p>
               </div>
             ))}
           </div>
@@ -129,8 +131,8 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
             {gallery.map((g) => (
               <figure key={g.src} className="ph">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={g.src} alt={g.caption} loading="lazy" />
-                <figcaption className="cap">{g.caption}</figcaption>
+                <img src={g.src} alt={T(g.caption)} loading="lazy" />
+                <figcaption className="cap">{T(g.caption)}</figcaption>
               </figure>
             ))}
           </div>
@@ -141,12 +143,12 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
       <section className="px-4 sm:px-8 pb-16">
         <div className="max-w-3xl mx-auto glass rounded-3xl p-7 sm:p-10 text-center" style={{ borderColor: `${project.accent}44` }}>
           <h2 className="text-3xl sm:text-4xl tracking-wide" style={bebas}>
-            {project.appUrl ? "ENTRE NO PROJETO" : "QUER ACOMPANHAR DE PERTO?"}
+            {project.appUrl ? T("ENTRE NO PROJETO") : "QUER ACOMPANHAR DE PERTO?"}
           </h2>
           <p className="mt-2 text-sm sm:text-base text-white/65">
             {project.appUrl
-              ? "Use agora — e aprenda a dominar a ferramenta com o curso que combina com ela."
-              : "Crie sua conta grátis e seja avisado de cada novidade deste projeto — antes de todo mundo."}
+              ? T("Use agora — e aprenda a dominar a ferramenta com o curso que combina com ela.")
+              : T("Crie sua conta grátis e seja avisado de cada novidade deste projeto — antes de todo mundo.")}
           </p>
           <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
             {project.appUrl ? (
@@ -157,7 +159,8 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
                 className="inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold hover:opacity-90 transition-opacity"
                 style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, color: "#241a05", boxShadow: "0 10px 30px rgba(245,192,78,.35)" }}
               >
-                Usar agora <ArrowRight size={18} />
+                
+                {T("Usar agora")} <ArrowRight size={18} />
               </a>
             ) : (
               <Link
@@ -188,7 +191,7 @@ export function ProjectDetailPage({ project, detail }: { project: FayProject; de
       </section>
 
       <footer className="px-4 sm:px-8 pb-6 text-center text-[11px] text-white/35">
-        © {new Date().getFullYear()} FayAI — aprenda IA fazendo, não assistindo.
+        © {new Date().getFullYear()}  {T("FayAI — aprenda IA fazendo, não assistindo.")}
       </footer>
     </div>
   );

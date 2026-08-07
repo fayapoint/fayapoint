@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { ShoppingCart, X } from "lucide-react";
@@ -15,6 +16,7 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 });
 
 export function FloatingCart() {
+  const T = useT();
   const { itemCount, items, clearCart } = useServiceCart();
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -43,7 +45,7 @@ export function FloatingCart() {
           <div className="fixed bottom-24 right-6 z-50 w-full max-w-sm" onClick={(e) => e.stopPropagation()}>
             <Card className="p-4 shadow-2xl border-primary/20 animate-in slide-in-from-bottom-5 fade-in duration-300">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-lg">Seu Carrinho</h3>
+                <h3 className="font-bold text-lg">{T("Seu Carrinho")}</h3>
                 <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                   <X className="w-4 h-4" />
                 </Button>
@@ -51,7 +53,8 @@ export function FloatingCart() {
               
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Você tem {itemCount} item(s) selecionado(s).
+                  
+                  {T("Você tem")} {itemCount} item(s) selecionado(s).
                 </p>
                 
                 <div className="grid grid-cols-2 gap-2">
@@ -64,7 +67,8 @@ export function FloatingCart() {
                      router.push(`/servicos/construcao-de-sites#builder`);
                      setIsOpen(false);
                    }}>
-                     Ver Detalhes
+                     
+                     {T("Ver Detalhes")}
                    </Button>
                 </div>
               </div>

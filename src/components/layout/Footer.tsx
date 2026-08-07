@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, type FormEvent } from "react";
 import Link from "next/link";
@@ -49,6 +50,7 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const T = useT();
   const t = useTranslations("Footer");
   const locale = useLocale();
 
@@ -146,7 +148,8 @@ export function Footer() {
               
               {/* Tooltip */}
               <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-card text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-border">
-                Voltar ao topo
+                
+                {T("Voltar ao topo")}
                 <div className="absolute top-full right-4 w-2 h-2 bg-card transform rotate-45 -mt-1 border-r border-b border-border" />
               </div>
             </div>
@@ -206,7 +209,8 @@ export function Footer() {
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 <a href="mailto:ricardofaya@gmail.com" className="hover:text-white">
-                  ricardofaya@gmail.com
+                  
+                  {T("ricardofaya@gmail.com")}
                 </a>
               </div>
               <div className="flex items-center gap-2">
@@ -288,7 +292,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-11 h-11 rounded-lg text-muted-foreground hover:text-white hover:bg-secondary transition-colors"
-                  aria-label={social.label}
+                  aria-label={T(social.label)}
                 >
                   <social.icon className="w-5 h-5" />
                 </a>

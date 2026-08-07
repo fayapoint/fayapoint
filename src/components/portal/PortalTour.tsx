@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -40,6 +41,7 @@ const STEPS: { art: string; video?: string; cor: string; titulo: string; texto: 
 ];
 
 export function PortalTour() {
+  const T = useT();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
 
@@ -102,8 +104,8 @@ export function PortalTour() {
                 <img src={s.art} alt="" className="w-full h-full object-cover" />
               )}
             </span>
-            <h2 className="mt-4 text-xl font-bold">{s.titulo}</h2>
-            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.texto}</p>
+            <h2 className="mt-4 text-xl font-bold">{T(s.titulo)}</h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{T(s.texto)}</p>
           </motion.div>
         </AnimatePresence>
 
@@ -128,7 +130,7 @@ export function PortalTour() {
             className="flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-extrabold text-[#241a05] hover:opacity-90 transition-opacity"
             style={{ background: "linear-gradient(135deg, #f5c04e, #ffd97a)" }}
           >
-            {last ? "Começar!" : "Próximo"}
+            {last ? T("Começar!") : T("Próximo")}
             <ArrowRight size={15} />
           </button>
         </div>

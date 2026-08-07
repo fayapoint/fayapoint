@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
@@ -18,6 +19,7 @@ type Instructor = {
 };
 
 export default function InstructorsPage() {
+  const T = useT();
   const t = useTranslations("Instructors");
   const instructors = t.raw("list") as Instructor[];
 
@@ -58,7 +60,7 @@ export default function InstructorsPage() {
                   {instructor.image ? (
                     <Image
                       src={instructor.image}
-                      alt={instructor.name}
+                      alt={T(instructor.name)}
                       fill
                       className="object-cover"
                     />
@@ -91,15 +93,15 @@ export default function InstructorsPage() {
                 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-1">{instructor.name}</h3>
-                  <p className="text-amber-400 text-sm mb-3">{instructor.role}</p>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{instructor.bio}</p>
+                  <h3 className="text-xl font-bold mb-1">{T(instructor.name)}</h3>
+                  <p className="text-amber-400 text-sm mb-3">{T(instructor.role)}</p>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{T(instructor.bio)}</p>
                   
                   {/* Expertise */}
                   <div className="flex flex-wrap gap-2">
                     {instructor.expertise.slice(0, 3).map((skill) => (
                       <span key={skill} className="px-2 py-1 text-xs bg-amber-500/20 text-amber-300 rounded-full">
-                        {skill}
+                        {T(skill)}
                       </span>
                     ))}
                   </div>

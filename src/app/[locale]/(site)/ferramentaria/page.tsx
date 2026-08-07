@@ -1,3 +1,4 @@
+import { obterT } from "@/i18n/dicionario-servidor";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -42,6 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function FerramentariaPage({ params }: Props) {
   const { locale } = await params;
+  const T = await obterT(locale);
   const emDestaque = destaques(3);
   const ultimosMicrocursos = microcursosOrdenados.slice(0, 3);
 
@@ -85,7 +87,8 @@ export default async function FerramentariaPage({ params }: Props) {
             <div className="flex items-center gap-2">
               <Sparkles aria-hidden className="h-4 w-4 text-primary" />
               <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">
-                As mais bem avaliadas
+                
+                {T("As mais bem avaliadas")}
               </h2>
             </div>
 
@@ -109,10 +112,10 @@ export default async function FerramentariaPage({ params }: Props) {
                   </span>
                   <span className="block p-4">
                     <span className="block text-base font-semibold tracking-tight">
-                      {f.nome}
+                      {T(f.nome)}
                     </span>
                     <span className="mt-1 block line-clamp-2 text-sm text-muted-foreground">
-                      {f.descricao}
+                      {T(f.descricao)}
                     </span>
                   </span>
                 </Link>
@@ -120,8 +123,8 @@ export default async function FerramentariaPage({ params }: Props) {
             </div>
 
             <p className="mt-4 text-xs text-muted-foreground">
-              Logos e imagens são de cada fabricante, exibidos para identificação.
-              As notas são nossas.
+              
+              {T("Logos e imagens são de cada fabricante, exibidos para identificação.\r\n              As notas são nossas.")}
             </p>
           </div>
         </section>
@@ -135,19 +138,21 @@ export default async function FerramentariaPage({ params }: Props) {
               <div className="flex items-center gap-2">
                 <GraduationCap aria-hidden className="h-4 w-4 text-primary" />
                 <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">
-                  Recém-lançadas
+                  
+                  {T("Recém-lançadas")}
                 </h2>
               </div>
               <p className="mt-2 max-w-xl text-[15px] text-muted-foreground">
-                O catálogo acima cobre as ferramentas consolidadas. O que saiu
-                esta semana ainda não está nele — vira microcurso primeiro.
+                
+                {T("O catálogo acima cobre as ferramentas consolidadas. O que saiu\r\n                esta semana ainda não está nele — vira microcurso primeiro.")}
               </p>
             </div>
             <Link
               href={`/${locale}/inventando`}
               className="inline-flex shrink-0 items-center gap-2 text-sm font-medium text-primary hover:underline"
             >
-              Ver todos os microcursos
+              
+              {T("Ver todos os microcursos")}
               <ArrowRight aria-hidden className="h-4 w-4" />
             </Link>
           </div>
@@ -160,13 +165,13 @@ export default async function FerramentariaPage({ params }: Props) {
                 className="group rounded-2xl border border-border bg-card/50 p-5 transition-colors hover:border-foreground/25"
               >
                 <span className="text-[11px] font-medium uppercase tracking-wide text-primary">
-                  {m.categoria}
+                  {T(m.categoria)}
                 </span>
                 <span className="mt-2 block text-[15px] font-semibold leading-snug">
-                  {m.titulo}
+                  {T(m.titulo)}
                 </span>
                 <span className="mt-1.5 block line-clamp-2 text-sm text-muted-foreground">
-                  {m.subtitulo}
+                  {T(m.subtitulo)}
                 </span>
               </Link>
             ))}
@@ -178,9 +183,9 @@ export default async function FerramentariaPage({ params }: Props) {
       <section className="border-t border-border bg-card/30">
         <div className="mx-auto grid max-w-6xl gap-3 px-4 py-10 sm:grid-cols-3 sm:px-6">
           {[
-            { href: "/cursos", titulo: "Cursos completos", desc: "Quando a ficha não basta", icone: GraduationCap },
+            { href: "/cursos", titulo: T("Cursos completos"), desc: T("Quando a ficha não basta"), icone: GraduationCap },
             { href: "/ferramentas", titulo: "Fichas detalhadas", desc: "Prompts, casos de uso e armadilhas", icone: Sparkles },
-            { href: "/noticias", titulo: "IA Hoje", desc: "O que mudou desde ontem", icone: Newspaper },
+            { href: "/noticias", titulo: "IA Hoje", desc: T("O que mudou desde ontem"), icone: Newspaper },
           ].map((l) => (
             <Link
               key={l.href}
@@ -189,8 +194,8 @@ export default async function FerramentariaPage({ params }: Props) {
             >
               <l.icone aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
               <span>
-                <span className="block text-sm font-medium">{l.titulo}</span>
-                <span className="mt-0.5 block text-xs text-muted-foreground">{l.desc}</span>
+                <span className="block text-sm font-medium">{T(l.titulo)}</span>
+                <span className="mt-0.5 block text-xs text-muted-foreground">{T(l.desc)}</span>
               </span>
             </Link>
           ))}

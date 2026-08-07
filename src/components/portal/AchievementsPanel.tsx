@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import {
@@ -115,6 +116,7 @@ export const ACHIEVEMENT_NAMES: Record<string, { name: string; description: stri
 };
 
 export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsPanelProps) {
+  const T = useT();
   const categories = [...new Set(achievements.map(a => a.category))];
   const totalAchievements = achievements.length;
   const completionPercent = Math.round((totalUnlocked / totalAchievements) * 100);
@@ -133,7 +135,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
             </div>
             <div className="min-w-0">
               <p className="text-2xl md:text-3xl font-bold">{totalUnlocked}</p>
-              <p className="text-xs md:text-sm text-muted-foreground truncate">Conquistas Desbloqueadas</p>
+              <p className="text-xs md:text-sm text-muted-foreground truncate">{T("Conquistas Desbloqueadas")}</p>
             </div>
           </div>
         </Card>
@@ -146,7 +148,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
             </div>
             <div className="min-w-0">
               <p className="text-2xl md:text-3xl font-bold">{totalAchievements}</p>
-              <p className="text-xs md:text-sm text-muted-foreground truncate">Total de Conquistas</p>
+              <p className="text-xs md:text-sm text-muted-foreground truncate">{T("Total de Conquistas")}</p>
             </div>
           </div>
         </Card>
@@ -154,7 +156,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
         <Card className="bg-secondary border-border p-3 md:p-6">
           <div className="space-y-2 md:space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs md:text-sm text-muted-foreground">Progresso Geral</p>
+              <p className="text-xs md:text-sm text-muted-foreground">{T("Progresso Geral")}</p>
               <span className="text-base md:text-lg font-bold">{completionPercent}%</span>
             </div>
             <Progress value={completionPercent} className="h-2 md:h-3 bg-secondary" />
@@ -204,7 +206,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
                           `bg-gradient-to-r ${TIER_COLORS[achievement.tier]} text-white border-0`
                         )}
                       >
-                        {achievement.tier}
+                        {T(achievement.tier)}
                       </Badge>
 
                       <div className="flex flex-col items-center text-center min-w-0">
@@ -230,7 +232,7 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
                           {isSecret ? "???" : info.name}
                         </h4>
                         <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">
-                          {isSecret ? "Continue explorando para descobrir!" : info.description}
+                          {isSecret ? T("Continue explorando para descobrir!") : info.description}
                         </p>
 
                         <div className="flex items-center gap-1 text-[10px] md:text-xs">

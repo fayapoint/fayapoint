@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -22,6 +23,7 @@ import { useUser } from "@/contexts/UserContext";
 import { ArcadeShowcase } from "@/components/landing/ArcadeShowcase";
 import { RadarSection } from "@/components/landing/RadarSection";
 import { LogoFayai } from "@/components/marca/LogoFayai";
+import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
 import { TrilhoParallax, type ItemTrilho } from "@/components/biblioteca/TrilhoParallax";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
@@ -98,6 +100,7 @@ function capaDoTrilho(c: FeaturedCourse): string {
 }
 
 export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]; featuredCourses?: FeaturedCourse[] }) {
+  const T = useT();
   const locale = useLocale();
   const t = useTranslations("Landing");
   // O banco do minigame tem uma versão por idioma, com os MESMOS `id` — a arte
@@ -438,6 +441,12 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           <LogoFayai texto="FAYAI" />
         </span>
         <div className="flex items-center gap-3">
+          {/* A home é a única porta de entrada sem o cabeçalho do site — ela
+              fica fora do grupo (site), que é onde o SiteChrome monta Header e
+              Footer. Sem isto aqui, quem cai em `/en` não tem como voltar para
+              o português, e quem cai em `/pt-BR` não tem como ir para o inglês:
+              o seletor existia e simplesmente não aparecia na porta de entrada. */}
+          <BotaoIdioma />
           <div
             className="relative flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-bold text-[#1a1405]"
             style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
@@ -557,7 +566,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
                         <img
                           src={catArt(cat.id, artVariants[cat.id])}
-                          alt={cat.label}
+                          alt={T(cat.label)}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       </span>
@@ -565,7 +574,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         className="block px-3 py-2.5 font-bold text-center text-sm sm:text-base"
                         style={{ color: st.color }}
                       >
-                        {cat.label}
+                        {T(cat.label)}
                       </span>
                     </motion.button>
                   );
@@ -600,12 +609,12 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     className="inline-block text-[11px] font-extrabold uppercase tracking-widest rounded-full px-3 py-1"
                     style={{ color: "#0c0e1d", background: accent }}
                   >
-                    {CATEGORIES.find((c) => c.id === current.category)?.label}
+                    {T(CATEGORIES.find((c) => c.id === current.category)?.label)}
                   </span>
                   <h2 className="mt-3 text-2xl sm:text-4xl leading-tight tracking-wide" style={bebas}>
-                    {current.title}
+                    {T(current.title)}
                   </h2>
-                  <p className="mt-2 text-sm sm:text-base text-white/65">{current.hook}</p>
+                  <p className="mt-2 text-sm sm:text-base text-white/65">{T(current.hook)}</p>
                 </div>
                 {logged ? (
                   <span className="shrink-0 mt-2 text-[11px] font-bold text-white/45 whitespace-nowrap">
@@ -636,7 +645,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/landing/scenes/${current.id}.webp`}
-                    alt={current.title}
+                    alt={T(current.title)}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
@@ -661,7 +670,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   <p className="text-sm font-extrabold uppercase tracking-wider" style={{ color: accent }}>
                     {treino ? t("trainingMode") : t("guessWorth", { xp: XP_BONUS_ACERTO })}
                   </p>
-                  <p className="mt-1 text-base sm:text-lg font-bold">{current.quiz.question}</p>
+                  <p className="mt-1 text-base sm:text-lg font-bold">{T(current.quiz.question)}</p>
                   <div className="mt-3 space-y-2">
                     {current.quiz.options.map((op, idx) => (
                       <button
@@ -673,7 +682,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                               style={{ background: `${accent}22`, color: accent }}>
                           {String.fromCharCode(65 + idx)}
                         </span>
-                        {op}
+                        {T(op)}
                       </button>
                     ))}
                   </div>
@@ -713,7 +722,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     <p className="text-xs font-extrabold uppercase tracking-wider mb-1.5" style={{ color: accent }}>
                       {t("resultLabel")}
                     </p>
-                    <p className="text-sm sm:text-base leading-relaxed">{current.result}</p>
+                    <p className="text-sm sm:text-base leading-relaxed">{T(current.result)}</p>
                   </div>
 
                   <div className="rounded-2xl p-4 border-2 border-white/10" style={{ background: "#0c0e1d" }}>
@@ -730,11 +739,11 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         {copied ? t("copied") : t("copy")}
                       </button>
                     </div>
-                    <p className="text-xs sm:text-sm text-white/60 leading-relaxed">{current.prompt}</p>
+                    <p className="text-xs sm:text-sm text-white/60 leading-relaxed">{T(current.prompt)}</p>
                   </div>
 
                   <p className="text-xs sm:text-sm text-white/60">
-                    <span className="font-bold text-white">{t("inYourLife")}</span> {current.apply}
+                    <span className="font-bold text-white">{t("inYourLife")}</span> {T(current.apply)}
                   </p>
 
                   {!limitReached ? (
@@ -853,10 +862,10 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     className="inline-flex h-6 w-6 items-center justify-center rounded-lg text-xs font-black text-black"
                     style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)` }}
                   >
-                    {p.n}
+                    {T(p.n)}
                   </span>
-                  <p className="mt-2 text-sm font-bold text-white">{p.t}</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-white/50">{p.d}</p>
+                  <p className="mt-2 text-sm font-bold text-white">{T(p.t)}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-white/50">{T(p.d)}</p>
                 </div>
               ))}
             </div>
@@ -1005,7 +1014,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                       {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
                       <img
                         src={item.image}
-                        alt={item.title}
+                        alt={T(item.title)}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     </span>
@@ -1013,17 +1022,17 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   <span className="block p-3.5">
                     <span className="flex items-center justify-between">
                       <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: GOLD }}>
-                        {item.tag}
+                        {T(item.tag)}
                       </span>
                       <ArrowUpRight size={14} className="text-white/30 group-hover:text-white/70 transition-colors" />
                     </span>
-                    <span className="block mt-1 text-sm font-bold leading-snug">{item.title}</span>
+                    <span className="block mt-1 text-sm font-bold leading-snug">{T(item.title)}</span>
                     <span className="block mt-1 text-xs text-white/55 leading-relaxed line-clamp-2">
-                      {item.summary}
+                      {T(item.summary)}
                     </span>
                     {item.source && (
                       <span className="block mt-2 text-[10px] font-semibold uppercase tracking-wider text-white/35">
-                        {item.source}
+                        {T(item.source)}
                         {item.date ? ` · ${new Date(item.date).toLocaleDateString(tagIntl(locale))}` : ""}
                       </span>
                     )}
@@ -1062,8 +1071,8 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   <Icon size={18} />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-bold">{label}</span>
-                  <span className="block text-[11px] text-white/45 truncate">{desc}</span>
+                  <span className="block text-sm font-bold">{T(label)}</span>
+                  <span className="block text-[11px] text-white/45 truncate">{T(desc)}</span>
                 </span>
               </Link>
             ))}
@@ -1094,7 +1103,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             role="status"
           >
             <Sparkles size={18} className="shrink-0" />
-            <p className="text-sm font-bold leading-snug">{creditMsg}</p>
+            <p className="text-sm font-bold leading-snug">{T(creditMsg)}</p>
           </motion.div>
         )}
       </AnimatePresence>

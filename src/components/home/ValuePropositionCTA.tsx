@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -20,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { useTranslations, useLocale } from "next-intl";
 
 export function ValuePropositionCTA() {
+  const T = useT();
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("Home.ValueCTA");
@@ -132,7 +134,7 @@ export function ValuePropositionCTA() {
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl ${step.bg} border border-border flex items-center justify-center shadow-lg`}
                 >
-                  <span className="text-2xl md:text-3xl">{step.emoji}</span>
+                  <span className="text-2xl md:text-3xl">{T(step.emoji)}</span>
                 </motion.div>
                 {idx < steps.length - 1 && (
                   <ArrowRight className="w-5 h-5 text-muted-foreground hidden sm:block" />
