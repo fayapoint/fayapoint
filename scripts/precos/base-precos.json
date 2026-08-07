@@ -1,0 +1,29 @@
+{
+  "em": "2026-08-07T00:33:51.960Z",
+  "precos": {
+    "~deepseek/deepseek-v4-flash-latest": {
+      "entrada": 0.09,
+      "saida": 0.18,
+      "contexto": 1048576,
+      "provedorMaisBarato": "DeepInfra",
+      "provedorPreco": "0.09/0.18",
+      "quantosProvedores": 22
+    },
+    "deepseek/deepseek-v4-flash-0731": {
+      "entrada": 0.09,
+      "saida": 0.18,
+      "contexto": 1048576,
+      "provedorMaisBarato": "DeepInfra",
+      "provedorPreco": "0.09/0.18",
+      "quantosProvedores": 22
+    },
+    "deepseek/deepseek-v4-pro": {
+      "entrada": 0.435,
+      "saida": 0.87,
+      "contexto": 1048576,
+      "provedorMaisBarato": "Baidu",
+      "provedorPreco": "0.4225/0.845",
+      "quantosProvedores": 18
+    }
+  }
+}
