@@ -175,19 +175,21 @@ function MastercardLogo({ className = "h-7" }: { className?: string }) {
 }
 
 function EloLogo({ className = "h-7" }: { className?: string }) {
+  const T = useT();
   return (
     <svg className={className} viewBox="0 0 48 30" fill="none">
       <rect width="48" height="30" rx="4" fill="#000"/>
-      <text x="24" y="20" textAnchor="middle" fill="#FFCB05" fontSize="14" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">elo</text>
+      <text x="24" y="20" textAnchor="middle" fill="#FFCB05" fontSize="14" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">{T("elo")}</text>
     </svg>
   );
 }
 
 function AmexLogo({ className = "h-7" }: { className?: string }) {
+  const T = useT();
   return (
     <svg className={className} viewBox="0 0 48 30" fill="none">
       <rect width="48" height="30" rx="4" fill="#006FCF"/>
-      <text x="24" y="19" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">AMEX</text>
+      <text x="24" y="19" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif">{T("AMEX")}</text>
     </svg>
   );
 }
@@ -209,17 +211,19 @@ function MercadoPagoLogo({ className = "h-5", muted = false }: { className?: str
 }
 
 function AsaasLogo({ className = "h-4" }: { className?: string }) {
+  const T = useT();
   return (
     <svg className={className} viewBox="0 0 100 28" fill="none">
-      <text x="0" y="21" fill="#94a3b8" fontSize="20" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="-0.5">ASAAS</text>
+      <text x="0" y="21" fill="#94a3b8" fontSize="20" fontWeight="700" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="-0.5">{T("ASAAS")}</text>
     </svg>
   );
 }
 
 function CardBrandStrip() {
+  const T = useT();
   return (
     <div className="flex items-center justify-center gap-4 mb-6 py-3 px-5 bg-gray-50/80 rounded-xl border border-gray-100">
-      <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">Aceitamos</span>
+      <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">{T("Aceitamos")}</span>
       <div className="flex items-center gap-2">
         <VisaLogo className="h-7 w-auto rounded" />
         <MastercardLogo className="h-7 w-auto rounded" />
@@ -391,7 +395,7 @@ export default function CheckoutPage() {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      toast.success("Copiado!");
+      toast.success(T("Copiado!"));
       setTimeout(() => setCopied(false), 2000);
     } catch { toast.error(T("Erro ao copiar")); }
   };
@@ -426,7 +430,7 @@ export default function CheckoutPage() {
         ? data.subscription?.status === "active"
         : data.payment?.status === "paid";
       if (paid) {
-        toast.success("Pagamento confirmado!");
+        toast.success(T("Pagamento confirmado!"));
         clearCart();
         router.push(`/pt-BR/checkout/success?order=${paymentResult.orderNumber}`);
       }
@@ -546,7 +550,7 @@ export default function CheckoutPage() {
 
       setPaymentResult(data as PaymentResult);
       if (data.isPaid) {
-        toast.success("Pagamento aprovado!");
+        toast.success(T("Pagamento aprovado!"));
         clearCart();
         router.push(`/pt-BR/checkout/success?order=${data.orderNumber}`);
       } else {
@@ -575,8 +579,8 @@ export default function CheckoutPage() {
               <div className="w-20 h-20 bg-gradient-to-br from-amber-50 to-orange-100 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-100/50">
                 <Clock className="w-10 h-10 text-amber-600" />
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Aguardando Pagamento</h1>
-              <p className="text-muted-foreground">Pedido #{T(paymentResult.orderNumber)}</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{T("Aguardando Pagamento")}</h1>
+              <p className="text-muted-foreground">{T("Pedido #")}{T(paymentResult.orderNumber)}</p>
             </div>
 
             <div className="rounded-2xl border border-gray-200 bg-white shadow-xl shadow-gray-100/50 p-8">
@@ -589,7 +593,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="bg-white p-6 rounded-2xl inline-block mx-auto shadow-lg border border-gray-100">
-                    <Image src={`data:image/png;base64,${paymentResult.pixData.qrCodeBase64}`} alt="PIX QR Code" width={220} height={220} className="mx-auto" />
+                    <Image src={`data:image/png;base64,${paymentResult.pixData.qrCodeBase64}`} alt={T("PIX QR Code")} width={220} height={220} className="mx-auto" />
                   </div>
 
                   <div className="text-3xl font-bold text-gray-900">
@@ -597,7 +601,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">PIX Copia e Cola:</p>
+                    <p className="text-sm text-muted-foreground">{T("PIX Copia e Cola:")}</p>
                     <div className="flex gap-2">
                       <input readOnly value={paymentResult.pixData.qrCodePayload} className="flex-1 bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-700 text-sm truncate" />
                       <Button onClick={() => copyToClipboard(paymentResult.pixData!.qrCodePayload)} className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 shadow-md">
@@ -608,7 +612,7 @@ export default function CheckoutPage() {
 
                   <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground bg-emerald-50 rounded-xl p-3 border border-emerald-100">
                     {checkingStatus ? (
-                      <><Loader2 className="w-4 h-4 animate-spin text-emerald-600" /> Verificando pagamento...</>
+                      <><Loader2 className="w-4 h-4 animate-spin text-emerald-600" />  {T("Verificando pagamento...")}</>
                     ) : (
                       <><Timer className="w-4 h-4 text-emerald-600" />  {T("Confirmação automática em segundos")}</>
                     )}
@@ -638,7 +642,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  <p className="text-sm text-muted-foreground">Vencimento: {new Date(paymentResult.boletoData.dueDate).toLocaleDateString("pt-BR")}</p>
+                  <p className="text-sm text-muted-foreground">{T("Vencimento:")} {new Date(paymentResult.boletoData.dueDate).toLocaleDateString("pt-BR")}</p>
 
                   <Button onClick={() => window.open(paymentResult.boletoData?.bankSlipUrl, "_blank")} className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-4 shadow-md">
                     <FileText className="w-4 h-4 mr-2" />  {T("Abrir Boleto PDF")}
@@ -649,7 +653,7 @@ export default function CheckoutPage() {
               <div className="h-px bg-gray-100 my-6" />
               <div className="flex gap-4">
                 <Button variant="outline" className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl" onClick={() => setPaymentResult(null)}>{T("Voltar")}</Button>
-                <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md" onClick={() => router.push("/pt-BR/portal")}>Meu Portal</Button>
+                <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md" onClick={() => router.push("/pt-BR/portal")}>{T("Meu Portal")}</Button>
               </div>
             </div>
           </div>
@@ -673,7 +677,7 @@ export default function CheckoutPage() {
               {T("Checkout seguro com criptografia SSL 256-bit")}
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              {isFreeCourseCheckout ? "Liberar Acesso Gratuito" : "Finalizar Compra"}
+              {isFreeCourseCheckout ? T("Liberar Acesso Gratuito") : T("Finalizar Compra")}
             </h1>
             <p className="text-muted-foreground text-lg">
               {isCartCheckout ? T("Revise seus itens e finalize com segurança.") : `Plano ${planInfo?.name || planName} — comece a aprender hoje.`}
@@ -706,7 +710,7 @@ export default function CheckoutPage() {
                         subscriptionCycle === "yearly" ? "border-emerald-500 bg-emerald-50/50 shadow-sm" : "border-gray-200 hover:border-gray-300 bg-white"
                       }`}>
                       {subscriptionCycle === "yearly" && <div className="absolute top-3 right-3"><CheckCircle2 className="w-5 h-5 text-emerald-500" /></div>}
-                      <div className="absolute -top-2.5 right-3 px-2 py-0.5 bg-emerald-500 text-white text-xs font-bold rounded-full shadow-sm">Economize 17%</div>
+                      <div className="absolute -top-2.5 right-3 px-2 py-0.5 bg-emerald-500 text-white text-xs font-bold rounded-full shadow-sm">{T("Economize 17%")}</div>
                       <span className="text-lg font-bold text-gray-900 block">{formatCurrency(planInfo.yearlyPrice)}</span>
                       <span className="text-sm text-muted-foreground">{T("por ano (")}{formatCurrency(planInfo.yearlyPrice / 12)}/mês)</span>
                     </button>
@@ -730,15 +734,15 @@ export default function CheckoutPage() {
                     <input className={inputClass} placeholder={T("Seu nome")} value={name} onChange={(e) => setName(e.target.value)} disabled={isLoggedIn} />
                   </div>
                   <div>
-                    <label className={labelClass}>Email *</label>
+                    <label className={labelClass}>{T("Email *")}</label>
                     <input className={inputClass} placeholder={T("email@exemplo.com")} value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoggedIn} />
                   </div>
                   <div>
-                    <label className={labelClass}>{isFreeCourseCheckout ? "CPF ou CNPJ" : "CPF ou CNPJ *"}</label>
-                    <input className={inputClass} placeholder={isFreeCourseCheckout ? "Opcional" : "000.000.000-00"} value={cpfCnpj} onChange={(e) => setCpfCnpj(formatCpfCnpj(e.target.value))} maxLength={18} />
+                    <label className={labelClass}>{isFreeCourseCheckout ? T("CPF ou CNPJ") : T("CPF ou CNPJ *")}</label>
+                    <input className={inputClass} placeholder={isFreeCourseCheckout ? T("Opcional") : "000.000.000-00"} value={cpfCnpj} onChange={(e) => setCpfCnpj(formatCpfCnpj(e.target.value))} maxLength={18} />
                   </div>
                   <div>
-                    <label className={labelClass}>WhatsApp</label>
+                    <label className={labelClass}>{T("WhatsApp")}</label>
                     <input className={inputClass} placeholder="(11) 99999-9999" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} maxLength={15} />
                   </div>
                 </div>
@@ -750,7 +754,7 @@ export default function CheckoutPage() {
               {/* Payment Methods */}
               <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                  {isFreeCourseCheckout ? T("Liberação do Acesso") : "Forma de Pagamento"}
+                  {isFreeCourseCheckout ? T("Liberação do Acesso") : T("Forma de Pagamento")}
                 </h3>
                 {!isFreeCourseCheckout && <p className="text-sm text-muted-foreground mb-5">{T("Escolha como prefere pagar.")}</p>}
 
@@ -790,8 +794,8 @@ export default function CheckoutPage() {
                         <div className="flex justify-center mb-2">
                           <BoletoIcon3D active={selectedMethod === "boleto"} />
                         </div>
-                        <span className="text-sm font-semibold text-gray-900 block">Boleto</span>
-                        <span className="text-xs text-blue-600 font-medium">Vencimento claro</span>
+                        <span className="text-sm font-semibold text-gray-900 block">{T("Boleto")}</span>
+                        <span className="text-xs text-blue-600 font-medium">{T("Vencimento claro")}</span>
                       </button>
 
                       {/* Credit Card */}
@@ -816,8 +820,8 @@ export default function CheckoutPage() {
                         <div className="flex justify-center mb-2">
                           <MercadoPagoIcon3D active={selectedMethod === "mercadopago"} />
                         </div>
-                        <span className="text-sm font-semibold text-gray-900 block">MercadoPago</span>
-                        <span className="text-xs text-cyan-600 font-medium">Checkout seguro</span>
+                        <span className="text-sm font-semibold text-gray-900 block">{T("MercadoPago")}</span>
+                        <span className="text-xs text-cyan-600 font-medium">{T("Checkout seguro")}</span>
                       </button>
                     </div>
 
@@ -876,15 +880,15 @@ export default function CheckoutPage() {
                               <input className={`${inputClass} uppercase`} placeholder={T("NOME COMO ESTÁ NO CARTÃO")} value={cardHolder} onChange={(e) => setCardHolder(e.target.value.toUpperCase())} />
                             </div>
                             <div>
-                              <label className={labelClass}>Validade *</label>
-                              <input className={`${inputClass} font-mono`} placeholder="MM/AA" value={cardExpiry} onChange={(e) => setCardExpiry(formatExpiry(e.target.value))} maxLength={5} />
+                              <label className={labelClass}>{T("Validade *")}</label>
+                              <input className={`${inputClass} font-mono`} placeholder={T("MM/AA")} value={cardExpiry} onChange={(e) => setCardExpiry(formatExpiry(e.target.value))} maxLength={5} />
                             </div>
                             <div>
-                              <label className={labelClass}>CVV *</label>
+                              <label className={labelClass}>{T("CVV *")}</label>
                               <input type="password" className={`${inputClass} font-mono`} placeholder="•••" value={cardCvv} onChange={(e) => setCardCvv(e.target.value.replace(/\D/g, ""))} maxLength={4} />
                             </div>
                             <div>
-                              <label className={labelClass}>CEP *</label>
+                              <label className={labelClass}>{T("CEP *")}</label>
                               <input className={inputClass} placeholder="00000-000" value={postalCode} onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2"))} maxLength={9} />
                             </div>
                             <div>
@@ -892,7 +896,7 @@ export default function CheckoutPage() {
                               <input className={inputClass} placeholder="123" value={addressNumber} onChange={(e) => setAddressNumber(e.target.value)} />
                             </div>
                             <div className="md:col-span-2">
-                              <label className={labelClass}>Parcelas</label>
+                              <label className={labelClass}>{T("Parcelas")}</label>
                               <select className={inputClass} value={installments} onChange={(e) => setInstallments(parseInt(e.target.value))}>
                                 {installmentOptions.map((opt) => <option key={opt.count} value={opt.count}>{T(opt.label)}</option>)}
                               </select>
@@ -960,7 +964,7 @@ export default function CheckoutPage() {
                 {/* Price Breakdown */}
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="text-muted-foreground">{T("Subtotal")}</span>
                     <span className="text-gray-700">{formatCurrency(isCartCheckout ? cartTotal : total)}</span>
                   </div>
                   {isCartCheckout && courseDiscountAmount > 0 && (
@@ -971,18 +975,19 @@ export default function CheckoutPage() {
                   )}
                   <div className="h-px bg-gray-100" />
                   <div className="flex justify-between items-center pt-1">
-                    <span className="text-lg font-bold text-gray-900">Total</span>
+                    <span className="text-lg font-bold text-gray-900">{T("Total")}</span>
                     <span className="text-2xl font-bold text-gray-900">
                       {formatCurrency(effectiveTotal)}
                     </span>
                   </div>
                   {!isFreeCourseCheckout && selectedMethod === "credit_card" && installments > 1 && (
-                    <p className="text-sm text-muted-foreground text-center">ou {installments}x de {formatCurrency(total / installments)}  {T("sem juros")}</p>
+                    <p className="text-sm text-muted-foreground text-center">{T("ou")} {installments}{T("x de")} {formatCurrency(total / installments)}  {T("sem juros")}</p>
                   )}
                   {isSubscription && subscriptionCycle === "yearly" && planInfo && (
                     <div className="text-center">
                       <span className="text-xs bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200 font-medium">
-                        Economia de {formatCurrency(planInfo.monthlyPrice * 12 - planInfo.yearlyPrice)}/ano
+                        
+                        {T("Economia de")} {formatCurrency(planInfo.monthlyPrice * 12 - planInfo.yearlyPrice)}/ano
                       </span>
                     </div>
                   )}
@@ -999,20 +1004,20 @@ export default function CheckoutPage() {
                   disabled={loading || (isCartCheckout && cartItems.length === 0)}
                 >
                   {loading ? (
-                    <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> {isFreeCourseCheckout ? "Liberando..." : selectedMethod === "mercadopago" ? "Redirecionando..." : "Processando..."}</>
+                    <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> {isFreeCourseCheckout ? T("Liberando...") : selectedMethod === "mercadopago" ? T("Redirecionando...") : T("Processando...")}</>
                   ) : isFreeCourseCheckout ? (
                     <><Gift className="w-5 h-5 mr-2" />  {T("Liberar Acesso Grátis")}</>
                   ) : selectedMethod === "mercadopago" ? (
                     <span className="flex items-center justify-center gap-2">
                       <ArrowRight className="w-5 h-5 shrink-0" />
-                      <span className="truncate">Pagar {formatCurrency(effectiveTotal)}</span>
+                      <span className="truncate">{T("Pagar")} {formatCurrency(effectiveTotal)}</span>
                     </span>
                   ) : (
-                    <><Lock className="w-5 h-5 mr-2" /> Pagar {formatCurrency(effectiveTotal)}</>
+                    <><Lock className="w-5 h-5 mr-2" />  {T("Pagar")} {formatCurrency(effectiveTotal)}</>
                   )}
                 </Button>
                 {selectedMethod === "mercadopago" && !isFreeCourseCheckout && (
-                  <p className="text-xs text-center text-muted-foreground mt-1.5">via MercadoPago — ambiente seguro</p>
+                  <p className="text-xs text-center text-muted-foreground mt-1.5">{T("via MercadoPago — ambiente seguro")}</p>
                 )}
 
                 {/* Trust & Security Section */}
@@ -1020,7 +1025,8 @@ export default function CheckoutPage() {
                   {/* Security line */}
                   <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground font-medium">
                     <Lock className="w-3.5 h-3.5 text-emerald-500" />
-                    Pagamento 100% seguro — dados criptografados
+                    
+                    {T("Pagamento 100% seguro — dados criptografados")}
                   </div>
 
                   {/* Trust badges */}
@@ -1035,7 +1041,7 @@ export default function CheckoutPage() {
                       <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
                         <Zap className="w-4 h-4 text-amber-600" />
                       </div>
-                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">Acesso imediato</span>
+                      <span className="text-[11px] text-muted-foreground text-center leading-tight font-medium">{T("Acesso imediato")}</span>
                     </div>
                     <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 border border-gray-100">
                       <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">

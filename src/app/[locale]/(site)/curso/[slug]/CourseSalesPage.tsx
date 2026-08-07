@@ -311,20 +311,20 @@ export default function CourseSalesPage({
                   {isFreeCourseOfMonth && (
                     <Badge className="bg-gradient-to-r from-emerald-400 to-green-500 text-black border-0">
                       <Gift className="mr-1" size={14} />
-                      {isPtBr ? T("Curso grátis do mês") : "Free course of the month"}
+                      {isPtBr ? T("Curso grátis do mês") : T("Free course of the month")}
                     </Badge>
                   )}
                   {product.metrics.students > 100 && (
                     <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-0">
                       <Flame className="mr-1" size={14} />
-                      {locale === 'pt-BR' ? 'Popular' : 'Popular'}
+                      {locale === 'pt-BR' ? T("Popular") : T("Popular")}
                     </Badge>
                   )}
                   <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0">
                     <Timer className="mr-1" size={14} />
                     {isFreeCourseOfMonth
-                      ? (isPtBr ? T("Acesso aberto no mês") : 'Monthly open access')
-                      : locale === 'pt-BR' ? T("Preço de Lançamento") : 'Launch Price'}
+                      ? (isPtBr ? T("Acesso aberto no mês") : T("Monthly open access"))
+                      : locale === 'pt-BR' ? T("Preço de Lançamento") : T("Launch Price")}
                   </Badge>
                   <Badge className="bg-gray-700 text-muted-foreground border-0">
                     {T(product.level)}
@@ -361,7 +361,7 @@ export default function CourseSalesPage({
                     <PlayCircle className="text-amber-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.lessons}</div>
-                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("Aulas") : 'Lessons'}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("Aulas") : T("Lessons")}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
@@ -369,15 +369,15 @@ export default function CourseSalesPage({
                     <Clock className="text-blue-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{T(product.metrics.duration)}</div>
-                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("de conteúdo") : 'of content'}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("de conteúdo") : T("of content")}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
                   <div className="flex items-center gap-2">
                     <Award className="text-green-400" size={20} />
                     <div>
-                      <div className="font-bold text-lg">{locale === 'pt-BR' ? T("Certificado") : 'Certificate'}</div>
-                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? 'Incluso' : 'Included'}</div>
+                      <div className="font-bold text-lg">{locale === 'pt-BR' ? T("Certificado") : T("Certificate")}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("Incluso") : T("Included")}</div>
                     </div>
                   </div>
                 </div>
@@ -395,7 +395,7 @@ export default function CourseSalesPage({
                           Ficam os números que ele confere abrindo o curso. */}
                       <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
                         <BadgeCheck size={16} />
-                        <span>{isPtBr ? T("Curso escrito por inteiro") : 'Fully written course'}</span>
+                        <span>{isPtBr ? T("Curso escrito por inteiro") : T("Fully written course")}</span>
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">
                         {isPtBr
@@ -540,22 +540,22 @@ export default function CourseSalesPage({
                           <Sparkles className="text-green-400" size={18} />
                           <span className="font-bold text-green-400">
                             {isFreeCourseOfMonth
-                              ? (isPtBr ? T("Curso grátis do mês") : 'Free course of the month')
+                              ? (isPtBr ? T("Curso grátis do mês") : T("Free course of the month"))
                               : product.pricing.note
-                                ? (isPtBr ? T("Preço simbólico") : 'Symbolic price')
-                                : locale === 'pt-BR' ? T("Preço de Lançamento") : 'Launch Price'}
+                                ? (isPtBr ? T("Preço simbólico") : T("Symbolic price"))
+                                : locale === 'pt-BR' ? T("Preço de Lançamento") : T("Launch Price")}
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground">
                           {isFreeCourseOfMonth
                             ? (isPtBr
                                 ? T("Oferta mensal liberada para qualquer usuário logado, com certificado incluso.")
-                                : 'Monthly offer unlocked for any logged-in user, including the certificate.')
+                                : T("Monthly offer unlocked for any logged-in user, including the certificate."))
                             : product.pricing.note
                               ? product.pricing.note
                               : locale === 'pt-BR'
                               ? T("Aproveite o preço especial de lançamento. O valor aumentará em breve.")
-                              : 'Take advantage of the special launch price. Price will increase soon.'}
+                              : T("Take advantage of the special launch price. Price will increase soon.")}
                         </p>
                       </div>
                     )}
@@ -565,7 +565,8 @@ export default function CourseSalesPage({
                       {effectiveOriginalPrice > effectivePrice && (
                         <div className="flex items-center gap-3 mb-2">
                           <span className="text-muted-foreground line-through text-2xl">
-                            R$ {effectiveOriginalPrice.toLocaleString()}
+                            
+                            {T("R$")} {effectiveOriginalPrice.toLocaleString()}
                           </span>
                           <Badge className="bg-red-500 text-white text-lg px-3 py-1">
                             -{effectiveDiscount}%
@@ -574,14 +575,15 @@ export default function CourseSalesPage({
                       )}
                       <div className="flex items-baseline gap-2 mb-2">
                         <span className="text-5xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
-                          R$ {effectivePrice.toLocaleString()}
+                          
+                          {T("R$")} {effectivePrice.toLocaleString()}
                         </span>
                       </div>
                       {isFreeCourseOfMonth ? (
                         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-muted-foreground">
                           {isPtBr
                             ? T("Acesso completo liberado neste mês para qualquer usuário logado, com certificado incluído.")
-                            : "Full access is unlocked this month for any logged-in user, including the certificate."}
+                            : T("Full access is unlocked this month for any logged-in user, including the certificate.")}
                         </div>
                       ) : product.pricing.note ? (
                         // Preço simbólico (ex.: chatgpt-zero R$5): nota honesta no
@@ -615,7 +617,7 @@ export default function CourseSalesPage({
                       >
                         {isPtBr
                           ? T("Ler um capítulo inteiro de graça →")
-                          : "Read a full chapter for free →"}
+                          : T("Read a full chapter for free →")}
                       </Link>
 
                       <Button
@@ -625,9 +627,9 @@ export default function CourseSalesPage({
                       >
                         {jaTemOCurso ? <PlayCircle className="mr-2" size={20} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
                         {jaTemOCurso
-                          ? (isPtBr ? T("Ler agora") : "Read now")
+                          ? (isPtBr ? T("Ler agora") : T("Read now"))
                           : isFreeCourseOfMonth
-                            ? (isPtBr ? T("Liberar grátis") : "Unlock free")
+                            ? (isPtBr ? T("Liberar grátis") : T("Unlock free"))
                             : t("sidebar.buyNow")}
                       </Button>
 
@@ -648,7 +650,7 @@ export default function CourseSalesPage({
                       <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
                         <div className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
                           <BadgeCheck size={15} />
-                          <span>{isPtBr ? T("Atualizado para o cenário atual") : 'Updated for the current landscape'}</span>
+                          <span>{isPtBr ? T("Atualizado para o cenário atual") : T("Updated for the current landscape")}</span>
                         </div>
                         {/* O canon de modelos saiu daqui em 03/08/2026 — ver o
                             bloco de verificação mais acima. Anunciar quais
@@ -1112,7 +1114,7 @@ export default function CourseSalesPage({
                 >
                   {isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
                   {isFreeCourseOfMonth
-                    ? (isPtBr ? T("Liberar curso grátis do mês") : "Unlock free course of the month")
+                    ? (isPtBr ? T("Liberar curso grátis do mês") : T("Unlock free course of the month"))
                     : t("finalCta.enrollNow", { currency: "R$", price: product.pricing.price.toLocaleString() })}
                 </Button>
               </div>
@@ -1145,17 +1147,17 @@ export default function CourseSalesPage({
                 âmbar ao lado dela é a contradição em dois dedos de tela. */}
             {jaTemOCurso ? (
               <div className="text-sm font-bold text-amber-400">
-                {isPtBr ? T("Incluído no seu plano") : "Included in your plan"}
+                {isPtBr ? T("Incluído no seu plano") : T("Included in your plan")}
               </div>
             ) : (
               <>
                 {effectiveOriginalPrice > effectivePrice && (
                   <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground line-through text-sm">R$ {effectiveOriginalPrice.toLocaleString()}</span>
+                    <span className="text-muted-foreground line-through text-sm">{T("R$")} {effectiveOriginalPrice.toLocaleString()}</span>
                     <Badge className="bg-red-500 text-white text-xs">-{effectiveDiscount}%</Badge>
                   </div>
                 )}
-                <div className="text-xl font-bold text-amber-400">R$ {effectivePrice.toLocaleString()}</div>
+                <div className="text-xl font-bold text-amber-400">{T("R$")} {effectivePrice.toLocaleString()}</div>
               </>
             )}
           </div>
@@ -1165,9 +1167,9 @@ export default function CourseSalesPage({
           >
             {jaTemOCurso ? <PlayCircle className="mr-2" size={18} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}
             {jaTemOCurso
-              ? (isPtBr ? T("Ler agora") : "Read now")
+              ? (isPtBr ? T("Ler agora") : T("Read now"))
               : isFreeCourseOfMonth
-                ? (isPtBr ? T("Liberar grátis") : "Unlock free")
+                ? (isPtBr ? T("Liberar grátis") : T("Unlock free"))
                 : t("mobileCta.buy")}
           </Button>
         </div>

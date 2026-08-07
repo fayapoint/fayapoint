@@ -97,11 +97,12 @@ export function AssinaturaFayai({
 
         <div className="min-w-0 flex-1">
           <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300/70">
-            {isPtBr ? T("Produção") : "Produced by"}
+            {isPtBr ? T("Produção") : T("Produced by")}
           </div>
           <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
             <span className="text-[15px] font-bold leading-none text-white">
-              FayAi
+              
+              {T("FayAi")}
             </span>
             <span className="text-[11px] leading-none text-white/35">
               
@@ -110,8 +111,8 @@ export function AssinaturaFayai({
           </div>
           <p className="mt-1.5 text-xs leading-snug text-white/45">
             {isPtBr
-              ? "Escrito, revisado e ilustrado na casa — e reescrito sempre que a ferramenta muda."
-              : "Written, reviewed and illustrated in-house — and rewritten whenever the tool changes."}
+              ? T("Escrito, revisado e ilustrado na casa — e reescrito sempre que a ferramenta muda.")
+              : T("Written, reviewed and illustrated in-house — and rewritten whenever the tool changes.")}
           </p>
         </div>
       </div>

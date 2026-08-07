@@ -52,7 +52,7 @@ export function MinigamesPanel() {
     return (
       <div className="mx-auto max-w-screen-xl space-y-4 min-w-0">
         <button onClick={() => setJogo(null)} className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={15} /> Arcade
+          <ArrowLeft size={15} />  {T("Arcade")}
         </button>
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           <ArcadeVisual gameId={jogo} alt={`Arte animada do jogo ${TITULOS[jogo]}`} active eager className="aspect-[16/5] border-b border-border" imageClassName="transition-transform duration-700 hover:scale-[1.02]" />
@@ -92,10 +92,11 @@ export function MinigamesPanel() {
           <div className="grid sm:grid-cols-2 items-center">
             <div className="p-5 md:p-7">
               <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest rounded-full px-2.5 py-1" style={{ background: "rgba(245,192,78,.15)", color: "#f5c04e" }}>
-                <Gamepad2 size={11} /> Arcade da IA
+                <Gamepad2 size={11} />  {T("Arcade da IA")}
               </span>
               <h2 className="mt-2.5 text-2xl md:text-3xl font-extrabold leading-tight">
-                Aprenda IA <span style={{ color: "#f5c04e" }}>jogando</span>
+                
+                {T("Aprenda IA")} <span style={{ color: "#f5c04e" }}>{T("jogando")}</span>
               </h2>
               <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
                 
@@ -106,7 +107,7 @@ export function MinigamesPanel() {
               <img src="/landing/photos/cursos-hero.webp" alt={T("Pessoas aprendendo juntas com tecnologia")} className="absolute inset-0 h-full w-full object-cover opacity-70" style={{ maskImage: "linear-gradient(90deg, transparent, black 22%)", WebkitMaskImage: "linear-gradient(90deg, transparent, black 22%)" }} />
               <span className="absolute inset-0 bg-gradient-to-l from-[#0c0e1d]/10 to-[#0c0e1d] sm:to-transparent" />
               <span className="arc-float absolute bottom-3 right-4 block aspect-[3/2] w-36 rotate-2 overflow-hidden rounded-2xl border border-white/25 bg-[#141731] shadow-2xl shadow-violet-500/30 sm:w-44">
-                <RandomArcadeVisual alt="Cenas dos minigames do Arcade da IA" eager className="h-full w-full" imageClassName="h-full w-full object-cover" />
+                <RandomArcadeVisual alt={T("Cenas dos minigames do Arcade da IA")} eager className="h-full w-full" imageClassName="h-full w-full object-cover" />
               </span>
             </div>
           </div>
@@ -129,7 +130,7 @@ export function MinigamesPanel() {
                 <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                   <ArcadeVisual gameId={j.id} alt={`Arte do minigame ${j.titulo}`} className="absolute inset-0 h-full w-full" imageClassName="transition-transform duration-500 group-hover:scale-105" />
                   <span className="absolute top-2.5 left-2.5 text-[9px] font-extrabold uppercase tracking-widest rounded-full px-2 py-0.5" style={{ background: j.status === "construindo" ? "#f5c04e" : j.cor, color: "#0c0e1d" }}>
-                    {j.status === "construindo" ? "Construindo" : j.status === "home" ? T("Na página inicial") : T("Jogar agora")}
+                    {j.status === "construindo" ? T("Construindo") : j.status === "home" ? T("Na página inicial") : T("Jogar agora")}
                   </span>
                 </span>
                 <span className="block p-3.5">
@@ -189,10 +190,11 @@ export function ArcadeBanner({ onOpen }: { onOpen: () => void }) {
               <Gamepad2 size={11} />  {T("Novo: Arcade da IA")}
             </span>
             <p className="mt-1.5 font-bold text-sm md:text-base">{T("5 minigames para aprender IA jogando")}</p>
-            <p className="text-[12px] text-muted-foreground">Monte, compare e reconstrua prompts — entrou, jogou, aprendeu.</p>
+            <p className="text-[12px] text-muted-foreground">{T("Monte, compare e reconstrua prompts — entrou, jogou, aprendeu.")}</p>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-extrabold text-[#241a05] shrink-0 group-hover:opacity-90 transition-opacity" style={{ background: "linear-gradient(135deg, #f5c04e, #ffd97a)" }}>
-            Jogar <ArrowRight size={14} />
+            
+            {T("Jogar")} <ArrowRight size={14} />
           </span>
         </div>
       </div>

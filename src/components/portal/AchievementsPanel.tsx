@@ -257,7 +257,8 @@ export function AchievementsPanel({ achievements, totalUnlocked }: AchievementsP
                         {/* Unlock date */}
                         {achievement.unlocked && achievement.unlockedAt && (
                           <p className="text-[9px] md:text-[10px] text-muted-foreground mt-1 md:mt-2 truncate w-full">
-                            Desbloqueado em {new Date(achievement.unlockedAt).toLocaleDateString('pt-BR')}
+                            
+                            {T("Desbloqueado em")} {new Date(achievement.unlockedAt).toLocaleDateString('pt-BR')}
                           </p>
                         )}
                       </div>

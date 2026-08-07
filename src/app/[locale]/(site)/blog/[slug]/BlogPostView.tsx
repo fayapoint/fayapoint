@@ -189,7 +189,7 @@ export default function BlogPostView() {
               onClick={() => navigator.share?.({ title: post.title, url: window.location.href }).catch(() => {})}
               className="ml-auto flex items-center gap-1.5 hover:text-amber-400 transition"
             >
-              <Share2 size={14} /> Compartilhar
+              <Share2 size={14} />  {T("Compartilhar")}
             </button>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function BlogPostView() {
         {/* Related posts */}
         {relatedPosts.length > 0 && (
           <section className="container mx-auto max-w-4xl px-6 pb-10">
-            <h3 className="text-xl font-bold mb-6">Artigos Relacionados</h3>
+            <h3 className="text-xl font-bold mb-6">{T("Artigos Relacionados")}</h3>
             <div className="grid md:grid-cols-3 gap-4">
               {relatedPosts.map((rp) => (
                 <Link key={rp.id} href={`/${locale}/blog/${rp.slug}`}>

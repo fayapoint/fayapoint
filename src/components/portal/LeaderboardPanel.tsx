@@ -83,7 +83,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
               <Trophy size={18} className="text-white md:hidden" />
               <Trophy size={22} className="text-white hidden md:block" />
             </div>
-            <span className="truncate">Ranking Semanal</span>
+            <span className="truncate">{T("Ranking Semanal")}</span>
           </h2>
           <p className="text-muted-foreground text-xs md:text-sm mt-1 truncate">{T("Compete com outros alunos e ganhe XP extra!")}</p>
         </div>
@@ -159,7 +159,7 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
                   <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground">
                     <Flame size={10} className="text-amber-400 md:hidden" />
                     <Flame size={12} className="text-amber-400 hidden md:block" />
-                    <span>Lvl {user.level}</span>
+                    <span>{T("Lvl")} {user.level}</span>
                   </div>
                 </div>
 
@@ -259,19 +259,23 @@ export function LeaderboardPanel({ users, userRank }: LeaderboardPanelProps) {
             <TrendingUp className="text-amber-400 hidden md:block" size={24} />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="font-bold text-base md:text-lg mb-1">Recompensas Semanais</h3>
+            <h3 className="font-bold text-base md:text-lg mb-1">{T("Recompensas Semanais")}</h3>
             <p className="text-xs md:text-sm text-muted-foreground mb-2 md:mb-3">
-              Os top 3 do ranking semanal ganham bonus exclusivos:
+              
+              {T("Os top 3 do ranking semanal ganham bonus exclusivos:")}
             </p>
             <div className="flex flex-wrap gap-2 md:gap-3">
               <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 text-[10px] md:text-xs">
-                1st: +500 XP + Badge
+                
+                {T("1st: +500 XP + Badge")}
               </Badge>
               <Badge className="bg-gray-400/20 text-muted-foreground border-gray-400/50 text-[10px] md:text-xs">
-                2nd: +300 XP
+                
+                {T("2nd: +300 XP")}
               </Badge>
               <Badge className="bg-amber-700/20 text-amber-500 border-amber-700/50 text-[10px] md:text-xs">
-                3rd: +150 XP
+                
+                {T("3rd: +150 XP")}
               </Badge>
             </div>
           </div>

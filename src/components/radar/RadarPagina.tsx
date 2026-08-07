@@ -341,7 +341,8 @@ export function RadarPagina() {
         <header className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <h1 className="text-4xl sm:text-6xl tracking-wide" style={bebas}>
-              RADAR <span style={{ color: GOLD }}>FAYAI</span>
+              
+              {T("RADAR")} <span style={{ color: GOLD }}>{T("FAYAI")}</span>
             </h1>
             <p className="mt-1 text-sm sm:text-base text-white/60 max-w-2xl">
               
@@ -352,7 +353,7 @@ export function RadarPagina() {
               <Radar size={13} />
               {medindo ? (
                 <>
-                  <Loader2 size={11} className="animate-spin" /> medindo
+                  <Loader2 size={11} className="animate-spin" />  {T("medindo")}
                 </>
               ) : (
                 T("em alta agora")
@@ -505,12 +506,13 @@ export function RadarPagina() {
             ) : (
             <>
             <h2 className="text-lg tracking-wide mb-2" style={bebas}>
-              WORLD TREND — EM ALTA{" "}
+              
+              {T("WORLD TREND — EM ALTA")}{" "}
               <span style={{ color: lugar.cor }}>{noLugar(lugar).toUpperCase()}</span>
             </h2>
             {itens.length === 0 ? (
               <div className="glass rounded-2xl p-5 text-sm text-white/55">
-                {medindo ? "Medindo…" : T("Sem sinal para este lugar agora.")}
+                {medindo ? T("Medindo…") : T("Sem sinal para este lugar agora.")}
               </div>
             ) : (
               <ol className="space-y-1">
@@ -552,7 +554,7 @@ export function RadarPagina() {
                           </span>
                         )}
                         <span className="block text-[10px] text-white/35 mt-0.5">
-                          {it.fonte === "leitura" ? T("lido na Wikipédia") : "buscado no Google"} ·{" "}
+                          {it.fonte === "leitura" ? T("lido na Wikipédia") : T("buscado no Google")} ·{" "}
                           {T(it.volumeRotulo)}
                           {it.lugares?.length ? ` · ${it.lugares.join(" ")}` : it.veiculo ? ` · ${it.veiculo}` : ""}
                         </span>
@@ -570,7 +572,7 @@ export function RadarPagina() {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        aria-label={`Abrir em ${it.veiculo ?? "fonte"}`}
+                        aria-label={`Abrir em ${it.veiculo ?? T("fonte")}`}
                         className="relative shrink-0 grid place-items-center w-6 h-6 rounded-lg text-white/20 hover:text-white hover:bg-white/10 transition-colors mt-0.5"
                       >
                         <ArrowUpRight size={12} />
@@ -589,7 +591,8 @@ export function RadarPagina() {
         {/* --------------------------- comparação regional -------------------------- */}
         <section className="mt-10">
           <h2 className="text-xl tracking-wide" style={bebas}>
-            O BRASIL POR <span style={{ color: GOLD }}>{T("REGIÃO")}</span>
+            
+            {T("O BRASIL POR")} <span style={{ color: GOLD }}>{T("REGIÃO")}</span>
           </h2>
           <p className="text-sm text-white/50 mb-3 max-w-2xl">
             
@@ -613,7 +616,7 @@ export function RadarPagina() {
                   {T(r.nome)}
                 </span>
                 {r.medindo ? (
-                  <span className="block mt-1 text-[11px] text-white/35">medindo…</span>
+                  <span className="block mt-1 text-[11px] text-white/35">{T("medindo…")}</span>
                 ) : (
                   <>
                     <span className="block mt-1 text-sm font-semibold leading-snug capitalize line-clamp-2">
@@ -621,7 +624,7 @@ export function RadarPagina() {
                     </span>
                     <span className="block mt-1 text-[10px] text-white/35">
                       {r.alcance > 0
-                        ? `aparece em ${r.alcance} ${r.alcance === 1 ? "estado" : "estados"} de ${r.estados}`
+                        ? `aparece em ${r.alcance} ${r.alcance === 1 ? T("estado") : T("estados")} de ${r.estados}`
                         : `medido nos ${r.estados} estados da região`}
                       {r.comIa > 0 && (
                         <span className="text-violet-300/70"> · {r.comIa}  {T("sobre IA")}</span>
@@ -638,12 +641,13 @@ export function RadarPagina() {
         <section id="ia-trend" className="mt-10 scroll-mt-6">
           <h2 className="text-xl tracking-wide">
             <span style={bebas}>
-              IA TREND — O RECORTE DE <span style={{ color: "#a78bfa" }}>IA</span>
+              
+              {T("IA TREND — O RECORTE DE")} <span style={{ color: "#a78bfa" }}>IA</span>
             </span>
           </h2>
           <p className="text-sm text-white/50 mb-2 max-w-2xl">
             
-            {T("O que o Brasil digita sobre inteligência artificial, por profissão. A leitura que\r\n            importa é o")} <strong className="text-white/75">canal</strong>{T(": termo que só aparece no\r\n            YouTube é demanda de vídeo — onde um canal ganha antes de o site ranquear.")}
+            {T("O que o Brasil digita sobre inteligência artificial, por profissão. A leitura que\r\n            importa é o")} <strong className="text-white/75">{T("canal")}</strong>{T(": termo que só aparece no\r\n            YouTube é demanda de vídeo — onde um canal ganha antes de o site ranquear.")}
           </p>
 
           {/* Qual dos dois está na tela. A página afirma no rodapé que nada aqui
@@ -740,8 +744,7 @@ export function RadarPagina() {
           {canais.yt === 0 && canais.web === 0 && (
             <p className="mt-2 text-[12px] leading-snug text-white/40">
               
-              {T("Nenhum termo exclusivo de um canal só neste recorte: os")} {canais.ambos} apareceram
-              no Google <em>e</em>  {T("no YouTube, que é a confirmação mais forte que este método dá.")}
+              {T("Nenhum termo exclusivo de um canal só neste recorte: os")} {canais.ambos}  {T("apareceram\r\n              no Google")} <em>e</em>  {T("no YouTube, que é a confirmação mais forte que este método dá.")}
             </p>
           )}
 
@@ -793,7 +796,8 @@ export function RadarPagina() {
               rel="noopener noreferrer"
               className="underline decoration-white/25 hover:text-white transition-colors"
             >
-              Google Trends
+              
+              {T("Google Trends")}
             </a>
             ,{" "}
             <a
@@ -805,7 +809,8 @@ export function RadarPagina() {
               
               {T("Wikipédia")}
             </a>{" "}
-            e o autocomplete do Google e do YouTube.
+            
+            {T("e o autocomplete do Google e do YouTube.")}
           </p>
           <Link
             href="/"
@@ -861,7 +866,8 @@ function RankingIa({
   return (
     <div>
       <h2 className="text-lg tracking-wide mb-2" style={bebas}>
-        IA TREND — <span style={{ color: nicho.cor }}>{nicho.label.toUpperCase()}</span>
+        
+        {T("IA TREND —")} <span style={{ color: nicho.cor }}>{nicho.label.toUpperCase()}</span>
       </h2>
 
       <div className="flex gap-1.5 flex-wrap mb-2" role="tablist">
@@ -890,7 +896,8 @@ function RankingIa({
           radar consultando um canal só, que é o controle na mão do visitante. */}
       <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/30 mr-1">
-          Fontes
+          
+          {T("Fontes")}
         </span>
         {FONTES.map(({ id, label, icone: Icone, desc }) => {
           const on = fontes.has(id);
@@ -952,7 +959,7 @@ function RankingIa({
                     <p className="text-[13px] font-bold leading-snug break-words">{T(l.termo)}</p>
                     <p className="text-[10px] text-white/35">
                       {l.canais === "web+yt"
-                        ? "Google e YouTube"
+                        ? T("Google e YouTube")
                         : l.canais === "yt"
                           ? T("só YouTube — demanda de vídeo")
                           : T("só Google")}{" "}

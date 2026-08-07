@@ -72,7 +72,7 @@ export function PortalTour() {
       >
         <button
           onClick={close}
-          aria-label="Pular tour"
+          aria-label={T("Pular tour")}
           className="absolute top-3 right-3 p-2 rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
         >
           <X size={16} />
@@ -123,7 +123,8 @@ export function PortalTour() {
 
         <div className="mt-5 flex items-center justify-center gap-3">
           <button onClick={close} className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors px-3 py-2">
-            Pular
+            
+            {T("Pular")}
           </button>
           <button
             onClick={() => (last ? close() : setStep(step + 1))}

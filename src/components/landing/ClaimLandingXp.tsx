@@ -55,7 +55,7 @@ export function ClaimLandingXp() {
       <p className="text-sm font-bold leading-snug">🏆 {T(msg)}</p>
       <button
         onClick={() => setMsg(null)}
-        aria-label="Fechar"
+        aria-label={T("Fechar")}
         className="shrink-0 rounded-full p-1 hover:bg-black/10 transition-colors cursor-pointer"
       >
         <X size={16} />

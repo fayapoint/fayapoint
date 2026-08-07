@@ -236,19 +236,19 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-4xl relative text-center">
             <Badge className="mb-5 px-4 py-2 bg-amber-500/10 border-amber-500/20 text-amber-300" variant="outline">
               <Sparkles className="w-4 h-4 mr-2" />
-              {isPt ? T("Preços transparentes") : "Transparent pricing"}
+              {isPt ? T("Preços transparentes") : T("Transparent pricing")}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-5 tracking-tight">
               {isPt ? (
                 <>{T("Comece grátis.")}{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">{T("Escale quando quiser.")}</span></>
               ) : (
-                <>Start free.{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">Scale when ready.</span></>
+                <>{T("Start free.")}{" "}<span className="bg-gradient-to-r from-amber-400 to-violet-300 bg-clip-text text-transparent">{T("Scale when ready.")}</span></>
               )}
             </h1>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               {isPt
                 ? T("Todo mês um curso completo fica aberto para qualquer conta — com certificado incluso. Assine para desbloquear mais cursos, créditos de IA e descontos.")
-                : "Every month one full course opens for any account — certificate included. Subscribe to unlock more courses, AI credits and discounts."}
+                : T("Every month one full course opens for any account — certificate included. Subscribe to unlock more courses, AI credits and discounts.")}
             </p>
 
             {/* Cycle Toggle */}
@@ -261,7 +261,7 @@ export default function PricingPage() {
                     : "text-muted-foreground hover:text-white"
                 }`}
               >
-                {isPt ? "Mensal" : "Monthly"}
+                {isPt ? T("Mensal") : T("Monthly")}
               </button>
               <button
                 onClick={() => setCycle("yearly")}
@@ -271,7 +271,7 @@ export default function PricingPage() {
                     : "text-muted-foreground hover:text-white"
                 }`}
               >
-                {isPt ? "Anual" : "Yearly"}
+                {isPt ? T("Anual") : T("Yearly")}
                 <span className="text-xs font-bold bg-emerald-500 text-white px-2 py-0.5 rounded-full">
                   -17%
                 </span>
@@ -286,15 +286,15 @@ export default function PricingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-400" />
-                {isPt ? "Acesso imediato" : "Instant access"}
+                {isPt ? T("Acesso imediato") : T("Instant access")}
               </div>
               <div className="flex items-center gap-2">
                 <CreditCard className="w-4 h-4 text-blue-400" />
-                {isPt ? T("PIX, Cartão ou Boleto") : "PIX, Card or Boleto"}
+                {isPt ? T("PIX, Cartão ou Boleto") : T("PIX, Card or Boleto")}
               </div>
               <div className="flex items-center gap-2">
                 <X className="w-4 h-4 text-red-400" />
-                {isPt ? T("Cancele quando quiser") : "Cancel anytime"}
+                {isPt ? T("Cancele quando quiser") : T("Cancel anytime")}
               </div>
             </div>
           </div>
@@ -313,21 +313,21 @@ export default function PricingPage() {
                         <Gift className="h-4 w-4 text-emerald-400" />
                       </div>
                       <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">
-                        {isPt ? T("Grátis este mês") : "Free this month"}
+                        {isPt ? T("Grátis este mês") : T("Free this month")}
                       </span>
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold mb-2">{T(monthlyOffers.freeCourse.name)}</h2>
                     <p className="text-muted-foreground mb-4">
                       {isPt
                         ? T("Curso completo com certificado incluso. Sem cadastrar cartão. Sem pegadinha.")
-                        : "Full course with certificate included. No card required. No catch."}
+                        : T("Full course with certificate included. No card required. No catch.")}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-300 border-emerald-500/20">
-                        <Award className="w-3 h-3 mr-1" /> {isPt ? T("Certificado grátis") : "Free certificate"}
+                        <Award className="w-3 h-3 mr-1" /> {isPt ? T("Certificado grátis") : T("Free certificate")}
                       </Badge>
                       <Badge variant="secondary" className="bg-secondary text-muted-foreground border-border">
-                        <BookOpen className="w-3 h-3 mr-1" /> {monthlyOffers.freeCourse.metrics.lessons} {isPt ? T("aulas") : "lessons"}
+                        <BookOpen className="w-3 h-3 mr-1" /> {monthlyOffers.freeCourse.metrics.lessons} {isPt ? T("aulas") : T("lessons")}
                       </Badge>
                       <Badge variant="secondary" className="bg-secondary text-muted-foreground border-border">
                         <Clock className="w-3 h-3 mr-1" /> {T(monthlyOffers.freeCourse.metrics.duration)}
@@ -336,7 +336,7 @@ export default function PricingPage() {
                   </div>
                   <Link href={`/curso/${monthlyOffers.freeCourse.slug}`}>
                     <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-8 shadow-lg shadow-emerald-500/20">
-                      {isPt ? T("Começar grátis") : "Start free"}
+                      {isPt ? T("Começar grátis") : T("Start free")}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -392,21 +392,21 @@ export default function PricingPage() {
                       <div className="mb-6">
                         {price === 0 ? (
                           <div>
-                            <span className="text-4xl font-bold">R$0</span>
+                            <span className="text-4xl font-bold">{T("R$0")}</span>
                             <span className="text-muted-foreground ml-1">{isPt ? "/sempre" : "/forever"}</span>
                           </div>
                         ) : (
                           <div>
                             <span className="text-4xl font-bold">{formatBRL(price)}</span>
                             <span className="text-muted-foreground ml-1">
-                              /{cycle === "yearly" ? (isPt ? T("ano") : "year") : (isPt ? T("mês") : "month")}
+                              /{cycle === "yearly" ? (isPt ? T("ano") : T("year")) : (isPt ? T("mês") : T("month"))}
                             </span>
                             {monthlyEquivalent && (
                               <p className="text-sm text-emerald-400 mt-1">
-                                = {formatBRL(monthlyEquivalent)}/{isPt ? T("mês") : "mo"}
+                                = {formatBRL(monthlyEquivalent)}/{isPt ? T("mês") : T("mo")}
                                 {savings > 0 && (
                                   <span className="ml-2 text-xs bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                                    {isPt ? "Economia" : "Save"} {formatBRL(savings)}
+                                    {isPt ? T("Economia") : T("Save")} {formatBRL(savings)}
                                   </span>
                                 )}
                               </p>
@@ -481,10 +481,10 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-3">
-                {isPt ? T("Compare os planos em detalhe") : "Compare plans in detail"}
+                {isPt ? T("Compare os planos em detalhe") : T("Compare plans in detail")}
               </h2>
               <p className="text-muted-foreground">
-                {isPt ? T("Tudo o que cada plano inclui, sem letra miúda.") : "Everything each plan includes, no fine print."}
+                {isPt ? T("Tudo o que cada plano inclui, sem letra miúda.") : T("Everything each plan includes, no fine print.")}
               </p>
             </div>
 
@@ -493,7 +493,7 @@ export default function PricingPage() {
                 <thead>
                   <tr>
                     <th className="text-left p-4 text-sm text-muted-foreground font-normal border-b border-border/50 min-w-[200px]">
-                      {isPt ? "Recurso" : "Feature"}
+                      {isPt ? T("Recurso") : T("Feature")}
                     </th>
                     {PLANS.map((plan) => (
                       <th key={plan.slug} className={`p-4 text-center border-b min-w-[140px] ${
@@ -502,8 +502,8 @@ export default function PricingPage() {
                         <span className="text-sm font-bold">{isPt ? plan.name : plan.nameEn}</span>
                         <br />
                         <span className="text-xs text-muted-foreground">
-                          {plan.monthlyPrice === 0 ? "R$0" : formatBRL(cycle === "yearly" ? plan.yearlyPrice : plan.monthlyPrice)}
-                          /{cycle === "yearly" ? (isPt ? T("ano") : "yr") : (isPt ? T("mês") : "mo")}
+                          {plan.monthlyPrice === 0 ? T("R$0") : formatBRL(cycle === "yearly" ? plan.yearlyPrice : plan.monthlyPrice)}
+                          /{cycle === "yearly" ? (isPt ? T("ano") : T("yr")) : (isPt ? T("mês") : T("mo"))}
                         </span>
                       </th>
                     ))}
@@ -549,12 +549,12 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-3">
-                {isPt ? T("Como funciona o catálogo mensal") : "How the monthly catalog works"}
+                {isPt ? T("Como funciona o catálogo mensal") : T("How the monthly catalog works")}
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 {isPt
                   ? T("Todo dia 1 o catálogo atualiza. Você escolhe quais cursos da vitrine quer ocupar nas vagas do seu plano.")
-                  : "On the 1st of every month the catalog refreshes. You pick which showcase courses fill your plan slots."}
+                  : T("On the 1st of every month the catalog refreshes. You pick which showcase courses fill your plan slots.")}
               </p>
             </div>
             <div className="grid md:grid-cols-4 gap-5">
@@ -588,12 +588,12 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-3">
-                {isPt ? "Pagamento simples e seguro" : "Simple and secure payment"}
+                {isPt ? T("Pagamento simples e seguro") : T("Simple and secure payment")}
               </h2>
               <p className="text-muted-foreground">
                 {isPt
                   ? T("Escolha como pagar. Todas as opções com proteção completa dos seus dados.")
-                  : "Choose how to pay. All options with complete data protection."}
+                  : T("Choose how to pay. All options with complete data protection.")}
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -615,15 +615,15 @@ export default function PricingPage() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                {isPt ? "Dados criptografados" : "Encrypted data"}
+                {isPt ? T("Dados criptografados") : T("Encrypted data")}
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                {isPt ? T("Gateways certificados") : "Certified gateways"}
+                {isPt ? T("Gateways certificados") : T("Certified gateways")}
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                {isPt ? T("Sem armazenamento de cartão") : "No card storage"}
+                {isPt ? T("Sem armazenamento de cartão") : T("No card storage")}
               </div>
             </div>
           </div>
@@ -645,13 +645,13 @@ export default function PricingPage() {
                   {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
                   <span className="text-sm text-muted-foreground ml-1">4.9/5</span>
                 </div>
-                <p className="text-sm text-muted-foreground">+230 {isPt ? "alunos ativos" : "active students"}</p>
+                <p className="text-sm text-muted-foreground">+230 {isPt ? T("alunos ativos") : T("active students")}</p>
               </div>
             </div>
             <p className="text-lg text-muted-foreground italic max-w-xl mx-auto">
               {isPt
                 ? T("&ldquo;Comecei pelo curso grátis do mês e em uma semana já tinha assinado o Profissional. O conteúdo é prático e atualizado.&rdquo;")
-                : "&ldquo;I started with the free monthly course and within a week I subscribed to Professional. The content is practical and up-to-date.&rdquo;"}
+                : T("&ldquo;I started with the free monthly course and within a week I subscribed to Professional. The content is practical and up-to-date.&rdquo;")}
             </p>
           </div>
         </section>
@@ -660,7 +660,7 @@ export default function PricingPage() {
         <section className="py-16 px-4 border-t border-border/30" id="faq">
           <div className="container mx-auto max-w-3xl">
             <h2 className="text-3xl font-bold text-center mb-10">
-              {isPt ? "Perguntas frequentes" : "Frequently asked questions"}
+              {isPt ? T("Perguntas frequentes") : T("Frequently asked questions")}
             </h2>
             <div className="space-y-3">
               {faqItems.map((item, i) => (
@@ -696,23 +696,23 @@ export default function PricingPage() {
           <div className="container mx-auto max-w-3xl text-center">
             <div className="rounded-3xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 via-gray-900/80 to-violet-500/5 p-10 md:p-14 backdrop-blur-sm">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {isPt ? T("Pronto para dominar IA?") : "Ready to master AI?"}
+                {isPt ? T("Pronto para dominar IA?") : T("Ready to master AI?")}
               </h2>
               <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                 {isPt
                   ? T("Comece pelo curso grátis do mês. Se gostar, assine. Se não gostar, não pague nada.")
-                  : "Start with the free course of the month. If you like it, subscribe. If not, pay nothing."}
+                  : T("Start with the free course of the month. If you like it, subscribe. If not, pay nothing.")}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link href={monthlyOffers?.freeCourse ? `/curso/${monthlyOffers.freeCourse.slug}` : "/registro"}>
                   <Button size="lg" className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-violet-700 text-white font-bold px-8 shadow-lg shadow-amber-500/20">
-                    {isPt ? T("Começar grátis") : "Start free"}
+                    {isPt ? T("Começar grátis") : T("Start free")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="#planos">
                   <Button size="lg" variant="outline" className="border-border text-muted-foreground hover:bg-secondary px-8">
-                    {isPt ? T("Ver planos") : "See plans"}
+                    {isPt ? T("Ver planos") : T("See plans")}
                   </Button>
                 </Link>
               </div>

@@ -266,32 +266,32 @@ export default function FreeClassPage() {
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 bg-green-500/20 text-green-400 border-green-500/30 px-4 py-2 text-sm">
               <Sparkles className="mr-2 inline" size={14} />
-              {isPtBr ? T("100% Gratuito — Sem Cadastro") : "100% Free — No Signup Required"}
+              {isPtBr ? T("100% Gratuito — Sem Cadastro") : T("100% Free — No Signup Required")}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
                 {isPtBr 
                   ? T("Mini-Curso Grátis: IA na Prática") 
-                  : "Free Mini-Course: AI in Practice"}
+                  : T("Free Mini-Course: AI in Practice")}
               </span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               {isPtBr
                 ? T("3 aulas práticas com conteúdo real para você começar a usar Inteligência Artificial hoje. Leia, aplique e veja resultados imediatos.")
-                : "3 practical lessons with real content to start using Artificial Intelligence today. Read, apply, and see immediate results."}
+                : T("3 practical lessons with real content to start using Artificial Intelligence today. Read, apply, and see immediate results.")}
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Clock size={16} className="text-amber-400" />
-                <span>~37 {isPtBr ? "minutos de leitura" : "minutes reading"}</span>
+                <span>~37 {isPtBr ? T("minutos de leitura") : T("minutes reading")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <BookOpen size={16} className="text-amber-400" />
-                <span>3 {isPtBr ? T("aulas completas") : "complete lessons"}</span>
+                <span>3 {isPtBr ? T("aulas completas") : T("complete lessons")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Copy size={16} className="text-amber-400" />
-                <span>{isPtBr ? "Templates inclusos" : "Templates included"}</span>
+                <span>{isPtBr ? T("Templates inclusos") : T("Templates included")}</span>
               </div>
             </div>
 
@@ -415,7 +415,7 @@ export default function FreeClassPage() {
                       <div className="p-4 bg-amber-900/20 rounded-lg border border-amber-500/20">
                         <h4 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-2">
                           <Lightbulb size={16} />
-                          {isPtBr ? T("Pontos-chave desta aula:") : "Key takeaways:"}
+                          {isPtBr ? T("Pontos-chave desta aula:") : T("Key takeaways:")}
                         </h4>
                         <ul className="space-y-2">
                           {(isPtBr ? lesson.topics : lesson.topicsEn).map((topic, i) => (
@@ -441,7 +441,7 @@ export default function FreeClassPage() {
               <h2 className="text-2xl font-bold mb-6 text-center">
                 {isPtBr 
                   ? T("Depois dessas 3 aulas, você vai saber:") 
-                  : "After these 3 lessons, you'll know:"}
+                  : T("After these 3 lessons, you'll know:")}
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {[
@@ -467,24 +467,24 @@ export default function FreeClassPage() {
               <h2 className="text-3xl font-bold mb-4">
                 {isPtBr 
                   ? T("Quer ir além dos fundamentos?") 
-                  : "Want to go beyond the fundamentals?"}
+                  : T("Want to go beyond the fundamentals?")}
               </h2>
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
                 {isPtBr
                   ? T("Este mini-curso cobre o essencial. Nos cursos completos, você domina técnicas avançadas de prompt engineering, automação com n8n e Make, criação de conteúdo com IA e muito mais — tudo com projetos práticos.")
-                  : "This mini-course covers the essentials. In the full courses, you master advanced prompt engineering, automation with n8n and Make, AI content creation and more — all with practical projects."}
+                  : T("This mini-course covers the essentials. In the full courses, you master advanced prompt engineering, automation with n8n and Make, AI content creation and more — all with practical projects.")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/cursos">
                   <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-8 py-6 text-lg">
-                    {isPtBr ? T("Ver Cursos Completos") : "See Full Courses"}
+                    {isPtBr ? T("Ver Cursos Completos") : T("See Full Courses")}
                     <ArrowRight className="ml-2" size={20} />
                   </Button>
                 </Link>
                 <Link href="https://wa.me/5521971908530">
                   <Button variant="outline" className="border-green-500 text-green-400 hover:bg-green-500/10 px-8 py-6 text-lg">
                     <MessageCircle className="mr-2" size={20} />
-                    {isPtBr ? T("Tirar Dúvidas no WhatsApp") : "Ask Questions on WhatsApp"}
+                    {isPtBr ? T("Tirar Dúvidas no WhatsApp") : T("Ask Questions on WhatsApp")}
                   </Button>
                 </Link>
               </div>

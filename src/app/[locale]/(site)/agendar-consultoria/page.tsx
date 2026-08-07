@@ -15,7 +15,7 @@ export default function ConsultPage() {
         <section className="relative pt-32 pb-20 overflow-hidden">
           <Image
             src="/rwx6.jpg"
-            alt="Equipe FayAi"
+            alt={T("Equipe FayAi")}
             fill
             priority
             sizes="100vw"
@@ -25,7 +25,8 @@ export default function ConsultPage() {
           <div className="relative z-10 container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center text-white">
               <Badge variant="secondary" className="mb-6 text-sm tracking-[0.3em] uppercase">
-                Agenda exclusiva
+                
+                {T("Agenda exclusiva")}
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
               <p className="text-lg md:text-xl text-gray-100 mb-6">{t("description")}</p>
@@ -73,7 +74,8 @@ export default function ConsultPage() {
                 <p className="text-sm text-muted-foreground mb-3">{T("Prefere falar direto com o time?")}</p>
                 <Button asChild variant="outline">
                   <a href="https://wa.me/5521971908530" target="_blank" rel="noreferrer">
-                    WhatsApp Business
+                    
+                    {T("WhatsApp Business")}
                   </a>
                 </Button>
               </div>

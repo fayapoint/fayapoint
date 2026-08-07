@@ -716,7 +716,7 @@ export default function AccountPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Email</Label>
+                      <Label className="text-muted-foreground">{T("Email")}</Label>
                       <Input
                         value={account.email}
                         disabled
@@ -726,7 +726,7 @@ export default function AccountPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-muted-foreground">Bio</Label>
+                    <Label className="text-muted-foreground">{T("Bio")}</Label>
                     <Textarea
                       value={profileForm.bio}
                       onChange={(e) =>
@@ -739,7 +739,7 @@ export default function AccountPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">LinkedIn</Label>
+                      <Label className="text-muted-foreground">{T("LinkedIn")}</Label>
                       <Input
                         value={profileForm.linkedin}
                         onChange={(e) =>
@@ -750,7 +750,7 @@ export default function AccountPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Website</Label>
+                      <Label className="text-muted-foreground">{T("Website")}</Label>
                       <Input
                         value={profileForm.website}
                         onChange={(e) =>
@@ -764,7 +764,7 @@ export default function AccountPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Empresa</Label>
+                      <Label className="text-muted-foreground">{T("Empresa")}</Label>
                       <Input
                         value={profileForm.company}
                         onChange={(e) =>
@@ -775,7 +775,7 @@ export default function AccountPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Cargo</Label>
+                      <Label className="text-muted-foreground">{T("Cargo")}</Label>
                       <Input
                         value={profileForm.position}
                         onChange={(e) =>
@@ -794,7 +794,7 @@ export default function AccountPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, location: e.target.value })
                       }
-                      placeholder="Cidade, Estado"
+                      placeholder={T("Cidade, Estado")}
                       className="bg-secondary border-border text-white"
                     />
                   </div>
@@ -803,13 +803,13 @@ export default function AccountPage() {
                 {/* Skills & Interests */}
                 <Card className="p-4 md:p-6 bg-card border-border space-y-4 md:space-y-5 min-w-0 overflow-hidden">
                   <div className="space-y-3">
-                    <Label className="text-muted-foreground">Habilidades</Label>
+                    <Label className="text-muted-foreground">{T("Habilidades")}</Label>
                     <div className="flex gap-2">
                       <Input
                         value={skillsInput}
                         onChange={(e) => setSkillsInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag("skills"))}
-                        placeholder="Adicionar habilidade..."
+                        placeholder={T("Adicionar habilidade...")}
                         className="bg-secondary border-border text-white flex-1"
                       />
                       <Button
@@ -835,13 +835,13 @@ export default function AccountPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-muted-foreground">Interesses</Label>
+                    <Label className="text-muted-foreground">{T("Interesses")}</Label>
                     <div className="flex gap-2">
                       <Input
                         value={interestsInput}
                         onChange={(e) => setInterestsInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag("interests"))}
-                        placeholder="Adicionar interesse..."
+                        placeholder={T("Adicionar interesse...")}
                         className="bg-secondary border-border text-white flex-1"
                       />
                       <Button
@@ -878,7 +878,7 @@ export default function AccountPage() {
                   ) : (
                     <Save size={20} className="mr-2" />
                   )}
-                  {savingProfile ? "Salvando..." : T("Salvar Perfil")}
+                  {savingProfile ? T("Salvando...") : T("Salvar Perfil")}
                 </Button>
               </motion.div>
             </TabsContent>
@@ -911,13 +911,13 @@ export default function AccountPage() {
                   {subscriptionData?.subscription ? (
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm gap-2">
-                        <span className="text-muted-foreground shrink-0">Valor</span>
+                        <span className="text-muted-foreground shrink-0">{T("Valor")}</span>
                         <span className="font-medium text-right truncate">
                           {formatCurrency(subscriptionData.subscription.value)}/{subscriptionData.subscription.cycle === "monthly" ? T("mês") : subscriptionData.subscription.cycle === "yearly" ? T("ano") : subscriptionData.subscription.cycle}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm gap-2">
-                        <span className="text-muted-foreground shrink-0">Status</span>
+                        <span className="text-muted-foreground shrink-0">{T("Status")}</span>
                         <Badge
                           className={cn(
                             "text-xs",
@@ -926,7 +926,7 @@ export default function AccountPage() {
                               : "bg-red-500/20 text-red-400"
                           )}
                         >
-                          {subscriptionData.subscription.status === "active" ? "Ativo" : "Inativo"}
+                          {subscriptionData.subscription.status === "active" ? T("Ativo") : T("Inativo")}
                         </Badge>
                       </div>
                       {subscriptionData.subscription.nextDueDate && (
@@ -937,7 +937,7 @@ export default function AccountPage() {
                       )}
                       {subscriptionData.subscription.billingType && (
                         <div className="flex justify-between text-sm gap-2">
-                          <span className="text-muted-foreground shrink-0">Forma de pagamento</span>
+                          <span className="text-muted-foreground shrink-0">{T("Forma de pagamento")}</span>
                           <span className="flex items-center gap-1.5 min-w-0 justify-end">
                             <CreditCard size={14} className="text-muted-foreground shrink-0" />
                             {subscriptionData.subscription.billingType === "credit_card" && subscriptionData.subscription.creditCardLastFour
@@ -945,7 +945,7 @@ export default function AccountPage() {
                               : subscriptionData.subscription.billingType === "pix"
                                 ? "PIX"
                                 : subscriptionData.subscription.billingType === "boleto"
-                                  ? "Boleto"
+                                  ? T("Boleto")
                                   : subscriptionData.subscription.billingType}
                           </span>
                         </div>
@@ -1143,14 +1143,14 @@ export default function AccountPage() {
                       ) : (
                         <Shield size={16} className="mr-2" />
                       )}
-                      {savingPassword ? "Alterando..." : T("Alterar Senha")}
+                      {savingPassword ? T("Alterando...") : T("Alterar Senha")}
                     </Button>
                   </div>
                 </Card>
 
                 {/* Connected Accounts */}
                 <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-4">Contas Conectadas</h3>
+                  <h3 className="text-base md:text-lg font-semibold mb-4">{T("Contas Conectadas")}</h3>
                   <div className="flex items-center justify-between p-3 md:p-4 bg-secondary/50 rounded-lg border border-border gap-2 min-w-0">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0">
@@ -1174,12 +1174,13 @@ export default function AccountPage() {
                         </svg>
                       </div>
                       <div>
-                        <p className="font-medium">Google</p>
+                        <p className="font-medium">{T("Google")}</p>
                         <p className="text-sm text-muted-foreground">{T("Login com Google")}</p>
                       </div>
                     </div>
                     <Badge variant="outline" className="border-green-500/50 text-green-400">
-                      Conectado
+                      
+                      {T("Conectado")}
                     </Badge>
                   </div>
                 </Card>
@@ -1193,7 +1194,7 @@ export default function AccountPage() {
                   </p>
                   <div className="p-4 bg-secondary/30 rounded-lg border border-border/50 text-center">
                     <Monitor size={32} className="mx-auto text-muted-foreground mb-2" />
-                    <p className="text-muted-foreground text-sm">Recurso em breve</p>
+                    <p className="text-muted-foreground text-sm">{T("Recurso em breve")}</p>
                     <p className="text-muted-foreground text-xs mt-1">
                       
                       {T("O gerenciamento de sessões estará disponível em uma atualização futura.")}
@@ -1205,7 +1206,7 @@ export default function AccountPage() {
                 <Card className="relative p-4 md:p-6 bg-card border-red-900/50 min-w-0 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element -- privacidade/controle dos dados §12 */}
                   <img src="/portal/conta/privacidade.webp" alt="" aria-hidden className="pointer-events-none absolute right-0 top-0 h-24 w-40 object-cover opacity-30" style={{ WebkitMaskImage: "linear-gradient(to left, black 35%, transparent)", maskImage: "linear-gradient(to left, black 35%, transparent)" }} />
-                  <h3 className="relative text-base md:text-lg font-semibold text-red-400 mb-2">Zona de Perigo</h3>
+                  <h3 className="relative text-base md:text-lg font-semibold text-red-400 mb-2">{T("Zona de Perigo")}</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     
                     {T("Ao excluir sua conta, todos os seus dados serão permanentemente removidos. Esta ação não pode ser desfeita.")}
@@ -1258,7 +1259,7 @@ export default function AccountPage() {
 
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between gap-2">
-                            <span className="text-muted-foreground shrink-0">Emitido em</span>
+                            <span className="text-muted-foreground shrink-0">{T("Emitido em")}</span>
                             <span className="text-right truncate">{formatDate(cert.issuedAt)}</span>
                           </div>
                           <div className="flex justify-between gap-2">
@@ -1269,7 +1270,7 @@ export default function AccountPage() {
                           </div>
                           {cert.quizScore > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Nota</span>
+                              <span className="text-muted-foreground">{T("Nota")}</span>
                               <span className="text-green-400">{cert.quizScore}%</span>
                             </div>
                           )}
@@ -1288,7 +1289,8 @@ export default function AccountPage() {
                                 className="w-full bg-amber-600 hover:bg-amber-700 text-xs"
                               >
                                 <Download size={14} className="mr-1.5" />
-                                Download PDF
+                                
+                                {T("Download PDF")}
                               </Button>
                             </a>
                           )}
@@ -1304,7 +1306,8 @@ export default function AccountPage() {
                               className="w-full border-border text-muted-foreground hover:bg-secondary text-xs"
                             >
                               <ExternalLink size={14} className="mr-1.5" />
-                              Verificar
+                              
+                              {T("Verificar")}
                             </Button>
                           </a>
                         </div>
@@ -1371,7 +1374,7 @@ export default function AccountPage() {
 
                 {/* Language */}
                 <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-4">Idioma</h3>
+                  <h3 className="text-base md:text-lg font-semibold mb-4">{T("Idioma")}</h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       { id: "pt-BR", label: T("Português"), flag: "🇧🇷" },
@@ -1498,7 +1501,7 @@ export default function AccountPage() {
                   ) : (
                     <Save size={20} className="mr-2" />
                   )}
-                  {savingPrefs ? "Salvando..." : T("Salvar Preferências")}
+                  {savingPrefs ? T("Salvando...") : T("Salvar Preferências")}
                 </Button>
               </motion.div>
             </TabsContent>
@@ -1522,12 +1525,13 @@ export default function AccountPage() {
           </DialogHeader>
           <div className="space-y-3 py-2">
             <p className="text-sm text-muted-foreground">
-              Digite <strong className="text-red-400">EXCLUIR</strong>  {T("para confirmar:")}
+              
+              {T("Digite")} <strong className="text-red-400">{T("EXCLUIR")}</strong>  {T("para confirmar:")}
             </p>
             <Input
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
-              placeholder="EXCLUIR"
+              placeholder={T("EXCLUIR")}
               className="bg-secondary border-border text-white"
             />
           </div>
@@ -1540,19 +1544,21 @@ export default function AccountPage() {
               }}
               className="border-border"
             >
-              Cancelar
+              
+              {T("Cancelar")}
             </Button>
             <Button
               disabled={deleteConfirmText !== "EXCLUIR"}
               className="bg-red-600 hover:bg-red-700 disabled:opacity-50"
               onClick={() => {
-                toast.error("Funcionalidade em desenvolvimento");
+                toast.error(T("Funcionalidade em desenvolvimento"));
                 setShowDeleteDialog(false);
                 setDeleteConfirmText("");
               }}
             >
               <Trash2 size={16} className="mr-2" />
-              Excluir Permanentemente
+              
+              {T("Excluir Permanentemente")}
             </Button>
           </DialogFooter>
         </DialogContent>

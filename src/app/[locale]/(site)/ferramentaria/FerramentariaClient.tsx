@@ -205,7 +205,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
                     {T(v.label)}
                   </span>
                   <span className="mt-0.5 block text-[11px] text-muted-foreground">
-                    {quantas} ferramenta{quantas === 1 ? "" : "s"}
+                    {quantas}  {T("ferramenta")}{quantas === 1 ? "" : "s"}
                   </span>
                 </span>
               </button>
@@ -237,7 +237,8 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
                   className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs transition-colors hover:border-foreground/30 hover:text-foreground"
                 >
                   <X className="h-3 w-3" aria-hidden />
-                  limpar
+                  
+                  {T("limpar")}
                 </button>
               </p>
             </motion.div>
@@ -249,7 +250,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
       <section className="mx-auto mt-10 max-w-6xl px-4 sm:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <label className="relative w-full sm:max-w-sm">
-            <span className="sr-only">Buscar ferramenta</span>
+            <span className="sr-only">{T("Buscar ferramenta")}</span>
             <Search
               aria-hidden
               className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -265,7 +266,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
 
           <p aria-live="polite" className="text-sm text-muted-foreground">
             <strong className="font-semibold text-foreground">{filtradas.length}</strong>{" "}
-            {filtradas.length === 1 ? "ferramenta" : "ferramentas"}
+            {filtradas.length === 1 ? T("ferramenta") : T("ferramentas")}
             {verboSelecionado && ` para ${verboSelecionado.label.toLowerCase()}`}
           </p>
         </div>
@@ -288,7 +289,7 @@ export function FerramentariaClient({ ferramentas, verbos, locale }: Props) {
               className="mt-3 text-sm text-primary underline underline-offset-4"
             >
               
-              {T("Ver as")} {ferramentas.length} ferramentas
+              {T("Ver as")} {ferramentas.length}  {T("ferramentas")}
             </button>
           </div>
         ) : (
@@ -421,11 +422,12 @@ function Hero({
 
       <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-16 sm:px-6 sm:pb-20 sm:pt-24">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-          {total} ferramentas de IA · escolhidas e explicadas
+          {total}  {T("ferramentas de IA · escolhidas e explicadas")}
         </p>
 
         <h1 className="mt-5 text-[clamp(2.75rem,9vw,6rem)] font-bold leading-[0.95] tracking-tighter">
-          Ferramentaria
+          
+          {T("Ferramentaria")}
         </h1>
 
         {/* A frase que gira */}

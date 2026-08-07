@@ -37,6 +37,21 @@
 
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+/**
+ * O roteamento vem do MESMO arquivo que o site lê. Ver
+ * `config/openrouter-roteamento.json` e `src/lib/ai/roteamento.ts`.
+ *
+ * Repetir a ordem dos provedores aqui seria a forma mais fácil de, daqui a três
+ * meses, o site comprar de um e o script de outro sem ninguém notar.
+ */
+const ROTEAMENTO = JSON.parse(
+  fs.readFileSync(
+    path.join(path.dirname(fileURLToPath(import.meta.url)), "../../config/openrouter-roteamento.json"),
+    "utf8",
+  ),
+);
 
 const CHAVE = process.env.OPENROUTER_API_KEY;
 if (!CHAVE) {
@@ -44,10 +59,22 @@ if (!CHAVE) {
   process.exit(1);
 }
 
+/**
+ * A prateleira de provedores do modelo pedido — ordem e preço de entrada
+ * cacheada. Ver `_aOrdemEPorMODELO` no arquivo de roteamento: a lista muda de
+ * modelo para modelo, e a DeepInfra passa de mais barata a 3× mais cara.
+ */
+function prateleira(idDoModelo) {
+  const chave = Object.keys(ROTEAMENTO.ordemPorModelo).find((k) => idDoModelo.includes(k));
+  return chave
+    ? ROTEAMENTO.ordemPorModelo[chave]
+    : { ordem: ROTEAMENTO.ordemPadrao, cacheEntrada: 0 };
+}
+
 /** Flash para volume, Pro quando a frase é vitrine. Preço em USD por milhão. */
 export const MODELOS = {
   volume: { id: "~deepseek/deepseek-v4-flash-latest", entrada: 0.09, saida: 0.18 },
-  vitrine: { id: "deepseek/deepseek-v4-pro", entrada: 0.435, saida: 0.87 },
+  vitrine: { id: "deepseek/deepseek-v4-pro", entrada: 0.4225, saida: 0.845 },
 };
 
 const INSTRUCAO = `You are a professional pt-BR → en translator working on FayAI, a Brazilian platform that teaches people to use AI.
@@ -83,8 +110,37 @@ async function fazerPedido(modelo, conteudo) {
     },
     body: JSON.stringify({
       model: modelo.id,
+      /**
+       * ⚠️ Provedor FIXADO. O V4 Flash tem 22 provedores; a DeepInfra cobra
+       * 0,09/0,18 e a segunda colocada 0,13/0,26 — 44% a mais pela mesma
+       * resposta. Sem `order`, quem escolhe é a OpenRouter, e a troca não
+       * aparece em lugar nenhum a não ser na fatura.
+       */
+      provider: {
+        order: prateleira(modelo.id).ordem,
+        allow_fallbacks: ROTEAMENTO.permitirQueda,
+      },
       messages: [
-        { role: "system", content: INSTRUCAO },
+        /**
+         * A instrução vai marcada para CACHE e vem PRIMEIRO — nesta ordem, e
+         * não por acaso. O desconto vale para o prefixo repetido, e esta
+         * instrução de ~1.900 caracteres é idêntica em todas as centenas de
+         * chamadas de um lote. Entrada repetida custa 0,018 por M na DeepInfra
+         * contra 0,09 da nova.
+         *
+         * Não são os 50× do anúncio do DeepSeek: aqueles são do endpoint dele,
+         * onde a entrada nova custa 0,14. Aqui são 5×, e só sobre a ENTRADA —
+         * neste trabalho quem manda no custo é a saída. Ver o `_quantoVale` do
+         * arquivo de roteamento.
+         */
+        ROTEAMENTO.cache.ligado
+          ? {
+              role: "system",
+              content: [
+                { type: "text", text: INSTRUCAO, cache_control: { type: "ephemeral" } },
+              ],
+            }
+          : { role: "system", content: INSTRUCAO },
         { role: "user", content: JSON.stringify(conteudo, null, 0) },
       ],
       // ⚠️ DeepSeek V4 é modelo de raciocínio: os tokens de pensamento saem do
@@ -194,6 +250,10 @@ async function chamar(modelo, conteudo, tentativa = 1) {
     saida,
     entrada: dados.usage?.prompt_tokens ?? 0,
     saidaTokens: dados.usage?.completion_tokens ?? 0,
+    // quanto da entrada veio do cache, e quem serviu — os dois medidos, não
+    // presumidos. Ver `_comoConferir` no arquivo de roteamento.
+    cacheadas: dados.usage?.prompt_tokens_details?.cached_tokens ?? 0,
+    provedor: dados.provider ?? "?",
   };
 }
 
@@ -231,6 +291,7 @@ export async function traduzirMapa(
   const saida = {};
   let custo = 0;
   let prontos = 0;
+  const medida = { entrada: 0, cacheadas: 0, provedores: new Set() };
 
   /**
    * Um lote, com a checagem que impede o pior defeito silencioso: chave que
@@ -260,7 +321,20 @@ export async function traduzirMapa(
       console.warn(`   ⚠ lote ${indice + 1}: ${faltando.length} chave(s) sem tradução`);
     }
     Object.assign(saida, r.saida);
-    custo += (r.entrada / 1e6) * modelo.entrada + (r.saidaTokens / 1e6) * modelo.saida;
+    /**
+     * A entrada cacheada é cobrada à parte, e mais barata. Contar tudo ao
+     * preço cheio inflaria o custo relatado — e um número inflado seria o
+     * mesmo problema, ao contrário, de prometer economia que não existe.
+     */
+    const cacheEntrada = prateleira(modelo.id).cacheEntrada || modelo.entrada;
+    const novas = Math.max(0, r.entrada - r.cacheadas);
+    custo +=
+      (novas / 1e6) * modelo.entrada +
+      (r.cacheadas / 1e6) * cacheEntrada +
+      (r.saidaTokens / 1e6) * modelo.saida;
+    medida.entrada += r.entrada;
+    medida.cacheadas += r.cacheadas;
+    medida.provedores.add(r.provedor);
     prontos++;
     if (lotes.length > 1) {
       process.stdout.write(`\r   ${prontos}/${lotes.length} lotes`);
@@ -285,7 +359,14 @@ export async function traduzirMapa(
     await Promise.all(trabalhadores);
   }
   if (lotes.length > 1) process.stdout.write("\n");
-  return { saida, custo };
+  if (medida.entrada) {
+    const pct = ((medida.cacheadas / medida.entrada) * 100).toFixed(1);
+    console.log(
+      `   provedor: ${[...medida.provedores].join(", ")} · ` +
+        `entrada ${medida.entrada} tokens, ${medida.cacheadas} em cache (${pct}%)`,
+    );
+  }
+  return { saida, custo, medida };
 }
 
 /** Grava JSON com indentação estável, criando a pasta se preciso. */

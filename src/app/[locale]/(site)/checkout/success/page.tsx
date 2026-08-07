@@ -101,7 +101,7 @@ function CheckoutSuccessContent() {
               <Sparkles className="w-6 h-6 text-yellow-400 absolute -top-1 -right-1 animate-bounce" />
             </div>
             
-            <h1 className="text-4xl font-bold mb-2">Pagamento Confirmado!</h1>
+            <h1 className="text-4xl font-bold mb-2">{T("Pagamento Confirmado!")}</h1>
             <p className="text-muted-foreground text-lg">
               
               {T("Obrigado pela sua compra. Seu pedido foi processado com sucesso.")}
@@ -112,7 +112,7 @@ function CheckoutSuccessContent() {
           <Card className="p-6 bg-card/50 border-border mb-6">
             <div className="flex items-center gap-3 mb-4">
               <Package className="w-5 h-5 text-amber-400" />
-              <h2 className="text-xl font-semibold">Detalhes do Pedido</h2>
+              <h2 className="text-xl font-semibold">{T("Detalhes do Pedido")}</h2>
             </div>
 
             <div className="space-y-3">
@@ -124,15 +124,16 @@ function CheckoutSuccessContent() {
               )}
               
               <div className="flex justify-between items-center py-2 border-b border-border">
-                <span className="text-muted-foreground">Status</span>
+                <span className="text-muted-foreground">{T("Status")}</span>
                 <span className="flex items-center gap-2 text-green-400">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                  Pago
+                  
+                  {T("Pago")}
                 </span>
               </div>
               
               <div className="flex justify-between items-center py-2">
-                <span className="text-muted-foreground">Data</span>
+                <span className="text-muted-foreground">{T("Data")}</span>
                 <span>{new Date().toLocaleDateString('pt-BR', { 
                   day: '2-digit', 
                   month: 'long', 
@@ -182,7 +183,7 @@ function CheckoutSuccessContent() {
                   <span className="text-xs font-bold text-amber-400">2</span>
                 </div>
                 <div>
-                  <p className="font-medium">Comece a aprender</p>
+                  <p className="font-medium">{T("Comece a aprender")}</p>
                   <p className="text-sm text-muted-foreground">
                     
                     {T("Explore os conteúdos e comece sua jornada de aprendizado.")}
@@ -195,7 +196,7 @@ function CheckoutSuccessContent() {
                   <span className="text-xs font-bold text-amber-400">3</span>
                 </div>
                 <div>
-                  <p className="font-medium">Ganhe XP</p>
+                  <p className="font-medium">{T("Ganhe XP")}</p>
                   <p className="text-sm text-muted-foreground">
                     
                     {T("Complete lições e desafios para subir de nível e ganhar recompensas.")}
@@ -211,7 +212,8 @@ function CheckoutSuccessContent() {
               className="flex-1 bg-amber-600 hover:bg-amber-700 py-6"
               onClick={() => router.push("/pt-BR/portal")}
             >
-              Acessar Meu Portal
+              
+              {T("Acessar Meu Portal")}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
 

@@ -189,26 +189,26 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="gap-2">
               <Sparkles className="w-4 h-4" />
-              {isEn ? "Automation Toolbox" : "Automation Toolbox"}
+              {isEn ? T("Automation Toolbox") : T("Automation Toolbox")}
             </Badge>
             <Badge variant="outline" className="gap-2">
               <FileText className="w-4 h-4" />
-              {isEn ? "Blueprint + ROI" : "Blueprint + ROI"}
+              {isEn ? T("Blueprint + ROI") : T("Blueprint + ROI")}
             </Badge>
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mt-3">
-            {isEn ? "Scope, ROI and spec" : "Escopo, ROI e spec"}
+            {isEn ? T("Scope, ROI and spec") : T("Escopo, ROI e spec")}
           </h2>
           <p className="text-muted-foreground mt-2">
             {isEn
-              ? "Generate an automation blueprint, ROI model and a spec to align your team fast."
+              ? T("Generate an automation blueprint, ROI model and a spec to align your team fast.")
               : T("Gere blueprint, modelo de ROI e uma spec para alinhar o time rápido.")}
           </p>
         </div>
         <div className="rounded-2xl border border-border bg-background/60 px-5 py-4">
           <div className="flex items-center gap-2 text-muted-foreground">
             <DollarSign className="w-4 h-4" />
-            <span className="text-sm">{isEn ? "ROI/mo" : T("ROI/mês")}</span>
+            <span className="text-sm">{isEn ? T("ROI/mo") : T("ROI/mês")}</span>
           </div>
           <div className="mt-1 text-3xl font-bold">{moneyBR(roi.total)}</div>
         </div>
@@ -218,15 +218,15 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
         <div className="md:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Process" : "Processo"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Process") : T("Processo")}</label>
               <Input className="mt-2" value={processName} onChange={(e) => setProcessName(e.target.value)} />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Trigger" : "Gatilho"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Trigger") : T("Gatilho")}</label>
               <Input className="mt-2" value={trigger} onChange={(e) => setTrigger(e.target.value)} />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm text-muted-foreground">{isEn ? "Systems (one per line)" : "Sistemas (um por linha)"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Systems (one per line)") : T("Sistemas (um por linha)")}</label>
               <Textarea className="mt-2 min-h-[90px]" value={systems} onChange={(e) => setSystems(e.target.value)} />
             </div>
           </div>
@@ -234,50 +234,50 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
           <Tabs defaultValue="roi" className="mt-6">
             <TabsList className="w-full flex flex-wrap">
               <TabsTrigger value="roi" className="gap-2"><DollarSign className="w-4 h-4" />{isEn ? "ROI" : "ROI"}</TabsTrigger>
-              <TabsTrigger value="blueprint" className="gap-2"><Workflow className="w-4 h-4" />{isEn ? "Blueprint" : "Blueprint"}</TabsTrigger>
-              <TabsTrigger value="spec" className="gap-2"><FileCode2 className="w-4 h-4" />{isEn ? "Spec" : "Spec"}</TabsTrigger>
-              <TabsTrigger value="checklist" className="gap-2"><ShieldCheck className="w-4 h-4" />{isEn ? "Checklist" : "Checklist"}</TabsTrigger>
+              <TabsTrigger value="blueprint" className="gap-2"><Workflow className="w-4 h-4" />{isEn ? T("Blueprint") : T("Blueprint")}</TabsTrigger>
+              <TabsTrigger value="spec" className="gap-2"><FileCode2 className="w-4 h-4" />{isEn ? T("Spec") : T("Spec")}</TabsTrigger>
+              <TabsTrigger value="checklist" className="gap-2"><ShieldCheck className="w-4 h-4" />{isEn ? T("Checklist") : T("Checklist")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="roi" className="mt-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-2xl border border-border bg-background/50 p-5">
-                  <p className="font-semibold">{isEn ? "Inputs" : "Entradas"}</p>
+                  <p className="font-semibold">{isEn ? T("Inputs") : T("Entradas")}</p>
                   <div className="mt-4 grid gap-3">
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Hours saved / week" : T("Horas salvas / semana")}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? T("Hours saved / week") : T("Horas salvas / semana")}</label>
                       <Input type="number" min={0} value={String(hoursSavedPerWeek)} onChange={(e) => setHoursSavedPerWeek(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Hourly cost (R$)" : T("Custo hora (R$)")}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? T("Hourly cost (R$)") : T("Custo hora (R$)")}</label>
                       <Input type="number" min={0} value={String(hourlyCost)} onChange={(e) => setHourlyCost(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Error rate (0-1)" : T("Taxa de erro (0-1)")}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? T("Error rate (0-1)") : T("Taxa de erro (0-1)")}</label>
                       <Input type="number" step="0.01" min={0} max={1} value={String(errorRate)} onChange={(e) => setErrorRate(Number(e.target.value) || 0)} />
                     </div>
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-border bg-background/50 p-5">
-                  <p className="font-semibold">{isEn ? "Result" : "Resultado"}</p>
+                  <p className="font-semibold">{isEn ? T("Result") : T("Resultado")}</p>
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <div className="rounded-xl border border-border bg-background/60 p-4">
-                      <p className="text-xs text-muted-foreground">{isEn ? "Hours/mo" : T("Horas/mês")}</p>
+                      <p className="text-xs text-muted-foreground">{isEn ? T("Hours/mo") : T("Horas/mês")}</p>
                       <p className="text-2xl font-bold mt-1">{roi.monthlyHours}</p>
                     </div>
                     <div className="rounded-xl border border-border bg-background/60 p-4">
-                      <p className="text-xs text-muted-foreground">{isEn ? "Savings" : "Economia"}</p>
+                      <p className="text-xs text-muted-foreground">{isEn ? T("Savings") : T("Economia")}</p>
                       <p className="text-2xl font-bold mt-1">{moneyBR(roi.monthlySavings)}</p>
                     </div>
                     <div className="rounded-xl border border-border bg-background/60 p-4 col-span-2">
-                      <p className="text-xs text-muted-foreground">{isEn ? "Total" : "Total"}</p>
+                      <p className="text-xs text-muted-foreground">{isEn ? T("Total") : T("Total")}</p>
                       <p className="text-2xl font-bold mt-1">{moneyBR(roi.total)}</p>
                     </div>
                   </div>
                   <Button variant="outline" className="mt-4 gap-2" onClick={() => copyToClipboard(`${roi.monthlyHours}h/mo\n${moneyBR(roi.total)}`)}>
                     <Clipboard className="w-4 h-4" />
-                    {isEn ? "Copy" : "Copiar"}
+                    {isEn ? T("Copy") : T("Copiar")}
                   </Button>
                 </div>
               </div>
@@ -289,7 +289,7 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
                 <Textarea className="mt-4 min-h-[220px]" readOnly value={blueprint.steps.map((s) => `- ${s}`).join("\n")} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(blueprint.steps.join("\n"))}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy blueprint" : "Copiar blueprint"}
+                  {isEn ? T("Copy blueprint") : T("Copiar blueprint")}
                 </Button>
               </div>
             </TabsContent>
@@ -297,25 +297,25 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
             <TabsContent value="spec" className="mt-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-2xl border border-border bg-background/50 p-5">
-                  <p className="font-semibold">{isEn ? "Volume" : "Volume"}</p>
+                  <p className="font-semibold">{isEn ? T("Volume") : T("Volume")}</p>
                   <div className="mt-4 grid gap-3">
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Events/day" : T("Eventos/dia")}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? T("Events/day") : T("Eventos/dia")}</label>
                       <Input type="number" min={0} value={String(eventsPerDay)} onChange={(e) => setEventsPerDay(Number(e.target.value) || 0)} />
                     </div>
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "SLA (minutes)" : "SLA (minutos)"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? T("SLA (minutes)") : T("SLA (minutos)")}</label>
                       <Input type="number" min={1} value={String(slaMinutes)} onChange={(e) => setSlaMinutes(Number(e.target.value) || 1)} />
                     </div>
                     <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(spec)}>
                       <Clipboard className="w-4 h-4" />
-                      {isEn ? "Copy spec" : "Copiar spec"}
+                      {isEn ? T("Copy spec") : T("Copiar spec")}
                     </Button>
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-border bg-background/50 p-5">
-                  <p className="font-semibold">Spec JSON</p>
+                  <p className="font-semibold">{T("Spec JSON")}</p>
                   <Textarea className="mt-4 min-h-[220px]" readOnly value={spec} />
                 </div>
               </div>
@@ -323,11 +323,11 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
 
             <TabsContent value="checklist" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Production checklist" : T("Checklist de produção")}</p>
+                <p className="font-semibold">{isEn ? T("Production checklist") : T("Checklist de produção")}</p>
                 <Textarea className="mt-4 min-h-[220px]" readOnly value={checklist} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(checklist)}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy checklist" : "Copiar checklist"}
+                  {isEn ? T("Copy checklist") : T("Copiar checklist")}
                 </Button>
               </div>
             </TabsContent>
@@ -335,26 +335,26 @@ export function AutomationToolbox({ locale }: { locale: Locale }) {
         </div>
 
         <div className="rounded-2xl border border-border bg-background/60 p-5">
-          <p className="font-semibold">{isEn ? "Send me the report" : T("Me envia o relatório")}</p>
+          <p className="font-semibold">{isEn ? T("Send me the report") : T("Me envia o relatório")}</p>
           <p className="text-sm text-muted-foreground mt-2">
             {isEn
-              ? "Enter your email to save the blueprint + next steps."
+              ? T("Enter your email to save the blueprint + next steps.")
               : T("Informe seu email para salvar o blueprint + próximos passos.")}
           </p>
 
           <div className="mt-4 grid gap-3">
             <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? T("you@company.com") : T("voce@empresa.com")} />
             <Button onClick={sendLead} disabled={!leadEmail || sending} className="bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600">
-              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : T("Salvar + enviar"))}
+              {sending ? (isEn ? T("Sending...") : T("Enviando...")) : (isEn ? T("Save + send") : T("Salvar + enviar"))}
             </Button>
             <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(report)}>
               <Clipboard className="w-4 h-4" />
-              {isEn ? "Copy report" : T("Copiar relatório")}
+              {isEn ? T("Copy report") : T("Copiar relatório")}
             </Button>
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-background/50 p-4">
-            <p className="text-sm font-medium">{isEn ? "Preview" : T("Prévia")}</p>
+            <p className="text-sm font-medium">{isEn ? T("Preview") : T("Prévia")}</p>
             <Textarea value={report} readOnly className="mt-3 min-h-[220px]" />
           </div>
         </div>

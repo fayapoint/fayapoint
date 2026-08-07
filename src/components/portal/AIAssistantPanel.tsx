@@ -148,7 +148,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
   const handleCopy = (id: string, content: string) => {
     navigator.clipboard.writeText(content);
     setCopiedId(id);
-    toast.success("Copiado!");
+    toast.success(T("Copiado!"));
     setTimeout(() => setCopiedId(null), 2000);
   };
 
@@ -176,10 +176,11 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
             <Bot size={32} className="text-amber-400 md:hidden" />
             <Bot size={40} className="text-amber-400 hidden md:block" />
           </div>
-          <h2 className="text-xl md:text-2xl font-bold mb-2">Assistente IA</h2>
+          <h2 className="text-xl md:text-2xl font-bold mb-2">{T("Assistente IA")}</h2>
           <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 mb-4">
             <Crown size={12} className="mr-1" />
-            Recurso PRO
+            
+            {T("Recurso PRO")}
           </Badge>
           <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
             
@@ -206,8 +207,8 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
           </div>
           <div className="min-w-0">
             <h2 className="text-base md:text-xl font-bold flex items-center gap-2">
-              <span className="truncate">Assistente IA</span>
-              <Badge className="bg-green-500/20 text-green-400 text-[10px] md:text-xs shrink-0">Online</Badge>
+              <span className="truncate">{T("Assistente IA")}</span>
+              <Badge className="bg-green-500/20 text-green-400 text-[10px] md:text-xs shrink-0">{T("Online")}</Badge>
             </h2>
             <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">{T("Seu tutor pessoal de IA")}</p>
           </div>
@@ -215,9 +216,9 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
           <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px] md:text-xs hidden sm:flex">
             <MessageSquare size={12} className="mr-1" />
-            {aiChats} conversas
+            {aiChats}  {T("conversas")}
           </Badge>
-          <Button variant="ghost" size="icon" onClick={handleReset} title="Reiniciar conversa" className="h-8 w-8 md:h-10 md:w-10">
+          <Button variant="ghost" size="icon" onClick={handleReset} title={T("Reiniciar conversa")} className="h-8 w-8 md:h-10 md:w-10">
             <RotateCcw size={16} className="md:hidden" />
             <RotateCcw size={18} className="hidden md:block" />
           </Button>
@@ -302,7 +303,7 @@ export function AIAssistantPanel({ isPro, userName, aiChats }: AIAssistantPanelP
               <div className="bg-secondary rounded-2xl rounded-tl-sm px-4 py-3">
                 <div className="flex items-center gap-2">
                   <Loader2 size={16} className="animate-spin text-amber-400" />
-                  <span className="text-sm text-muted-foreground">Pensando...</span>
+                  <span className="text-sm text-muted-foreground">{T("Pensando...")}</span>
                 </div>
               </div>
             </motion.div>

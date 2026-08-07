@@ -143,14 +143,14 @@ export function FreeOfferBanner() {
                     {freeCourse
                       ? isPtBr
                         ? T("Uma oferta real para o usuário sentir o valor da academia")
-                        : "A real offer that lets users feel the value of the academy"
+                        : T("A real offer that lets users feel the value of the academy")
                       : t("title1")}
                   </span>{" "}
                   <span className="bg-gradient-to-r from-green-400 to-cyan-300 bg-clip-text text-transparent">
                     {freeCourse
                       ? isPtBr
-                        ? "antes de pagar"
-                        : "before paying"
+                        ? T("antes de pagar")
+                        : T("before paying")
                       : t("title2")}
                   </span>
                 </h2>
@@ -167,14 +167,14 @@ export function FreeOfferBanner() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                        {isPtBr ? T("Oferta do mês") : "Monthly offer"}
+                        {isPtBr ? T("Oferta do mês") : T("Monthly offer")}
                       </p>
                       <h3 className="mt-2 text-2xl font-bold text-white">
-                        {freeCourse?.name || (isPtBr ? T("Rotação automática ativa") : "Automatic rotation active")}
+                        {freeCourse?.name || (isPtBr ? T("Rotação automática ativa") : T("Automatic rotation active"))}
                       </h3>
                     </div>
                     <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-right">
-                      <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
+                      <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">{T("Now")}</p>
                       <p className="text-3xl font-black text-white">{T("GRÁTIS")}</p>
                       <p className="text-[10px] text-emerald-200/60">{T("sem cobrança")}</p>
                     </div>
@@ -189,8 +189,8 @@ export function FreeOfferBanner() {
                         <Gift className="mr-2 h-5 w-5" />
                         {freeCourse
                           ? isLoggedIn
-                            ? (isPtBr ? T("Liberar curso grátis do mês") : "Unlock free course of the month")
-                            : (isPtBr ? T("Criar conta e aproveitar") : "Create account and get started")
+                            ? (isPtBr ? T("Liberar curso grátis do mês") : T("Unlock free course of the month"))
+                            : (isPtBr ? T("Criar conta e aproveitar") : T("Create account and get started"))
                           : t("cta")}
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
@@ -199,7 +199,7 @@ export function FreeOfferBanner() {
                       {freeCourse
                         ? isPtBr
                           ? T("Sem cobrança. Acesso vitalício ao curso completo.")
-                          : "No charge. Lifetime access to the full course."
+                          : T("No charge. Lifetime access to the full course.")
                         : t("noCreditCard")}
                     </p>
                   </div>

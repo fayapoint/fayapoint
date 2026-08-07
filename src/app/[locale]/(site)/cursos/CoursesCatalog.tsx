@@ -252,7 +252,7 @@ export default function CoursesCatalog({
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">
-                  {isPtBr ? T("Resultados para") : "Results for"}
+                  {isPtBr ? T("Resultados para") : T("Results for")}
                 </p>
                 <h2 className="text-2xl md:text-3xl font-bold">
                   {isPtBr
@@ -265,7 +265,7 @@ export default function CoursesCatalog({
                 className="border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
                 onClick={() => setSearchTerm("")}
               >
-                {isPtBr ? "Limpar filtro" : "Clear filter"}
+                {isPtBr ? T("Limpar filtro") : T("Clear filter")}
               </Button>
             </div>
 
@@ -316,7 +316,7 @@ export default function CoursesCatalog({
                 Ficam as duas garantias que não dependem de data. */}
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="text-blue-400" size={18} />
-              <span>{isPtBr ? T("Conteúdo atualizado continuamente") : "Continuously updated content"}</span>
+              <span>{isPtBr ? T("Conteúdo atualizado continuamente") : T("Continuously updated content")}</span>
             </div>
           </div>
         </div>
@@ -341,7 +341,7 @@ export default function CoursesCatalog({
                 <div className="p-6 md:p-8">
                   <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
                     <Sparkles className="h-3.5 w-3.5" />
-                    <span>{isPtBr ? T("Curso grátis do mês") : "Free course of the month"}</span>
+                    <span>{isPtBr ? T("Curso grátis do mês") : T("Free course of the month")}</span>
                   </div>
                   <h2 className="text-3xl font-bold text-white">
                     {T(monthlyOffers.freeCourse.name)}
@@ -349,15 +349,15 @@ export default function CoursesCatalog({
                   <p className="mt-3 max-w-3xl text-muted-foreground">
                     {isPtBr
                       ? T("Todo usuário pode testar a experiência completa da academia neste curso, incluindo progresso salvo e certificado liberado.")
-                      : "Every user can test the full academy experience on this course, including saved progress and certificate access."}
+                      : T("Every user can test the full academy experience on this course, including saved progress and certificate access.")}
                   </p>
                   <div className="mt-5 flex flex-wrap gap-2 text-sm text-muted-foreground">
                     <Badge className="bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
-                      {isPtBr ? T("Certificado incluso") : "Certificate included"}
+                      {isPtBr ? T("Certificado incluso") : T("Certificate included")}
                     </Badge>
                     {monthlyOffers.freeCourse.metrics?.lessons != null && (
                       <Badge className="bg-secondary text-gray-200 border-border">
-                        {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? T("aulas") : "lessons"}
+                        {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? T("aulas") : T("lessons")}
                       </Badge>
                     )}
                     {monthlyOffers.freeCourse.metrics?.duration && (
@@ -369,7 +369,7 @@ export default function CoursesCatalog({
                   <div className="mt-6 flex flex-wrap items-center gap-4">
                     <Link href={`/curso/${monthlyOffers.freeCourse.slug}`}>
                       <Button className="bg-gradient-to-r from-emerald-500 to-green-500 text-black hover:from-emerald-400 hover:to-green-400">
-                        {isPtBr ? T("Ver curso grátis") : "View free course"}
+                        {isPtBr ? T("Ver curso grátis") : T("View free course")}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
@@ -384,29 +384,29 @@ export default function CoursesCatalog({
                 <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 p-6 md:p-8 lg:p-4">
                   <div className="rounded-2xl border border-border bg-secondary p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                      {isPtBr ? "Explorador" : "Explorer"}
+                      {isPtBr ? T("Explorador") : T("Explorer")}
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.beginner.length}</p>
                     <p className="text-sm text-muted-foreground">
-                      {isPtBr ? T("cursos iniciantes liberados neste mês") : "beginner courses unlocked this month"}
+                      {isPtBr ? T("cursos iniciantes liberados neste mês") : T("beginner courses unlocked this month")}
                     </p>
                   </div>
                   <div className="rounded-2xl border border-border bg-secondary p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                      {isPtBr ? "Profissional" : "Professional"}
+                      {isPtBr ? T("Profissional") : T("Professional")}
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.intermediate.length}</p>
                     <p className="text-sm text-muted-foreground">
-                      {isPtBr ? T("intermediários no catálogo rotativo") : "intermediate courses in the rotating catalog"}
+                      {isPtBr ? T("intermediários no catálogo rotativo") : T("intermediate courses in the rotating catalog")}
                     </p>
                   </div>
                   <div className="rounded-2xl border border-border bg-secondary p-4">
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                      {isPtBr ? "Expert" : "Expert"}
+                      {isPtBr ? T("Expert") : T("Expert")}
                     </p>
                     <p className="mt-2 text-2xl font-bold text-white">{monthlyOffers.pools.advanced.length}</p>
                     <p className="text-sm text-muted-foreground">
-                      {isPtBr ? T("avançados disponíveis para planos altos") : "advanced courses available for upper tiers"}
+                      {isPtBr ? T("avançados disponíveis para planos altos") : T("advanced courses available for upper tiers")}
                     </p>
                   </div>
                 </div>
@@ -536,11 +536,13 @@ export default function CoursesCatalog({
                           <div>
                             {featured.pricing.originalPrice > featured.pricing.price && (
                               <span className="text-muted-foreground line-through text-lg mr-3">
-                                R$ {featured.pricing.originalPrice.toLocaleString()}
+                                
+                                {T("R$")} {featured.pricing.originalPrice.toLocaleString()}
                               </span>
                             )}
                             <span className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
-                              R$ {featured.pricing.price.toLocaleString()}
+                              
+                              {T("R$")} {featured.pricing.price.toLocaleString()}
                             </span>
                           </div>
                           <Button className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-8 py-6 text-lg">

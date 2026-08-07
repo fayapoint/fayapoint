@@ -213,7 +213,7 @@ export default function ReceiptPage() {
                         <Sparkles className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <h1 className="text-2xl font-black text-white tracking-tight">FayAi</h1>
+                        <h1 className="text-2xl font-black text-white tracking-tight">{T("FayAi")}</h1>
                         <p className="text-sm text-white/70">{T("Academia de Inteligência Artificial")}</p>
                       </div>
                     </div>
@@ -223,7 +223,7 @@ export default function ReceiptPage() {
                   <div className="text-right">
                     <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-xl rounded-full px-4 py-2 mb-2">
                       <CheckCircle2 className="w-4 h-4 text-white" />
-                      <span className="text-sm font-bold text-white">PAGO</span>
+                      <span className="text-sm font-bold text-white">{T("PAGO")}</span>
                     </div>
                     <p className="text-white/60 text-xs">{formatShortDate(receipt.paidAt)}</p>
                   </div>
@@ -236,11 +236,11 @@ export default function ReceiptPage() {
               {/* Receipt Number & Date */}
               <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-border">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">Comprovante</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">{T("Comprovante")}</p>
                   <p className="text-xl font-bold text-white">{T(receipt.receiptNumber)}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">Data do pagamento</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">{T("Data do pagamento")}</p>
                   <p className="text-sm text-muted-foreground">{formatDate(receipt.paidAt)}</p>
                 </div>
               </div>
@@ -248,12 +248,12 @@ export default function ReceiptPage() {
               {/* Buyer Info */}
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Adquirido por</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">{T("Adquirido por")}</p>
                   <p className="text-lg font-semibold text-white">{T(receipt.userName)}</p>
                   <p className="text-sm text-muted-foreground">{T(receipt.userEmail)}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Forma de pagamento</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">{T("Forma de pagamento")}</p>
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{PAYMENT_ICONS[receipt.paymentMethod] || "💰"}</span>
                     <p className="text-sm text-muted-foreground">{T(receipt.paymentMethodLabel)}</p>
@@ -263,7 +263,7 @@ export default function ReceiptPage() {
 
               {/* Items Table */}
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4">Itens adquiridos</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-4">{T("Itens adquiridos")}</p>
                 <div className="space-y-4">
                   {receipt.items.map((item, idx) => (
                     <div
@@ -297,7 +297,7 @@ export default function ReceiptPage() {
                               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium">
                                 <Star className="w-3 h-3" />
                                 
-                                {T("Assinatura")} {receipt.planCycle === "yearly" ? "anual" : "mensal"}
+                                {T("Assinatura")} {receipt.planCycle === "yearly" ? T("anual") : T("mensal")}
                               </span>
                             )}
                           </div>
@@ -323,18 +323,18 @@ export default function ReceiptPage() {
                 {receipt.discount > 0 && (
                   <>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="text-muted-foreground">{T("Subtotal")}</span>
                       <span className="text-muted-foreground">{formatCurrency(receipt.subtotal)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-emerald-400">Desconto aplicado</span>
+                      <span className="text-emerald-400">{T("Desconto aplicado")}</span>
                       <span className="text-emerald-400">- {formatCurrency(receipt.discount)}</span>
                     </div>
                     <div className="border-t border-border pt-3" />
                   </>
                 )}
                 <div className="flex justify-between items-baseline">
-                  <span className="text-sm font-medium text-muted-foreground">Total pago</span>
+                  <span className="text-sm font-medium text-muted-foreground">{T("Total pago")}</span>
                   <span className="text-3xl font-black bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
                     {formatCurrency(receipt.total)}
                   </span>
@@ -420,13 +420,13 @@ export default function ReceiptPage() {
                       <p className="text-white font-semibold mt-1">{T(receipt.planName)}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs uppercase tracking-wider">Ciclo</p>
+                      <p className="text-muted-foreground text-xs uppercase tracking-wider">{T("Ciclo")}</p>
                       <p className="text-white font-semibold mt-1">
-                        {receipt.planCycle === "yearly" ? "Anual" : "Mensal"}
+                        {receipt.planCycle === "yearly" ? T("Anual") : T("Mensal")}
                       </p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs uppercase tracking-wider">Valor</p>
+                      <p className="text-muted-foreground text-xs uppercase tracking-wider">{T("Valor")}</p>
                       <p className="text-white font-semibold mt-1">
                         {formatCurrency(receipt.total)}/{receipt.planCycle === "yearly" ? T("ano") : T("mês")}
                       </p>

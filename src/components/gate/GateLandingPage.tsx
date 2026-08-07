@@ -490,7 +490,7 @@ export function GateLandingPage() {
             >
               <img
                 src="/ainxecond1.png"
-                alt="Platform preview"
+                alt={T("Platform preview")}
                 className="w-full h-auto blur-lg scale-105 opacity-40"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#030108] via-black/60 to-black/40 flex flex-col items-center justify-center gap-4">
@@ -718,7 +718,7 @@ export function GateLandingPage() {
 
         {/* Minimal footer */}
         <div className="py-6 text-center text-white/20 text-xs">
-          <p>&copy; {new Date().getFullYear()} FayAi AI Academy</p>
+          <p>&copy; {new Date().getFullYear()}  {T("FayAi AI Academy")}</p>
         </div>
       </div>
     </AnimatePresence>

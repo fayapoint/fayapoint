@@ -94,7 +94,8 @@ export function ProjetosPage() {
       <section className="px-4 sm:px-8 pt-6 pb-10 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-5xl sm:text-7xl tracking-wide leading-[0.95]" style={bebas}>
-            PROJETOS <span style={{ color: GOLD }}>FAYAI</span>
+            
+            {T("PROJETOS")} <span style={{ color: GOLD }}>{T("FAYAI")}</span>
           </h1>
           <p className="mt-4 text-base sm:text-lg text-white/70 max-w-2xl mx-auto">
             
@@ -150,7 +151,8 @@ export function ProjetosPage() {
                       ))}
                     </span>
                     <span className="inline-flex items-center gap-1 mt-3 text-sm font-bold" style={{ color: GOLD }}>
-                      Conhecer o projeto <ArrowUpRight size={15} />
+                      
+                      {T("Conhecer o projeto")} <ArrowUpRight size={15} />
                     </span>
                   </span>
                 </>
@@ -201,7 +203,8 @@ export function ProjetosPage() {
           <div className="flex items-center gap-3 mb-4">
             <Sparkles size={22} style={{ color: GOLD }} />
             <h2 className="text-3xl sm:text-4xl tracking-wide" style={bebas}>
-              UMA VIDA EM <span style={{ color: GOLD }}>TECNOLOGIA</span>
+              
+              {T("UMA VIDA EM")} <span style={{ color: GOLD }}>{T("TECNOLOGIA")}</span>
             </h2>
           </div>
           <p className="text-sm sm:text-base text-white/60 max-w-2xl mb-8">
@@ -235,7 +238,7 @@ export function ProjetosPage() {
           {/* credenciais */}
           <div className="glass rounded-3xl p-6 sm:p-8 mt-6 text-center">
             <p className="text-sm sm:text-base text-white/70 leading-relaxed max-w-3xl mx-auto">
-              <span className="font-bold text-white">Credenciais ao longo do caminho:</span>{" "}
+              <span className="font-bold text-white">{T("Credenciais ao longo do caminho:")}</span>{" "}
               
               {T("Ciência da Computação (UNIVAP) · Técnico Cinematográfico registrado · Copa do Mundo e\r\n              Olimpíadas pela Fox · Editor-chefe na FGV · Transição SD→HD do Jockey Club · TV alemã\r\n              ZDF e ARD · Harvard ManageMentor · Certificações Google Cloud em IA Generativa, LLMs e\r\n              Prompt Design · Palestrante no RioWebSummit com o Ultimate Social Suite.")}
             </p>
@@ -244,7 +247,8 @@ export function ProjetosPage() {
               className="mt-5 inline-flex items-center gap-2 rounded-2xl px-8 py-3.5 font-extrabold hover:opacity-90 transition-opacity"
               style={{ background: `linear-gradient(135deg, ${GOLD}, #ffd97a)`, color: "#241a05", boxShadow: "0 10px 30px rgba(245,192,78,.35)" }}
             >
-              Trabalhe comigo <ArrowRight size={18} />
+              
+              {T("Trabalhe comigo")} <ArrowRight size={18} />
             </Link>
           </div>
         </div>

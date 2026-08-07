@@ -331,7 +331,7 @@ export function DashboardHome({
               {!isPro && (
                 <Link href="/precos">
                   <Button size="sm" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold gap-1 text-xs h-8 px-3 shadow-lg shadow-orange-500/20">
-                    <Crown size={12} /> Upgrade
+                    <Crown size={12} />  {T("Upgrade")}
                   </Button>
                 </Link>
               )}
@@ -404,7 +404,7 @@ export function DashboardHome({
       {/* ═══════════════════════════════════════════════════ */}
       <div className="rounded-2xl border border-border bg-card p-4">
         <div className="flex items-baseline justify-between mb-3">
-          <h3 className="text-base font-bold">Ecossistema FayAI</h3>
+          <h3 className="text-base font-bold">{T("Ecossistema FayAI")}</h3>
           <Link href="/projetos" className="text-[12px] font-semibold text-[var(--primary)] hover:opacity-80">{T("Ver todos ›")}</Link>
         </div>
         <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1">
@@ -458,7 +458,7 @@ export function DashboardHome({
                 <div className="flex-1 p-3 flex flex-col justify-between min-h-[100px]">
                   <div>
                     <div className="flex items-center justify-between">
-                      <h3 className="text-base font-bold text-white">Studio AI</h3>
+                      <h3 className="text-base font-bold text-white">{T("Studio AI")}</h3>
                       {!hasCreatedImages && (
                         <Badge className="bg-green-500/90 text-white border-0 text-[8px] font-bold px-1.5 animate-pulse">{T("NOVO")}</Badge>
                       )}
@@ -524,8 +524,8 @@ export function DashboardHome({
                   <Flame size={15} className="text-orange-400" fill="currentColor" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-bold">Streak · {stats.streak}  {T("dias")}</h4>
-                  <p className="text-xs text-muted-foreground/70">{stats.streak >= 7 ? `Recorde: ${stats.longestStreak}` : "Continue aprendendo!"}</p>
+                  <h4 className="text-sm font-bold">{T("Streak ·")} {stats.streak}  {T("dias")}</h4>
+                  <p className="text-xs text-muted-foreground/70">{stats.streak >= 7 ? `Recorde: ${stats.longestStreak}` : T("Continue aprendendo!")}</p>
                 </div>
               </div>
               <div className="flex gap-1 mb-2.5">
@@ -539,7 +539,7 @@ export function DashboardHome({
                 })}
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-amber-400">Nv {stats.level}</span>
+                <span className="text-[10px] font-bold text-amber-400">{T("Nv")} {stats.level}</span>
                 <div className="flex-1"><Progress value={stats.levelProgress} className="h-1 bg-secondary" /></div>
                 <span className="text-[10px] text-muted-foreground/70 tabular-nums">{stats.xp} XP</span>
               </div>
@@ -584,7 +584,7 @@ export function DashboardHome({
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-base font-bold truncate">{T("Sua Jornada")}</h3>
-                    <p className="text-xs text-muted-foreground truncate">{hasStartedCourses ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} na sua jornada` : "Comece a aprender"}</p>
+                    <p className="text-xs text-muted-foreground truncate">{hasStartedCourses ? `${userCourses.length} curso${userCourses.length > 1 ? 's' : ''} na sua jornada` : T("Comece a aprender")}</p>
                   </div>
                 </div>
                 <button onClick={() => onTabChange("courses")} className="text-[10px] text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-0.5">
@@ -616,7 +616,7 @@ export function DashboardHome({
                             {course.details?.tool && <span className="text-muted-foreground">{T(course.details.tool)}</span>}
                           </p>
                           <p className="text-xs text-emerald-400/70 flex items-center gap-0.5">
-                            <PlayCircle size={10} /> {course.progressPercent > 0 ? "Continuar" : T("Começar")}
+                            <PlayCircle size={10} /> {course.progressPercent > 0 ? T("Continuar") : T("Começar")}
                           </p>
                         </div>
                       </div>
@@ -767,7 +767,7 @@ export function DashboardHome({
                     <Trophy size={15} className="text-white" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold">Ranking</h4>
+                    <h4 className="text-sm font-bold">{T("Ranking")}</h4>
                     <p className="text-xs text-muted-foreground">#{leaderboard?.userRank || "-"}  {T("posição")}</p>
                   </div>
                 </div>
@@ -780,7 +780,7 @@ export function DashboardHome({
                       idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-amber-200 text-black" : "bg-amber-700 text-white"
                     )}>{idx + 1}</span>
                     <span className="text-[10px] text-muted-foreground truncate flex-1">
-                      {u.name}{u.isCurrentUser && <span className="text-amber-400 ml-1">{T("(você)")}</span>}
+                      {T(u.name)}{u.isCurrentUser && <span className="text-amber-400 ml-1">{T("(você)")}</span>}
                     </span>
                     <span className="text-[9px] text-muted-foreground/70 tabular-nums">{u.weeklyXp} XP</span>
                   </div>
@@ -803,7 +803,7 @@ export function DashboardHome({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <h4 className="text-sm font-bold">Assistente IA</h4>
+                    <h4 className="text-sm font-bold">{T("Assistente IA")}</h4>
                     {!isPro && <Badge className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-[8px] gap-0.5"><Crown size={8} /> PRO</Badge>}
                   </div>
                   <p className="text-xs text-muted-foreground truncate">
@@ -828,7 +828,7 @@ export function DashboardHome({
                   <Gift size={15} className="text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold">Recompensas</h4>
+                  <h4 className="text-sm font-bold">{T("Recompensas")}</h4>
                   <div className="flex items-center gap-1">
                     <Zap size={10} className="text-yellow-400" />
                     <span className="text-xs font-bold text-yellow-400">{stats.xp} XP</span>
@@ -885,7 +885,7 @@ export function DashboardHome({
                   ))}
                 </div>
               ) : (
-                <p className="text-[10px] text-muted-foreground/70 text-center py-3">Produtos em breve!</p>
+                <p className="text-[10px] text-muted-foreground/70 text-center py-3">{T("Produtos em breve!")}</p>
               )}
             </Card>
           </motion.div>
@@ -924,7 +924,7 @@ export function DashboardHome({
                   <Crown size={20} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm">Desbloqueie Todo o Potencial</h3>
+                  <h3 className="font-bold text-sm">{T("Desbloqueie Todo o Potencial")}</h3>
                   <p className="text-[11px] text-muted-foreground">{T("AI Assistant, modelos premium, cursos avançados e mais.")}</p>
                 </div>
               </div>

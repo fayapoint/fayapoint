@@ -100,9 +100,10 @@ export default async function MicrocursoPage({ params }: Props) {
 
       <article className="mx-auto max-w-3xl px-4 pb-20 pt-8 sm:px-6 sm:pt-12">
         {/* Trilha */}
-        <nav aria-label="Trilha" className="mb-6 text-xs text-white/40">
+        <nav aria-label={T("Trilha")} className="mb-6 text-xs text-white/40">
           <Link href={`/${locale}/inventando`} className="transition-colors hover:text-white/70">
-            Inventando
+            
+            {T("Inventando")}
           </Link>
           <span className="mx-2" aria-hidden>
             /
@@ -118,7 +119,7 @@ export default async function MicrocursoPage({ params }: Props) {
           <span className="mx-2" aria-hidden>
             /
           </span>
-          <span className="text-white/60">completo</span>
+          <span className="text-white/60">{T("completo")}</span>
         </nav>
 
         {/* Cabeçalho */}
@@ -155,10 +156,10 @@ export default async function MicrocursoPage({ params }: Props) {
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Clock aria-hidden className="h-3.5 w-3.5" />
-              {T(microcurso.duracao)} de leitura
+              {T(microcurso.duracao)}  {T("de leitura")}
             </span>
             <span>
-              {acesso.aulasLiberadas} de {acesso.totalAulas}  {T("aulas liberadas")}
+              {acesso.aulasLiberadas}  {T("de")} {acesso.totalAulas}  {T("aulas liberadas")}
             </span>
           </div>
         </header>
@@ -187,7 +188,7 @@ export default async function MicrocursoPage({ params }: Props) {
 
         {/* Por que importa */}
         <section className="mt-8">
-          <h2 className="mb-4 text-lg font-semibold">Por que isso importa</h2>
+          <h2 className="mb-4 text-lg font-semibold">{T("Por que isso importa")}</h2>
           <ul className="space-y-2.5">
             {visivel.porQueImporta.map((item, i) => (
               <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-white/75">
@@ -230,7 +231,7 @@ export default async function MicrocursoPage({ params }: Props) {
         <div className="microcurso-pago">
           {visivel.aulas.length > 0 && (
             <section className="mt-11">
-              <h2 className="mb-6 text-lg font-semibold">O microcurso</h2>
+              <h2 className="mb-6 text-lg font-semibold">{T("O microcurso")}</h2>
               <div className="space-y-8">
                 {visivel.aulas.map((aula, i) => (
                   <div key={i} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">

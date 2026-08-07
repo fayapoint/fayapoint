@@ -215,7 +215,7 @@ export default async function AutomationIntegrationPage({
             </ScheduleConsultationButton>
             <a href="#toolbox">
               <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-                {isEn ? "Use the free tools" : T("Usar ferramentas grátis")}
+                {isEn ? T("Use the free tools") : T("Usar ferramentas grátis")}
               </Button>
             </a>
           </div>
@@ -223,15 +223,15 @@ export default async function AutomationIntegrationPage({
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <BadgeCheck className="w-5 h-5 text-emerald-500" />
-              <span>{isEn ? "No lock-in" : T("Sem fidelidade")}</span>
+              <span>{isEn ? T("No lock-in") : T("Sem fidelidade")}</span>
             </div>
             <div className="flex items-center gap-2">
               <BadgeCheck className="w-5 h-5 text-emerald-500" />
-              <span>{isEn ? "Observable + reliable" : T("Observável + confiável")}</span>
+              <span>{isEn ? T("Observable + reliable") : T("Observável + confiável")}</span>
             </div>
             <div className="flex items-center gap-2">
               <BadgeCheck className="w-5 h-5 text-emerald-500" />
-              <span>{isEn ? "UTM attribution" : T("Atribuição por UTM")}</span>
+              <span>{isEn ? T("UTM attribution") : T("Atribuição por UTM")}</span>
             </div>
           </div>
         </div>
@@ -262,7 +262,7 @@ export default async function AutomationIntegrationPage({
         <div className="bg-card/50 border border-border rounded-3xl p-8 md:p-12 mb-20">
           <div className="flex items-center gap-3 mb-8">
             <CircuitBoard className="w-6 h-6 text-orange-400" />
-            <p className="text-sm uppercase tracking-[0.2em] text-orange-300">Metodologia</p>
+            <p className="text-sm uppercase tracking-[0.2em] text-orange-300">{T("Metodologia")}</p>
           </div>
           <div className="grid gap-10">
             {processSteps.map((step, index) => (
@@ -313,11 +313,11 @@ export default async function AutomationIntegrationPage({
 
         <div className="max-w-6xl mx-auto mb-20">
           <div className="text-center mb-10">
-            <Badge variant="secondary" className="mb-4">{isEn ? "Packages" : "Pacotes"}</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Choose a plan" : T("Escolha o plano ideal")}</h2>
+            <Badge variant="secondary" className="mb-4">{isEn ? T("Packages") : T("Pacotes")}</Badge>
+            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? T("Choose a plan") : T("Escolha o plano ideal")}</h2>
             <p className="text-muted-foreground mt-3">
               {isEn
-                ? "Start with quick wins, then scale with governance."
+                ? T("Start with quick wins, then scale with governance.")
                 : T("Comece com quick wins e escale com governança.")}
             </p>
           </div>
@@ -331,7 +331,7 @@ export default async function AutomationIntegrationPage({
                 <div className="flex items-center justify-between">
                   <Badge variant={p.featured ? "default" : "secondary"}>{T(p.tier)}</Badge>
                   {p.featured && (
-                    <Badge className="bg-orange-600">{isEn ? "Most popular" : T("Mais escolhido")}</Badge>
+                    <Badge className="bg-orange-600">{isEn ? T("Most popular") : T("Mais escolhido")}</Badge>
                   )}
                 </div>
                 <h3 className="text-2xl font-bold mt-5">{T(p.title)}</h3>
@@ -350,10 +350,10 @@ export default async function AutomationIntegrationPage({
                     source={p.source}
                     showCompanyRole
                   >
-                    {isEn ? "Book a call" : "Agendar conversa"}
+                    {isEn ? T("Book a call") : T("Agendar conversa")}
                   </ScheduleConsultationButton>
                   <Link href="/precos">
-                    <Button variant="outline">{isEn ? "Pricing" : T("Preços")}</Button>
+                    <Button variant="outline">{isEn ? T("Pricing") : T("Preços")}</Button>
                   </Link>
                 </div>
               </Card>
@@ -364,9 +364,9 @@ export default async function AutomationIntegrationPage({
         <div className="max-w-4xl mx-auto mb-24">
           <div className="text-center mb-8">
             <Badge variant="secondary" className="mb-3">FAQ</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">{isEn ? T("Questions") : T("Perguntas")}</h2>
             <p className="text-muted-foreground mt-3">
-              {isEn ? "Clear answers before you book." : T("Respostas rápidas antes de agendar.")}
+              {isEn ? T("Clear answers before you book.") : T("Respostas rápidas antes de agendar.")}
             </p>
           </div>
 
@@ -397,14 +397,14 @@ export default async function AutomationIntegrationPage({
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-sm font-medium">{isEn ? "Automation diagnosis" : T("Diagnóstico de automação")}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
+            <p className="text-sm font-medium">{isEn ? T("Automation diagnosis") : T("Diagnóstico de automação")}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? T("Free + actionable") : T("Grátis + acionável")}</p>
           </div>
           <a href="#toolbox">
-            <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>
+            <Button className="px-4" variant="outline">{isEn ? T("Tools") : T("Ferramentas")}</Button>
           </a>
           <ScheduleConsultationButton source="automation-sticky" className="px-4">
-            {isEn ? "Book" : "Agendar"}
+            {isEn ? T("Book") : T("Agendar")}
           </ScheduleConsultationButton>
         </div>
       </div>

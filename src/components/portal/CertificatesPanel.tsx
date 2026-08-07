@@ -153,7 +153,7 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
           <div className="min-w-0">
             <h2 className="text-base md:text-lg font-bold text-white truncate">{T("Meus Certificados")}</h2>
             <p className="text-[10px] md:text-xs text-white/40">
-              {certificates.length}  {T("certificado")}{certificates.length !== 1 ? "s" : ""} emitido{certificates.length !== 1 ? "s" : ""}
+              {certificates.length}  {T("certificado")}{certificates.length !== 1 ? "s" : ""}  {T("emitido")}{certificates.length !== 1 ? "s" : ""}
             </p>
           </div>
         </div>
@@ -222,7 +222,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                 onClick={() => onTabChange?.("courses")}
                 className="mt-5 h-10 rounded-xl bg-amber-400 px-5 font-bold text-[#17120a] hover:bg-amber-300"
               >
-                Continuar minha trilha <ArrowRight className="ml-2 h-4 w-4" />
+                
+                {T("Continuar minha trilha")} <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
             <div className="mx-auto w-full max-w-lg rotate-[-1.5deg] transition-transform duration-500 hover:rotate-0">
@@ -293,7 +294,7 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                           </div>
                           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-white/35">
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{formatDate(cert.issuedAt)}</span>
-                            <span className="flex items-center gap-1"><Star className="w-3 h-3" />Quiz {cert.quizScore}%</span>
+                            <span className="flex items-center gap-1"><Star className="w-3 h-3" />{T("Quiz")} {cert.quizScore}%</span>
                           </div>
                         </div>
                       ) : (
@@ -305,9 +306,9 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                               <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-white/35">
                                 <span className="flex items-center gap-1"><Shield className="w-3 h-3" />{T(cert.certificateNumber)}</span>
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{formatDate(cert.issuedAt)}</span>
-                                <span className="flex items-center gap-1"><Star className="w-3 h-3" />Quiz: {cert.quizScore}%</span>
+                                <span className="flex items-center gap-1"><Star className="w-3 h-3" />{T("Quiz:")} {cert.quizScore}%</span>
                                 {cert.totalStudyHours > 0 && (
-                                  <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" />{cert.totalStudyHours}h de estudo</span>
+                                  <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" />{cert.totalStudyHours}{T("h de estudo")}</span>
                                 )}
                               </div>
                             </div>
@@ -315,7 +316,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                               onClick={(e) => { e.stopPropagation(); setExpandedId(null); }}
                               className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold text-white/50 hover:text-white hover:border-white/30 transition-colors shrink-0 cursor-pointer"
                             >
-                              Fechar
+                              
+                              {T("Fechar")}
                             </button>
                           </div>
 
@@ -363,7 +365,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                               ) : (
                                 <Download className="w-3 h-3 mr-1.5" />
                               )}
-                              Baixar PDF
+                              
+                              {T("Baixar PDF")}
                             </Button>
                             <Button
                               size="sm"
@@ -390,7 +393,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                               className="h-8 border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50 text-xs rounded-lg px-3"
                             >
                               <ExternalLink className="w-3 h-3 mr-1.5" />
-                              Compartilhar
+                              
+                              {T("Compartilhar")}
                             </Button>
                             <Button
                               size="sm"
@@ -399,7 +403,8 @@ export function CertificatesPanel({ onTabChange }: { onTabChange?: (tab: string)
                               className="h-8 border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-white/50 text-xs rounded-lg px-3"
                             >
                               <Shield className="w-3 h-3 mr-1.5" />
-                              Verificar Online
+                              
+                              {T("Verificar Online")}
                             </Button>
                           </div>
                         </div>

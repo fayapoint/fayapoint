@@ -170,7 +170,7 @@ export function UserAvatarWithBadges({
               animate={{ opacity: 1 }}
               className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center"
             >
-              <span className="text-white text-xs font-medium">Editar</span>
+              <span className="text-white text-xs font-medium">{T("Editar")}</span>
             </motion.div>
           )}
         </motion.div>

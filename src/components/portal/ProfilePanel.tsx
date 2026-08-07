@@ -283,7 +283,7 @@ export function ProfilePanel({
                 </div>
                 
                 <div>
-                  <Label htmlFor="bio">Bio</Label>
+                  <Label htmlFor="bio">{T("Bio")}</Label>
                   <Textarea
                     id="bio"
                     value={formData.bio}
@@ -295,7 +295,7 @@ export function ProfilePanel({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="company">Empresa</Label>
+                    <Label htmlFor="company">{T("Empresa")}</Label>
                     <Input
                       id="company"
                       value={formData.company}
@@ -305,7 +305,7 @@ export function ProfilePanel({
                     />
                   </div>
                   <div>
-                    <Label htmlFor="position">Cargo</Label>
+                    <Label htmlFor="position">{T("Cargo")}</Label>
                     <Input
                       id="position"
                       value={formData.position}
@@ -330,7 +330,7 @@ export function ProfilePanel({
                 </div>
                 
                 <div>
-                  <Label htmlFor="website">Website</Label>
+                  <Label htmlFor="website">{T("Website")}</Label>
                   <Input
                     id="website"
                     value={formData.website}
@@ -341,7 +341,7 @@ export function ProfilePanel({
                 </div>
                 
                 <div>
-                  <Label htmlFor="linkedin">LinkedIn</Label>
+                  <Label htmlFor="linkedin">{T("LinkedIn")}</Label>
                   <Input
                     id="linkedin"
                     value={formData.linkedin}
@@ -359,7 +359,8 @@ export function ProfilePanel({
                 onClick={() => setIsEditing(false)}
                 disabled={isSaving}
               >
-                Cancelar
+                
+                {T("Cancelar")}
               </Button>
               <Button
                 onClick={handleSave}
@@ -369,7 +370,8 @@ export function ProfilePanel({
                 {isSaving ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Salvando...
+                    
+                    {T("Salvando...")}
                   </>
                 ) : (
                   <>
@@ -407,7 +409,7 @@ export function ProfilePanel({
             </div>
             <div className="min-w-0">
               <p className="text-xl md:text-2xl font-bold truncate">{stats.xp.toLocaleString()}</p>
-              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">XP Total</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">{T("XP Total")}</p>
             </div>
           </div>
         </Card>
@@ -433,7 +435,7 @@ export function ProfilePanel({
             </div>
             <div className="min-w-0">
               <p className="text-xl md:text-2xl font-bold">{stats.longestStreak || stats.streak}</p>
-              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">Maior streak</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground uppercase">{T("Maior streak")}</p>
             </div>
           </div>
         </Card>

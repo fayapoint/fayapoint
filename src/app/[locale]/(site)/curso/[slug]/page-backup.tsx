@@ -260,7 +260,7 @@ return (
               >
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <Link href="/" className="hover:text-white">Home</Link>
+                  <Link href="/" className="hover:text-white">{T("Home")}</Link>
                   <span>/</span>
                   <Link href="/cursos" className="hover:text-white">{T("Cursos")}</Link>
                   <span>/</span>
@@ -276,7 +276,7 @@ return (
                 </p>
 
                 <div className="flex items-center gap-4 mb-6">
-                  <Badge className="bg-yellow-500 text-black">Bestseller</Badge>
+                  <Badge className="bg-yellow-500 text-black">{T("Bestseller")}</Badge>
                   <div className="flex items-center gap-1">
                     <Star className="text-yellow-400 fill-yellow-400" size={18} />
                     <span className="font-semibold">{courseData.rating}</span>
@@ -284,7 +284,7 @@ return (
                   </div>
                   <div className="flex items-center gap-1">
                     <Users size={18} className="text-muted-foreground" />
-                    <span>{courseData.students.toLocaleString("pt-BR")} alunos</span>
+                    <span>{courseData.students.toLocaleString("pt-BR")}  {T("alunos")}</span>
                   </div>
                 </div>
 
@@ -296,7 +296,8 @@ return (
                   </span>
                   <span className="flex items-center gap-1">
                     <Calendar size={16} />
-                    Atualizado em {T(courseData.lastUpdated)}
+                    
+                    {T("Atualizado em")} {T(courseData.lastUpdated)}
                   </span>
                   <span className="flex items-center gap-1">
                     <Award size={16} />
@@ -311,8 +312,8 @@ return (
                     <span className="text-2xl font-bold">RF</span>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Instrutor</p>
-                    <p className="font-semibold">Ricardo Faya</p>
+                    <p className="text-sm text-muted-foreground">{T("Instrutor")}</p>
+                    <p className="font-semibold">{T("Ricardo Faya")}</p>
                     <p className="text-sm text-muted-foreground">{T("50.000+ alunos • 20+ cursos")}</p>
                   </div>
                 </div>
@@ -332,19 +333,21 @@ return (
                       <PlayCircle size={64} className="text-white/80 group-hover:scale-110 transition" />
                     </div>
                     <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-sm">
-                      Preview Gratuito
+                      
+                      {T("Preview Gratuito")}
                     </div>
                   </div>
 
                   {/* Price */}
                   <div className="mb-6">
                     <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-3xl font-bold">R$ {courseData.price}</span>
-                      <span className="text-muted-foreground line-through">R$ {courseData.originalPrice}</span>
-                      <Badge className="bg-green-500 text-black">{Math.max(0, Math.round(((courseData.originalPrice - courseData.price) / courseData.originalPrice) * 100))}% OFF</Badge>
+                      <span className="text-3xl font-bold">{T("R$")} {courseData.price}</span>
+                      <span className="text-muted-foreground line-through">{T("R$")} {courseData.originalPrice}</span>
+                      <Badge className="bg-green-500 text-black">{Math.max(0, Math.round(((courseData.originalPrice - courseData.price) / courseData.originalPrice) * 100))}{T("% OFF")}</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      ou 12x de R$ {(courseData.price / 12).toFixed(2)}
+                      
+                      {T("ou 12x de R$")} {(courseData.price / 12).toFixed(2)}
                     </p>
                   </div>
 
@@ -373,11 +376,13 @@ return (
                         onClick={handleFavorite}
                       >
                         <Heart className={`mr-2 ${isFavorite ? "fill-red-500 text-red-500" : ""}`} size={18} />
-                        Favoritar
+                        
+                        {T("Favoritar")}
                       </Button>
                       <Button variant="ghost" className="flex-1">
                         <Share2 className="mr-2" size={18} />
-                        Compartilhar
+                        
+                        {T("Compartilhar")}
                       </Button>
                     </div>
                   </div>
@@ -409,7 +414,7 @@ return (
               <TabsTrigger value="overview">{T("Visão Geral")}</TabsTrigger>
               <TabsTrigger value="curriculum">{T("Conteúdo do Curso")}</TabsTrigger>
               <TabsTrigger value="reviews">{T("Avaliações")}</TabsTrigger>
-              <TabsTrigger value="instructor">Instrutor</TabsTrigger>
+              <TabsTrigger value="instructor">{T("Instrutor")}</TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
@@ -427,7 +432,7 @@ return (
               </Card>
 
               <Card className="backdrop-blur border-border p-6">
-                <h2 className="text-2xl font-bold mb-4">Requisitos</h2>
+                <h2 className="text-2xl font-bold mb-4">{T("Requisitos")}</h2>
                 <ul className="space-y-2">
                   {(courseData.requirements || []).map((req: string, i: number) => (
                     <li key={i} className="flex items-center gap-2">
@@ -457,7 +462,7 @@ return (
                 <div className="mb-6">
                   <h2 className="text-2xl font-bold mb-2">{T("Conteúdo do Curso")}</h2>
                   <p className="text-muted-foreground">
-                    {(courseData.modules || []).length}  {T("módulos •")} {(courseData.totalLessons || 0)}  {T("aulas •")} {(courseData.duration || '')} total
+                    {(courseData.modules || []).length}  {T("módulos •")} {(courseData.totalLessons || 0)}  {T("aulas •")} {(courseData.duration || '')}  {T("total")}
                   </p>
                 </div>
 
@@ -573,7 +578,7 @@ return (
                     <span className="text-4xl font-bold">RF</span>
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-2xl font-bold mb-2">Ricardo Faya</h2>
+                    <h2 className="text-2xl font-bold mb-2">{T("Ricardo Faya")}</h2>
                     <p className="text-muted-foreground mb-4">{T("Especialista em IA e Automação")}</p>
                     
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -583,7 +588,7 @@ return (
                       </div>
                       <div>
                         <div className="text-2xl font-bold">50.000+</div>
-                        <div className="text-sm text-muted-foreground">Alunos</div>
+                        <div className="text-sm text-muted-foreground">{T("Alunos")}</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold">20+</div>

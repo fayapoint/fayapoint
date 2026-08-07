@@ -54,12 +54,13 @@ export function FloatingCart() {
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground">
                   
-                  {T("Você tem")} {itemCount} item(s) selecionado(s).
+                  {T("Você tem")} {itemCount}  {T("item(s) selecionado(s).")}
                 </p>
                 
                 <div className="grid grid-cols-2 gap-2">
                    <Button variant="outline" onClick={clearCart}>
-                     Limpar
+                     
+                     {T("Limpar")}
                    </Button>
                    <Button onClick={() => {
                      // Redirect to the most relevant builder or a checkout page

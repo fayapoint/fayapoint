@@ -429,14 +429,16 @@ export function Header() {
                 icon={Sparkles}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Ferramentaria
+                
+                {T("Ferramentaria")}
               </MobileNavLink>
               <MobileNavLink
                 href={rota("/inventando")}
                 icon={GraduationCap}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Inventando
+                
+                {T("Inventando")}
               </MobileNavLink>
               <MobileNavLink
                 href={rota("/noticias")}

@@ -406,7 +406,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         {/* Progress */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Passo {step + 1} de 5</span>
+            <span className="text-muted-foreground">{T("Passo")} {step + 1}  {T("de 5")}</span>
             <span className="font-medium text-amber-400">{Math.round(((step + 1) / 5) * 100)}%</span>
           </div>
           <Progress value={((step + 1) / 5) * 100} className="h-2 bg-white/[0.05] [&>[data-slot=progress-indicator]]:bg-gradient-to-r [&>[data-slot=progress-indicator]]:from-amber-500 [&>[data-slot=progress-indicator]]:to-yellow-400" />
@@ -596,7 +596,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                       {acc.followers > 0 && ` · ${acc.followers.toLocaleString("pt-BR")} seguidores`}
                     </p>
                   ) : !p.available ? (
-                    <p className="text-xs text-muted-foreground">Em breve</p>
+                    <p className="text-xs text-muted-foreground">{T("Em breve")}</p>
                   ) : null}
                   {soIdentidade && (
                     <p className="mt-0.5 flex items-start gap-1 text-[11px] leading-snug text-amber-400/80">
@@ -615,31 +615,32 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                   ) : conectado && soIdentidade ? (
                     <>
                       <Badge className="border-emerald-500/30 bg-emerald-500/15 text-xs text-emerald-400">
-                        <Check className="mr-1 h-3 w-3" /> Conectada
+                        <Check className="mr-1 h-3 w-3" />  {T("Conectada")}
                       </Badge>
                       <Button
                         size="sm"
                         className="h-8 bg-gradient-to-r from-amber-500 to-yellow-500 text-xs font-semibold text-black"
                         onClick={() => (window.location.href = p.url)}
                       >
-                        <KeyRound className="mr-1 h-3 w-3" /> Liberar
+                        <KeyRound className="mr-1 h-3 w-3" />  {T("Liberar")}
                       </Button>
                     </>
                   ) : p.available ? (
                     <>
                       <Badge variant="outline" className="border-amber-500/30 text-xs text-amber-400">
-                        <Zap className="mr-0.5 h-3 w-3" /> +100 XP
+                        <Zap className="mr-0.5 h-3 w-3" />  {T("+100 XP")}
                       </Badge>
                       <Button
                         size="sm"
                         className="h-8 bg-gradient-to-r from-amber-500 to-yellow-500 text-xs font-semibold text-black"
                         onClick={() => (window.location.href = p.url)}
                       >
-                        Conectar
+                        
+                        {T("Conectar")}
                       </Button>
                     </>
                   ) : (
-                    <Badge variant="outline" className="border-border text-xs text-muted-foreground">Em breve</Badge>
+                    <Badge variant="outline" className="border-border text-xs text-muted-foreground">{T("Em breve")}</Badge>
                   )}
                 </div>
               </motion.div>
@@ -723,7 +724,7 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
         >
           {analyzing ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analisando...
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />  {T("Analisando...")}
             </>
           ) : (
             <>
@@ -779,16 +780,16 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
           <Tabs defaultValue="persona" className="w-full">
             <TabsList className="w-full border border-border bg-[#2a251d]">
               <TabsTrigger value="persona" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-                <Palette className="mr-1.5 h-4 w-4" /> Persona
+                <Palette className="mr-1.5 h-4 w-4" />  {T("Persona")}
               </TabsTrigger>
               <TabsTrigger value="contas" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-                <Share2 className="mr-1.5 h-4 w-4" /> Contas
+                <Share2 className="mr-1.5 h-4 w-4" />  {T("Contas")}
               </TabsTrigger>
               <TabsTrigger value="inteligencia" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
                 <Brain className="mr-1.5 h-4 w-4" />  {T("Inteligência")}
               </TabsTrigger>
               <TabsTrigger value="publicar" className="flex-1 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400">
-                <Zap className="mr-1.5 h-4 w-4" /> Publicar
+                <Zap className="mr-1.5 h-4 w-4" />  {T("Publicar")}
               </TabsTrigger>
             </TabsList>
 
@@ -814,7 +815,8 @@ export default function SocialProfilePanel({ user }: SocialProfilePanelProps) {
                     </span>
                   </span>
                   <span className="ml-3 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/40 px-3 py-1 text-[11px] font-bold text-amber-300">
-                    Refazer <ChevronRight className="h-3 w-3" />
+                    
+                    {T("Refazer")} <ChevronRight className="h-3 w-3" />
                   </span>
                 </button>
               ) : (

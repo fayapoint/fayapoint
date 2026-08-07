@@ -100,15 +100,15 @@ export function AulasTrancadas({
               <>
                 
                 {T("Você está vendo a ficha da ferramenta — o que ela é e o que ela\n                não faz. O passo a passo, os critérios de escolha e o que fazer\n                com ela ficam no microcurso, e o microcurso completo é do")}{" "}
-                <strong className="text-white">Expert</strong>.
+                <strong className="text-white">{T("Expert")}</strong>.
               </>
             ) : (
               <>
                 
                 {T("Seu plano")}{" "}
-                <strong className="text-white">{T(acesso.planoNome)}</strong> abre{" "}
-                {acesso.aulasLiberadas} de {acesso.totalAulas}  {T("aulas. O\n                microcurso inteiro — em todas as ferramentas da seção — é do")}{" "}
-                <strong className="text-white">Expert</strong>.
+                <strong className="text-white">{T(acesso.planoNome)}</strong>  {T("abre")}{" "}
+                {acesso.aulasLiberadas}  {T("de")} {acesso.totalAulas}  {T("aulas. O\n                microcurso inteiro — em todas as ferramentas da seção — é do")}{" "}
+                <strong className="text-white">{T("Expert")}</strong>.
               </>
             )}
           </p>
@@ -193,8 +193,8 @@ export function AulasTrancadas({
 
           {acesso.proximoPlano && acesso.proximoPlano !== "expert" && (
             <p className="mt-4 text-xs leading-relaxed text-white/40">
-              O {T(acesso.proximoPlanoNome)} (R$ {acesso.proximoPlanoPreco}/mês) abre{" "}
-              {acesso.aulasNoProximoPlano} de {acesso.totalAulas}  {T("aulas. Só o Expert\n              abre todas — e vale para todos os microcursos da seção.")}
+              O {T(acesso.proximoPlanoNome)}  {T("(R$")} {acesso.proximoPlanoPreco}/mês) abre{" "}
+              {acesso.aulasNoProximoPlano}  {T("de")} {acesso.totalAulas}  {T("aulas. Só o Expert\n              abre todas — e vale para todos os microcursos da seção.")}
             </p>
           )}
         </div>
@@ -205,12 +205,12 @@ export function AulasTrancadas({
 
 /** Faixa fina no topo, para quem já é Expert. */
 export function SeloExpert() {
+  const T = useT();
   return (
     <div className="flex items-center gap-2 rounded-xl border border-[#f5c04e]/25 bg-[#f5c04e]/[0.07] px-4 py-2.5">
       <Crown aria-hidden className="h-4 w-4 shrink-0 text-[#f5c04e]" />
       <span className="text-sm text-white/75">
-        <strong className="font-semibold text-[#f5c04e]">Expert</strong> — microcurso
-        completo liberado.
+        <strong className="font-semibold text-[#f5c04e]">{T("Expert")}</strong>  {T("— microcurso\r\n        completo liberado.")}
       </span>
     </div>
   );

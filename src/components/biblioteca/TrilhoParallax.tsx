@@ -1230,7 +1230,7 @@ export function TrilhoParallax({
                 <button
                   type="button"
                   aria-expanded={abertoEm === i}
-                  aria-label={abertoEm === i ? "Recolher detalhes" : T("Ver detalhes")}
+                  aria-label={abertoEm === i ? T("Recolher detalhes") : T("Ver detalhes")}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1323,10 +1323,11 @@ export function TrilhoParallax({
                 typeof item.preco === "number" && (
                   <span className="mt-1 flex items-baseline gap-2">
                     <span className="text-[12px] font-extrabold leading-none text-[#f5c04e] sm:text-lg">
-                      R$ {item.preco}
+                      
+                      {T("R$")} {item.preco}
                     </span>
                     {item.precoDe ? (
-                      <span className="hidden text-xs text-white/35 line-through sm:inline">R$ {item.precoDe}</span>
+                      <span className="hidden text-xs text-white/35 line-through sm:inline">{T("R$")} {item.precoDe}</span>
                     ) : null}
                   </span>
                 )

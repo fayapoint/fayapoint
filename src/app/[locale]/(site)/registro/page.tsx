@@ -344,7 +344,8 @@ export default function RegisterPage() {
                 onClick={handleGoogleSignup}
               >
                 <Chrome className="mr-2" size={20} />
-                Google
+                
+                {T("Google")}
               </Button>
               <Button
                 type="button"
@@ -353,7 +354,8 @@ export default function RegisterPage() {
                 onClick={handleGithubSignup}
               >
                 <Github className="mr-2" size={20} />
-                GitHub
+                
+                {T("GitHub")}
               </Button>
             </div>
 

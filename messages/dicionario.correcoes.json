@@ -1,0 +1,37 @@
+{
+  "_leia": "Correções À MÃO do dicionário de interface, aplicadas DEPOIS da tradução automática por scripts/i18n/interface.mjs. Sobrevivem a --refazer, que é a razão de existirem num arquivo separado em vez de editadas direto no dicionario.en.json.",
+
+  "_porqueIssoEPermanente": "O dicionário é chaveado pela frase ISOLADA, então o tradutor nunca vê a tela. Isso é uma escolha de projeto (ver src/i18n/dicionario.ts) e o preço dela é este: palavra curta com dois sentidos sai no sentido errado, e sai com cara de acerto. Não é defeito do modelo — é falta de contexto, e quem tem o contexto é quem olha a tela. Toda entrada aqui precisa dizer ONDE aparece.",
+
+  "correcoes": {
+    "Boa noite": {
+      "en": "Good evening",
+      "_onde": "saudação do topo do dashboard, depois das 18h",
+      "_porque": "O automático deu \"Good night\", que em inglês é DESPEDIDA. Cumprimentar quem acabou de entrar com \"boa noite, até amanhã\" é o tipo de erro que só um não-nativo deixa passar — e não-nativo é justamente quem esta tradução serve."
+    },
+    "Boa madrugada": {
+      "en": "Good evening",
+      "_onde": "mesma saudação, antes das 6h",
+      "_porque": "\"Good early morning\" não existe em inglês. Madrugada não tem saudação própria; o inglês usa \"Good evening\" até virar manhã de verdade."
+    },
+    "Recursos": {
+      "en": "Resources",
+      "_onde": "aba da barra lateral e do menu do celular, ícone de download — materiais para baixar",
+      "_porque": "O automático deu \"Features\", que é recurso no sentido de funcionalidade do produto. Aqui é recurso no sentido de material. O aluno clicaria esperando ver o que o site faz e acharia PDF."
+    },
+    "Responder": {
+      "en": "Answer",
+      "_onde": "botão do cartão da Persona, que abre a próxima PERGUNTA",
+      "_porque": "\"Reply\" é responder a alguém — mensagem, comentário, e-mail. Aqui é responder uma pergunta."
+    },
+    "PESQUISA": {
+      "en": "RESEARCH",
+      "_onde": "selo de status dos cartões do Ecossistema (STATUS_LABEL em src/data/landing/projects.ts)",
+      "_porque": "\"SEARCH\" é buscar. O selo diz que o projeto está em fase de pesquisa, ao lado de NO AR e CONSTRUINDO."
+    }
+  },
+
+  "naoTraduzir": {
+    "Som em Bando": "Nome do aplicativo, não descrição. O automático deu \"Sound in Groups\". A prova de que é nome: o próprio texto em INGLÊS do site já o mantém — src/lib/metadata.ts diz \"Som em Bando, the synced-music app\". Marca não se traduz, nem quando a marca é uma frase em português."
+  }
+}

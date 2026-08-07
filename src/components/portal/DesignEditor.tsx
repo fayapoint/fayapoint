@@ -96,7 +96,7 @@ export default function DesignEditor({
     setSelectedLayerId(newLayer.id);
     setEditingText(newLayer.id);
     setTempText(newLayer.text);
-    toast.success("Camada de texto adicionada");
+    toast.success(T("Camada de texto adicionada"));
   }, []);
 
   // Add image layer
@@ -104,7 +104,7 @@ export default function DesignEditor({
     const newLayer = createImageLayer(imageUrl, width, height);
     setLayers(prev => [...prev, newLayer]);
     setSelectedLayerId(newLayer.id);
-    toast.success("Imagem adicionada");
+    toast.success(T("Imagem adicionada"));
   }, []);
 
   // Update layer
@@ -124,7 +124,7 @@ export default function DesignEditor({
     if (selectedLayerId === layerId) {
       setSelectedLayerId(null);
     }
-    toast.success("Camada removida");
+    toast.success(T("Camada removida"));
   }, [selectedLayerId]);
 
   // Duplicate layer
@@ -140,7 +140,7 @@ export default function DesignEditor({
     };
     setLayers(prev => [...prev, newLayer]);
     setSelectedLayerId(newLayer.id);
-    toast.success("Camada duplicada");
+    toast.success(T("Camada duplicada"));
   }, [layers]);
 
   // Move layer up/down in z-order
@@ -229,7 +229,8 @@ export default function DesignEditor({
         <Card className="bg-secondary border-border p-4">
           <h4 className="font-semibold mb-3 flex items-center gap-2">
             <Plus size={16} className="text-amber-400" />
-            Adicionar Elemento
+            
+            {T("Adicionar Elemento")}
           </h4>
           <div className="grid grid-cols-2 gap-2">
             <Button
@@ -238,7 +239,8 @@ export default function DesignEditor({
               onClick={addTextLayer}
             >
               <Type size={16} className="mr-2" />
-              Texto
+              
+              {T("Texto")}
             </Button>
             <Button
               variant="outline"
@@ -246,7 +248,8 @@ export default function DesignEditor({
               onClick={() => fileInputRef.current?.click()}
             >
               <ImageIcon size={16} className="mr-2" />
-              Imagem
+              
+              {T("Imagem")}
             </Button>
             <input
               ref={fileInputRef}
@@ -286,13 +289,14 @@ export default function DesignEditor({
         <Card className="bg-secondary border-border p-4">
           <h4 className="font-semibold mb-3 flex items-center gap-2">
             <Layers size={16} className="text-amber-400" />
-            Camadas ({layers.length}/20)
+            
+            {T("Camadas (")}{layers.length}/20)
           </h4>
           
           {layers.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
               
-              {T("Nenhuma camada ainda.")}<br />Adicione texto ou imagem.
+              {T("Nenhuma camada ainda.")}<br />{T("Adicione texto ou imagem.")}
             </p>
           ) : (
             <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
@@ -317,7 +321,7 @@ export default function DesignEditor({
                   <span className="flex-1 text-sm truncate">
                     {layer.type === "text" 
                       ? (layer as TextLayer).text.substring(0, 20) + ((layer as TextLayer).text.length > 20 ? "..." : "")
-                      : "Imagem"
+                      : T("Imagem")
                     }
                   </span>
                   <div className="flex items-center gap-1">
@@ -375,7 +379,8 @@ export default function DesignEditor({
             onClick={() => setShowGrid(!showGrid)}
           >
             <Grid size={14} className="mr-1" />
-            Grade
+            
+            {T("Grade")}
           </Button>
         </div>
 
@@ -397,7 +402,7 @@ export default function DesignEditor({
             <div className="relative">
               <img 
                 src={productImage} 
-                alt="Product" 
+                alt={T("Product")} 
                 className="max-w-full max-h-full object-contain"
                 style={{ maxHeight: "500px" }}
               />
@@ -476,7 +481,7 @@ export default function DesignEditor({
                     ) : (
                       <img
                         src={(layer as ImageLayer).imageUrl}
-                        alt="Design"
+                        alt={T("Design")}
                         style={{
                           maxWidth: "200px",
                           maxHeight: "200px",
@@ -511,7 +516,8 @@ export default function DesignEditor({
                   <Card className="bg-secondary border-border p-4">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
                       <Type size={16} className="text-amber-400" />
-                      Texto
+                      
+                      {T("Texto")}
                     </h4>
                     <Textarea
                       value={editingText === selectedLayerId ? tempText : (selectedLayer as TextLayer).text}
@@ -530,7 +536,7 @@ export default function DesignEditor({
 
                   {/* Font Settings */}
                   <Card className="bg-secondary border-border p-4">
-                    <h4 className="font-semibold mb-3">Fonte</h4>
+                    <h4 className="font-semibold mb-3">{T("Fonte")}</h4>
                     <div className="space-y-3">
                       <Select
                         value={AVAILABLE_FONTS.find(f => f.family === (selectedLayer as TextLayer).fontFamily)?.id || "inter"}
@@ -553,7 +559,7 @@ export default function DesignEditor({
 
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <Label className="text-xs text-muted-foreground">Peso</Label>
+                          <Label className="text-xs text-muted-foreground">{T("Peso")}</Label>
                           <Select
                             value={String((selectedLayer as TextLayer).fontWeight)}
                             onValueChange={(v) => updateLayer(selectedLayerId!, { fontWeight: parseInt(v) } as Partial<TextLayer>)}
@@ -564,14 +570,14 @@ export default function DesignEditor({
                             <SelectContent className="bg-card border-border">
                               {[400, 500, 600, 700, 800, 900].map(w => (
                                 <SelectItem key={w} value={String(w)}>
-                                  {w === 400 ? "Normal" : w === 700 ? "Bold" : w}
+                                  {w === 400 ? T("Normal") : w === 700 ? T("Bold") : w}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
                         </div>
                         <div>
-                          <Label className="text-xs text-muted-foreground">Tamanho</Label>
+                          <Label className="text-xs text-muted-foreground">{T("Tamanho")}</Label>
                           <Select
                             value={String((selectedLayer as TextLayer).fontSize)}
                             onValueChange={(v) => updateLayer(selectedLayerId!, { fontSize: parseInt(v) } as Partial<TextLayer>)}
@@ -592,7 +598,7 @@ export default function DesignEditor({
 
                       {/* Text Alignment */}
                       <div>
-                        <Label className="text-xs text-muted-foreground">Alinhamento</Label>
+                        <Label className="text-xs text-muted-foreground">{T("Alinhamento")}</Label>
                         <div className="flex gap-1 mt-1">
                           {([
                             { value: "left", icon: AlignLeft },
@@ -622,11 +628,12 @@ export default function DesignEditor({
                   <Card className="bg-secondary border-border p-4">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
                       <Palette size={16} className="text-amber-400" />
-                      Cores
+                      
+                      {T("Cores")}
                     </h4>
                     <div className="space-y-3">
                       <div>
-                        <Label className="text-xs text-muted-foreground">Cor do Texto</Label>
+                        <Label className="text-xs text-muted-foreground">{T("Cor do Texto")}</Label>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {COLOR_PALETTE.slice(0, 15).map(color => (
                             <button
@@ -651,7 +658,7 @@ export default function DesignEditor({
                       </div>
 
                       <div>
-                        <Label className="text-xs text-muted-foreground">Contorno</Label>
+                        <Label className="text-xs text-muted-foreground">{T("Contorno")}</Label>
                         <div className="flex gap-2 mt-1">
                           <Input
                             type="color"
@@ -666,7 +673,7 @@ export default function DesignEditor({
                             value={(selectedLayer as TextLayer).strokeWidth || 0}
                             onChange={(e) => updateLayer(selectedLayerId!, { strokeWidth: parseInt(e.target.value) || 0 } as Partial<TextLayer>)}
                             className="flex-1 bg-secondary border-border"
-                            placeholder="Espessura"
+                            placeholder={T("Espessura")}
                           />
                         </div>
                       </div>
@@ -677,7 +684,8 @@ export default function DesignEditor({
                   <Card className="bg-secondary border-border p-4">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
                       <Sparkles size={16} className="text-amber-400" />
-                      Efeitos
+                      
+                      {T("Efeitos")}
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {Object.entries(TEXT_EFFECTS).map(([key, effect]) => (
@@ -729,7 +737,7 @@ export default function DesignEditor({
                   {/* X Position */}
                   <div>
                     <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                      <span>Horizontal (X)</span>
+                      <span>{T("Horizontal (X)")}</span>
                       <span>{Math.round(selectedLayer.x * 100)}%</span>
                     </div>
                     <Slider
@@ -745,7 +753,7 @@ export default function DesignEditor({
                   {/* Y Position */}
                   <div>
                     <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                      <span>Vertical (Y)</span>
+                      <span>{T("Vertical (Y)")}</span>
                       <span>{Math.round(selectedLayer.y * 100)}%</span>
                     </div>
                     <Slider
@@ -761,7 +769,7 @@ export default function DesignEditor({
                   {/* Scale */}
                   <div>
                     <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                      <span>Escala</span>
+                      <span>{T("Escala")}</span>
                       <span>{Math.round(selectedLayer.scale * 100)}%</span>
                     </div>
                     <Slider
@@ -826,7 +834,8 @@ export default function DesignEditor({
             >
               <Layers size={48} className="mb-4 opacity-50" />
               <p className="text-center">
-                Selecione uma camada<br />{T("para editar suas propriedades")}
+                
+                {T("Selecione uma camada")}<br />{T("para editar suas propriedades")}
               </p>
             </motion.div>
           )}

@@ -100,7 +100,7 @@ export function CartaoDeCreditos() {
             </div>
             <div className="rounded-lg border border-border bg-secondary/40 p-3">
               <div className="text-lg font-bold tabular-nums">{d.purchasedBalance}</div>
-              <div className="text-[11px] text-muted-foreground">comprados</div>
+              <div className="text-[11px] text-muted-foreground">{T("comprados")}</div>
             </div>
             <div className="col-span-2 rounded-lg border border-border bg-secondary/40 p-3 sm:col-span-1">
               <div className="text-lg font-bold tabular-nums">{d.monthlyAllocation}</div>
@@ -129,7 +129,8 @@ export function CartaoDeCreditos() {
           {d.costs && (
             <div className="mt-4 border-t border-border pt-3">
               <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                O que eles compram
+                
+                {T("O que eles compram")}
               </p>
               <ul className="space-y-1.5">
                 {Object.entries(ROTULOS)

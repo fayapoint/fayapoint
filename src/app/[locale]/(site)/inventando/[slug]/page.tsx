@@ -111,8 +111,8 @@ export default async function MicrocursoGratisPage({ params }: Props) {
         </div>
 
         <div className="mx-auto -mt-44 max-w-3xl px-4 pb-2 sm:-mt-52 sm:px-6">
-          <nav aria-label="Trilha" className="mb-5 text-xs text-white/60">
-            <Link href={`/${locale}/inventando`} className="transition-colors hover:text-white">Inventando</Link>
+          <nav aria-label={T("Trilha")} className="mb-5 text-xs text-white/60">
+            <Link href={`/${locale}/inventando`} className="transition-colors hover:text-white">{T("Inventando")}</Link>
             <span className="mx-2" aria-hidden>/</span>
             <span className="text-white/80">{T(m.categoria)}</span>
           </nav>
@@ -172,7 +172,7 @@ export default async function MicrocursoGratisPage({ params }: Props) {
         </section>
 
         <section className="mt-9 rounded-2xl border border-border bg-card/40 p-5 sm:p-6">
-          <h2 className="mb-4 text-lg font-semibold">Por que isso importa</h2>
+          <h2 className="mb-4 text-lg font-semibold">{T("Por que isso importa")}</h2>
           <ul className="space-y-2.5">
             {m.porQueImporta.map((item, i) => (
               <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-foreground/75">
@@ -230,7 +230,8 @@ export default async function MicrocursoGratisPage({ params }: Props) {
 
           <div className="relative p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-              Continue no microcurso completo
+              
+              {T("Continue no microcurso completo")}
             </p>
             <h2 className="mt-2.5 text-2xl font-bold leading-snug sm:text-3xl">
               

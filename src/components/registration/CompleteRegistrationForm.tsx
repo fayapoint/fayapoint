@@ -179,7 +179,7 @@ export function CompleteRegistrationForm() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("Arquivo muito grande (max 5MB)");
+        toast.error(T("Arquivo muito grande (max 5MB)"));
         return;
       }
       const reader = new FileReader();
@@ -262,7 +262,7 @@ export function CompleteRegistrationForm() {
             <div className="bg-green-100 dark:bg-green-800 p-4 rounded-full">
               <Check className="w-12 h-12 text-green-600 dark:text-green-400" />
             </div>
-            <h3 className="text-2xl font-bold text-green-800 dark:text-green-300">Cadastro Completo!</h3>
+            <h3 className="text-2xl font-bold text-green-800 dark:text-green-300">{T("Cadastro Completo!")}</h3>
             <div className="text-center space-y-2">
               <p className="text-muted-foreground">{T("Seu código de desconto exclusivo é:")}</p>
               <div className="text-4xl font-mono font-bold tracking-wider text-amber-600 dark:text-amber-400 select-all bg-white dark:bg-black/20 px-6 py-3 rounded-lg border-2 border-dashed border-amber-500">
@@ -284,10 +284,10 @@ export function CompleteRegistrationForm() {
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-5">
                   <TabsTrigger value="basic"><UserIcon className="w-4 h-4 mr-2" />  {T("Básico")}</TabsTrigger>
-                  <TabsTrigger value="professional"><Briefcase className="w-4 h-4 mr-2" /> Profissional</TabsTrigger>
-                  <TabsTrigger value="personal"><Heart className="w-4 h-4 mr-2" /> Pessoal</TabsTrigger>
+                  <TabsTrigger value="professional"><Briefcase className="w-4 h-4 mr-2" />  {T("Profissional")}</TabsTrigger>
+                  <TabsTrigger value="personal"><Heart className="w-4 h-4 mr-2" />  {T("Pessoal")}</TabsTrigger>
                   <TabsTrigger value="preferences"><MessageSquare className="w-4 h-4 mr-2" />  {T("Preferências")}</TabsTrigger>
-                  <TabsTrigger value="contact"><MapPin className="w-4 h-4 mr-2" /> Contato</TabsTrigger>
+                  <TabsTrigger value="contact"><MapPin className="w-4 h-4 mr-2" />  {T("Contato")}</TabsTrigger>
                 </TabsList>
 
                 {/* --- BASIC INFO --- */}
@@ -302,7 +302,7 @@ export function CompleteRegistrationForm() {
                     )} />
                     <FormField control={form.control} name="email" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email *</FormLabel>
+                        <FormLabel>{T("Email *")}</FormLabel>
                         <FormControl><Input placeholder={T("seu@email.com")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -312,12 +312,12 @@ export function CompleteRegistrationForm() {
                         <FormLabel>{T("Gênero")}</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder={T("Selecione")} /></SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="masculino">Masculino</SelectItem>
-                            <SelectItem value="feminino">Feminino</SelectItem>
-                            <SelectItem value="outro">Outro</SelectItem>
+                            <SelectItem value="masculino">{T("Masculino")}</SelectItem>
+                            <SelectItem value="feminino">{T("Feminino")}</SelectItem>
+                            <SelectItem value="outro">{T("Outro")}</SelectItem>
                             <SelectItem value="prefiro_nao_dizer">{T("Prefiro não dizer")}</SelectItem>
                           </SelectContent>
                         </Select>
@@ -326,7 +326,7 @@ export function CompleteRegistrationForm() {
                     )} />
                     <FormField control={form.control} name="birthDate" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Data de Nascimento</FormLabel>
+                        <FormLabel>{T("Data de Nascimento")}</FormLabel>
                         <FormControl>
                           <Input 
                             type="date" 
@@ -346,11 +346,11 @@ export function CompleteRegistrationForm() {
                       <FormItem>
                         <FormLabel>{T("Foto de Perfil")}</FormLabel>
                         <div className="flex items-center gap-4">
-                          {field.value && <img src={field.value} alt="Preview" className="w-16 h-16 rounded-full object-cover border" />}
+                          {field.value && <img src={field.value} alt={T("Preview")} className="w-16 h-16 rounded-full object-cover border" />}
                           <div className="flex-1 space-y-2">
-                            <FormControl><Input placeholder="Cole a URL da imagem..." {...field} /></FormControl>
+                            <FormControl><Input placeholder={T("Cole a URL da imagem...")} {...field} /></FormControl>
                             <div className="flex items-center gap-2">
-                              <span className="text-sm text-muted-foreground">Ou upload:</span>
+                              <span className="text-sm text-muted-foreground">{T("Ou upload:")}</span>
                               <Input type="file" accept="image/*" onChange={handleFileUpload} className="w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
                             </div>
                           </div>
@@ -360,7 +360,7 @@ export function CompleteRegistrationForm() {
                     )} />
                     <FormField control={form.control} name="bio" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Bio</FormLabel>
+                        <FormLabel>{T("Bio")}</FormLabel>
                         <FormControl><Textarea placeholder={T("Fale um pouco sobre você...")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -374,20 +374,20 @@ export function CompleteRegistrationForm() {
                     <FormField control={form.control} name="profession" render={({ field }) => (
                       <FormItem>
                         <FormLabel>{T("Profissão")}</FormLabel>
-                        <FormControl><Input placeholder="Ex: Desenvolvedor Fullstack" {...field} /></FormControl>
+                        <FormControl><Input placeholder={T("Ex: Desenvolvedor Fullstack")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name="company" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Empresa</FormLabel>
-                        <FormControl><Input placeholder="Ex: Fayapoint AI" {...field} /></FormControl>
+                        <FormLabel>{T("Empresa")}</FormLabel>
+                        <FormControl><Input placeholder={T("Ex: Fayapoint AI")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name="website" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Website</FormLabel>
+                        <FormLabel>{T("Website")}</FormLabel>
                         <FormControl><Input placeholder="https://..." {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -410,7 +410,7 @@ export function CompleteRegistrationForm() {
                   <FormField control={form.control} name="skills" render={({ field }) => (
                     <FormItem>
                       <FormLabel>{T("Habilidades (separe por vírgula)")}</FormLabel>
-                      <FormControl><Input placeholder="Ex: React, Node.js, Marketing, Vendas" {...field} /></FormControl>
+                      <FormControl><Input placeholder={T("Ex: React, Node.js, Marketing, Vendas")} {...field} /></FormControl>
                       <FormDescription>{T("Principais competências técnicas e comportamentais")}</FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -429,29 +429,29 @@ export function CompleteRegistrationForm() {
                   <FormField control={form.control} name="interests" render={({ field }) => (
                     <FormItem>
                       <FormLabel>{T("Interesses (separe por vírgula)")}</FormLabel>
-                      <FormControl><Input placeholder="Ex: Tecnologia, Viagens, Cinema" {...field} /></FormControl>
+                      <FormControl><Input placeholder={T("Ex: Tecnologia, Viagens, Cinema")} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField control={form.control} name="personality" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Personalidade</FormLabel>
-                        <FormControl><Input placeholder="Ex: Criativo, Introvertido..." {...field} /></FormControl>
+                        <FormLabel>{T("Personalidade")}</FormLabel>
+                        <FormControl><Input placeholder={T("Ex: Criativo, Introvertido...")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                      <FormField control={form.control} name="values" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Valores Pessoais</FormLabel>
-                        <FormControl><Input placeholder="Ex: Honestidade, Liberdade..." {...field} /></FormControl>
+                        <FormLabel>{T("Valores Pessoais")}</FormLabel>
+                        <FormControl><Input placeholder={T("Ex: Honestidade, Liberdade...")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                   </div>
                   <FormField control={form.control} name="goals" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Objetivos Pessoais e Profissionais</FormLabel>
+                      <FormLabel>{T("Objetivos Pessoais e Profissionais")}</FormLabel>
                       <FormControl><Textarea placeholder={T("Onde você quer chegar?")} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -459,13 +459,13 @@ export function CompleteRegistrationForm() {
                   <FormField control={form.control} name="inspirations" render={({ field }) => (
                     <FormItem>
                       <FormLabel>{T("Referências Inspiradoras")}</FormLabel>
-                      <FormControl><Textarea placeholder="Quem te inspira?" {...field} /></FormControl>
+                      <FormControl><Textarea placeholder={T("Quem te inspira?")} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="funFacts" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Curiosidades Pessoais</FormLabel>
+                      <FormLabel>{T("Curiosidades Pessoais")}</FormLabel>
                       <FormControl><Textarea placeholder={T("Algo único sobre você...")} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -477,13 +477,13 @@ export function CompleteRegistrationForm() {
                   <FormField control={form.control} name="targetAudience" render={({ field }) => (
                     <FormItem>
                       <FormLabel>{T("Público-alvo")}</FormLabel>
-                      <FormControl><Input placeholder="Ex: Empreendedores, Estudantes..." {...field} /></FormControl>
+                      <FormControl><Input placeholder={T("Ex: Empreendedores, Estudantes...")} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="marketSegment" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Segmento de Mercado</FormLabel>
+                      <FormLabel>{T("Segmento de Mercado")}</FormLabel>
                       <FormControl><Input placeholder={T("Ex: E-commerce, Educação...")} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -497,7 +497,7 @@ export function CompleteRegistrationForm() {
                   )} />
                   <FormField control={form.control} name="communicationTone" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tom de Voz</FormLabel>
+                      <FormLabel>{T("Tom de Voz")}</FormLabel>
                       <FormControl><Input placeholder={T("Ex: Formal, Descontraído, Técnico...")} {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -509,14 +509,14 @@ export function CompleteRegistrationForm() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField control={form.control} name="phone" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Telefone</FormLabel>
+                        <FormLabel>{T("Telefone")}</FormLabel>
                         <FormControl><Input placeholder="+55 11 99999-9999" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name="whatsapp" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>WhatsApp</FormLabel>
+                        <FormLabel>{T("WhatsApp")}</FormLabel>
                         <FormControl><Input placeholder="+55 11 99999-9999" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -525,14 +525,14 @@ export function CompleteRegistrationForm() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                      <FormField control={form.control} name="location.city" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Cidade</FormLabel>
+                        <FormLabel>{T("Cidade")}</FormLabel>
                         <FormControl><Input placeholder={T("São Paulo")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                      <FormField control={form.control} name="location.state" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Estado</FormLabel>
+                        <FormLabel>{T("Estado")}</FormLabel>
                         <FormControl><Input placeholder="SP" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -540,7 +540,7 @@ export function CompleteRegistrationForm() {
                      <FormField control={form.control} name="location.country" render={({ field }) => (
                       <FormItem>
                         <FormLabel>{T("País")}</FormLabel>
-                        <FormControl><Input placeholder="Brasil" {...field} /></FormControl>
+                        <FormControl><Input placeholder={T("Brasil")} {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -548,9 +548,9 @@ export function CompleteRegistrationForm() {
                   
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <FormLabel>Redes Sociais</FormLabel>
+                      <FormLabel>{T("Redes Sociais")}</FormLabel>
                       <Button type="button" variant="outline" size="sm" onClick={() => appendSocial({ platform: 'linkedin', url: '' })}>
-                        <Plus className="w-4 h-4 mr-2" /> Adicionar
+                        <Plus className="w-4 h-4 mr-2" />  {T("Adicionar")}
                       </Button>
                     </div>
                     {socialFields.map((field, index) => (
@@ -561,12 +561,12 @@ export function CompleteRegistrationForm() {
                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="linkedin">LinkedIn</SelectItem>
-                                  <SelectItem value="instagram">Instagram</SelectItem>
-                                  <SelectItem value="facebook">Facebook</SelectItem>
-                                  <SelectItem value="twitter">Twitter/X</SelectItem>
-                                  <SelectItem value="website">Website</SelectItem>
-                                  <SelectItem value="other">Outro</SelectItem>
+                                  <SelectItem value="linkedin">{T("LinkedIn")}</SelectItem>
+                                  <SelectItem value="instagram">{T("Instagram")}</SelectItem>
+                                  <SelectItem value="facebook">{T("Facebook")}</SelectItem>
+                                  <SelectItem value="twitter">{T("Twitter/X")}</SelectItem>
+                                  <SelectItem value="website">{T("Website")}</SelectItem>
+                                  <SelectItem value="other">{T("Outro")}</SelectItem>
                                 </SelectContent>
                               </Select>
                              </FormControl>
@@ -603,9 +603,9 @@ export function CompleteRegistrationForm() {
               </Tabs>
 
               <div className="flex justify-end gap-4 pt-6 border-t">
-                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button>
+                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>{T("Cancelar")}</Button>
                 <Button type="submit" disabled={isLoading} className="bg-amber-600 hover:bg-amber-700 text-white">
-                  {isLoading ? "Salvando..." : T("Salvar e Obter Código")}
+                  {isLoading ? T("Salvando...") : T("Salvar e Obter Código")}
                 </Button>
               </div>
             </form>

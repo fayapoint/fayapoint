@@ -129,16 +129,15 @@ export function BatalhaPrompts() {
             className="mx-auto mb-3 h-28 w-44 rounded-2xl border border-amber-400/25 object-cover"
           />
           <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/12 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-amber-300">
-            <Swords size={12} /> {ROUNDS} duelos
+            <Swords size={12} /> {ROUNDS}  {T("duelos")}
           </span>
           <h3 className="mt-3 text-2xl font-black">{T("Aposte na sua leitura")}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             
-            {T("Você começa com")} <strong className="text-amber-300">{START_BANK} fichas</strong>{T(". Em cada\r\n            duelo, decida")} <strong>quanto arriscar</strong> e aponte o prompt vencedor. Acertou, dobra
-            a aposta. Errou, perde. Zerou, acabou.
+            {T("Você começa com")} <strong className="text-amber-300">{START_BANK}  {T("fichas")}</strong>{T(". Em cada\r\n            duelo, decida")} <strong>{T("quanto arriscar")}</strong>  {T("e aponte o prompt vencedor. Acertou, dobra\r\n            a aposta. Errou, perde. Zerou, acabou.")}
           </p>
           {high > 0 && (
-            <p className="mt-3 text-xs font-bold text-amber-300">{T("Sua melhor banca:")} {high} fichas</p>
+            <p className="mt-3 text-xs font-bold text-amber-300">{T("Sua melhor banca:")} {high}  {T("fichas")}</p>
           )}
           <button
             onClick={begin}
@@ -169,7 +168,8 @@ export function BatalhaPrompts() {
         />
         {isRecord && !broke && (
           <p className="relative mb-1 text-sm font-black uppercase tracking-widest text-lime-300">
-            ★ Melhor banca ★
+            
+            {T("★ Melhor banca ★")}
           </p>
         )}
         <p className="relative text-6xl font-black" style={{ color: broke ? "#f47276" : "#f5c04e" }}>
@@ -230,7 +230,8 @@ export function BatalhaPrompts() {
           </AnimatePresence>
         </div>
         <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-          Duelo {index + 1}/{deck.length}
+          
+          {T("Duelo")} {index + 1}/{deck.length}
         </span>
       </div>
 
@@ -240,7 +241,8 @@ export function BatalhaPrompts() {
       >
         <p className="px-3 py-2.5 text-center text-sm">
           <span className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">
-            Tarefa
+            
+            {T("Tarefa")}
           </span>
           <br />
           <span className="font-bold">{T(round.task)}</span>
@@ -251,7 +253,8 @@ export function BatalhaPrompts() {
       {!revealed && (
         <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
           <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-            Arriscar
+            
+            {T("Arriscar")}
           </span>
           {STAKES.map((option) => {
             const active = stake === option.fraction;
@@ -270,7 +273,7 @@ export function BatalhaPrompts() {
               </button>
             );
           })}
-          <span className="text-xs font-black text-amber-300">= {wager} fichas</span>
+          <span className="text-xs font-black text-amber-300">= {wager}  {T("fichas")}</span>
         </div>
       )}
 
@@ -326,7 +329,8 @@ export function BatalhaPrompts() {
               <p className="text-[13px] leading-relaxed">{T(text)}</p>
               {revealed && isWinner && (
                 <p className="mt-2 text-[10px] font-black uppercase tracking-wider text-lime-400">
-                  vencedor · {T(round.criterion)}
+                  
+                  {T("vencedor ·")} {T(round.criterion)}
                 </p>
               )}
             </motion.button>
@@ -363,7 +367,7 @@ export function BatalhaPrompts() {
               {bank <= 0
                 ? T("Ver resultado")
                 : index + 1 >= deck.length
-                  ? "Encerrar mesa"
+                  ? T("Encerrar mesa")
                   : T("Próximo duelo")}{" "}
               <ArrowRight size={14} />
             </button>

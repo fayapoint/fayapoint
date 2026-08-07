@@ -205,7 +205,7 @@ export function ProfileAvatarEditor({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-md bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-xl">Editar Avatar</DialogTitle>
+            <DialogTitle className="text-xl">{T("Editar Avatar")}</DialogTitle>
             <DialogDescription>
               
               {T("Faça upload de uma nova foto de perfil ou remova a atual.")}
@@ -282,7 +282,8 @@ export function ProfileAvatarEditor({
                   >
                     <Upload className="w-10 h-10 mx-auto text-muted-foreground" />
                     <p className="text-muted-foreground">
-                      Arraste uma imagem ou <span className="text-amber-400 font-medium">{T("clique para selecionar")}</span>
+                      
+                      {T("Arraste uma imagem ou")} <span className="text-amber-400 font-medium">{T("clique para selecionar")}</span>
                     </p>
                     <p className="text-xs text-gray-600">
                       
@@ -340,7 +341,8 @@ export function ProfileAvatarEditor({
                   ) : (
                     <>
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Remover
+                      
+                      {T("Remover")}
                     </>
                   )}
                 </Button>
@@ -354,7 +356,8 @@ export function ProfileAvatarEditor({
                     disabled={isUploading}
                     className="flex-1"
                   >
-                    Cancelar
+                    
+                    {T("Cancelar")}
                   </Button>
                   <Button
                     onClick={handleUpload}
@@ -364,7 +367,8 @@ export function ProfileAvatarEditor({
                     {isUploading ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Salvando...
+                        
+                        {T("Salvando...")}
                       </>
                     ) : (
                       <>

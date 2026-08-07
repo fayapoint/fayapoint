@@ -202,10 +202,10 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
                 <source src="/portal/persona/vidente-loop.webm" type="video/webm" />
               </video>
               {/* eslint-disable-next-line @next/next/no-img-element -- fallback reduced-motion */}
-              <img src={art("vidente-hero")} alt="O Vidente da FayAI" className="hidden h-full w-full object-cover motion-reduce:block" />
+              <img src={art("vidente-hero")} alt={T("O Vidente da FayAI")} className="hidden h-full w-full object-cover motion-reduce:block" />
             </div>
             <div className="p-5">
-              <h3 className="text-lg font-extrabold text-foreground">🔮 O Vidente</h3>
+              <h3 className="text-lg font-extrabold text-foreground">{T("🔮 O Vidente")}</h3>
               <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
                 
                 {T("Responda 5 perguntas rápidas e eu")} <strong className="text-violet-300">{T("adivinho quem você é")}</strong>  {T("—\r\n                sem formulário chato. Se eu errar, você me corrige.")}
@@ -214,7 +214,7 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
                 onClick={() => setStage("asking")}
                 className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 px-6 py-2.5 text-sm font-extrabold text-white hover:opacity-90 transition-opacity cursor-pointer"
               >
-                <Wand2 size={15} /> Pode adivinhar
+                <Wand2 size={15} />  {T("Pode adivinhar")}
               </button>
             </div>
           </motion.div>
@@ -223,7 +223,7 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
         {stage === "asking" && (
           <motion.div key={`q-${qIndex}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} className="p-5">
             <p className="text-[11px] font-extrabold uppercase tracking-widest text-violet-300 flex items-center gap-1.5">
-              <Sparkles size={12} /> Pergunta {qIndex + 1} de {QUESTIONS.length}
+              <Sparkles size={12} />  {T("Pergunta")} {qIndex + 1}  {T("de")} {QUESTIONS.length}
             </p>
             <p className="mt-2 text-base font-bold text-foreground">{T(QUESTIONS[qIndex].text)}</p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
@@ -245,22 +245,22 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
           <motion.div key="guess" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="text-center">
             <div className="relative mx-auto aspect-[3/2] max-h-52 w-full overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={art(guessArt)} alt="O palpite do Vidente" className="h-full w-full object-cover" />
+              <img src={art(guessArt)} alt={T("O palpite do Vidente")} className="h-full w-full object-cover" />
             </div>
             <div className="p-5">
-              <p className="text-[11px] font-extrabold uppercase tracking-widest text-violet-300">A bola de cristal diz…</p>
+              <p className="text-[11px] font-extrabold uppercase tracking-widest text-violet-300">{T("A bola de cristal diz…")}</p>
               <p className="mx-auto mt-2 max-w-md text-base font-bold text-foreground leading-relaxed">
                 
-                {T("Vejo alguém de")} <span className="text-violet-300">{T(INDUSTRY_LABEL[guess.industry])}</span>, que{" "}
+                {T("Vejo alguém de")} <span className="text-violet-300">{T(INDUSTRY_LABEL[guess.industry])}</span>{T(", que")}{" "}
                 <span className="text-amber-300">{T(LEVEL_LABEL[guess.level])}</span>  {T("com IA e sonha em")}{" "}
-                <span className="text-fuchsia-300">{T(GOAL_LABEL[guess.goal])}</span>. Acertei? 🔮
+                <span className="text-fuchsia-300">{T(GOAL_LABEL[guess.goal])}</span>{T(". Acertei? 🔮")}
               </p>
               <div className="mt-4 flex justify-center gap-3">
                 <button onClick={confirm} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-emerald-400 to-lime-400 px-5 py-2 text-sm font-extrabold text-[#12250a] cursor-pointer hover:opacity-90">
-                  <Check size={15} /> Na mosca!
+                  <Check size={15} />  {T("Na mosca!")}
                 </button>
                 <button onClick={() => setStage("fixing")} className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-5 py-2 text-sm font-bold text-white/70 hover:text-white hover:border-white/40 cursor-pointer transition-colors">
-                  <X size={15} /> Quase…
+                  <X size={15} />  {T("Quase…")}
                 </button>
               </div>
             </div>
@@ -272,7 +272,7 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
             <FxConfetti active />
             <div className="relative mx-auto aspect-[3/2] max-h-52 w-full overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={art("acertou")} alt="O Vidente acertou" className="h-full w-full object-cover" />
+              <img src={art("acertou")} alt={T("O Vidente acertou")} className="h-full w-full object-cover" />
             </div>
             <p className="p-5 text-base font-extrabold text-foreground">{T("🎯 Eu SABIA! Anotei tudo — seu portal agora te conhece melhor.")}</p>
           </motion.div>
@@ -282,10 +282,10 @@ export default function PersonaOracle({ onComplete }: { onComplete?: () => void 
           <motion.div key="fixing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
             <div className="relative mx-auto aspect-[3/2] max-h-44 w-full overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={art("errou")} alt="O Vidente errou" className="h-full w-full object-cover" />
+              <img src={art("errou")} alt={T("O Vidente errou")} className="h-full w-full object-cover" />
             </div>
             <div className="p-5 text-left">
-              <p className="text-center text-sm font-bold text-foreground">Ops! Me ajuda a acertar:</p>
+              <p className="text-center text-sm font-bold text-foreground">{T("Ops! Me ajuda a acertar:")}</p>
               <p className="mt-3 text-[11px] font-extrabold uppercase tracking-widest text-violet-300">{T("Sua área é…")}</p>
               <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {Object.entries(INDUSTRY_LABEL).map(([k, label]) => (

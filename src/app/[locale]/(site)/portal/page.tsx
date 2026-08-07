@@ -582,7 +582,8 @@ export default function PortalPage() {
               onClick={() => window.location.reload()}
               className="border-white/20 text-white hover:bg-secondary"
             >
-              Tentar novamente
+              
+              {T("Tentar novamente")}
             </Button>
           </div>
         </div>
@@ -689,7 +690,7 @@ export default function PortalPage() {
         <header className="h-14 md:h-16 shrink-0 bg-card/95 backdrop-blur-xl border-b border-border z-30 flex items-center justify-between px-4 md:px-6">
           <div>
             <h1 className="text-lg font-semibold" style={{ fontFamily: "var(--font-bebas), sans-serif", letterSpacing: "0.08em", fontSize: "1.4rem" }}>
-              {activeTab === "dashboard" && "Dashboard"}
+              {activeTab === "dashboard" && T("Dashboard")}
               {activeTab === "pod-store" && T("Minha Loja POD")}
               {activeTab === "store" && T("Loja Tech")}
               {activeTab === "cart" && T("Carrinho")}
@@ -697,16 +698,16 @@ export default function PortalPage() {
               {activeTab === "courses" && T("Meus Cursos")}
               {activeTab === "certificates" && T("Certificados")}
               {activeTab === "social" && T("Perfil Social")}
-              {activeTab === "studio" && "Studio AI"}
-              {activeTab === "assistant" && "Assistente IA"}
+              {activeTab === "studio" && T("Studio AI")}
+              {activeTab === "assistant" && T("Assistente IA")}
               {activeTab === "achievements" && T("Conquistas")}
-              {activeTab === "leaderboard" && "Ranking"}
+              {activeTab === "leaderboard" && T("Ranking")}
               {activeTab === "challenges" && T("Desafios")}
-              {activeTab === "games" && "Arcade da IA"}
-              {activeTab === "galeria" && "Galeria"}
-              {activeTab === "resources" && "Recursos"}
+              {activeTab === "games" && T("Arcade da IA")}
+              {activeTab === "galeria" && T("Galeria")}
+              {activeTab === "resources" && T("Recursos")}
               {activeTab === "history" && T("Histórico")}
-              {activeTab === "rewards" && "Recompensas"}
+              {activeTab === "rewards" && T("Recompensas")}
             </h1>
           </div>
 
@@ -915,7 +916,7 @@ export default function PortalPage() {
                   <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6 pb-6 border-b border-border">
                     <div className="min-w-0">
                       <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-yellow-500">
-                        <Sparkles className="text-amber-400 shrink-0" /> Studio AI Pro
+                        <Sparkles className="text-amber-400 shrink-0" />  {T("Studio AI Pro")}
                       </h2>
                       <p className="text-sm text-muted-foreground mt-1">
                         
@@ -924,7 +925,7 @@ export default function PortalPage() {
                     </div>
                     {imageQuota && (
                       <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300 whitespace-nowrap">
-                        {imageQuota.used}/{imageQuota.limit} hoje
+                        {imageQuota.used}/{imageQuota.limit}  {T("hoje")}
                       </span>
                     )}
                   </div>
@@ -980,7 +981,8 @@ export default function PortalPage() {
                           onClick={() => setReferenceImage(null)}
                           className="text-[11px] font-bold text-rose-400 hover:text-rose-300 cursor-pointer"
                         >
-                          remover
+                          
+                          {T("remover")}
                         </button>
                       </>
                     )}
@@ -1043,7 +1045,7 @@ export default function PortalPage() {
                           <Loader2 className="animate-spin" size={20} />
                         ) : (
                           <>
-                            <Flame className="mr-2" size={18} /> Gerar
+                            <Flame className="mr-2" size={18} />  {T("Gerar")}
                           </>
                         )}
                       </Button>
@@ -1059,7 +1061,7 @@ export default function PortalPage() {
                         <div className="relative w-full h-full flex flex-col items-center justify-center">
                           <img
                             src={generatedImage}
-                            alt="Generated"
+                            alt={T("Generated")}
                             className="max-h-[600px] w-auto rounded-lg shadow-2xl object-contain"
                           />
                           <Button
@@ -1068,7 +1070,7 @@ export default function PortalPage() {
                             className="mt-4"
                             onClick={() => window.open(generatedImage, "_blank")}
                           >
-                            <Download className="mr-2" size={16} /> Download HD
+                            <Download className="mr-2" size={16} />  {T("Download HD")}
                           </Button>
                         </div>
                       ) : (
@@ -1084,7 +1086,8 @@ export default function PortalPage() {
                             {isGenerating ? T("Criando sua imagem...") : T("Prévia da Imagem")}
                           </p>
                           <p className="text-sm opacity-60">
-                            Digite um prompt e clique em Gerar
+                            
+                            {T("Digite um prompt e clique em Gerar")}
                           </p>
                         </div>
                       )}
@@ -1234,7 +1237,7 @@ export default function PortalPage() {
                         </div>
                         <h3 className="font-medium">{T(resource.name)}</h3>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {resource.available ? T("Disponível") : "Requer upgrade"}
+                          {resource.available ? T("Disponível") : T("Requer upgrade")}
                         </p>
                       </Card>
                     ))}
@@ -1300,9 +1303,10 @@ export default function PortalPage() {
                           </div>
                           <div className="text-right shrink-0">
                             <p className="font-bold text-sm md:text-base">
-                              R$ {item.price.toLocaleString("pt-BR")}
+                              
+                              {T("R$")} {item.price.toLocaleString("pt-BR")}
                             </p>
-                            <p className="text-xs text-muted-foreground">Qtd: {item.quantity}</p>
+                            <p className="text-xs text-muted-foreground">{T("Qtd:")} {item.quantity}</p>
                           </div>
                         </div>
                       ))
@@ -1313,12 +1317,13 @@ export default function PortalPage() {
                   {cartTotal > 0 && (
                     <div className="mt-6 flex justify-end border-t border-border pt-4">
                       <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Total Estimado</p>
+                        <p className="text-sm text-muted-foreground">{T("Total Estimado")}</p>
                         <p className="text-xl md:text-2xl font-bold text-green-400">
-                          R$ {cartTotal.toLocaleString("pt-BR")}
+                          
+                          {T("R$")} {cartTotal.toLocaleString("pt-BR")}
                         </p>
                         <Link href="/carrinho">
-                          <Button className="mt-2">Finalizar Compra</Button>
+                          <Button className="mt-2">{T("Finalizar Compra")}</Button>
                         </Link>
                       </div>
                     </div>
@@ -1350,10 +1355,11 @@ export default function PortalPage() {
                                 </div>
                                 <div className="min-w-0">
                                   <p className="font-medium text-sm md:text-base truncate">
-                                    Pedido #{order._id.substring(order._id.length - 6)}
+                                    
+                                    {T("Pedido #")}{order._id.substring(order._id.length - 6)}
                                   </p>
                                   <p className="text-xs md:text-sm text-muted-foreground truncate">
-                                    {new Date(order.createdAt).toLocaleDateString("pt-BR")} • {order.items.length} {order.items.length === 1 ? 'item' : 'itens'}
+                                    {new Date(order.createdAt).toLocaleDateString("pt-BR")} • {order.items.length} {order.items.length === 1 ? T("item") : T("itens")}
                                   </p>
                                 </div>
                               </div>
@@ -1368,15 +1374,16 @@ export default function PortalPage() {
                                     order.status === "delivered" && "bg-green-500/20 text-green-400 border-green-500/30",
                                   )}
                                 >
-                                  {order.status === "pending" ? "Pendente" :
-                                   order.status === "processing" ? "Processando" :
+                                  {order.status === "pending" ? T("Pendente") :
+                                   order.status === "processing" ? T("Processando") :
                                    order.status === "completed" ? T("Concluído") :
                                    order.status === "shipped" ? T("Enviado") :
-                                   order.status === "delivered" ? "Entregue" :
+                                   order.status === "delivered" ? T("Entregue") :
                                    order.status}
                                 </Badge>
                                 <p className="font-bold text-green-400 text-sm md:text-base whitespace-nowrap">
-                                  R$ {order.totalAmount.toLocaleString("pt-BR")}
+                                  
+                                  {T("R$")} {order.totalAmount.toLocaleString("pt-BR")}
                                 </p>
                               </div>
                             </div>
@@ -1392,7 +1399,7 @@ export default function PortalPage() {
                                   className="overflow-hidden"
                                 >
                                   <div className="border-t border-border bg-secondary p-3 md:p-4">
-                                    <p className="text-sm text-muted-foreground mb-3">Itens do pedido:</p>
+                                    <p className="text-sm text-muted-foreground mb-3">{T("Itens do pedido:")}</p>
                                     <div className="space-y-3">
                                       {order.items.map((item, idx) => (
                                         <div
@@ -1412,22 +1419,24 @@ export default function PortalPage() {
                                             <div className="min-w-0">
                                               <p className="font-medium text-sm truncate">{T(item.name)}</p>
                                               <p className="text-xs text-muted-foreground">
-                                                {item.type === "product" ? "Produto" :
+                                                {item.type === "product" ? T("Produto") :
                                                  item.type === "course" ? T("Curso") : T("Serviço")}
                                                 {item.quantity > 1 && ` × ${item.quantity}`}
                                               </p>
                                             </div>
                                           </div>
                                           <p className="font-medium text-sm shrink-0 whitespace-nowrap">
-                                            R$ {(item.price * item.quantity).toLocaleString("pt-BR")}
+                                            
+                                            {T("R$")} {(item.price * item.quantity).toLocaleString("pt-BR")}
                                           </p>
                                         </div>
                                       ))}
                                     </div>
                                     <div className="mt-4 pt-3 border-t border-border flex justify-between items-center">
-                                      <span className="text-sm text-muted-foreground">Total do pedido</span>
+                                      <span className="text-sm text-muted-foreground">{T("Total do pedido")}</span>
                                       <span className="text-lg font-bold text-green-400">
-                                        R$ {order.totalAmount.toLocaleString("pt-BR")}
+                                        
+                                        {T("R$")} {order.totalAmount.toLocaleString("pt-BR")}
                                       </span>
                                     </div>
                                   </div>
@@ -1507,7 +1516,7 @@ export default function PortalPage() {
                                   : "bg-muted"
                               )}
                             >
-                              {stats.xp >= reward.xp ? "Resgatar" : "Insuficiente"}
+                              {stats.xp >= reward.xp ? T("Resgatar") : T("Insuficiente")}
                             </Button>
                           </div>
                         </Card>
@@ -1524,7 +1533,8 @@ export default function PortalPage() {
                       <h2 className="text-xl md:text-2xl font-bold mb-2">{T("Loja de Recompensas")}</h2>
                       <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/50 mb-4">
                         <Crown size={12} className="mr-1" />
-                        Recurso PRO
+                        
+                        {T("Recurso PRO")}
                       </Badge>
                       <p className="text-muted-foreground mb-6">
                         

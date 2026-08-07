@@ -190,26 +190,26 @@ export function VideoToolbox({ locale }: { locale: Locale }) {
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="gap-2">
               <Sparkles className="w-4 h-4" />
-              {isEn ? "Video Toolbox" : "Video Toolbox"}
+              {isEn ? T("Video Toolbox") : T("Video Toolbox")}
             </Badge>
             <Badge variant="outline" className="gap-2">
               <FileText className="w-4 h-4" />
-              {isEn ? "Calendar + hooks" : T("Calendário + hooks")}
+              {isEn ? T("Calendar + hooks") : T("Calendário + hooks")}
             </Badge>
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mt-3">
-            {isEn ? "Plan content like a studio" : T("Planeje como um estúdio")}
+            {isEn ? T("Plan content like a studio") : T("Planeje como um estúdio")}
           </h2>
           <p className="text-muted-foreground mt-2">
             {isEn
-              ? "Generate a calendar, hook ideas and a repurposing system."
+              ? T("Generate a calendar, hook ideas and a repurposing system.")
               : T("Gere calendário, hooks e um sistema de reaproveitamento.")}
           </p>
         </div>
         <div className="rounded-2xl border border-border bg-background/60 px-5 py-4">
           <div className="flex items-center gap-2 text-muted-foreground">
             <CalendarDays className="w-4 h-4" />
-            <span className="text-sm">{isEn ? "Posts/week" : T("Posts/sem")}</span>
+            <span className="text-sm">{isEn ? T("Posts/week") : T("Posts/sem")}</span>
           </div>
           <div className="mt-1 text-3xl font-bold">{postsPerWeek}</div>
         </div>
@@ -219,79 +219,79 @@ export function VideoToolbox({ locale }: { locale: Locale }) {
         <div className="md:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Brand" : "Marca"}</label>
-              <Input className="mt-2" value={brand} onChange={(e) => setBrand(e.target.value)} placeholder={isEn ? "Example: VoltPay" : "Ex: VoltPay"} />
+              <label className="text-sm text-muted-foreground">{isEn ? T("Brand") : T("Marca")}</label>
+              <Input className="mt-2" value={brand} onChange={(e) => setBrand(e.target.value)} placeholder={isEn ? T("Example: VoltPay") : T("Ex: VoltPay")} />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Niche" : "Nicho"}</label>
-              <Input className="mt-2" value={niche} onChange={(e) => setNiche(e.target.value)} placeholder={isEn ? "Example: fintech" : "Ex: fintech"} />
+              <label className="text-sm text-muted-foreground">{isEn ? T("Niche") : T("Nicho")}</label>
+              <Input className="mt-2" value={niche} onChange={(e) => setNiche(e.target.value)} placeholder={isEn ? T("Example: fintech") : T("Ex: fintech")} />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Goal" : "Objetivo"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Goal") : T("Objetivo")}</label>
               <Input className="mt-2" value={goal} onChange={(e) => setGoal(e.target.value)} />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Posts/week" : T("Posts/sem")}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Posts/week") : T("Posts/sem")}</label>
               <Input type="number" min={1} max={7} className="mt-2" value={String(postsPerWeek)} onChange={(e) => setPostsPerWeek(Number(e.target.value) || 1)} />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm text-muted-foreground">{isEn ? "Content pillars (one per line)" : "Pilares (um por linha)"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Content pillars (one per line)") : T("Pilares (um por linha)")}</label>
               <Textarea className="mt-2 min-h-[90px]" value={pillars} onChange={(e) => setPillars(e.target.value)} />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm text-muted-foreground">{isEn ? "Platforms (one per line)" : "Plataformas (um por linha)"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Platforms (one per line)") : T("Plataformas (um por linha)")}</label>
               <Textarea className="mt-2 min-h-[80px]" value={platforms} onChange={(e) => setPlatforms(e.target.value)} />
             </div>
           </div>
 
           <Tabs defaultValue="calendar" className="mt-6">
             <TabsList className="w-full flex flex-wrap">
-              <TabsTrigger value="calendar" className="gap-2"><CalendarDays className="w-4 h-4" />{isEn ? "Calendar" : T("Calendário")}</TabsTrigger>
-              <TabsTrigger value="hooks" className="gap-2"><Lightbulb className="w-4 h-4" />{isEn ? "Hooks" : "Hooks"}</TabsTrigger>
-              <TabsTrigger value="brief" className="gap-2"><FileVideo2 className="w-4 h-4" />{isEn ? "Brief" : "Brief"}</TabsTrigger>
-              <TabsTrigger value="repurpose" className="gap-2"><Repeat className="w-4 h-4" />{isEn ? "Repurpose" : "Reaproveitar"}</TabsTrigger>
+              <TabsTrigger value="calendar" className="gap-2"><CalendarDays className="w-4 h-4" />{isEn ? T("Calendar") : T("Calendário")}</TabsTrigger>
+              <TabsTrigger value="hooks" className="gap-2"><Lightbulb className="w-4 h-4" />{isEn ? T("Hooks") : T("Hooks")}</TabsTrigger>
+              <TabsTrigger value="brief" className="gap-2"><FileVideo2 className="w-4 h-4" />{isEn ? T("Brief") : T("Brief")}</TabsTrigger>
+              <TabsTrigger value="repurpose" className="gap-2"><Repeat className="w-4 h-4" />{isEn ? T("Repurpose") : T("Reaproveitar")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="calendar" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Weekly plan" : T("Plano semanal")}</p>
+                <p className="font-semibold">{isEn ? T("Weekly plan") : T("Plano semanal")}</p>
                 <Textarea className="mt-4 min-h-[220px]" readOnly value={calendar.entries.join("\n")} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(calendar.entries.join("\n"))}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy" : "Copiar"}
+                  {isEn ? T("Copy") : T("Copiar")}
                 </Button>
               </div>
             </TabsContent>
 
             <TabsContent value="hooks" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Hook ideas" : "Ideias de hooks"}</p>
+                <p className="font-semibold">{isEn ? T("Hook ideas") : T("Ideias de hooks")}</p>
                 <Textarea className="mt-4 min-h-[220px]" readOnly value={hookIdeas.map((h) => `- ${h}`).join("\n")} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(hookIdeas.join("\n"))}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy hooks" : "Copiar hooks"}
+                  {isEn ? T("Copy hooks") : T("Copiar hooks")}
                 </Button>
               </div>
             </TabsContent>
 
             <TabsContent value="brief" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Brief template" : "Template de brief"}</p>
+                <p className="font-semibold">{isEn ? T("Brief template") : T("Template de brief")}</p>
                 <Textarea className="mt-4 min-h-[240px]" readOnly value={brief} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(brief)}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy" : "Copiar"}
+                  {isEn ? T("Copy") : T("Copiar")}
                 </Button>
               </div>
             </TabsContent>
 
             <TabsContent value="repurpose" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Repurposing matrix" : "Matriz de reaproveitamento"}</p>
+                <p className="font-semibold">{isEn ? T("Repurposing matrix") : T("Matriz de reaproveitamento")}</p>
                 <Textarea className="mt-4 min-h-[220px]" readOnly value={repurpose} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(repurpose)}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy" : "Copiar"}
+                  {isEn ? T("Copy") : T("Copiar")}
                 </Button>
               </div>
             </TabsContent>
@@ -299,10 +299,10 @@ export function VideoToolbox({ locale }: { locale: Locale }) {
         </div>
 
         <div className="rounded-2xl border border-border bg-background/60 p-5">
-          <p className="font-semibold">{isEn ? "Send me the plan" : T("Me envia o plano")}</p>
+          <p className="font-semibold">{isEn ? T("Send me the plan") : T("Me envia o plano")}</p>
           <p className="text-sm text-muted-foreground mt-2">
             {isEn
-              ? "Enter your email to save this calendar + next steps."
+              ? T("Enter your email to save this calendar + next steps.")
               : T("Informe seu email para salvar o calendário + próximos passos.")}
           </p>
 
@@ -332,16 +332,16 @@ export function VideoToolbox({ locale }: { locale: Locale }) {
                 setSending(false);
               }
             }} disabled={!leadEmail || sending} className="bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-purple-700 hover:to-yellow-600">
-              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : T("Salvar + enviar"))}
+              {sending ? (isEn ? T("Sending...") : T("Enviando...")) : (isEn ? T("Save + send") : T("Salvar + enviar"))}
             </Button>
             <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(report)}>
               <Clipboard className="w-4 h-4" />
-              {isEn ? "Copy plan" : T("Copiar plano")}
+              {isEn ? T("Copy plan") : T("Copiar plano")}
             </Button>
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-background/50 p-4">
-            <p className="text-sm font-medium">{isEn ? "Preview" : T("Prévia")}</p>
+            <p className="text-sm font-medium">{isEn ? T("Preview") : T("Prévia")}</p>
             <Textarea value={report} readOnly className="mt-3 min-h-[220px]" />
           </div>
         </div>

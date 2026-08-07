@@ -105,7 +105,8 @@ export function ChallengesPanel({
           <div className="flex items-center justify-between mb-3 md:mb-4 min-w-0">
             <h3 className="font-semibold flex items-center gap-2 text-sm md:text-base">
               <Flame className="text-orange-400 shrink-0" size={18} />
-              Streak Atual
+              
+              {T("Streak Atual")}
             </h3>
             {streakFreeze > 0 && (
               <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px] md:text-xs shrink-0">
@@ -123,7 +124,7 @@ export function ChallengesPanel({
             {streak === 0
               ? T("Complete uma lição hoje para iniciar seu streak!")
               : streak < 7
-                ? "Continue assim! Faltam " + (7 - streak) + T(" dias para a primeira conquista de streak.")
+                ? T("Continue assim! Faltam ") + (7 - streak) + T(" dias para a primeira conquista de streak.")
                 : T("Incrível! Mantenha o ritmo! 🔥")}
           </p>
 
@@ -179,11 +180,11 @@ export function ChallengesPanel({
           <div className="flex items-center gap-3 md:gap-4 mt-3 md:mt-4 text-[10px] md:text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5 md:gap-2">
               <Flame size={13} className="text-orange-400 fill-orange-400/30" />
-              <span>Ativo</span>
+              <span>{T("Ativo")}</span>
             </div>
             <div className="flex items-center gap-1.5 md:gap-2">
               <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded bg-secondary shrink-0" />
-              <span>Inativo</span>
+              <span>{T("Inativo")}</span>
             </div>
           </div>
         </Card>
@@ -224,7 +225,7 @@ export function ChallengesPanel({
             <div className="mt-4 grid gap-2 sm:grid-cols-3">
               {guide.steps.map((step, index) => (
                 <div key={step} className="rounded-xl border border-white/8 bg-black/15 p-3">
-                  <span className="mb-1 flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-300"><Footprints size={11} /> Passo {index + 1}</span>
+                  <span className="mb-1 flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-amber-300"><Footprints size={11} />  {T("Passo")} {index + 1}</span>
                   <p className="text-xs leading-relaxed text-white/80">{T(step)}</p>
                 </div>
               ))}
@@ -233,7 +234,7 @@ export function ChallengesPanel({
             {dailyChallenge.completed ? (
               <div className="flex items-center gap-2 text-green-400">
                 <CheckCircle size={16} className="shrink-0" />
-                <span className="font-medium text-xs md:text-sm">{T("Desafio Completo! +")}{dailyChallenge.reward} XP conquistados</span>
+                <span className="font-medium text-xs md:text-sm">{T("Desafio Completo! +")}{dailyChallenge.reward}  {T("XP conquistados")}</span>
               </div>
             ) : (
               <div className="flex items-center gap-2 md:gap-4">
@@ -253,7 +254,7 @@ export function ChallengesPanel({
         {/* Timer */}
         <div className="absolute top-2 right-2 md:top-4 md:right-4 flex items-center gap-1 md:gap-2 text-[10px] md:text-xs text-muted-foreground">
           <Clock size={12} />
-          <span>Renova em 24h</span>
+          <span>{T("Renova em 24h")}</span>
         </div>
       </Card>
 
@@ -316,7 +317,8 @@ export function ChallengesPanel({
         <div className="relative flex items-center justify-between mb-3 md:mb-4 min-w-0 gap-2">
           <h3 className="font-semibold flex items-center gap-2 text-sm md:text-base">
             <TrendingUp className="text-blue-400 shrink-0" size={18} />
-            Meta Semanal
+            
+            {T("Meta Semanal")}
           </h3>
           <Badge variant="outline" className="text-[10px] md:text-xs shrink-0">
             {weeklyGoal.current}/{weeklyGoal.target} {T(GOAL_TYPE_LABELS[weeklyGoal.type])}

@@ -116,7 +116,7 @@ export function CourseCategoriesSection() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  {isPtBr ? T("Verificação editorial") : "Editorial verification"}
+                  {isPtBr ? T("Verificação editorial") : T("Editorial verification")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {isPtBr ? `Revisado em ${verifiedAtLabel}.` : `Reviewed on ${verifiedAtLabel}.`}
@@ -137,12 +137,12 @@ export function CourseCategoriesSection() {
                   versão, não. */}
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  {isPtBr ? "Sempre no modelo atual" : "Always on the current model"}
+                  {isPtBr ? T("Sempre no modelo atual") : T("Always on the current model")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {isPtBr
                     ? T("Cada curso é reescrito quando a ferramenta muda")
-                    : "Every course is rewritten when the tool changes"}
+                    : T("Every course is rewritten when the tool changes")}
                 </p>
               </div>
             </div>
@@ -155,12 +155,12 @@ export function CourseCategoriesSection() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  {isPtBr ? T("Critério de publicação") : "Publishing standard"}
+                  {isPtBr ? T("Critério de publicação") : T("Publishing standard")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {isPtBr
                     ? T("Fontes oficiais recentes e cobertura real por aula.")
-                    : "Recent official sources and real lesson-by-lesson coverage."}
+                    : T("Recent official sources and real lesson-by-lesson coverage.")}
                 </p>
               </div>
             </div>

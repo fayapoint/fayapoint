@@ -25,6 +25,40 @@ import { traduzirMapa, MODELOS, ler, dinheiro } from "./traduzir.mjs";
 import { colher, chaveDe, ALVOS_PADRAO } from "./extrair-interface.mjs";
 
 const DESTINO = "messages/dicionario.en.json";
+const CORRECOES = "messages/dicionario.correcoes.json";
+
+/**
+ * As correções à mão, aplicadas por último.
+ *
+ * ── Por que isto precisa existir ──────────────────────────────────────────────
+ *
+ * O dicionário é chaveado pela frase isolada, então o tradutor **nunca vê a
+ * tela**. É uma escolha de projeto, e este é o preço dela: "Boa noite" virou
+ * "Good night" (despedida, não saudação), "Recursos" virou "Features"
+ * (funcionalidade, não material para baixar), "Responder" virou "Reply"
+ * (responder a alguém, não responder uma pergunta). Nenhum desses é erro de
+ * modelo — é falta de contexto, e quem tem o contexto é quem olha a tela.
+ *
+ * Ficam em arquivo separado, e não editadas direto no dicionário, porque
+ * `--refazer` reescreve o dicionário inteiro e levaria a revisão humana junto.
+ */
+function aplicarCorrecoes(dic) {
+  const c = ler(CORRECOES, null);
+  if (!c) return { corrigidos: 0, protegidos: 0 };
+  let corrigidos = 0;
+  for (const [pt, item] of Object.entries(c.correcoes || {})) {
+    if (dic[pt] !== item.en) corrigidos++;
+    dic[pt] = item.en;
+  }
+  let protegidos = 0;
+  for (const pt of Object.keys(c.naoTraduzir || {})) {
+    if (pt in dic) {
+      delete dic[pt];
+      protegidos++;
+    }
+  }
+  return { corrigidos, protegidos };
+}
 
 /**
  * Texto que NÃO deve ser traduzido mesmo aparecendo na tela.
@@ -62,13 +96,23 @@ function main() {
   const textos = colher(ALVOS_PADRAO);
 
   const pronto = refazer ? {} : ler(DESTINO);
+  // marca própria declarada à mão nunca vai ao tradutor — nem na primeira vez
+  const protegidos = new Set(Object.keys(ler(CORRECOES, {}).naoTraduzir || {}));
   const faltando = textos.filter(
-    (t) => !pronto[t] && !NAO_TRADUZIR.some((r) => r.test(t)),
+    (t) => !pronto[t] && !protegidos.has(t) && !NAO_TRADUZIR.some((r) => r.test(t)),
   );
 
   console.log(`${textos.length} texto(s) no código · ${Object.keys(pronto).length} já traduzidos`);
   if (!faltando.length) {
-    console.log("Nada a fazer.");
+    // as correções à mão são aplicadas mesmo sem tradução nova: elas podem ter
+    // sido editadas desde a última rodada, e é a única forma de entrarem.
+    const { corrigidos, protegidos: p } = aplicarCorrecoes(pronto);
+    if (corrigidos || p) {
+      writeFileSync(DESTINO, JSON.stringify(ordenado(pronto), null, 2) + "\n", "utf8");
+      console.log(`${corrigidos} correção(ões) à mão, ${p} marca(s) devolvida(s) ao original.`);
+    } else {
+      console.log("Nada a fazer.");
+    }
     return Promise.resolve();
   }
   console.log(`→ traduzindo ${faltando.length}\n`);
@@ -108,9 +152,11 @@ function main() {
         gravados++;
       }
 
+      const { corrigidos, protegidos: p } = aplicarCorrecoes(pronto);
       writeFileSync(DESTINO, JSON.stringify(ordenado(pronto), null, 2) + "\n", "utf8");
       console.log(
-        `\n${gravados} gravado(s), ${eco} eco/idêntico(s). ` +
+        `\n${gravados} gravado(s), ${eco} eco/idêntico(s), ` +
+          `${corrigidos} corrigido(s) à mão, ${p} marca(s) preservada(s). ` +
           `${Object.keys(pronto).length} no dicionário. Custo: ${dinheiro(custo)}`,
       );
     },

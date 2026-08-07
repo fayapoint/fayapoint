@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useRef, useCallback } from "react";
 
@@ -39,6 +40,7 @@ export default function TurnstileWidget({
   size = "normal",
   className = "",
 }: TurnstileWidgetProps) {
+  const T = useT();
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const scriptLoadedRef = useRef(false);
@@ -95,7 +97,8 @@ export default function TurnstileWidget({
   if (!siteKey && process.env.NODE_ENV === "development") {
     return (
       <div className={`text-xs text-muted-foreground ${className}`}>
-        [CAPTCHA disabled in dev mode]
+        
+        {T("[CAPTCHA disabled in dev mode]")}
       </div>
     );
   }

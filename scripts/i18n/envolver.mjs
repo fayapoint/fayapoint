@@ -60,32 +60,29 @@ const FORA = [
   /\.test\.tsx?$/,
 ];
 
-const ACENTO = /[áàâãäéèêëíìîïóòôõöúùûüçÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ]/;
-const PALAVRAS_PT =
-  /\b(você|vocês|seu|sua|seus|suas|não|são|está|estão|para|com|como|mais|todos|todas|nenhum|nenhuma|aqui|agora|ainda|já|também|quando|onde|porque|cada|entre|sobre|desde|até|pelo|pela|nosso|nossa|criar|criado|fazer|feito|veja|abrir|salvar|salvo|enviar|enviado|carregando|aguarde|erro|falhou|sucesso|voltar|próximo|próxima|anterior|aula|aulas|curso|cursos|aluno|conta|senha|entrar|sair|escolher|escolha|comprar|comprado|preço|grátis|nível|conquista|conquistas|desafio|desafios|certificado|certificados|carrinho|loja|perfil|painel|resumo|progresso|pontos|créditos|assinatura|plano|planos|meus|minhas|dia|dias|hora|horas|semana|mês|ano|anos|nome|novo|nova|ver|sem|seu)\b/i;
 
-const PROPS_VISIVEIS = new Set([
-  "title", "label", "placeholder", "aria-label", "alt", "description",
-  "subtitle", "tooltip", "hint", "legend", "cta", "texto", "rotulo",
-  "legenda", "mensagem", "emptyText", "loadingText",
-]);
-
-function ehPortugues(s) {
-  const t = s.trim();
-  if (t.length < 2 || !/[a-zA-ZÀ-ÿ]/.test(t)) return false;
-  if (/^[/#@]/.test(t) || /^https?:/.test(t)) return false;
-  /**
-   * Slug e chave: minúsculas COM separador — `chatgpt-masterclass`, `nivel_2`.
-   *
-   * ⚠️ A primeira versão descartava qualquer palavra minúscula solta, e
-   * "aulas" caiu nessa peneira: a `/cursos` inglesa listava "30 aulas",
-   * "70 aulas", "250 aulas" — doze vezes na mesma página. Palavra sozinha em
-   * minúscula é rótulo com a mesma frequência que é chave; quem decide é a
-   * lista de palavras portuguesas logo abaixo, não a caixa da letra.
-   */
-  if (/^[a-z0-9]+([-_][a-z0-9]+)+$/.test(t)) return false;
-  return ACENTO.test(t) || PALAVRAS_PT.test(t);
-}
+/**
+ * ── Aqui não se pergunta o idioma, e isso é deliberado ────────────────────────
+ *
+ * Este arquivo tinha a própria cópia do "parece português?" — acento ou lista
+ * de sessenta palavras. Foi por essa peneira que `<h3>Ecossistema FayAI</h3>`
+ * ficou sem `T()` numa tela que já estava traduzida em volta: a frase não tem
+ * acento e nenhuma das palavras estava na lista.
+ *
+ * A peneira sai porque ela é redundante e mentirosa ao mesmo tempo. **Todas as
+ * quatro regras abaixo já provaram a POSIÇÃO antes de chamar isto** — texto
+ * solto em JSX, prop visível, saída de JSX, argumento de `toast`. Se o texto
+ * chega à tela, ele passa pelo tradutor, ponto; se já estiver em inglês, `T` é
+ * a identidade e não custa nada (o dicionário só guarda o que MUDA).
+ *
+ * Sobra a pergunta de forma, e ela mora num lugar só, junto do extrator — as
+ * duas metades do oleoduto têm de concordar sobre o que é texto de tela.
+ */
+import {
+  temFormaDeTexto as ehPortugues,
+  PROPS_VISIVEIS,
+  CAMPOS_RENDER,
+} from "./extrair-interface.mjs";
 
 function arquivos(dir) {
   const s = [];
@@ -112,13 +109,6 @@ const alvos = (pedidos.length ? pedidos : ALVOS_PADRAO)
 /** Chamadas cujo primeiro argumento é um aviso que o usuário lê. */
 const AVISOS = /^(toast(\.\w+)?|alert|setErro|setError|setMensagem|setMessage|setAviso|setStatusMsg)$/;
 
-/** Campos de dado que, renderizados, viram texto na tela. */
-const CAMPOS_RENDER = new Set([
-  "title", "titulo", "label", "rotulo", "description", "descricao", "desc",
-  "subtitle", "subtitulo", "texto", "text", "message", "mensagem",
-  "hint", "dica", "cta", "legenda", "caption", "resumo", "tagline", "frase",
-  "aviso", "nome",
-]);
 
 /**
  * Onde o literal está, do ponto de vista do JSX: prop visível, prop visível
@@ -143,6 +133,77 @@ function posicaoNoJsx(no, sf) {
       if (avo && (ts.isJsxElement(avo) || ts.isJsxFragment(avo))) return "saida";
       return null;
     }
+    /**
+     * ⚠️ Campo de OBJETO: quem decide é a CHAVE, e este é o teste que faltava.
+     *
+     * O padrão mais comum do portal é uma lista de objetos desenhada por um
+     * `.map` dentro do JSX — `{[{ icon, label: "Loja", tab: "store" }].map(…)}`.
+     * Subindo a árvore, TODOS os literais desse objeto chegam a um
+     * `JsxExpression` filho de elemento e parecem "saída de tela". `label` é
+     * rótulo; `tab` é IDENTIFICADOR, comparado por igualdade para saber qual
+     * painel abrir.
+     *
+     * Sem esta parada o codemod escreveu `tab: T("store")` e `bg:
+     * T("bg-indigo-500/10")` — em inglês o `T` devolveria outra string e a
+     * navegação do dashboard pararia de casar. É a mesma lei que já custou
+     * caro uma vez: **chave de filtro não é rótulo.** Traduzir o dado zera a
+     * comparação, e o defeito não aparece em português, onde `T` é a
+     * identidade.
+     */
+    /**
+     * ⚠️ Argumento de CHAMADA não é texto de tela — é entrada de uma função,
+     * e o que ela faz com aquilo é problema dela.
+     *
+     * O caso real: `label: t("stats.ofCompletion")`. A chave da propriedade é
+     * `label`, o resultado vai para a tela, e mesmo assim o literal ali dentro
+     * é a CHAVE do next-intl, não o texto. Envolver gerou
+     * `t(T("stats.ofCompletion"))`, que em inglês procuraria uma chave que não
+     * existe. Vale para `cn(...)`, `clsx(...)`, `new Date(...)` e todo o resto.
+     *
+     * O aviso ao usuário (`toast`, `alert`) é a exceção, e tem regra própria
+     * mais abaixo — lá o argumento É a tela.
+     */
+    if (ts.isCallExpression(pai) || ts.isNewExpression(pai)) return null;
+
+    /**
+     * ⚠️⚠️ OPERANDO DE COMPARAÇÃO — o defeito mais perigoso que este codemod
+     * já produziu, e ele não dá erro em português.
+     *
+     * `{selectedMethod === "pix" && …}` está, pela árvore, em posição de saída
+     * de JSX: o literal fica dentro de `{...}` filho de elemento. Envolver dá
+     * `selectedMethod === T("pix")`, e aí a comparação passa a depender do
+     * IDIOMA. Em pt-BR `T` é a identidade e tudo funciona; em inglês, se
+     * "pix" tiver tradução, a condição nunca é verdadeira. Foram 195
+     * ocorrências, várias no checkout — método de pagamento, ciclo de
+     * assinatura, tipo de item.
+     *
+     * O primeiro que apareceu foi `typeof x === T("number")`, que destruiu a
+     * guarda de tipo e derrubou o `tsc` com treze erros de "possibly
+     * undefined" em arquivos que eu não tinha tocado. Essa foi a sorte: as
+     * outras 194 compilam sem uma reclamação.
+     *
+     * É a mesma lei de sempre, num disfarce novo: **chave de filtro não é
+     * rótulo.** Comparação nunca é tela.
+     */
+    if (ts.isCaseClause(pai)) return null;
+    if (ts.isBinaryExpression(pai)) {
+      const op = pai.operatorToken.kind;
+      if (
+        op === ts.SyntaxKind.EqualsEqualsEqualsToken ||
+        op === ts.SyntaxKind.ExclamationEqualsEqualsToken ||
+        op === ts.SyntaxKind.EqualsEqualsToken ||
+        op === ts.SyntaxKind.ExclamationEqualsToken
+      ) {
+        return null;
+      }
+    }
+
+    if (ts.isPropertyAssignment(pai) && pai.name !== atual) {
+      const chave =
+        ts.isIdentifier(pai.name) || ts.isStringLiteral(pai.name) ? pai.name.text : null;
+      if (!chave || !CAMPOS_RENDER.has(chave)) return null;
+    }
+
     // uma função nova entre o literal e o JSX: é callback (`.map`, `onClick`),
     // e o que ela devolve não é necessariamente tela.
     if (ts.isArrowFunction(pai) || ts.isFunctionExpression(pai)) {

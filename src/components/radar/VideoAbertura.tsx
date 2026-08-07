@@ -98,7 +98,7 @@ export function VideoAbertura() {
         preload="none"
         poster="/radar/abertura.webp"
         onError={() => setFalhou(true)}
-        aria-label="Ricardo Faya ao lado do globo do Radar FayAI"
+        aria-label={T("Ricardo Faya ao lado do globo do Radar FayAI")}
       >
         <source src="/radar/abertura.webm" type="video/webm" />
       </video>

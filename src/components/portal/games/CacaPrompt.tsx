@@ -184,9 +184,10 @@ export function CacaPrompt() {
           <span className="inline-flex items-center gap-1.5 rounded-full bg-lime-400/12 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-lime-300">
             <Hand size={12} /> {ROUNDS}  {T("caçadas")}
           </span>
-          <h3 className="mt-3 text-2xl font-black">Monte a receita</h3>
+          <h3 className="mt-3 text-2xl font-black">{T("Monte a receita")}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Olhe a imagem e <strong className="text-lime-300">arraste</strong>  {T("cada ingrediente para\r\n            o slot certo. Cuidado: tem intruso no meio. Encaixe tudo certo e rápido para o bônus.")}
+            
+            {T("Olhe a imagem e")} <strong className="text-lime-300">{T("arraste")}</strong>  {T("cada ingrediente para\r\n            o slot certo. Cuidado: tem intruso no meio. Encaixe tudo certo e rápido para o bônus.")}
           </p>
           {high > 0 && <p className="mt-3 text-xs font-bold text-amber-300">{T("Seu recorde:")} {high}</p>}
           <button
@@ -222,7 +223,7 @@ export function CacaPrompt() {
         )}
         <p className="relative text-6xl font-black text-amber-400">{score}</p>
         <p className="relative mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-          {perfects} de {deck.length}  {T("receitas montadas sem erro")}
+          {perfects}  {T("de")} {deck.length}  {T("receitas montadas sem erro")}
           {high > 0 && !isRecord && ` · recorde: ${high}`}
         </p>
         <button
@@ -258,9 +259,9 @@ export function CacaPrompt() {
         <div className="absolute inset-0 flex items-center justify-between px-4 text-[11px] font-bold uppercase tracking-widest text-white/90">
           <span>
             
-            {T("Caçada")} {index + 1} de {deck.length}
+            {T("Caçada")} {index + 1}  {T("de")} {deck.length}
           </span>
-          <span className="text-amber-400">{score} pts</span>
+          <span className="text-amber-400">{score}  {T("pts")}</span>
         </div>
       </div>
 
@@ -299,7 +300,7 @@ export function CacaPrompt() {
                   }}
                   role="button"
                   tabIndex={0}
-                  aria-label={`Slot ${slotLabel}${piece ? `, preenchido com ${piece.text}` : ", vazio"}`}
+                  aria-label={`Slot ${slotLabel}${piece ? `, preenchido com ${piece.text}` : T(", vazio")}`}
                   onKeyDown={(e) => {
                     if (e.key !== "Enter" && e.key !== " ") return;
                     e.preventDefault();
@@ -341,12 +342,13 @@ export function CacaPrompt() {
                     </motion.span>
                   ) : (
                     <span className="text-[12px] italic text-white/30">
-                      {held ? T("toque para encaixar aqui") : "arraste um ingrediente"}
+                      {held ? T("toque para encaixar aqui") : T("arraste um ingrediente")}
                     </span>
                   )}
                   {checked && wrong && (
                     <span className="ml-auto shrink-0 text-[10px] font-black uppercase text-rose-300">
-                      era: {T(shuffled.find((p) => p.id === round.answer[slotIndex])?.label)}
+                      
+                      {T("era:")} {T(shuffled.find((p) => p.id === round.answer[slotIndex])?.label)}
                     </span>
                   )}
                 </div>
@@ -397,14 +399,14 @@ export function CacaPrompt() {
                 disabled={!allFilled}
                 className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-lime-400 to-lime-200 px-5 py-2 text-sm font-black text-[#0c2a12] transition-transform hover:scale-[1.04] disabled:opacity-40 disabled:hover:scale-100"
               >
-                <Sparkles size={14} /> Conferir receita
+                <Sparkles size={14} />  {T("Conferir receita")}
               </button>
               {placedIds.length > 0 && (
                 <button
                   onClick={() => setPlacements(new Array(round.slots.length).fill(null))}
                   className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-2 text-xs font-bold text-white/60 hover:text-white"
                 >
-                  <RotateCcw size={12} /> Limpar
+                  <RotateCcw size={12} />  {T("Limpar")}
                 </button>
               )}
             </div>

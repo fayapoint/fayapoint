@@ -199,7 +199,8 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href={comIdioma("/")} className="inline-block mb-4">
               <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
-                FayAi
+                
+                {T("FayAi")}
               </h2>
             </Link>
             <p className="text-muted-foreground mb-4">
@@ -303,10 +304,10 @@ export function Footer() {
             <div className="flex items-center gap-4 text-muted-foreground text-sm">
               <span>{t("bottom.paymentsLabel")}</span>
               <div className="flex gap-2">
-                <span>Visa</span>
-                <span>Master</span>
+                <span>{T("Visa")}</span>
+                <span>{T("Master")}</span>
                 <span>PIX</span>
-                <span>Boleto</span>
+                <span>{T("Boleto")}</span>
               </div>
             </div>
           </div>

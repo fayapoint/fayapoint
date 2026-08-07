@@ -118,7 +118,8 @@ export default async function InventandoHub({ params, searchParams }: Props) {
             {microcursosOrdenados.length}  {T("microcursos · primeira aula sempre grátis")}
           </p>
           <h1 className="mt-5 text-[clamp(2.75rem,9vw,5.5rem)] font-bold leading-[0.95] tracking-tighter">
-            Inventando
+            
+            {T("Inventando")}
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             
@@ -145,7 +146,7 @@ export default async function InventandoHub({ params, searchParams }: Props) {
 
       <div className="mx-auto max-w-6xl px-4 pb-20 pt-10 sm:px-6">
         {/* ── Filtro por categoria ───────────────────────────────────── */}
-        <nav aria-label="Categorias" className="flex flex-wrap gap-2">
+        <nav aria-label={T("Categorias")} className="flex flex-wrap gap-2">
           <Link
             href={url({ categoria: undefined, p: 1 })}
             className={[

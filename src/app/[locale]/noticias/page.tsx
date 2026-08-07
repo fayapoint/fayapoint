@@ -215,7 +215,8 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
       {/* Guias rápidos (conteúdo evergreen) */}
       <section className="px-4 sm:px-8 pb-16 max-w-6xl mx-auto">
         <h2 className="text-2xl sm:text-3xl tracking-wide mb-4" style={bebas}>
-          GUIAS <span style={{ color: GOLD }}>{T("RÁPIDOS")}</span>
+          
+          {T("GUIAS")} <span style={{ color: GOLD }}>{T("RÁPIDOS")}</span>
         </h2>
         <div className="grid sm:grid-cols-3 gap-4">
           {SEED_NEWS.map((g) => (

@@ -40,7 +40,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
     <div className="w-full">
       <header className="flex items-center justify-between gap-4 px-4 sm:px-8 pt-4 pb-2 max-w-6xl mx-auto">
         <Link href={rota("/")} className="text-3xl sm:text-4xl tracking-wide select-none shrink-0" style={bebas}>
-          <LogoFayai texto="FAYAI" />
+          <LogoFayai texto={T("FAYAI")} />
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           {LINKS.map((l) => (
@@ -59,8 +59,8 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
             className="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity shrink-0"
             style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
           >
-            <span className="hidden sm:inline">Oi, {T((user.name || T("aluno")).split(" ")[0])}!</span>
-            <span>Meu Portal</span>
+            <span className="hidden sm:inline">{T("Oi,")} {T((user.name || T("aluno")).split(" ")[0])}!</span>
+            <span>{T("Meu Portal")}</span>
             <ArrowRight size={15} />
           </Link>
         ) : (
@@ -85,7 +85,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
       </nav>
 
       {crumb && (
-        <nav aria-label="breadcrumb" className="flex items-center gap-1.5 px-4 sm:px-8 pt-1 max-w-6xl mx-auto text-[13px]">
+        <nav aria-label={T("breadcrumb")} className="flex items-center gap-1.5 px-4 sm:px-8 pt-1 max-w-6xl mx-auto text-[13px]">
           <Link href={rota(crumb.href)} className="font-semibold text-white/50 hover:text-white transition-colors">
             {T(crumb.label)}
           </Link>

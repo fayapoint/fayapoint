@@ -69,7 +69,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 -z-10">
             <Image
               src="/rwx1.jpg"
-              alt="Ricardo Faya apresentando um workshop de IA"
+              alt={T("Ricardo Faya apresentando um workshop de IA")}
               fill
               priority
               sizes="100vw"
@@ -144,7 +144,7 @@ export default function AboutPage() {
                   <div className="relative aspect-[3/4] rounded-3xl overflow-hidden ring-1 ring-white/15 shadow-2xl">
                     <Image
                       src="/rwx2.jpg"
-                      alt="Retrato de Ricardo Faya em treinamento presencial"
+                      alt={T("Retrato de Ricardo Faya em treinamento presencial")}
                       fill
                       priority
                       sizes="(min-width: 1024px) 480px, 90vw"

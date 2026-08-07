@@ -109,7 +109,7 @@ export function GaleriaPanel() {
           <Images size={15} className="text-white" />
         </div>
         <div className="min-w-0">
-          <h3 className="truncate text-base font-bold">Galeria da comunidade</h3>
+          <h3 className="truncate text-base font-bold">{T("Galeria da comunidade")}</h3>
           <p className="text-xs text-muted-foreground">
             {criacoes.length}  {T("criações · passe o cursor para parar, clique para ver o prompt")}
           </p>
@@ -264,7 +264,7 @@ function Lightbox({ criacao, aoFechar }: { criacao: Criacao; aoFechar: () => voi
           <button
             type="button"
             onClick={aoFechar}
-            aria-label="Fechar"
+            aria-label={T("Fechar")}
             className="rounded-full p-1.5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
           >
             <X size={18} />
@@ -274,7 +274,7 @@ function Lightbox({ criacao, aoFechar }: { criacao: Criacao; aoFechar: () => voi
         <img src={criacao.imageUrl} alt={T(criacao.prompt)} className="w-full" />
         {criacao.prompt && (
           <div className="p-4">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-white/35">Prompt</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-white/35">{T("Prompt")}</p>
             <p className="mt-1.5 text-sm leading-relaxed text-white/70">{T(criacao.prompt)}</p>
           </div>
         )}

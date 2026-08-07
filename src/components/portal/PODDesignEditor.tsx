@@ -365,20 +365,20 @@ export default function PODDesignEditor({
             <Layers size={18} className="text-white" />
           </div>
           <div>
-            <h2 className="text-base md:text-lg font-bold text-white">Editor de Design</h2>
+            <h2 className="text-base md:text-lg font-bold text-white">{T("Editor de Design")}</h2>
             <p className="text-[11px] text-muted-foreground">{T("Preview realista — veja como ficará impresso")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" className="border-border" onClick={onCancel}>
-            <X size={14} className="mr-1.5" /> Cancelar
+            <X size={14} className="mr-1.5" />  {T("Cancelar")}
           </Button>
           <Button
             size="sm"
             className="bg-gradient-to-r from-amber-600 to-yellow-700"
-            onClick={() => { onApply(settings); toast.success("Design aplicado!"); }}
+            onClick={() => { onApply(settings); toast.success(T("Design aplicado!")); }}
           >
-            <Check size={14} className="mr-1.5" /> Aplicar Design
+            <Check size={14} className="mr-1.5" />  {T("Aplicar Design")}
           </Button>
         </div>
       </div>
@@ -409,7 +409,7 @@ export default function PODDesignEditor({
 
             {/* Coverage indicator */}
             <div className="absolute top-2 right-2 z-10 bg-black/70 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-white/10">
-              <span className="text-[10px] text-white/60">Cobertura: </span>
+              <span className="text-[10px] text-white/60">{T("Cobertura:")} </span>
               <span className={cn(
                 "text-sm font-bold",
                 coveragePercent >= 100 ? "text-green-400" : coveragePercent >= 75 ? "text-amber-400" : "text-orange-400"
@@ -446,8 +446,8 @@ export default function PODDesignEditor({
             {/* Help bar */}
             <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-white/40">
               <span className="flex items-center gap-1"><Move size={12} />  {T("Arraste para mover")}</span>
-              <span><kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px]">↑↓←→</kbd> Ajuste fino</span>
-              <span><kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px]">+/-</kbd> Escala</span>
+              <span><kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px]">↑↓←→</kbd>  {T("Ajuste fino")}</span>
+              <span><kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px]">+/-</kbd>  {T("Escala")}</span>
             </div>
           </div>
         </div>
@@ -459,7 +459,8 @@ export default function PODDesignEditor({
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-semibold flex items-center gap-2 text-sm text-white">
                 <Maximize2 size={14} className="text-amber-400" />
-                Tamanho
+                
+                {T("Tamanho")}
               </h4>
               <span className={cn(
                 "text-sm font-mono font-bold",
@@ -522,7 +523,7 @@ export default function PODDesignEditor({
             <div className="space-y-2.5">
               <div>
                 <div className="flex justify-between text-[11px] text-muted-foreground mb-1">
-                  <span>Horizontal</span>
+                  <span>{T("Horizontal")}</span>
                   <span className="font-mono">{Math.round(settings.x * 100)}%</span>
                 </div>
                 <Slider
@@ -533,7 +534,7 @@ export default function PODDesignEditor({
               </div>
               <div>
                 <div className="flex justify-between text-[11px] text-muted-foreground mb-1">
-                  <span>Vertical</span>
+                  <span>{T("Vertical")}</span>
                   <span className="font-mono">{Math.round(settings.y * 100)}%</span>
                 </div>
                 <Slider
@@ -583,7 +584,8 @@ export default function PODDesignEditor({
           <Card className="bg-secondary border-border p-4">
             <h4 className="font-semibold mb-2 flex items-center gap-2 text-sm text-white">
               <RefreshCw size={14} className="text-amber-400" />
-              Espelhar
+              
+              {T("Espelhar")}
             </h4>
             <div className="grid grid-cols-2 gap-2">
               <Button
@@ -592,7 +594,7 @@ export default function PODDesignEditor({
                 className={cn("border-border h-9", settings.flipX && "bg-amber-600/30 border-amber-500")}
                 onClick={() => updateSetting('flipX', !settings.flipX)}
               >
-                <FlipHorizontal size={14} className="mr-1.5" /> Horizontal
+                <FlipHorizontal size={14} className="mr-1.5" />  {T("Horizontal")}
               </Button>
               <Button
                 variant="outline"
@@ -600,7 +602,7 @@ export default function PODDesignEditor({
                 className={cn("border-border h-9", settings.flipY && "bg-amber-600/30 border-amber-500")}
                 onClick={() => updateSetting('flipY', !settings.flipY)}
               >
-                <FlipVertical size={14} className="mr-1.5" /> Vertical
+                <FlipVertical size={14} className="mr-1.5" />  {T("Vertical")}
               </Button>
             </div>
           </Card>
@@ -620,7 +622,7 @@ export default function PODDesignEditor({
             <div className="flex items-start gap-2">
               <AlertCircle size={14} className="text-amber-400 shrink-0 mt-0.5" />
               <p className="text-[11px] text-muted-foreground leading-relaxed">
-                <span className="font-medium text-white">Preview realista</span>  {T("— Esta simulação mostra como o design ficará impresso no tecido, com sombras e textura do produto real. A área tracejada é o limite de impressão.")}
+                <span className="font-medium text-white">{T("Preview realista")}</span>  {T("— Esta simulação mostra como o design ficará impresso no tecido, com sombras e textura do produto real. A área tracejada é o limite de impressão.")}
               </p>
             </div>
           </Card>

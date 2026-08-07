@@ -185,26 +185,26 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="gap-2">
               <Sparkles className="w-4 h-4" />
-              {isEn ? "AI Consulting Toolbox" : "AI Consulting Toolbox"}
+              {isEn ? T("AI Consulting Toolbox") : T("AI Consulting Toolbox")}
             </Badge>
             <Badge variant="outline" className="gap-2">
               <FileText className="w-4 h-4" />
-              {isEn ? "Use cases + policy" : "Use cases + policy"}
+              {isEn ? T("Use cases + policy") : T("Use cases + policy")}
             </Badge>
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mt-3">
-            {isEn ? "Prioritize, govern and ship" : "Priorize, governe e entregue"}
+            {isEn ? T("Prioritize, govern and ship") : T("Priorize, governe e entregue")}
           </h2>
           <p className="text-muted-foreground mt-2">
             {isEn
-              ? "Generate a roadmap, governance policy and agent spec without external tools."
+              ? T("Generate a roadmap, governance policy and agent spec without external tools.")
               : T("Gere roadmap, política de governança e spec de agente sem ferramentas externas.")}
           </p>
         </div>
         <div className="rounded-2xl border border-border bg-background/60 px-5 py-4">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Target className="w-4 h-4" />
-            <span className="text-sm">{isEn ? "Top use case" : "Use case #1"}</span>
+            <span className="text-sm">{isEn ? T("Top use case") : T("Use case #1")}</span>
           </div>
           <div className="mt-1 text-base font-semibold">{prioritization[0]?.c ?? "-"}</div>
         </div>
@@ -214,52 +214,52 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
         <div className="md:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Company" : "Empresa"}</label>
-              <Input className="mt-2" value={company} onChange={(e) => setCompany(e.target.value)} placeholder={isEn ? "Example: VoltPay" : "Ex: VoltPay"} />
+              <label className="text-sm text-muted-foreground">{isEn ? T("Company") : T("Empresa")}</label>
+              <Input className="mt-2" value={company} onChange={(e) => setCompany(e.target.value)} placeholder={isEn ? T("Example: VoltPay") : T("Ex: VoltPay")} />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Team" : "Time"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Team") : T("Time")}</label>
               <Input className="mt-2" value={team} onChange={(e) => setTeam(e.target.value)} />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Objective" : "Objetivo"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Objective") : T("Objetivo")}</label>
               <Input className="mt-2" value={objective} onChange={(e) => setObjective(e.target.value)} />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground">{isEn ? "Data sensitivity" : "Sensibilidade de dados"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Data sensitivity") : T("Sensibilidade de dados")}</label>
               <Input className="mt-2" value={dataSensitivity} onChange={(e) => setDataSensitivity(e.target.value)} />
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm text-muted-foreground">{isEn ? "Use cases (one per line)" : "Use cases (um por linha)"}</label>
+              <label className="text-sm text-muted-foreground">{isEn ? T("Use cases (one per line)") : T("Use cases (um por linha)")}</label>
               <Textarea className="mt-2 min-h-[100px]" value={useCases} onChange={(e) => setUseCases(e.target.value)} />
             </div>
           </div>
 
           <Tabs defaultValue="prioritize" className="mt-6">
             <TabsList className="w-full flex flex-wrap">
-              <TabsTrigger value="prioritize" className="gap-2"><ListChecks className="w-4 h-4" />{isEn ? "Prioritize" : "Priorizar"}</TabsTrigger>
-              <TabsTrigger value="policy" className="gap-2"><Shield className="w-4 h-4" />{isEn ? "Policy" : T("Política")}</TabsTrigger>
-              <TabsTrigger value="agent" className="gap-2"><Bot className="w-4 h-4" />{isEn ? "Agent spec" : "Spec de agente"}</TabsTrigger>
+              <TabsTrigger value="prioritize" className="gap-2"><ListChecks className="w-4 h-4" />{isEn ? T("Prioritize") : T("Priorizar")}</TabsTrigger>
+              <TabsTrigger value="policy" className="gap-2"><Shield className="w-4 h-4" />{isEn ? T("Policy") : T("Política")}</TabsTrigger>
+              <TabsTrigger value="agent" className="gap-2"><Bot className="w-4 h-4" />{isEn ? T("Agent spec") : T("Spec de agente")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="prioritize" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Use case ranking" : "Ranking de use cases"}</p>
+                <p className="font-semibold">{isEn ? T("Use case ranking") : T("Ranking de use cases")}</p>
                 <Textarea className="mt-4 min-h-[240px]" readOnly value={prioritization.map((r) => `${r.c} | impact ${r.impact} | effort ${r.effort} | risk ${r.risk} | score ${r.score}`).join("\n")} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(prioritization.map((r) => r.c).join("\n"))}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy list" : "Copiar lista"}
+                  {isEn ? T("Copy list") : T("Copiar lista")}
                 </Button>
               </div>
             </TabsContent>
 
             <TabsContent value="policy" className="mt-4">
               <div className="rounded-2xl border border-border bg-background/50 p-5">
-                <p className="font-semibold">{isEn ? "Governance policy" : T("Política de governança")}</p>
+                <p className="font-semibold">{isEn ? T("Governance policy") : T("Política de governança")}</p>
                 <Textarea className="mt-4 min-h-[240px]" readOnly value={policy} />
                 <Button variant="outline" className="mt-3 gap-2" onClick={() => copyToClipboard(policy)}>
                   <Clipboard className="w-4 h-4" />
-                  {isEn ? "Copy" : "Copiar"}
+                  {isEn ? T("Copy") : T("Copiar")}
                 </Button>
               </div>
             </TabsContent>
@@ -267,20 +267,20 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
             <TabsContent value="agent" className="mt-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-2xl border border-border bg-background/50 p-5">
-                  <p className="font-semibold">{isEn ? "Rollout" : "Rollout"}</p>
+                  <p className="font-semibold">{isEn ? T("Rollout") : T("Rollout")}</p>
                   <div className="mt-4 grid gap-3">
                     <div className="grid gap-2">
-                      <label className="text-sm text-muted-foreground">{isEn ? "Weeks" : "Semanas"}</label>
+                      <label className="text-sm text-muted-foreground">{isEn ? T("Weeks") : T("Semanas")}</label>
                       <Input type="number" min={1} value={String(effortWeeks)} onChange={(e) => setEffortWeeks(Number(e.target.value) || 1)} />
                     </div>
                     <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(agentSpec)}>
                       <Clipboard className="w-4 h-4" />
-                      {isEn ? "Copy spec" : "Copiar spec"}
+                      {isEn ? T("Copy spec") : T("Copiar spec")}
                     </Button>
                   </div>
                 </div>
                 <div className="rounded-2xl border border-border bg-background/50 p-5">
-                  <p className="font-semibold">JSON</p>
+                  <p className="font-semibold">{T("JSON")}</p>
                   <Textarea className="mt-4 min-h-[240px]" readOnly value={agentSpec} />
                 </div>
               </div>
@@ -289,26 +289,26 @@ export function AIConsultingToolbox({ locale }: { locale: Locale }) {
         </div>
 
         <div className="rounded-2xl border border-border bg-background/60 p-5">
-          <p className="font-semibold">{isEn ? "Send me the report" : T("Me envia o relatório")}</p>
+          <p className="font-semibold">{isEn ? T("Send me the report") : T("Me envia o relatório")}</p>
           <p className="text-sm text-muted-foreground mt-2">
             {isEn
-              ? "Enter your email to save this diagnosis + next steps."
+              ? T("Enter your email to save this diagnosis + next steps.")
               : T("Informe seu email para salvar o diagnóstico + próximos passos.")}
           </p>
 
           <div className="mt-4 grid gap-3">
             <Input type="email" autoComplete="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder={isEn ? T("you@company.com") : T("voce@empresa.com")} />
             <Button onClick={sendLead} disabled={!leadEmail || sending} className="bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600">
-              {sending ? (isEn ? "Sending..." : "Enviando...") : (isEn ? "Save + send" : T("Salvar + enviar"))}
+              {sending ? (isEn ? T("Sending...") : T("Enviando...")) : (isEn ? T("Save + send") : T("Salvar + enviar"))}
             </Button>
             <Button variant="outline" className="gap-2" onClick={() => copyToClipboard(report)}>
               <Clipboard className="w-4 h-4" />
-              {isEn ? "Copy report" : T("Copiar relatório")}
+              {isEn ? T("Copy report") : T("Copiar relatório")}
             </Button>
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-background/50 p-4">
-            <p className="text-sm font-medium">{isEn ? "Preview" : T("Prévia")}</p>
+            <p className="text-sm font-medium">{isEn ? T("Preview") : T("Prévia")}</p>
             <Textarea value={report} readOnly className="mt-3 min-h-[220px]" />
           </div>
         </div>

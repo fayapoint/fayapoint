@@ -154,7 +154,8 @@ export function VideoIntroCurso({
                 className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300/90 sm:text-[11px]"
                 style={{ textShadow: "0 1px 10px rgba(0,0,0,.9)" }}
               >
-                Uma olhada por dentro
+                
+                {T("Uma olhada por dentro")}
               </p>
               <h2
                 className="mt-1 line-clamp-2 text-lg font-bold leading-tight text-white sm:text-3xl"

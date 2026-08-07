@@ -72,7 +72,7 @@ export default function EnhancedCoursePage() {
                 </Badge>
                 {discount > 0 && (
                   <Badge className="bg-red-600/20 text-red-400 border-red-500/50">
-                    -{discount}% OFF
+                    -{discount}{T("% OFF")}
                   </Badge>
                 )}
               </div>
@@ -88,7 +88,7 @@ export default function EnhancedCoursePage() {
               <div className="flex flex-wrap gap-4 text-sm">
                 <span className="flex items-center gap-1">
                   <Star className="text-yellow-400" size={18} />
-                  <strong>{course.rating}</strong> ({course.students.toLocaleString()} alunos)
+                  <strong>{course.rating}</strong> ({course.students.toLocaleString()}  {T("alunos)")}
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock size={18} />
@@ -100,7 +100,8 @@ export default function EnhancedCoursePage() {
                 </span>
                 <span className="flex items-center gap-1">
                   <Calendar size={18} />
-                  Atualizado: {T(course.lastUpdated)}
+                  
+                  {T("Atualizado:")} {T(course.lastUpdated)}
                 </span>
               </div>
               
@@ -120,14 +121,17 @@ export default function EnhancedCoursePage() {
                   <div>
                     {discount > 0 && (
                       <p className="text-muted-foreground line-through text-lg">
-                        R$ {course.originalPrice.toLocaleString('pt-BR')}
+                        
+                        {T("R$")} {course.originalPrice.toLocaleString('pt-BR')}
                       </p>
                     )}
                     <p className="text-4xl font-bold">
-                      R$ {course.price.toLocaleString('pt-BR')}
+                      
+                      {T("R$")} {course.price.toLocaleString('pt-BR')}
                     </p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      ou 12x de R$ {(course.price / 12).toFixed(2)}
+                      
+                      {T("ou 12x de R$")} {(course.price / 12).toFixed(2)}
                     </p>
                   </div>
                   
@@ -166,7 +170,7 @@ export default function EnhancedCoursePage() {
                   <Separator className="bg-gray-700" />
                   
                   <div className="text-center text-sm text-muted-foreground">
-                    <p>🔒 Compra 100% segura</p>
+                    <p>{T("🔒 Compra 100% segura")}</p>
                     <p className="mt-2">{T("✅ Satisfação garantida ou seu dinheiro de volta")}</p>
                   </div>
                 </div>
@@ -180,7 +184,8 @@ export default function EnhancedCoursePage() {
       <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
-            Impacto Transformador do {T(course.tool)}
+            
+            {T("Impacto Transformador do")} {T(course.tool)}
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -333,7 +338,8 @@ export default function EnhancedCoursePage() {
       <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
-            O Que Nossos Alunos Dizem
+            
+            {T("O Que Nossos Alunos Dizem")}
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -395,7 +401,8 @@ export default function EnhancedCoursePage() {
                   <h3 className="font-semibold mb-2">{T(bonus.title)}</h3>
                   <p className="text-sm text-muted-foreground mb-3">{T(bonus.description)}</p>
                   <p className="text-lg font-bold text-amber-400">
-                    Valor: R$ {bonus.value}
+                    
+                    {T("Valor: R$")} {bonus.value}
                   </p>
                 </Card>
               ))}
@@ -415,7 +422,8 @@ export default function EnhancedCoursePage() {
       <section className="py-16 bg-gradient-to-b from-black to-amber-900/10">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">
-            Perguntas Frequentes
+            
+            {T("Perguntas Frequentes")}
           </h2>
           
           <div className="max-w-3xl mx-auto space-y-4">
@@ -472,11 +480,13 @@ export default function EnhancedCoursePage() {
             </Button>
             <div className="text-left">
               <p className="text-3xl font-bold">
-                R$ {course.price.toLocaleString('pt-BR')}
+                
+                {T("R$")} {course.price.toLocaleString('pt-BR')}
               </p>
               {discount > 0 && (
                 <p className="text-muted-foreground line-through">
-                  R$ {course.originalPrice.toLocaleString('pt-BR')}
+                  
+                  {T("R$")} {course.originalPrice.toLocaleString('pt-BR')}
                 </p>
               )}
             </div>
@@ -495,11 +505,13 @@ export default function EnhancedCoursePage() {
             </span>
             <span className="flex items-center gap-2">
               <Users className="text-blue-400" />
-              Comunidade exclusiva
+              
+              {T("Comunidade exclusiva")}
             </span>
             <span className="flex items-center gap-2">
               <Zap className="text-amber-400" />
-              Acesso imediato
+              
+              {T("Acesso imediato")}
             </span>
           </div>
         </div>

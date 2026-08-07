@@ -194,7 +194,7 @@ export function ModalAssunto({
                   style={{ color: cor }}
                 >
                   {ehIa ? <Sparkles size={10} /> : ehBusca ? <Search size={10} /> : <BookOpen size={10} />}
-                  {ehIa ? `demanda de IA · ${ia?.nicho ?? ""}` : `${ehBusca ? "em alta" : T("mais lido")} · ${nomeDoLugar}`}
+                  {ehIa ? `demanda de IA · ${ia?.nicho ?? ""}` : `${ehBusca ? T("em alta") : T("mais lido")} · ${nomeDoLugar}`}
                 </span>
                 <span className="flex items-center gap-0.5 shrink-0 -mt-0.5 -mr-0.5">
                   <button
@@ -209,7 +209,7 @@ export function ModalAssunto({
                   </button>
                   <button
                     onClick={onFechar}
-                    aria-label="Fechar"
+                    aria-label={T("Fechar")}
                     className="grid place-items-center w-6 h-6 rounded text-white/40 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                   >
                     <X size={14} />
@@ -234,10 +234,10 @@ export function ModalAssunto({
                       : "—"}
                 </span>
                 <span className="text-[10px] text-white/45 leading-tight pb-0.5">
-                  {ehIa ? "nota do radar" : ehBusca ? "buscas" : "leituras"}
+                  {ehIa ? T("nota do radar") : ehBusca ? T("buscas") : T("leituras")}
                   <br />
                   <span className="inline-flex items-center gap-0.5 text-white/30">
-                    <Clock size={8} /> {ehIa ? T("posição no autocomplete") : ehBusca ? T("últimas 24h") : "ontem"}
+                    <Clock size={8} /> {ehIa ? T("posição no autocomplete") : ehBusca ? T("últimas 24h") : T("ontem")}
                   </span>
                 </span>
                 {assunto.temIa && !ehIa && (
@@ -260,7 +260,7 @@ export function ModalAssunto({
                       className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
                       style={{ background: "#38bdf826", color: "#38bdf8" }}
                     >
-                      <Search size={8} /> Google · {ia.posWeb + 1}º
+                      <Search size={8} />  {T("Google ·")} {ia.posWeb + 1}º
                     </span>
                   )}
                   {ia.posYt !== null && (
@@ -268,7 +268,7 @@ export function ModalAssunto({
                       className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
                       style={{ background: "#f472b626", color: "#f472b6" }}
                     >
-                      <Youtube size={8} /> YouTube · {ia.posYt + 1}º
+                      <Youtube size={8} />  {T("YouTube ·")} {ia.posYt + 1}º
                     </span>
                   )}
                   {ia.canais === "web+yt" && (
@@ -276,7 +276,8 @@ export function ModalAssunto({
                       className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
                       style={{ background: "#a3e63526", color: "#a3e635" }}
                     >
-                      confirmado nos dois
+                      
+                      {T("confirmado nos dois")}
                     </span>
                   )}
                   {ia.naNoticia && (
@@ -289,7 +290,7 @@ export function ModalAssunto({
                     </span>
                   )}
                   <span className="inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/35">
-                    {ia.sementes} {ia.sementes === 1 ? "pergunta distinta" : "perguntas distintas"}
+                    {ia.sementes} {ia.sementes === 1 ? T("pergunta distinta") : T("perguntas distintas")}
                   </span>
                 </div>
               )}
@@ -354,7 +355,7 @@ export function ModalAssunto({
                   className="radar-peca mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider transition-opacity hover:opacity-80"
                   style={{ ["--i" as string]: 5 } as React.CSSProperties}
                 >
-                  {ehIa ? T("Ver no") : "Ler em"} {assunto.veiculo ?? "fonte"} <ArrowUpRight size={12} />
+                  {ehIa ? T("Ver no") : T("Ler em")} {assunto.veiculo ?? T("fonte")} <ArrowUpRight size={12} />
                 </a>
               )}
             </div>

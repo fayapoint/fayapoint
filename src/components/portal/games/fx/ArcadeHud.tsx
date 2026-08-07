@@ -59,6 +59,7 @@ export function TimerBar({ remaining, progress }: { remaining: number; progress:
 /* ------------------------------------------------------------------ */
 
 export function ComboMeter({ streak, multiplier }: { streak: number; multiplier: number }) {
+  const T = useT();
   const reduced = useReducedMotion();
   const active = multiplier > 1;
 
@@ -83,7 +84,7 @@ export function ComboMeter({ streak, multiplier }: { streak: number; multiplier:
           >
             <Flame size={12} />
           </motion.span>
-          {streak} seguidos
+          {streak}  {T("seguidos")}
           {active && <span className="ml-0.5 rounded bg-amber-400/25 px-1">×{multiplier}</span>}
         </motion.div>
       )}
@@ -127,6 +128,7 @@ export function ScorePops({ events }: { events: ScoreEvent[] }) {
 /* ------------------------------------------------------------------ */
 
 export function ScoreBadge({ score, high }: { score: number; high?: number }) {
+  const T = useT();
   const reduced = useReducedMotion();
   const beating = high !== undefined && high > 0 && score > high;
 
@@ -147,7 +149,7 @@ export function ScoreBadge({ score, high }: { score: number; high?: number }) {
           className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider"
           style={{ color: beating ? LIME : "rgba(255,255,255,.4)" }}
         >
-          <Trophy size={10} /> {beating ? "recorde!" : high}
+          <Trophy size={10} /> {beating ? T("recorde!") : high}
         </span>
       )}
     </div>

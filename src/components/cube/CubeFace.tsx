@@ -147,21 +147,21 @@ export function CubeFace({ config, isActive, onFaceClick }: CubeFaceProps) {
 
         {content.type === "certificate" && (
           <div className={s.certCard}>
-            <div className={s.certHeader}>FAYAPOINT</div>
-            <div className={s.certSubheader}>Academia de Tecnologia & IA</div>
+            <div className={s.certHeader}>{T("FAYAPOINT")}</div>
+            <div className={s.certSubheader}>{T("Academia de Tecnologia & IA")}</div>
             <div className={s.certDivider} />
             <div className={s.certLabel}>{T("Certificado de Conclusao")}</div>
             <div className={s.certName}>{T(content.name)}</div>
             <div className={s.certCourse}>{T(content.course)}</div>
             <div className={s.certSeal}>🏅</div>
             <div className={s.certMeta}>
-              <span>Avaliacao: {T(content.score)}</span>
+              <span>{T("Avaliacao:")} {T(content.score)}</span>
               <span>•</span>
               <span>{T(content.code)}</span>
             </div>
             <div className={s.certFooter}>
-              <span>Ricardo Faya</span>
-              <span>FayAi Academy</span>
+              <span>{T("Ricardo Faya")}</span>
+              <span>{T("FayAi Academy")}</span>
             </div>
           </div>
         )}

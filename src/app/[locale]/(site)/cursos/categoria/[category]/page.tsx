@@ -69,7 +69,7 @@ export default function CoursesByCategoryPage() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
                   <Input
-                    placeholder="Buscar nesta categoria..."
+                    placeholder={T("Buscar nesta categoria...")}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 bg-input border-border"
@@ -79,11 +79,11 @@ export default function CoursesByCategoryPage() {
 
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="bg-input border-border">
-                  <SelectValue placeholder="Ordenar por" />
+                  <SelectValue placeholder={T("Ordenar por")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="popular">{T("Mais Popular")}</SelectItem>
-                  <SelectItem value="rating">Melhor Avaliado</SelectItem>
+                  <SelectItem value="rating">{T("Melhor Avaliado")}</SelectItem>
                   <SelectItem value="price-low">{T("Menor Preço")}</SelectItem>
                   <SelectItem value="price-high">{T("Maior Preço")}</SelectItem>
                   <SelectItem value="students">{T("Mais Alunos")}</SelectItem>
@@ -123,8 +123,8 @@ export default function CoursesByCategoryPage() {
                       </div>
                       <div className="flex items-center justify-between">
                         <div>
-                          {course.oldPrice && <span className="text-muted-foreground line-through text-sm">R$ {course.oldPrice.toLocaleString("pt-BR")}</span>}
-                          <span className="text-2xl font-bold ml-2">R$ {course.price.toLocaleString("pt-BR")}</span>
+                          {course.oldPrice && <span className="text-muted-foreground line-through text-sm">{T("R$")} {course.oldPrice.toLocaleString("pt-BR")}</span>}
+                          <span className="text-2xl font-bold ml-2">{T("R$")} {course.price.toLocaleString("pt-BR")}</span>
                         </div>
                         <ChevronRight className="text-muted-foreground group-hover:text-amber-400 transition" />
                       </div>

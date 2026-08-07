@@ -110,7 +110,7 @@ export default function CourseSalesPage() {
               <div className="lg:col-span-2">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-                  <Link href="/" className="hover:text-white">Home</Link>
+                  <Link href="/" className="hover:text-white">{T("Home")}</Link>
                   <ChevronRight size={14} />
                   <Link href="/cursos" className="hover:text-white">{T("Cursos")}</Link>
                   <ChevronRight size={14} />
@@ -122,7 +122,8 @@ export default function CourseSalesPage() {
                   {product.metrics.students > 5000 && (
                     <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-0">
                       <Flame className="mr-1" size={14} />
-                      Bestseller #{1}
+                      
+                      {T("Bestseller #")}{1}
                     </Badge>
                   )}
                   <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-black border-0">
@@ -163,7 +164,7 @@ export default function CourseSalesPage() {
                     <Users className="text-amber-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.students.toLocaleString()}</div>
-                      <div className="text-xs text-muted-foreground">alunos matriculados</div>
+                      <div className="text-xs text-muted-foreground">{T("alunos matriculados")}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
@@ -182,7 +183,7 @@ export default function CourseSalesPage() {
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">{T("Criado por")}</div>
-                    <div className="font-bold text-lg">Ricardo Faya</div>
+                    <div className="font-bold text-lg">{T("Ricardo Faya")}</div>
                     <div className="text-sm text-muted-foreground">{T("18 cursos de IA • 28 anos experiência em mídia e tech")}</div>
                   </div>
                 </div>
@@ -203,7 +204,8 @@ export default function CourseSalesPage() {
                         </motion.div>
                       </div>
                       <div className="absolute top-3 right-3 bg-black/70 px-3 py-1 rounded-full text-sm font-semibold">
-                        Preview Gratuito
+                        
+                        {T("Preview Gratuito")}
                       </div>
                       <div className="absolute bottom-3 left-3 bg-black/70 px-3 py-1 rounded-full text-sm">
                         <Clock className="inline mr-1" size={14} />
@@ -215,7 +217,7 @@ export default function CourseSalesPage() {
                     <div className="mb-6 p-4 bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-lg border border-green-500/30">
                       <div className="flex items-center gap-2 mb-2">
                         <Shield className="text-green-400" size={20} />
-                        <span className="font-bold text-green-400">COMPRA SEGURA</span>
+                        <span className="font-bold text-green-400">{T("COMPRA SEGURA")}</span>
                       </div>
                       <div className="space-y-2 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
@@ -237,7 +239,8 @@ export default function CourseSalesPage() {
                     <div className="mb-6">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="text-muted-foreground line-through text-2xl">
-                          R$ {product.pricing.originalPrice.toLocaleString()}
+                          
+                          {T("R$")} {product.pricing.originalPrice.toLocaleString()}
                         </span>
                         <Badge className="bg-red-500 text-white text-lg px-3 py-1">
                           -{discount}%
@@ -245,15 +248,18 @@ export default function CourseSalesPage() {
                       </div>
                       <div className="flex items-baseline gap-2 mb-2">
                         <span className="text-5xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
-                          R$ {product.pricing.price.toLocaleString()}
+                          
+                          {T("R$")} {product.pricing.price.toLocaleString()}
                         </span>
                       </div>
                       <p className="text-muted-foreground">
-                        ou <span className="font-semibold text-white">12x de R$ {(product.pricing.price / 12).toFixed(2)}</span>  {T("sem juros")}
+                        
+                        {T("ou")} <span className="font-semibold text-white">{T("12x de R$")} {(product.pricing.price / 12).toFixed(2)}</span>  {T("sem juros")}
                       </p>
                       <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
                         <span className="text-green-400 font-bold">
-                          Economize R$ {savings.toLocaleString()} hoje!
+                          
+                          {T("Economize R$")} {savings.toLocaleString()}  {T("hoje!")}
                         </span>
                       </div>
                     </div>
@@ -318,11 +324,11 @@ export default function CourseSalesPage() {
                     <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <BadgeCheck size={14} />
-                        <span>Compra Segura</span>
+                        <span>{T("Compra Segura")}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Lock size={14} />
-                        <span>Dados Protegidos</span>
+                        <span>{T("Dados Protegidos")}</span>
                       </div>
                     </div>
                   </Card>
@@ -381,7 +387,8 @@ export default function CourseSalesPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Imagine transformar <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{T("sua vida profissional")}</span>  {T("em apenas 30 dias")}
+                
+                {T("Imagine transformar")} <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{T("sua vida profissional")}</span>  {T("em apenas 30 dias")}
               </h2>
             </div>
 
@@ -391,7 +398,8 @@ export default function CourseSalesPage() {
                 <div className="p-8 bg-secondary/50 border-2 border-border rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-red-500/20 text-red-400 border-red-500/50">
-                      ANTES
+                      
+                      {T("ANTES")}
                     </Badge>
                   </div>
                   <ul className="space-y-4">
@@ -414,7 +422,8 @@ export default function CourseSalesPage() {
                 <div className="p-8 bg-gradient-to-br from-amber-900/30 to-yellow-900/30 border-2 border-amber-500 rounded-2xl">
                   <div className="text-center mb-6">
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                      DEPOIS
+                      
+                      {T("DEPOIS")}
                     </Badge>
                   </div>
                   <ul className="space-y-4">
@@ -460,7 +469,7 @@ export default function CourseSalesPage() {
             <div className="max-w-5xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
                 
-                {T("O que você vai")} <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">dominar</span>
+                {T("O que você vai")} <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">{T("dominar")}</span>
               </h2>
               <p className="text-xl text-muted-foreground text-center mb-12">
                 

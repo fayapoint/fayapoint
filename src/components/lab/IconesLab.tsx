@@ -210,7 +210,7 @@ export function IconesLab() {
       <p className="text-sm text-white/55 max-w-2xl mb-4">
         
         {T("As peças que estão no menu do portal — família")}{" "}
-        <strong className="text-white/75">{T("sólida")}</strong>{T(", escolhida por ser a única em que nenhuma\n        das dezessete passa de 120 KB (o facetado tinha uma de 340, o emblema uma de 207). No portal\n        elas aparecem")} <strong className="text-white/75">no hover</strong>{T(": a leitura padrão continua\n        sendo o ícone vetorial.")}
+        <strong className="text-white/75">{T("sólida")}</strong>{T(", escolhida por ser a única em que nenhuma\n        das dezessete passa de 120 KB (o facetado tinha uma de 340, o emblema uma de 207). No portal\n        elas aparecem")} <strong className="text-white/75">{T("no hover")}</strong>{T(": a leitura padrão continua\n        sendo o ícone vetorial.")}
       </p>
 
       <div className="mb-5 flex flex-wrap items-start gap-4">
@@ -218,8 +218,7 @@ export function IconesLab() {
         <p className="text-[12px] text-white/45 leading-relaxed max-w-xs pt-1">
           
           {T("É assim que aparece no portal: passe o cursor e o vetorial dá lugar à peça. Só um item\n          desenha por vez — o cursor está sobre um só, e é isso que mantém")}{" "}
-          <strong className="text-white/70">um contexto WebGL</strong> no menu inteiro em vez de
-          dezessete.
+          <strong className="text-white/70">{T("um contexto WebGL")}</strong>  {T("no menu inteiro em vez de\r\n          dezessete.")}
         </p>
       </div>
 
@@ -255,7 +254,7 @@ export function IconesLab() {
       </div>
 
       <p className="mt-3 text-[11px] text-white/35">
-        {ICONES_3D.length}  {T("peças ·")} {total} KB no total. A grade inteira usa{" "}
+        {ICONES_3D.length}  {T("peças ·")} {total}  {T("KB no total. A grade inteira usa")}{" "}
         <strong className="text-white/55">{T("uma única tela WebGL")}</strong>{T(", com as peças posicionadas\n        em pixels sobre os cartões — com uma tela por cartão, medido aqui, 5 dos 11 contextos vinham\n        perdidos e os cartões apareciam vazios.")}
       </p>
     </div>

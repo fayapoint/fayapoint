@@ -57,7 +57,8 @@ export function PromptBuilderGame() {
         <div className="min-w-0">
           <h3 className="font-bold text-base flex items-center gap-2">
             <Sparkles size={16} className="text-amber-400" />
-            Minigame: Monte o Prompt
+            
+            {T("Minigame: Monte o Prompt")}
           </h3>
           <p className="text-sm text-muted-foreground mt-0.5">
             
@@ -98,7 +99,7 @@ export function PromptBuilderGame() {
       </div>
 
       <button onClick={surpreender} className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-violet-400/35 bg-violet-400/10 px-4 py-2 text-sm font-bold text-violet-200 hover:bg-violet-400/15">
-        <Dices size={15} /> Surpreenda-me
+        <Dices size={15} />  {T("Surpreenda-me")}
       </button>
 
       <AnimatePresence>
@@ -123,14 +124,15 @@ export function PromptBuilderGame() {
                 style={{ background: "linear-gradient(135deg, #f5c04e, #ffd97a)" }}
               >
                 {copiado ? <Check size={15} /> : <Copy size={15} />}
-                {copiado ? "Copiado!" : "Copiar prompt"}
+                {copiado ? T("Copiado!") : T("Copiar prompt")}
               </button>
               <button
                 onClick={() => { setEscolhas({}); setCopiado(false); }}
                 className="flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
               >
                 <RefreshCw size={14} />
-                Montar outra
+                
+                {T("Montar outra")}
               </button>
               <span className="text-[12px] text-muted-foreground">
                 

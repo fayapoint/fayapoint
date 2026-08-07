@@ -46,7 +46,8 @@ export function Lab3D() {
       <div className="max-w-6xl mx-auto">
         <header>
           <h1 className="text-4xl sm:text-5xl tracking-wide" style={bebas}>
-            BANCADA <span style={{ color: GOLD }}>3D</span>
+            
+            {T("BANCADA")} <span style={{ color: GOLD }}>{T("3D")}</span>
           </h1>
           <p className="mt-1 text-sm max-w-2xl" style={{ opacity: 0.6 }}>
             
@@ -64,7 +65,8 @@ export function Lab3D() {
             opacity: 0.75,
           }}
         >
-          fundo {fundoClaro ? "claro" : "escuro"} — trocar
+          
+          {T("fundo")} {fundoClaro ? T("claro") : T("escuro")}  {T("— trocar")}
         </button>
 
         <section className="mt-6">
@@ -96,7 +98,8 @@ export function Lab3D() {
                           className="rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
                           style={{ background: `${GOLD}22`, color: GOLD }}
                         >
-                          no ar hoje
+                          
+                          {T("no ar hoje")}
                         </span>
                       )}
                       <span
@@ -114,7 +117,7 @@ export function Lab3D() {
                     style={{ background: fundoClaro ? "rgba(0,0,0,.04)" : "rgba(0,0,0,.35)" }}
                   >
                     <span className="text-5xl tracking-wide select-none" style={bebas}>
-                      <LogoFayai texto="FAYAI" variante={id} />
+                      <LogoFayai texto={T("FAYAI")} variante={id} />
                     </span>
                   </div>
 

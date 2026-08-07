@@ -207,7 +207,7 @@ export function PricingSection() {
           <p className="text-sm text-muted-foreground/70">
             {isPtBr
               ? T("Curso gratis do mes, rotacao mensal e certificacao usam a mesma regra mostrada nestes planos.")
-              : "The free course of the month, monthly rotation, and certification follow the same rules shown in these plans."}
+              : T("The free course of the month, monthly rotation, and certification follow the same rules shown in these plans.")}
           </p>
         </motion.div>
       </div>

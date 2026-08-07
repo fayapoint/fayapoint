@@ -134,7 +134,7 @@ export function CartPanel() {
     const newQuantity = item.quantity + delta;
     if (newQuantity <= 0) {
       removeItem(item.id);
-      toast.success("Item removido");
+      toast.success(T("Item removido"));
     } else {
       setItemQuantity(item.id, newQuantity);
     }
@@ -147,10 +147,10 @@ export function CartPanel() {
     
     if (couponCode.toUpperCase() === "FAYA10") {
       setAppliedCoupon({ code: "FAYA10", discount: 10 });
-      toast.success("Cupom aplicado: 10% de desconto!");
+      toast.success(T("Cupom aplicado: 10% de desconto!"));
     } else if (couponCode.toUpperCase() === "FAYA20") {
       setAppliedCoupon({ code: "FAYA20", discount: 20 });
-      toast.success("Cupom aplicado: 20% de desconto!");
+      toast.success(T("Cupom aplicado: 20% de desconto!"));
     } else {
       toast.error(T("Cupom inválido"));
     }
@@ -213,7 +213,7 @@ export function CartPanel() {
                 <button
                   onClick={() => {
                     removeItem(item.id);
-                    toast.success("Removido");
+                    toast.success(T("Removido"));
                   }}
                   className="opacity-0 group-hover:opacity-100 transition p-1 hover:bg-red-500/20 rounded-lg text-red-400"
                 >
@@ -275,7 +275,7 @@ export function CartPanel() {
           <div className="space-y-2 text-sm">
             {productItems.length > 0 && (
               <div className="flex justify-between gap-2 text-muted-foreground">
-                <span className="flex items-center gap-1.5 min-w-0 truncate"><Store size={14} className="shrink-0" /> Produtos ({productItems.length})</span>
+                <span className="flex items-center gap-1.5 min-w-0 truncate"><Store size={14} className="shrink-0" />  {T("Produtos (")}{productItems.length})</span>
                 <span className="shrink-0">{formatPrice(productItems.reduce((sum, i) => sum + i.price * i.quantity, 0))}</span>
               </div>
             )}
@@ -296,10 +296,10 @@ export function CartPanel() {
 
         {/* Coupon */}
         <div>
-          <label className="text-xs text-muted-foreground mb-2 block">Cupom de Desconto</label>
+          <label className="text-xs text-muted-foreground mb-2 block">{T("Cupom de Desconto")}</label>
           <div className="flex gap-2">
             <Input
-              placeholder="FAYA10"
+              placeholder={T("FAYA10")}
               className="bg-secondary border-border text-sm h-9"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value)}
@@ -310,7 +310,7 @@ export function CartPanel() {
                 size="sm"
                 variant="outline"
                 className="border-red-500/30 text-red-400 h-9"
-                onClick={() => { setAppliedCoupon(null); toast.success("Removido"); }}
+                onClick={() => { setAppliedCoupon(null); toast.success(T("Removido")); }}
               >
                 <X size={14} />
               </Button>
@@ -322,13 +322,13 @@ export function CartPanel() {
                 onClick={handleApplyCoupon}
                 disabled={isApplyingCoupon}
               >
-                {isApplyingCoupon ? "..." : "Aplicar"}
+                {isApplyingCoupon ? "..." : T("Aplicar")}
               </Button>
             )}
           </div>
           {appliedCoupon && (
             <p className="text-xs text-green-400 mt-2 flex items-center gap-1">
-              <Check size={12} /> {appliedCoupon.discount}% de desconto aplicado
+              <Check size={12} /> {appliedCoupon.discount}{T("% de desconto aplicado")}
             </p>
           )}
         </div>
@@ -336,25 +336,26 @@ export function CartPanel() {
         {/* Totals */}
         <div className="space-y-2 pt-4 border-t border-border">
           <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Subtotal</span>
+            <span>{T("Subtotal")}</span>
             <span>{formatPrice(cartTotal)}</span>
           </div>
           {appliedCoupon && (
             <div className="flex justify-between text-sm text-green-400">
-              <span>Desconto</span>
+              <span>{T("Desconto")}</span>
               <span>-{formatPrice(discountAmount)}</span>
             </div>
           )}
           <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Frete</span>
+            <span>{T("Frete")}</span>
             <span className="text-green-400">{T("Grátis")}</span>
           </div>
           <div className="flex justify-between pt-2 border-t border-border">
-            <span className="font-semibold">Total</span>
+            <span className="font-semibold">{T("Total")}</span>
             <span className="text-xl md:text-2xl font-bold text-green-400">{formatPrice(finalTotal)}</span>
           </div>
           <p className="text-[10px] text-muted-foreground text-right">
-            ou 12x de {formatPrice(finalTotal / 12)}  {T("sem juros")}
+            
+            {T("ou 12x de")} {formatPrice(finalTotal / 12)}  {T("sem juros")}
           </p>
         </div>
 
@@ -365,7 +366,8 @@ export function CartPanel() {
           onClick={() => router.push("/pt-BR/checkout/cart")}
         >
           <CreditCard size={18} className="mr-2" />
-          Finalizar Compra
+          
+          {T("Finalizar Compra")}
         </Button>
 
         {/* Trust */}
@@ -377,11 +379,13 @@ export function CartPanel() {
           </div>
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
             <Shield size={12} className="text-blue-400" />
-            Compra Segura
+            
+            {T("Compra Segura")}
           </div>
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
             <Tag size={12} className="text-amber-400" />
-            Garantia
+            
+            {T("Garantia")}
           </div>
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
             <CreditCard size={12} className="text-yellow-400" />
@@ -452,7 +456,8 @@ export function CartPanel() {
                       onClick={() => { clearCart(); toast.success(T("Carrinho limpo")); }}
                     >
                       <Trash2 size={14} />
-                      Limpar tudo
+                      
+                      {T("Limpar tudo")}
                     </Button>
                   </div>
 
@@ -460,7 +465,7 @@ export function CartPanel() {
                   {productItems.length > 0 && (
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-                        <Store size={14} /> Produtos ({productItems.length})
+                        <Store size={14} />  {T("Produtos (")}{productItems.length})
                       </h3>
                       <div className="space-y-3">
                         {productItems.map(item => <CartItemCard key={item.id} item={item} />)}
@@ -512,7 +517,8 @@ export function CartPanel() {
               <h2 className="text-base md:text-lg font-bold truncate">{T("Histórico de Pedidos")}</h2>
               <Button variant="outline" size="sm" className="border-border gap-1.5 md:gap-2 shrink-0" onClick={fetchOrders}>
                 <Download size={14} />
-                Atualizar
+                
+                {T("Atualizar")}
               </Button>
             </div>
 

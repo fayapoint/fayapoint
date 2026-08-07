@@ -103,7 +103,7 @@ export default function VerifyCertificatePage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <Link href={`/${locale}`} className="flex items-center gap-2 text-white/50 transition-colors hover:text-white">
             <ArrowLeft size={16} />
-            <span className="text-sm font-black tracking-[.22em]">FAYAI</span>
+            <span className="text-sm font-black tracking-[.22em]">{T("FAYAI")}</span>
           </Link>
           <div className="flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.07] px-3 py-1.5">
             <ShieldCheck size={14} className="text-emerald-400" />
@@ -116,7 +116,7 @@ export default function VerifyCertificatePage() {
         {loading ? (
           <div className="py-28 text-center">
             <Loader2 className="mx-auto mb-4 h-10 w-10 animate-spin text-violet-400" />
-            <p className="text-sm text-white/40">Validando o registro FayAi...</p>
+            <p className="text-sm text-white/40">{T("Validando o registro FayAi...")}</p>
           </div>
         ) : valid && certificate ? (
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
@@ -129,7 +129,7 @@ export default function VerifyCertificatePage() {
               >
                 <CheckCircle2 className="h-7 w-7 text-emerald-400" />
               </motion.div>
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[.24em] text-emerald-300">Autenticidade confirmada</p>
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[.24em] text-emerald-300">{T("Autenticidade confirmada")}</p>
               <h1 className="text-3xl font-black tracking-tight sm:text-5xl">{T("Uma conquista que pode ser verificada.")}</h1>
               <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/45 sm:text-base">
                 
@@ -148,7 +148,7 @@ export default function VerifyCertificatePage() {
 
               <aside className="overflow-hidden rounded-[1.4rem] border border-white/[0.08] bg-white/[0.035] backdrop-blur-xl">
                 <div className="border-b border-white/[0.06] p-5">
-                  <p className="text-[9px] font-bold uppercase tracking-[.2em] text-white/30">Titular</p>
+                  <p className="text-[9px] font-bold uppercase tracking-[.2em] text-white/30">{T("Titular")}</p>
                   <h2 className="mt-1 text-xl font-black text-white">{T(certificate.studentName)}</h2>
                   <p className="mt-1 text-sm font-semibold text-amber-300">{T(certificate.courseTitle)}</p>
                 </div>
@@ -171,12 +171,12 @@ export default function VerifyCertificatePage() {
                 <div className="space-y-2 p-5">
                   <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="block">
                     <Button className="h-11 w-full rounded-xl bg-[#0a66c2] font-bold text-white hover:bg-[#1877d2]">
-                      <Linkedin className="mr-2 h-4 w-4" /> Compartilhar no LinkedIn
+                      <Linkedin className="mr-2 h-4 w-4" />  {T("Compartilhar no LinkedIn")}
                     </Button>
                   </a>
                   <Button onClick={copyLink} variant="outline" className="h-11 w-full rounded-xl border-white/10 bg-white/[0.03] text-white/70 hover:bg-white/[0.07] hover:text-white">
                     {copied ? <Check className="mr-2 h-4 w-4 text-emerald-400" /> : <Copy className="mr-2 h-4 w-4" />}
-                    {copied ? "Link copiado" : T("Copiar link público")}
+                    {copied ? T("Link copiado") : T("Copiar link público")}
                   </Button>
                 </div>
               </aside>
@@ -186,7 +186,7 @@ export default function VerifyCertificatePage() {
               {certificate.courseLevel && <span>{T(certificate.courseLevel)}</span>}
               {certificate.courseDuration && <span>{T(certificate.courseDuration)}</span>}
               {certificate.courseCategory && <span>{T(certificate.courseCategory)}</span>}
-              {certificate.totalStudyHours > 0 && <span>{certificate.totalStudyHours}h de estudo</span>}
+              {certificate.totalStudyHours > 0 && <span>{certificate.totalStudyHours}{T("h de estudo")}</span>}
               <span className="flex items-center gap-1 text-emerald-300/60"><ShieldCheck className="h-3 w-3" />  {T("Código")} {T(certificate.verificationCode)}</span>
             </div>
           </motion.div>
@@ -214,7 +214,7 @@ export default function VerifyCertificatePage() {
             className="flex gap-2"
           >
             <input name="verifyCode" placeholder={T("Código de verificação")} className="min-w-0 flex-1 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/20 focus:border-amber-400/30" />
-            <Button type="submit" className="rounded-xl bg-amber-400 px-5 font-bold text-[#17120a] hover:bg-amber-300">Verificar</Button>
+            <Button type="submit" className="rounded-xl bg-amber-400 px-5 font-bold text-[#17120a] hover:bg-amber-300">{T("Verificar")}</Button>
           </form>
         </div>
       </main>

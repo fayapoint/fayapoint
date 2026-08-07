@@ -91,7 +91,7 @@ export function ServicePackagesSection() {
                       {packageEmojis[pkg.unitLabel] ?? "✨"}
                     </span>
                     <Badge variant="secondary" className="uppercase tracking-widest text-xs">
-                      {pkg.category === "packages" ? "Bundle" : pkg.category}
+                      {pkg.category === "packages" ? T("Bundle") : pkg.category}
                     </Badge>
                   </div>
                   <div>

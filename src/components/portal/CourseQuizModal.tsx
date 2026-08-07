@@ -264,7 +264,7 @@ export function CourseQuizModal({
             <div className="grid grid-cols-2 gap-3 mb-6">
               <Card className="bg-white/[0.03] border-white/[0.06] p-4 text-center">
                 <p className="text-2xl font-bold text-violet-400">{config.totalQuestions}</p>
-                <p className="text-xs text-white/30">Perguntas</p>
+                <p className="text-xs text-white/30">{T("Perguntas")}</p>
               </Card>
               <Card className="bg-white/[0.03] border-white/[0.06] p-4 text-center">
                 <p className="text-2xl font-bold text-emerald-400">{config.passingScore}%</p>
@@ -272,7 +272,7 @@ export function CourseQuizModal({
               </Card>
               <Card className="bg-white/[0.03] border-white/[0.06] p-4 text-center">
                 <p className="text-2xl font-bold text-amber-400">{config.currentAttempt}/{config.maxAttempts}</p>
-                <p className="text-xs text-white/30">Tentativa</p>
+                <p className="text-xs text-white/30">{T("Tentativa")}</p>
               </Card>
               <Card className="bg-white/[0.03] border-white/[0.06] p-4 text-center">
                 <p className="text-2xl font-bold text-blue-400">∞</p>
@@ -284,11 +284,11 @@ export function CourseQuizModal({
               <div className="flex gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-white/50">
-                  <p className="font-medium text-white/70 mb-1">Importante</p>
+                  <p className="font-medium text-white/70 mb-1">{T("Importante")}</p>
                   <ul className="space-y-1 text-xs">
                     <li>{T("• As perguntas são geradas por IA com base no conteúdo do curso")}</li>
                     <li>{T("• Você precisa acertar pelo menos")} {config.passingScore}{T("% para receber o certificado")}</li>
-                    <li>{T("• Você tem")} {config.remainingAttempts} tentativa{config.remainingAttempts !== 1 ? "s" : ""} restante{config.remainingAttempts !== 1 ? "s" : ""}</li>
+                    <li>{T("• Você tem")} {config.remainingAttempts}  {T("tentativa")}{config.remainingAttempts !== 1 ? "s" : ""}  {T("restante")}{config.remainingAttempts !== 1 ? "s" : ""}</li>
                     <li>{T("• Ao passar, seu certificado será emitido automaticamente")}</li>
                   </ul>
                 </div>
@@ -297,7 +297,8 @@ export function CourseQuizModal({
 
             <div className="flex gap-3">
               <Button variant="outline" onClick={onClose} className="flex-1 border-white/[0.08] text-white/40">
-                Cancelar
+                
+                {T("Cancelar")}
               </Button>
               <Button
                 onClick={() => setPhase("quiz")}
@@ -318,9 +319,10 @@ export function CourseQuizModal({
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-white/30">
-                  Pergunta {currentQuestion + 1} de {questions.length}
+                  
+                  {T("Pergunta")} {currentQuestion + 1}  {T("de")} {questions.length}
                 </span>
-                <span className="text-xs text-violet-400">{progress}% respondido</span>
+                <span className="text-xs text-violet-400">{progress}{T("% respondido")}</span>
               </div>
               <div className="h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
                 <motion.div
@@ -460,19 +462,20 @@ export function CourseQuizModal({
               </div>
               <h2 className="text-xl font-bold text-white mb-1">{T("Não foi dessa vez")}</h2>
               <p className="text-sm text-white/40">
-                Nota: <span className="text-red-400 font-bold">{results.score}%</span>  {T("· Mínimo:")} {results.passingScore}%
+                
+                {T("Nota:")} <span className="text-red-400 font-bold">{results.score}%</span>  {T("· Mínimo:")} {results.passingScore}%
               </p>
             </div>
 
             <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-4 mb-4">
               <p className="text-sm text-white/50 text-center">
                 
-                {T("Você acertou")} <span className="text-white font-bold">{results.correctCount}</span> de{" "}
-                <span className="text-white font-bold">{results.totalQuestions}</span> perguntas.
+                {T("Você acertou")} <span className="text-white font-bold">{results.correctCount}</span>  {T("de")}{" "}
+                <span className="text-white font-bold">{results.totalQuestions}</span>  {T("perguntas.")}
                 {results.remainingAttempts && results.remainingAttempts > 0 ? (
                   <span className="block mt-1 text-amber-400/70">
                     
-                    {T("Você ainda tem")} {results.remainingAttempts} tentativa{results.remainingAttempts !== 1 ? "s" : ""}.
+                    {T("Você ainda tem")} {results.remainingAttempts}  {T("tentativa")}{results.remainingAttempts !== 1 ? "s" : ""}.
                   </span>
                 ) : (
                   <span className="block mt-1 text-red-400/70">
@@ -505,7 +508,8 @@ export function CourseQuizModal({
                       <p className="text-white/70 text-xs leading-relaxed">{T(qr.question)}</p>
                       {!qr.isCorrect && (
                         <p className="text-emerald-400/60 text-[11px] mt-1">
-                          Correta: {T(qr.options[qr.correctAnswer])}
+                          
+                          {T("Correta:")} {T(qr.options[qr.correctAnswer])}
                         </p>
                       )}
                     </div>
@@ -516,14 +520,16 @@ export function CourseQuizModal({
 
             <div className="flex gap-3">
               <Button variant="outline" onClick={onClose} className="flex-1 border-white/[0.08] text-white/40">
-                Fechar
+                
+                {T("Fechar")}
               </Button>
               {results.remainingAttempts && results.remainingAttempts > 0 && (
                 <Button
                   onClick={loadQuiz}
                   className="flex-1 bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500"
                 >
-                  Tentar Novamente
+                  
+                  {T("Tentar Novamente")}
                 </Button>
               )}
             </div>
@@ -577,7 +583,7 @@ export function CourseQuizModal({
                     <span className="text-white/70 font-mono">{T(results.certificate.certificateNumber)}</span>
                   </div>
                   <div className="bg-black/20 rounded-lg p-2">
-                    <span className="text-white/30 block">Nota</span>
+                    <span className="text-white/30 block">{T("Nota")}</span>
                     <span className="text-emerald-400 font-bold">{results.score}%</span>
                   </div>
                   <div className="bg-black/20 rounded-lg p-2">
@@ -585,7 +591,7 @@ export function CourseQuizModal({
                     <span className="text-amber-400/80 font-mono text-[10px]">{T(results.certificate.verificationCode)}</span>
                   </div>
                   <div className="bg-black/20 rounded-lg p-2">
-                    <span className="text-white/30 block">XP Ganho</span>
+                    <span className="text-white/30 block">{T("XP Ganho")}</span>
                     <span className="text-violet-400 font-bold">+{results.xpEarned || 500}</span>
                   </div>
                 </div>
@@ -601,7 +607,8 @@ export function CourseQuizModal({
                   {T("Baixar Certificado PDF")}
                 </Button>
                 <Button variant="outline" onClick={onClose} className="border-white/[0.08] text-white/40">
-                  Fechar
+                  
+                  {T("Fechar")}
                 </Button>
               </div>
             </motion.div>
@@ -627,10 +634,12 @@ export function CourseQuizModal({
                 className="bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500"
               >
                 <Download className="w-4 h-4 mr-2" />
-                Baixar PDF
+                
+                {T("Baixar PDF")}
               </Button>
               <Button variant="outline" onClick={onClose} className="border-white/[0.08] text-white/40">
-                Fechar
+                
+                {T("Fechar")}
               </Button>
             </div>
           </div>
@@ -642,10 +651,11 @@ export function CourseQuizModal({
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
               <AlertTriangle className="w-8 h-8 text-red-400" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Tentativas Esgotadas</h2>
+            <h2 className="text-xl font-bold text-white mb-2">{T("Tentativas Esgotadas")}</h2>
             <p className="text-sm text-white/40 mb-6">{T(errorMsg)}</p>
             <Button variant="outline" onClick={onClose} className="border-white/[0.08] text-white/40">
-              Fechar
+              
+              {T("Fechar")}
             </Button>
           </div>
         )}
@@ -663,10 +673,12 @@ export function CourseQuizModal({
                 onClick={() => { setErrorMsg(""); loadQuiz(); }}
                 className="bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500"
               >
-                Tentar Novamente
+                
+                {T("Tentar Novamente")}
               </Button>
               <Button variant="outline" onClick={onClose} className="border-white/[0.08] text-white/40">
-                Fechar
+                
+                {T("Fechar")}
               </Button>
             </div>
           </div>

@@ -113,7 +113,7 @@ export function CartaoPersona({ onAbrir }: { onAbrir: () => void }) {
           className="hidden shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-extrabold text-[#241a05] transition-opacity group-hover:opacity-90 sm:inline-flex"
           style={{ background: "linear-gradient(135deg, #a78bfa, #c4b5fd)" }}
         >
-          {proxima ? "Responder" : T("Abrir")} <ChevronRight size={14} />
+          {proxima ? T("Responder") : T("Abrir")} <ChevronRight size={14} />
         </span>
       </div>
 

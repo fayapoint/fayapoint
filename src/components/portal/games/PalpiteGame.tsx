@@ -119,7 +119,7 @@ export function PalpiteGame() {
           
           {T("Escolha um tema, veja a mágica e dê seu palpite — cada exemplo novo vale")}{" "}
           <span className="font-bold text-amber-400">+{XP_PER_EXAMPLE} XP</span>
-          {" "}(+{XP_BONUS_ACERTO} se acertar).
+          {" "}(+{XP_BONUS_ACERTO}  {T("se acertar).")}
         </p>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           {CATEGORIES.map((cat) => (
@@ -142,7 +142,7 @@ export function PalpiteGame() {
                 <span className="text-sm font-bold">{T(cat.emoji)} {T(cat.label)}</span>
                 {loaded && (
                   <span className="rounded-full bg-amber-400/10 px-2 py-0.5 text-[10px] font-bold text-amber-300">
-                    {novosNaCategoria[cat.id] > 0 ? `${novosNaCategoria[cat.id]} novos` : "treino"}
+                    {novosNaCategoria[cat.id] > 0 ? `${novosNaCategoria[cat.id]} novos` : T("treino")}
                   </span>
                 )}
               </span>
@@ -162,7 +162,7 @@ export function PalpiteGame() {
           onClick={() => setCurrent(null)}
           className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
         >
-          <ArrowLeft size={15} /> Temas
+          <ArrowLeft size={15} />  {T("Temas")}
         </button>
         {treino && (
           <span className="rounded-full bg-secondary px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">
@@ -211,7 +211,7 @@ export function PalpiteGame() {
             {revealed && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-4">
                 <p className="text-sm font-extrabold uppercase tracking-widest" style={{ color: acertou ? "#a3e635" : "#f47276" }}>
-                  {acertou ? (treino ? "Acertou! (treino)" : `Acertou! +${XP_PER_EXAMPLE + XP_BONUS_ACERTO} XP`) : treino ? "Quase!" : `Quase! +${XP_PER_EXAMPLE} XP mesmo assim`}
+                  {acertou ? (treino ? T("Acertou! (treino)") : `Acertou! +${XP_PER_EXAMPLE + XP_BONUS_ACERTO} XP`) : treino ? T("Quase!") : `Quase! +${XP_PER_EXAMPLE} XP mesmo assim`}
                 </p>
                 <div className="mt-3 rounded-2xl border border-border bg-secondary/50 p-4">
                   <p className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">{T("O prompt que faz a mágica")}</p>
@@ -227,12 +227,12 @@ export function PalpiteGame() {
                       }}
                       className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-bold text-muted-foreground transition-colors hover:text-foreground"
                     >
-                      {copied ? <Check size={12} className="text-lime-400" /> : <Copy size={12} />} {copied ? "Copiado!" : "Copiar prompt"}
+                      {copied ? <Check size={12} className="text-lime-400" /> : <Copy size={12} />} {copied ? T("Copiado!") : T("Copiar prompt")}
                     </button>
                   </div>
                 </div>
                 <div className="mt-3 rounded-2xl border border-lime-400/20 bg-lime-400/5 p-4">
-                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-lime-300">O que a IA devolve</p>
+                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-lime-300">{T("O que a IA devolve")}</p>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{T(current.result)}</p>
                 </div>
                 <p className="mt-3 text-xs leading-relaxed text-muted-foreground"><Sparkles size={12} className="mr-1 inline text-amber-400" />{T(current.apply)}</p>
@@ -241,13 +241,15 @@ export function PalpiteGame() {
                     onClick={() => category && pick(category)}
                     className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-br from-amber-400 to-amber-200 px-5 py-2 text-sm font-extrabold text-[#241a05]"
                   >
-                    Outro exemplo <ArrowRight size={14} />
+                    
+                    {T("Outro exemplo")} <ArrowRight size={14} />
                   </button>
                   <button
                     onClick={() => setCurrent(null)}
                     className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm font-bold text-muted-foreground"
                   >
-                    Trocar tema
+                    
+                    {T("Trocar tema")}
                   </button>
                 </div>
               </motion.div>

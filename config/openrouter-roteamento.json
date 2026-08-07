@@ -1,0 +1,31 @@
+{
+  "_leia": "FONTE ÚNICA do roteamento da OpenRouter. Lido pelo site (src/lib/ai/roteamento.ts) e pelos scripts (scripts/i18n/traduzir.mjs, ../../cursos/novo_curso.mjs). Se um lado divergir do outro, a conta muda sem ninguém ver — foi por isso que virou arquivo, e não constante repetida em três lugares. Medido em 07/08/2026 com `node scripts/precos/vigia-precos.mjs --provedores`.",
+
+  "_aOrdemEPorMODELO": "⚠️ A armadilha que quase entrou: uma ordem única para tudo. A prateleira de provedores MUDA de modelo para modelo, e muda de posição. A DeepInfra é a mais barata do Flash (0,09 contra 0,13 da segunda) e a NONA mais cara do Pro (1,30 contra 0,42 da Baidu) — 3× o preço do topo da lista. Fixar a mesma ordem nos dois teria trocado uma economia por um prejuízo, com a mesma linha de código e a mesma sensação de dever cumprido.",
+
+  "permitirQueda": true,
+  "_porquePermitirQueda": "`allow_fallbacks: false` transformaria uma indisponibilidade do provedor fixado em erro para o aluno no meio de uma aula. Com a ordem fixada o preço já é previsível; ficar fora do ar não é aceitável. Quem quiser o contrário troca aqui, num lugar só.",
+
+  "ordemPadrao": ["DeepInfra", "BaseTen", "CoreWeave", "Fireworks"],
+
+  "ordemPorModelo": {
+    "deepseek-v4-flash": {
+      "ordem": ["DeepInfra", "BaseTen", "CoreWeave", "Fireworks"],
+      "_medido": "DeepInfra 0,09/0,18 · BaseTen 0,13/0,26 · CoreWeave 0,13/0,28 · Fireworks 0,14/0,28. A segunda colocada custa 44% a mais pela mesma resposta.",
+      "cacheEntrada": 0.018
+    },
+    "deepseek-v4-pro": {
+      "ordem": ["Baidu", "DeepSeek", "StreamLake", "GMICloud"],
+      "_medido": "Baidu 0,4225/0,845 · DeepSeek 0,435/0,87 · StreamLake 0,65/1,31 · GMICloud 0,66/1,32. A DeepInfra, que lidera o Flash, aqui cobra 1,30/2,60 — 3× a Baidu.",
+      "_sobreODeepSeek": "Fica em segundo mesmo sendo ele quem anunciou aumento: hoje custa 3% a mais que a Baidu e é a origem dos pesos. Se o aumento sair, o vigia das 09:30 avisa e a ordem se resolve aqui, numa linha.",
+      "cacheEntrada": 0.035
+    }
+  },
+
+  "cache": {
+    "ligado": true,
+    "_leia": "A entrada REPETIDA custa 0,018 por M na DeepInfra contra 0,09 da nova — 5×, não os 50× que o anúncio do DeepSeek sugeria (aqueles são do endpoint DELE, onde a nova custa 0,14 e a cacheada 0,0028). Os nossos prompts têm prefixo longo e estável: a instrução do tradutor, e o padrão editorial de 4.817 caracteres que vai junto em TODA chamada de capítulo.",
+    "_quantoVale": "Medido no piloto ia-para-estudar: ~2.000 tokens de entrada por capítulo, dos quais ~1.750 são prefixo estável (87%), contra ~2.600 de saída. Com cache o capítulo cai de US$ 0,00065 para US$ 0,00052 — 19%. É real e é pouco, porque neste trabalho quem manda no custo é a SAÍDA, que cache nenhum desconta. Registrado aqui para ninguém prometer economia de 50× a partir do número do anúncio.",
+    "_comoConferir": "AI_LOG_ROTEAMENTO=1 no site, ou a linha `cache:` que os scripts imprimem no fim. Zero em toda chamada = o provedor da vez não está guardando nada, e aí o certo é dizer isso em vez de repetir a promessa."
+  }
+}

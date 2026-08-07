@@ -358,7 +358,7 @@ function Cabecalho({
           onClick={onAlternarTamanho}
           aria-pressed={ampliada}
           aria-label={ampliada ? T("Reduzir o dossiê") : T("Ampliar o dossiê")}
-          title={ampliada ? "Reduzir (Esc)" : "Ampliar e deixar reto"}
+          title={ampliada ? T("Reduzir (Esc)") : T("Ampliar e deixar reto")}
           className="-mr-1 -mt-1 ml-auto shrink-0 cursor-pointer rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/[0.07] hover:text-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
         >
           {ampliada ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
@@ -708,7 +708,7 @@ function ListaDeItens({
           />
           <button
             onClick={adicionar}
-            aria-label="Adicionar"
+            aria-label={T("Adicionar")}
             className="grid h-[30px] w-[30px] shrink-0 place-items-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-white/25 hover:text-white cursor-pointer"
           >
             <Plus size={13} />
@@ -759,7 +759,7 @@ function VagaDeFoto({
         toast.error(data?.error || "Não deu para enviar a foto");
         return;
       }
-      toast.success("Foto guardada 📸");
+      toast.success(T("Foto guardada 📸"));
       aoRecarregar();
     } catch {
       toast.error(T("Erro de rede"));
@@ -803,7 +803,7 @@ function VagaDeFoto({
         style={{ borderColor: `${cor}55`, color: cor }}
       >
         {enviando ? <Loader2 size={11} className="animate-spin" /> : <Upload size={11} />}
-        {foto ? "Trocar" : T("Enviar")}
+        {foto ? T("Trocar") : T("Enviar")}
       </button>
 
       {foto && foto.origem === "upload" && (
@@ -816,7 +816,7 @@ function VagaDeFoto({
             });
             aoRecarregar();
           }}
-          aria-label="Remover foto"
+          aria-label={T("Remover foto")}
           className="text-white/30 transition-colors hover:text-red-400 cursor-pointer"
         >
           <Trash2 size={13} />
@@ -844,7 +844,7 @@ export function GaleriaDeFotos({ fotos, token, aoRecarregar }: { fotos: FotoPers
         <h4 className="flex items-center gap-1.5 text-sm font-bold text-foreground">
           <Camera size={14} className="text-pink-400" />  {T("Seu rosto")}
         </h4>
-        <span className="text-[11px] text-white/40">{preenchidas} de 4</span>
+        <span className="text-[11px] text-white/40">{preenchidas}  {T("de 4")}</span>
       </div>
       <p className="mb-3 text-[11.5px] leading-snug text-white/45">
         

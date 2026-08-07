@@ -113,6 +113,13 @@ const localizedMetadata: Record<string, Metadata> = {
       locale: "en_US",
       title: "FayAi - Master AI from Beginner to Pro",
       description: "Master Artificial Intelligence with practical training and 100+ AI tools.",
+      /**
+       * ⚠️ O `alt` do cartão social também é texto, e é o texto de quem NÃO vê
+       * a imagem. Ele estava herdando o `baseMetadata` em português nas duas
+       * árvores — não aparece na tela, então nenhuma leitura de página pega;
+       * quem pega é o medidor de HTML.
+       */
+      images: [{ ...baseMetadata.openGraph.images[0], alt: "FayAI — AI courses in Portuguese" }],
     },
     twitter: {
       ...baseMetadata.twitter,

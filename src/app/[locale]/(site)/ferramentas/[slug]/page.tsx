@@ -405,7 +405,7 @@ export default async function ToolPage({ params }: PageProps) {
                             <Card className="p-6 backdrop-blur border-border hover:bg-card/80 transition">
                               <Badge variant="outline" className="mb-2 text-xs">{T(c.level)}</Badge>
                               <h4 className="font-semibold">{T(c.title)}</h4>
-                              <p className="text-sm text-muted-foreground mt-2">R$ {c.price.toLocaleString(tagIntl(locale))}</p>
+                              <p className="text-sm text-muted-foreground mt-2">{T("R$")} {c.price.toLocaleString(tagIntl(locale))}</p>
                             </Card>
                           </Link>
                         ))}
@@ -500,7 +500,8 @@ export default async function ToolPage({ params }: PageProps) {
                     </Link>
                     <Link href="/contato" className="block mt-2">
                       <Button variant="outline" className="w-full border-border text-muted-foreground hover:text-foreground">
-                        Ou envie um e-mail
+                        
+                        {T("Ou envie um e-mail")}
                       </Button>
                     </Link>
                   </Card>

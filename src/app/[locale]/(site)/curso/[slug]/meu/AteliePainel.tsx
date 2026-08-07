@@ -328,7 +328,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
             O <span className="text-amber-400">{T("seu")}</span> {T(curso.titulo)}
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Os {curso.capitulos}  {T("capítulos deste curso, reescritos para o seu negócio — cada um com uma\n            abertura, um exemplo e uma tarefa no seu contexto. A aula original continua intacta: a\n            camada envolve o conteúdo, não o substitui.")}
+            
+            {T("Os")} {curso.capitulos}  {T("capítulos deste curso, reescritos para o seu negócio — cada um com uma\n            abertura, um exemplo e uma tarefa no seu contexto. A aula original continua intacta: a\n            camada envolve o conteúdo, não o substitui.")}
           </p>
           <p className="mt-3 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs italic text-white/70">
             {T(persona.resumo)}
@@ -352,7 +353,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
               
               {T("Escrevemos o capítulo")}{" "}
               <strong className="text-white">
-                {dados.amostraDisponivel?.titulo || "de amostra"}
+                {dados.amostraDisponivel?.titulo || T("de amostra")}
               </strong>{" "}
               
               {T("com o que já sabemos sobre você, e mostramos lado a lado com o original. Depois você\n              decide se vale.")}
@@ -373,7 +374,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                 </>
               )}
             </Button>
-            <p className="mt-2 text-[11px] text-muted-foreground">Leva uns 10 segundos.</p>
+            <p className="mt-2 text-[11px] text-muted-foreground">{T("Leva uns 10 segundos.")}</p>
           </div>
         ) : (
           <>
@@ -452,7 +453,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
           {!podePersonalizar && (
             <p className="mt-2 text-[11px] opacity-80">
               
-              {T("Mínimo para personalizar:")} {persona.minima}%. Faltam {persona.minima - persona.confianca}  {T("pontos.")}
+              {T("Mínimo para personalizar:")} {persona.minima}{T("%. Faltam")} {persona.minima - persona.confianca}  {T("pontos.")}
             </p>
           )}
         </div>
@@ -504,7 +505,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                     ))}
                     {ganho > 0 && (
                       <p className="mt-1 text-[10px] font-bold text-violet-300">
-                        Completar isto vale +{ganho}  {T("pontos de precisão")}
+                        
+                        {T("Completar isto vale +")}{ganho}  {T("pontos de precisão")}
                       </p>
                     )}
                   </div>
@@ -570,7 +572,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   <span className="flex flex-wrap items-center gap-2">
                     <strong className="text-sm">{T(item.titulo)}</strong>
                     {item.emBreve && (
-                      <Badge className="border-white/15 bg-white/5 text-[9px] text-white/60">Em breve</Badge>
+                      <Badge className="border-white/15 bg-white/5 text-[9px] text-white/60">{T("Em breve")}</Badge>
                     )}
                     {item.jaFeito && !item.emBreve && (
                       <Badge className="border-emerald-400/30 bg-emerald-500/10 text-[9px] text-emerald-300">
@@ -613,7 +615,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   o que torna o preço julgável — "32 créditos" não diz nada a
                   quem chegou hoje; "R$32" diz tudo. */}
               <p className="text-[10px] text-muted-foreground">
-                = R$ {creditos.saldo}
+                
+                {T("= R$")} {creditos.saldo}
                 {creditos.comprado > 0 && ` · ${creditos.mensal} do plano + ${creditos.comprado} comprados`}
               </p>
             </div>
@@ -624,7 +627,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                 −{total}
               </p>
               <p className="text-[10px] text-muted-foreground">
-                = R$ {total} · sobram {Math.max(0, creditos.saldo - total)}
+                
+                {T("= R$")} {total}  {T("· sobram")} {Math.max(0, creditos.saldo - total)}
               </p>
             </div>
           </div>
@@ -638,7 +642,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
 
           {camada.capitulos > 0 && !camada.completo && (
             <p className="mt-3 rounded-lg border border-cyan-400/20 bg-cyan-500/[0.06] px-3 py-2 text-[11px] text-cyan-200">
-              {camada.capitulos} de {orcamento.capitulos}  {T("capítulos já estão no seu contexto — você só\n              paga pelos que faltam.")}
+              {camada.capitulos}  {T("de")} {orcamento.capitulos}  {T("capítulos já estão no seu contexto — você só\n              paga pelos que faltam.")}
             </p>
           )}
 
@@ -653,7 +657,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
               <p className="mt-1.5 text-center text-[11px] text-muted-foreground">
                 
                 {T("Escrevendo o seu curso —")}{" "}
-                <strong className="text-white/80">{Math.round((progresso / 100) * Math.max(1, orcamento.capitulos - camada.capitulos))} de{" "}
+                <strong className="text-white/80">{Math.round((progresso / 100) * Math.max(1, orcamento.capitulos - camada.capitulos))}  {T("de")}{" "}
                 {Math.max(1, orcamento.capitulos - camada.capitulos)}</strong>  {T("capítulos. Pode fechar a\n                aba: o que já foi escrito fica salvo e você retoma daqui.")}
               </p>
             </div>
@@ -676,13 +680,15 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                     {T("Primeiro me conte um pouco mais sobre você")}
                   </p>
                   <p className="mt-1 text-[11px] text-muted-foreground">
-                    Faltam {persona.minima - persona.confianca}  {T("pontos. O medidor acima mostra quais\n                    respostas rendem mais — normalmente duas bastam.")}
+                    
+                    {T("Faltam")} {persona.minima - persona.confianca}  {T("pontos. O medidor acima mostra quais\n                    respostas rendem mais — normalmente duas bastam.")}
                   </p>
                 </div>
               ) : faltamCreditos > 0 ? (
                 <div className="rounded-xl border border-amber-400/25 bg-amber-500/[0.06] p-3 text-center">
                   <p className="text-xs font-bold text-amber-200">
-                    Faltam {faltamCreditos}  {T("créditos para este curso")}
+                    
+                    {T("Faltam")} {faltamCreditos}  {T("créditos para este curso")}
                   </p>
                   <div className="mt-2 flex flex-wrap justify-center gap-2">
                     <Link href={`/${locale}/portal?tab=rewards`}>
@@ -704,7 +710,8 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
               ) : !dados.podeGastar ? (
                 <Link href={`/${locale}/curso/${curso.slug}`}>
                   <Button variant="outline" className="w-full border-amber-400/40 text-amber-200" size="lg">
-                    Adicionar ao meu acervo primeiro
+                    
+                    {T("Adicionar ao meu acervo primeiro")}
                     <ArrowRight size={16} className="ml-2" />
                   </Button>
                 </Link>

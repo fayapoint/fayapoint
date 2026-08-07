@@ -83,7 +83,7 @@ export function ThemeSwitcher() {
     <div className="min-w-[140px]">
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="bg-secondary/50 border-border text-foreground">
-          <SelectValue placeholder={isEnglish ? "Theme" : "Tema"} />
+          <SelectValue placeholder={isEnglish ? T("Theme") : T("Tema")} />
         </SelectTrigger>
         <SelectContent>
           {options.map((opt) => (

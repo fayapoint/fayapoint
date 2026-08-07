@@ -71,13 +71,13 @@ export default function PautasDoDia({ onEscolher }: { onEscolher: (termo: string
     <div className="rounded-xl border p-4" style={{ borderColor: `${cor}33`, background: `${cor}0a` }}>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
         <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider" style={{ color: cor }}>
-          <Radar className="h-3.5 w-3.5" /> Pauta de hoje · {T(dados.nicho.label)}
+          <Radar className="h-3.5 w-3.5" />  {T("Pauta de hoje ·")} {T(dados.nicho.label)}
         </p>
         <button
           onClick={buscar}
           className="flex items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
         >
-          <RefreshCw className="h-3 w-3" /> Atualizar
+          <RefreshCw className="h-3 w-3" />  {T("Atualizar")}
         </button>
       </div>
 
@@ -89,7 +89,8 @@ export default function PautasDoDia({ onEscolher }: { onEscolher: (termo: string
           </>
         ) : (
           <>
-            Recorte do Brasil inteiro.{" "}
+            
+            {T("Recorte do Brasil inteiro.")}{" "}
             <strong className="text-foreground">{T("Escolha sua área na aba Persona")}</strong>  {T("e esta lista passa a ser a da sua profissão.")}
           </>
         )}
@@ -116,7 +117,7 @@ export default function PautasDoDia({ onEscolher }: { onEscolher: (termo: string
                   }
                 >
                   {p.so_video ? <Youtube size={8} /> : <Search size={8} />}
-                  {p.so_video ? T("demanda de vídeo") : p.canais === "web+yt" ? "nos dois canais" : "busca"}
+                  {p.so_video ? T("demanda de vídeo") : p.canais === "web+yt" ? T("nos dois canais") : T("busca")}
                 </span>
                 <span className="text-[10px] text-muted-foreground">{T(p.formato)}</span>
               </span>

@@ -248,7 +248,7 @@ export default function ProdigiStorePanel() {
     if (!file) return;
 
     if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
-      toast.error("Use PNG, JPG ou WebP");
+      toast.error(T("Use PNG, JPG ou WebP"));
       return;
     }
 
@@ -315,7 +315,7 @@ export default function ProdigiStorePanel() {
       return;
     }
 
-    toast.loading("Processando design...");
+    toast.loading(T("Processando design..."));
 
     // Upload design first
     const designUrl = await uploadDesign();
@@ -370,7 +370,7 @@ export default function ProdigiStorePanel() {
     }
 
     if (!recipientName || !addressLine1 || !addressCity || !addressState || !addressPostalCode) {
-      toast.error("Preencha os dados de entrega");
+      toast.error(T("Preencha os dados de entrega"));
       return;
     }
 
@@ -471,8 +471,9 @@ export default function ProdigiStorePanel() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              Prodigi Wall Art
-              <Badge className="bg-blue-600 text-xs">PREMIUM</Badge>
+              
+              {T("Prodigi Wall Art")}
+              <Badge className="bg-blue-600 text-xs">{T("PREMIUM")}</Badge>
             </h2>
             <p className="text-sm text-muted-foreground">{T("Canvas, Metal Prints, Fine Art e mais")}</p>
           </div>
@@ -539,7 +540,7 @@ export default function ProdigiStorePanel() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
               <Input
-                placeholder="Buscar produtos..."
+                placeholder={T("Buscar produtos...")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 bg-secondary border-border"
@@ -575,7 +576,7 @@ export default function ProdigiStorePanel() {
                             <Icon size={16} className="text-amber-400" />
                             <h3 className="font-bold text-white">{T(category.namePT)}</h3>
                           </div>
-                          <p className="text-xs text-muted-foreground">{category.productCount} produtos</p>
+                          <p className="text-xs text-muted-foreground">{category.productCount}  {T("produtos")}</p>
                         </div>
                       </motion.div>
                     );
@@ -598,7 +599,7 @@ export default function ProdigiStorePanel() {
 
                 <div className="flex items-center gap-3 mb-4">
                   <h3 className="text-lg font-bold text-white">{T(currentCategory.namePT)}</h3>
-                  <Badge className="bg-gray-700">{currentCategory.products.length} produtos</Badge>
+                  <Badge className="bg-gray-700">{currentCategory.products.length}  {T("produtos")}</Badge>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -630,19 +631,21 @@ export default function ProdigiStorePanel() {
                         </div>
                         <div className="space-y-1 text-sm">
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Custo base:</span>
-                            <span className="text-white">R$ {product.estimatedBaseCostBRL.toFixed(2)}</span>
+                            <span className="text-muted-foreground">{T("Custo base:")}</span>
+                            <span className="text-white">{T("R$")} {product.estimatedBaseCostBRL.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Venda sugerida:</span>
+                            <span className="text-muted-foreground">{T("Venda sugerida:")}</span>
                             <span className="text-green-400 font-semibold">
-                              R$ {product.suggestedSellingPriceBRL.toFixed(2)}
+                              
+                              {T("R$")} {product.suggestedSellingPriceBRL.toFixed(2)}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Lucro estimado:</span>
+                            <span className="text-muted-foreground">{T("Lucro estimado:")}</span>
                             <span className="text-amber-400">
-                              R$ {(product.suggestedSellingPriceBRL - product.estimatedBaseCostBRL).toFixed(2)}
+                              
+                              {T("R$")} {(product.suggestedSellingPriceBRL - product.estimatedBaseCostBRL).toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -671,10 +674,10 @@ export default function ProdigiStorePanel() {
                     <div className="flex items-start gap-4">
                       <div className="flex-1">
                         <h3 className="text-lg font-bold text-white">{T(selectedProduct.name)}</h3>
-                        <p className="text-muted-foreground">Tamanho: {T(selectedProduct.size)}</p>
+                        <p className="text-muted-foreground">{T("Tamanho:")} {T(selectedProduct.size)}</p>
                         <div className="flex gap-2 mt-2">
                           <Badge className="bg-amber-600/50">{T(selectedProduct.aspectRatio)}</Badge>
-                          <Badge className="bg-gray-700">{selectedProduct.printDimensions?.widthPx}x{selectedProduct.printDimensions?.heightPx}px</Badge>
+                          <Badge className="bg-gray-700">{selectedProduct.printDimensions?.widthPx}x{selectedProduct.printDimensions?.heightPx}{T("px")}</Badge>
                         </div>
                       </div>
                     </div>
@@ -695,7 +698,7 @@ export default function ProdigiStorePanel() {
                         >
                           <img
                             src={designPreview}
-                            alt="Your Design"
+                            alt={T("Your Design")}
                             className="max-w-[70%] max-h-[70%] object-contain rounded shadow-2xl"
                           />
                         </div>
@@ -721,18 +724,18 @@ export default function ProdigiStorePanel() {
                         <div className="flex items-center gap-4">
                           <img
                             src={designPreview}
-                            alt="Design"
+                            alt={T("Design")}
                             className="w-16 h-16 object-contain rounded"
                           />
                           <div>
-                            <p className="text-white font-medium">Design carregado</p>
+                            <p className="text-white font-medium">{T("Design carregado")}</p>
                             <p className="text-sm text-muted-foreground">{T("Clique para trocar")}</p>
                           </div>
                         </div>
                       ) : (
                         <div className="text-center">
                           <Upload size={32} className="mx-auto text-muted-foreground mb-2" />
-                          <p className="text-white font-medium">Upload do design</p>
+                          <p className="text-white font-medium">{T("Upload do design")}</p>
                           <p className="text-xs text-muted-foreground mt-1">{T("PNG, JPG ou WebP até 50MB")}</p>
                         </div>
                       )}
@@ -755,7 +758,8 @@ export default function ProdigiStorePanel() {
                         className="w-full"
                       >
                         <X size={16} className="mr-2" />
-                        Remover design
+                        
+                        {T("Remover design")}
                       </Button>
                     )}
                   </div>
@@ -772,12 +776,12 @@ export default function ProdigiStorePanel() {
 
                       <div className="space-y-4">
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Custo base Prodigi:</span>
-                          <span className="text-white">R$ {selectedProduct.estimatedBaseCostBRL.toFixed(2)}</span>
+                          <span className="text-muted-foreground">{T("Custo base Prodigi:")}</span>
+                          <span className="text-white">{T("R$")} {selectedProduct.estimatedBaseCostBRL.toFixed(2)}</span>
                         </div>
 
                         <div>
-                          <Label className="text-muted-foreground">Quantidade</Label>
+                          <Label className="text-muted-foreground">{T("Quantidade")}</Label>
                           <div className="flex items-center gap-2 mt-1">
                             <Button
                               variant="outline"
@@ -813,27 +817,31 @@ export default function ProdigiStorePanel() {
                             step="0.01"
                           />
                           <p className="text-xs text-muted-foreground mt-1">
-                            Sugerido: R$ {selectedProduct.suggestedSellingPriceBRL.toFixed(2)} (45% margem)
+                            
+                            {T("Sugerido: R$")} {selectedProduct.suggestedSellingPriceBRL.toFixed(2)}  {T("(45% margem)")}
                           </p>
                         </div>
 
                         <div className="border-t border-border pt-4 space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Custo total:</span>
+                            <span className="text-muted-foreground">{T("Custo total:")}</span>
                             <span className="text-white">
-                              R$ {(selectedProduct.estimatedBaseCostBRL * copies).toFixed(2)}
+                              
+                              {T("R$")} {(selectedProduct.estimatedBaseCostBRL * copies).toFixed(2)}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">Venda total:</span>
+                            <span className="text-muted-foreground">{T("Venda total:")}</span>
                             <span className="text-white font-semibold">
-                              R$ {(customPrice * copies).toFixed(2)}
+                              
+                              {T("R$")} {(customPrice * copies).toFixed(2)}
                             </span>
                           </div>
                           <div className="flex justify-between text-lg">
-                            <span className="text-amber-400">Lucro:</span>
+                            <span className="text-amber-400">{T("Lucro:")}</span>
                             <span className="text-green-400 font-bold">
-                              R$ {((customPrice - selectedProduct.estimatedBaseCostBRL) * copies).toFixed(2)}
+                              
+                              {T("R$")} {((customPrice - selectedProduct.estimatedBaseCostBRL) * copies).toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -849,8 +857,8 @@ export default function ProdigiStorePanel() {
                           <ul className="text-muted-foreground space-y-1">
                             <li>{T("• Produção em UK, USA, EU e Austrália")}</li>
                             <li>{T("• Envio para Brasil em 10-20 dias úteis")}</li>
-                            <li>• Rastreamento completo</li>
-                            <li>• Qualidade premium garantida</li>
+                            <li>{T("• Rastreamento completo")}</li>
+                            <li>{T("• Qualidade premium garantida")}</li>
                           </ul>
                         </div>
                       </div>
@@ -898,7 +906,8 @@ export default function ProdigiStorePanel() {
                 {/* Cart Items */}
                 <div className="lg:col-span-2 space-y-4">
                   <h3 className="text-lg font-bold text-white">
-                    Itens ({cart.length})
+                    
+                    {T("Itens (")}{cart.length})
                   </h3>
 
                   {cart.map((item, index) => (
@@ -918,15 +927,18 @@ export default function ProdigiStorePanel() {
                           <h4 className="font-semibold text-white">{T(item.name)}</h4>
                           <p className="text-sm text-muted-foreground">{T(item.sku)}</p>
                           <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
-                            <span className="text-muted-foreground">Qtd: {item.copies}</span>
+                            <span className="text-muted-foreground">{T("Qtd:")} {item.copies}</span>
                             <span className="text-muted-foreground">
-                              Custo: R$ {(item.baseCostBRL * item.copies).toFixed(2)}
+                              
+                              {T("Custo: R$")} {(item.baseCostBRL * item.copies).toFixed(2)}
                             </span>
                             <span className="text-green-400 font-semibold">
-                              Venda: R$ {(item.sellingPriceBRL * item.copies).toFixed(2)}
+                              
+                              {T("Venda: R$")} {(item.sellingPriceBRL * item.copies).toFixed(2)}
                             </span>
                             <span className="text-amber-400">
-                              Lucro: R$ {((item.sellingPriceBRL - item.baseCostBRL) * item.copies).toFixed(2)}
+                              
+                              {T("Lucro: R$")} {((item.sellingPriceBRL - item.baseCostBRL) * item.copies).toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -950,19 +962,19 @@ export default function ProdigiStorePanel() {
 
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Subtotal:</span>
-                        <span className="text-white">R$ {cartSubtotal.toFixed(2)}</span>
+                        <span className="text-muted-foreground">{T("Subtotal:")}</span>
+                        <span className="text-white">{T("R$")} {cartSubtotal.toFixed(2)}</span>
                       </div>
 
                       {/* Shipping Options */}
                       {isLoadingQuote ? (
                         <div className="flex items-center gap-2 py-2">
                           <Loader2 className="animate-spin" size={16} />
-                          <span className="text-muted-foreground">Calculando frete...</span>
+                          <span className="text-muted-foreground">{T("Calculando frete...")}</span>
                         </div>
                       ) : quotes.length > 0 ? (
                         <div className="space-y-2">
-                          <Label className="text-muted-foreground">Frete:</Label>
+                          <Label className="text-muted-foreground">{T("Frete:")}</Label>
                           <Select
                             value={selectedQuote?.shippingMethod || ""}
                             onValueChange={(value) => {
@@ -979,7 +991,8 @@ export default function ProdigiStorePanel() {
                                   <div className="flex items-center justify-between w-full">
                                     <span>{T(quote.shippingMethodLabel)}</span>
                                     <span className="text-muted-foreground ml-4">
-                                      R$ {quote.suggestedPricing.shipping.toFixed(2)}
+                                      
+                                      {T("R$")} {quote.suggestedPricing.shipping.toFixed(2)}
                                       <span className="text-xs ml-1">
                                         ({quote.delivery.minDays}-{quote.delivery.maxDays}  {T("dias)")}
                                       </span>
@@ -994,26 +1007,27 @@ export default function ProdigiStorePanel() {
 
                       {selectedQuote && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Frete ({T(selectedQuote.shippingMethodLabel)}):</span>
-                          <span className="text-white">R$ {shippingCost.toFixed(2)}</span>
+                          <span className="text-muted-foreground">{T("Frete (")}{T(selectedQuote.shippingMethodLabel)}):</span>
+                          <span className="text-white">{T("R$")} {shippingCost.toFixed(2)}</span>
                         </div>
                       )}
 
                       <div className="border-t border-border pt-3">
                         <div className="flex justify-between text-lg">
-                          <span className="text-white font-bold">Total:</span>
-                          <span className="text-white font-bold">R$ {cartTotal.toFixed(2)}</span>
+                          <span className="text-white font-bold">{T("Total:")}</span>
+                          <span className="text-white font-bold">{T("R$")} {cartTotal.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-green-400">
                           <span>{T("Seu lucro:")}</span>
-                          <span className="font-semibold">R$ {cartProfit.toFixed(2)}</span>
+                          <span className="font-semibold">{T("R$")} {cartProfit.toFixed(2)}</span>
                         </div>
                       </div>
 
                       {selectedQuote && (
                         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
                           <Truck size={14} />
-                          Entrega estimada: {selectedQuote.delivery.minDays}-{selectedQuote.delivery.maxDays}  {T("dias úteis")}
+                          
+                          {T("Entrega estimada:")} {selectedQuote.delivery.minDays}-{selectedQuote.delivery.maxDays}  {T("dias úteis")}
                         </div>
                       )}
                     </div>
@@ -1023,7 +1037,8 @@ export default function ProdigiStorePanel() {
                       disabled={!selectedQuote}
                       className="w-full mt-6 bg-gradient-to-r from-amber-600 to-yellow-700"
                     >
-                      Finalizar Pedido
+                      
+                      {T("Finalizar Pedido")}
                       <ArrowRight size={16} className="ml-2" />
                     </Button>
                   </Card>
@@ -1049,7 +1064,7 @@ export default function ProdigiStorePanel() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="p-6 border-b border-border flex justify-between items-center">
-                      <h3 className="text-lg font-bold text-white">Dados de Entrega</h3>
+                      <h3 className="text-lg font-bold text-white">{T("Dados de Entrega")}</h3>
                       <button onClick={() => setShowCheckout(false)}>
                         <X size={24} className="text-muted-foreground" />
                       </button>
@@ -1068,7 +1083,7 @@ export default function ProdigiStorePanel() {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label>E-mail</Label>
+                          <Label>{T("E-mail")}</Label>
                           <Input
                             type="email"
                             value={recipientEmail}
@@ -1077,7 +1092,7 @@ export default function ProdigiStorePanel() {
                           />
                         </div>
                         <div>
-                          <Label>Telefone</Label>
+                          <Label>{T("Telefone")}</Label>
                           <Input
                             value={recipientPhone}
                             onChange={(e) => setRecipientPhone(e.target.value)}
@@ -1097,18 +1112,18 @@ export default function ProdigiStorePanel() {
                       </div>
 
                       <div>
-                        <Label>Complemento</Label>
+                        <Label>{T("Complemento")}</Label>
                         <Input
                           value={addressLine2}
                           onChange={(e) => setAddressLine2(e.target.value)}
                           className="mt-1 bg-secondary border-border"
-                          placeholder="Apto, bloco, etc."
+                          placeholder={T("Apto, bloco, etc.")}
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label>Cidade *</Label>
+                          <Label>{T("Cidade *")}</Label>
                           <Input
                             value={addressCity}
                             onChange={(e) => setAddressCity(e.target.value)}
@@ -1116,7 +1131,7 @@ export default function ProdigiStorePanel() {
                           />
                         </div>
                         <div>
-                          <Label>Estado *</Label>
+                          <Label>{T("Estado *")}</Label>
                           <Input
                             value={addressState}
                             onChange={(e) => setAddressState(e.target.value)}
@@ -1127,7 +1142,7 @@ export default function ProdigiStorePanel() {
                       </div>
 
                       <div>
-                        <Label>CEP *</Label>
+                        <Label>{T("CEP *")}</Label>
                         <Input
                           value={addressPostalCode}
                           onChange={(e) => setAddressPostalCode(e.target.value)}
@@ -1138,12 +1153,12 @@ export default function ProdigiStorePanel() {
 
                       <div className="bg-secondary rounded-lg p-4 mt-4">
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-muted-foreground">Total do pedido:</span>
-                          <span className="text-white font-bold">R$ {cartTotal.toFixed(2)}</span>
+                          <span className="text-muted-foreground">{T("Total do pedido:")}</span>
+                          <span className="text-white font-bold">{T("R$")} {cartTotal.toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-sm text-green-400">
                           <span>{T("Seu lucro:")}</span>
-                          <span>R$ {cartProfit.toFixed(2)}</span>
+                          <span>{T("R$")} {cartProfit.toFixed(2)}</span>
                         </div>
                       </div>
 
@@ -1155,12 +1170,14 @@ export default function ProdigiStorePanel() {
                         {isCreatingOrder ? (
                           <>
                             <Loader2 className="animate-spin mr-2" size={16} />
-                            Criando pedido...
+                            
+                            {T("Criando pedido...")}
                           </>
                         ) : (
                           <>
                             <CreditCard size={16} className="mr-2" />
-                            Confirmar Pedido
+                            
+                            {T("Confirmar Pedido")}
                           </>
                         )}
                       </Button>
@@ -1185,7 +1202,8 @@ export default function ProdigiStorePanel() {
               <h3 className="text-lg font-bold text-white">{T("Meus Pedidos Prodigi")}</h3>
               <Button variant="outline" size="sm" onClick={fetchOrders}>
                 <RefreshCw size={14} className="mr-2" />
-                Atualizar
+                
+                {T("Atualizar")}
               </Button>
             </div>
 
@@ -1222,16 +1240,16 @@ export default function ProdigiStorePanel() {
 
                       <div className="grid grid-cols-3 gap-4 text-sm mb-3">
                         <div>
-                          <span className="text-muted-foreground">Itens:</span>
+                          <span className="text-muted-foreground">{T("Itens:")}</span>
                           <span className="text-white ml-2">{order.items?.length || 0}</span>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Total:</span>
-                          <span className="text-white ml-2">R$ {order.grandTotalBRL?.toFixed(2)}</span>
+                          <span className="text-muted-foreground">{T("Total:")}</span>
+                          <span className="text-white ml-2">{T("R$")} {order.grandTotalBRL?.toFixed(2)}</span>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Lucro:</span>
-                          <span className="text-green-400 ml-2">R$ {order.totalProfitBRL?.toFixed(2)}</span>
+                          <span className="text-muted-foreground">{T("Lucro:")}</span>
+                          <span className="text-green-400 ml-2">{T("R$")} {order.totalProfitBRL?.toFixed(2)}</span>
                         </div>
                       </div>
 
@@ -1251,7 +1269,8 @@ export default function ProdigiStorePanel() {
                           className="flex items-center gap-1 text-amber-400 text-sm mt-2 hover:underline"
                         >
                           <ExternalLink size={14} />
-                          Rastrear pedido
+                          
+                          {T("Rastrear pedido")}
                         </a>
                       )}
                     </Card>

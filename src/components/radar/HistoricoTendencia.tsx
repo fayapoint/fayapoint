@@ -74,18 +74,19 @@ export function HistoricoTendencia({ corNicho }: { corNicho: string }) {
   return (
     <section className="mt-10">
       <h2 className="text-xl tracking-wide" style={{ fontFamily: "var(--font-bebas), sans-serif" }}>
-        A LINHA DO <span style={{ color: corNicho }}>TEMPO</span>
+        
+        {T("A LINHA DO")} <span style={{ color: corNicho }}>{T("TEMPO")}</span>
       </h2>
       <p className="mb-3 max-w-2xl text-sm text-white/50">
         
         {T("Quantas pessoas abriram cada verbete de IA na")}{" "}
-        <strong className="text-white/75">{T("Wikipédia em português")}</strong>{T(", dia a dia. O que\r\n        interessa é a")} <strong className="text-white/75">{T("inclinação")}</strong>  {T("— tema que sobe\r\n        rápido tem janela curta e rende matéria hoje; linha estável é conteúdo que não perde\r\n        a validade. É")} <em>leitura</em>{T(", não busca: mede quem foi atrás de entender o assunto.")}
+        <strong className="text-white/75">{T("Wikipédia em português")}</strong>{T(", dia a dia. O que\r\n        interessa é a")} <strong className="text-white/75">{T("inclinação")}</strong>  {T("— tema que sobe\r\n        rápido tem janela curta e rende matéria hoje; linha estável é conteúdo que não perde\r\n        a validade. É")} <em>{T("leitura")}</em>{T(", não busca: mede quem foi atrás de entender o assunto.")}
       </p>
 
       <div className="glass rounded-2xl p-4">
         {/* filtros numa linha só, acima do gráfico */}
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <div className="flex gap-1" role="group" aria-label="Janela de tempo">
+          <div className="flex gap-1" role="group" aria-label={T("Janela de tempo")}>
             {[7, 30, 90].map((d) => (
               <button
                 key={d}
@@ -502,7 +503,8 @@ function Tabela({ dado }: { dado: LeituraRadar }) {
         <thead>
           <tr className="border-b border-white/10">
             <th scope="col" className="py-1.5 pr-3 text-left font-bold" style={{ color: TINTA.apagada }}>
-              Termo
+              
+              {T("Termo")}
             </th>
             {dado.dias.map((d) => (
               <th key={d} scope="col" className="px-1.5 py-1.5 text-right font-bold tabular-nums" style={{ color: TINTA.apagada }}>

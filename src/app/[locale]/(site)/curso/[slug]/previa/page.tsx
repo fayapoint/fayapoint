@@ -152,7 +152,7 @@ export default async function PreviaPage({ params }: Props) {
       ))}
 
       <main className="mx-auto w-full max-w-3xl px-5 py-12 md:py-16">
-        <nav aria-label="Trilha" className="mb-8 text-sm text-white/50">
+        <nav aria-label={T("Trilha")} className="mb-8 text-sm text-white/50">
           <Link href={`/${locale}/cursos`} className="hover:text-white/80">
             
             {T("Cursos")}
@@ -240,7 +240,8 @@ export default async function PreviaPage({ params }: Props) {
 
         <aside className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.04] p-6 text-center">
           <p className="text-lg font-medium text-white">
-            Continue nos outros {previa.totalCapitulos - 1}  {T("capítulos")}
+            
+            {T("Continue nos outros")} {previa.totalCapitulos - 1}  {T("capítulos")}
           </p>
           <p className="mt-2 text-sm text-white/60">
             

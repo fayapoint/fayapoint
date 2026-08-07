@@ -118,19 +118,19 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 {isNew && (
                   <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
                     <Zap size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? T("Novo") : 'New'}</span>
+                    <span className="font-bold">{isPtBr ? T("Novo") : T("New")}</span>
                   </Badge>
                 )}
                 {isFreeCourseOfMonth && (
                   <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
                     <Sparkles size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? T("Grátis no mês") : 'Free this month'}</span>
+                    <span className="font-bold">{isPtBr ? T("Grátis no mês") : T("Free this month")}</span>
                   </Badge>
                 )}
                 {isAdvanced && (
                   <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
                     <Award size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? T("Avançado") : 'Advanced'}</span>
+                    <span className="font-bold">{isPtBr ? T("Avançado") : T("Advanced")}</span>
                   </Badge>
                 )}
               </div>
@@ -175,19 +175,19 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 {isNew && (
                   <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 shadow-lg">
                     <Zap size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? T("Novo") : 'New'}</span>
+                    <span className="font-bold">{isPtBr ? T("Novo") : T("New")}</span>
                   </Badge>
                 )}
                 {isFreeCourseOfMonth && (
                   <Badge className="bg-gradient-to-r from-emerald-300 to-green-400 text-black border-0 shadow-lg">
                     <Sparkles size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? T("Grátis no mês") : 'Free this month'}</span>
+                    <span className="font-bold">{isPtBr ? T("Grátis no mês") : T("Free this month")}</span>
                   </Badge>
                 )}
                 {isAdvanced && (
                   <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0 shadow-lg">
                     <Award size={14} className="mr-1" />
-                    <span className="font-bold">{isPtBr ? T("Avançado") : 'Advanced'}</span>
+                    <span className="font-bold">{isPtBr ? T("Avançado") : T("Advanced")}</span>
                   </Badge>
                 )}
               </div>
@@ -234,7 +234,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-white">
                 <ShieldCheck size={15} className="text-emerald-400" />
-                <span>{isPtBr ? T("Curso escrito por inteiro") : "Fully written course"}</span>
+                <span>{isPtBr ? T("Curso escrito por inteiro") : T("Fully written course")}</span>
               </div>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 {isPtBr
@@ -254,7 +254,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-center gap-1.5">
                 <Play className="text-amber-400" size={16} />
                 <span className="font-semibold text-white">
-                  {product.metrics.lessons} {isPtBr ? T("aulas") : 'lessons'}
+                  {product.metrics.lessons} {isPtBr ? T("aulas") : T("lessons")}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -266,24 +266,24 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
             {/* What's Included */}
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                {isPtBr ? T("Este curso inclui:") : 'This course includes:'}
+                {isPtBr ? T("Este curso inclui:") : T("This course includes:")}
               </p>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{product.metrics.lessons} {isPtBr ? T("aulas") : 'lessons'}</span>
+                  <span>{product.metrics.lessons} {isPtBr ? T("aulas") : T("lessons")}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{isPtBr ? T("Certificado") : 'Certificate'}</span>
+                  <span>{isPtBr ? T("Certificado") : T("Certificate")}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{isPtBr ? T("Acesso vitalício") : 'Lifetime access'}</span>
+                  <span>{isPtBr ? T("Acesso vitalício") : T("Lifetime access")}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{isPtBr ? 'Suporte' : 'Support'}</span>
+                  <span>{isPtBr ? T("Suporte") : T("Support")}</span>
                 </div>
               </div>
             </div>
@@ -294,28 +294,31 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 <div>
                   {effectiveOriginalPrice > effectivePrice && (
                     <p className="text-muted-foreground line-through text-sm">
-                      R$ {effectiveOriginalPrice}
+                      
+                      {T("R$")} {effectiveOriginalPrice}
                     </p>
                   )}
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
-                      R$ {effectivePrice}
+                      
+                      {T("R$")} {effectivePrice}
                     </span>
                     {discount > 0 && (
                       <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
                         {isFreeCourseOfMonth
-                          ? (isPtBr ? T("Certificado incluso") : 'Certificate included')
+                          ? (isPtBr ? T("Certificado incluso") : T("Certificate included"))
                           : isPtBr ? `Economize ${discount}%` : `Save ${discount}%`}
                       </Badge>
                     )}
                   </div>
                   {isFreeCourseOfMonth ? (
                     <p className="text-xs text-emerald-300 mt-1">
-                      {isPtBr ? T("Curso grátis do mês") : "Free course of the month"}
+                      {isPtBr ? T("Curso grátis do mês") : T("Free course of the month")}
                     </p>
                   ) : (
                     <p className="text-xs text-muted-foreground mt-1">
-                      ou 12x de R$ {(product.pricing.price / 12).toFixed(2)}
+                      
+                      {T("ou 12x de R$")} {(product.pricing.price / 12).toFixed(2)}
                     </p>
                   )}
                 </div>
@@ -326,8 +329,8 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               >
                 <span>
                   {isFreeCourseOfMonth
-                    ? (isPtBr ? T("Liberar grátis") : "Unlock free")
-                    : isPtBr ? T("Ver Curso Completo") : 'View Full Course'}
+                    ? (isPtBr ? T("Liberar grátis") : T("Unlock free"))
+                    : isPtBr ? T("Ver Curso Completo") : T("View Full Course")}
                 </span>
                 <Play size={18} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
               </Button>
@@ -340,7 +343,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 </div>
                 <div className="flex items-center gap-1">
                   <Check size={12} className="text-green-400" />
-                  <span>{isPtBr ? 'Acesso imediato' : 'Instant access'}</span>
+                  <span>{isPtBr ? T("Acesso imediato") : T("Instant access")}</span>
                 </div>
               </div>
             </div>

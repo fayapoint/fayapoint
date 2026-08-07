@@ -212,7 +212,7 @@ function MissionSection() {
             {/* Quote */}
             <div className="relative p-6 bg-secondary border-l-4 border-amber-500 rounded-r-xl">
               <p className="text-lg text-muted-foreground italic">&quot;{t("quote")}&quot;</p>
-              <p className="text-sm text-muted-foreground mt-2">— Ricardo Faya, Fundador</p>
+              <p className="text-sm text-muted-foreground mt-2">{T("— Ricardo Faya, Fundador")}</p>
             </div>
           </motion.div>
 

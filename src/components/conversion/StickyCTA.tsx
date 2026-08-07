@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +10,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useTranslations, useLocale } from "next-intl";
 
 export function StickyCTA() {
+  const T = useT();
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
   const t = useTranslations("StickyCTA");
@@ -80,7 +82,7 @@ export function StickyCTA() {
             <button
               onClick={handleDismiss}
               className="p-2 text-amber-300 hover:text-white transition-colors"
-              aria-label="Fechar"
+              aria-label={T("Fechar")}
             >
               <X className="w-5 h-5" />
             </button>

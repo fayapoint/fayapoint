@@ -38,8 +38,8 @@ export function BackToCube() {
         href={cubeHref}
         onClick={handleBack}
         className={`${styles.logoBack} ${isPortal ? styles.logoBackPortal : styles.logoBackInner}`}
-        aria-label={locale === "en" ? "Back to the FayAI cube" : T("Voltar ao cubo FayAI")}
-        title={locale === "en" ? "Back to the FayAI cube" : T("Voltar ao cubo FayAI")}
+        aria-label={locale === "en" ? T("Back to the FayAI cube") : T("Voltar ao cubo FayAI")}
+        title={locale === "en" ? T("Back to the FayAI cube") : T("Voltar ao cubo FayAI")}
       >
         <span className={styles.logoStage} aria-hidden="true">
           <span className={styles.logoCube}>
@@ -49,7 +49,7 @@ export function BackToCube() {
           </span>
           <span className={styles.logoSpark}>F</span>
         </span>
-        <span className={styles.logoText}>FAYAI</span>
+        <span className={styles.logoText}>{T("FAYAI")}</span>
       </Link>
     </>
   );

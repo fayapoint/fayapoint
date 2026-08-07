@@ -12,6 +12,8 @@
  *   node scripts/i18n/auditar.mjs --detalhe             # mostra os trechos
  */
 
+import { readFileSync } from "fs";
+
 const BASE = process.argv.find((a) => a.startsWith("http")) ?? "http://localhost:3002";
 const DETALHE = process.argv.includes("--detalhe");
 
@@ -26,6 +28,37 @@ const ROTAS = [
   "/servicos/consultoria-ai",
   "/login", "/registrar", "/portal",
 ];
+
+/**
+ * ── A segunda medida, e é a que não erra ──────────────────────────────────────
+ *
+ * A heurística abaixo (acento ou lista de palavras) foi útil e é CEGA para
+ * português sem acento: "Galeria", "Recursos", "Jogar", "Boa noite",
+ * "Ecossistema FayAI" passavam limpas por ela. O dashboard estava cheio delas
+ * enquanto a auditoria dizia que a página estava boa.
+ *
+ * Esta medida não adivinha idioma nenhum. Ela pergunta uma coisa verificável:
+ * **alguma CHAVE do dicionário aparece literalmente no HTML inglês?** Se
+ * aparece, o dicionário sabe traduzir aquilo e a tela mostrou o original — é
+ * um ponto de render sem `T()`, provado, com o texto na mão.
+ *
+ * Só entram chaves de 6+ caracteres e cuja tradução é DIFERENTE do original:
+ * "Total" e "Design" são iguais nos dois idiomas e apareceriam como falso
+ * positivo em toda página.
+ */
+const DICIONARIO = JSON.parse(
+  readFileSync(new URL("../../messages/dicionario.en.json", import.meta.url), "utf8"),
+);
+const CHAVES_MEDIVEIS = Object.entries(DICIONARIO)
+  .filter(([pt, en]) => pt.length >= 6 && pt !== en)
+  .map(([pt]) => pt);
+
+function chavesNaoTraduzidas(html) {
+  const limpo = html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "");
+  return CHAVES_MEDIVEIS.filter((k) => limpo.includes(`>${k}<`) || limpo.includes(`"${k}"`));
+}
 
 const ACENTO = /[áàâãéêíóôõúçÁÀÂÃÉÊÍÓÔÕÚÇ]/;
 const PALAVRAS_PT =
@@ -61,6 +94,7 @@ function trechosEmPortugues(html) {
 const linha = (s, n) => `${String(n).padStart(4)}  ${s}`;
 
 let total = 0;
+let totalProvados = 0;
 const problemas = [];
 
 for (const rota of ROTAS) {
@@ -84,13 +118,22 @@ for (const rota of ROTAS) {
   }
 
   const pt = trechosEmPortugues(html);
+  const provados = chavesNaoTraduzidas(html);
   total += pt.length;
-  console.log(linha(rota, pt.length));
-  if (pt.length > 2) problemas.push({ rota, pt });
-  if (DETALHE) for (const t of pt) console.log(`        ${t}`);
+  totalProvados += provados.length;
+  console.log(linha(`${rota}${provados.length ? `   ⚠ ${provados.length} provado(s)` : ""}`, pt.length));
+  if (pt.length > 2 || provados.length) problemas.push({ rota, pt, provados });
+  if (DETALHE) {
+    for (const t of pt) console.log(`        ${t}`);
+    for (const k of provados) console.log(`     ⚠  ${k}  → deveria ser "${DICIONARIO[k]}"`);
+  }
 }
 
-console.log(`\n${total} trecho(s) em ${ROTAS.length} rota(s).`);
+console.log(`\n${total} trecho(s) pela heurística em ${ROTAS.length} rota(s).`);
+console.log(
+  `${totalProvados} ponto(s) de render PROVADO(s) sem tradução ` +
+    `(chave do dicionário aparecendo literal no HTML inglês).`,
+);
 if (problemas.length && !DETALHE) {
-  console.log(`\n${problemas.length} rota(s) acima de 2 — rode com --detalhe para ver.`);
+  console.log(`\n${problemas.length} rota(s) com achado — rode com --detalhe para ver.`);
 }

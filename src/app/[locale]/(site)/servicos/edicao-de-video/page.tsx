@@ -260,13 +260,13 @@ export default async function VideoEditingPage({
                 </ScheduleConsultationButton>
                 <a href="#toolbox">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                    {isEn ? "Use the free tools" : T("Usar ferramentas grátis")}
+                    {isEn ? T("Use the free tools") : T("Usar ferramentas grátis")}
                   </Button>
                 </a>
               </div>
               <div className="mt-4">
                 <Link href="/contato" className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">
-                  {isEn ? "Get portfolio" : T("Receber portfólio")}
+                  {isEn ? T("Get portfolio") : T("Receber portfólio")}
                 </Link>
               </div>
               <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
@@ -351,7 +351,8 @@ export default async function VideoEditingPage({
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
-                Brands e creators que confiam
+                
+                {T("Brands e creators que confiam")}
               </h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
                 
@@ -393,7 +394,7 @@ export default async function VideoEditingPage({
                   className={`p-8 border ${pkg.featured ? "border-primary shadow-lg relative" : "border-border"} bg-card`}
                 >
                   {pkg.featured && (
-                    <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">Preferido</Badge>
+                    <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">{T("Preferido")}</Badge>
                   )}
                   <div className="text-sm font-semibold text-primary mb-2">{T(pkg.tier)}</div>
                   <h3 className="text-2xl font-bold mb-4">{T(pkg.title)}</h3>
@@ -432,9 +433,9 @@ export default async function VideoEditingPage({
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-8">
               <Badge variant="secondary" className="mb-3">FAQ</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">{isEn ? T("Questions") : T("Perguntas")}</h2>
               <p className="text-muted-foreground mt-3">
-                {isEn ? "Clear answers before you book." : T("Respostas rápidas antes de agendar.")}
+                {isEn ? T("Clear answers before you book.") : T("Respostas rápidas antes de agendar.")}
               </p>
             </div>
 
@@ -495,14 +496,14 @@ export default async function VideoEditingPage({
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-sm font-medium">{isEn ? "Video content plan" : T("Plano de conteúdo")}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
+            <p className="text-sm font-medium">{isEn ? T("Video content plan") : T("Plano de conteúdo")}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? T("Free + actionable") : T("Grátis + acionável")}</p>
           </div>
           <a href="#toolbox">
-            <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>
+            <Button className="px-4" variant="outline">{isEn ? T("Tools") : T("Ferramentas")}</Button>
           </a>
           <ScheduleConsultationButton source="video-editing-sticky" className="px-4" showCompanyRole>
-            {isEn ? "Book" : "Agendar"}
+            {isEn ? T("Book") : T("Agendar")}
           </ScheduleConsultationButton>
         </div>
       </div>

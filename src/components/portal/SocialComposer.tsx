@@ -141,7 +141,7 @@ export default function SocialComposer() {
         setContent(first.content);
         if (Array.isArray(first.hashtags)) setHashtags(first.hashtags.join(" "));
         if (typeof first.mediaPrompt === "string") setMediaPrompt(first.mediaPrompt);
-        toast.success("Post gerado — revise antes de publicar ✨");
+        toast.success(T("Post gerado — revise antes de publicar ✨"));
       } else {
         toast.error(data?.error || "A IA não conseguiu gerar agora");
       }
@@ -165,7 +165,7 @@ export default function SocialComposer() {
       const data = await res.json();
       if (res.ok && data.imageUrl) {
         setMediaUrl(data.imageUrl);
-        toast.success("Imagem criada e anexada ao post 🎨");
+        toast.success(T("Imagem criada e anexada ao post 🎨"));
       } else {
         toast.error(data?.error || "Não deu para criar a imagem agora");
       }
@@ -225,7 +225,7 @@ export default function SocialComposer() {
           toast.error(pubData?.error || "Salvo como rascunho, mas a publicação falhou");
         }
       } else {
-        toast.success("Post agendado ⏰");
+        toast.success(T("Post agendado ⏰"));
       }
 
       setContent("");
@@ -245,7 +245,7 @@ export default function SocialComposer() {
     try {
       const res = await fetch(`/api/social/posts/${id}/publish`, { method: "POST", headers });
       const data = await res.json();
-      if (res.ok && data.published) toast.success("Publicado 🎉");
+      if (res.ok && data.published) toast.success(T("Publicado 🎉"));
       else toast.error(data?.error || "Falha ao publicar");
       await load();
     } catch {
@@ -277,7 +277,7 @@ export default function SocialComposer() {
           <p className="font-semibold text-foreground">{T("Nenhuma conta pronta para publicar")}</p>
           <p className="mt-1 text-sm text-muted-foreground">
             
-            {T("Você pode escrever e gerar aqui do mesmo jeito. Para publicar direto, conecte Facebook + Instagram\r\n            na aba")} <span className="font-semibold text-amber-400">Contas</span>.
+            {T("Você pode escrever e gerar aqui do mesmo jeito. Para publicar direto, conecte Facebook + Instagram\r\n            na aba")} <span className="font-semibold text-amber-400">{T("Contas")}</span>.
           </p>
         </div>
       )}
@@ -324,7 +324,8 @@ export default function SocialComposer() {
             className="border-violet-500/40 text-violet-300 hover:bg-violet-500/10"
           >
             {generating ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <Sparkles className="h-4 w-4 mr-1.5" />}
-            Gerar
+            
+            {T("Gerar")}
           </Button>
         </div>
       </div>
@@ -351,7 +352,7 @@ export default function SocialComposer() {
             <input
               value={mediaUrl}
               onChange={(e) => setMediaUrl(e.target.value)}
-              placeholder={selected?.platform === "instagram" ? T("URL da imagem (obrigatória no IG)") : "URL da imagem (opcional)"}
+              placeholder={selected?.platform === "instagram" ? T("URL da imagem (obrigatória no IG)") : T("URL da imagem (opcional)")}
               className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-amber-400/60"
             />
           </div>
@@ -367,7 +368,7 @@ export default function SocialComposer() {
               className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 px-3.5 py-1.5 text-[11px] font-extrabold text-black hover:from-amber-400 hover:to-yellow-400 transition-colors cursor-pointer disabled:opacity-60"
             >
               {creatingImage ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ImageIcon className="h-3.5 w-3.5" />}
-              {mediaUrl ? "Recriar imagem" : T("Criar imagem")}
+              {mediaUrl ? T("Recriar imagem") : T("Criar imagem")}
             </button>
           </div>
         )}
@@ -375,7 +376,7 @@ export default function SocialComposer() {
           <div className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={mediaUrl} alt={T("Mídia do post")} className="h-14 w-14 rounded-lg object-cover ring-1 ring-amber-400/40" />
-            <span className="text-[11px] text-muted-foreground">Imagem anexada ao post</span>
+            <span className="text-[11px] text-muted-foreground">{T("Imagem anexada ao post")}</span>
           </div>
         )}
         <p className="text-[11px] text-muted-foreground text-right">{content.length}/5000</p>
@@ -407,7 +408,8 @@ export default function SocialComposer() {
             className="border-sky-500/40 text-sky-300 hover:bg-sky-500/10"
           >
             {sending === "schedule" ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : <CalendarClock className="h-4 w-4 mr-1.5" />}
-            Agendar
+            
+            {T("Agendar")}
           </Button>
         </div>
       </div>
@@ -420,7 +422,7 @@ export default function SocialComposer() {
             onClick={load}
             className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 cursor-pointer"
           >
-            <RefreshCw className="h-3 w-3" /> Atualizar
+            <RefreshCw className="h-3 w-3" />  {T("Atualizar")}
           </button>
         </div>
         {posts.length === 0 ? (

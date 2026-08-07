@@ -271,12 +271,14 @@ export default async function WebsiteBuildingPage({
                   className="text-lg px-8 py-6 group"
                   source="website-building-hero"
                 >
-                  Planejar projeto
+                  
+                  {T("Planejar projeto")}
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </ScheduleConsultationButton>
                 <Link href="/contato">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-                    Receber estimativa
+                    
+                    {T("Receber estimativa")}
                   </Button>
                 </Link>
               </div>
@@ -296,9 +298,9 @@ export default async function WebsiteBuildingPage({
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-8">
               <Badge variant="secondary" className="mb-3">FAQ</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold">{isEn ? "Questions" : "Perguntas"}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">{isEn ? T("Questions") : T("Perguntas")}</h2>
               <p className="text-muted-foreground mt-3">
-                {isEn ? "Clear answers before you start." : T("Respostas rápidas antes de começar.")}
+                {isEn ? T("Clear answers before you start.") : T("Respostas rápidas antes de começar.")}
               </p>
             </div>
 
@@ -338,7 +340,7 @@ export default async function WebsiteBuildingPage({
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Do discovery ao go-live</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Do discovery ao go-live")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
                 
                 {T("Sites que combinam velocidade, SEO, integrações e storytelling para converter.")}
@@ -361,7 +363,7 @@ export default async function WebsiteBuildingPage({
         <section className="py-20 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Trabalhos recentes</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Trabalhos recentes")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
                 
                 {T("Seleção de produtos digitais lançados pela squad FayAi — landing pages, portais e lojas completos.")}
@@ -382,7 +384,8 @@ export default async function WebsiteBuildingPage({
                   <div className="p-6 space-y-4">
                     <div>
                       <p className="text-sm uppercase tracking-widest text-muted-foreground mb-2">
-                        Website / Produto digital
+                        
+                        {T("Website / Produto digital")}
                       </p>
                       <h3 className="text-xl font-semibold">{T(work.title)}</h3>
                     </div>
@@ -396,7 +399,8 @@ export default async function WebsiteBuildingPage({
                       </div>
                     )}
                     <Link href={work.url} target="_blank" className="inline-flex items-center gap-2 text-primary font-medium">
-                      Visitar projeto
+                      
+                      {T("Visitar projeto")}
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -409,7 +413,7 @@ export default async function WebsiteBuildingPage({
         <section className="py-20 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">Processo co-criativo</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Processo co-criativo")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
                 
                 {T("Cada sprint traz entregas navegáveis, documentação viva e indicadores claros.")}
@@ -507,7 +511,8 @@ export default async function WebsiteBuildingPage({
                 source="website-building-final"
                 showCompanyRole
               >
-                Agendar blueprint
+                
+                {T("Agendar blueprint")}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </ScheduleConsultationButton>
               <p className="text-sm text-muted-foreground mt-6">{T("Inclui sessão estratégica + entregáveis em PDF")}</p>
@@ -531,14 +536,14 @@ export default async function WebsiteBuildingPage({
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur md:hidden">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex-1">
-            <p className="text-sm font-medium">{isEn ? "Website blueprint" : "Blueprint do site"}</p>
-            <p className="text-xs text-muted-foreground">{isEn ? "Free + actionable" : T("Grátis + acionável")}</p>
+            <p className="text-sm font-medium">{isEn ? T("Website blueprint") : T("Blueprint do site")}</p>
+            <p className="text-xs text-muted-foreground">{isEn ? T("Free + actionable") : T("Grátis + acionável")}</p>
           </div>
           <a href="#toolbox">
-            <Button className="px-4" variant="outline">{isEn ? "Tools" : "Ferramentas"}</Button>
+            <Button className="px-4" variant="outline">{isEn ? T("Tools") : T("Ferramentas")}</Button>
           </a>
           <ScheduleConsultationButton source="website-building-sticky" className="px-4">
-            {isEn ? "Book" : "Agendar"}
+            {isEn ? T("Book") : T("Agendar")}
           </ScheduleConsultationButton>
         </div>
       </div>

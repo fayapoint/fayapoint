@@ -208,14 +208,14 @@ export function ScheduleMeetingForm({
           <div className="flex items-center gap-2 mb-3">
             <ShoppingCart className="w-5 h-5 text-purple-600" />
             <span className="font-semibold text-amber-700 dark:text-amber-300">
-              {itemCount} {itemCount === 1 ? 'item' : 'itens'}  {T("no carrinho")}
+              {itemCount} {itemCount === 1 ? T("item") : T("itens")}  {T("no carrinho")}
             </span>
           </div>
           <div className="space-y-2">
             {Object.values(cartItems).map(item => (
               <div key={item.id} className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">
-                  {T(item.name)} <span className="text-xs">(x{item.quantity})</span>
+                  {T(item.name)} <span className="text-xs">{T("(x")}{item.quantity})</span>
                 </span>
                 <span className="font-medium">
                   {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -224,7 +224,7 @@ export function ScheduleMeetingForm({
               </div>
             ))}
             <div className="pt-2 border-t border-amber-200 dark:border-amber-700 flex justify-between items-center font-semibold">
-              <span>Total</span>
+              <span>{T("Total")}</span>
               <span className="text-amber-700 dark:text-amber-300">
                 {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cartTotal)}
               </span>

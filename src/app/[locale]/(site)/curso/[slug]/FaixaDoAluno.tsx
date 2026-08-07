@@ -167,7 +167,8 @@ export default function FaixaDoAluno({
               <Link href={`/${locale}/curso/${slug}/meu`}>
                 <Button variant="outline" className="border-amber-400/40 text-amber-200 hover:bg-amber-500/10">
                   <Wand2 size={16} className="mr-1.5" />
-                  Personalizar
+                  
+                  {T("Personalizar")}
                 </Button>
               </Link>
             )}
@@ -226,7 +227,8 @@ export default function FaixaDoAluno({
               ) : (
                 <Check size={16} className="mr-1.5" />
               )}
-              Adicionar ao acervo
+              
+              {T("Adicionar ao acervo")}
             </Button>
           </div>
         </div>
@@ -253,11 +255,11 @@ export default function FaixaDoAluno({
         {desconto > 0
           ? `Este curso não entra na cota do seu plano. Você lê ${acesso.freeChapters} capítulos de graça e, por ser ${tier.displayName}, leva o curso completo por `
           : `Você lê ${acesso.freeChapters} capítulos de graça. Para ler o curso inteiro, ele sai por `}
-        <strong className="text-white">R$ {precoComDesconto}</strong>
+        <strong className="text-white">{T("R$")} {precoComDesconto}</strong>
         {desconto > 0 && (
           <>
             {" "}
-            <span className="line-through opacity-60">R$ {preco}</span>{" "}
+            <span className="line-through opacity-60">{T("R$")} {preco}</span>{" "}
             <span>({Math.round(desconto * 100)}{T("% de desconto já aplicado no checkout)")}</span>
           </>
         )}

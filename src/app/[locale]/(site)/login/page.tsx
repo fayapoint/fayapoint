@@ -323,7 +323,8 @@ function LoginPageContent() {
                 onClick={handleGoogleLogin}
               >
                 <Chrome className="mr-2" size={20} />
-                Google
+                
+                {T("Google")}
               </Button>
               <Button
                 type="button"
@@ -332,7 +333,8 @@ function LoginPageContent() {
                 onClick={handleGithubLogin}
               >
                 <Github className="mr-2" size={20} />
-                GitHub
+                
+                {T("GitHub")}
               </Button>
             </div>
 

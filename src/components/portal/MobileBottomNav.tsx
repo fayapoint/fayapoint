@@ -152,7 +152,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
               </div>
               <div className="h-4 w-px bg-border" />
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-amber-400 font-bold">Lv.{stats.level}</span>
+                <span className="text-amber-400 font-bold">{T("Lv.")}{stats.level}</span>
               </div>
               {/* O saldo entra AQUI porque foi aqui que o Ricardo procurou por
                   ele em 05/08/2026 e não achou — ao lado do nível, no menu que
@@ -213,7 +213,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
 
           {/* Theme */}
           <div className="px-4 pt-3 pb-1 border-t border-border">
-            <p className="text-xs text-muted-foreground mb-1.5">Tema</p>
+            <p className="text-xs text-muted-foreground mb-1.5">{T("Tema")}</p>
             <ThemeSwitcher />
           </div>
 
@@ -230,7 +230,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
             <Link href={settingsHref} className="min-w-0">
               <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-secondary rounded-xl text-muted-foreground hover:bg-white/10 transition">
                 <Settings size={18} />
-                <span className="text-sm truncate">Config</span>
+                <span className="text-sm truncate">{T("Config")}</span>
               </button>
             </Link>
             {/* No celular a barra lateral não existe, então este é o único
@@ -288,7 +288,7 @@ export function MobileBottomNav({ activeTab, onTabChange, plan, stats }: MobileB
           <Link href={cubeHref} className="flex-1 min-w-0 h-full">
             <span className="flex h-full flex-col items-center justify-center gap-1 rounded-xl text-muted-foreground transition-colors hover:text-white">
               <Home size={19} />
-              <span className="text-[9px] font-medium leading-none truncate max-w-full">Site</span>
+              <span className="text-[9px] font-medium leading-none truncate max-w-full">{T("Site")}</span>
             </span>
           </Link>
 

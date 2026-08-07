@@ -75,7 +75,8 @@ export function CoursePaywall({
         <div className="flex items-center gap-2 mb-6">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/20 text-amber-400 text-xs font-semibold">
             <Lock size={12} />
-            Conteudo Premium
+            
+            {T("Conteudo Premium")}
           </span>
         </div>
 
@@ -93,7 +94,8 @@ export function CoursePaywall({
 
         {/* Heading */}
         <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 tracking-tight">
-          Continue aprendendo
+          
+          {T("Continue aprendendo")}
         </h3>
         <p className="text-white/40 text-sm mb-8 max-w-md">
           
@@ -105,7 +107,8 @@ export function CoursePaywall({
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <Link href={`/${locale}/portal/planos`} className="flex-1">
             <Button className="w-full h-12 bg-gradient-to-r from-violet-600 to-amber-600 hover:from-amber-500 hover:to-amber-500 rounded-xl font-semibold shadow-lg shadow-violet-600/25 text-sm transition-all duration-300 hover:shadow-amber-500/30 hover:scale-[1.01]">
-              Assine por R$19,90/mes
+              
+              {T("Assine por R$19,90/mes")}
               <ChevronRight size={16} className="ml-1" />
             </Button>
           </Link>
@@ -156,7 +159,8 @@ export function CoursePaywall({
               href={`/${locale}/login`}
               className="text-violet-400/70 hover:text-violet-400 underline underline-offset-2 transition-colors"
             >
-              Faca login
+              
+              {T("Faca login")}
             </Link>
           </p>
         )}

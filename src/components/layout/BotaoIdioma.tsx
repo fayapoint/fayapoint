@@ -22,7 +22,7 @@ export function BotaoIdioma({ className = "" }: { className?: string }) {
     <div
       className={`flex items-center rounded-full border border-white/15 bg-white/5 p-0.5 text-[11px] font-bold tracking-wide backdrop-blur-sm ${className}`}
       role="group"
-      aria-label={ehIngles ? "Language" : "Idioma"}
+      aria-label={ehIngles ? T("Language") : T("Idioma")}
     >
       {IDIOMAS.map((item) => {
         const ativo = item.code === locale;

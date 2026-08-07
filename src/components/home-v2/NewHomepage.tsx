@@ -191,7 +191,7 @@ export function NewHomepage() {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.95]"
           >
-            <span className="block text-white">Domine a IA.</span>
+            <span className="block text-white">{T("Domine a IA.")}</span>
             <span className="block bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
               
               {T("Comece grátis.")}
@@ -354,7 +354,7 @@ export function NewHomepage() {
             className="text-center mb-14"
           >
             <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400 mb-3">{T("Nossos Cursos")}</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Aprenda por ferramenta</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">{T("Aprenda por ferramenta")}</h2>
             <p className="mt-4 text-slate-400 text-lg max-w-lg mx-auto">
               
               {T("Cada curso cobre uma ferramenta de IA do zero ao avançado")}
@@ -489,8 +489,8 @@ export function NewHomepage() {
       {/* ═══ AI TOOLS MARQUEE ═══ */}
       <section className="py-16 overflow-hidden">
         <div className="text-center mb-10">
-          <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-3">Ferramentas</p>
-          <h2 className="text-3xl md:text-4xl font-bold">40+ ferramentas de IA</h2>
+          <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-3">{T("Ferramentas")}</p>
+          <h2 className="text-3xl md:text-4xl font-bold">{T("40+ ferramentas de IA")}</h2>
         </div>
         <div className="relative">
           <div className="flex gap-4 animate-[marquee_30s_linear_infinite]">
@@ -528,7 +528,8 @@ export function NewHomepage() {
               
               {T("Pronto para")}{" "}
               <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-cyan-400 bg-clip-text text-transparent">
-                dominar a IA?
+                
+                {T("dominar a IA?")}
               </span>
             </h2>
             <p className="text-slate-400 text-lg mb-8">

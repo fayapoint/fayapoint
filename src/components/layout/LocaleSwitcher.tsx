@@ -33,7 +33,7 @@ export function LocaleSwitcher() {
           variant="ghost"
           size="sm"
           disabled={pendente}
-          aria-label={atual.code === "en" ? "Change language" : "Trocar idioma"}
+          aria-label={atual.code === "en" ? T("Change language") : T("Trocar idioma")}
           className="flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground"
         >
           <Globe className="h-4 w-4" />

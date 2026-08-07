@@ -95,8 +95,8 @@ export function CertificateArtwork({
               <Award className="h-4 w-4" />
             </div>
             <div>
-              <p className="text-[9px] font-black tracking-[.28em] text-white">FAYAI</p>
-              <p className="text-[7px] tracking-[.2em] text-white/40">ACADEMY</p>
+              <p className="text-[9px] font-black tracking-[.28em] text-white">{T("FAYAI")}</p>
+              <p className="text-[7px] tracking-[.2em] text-white/40">{T("ACADEMY")}</p>
             </div>
           </div>
           <span
@@ -118,12 +118,12 @@ export function CertificateArtwork({
 
         <div className="flex w-full items-end justify-between gap-4 text-left">
           <div>
-            <p className="text-[6px] tracking-[.18em] text-white/30 sm:text-[7px]">EMITIDO EM</p>
+            <p className="text-[6px] tracking-[.18em] text-white/30 sm:text-[7px]">{T("EMITIDO EM")}</p>
             <p className="mt-1 text-[7px] font-semibold text-white/65 sm:text-[9px]">{shortDate(issuedAt)}</p>
           </div>
           <div className="flex items-center gap-2 text-right">
             <div>
-              <p className="text-[6px] tracking-[.18em] text-white/30 sm:text-[7px]">REGISTRO DIGITAL</p>
+              <p className="text-[6px] tracking-[.18em] text-white/30 sm:text-[7px]">{T("REGISTRO DIGITAL")}</p>
               <p className="mt-1 font-mono text-[7px] font-semibold sm:text-[9px]" style={{ color: theme.accent }}>{T(certificateNumber)}</p>
             </div>
             <ShieldCheck className="h-5 w-5" style={{ color: theme.accent }} />

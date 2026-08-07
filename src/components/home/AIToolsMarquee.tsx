@@ -242,7 +242,8 @@ const PortalTooltip = ({
                 </>
               ) : (
                 <>
-                  Visitar site 
+                  
+                  {T("Visitar site")} 
                   <motion.span
                     animate={{ x: [0, 3, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}

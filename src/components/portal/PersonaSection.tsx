@@ -394,7 +394,7 @@ export function PersonaSection() {
                       addCustom(dim);
                     }
                   }}
-                  placeholder="Outro? Digite e Enter…"
+                  placeholder={T("Outro? Digite e Enter…")}
                   className="h-7 w-44 rounded-full border-white/10 bg-white/5 px-3 text-[11px]"
                 />
               </div>
@@ -422,7 +422,7 @@ export function PersonaSection() {
           )}
           {persona.writingStyle && (
             <p className="mt-2 text-xs text-muted-foreground">
-              <strong className="text-white/70">Estilo de escrita:</strong> {T(persona.writingStyle)}
+              <strong className="text-white/70">{T("Estilo de escrita:")}</strong> {T(persona.writingStyle)}
             </p>
           )}
           {persona.audienceInsights && (

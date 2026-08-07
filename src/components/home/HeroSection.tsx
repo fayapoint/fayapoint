@@ -123,11 +123,11 @@ export function HeroSection() {
             <div className="flex flex-wrap items-center gap-3">
               <Badge className="border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-emerald-200">
                 <Gift size={14} className="mr-2" />
-                {isPtBr ? T("Curso grátis do mês") : "Free course of the month"}
+                {isPtBr ? T("Curso grátis do mês") : T("Free course of the month")}
               </Badge>
               <Badge className="border-cyan-400/15 bg-cyan-500/10 px-3 py-1 text-cyan-100">
                 <CalendarDays size={14} className="mr-2" />
-                {isPtBr ? T("Catálogo mensal transparente") : "Transparent monthly catalog"}
+                {isPtBr ? T("Catálogo mensal transparente") : T("Transparent monthly catalog")}
               </Badge>
             </div>
 
@@ -142,7 +142,7 @@ export function HeroSection() {
               <p className="max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
                 {isPtBr
                   ? T("Descubra o curso grátis do mês, veja quais trilhas entram no seu plano agora e transforme a primeira experiência em confiança para continuar aprendendo.")
-                  : "Discover the free course of the month, see which paths belong to your plan right now, and turn the first experience into confidence to keep learning."}
+                  : T("Discover the free course of the month, see which paths belong to your plan right now, and turn the first experience into confidence to keep learning.")}
             </p>
             </div>
 
@@ -158,7 +158,7 @@ export function HeroSection() {
                   <div className="flex items-center gap-2">
                     <stat.icon size={16} />
                     <span className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-                      {isPtBr ? "Prova de valor" : "Proof of value"}
+                      {isPtBr ? T("Prova de valor") : T("Proof of value")}
                     </span>
                   </div>
                   <p className="mt-4 text-3xl font-black text-white">{T(stat.value)}</p>
@@ -175,10 +175,10 @@ export function HeroSection() {
                   {freeCourse
                     ? isPtBr
                       ? T("Liberar curso grátis do mês")
-                      : "Unlock free course of the month"
+                      : T("Unlock free course of the month")
                     : isPtBr
                       ? T("Assistir aula gratuita")
-                      : "Watch free class"}
+                      : T("Watch free class")}
                 </Button>
               </Link>
 
@@ -189,7 +189,7 @@ export function HeroSection() {
                   className="h-14 border-white/15 bg-white/[0.05] px-8 text-base font-semibold text-white backdrop-blur-xl hover:bg-white/[0.1]"
                 >
                   <Crown className="mr-2 h-5 w-5" />
-                  {isPtBr ? T("Ver planos e catálogo do mês") : "View plans and this month's catalog"}
+                  {isPtBr ? T("Ver planos e catálogo do mês") : T("View plans and this month's catalog")}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -198,11 +198,11 @@ export function HeroSection() {
             <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-emerald-300" />
-                {isPtBr ? T("Curso grátis com progresso salvo e acesso vitalício") : "Free course with saved progress and lifetime access"}
+                {isPtBr ? T("Curso grátis com progresso salvo e acesso vitalício") : T("Free course with saved progress and lifetime access")}
               </span>
               <span className="inline-flex items-center gap-2">
                 <CheckCircle2 size={15} className="text-emerald-300" />
-                {isPtBr ? T("Certificado verificável incluído na oferta mensal") : "Verifiable certificate included in the monthly offer"}
+                {isPtBr ? T("Certificado verificável incluído na oferta mensal") : T("Verifiable certificate included in the monthly offer")}
               </span>
             </div>
           </motion.div>
@@ -218,14 +218,14 @@ export function HeroSection() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-emerald-300">
-                    {isPtBr ? T("Oferta principal do mês") : "Primary offer of the month"}
+                    {isPtBr ? T("Oferta principal do mês") : T("Primary offer of the month")}
                   </p>
                   <h2 className="mt-2 text-2xl font-black text-white">
-                    {freeCourse?.name || (isPtBr ? T("Um curso completo grátis todo mês") : "A full course free every month")}
+                    {freeCourse?.name || (isPtBr ? T("Um curso completo grátis todo mês") : T("A full course free every month"))}
                   </h2>
                 </div>
                 <div className="rounded-[22px] border border-emerald-400/20 bg-[linear-gradient(180deg,rgba(16,185,129,0.2),rgba(16,185,129,0.08))] px-4 py-3 text-right shadow-[0_12px_30px_rgba(16,185,129,0.16)]">
-                  <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">Now</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-emerald-200/80">{T("Now")}</p>
                   <p className="text-3xl font-black text-white">{T("GRÁTIS")}</p>
                   <p className="text-[10px] text-emerald-200/60">{T("sem cobrança")}</p>
                 </div>
@@ -236,53 +236,53 @@ export function HeroSection() {
                   ? freeCourse.copy?.shortDescription || freeCourse.copy?.subheadline || freeCourse.name
                   : isPtBr
                     ? T("Entre, teste a experiência completa da academia e entenda o valor real do restante da oferta.")
-                    : "Get in, try the full academy experience, and understand the real value of the rest of the offer."}
+                    : T("Get in, try the full academy experience, and understand the real value of the rest of the offer.")}
               </p>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-[22px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    {isPtBr ? T("O que está incluso") : "What is included"}
+                    {isPtBr ? T("O que está incluso") : T("What is included")}
                   </p>
                   <ul className="mt-3 space-y-2 text-sm text-white/85">
                     <li className="inline-flex items-center gap-2">
                       <CheckCircle2 size={14} className="text-emerald-300" />
-                      {isPtBr ? T("Acesso completo ao curso") : "Full course access"}
+                      {isPtBr ? T("Acesso completo ao curso") : T("Full course access")}
                     </li>
                     <li className="inline-flex items-center gap-2">
                       <CheckCircle2 size={14} className="text-emerald-300" />
-                      {isPtBr ? T("Progresso salvo no portal") : "Saved progress in the portal"}
+                      {isPtBr ? T("Progresso salvo no portal") : T("Saved progress in the portal")}
                     </li>
                     <li className="inline-flex items-center gap-2">
                       <CheckCircle2 size={14} className="text-emerald-300" />
-                      {isPtBr ? T("Certificado verificável") : "Verifiable certificate"}
+                      {isPtBr ? T("Certificado verificável") : T("Verifiable certificate")}
                     </li>
                   </ul>
                 </div>
 
                 <div className="rounded-[22px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4 backdrop-blur-xl">
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    {isPtBr ? T("Como o modelo funciona") : "How the model works"}
+                    {isPtBr ? T("Como o modelo funciona") : T("How the model works")}
                   </p>
                   <ul className="mt-3 space-y-2 text-sm text-white/85">
                     <li className="inline-flex items-center gap-2">
                       <Zap size={14} className="text-cyan-300" />
-                      {isPtBr ? T("1 curso novo grátis no início de cada mês") : "1 new free course at the start of each month"}
+                      {isPtBr ? T("1 curso novo grátis no início de cada mês") : T("1 new free course at the start of each month")}
                     </li>
                     <li className="inline-flex items-center gap-2">
                       <Zap size={14} className="text-cyan-300" />
-                      {isPtBr ? T("Pool rotativo por faixa de plano") : "Rotating pool by plan tier"}
+                      {isPtBr ? T("Pool rotativo por faixa de plano") : T("Rotating pool by plan tier")}
                     </li>
                     <li className="inline-flex items-center gap-2">
                       <Zap size={14} className="text-cyan-300" />
-                      {isPtBr ? "Upgrade fica claro antes da compra" : "Upgrade value is clear before purchase"}
+                      {isPtBr ? T("Upgrade fica claro antes da compra") : T("Upgrade value is clear before purchase")}
                     </li>
                   </ul>
                 </div>
               </div>
 
               <div className="mt-5 rounded-[22px] border border-border bg-black/20 p-4 text-sm text-muted-foreground backdrop-blur-xl">
-                <p className="font-semibold text-white">{isPtBr ? T("Catálogo atual do mês") : "Current monthly catalog"}</p>
+                <p className="font-semibold text-white">{isPtBr ? T("Catálogo atual do mês") : T("Current monthly catalog")}</p>
                 <p className="mt-1 leading-6">{T(monthlySummary)}</p>
               </div>
             </div>
@@ -290,29 +290,29 @@ export function HeroSection() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-[28px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
                 <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                  {isPtBr ? T("Entrada sem fricção") : "Frictionless entry"}
+                  {isPtBr ? T("Entrada sem fricção") : T("Frictionless entry")}
                 </p>
                 <h3 className="mt-2 text-xl font-bold text-white">
-                  {isPtBr ? T("O usuário novo entende o valor antes de pagar") : "New users understand the value before paying"}
+                  {isPtBr ? T("O usuário novo entende o valor antes de pagar") : T("New users understand the value before paying")}
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {isPtBr
                     ? T("Curso grátis, catálogo mensal e upgrade aparecem com contexto, sem telas confusas.")
-                    : "The free course, monthly catalog, and upgrade appear with context, without confusing screens."}
+                    : T("The free course, monthly catalog, and upgrade appear with context, without confusing screens.")}
                 </p>
               </div>
 
               <div className="rounded-[28px] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-5 backdrop-blur-xl">
                 <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                  {isPtBr ? "Posicionamento" : "Positioning"}
+                  {isPtBr ? T("Posicionamento") : T("Positioning")}
                 </p>
                 <h3 className="mt-2 text-xl font-bold text-white">
-                  {isPtBr ? T("Oferta clara, moderna e pronta para vender") : "Clear, modern offer ready to sell"}
+                  {isPtBr ? T("Oferta clara, moderna e pronta para vender") : T("Clear, modern offer ready to sell")}
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {isPtBr
                     ? T("A página abre com contexto, confiança e caminho de compra, sem ruído desnecessário.")
-                    : "The page opens with context, trust, and a buying path, without unnecessary noise."}
+                    : T("The page opens with context, trust, and a buying path, without unnecessary noise.")}
                 </p>
               </div>
             </div>

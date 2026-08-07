@@ -152,13 +152,13 @@ export function VerdadeOuMito() {
           className="mx-auto max-w-sm"
         >
           <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/12 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-amber-300">
-            <Zap size={12} /> 60 segundos
+            <Zap size={12} />  {T("60 segundos")}
           </span>
           <h3 className="mt-3 text-2xl font-black">{T("Deslize rápido")}</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             
-            {T("Arraste para a")} <strong className="text-lime-300">direita</strong>  {T("se for verdade, para a")}{" "}
-            <strong className="text-rose-300">esquerda</strong>  {T("se for mito. Acerto seguido vale mais,\r\n            erro custa")} {TIME_PENALTY} segundos.
+            {T("Arraste para a")} <strong className="text-lime-300">{T("direita")}</strong>  {T("se for verdade, para a")}{" "}
+            <strong className="text-rose-300">{T("esquerda")}</strong>  {T("se for mito. Acerto seguido vale mais,\r\n            erro custa")} {TIME_PENALTY}  {T("segundos.")}
           </p>
           {high > 0 && (
             <p className="mt-3 text-xs font-bold text-amber-300">{T("Seu recorde:")} {high}  {T("pontos")}</p>
@@ -193,14 +193,15 @@ export function VerdadeOuMito() {
         )}
         <p className="text-6xl font-black text-amber-400">{score}</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          {hits} acerto{hits === 1 ? "" : "s"}  {T("· melhor sequência:")} {combo.best}
+          {hits}  {T("acerto")}{hits === 1 ? "" : "s"}  {T("· melhor sequência:")} {combo.best}
           {high > 0 && !isRecord && ` · recorde: ${high}`}
         </p>
 
         {misses.length > 0 && (
           <div className="mx-auto mt-5 max-w-md space-y-2 text-left">
             <p className="text-[11px] font-extrabold uppercase tracking-widest text-muted-foreground">
-              Revise o que escapou
+              
+              {T("Revise o que escapou")}
             </p>
             {misses.slice(0, 4).map((miss, i) => (
               <div
@@ -209,7 +210,8 @@ export function VerdadeOuMito() {
               >
                 <p className="font-bold leading-snug">{T(miss.statement)}</p>
                 <p className="mt-1 text-xs font-extrabold uppercase tracking-wider text-rose-300">
-                  Era {miss.wasTrue ? "verdade" : "mito"}
+                  
+                  {T("Era")} {miss.wasTrue ? T("verdade") : T("mito")}
                 </p>
                 <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                   {T(miss.explanation)}
@@ -283,17 +285,17 @@ export function VerdadeOuMito() {
       <div className="mt-3 flex items-center justify-center gap-3">
         <button
           onClick={() => answer(false)}
-          aria-label="Responder mito"
+          aria-label={T("Responder mito")}
           className="flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-400 px-6 py-3 font-black text-white transition-transform hover:scale-[1.05] active:scale-95"
         >
-          <X size={17} strokeWidth={3} /> Mito
+          <X size={17} strokeWidth={3} />  {T("Mito")}
         </button>
         <button
           onClick={() => answer(true)}
-          aria-label="Responder verdade"
+          aria-label={T("Responder verdade")}
           className="flex items-center gap-2 rounded-2xl bg-gradient-to-br from-lime-400 to-lime-200 px-6 py-3 font-black text-[#0c2a12] transition-transform hover:scale-[1.05] active:scale-95"
         >
-          <Check size={17} strokeWidth={3} /> Verdade
+          <Check size={17} strokeWidth={3} />  {T("Verdade")}
         </button>
       </div>
       <p className="mt-2 text-center text-[11px] text-muted-foreground">
@@ -368,13 +370,15 @@ function SwipeCard({
         style={{ opacity: trueOpacity }}
         className="pointer-events-none absolute left-4 top-4 z-20 rotate-[-14deg] rounded-lg border-[3px] border-lime-400 px-3 py-1 text-lg font-black uppercase tracking-wider text-lime-400"
       >
-        Verdade
+        
+        {T("Verdade")}
       </motion.span>
       <motion.span
         style={{ opacity: mythOpacity }}
         className="pointer-events-none absolute right-4 top-4 z-20 rotate-[14deg] rounded-lg border-[3px] border-rose-400 px-3 py-1 text-lg font-black uppercase tracking-wider text-rose-400"
       >
-        Mito
+        
+        {T("Mito")}
       </motion.span>
 
       {card.art && (

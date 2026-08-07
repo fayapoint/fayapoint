@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useRef } from "react";
 
@@ -12,6 +13,7 @@ interface HoneypotFieldProps {
  * If filled, we know it's a bot.
  */
 export function HoneypotField({ onBotDetected }: HoneypotFieldProps) {
+  const T = useT();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export function HoneypotField({ onBotDetected }: HoneypotFieldProps) {
         pointerEvents: "none",
       }}
     >
-      <label htmlFor="website_url">Website (leave empty)</label>
+      <label htmlFor="website_url">{T("Website (leave empty)")}</label>
       <input
         ref={inputRef}
         type="text"
