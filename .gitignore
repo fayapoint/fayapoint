@@ -80,3 +80,6 @@ _capas_novas/telas/
 
 # rascunho de sessão (scripts de auditoria/estado). Não é fonte.
 _tmp/
+
+# saida de execucao do vigia (log de rodada). O que vale e base-precos.json.
+scripts/precos/*.log
