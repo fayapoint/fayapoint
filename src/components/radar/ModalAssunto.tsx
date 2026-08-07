@@ -3,7 +3,7 @@ import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowUpRight, X, Clock, Search, BookOpen, Sparkles, Pin, PinOff, Youtube, BookOpenText } from "lucide-react";
 import type { EstadoPainel } from "@/components/radar/usePainelAssunto";
 

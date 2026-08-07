@@ -4,7 +4,7 @@ import { useT } from "@/i18n/dicionario";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   PlayCircle, Clock, Users, Star, Award, CheckCircle, Lock,
@@ -612,7 +612,7 @@ export default function CourseSalesPage({
                           interno que aponta autoridade para a única URL do
                           curso com conteúdo de profundidade indexável. */}
                       <Link
-                        href={`/${locale}/curso/${slug}/previa`}
+                        href={`/curso/${slug}/previa`}
                         className="block w-full rounded-lg border border-emerald-500/40 bg-emerald-500/5 px-4 py-3 text-center text-sm font-medium text-emerald-300 transition hover:bg-emerald-500/10"
                       >
                         {isPtBr

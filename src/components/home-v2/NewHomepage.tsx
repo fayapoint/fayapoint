@@ -2,7 +2,7 @@
 import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, Sparkles, BookOpen, Award, Zap,

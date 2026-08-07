@@ -17,8 +17,7 @@ import {
   ArrowRight,
   ExternalLink
 } from "lucide-react";
-import Link from "next/link";
-
+import { Link } from "@/i18n/navigation";
 interface Creation {
   _id: string;
   userName: string;

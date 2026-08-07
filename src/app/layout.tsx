@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Inter, Plus_Jakarta_Sans, Fira_Code, Bebas_Neue, DM_Mono } from "next/font/google";
 import Script from "next/script";
+import { getLocale } from "next-intl/server";
 import "./globals.css";
 
 const inter = Inter({
@@ -37,9 +38,29 @@ type RootLayoutProps = {
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
-export default function RootLayout({ children }: RootLayoutProps) {
+/**
+ * ⚠️ `lang` era "pt-BR" cravado, em TODA página — inclusive `/en`. O `<html>`
+ * mora aqui, fora do `[locale]`, então ninguém percebeu quando o inglês entrou:
+ * o texto virava inglês e o atributo continuava dizendo português.
+ *
+ * Não é detalhe. É por `lang` que o Google decide para qual idioma indexar a
+ * página, e é por ele que o leitor de tela escolhe a pronúncia — uma página
+ * inteira em inglês lida com fonemas de português.
+ *
+ * `getLocale()` do next-intl resolve o idioma do pedido. O `catch` existe
+ * porque este layout também embrulha rotas fora do `[locale]` (ex.: /blocked),
+ * onde não há idioma para resolver — ali o padrão do site é o certo.
+ */
+export default async function RootLayout({ children }: RootLayoutProps) {
+  let lang = "pt-BR";
+  try {
+    lang = await getLocale();
+  } catch {
+    // rota fora do [locale]: segue o padrão
+  }
+
   return (
-    <html lang="pt-BR" className="dark" suppressHydrationWarning>
+    <html lang={lang} className="dark" suppressHydrationWarning>
       <body
         suppressHydrationWarning
         className={`${inter.variable} ${plusJakarta.variable} ${firaCode.variable} ${bebasNeue.variable} ${dmMono.variable} font-sans antialiased bg-background text-foreground min-h-screen`}

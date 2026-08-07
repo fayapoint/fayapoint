@@ -2,7 +2,7 @@
 import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { BookOpen, Sparkles, ArrowRight } from "lucide-react";
 
 /**

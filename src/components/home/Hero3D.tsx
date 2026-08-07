@@ -3,7 +3,7 @@ import { useT } from "@/i18n/dicionario";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";

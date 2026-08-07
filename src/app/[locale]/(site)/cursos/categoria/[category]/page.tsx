@@ -2,7 +2,7 @@
 import { useT } from "@/i18n/dicionario";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, Clock, Users, Star, ChevronRight, Grid, List, Filter } from "lucide-react";

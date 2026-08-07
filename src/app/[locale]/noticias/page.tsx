@@ -5,6 +5,7 @@ import { getAllNews } from "@/lib/ai-news";
 import { SEED_NEWS } from "@/data/landing/seed-news";
 import { ExperienceNav } from "@/components/layout/ExperienceNav";
 import { generatePageMetadata, ROUTE_SEO } from "@/lib/metadata";
+import { comIdioma } from "@/lib/rota-idioma";
 import { getTranslations } from "next-intl/server";
 
 // canonical explícito: sem ele o hub herda o canonical da home declarado no
@@ -219,8 +220,12 @@ export default async function NoticiasPage({ params, searchParams }: Props) {
           {T("GUIAS")} <span style={{ color: GOLD }}>{T("RÁPIDOS")}</span>
         </h2>
         <div className="grid sm:grid-cols-3 gap-4">
+          {/* O href vem do DADO (`seed-news.ts`), que é escrito sem idioma — por
+              isso passa pelo `comIdioma`, em vez de confiar em o autor do dado
+              ter lembrado do prefixo. Sem isto, "GUIAS RÁPIDOS" era o único
+              ponto de /en/noticias que devolvia o leitor ao português. */}
           {SEED_NEWS.map((g) => (
-            <Link key={g.slug} href={g.url ?? "/cursos"} className="glass glass-hover group rounded-2xl overflow-hidden block">
+            <Link key={g.slug} href={comIdioma(g.url ?? "/cursos", locale)} className="glass glass-hover group rounded-2xl overflow-hidden block">
               <span className="block relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={g.image ?? "/landing/tags/voce-sabia.webp"} alt={T(g.title)} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />

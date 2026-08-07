@@ -5,8 +5,7 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { FileCode, Copy, Check, Zap } from "lucide-react";
 import { useState } from "react";
-import Link from "next/link";
-
+import { Link } from "@/i18n/navigation";
 type Template = {
   title: string;
   description: string;

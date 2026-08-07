@@ -1,5 +1,5 @@
 import { useT } from "@/i18n/dicionario";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Card } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
 

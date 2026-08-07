@@ -3,7 +3,7 @@ import { useT } from "@/i18n/dicionario";
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   Award,
   BookOpen,
