@@ -43,7 +43,13 @@ export async function GET(request: NextRequest) {
     const curso = new URL(request.url).searchParams.get("curso") || "";
 
     await dbConnect();
-    const user = await User.findById(authUser.id).select("socialPersona name image subscription role enrolledCourses");
+    // ⚠️ `credits` no projection: sem ele `saldoDe` lê `undefined` e a vitrine
+    // mostra "0 créditos" ao lado de um selo dizendo 50 — dois números
+    // diferentes para a mesma coisa na mesma tela. Um `select` que esquece um
+    // campo não dá erro; dá zero, que é pior.
+    const user = await User.findById(authUser.id).select(
+      "socialPersona name image subscription role enrolledCourses credits",
+    );
     if (!user) return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
 
     // Sem `curso`: devolve os cursos do aluno COM título. Nenhuma outra rota

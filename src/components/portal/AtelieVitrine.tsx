@@ -39,6 +39,15 @@ import { getClientAuthHeaders } from "@/lib/client-auth";
  *
  * O resultado é o mesmo banner desenhado — imagem de verdade, tipografia de
  * verdade — sem herdar nenhum dos três problemas.
+ *
+ * ## ⚠️ `<img>` para o que vem de fora, `<Image>` para o que é nosso
+ *
+ * As capas dos cursos moram no Cloudinary e o `next.config.ts` **não declara
+ * `images.remotePatterns`**. `next/image` recusa host não declarado, e o
+ * sintoma é o pior possível: o card aparece com o buraco no lugar da capa, sem
+ * erro no console e sem quebrar o build. Foi o que aconteceu na primeira
+ * versão desta tela. A arte dos passos é servida por nós, do mesmo domínio, e
+ * continua no `next/image` — que aí otimiza de verdade.
  */
 
 interface CursoVitrine {
@@ -154,11 +163,11 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
           {/* O saldo dele, no banner, porque é a informação que decide */}
           <div className="flex shrink-0 items-center gap-4 rounded-2xl border border-border bg-background/70 p-4 backdrop-blur">
             {avatar && (
-              <Image
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
                 src={avatar}
                 alt=""
-                width={44}
-                height={44}
+                referrerPolicy="no-referrer"
                 className="h-11 w-11 shrink-0 rounded-full object-cover"
               />
             )}
@@ -253,12 +262,12 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                     {c.capa ? (
-                      <Image
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
                         src={c.capa}
                         alt=""
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center">
