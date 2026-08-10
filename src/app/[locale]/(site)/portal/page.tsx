@@ -93,6 +93,7 @@ import { MobileBottomNav } from "@/components/portal/MobileBottomNav";
 import { CertificatesPanel } from "@/components/portal/CertificatesPanel";
 import { CoursesPanel } from "@/components/portal/CoursesPanel";
 import { GaleriaPanel } from "@/components/portal/GaleriaPanel";
+import { AtelieVitrine } from "@/components/portal/AtelieVitrine";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 
 // Types
@@ -287,7 +288,7 @@ export default function PortalPage() {
   useEffect(() => {
     // ⚠️ Aba nova precisa entrar AQUI também, senão `?tab=<nome>` é ignorado em
     // silêncio e o deep-link cai no dashboard sem dizer por quê.
-    const VALID_TABS = ["dashboard", "pod-store", "store", "cart", "profile", "courses", "certificates", "social", "studio", "assistant", "achievements", "leaderboard", "challenges", "games", "galeria", "resources", "history", "rewards"];
+    const VALID_TABS = ["dashboard", "pod-store", "store", "cart", "profile", "courses", "atelie", "certificates", "social", "studio", "assistant", "achievements", "leaderboard", "challenges", "games", "galeria", "resources", "history", "rewards"];
     try {
       const t = new URLSearchParams(window.location.search).get("tab");
       if (t && VALID_TABS.includes(t)) setActiveTab(t);
@@ -719,6 +720,7 @@ export default function PortalPage() {
               {activeTab === "cart" && T("Carrinho")}
               {activeTab === "profile" && T("Meu Perfil")}
               {activeTab === "courses" && T("Meus Cursos")}
+              {activeTab === "atelie" && T("Ateliê")}
               {activeTab === "certificates" && T("Certificados")}
               {activeTab === "social" && T("Perfil Social")}
               {activeTab === "studio" && T("Studio AI")}
@@ -891,6 +893,17 @@ export default function PortalPage() {
             )}
 
             {/* Certificates Tab */}
+            {activeTab === "atelie" && (
+              <motion.div
+                key="atelie"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <AtelieVitrine nome={user?.name} avatar={user?.image} />
+              </motion.div>
+            )}
+
             {activeTab === "certificates" && (
               <motion.div
                 key="certificates"

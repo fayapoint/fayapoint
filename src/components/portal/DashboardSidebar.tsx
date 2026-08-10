@@ -35,6 +35,7 @@ import {
   UserCog,
   Share2,
   Gamepad2,
+  Wand2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -97,6 +98,10 @@ const MENU_ITEMS = [
   { id: "social", icon: Share2, label: "Perfil Social", proOnly: false, badge: "USS" },
   { id: "profile", icon: Crown, label: "Meu Perfil", proOnly: false },
   { id: "courses", icon: BookOpen, label: "Meus Cursos", proOnly: false },
+  // O Ateliê é o coração do produto e não tinha porta no menu: só dava para
+  // chegar nele DE DENTRO de um curso, o que inverte a decisão (a pessoa quer
+  // ver o que dá para transformar antes de escolher o que transformar).
+  { id: "atelie", icon: Wand2, label: "Ateliê", proOnly: false, badge: "NOVO" },
   { id: "certificates", icon: Award, label: "Certificados", proOnly: false },
   { id: "studio", icon: ImageIcon, label: "Studio AI", proOnly: false, badge: "AI" },
   { id: "assistant", icon: Bot, label: "Assistente IA", proOnly: true, badge: "PRO" },

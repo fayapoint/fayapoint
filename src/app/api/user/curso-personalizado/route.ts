@@ -9,7 +9,7 @@ import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
-import { debitar, saldoParaGastar, custoDe } from "@/lib/creditos";
+import { debitar, saldoParaGastar, custoDe, saldoDe, garantirCreditos } from "@/lib/creditos";
 import { MINIMA_CONFIANCA, impressao, escreverCamada } from "@/lib/atelie-servidor";
 import { podePersonalizar, motivoSemPersonalizacao } from "@/lib/curso-personalizavel";
 
@@ -50,6 +50,9 @@ export async function GET(request: NextRequest) {
     // faz isso — o progresso guarda só o slug, e "chatgpt-zero" num seletor é
     // pior que não ter seletor.
     if (!curso) {
+      // A vitrine mostra saldo, então concede antes de ler — é a leitura do
+      // saldo que faz o refill acontecer (não há cron). Ver `lib/creditos.ts`.
+      await garantirCreditos(String(user._id));
       const slugs = [...new Set((user.enrolledCourses || []).filter((c) => c.isActive).map((c) => c.courseSlug))];
       if (!slugs.length) return NextResponse.json({ cursos: [] });
 
@@ -57,12 +60,36 @@ export async function GET(request: NextRequest) {
       const produtos = await client
         .db("fayapointProdutos")
         .collection("products")
-        .find({ slug: { $in: slugs } }, { projection: { slug: 1, name: 1 } })
+        .find(
+          { slug: { $in: slugs } },
+          // A vitrine do Ateliê precisa de capa, nível e número de capítulos —
+          // sem eles um curso vira uma linha de texto, que foi exatamente o
+          // problema do `<select>` que este produto substituiu.
+          { projection: { slug: 1, name: 1, thumbnail: 1, level: 1, contentChapters: 1, shortName: 1 } },
+        )
         .toArray();
 
-      const titulos = new Map(produtos.map((p) => [p.slug, p.name]));
+      const porSlug = new Map(produtos.map((p) => [p.slug, p]));
+      const saldo = saldoDe(user as never);
+
       return NextResponse.json({
-        cursos: slugs.map((s) => ({ slug: s, titulo: titulos.get(s) || s })),
+        saldo: saldo.total,
+        precoPorCapitulo: CREDIT_COSTS.custom_course_chapter,
+        cursos: slugs.map((s) => {
+          const p = porSlug.get(s);
+          // ⚠️ Sem `contentChapters` o custo seria `NaN` na tela. Quando o
+          // produto não declara o tamanho, o preço fica `null` e a vitrine diz
+          // "sob consulta" em vez de mostrar um número inventado.
+          const capitulos = Number(p?.contentChapters) || null;
+          return {
+            slug: s,
+            titulo: p?.name || s,
+            capa: p?.thumbnail || null,
+            nivel: p?.level || null,
+            capitulos,
+            custo: capitulos ? capitulos * CREDIT_COSTS.custom_course_chapter : null,
+          };
+        }),
       });
     }
 
