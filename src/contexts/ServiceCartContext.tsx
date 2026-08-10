@@ -4,7 +4,8 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const STORAGE_KEY = "service-cart-items-v2";
 
-export type CartItemType = "service" | "course";
+/** `credits` é o pacote de créditos avulso (CREDIT_PACKS em lib/course-tiers). */
+export type CartItemType = "service" | "course" | "credits";
 
 export interface CartItem {
   id: string;

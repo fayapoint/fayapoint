@@ -10,7 +10,7 @@ export interface IReceiptItem {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
-  type: 'course' | 'subscription' | 'service' | 'product';
+  type: 'course' | 'subscription' | 'service' | 'product' | 'credits';
   slug?: string;
   lifetimeAccess?: boolean;
   certificateIncluded?: boolean;
@@ -64,7 +64,9 @@ const ReceiptItemSchema = new Schema({
   quantity: { type: Number, required: true, default: 1 },
   unitPrice: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
-  type: { type: String, enum: ['course', 'subscription', 'service', 'product'], required: true },
+  // `credits` faltava, e sem ele a compra de pacote gerava pagamento válido e
+  // recibo nenhum — o cliente pagava e não recebia comprovante.
+  type: { type: String, enum: ['course', 'subscription', 'service', 'product', 'credits'], required: true },
   slug: String,
   lifetimeAccess: { type: Boolean, default: false },
   certificateIncluded: { type: Boolean, default: false },
@@ -100,14 +102,57 @@ const ReceiptSchema = new Schema<IReceipt>({
   timestamps: true,
 });
 
-// Generate receipt number
-ReceiptSchema.pre('save', async function (next) {
-  if (this.isNew && !this.receiptNumber) {
+/**
+ * O número do recibo.
+ *
+ * ## ⚠️ Era `pre('save')`, e por isso NENHUM recibo jamais foi emitido
+ *
+ * `receiptNumber` é `required: true`. O hook que o gerava estava em
+ * `pre('save')` — e **o Mongoose valida antes de rodar os hooks de `save`
+ * definidos no schema**. Quer dizer: a validação acontecia com o campo ainda
+ * vazio, estourava `Path 'receiptNumber' is required`, e o hook que ia
+ * preenchê-lo nunca chegava a rodar.
+ *
+ * O erro era engolido pelo `try/catch` de quem chamava (o webhook loga e
+ * segue), então o pagamento era confirmado normalmente e só o recibo sumia.
+ * Medido em 10/08/2026: **a coleção `receipts` tinha zero documentos.** Nunca
+ * funcionou.
+ *
+ * `pre('validate')` roda antes da validação — é o gancho certo para campo
+ * obrigatório que o próprio modelo preenche.
+ *
+ * ## ⚠️ E o número não pode vir de `countDocuments()`
+ *
+ * `count + 1` dá o mesmo número para dois recibos emitidos no mesmo instante —
+ * e `receiptNumber` é `unique`, então o segundo falharia. Pior: some um recibo
+ * do banco e a contagem passa a repetir um número já usado. Contar linhas nunca
+ * foi um gerador de sequência.
+ *
+ * O contador agora é atômico por ano (`$inc` em `counters`), com o `countDocuments`
+ * antigo servindo só de piso para não recomeçar do 1 sobre um histórico que já
+ * existisse.
+ */
+ReceiptSchema.pre('validate', async function (next) {
+  if (!this.isNew || this.receiptNumber) return next();
+  try {
     const year = new Date().getFullYear();
-    const count = await mongoose.model('Receipt').countDocuments();
-    this.receiptNumber = `REC-${year}-${String(count + 1).padStart(5, '0')}`;
+    const contadores = mongoose.connection.collection('counters');
+    const r = await contadores.findOneAndUpdate(
+      { _id: `receipt-${year}` as unknown as import('mongodb').ObjectId },
+      { $inc: { seq: 1 } },
+      { upsert: true, returnDocument: 'after' },
+    );
+    const seq = (r as { seq?: number } | null)?.seq ?? 1;
+    this.receiptNumber = `REC-${year}-${String(seq).padStart(5, '0')}`;
+    next();
+  } catch (erro) {
+    // ⚠️ Não deixa o recibo sem número: sem isto voltaríamos ao defeito
+    // original, só que por outro caminho. O sufixo aleatório garante unicidade
+    // mesmo se o contador estiver indisponível.
+    this.receiptNumber = `REC-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}`;
+    console.warn('[Receipt] contador indisponível, número de contingência:', (erro as Error)?.message);
+    next();
   }
-  next();
 });
 
 // =============================================================================

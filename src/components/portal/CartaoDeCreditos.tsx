@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Coins, Loader2, Wand2 } from "lucide-react";
 import { getClientAuthHeaders } from "@/lib/client-auth";
+import { ComprarCreditos } from "./ComprarCreditos";
 
 /**
  * O extrato curto dos créditos, dentro da aba Assinatura.
@@ -26,7 +27,10 @@ interface Resposta {
   purchasedBalance: number;
   monthlyAllocation: number;
   lastRefillDate?: string;
+  nextRefillDate?: string | null;
+  purchasedPacks?: Array<{ amount: number; expiresAt: string }>;
   totalSpent: number;
+  plan?: string;
   costs?: Record<string, number>;
 }
 
@@ -147,12 +151,33 @@ export function CartaoDeCreditos() {
             </div>
           )}
 
-          <Link
-            href="/portal?tab=courses"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-sm font-bold text-amber-200 transition-colors hover:bg-amber-500/20"
-          >
-            <Wand2 size={14} />  {T("Usar no Ateliê")}
-          </Link>
+          {/* ⚠️ O pacote comprado tem validade PRÓPRIA (90 dias) e não vence
+              com o ciclo do plano. Mostrar só o total somado esconde o que
+              está prestes a expirar — que é a única parte do saldo que a
+              pessoa ainda pode salvar gastando. */}
+          {d.purchasedPacks && d.purchasedPacks.length > 0 && (
+            <div className="mt-3 space-y-1">
+              {d.purchasedPacks.map((p, i) => (
+                <p key={i} className="text-xs text-muted-foreground">
+                  {p.amount} {T("créditos comprados vencem em")}{" "}
+                  {new Date(p.expiresAt).toLocaleDateString("pt-BR")}
+                </p>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/portal?tab=courses"
+              className="inline-flex items-center gap-2 rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-sm font-bold text-amber-200 transition-colors hover:bg-amber-500/20"
+            >
+              <Wand2 size={14} />  {T("Usar no Ateliê")}
+            </Link>
+          </div>
+
+          <div className="mt-5 border-t border-border pt-4">
+            <ComprarCreditos compacto />
+          </div>
         </>
       )}
     </div>

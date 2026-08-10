@@ -1,4 +1,5 @@
 import User from '@/models/User';
+import { registrarCredito } from '@/lib/uso';
 import {
   CREDIT_COSTS,
   CREDIT_PACKS,
@@ -102,6 +103,14 @@ export async function garantirBoasVindas(userId: string): Promise<number> {
         $slice: -200,
       },
     },
+  });
+  // Também na linha do tempo de uso: `credits.history` guarda só os últimos
+  // 200 lançamentos e não sabe em que sessão nem em que rota aconteceu.
+  registrarCredito({
+    userId,
+    action: ACAO_BOAS_VINDAS,
+    credits: valor,
+    descricao: `Boas-vindas: ${valor} créditos`,
   });
   return valor;
 }
@@ -214,7 +223,16 @@ export async function garantirRefillMensal(userId: string, agora: Date = new Dat
     },
   );
 
-  return r.modifiedCount > 0 ? valor : 0;
+  if (r.modifiedCount > 0) {
+    registrarCredito({
+      userId,
+      action: ACAO_REFILL,
+      credits: valor,
+      descricao: `Renovação mensal — plano ${TIER_CONFIGS[plano].displayName}`,
+    });
+    return valor;
+  }
+  return 0;
 }
 
 /**
@@ -353,5 +371,14 @@ export async function debitar(
   });
 
   const restante = mensal + restantes.reduce((s: number, p: { amount: number }) => s + p.amount, 0);
+
+  registrarCredito({
+    userId,
+    userEmail: user.email,
+    action,
+    credits: -custo,
+    descricao: descricao,
+  });
+
   return { ok: true, gasto: custo, restante };
 }

@@ -2,7 +2,7 @@ import { ObjectId, type Document } from 'mongodb';
 import { getMongoClient } from '@/lib/products';
 import StoreProduct from '@/models/StoreProduct';
 import type { IPaymentItem } from '@/models/Payment';
-import { resolvePlan, TIER_CONFIGS } from '@/lib/course-tiers';
+import { resolvePlan, TIER_CONFIGS, CREDIT_PACKS } from '@/lib/course-tiers';
 
 const PRODUCTS_DATABASE = 'fayapointProdutos';
 const MAX_CART_LINES = 20;
@@ -265,6 +265,54 @@ async function resolveStoreProduct(input: CheckoutItemInput): Promise<IPaymentIt
   };
 }
 
+/**
+ * O pacote de créditos (10/08/2026).
+ *
+ * ## Por que entra no catálogo de checkout, e não numa rota própria
+ *
+ * `POST /api/credits/purchase` prometia um `checkoutUrl` para
+ * `/checkout/credits/<packId>` — **uma rota que nunca existiu**. Comprar
+ * crédito dava 404 desde sempre, e o banco confirma: em 10/08/2026,
+ * `totalPurchased` somava **0** entre os 23 usuários, e nenhum tinha um único
+ * pacote. O botão de comprar crédito era decorativo.
+ *
+ * Resolvendo aqui, o pacote passa pelo MESMO caminho que já leva curso e
+ * serviço até a Asaas: PIX, boleto, cartão, parcelamento, MercadoPago, recibo e
+ * webhook. Construir um segundo checkout só para crédito seria refazer tudo
+ * isso e ganhar um segundo lugar para dar defeito.
+ *
+ * ⚠️ **O preço sai de `CREDIT_PACKS`, nunca do que o cliente mandou.**
+ * `expectedUnitPrice` serve só para detectar catálogo velho na aba aberta —
+ * é o mesmo contrato dos outros itens (`assertDisplayedPrice`).
+ *
+ * ⚠️ Sem desconto de assinante. O bônus do volume JÁ está no pacote (R$100
+ * compram 115 créditos) e a paridade 1 crédito = R$1 é o que torna o preço
+ * legível. Um desconto por cima quebraria a paridade — R$90 comprariam 115
+ * créditos e o crédito deixaria de valer um real.
+ */
+function resolveCreditPack(input: CheckoutItemInput): IPaymentItem {
+  const slug = asNonEmptyString(input.slug) || asNonEmptyString(input.id);
+  const pack = slug ? CREDIT_PACKS.find((p) => p.id === slug) : undefined;
+  if (!pack) {
+    throw new CheckoutCatalogError('Pacote de créditos não encontrado', 'CREDIT_PACK_NOT_FOUND', 404);
+  }
+
+  const quantity = parseQuantity(input.quantity ?? 1, `pacote ${pack.id}`);
+  const unitPrice = pack.priceReais;
+  assertDisplayedPrice(input, unitPrice, `pacote ${pack.id}`);
+
+  return {
+    productId: pack.id,
+    productSlug: pack.id,
+    type: 'credits',
+    name: `${pack.credits} créditos FayAI`,
+    description: `Válidos por ${pack.expiresInDays} dias${pack.savings ? ` · ${pack.savings}` : ''}`,
+    quantity,
+    unitPrice,
+    totalPrice: Math.round(unitPrice * quantity * 100) / 100,
+  };
+}
+
 export async function resolveCheckoutItems(
   rawItems: unknown,
   pricing: CheckoutPricingContext = {},
@@ -298,6 +346,9 @@ export async function resolveCheckoutItems(
       case 'product':
       case 'pod':
         item = await resolveStoreProduct(input);
+        break;
+      case 'credits':
+        item = resolveCreditPack(input);
         break;
       case 'subscription':
         throw new CheckoutCatalogError(

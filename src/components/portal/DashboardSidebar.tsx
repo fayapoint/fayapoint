@@ -42,6 +42,7 @@ import { cn } from "@/lib/utils";
 import { UserAvatarWithBadges } from "@/components/user/UserAvatarWithBadges";
 import dynamic from "next/dynamic";
 import { temIcone3D } from "@/data/icones3d-tem";
+import { SaldoDeCreditos } from "@/components/portal/SaldoDeCreditos";
 
 // WebGL não entra no bundle do portal: o chunk só é baixado quando alguém
 // passa o cursor pela primeira vez. Quem nunca passar não paga nada.
@@ -217,6 +218,27 @@ export function DashboardSidebar({
               <span className="text-xs text-muted-foreground">{stats.xp}/{stats.xpToNextLevel} XP</span>
             </div>
             <Progress value={stats.levelProgress} className="h-2 bg-secondary" />
+
+            {/**
+             * ⚠️ O saldo de créditos no menu do DESKTOP (10/08/2026).
+             *
+             * `SaldoDeCreditos` foi criado em 05/08 para responder ao *"não vejo
+             * meus créditos"* — e entrou **só no `MobileBottomNav`**. No
+             * desktop, nada no portal chamava `/api/credits`.
+             *
+             * Isso não era só cosmético. Não existe cron: quem faz o crédito de
+             * boas-vindas e o refill do mês acontecerem é a LEITURA do saldo
+             * (`garantirCreditos`, em `lib/creditos.ts`). Sem ninguém lendo, o
+             * crédito não era concedido.
+             *
+             * O banco mostrava o estrago em 10/08: dos 23 usuários, **3** tinham
+             * qualquer lançamento no extrato. Os assinantes Expert reais —
+             * `jrbfaya`, `jimmyfbavinck`, `ppantunes` — estavam com **saldo 0,
+             * alocação 0, nenhuma renovação**, num plano que promete 400
+             * créditos por mês. Só as contas de QA tinham crédito, e porque um
+             * script os pôs lá.
+             */}
+            <SaldoDeCreditos className="pt-1" />
           </div>
         )}
       </div>

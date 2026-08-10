@@ -28,6 +28,13 @@ import {
   Infinity as InfinityIcon,
 } from "lucide-react";
 import type { Product } from "@/lib/products";
+import {
+  TIER_CONFIGS,
+  CREDIT_COSTS,
+  CREDIT_PACKS,
+  CREDITO_EM_REAIS,
+  type SubscriptionPlan,
+} from "@/lib/course-tiers";
 
 type MonthlyOfferPayload = {
   monthKey: string;
@@ -39,7 +46,44 @@ type MonthlyOfferPayload = {
   };
 };
 
-// ─── Plan Data (single source of truth) ─────────────────────────────────────
+// ─── Plan Data ──────────────────────────────────────────────────────────────
+
+/**
+ * ⚠️ Esta tabela dizia ser "single source of truth" e **não era**.
+ *
+ * A fonte de verdade do que a conta recebe é `TIER_CONFIGS` em
+ * `lib/course-tiers.ts` — é dela que o webhook de pagamento tira a alocação, e
+ * dela que `garantirRefillMensal` tira a reposição do mês. Esta página mantinha
+ * uma segunda cópia dos mesmos números, e as duas divergiram (medido em
+ * 10/08/2026):
+ *
+ * | plano | a página prometia | o sistema entregava |
+ * |---|---|---|
+ * | Gratuito | 0 crédito | **50** (boas-vindas, uma vez) |
+ * | Explorador | 100 | 100 ✓ |
+ * | Profissional | **300** | **200** |
+ * | Expert | **800** | **400** |
+ *
+ * Prometer 800 e creditar 400 é a pior metade dessa divergência: quem assinasse
+ * o plano mais caro receberia metade do anunciado, e a reclamação chegaria
+ * depois do dinheiro. Nos cursos a divergência ia para o outro lado — a página
+ * vendia "7 iniciantes/mês" ao Expert quando o Expert lê o **acervo inteiro
+ * sem cadeado**, jogando fora o argumento mais forte do plano mais caro.
+ *
+ * Agora crédito, limites e descontos são LIDOS de `TIER_CONFIGS`. O que sobra
+ * aqui é o que é próprio da página: texto de venda, ordem, badge e CTA.
+ */
+const creditoDe = (slug: SubscriptionPlan) => String(TIER_CONFIGS[slug].monthlyCredits);
+const limiteDe = (slug: SubscriptionPlan, nivel: 'beginner' | 'intermediate' | 'advanced') => {
+  const n = TIER_CONFIGS[slug].limits[nivel];
+  // `Infinity` é como o Expert declara "sem cadeado". Imprimir "Infinity" numa
+  // tabela de preços seria vazar o tipo do código para a cara do cliente.
+  return n === Infinity ? 'Tudo' : String(n);
+};
+const descontoDe = (slug: SubscriptionPlan, campo: 'quizDiscount' | 'purchaseDiscount') => {
+  const d = TIER_CONFIGS[slug][campo];
+  return d > 0 ? `${Math.round(d * 100)}%` : '—';
+};
 
 const PLANS = [
   {
@@ -60,12 +104,13 @@ const PLANS = [
       "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
-      "Cursos iniciantes/mês": "0",
-      "Cursos intermediários/mês": "0",
-      "Cursos avançados/mês": "0",
-      "Créditos IA/mês": "0",
-      "Desconto em certificações": "—",
-      "Desconto em cursos avulsos": "—",
+      "Cursos iniciantes/mês": limiteDe("free", "beginner"),
+      "Cursos intermediários/mês": limiteDe("free", "intermediate"),
+      "Cursos avançados/mês": limiteDe("free", "advanced"),
+      // Boas-vindas, uma vez — não por mês. Ver `garantirBoasVindas`.
+      "Créditos IA/mês": `${creditoDe("free")} (uma vez)`,
+      "Desconto em certificações": descontoDe("free", "quizDiscount"),
+      "Desconto em cursos avulsos": descontoDe("free", "purchaseDiscount"),
       "Suporte prioritário": false,
       "Conteúdo antecipado": false,
       "Consultoria mensal": false,
@@ -89,12 +134,12 @@ const PLANS = [
       "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
-      "Cursos iniciantes/mês": "3",
-      "Cursos intermediários/mês": "0",
-      "Cursos avançados/mês": "0",
-      "Créditos IA/mês": "100",
-      "Desconto em certificações": "10%",
-      "Desconto em cursos avulsos": "10%",
+      "Cursos iniciantes/mês": limiteDe("explorador", "beginner"),
+      "Cursos intermediários/mês": limiteDe("explorador", "intermediate"),
+      "Cursos avançados/mês": limiteDe("explorador", "advanced"),
+      "Créditos IA/mês": creditoDe("explorador"),
+      "Desconto em certificações": descontoDe("explorador", "quizDiscount"),
+      "Desconto em cursos avulsos": descontoDe("explorador", "purchaseDiscount"),
       "Suporte prioritário": false,
       "Conteúdo antecipado": false,
       "Consultoria mensal": false,
@@ -119,12 +164,12 @@ const PLANS = [
       "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
-      "Cursos iniciantes/mês": "5",
-      "Cursos intermediários/mês": "2",
-      "Cursos avançados/mês": "1",
-      "Créditos IA/mês": "300",
-      "Desconto em certificações": "20%",
-      "Desconto em cursos avulsos": "20%",
+      "Cursos iniciantes/mês": limiteDe("profissional", "beginner"),
+      "Cursos intermediários/mês": limiteDe("profissional", "intermediate"),
+      "Cursos avançados/mês": limiteDe("profissional", "advanced"),
+      "Créditos IA/mês": creditoDe("profissional"),
+      "Desconto em certificações": descontoDe("profissional", "quizDiscount"),
+      "Desconto em cursos avulsos": descontoDe("profissional", "purchaseDiscount"),
       "Suporte prioritário": true,
       "Conteúdo antecipado": true,
       "Consultoria mensal": false,
@@ -148,12 +193,12 @@ const PLANS = [
       "Curso grátis do mês": true,
       "Certificado na oferta do mês": true,
       "3 capítulos de prévia em outros cursos": true,
-      "Cursos iniciantes/mês": "7",
-      "Cursos intermediários/mês": "4",
-      "Cursos avançados/mês": "3",
-      "Créditos IA/mês": "800",
-      "Desconto em certificações": "50%",
-      "Desconto em cursos avulsos": "50%",
+      "Cursos iniciantes/mês": limiteDe("expert", "beginner"),
+      "Cursos intermediários/mês": limiteDe("expert", "intermediate"),
+      "Cursos avançados/mês": limiteDe("expert", "advanced"),
+      "Créditos IA/mês": creditoDe("expert"),
+      "Desconto em certificações": descontoDe("expert", "quizDiscount"),
+      "Desconto em cursos avulsos": descontoDe("expert", "purchaseDiscount"),
       "Suporte prioritário": true,
       "Conteúdo antecipado": true,
       "Consultoria mensal": true,
@@ -194,9 +239,14 @@ const FAQ_ITEMS_PT = [
   { q: "Posso comprar cursos avulsos sem assinar?", a: "Sim. Qualquer curso pode ser comprado individualmente. Assinantes recebem desconto." },
   { q: "O pagamento é seguro?", a: "100%. Usamos PIX, Boleto e Cartão de Crédito via gateways certificados (Asaas e MercadoPago). Seus dados nunca ficam nos nossos servidores." },
   { q: "E se eu quiser trocar de plano?", a: "Você pode fazer upgrade a qualquer momento. O valor é ajustado proporcionalmente ao ciclo vigente." },
+  { q: "O que é um crédito?", a: "1 crédito = R$1. É a moeda que paga a IA trabalhando no SEU material: reescrever um capítulo com o seu contexto, gerar uma imagem, emitir um certificado. Conversar com o assistente não custa crédito." },
+  { q: "Os créditos acumulam de um mês para o outro?", a: "Os do plano, não — voltam ao teto na virada do ciclo. Os comprados em pacote, sim: valem 90 dias e não vencem junto com os do plano. Por isso o site gasta sempre o crédito do plano primeiro, para você não perder o que pagou à parte." },
+  { q: "Posso comprar créditos sem assinar?", a: "Pode. Os pacotes ficam na sua conta, em Assinatura, e são pagos por PIX, boleto ou cartão como qualquer compra." },
 ];
 
 const FAQ_ITEMS_EN = [
+  { q: "What is a credit?", a: "1 credit = R$1. It is the currency that pays for AI working on YOUR material: rewriting a chapter in your context, generating an image, issuing a certificate. Chatting with the assistant costs no credit." },
+  { q: "Do credits roll over?", a: "Plan credits do not — they reset to the cap when the cycle turns. Purchased packs do: they last 90 days and do not expire with your plan's. That is why the site always spends plan credit first, so you never lose what you paid for separately." },
   { q: "Can I cancel anytime?", a: "Yes. No contracts, no penalties. Your access continues until the end of the paid cycle." },
   { q: "What is the free course of the month?", a: "Every month, one full course opens to any account — certificate included. It's the best way to try the platform." },
   { q: "What happens if I don't use all my monthly slots?", a: "Slots don't carry over. On the 1st of each month, the rotating catalog updates and you get fresh plan slots." },
@@ -424,28 +474,34 @@ export default function PricingPage() {
                             <Feature text={isPt ? "Prévia de 3 capítulos em outros cursos" : "3-chapter preview on others"} />
                           </>
                         )}
+                        {/* ⚠️ TERCEIRA cópia dos mesmos números — a tabela de
+                            comparação tinha a segunda, e `TIER_CONFIGS` é a
+                            primeira. Esta lista dizia "800 créditos" ao Expert
+                            (o sistema dá 400) e "14 cursos/mês" (o Expert lê o
+                            acervo inteiro). Os números agora saem do mesmo
+                            lugar de onde o crédito é realmente lançado. */}
                         {plan.slug === "explorador" && (
                           <>
-                            <Feature text={isPt ? "3 cursos iniciantes/mês" : "3 beginner courses/month"} />
-                            <Feature text={isPt ? "100 créditos IA/mês" : "100 AI credits/month"} />
-                            <Feature text={isPt ? "10% desconto em certificações" : "10% off certifications"} />
-                            <Feature text={isPt ? "10% desconto em cursos avulsos" : "10% off individual courses"} />
+                            <Feature text={isPt ? `${limiteDe("explorador", "beginner")} cursos iniciantes/mês` : `${limiteDe("explorador", "beginner")} beginner courses/month`} />
+                            <Feature text={isPt ? `${creditoDe("explorador")} créditos IA/mês (= R$${creditoDe("explorador")})` : `${creditoDe("explorador")} AI credits/month`} />
+                            <Feature text={isPt ? `${descontoDe("explorador", "quizDiscount")} desconto em certificações` : `${descontoDe("explorador", "quizDiscount")} off certifications`} />
+                            <Feature text={isPt ? `${descontoDe("explorador", "purchaseDiscount")} desconto em cursos avulsos` : `${descontoDe("explorador", "purchaseDiscount")} off individual courses`} />
                           </>
                         )}
                         {plan.slug === "profissional" && (
                           <>
                             <Feature text={isPt ? "8 cursos/mês (todos os níveis)" : "8 courses/month (all levels)"} highlight />
-                            <Feature text={isPt ? "300 créditos IA/mês" : "300 AI credits/month"} />
-                            <Feature text={isPt ? "20% desconto em tudo" : "20% off everything"} />
+                            <Feature text={isPt ? `${creditoDe("profissional")} créditos IA/mês (= R$${creditoDe("profissional")})` : `${creditoDe("profissional")} AI credits/month`} />
+                            <Feature text={isPt ? `${descontoDe("profissional", "purchaseDiscount")} desconto em tudo` : `${descontoDe("profissional", "purchaseDiscount")} off everything`} />
                             <Feature text={isPt ? "Suporte prioritário" : "Priority support"} />
                             <Feature text={isPt ? "Conteúdo antecipado" : "Early access content"} />
                           </>
                         )}
                         {plan.slug === "expert" && (
                           <>
-                            <Feature text={isPt ? "14 cursos/mês (todos os níveis)" : "14 courses/month (all levels)"} highlight />
-                            <Feature text={isPt ? "800 créditos IA/mês" : "800 AI credits/month"} />
-                            <Feature text={isPt ? "50% desconto em tudo" : "50% off everything"} highlight />
+                            <Feature text={isPt ? "Acervo completo — todos os cursos, sem cadeado" : "Full catalog — every course, no locks"} highlight />
+                            <Feature text={isPt ? `${creditoDe("expert")} créditos IA/mês (= R$${creditoDe("expert")})` : `${creditoDe("expert")} AI credits/month`} />
+                            <Feature text={isPt ? `${descontoDe("expert", "purchaseDiscount")} desconto em tudo` : `${descontoDe("expert", "purchaseDiscount")} off everything`} highlight />
                             <Feature text={isPt ? "Suporte VIP dedicado" : "Dedicated VIP support"} />
                             <Feature text={isPt ? "Consultoria mensal" : "Monthly consultation"} />
                           </>
@@ -472,6 +528,155 @@ export default function PricingPage() {
                   </motion.div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* ━━━ Como funcionam os créditos ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            Ricardo, 10/08/2026: *"ter uma explicação clara de como podemos
+            usar os créditos na página de preços"*.
+
+            A página citava "créditos IA/mês" em quatro cartões e numa linha da
+            tabela, e **em nenhum lugar dizia o que um crédito é ou compra**. Um
+            número sem unidade não vende: "800 créditos" não se compara com
+            "R$167/mês" a menos que a pessoa saiba a régua.
+
+            A régua existe e é o melhor argumento que temos — **1 crédito = R$1**
+            (`CREDITO_EM_REAIS`). Com ela, "200 créditos por R$97" lê-se como
+            "R$200 de trabalho por R$97", e o bônus de cada plano fica visível
+            sem tabela de conversão.
+
+            ⚠️ Preço de ação e pacote saem de `CREDIT_COSTS`/`CREDIT_PACKS` — os
+            MESMOS objetos que a caixa registradora usa. Foi copiar número de
+            crédito para dentro desta página que produziu o 800 contra 400. */}
+        <section className="py-16 px-4 border-t border-border/30" id="creditos">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center mb-10">
+              <Badge variant="outline" className="mb-3 border-amber-400/40 text-amber-300">
+                {isPt ? T("Créditos") : "Credits"}
+              </Badge>
+              <h2 className="text-3xl font-bold mb-3">
+                {isPt ? T("O que são os créditos, em uma linha") : "What credits are, in one line"}
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                {isPt
+                  ? T(`1 crédito = R$${CREDITO_EM_REAIS}. Sua assinatura vira crédito com bônus, e o crédito paga a IA trabalhando no SEU material.`)
+                  : `1 credit = R$${CREDITO_EM_REAIS}. Your subscription becomes credit with a bonus, and credit pays for AI working on YOUR material.`}
+              </p>
+            </div>
+
+            {/* O que o crédito compra */}
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="rounded-2xl border border-border bg-secondary/20 p-6">
+                <h3 className="mb-1 flex items-center gap-2 text-lg font-bold">
+                  <Zap size={18} className="text-amber-400" />
+                  {isPt ? T("No que você gasta") : "What you spend on"}
+                </h3>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  {isPt
+                    ? T("Crédito paga ENTREGA — uma coisa nova feita para você. Conversar com o assistente é do plano e não custa crédito.")
+                    : "Credit pays for DELIVERY — something new made for you. Chatting with the assistant is included and costs nothing."}
+                </p>
+                <ul className="space-y-2.5">
+                  {[
+                    { k: "custom_course_chapter", pt: "Reescrever um capítulo com a sua cara", en: "Rewrite a chapter in your context", sufixo: isPt ? "por capítulo" : "per chapter" },
+                    { k: "character_sheet", pt: "Caderno de personagem (o seu rosto, vários ângulos)", en: "Character sheet (your face, many angles)", sufixo: isPt ? "uma vez" : "once" },
+                    { k: "certificate_generation", pt: "Emitir um certificado verificável", en: "Issue a verifiable certificate", sufixo: "" },
+                    { k: "image_generation", pt: "Gerar uma imagem no seu contexto", en: "Generate an image in your context", sufixo: isPt ? "por imagem" : "per image" },
+                    { k: "quiz_attempt", pt: "Uma tentativa no quiz do certificado", en: "One certificate quiz attempt", sufixo: "" },
+                    { k: "ai_chat_message", pt: "Conversar com o assistente", en: "Chat with the assistant", sufixo: "" },
+                  ].map((linha) => {
+                    const custo = CREDIT_COSTS[linha.k as keyof typeof CREDIT_COSTS];
+                    return (
+                      <li key={linha.k} className="flex items-baseline justify-between gap-4 border-b border-border/40 pb-2 text-sm last:border-0">
+                        <span className="min-w-0 text-muted-foreground">
+                          {isPt ? T(linha.pt) : linha.en}
+                        </span>
+                        <span className="shrink-0 font-bold tabular-nums text-amber-300">
+                          {custo === 0
+                            ? (isPt ? T("grátis") : "free")
+                            : `${custo} ${linha.sufixo ? `· ${linha.sufixo}` : ""}`}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+
+              {/* Quanto cada plano dá, e o multiplicador */}
+              <div className="rounded-2xl border border-amber-400/25 bg-gradient-to-br from-amber-500/[0.07] via-transparent to-transparent p-6">
+                <h3 className="mb-1 flex items-center gap-2 text-lg font-bold">
+                  <Gift size={18} className="text-amber-400" />
+                  {isPt ? T("Quanto cada plano devolve") : "What each plan gives back"}
+                </h3>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  {isPt
+                    ? T("Cada real da assinatura vira mais de um real em crédito — e quanto maior o plano, maior o bônus.")
+                    : "Every real of your subscription becomes more than a real in credit — the bigger the plan, the bigger the bonus."}
+                </p>
+                <ul className="space-y-2.5">
+                  {(["free", "explorador", "profissional", "expert"] as SubscriptionPlan[]).map((slug) => {
+                    const tier = TIER_CONFIGS[slug];
+                    const preco = tier.monthlyPrice;
+                    // O gratuito não tem multiplicador: não há mensalidade para
+                    // multiplicar. Dizer "×∞" seria bonito e falso.
+                    const mult = preco > 0 ? (tier.monthlyCredits / preco).toFixed(2).replace(".", ",") : null;
+                    return (
+                      <li key={slug} className="flex items-baseline justify-between gap-3 border-b border-border/40 pb-2 text-sm last:border-0">
+                        <span className="text-muted-foreground">
+                          {tier.displayName}
+                          <span className="ml-1.5 text-xs opacity-70">
+                            {preco > 0 ? `R$${preco}/${isPt ? "mês" : "mo"}` : (isPt ? T("grátis") : "free")}
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-right">
+                          <span className="font-bold tabular-nums text-amber-300">
+                            {tier.monthlyCredits}
+                          </span>
+                          <span className="ml-1 text-xs text-muted-foreground">
+                            {mult ? `(${mult}×)` : (isPt ? T("uma vez") : "once")}
+                          </span>
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <p className="mt-4 text-xs text-muted-foreground">
+                  {isPt
+                    ? T("Os créditos do plano voltam ao teto todo mês e não acumulam. O plano gratuito recebe o valor uma única vez, de boas-vindas.")
+                    : "Plan credits reset to the cap every month and do not roll over. The free plan receives its amount once, as a welcome."}
+                </p>
+              </div>
+            </div>
+
+            {/* Pacotes avulsos */}
+            <div className="mt-6 rounded-2xl border border-border bg-secondary/20 p-6">
+              <h3 className="mb-1 flex items-center gap-2 text-lg font-bold">
+                <CreditCard size={18} className="text-amber-400" />
+                {isPt ? T("Acabou no meio do mês?") : "Ran out mid-month?"}
+              </h3>
+              <p className="mb-4 text-sm text-muted-foreground">
+                {isPt
+                  ? T("Dá para comprar crédito avulso sem trocar de plano. O volume vira bônus, e o crédito comprado vale 90 dias — não vence junto com o do plano.")
+                  : "You can buy extra credit without changing plans. Volume becomes bonus, and purchased credit lasts 90 days — it does not expire with your plan's."}
+              </p>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {CREDIT_PACKS.map((pack) => {
+                  const bonus = pack.credits - pack.priceReais;
+                  return (
+                    <div key={pack.id} className="relative rounded-xl border border-border bg-background/60 p-4 text-center">
+                      {bonus > 0 && (
+                        <span className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full bg-amber-500/90 px-2 py-0.5 text-[10px] font-bold text-black">
+                          +{bonus} {isPt ? T("de bônus") : "bonus"}
+                        </span>
+                      )}
+                      <div className="text-2xl font-extrabold tabular-nums text-amber-300">{pack.credits}</div>
+                      <div className="text-[11px] text-muted-foreground">{isPt ? T("créditos") : "credits"}</div>
+                      <div className="mt-2 text-sm font-bold">R${pack.priceReais}</div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>

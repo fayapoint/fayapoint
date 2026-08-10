@@ -78,9 +78,13 @@ export function SaldoDeCreditos({
       </>
     );
 
+  // ⚠️ `/portal/creditos` NÃO existe — o selo levava a um 404 desde que foi
+  // criado (não há pasta `creditos` em `app/[locale]/(site)/portal/`). O
+  // extrato mora na aba Assinatura de `/portal/conta`, que é onde
+  // `CartaoDeCreditos` é renderizado.
   return (
     <Link
-      href="/portal/creditos"
+      href="/portal/conta?tab=assinatura"
       className={`inline-flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-500/10 px-2.5 py-1 text-xs transition-colors hover:border-amber-400/50 hover:bg-amber-500/15 ${className}`}
       title={T("Seus créditos — usados para personalizar capítulos no Ateliê")}
     >

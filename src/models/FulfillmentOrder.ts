@@ -98,7 +98,7 @@ export interface ISupplierOrder {
 export interface IFulfillmentItem {
   productId?: string;
   productSlug?: string;
-  type: 'course' | 'subscription' | 'product' | 'pod' | 'service';
+  type: 'course' | 'subscription' | 'product' | 'pod' | 'service' | 'credits';
   name: string;
   quantity: number;
   unitPrice: number;
@@ -251,7 +251,7 @@ const FulfillmentItemSchema = new Schema<IFulfillmentItem>({
   productSlug: String,
   type: {
     type: String,
-    enum: ['course', 'subscription', 'product', 'pod', 'service'],
+    enum: ['course', 'subscription', 'product', 'pod', 'service', 'credits'],
     required: true,
   },
   name: { type: String, required: true },

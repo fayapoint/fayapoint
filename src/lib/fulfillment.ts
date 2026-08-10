@@ -29,6 +29,7 @@ import {
 } from './prodigi-api';
 import { createPrintifyOrder, getPrintifyShopId } from './printify-api';
 import dbConnect from './mongodb';
+import { TIER_CONFIGS, resolvePlan } from './course-tiers';
 
 // =============================================================================
 // TYPES
@@ -129,7 +130,15 @@ export async function processFulfillment(paymentId: string): Promise<Fulfillment
         case 'service':
           result = await fulfillService(fulfillmentOrder, item, i);
           break;
-          
+
+        case 'credits':
+          // O crédito já foi lançado na conta pelo `grantUserAccess` do webhook,
+          // que roda ANTES da entrega e é o único lugar onde saldo é mexido.
+          // Aqui só marcamos entregue — duplicar o lançamento daria crédito em
+          // dobro para quem pagou uma vez.
+          result = await fulfillCredits(fulfillmentOrder, item, i);
+          break;
+
         default:
           result = { success: false, message: `Unknown item type: ${item.type}` };
       }
@@ -339,27 +348,39 @@ async function fulfillSubscription(
       return { success: false, message: 'User not found' };
     }
     
-    // Map plan slug to plan name
-    const planMap: Record<string, string> = {
-      'starter': 'starter',
-      'pro': 'pro',
-      'business': 'business',
-    };
-    
+    /**
+     * ⚠️ Duas coisas estavam erradas aqui (10/08/2026), e cada uma sozinha
+     * bastava para a entrega falhar:
+     *
+     * 1. O mapa só conhecia os slugs LEGADOS (`starter`/`pro`/`business`). Os
+     *    planos que o site vende hoje chamam-se `explorador`, `profissional` e
+     *    `expert` — nenhum deles casava, e a função devolvia
+     *    *"Invalid subscription plan"* para toda assinatura vendida.
+     * 2. Gravava `user.plan` e `user.planExpiresAt`, que **não existem no
+     *    `UserSchema`**. Mongoose em modo `strict` descarta caminho
+     *    desconhecido no save, sem erro. Mesmo que o mapa casasse, o plano não
+     *    era gravado.
+     *
+     * `resolvePlan` é a mesma função que o resto do site usa, e já traduz os
+     * slugs legados para os atuais.
+     */
     const planSlug = item.productSlug?.toLowerCase() || '';
-    const newPlan = planMap[planSlug];
-    
-    if (newPlan) {
-      user.plan = newPlan;
-      user.planExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    const newPlan = planSlug ? resolvePlan(planSlug) : null;
+
+    if (newPlan && !(newPlan === 'free' && planSlug !== 'free')) {
+      const tier = TIER_CONFIGS[newPlan];
+      const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      user.set('subscription.plan', newPlan);
+      user.set('subscription.status', 'active');
+      user.set('subscription.expiresAt', expiresAt);
       await user.save();
-      
+
       // Set digital delivery
       const digitalDelivery: IDigitalDelivery = {
         type: 'subscription',
         subscriptionPlan: newPlan,
         accessUrl: 'https://fayai.com.br/pt-BR/portal',
-        expiresAt: user.planExpiresAt,
+        expiresAt,
       };
       
       fulfillmentOrder.items[itemIndex].status = 'delivered';
@@ -836,6 +857,47 @@ async function fulfillDropshipping(
  * - Send confirmation
  * - Schedule follow-up
  */
+/**
+ * Pacote de créditos — entrega instantânea.
+ *
+ * ⚠️ **Não lança crédito nenhum.** O saldo é creditado uma única vez, no
+ * `grantUserAccess` do webhook, que roda antes daqui. Esta função existe porque
+ * sem um `case` para `credits` o despachante caía no `default` e a compra
+ * ficava marcada como *"Unknown item type"* — pedido pago, crédito na conta, e
+ * a esteira de entrega dizendo que falhou.
+ */
+async function fulfillCredits(
+  fulfillmentOrder: IFulfillmentOrder,
+  item: IFulfillmentItem,
+  itemIndex: number
+): Promise<{ success: boolean; message: string }> {
+  try {
+    fulfillmentOrder.items[itemIndex].status = 'delivered';
+    fulfillmentOrder.items[itemIndex].deliveredAt = new Date();
+    fulfillmentOrder.items[itemIndex].digitalDelivery = {
+      type: 'course_access',
+      accessUrl: 'https://fayai.com.br/pt-BR/portal/conta?tab=assinatura',
+    };
+
+    fulfillmentOrder.timeline.push({
+      status: 'delivered',
+      timestamp: new Date(),
+      message: `${item.name} creditado na conta`,
+      notified: false,
+    });
+
+    await fulfillmentOrder.save();
+    console.log(`[Fulfillment] Credit pack ${item.productSlug} delivered to ${fulfillmentOrder.userEmail}`);
+    return { success: true, message: 'Credits delivered' };
+  } catch (error) {
+    console.error('[Fulfillment] Credits fulfillment error:', error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Credits fulfillment failed',
+    };
+  }
+}
+
 async function fulfillService(
   fulfillmentOrder: IFulfillmentOrder,
   item: IFulfillmentItem,

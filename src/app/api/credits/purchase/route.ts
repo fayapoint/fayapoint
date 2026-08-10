@@ -5,13 +5,35 @@ import { getAuthUser } from '@/lib/auth';
 import { CREDIT_PACKS } from '@/lib/course-tiers';
 
 /**
- * POST /api/credits/purchase
- * Purchase a credit pack
- * Body: { packId: string }
+ * POST /api/credits/purchase — **concessão manual** de um pacote de créditos.
  *
- * Note: This creates the credit pack record. Actual payment is handled
- * by the Asaas webhook or checkout flow. This endpoint can be called
- * after payment confirmation, or by admin/mission-control.
+ * ## ⚠️ O que esta rota deixou de ser (10/08/2026)
+ *
+ * Ela era a rota de COMPRA, e a compra não funcionava. Para quem não é admin,
+ * devolvia:
+ *
+ * ```
+ * { requiresPayment: true, checkoutUrl: `/checkout/credits/${packId}` }
+ * ```
+ *
+ * **`/checkout/credits/<packId>` nunca existiu.** O único checkout do site é
+ * `/checkout/[plan]`, de um segmento só — dois segmentos dão 404. Quem clicasse
+ * em comprar crédito caía numa página inexistente, e nada no banco registrava a
+ * tentativa. Confere com a medição de 10/08/2026: `totalPurchased` = **0**
+ * somando os 23 usuários, e nenhum pacote em nenhuma conta.
+ *
+ * ## Onde a compra mora agora
+ *
+ * No mesmo checkout de tudo o mais: o pacote entra no carrinho como item
+ * `type: 'credits'`, `/checkout/cart` cobra por PIX, boleto, cartão ou
+ * MercadoPago, e o **webhook** credita o saldo em `grantUserAccess`. O caminho
+ * do dinheiro passa a ser um só — o que já tem recibo, idempotência e estorno.
+ *
+ * ⚠️ **Crédito só é lançado por webhook de pagamento confirmado, ou aqui, por
+ * um admin.** Não existe caminho em que o cliente credite a si mesmo: era
+ * exatamente o que o `adminOverride` do corpo da requisição permitia — bastava
+ * mandar `{"packId":"pack-500","adminOverride":true}` para ganhar 650 créditos
+ * (R$650) de graça, porque a condição era `if (!adminOverride && role !== 'admin')`.
  */
 export async function POST(request: Request) {
   try {
@@ -20,67 +42,72 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const { packId, adminOverride } = await request.json();
+    await dbConnect();
+
+    // O papel vem do BANCO, não do token nem do corpo. Um token antigo de quem
+    // deixou de ser admin não deve continuar valendo para dar dinheiro.
+    const solicitante = await User.findById(authUser.id).select('role');
+    if (!solicitante || solicitante.role !== 'admin') {
+      return NextResponse.json(
+        {
+          error: 'Créditos são creditados pelo pagamento confirmado.',
+          checkoutUrl: '/checkout/cart',
+          packs: CREDIT_PACKS,
+        },
+        { status: 403 },
+      );
+    }
+
+    const { packId, userId, motivo } = await request.json();
 
     const pack = CREDIT_PACKS.find((p) => p.id === packId);
     if (!pack) {
       return NextResponse.json(
         { error: 'Pacote inválido', availablePacks: CREDIT_PACKS },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    await dbConnect();
-    const user = await User.findById(authUser.id);
-    if (!user) {
+    // Sem `userId`, o admin credita a si mesmo — que é o caso de teste.
+    const alvoId = userId || authUser.id;
+    const alvo = await User.findById(alvoId).select('email');
+    if (!alvo) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
-    }
-
-    // Admin can bypass payment check
-    if (!adminOverride && user.role !== 'admin') {
-      // In production, verify payment was completed via Asaas/payment gateway
-      // For now, return checkout URL
-      return NextResponse.json({
-        requiresPayment: true,
-        checkoutUrl: `/checkout/credits/${packId}`,
-        pack: {
-          id: pack.id,
-          credits: pack.credits,
-          price: pack.priceReais,
-        },
-      });
     }
 
     const now = new Date();
     const expiresAt = new Date(now);
     expiresAt.setDate(expiresAt.getDate() + pack.expiresInDays);
 
-    const purchaseEntry = {
-      amount: pack.credits,
-      purchasedAt: now,
-      expiresAt,
-    };
-
-    const historyEntry = {
-      action: 'credit_purchase',
-      amount: pack.credits,
-      description: `Compra de ${pack.credits} créditos (R$${pack.priceReais})`,
-      createdAt: now,
-    };
-
-    await User.findByIdAndUpdate(authUser.id, {
+    await User.findByIdAndUpdate(alvoId, {
       $push: {
-        'credits.purchasedCredits': purchaseEntry,
-        'credits.history': { $each: [historyEntry], $slice: -200 },
+        'credits.purchasedCredits': { amount: pack.credits, purchasedAt: now, expiresAt },
+        'credits.history': {
+          $each: [{
+            action: 'credit_grant',
+            amount: pack.credits,
+            // A descrição é o extrato do aluno. "Concedido pela equipe" é
+            // honesto; chamar de "compra" o que ninguém pagou faria o extrato
+            // mentir para as duas partes.
+            description: motivo
+              ? `${pack.credits} créditos concedidos pela equipe — ${motivo}`
+              : `${pack.credits} créditos concedidos pela equipe`,
+            createdAt: now,
+          }],
+          $slice: -200,
+        },
       },
       $inc: { 'credits.totalPurchased': pack.credits },
     });
+
+    console.log(`[Credits] admin ${authUser.id} concedeu ${pack.credits} a ${alvo.email}`);
 
     return NextResponse.json({
       success: true,
       creditsAdded: pack.credits,
       expiresAt,
-      message: `${pack.credits} créditos adicionados! Válidos até ${expiresAt.toLocaleDateString('pt-BR')}.`,
+      userEmail: alvo.email,
+      message: `${pack.credits} créditos adicionados a ${alvo.email}. Válidos até ${expiresAt.toLocaleDateString('pt-BR')}.`,
     });
   } catch (error) {
     console.error('Credit purchase error:', error);

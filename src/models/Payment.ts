@@ -21,7 +21,8 @@ export type PaymentProvider = 'asaas' | 'stripe' | 'mercadopago';
 export interface IPaymentItem {
   productId?: string;
   productSlug?: string;
-  type: 'course' | 'service' | 'subscription' | 'product' | 'pod';
+  /** `credits` é o pacote de créditos avulso — ver CREDIT_PACKS em course-tiers. */
+  type: 'course' | 'service' | 'subscription' | 'product' | 'pod' | 'credits';
   name: string;
   description?: string;
   quantity: number;
@@ -140,7 +141,7 @@ const PaymentItemSchema = new Schema<IPaymentItem>({
   productSlug: { type: String },
   type: { 
     type: String, 
-    enum: ['course', 'service', 'subscription', 'product', 'pod'],
+    enum: ['course', 'service', 'subscription', 'product', 'pod', 'credits'],
     required: true 
   },
   name: { type: String, required: true },
