@@ -7,6 +7,8 @@ import User from '@/models/User';
 import CourseProgress from '@/models/CourseProgress';
 import Certificate, { QUIZ_CONFIG } from '@/models/Certificate';
 import { getAuthUser } from '@/lib/auth';
+import { debitar, saldoParaGastar } from '@/lib/creditos';
+import { CREDIT_COSTS, CREDIT_PACKS, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
 import { getCourseBySlug } from '@/data/courses';
 import { getQuizConfig } from '@/config/quiz-config';
 import { resolveContentFacts } from '@/lib/content-facts';
@@ -499,6 +501,48 @@ export async function POST(
       }, { status: 403 });
     }
 
+    /**
+     * ── A COBRANÇA DA TENTATIVA (10/08/2026) ────────────────────────────────
+     *
+     * ⚠️ `CREDIT_COSTS.quiz_attempt` (5) e `certificate_generation` (15)
+     * existiam desde 03/08, apareciam na página de preços e no extrato do
+     * aluno — e **nenhuma rota do site cobrava um crédito por eles**. Medido:
+     * zero ocorrências de `debitar` em qualquer rota de quiz ou certificado.
+     * O preço era uma promessa de tabela sem caixa registradora atrás.
+     *
+     * Ricardo, 10/08: *"nem vi sendo cobrado pelas certificações"*.
+     *
+     * ## Por que a conferência vem ANTES de corrigir a prova
+     *
+     * `saldoParaGastar` concede o crédito do mês antes de ler o saldo (não há
+     * cron — ver `lib/creditos.ts`) e é o portão. Corrigir primeiro e cobrar
+     * depois entregaria a nota a quem não pode pagar, e recusar depois de
+     * mostrar o resultado seria pior do que recusar antes.
+     *
+     * ## O desconto do plano vale aqui
+     *
+     * `quizDiscount` é 10/20/50% conforme o plano — é parte do que a
+     * assinatura compra, e ignorá-lo cobraria do Expert o mesmo que do
+     * gratuito.
+     */
+    const plano = resolvePlan(user.subscription?.plan || 'free');
+    const descontoQuiz = TIER_CONFIGS[plano].quizDiscount;
+    const custoTentativa = Math.round(CREDIT_COSTS.quiz_attempt * (1 - descontoQuiz));
+
+    if (custoTentativa > 0) {
+      const saldo = await saldoParaGastar(authUser.id);
+      if (saldo.total < custoTentativa) {
+        return NextResponse.json({
+          error: 'Créditos insuficientes para tentar a avaliação.',
+          required: custoTentativa,
+          available: saldo.total,
+          faltam: custoTentativa - saldo.total,
+          packs: CREDIT_PACKS,
+          checkoutUrl: '/checkout/cart',
+        }, { status: 402 });
+      }
+    }
+
     // Score the quiz
     let correctCount = 0;
     const questionResults = correctAnswers.map((correct, i) => {
@@ -517,6 +561,26 @@ export async function POST(
     const score = Math.round((correctCount / correctAnswers.length) * 100);
     const passed = score >= QUIZ_CONFIG.PASSING_SCORE;
 
+    // A tentativa foi consumida — cobra. Acontece DEPOIS da correção porque só
+    // aqui sabemos que a prova foi de fato processada, e antes de qualquer
+    // resposta ao cliente, para que não haja caminho de saída sem passar pelo
+    // caixa. Falha de cobrança não derruba a prova: o débito já foi conferido
+    // acima e o extrato é a prova contábil.
+    let gastoTentativa = 0;
+    if (custoTentativa > 0) {
+      const r = await debitar(
+        authUser.id,
+        'quiz_attempt',
+        // ⚠️ `debitar` cobra `preço × quantidade`. Passar 1 aqui ignoraria o
+        // desconto do plano e cobraria do Expert o mesmo que do gratuito. A
+        // razão devolve exatamente `custoTentativa`, que já é inteiro.
+        custoTentativa / CREDIT_COSTS.quiz_attempt,
+        `Tentativa ${(certificate.totalQuizAttempts || 0) + 1} na avaliação de ${certificate.courseTitle || slug}`
+          + (descontoQuiz > 0 ? ` (−${Math.round(descontoQuiz * 100)}% do plano)` : ''),
+      );
+      gastoTentativa = r.gasto;
+    }
+
     // Update question bank stats (if questions came from bank)
     await updateQuestionStats(slug, answers, submittedQuestions);
 
@@ -534,6 +598,55 @@ export async function POST(
     certificate.quizScore = score;
 
     if (passed) {
+      /**
+       * ⚠️ A EMISSÃO tem preço próprio, e ele é conferido aqui — não no
+       * começo.
+       *
+       * Cobrar os 15 na entrada faria quem reprova pagar pelo certificado que
+       * não recebeu. Cobrar aqui significa que só quem passou paga, que é o
+       * que a tabela de preços diz ("Emitir um certificado verificável").
+       *
+       * E se o saldo não der **a prova continua aprovada** — a nota é do
+       * aluno, ele acabou de pagar a tentativa. O que fica pendente é o
+       * documento: `status` vira `aprovado_aguardando_credito` e a resposta
+       * leva ao pacote. Anular uma aprovação por falta de saldo seria cobrar
+       * duas vezes pelo mesmo erro.
+       */
+      const custoEmissao = Math.round(
+        CREDIT_COSTS.certificate_generation * (1 - TIER_CONFIGS[plano].quizDiscount),
+      );
+      const saldoPosTentativa = await saldoParaGastar(authUser.id);
+
+      if (custoEmissao > 0 && saldoPosTentativa.total < custoEmissao) {
+        certificate.status = 'quiz_in_progress';
+        await certificate.save();
+        return NextResponse.json({
+          status: 'passed_pending_credits',
+          score,
+          correctCount,
+          totalQuestions: correctAnswers.length,
+          message: 'Você passou! Faltam créditos para emitir o certificado.',
+          required: custoEmissao,
+          available: saldoPosTentativa.total,
+          faltam: custoEmissao - saldoPosTentativa.total,
+          packs: CREDIT_PACKS,
+          checkoutUrl: '/checkout/cart',
+          creditosGastos: gastoTentativa,
+        }, { status: 402 });
+      }
+
+      if (custoEmissao > 0) {
+        await debitar(
+          authUser.id,
+          'certificate_generation',
+          custoEmissao / CREDIT_COSTS.certificate_generation,
+          `Certificado de ${certificate.courseTitle || slug}`
+            + (TIER_CONFIGS[plano].quizDiscount > 0
+              ? ` (−${Math.round(TIER_CONFIGS[plano].quizDiscount * 100)}% do plano)`
+              : ''),
+        );
+      }
+
       // ═══ ISSUE CERTIFICATE ═══
       certificate.status = 'issued';
       certificate.issuedAt = new Date();
@@ -581,6 +694,9 @@ export async function POST(
           options: q.options,
         })),
         xpEarned: 500,
+        creditosGastos: gastoTentativa + Math.round(
+          CREDIT_COSTS.certificate_generation * (1 - TIER_CONFIGS[plano].quizDiscount),
+        ),
       });
     } else {
       certificate.status = 'quiz_in_progress';
@@ -593,6 +709,7 @@ export async function POST(
         totalQuestions: correctAnswers.length,
         passingScore: QUIZ_CONFIG.PASSING_SCORE,
         remainingAttempts: QUIZ_CONFIG.MAX_ATTEMPTS - certificate.totalQuizAttempts,
+        creditosGastos: gastoTentativa,
         questionResults: questionResults.map(q => ({
           question: q.question,
           isCorrect: q.isCorrect,

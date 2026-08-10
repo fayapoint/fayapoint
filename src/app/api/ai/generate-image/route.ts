@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthUser } from '@/lib/auth';
+import { debitar, saldoParaGastar } from '@/lib/creditos';
+import { CREDIT_COSTS, CREDIT_PACKS } from '@/lib/course-tiers';
 import { v2 as cloudinary } from 'cloudinary';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
@@ -39,17 +41,59 @@ export async function POST(request: Request) {
         userId: user._id,
         createdAt: { $gte: startOfDay },
     });
-    if (usedToday >= dailyQuota) {
-        return NextResponse.json({
-            error: plan === 'free'
-                ? `Suas ${dailyQuota} gerações grátis de hoje acabaram — volte amanhã ou faça upgrade para gerar mais.`
-                : `Sua cota diária de ${dailyQuota} imagens acabou — volta à meia-noite.`,
-            quota: { used: usedToday, limit: dailyQuota },
-        }, { status: 403 });
-    }
-
     const body = await request.json();
-    const { prompt, model = 'nano-banana-1', referenceImage } = body;
+    const { prompt, model = 'nano-banana-1', referenceImage, usarCreditos } = body;
+
+    /**
+     * ── A cota diária, e o crédito como CONTINUAÇÃO dela (10/08/2026) ───────
+     *
+     * ⚠️ O Studio **não passa a cobrar crédito por imagem**, e isso é
+     * deliberado. Já existe uma cota diária por plano, que é a promessa de
+     * "gerações grátis"; cobrar 3 créditos por cima dela seria cobrar duas
+     * vezes pela mesma coisa e transformar um benefício do plano em pegadinha.
+     *
+     * O que muda é o fim da cota: onde antes havia só *"volte amanhã"*, agora
+     * há uma escolha. O crédito compra a continuação do dia — que é
+     * exatamente o que `CREDIT_COSTS.image_generation` (3) sempre quis dizer e
+     * nunca teve como acontecer, porque nenhuma rota o cobrava.
+     *
+     * ⚠️ **Só cobra com `usarCreditos: true` no corpo.** Debitar em silêncio
+     * quando a cota acaba seria a pior forma possível de apresentar o sistema
+     * de créditos a alguém: um saldo que some sem ninguém ter pedido.
+     */
+    let gastoImagem = 0;
+    if (usedToday >= dailyQuota) {
+        const custoImagem = CREDIT_COSTS.image_generation;
+        const saldo = await saldoParaGastar(authUser.id);
+
+        if (!usarCreditos) {
+            return NextResponse.json({
+                error: plan === 'free'
+                    ? `Suas ${dailyQuota} gerações grátis de hoje acabaram.`
+                    : `Sua cota diária de ${dailyQuota} imagens acabou — volta à meia-noite.`,
+                // O cliente usa isto para oferecer o botão "gerar por N créditos"
+                // em vez de só fechar a porta.
+                podeUsarCreditos: saldo.total >= custoImagem,
+                custoEmCreditos: custoImagem,
+                saldo: saldo.total,
+                quota: { used: usedToday, limit: dailyQuota },
+            }, { status: 403 });
+        }
+
+        if (saldo.total < custoImagem) {
+            return NextResponse.json({
+                error: 'Créditos insuficientes para continuar gerando hoje.',
+                required: custoImagem,
+                available: saldo.total,
+                faltam: custoImagem - saldo.total,
+                packs: CREDIT_PACKS,
+                checkoutUrl: '/checkout/cart',
+            }, { status: 402 });
+        }
+
+        // ⚠️ Cobrado só depois de a imagem existir — ver mais abaixo. Aqui só
+        // conferimos, porque gastar o modelo sem saldo seria prejuízo nosso.
+    }
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt é obrigatório' }, { status: 400 });
@@ -232,6 +276,19 @@ export async function POST(request: Request) {
         });
     }
 
+    // A imagem existe: agora sim cobra. `debitar` é caixa registradora, não
+    // portaria — cobra o que já foi entregue. Se o modelo tivesse falhado, o
+    // `return` de erro teria acontecido antes desta linha e nada seria cobrado.
+    if (usedToday >= dailyQuota && usarCreditos) {
+        const r = await debitar(
+            authUser.id,
+            'image_generation',
+            1,
+            `Imagem no Estúdio além da cota diária de ${dailyQuota}`,
+        );
+        gastoImagem = r.gasto;
+    }
+
     // Save to MongoDB
     const newCreation = await ImageCreation.create({
         userId: user._id,
@@ -259,7 +316,8 @@ export async function POST(request: Request) {
     return NextResponse.json({
         imageUrl: uploadResult.secure_url,
         creationId: newCreation._id,
-        quota: { used: usedToday + 1, limit: dailyQuota }
+        quota: { used: usedToday + 1, limit: dailyQuota },
+        creditosGastos: gastoImagem || undefined,
     });
 
   } catch (error) {
