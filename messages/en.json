@@ -824,55 +824,6 @@
     "Pricing": {
       "title": "Investments That Pay for Themselves",
       "description": "Choose the plan that fits your journey",
-      "plans": {
-        "starter": {
-          "name": "Explorer",
-          "price": "R$57",
-          "period": "/month",
-          "description": "Perfect to begin your AI journey",
-          "features": [
-            "3 beginner courses per month",
-            "100 AI credits/month",
-            "10% off certifications & course purchases",
-            "Online-verifiable certificates",
-            "Community access"
-          ],
-          "cta": "Start Exploring",
-          "href": "/checkout/explorador"
-        },
-        "pro": {
-          "name": "Professional",
-          "price": "R$97",
-          "period": "/month",
-          "description": "For serious AI learners",
-          "features": [
-            "5 beginner + 2 intermediate + 1 advanced/month",
-            "300 AI credits/month",
-            "20% off certifications & course purchases",
-            "Priority support",
-            "Exclusive early access content"
-          ],
-          "highlighted": true,
-          "badge": "MOST POPULAR",
-          "cta": "Choose Professional",
-          "href": "/checkout/profissional"
-        },
-        "business": {
-          "name": "Expert",
-          "price": "R$167",
-          "period": "/month",
-          "description": "Master AI completely",
-          "features": [
-            "7 beginner + 4 intermediate + 3 advanced/month",
-            "800 AI credits/month",
-            "50% off certifications & course purchases",
-            "VIP support + exclusive content",
-            "Monthly expert consultation"
-          ],
-          "cta": "Go Expert",
-          "href": "/checkout/expert"
-        }
-      },
       "guarantee": "30-day guarantee",
       "rating": "4.9/5 rating",
       "footnote": "Cancel anytime • No fees • No fine print"

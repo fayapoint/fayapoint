@@ -824,55 +824,6 @@
     "Pricing": {
       "title": "Investimento que se Paga",
       "description": "Escolha o plano ideal para sua jornada",
-      "plans": {
-        "starter": {
-          "name": "Explorador",
-          "price": "R$57",
-          "period": "/mês",
-          "description": "Perfeito para começar sua jornada em IA",
-          "features": [
-            "3 cursos iniciantes por mês",
-            "100 créditos/mês para IA",
-            "10% de desconto em certificações e cursos avulsos",
-            "Certificados verificáveis online",
-            "Acesso à comunidade"
-          ],
-          "cta": "Começar a Explorar",
-          "href": "/checkout/explorador"
-        },
-        "pro": {
-          "name": "Profissional",
-          "price": "R$97",
-          "period": "/mês",
-          "description": "Para quem leva IA a sério",
-          "features": [
-            "5 iniciantes + 2 intermediários + 1 avançado/mês",
-            "300 créditos/mês para IA",
-            "20% de desconto em certificações e cursos avulsos",
-            "Suporte prioritário",
-            "Conteúdo exclusivo e antecipado"
-          ],
-          "highlighted": true,
-          "badge": "MAIS POPULAR",
-          "cta": "Escolher Profissional",
-          "href": "/checkout/profissional"
-        },
-        "business": {
-          "name": "Expert",
-          "price": "R$167",
-          "period": "/mês",
-          "description": "Domine IA por completo",
-          "features": [
-            "7 iniciantes + 4 intermediários + 3 avançados/mês",
-            "800 créditos/mês para IA",
-            "50% de desconto em certificações e cursos avulsos",
-            "Suporte VIP + conteúdo exclusivo",
-            "Consultoria mensal com especialista"
-          ],
-          "cta": "Virar Expert",
-          "href": "/checkout/expert"
-        }
-      },
       "guarantee": "Garantia de 30 dias",
       "rating": "4.9/5 de avaliação",
       "footnote": "Cancele quando quiser • Sem multas • Sem pegadinhas"
