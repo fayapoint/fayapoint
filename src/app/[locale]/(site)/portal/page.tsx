@@ -1,7 +1,8 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { marcarArea } from "@/components/UsoTracker";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ClaimLandingXp } from "@/components/landing/ClaimLandingXp";
@@ -250,8 +251,30 @@ export default function PortalPage() {
   const { user, setUser, logout } = useUser();
   const { items: cartItems, cartTotal } = useServiceCart();
   const { data: cachedDashboardData, isLoading: isDashboardLoading, error: dashboardError, refetch: refetchDashboard } = useDashboard();
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTabBruto] = useState("dashboard");
   const contentScrollRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * ⚠️ Toda troca de aba passa por aqui, e não por `setActiveTabBruto`.
+   *
+   * O portal trocava de aba **só no estado do React**: a URL continuava
+   * `/pt-BR/portal` para as 18 telas. Duas consequências, e a segunda é a que
+   * importa para o negócio:
+   *
+   * 1. o link nunca refletia onde a pessoa estava — o deep-link `?tab=` era
+   *    LIDO na montagem e nunca ESCRITO, então F5 sempre voltava ao Painel;
+   * 2. o medidor de uso via um pageview só por sessão de portal. "Onde ele foi
+   *    e quanto tempo passou em cada área" ficava invisível justamente no
+   *    produto — que é onde a resposta interessa.
+   *
+   * `marcarArea` grava a aba na URL (com `replaceState`, para não encher o
+   * histórico) e avisa o `UsoTracker`, que fecha o tempo da aba anterior e
+   * começa a contar a nova.
+   */
+  const setActiveTab = useCallback((tab: string) => {
+    setActiveTabBruto(tab);
+    marcarArea(tab);
+  }, []);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [userCourses, setUserCourses] = useState<DashboardCourseProgress[]>([]);

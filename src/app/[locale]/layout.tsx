@@ -22,6 +22,7 @@ import { AttributionTracker } from "@/components/AttributionTracker";
 import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { UsoTracker } from "@/components/UsoTracker";
 import { routing } from "@/i18n/routing";
 
 // Analytics IDs
@@ -293,6 +294,10 @@ export default async function RootLayout({
             }
           `}} />
           {children}
+          {/* Mede a banda de verdade (imagem e vídeo do CDN, que não passam por
+              rota nossa) e devolve um evento por navegação. Não renderiza nada
+              e nunca lança — ver `UsoTracker`. */}
+          <UsoTracker />
           <Toaster
             position="top-center"
             reverseOrder={false}

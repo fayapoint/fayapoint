@@ -4,6 +4,7 @@ import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { rateLimit, getClientIpFromRequest } from '@/lib/rate-limit';
+import { registrarUsoAssincrono, prefixoDeIp } from '@/lib/uso';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -85,6 +86,23 @@ export async function POST(request: Request) {
     // Update last login
     user.lastLoginAt = new Date();
     await user.save();
+
+    // A entrada na conta é o começo de toda sessão — sem ela a linha do tempo
+    // do usuário começa no meio. `lastLoginAt` guarda só a ÚLTIMA; isto guarda
+    // todas, com IP e agente.
+    registrarUsoAssincrono({
+      userId: String(user._id),
+      userEmail: user.email,
+      kind: 'auth',
+      route: 'auth/login',
+      method: 'POST',
+      status: 200,
+      label: 'Entrou na conta',
+      ipPrefix: prefixoDeIp(
+        request.headers.get('x-nf-client-connection-ip') || request.headers.get('x-forwarded-for'),
+      ),
+      userAgent: request.headers.get('user-agent') || undefined,
+    });
 
     // Create token
     const token = jwt.sign(
