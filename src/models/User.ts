@@ -142,6 +142,22 @@ export interface IUser extends Document {
     weeklyXp: number;
     monthlyXp: number;
   };
+  /**
+   * ── A FRANQUIA DE CONVERSA CONSUMIDA NESTE MÊS (11/08/2026) ───────────────
+   *
+   * Ricardo: *"conversar com o assistente, depende do plano"*. O teto por plano
+   * vive em `TierConfig.chatMensagensMes` (e é editável no Mission Control);
+   * aqui fica só o quanto já foi usado.
+   *
+   * ⚠️ `periodo` é a chave do mês (`AAAA-MM`) e é o que faz a franquia zerar
+   * sem cron: quando a chave lida difere da chave de hoje, a contagem recomeça.
+   * É o mesmo desenho do refill de créditos — o gatilho é o USO, não o relógio.
+   * Guardar só o número, sem o período, faria a franquia valer para sempre.
+   */
+  aiChatUsage?: {
+    periodo: string;
+    mensagens: number;
+  };
   gamification: {
     achievements: {
       id: string;
@@ -485,6 +501,14 @@ const UserSchema = new Schema<IUser>({
     lastActiveDate: Date,
     weeklyXp: { type: Number, default: 0 },
     monthlyXp: { type: Number, default: 0 },
+  },
+  // ⚠️ Campo NOVO — precisa estar AQUI, não só na interface. O Mongoose
+  // descarta em silêncio o que não está no schema (foi o defeito de
+  // `socialPersona.negocio`): sem esta declaração, a contagem nunca é gravada
+  // e a franquia do assistente vira ilimitada para todo mundo, sem erro nenhum.
+  aiChatUsage: {
+    periodo: { type: String, default: '' },
+    mensagens: { type: Number, default: 0 },
   },
   gamification: {
     achievements: [{

@@ -44,12 +44,19 @@ interface Resposta {
  *
  * `ai_chat_message` fica de fora de propósito: custa zero, e listar um item
  * grátis numa lista de preços faz a pessoa procurar a pegadinha.
+ *
+ * ⚠️ **Atualizado em 11/08/2026 junto com a tabela nova.** As chaves antigas
+ * (`custom_course_chapter`, `quiz_attempt`, `custom_course_generation`) valem
+ * zero agora, e o filtro de custo desta lista as descartaria — mas deixá-las
+ * escritas aqui seria manter na tela um vocabulário que o site abandonou
+ * ("capítulo", "tentativa"), esperando que ninguém repare.
  */
 const ROTULOS: Record<string, string> = {
-  custom_course_chapter: "Reescrever um capítulo com a sua cara",
-  custom_course_generation: "Gerar um curso inteiro sob medida",
-  certificate_generation: "Emitir um certificado verificável",
-  quiz_attempt: "Uma tentativa no quiz do certificado",
+  curso_escrito: "Reescrever um curso com a sua cara",
+  curso_completo: "O curso completo — com vídeo e audiobook",
+  certificate_generation: "Emitir um certificado (o quiz vem junto)",
+  character_sheet_extra: "Um novo caderno de personagem",
+  image_generation: "Gerar uma imagem no seu contexto",
 };
 
 export function CartaoDeCreditos() {

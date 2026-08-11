@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAuthUser } from '@/lib/auth';
 import { debitar, saldoParaGastar } from '@/lib/creditos';
-import { CREDIT_COSTS, CREDIT_PACKS } from '@/lib/course-tiers';
+import { CREDIT_PACKS } from '@/lib/course-tiers';
+import { precoDe } from '@/lib/precos-runtime';
 import { v2 as cloudinary } from 'cloudinary';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
@@ -54,8 +55,10 @@ export async function POST(request: Request) {
      *
      * O que muda é o fim da cota: onde antes havia só *"volte amanhã"*, agora
      * há uma escolha. O crédito compra a continuação do dia — que é
-     * exatamente o que `CREDIT_COSTS.image_generation` (3) sempre quis dizer e
-     * nunca teve como acontecer, porque nenhuma rota o cobrava.
+     * exatamente o que `image_generation` sempre quis dizer e nunca teve como
+     * acontecer, porque nenhuma rota o cobrava. Desde 11/08 são **R$1** por
+     * imagem, e o número sai da tabela viva (Mission Control), não da
+     * constante compilada.
      *
      * ⚠️ **Só cobra com `usarCreditos: true` no corpo.** Debitar em silêncio
      * quando a cota acaba seria a pior forma possível de apresentar o sistema
@@ -63,7 +66,7 @@ export async function POST(request: Request) {
      */
     let gastoImagem = 0;
     if (usedToday >= dailyQuota) {
-        const custoImagem = CREDIT_COSTS.image_generation;
+        const custoImagem = await precoDe('image_generation');
         const saldo = await saldoParaGastar(authUser.id);
 
         if (!usarCreditos) {

@@ -94,6 +94,21 @@ export interface TierConfig {
   yearlyPrice: number;
   limits: TierLimits;
   monthlyCredits: number;
+  /**
+   * ── A FRANQUIA DO ASSISTENTE (11/08/2026) ──────────────────────────────────
+   *
+   * Ricardo: *"conversar com o assistente, depende do plano"*.
+   *
+   * A conversa não custa crédito e não vai custar: R$1 por mensagem é absurdo,
+   * e fração quebraria a paridade que torna todo o resto legível. Mas
+   * "ilimitado para todo mundo, inclusive quem não paga" também não é verdade —
+   * cada mensagem é uma chamada de modelo, e o gratuito conversando à vontade
+   * é o único item da casa que escala com o uso e não com a receita.
+   *
+   * Então o assistente vira aquilo que o PLANO compra: uma franquia mensal,
+   * que zera junto com o ciclo. `Infinity` = sem franquia (o Expert).
+   */
+  chatMensagensMes: number;
   purchaseDiscount: number;   // 0–1 discount on individual course purchases
   quizDiscount: number;       // 0–1 discount on quiz + certificate
   canAccessLevel: (level: CourseLevel) => boolean;
@@ -142,12 +157,15 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
      * boas-vindas não virar dinheiro queimado em capítulo trancado.
      */
     monthlyCredits: 50,
+    /** 20 mensagens para experimentar. Suficiente para ver que serve, curto para não virar o produto. */
+    chatMensagensMes: 20,
     purchaseDiscount: 0,
     quizDiscount: 0,
     canAccessLevel: (level) => level === 'free',
     features: [
       '50 créditos de boas-vindas (= R$50)',
       'Dá para personalizar um curso inteiro',
+      '20 mensagens com o assistente por mês',
       '3 capítulos grátis por curso',
       '1 curso aberto por vez',
     ],
@@ -166,6 +184,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     },
     /** R$57 viram 57 + 43 de bônus (75%). ~6 cursos medianos personalizados. */
     monthlyCredits: 100,
+    chatMensagensMes: 300,
     purchaseDiscount: 0.10,
     quizDiscount: 0.10,
     canAccessLevel: (level) => level === 'free' || level === 'beginner',
@@ -173,6 +192,7 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
       '2 cursos abertos ao mesmo tempo',
       '3 cursos iniciantes por mês',
       '100 créditos/mês (= R$100, com 75% de bônus)',
+      '300 mensagens com o assistente por mês',
       '10% de desconto em certificações',
       '10% de desconto na compra de cursos avulsos',
       'Certificados verificáveis online',
@@ -193,10 +213,12 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     },
     /** R$97 viram 97 + 103 de bônus (106%). ~12 cursos medianos. */
     monthlyCredits: 200,
+    chatMensagensMes: 1000,
     purchaseDiscount: 0.20,
     quizDiscount: 0.20,
     canAccessLevel: () => true,
     features: [
+      'Assistente sem limite prático (1.000 mensagens/mês)',
       '3 cursos abertos ao mesmo tempo',
       '5 cursos iniciantes por mês',
       '2 cursos intermediários por mês',
@@ -246,10 +268,13 @@ export const TIER_CONFIGS: Record<SubscriptionPlan, TierConfig> = {
     },
     /** R$167 viram 167 + 233 de bônus (140%). ~25 cursos medianos — o catálogo tem 22. */
     monthlyCredits: 400,
+    /** Sem franquia. É o único plano em que o assistente é de fato ilimitado. */
+    chatMensagensMes: Infinity,
     purchaseDiscount: 0.50,
     quizDiscount: 0.50,
     canAccessLevel: () => true,
     features: [
+      'Assistente ilimitado',
       'Acervo completo — todos os cursos, sem cadeado',
       '4 cursos abertos ao mesmo tempo',
       '400 créditos/mês (= R$400, com 140% de bônus)',
@@ -350,24 +375,43 @@ export const CREDITO_EM_REAIS = 1;
 
 export const CREDIT_COSTS = {
   /**
-   * R$5 por tentativa. O quiz é o portão do certificado e precisa custar o
-   * suficiente para não virar tentativa e erro — mas menos que o certificado,
-   * senão errar uma vez sai mais caro que passar.
-   */
-  quiz_attempt: 5,
-  /** R$15, além do quiz. O certificado é verificável e não vem com o plano. */
-  certificate_generation: 15,
-  /**
-   * ZERO — o assistente entra no plano, não no crédito.
+   * ZERO — **a tentativa deixou de ser um produto** (11/08/2026).
    *
-   * Com a paridade, cobrar 1 crédito por mensagem viraria R$1 por mensagem, o
-   * que é absurdo para uma conversa. E cobrar frações quebraria a legibilidade
-   * que a paridade existe para criar. Conversa é volume; crédito aqui é para
-   * ENTREGA (um capítulo, uma imagem, um certificado).
+   * Ricardo: *"tentativa no quiz mudou para emitir certificado"*. Cobrar a
+   * tentativa era cobrar o aluno por tentar provar o que aprendeu, e produzia
+   * a pior conversa possível: quem errou pagou e não levou nada. Agora existe
+   * **um preço só**, o do certificado, e ele é cobrado **quando o documento é
+   * emitido** — quem reprova não paga nada.
+   *
+   * A chave continua exportada (e vale zero) porque o extrato de quem já pagou
+   * tentativa cita `quiz_attempt` e a rota `/api/credits` valida a ação contra
+   * este objeto. Apagar a chave apagaria o passado do extrato.
+   */
+  quiz_attempt: 0,
+  /**
+   * **R$50 — o quiz E o certificado, num preço só** (11/08/2026, Ricardo).
+   *
+   * Subiu de 15 para 50 e absorveu a tentativa. O que sustenta o número não é
+   * o custo de gerar um PDF: é que o certificado é **verificável em endereço
+   * público** e exige, nesta ordem, 100% do curso lido, aprovação num quiz que
+   * o servidor corrige e nunca revela, e um limite de tentativas. Documento que
+   * qualquer um emite não vale nada na parede — o preço é parte da prova.
+   *
+   * ⚠️ Cobrado **só na aprovação**. Ver `POST /api/courses/[slug]/quiz`.
+   */
+  certificate_generation: 50,
+  /**
+   * ZERO em crédito — **o assistente é do PLANO** (revisto em 11/08/2026).
+   *
+   * Ricardo: *"conversar com o assistente, depende do plano"*. Continua sem
+   * custar crédito (cobrar R$1 por mensagem seria absurdo, e fração quebraria
+   * a paridade), mas deixou de ser ilimitado para todo mundo: a franquia
+   * mensal por plano vive em `TierConfig.chatMensagensMes` e é o que o plano
+   * realmente compra. Crédito é para ENTREGA; conversa é para assinatura.
    */
   ai_chat_message: 0,
-  /** R$3 por imagem gerada no seu contexto. */
-  image_generation: 3,
+  /** **R$1 por imagem** gerada no seu contexto (11/08/2026, Ricardo). Era R$3. */
+  image_generation: 1,
   /**
    * ⚠️ Preço FIXO, de quando a personalização era um botão só (27/07). Um curso
    * de 5 capítulos e um de 30 custavam o mesmo — e o de 30 dá seis vezes mais
@@ -376,31 +420,41 @@ export const CREDIT_COSTS = {
    */
   custom_course_generation: 50,
   /**
-   * **R$2 por capítulo escrito** — o preço central do site.
+   * ⚠️ **Aposentado em 11/08/2026** — o preço do capítulo virou preço de CURSO.
    *
-   * Com o catálogo medido, sai: curso de entrada (13 capítulos) **R$26**,
-   * mediano (16) **R$32**, médio (20,5) **R$41**, o maior (30) **R$60**.
-   * Contra um preço médio de curso de R$91, personalizar custa de 28% a 66% do
-   * curso — é um segundo produto, não um acessório, e o preço diz isso.
+   * Ricardo: *"reescrever capítulo deve mudar para curso. E cobraremos 25"*. O
+   * preço por capítulo era honesto na conta e ruim na cabeça do aluno: ele
+   * escolhia um curso e recebia um número diferente para cada um (R$26, R$41,
+   * R$60), sem saber de antemão quanto o "seu curso do seu jeito" custa. Um
+   * preço de tabela — 25 — é uma promessa que cabe na vitrine.
    *
-   * ⚠️ Começou em R$1 e subiu no mesmo dia, por instrução do Ricardo: a R$1 o
-   * curso inteiro saía por R$16 e ficava mais barato que o almoço, o que
-   * desvaloriza a única coisa que só nós fazemos.
-   *
-   * A cobrança é por capítulo ESCRITO, não por capítulo pedido: se o modelo
-   * falhar no capítulo 12, o aluno paga 11. Ver `debitar` em `lib/creditos.ts`.
+   * Continua exportado em **zero** porque o extrato de quem pagou por capítulo
+   * cita esta chave, e a rota de crédito valida a ação contra este objeto.
+   * A chave está zerada de propósito: se alguma rota antiga ainda cobrar por
+   * ela, ela cobra nada em vez de cobrar duas vezes o mesmo curso.
    */
-  custom_course_chapter: 2,
+  custom_course_chapter: 0,
   /**
-   * **R$40, uma vez.** O caderno de personagem são 6 a 8 imagens do mesmo
-   * rosto em ângulos diferentes — a R$3 a imagem já seriam R$18 a R$24 só de
-   * geração, e o que se compra aqui é a CONSISTÊNCIA, que é o caro. É o insumo
-   * sem o qual "curso com o SEU rosto" não passa de promessa.
+   * **O PRIMEIRO caderno é de graça** (11/08/2026, Ricardo: *"caderno de
+   * personagem, 1 – 0"*).
    *
-   * Cobrado uma vez porque serve para todas as imagens seguintes — cobrar por
-   * uso puniria justamente quem usa.
+   * O caderno é o insumo sem o qual "curso com o SEU rosto" não passa de
+   * promessa — e cobrar R$40 pelo insumo, antes de a pessoa ter visto uma
+   * única imagem com a cara dela, era pedir fé adiantada. Grátis na primeira
+   * vez, o caderno deixa de ser uma compra e vira parte de conhecer o produto;
+   * o dinheiro passa a estar onde há uso repetido.
    */
-  character_sheet: 40,
+  character_sheet: 0,
+  /**
+   * **R$20 do segundo em diante** (11/08/2026, Ricardo: *"demais refaturas ou
+   * personagens – 20"*).
+   *
+   * Vale para refazer o seu caderno (mudou o cabelo, a foto, o enquadramento)
+   * e para cadastrar OUTRO personagem — sócio, mascote, cliente. São quatro
+   * gerações de imagem com consistência de rosto entre elas; a R$1 a imagem
+   * avulsa, os R$20 pagam a consistência, que é a parte cara.
+   */
+  character_sheet_extra: 20,
   /**
    * **R$1 por capítulo narrado** (10/08/2026).
    *
@@ -411,9 +465,121 @@ export const CREDIT_COSTS = {
    * texto a você) já foi pago ali; aqui é a locução em cima.
    */
   course_narration_chapter: 1,
+  /**
+   * ── OS QUATRO PACOTES DO CURSO (11/08/2026) ──────────────────────────────
+   *
+   * Ricardo: *"reescrever capítulo deve mudar para curso. E cobraremos 25, e
+   * devem ter as opções de tier até o com vídeo e áudiobook. Que deverá custar
+   * 100"*.
+   *
+   * As duas pontas são dele — **25** na entrada e **100** no completo. Os dois
+   * degraus do meio são a escada entre elas, e existem porque uma escolha entre
+   * 25 e 100 não é uma escada, é um abismo: quem quer imagem mas não quer
+   * vídeo não tem para onde ir e volta para os 25.
+   *
+   * Cada degrau ACUMULA o anterior — quem sobe não recompra o que já tem, paga
+   * a diferença (ver `diferencaDePacote`). É o que faz o 100 parecer o topo de
+   * um caminho e não um segundo produto.
+   *
+   * ⚠️ **Preço por CURSO, não por capítulo.** Um curso de 13 capítulos e um de
+   * 30 custam o mesmo. É pior para a nossa conta no curso grande e muito melhor
+   * para a vitrine: o preço vira tabela, e tabela é o que se anuncia.
+   */
+  curso_escrito: 25,
+  curso_ilustrado: 45,
+  curso_narrado: 70,
+  curso_completo: 100,
 } as const;
 
 export type CreditAction = keyof typeof CREDIT_COSTS;
+
+// ─── Os pacotes do Ateliê ────────────────────────────────
+
+export type IdPacote = 'escrito' | 'ilustrado' | 'narrado' | 'completo';
+
+export interface PacoteCurso {
+  id: IdPacote;
+  /** A chave em `CREDIT_COSTS` — é dela que sai o preço, e é ela que vai ao extrato. */
+  acao: CreditAction;
+  titulo: string;
+  promessa: string;
+  /** O que ESTE degrau acrescenta ao anterior. A tela lista os de baixo junto. */
+  inclui: string[];
+  /** Ainda não há produção para entregar — aparece anunciado e não é cobrável. */
+  emBreve?: boolean;
+  /** Ilustração do degrau (`/precos/…`). Sem ela a tela cai no emoji. */
+  imagem?: string;
+  emoji: string;
+}
+
+/**
+ * ⚠️ A ORDEM É A ESCADA. Índice maior = degrau mais alto, e é isso que
+ * `diferencaDePacote` usa para saber se o aluno está subindo ou já pagou.
+ */
+export const PACOTES_CURSO: PacoteCurso[] = [
+  {
+    id: 'escrito',
+    acao: 'curso_escrito',
+    titulo: 'O curso escrito para você',
+    promessa: 'Cada capítulo ganha abertura, exemplo e tarefa no contexto do seu negócio.',
+    inclui: ['Todos os capítulos reescritos no seu contexto', 'Ajustes de tom, profundidade e foco', 'Atualizações quando você aprofundar seu perfil'],
+    emoji: '✍️',
+    imagem: '/precos/curso-escrito.webp',
+  },
+  {
+    id: 'ilustrado',
+    acao: 'curso_ilustrado',
+    titulo: 'Escrito e ilustrado',
+    promessa: 'Uma imagem por capítulo, gerada do seu ramo e do seu público — não banco de imagens.',
+    inclui: ['Uma ilustração por capítulo', 'Com o seu rosto, se você tiver caderno de personagem'],
+    emoji: '🖼️',
+    imagem: '/precos/curso-ilustrado.webp',
+  },
+  {
+    id: 'narrado',
+    acao: 'curso_narrado',
+    titulo: 'Com audiobook',
+    promessa: 'O curso inteiro em áudio, na voz que você escolher — para estudar dirigindo ou treinando.',
+    inclui: ['Audiobook do curso personalizado', 'Narrador à sua escolha'],
+    emoji: '🎧',
+    imagem: '/precos/curso-narrado.webp',
+    // A cota de TTS acabou em abril (`public/audio/PRODUCTION_STATUS.md`).
+    // Anunciar o preço é honesto; cobrar sem entregar não é.
+    emBreve: true,
+  },
+  {
+    id: 'completo',
+    acao: 'curso_completo',
+    titulo: 'Completo — com vídeo e audiobook',
+    promessa: 'O curso todo seu: escrito, ilustrado, narrado e com vídeo de abertura por módulo.',
+    inclui: ['Vídeo de abertura por módulo', 'Tudo dos degraus anteriores'],
+    emoji: '🎬',
+    imagem: '/precos/curso-completo.webp',
+    emBreve: true,
+  },
+];
+
+export function acharPacote(id: string): PacoteCurso {
+  return PACOTES_CURSO.find((p) => p.id === id) || PACOTES_CURSO[0];
+}
+
+/**
+ * Quanto custa ir do pacote que o aluno JÁ PAGOU para o que ele quer.
+ *
+ * ⚠️ Nunca devolve negativo: descer de degrau não gera crédito de volta. E
+ * pagar de novo o mesmo degrau devolve zero — o pacote é por curso, e uma vez
+ * pago cobre também as regerações depois de o perfil mudar.
+ */
+export function diferencaDePacote(
+  jaPago: IdPacote | null,
+  desejado: IdPacote,
+  precos: Record<string, number> = CREDIT_COSTS,
+): number {
+  const alvo = precos[acharPacote(desejado).acao] ?? 0;
+  if (!jaPago) return alvo;
+  const pago = precos[acharPacote(jaPago).acao] ?? 0;
+  return Math.max(0, alvo - pago);
+}
 
 export interface CreditPack {
   id: string;

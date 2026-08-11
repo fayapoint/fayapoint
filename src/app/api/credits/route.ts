@@ -9,8 +9,10 @@ import {
   TIER_CONFIGS,
   resolvePlan,
   SubscriptionPlan,
+  PACOTES_CURSO,
 } from '@/lib/course-tiers';
 import { garantirCreditos, saldoParaGastar, debitar, custoDe } from '@/lib/creditos';
+import { getPrecos } from '@/lib/precos-runtime';
 
 /**
  * GET /api/credits
@@ -60,6 +62,8 @@ export async function GET() {
       nextRefillDate = alvo;
     }
 
+    const precosVivos = await getPrecos();
+
     return NextResponse.json({
       balance: (user.credits?.balance || 0) + purchasedBalance,
       monthlyBalance: user.credits?.balance || 0,
@@ -78,7 +82,13 @@ export async function GET() {
       totalPurchased: user.credits?.totalPurchased || 0,
       plan: userPlan,
       planStatus: user.subscription?.status || 'active',
-      costs: CREDIT_COSTS,
+      // ⚠️ A tabela VIVA, não a compilada: é este objeto que o cartão de
+      // créditos do portal desenha, e mostrar 40 no cartão enquanto a rota
+      // cobra 20 é a divergência que o painel do Mission Control existe para
+      // não criar. Ver `lib/precos-runtime.ts`.
+      costs: precosVivos.custos,
+      pacotes: PACOTES_CURSO.map((p) => ({ ...p, creditos: precosVivos.custos[p.acao] })),
+      chatMensagensMes: precosVivos.chatMensagensMes[userPlan],
       packs: CREDIT_PACKS,
       history: (user.credits?.history || []).slice(-50),  // last 50 entries
     });
@@ -134,7 +144,7 @@ export async function POST(request: Request) {
 
     await dbConnect();
 
-    const custo = custoDe(action as CreditAction, unidades);
+    const custo = await custoDe(action as CreditAction, unidades);
     const saldo = await saldoParaGastar(authUser.id);
     if (saldo.total < custo) {
       return NextResponse.json({

@@ -62,7 +62,12 @@ interface CursoVitrine {
 interface Resposta {
   cursos: CursoVitrine[];
   saldo?: number;
-  precoPorCapitulo?: number;
+  /**
+   * ⚠️ `precoPorCapitulo` saiu em 11/08: o preço virou por CURSO, em degraus.
+   * A vitrine mostra o degrau de entrada, que é o mesmo número para todos os
+   * cursos — e é justamente isso que um preço de tabela compra.
+   */
+  pacotes?: Array<{ id: string; titulo: string; creditos: number; emBreve?: boolean }>;
 }
 
 /** As três etapas, com a arte aprovada da casa como fundo. */
@@ -77,7 +82,7 @@ const PASSOS = [
   {
     n: 2,
     titulo: "Escolha o curso",
-    texto: "Qualquer curso do seu acervo. O preço é por capítulo escrito — você vê o total antes de gastar um crédito.",
+    texto: "Qualquer curso do seu acervo. O preço é do CURSO inteiro, pago uma vez — você vê o total antes de gastar um crédito.",
     arte: "/cursos/media/chatgpt-zero/inline/cap02-fluxo.webp",
     icone: BookOpen,
   },
@@ -228,9 +233,9 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
       <div>
         <div className="mb-4 flex items-baseline justify-between gap-3">
           <h2 className="text-lg font-bold">{T("Escolha o que vai ganhar a sua cara")}</h2>
-          {d?.precoPorCapitulo && (
+          {d?.pacotes?.[0] && (
             <span className="text-xs text-muted-foreground">
-              {d.precoPorCapitulo} {T("crédito por capítulo")}
+              {T("a partir de")} {d.pacotes[0].creditos} {T("créditos por curso")}
             </span>
           )}
         </div>

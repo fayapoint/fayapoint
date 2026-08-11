@@ -31,6 +31,27 @@ export interface IAtelieConfig extends Document {
   foco: string[];
   narrador: string;
   atualizadoEm: Date;
+  /**
+   * ── O PACOTE JÁ PAGO DESTE CURSO (11/08/2026) ────────────────────────────
+   *
+   * O Ateliê passou de preço por capítulo para **preço por curso, em quatro
+   * degraus** (ver `PACOTES_CURSO`). Isso obriga a lembrar de uma coisa que
+   * antes não existia: **este aluno já comprou este curso personalizado?**
+   *
+   * Sem esta memória, cada lote de geração cobraria os 25 de novo — um curso
+   * de 30 capítulos, gerado em lotes de 2, sairia por 375. E o aluno que volta
+   * para regerar depois de aprofundar o perfil pagaria uma segunda vez pelo que
+   * já é dele, que é exatamente o comportamento que a casa quer PREMIAR.
+   *
+   * Fica aqui, e não em `UserCourseLayer`, porque a camada é por capítulo e é
+   * apagada em "refazer tudo" — a compra tem de sobreviver a isso.
+   */
+  pacotePago?: {
+    id: string;
+    /** Quanto foi pago no total até agora por este curso (soma dos degraus). */
+    creditos: number;
+    pagoEm: Date;
+  };
 }
 
 const AtelieConfigSchema = new Schema<IAtelieConfig>(
@@ -43,6 +64,20 @@ const AtelieConfigSchema = new Schema<IAtelieConfig>(
     foco: { type: [String], default: [] },
     narrador: { type: String, default: 'fernando_borges' },
     atualizadoEm: { type: Date, default: Date.now },
+    // ⚠️ Campo NOVO. Se ele não estiver declarado aqui, o Mongoose descarta a
+    // compra em silêncio (foi o defeito de `socialPersona.negocio`, 03–10/08) e
+    // o aluno é cobrado de novo a cada lote — sem erro nenhum na tela.
+    pacotePago: {
+      type: new Schema(
+        {
+          id: { type: String, required: true },
+          creditos: { type: Number, required: true },
+          pagoEm: { type: Date, required: true },
+        },
+        { _id: false },
+      ),
+      required: false,
+    },
   },
   { timestamps: true },
 );

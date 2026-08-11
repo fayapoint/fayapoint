@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 import { promises as fs } from 'fs';
 import path from 'path';
 import dbConnect from '@/lib/mongodb';
@@ -8,13 +9,24 @@ import CourseProgress from '@/models/CourseProgress';
 import Certificate, { QUIZ_CONFIG } from '@/models/Certificate';
 import { getAuthUser } from '@/lib/auth';
 import { debitar, saldoParaGastar } from '@/lib/creditos';
-import { CREDIT_COSTS, CREDIT_PACKS, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
+import { CREDIT_PACKS, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
+import { precoDe } from '@/lib/precos-runtime';
 import { getCourseBySlug } from '@/data/courses';
 import { getQuizConfig } from '@/config/quiz-config';
 import { resolveContentFacts } from '@/lib/content-facts';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 const BANKS_DIR = path.join(process.cwd(), 'data', 'question-banks');
+
+/**
+ * Quanto tempo uma prova aberta continua valendo: **2 horas**.
+ *
+ * Longo o bastante para quem foi almoçar no meio, curto o bastante para que
+ * uma prova esquecida numa aba não vire um gabarito guardado. Depois disso, o
+ * próximo `GET` monta uma prova nova — sem consumir tentativa, porque tentativa
+ * só é consumida quando a prova é ENTREGUE.
+ */
+const VALIDADE_PROVA_MS = 2 * 60 * 60 * 1000;
 
 interface QuizQuestion {
   question: string;
@@ -258,23 +270,33 @@ async function generateQuizFromContent(courseContent: string, courseTitle: strin
     }
   }
 
-  // All AI models failed — use static fallback quiz
-  console.warn(`[Quiz] All AI models failed, using static fallback. Errors: ${errors.join(' | ')}`);
-  return getStaticFallbackQuiz(courseTitle);
+  /**
+   * ⚠️ **O QUIZ GENÉRICO DEIXOU DE EMITIR CERTIFICADO** (11/08/2026).
+   *
+   * Aqui havia `getStaticFallbackQuiz()`: quando todos os modelos falhavam, a
+   * rota devolvia dez perguntas fixas do `quiz-config` — sobre *prompt
+   * engineering*, LGPD e "o que é temperature" — **para qualquer curso**. Quem
+   * pegasse esse momento respondia perguntas de ChatGPT e recebia um
+   * certificado de "Leonardo AI: criação visual", verificável em endereço
+   * público, com o nome dele e o nome do curso errado dentro.
+   *
+   * Era tolerável quando o certificado custava 15 e ninguém cobrava. Não é
+   * tolerável a R$50 com a palavra *verificável* na vitrine: o certificado vale
+   * pela prova, e uma prova que não fala do curso não é prova de nada.
+   *
+   * Falhar aqui é a resposta certa. A rota devolve 503 e o aluno tenta de novo
+   * em alguns minutos, sem ter consumido tentativa nem crédito — o pior que
+   * acontece é um adiamento, contra um documento falso que fica de pé para
+   * sempre.
+   */
+  console.error(`[Quiz] Nenhum modelo respondeu para "${courseTitle}". Erros: ${errors.join(' | ')}`);
+  throw new QuizIndisponivel(
+    'Não consegui montar a avaliação deste curso agora. Tente de novo em alguns minutos — nada foi cobrado.',
+  );
 }
 
-/**
- * Static fallback quiz — used when AI generation fails (timeout, API down, etc.)
- * Loads questions from quiz configuration's fallback questions.
- */
-function getStaticFallbackQuiz(courseTitle: string): QuizQuestion[] {
-  const config = getQuizConfig();
-  const allQuestions = config.fallbackQuestions;
-
-  // Shuffle and return the required number
-  const shuffled = allQuestions.sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, QUIZ_CONFIG.TOTAL_QUESTIONS);
-}
+/** Falha temporária de geração: vira 503, não 500 nem certificado genérico. */
+class QuizIndisponivel extends Error {}
 
 /**
  * GET /api/courses/[slug]/quiz
@@ -299,13 +321,21 @@ export async function GET(
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
     }
 
-    // Check for test bypass mode (temporary — for testing certification flow)
-    const url = new URL(request.url);
-    const testBypass = url.searchParams.get('_test_bypass') === 'cert_test_2026';
-
-    // Check course progress — must be 100% (unless test bypass)
+    /**
+     * ⚠️ O ATALHO DE TESTE FOI REMOVIDO (11/08/2026).
+     *
+     * Havia aqui `?_test_bypass=cert_test_2026`, que pulava a exigência de ter
+     * lido 100% do curso. A senha estava no código que vai para o navegador,
+     * então não era um atalho nosso: era um atalho de **qualquer pessoa**.
+     * Com o certificado a R$50 e vendido como verificável, um parâmetro de URL
+     * que dispensa o curso é o oposto do que o preço promete.
+     *
+     * A regra da casa, de 29/07: **parâmetro de teste pode ENDURECER, nunca
+     * afrouxar.** Para testar o fluxo, marque o progresso do curso — que é o
+     * que o aluno faz.
+     */
     const progress = await CourseProgress.findOne({ userId: authUser.id, courseId: slug });
-    if (!testBypass && (!progress || progress.progressPercent < QUIZ_CONFIG.MIN_PROGRESS_PERCENT)) {
+    if (!progress || progress.progressPercent < QUIZ_CONFIG.MIN_PROGRESS_PERCENT) {
       return NextResponse.json({
         error: 'Você precisa completar 100% do curso antes de fazer a avaliação.',
         currentProgress: progress?.progressPercent || 0,
@@ -343,6 +373,36 @@ export async function GET(
           lastScore: certificate.quizAttempts[certificate.quizAttempts.length - 1]?.score || 0,
         });
       }
+    }
+
+    /**
+     * ── A PROVA ABERTA É REAPROVEITADA (11/08/2026) ────────────────────────
+     *
+     * Antes, cada `GET` gerava um conjunto novo de perguntas e nenhuma
+     * tentativa era consumida por isso. Dava para recarregar a página até
+     * aparecer um conjunto fácil — e, como o gabarito viajava junto, nem era
+     * preciso: bastava ler. O limite de 3 tentativas media a coisa errada.
+     *
+     * Agora, enquanto houver prova aberta e dentro da validade, o `GET`
+     * devolve **a mesma prova**. Recarregar a página deixa de ser uma jogada.
+     */
+    if (certificate?.provaPendente && certificate.provaPendente.expiraEm > new Date()) {
+      const aberta = certificate.provaPendente;
+      return NextResponse.json({
+        status: 'quiz_ready',
+        questions: aberta.perguntas.map((q, i) => ({ id: i, question: q.question, options: q.options })),
+        answersToken: aberta.nonce,
+        expiraEm: aberta.expiraEm,
+        config: {
+          totalQuestions: aberta.perguntas.length,
+          passingScore: QUIZ_CONFIG.PASSING_SCORE,
+          maxAttempts: QUIZ_CONFIG.MAX_ATTEMPTS,
+          currentAttempt: (certificate.totalQuizAttempts || 0) + 1,
+          remainingAttempts: QUIZ_CONFIG.MAX_ATTEMPTS - (certificate.totalQuizAttempts || 0),
+          custoCertificado: await precoDe('certificate_generation'),
+        },
+        courseTitle: certificate.courseTitle,
+      });
     }
 
     // Get course content for quiz generation — try static data first, then MongoDB
@@ -412,32 +472,50 @@ export async function GET(
       await certificate.save();
     }
 
-    // Return questions WITHOUT correct answers (security)
-    const safeQuestions = questions.map((q, i) => ({
-      id: i,
-      question: q.question,
-      options: q.options,
-    }));
-
-    // Store correct answers temporarily in a server-side structure
-    // We'll validate on POST by regenerating or using stored hash
-    // For simplicity, encode answers and store in certificate metadata
-    const answersHash = Buffer.from(JSON.stringify(questions.map(q => q.correctAnswer))).toString('base64');
+    /**
+     * ── O GABARITO FICA AQUI, NÃO NO NAVEGADOR ─────────────────────────────
+     *
+     * O que sai daqui são as perguntas e as opções. As respostas certas vão
+     * para `certificate.provaPendente`, no banco, e o cliente recebe apenas um
+     * `nonce` aleatório — um número de senha que identifica a prova e não
+     * carrega informação nenhuma sobre ela.
+     *
+     * Ver o comentário de `IProvaPendente` em `models/Certificate.ts` para o
+     * que existia antes (o gabarito em base64, e o `POST` confiando nele).
+     */
+    const nonce = crypto.randomBytes(24).toString('hex');
+    certificate.provaPendente = {
+      nonce,
+      perguntas: questions,
+      criadaEm: new Date(),
+      expiraEm: new Date(Date.now() + VALIDADE_PROVA_MS),
+    };
+    await certificate.save();
 
     return NextResponse.json({
       status: 'quiz_ready',
-      questions: safeQuestions,
-      answersToken: answersHash,
+      questions: questions.map((q, i) => ({ id: i, question: q.question, options: q.options })),
+      answersToken: nonce,
+      expiraEm: certificate.provaPendente.expiraEm,
       config: {
-        totalQuestions: QUIZ_CONFIG.TOTAL_QUESTIONS,
+        totalQuestions: questions.length,
         passingScore: QUIZ_CONFIG.PASSING_SCORE,
         maxAttempts: QUIZ_CONFIG.MAX_ATTEMPTS,
         currentAttempt: (certificate.totalQuizAttempts || 0) + 1,
         remainingAttempts: QUIZ_CONFIG.MAX_ATTEMPTS - (certificate.totalQuizAttempts || 0),
+        // O aluno precisa saber o preço ANTES de responder. Descobrir que o
+        // certificado custa 50 depois de passar na prova é a pior hora.
+        custoCertificado: await precoDe('certificate_generation'),
       },
       courseTitle,
     });
   } catch (error) {
+    // Indisponibilidade temporária do gerador é 503, e a mensagem já é a do
+    // aluno: 500 com "Erro ao gerar avaliação: …" convidaria a recarregar sem
+    // parar, e escondia que o certificado ficou intacto.
+    if (error instanceof QuizIndisponivel) {
+      return NextResponse.json({ error: error.message, temporario: true }, { status: 503 });
+    }
     const msg = error instanceof Error ? error.message : String(error);
     console.error('Quiz GET error:', msg, error);
     return NextResponse.json({ error: `Erro ao gerar avaliação: ${msg}` }, { status: 500 });
@@ -467,18 +545,10 @@ export async function POST(
     }
 
     const body = await request.json();
-    const { answers, answersToken, questions: submittedQuestions } = body;
+    const { answers, answersToken } = body;
 
-    if (!answers || !Array.isArray(answers) || !answersToken) {
+    if (!answers || !Array.isArray(answers) || typeof answersToken !== 'string') {
       return NextResponse.json({ error: 'Respostas inválidas' }, { status: 400 });
-    }
-
-    // Decode correct answers
-    let correctAnswers: number[];
-    try {
-      correctAnswers = JSON.parse(Buffer.from(answersToken, 'base64').toString());
-    } catch {
-      return NextResponse.json({ error: 'Token de respostas inválido' }, { status: 400 });
     }
 
     // Get certificate
@@ -486,6 +556,39 @@ export async function POST(
     if (!certificate) {
       return NextResponse.json({ error: 'Certificado não encontrado. Inicie a avaliação primeiro.' }, { status: 404 });
     }
+
+    /**
+     * ── A PROVA VEM DO BANCO, NÃO DO CORPO DA REQUISIÇÃO ───────────────────
+     *
+     * As três linhas que existiam aqui — `JSON.parse(base64(answersToken))` —
+     * eram o defeito inteiro. O cliente mandava o gabarito e o servidor
+     * acreditava; um `POST` com `answersToken` de uma pergunta só e
+     * `answers: [aquela]` valia 100% e emitia o certificado.
+     *
+     * Agora `answersToken` é só um nonce, e tudo que decide a nota (as
+     * perguntas, as respostas certas e **quantas perguntas existem**) sai de
+     * `certificate.provaPendente`. O denominador em particular importa: com ele
+     * vindo do cliente, encolher a prova era encolher o que era preciso acertar.
+     *
+     * ⚠️ `timingSafeEqual` e não `===`. O ganho prático é pequeno aqui, mas
+     * comparar segredo com `===` é o hábito que, no lugar errado, vira o
+     * vazamento — e o custo de fazer certo é uma linha.
+     */
+    const pendente = certificate.provaPendente;
+    if (!pendente || pendente.expiraEm <= new Date()) {
+      return NextResponse.json({
+        error: 'Esta avaliação expirou ou não foi iniciada. Abra a avaliação de novo — nenhuma tentativa foi consumida.',
+        expirada: true,
+      }, { status: 409 });
+    }
+    const esperado = Buffer.from(pendente.nonce);
+    const recebido = Buffer.from(answersToken);
+    if (esperado.length !== recebido.length || !crypto.timingSafeEqual(esperado, recebido)) {
+      return NextResponse.json({ error: 'Token de avaliação inválido' }, { status: 400 });
+    }
+
+    const perguntasDaProva = pendente.perguntas;
+    const correctAnswers = perguntasDaProva.map((q) => q.correctAnswer);
 
     if (certificate.status === 'issued') {
       return NextResponse.json({
@@ -502,57 +605,38 @@ export async function POST(
     }
 
     /**
-     * ── A COBRANÇA DA TENTATIVA (10/08/2026) ────────────────────────────────
+     * ── UM PREÇO SÓ, E ELE É O DO CERTIFICADO (11/08/2026) ─────────────────
      *
-     * ⚠️ `CREDIT_COSTS.quiz_attempt` (5) e `certificate_generation` (15)
-     * existiam desde 03/08, apareciam na página de preços e no extrato do
-     * aluno — e **nenhuma rota do site cobrava um crédito por eles**. Medido:
-     * zero ocorrências de `debitar` em qualquer rota de quiz ou certificado.
-     * O preço era uma promessa de tabela sem caixa registradora atrás.
+     * Ricardo: *"emitir certificado, é onde está o quiz (...) e deve custar
+     * 50 (...) tentativa no quiz, mudou para emitir certificado"*.
      *
-     * Ricardo, 10/08: *"nem vi sendo cobrado pelas certificações"*.
+     * Até 10/08 havia dois preços: R$5 por tentativa e R$15 pela emissão. A
+     * tentativa cobrada era o pior dos dois — quem errava pagava e não levava
+     * nada, e o aluno que mais precisava tentar de novo era o mais penalizado.
+     * Agora **tentar é de graça** (dentro do limite de tentativas) e o preço
+     * único vive na emissão, cobrado só de quem passou.
      *
-     * ## Por que a conferência vem ANTES de corrigir a prova
-     *
-     * `saldoParaGastar` concede o crédito do mês antes de ler o saldo (não há
-     * cron — ver `lib/creditos.ts`) e é o portão. Corrigir primeiro e cobrar
-     * depois entregaria a nota a quem não pode pagar, e recusar depois de
-     * mostrar o resultado seria pior do que recusar antes.
-     *
-     * ## O desconto do plano vale aqui
-     *
-     * `quizDiscount` é 10/20/50% conforme o plano — é parte do que a
-     * assinatura compra, e ignorá-lo cobraria do Expert o mesmo que do
-     * gratuito.
+     * ⚠️ Preço lido de `getPrecos()`: é o número que o Ricardo mexe no Mission
+     * Control. `quizDiscount` (10/20/50% conforme o plano) continua valendo por
+     * cima dele — é parte do que a assinatura compra.
      */
     const plano = resolvePlan(user.subscription?.plan || 'free');
     const descontoQuiz = TIER_CONFIGS[plano].quizDiscount;
-    const custoTentativa = Math.round(CREDIT_COSTS.quiz_attempt * (1 - descontoQuiz));
+    const precoCertificado = await precoDe('certificate_generation');
+    const custoEmissao = Math.round(precoCertificado * (1 - descontoQuiz));
 
-    if (custoTentativa > 0) {
-      const saldo = await saldoParaGastar(authUser.id);
-      if (saldo.total < custoTentativa) {
-        return NextResponse.json({
-          error: 'Créditos insuficientes para tentar a avaliação.',
-          required: custoTentativa,
-          available: saldo.total,
-          faltam: custoTentativa - saldo.total,
-          packs: CREDIT_PACKS,
-          checkoutUrl: '/checkout/cart',
-        }, { status: 402 });
-      }
-    }
-
-    // Score the quiz
+    // Score the quiz — contra a prova GUARDADA, não contra a que o cliente diz
+    // ter recebido. `submittedQuestions` do corpo é ignorado de propósito: era
+    // o cliente escrevendo o enunciado que vai para dentro do certificado.
     let correctCount = 0;
-    const questionResults = correctAnswers.map((correct, i) => {
-      const userAnswer = answers[i] ?? -1;
-      const isCorrect = userAnswer === correct;
+    const questionResults = perguntasDaProva.map((q, i) => {
+      const userAnswer = typeof answers[i] === 'number' ? answers[i] : -1;
+      const isCorrect = userAnswer === q.correctAnswer;
       if (isCorrect) correctCount++;
       return {
-        question: submittedQuestions?.[i]?.question || `Pergunta ${i + 1}`,
-        options: submittedQuestions?.[i]?.options || [],
-        correctAnswer: correct,
+        question: q.question,
+        options: q.options,
+        correctAnswer: q.correctAnswer,
         userAnswer,
         isCorrect,
       };
@@ -561,28 +645,22 @@ export async function POST(
     const score = Math.round((correctCount / correctAnswers.length) * 100);
     const passed = score >= QUIZ_CONFIG.PASSING_SCORE;
 
-    // A tentativa foi consumida — cobra. Acontece DEPOIS da correção porque só
-    // aqui sabemos que a prova foi de fato processada, e antes de qualquer
-    // resposta ao cliente, para que não haja caminho de saída sem passar pelo
-    // caixa. Falha de cobrança não derruba a prova: o débito já foi conferido
-    // acima e o extrato é a prova contábil.
-    let gastoTentativa = 0;
-    if (custoTentativa > 0) {
-      const r = await debitar(
-        authUser.id,
-        'quiz_attempt',
-        // ⚠️ `debitar` cobra `preço × quantidade`. Passar 1 aqui ignoraria o
-        // desconto do plano e cobraria do Expert o mesmo que do gratuito. A
-        // razão devolve exatamente `custoTentativa`, que já é inteiro.
-        custoTentativa / CREDIT_COSTS.quiz_attempt,
-        `Tentativa ${(certificate.totalQuizAttempts || 0) + 1} na avaliação de ${certificate.courseTitle || slug}`
-          + (descontoQuiz > 0 ? ` (−${Math.round(descontoQuiz * 100)}% do plano)` : ''),
-      );
-      gastoTentativa = r.gasto;
-    }
+    /**
+     * ⚠️ A prova aberta é QUEIMADA aqui, antes de qualquer resposta.
+     *
+     * Sem isto, o mesmo nonce serviria para reenviar respostas até acertar —
+     * o limite de tentativas contaria, mas o aluno já teria visto o gabarito no
+     * resultado da tentativa anterior e responderia a MESMA prova de novo.
+     * Cada entrega consome a prova; a próxima tentativa monta outra.
+     */
+    // `set(path, undefined)` e não `= undefined`: a atribuição direta depende
+    // de o Mongoose interpretar `undefined` como remoção, o que já variou entre
+    // versões. Aqui a intenção é explícita e o `$unset` é garantido — e se ela
+    // falhasse, o nonce continuaria válido e a prova seria reenviável.
+    certificate.set('provaPendente', undefined);
 
     // Update question bank stats (if questions came from bank)
-    await updateQuestionStats(slug, answers, submittedQuestions);
+    await updateQuestionStats(slug, answers, perguntasDaProva);
 
     // Record attempt
     const attempt = {
@@ -599,22 +677,16 @@ export async function POST(
 
     if (passed) {
       /**
-       * ⚠️ A EMISSÃO tem preço próprio, e ele é conferido aqui — não no
-       * começo.
+       * ⚠️ A conferência de saldo acontece AQUI, depois da correção.
        *
-       * Cobrar os 15 na entrada faria quem reprova pagar pelo certificado que
-       * não recebeu. Cobrar aqui significa que só quem passou paga, que é o
-       * que a tabela de preços diz ("Emitir um certificado verificável").
+       * Cobrar na entrada faria quem reprova pagar pelo certificado que não
+       * recebeu. Só quem passou paga — que é o que a tabela de preços diz.
        *
-       * E se o saldo não der **a prova continua aprovada** — a nota é do
-       * aluno, ele acabou de pagar a tentativa. O que fica pendente é o
-       * documento: `status` vira `aprovado_aguardando_credito` e a resposta
-       * leva ao pacote. Anular uma aprovação por falta de saldo seria cobrar
-       * duas vezes pelo mesmo erro.
+       * E se o saldo não der, **a prova continua aprovada**: a nota é do aluno
+       * e ele não deve nada por ela. O que fica pendente é o documento, e a
+       * resposta leva ao pacote de créditos. Anular a aprovação por falta de
+       * saldo seria transformar uma venda perdida numa punição.
        */
-      const custoEmissao = Math.round(
-        CREDIT_COSTS.certificate_generation * (1 - TIER_CONFIGS[plano].quizDiscount),
-      );
       const saldoPosTentativa = await saldoParaGastar(authUser.id);
 
       if (custoEmissao > 0 && saldoPosTentativa.total < custoEmissao) {
@@ -631,20 +703,23 @@ export async function POST(
           faltam: custoEmissao - saldoPosTentativa.total,
           packs: CREDIT_PACKS,
           checkoutUrl: '/checkout/cart',
-          creditosGastos: gastoTentativa,
+          creditosGastos: 0,
         }, { status: 402 });
       }
 
+      let gastoEmissao = 0;
       if (custoEmissao > 0) {
-        await debitar(
+        // ⚠️ `debitar` cobra `preço × quantidade`. Passar 1 aqui ignoraria o
+        // desconto do plano e cobraria do Expert o mesmo que do gratuito. A
+        // razão devolve exatamente `custoEmissao`, que já é inteiro.
+        const r = await debitar(
           authUser.id,
           'certificate_generation',
-          custoEmissao / CREDIT_COSTS.certificate_generation,
+          precoCertificado > 0 ? custoEmissao / precoCertificado : 0,
           `Certificado de ${certificate.courseTitle || slug}`
-            + (TIER_CONFIGS[plano].quizDiscount > 0
-              ? ` (−${Math.round(TIER_CONFIGS[plano].quizDiscount * 100)}% do plano)`
-              : ''),
+            + (descontoQuiz > 0 ? ` (−${Math.round(descontoQuiz * 100)}% do plano)` : ''),
         );
+        gastoEmissao = r.gasto;
       }
 
       // ═══ ISSUE CERTIFICATE ═══
@@ -694,9 +769,7 @@ export async function POST(
           options: q.options,
         })),
         xpEarned: 500,
-        creditosGastos: gastoTentativa + Math.round(
-          CREDIT_COSTS.certificate_generation * (1 - TIER_CONFIGS[plano].quizDiscount),
-        ),
+        creditosGastos: gastoEmissao,
       });
     } else {
       certificate.status = 'quiz_in_progress';
@@ -709,7 +782,9 @@ export async function POST(
         totalQuestions: correctAnswers.length,
         passingScore: QUIZ_CONFIG.PASSING_SCORE,
         remainingAttempts: QUIZ_CONFIG.MAX_ATTEMPTS - certificate.totalQuizAttempts,
-        creditosGastos: gastoTentativa,
+        // Reprovar não custa nada desde 11/08 — o preço mora na emissão.
+        creditosGastos: 0,
+        custoCertificado: custoEmissao,
         questionResults: questionResults.map(q => ({
           question: q.question,
           isCorrect: q.isCorrect,

@@ -3,6 +3,8 @@ import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { generate } from '@/lib/ai/provider';
+import { resolvePlan, TIER_CONFIGS } from '@/lib/course-tiers';
+import { franquiaDeChat } from '@/lib/precos-runtime';
 
 export async function POST(request: Request) {
   try {
@@ -25,12 +27,43 @@ export async function POST(request: Request) {
 
     const userId = authUser.id;
 
-    // Check if user has Pro access
-    const plan = user.subscription?.plan || 'free';
-    if (!['pro', 'business', 'starter', 'explorador', 'profissional', 'expert'].includes(plan)) {
+    /**
+     * ── O ASSISTENTE PASSOU A DEPENDER DO PLANO, E NÃO A SER TRANCADO ───────
+     *
+     * Ricardo, 11/08: *"conversar com o assistente, depende do plano"*.
+     *
+     * O que havia aqui era uma porta fechada: quem não assinava recebia *"Este
+     * recurso requer um plano Pro ou superior"* e nunca trocava uma mensagem
+     * com o produto que a casa mais quer mostrar. É o pior lugar possível para
+     * um cadeado — o assistente é justamente o que convence alguém a assinar.
+     *
+     * Trocado por uma **franquia mensal por plano** (`chatMensagensMes`, viva
+     * no Mission Control): o gratuito conversa 20 vezes por mês, o Expert sem
+     * limite. Continua sem custar crédito — cobrar R$1 por mensagem, na
+     * paridade, seria absurdo, e é para isso que existe o plano.
+     *
+     * ⚠️ A franquia zera pela CHAVE DO MÊS, sem cron: se o período gravado é de
+     * outro mês, a contagem recomeça na leitura. Mesmo desenho do refill de
+     * créditos, e pelo mesmo motivo — o que dispara é o uso, não o relógio.
+     */
+    const plan = resolvePlan(user.subscription?.plan || 'free');
+    const franquia = await franquiaDeChat(plan);
+    const agora = new Date();
+    const periodo = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}`;
+    const usadasNoMes = user.aiChatUsage?.periodo === periodo ? (user.aiChatUsage.mensagens || 0) : 0;
+
+    if (franquia !== null && usadasNoMes >= franquia) {
       return NextResponse.json(
-        { error: 'Este recurso requer um plano Pro ou superior' },
-        { status: 403 }
+        {
+          error: plan === 'free'
+            ? `Suas ${franquia} conversas grátis deste mês acabaram. Assine para conversar à vontade.`
+            : `Você usou as ${franquia} mensagens do plano ${TIER_CONFIGS[plan].displayName} neste mês.`,
+          franquia,
+          usadas: usadasNoMes,
+          // O caminho, nunca o beco: o teto do plano leva ao plano de cima.
+          upgradeUrl: '/precos#creditos',
+        },
+        { status: 429 }
       );
     }
 
@@ -102,13 +135,27 @@ Mantenha as respostas concisas mas úteis.`;
 
     const assistantResponse = ai.content || 'Desculpe, não consegui processar sua pergunta.';
 
-    // Update user's AI chat count
+    /**
+     * Conta a mensagem — depois da resposta, nunca antes.
+     *
+     * Se o modelo falhar, o `catch` responde 500 sem passar por aqui e a
+     * mensagem não é debitada da franquia. Cobrar a franquia por uma resposta
+     * que não veio é a versão barata do mesmo erro de cobrar crédito por
+     * capítulo não escrito.
+     *
+     * ⚠️ `$set` do período junto com o `$inc`: quando o mês virou, `usadasNoMes`
+     * já foi lido como 0 e este `$set` reancora o contador. Sem ele, o `$inc`
+     * somaria em cima do total do mês passado.
+     */
     await User.findByIdAndUpdate(userId, {
       $inc: { 'gamification.totalAiChats': 1 },
+      $set: { 'aiChatUsage.periodo': periodo, 'aiChatUsage.mensagens': usadasNoMes + 1 },
     });
 
     return NextResponse.json({
       response: assistantResponse,
+      // A tela pode mostrar "12 de 20 deste mês" sem uma segunda requisição.
+      franquia: { limite: franquia, usadas: usadasNoMes + 1 },
     });
 
   } catch (error) {

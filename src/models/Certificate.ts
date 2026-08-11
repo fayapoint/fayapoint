@@ -16,6 +16,38 @@ export interface IQuizAttempt {
   failedAt?: Date;
 }
 
+/**
+ * A prova ABERTA — as respostas certas guardadas no servidor (11/08/2026).
+ *
+ * ## O buraco que este campo fecha
+ *
+ * Até aqui o `GET` devolvia ao navegador um `answersToken` que era,
+ * literalmente, `base64(JSON.stringify(respostasCertas))`. Não era um token:
+ * era o gabarito, em claro, dentro da resposta HTTP. `atob(token)` no console
+ * do navegador devolvia `[1,3,0,2,…]` — a prova inteira, antes de responder.
+ *
+ * Pior: o `POST` **confiava no token que o cliente devolvia**. Quem quisesse
+ * podia mandar um token forjado com uma pergunta só e a própria resposta como
+ * gabarito; a nota saía `100%` e o certificado era emitido. O documento que o
+ * site vende como *verificável* podia ser emitido sem abrir o curso.
+ *
+ * A correção é a única que resolve as duas coisas: **o gabarito nunca sai do
+ * servidor**. O que viaja é um `nonce` aleatório que só serve para dizer *qual*
+ * prova está sendo entregue. Sem o documento, o nonce não vale nada; e como as
+ * perguntas também ficam aqui, a nota é calculada sobre a prova que o servidor
+ * montou, não sobre a que o cliente diz ter recebido.
+ *
+ * `expiraEm` existe para que uma prova aberta e abandonada não fique válida
+ * para sempre — e para que reabrir a página depois de horas dê uma prova nova
+ * em vez de continuar uma antiga.
+ */
+export interface IProvaPendente {
+  nonce: string;
+  perguntas: { question: string; options: string[]; correctAnswer: number }[];
+  criadaEm: Date;
+  expiraEm: Date;
+}
+
 export interface ICertificate extends Document {
   userId: mongoose.Types.ObjectId;
   userName: string;
@@ -39,6 +71,7 @@ export interface ICertificate extends Document {
   quizScore: number;
   quizAttempts: IQuizAttempt[];
   totalQuizAttempts: number;
+  provaPendente?: IProvaPendente;
   certificateNumber: string;
   status: 'pending_quiz' | 'quiz_in_progress' | 'issued' | 'revoked';
   pdfUrl?: string;
@@ -111,6 +144,26 @@ const CertificateSchema = new Schema<ICertificate>({
   quizScore: { type: Number, default: 0 },
   quizAttempts: [QuizAttemptSchema],
   totalQuizAttempts: { type: Number, default: 0 },
+  /**
+   * ⚠️ Campo NOVO — e a lição de 10/08 vale aqui: um campo que não existe no
+   * schema é descartado pelo Mongoose **em silêncio**, sem erro, sem aviso
+   * (foi assim que `socialPersona.negocio` passou uma semana sendo gravado e
+   * jogado fora). Se este bloco sumir do schema, o gabarito nunca é salvo e
+   * TODA prova volta "expirada" — sem uma única mensagem de erro.
+   */
+  provaPendente: {
+    type: new Schema<IProvaPendente>({
+      nonce: { type: String, required: true },
+      perguntas: [{
+        question: { type: String, required: true },
+        options: [{ type: String }],
+        correctAnswer: { type: Number, required: true },
+      }],
+      criadaEm: { type: Date, required: true },
+      expiraEm: { type: Date, required: true },
+    }, { _id: false }),
+    required: false,
+  },
   certificateNumber: {
     type: String,
     unique: true,

@@ -132,7 +132,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
   const router = useRouter();
   const [dados, setDados] = useState<Dados | null>(null);
   const [erro, setErro] = useState<string | null>(null);
-  const [escolhidas, setEscolhidas] = useState<IdOpcao[]>(["texto"]);
+  const [escolhidas, setEscolhidas] = useState<IdOpcao[]>(["escrito"]);
   const [gerandoAmostra, setGerandoAmostra] = useState(false);
   const [gerando, setGerando] = useState(false);
   const [progresso, setProgresso] = useState(0);
@@ -221,7 +221,10 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
           // O tamanho do lote é decisão do SERVIDOR (medido: 2 = 12s, 4 = 41s
           // por causa do estrangulamento do provedor). O cliente não manda o
           // número para não haver dois lugares definindo o mesmo limite.
-          body: JSON.stringify({ curso: slug }),
+          // ⚠️ O pacote VAI no corpo. Sem ele o servidor assume o degrau de
+          // entrada e o aluno que escolheu "completo" pagaria 25 e receberia
+          // só o texto — a tela prometendo uma coisa e a caixa cobrando outra.
+          body: JSON.stringify({ curso: slug, pacote: escolhidas[0] || "escrito" }),
         });
         const d = await r.json();
 
@@ -269,8 +272,16 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
     }
   };
 
-  const alternar = (id: IdOpcao) =>
-    setEscolhidas((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+  /**
+   * ⚠️ Virou seleção ÚNICA em 11/08/2026.
+   *
+   * Era um alternar de caixas independentes, e fazia sentido enquanto as
+   * opções eram add-ons ("texto", "imagens", "rosto"). Agora são degraus de uma
+   * escada em que cada um contém o anterior — marcar dois seria cobrar duas
+   * vezes pelo mesmo conteúdo, e desmarcar o de baixo mantendo o de cima seria
+   * pedir narração de um curso que não foi escrito.
+   */
+  const alternar = (id: IdOpcao) => setEscolhidas([id]);
 
   /**
    * Grava um ajuste e recarrega.
@@ -355,7 +366,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
   const { curso, persona, camada, amostra, creditos, orcamento } = dados;
   const tom = TOM_CALIBRE[persona.calibre];
   const podePersonalizar = persona.confianca >= persona.minima;
-  const custoTexto = orcamento.itens.find((i) => i.id === "texto");
+  const custoTexto = orcamento.itens.find((i) => i.id === escolhidas[0]) || orcamento.itens[0];
   const total = orcamento.total;
   const faltamCreditos = Math.max(0, total - creditos.saldo);
 
@@ -668,7 +679,7 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
           icone={<Coins size={15} className="text-white" />}
           cor="from-emerald-500 to-teal-600"
           titulo="Quanto custa o seu"
-          sub="A conta inteira à mostra, antes de qualquer clique que gaste crédito."
+          sub="Preço por CURSO, não por capítulo. Escolha um degrau — cada um inclui o de baixo."
         />
 
         <div className="space-y-2.5">
@@ -689,19 +700,33 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                       : "border-border bg-card/60 hover:border-white/20",
                 )}
               >
+                {/* ⚠️ Degrau é escolha ÚNICA, então o controle é redondo, não
+                    quadrado. A forma é o que diz "só um" antes de qualquer
+                    texto — um quadrado convida a marcar dois. */}
                 <span
                   className={cn(
-                    "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border",
+                    "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
                     marcada && !travada ? "border-emerald-400 bg-emerald-500" : "border-white/25",
                   )}
                 >
-                  {item.jaFeito ? (
-                    <Check size={12} className="text-emerald-300" />
-                  ) : item.emBreve ? (
+                  {item.emBreve ? (
                     <Lock size={11} className="text-white/40" />
+                  ) : item.jaFeito ? (
+                    <Check size={12} className="text-emerald-300" />
                   ) : marcada ? (
                     <Check size={12} className="text-black" />
                   ) : null}
+                </span>
+
+                {/* A ilustração do degrau. Sem arquivo, o emoji segura o lugar —
+                    uma vaga de imagem vazia parece imagem quebrada (rodada 3 do
+                    gauntlet, 11/08). */}
+                <span className="hidden h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] sm:flex">
+                  {item.imagem ? (
+                    <Image src={item.imagem} alt="" width={56} height={56} className="h-full w-full object-cover" />
+                  ) : (
+                    <span className="text-xl">{item.emoji}</span>
+                  )}
                 </span>
 
                 <span className="min-w-0 flex-1">
@@ -720,10 +745,23 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   <span className="mt-0.5 block text-[11.5px] leading-snug text-muted-foreground">
                     {T(item.descricao)}
                   </span>
+                  <span className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
+                    {item.inclui.map((linha) => (
+                      <span key={linha} className="flex items-center gap-1 text-[10.5px] text-white/55">
+                        <Check size={10} className="shrink-0 text-emerald-400/70" />
+                        {T(linha)}
+                      </span>
+                    ))}
+                  </span>
                   <span className="mt-1 block text-[10.5px] text-white/45">{T(item.conta)}</span>
                 </span>
 
                 <span className="shrink-0 text-right">
+                  {/* Preço cheio riscado quando há degrau já pago: sem isto, o
+                      aluno que pagou 25 e vê "75" acha que o site esqueceu. */}
+                  {!item.jaFeito && item.precoCheio > item.creditos && (
+                    <span className="block text-[10px] tabular-nums text-white/35 line-through">{item.precoCheio}</span>
+                  )}
                   <span className="block text-base font-black tabular-nums">
                     {item.jaFeito ? "—" : item.creditos}
                   </span>
@@ -776,11 +814,19 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
             </p>
           )}
 
-          {camada.capitulos > 0 && !camada.completo && (
-            <p className="mt-3 rounded-lg border border-cyan-400/20 bg-cyan-500/[0.06] px-3 py-2 text-[11px] text-cyan-200">
-              {camada.capitulos}  {T("de")} {orcamento.capitulos}  {T("capítulos já estão no seu contexto — você só\n              paga pelos que faltam.")}
+          {/* ⚠️ Este aviso dizia "você só paga pelos que faltam", que era
+              verdade no preço por capítulo e virou mentira em 11/08: o pacote é
+              do curso e pago uma vez. Agora ele conta a verdade nova, que é
+              melhor: já pagou, pode regerar à vontade. */}
+          {orcamento.pacotePago ? (
+            <p className="mt-3 rounded-lg border border-emerald-400/20 bg-emerald-500/[0.06] px-3 py-2 text-[11px] text-emerald-200">
+              {T("Este curso já é seu neste pacote — gerar de novo, depois de melhorar seu perfil, não custa nada.")}
             </p>
-          )}
+          ) : camada.capitulos > 0 && !camada.completo ? (
+            <p className="mt-3 rounded-lg border border-cyan-400/20 bg-cyan-500/[0.06] px-3 py-2 text-[11px] text-cyan-200">
+              {camada.capitulos}  {T("de")} {orcamento.capitulos}  {T("capítulos já estão no seu contexto.")}
+            </p>
+          ) : null}
 
           {gerando && (
             <div className="mt-4">

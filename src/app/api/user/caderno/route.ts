@@ -5,6 +5,7 @@ import User from "@/models/User";
 import { getAuthUser } from "@/lib/auth";
 import { CREDIT_COSTS } from "@/lib/course-tiers";
 import { debitar, saldoParaGastar } from "@/lib/creditos";
+import { getPrecos } from "@/lib/precos-runtime";
 import type { PersonaProfunda } from "@/lib/persona";
 
 export const dynamic = "force-dynamic";
@@ -100,12 +101,34 @@ export async function POST() {
       );
     }
 
-    const custo = CREDIT_COSTS.character_sheet;
+    /**
+     * ── O PRIMEIRO É DE GRAÇA, OS SEGUINTES CUSTAM 20 (11/08/2026) ──────────
+     *
+     * Ricardo: *"caderno de personagem, 1 – 0 e demais refaturas ou personagens
+     * – 20"*.
+     *
+     * A régua é a EXISTÊNCIA de um caderno pronto, não uma contagem: quem nunca
+     * teve rosto no sistema entra sem pagar — é o insumo que faz "curso com o
+     * SEU rosto" deixar de ser promessa —, e quem já viu o próprio caderno
+     * funcionando está refazendo por escolha (mudou a foto, quer outro
+     * personagem) e paga por isso.
+     *
+     * ⚠️ Preço lido de `getPrecos()`, não de `CREDIT_COSTS`: os dois números
+     * são editáveis no Mission Control, e ler a constante aqui faria o painel
+     * mostrar 20 enquanto esta rota cobra 40.
+     */
+    const jaTemCaderno = Boolean(
+      (persona as { caderno?: { imagens?: string[] } }).caderno?.imagens?.length,
+    );
+    const acaoCobranca = jaTemCaderno ? 'character_sheet_extra' : 'character_sheet';
+    const precos = await getPrecos();
+    const custo = precos.custos[acaoCobranca] ?? CREDIT_COSTS[acaoCobranca];
+
     const saldo = await saldoParaGastar(String(user._id));
-    if (saldo.total < custo) {
+    if (custo > 0 && saldo.total < custo) {
       return NextResponse.json(
         {
-          error: `O caderno custa ${custo} créditos (= R$${custo}) e você tem ${saldo.total}.`,
+          error: `Refazer o caderno custa ${custo} créditos (= R$${custo}) e você tem ${saldo.total}. O primeiro caderno é gratuito; este é um novo.`,
           creditosNecessarios: custo,
           creditosDisponiveis: saldo.total,
           faltam: custo - saldo.total,
@@ -212,19 +235,25 @@ export async function POST() {
       $inc: { "socialPersona.personaVersion": 1 },
     });
 
-    // Proporcional: se saíram 3 de 4 ângulos, cobra 3/4 (R$30 em vez de R$40).
-    // Cobrar cheio por caderno incompleto seria vender o que não foi entregue.
+    // Proporcional: se saíram 3 de 4 ângulos, cobra 3/4. Cobrar cheio por
+    // caderno incompleto seria vender o que não foi entregue.
+    //
+    // ⚠️ No primeiro caderno o preço é zero e `debitar` devolve `ok` sem tocar
+    // no saldo nem no extrato — de propósito. Um lançamento de "-0 créditos" no
+    // extrato do aluno é ruído que ele tem de interpretar.
     const cobranca = await debitar(
       authUser.id,
-      "character_sheet",
+      acaoCobranca,
       imagens.length / ANGULOS.length,
-      `Caderno de personagem (${imagens.length} de ${ANGULOS.length} ângulos)`,
+      `${jaTemCaderno ? "Novo caderno de personagem" : "Caderno de personagem (primeiro, gratuito)"}`
+        + ` — ${imagens.length} de ${ANGULOS.length} ângulos`,
     );
 
     return NextResponse.json({
       imagens,
       angulos: imagens.length,
       totalAngulos: ANGULOS.length,
+      primeiroGratuito: !jaTemCaderno,
       creditosGastos: cobranca.ok ? cobranca.gasto : 0,
       creditosRestantes: cobranca.restante,
       falhas: falhas.length ? falhas : undefined,

@@ -1,4 +1,10 @@
-import { CREDIT_COSTS } from '@/lib/course-tiers';
+import {
+  CREDIT_COSTS,
+  PACOTES_CURSO,
+  diferencaDePacote,
+  type IdPacote,
+  type CreditAction,
+} from '@/lib/course-tiers';
 
 /**
  * O Ateliê — o orçamento antes do compromisso (03/08/2026).
@@ -25,7 +31,17 @@ import { CREDIT_COSTS } from '@/lib/course-tiers';
  * Aqui não há banco nem rede: entra o número de capítulos, sai o orçamento.
  */
 
-export type IdOpcao = 'texto' | 'imagens' | 'rosto' | 'narracao';
+/**
+ * ⚠️ **Deixou de ser um menu e virou uma ESCADA** (11/08/2026).
+ *
+ * Eram quatro caixas de seleção independentes (`texto`, `imagens`, `rosto`,
+ * `narracao`), cada uma com a própria conta por capítulo. Ricardo mandou o
+ * preço passar a ser por CURSO, com degraus até o completo — e degrau não é
+ * caixa de seleção: escolher "narração sem texto" nunca fez sentido, e o menu
+ * permitia. Agora são quatro opções mutuamente exclusivas, cada uma contendo a
+ * anterior. Ver `PACOTES_CURSO` em `lib/course-tiers.ts`.
+ */
+export type IdOpcao = IdPacote;
 
 // ─────────────────────────────────────────────────────────────────────
 // Os ajustes — a personalização que a persona sozinha não decide
@@ -139,14 +155,18 @@ export interface ItemOrcamento {
   id: IdOpcao;
   titulo: string;
   descricao: string;
-  /** Custo total em créditos desta opção para ESTE curso. */
+  /** O que este degrau acrescenta ao de baixo. */
+  inclui: string[];
+  emoji: string;
+  imagem?: string;
+  /** O que o aluno paga AGORA por este degrau — já descontado o que ele tem. */
   creditos: number;
+  /** O preço de tabela, para a tela poder riscar quando há desconto por degrau. */
+  precoCheio: number;
   /** Como o total foi formado — a tela mostra a conta, não só o resultado. */
   conta: string;
-  /** Já entregue: não cobra de novo. */
+  /** Já pago: este degrau (ou um acima) é dele. */
   jaFeito: boolean;
-  /** Depende de outra opção (o rosto exige o caderno de personagem). */
-  requer?: IdOpcao;
   /** Ainda não existe pipeline — aparece anunciado, nunca cobrável. */
   emBreve?: boolean;
 }
@@ -154,90 +174,80 @@ export interface ItemOrcamento {
 export interface Orcamento {
   capitulos: number;
   itens: ItemOrcamento[];
-  /** Soma das opções escolhidas. */
+  /** O degrau que o aluno já comprou neste curso, se comprou. */
+  pacotePago: IdPacote | null;
+  /** O que a escolha atual custa agora. */
   total: number;
 }
 
 export interface EntradaOrcamento {
   capitulos: number;
-  /** Capítulos que já têm camada válida — esses não são recobrados. */
+  /** Capítulos que já têm camada válida — relatados, não descontados. */
   capitulosJaFeitos: number;
   temCadernoDePersonagem: boolean;
+  /** O degrau escolhido na tela. Sempre um só — é uma escada. */
   escolhidas: IdOpcao[];
+  /** O degrau que este aluno já pagou neste curso (`AtelieConfig.pacotePago`). */
+  pacotePago?: IdPacote | null;
   /** Este curso já tem narração gravada na voz escolhida? Ver `data/narradores`. */
   narracaoPronta?: boolean;
+  /** A tabela viva do Mission Control. Sem ela, o padrão de fábrica. */
+  precos?: Record<string, number>;
 }
 
 /**
- * ⚠️ Cobra só o que FALTA.
+ * A escada de pacotes, precificada para ESTE aluno neste curso.
  *
- * Um aluno que gerou 30 capítulos, aprofundou a persona e volta para atualizar
- * 4 paga por 4. Cobrar os 30 de novo transformaria "melhorei meu perfil" numa
- * punição — exatamente o oposto do laço que queremos: quanto mais ele conta
- * sobre si, melhor o conteúdo e mais barata a atualização.
+ * ## ⚠️ O que mudou em 11/08/2026, e por quê
+ *
+ * Era um orçamento somado por capítulo: `faltam × 2`, `capítulos × 3`, e o
+ * total dependia do tamanho do curso. Tinha uma virtude real — cobrava só o que
+ * faltava — e um defeito maior: **o aluno não sabia o preço antes de escolher o
+ * curso**. Cada curso custava um número diferente, e um preço que só aparece
+ * depois da escolha não é uma tabela, é um orçamento.
+ *
+ * Agora o preço é do curso e é o mesmo para todos: 25 na entrada, 100 no
+ * completo. A virtude antiga não se perdeu, mudou de forma — **pagou uma vez,
+ * é seu**: gerar de novo depois de aprofundar o perfil não custa nada, e subir
+ * de degrau paga só a diferença (`diferencaDePacote`).
  */
 export function montarOrcamento(e: EntradaOrcamento): Orcamento {
-  const faltam = Math.max(0, e.capitulos - e.capitulosJaFeitos);
-  const custoTexto = faltam * CREDIT_COSTS.custom_course_chapter;
-  const custoImagens = e.capitulos * CREDIT_COSTS.image_generation;
+  const precos = e.precos || (CREDIT_COSTS as unknown as Record<string, number>);
+  const pago = e.pacotePago || null;
+  const indicePago = pago ? PACOTES_CURSO.findIndex((p) => p.id === pago) : -1;
+  const escolhido = (e.escolhidas[0] || 'escrito') as IdPacote;
 
-  const itens: ItemOrcamento[] = [
-    {
-      id: 'texto',
-      titulo: 'O curso escrito para você',
-      descricao:
-        'Cada capítulo ganha uma abertura, um exemplo e uma tarefa no contexto do seu negócio. A aula original continua intacta.',
-      creditos: custoTexto,
-      conta:
-        faltam === e.capitulos
-          ? `${faltam} capítulos × ${CREDIT_COSTS.custom_course_chapter} créditos`
-          : `${faltam} capítulos que faltam × ${CREDIT_COSTS.custom_course_chapter} créditos (${e.capitulosJaFeitos} já feitos não são cobrados de novo)`,
-      jaFeito: faltam === 0,
-    },
-    {
-      id: 'imagens',
-      titulo: 'Ilustrações do seu contexto',
-      descricao:
-        'Uma imagem por capítulo, gerada a partir do seu ramo e do seu público — não banco de imagens.',
-      creditos: custoImagens,
-      conta: `${e.capitulos} imagens × ${CREDIT_COSTS.image_generation} créditos`,
-      jaFeito: false,
-      emBreve: true,
-    },
-    {
-      id: 'rosto',
-      titulo: 'Com o seu rosto',
-      descricao:
-        'Um caderno de personagem a partir das suas fotos, para você aparecer nas imagens do curso com o mesmo rosto em todos os ângulos.',
-      creditos: e.temCadernoDePersonagem ? 0 : CREDIT_COSTS.character_sheet,
-      conta: e.temCadernoDePersonagem
-        ? 'Você já tem um caderno de personagem — nada a pagar'
-        : `${CREDIT_COSTS.character_sheet} créditos, uma vez só`,
-      jaFeito: e.temCadernoDePersonagem,
-      requer: 'imagens',
-      emBreve: true,
-    },
-    {
-      id: 'narracao',
-      titulo: 'Narrado para ouvir',
-      descricao:
-        'O curso inteiro em áudio, na voz que você escolher abaixo — para estudar dirigindo, treinando ou lavando louça.',
-      creditos: e.capitulos * CREDIT_COSTS.course_narration_chapter,
-      conta: `${e.capitulos} capítulos × ${CREDIT_COSTS.course_narration_chapter} crédito`,
-      jaFeito: e.narracaoPronta === true,
-      // ⚠️ `emBreve` enquanto a produção de áudio não voltar (ver
-      // `public/audio/PRODUCTION_STATUS.md`: a cota de caracteres acabou em
-      // abril). O preço aparece porque anunciar o preço é honesto; a cobrança
-      // não acontece porque `montarOrcamento` nunca soma item `emBreve`.
-      emBreve: e.narracaoPronta !== true,
-    },
-  ];
+  const itens: ItemOrcamento[] = PACOTES_CURSO.map((p, i) => {
+    const cheio = precos[p.acao as CreditAction] ?? 0;
+    const aPagar = diferencaDePacote(pago, p.id, precos);
+    const jaFeito = i <= indicePago;
+    // A narração só é "em breve" enquanto não houver áudio pronto para este
+    // curso nesta voz. Com áudio pronto, o degrau é entregável.
+    const emBreve = p.emBreve === true && !(p.id === 'narrado' && e.narracaoPronta === true);
 
-  const total = itens
-    .filter((i) => e.escolhidas.includes(i.id) && !i.jaFeito && !i.emBreve)
-    .reduce((s, i) => s + i.creditos, 0);
+    return {
+      id: p.id,
+      titulo: p.titulo,
+      descricao: p.promessa,
+      inclui: p.inclui,
+      emoji: p.emoji,
+      imagem: p.imagem,
+      creditos: aPagar,
+      precoCheio: cheio,
+      conta: jaFeito
+        ? 'Você já tem este pacote neste curso — nada a pagar'
+        : indicePago >= 0
+          ? `${cheio} créditos − ${cheio - aPagar} que você já pagou = ${aPagar}`
+          : `${cheio} créditos pelo curso inteiro (${e.capitulos} capítulos), uma vez só`,
+      jaFeito,
+      emBreve,
+    };
+  });
 
-  return { capitulos: e.capitulos, itens, total };
+  const alvo = itens.find((i) => i.id === escolhido);
+  const total = alvo && !alvo.jaFeito && !alvo.emBreve ? alvo.creditos : 0;
+
+  return { capitulos: e.capitulos, itens, pacotePago: pago, total };
 }
 
 /**

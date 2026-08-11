@@ -4,7 +4,15 @@ import User from "@/models/User";
 import UserCourseLayer from "@/models/UserCourseLayer";
 import { getAuthUser } from "@/lib/auth";
 import { getMongoClient } from "@/lib/products";
-import { CREDIT_COSTS, TIER_CONFIGS, resolvePlan } from "@/lib/course-tiers";
+import {
+  TIER_CONFIGS,
+  resolvePlan,
+  PACOTES_CURSO,
+  acharPacote,
+  diferencaDePacote,
+  type IdPacote,
+} from "@/lib/course-tiers";
+import { getPrecos } from "@/lib/precos-runtime";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
@@ -79,23 +87,43 @@ export async function GET(request: NextRequest) {
 
       const porSlug = new Map(produtos.map((p) => [p.slug, p]));
       const saldo = saldoDe(user as never);
+      const precosVitrine = await getPrecos();
+      // O que cada curso já foi comprado — a vitrine precisa disto para dizer
+      // "já é seu" em vez de repetir o preço de quem já pagou.
+      const pagos = await AtelieConfig.find({ userId: String(user._id), courseSlug: { $in: slugs } })
+        .select("courseSlug pacotePago")
+        .lean();
+      const pagoPorSlug = new Map(pagos.map((c) => [c.courseSlug, c.pacotePago?.id as IdPacote | undefined]));
 
       return NextResponse.json({
         saldo: saldo.total,
-        precoPorCapitulo: CREDIT_COSTS.custom_course_chapter,
+        /**
+         * ⚠️ `precoPorCapitulo` **acabou** em 11/08. O preço é do curso, e a
+         * vitrine passa a mostrar a escada inteira: o mesmo número para todos
+         * os cursos, que é justamente o que o preço de tabela compra.
+         */
+        pacotes: PACOTES_CURSO.map((p) => ({
+          id: p.id,
+          titulo: precosVitrine.pacotes[p.id].titulo,
+          promessa: precosVitrine.pacotes[p.id].promessa,
+          imagem: precosVitrine.pacotes[p.id].imagem,
+          emBreve: precosVitrine.pacotes[p.id].emBreve,
+          emoji: p.emoji,
+          creditos: precosVitrine.custos[p.acao],
+        })),
         cursos: slugs.map((s) => {
           const p = porSlug.get(s);
-          // ⚠️ Sem `contentChapters` o custo seria `NaN` na tela. Quando o
-          // produto não declara o tamanho, o preço fica `null` e a vitrine diz
-          // "sob consulta" em vez de mostrar um número inventado.
           const capitulos = Number(p?.contentChapters) || null;
+          const pacoteJaPago = pagoPorSlug.get(s) || null;
           return {
             slug: s,
             titulo: p?.name || s,
             capa: p?.thumbnail || null,
             nivel: p?.level || null,
             capitulos,
-            custo: capitulos ? capitulos * CREDIT_COSTS.custom_course_chapter : null,
+            pacotePago: pacoteJaPago,
+            // O que falta pagar para o degrau de entrada. Zero = já é dele.
+            custo: diferencaDePacote(pacoteJaPago, "escrito", precosVitrine.custos),
           };
         }),
       });
@@ -281,15 +309,41 @@ export async function POST(request: NextRequest) {
         });
     const pendentes = listaPendente.length;
 
+    /**
+     * ── O PREÇO É DO CURSO, NÃO DO CAPÍTULO (11/08/2026) ───────────────────
+     *
+     * Ricardo: *"reescrever capítulo deve mudar para curso. E cobraremos 25"*.
+     *
+     * Três consequências, e todas mudam esta rota:
+     *
+     * 1. **Cobra UMA vez por curso.** O aluno paga o degrau escolhido e o curso
+     *    inteiro é dele — inclusive os lotes seguintes, e inclusive as
+     *    regerações depois de aprofundar o perfil. A memória disso é
+     *    `AtelieConfig.pacotePago`; sem ela, um curso de 30 capítulos gerado em
+     *    lotes de 2 cobraria 15 vezes.
+     * 2. **Subir de degrau paga a diferença.** Quem comprou "escrito" por 25 e
+     *    quer "completo" paga 75, não 100.
+     * 3. **Cobra na entrada do primeiro lote**, e não capítulo a capítulo — mas
+     *    só depois de o primeiro lote ter escrito alguma coisa (mais abaixo).
+     *    Nada escrito, nada cobrado, como sempre foi.
+     */
+    const pacoteDesejado = acharPacote(typeof body.pacote === "string" ? body.pacote : "escrito").id;
+    const jaPago = (configCurso?.pacotePago?.id as IdPacote | undefined) || null;
+    const precos = await getPrecos();
+    const custoPrevisto = diferencaDePacote(jaPago, pacoteDesejado, precos.custos);
+
     const saldo = await saldoParaGastar(String(user._id));
-    const custoPrevisto = custoDe("custom_course_chapter", pendentes);
-    if (pendentes > 0 && saldo.total < custoPrevisto) {
+    if (pendentes > 0 && custoPrevisto > 0 && saldo.total < custoPrevisto) {
+      const nome = precos.pacotes[pacoteDesejado]?.titulo || pacoteDesejado;
       return NextResponse.json(
         {
-          error: `Este curso custa ${custoPrevisto} créditos (${pendentes} capítulos × ${CREDIT_COSTS.custom_course_chapter}) e você tem ${saldo.total}.`,
+          error: jaPago
+            ? `Subir para "${nome}" custa ${custoPrevisto} créditos a mais e você tem ${saldo.total}.`
+            : `"${nome}" custa ${custoPrevisto} créditos (= R$${custoPrevisto}) e você tem ${saldo.total}.`,
           creditosNecessarios: custoPrevisto,
           creditosDisponiveis: saldo.total,
           faltam: custoPrevisto - saldo.total,
+          pacote: pacoteDesejado,
           capitulosPendentes: pendentes,
         },
         { status: 402 },
@@ -400,26 +454,47 @@ export async function POST(request: NextRequest) {
     const restantes = pendentes - geradas;
 
     /**
-     * ── A caixa registradora: cobra o que foi ESCRITO ─────────────────────
+     * ── A caixa registradora: o CURSO, uma vez só ─────────────────────────
      *
-     * Depois do laço, e sobre `geradas` — não sobre o que foi pedido. Se o
-     * modelo falhar no capítulo 12 de 30, o aluno paga 11 e os erros voltam na
-     * resposta. É a única ordem honesta: cobrar antes obrigaria a devolver
-     * crédito depois, e estorno é a parte que sempre quebra.
+     * Cobra depois do laço e só se o lote escreveu alguma coisa. É a mesma
+     * ordem honesta de antes — nada entregue, nada cobrado; cobrar na frente
+     * obrigaria a estornar depois, e estorno é a parte que sempre quebra.
      *
-     * A portaria lá em cima já garantiu que o saldo cobre o pior caso, então
-     * este débito não falha por falta — mas se falhar, o `ok: false` viaja na
-     * resposta em vez de derrubar a geração que já foi entregue.
+     * O que mudou é o QUE se cobra: o degrau do pacote, uma vez, e não os
+     * capítulos deste lote. `pacotePago` é gravado junto, na mesma passada, e é
+     * ele que faz o segundo lote sair de graça. A portaria lá em cima já
+     * garantiu o saldo.
+     *
+     * ⚠️ A gravação usa `upsert`: o aluno pode nunca ter tocado nos ajustes, e
+     * nesse caso não existe documento de `AtelieConfig` para receber a compra.
+     * Sem o `upsert`, a compra sumiria e ele seria cobrado a cada lote.
      */
     let cobranca: { gasto: number; restante: number } | null = null;
-    if (geradas > 0) {
+    if (geradas > 0 && custoPrevisto > 0) {
       const r = await debitar(
         String(user._id),
-        "custom_course_chapter",
-        geradas,
-        `Curso personalizado: ${produto.name || curso} (${geradas} ${geradas === 1 ? "capítulo" : "capítulos"})`,
+        acharPacote(pacoteDesejado).acao,
+        1,
+        jaPago
+          ? `Ateliê — subiu para "${acharPacote(pacoteDesejado).titulo}": ${produto.name || curso}`
+          : `Ateliê — "${acharPacote(pacoteDesejado).titulo}": ${produto.name || curso}`,
       );
-      if (r.ok) cobranca = { gasto: r.gasto, restante: r.restante };
+      if (r.ok) {
+        cobranca = { gasto: r.gasto, restante: r.restante };
+        await AtelieConfig.updateOne(
+          { userId: String(user._id), courseSlug: curso },
+          {
+            $set: {
+              pacotePago: {
+                id: pacoteDesejado,
+                creditos: (configCurso?.pacotePago?.creditos || 0) + r.gasto,
+                pagoEm: new Date(),
+              },
+            },
+          },
+          { upsert: true },
+        );
+      }
     }
 
     return NextResponse.json({
@@ -431,6 +506,7 @@ export async function POST(request: NextRequest) {
       /** Quantas já estão prontas somando o que já existia. */
       prontas: aulas.length - restantes,
       confianca: dossie.confianca,
+      pacote: pacoteDesejado,
       creditosGastos: cobranca?.gasto ?? 0,
       creditosRestantes: cobranca?.restante ?? saldo.total,
       erros: erros.length ? erros : undefined,

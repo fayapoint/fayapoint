@@ -1,5 +1,6 @@
 import User from '@/models/User';
 import { registrarCredito } from '@/lib/uso';
+import { getPrecos } from '@/lib/precos-runtime';
 import {
   CREDIT_COSTS,
   CREDIT_PACKS,
@@ -274,15 +275,23 @@ export async function saldoParaGastar(userId: string): Promise<Saldo> {
 }
 
 /**
- * O preço de N unidades de uma ação.
+ * O preço de N unidades de uma ação, **na tabela viva**.
+ *
+ * ⚠️ Virou `async` em 11/08/2026, e isso é o ponto: o preço deixou de ser uma
+ * constante compilada e passou a sair de `getPrecos()`, que lê o que o Ricardo
+ * gravou no Mission Control (ver `lib/precos-runtime.ts`). Enquanto esta
+ * função lia `CREDIT_COSTS` direto, o painel de preços podia salvar o que
+ * quisesse — a caixa registradora continuaria cobrando o número do build.
  *
  * `quantidade` aceita fração de propósito: o caderno de personagem cobra
- * proporcional ao número de ângulos que saíram (3 de 4 = 0,75 × R$40 = R$30).
+ * proporcional ao número de ângulos que saíram (3 de 4 = 0,75 do preço).
  * O total é arredondado porque crédito é inteiro — e, na paridade de R$1, um
  * crédito quebrado seria um centavo quebrado na cara do aluno.
  */
-export function custoDe(action: CreditAction, quantidade = 1): number {
-  return Math.round(CREDIT_COSTS[action] * Math.max(0, quantidade));
+export async function custoDe(action: CreditAction, quantidade = 1): Promise<number> {
+  const precos = await getPrecos();
+  const unitario = precos.custos[action] ?? CREDIT_COSTS[action];
+  return Math.round(unitario * Math.max(0, quantidade));
 }
 
 export interface ResultadoDebito {
@@ -312,7 +321,7 @@ export async function debitar(
   quantidade: number,
   descricao: string,
 ): Promise<ResultadoDebito> {
-  const custo = custoDe(action, quantidade);
+  const custo = await custoDe(action, quantidade);
   const user = await User.findById(userId);
   if (!user) return { ok: false, gasto: 0, restante: 0, faltam: custo };
 

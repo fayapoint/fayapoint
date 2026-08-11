@@ -33,6 +33,7 @@ import {
   CREDIT_COSTS,
   CREDIT_PACKS,
   CREDITO_EM_REAIS,
+  PACOTES_CURSO,
   type SubscriptionPlan,
 } from "@/lib/course-tiers";
 
@@ -45,6 +46,88 @@ type MonthlyOfferPayload = {
     advanced: Product[];
   };
 };
+
+/**
+ * ── AS LINHAS DE "NO QUE VOCÊ GASTA" (reescritas em 11/08/2026) ─────────────
+ *
+ * Ricardo mandou a tabela nova por cima de uma captura desta caixa, e as
+ * mudanças não são só de número:
+ *
+ * | linha | era | ficou |
+ * |---|---|---|
+ * | reescrever | **capítulo**, 2 por capítulo | **CURSO**, 25, com degraus até 100 |
+ * | caderno de personagem | 40, uma vez | **o primeiro 0**, os demais 20 |
+ * | certificado | 15 | **50**, e agora o quiz está incluído |
+ * | imagem | 3 | **1** |
+ * | tentativa no quiz | 5 | **saiu** — virou parte do certificado |
+ * | assistente | grátis | **depende do plano** (franquia mensal) |
+ *
+ * ⚠️ Os NÚMEROS não moram aqui. Saem de `/api/precos`, que lê o que o Ricardo
+ * gravou no Mission Control. O que mora aqui é o texto e a arte de cada linha —
+ * e `k` tem de casar com uma chave de `CREDIT_COSTS`, senão a linha desenha
+ * zero sem reclamar.
+ */
+const LINHAS_DE_GASTO: Array<{
+  k: keyof typeof CREDIT_COSTS;
+  pt: string;
+  en: string;
+  detalhePt: string;
+  detalheEn: string;
+  sufixo: string;
+  emoji: string;
+  imagem?: string;
+}> = [
+  {
+    k: "curso_escrito",
+    pt: "Reescrever um curso com a sua cara",
+    en: "Rewrite a whole course in your context",
+    detalhePt: "Todos os capítulos, uma vez só. Regerar depois não custa nada.",
+    detalheEn: "Every chapter, paid once. Regenerating later is free.",
+    sufixo: "por curso",
+    emoji: "✍️",
+    imagem: "/precos/curso-escrito.webp",
+  },
+  {
+    k: "character_sheet_extra",
+    pt: "Caderno de personagem (o seu rosto, vários ângulos)",
+    en: "Character sheet (your face, many angles)",
+    detalhePt: "O primeiro é gratuito. Refazer, ou criar outro personagem, custa isto.",
+    detalheEn: "The first one is free. Redoing it, or adding another character, costs this.",
+    sufixo: "a partir do 2º",
+    emoji: "🧑‍🎨",
+    imagem: "/precos/caderno-personagem.webp",
+  },
+  {
+    k: "certificate_generation",
+    pt: "Emitir um certificado verificável",
+    en: "Issue a verifiable certificate",
+    detalhePt: "Inclui o quiz. Tentar é de graça — só quem passa paga.",
+    detalheEn: "Includes the quiz. Attempts are free — you only pay when you pass.",
+    sufixo: "",
+    emoji: "🎓",
+    imagem: "/precos/certificado.webp",
+  },
+  {
+    k: "image_generation",
+    pt: "Gerar uma imagem no seu contexto",
+    en: "Generate an image in your context",
+    detalhePt: "Depois da sua cota diária do plano acabar.",
+    detalheEn: "After your plan's daily quota runs out.",
+    sufixo: "por imagem",
+    emoji: "🖼️",
+    imagem: "/precos/imagem.webp",
+  },
+  {
+    k: "ai_chat_message",
+    pt: "Conversar com o assistente",
+    en: "Chat with the assistant",
+    detalhePt: "Não custa crédito: a franquia mensal vem do seu plano.",
+    detalheEn: "Costs no credit: your monthly allowance comes with your plan.",
+    sufixo: "",
+    emoji: "💬",
+    imagem: "/precos/assistente.webp",
+  },
+];
 
 // ─── Plan Data ──────────────────────────────────────────────────────────────
 
@@ -269,10 +352,38 @@ export default function PricingPage() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const faqItems = isPt ? FAQ_ITEMS_PT : FAQ_ITEMS_EN;
 
+  /**
+   * ── OS PREÇOS VÊM DA REDE, NÃO DO BUILD (11/08/2026) ──────────────────────
+   *
+   * `CREDIT_COSTS` continua importado e serve de **primeiro quadro**: a caixa
+   * já desenha números certos no primeiro pixel, sem esperar a rede. Assim que
+   * `/api/precos` responde, entra a tabela viva do Mission Control.
+   *
+   * ⚠️ O padrão compilado é o fallback e nunca some — se a rota falhar, a
+   * página mostra o preço do último build, que é a coisa menos errada
+   * disponível. Uma tabela de preços em branco é pior que uma desatualizada.
+   */
+  const [custos, setCustos] = useState<Record<string, number>>(CREDIT_COSTS);
+  const [pacotes, setPacotes] = useState(
+    PACOTES_CURSO.map((p) => ({
+      id: p.id, titulo: p.titulo, emoji: p.emoji,
+      emBreve: p.emBreve === true, creditos: CREDIT_COSTS[p.acao],
+    })),
+  );
+
   useEffect(() => {
     fetch("/api/courses/monthly-offers", { cache: "no-store" })
       .then((r) => r.ok ? r.json() : null)
       .then((d) => d && setMonthlyOffers(d))
+      .catch(() => {});
+
+    fetch("/api/precos", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return;
+        if (d.custos) setCustos(d.custos);
+        if (Array.isArray(d.pacotes)) setPacotes(d.pacotes);
+      })
       .catch(() => {});
   }, []);
 
@@ -574,33 +685,70 @@ export default function PricingPage() {
                 </h3>
                 <p className="mb-4 text-sm text-muted-foreground">
                   {isPt
-                    ? T("Crédito paga ENTREGA — uma coisa nova feita para você. Conversar com o assistente é do plano e não custa crédito.")
-                    : "Credit pays for DELIVERY — something new made for you. Chatting with the assistant is included and costs nothing."}
+                    ? T("Crédito paga ENTREGA — uma coisa nova feita para você, e o preço é por curso, não por capítulo. Conversar com o assistente não custa crédito: a franquia vem do seu plano.")
+                    : "Credit pays for DELIVERY — something new made for you, priced per course, not per chapter. Chatting with the assistant costs no credit: the allowance comes with your plan."}
                 </p>
-                <ul className="space-y-2.5">
-                  {[
-                    { k: "custom_course_chapter", pt: "Reescrever um capítulo com a sua cara", en: "Rewrite a chapter in your context", sufixo: isPt ? "por capítulo" : "per chapter" },
-                    { k: "character_sheet", pt: "Caderno de personagem (o seu rosto, vários ângulos)", en: "Character sheet (your face, many angles)", sufixo: isPt ? "uma vez" : "once" },
-                    { k: "certificate_generation", pt: "Emitir um certificado verificável", en: "Issue a verifiable certificate", sufixo: "" },
-                    { k: "image_generation", pt: "Gerar uma imagem no seu contexto", en: "Generate an image in your context", sufixo: isPt ? "por imagem" : "per image" },
-                    { k: "quiz_attempt", pt: "Uma tentativa no quiz do certificado", en: "One certificate quiz attempt", sufixo: "" },
-                    { k: "ai_chat_message", pt: "Conversar com o assistente", en: "Chat with the assistant", sufixo: "" },
-                  ].map((linha) => {
-                    const custo = CREDIT_COSTS[linha.k as keyof typeof CREDIT_COSTS];
+                {/* ⚠️ Cada linha tem ILUSTRAÇÃO (Ricardo, 11/08: *"esta parte
+                    deve ser com imagens ilustrando"*). Uma lista de rótulo e
+                    número obriga o leitor a imaginar o que está comprando; a
+                    imagem entrega a promessa antes da frase. Sem o arquivo, o
+                    emoji segura o lugar — vaga de imagem vazia parece imagem
+                    quebrada, e isso custaria mais confiança do que ganharia. */}
+                <ul className="space-y-3">
+                  {LINHAS_DE_GASTO.map((linha) => {
+                    const custo = custos[linha.k] ?? 0;
                     return (
-                      <li key={linha.k} className="flex items-baseline justify-between gap-4 border-b border-border/40 pb-2 text-sm last:border-0">
-                        <span className="min-w-0 text-muted-foreground">
-                          {isPt ? T(linha.pt) : linha.en}
+                      <li key={linha.k} className="flex items-center gap-3 border-b border-border/40 pb-3 text-sm last:border-0 last:pb-0">
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
+                          {linha.imagem ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img src={linha.imagem} alt="" width={48} height={48} className="h-full w-full object-cover" loading="lazy" />
+                          ) : (
+                            <span className="text-lg">{linha.emoji}</span>
+                          )}
                         </span>
-                        <span className="shrink-0 font-bold tabular-nums text-amber-300">
-                          {custo === 0
-                            ? (isPt ? T("grátis") : "free")
-                            : `${custo} ${linha.sufixo ? `· ${linha.sufixo}` : ""}`}
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-foreground/90">{isPt ? T(linha.pt) : linha.en}</span>
+                          <span className="block text-[11px] leading-snug text-muted-foreground">
+                            {isPt ? T(linha.detalhePt) : linha.detalheEn}
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-right font-bold tabular-nums text-amber-300">
+                          {linha.k === "ai_chat_message"
+                            ? (isPt ? T("do plano") : "in the plan")
+                            : custo === 0
+                              ? (isPt ? T("grátis") : "free")
+                              : `${custo}${linha.sufixo ? ` · ${linha.sufixo}` : ""}`}
                         </span>
                       </li>
                     );
                   })}
                 </ul>
+
+                {/* A escada do Ateliê, aberta debaixo da linha do curso: é o
+                    único item da tabela que tem quatro preços, e escondê-los
+                    faria os 25 parecerem o teto — quando 25 é a entrada. */}
+                <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {isPt ? T("Os degraus do curso personalizado") : "Personalized course tiers"}
+                  </p>
+                  <ul className="space-y-1.5">
+                    {pacotes.map((p) => (
+                      <li key={p.id} className="flex items-baseline justify-between gap-3 text-[12.5px]">
+                        <span className="min-w-0 text-muted-foreground">
+                          <span className="mr-1.5">{p.emoji}</span>
+                          {isPt ? T(p.titulo) : p.titulo}
+                          {p.emBreve && (
+                            <span className="ml-1.5 text-[10px] uppercase tracking-wide text-white/35">
+                              {isPt ? T("em breve") : "soon"}
+                            </span>
+                          )}
+                        </span>
+                        <span className="shrink-0 font-bold tabular-nums text-amber-300">{p.creditos}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               {/* Quanto cada plano dá, e o multiplicador */}

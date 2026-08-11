@@ -11,6 +11,7 @@ import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { saldoDe, garantirCreditos } from "@/lib/creditos";
+import { getPrecos } from "@/lib/precos-runtime";
 import {
   montarOrcamento,
   calibrar,
@@ -53,7 +54,10 @@ export async function GET(request: NextRequest) {
     const curso = new URL(request.url).searchParams.get("curso")?.trim() || "";
     if (!curso) return NextResponse.json({ error: "curso é obrigatório" }, { status: 400 });
 
-    const escolhidas = (new URL(request.url).searchParams.get("opcoes") || "texto")
+    // ⚠️ O padrão mudou de `texto` para `escrito` em 11/08: as opções viraram
+    // degraus (`PACOTES_CURSO`) e um id antigo cairia no primeiro degrau de
+    // qualquer jeito — mas cairia calado, e o preço na tela sairia errado.
+    const escolhidas = (new URL(request.url).searchParams.get("opcoes") || "escrito")
       .split(",")
       .filter(Boolean) as IdOpcao[];
 
@@ -123,7 +127,13 @@ export async function GET(request: NextRequest) {
       capitulosJaFeitos: camadasValidas.length,
       temCadernoDePersonagem: (persona.caderno?.imagens || []).length > 0,
       escolhidas,
+      // O degrau que este aluno já comprou neste curso: é ele que faz o segundo
+      // lote (e o "refazer") custarem zero, e a subida custar só a diferença.
+      pacotePago: (configSalva?.pacotePago?.id as IdOpcao | undefined) || null,
       narracaoPronta: temNarracaoPronta(curso, ajustes.narrador),
+      // ⚠️ A tabela VIVA. Sem isto, o Ateliê mostraria o preço compilado e o
+      // `POST /api/user/curso-personalizado` cobraria o do Mission Control.
+      precos: (await getPrecos()).custos,
     });
 
     // O capítulo que serve de amostra é escolhido aqui e no POST pela MESMA
