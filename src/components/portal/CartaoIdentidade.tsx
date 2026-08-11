@@ -222,9 +222,14 @@ export default function CartaoIdentidade() {
             se contradizendo na mesma dobra, que é o defeito que ela veio
             consertar. */}
         <p className="mb-4 text-sm text-muted-foreground">
+          {/* ⚠️ O texto de "não conectado" NÃO afirma como a pessoa entra
+              hoje. O vínculo é gravado no login, então quem entrou pelo Google
+              antes desta versão ainda aparece sem vínculo — dizer "esta conta
+              entra por e-mail e senha" seria afirmar como verdade uma coisa
+              que a gente só descobre no próximo login dela. */}
           {dados.google.conectado
             ? T("Você não precisa entrar de novo: a conta que você usou para acessar já é a sua identidade aqui.")
-            : T("Esta conta entra por e-mail e senha. Conectando o Google, você passa a entrar com um clique — e nós preenchemos nome e foto sozinhos.")}
+            : T("O Google ainda não está ligado a esta conta. Ligando, você entra com um clique — e nome e foto vêm preenchidos de lá, sem você digitar nada.")}
         </p>
 
         <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-secondary/40 p-3 md:p-4">
