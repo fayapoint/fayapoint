@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import { getAuthUser } from '@/lib/auth';
 import { fireWelcomeFlow } from '@/lib/welcome-email';
 import { vincularGoogleDoLogin } from '@/lib/social-identity';
+import { acharPorQualquerEmail, vincularEmail } from '@/lib/identidade';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -209,14 +210,28 @@ export async function GET(request: NextRequest) {
 
     await dbConnect();
 
-    // Find or create user
-    let user = await User.findOne({ email: googleUser.email });
+    /**
+     * ⚠️ A busca é por QUALQUER e-mail da conta, não só o principal
+     * (10/08/2026). Uma pessoa com dois Google — o pessoal e o da empresa —
+     * entrava com o segundo e ganhava uma conta nova, vazia, sem os cursos nem
+     * os créditos da primeira. Duas contas da mesma pessoa é exatamente o que o
+     * Ricardo pediu para acabar. `acharPorQualquerEmail` só considera
+     * secundários VERIFICADOS; ver `lib/identidade.ts` para o porquê.
+     */
+    let user = await acharPorQualquerEmail(googleUser.email);
 
     if (user) {
       user.image = user.image || googleUser.picture;
       user.emailVerified = user.emailVerified || new Date();
       user.lastLoginAt = new Date();
+      // Autopreenchimento: o que o Google já nos deu não deve ser pedido de
+      // novo. Só preenche o que está VAZIO — nada aqui sobrescreve o que a
+      // pessoa escreveu.
+      if (!user.name && googleUser.name) user.name = googleUser.name;
       await user.save();
+      // Entrar com um e-mail novo o vincula a esta conta, provado pelo próprio
+      // OAuth. É o único caminho de verificação que existe hoje.
+      await vincularEmail(user, googleUser.email, { verificado: true, origem: 'google' });
     } else {
       user = await User.create({
         email: googleUser.email,
@@ -225,6 +240,8 @@ export async function GET(request: NextRequest) {
         emailVerified: new Date(),
         role: 'student',
         lastLoginAt: new Date(),
+        emails: [{ email: googleUser.email, verificado: true, origem: 'google', addedAt: new Date() }],
+        emailsVerificados: [googleUser.email.toLowerCase()],
       });
       // P5: boas-vindas + aviso ao admin — só em conta NOVA
       fireWelcomeFlow(user.name, user.email, 'google-oauth');

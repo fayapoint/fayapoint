@@ -401,6 +401,16 @@ export const CREDIT_COSTS = {
    * uso puniria justamente quem usa.
    */
   character_sheet: 40,
+  /**
+   * **R$1 por capítulo narrado** (10/08/2026).
+   *
+   * Um capítulo tem ~8 mil caracteres; a narração profissional dele em TTS
+   * custa centavos de insumo, mas o que se vende aqui é o audiolivro do SEU
+   * curso — com a sua camada personalizada dentro, na voz que você escolheu.
+   * Metade do preço do capítulo escrito porque o trabalho pesado (adaptar o
+   * texto a você) já foi pago ali; aqui é a locução em cima.
+   */
+  course_narration_chapter: 1,
 } as const;
 
 export type CreditAction = keyof typeof CREDIT_COSTS;

@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { getClientIpFromRequest, rateLimit } from '@/lib/rate-limit';
 import { fireWelcomeFlow } from '@/lib/welcome-email';
+import { filtroPorQualquerEmail } from '@/lib/identidade';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -62,7 +63,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    /**
+     * ⚠️ Bloqueia por posse PROVADA — principal ou `emailsVerificados` — e não
+     * pela lista de contato (10/08/2026).
+     *
+     * A primeira versão bloqueava por qualquer e-mail listado, inclusive os
+     * digitados à mão. Isso deixava qualquer pessoa logada reservar o endereço
+     * de um terceiro e impedir o cadastro dele para sempre. Contato não é
+     * identidade: só quem provou posse ocupa o endereço.
+     */
+    const existingUser = await User.findOne(filtroPorQualquerEmail(email));
 
     if (existingUser) {
       return NextResponse.json(
@@ -79,6 +89,10 @@ export async function POST(request: Request) {
     const newUser = await User.create({
       name,
       email: email.toLowerCase(),
+      // O principal mora na lista visível E no índice de exclusividade: ele é
+      // a chave de login desta conta, então ocupa o endereço.
+      emails: [{ email: email.toLowerCase(), verificado: false, origem: 'login', addedAt: new Date() }],
+      emailsVerificados: [email.toLowerCase()],
       password: hashedPassword,
       role: 'student', // Default role
       profile: {

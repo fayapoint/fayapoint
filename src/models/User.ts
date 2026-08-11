@@ -23,8 +23,55 @@ export interface ISavedCard {
   createdAt: Date;
 }
 
-export interface IUser extends Document {
+/**
+ * Um e-mail a mais na MESMA conta (10/08/2026).
+ *
+ * Ricardo: *"não pode ter 2 contas com o mesmo email, tem que requerer o cpf,
+ * um cpf por conta, tem que poder associar mais de um email por conta, mas não
+ * mais de um cpf."*
+ *
+ * ⚠️ `verificado` é uma trava de segurança, não um selo bonito. Só e-mail
+ * verificado entra na busca de login (ver `acharPorQualquerEmail`). Se um
+ * e-mail digitado à mão servisse para entrar, bastaria eu escrever o e-mail de
+ * outra pessoa aqui para que o próximo login dela caísse na MINHA conta.
+ * Verificar = provar posse, e hoje só o login social prova.
+ */
+export interface IEmailVinculado {
   email: string;
+  verificado: boolean;
+  /** 'google' prova posse; 'manual' serve para contato e recibo, nunca login. */
+  origem: 'login' | 'google' | 'manual';
+  addedAt: Date;
+}
+
+export interface IUser extends Document {
+  /** O e-mail principal — continua sendo a chave que o resto do sistema usa. */
+  email: string;
+  /** Os outros e-mails desta MESMA pessoa. Ver `IEmailVinculado`. */
+  emails: IEmailVinculado[];
+  /**
+   * Os e-mails com posse PROVADA — e o único lugar com índice único.
+   *
+   * ⚠️ Existe por causa de um sequestro possível, achado pelo laço de críticos
+   * em 10/08/2026. A primeira versão indexava `emails.email` inteiro, incluindo
+   * os digitados à mão. Consequência: eu escrevo o e-mail de um estranho na
+   * MINHA conta e, sem provar nada, aquele endereço fica reservado para sempre
+   * — o dono real não consegue mais se cadastrar ("já está cadastrado") nem
+   * entrar pelo Google (colisão de índice, erro 500). Negação de serviço a
+   * custo zero, contra qualquer pessoa.
+   *
+   * Agora a exclusividade global vale só para quem provou posse. E-mail de
+   * contato não verificado continua na lista, serve para recibo, e **não
+   * bloqueia ninguém** — duas contas podem até listar o mesmo, porque um
+   * rótulo sem poder não precisa ser único.
+   */
+  emailsVerificados: string[];
+  /**
+   * Só dígitos. Índice único esparso: uma conta por documento, e contas antigas
+   * sem CPF continuam existindo (`sparse`) até a pessoa preencher.
+   */
+  cpf?: string;
+  cpfVerifiedAt?: Date;
   password?: string;
   name: string;
   image?: string;
@@ -240,6 +287,35 @@ export interface IUser extends Document {
       ferramentas?: string[];
       travando?: string;
     };
+    /**
+     * ⚠️ FALTAVA NO SCHEMA (achado em 10/08/2026 pelo laço de críticos).
+     *
+     * A dimensão do NEGÓCIO entrou em 03/08 com tela, cálculo de confiança e
+     * seis perguntas — e nunca foi declarada aqui. O Mongoose **descarta em
+     * silêncio** o que não está no schema: a pessoa respondia "meu ticket é
+     * R$180", a tela dizia "Anotado ✨", e o dado morria no caminho. Nenhum
+     * erro, nenhum log; só a confiança que não subia e o exemplo do capítulo
+     * que continuava dizendo "imagine que você atende clientes".
+     *
+     * É a mesma armadilha que já custou o fluxo de pagamento antes. Ao criar
+     * bloco novo em `PersonaProfunda`, declare aqui NA MESMA EDIÇÃO.
+     */
+    negocio?: {
+      oQueVende?: string;
+      ticket?: number;
+      canal?: string;
+      objecao?: string;
+      clientesPorMes?: number;
+      orgulho?: string;
+      referencias?: string[];
+    };
+    /** Mesmo caso: lido pelo Ateliê (`persona.caderno?.imagens`) e nunca gravável. */
+    caderno?: {
+      imagens?: string[];
+      origem?: string[];
+      geradoEm?: Date;
+      status?: 'pendente' | 'pronto' | 'falhou';
+    };
     /** Rosto do usuário por contexto de uso — ver TIPOS_FOTO em lib/persona.ts */
     fotos?: {
       tipo: string;
@@ -282,6 +358,34 @@ const UserSchema = new Schema<IUser>({
     lowercase: true,
     trim: true,
   },
+  emails: {
+    type: [
+      new Schema<IEmailVinculado>(
+        {
+          email: { type: String, required: true, lowercase: true, trim: true },
+          verificado: { type: Boolean, default: false },
+          origem: { type: String, enum: ['login', 'google', 'manual'], default: 'manual' },
+          addedAt: { type: Date, default: Date.now },
+        },
+        { _id: false },
+      ),
+    ],
+    default: [],
+  },
+  emailsVerificados: {
+    type: [String],
+    default: [],
+    lowercase: true,
+    trim: true,
+  },
+  cpf: {
+    type: String,
+    trim: true,
+    // ⚠️ `sparse` é obrigatório aqui: sem ele, TODA conta sem CPF conta como
+    // um `null` duplicado e a segunda a ser criada explode no índice único.
+    index: { unique: true, sparse: true },
+  },
+  cpfVerifiedAt: Date,
   password: {
     type: String,
     select: false, // Don't return password by default
@@ -512,6 +616,23 @@ const UserSchema = new Schema<IUser>({
       ferramentas: [{ type: String }],
       travando: { type: String, default: '' },
     },
+    // Ver o comentário na interface acima: estes dois blocos existiam em
+    // `PersonaProfunda`, tinham tela e não tinham schema — logo, não gravavam.
+    negocio: {
+      oQueVende: { type: String, default: '' },
+      ticket: { type: Number },
+      canal: { type: String, default: '' },
+      objecao: { type: String, default: '' },
+      clientesPorMes: { type: Number },
+      orgulho: { type: String, default: '' },
+      referencias: [{ type: String }],
+    },
+    caderno: {
+      imagens: [{ type: String }],
+      origem: [{ type: String }],
+      geradoEm: { type: Date },
+      status: { type: String, enum: ['pendente', 'pronto', 'falhou'] },
+    },
     fotos: [
       {
         _id: false,
@@ -529,6 +650,18 @@ const UserSchema = new Schema<IUser>({
 });
 
 // Indexes for better query performance
+/**
+ * ⚠️ Único e esparso, como o do CPF, e garante a regra do Ricardo: **um
+ * endereço não pode estar em duas contas.**
+ *
+ * O índice é sobre `emailsVerificados` — só posse provada — e NUNCA sobre
+ * `emails.email`. Indexar a lista inteira permitiria reservar o endereço de um
+ * terceiro só digitando; ver o comentário de `emailsVerificados` na interface.
+ *
+ * A checagem em `lib/identidade.ts` existe para dar mensagem decente ANTES do
+ * erro 11000; o índice é a rede embaixo dela.
+ */
+UserSchema.index({ emailsVerificados: 1 }, { unique: true, sparse: true });
 UserSchema.index({ 'subscription.stripeCustomerId': 1 });
 UserSchema.index({ 'billing.asaasCustomerId': 1 });
 UserSchema.index({ createdAt: -1 });

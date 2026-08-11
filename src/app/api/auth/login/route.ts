@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { rateLimit, getClientIpFromRequest } from '@/lib/rate-limit';
 import { registrarUsoAssincrono, prefixoDeIp } from '@/lib/uso';
+import { filtroPorQualquerEmail } from '@/lib/identidade';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 
@@ -36,7 +37,12 @@ export async function POST(request: Request) {
     const { email, password } = await request.json();
 
     // Explicitly select password since it's set to select: false
-    const user = await User.findOne({ email }).select('+password');
+    //
+    // ⚠️ Qualquer e-mail VERIFICADO da conta serve para entrar (10/08/2026) —
+    // quem vinculou o e-mail do trabalho não deveria descobrir, no login, que
+    // ele não vale. `acharPorQualquerEmail` ignora e-mail não verificado, que é
+    // o que impede alguém de entrar numa conta escrevendo o e-mail dela.
+    const user = await User.findOne(filtroPorQualquerEmail(email)).select('+password');
 
     if (!user) {
       return NextResponse.json(
@@ -57,7 +63,7 @@ export async function POST(request: Request) {
     // try a direct Mongoose findOne with explicit projection as fallback.
     if (!user.password) {
       console.warn('[LOGIN DEBUG] select(+password) returned no password — trying raw projection fallback');
-      const rawUser = await User.findOne({ email }, { password: 1 }).lean();
+      const rawUser = await User.findOne({ _id: user._id }, { password: 1 }).lean();
       console.log('[LOGIN DEBUG] Raw projection result — password exists:', !!rawUser?.password, 'length:', (rawUser?.password as string)?.length || 0);
       if (rawUser?.password && typeof rawUser.password === 'string') {
         user.password = rawUser.password;

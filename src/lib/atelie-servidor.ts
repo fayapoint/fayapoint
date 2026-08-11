@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { blocoDePersona, type PersonaProfunda } from "@/lib/persona";
 import { generate } from "@/lib/ai/provider";
 import type { CapituloDoCurso } from "@/lib/curso-personalizado";
+import { instrucoesDeAjuste, type Ajustes } from "@/lib/atelie";
 
 /**
  * O motor da camada personalizada, num lugar só (03/08/2026).
@@ -88,6 +89,7 @@ export async function escreverCamada({
   numero,
   titulo,
   trecho,
+  ajustes,
 }: {
   persona: PersonaProfunda;
   nomeDoCurso: string;
@@ -95,8 +97,19 @@ export async function escreverCamada({
   titulo: string;
   /** Já resolvido pelos `{{fact:}}` — o modelo nunca deve ver token. */
   trecho: string;
+  /**
+   * O que o aluno escolheu para ESTE curso (10/08/2026): tom, profundidade,
+   * tamanho e foco. Vem de `AtelieConfig`.
+   *
+   * ⚠️ Entra DEPOIS das regras invioláveis e como "ajustes deste aluno" — se
+   * entrasse antes, um ajuste do usuário poderia contradizer a regra do
+   * português ou a proibição de inventar número, que são do produto e não dele.
+   * Ausente, o comportamento é exatamente o de antes.
+   */
+  ajustes?: Ajustes;
 }): Promise<CamadaEscrita> {
   const contexto = blocoDePersona(persona, "curso");
+  const comoEscrever = ajustes ? instrucoesDeAjuste(ajustes) : "";
 
   const pedir = async (reforco: boolean): Promise<CamadaEscrita> => {
     const res = await generate({
@@ -119,6 +132,7 @@ export async function escreverCamada({
             `CURSO: ${nomeDoCurso}\n` +
             `CAPÍTULO ${numero}: ${titulo}\n\n` +
             `TRECHO DO CAPÍTULO:\n${trecho}\n\n` +
+            (comoEscrever ? `AJUSTES QUE ESTE ALUNO PEDIU PARA ESTE CURSO:\n${comoEscrever}\n\n` : "") +
             `Escreva as três peças para ESTE aluno neste capítulo.` +
             (reforco
               ? `\n\nATENÇÃO: a tentativa anterior veio com alguma das três chaves vazia. ` +

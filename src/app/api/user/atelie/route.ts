@@ -11,7 +11,19 @@ import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { saldoDe, garantirCreditos } from "@/lib/creditos";
-import { montarOrcamento, calibrar, type IdOpcao } from "@/lib/atelie";
+import {
+  montarOrcamento,
+  calibrar,
+  normalizarAjustes,
+  EXTENSOES,
+  FOCOS,
+  PROFUNDIDADES,
+  TONS_AJUSTE,
+  type Ajustes,
+  type IdOpcao,
+} from "@/lib/atelie";
+import AtelieConfig from "@/models/AtelieConfig";
+import { NARRADORES, temNarracaoPronta } from "@/data/narradores";
 import { MINIMA_CONFIANCA, primeiroCapituloUtil } from "@/lib/atelie-servidor";
 import { podePersonalizar, motivoSemPersonalizacao } from "@/lib/curso-personalizavel";
 
@@ -100,11 +112,18 @@ export async function GET(request: NextRequest) {
     const amostra = await AtelieAmostra.findOne({ userId: String(user._id), courseSlug: curso }).lean();
 
     const saldo = saldoDe(user);
+
+    // Os ajustes deste aluno para ESTE curso. Ausentes, valem os padrões — a
+    // tela nunca abre sem uma escolha marcada.
+    const configSalva = await AtelieConfig.findOne({ userId: String(user._id), courseSlug: curso }).lean();
+    const ajustes = normalizarAjustes(configSalva as Partial<Ajustes> | null);
+
     const orcamento = montarOrcamento({
       capitulos: capitulos.length,
       capitulosJaFeitos: camadasValidas.length,
       temCadernoDePersonagem: (persona.caderno?.imagens || []).length > 0,
       escolhidas,
+      narracaoPronta: temNarracaoPronta(curso, ajustes.narrador),
     });
 
     // O capítulo que serve de amostra é escolhido aqui e no POST pela MESMA
@@ -165,6 +184,30 @@ export async function GET(request: NextRequest) {
         comprado: saldo.comprado,
       },
       orcamento,
+      /**
+       * Os ajustes e o catálogo inteiro na MESMA resposta.
+       *
+       * O catálogo poderia ser importado direto no componente — mas ele é a
+       * fonte das instruções que vão para o prompt, e mandá-lo do servidor
+       * garante que a tela nunca ofereça uma opção que o motor desta versão não
+       * sabe interpretar.
+       */
+      ajustes,
+      catalogo: {
+        tons: TONS_AJUSTE,
+        profundidades: PROFUNDIDADES,
+        extensoes: EXTENSOES,
+        focos: FOCOS,
+        narradores: NARRADORES.map((n) => ({
+          ...n,
+          jaGravado: temNarracaoPronta(curso, n.id),
+        })),
+      },
+      /** O material que a prévia de estúdio toca — vídeo mudo + voz. */
+      previa: {
+        video: `/cursos/intro/${curso}.webm`,
+        poster: `/cursos/intro/${curso}.webp`,
+      },
       plano: plano,
       /**
        * Pode gastar crédito neste curso?
@@ -179,6 +222,44 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("[atelie] GET", error);
+    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+  }
+}
+
+/**
+ * PATCH /api/user/atelie — grava os ajustes deste aluno para este curso.
+ *
+ * Não gera nada e não cobra nada: é só a escolha. A amostra (POST) e a geração
+ * paga leem daqui, então trocar o tom e pedir a amostra de novo mostra a
+ * diferença de graça — que é o ponto de ter uma prévia.
+ */
+export async function PATCH(request: NextRequest) {
+  try {
+    const authUser = await getAuthUser();
+    if (!authUser) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+
+    const body = await request.json().catch(() => ({}));
+    const curso = typeof body.curso === "string" ? body.curso.trim() : "";
+    if (!curso) return NextResponse.json({ error: "curso é obrigatório" }, { status: 400 });
+
+    // ⚠️ Normaliza SEMPRE: o corpo vem do cliente e uma opção inventada viraria
+    // instrução desconhecida no prompt — ou, pior, `undefined` no meio da lista
+    // numerada que o modelo lê.
+    const ajustes = normalizarAjustes(body.ajustes);
+    if (!NARRADORES.some((n) => n.id === ajustes.narrador)) {
+      ajustes.narrador = NARRADORES[0].id;
+    }
+
+    await dbConnect();
+    await AtelieConfig.findOneAndUpdate(
+      { userId: authUser.id, courseSlug: curso },
+      { $set: { ...ajustes, atualizadoEm: new Date() } },
+      { upsert: true, new: true },
+    );
+
+    return NextResponse.json({ ok: true, ajustes });
+  } catch (error) {
+    console.error("[atelie] PATCH", error);
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
 }
@@ -225,14 +306,30 @@ export async function POST(request: NextRequest) {
     const dossie = montarDossie(persona, { nome: user.name, temFoto: !!user.image, avatar: user.image });
     const versao = persona.personaVersion || 0;
 
+    // A amostra usa os MESMOS ajustes da geração paga — é o que a torna prévia
+    // em vez de propaganda. Trocar o tom e refazer mostra a diferença real.
+    const configAmostra = await AtelieConfig.findOne({ userId: String(user._id), courseSlug: curso }).lean();
+    const ajustesAmostra = normalizarAjustes(configAmostra as Partial<Ajustes> | null);
+
     const jaTem = await AtelieAmostra.findOne({ userId: String(user._id), courseSlug: curso });
     if (jaTem && !refazer) {
       return NextResponse.json({ amostra: jaTem, reaproveitada: true });
     }
-    // Refazer só faz sentido quando há o que mudar. Sem esta guarda, um clique
-    // repetido gastaria uma chamada de modelo para reescrever o mesmo texto com
-    // a mesma persona.
-    if (jaTem && refazer && (jaTem.personaVersion || 0) >= versao) {
+    /**
+     * Refazer só faz sentido quando há o que mudar. Sem esta guarda, um clique
+     * repetido gastaria uma chamada de modelo para reescrever o mesmo texto.
+     *
+     * São DUAS coisas que podem ter mudado: a persona (`personaVersion`) e os
+     * ajustes deste curso (`atualizadoEm` da config). Quando os ajustes entraram
+     * (10/08), checar só a persona teria transformado o botão "ver com o novo
+     * tom" numa mentira silenciosa: ele devolveria a amostra velha com cara de
+     * nova.
+     */
+    const ajustesMudaram =
+      !!configAmostra?.atualizadoEm &&
+      !!jaTem?.generatedAt &&
+      new Date(configAmostra.atualizadoEm) > new Date(jaTem.generatedAt);
+    if (jaTem && refazer && (jaTem.personaVersion || 0) >= versao && !ajustesMudaram) {
       return NextResponse.json({ amostra: jaTem, reaproveitada: true });
     }
 
@@ -259,6 +356,7 @@ export async function POST(request: NextRequest) {
       numero: cap.numero ?? 1,
       titulo: cap.titulo,
       trecho,
+      ajustes: ajustesAmostra,
     });
 
     // O "antes": as primeiras linhas do capítulo, sem cabeçalho e sem token

@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { CartaoDeCreditos } from "@/components/portal/CartaoDeCreditos";
+import CartaoIdentidade from "@/components/portal/CartaoIdentidade";
 import {
   User,
   CreditCard,
@@ -611,6 +612,9 @@ export default function AccountPage() {
                   <PlanIcon size={12} className="mr-1" />
                   {currentPlan.toUpperCase()}
                 </Badge>
+                <span className="text-[11px] text-muted-foreground">
+                  {T("membro desde")} {formatDate(account.createdAt)}
+                </span>
               </div>
             </div>
           </div>
@@ -675,30 +679,16 @@ export default function AccountPage() {
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-6 mt-6"
               >
-                {/* Avatar Section */}
-                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <div className="flex items-center gap-3 md:gap-4">
-                    {account.image ? (
-                      <img
-                        src={account.image}
-                        alt={T(account.name)}
-                        className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-border shrink-0"
-                      />
-                    ) : (
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-amber-600 to-yellow-700 flex items-center justify-center text-xl md:text-2xl font-bold shrink-0">
-                        {getInitials(account.name)}
-                      </div>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <h3 className="font-semibold text-base md:text-lg truncate">{T(account.name)}</h3>
-                      <p className="text-sm text-muted-foreground truncate">{T(account.email)}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        
-                        {T("Membro desde")} {formatDate(account.createdAt)}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
+                {/* Identidade PRIMEIRO: é a resposta às duas perguntas que a
+                    pessoa traz ao abrir esta tela — "com que conta eu estou
+                    aqui?" e "o que ainda falta?". O formulário de bio vem
+                    depois; ninguém abre a conta preocupado com a bio. */}
+                <CartaoIdentidade />
+
+                {/* O cartão de avatar que ficava aqui repetia foto, nome e
+                    e-mail — as mesmas três informações do cabeçalho fixo, a
+                    dois centímetros de distância. A única coisa que ele
+                    acrescentava, "membro desde", subiu para o cabeçalho. */}
 
                 {/* Profile Form */}
                 <Card className="p-4 md:p-6 bg-card border-border space-y-4 md:space-y-5 min-w-0 overflow-hidden">
@@ -1145,43 +1135,6 @@ export default function AccountPage() {
                       )}
                       {savingPassword ? T("Alterando...") : T("Alterar Senha")}
                     </Button>
-                  </div>
-                </Card>
-
-                {/* Connected Accounts */}
-                <Card className="p-4 md:p-6 bg-card border-border min-w-0 overflow-hidden">
-                  <h3 className="text-base md:text-lg font-semibold mb-4">{T("Contas Conectadas")}</h3>
-                  <div className="flex items-center justify-between p-3 md:p-4 bg-secondary/50 rounded-lg border border-border gap-2 min-w-0">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5">
-                          <path
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                            fill="#4285F4"
-                          />
-                          <path
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                            fill="#34A853"
-                          />
-                          <path
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                            fill="#FBBC05"
-                          />
-                          <path
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                            fill="#EA4335"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="font-medium">{T("Google")}</p>
-                        <p className="text-sm text-muted-foreground">{T("Login com Google")}</p>
-                      </div>
-                    </div>
-                    <Badge variant="outline" className="border-green-500/50 text-green-400">
-                      
-                      {T("Conectado")}
-                    </Badge>
                   </div>
                 </Card>
 

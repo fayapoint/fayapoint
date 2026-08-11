@@ -20,9 +20,12 @@ import {
   Trash2,
   Maximize2,
   Minimize2,
+  Pencil,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { RITMOS, TEMPOS, ROTULO_FOTO, TIPOS_FOTO, type Dossie, type DimensaoDossie, type FotoPersona, type TipoFoto } from "@/lib/persona";
+import { artePreset, CAMPOS_COM_ARTE, presetsDe, type Preset } from "@/lib/persona-presets";
+import { cn } from "@/lib/utils";
 
 /**
  * O dossiê — "o que eu sei de você", em placa angulada.
@@ -76,6 +79,19 @@ type Editor =
   | { tipo: "foto"; vaga: TipoFoto };
 
 const EDITORES: Record<string, Editor> = {
+  /**
+   * ⚠️ Todo campo que aparece em `conhecido` com `campo` PRECISA de editor
+   * aqui — sem editor, `Lacuna` devolve `null` e o botão "editar" da linha
+   * abriria um vazio. Os cinco primeiros entraram em 10/08 justamente porque
+   * nunca tinham sido perguntados: existiam no banco, apareciam na tela e não
+   * tinham por onde ser mudados.
+   */
+  "identidade.marca": { tipo: "texto", dica: "O nome que aparece para o cliente — o seu ou o da empresa" },
+  "identidade.cidade": { tipo: "texto", dica: "Ex.: Curitiba, PR" },
+  "publico.lugares": { tipo: "itens", dica: "Onde o seu público está", max: 6 },
+  "voz.vocabulario": { tipo: "texto", dica: "Como você escolhe as palavras" },
+  "fotos.perfil": { tipo: "foto", vaga: "perfil" },
+
   "identidade.papel": { tipo: "texto", dica: "Ex.: ajudo dentistas a lotar a agenda sem depender de indicação" },
   "identidade.missao": { tipo: "paragrafo", dica: "O que te fez começar? O que te faz continuar?", linhas: 3 },
   "identidade.valores": { tipo: "itens", dica: "Ex.: honestidade no preço", max: 5 },
@@ -148,11 +164,18 @@ export default function PersonaDossie({
   fotos,
   onSalvo,
   aoRecarregarFotos,
+  sempreReta,
 }: {
   dossie: Dossie | null;
   fotos: FotoPersona[];
   onSalvo: (d: Dossie) => void;
   aoRecarregarFotos: () => void;
+  /**
+   * Fora da coluna lateral (o Estúdio da Persona, o Ateliê) a perspectiva só
+   * atrapalha: ali a placa É a tela, não um enfeite ao lado dela. E o botão de
+   * ampliar deixa de fazer sentido quando já se está na página inteira.
+   */
+  sempreReta?: boolean;
 }) {
   const T = useT();
   const [aberta, setAberta] = useState<string | null>(null);
@@ -165,7 +188,7 @@ export default function PersonaDossie({
   // lateral; quem vai LER as sete dimensões de uma vez quer texto reto e
   // largura — foi o retorno que o Ricardo recebeu (28/07/2026). Por isso é um
   // botão e não uma troca: o repouso continua angulado.
-  const reta = editando || ampliada;
+  const reta = editando || ampliada || !!sempreReta;
 
   // Esc fecha e o fundo trava. Uma camada por cima da página que não responde a
   // Esc é armadilha de teclado, e página que rola atrás de overlay dá a
@@ -263,7 +286,7 @@ export default function PersonaDossie({
           <Cabecalho
             dossie={dossie}
             ampliada={ampliada}
-            onAlternarTamanho={() => setAmpliada((a) => !a)}
+            onAlternarTamanho={sempreReta ? null : () => setAmpliada((a) => !a)}
           />
 
           <div className="relative divide-y divide-white/[0.06] border-t border-white/[0.07]">
@@ -338,7 +361,8 @@ function Cabecalho({
 }: {
   dossie: Dossie;
   ampliada: boolean;
-  onAlternarTamanho: () => void;
+  /** `null` quando a placa já ocupa a página — ver `sempreReta`. */
+  onAlternarTamanho: (() => void) | null;
 }) {
   const T = useT();
   const raio = 26;
@@ -353,7 +377,7 @@ function Cabecalho({
 
         {/* O botão fica no canto oposto ao chanfro — ali o canto é reto e o
             alvo não some sob o `clipPath`. */}
-        <button
+        {onAlternarTamanho && <button
           type="button"
           onClick={onAlternarTamanho}
           aria-pressed={ampliada}
@@ -362,7 +386,7 @@ function Cabecalho({
           className="-mr-1 -mt-1 ml-auto shrink-0 cursor-pointer rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/[0.07] hover:text-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
         >
           {ampliada ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
-        </button>
+        </button>}
       </div>
 
       <div className="mt-3 flex items-center gap-3.5">
@@ -428,6 +452,7 @@ function Dimensao({
 }) {
   const T = useT();
   const Icone = ICONES[d.icone] || UserIcon;
+  const [editandoConhecido, setEditandoConhecido] = useState<string | null>(null);
 
   return (
     <div>
@@ -442,7 +467,20 @@ function Dimensao({
 
         <span className="min-w-0 flex-1">
           <span className="block text-[12.5px] font-bold text-foreground">{T(d.titulo)}</span>
-          <span className="mt-1 block h-[3px] w-full overflow-hidden rounded-full bg-white/[0.07]">
+          {/* ⚠️ Zero tem textura própria. Uma barra vazia ao lado de barras
+              cheias e coloridas lê como falha de carregamento, não como "ainda
+              não respondido" — o estado vazio parecia defeito. */}
+          <span
+            className="mt-1 block h-[3px] w-full overflow-hidden rounded-full"
+            style={
+              d.confianca > 0
+                ? { background: "rgba(255,255,255,.07)" }
+                : {
+                    backgroundImage:
+                      "repeating-linear-gradient(90deg, rgba(255,255,255,.22) 0 3px, transparent 3px 7px)",
+                  }
+            }
+          >
             <span
               className="block h-full rounded-full"
               style={{ width: `${d.confianca}%`, background: d.cor, transition: "width .7s cubic-bezier(.2,.85,.3,1)" }}
@@ -450,8 +488,18 @@ function Dimensao({
           </span>
         </span>
 
-        <span className="shrink-0 text-[11px] font-extrabold tabular-nums" style={{ color: d.confianca > 0 ? d.cor : "rgba(255,255,255,.3)" }}>
-          {d.confianca}%
+        <span className="shrink-0 text-[11px] font-extrabold tabular-nums" style={{ color: d.confianca > 0 ? d.cor : "rgba(255,255,255,.45)" }}>
+          {d.confianca > 0 ? `${d.confianca}%` : T("em branco")}
+        </span>
+        {/* O convite explícito. Sem ele, a única pista de que a placa é
+            editável era o acordeão — e foi exatamente isso que passou
+            despercebido por semanas. */}
+        <span
+          className="hidden shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide sm:inline-flex"
+          style={{ borderColor: `${d.cor}40`, color: d.cor }}
+        >
+          <Pencil size={9} />
+          {aberta ? T("editando") : T("editar")}
         </span>
         <ChevronDown size={13} className={`shrink-0 text-white/30 transition-transform ${aberta ? "rotate-180" : ""}`} />
       </button>
@@ -462,18 +510,58 @@ function Dimensao({
 
           {d.conhecido.length > 0 && (
             <dl className="mb-3 space-y-1.5 rounded-lg border p-2.5" style={{ borderColor: `${d.cor}2e`, background: `${d.cor}0a` }}>
-              {d.conhecido.map((c) => (
-                <div key={c.rotulo} className="flex gap-2 text-[11.5px]">
-                  <dt className="w-[92px] shrink-0 font-bold uppercase tracking-wide text-white/35">{T(c.rotulo)}</dt>
-                  <dd className="min-w-0 flex-1 text-white/75">{T(c.valor)}</dd>
-                </div>
-              ))}
+              {d.conhecido.map((c) => {
+                const editavel = !!c.campo && !!EDITORES[c.campo];
+                const emEdicao = editavel && editandoConhecido === c.campo;
+                return (
+                  <div key={c.rotulo}>
+                    <div className="flex items-start gap-2 text-[11.5px]">
+                      <dt className="w-[92px] shrink-0 font-bold uppercase tracking-wide text-white/35">{T(c.rotulo)}</dt>
+                      <dd className="min-w-0 flex-1 text-white/75">{T(c.valor)}</dd>
+                      {editavel && (
+                        /* O botão que faltava. Preenchido, o campo saía de
+                           `faltando` e virava rótulo morto — era preciso
+                           adivinhar que dava para mudar. */
+                        <button
+                          type="button"
+                          onClick={() => setEditandoConhecido((a) => (a === c.campo ? null : c.campo!))}
+                          aria-expanded={emEdicao}
+                          className="shrink-0 cursor-pointer rounded-md p-1 text-white/30 transition-colors hover:bg-white/10 hover:text-white"
+                          title={T("Editar")}
+                        >
+                          {emEdicao ? <X size={11} /> : <Pencil size={11} />}
+                        </button>
+                      )}
+                    </div>
+                    {emEdicao && c.campo && (
+                      <div className="mt-2">
+                        <Lacuna
+                          campo={c.campo}
+                          pergunta={`Trocar: ${c.rotulo}`}
+                          ganho={`Hoje está “${c.valor}”. O que você salvar aqui substitui isso.`}
+                          cor={d.cor}
+                          valor={rascunho[c.campo]}
+                          setValor={(v) => setRascunho((r) => ({ ...r, [c.campo!]: v }))}
+                          salvando={salvando === c.campo}
+                          onSalvar={async (campo, valor) => {
+                            await onSalvar(campo, valor);
+                            setEditandoConhecido(null);
+                          }}
+                          fotos={fotos}
+                          token={token}
+                          aoRecarregarFotos={aoRecarregarFotos}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </dl>
           )}
 
           {d.faltando.length === 0 ? (
             <p className="flex items-center gap-1.5 text-[11.5px] font-bold text-emerald-400">
-              <Check size={13} />  {T("Nada faltando aqui.")}
+              <Check size={13} />  {T("Nada faltando aqui — e tudo acima pode ser trocado no lápis.")}
             </p>
           ) : (
             <div className="space-y-2.5">
@@ -555,9 +643,38 @@ function Lacuna({
         ? typeof valor === "number"
         : typeof valor === "string" && valor.trim().length > 1;
 
+  /**
+   * O toque no ladrilho.
+   *
+   * Lista ACUMULA (é assim que "escolha três" funciona), texto SUBSTITUI, e nos
+   * dois casos o campo continua editável depois — o preset é ponto de partida,
+   * não gaveta fechada. Ver o cabeçalho de `lib/persona-presets.ts`.
+   */
+  const escolherPreset = (op: Preset) => {
+    if (editor.tipo === "itens") {
+      const atual = Array.isArray(valor) ? (valor as string[]) : [];
+      const texto = String(op.valor);
+      const max = editor.max || 5;
+      if (atual.includes(texto)) {
+        setValor(atual.filter((x) => x !== texto));
+      } else if (atual.length < max) {
+        setValor([...atual, texto]);
+      }
+      return;
+    }
+    setValor(op.valor);
+  };
+
+  const marcado = (op: Preset) =>
+    editor.tipo === "itens"
+      ? Array.isArray(valor) && (valor as string[]).includes(String(op.valor))
+      : valor === op.valor;
+
   return (
     <div className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-2.5">
       {rotulo}
+
+      <Prateleira campo={campo} cor={cor} escolher={escolherPreset} marcado={marcado} />
 
       <div className="mt-2">
         {editor.tipo === "texto" && (
@@ -615,7 +732,12 @@ function Lacuna({
           </div>
         )}
 
-        {editor.tipo === T("escolha") && (
+        {/* ⚠️ Era `editor.tipo === T("escolha")`. Em pt-BR `T` devolve a mesma
+            string e ninguém notou; em inglês devolveria a tradução e a
+            comparação daria `false` — o editor de escolha simplesmente não
+            apareceria. É a armadilha do codemod de i18n comparando valor
+            traduzido com valor de dado. */}
+        {editor.tipo === "escolha" && (
           <div className="flex flex-col gap-1.5">
             {Object.entries(editor.opcoes).map(([k, label]) => (
               <button
@@ -646,6 +768,117 @@ function Lacuna({
         {T("Salvar")}
       </button>
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+
+/**
+ * A prateleira de entradas prontas — o que transforma a caixa vazia em escolha.
+ *
+ * Some sozinha quando o campo não tem catálogo (`voz.amostra`, por exemplo:
+ * amostra da SUA escrita não pode vir pronta, seria o contrário do objetivo).
+ * O ladrilho tenta a arte de `/portal/persona/opts/` e, na falta dela, desenha
+ * gradiente + emoji — visual de verdade, nunca quadrado quebrado, e arte nova
+ * entra depois sem tocar em código.
+ */
+function Prateleira({
+  campo,
+  cor,
+  escolher,
+  marcado,
+}: {
+  campo: string;
+  cor: string;
+  escolher: (op: Preset) => void;
+  marcado: (op: Preset) => boolean;
+}) {
+  const T = useT();
+  const opcoes = presetsDe(campo);
+  const [mostrarTudo, setMostrarTudo] = useState(false);
+  if (!opcoes.length) return null;
+
+  // Seis já preenchem duas linhas no painel estreito; o resto vem a um clique.
+  const visiveis = mostrarTudo ? opcoes : opcoes.slice(0, 6);
+
+  return (
+    <div className="mt-2">
+      <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-white/35">
+        {T("Toque para usar — depois é só editar")}
+      </p>
+      <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-4">
+        {visiveis.map((op) => (
+          <Ladrilho key={String(op.valor)} campo={campo} op={op} cor={cor} marcado={marcado(op)} onClick={() => escolher(op)} />
+        ))}
+      </div>
+      {opcoes.length > 6 && (
+        <button
+          type="button"
+          onClick={() => setMostrarTudo((v) => !v)}
+          className="mt-1.5 cursor-pointer text-[10.5px] font-bold text-white/45 underline-offset-2 hover:text-white/80 hover:underline"
+        >
+          {mostrarTudo ? T("mostrar menos") : `+ ${opcoes.length - 6} ${T("opções")}`}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function Ladrilho({
+  campo,
+  op,
+  cor,
+  marcado,
+  onClick,
+}: {
+  campo: string;
+  op: Preset;
+  cor: string;
+  marcado: boolean;
+  onClick: () => void;
+}) {
+  const T = useT();
+  // Só pede a imagem de quem já tem arte no disco — ver `CAMPOS_COM_ARTE`.
+  const [temArte, setTemArte] = useState(CAMPOS_COM_ARTE.has(campo));
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={marcado}
+      title={op.rotulo}
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border text-left transition-all"
+      style={{
+        borderColor: marcado ? cor : "rgba(255,255,255,.09)",
+        background: marcado ? `${cor}1a` : "rgba(255,255,255,.02)",
+      }}
+    >
+      <span className="relative block aspect-[4/3] w-full overflow-hidden" style={{ background: `linear-gradient(135deg, ${cor}33, rgba(0,0,0,.35))` }}>
+        {temArte ? (
+          /* eslint-disable-next-line @next/next/no-img-element -- `next/image`
+             recusa caminho que pode não existir e desenha o buraco; aqui o 404
+             é esperado e cai no gradiente. */
+          <img
+            src={artePreset(campo, op.valor)}
+            alt=""
+            aria-hidden
+            onError={() => setTemArte(false)}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : null}
+        <span className="absolute inset-0 grid place-items-center text-[19px]" style={{ opacity: temArte ? 0 : 1 }}>
+          {op.emoji}
+        </span>
+        {marcado && (
+          <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full" style={{ background: cor }}>
+            <Check size={10} className="text-black" />
+          </span>
+        )}
+      </span>
+      <span className="block px-1.5 py-1 text-[10px] font-semibold leading-tight" style={{ color: marcado ? "#fff" : "rgba(255,255,255,.6)" }}>
+        {T(op.rotulo)}
+      </span>
+    </button>
   );
 }
 
@@ -856,15 +1089,25 @@ export function GaleriaDeFotos({ fotos, token, aoRecarregar }: { fotos: FotoPers
           const foto = fotos.find((f) => f.tipo === t);
           return (
             <div key={t} className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-2">
+              {/* ⚠️ Vaga vazia com borda TRACEJADA e chamada dentro do quadro.
+                  Preta e lisa com uma câmera apagada no meio, ela lia como
+                  imagem que falhou ao carregar — quatro delas em fila
+                  pareciam quatro erros, não quatro convites. */}
               <div
-                className="mb-1.5 grid aspect-square w-full place-items-center overflow-hidden rounded-md border"
-                style={{ borderColor: foto ? `${cores[t]}66` : "rgba(255,255,255,.1)", background: "rgba(0,0,0,.3)" }}
+                className={cn(
+                  "mb-1.5 grid aspect-square w-full place-items-center overflow-hidden rounded-md border",
+                  !foto && "border-dashed",
+                )}
+                style={{ borderColor: foto ? `${cores[t]}66` : "rgba(255,255,255,.28)", background: "rgba(0,0,0,.3)" }}
               >
                 {foto ? (
-                   
+
                   <img src={foto.url} alt={T(ROTULO_FOTO[t].titulo)} className="h-full w-full object-cover" />
                 ) : (
-                  <Camera size={18} className="text-white/20" />
+                  <span className="flex flex-col items-center gap-1 px-1 text-center">
+                    <Camera size={18} className="text-white/45" />
+                    <span className="text-[9px] font-semibold leading-tight text-white/45">{T("toque para enviar")}</span>
+                  </span>
                 )}
               </div>
               <p className="text-[11px] font-bold" style={{ color: foto ? cores[t] : "rgba(255,255,255,.5)" }}>

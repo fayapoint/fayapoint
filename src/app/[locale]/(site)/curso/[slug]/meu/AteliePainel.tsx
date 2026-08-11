@@ -1,7 +1,7 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,8 +12,12 @@ import {
   Check,
   ChevronRight,
   Coins,
+  Headphones,
   Loader2,
   Lock,
+  Pause,
+  Play,
+  SlidersHorizontal,
   Sparkles,
   Target,
   Wand2,
@@ -23,7 +27,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { getClientAuthHeaders } from "@/lib/client-auth";
-import type { IdOpcao, Orcamento } from "@/lib/atelie";
+import type { Ajustes, IdOpcao, OpcaoAjuste, Orcamento } from "@/lib/atelie";
+import type { Narrador } from "@/data/narradores";
 
 /**
  * O Ateliê — a página onde o curso vira o curso DELE (03/08/2026).
@@ -99,10 +104,21 @@ interface Dados {
   amostraDisponivel: { capitulo: number; titulo: string; numero: number } | null;
   creditos: { saldo: number; mensal: number; comprado: number };
   orcamento: Orcamento;
+  ajustes: Ajustes;
+  catalogo: {
+    tons: OpcaoAjuste[];
+    profundidades: OpcaoAjuste[];
+    extensoes: OpcaoAjuste[];
+    focos: OpcaoAjuste[];
+    narradores: NarradorNaTela[];
+  };
+  previa: { video: string; poster: string };
   plano: string;
   podeGastar: boolean;
   temNoAcervo: boolean;
 }
+
+type NarradorNaTela = Narrador & { jaGravado: boolean };
 
 const TOM_CALIBRE: Record<Dados["persona"]["calibre"], { cor: string; barra: string }> = {
   insuficiente: { cor: "text-rose-300 border-rose-400/30 bg-rose-500/10", barra: "bg-rose-400" },
@@ -255,6 +271,46 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
 
   const alternar = (id: IdOpcao) =>
     setEscolhidas((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+
+  /**
+   * Grava um ajuste e recarrega.
+   *
+   * Otimista de propósito: o ladrilho acende no clique e a rota confirma
+   * depois. Um `<select>` que espera a rede para mudar de estado é a coisa que
+   * faz uma tela parecer quebrada — e aqui não há nada a perder, porque
+   * gravar ajuste não gasta crédito nem gera nada.
+   */
+  const mudarAjuste = async (mudanca: Partial<Ajustes>) => {
+    if (!dados) return;
+    const novos: Ajustes = { ...dados.ajustes, ...mudanca };
+    setDados({ ...dados, ajustes: novos });
+    try {
+      const r = await fetch("/api/user/atelie", {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", ...getClientAuthHeaders() },
+        body: JSON.stringify({ curso: slug, ajustes: novos }),
+      });
+      if (!r.ok) {
+        toast.error(T("Não deu para salvar o ajuste"));
+        await buscar();
+        return;
+      }
+      // O orçamento muda com a narração e a narração muda com o narrador — a
+      // conta na tela tem de vir do servidor, não de uma segunda conta feita
+      // aqui (é como o preço mostrado e o preço cobrado passam a divergir).
+      await buscar();
+    } catch {
+      toast.error(T("Erro de rede"));
+    }
+  };
+
+  const alternarFoco = (id: string) => {
+    if (!dados) return;
+    const atual = dados.ajustes.foco || [];
+    const novo = atual.includes(id) ? atual.filter((f) => f !== id) : [...atual, id].slice(0, 3);
+    void mudarAjuste({ foco: novo });
+  };
 
   /**
    * Quanto a confiança SOBE se esta dimensão for completada.
@@ -426,10 +482,88 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         )}
       </section>
 
-      {/* ═══ 2. O MEDIDOR ═══ */}
+      {/* ═══ 2. OS AJUSTES ═══ */}
       <section className="mt-10">
         <Cabecalho
           numero={2}
+          icone={<SlidersHorizontal size={15} className="text-white" />}
+          cor="from-sky-500 to-indigo-600"
+          titulo="Como você quer ESTE curso"
+          sub="Sua persona diz quem você é. Aqui você diz como quer este curso — e cada escolha muda o texto que sai."
+        />
+
+        <div className="space-y-4 rounded-2xl border border-border bg-card/60 p-4 sm:p-5">
+          <Escolha
+            titulo="O tom"
+            sub="Como o texto conversa com você"
+            opcoes={dados.catalogo.tons}
+            marcado={(o) => dados.ajustes.tom === o.id}
+            aoEscolher={(o) => mudarAjuste({ tom: o.id })}
+          />
+          <Escolha
+            titulo="A profundidade"
+            sub="Quanto porquê antes do como"
+            opcoes={dados.catalogo.profundidades}
+            marcado={(o) => dados.ajustes.profundidade === o.id}
+            aoEscolher={(o) => mudarAjuste({ profundidade: o.id })}
+          />
+          <Escolha
+            titulo="O tamanho"
+            sub="Quanto texto novo entra em cada capítulo"
+            opcoes={dados.catalogo.extensoes}
+            marcado={(o) => dados.ajustes.extensao === o.id}
+            aoEscolher={(o) => mudarAjuste({ extensao: o.id })}
+          />
+          <Escolha
+            titulo="O foco"
+            sub={`Até 3 — para onde todo exemplo é puxado (${(dados.ajustes.foco || []).length}/3)`}
+            opcoes={dados.catalogo.focos}
+            marcado={(o) => (dados.ajustes.foco || []).includes(o.id)}
+            aoEscolher={(o) => alternarFoco(o.id)}
+          />
+
+          {amostra && (
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-sky-400/25 bg-sky-500/[0.06] px-3 py-2">
+              <p className="text-[11.5px] text-sky-100/80">
+                {T("Mudou os ajustes? A amostra acima ainda é a antiga — refazer é de graça.")}
+              </p>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => gerarAmostra(true)}
+                disabled={gerandoAmostra}
+                className="border-sky-400/40 text-sky-200 hover:bg-sky-500/10"
+              >
+                {gerandoAmostra ? <Loader2 size={13} className="mr-1.5 animate-spin" /> : <Wand2 size={13} className="mr-1.5" />}
+                {T("Refazer a amostra")}
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ═══ 3. QUEM NARRA ═══ */}
+      <section className="mt-10">
+        <Cabecalho
+          numero={3}
+          icone={<Headphones size={15} className="text-white" />}
+          cor="from-fuchsia-500 to-purple-600"
+          titulo="Quem narra o seu curso"
+          sub="Ouça antes de escolher. A voz vale para o áudio deste curso — e você troca quando quiser."
+        />
+        <Narradores
+          narradores={dados.catalogo.narradores}
+          escolhido={dados.ajustes.narrador}
+          aoEscolher={(id) => mudarAjuste({ narrador: id })}
+          previa={dados.previa}
+          curso={curso.titulo}
+        />
+      </section>
+
+      {/* ═══ 4. O MEDIDOR ═══ */}
+      <section className="mt-10">
+        <Cabecalho
+          numero={4}
           icone={<Target size={15} className="text-white" />}
           cor="from-violet-500 to-purple-600"
           titulo="O quanto eu te conheço"
@@ -516,19 +650,21 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
           })}
         </div>
 
-        <Link href={`/${locale}/portal?tab=social`}>
+        {/* O Estúdio da Persona (10/08) e não mais a aba do Perfil Social: lá o
+            dossiê era uma placa de 320px na coluna lateral, e mandar alguém
+            "responder no Perfil Social" era mandá-lo procurar. */}
+        <Link href={`/${locale}/portal/persona`}>
           <Button variant="outline" className="mt-4 w-full border-violet-400/40 text-violet-200 hover:bg-violet-500/10" size="lg">
-            
-            {T("Responder no Perfil Social")}
+            {T("Completar meu perfil — leva 2 minutos")}
             <ArrowRight size={16} className="ml-2" />
           </Button>
         </Link>
       </section>
 
-      {/* ═══ 3. O ORÇAMENTO ═══ */}
+      {/* ═══ 5. O ORÇAMENTO ═══ */}
       <section className="mt-10">
         <Cabecalho
-          numero={3}
+          numero={5}
           icone={<Coins size={15} className="text-white" />}
           cor="from-emerald-500 to-teal-600"
           titulo="Quanto custa o seu"
@@ -767,6 +903,251 @@ function Cabecalho({
           {T(titulo)}
         </h2>
         <p className="text-[11.5px] leading-snug text-muted-foreground">{T(sub)}</p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Uma linha de ajuste em ladrilhos.
+ *
+ * ⚠️ Não é `<select>`. O Ateliê nasceu de um `<select>` escondido e a lição
+ * daquele dia vale aqui: escolha que importa precisa estar VISÍVEL sem clique
+ * de descoberta, com o rótulo E a consequência lado a lado. Um menu suspenso
+ * esconde as cinco outras opções e some com a explicação de cada uma.
+ */
+function Escolha({
+  titulo,
+  sub,
+  opcoes,
+  marcado,
+  aoEscolher,
+}: {
+  titulo: string;
+  sub: string;
+  opcoes: OpcaoAjuste[];
+  marcado: (o: OpcaoAjuste) => boolean;
+  aoEscolher: (o: OpcaoAjuste) => void;
+}) {
+  const T = useT();
+  return (
+    <div>
+      <div className="mb-2 flex flex-wrap items-baseline gap-x-2">
+        <p className="text-[12.5px] font-bold text-white">{T(titulo)}</p>
+        <p className="text-[11px] text-muted-foreground">{T(sub)}</p>
+      </div>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {opcoes.map((o) => {
+          const ativo = marcado(o);
+          return (
+            <button
+              key={o.id}
+              onClick={() => aoEscolher(o)}
+              aria-pressed={ativo}
+              className={cn(
+                "flex cursor-pointer items-start gap-2 rounded-xl border p-2.5 text-left transition-all",
+                ativo
+                  ? "border-sky-400/60 bg-sky-500/[0.12]"
+                  : "border-white/10 bg-white/[0.02] hover:border-white/25",
+              )}
+            >
+              <span className="text-[17px] leading-none">{o.emoji}</span>
+              <span className="min-w-0">
+                <span className={cn("block text-[12px] font-bold", ativo ? "text-white" : "text-white/75")}>
+                  {T(o.rotulo)}
+                </span>
+                <span className="mt-0.5 block text-[10.5px] leading-snug text-muted-foreground">{T(o.descricao)}</span>
+              </span>
+              {ativo && <Check size={13} className="ml-auto shrink-0 text-sky-300" />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * O seletor de narrador com prévia de estúdio.
+ *
+ * ## Por que a prévia toca vídeo E voz ao mesmo tempo
+ *
+ * Ricardo pediu *"um preview... de um exemplo top tier com áudio e vídeo"*. O
+ * material existe e estava parado: a abertura animada do curso
+ * (`/cursos/intro/<slug>.webm`) e 172 MB de narração profissional em
+ * `public/audio/`. A prévia junta os dois — vídeo mudo em laço, voz por cima —
+ * e é isso que o produto entrega quando o áudio do curso estiver pronto.
+ *
+ * ⚠️ **Um áudio por vez.** Sem a referência única, cada clique empilhava uma
+ * voz sobre a outra e a prévia virava barulho.
+ */
+function Narradores({
+  narradores,
+  escolhido,
+  aoEscolher,
+  previa,
+  curso,
+}: {
+  narradores: NarradorNaTela[];
+  escolhido: string;
+  aoEscolher: (id: string) => void;
+  previa: { video: string; poster: string };
+  curso: string;
+}) {
+  const T = useT();
+  const [tocando, setTocando] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [temVideo, setTemVideo] = useState(true);
+
+  const tocar = (n: NarradorNaTela) => {
+    if (!n.amostra) return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    if (tocando === n.id) {
+      setTocando(null);
+      return;
+    }
+    const a = new Audio(n.amostra);
+    a.onended = () => setTocando(null);
+    a.onerror = () => setTocando(null);
+    audioRef.current = a;
+    void a.play();
+    setTocando(n.id);
+  };
+
+  // Sair da página com uma voz tocando é o tipo de coisa que assusta quem está
+  // no escritório.
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const atual = narradores.find((n) => n.id === escolhido) || narradores[0];
+
+  return (
+    /**
+     * Empilhado: a prévia em cima, a grade de vozes embaixo.
+     *
+     * ⚠️ Lado a lado, a prévia (alta, com texto) e a grade de seis cartões
+     * nunca fechavam na mesma altura — sobrava um vão preto ao lado da coluna
+     * cheia. E há um motivo de produto para a prévia vir primeiro: ela é o
+     * argumento; a escolha vem depois de ouvir.
+     */
+    <div className="flex flex-col gap-4">
+      <div className="grid gap-2 sm:grid-cols-2">
+        {narradores.map((n) => {
+          const ativo = n.id === escolhido;
+          return (
+            <div
+              key={n.id}
+              className={cn(
+                "rounded-2xl border p-3 transition-all",
+                ativo ? "border-fuchsia-400/50 bg-fuchsia-500/[0.08]" : "border-white/10 bg-white/[0.02]",
+                !n.disponivel && "opacity-70",
+              )}
+            >
+              <div className="flex items-start gap-2.5">
+                <span
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-xl text-[17px]"
+                  style={{ background: `${n.cor}22`, color: n.cor }}
+                >
+                  {n.emoji}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <p className="text-[13px] font-bold text-white">{T(n.nome)}</p>
+                    {n.jaGravado && (
+                      <Badge className="border-emerald-400/30 bg-emerald-500/10 text-[9px] text-emerald-300">
+                        {T("já gravado")}
+                      </Badge>
+                    )}
+                    {!n.disponivel && (
+                      <Badge className="border-white/15 bg-white/5 text-[9px] text-white/60">{T("Em breve")}</Badge>
+                    )}
+                  </div>
+                  <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{T(n.timbre)}</p>
+                  <p className="mt-0.5 text-[10.5px] leading-snug text-white/40">{T(n.boaPara)}</p>
+                  {!n.disponivel && n.falta && (
+                    <p className="mt-1 text-[10.5px] leading-snug text-amber-200/70">{T(n.falta)}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-2.5 flex items-center gap-2">
+                {n.amostra ? (
+                  <button
+                    onClick={() => tocar(n)}
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold transition-colors"
+                    style={{ borderColor: `${n.cor}55`, color: n.cor }}
+                  >
+                    {tocando === n.id ? <Pause size={11} /> : <Play size={11} />}
+                    {tocando === n.id ? T("parar") : T("ouvir")}
+                  </button>
+                ) : (
+                  <span className="text-[10.5px] text-white/30">{T("sem amostra ainda")}</span>
+                )}
+
+                {n.disponivel && (
+                  <button
+                    onClick={() => aoEscolher(n.id)}
+                    className={cn(
+                      "ml-auto cursor-pointer rounded-full px-3 py-1 text-[11px] font-extrabold transition-opacity",
+                      ativo ? "bg-fuchsia-500 text-black" : "border border-white/15 text-white/70 hover:text-white",
+                    )}
+                  >
+                    {ativo ? T("escolhida") : T("escolher")}
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── A prévia de estúdio ───────────────────────────────── */}
+      <div className="order-first grid overflow-hidden rounded-2xl border border-white/10 bg-black/40 sm:grid-cols-[280px_1fr]">
+        <div className="relative aspect-video w-full bg-black">
+          {temVideo ? (
+            <video
+              src={previa.video}
+              poster={previa.poster}
+              muted
+              loop
+              autoPlay
+              playsInline
+              onError={() => setTemVideo(false)}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element -- pôster local; o vídeo pode não existir para todo curso */
+            <img src={previa.poster} alt="" className="h-full w-full object-cover opacity-70" />
+          )}
+          <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/80">
+            <Play size={8} />
+            {T("prévia de estúdio · vídeo + voz")}
+          </span>
+        </div>
+        <div className="flex flex-col justify-center p-4">
+          <p className="text-[13px] font-black text-white">
+            {T(curso)} — {T("narrado por")} {T(atual?.nome || "")}
+          </p>
+          <p className="mt-1 max-w-md text-[11.5px] leading-snug text-white/70">
+            {T("É assim que soa o seu curso: a abertura em vídeo e a voz que você escolheu. Toque para ouvir a voz por cima do vídeo.")}
+          </p>
+          {atual?.amostra && (
+            <button
+              onClick={() => tocar(atual)}
+              className="mt-3 inline-flex w-fit cursor-pointer items-center gap-1.5 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-500 px-4 py-1.5 text-[11.5px] font-extrabold text-black"
+            >
+              {tocando === atual.id ? <Pause size={12} /> : <Play size={12} />}
+              {tocando === atual.id ? T("parar prévia") : T("tocar prévia")}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

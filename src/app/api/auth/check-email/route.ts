@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { rateLimit, getClientIpFromRequest } from '@/lib/rate-limit';
+import { filtroPorQualquerEmail } from '@/lib/identidade';
 
 /**
  * GET /api/auth/check-email?email=user@example.com
@@ -37,7 +38,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() }).select('_id');
+    // Mesma regra do cadastro: em uso = posse provada (principal ou
+    // verificado). E-mail apenas listado como contato por alguém não ocupa
+    // endereço nenhum — ver `lib/identidade.ts`.
+    const user = await User.findOne(filtroPorQualquerEmail(email)).select('_id');
 
     return NextResponse.json({
       exists: !!user

@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
 import { fireWelcomeFlow } from '@/lib/welcome-email';
 import { vincularGoogleDoLogin } from '@/lib/social-identity';
 import { rateLimit, getClientIpFromRequest } from '@/lib/rate-limit';
+import { acharPorQualquerEmail, vincularEmail } from '@/lib/identidade';
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 const GOOGLE_CLIENT_ID =
@@ -99,15 +100,27 @@ export async function POST(request: Request) {
 
     await dbConnect();
 
-    // Find or create user
-    let user = await User.findOne({ email: googleUser.email });
+    /**
+     * Find or create user.
+     *
+     * ⚠️ Esta é a TERCEIRA porta de entrada pelo Google (as outras duas são os
+     * callbacks de código). Ela ficou para trás quando a regra de identidade
+     * foi centralizada em `lib/identidade.ts`, e uma porta desatualizada é pior
+     * do que porta nenhuma: com `findOne({email})` cru, quem entrasse por aqui
+     * com um e-mail que já é secundário verificado de outra conta ganharia uma
+     * conta NOVA — a duplicação que o CPF e o índice único existem para
+     * impedir, e um crédito de boas-vindas a mais por tentativa.
+     */
+    let user = await acharPorQualquerEmail(googleUser.email);
 
     if (user) {
       // Update existing user with Google info
       user.image = user.image || googleUser.picture;
       user.emailVerified = user.emailVerified || new Date();
       user.lastLoginAt = new Date();
+      if (!user.name && googleUser.name) user.name = googleUser.name;
       await user.save();
+      await vincularEmail(user, googleUser.email, { verificado: true, origem: 'google' });
     } else {
       // Create new user from Google profile
       user = await User.create({
@@ -117,6 +130,8 @@ export async function POST(request: Request) {
         emailVerified: new Date(),
         role: 'student',
         lastLoginAt: new Date(),
+        emails: [{ email: googleUser.email, verificado: true, origem: 'google', addedAt: new Date() }],
+        emailsVerificados: [googleUser.email.toLowerCase()],
       });
       // P5: boas-vindas + aviso ao admin — só em conta NOVA
       fireWelcomeFlow(user.name, user.email, 'google-oauth');

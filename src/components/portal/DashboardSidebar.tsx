@@ -4,7 +4,7 @@ import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -96,6 +96,12 @@ const MENU_ITEMS = [
   { id: "store", icon: Store, label: "Loja Tech", proOnly: false },
   { id: "cart", icon: ShoppingCart, label: "Carrinho", proOnly: false },
   { id: "social", icon: Share2, label: "Perfil Social", proOnly: false, badge: "USS" },
+  // A persona alimenta o curso personalizado, as imagens e os posts — e só
+  // dava para editá-la dentro de uma placa lateral do Perfil Social, com os
+  // acordeões fechados. Ricardo descobriu por acaso que era editável
+  // (10/08/2026). Agora tem porta própria: `rota` faz este item navegar em vez
+  // de trocar de aba.
+  { id: "persona", icon: Sparkles, label: "Minha Persona", proOnly: false, badge: "NOVO", rota: "/portal/persona" },
   { id: "profile", icon: Crown, label: "Meu Perfil", proOnly: false },
   { id: "courses", icon: BookOpen, label: "Meus Cursos", proOnly: false },
   // O Ateliê é o coração do produto e não tinha porta no menu: só dava para
@@ -134,6 +140,7 @@ export function DashboardSidebar({
    */
   const [hover3d, setHover3d] = useState<string | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
   const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en");
   const cubeHref = locale ? `/${locale}` : "/";
   
@@ -255,11 +262,19 @@ export function DashboardSidebar({
           {MENU_ITEMS.map((item) => {
             const isActive = activeTab === item.id;
             const isLocked = item.proOnly && !isPro;
+            const rota = "rota" in item ? (item.rota as string) : null;
 
             return (
               <button
                 key={item.id}
-                onClick={() => !isLocked && onTabChange(item.id)}
+                onClick={() => {
+                  if (isLocked) return;
+                  // Item com `rota` sai do portal-aba e vai para uma página de
+                  // verdade. `router.push` e não `<Link>` para não reescrever a
+                  // marcação inteira deste botão, que carrega o ícone 3D.
+                  if (rota) router.push(`${locale ? `/${locale}` : ""}${rota}`);
+                  else onTabChange(item.id);
+                }}
                 onMouseEnter={() => !isLocked && temIcone3D(item.id) && setHover3d(item.id)}
                 onMouseLeave={() => setHover3d((atual) => (atual === item.id ? null : atual))}
                 disabled={isLocked}

@@ -25,7 +25,115 @@ import { CREDIT_COSTS } from '@/lib/course-tiers';
  * Aqui não há banco nem rede: entra o número de capítulos, sai o orçamento.
  */
 
-export type IdOpcao = 'texto' | 'imagens' | 'rosto';
+export type IdOpcao = 'texto' | 'imagens' | 'rosto' | 'narracao';
+
+// ─────────────────────────────────────────────────────────────────────
+// Os ajustes — a personalização que a persona sozinha não decide
+// ─────────────────────────────────────────────────────────────────────
+
+/**
+ * Ricardo, 10/08: *"ele não permite customização compreensiva"*. Ele tinha
+ * razão, e o diagnóstico é preciso: o Ateliê tinha três caixas de seleção
+ * ("texto", "imagens", "rosto") que decidiam O QUE gerar, e **nada** que
+ * decidisse COMO. Todo o "como" vinha da persona — que descreve quem a pessoa
+ * é, não como ela quer ESTE curso.
+ *
+ * São coisas diferentes e a diferença aparece na primeira leitura: a mesma
+ * pessoa quer o curso de tributação denso e o de Instagram direto ao ponto. A
+ * persona não tem como saber disso; ela nem deveria.
+ *
+ * ⚠️ **Cada ajuste vira frase no prompt** (`instrucoesDeAjuste`). Controle que
+ * não muda a saída é enfeite, e enfeite que promete controle é pior do que não
+ * ter controle nenhum.
+ */
+export interface Ajustes {
+  tom: string;
+  profundidade: string;
+  extensao: string;
+  /** Até 3 — acima disso o prompt perde foco e todos os pesos se anulam. */
+  foco: string[];
+  narrador: string;
+}
+
+export interface OpcaoAjuste {
+  id: string;
+  rotulo: string;
+  descricao: string;
+  emoji: string;
+  /** O que ESTA escolha manda o modelo fazer. É o que entra no prompt. */
+  instrucao: string;
+}
+
+export const TONS_AJUSTE: OpcaoAjuste[] = [
+  { id: 'espelho', rotulo: 'Do meu jeito', emoji: '🪞', descricao: 'Usa o tom que está na sua persona', instrucao: 'Use exatamente o tom de voz descrito no perfil do aluno.' },
+  { id: 'direto', rotulo: 'Direto ao ponto', emoji: '🎯', descricao: 'Sem rodeio, frase curta', instrucao: 'Seja direto: frases curtas, zero rodeio, nenhuma introdução cerimoniosa.' },
+  { id: 'professor', rotulo: 'Professor paciente', emoji: '🧑‍🏫', descricao: 'Explica cada termo na primeira vez', instrucao: 'Explique cada termo técnico na primeira vez que aparecer, com calma e sem pressupor conhecimento.' },
+  { id: 'parceiro', rotulo: 'Conversa de parceiro', emoji: '🤝', descricao: 'Como um colega que já passou por isso', instrucao: 'Escreva como um colega mais experiente conversando de igual para igual, admitindo dificuldades reais.' },
+  { id: 'provocador', rotulo: 'Provocador', emoji: '🔥', descricao: 'Confronta a acomodação', instrucao: 'Confronte a acomodação do aluno: aponte o custo de não agir, sem ofender.' },
+  { id: 'analitico', rotulo: 'Analítico', emoji: '📊', descricao: 'Números e critério antes da opinião', instrucao: 'Priorize números, critérios de decisão e comparações antes de qualquer opinião.' },
+];
+
+export const PROFUNDIDADES: OpcaoAjuste[] = [
+  { id: 'pratico', rotulo: 'Mão na massa', emoji: '🛠️', descricao: 'O que fazer, na ordem', instrucao: 'Foque no passo a passo executável; teoria só quando muda a execução.' },
+  { id: 'equilibrado', rotulo: 'Equilibrado', emoji: '⚖️', descricao: 'Porquê curto, prática longa', instrucao: 'Dê o porquê em uma frase e gaste o resto na prática.' },
+  { id: 'fundo', rotulo: 'Vai fundo', emoji: '🔬', descricao: 'Entender antes de aplicar', instrucao: 'Aprofunde o mecanismo por trás do que está sendo ensinado antes de aplicar.' },
+];
+
+export const EXTENSOES: OpcaoAjuste[] = [
+  { id: 'curta', rotulo: 'Enxuta', emoji: '⚡', descricao: 'O essencial, para ler no intervalo', instrucao: 'Camada curta: abertura de 1 frase, exemplo de até 3 frases, tarefa de 1 linha.' },
+  { id: 'media', rotulo: 'Na medida', emoji: '📄', descricao: 'O padrão da casa', instrucao: 'Camada padrão: abertura de até 2 frases, exemplo de até 5 frases, tarefa de 1 frase.' },
+  { id: 'longa', rotulo: 'Detalhada', emoji: '📚', descricao: 'Com mais contexto e mais exemplo', instrucao: 'Camada detalhada: abertura de até 3 frases, exemplo de até 8 frases com números concretos, tarefa com 2 passos.' },
+];
+
+export const FOCOS: OpcaoAjuste[] = [
+  { id: 'vender', rotulo: 'Vender mais', emoji: '💰', descricao: 'Puxa tudo para receita', instrucao: 'Puxe cada exemplo para o efeito em vendas e receita do aluno.' },
+  { id: 'tempo', rotulo: 'Ganhar tempo', emoji: '⏱️', descricao: 'Tudo medido em horas devolvidas', instrucao: 'Meça cada ganho em horas devolvidas ao aluno por semana.' },
+  { id: 'conteudo', rotulo: 'Produzir conteúdo', emoji: '🎬', descricao: 'Aplicado à produção dele', instrucao: 'Aplique o capítulo à produção de conteúdo do aluno.' },
+  { id: 'atendimento', rotulo: 'Atender melhor', emoji: '💬', descricao: 'Aplicado ao atendimento', instrucao: 'Aplique o capítulo ao atendimento e ao pós-venda do aluno.' },
+  { id: 'equipe', rotulo: 'Organizar a equipe', emoji: '👥', descricao: 'Processo e delegação', instrucao: 'Traduza o capítulo em processo que a equipe do aluno consiga seguir.' },
+  { id: 'custo', rotulo: 'Cortar custo', emoji: '✂️', descricao: 'Onde para de sangrar', instrucao: 'Mostre onde o capítulo corta custo ou desperdício no negócio do aluno.' },
+];
+
+export const AJUSTES_PADRAO: Ajustes = {
+  tom: 'espelho',
+  profundidade: 'equilibrado',
+  extensao: 'media',
+  foco: [],
+  narrador: 'fernando_borges',
+};
+
+/** Um ajuste desconhecido (veio de uma versão antiga da tela) cai no padrão. */
+function acharOpcao(lista: OpcaoAjuste[], id: string, padrao: string): OpcaoAjuste {
+  return lista.find((o) => o.id === id) || lista.find((o) => o.id === padrao)!;
+}
+
+export function normalizarAjustes(bruto: Partial<Ajustes> | null | undefined): Ajustes {
+  const a = bruto || {};
+  return {
+    tom: acharOpcao(TONS_AJUSTE, String(a.tom || ''), AJUSTES_PADRAO.tom).id,
+    profundidade: acharOpcao(PROFUNDIDADES, String(a.profundidade || ''), AJUSTES_PADRAO.profundidade).id,
+    extensao: acharOpcao(EXTENSOES, String(a.extensao || ''), AJUSTES_PADRAO.extensao).id,
+    foco: (Array.isArray(a.foco) ? a.foco : []).filter((f) => FOCOS.some((o) => o.id === f)).slice(0, 3),
+    narrador: String(a.narrador || AJUSTES_PADRAO.narrador),
+  };
+}
+
+/**
+ * As escolhas viradas em instrução — o pedaço que o modelo realmente lê.
+ *
+ * Fica ao lado do catálogo, e não no motor, porque é a MESMA lista que a tela
+ * desenha: separar os dois é como o rótulo de um botão acaba prometendo uma
+ * coisa e o prompt pedindo outra.
+ */
+export function instrucoesDeAjuste(a: Ajustes): string {
+  const linhas = [
+    acharOpcao(TONS_AJUSTE, a.tom, AJUSTES_PADRAO.tom).instrucao,
+    acharOpcao(PROFUNDIDADES, a.profundidade, AJUSTES_PADRAO.profundidade).instrucao,
+    acharOpcao(EXTENSOES, a.extensao, AJUSTES_PADRAO.extensao).instrucao,
+    ...a.foco.map((f) => FOCOS.find((o) => o.id === f)?.instrucao).filter(Boolean),
+  ];
+  return linhas.map((l, i) => `${i + 1}. ${l}`).join('\n');
+}
 
 export interface ItemOrcamento {
   id: IdOpcao;
@@ -56,6 +164,8 @@ export interface EntradaOrcamento {
   capitulosJaFeitos: number;
   temCadernoDePersonagem: boolean;
   escolhidas: IdOpcao[];
+  /** Este curso já tem narração gravada na voz escolhida? Ver `data/narradores`. */
+  narracaoPronta?: boolean;
 }
 
 /**
@@ -106,6 +216,20 @@ export function montarOrcamento(e: EntradaOrcamento): Orcamento {
       jaFeito: e.temCadernoDePersonagem,
       requer: 'imagens',
       emBreve: true,
+    },
+    {
+      id: 'narracao',
+      titulo: 'Narrado para ouvir',
+      descricao:
+        'O curso inteiro em áudio, na voz que você escolher abaixo — para estudar dirigindo, treinando ou lavando louça.',
+      creditos: e.capitulos * CREDIT_COSTS.course_narration_chapter,
+      conta: `${e.capitulos} capítulos × ${CREDIT_COSTS.course_narration_chapter} crédito`,
+      jaFeito: e.narracaoPronta === true,
+      // ⚠️ `emBreve` enquanto a produção de áudio não voltar (ver
+      // `public/audio/PRODUCTION_STATUS.md`: a cota de caracteres acabou em
+      // abril). O preço aparece porque anunciar o preço é honesto; a cobrança
+      // não acontece porque `montarOrcamento` nunca soma item `emBreve`.
+      emBreve: e.narracaoPronta !== true,
     },
   ];
 

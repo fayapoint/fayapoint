@@ -11,6 +11,8 @@ import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { debitar, saldoParaGastar, custoDe, saldoDe, garantirCreditos } from "@/lib/creditos";
 import { MINIMA_CONFIANCA, impressao, escreverCamada } from "@/lib/atelie-servidor";
+import AtelieConfig from "@/models/AtelieConfig";
+import { normalizarAjustes, type Ajustes } from "@/lib/atelie";
 import { podePersonalizar, motivoSemPersonalizacao } from "@/lib/curso-personalizavel";
 
 export const dynamic = "force-dynamic";
@@ -250,6 +252,11 @@ export async function POST(request: NextRequest) {
     );
     const versao = persona.personaVersion || 0;
 
+    // Os ajustes do Ateliê para ESTE curso. Sem documento, valem os padrões —
+    // que reproduzem exatamente o comportamento anterior a 10/08.
+    const configCurso = await AtelieConfig.findOne({ userId: String(user._id), courseSlug: curso }).lean();
+    const ajustesDoCurso = normalizarAjustes(configCurso as Partial<Ajustes> | null);
+
     /**
      * ── A portaria: confere o orçamento ANTES de acionar o modelo ──────────
      *
@@ -352,6 +359,10 @@ export async function POST(request: NextRequest) {
           numero: cap.numero ?? 1,
           titulo: cap.titulo,
           trecho: trechoResolvido,
+          // Os ajustes do Ateliê (10/08). Se ficassem só na amostra, a prévia
+          // grátis sairia com o tom escolhido e o curso pago sairia com o tom
+          // padrão — a decepção chegaria depois do gasto, que é o pior momento.
+          ajustes: ajustesDoCurso,
         });
 
         await UserCourseLayer.updateOne(

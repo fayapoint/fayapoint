@@ -280,7 +280,16 @@ export interface DimensaoDossie {
   icone: string;
   cor: string;
   confianca: number;
-  conhecido: Array<{ rotulo: string; valor: string }>;
+  /**
+   * O que já sabemos.
+   *
+   * ⚠️ `campo` não é enfeite: sem ele, um valor preenchido só podia ser LIDO —
+   * ele saía de `faltando` e não tinha mais editor nenhum. Ricardo em 10/08:
+   * *"eu só vi agora quando cliquei que podia editar"*. Com o campo, toda linha
+   * conhecida abre o mesmo editor da lacuna, já preenchida. Fica sem `campo` só
+   * o que não é editável por texto (as fotos, e o que vem de fora).
+   */
+  conhecido: Array<{ rotulo: string; valor: string; campo?: string }>;
   faltando: CampoFaltando[];
 }
 
@@ -345,13 +354,13 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
         [!!identidade.cidade, 1],
       ]),
       conhecido: [
-        identidade.marca ? { rotulo: 'Marca', valor: identidade.marca } : null,
-        extras?.nome && !identidade.marca ? { rotulo: 'Nome', valor: extras.nome } : null,
-        identidade.papel ? { rotulo: 'O que você faz', valor: identidade.papel } : null,
+        identidade.marca ? { rotulo: 'Marca', valor: identidade.marca, campo: 'identidade.marca' } : null,
+        extras?.nome && !identidade.marca ? { rotulo: 'Nome', valor: extras.nome, campo: 'identidade.marca' } : null,
+        identidade.papel ? { rotulo: 'O que você faz', valor: identidade.papel, campo: 'identidade.papel' } : null,
         areas.length ? { rotulo: 'Área', valor: areas.join(' · ') } : null,
-        identidade.cidade ? { rotulo: 'Onde', valor: identidade.cidade } : null,
-        identidade.missao ? { rotulo: 'Missão', valor: identidade.missao } : null,
-        (identidade.valores || []).length ? { rotulo: 'Valores', valor: (identidade.valores || []).join(' · ') } : null,
+        identidade.cidade ? { rotulo: 'Onde', valor: identidade.cidade, campo: 'identidade.cidade' } : null,
+        identidade.missao ? { rotulo: 'Missão', valor: identidade.missao, campo: 'identidade.missao' } : null,
+        (identidade.valores || []).length ? { rotulo: 'Valores', valor: (identidade.valores || []).join(' · '), campo: 'identidade.valores' } : null,
       ].filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: [
         !identidade.papel && {
@@ -389,14 +398,14 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
       conhecido: [
         tons.length ? { rotulo: 'Tom', valor: tons.join(' · ') } : null,
         typeof voz.formalidade === 'number'
-          ? { rotulo: 'Formalidade', valor: voz.formalidade < 35 ? 'Fala como com um amigo' : voz.formalidade > 70 ? 'Fala como num documento' : 'Meio-termo profissional' }
+          ? { rotulo: 'Formalidade', valor: voz.formalidade < 35 ? 'Fala como com um amigo' : voz.formalidade > 70 ? 'Fala como num documento' : 'Meio-termo profissional', campo: 'voz.formalidade' }
           : null,
         typeof voz.emoji === 'number'
-          ? { rotulo: 'Emoji', valor: voz.emoji < 20 ? 'Quase nunca' : voz.emoji > 65 ? 'Em quase toda frase' : 'De vez em quando' }
+          ? { rotulo: 'Emoji', valor: voz.emoji < 20 ? 'Quase nunca' : voz.emoji > 65 ? 'Em quase toda frase' : 'De vez em quando', campo: 'voz.emoji' }
           : null,
-        (voz.bordoes || []).length ? { rotulo: 'Bordões', valor: (voz.bordoes || []).join(' · ') } : null,
+        (voz.bordoes || []).length ? { rotulo: 'Bordões', valor: (voz.bordoes || []).join(' · '), campo: 'voz.bordoes' } : null,
         voz.vocabulario ? { rotulo: 'Vocabulário', valor: voz.vocabulario } : null,
-        voz.amostra ? { rotulo: 'Amostra da sua escrita', valor: `“${voz.amostra.slice(0, 120)}${voz.amostra.length > 120 ? '…' : ''}”` } : null,
+        voz.amostra ? { rotulo: 'Amostra da sua escrita', valor: `“${voz.amostra.slice(0, 120)}${voz.amostra.length > 120 ? '…' : ''}”`, campo: 'voz.amostra' } : null,
         voz.usaHumor !== undefined
           ? {
               rotulo: 'Recursos',
@@ -439,11 +448,11 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
         [!!p.audienceInsights, 2],
       ]),
       conhecido: [
-        publico.quemE ? { rotulo: 'Quem é', valor: publico.quemE } : null,
+        publico.quemE ? { rotulo: 'Quem é', valor: publico.quemE, campo: 'publico.quemE' } : null,
         Array.isArray(publico.idade) ? { rotulo: 'Idade', valor: `${publico.idade[0]} a ${publico.idade[1]} anos` } : null,
-        (publico.lugares || []).length ? { rotulo: 'Onde estão', valor: (publico.lugares || []).join(' · ') } : null,
-        (publico.dores || []).length ? { rotulo: 'O que dói neles', valor: (publico.dores || []).join(' · ') } : null,
-        (publico.desejos || []).length ? { rotulo: 'O que eles querem', valor: (publico.desejos || []).join(' · ') } : null,
+        (publico.lugares || []).length ? { rotulo: 'Onde estão', valor: (publico.lugares || []).join(' · '), campo: 'publico.lugares' } : null,
+        (publico.dores || []).length ? { rotulo: 'O que dói neles', valor: (publico.dores || []).join(' · '), campo: 'publico.dores' } : null,
+        (publico.desejos || []).length ? { rotulo: 'O que eles querem', valor: (publico.desejos || []).join(' · '), campo: 'publico.desejos' } : null,
         p.audienceInsights ? { rotulo: 'Sinais coletados', valor: p.audienceInsights.slice(0, 160) } : null,
       ].filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: [
@@ -480,11 +489,11 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
       ]),
       conhecido: [
         formatos.length ? { rotulo: 'Formatos', valor: formatos.join(' · ') } : null,
-        (estrategia.pilares || []).length ? { rotulo: 'Pilares', valor: (estrategia.pilares || []).join(' · ') } : null,
-        estrategia.porSemana ? { rotulo: 'Frequência', valor: `${estrategia.porSemana}x por semana` } : null,
+        (estrategia.pilares || []).length ? { rotulo: 'Pilares', valor: (estrategia.pilares || []).join(' · '), campo: 'estrategia.pilares' } : null,
+        estrategia.porSemana ? { rotulo: 'Frequência', valor: `${estrategia.porSemana}x por semana`, campo: 'estrategia.porSemana' } : null,
         (estrategia.melhoresHorarios || []).length ? { rotulo: 'Horários', valor: (estrategia.melhoresHorarios || []).join(' · ') } : null,
         (p.topHashtags || []).length ? { rotulo: 'Hashtags', valor: (p.topHashtags || []).slice(0, 6).map((h) => `#${h.replace(/^#/, '')}`).join(' ') } : null,
-        (estrategia.naoFalar || []).length ? { rotulo: 'Nunca falar de', valor: (estrategia.naoFalar || []).join(' · ') } : null,
+        (estrategia.naoFalar || []).length ? { rotulo: 'Nunca falar de', valor: (estrategia.naoFalar || []).join(' · '), campo: 'estrategia.naoFalar' } : null,
       ].filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: [
         !(estrategia.pilares || []).length && {
@@ -517,8 +526,8 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
       ]),
       conhecido: [
         metas.length ? { rotulo: 'Objetivos', valor: metas.join(' · ') } : null,
-        estrategia.assinatura ? { rotulo: 'Chamada padrão', valor: estrategia.assinatura } : null,
-        aprendizado.objetivo ? { rotulo: 'Meta pessoal', valor: aprendizado.objetivo } : null,
+        estrategia.assinatura ? { rotulo: 'Chamada padrão', valor: estrategia.assinatura, campo: 'estrategia.assinatura' } : null,
+        aprendizado.objetivo ? { rotulo: 'Meta pessoal', valor: aprendizado.objetivo, campo: 'aprendizado.objetivo' } : null,
       ].filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: [
         !aprendizado.objetivo && {
@@ -550,14 +559,14 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
         [(negocio.referencias || []).length > 0, 1],
       ]),
       conhecido: [
-        negocio.oQueVende ? { rotulo: 'Vende', valor: negocio.oQueVende } : null,
-        negocio.ticket ? { rotulo: 'Ticket médio', valor: `R$ ${negocio.ticket}` } : null,
-        negocio.canal ? { rotulo: 'Canal de venda', valor: negocio.canal } : null,
-        negocio.clientesPorMes ? { rotulo: 'Clientes/mês', valor: String(negocio.clientesPorMes) } : null,
-        negocio.objecao ? { rotulo: 'Objeção mais comum', valor: negocio.objecao } : null,
-        negocio.orgulho ? { rotulo: 'Orgulho', valor: negocio.orgulho } : null,
+        negocio.oQueVende ? { rotulo: 'Vende', valor: negocio.oQueVende, campo: 'negocio.oQueVende' } : null,
+        negocio.ticket ? { rotulo: 'Ticket médio', valor: `R$ ${negocio.ticket}`, campo: 'negocio.ticket' } : null,
+        negocio.canal ? { rotulo: 'Canal de venda', valor: negocio.canal, campo: 'negocio.canal' } : null,
+        negocio.clientesPorMes ? { rotulo: 'Clientes/mês', valor: String(negocio.clientesPorMes), campo: 'negocio.clientesPorMes' } : null,
+        negocio.objecao ? { rotulo: 'Objeção mais comum', valor: negocio.objecao, campo: 'negocio.objecao' } : null,
+        negocio.orgulho ? { rotulo: 'Orgulho', valor: negocio.orgulho, campo: 'negocio.orgulho' } : null,
         (negocio.referencias || []).length
-          ? { rotulo: 'Referências', valor: (negocio.referencias || []).join(' · ') }
+          ? { rotulo: 'Referências', valor: (negocio.referencias || []).join(' · '), campo: 'negocio.referencias' }
           : null,
       ].filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: [
@@ -603,10 +612,10 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
       ]),
       conhecido: [
         p.experienceLevel ? { rotulo: 'Nível', valor: NIVEIS[p.experienceLevel] ?? p.experienceLevel } : null,
-        aprendizado.ritmo ? { rotulo: 'Como prefere', valor: RITMOS[aprendizado.ritmo] ?? aprendizado.ritmo } : null,
-        aprendizado.tempo ? { rotulo: 'Tempo', valor: TEMPOS[aprendizado.tempo] ?? aprendizado.tempo } : null,
-        (aprendizado.ferramentas || []).length ? { rotulo: 'Já usa', valor: (aprendizado.ferramentas || []).join(' · ') } : null,
-        aprendizado.travando ? { rotulo: 'O que trava', valor: aprendizado.travando } : null,
+        aprendizado.ritmo ? { rotulo: 'Como prefere', valor: RITMOS[aprendizado.ritmo] ?? aprendizado.ritmo, campo: 'aprendizado.ritmo' } : null,
+        aprendizado.tempo ? { rotulo: 'Tempo', valor: TEMPOS[aprendizado.tempo] ?? aprendizado.tempo, campo: 'aprendizado.tempo' } : null,
+        (aprendizado.ferramentas || []).length ? { rotulo: 'Já usa', valor: (aprendizado.ferramentas || []).join(' · '), campo: 'aprendizado.ferramentas' } : null,
+        aprendizado.travando ? { rotulo: 'O que trava', valor: aprendizado.travando, campo: 'aprendizado.travando' } : null,
       ].filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: [
         !aprendizado.travando && {
@@ -649,6 +658,9 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
         return {
           rotulo: ROTULO_FOTO[t].titulo,
           valor: doGoogle ? 'veio da sua conta Google' : f ? 'enviada por você' : 'veio da sua conta',
+          // Trocar a foto que já existe é o pedido mais óbvio do mundo e não
+          // existia: preenchida, a vaga sumia de `faltando` e virava rótulo.
+          campo: `fotos.${t}`,
         };
       }).filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: TIPOS_FOTO.filter((t) => t !== 'perfil' && !fotos.some((f) => f.tipo === t)).map((t) => ({

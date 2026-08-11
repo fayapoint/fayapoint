@@ -12,6 +12,8 @@ import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 import { fireWelcomeFlow } from '@/lib/welcome-email';
 import { getAuthUser } from '@/lib/auth';
+import { acharPorQualquerEmail, vincularEmail } from '@/lib/identidade';
+import { vincularGoogleDoLogin } from '@/lib/social-identity';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -214,14 +216,19 @@ export async function GET(request: NextRequest) {
     await dbConnect();
 
     // Find or create user
-    let user = await User.findOne({ email: googleUser.email });
+    // ⚠️ Este arquivo é o gêmeo de `/api/auth/google/callback`. Enquanto os
+    // dois existirem, a regra de identidade tem de estar nos DOIS — uma conta
+    // duplicada criada por aqui é indistinguível de uma criada por lá.
+    let user = await acharPorQualquerEmail(googleUser.email);
 
     if (user) {
       console.log('[GOOGLE-CALLBACK] Existing user found:', user.email, 'plan:', user.subscription?.plan, 'level:', user.progress?.level);
       user.image = user.image || googleUser.picture;
       user.emailVerified = user.emailVerified || new Date();
       user.lastLoginAt = new Date();
+      if (!user.name && googleUser.name) user.name = googleUser.name;
       await user.save();
+      await vincularEmail(user, googleUser.email, { verificado: true, origem: 'google' });
     } else {
       console.log('[GOOGLE-CALLBACK] Creating new user:', googleUser.email);
       user = await User.create({
@@ -231,10 +238,30 @@ export async function GET(request: NextRequest) {
         emailVerified: new Date(),
         role: 'student',
         lastLoginAt: new Date(),
+        emails: [{ email: googleUser.email, verificado: true, origem: 'google', addedAt: new Date() }],
+        emailsVerificados: [googleUser.email.toLowerCase()],
       });
       // P5: boas-vindas + aviso ao admin — só em conta NOVA
       fireWelcomeFlow(user.name, user.email, 'google-oauth');
     }
+
+    /**
+     * ⚠️ ESTE é o callback que o botão de login realmente usa (o caminho
+     * plano; ver o comentário do topo). E era justamente aqui que faltava
+     * vincular o Google como conta conectada — a chamada existia só no gêmeo
+     * aninhado, que ninguém percorre.
+     *
+     * Resultado do defeito: a pessoa entrava com o Google e a aba Conta
+     * continuava dizendo que o Google não estava conectado. Era o sintoma
+     * exato que o Ricardo relatou — e a correção de 27/07 nunca chegou a rodar
+     * para ele, porque foi feita no arquivo errado.
+     */
+    await vincularGoogleDoLogin(user._id, {
+      id: googleUser.id,
+      email: googleUser.email,
+      name: googleUser.name,
+      picture: googleUser.picture,
+    });
 
     // Create JWT token
     const jwtToken = jwt.sign(
