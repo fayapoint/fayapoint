@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useT } from "@/i18n/dicionario";
 import { EDITORES, type Editor } from "@/components/portal/PersonaDossie";
+import { Atmosfera, SeletorAtmosfera } from "@/components/portal/PersonaAtmosfera";
 import { artePreset, presetsDe, type Preset } from "@/lib/persona-presets";
 import { temArtePreset } from "@/lib/persona-arte";
 import type { Dossie, DimensaoDossie } from "@/lib/persona";
@@ -226,6 +227,8 @@ export default function PersonaConsole({
           onSalvar={(v) => salvar(folha.campo, v)}
         />
 
+        <PreviaViva versao={`${respondidas}:${dossie.confianca}`} token={token} />
+
         <nav className="mt-3 flex shrink-0 items-center justify-between gap-3">
           <Passo
             direcao="atras"
@@ -246,7 +249,12 @@ export default function PersonaConsole({
       </section>
 
       {/* ─── O PERSONAGEM ─── */}
-      <Personagem dimensoes={dossie.dimensoes} confianca={dossie.confianca} qualidade={dossie.qualidade} />
+      <Personagem
+        dimensoes={dossie.dimensoes}
+        confianca={dossie.confianca}
+        qualidade={dossie.qualidade}
+        resumo={dossie.resumo}
+      />
     </div>
   );
 }
@@ -438,6 +446,9 @@ function Migalha({
       <span className="text-[12.5px] font-semibold tabular-nums text-white/60">
         {indice}/{total} {T("no total")}
       </span>
+      {/* O vazio da direita desta linha era o maior buraco da tela. Agora é
+          onde mora o controle do efeito do cartão. */}
+      <SeletorAtmosfera />
     </div>
   );
 }
@@ -478,20 +489,8 @@ function Palco({
         boxShadow: `0 0 0 1px ${folha.cor}59, 0 0 0 4px ${folha.cor}12, 0 22px 60px -28px ${folha.cor}aa`,
       }}
     >
-      {/* rastreio + varredura */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.055]"
-        style={{ backgroundImage: "repeating-linear-gradient(0deg, #fff 0 1px, transparent 1px 3px)" }}
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 h-24 animate-[varre_5.5s_linear_infinite]"
-        style={{ background: `linear-gradient(180deg, transparent, ${folha.cor}1f, transparent)` }}
-      />
+      <Atmosfera cor={folha.cor} semente={folha.campo} />
       <Cantos cor={folha.cor} />
-
-      <style>{`@keyframes varre{0%{top:-6rem}100%{top:100%}}`}</style>
 
       {/* ─── A pergunta ─── */}
       <div className="relative shrink-0 px-5 pb-3 pt-5 sm:px-7 sm:pt-6">
@@ -887,19 +886,37 @@ function Personagem({
   dimensoes,
   confianca,
   qualidade,
+  resumo,
 }: {
   dimensoes: DimensaoDossie[];
   confianca: number;
   qualidade: Dossie["qualidade"];
+  resumo: string;
 }) {
   const T = useT();
   const fechadas = dimensoes.filter((d) => d.confianca >= 60).length;
 
   return (
-    <aside className="flex shrink-0 flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] lg:w-[clamp(236px,17vw,300px)]">
+    <aside className="flex shrink-0 flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] lg:w-72">
+      {/* ⚠️ `lg:w-72` (escala padrão), NÃO `lg:w-[300px]`. Medido em 12/08: a
+          classe arbitrária nova não saiu no CSS do build — o painel virou uma
+          coluna de 597px que comia o palco. Largura de escala não depende de o
+          scanner ter visto a string. */}
       <p className="shrink-0 border-b border-white/10 px-3 py-2.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-amber-300">
         {T("Você, montado")}
       </p>
+
+      {/* ⚠️ O painel abria com um vazio de 300px acima do busto — o desenho
+          ficava perdido no escuro e o topo não dizia nada. A frase do dossiê é
+          o resumo em linguagem natural de TUDO que já sabemos: é a resposta
+          para "o que vocês têm sobre mim", que era a primeira pergunta de quem
+          chega e não estava em lugar nenhum da tela. */}
+      <div className="shrink-0 border-b border-white/10 px-3 py-2.5">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-white/35">{T("o que já sabemos")}</p>
+        <p className="mt-1 text-[12.5px] leading-snug text-white/80">
+          {resumo || T("Nada ainda — a primeira resposta já escreve esta frase.")}
+        </p>
+      </div>
 
       {/* ⚠️ Esticar o SVG NÃO aumenta o busto: com `meet` num viewBox quadrado
           quem manda é a LARGURA da coluna. Medido: caixa de 218×928 desenhou o
@@ -974,5 +991,201 @@ function Personagem({
         <p className="mt-0.5 text-[12px] font-semibold capitalize text-white/70">{T(qualidade)}</p>
       </div>
     </aside>
+  );
+}
+
+// ═════════════════════════════════════════════════════════════════════
+// A PRÉVIA VIVA
+// ═════════════════════════════════════════════════════════════════════
+
+interface Previa {
+  curso: string;
+  slug: string;
+  original: string;
+  personalizado: string;
+  usados: string[];
+}
+
+/**
+ * A prova, em tempo real: um trecho REAL do curso da pessoa, antes e depois.
+ *
+ * ## O defeito que ela corrige
+ *
+ * O console pedia 27 respostas e devolvia um número. Ricardo, em 12/08, com a
+ * tela na frente:
+ *
+ * > *"deveria (…) resumir o que temos sobre nós, e como isso se aplicaria em
+ * > tempo real (…) utilizar exemplos reais de trechos que temos nos cursos e
+ * > exatamente o que eles mudariam caso fossem inseridas as informações que o
+ * > usuário acabou de informar."*
+ *
+ * Perguntar sem mostrar o efeito é pedir fé. Aqui cada resposta reescreve, na
+ * hora, um pedaço do curso que a pessoa já tem — e o que só existe por causa
+ * do perfil vem **destacado**, senão ela lê dois parágrafos parecidos e não vê
+ * o que mudou.
+ *
+ * ⚠️ **O trecho é real** (`/api/user/persona-previa` puxa do `courseContent` do
+ * curso do acervo) e é o **mesmo motor** da camada paga. Texto de demonstração
+ * escrito à parte seria propaganda enganosa por construção: a decepção
+ * chegaria depois do gasto.
+ *
+ * ⚠️ Uma reescrita por resposta custa uma chamada de modelo. Por isso: espera
+ * de 1,2s depois da última mudança (quem responde três seguidas gera UMA vez),
+ * uma requisição em voo por vez, e a anterior é abortada.
+ */
+function PreviaViva({ versao, token }: { versao: string; token: string }) {
+  const T = useT();
+  const [previa, setPrevia] = useState<Previa | null>(null);
+  const [carregando, setCarregando] = useState(false);
+  const [vazio, setVazio] = useState(false);
+  const [erro, setErro] = useState(false);
+  const emVoo = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      emVoo.current?.abort();
+      const ctrl = new AbortController();
+      emVoo.current = ctrl;
+      setCarregando(true);
+      setErro(false);
+      fetch("/api/user/persona-previa", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({}),
+        signal: ctrl.signal,
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d?.vazio) {
+            setVazio(true);
+            return;
+          }
+          if (!d?.personalizado) {
+            setErro(true);
+            return;
+          }
+          setVazio(false);
+          setPrevia(d as Previa);
+        })
+        .catch((e) => {
+          if ((e as Error)?.name !== "AbortError") setErro(true);
+        })
+        .finally(() => {
+          if (!ctrl.signal.aborted) setCarregando(false);
+        });
+    }, 1200);
+    return () => clearTimeout(t);
+  }, [versao, token]);
+
+  if (vazio) {
+    return (
+      <div className="mt-3 shrink-0 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] px-4 py-3">
+        <p className="text-[13px] text-white/60">
+          {T("Responda a primeira pergunta e um trecho do seu curso aparece aqui, reescrito com o que você contou.")}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3 flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+      <div className="flex shrink-0 flex-wrap items-center gap-x-2 gap-y-1 border-b border-white/10 px-3 py-2">
+        <Sparkles size={13} className="text-amber-300" />
+        <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-amber-300">
+          {T("O que isso já muda no seu curso")}
+        </p>
+        {previa && (
+          <span className="truncate text-[12px] text-white/45">
+            {T("trecho real de")} {previa.curso}
+          </span>
+        )}
+        {carregando && <Loader2 className="ml-auto h-3.5 w-3.5 animate-spin text-amber-300" />}
+      </div>
+
+      {erro && !previa && (
+        <p className="px-3 py-3 text-[13px] text-white/50">
+          {T("A prévia não veio desta vez. A próxima resposta tenta de novo.")}
+        </p>
+      )}
+
+      {!previa && !erro && (
+        <div className="space-y-2 px-3 py-3">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-3 animate-pulse rounded bg-white/[0.06]" style={{ width: `${92 - i * 14}%` }} />
+          ))}
+        </div>
+      )}
+
+      {previa && (
+        <div className="grid min-h-0 flex-1 gap-px overflow-hidden bg-white/[0.06] md:grid-cols-2">
+          <Lado titulo={T("Como está no curso")} texto={previa.original} apagado />
+          <Lado titulo={T("Como fica com você")} texto={previa.personalizado} />
+        </div>
+      )}
+
+      {previa && previa.usados.length > 0 && (
+        <div className="flex shrink-0 flex-wrap items-center gap-1.5 border-t border-white/10 px-3 py-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-white/35">{T("feito com")}</span>
+          {previa.usados.slice(0, 8).map((u) => (
+            <span
+              key={u}
+              className="rounded-full border border-amber-400/25 bg-amber-400/10 px-2 py-0.5 text-[11px] font-semibold text-amber-200"
+            >
+              {u}
+            </span>
+          ))}
+          <span className="ml-auto text-[11px] text-white/40">
+            {T("cada resposta nova entra aqui")}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Um lado do antes/depois.
+ *
+ * O «guilhemet» que o modelo devolve marca o que só existe por causa do perfil.
+ * Sem esse destaque a pessoa compara dois parágrafos parecidos e não enxerga a
+ * diferença — que é justamente a pergunta que ela tem na cabeça.
+ */
+function Lado({ titulo, texto, apagado }: { titulo: string; texto: string; apagado?: boolean }) {
+  const partes = texto.split(/(«[^»]*»)/g);
+  return (
+    <div className="flex min-h-0 flex-col bg-[#0d0b08]">
+      <p
+        className={`shrink-0 px-3 pt-2 text-[11px] font-bold uppercase tracking-wider ${
+          apagado ? "text-white/30" : "text-emerald-300"
+        }`}
+      >
+        {titulo}
+      </p>
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-3 pt-1.5">
+        <p
+          className={`whitespace-pre-wrap text-[13px] leading-relaxed ${
+            apagado ? "text-white/40" : "text-white/85"
+          }`}
+        >
+          {partes.map((p, i) =>
+            p.startsWith("«") && p.endsWith("»") ? (
+              /* ⚠️ `<mark>` traz do navegador um amarelo sólido com texto
+                 preto que VENCE a classe utilitária — o destaque virou uma
+                 tarja ilegível. Cor e fundo vão no style, sem intermediário. */
+              <mark
+                key={i}
+                className="rounded px-1 [box-decoration-break:clone]"
+                style={{ background: "rgba(245,192,78,.16)", color: "#ffe6ad" }}
+              >
+                {p.slice(1, -1)}
+              </mark>
+            ) : (
+              <span key={i}>{p}</span>
+            ),
+          )}
+        </p>
+      </div>
+    </div>
   );
 }

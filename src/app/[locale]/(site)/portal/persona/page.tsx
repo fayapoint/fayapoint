@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Camera, Loader2, Wand2, X } from "lucide-react";
+import { ArrowLeft, Camera, Loader2, Wand2, X } from "lucide-react";
 import { useT } from "@/i18n/dicionario";
 import PersonaConsole from "@/components/portal/PersonaConsole";
 import { GaleriaDeFotos } from "@/components/portal/PersonaDossie";
@@ -115,6 +115,19 @@ export default function EstudioDaPersonaPage() {
        existe, mas dentro dos painéis do console. */
     <div className="flex h-[100dvh] flex-col overflow-hidden pt-16">
       <header className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2 sm:px-4">
+        {/* ⚠️ SAÍDA. A página ocupa 100dvh com `overflow-hidden` e some com a
+            barra do site — sem este botão não há como voltar sem o botão do
+            navegador. Ricardo, em 12/08: *"não conseguimos sair dessa página,
+            não tem menu algum, ficamos presos"*. Tela cheia sem porta é
+            armadilha, por mais bonita que seja. */}
+        <Link
+          href={`/${locale}/portal`}
+          aria-label={T("Voltar ao portal")}
+          className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-white/15 bg-white/[0.05] px-2.5 text-[13px] font-bold text-white transition-colors hover:bg-white/[0.12]"
+        >
+          <ArrowLeft size={15} />
+          <span className="hidden sm:inline">{T("Portal")}</span>
+        </Link>
         <h1 className="text-[17px] font-black leading-none text-white sm:text-[19px]">
           {T("O que a FayAI sabe")} <span className="text-amber-400">{T("sobre você")}</span>
         </h1>
