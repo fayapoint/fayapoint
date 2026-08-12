@@ -105,13 +105,20 @@ export async function POST(request: NextRequest) {
     if (!original) return NextResponse.json({ error: "Sem trecho utilizável" }, { status: 404 });
 
     const curso = (product?.name as string) || (product?.title as string) || slug;
-    const recorte = original.length > 900 ? `${original.slice(0, 900)}…` : original;
+    // ⚠️ 450, não 900. Medido em produção: com o trecho longo e o tier budget a
+    // resposta levava >30s e a plataforma devolvia 504 antes de o modelo
+    // terminar — a tela mostrava "a prévia não veio" em toda resposta.
+    const recorte = original.length > 450 ? `${original.slice(0, 450)}…` : original;
 
     const res = await generate({
-      tier: "budget",
-      // O provedor raciocina antes de escrever e o pensamento sai do mesmo
-      // orçamento — abaixo disso o `content` volta VAZIO sem erro nenhum.
-      maxTokens: 2000,
+      // ⚠️ `free` (Gemini 3 Flash), não `budget`: o DeepSeek raciocina antes de
+      // escrever e estourava o teto de tempo da plataforma. Aqui o que importa
+      // é chegar ANTES de a pessoa responder a próxima pergunta — uma prévia
+      // boa que chega depois do 504 não vale nada.
+      tier: "free",
+      // Piso de segurança do provedor: abaixo de ~1500 o `content` pode voltar
+      // VAZIO sem erro nenhum, porque o raciocínio sai do mesmo orçamento.
+      maxTokens: 1600,
       temperature: 0.7,
       messages: [
         { role: "system", content: SISTEMA },
