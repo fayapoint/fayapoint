@@ -1,0 +1,646 @@
+[
+  {
+    "campo": "identidade.papel",
+    "rotulo": "Crio conteúdo e vivo de audiência e parcerias",
+    "arquivo": "identidade-papel-crio-conteudo-e-vivo-de-audiencia-e-parcerias.webp",
+    "destino": "portal/persona/opts/identidade-papel-crio-conteudo-e-vivo-de-audiencia-e-parcerias.webp",
+    "prompt": "Photorealistic photograph: a Brazilian professional at work, mid-action, shot candidly in their real workplace. The scene must read, at a glance and with no words, as: \"Crio conteúdo e vivo de audiência e parcerias\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.papel",
+    "rotulo": "Trabalho com tecnologia e quero usar IA no meu trabalho",
+    "arquivo": "identidade-papel-trabalho-com-tecnologia-e-quero-usar-ia-no-meu-t.webp",
+    "destino": "portal/persona/opts/identidade-papel-trabalho-com-tecnologia-e-quero-usar-ia-no-meu-t.webp",
+    "prompt": "Photorealistic photograph: a Brazilian professional at work, mid-action, shot candidly in their real workplace. The scene must read, at a glance and with no words, as: \"Trabalho com tecnologia e quero usar IA no meu trabalho\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.papel",
+    "rotulo": "Estudo e quero aprender IA antes de entrar no mercado",
+    "arquivo": "identidade-papel-estudo-e-quero-aprender-ia-antes-de-entrar-no-me.webp",
+    "destino": "portal/persona/opts/identidade-papel-estudo-e-quero-aprender-ia-antes-de-entrar-no-me.webp",
+    "prompt": "Photorealistic photograph: a Brazilian professional at work, mid-action, shot candidly in their real workplace. The scene must read, at a glance and with no words, as: \"Estudo e quero aprender IA antes de entrar no mercado\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.papel",
+    "rotulo": "Ajudo outros negócios a aparecerem na internet",
+    "arquivo": "identidade-papel-ajudo-outros-negocios-a-aparecerem-na-internet.webp",
+    "destino": "portal/persona/opts/identidade-papel-ajudo-outros-negocios-a-aparecerem-na-internet.webp",
+    "prompt": "Photorealistic photograph: a Brazilian professional at work, mid-action, shot candidly in their real workplace. The scene must read, at a glance and with no words, as: \"Ajudo outros negócios a aparecerem na internet\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.marca",
+    "rotulo": "Uso o meu próprio nome",
+    "arquivo": "identidade-marca-uso-o-meu-proprio-nome.webp",
+    "destino": "portal/persona/opts/identidade-marca-uso-o-meu-proprio-nome.webp",
+    "prompt": "Photorealistic photograph: a close, warm still life that stands for how someone signs their own work. The scene must read, at a glance and with no words, as: \"Uso o meu próprio nome\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "São Paulo, SP",
+    "arquivo": "identidade-cidade-sao-paulo-sp.webp",
+    "destino": "portal/persona/opts/identidade-cidade-sao-paulo-sp.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"São Paulo, SP\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Rio de Janeiro, RJ",
+    "arquivo": "identidade-cidade-rio-de-janeiro-rj.webp",
+    "destino": "portal/persona/opts/identidade-cidade-rio-de-janeiro-rj.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Rio de Janeiro, RJ\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Curitiba, PR",
+    "arquivo": "identidade-cidade-curitiba-pr.webp",
+    "destino": "portal/persona/opts/identidade-cidade-curitiba-pr.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Curitiba, PR\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Belo Horizonte, MG",
+    "arquivo": "identidade-cidade-belo-horizonte-mg.webp",
+    "destino": "portal/persona/opts/identidade-cidade-belo-horizonte-mg.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Belo Horizonte, MG\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Florianópolis, SC",
+    "arquivo": "identidade-cidade-florianopolis-sc.webp",
+    "destino": "portal/persona/opts/identidade-cidade-florianopolis-sc.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Florianópolis, SC\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Recife, PE",
+    "arquivo": "identidade-cidade-recife-pe.webp",
+    "destino": "portal/persona/opts/identidade-cidade-recife-pe.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Recife, PE\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Fortaleza, CE",
+    "arquivo": "identidade-cidade-fortaleza-ce.webp",
+    "destino": "portal/persona/opts/identidade-cidade-fortaleza-ce.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Fortaleza, CE\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Salvador, BA",
+    "arquivo": "identidade-cidade-salvador-ba.webp",
+    "destino": "portal/persona/opts/identidade-cidade-salvador-ba.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Salvador, BA\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Brasília, DF",
+    "arquivo": "identidade-cidade-brasilia-df.webp",
+    "destino": "portal/persona/opts/identidade-cidade-brasilia-df.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Brasília, DF\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Goiânia, GO",
+    "arquivo": "identidade-cidade-goiania-go.webp",
+    "destino": "portal/persona/opts/identidade-cidade-goiania-go.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Goiânia, GO\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Porto Alegre, RS",
+    "arquivo": "identidade-cidade-porto-alegre-rs.webp",
+    "destino": "portal/persona/opts/identidade-cidade-porto-alegre-rs.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Porto Alegre, RS\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.cidade",
+    "rotulo": "Interior do meu estado",
+    "arquivo": "identidade-cidade-interior-do-meu-estado.webp",
+    "destino": "portal/persona/opts/identidade-cidade-interior-do-meu-estado.webp",
+    "prompt": "Photorealistic photograph: a recognisable, sunlit street-level view of this Brazilian city, no landmarks-postcard cliché, everyday life in frame. The scene must read, at a glance and with no words, as: \"Interior do meu estado\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Quero que gente comum consiga usar as mesmas ferramentas das grandes empresas",
+    "arquivo": "identidade-missao-quero-que-gente-comum-consiga-usar-as-mesmas-fer.webp",
+    "destino": "portal/persona/opts/identidade-missao-quero-que-gente-comum-consiga-usar-as-mesmas-fer.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Quero que gente comum consiga usar as mesmas ferramentas das grandes empresas\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Cansei de ver gente perdendo tempo com o que dá para automatizar",
+    "arquivo": "identidade-missao-cansei-de-ver-gente-perdendo-tempo-com-o-que-da-.webp",
+    "destino": "portal/persona/opts/identidade-missao-cansei-de-ver-gente-perdendo-tempo-com-o-que-da-.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Cansei de ver gente perdendo tempo com o que dá para automatizar\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Passei pela dificuldade que meu cliente passa hoje e sei o caminho de volta",
+    "arquivo": "identidade-missao-passei-pela-dificuldade-que-meu-cliente-passa-ho.webp",
+    "destino": "portal/persona/opts/identidade-missao-passei-pela-dificuldade-que-meu-cliente-passa-ho.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Passei pela dificuldade que meu cliente passa hoje e sei o caminho de volta\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Quero construir algo que sustente a minha família com liberdade",
+    "arquivo": "identidade-missao-quero-construir-algo-que-sustente-a-minha-famili.webp",
+    "destino": "portal/persona/opts/identidade-missao-quero-construir-algo-que-sustente-a-minha-famili.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Quero construir algo que sustente a minha família com liberdade\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Odeio trabalho mal feito no meu ramo e faço questão de mostrar como se faz",
+    "arquivo": "identidade-missao-odeio-trabalho-mal-feito-no-meu-ramo-e-faco-ques.webp",
+    "destino": "portal/persona/opts/identidade-missao-odeio-trabalho-mal-feito-no-meu-ramo-e-faco-ques.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Odeio trabalho mal feito no meu ramo e faço questão de mostrar como se faz\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Quero que o meu ofício sobreviva à mudança em vez de ser atropelado por ela",
+    "arquivo": "identidade-missao-quero-que-o-meu-oficio-sobreviva-a-mudanca-em-ve.webp",
+    "destino": "portal/persona/opts/identidade-missao-quero-que-o-meu-oficio-sobreviva-a-mudanca-em-ve.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Quero que o meu ofício sobreviva à mudança em vez de ser atropelado por ela\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Quero ser a pessoa que explica sem enrolar o que os outros complicam",
+    "arquivo": "identidade-missao-quero-ser-a-pessoa-que-explica-sem-enrolar-o-que.webp",
+    "destino": "portal/persona/opts/identidade-missao-quero-ser-a-pessoa-que-explica-sem-enrolar-o-que.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Quero ser a pessoa que explica sem enrolar o que os outros complicam\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.missao",
+    "rotulo": "Quero abrir a porta que ninguém abriu para mim quando eu comecei",
+    "arquivo": "identidade-missao-quero-abrir-a-porta-que-ninguem-abriu-para-mim-q.webp",
+    "destino": "portal/persona/opts/identidade-missao-quero-abrir-a-porta-que-ninguem-abriu-para-mim-q.webp",
+    "prompt": "Photorealistic photograph: a quiet, emotional portrait moment of a Brazilian person that embodies this conviction. The scene must read, at a glance and with no words, as: \"Quero abrir a porta que ninguém abriu para mim quando eu comecei\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Honestidade no preço",
+    "arquivo": "identidade-valores-honestidade-no-preco.webp",
+    "destino": "portal/persona/opts/identidade-valores-honestidade-no-preco.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Honestidade no preço\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Cumprir prazo",
+    "arquivo": "identidade-valores-cumprir-prazo.webp",
+    "destino": "portal/persona/opts/identidade-valores-cumprir-prazo.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Cumprir prazo\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Falar simples",
+    "arquivo": "identidade-valores-falar-simples.webp",
+    "destino": "portal/persona/opts/identidade-valores-falar-simples.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Falar simples\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Não prometer o que não entrego",
+    "arquivo": "identidade-valores-nao-prometer-o-que-nao-entrego.webp",
+    "destino": "portal/persona/opts/identidade-valores-nao-prometer-o-que-nao-entrego.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Não prometer o que não entrego\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Atender bem quem paga pouco",
+    "arquivo": "identidade-valores-atender-bem-quem-paga-pouco.webp",
+    "destino": "portal/persona/opts/identidade-valores-atender-bem-quem-paga-pouco.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Atender bem quem paga pouco\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Mostrar o processo, não só o resultado",
+    "arquivo": "identidade-valores-mostrar-o-processo-nao-so-o-resultado.webp",
+    "destino": "portal/persona/opts/identidade-valores-mostrar-o-processo-nao-so-o-resultado.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Mostrar o processo, não só o resultado\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Estudar antes de opinar",
+    "arquivo": "identidade-valores-estudar-antes-de-opinar.webp",
+    "destino": "portal/persona/opts/identidade-valores-estudar-antes-de-opinar.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Estudar antes de opinar\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Tratar cliente como gente, não como número",
+    "arquivo": "identidade-valores-tratar-cliente-como-gente-nao-como-numero.webp",
+    "destino": "portal/persona/opts/identidade-valores-tratar-cliente-como-gente-nao-como-numero.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Tratar cliente como gente, não como número\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Transparência total nos números",
+    "arquivo": "identidade-valores-transparencia-total-nos-numeros.webp",
+    "destino": "portal/persona/opts/identidade-valores-transparencia-total-nos-numeros.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Transparência total nos números\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "identidade.valores",
+    "rotulo": "Nunca falar mal de concorrente",
+    "arquivo": "identidade-valores-nunca-falar-mal-de-concorrente.webp",
+    "destino": "portal/persona/opts/identidade-valores-nunca-falar-mal-de-concorrente.webp",
+    "prompt": "Photorealistic photograph: an intimate detail shot — hands, objects, a gesture — that stands for this value being practised. The scene must read, at a glance and with no words, as: \"Nunca falar mal de concorrente\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "voz.vocabulario",
+    "rotulo": "Técnico — meu público conhece o jargão",
+    "arquivo": "voz-vocabulario-tecnico-meu-publico-conhece-o-jargao.webp",
+    "destino": "portal/persona/opts/voz-vocabulario-tecnico-meu-publico-conhece-o-jargao.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person explaining something to another, framed to show how plain or technical the talk is. The scene must read, at a glance and with no words, as: \"Técnico — meu público conhece o jargão\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "voz.vocabulario",
+    "rotulo": "Didático — explico cada termo na primeira vez",
+    "arquivo": "voz-vocabulario-didatico-explico-cada-termo-na-primeira-vez.webp",
+    "destino": "portal/persona/opts/voz-vocabulario-didatico-explico-cada-termo-na-primeira-vez.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person explaining something to another, framed to show how plain or technical the talk is. The scene must read, at a glance and with no words, as: \"Didático — explico cada termo na primeira vez\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.quemE",
+    "rotulo": "Dona de pequeno negócio, 30 a 45 anos, faz tudo sozinha e não tem tempo de aprender ferramenta nova",
+    "arquivo": "publico-quemE-dona-de-pequeno-negocio-30-a-45-anos-faz-tudo-so.webp",
+    "destino": "portal/persona/opts/publico-quemE-dona-de-pequeno-negocio-30-a-45-anos-faz-tudo-so.webp",
+    "prompt": "Photorealistic photograph: a candid environmental portrait of exactly this Brazilian person in their own setting. The scene must read, at a glance and with no words, as: \"Dona de pequeno negócio, 30 a 45 anos, faz tudo sozinha e não tem tempo de aprender ferramenta nova\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.quemE",
+    "rotulo": "Comerciante com loja física que ainda vende pouco pela internet",
+    "arquivo": "publico-quemE-comerciante-com-loja-fisica-que-ainda-vende-pouc.webp",
+    "destino": "portal/persona/opts/publico-quemE-comerciante-com-loja-fisica-que-ainda-vende-pouc.webp",
+    "prompt": "Photorealistic photograph: a candid environmental portrait of exactly this Brazilian person in their own setting. The scene must read, at a glance and with no words, as: \"Comerciante com loja física que ainda vende pouco pela internet\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.quemE",
+    "rotulo": "Pessoa mais velha que se sente excluída da conversa de tecnologia",
+    "arquivo": "publico-quemE-pessoa-mais-velha-que-se-sente-excluida-da-conve.webp",
+    "destino": "portal/persona/opts/publico-quemE-pessoa-mais-velha-que-se-sente-excluida-da-conve.webp",
+    "prompt": "Photorealistic photograph: a candid environmental portrait of exactly this Brazilian person in their own setting. The scene must read, at a glance and with no words, as: \"Pessoa mais velha que se sente excluída da conversa de tecnologia\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.quemE",
+    "rotulo": "Quem já vende bem e quer escalar sem contratar",
+    "arquivo": "publico-quemE-quem-ja-vende-bem-e-quer-escalar-sem-contratar.webp",
+    "destino": "portal/persona/opts/publico-quemE-quem-ja-vende-bem-e-quer-escalar-sem-contratar.webp",
+    "prompt": "Photorealistic photograph: a candid environmental portrait of exactly this Brazilian person in their own setting. The scene must read, at a glance and with no words, as: \"Quem já vende bem e quer escalar sem contratar\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.dores",
+    "rotulo": "Tem vergonha de aparecer",
+    "arquivo": "publico-dores-tem-vergonha-de-aparecer.webp",
+    "destino": "portal/persona/opts/publico-dores-tem-vergonha-de-aparecer.webp",
+    "prompt": "Photorealistic photograph: a Brazilian small-business person in the middle of this frustration, body language doing the telling. The scene must read, at a glance and with no words, as: \"Tem vergonha de aparecer\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.dores",
+    "rotulo": "Faz orçamento demais e fecha de menos",
+    "arquivo": "publico-dores-faz-orcamento-demais-e-fecha-de-menos.webp",
+    "destino": "portal/persona/opts/publico-dores-faz-orcamento-demais-e-fecha-de-menos.webp",
+    "prompt": "Photorealistic photograph: a Brazilian small-business person in the middle of this frustration, body language doing the telling. The scene must read, at a glance and with no words, as: \"Faz orçamento demais e fecha de menos\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.dores",
+    "rotulo": "Se enrola na parte burocrática e deixa o principal para depois",
+    "arquivo": "publico-dores-se-enrola-na-parte-burocratica-e-deixa-o-princip.webp",
+    "destino": "portal/persona/opts/publico-dores-se-enrola-na-parte-burocratica-e-deixa-o-princip.webp",
+    "prompt": "Photorealistic photograph: a Brazilian small-business person in the middle of this frustration, body language doing the telling. The scene must read, at a glance and with no words, as: \"Se enrola na parte burocrática e deixa o principal para depois\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.desejos",
+    "rotulo": "Fechar o celular às 18h sem culpa",
+    "arquivo": "publico-desejos-fechar-o-celular-as-18h-sem-culpa.webp",
+    "destino": "portal/persona/opts/publico-desejos-fechar-o-celular-as-18h-sem-culpa.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person living this relief, warm and calm, the moment it finally happens. The scene must read, at a glance and with no words, as: \"Fechar o celular às 18h sem culpa\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.desejos",
+    "rotulo": "Sair do operacional e cuidar do crescimento",
+    "arquivo": "publico-desejos-sair-do-operacional-e-cuidar-do-crescimento.webp",
+    "destino": "portal/persona/opts/publico-desejos-sair-do-operacional-e-cuidar-do-crescimento.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person living this relief, warm and calm, the moment it finally happens. The scene must read, at a glance and with no words, as: \"Sair do operacional e cuidar do crescimento\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.lugares",
+    "rotulo": "YouTube",
+    "arquivo": "publico-lugares-youtube.webp",
+    "destino": "portal/persona/opts/publico-lugares-youtube.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person using this channel in real life — the device and the hands, not a logo. The scene must read, at a glance and with no words, as: \"YouTube\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "publico.lugares",
+    "rotulo": "Facebook",
+    "arquivo": "publico-lugares-facebook.webp",
+    "destino": "portal/persona/opts/publico-lugares-facebook.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person using this channel in real life — the device and the hands, not a logo. The scene must read, at a glance and with no words, as: \"Facebook\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.pilares",
+    "rotulo": "Casos e resultados de clientes",
+    "arquivo": "estrategia-pilares-casos-e-resultados-de-clientes.webp",
+    "destino": "portal/persona/opts/estrategia-pilares-casos-e-resultados-de-clientes.webp",
+    "prompt": "Photorealistic photograph: a behind-the-scenes photograph of this kind of content being made in Brazil. The scene must read, at a glance and with no words, as: \"Casos e resultados de clientes\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.pilares",
+    "rotulo": "Minha opinião sobre o que está acontecendo",
+    "arquivo": "estrategia-pilares-minha-opiniao-sobre-o-que-esta-acontecendo.webp",
+    "destino": "portal/persona/opts/estrategia-pilares-minha-opiniao-sobre-o-que-esta-acontecendo.webp",
+    "prompt": "Photorealistic photograph: a behind-the-scenes photograph of this kind of content being made in Brazil. The scene must read, at a glance and with no words, as: \"Minha opinião sobre o que está acontecendo\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.pilares",
+    "rotulo": "Minha história e meus tropeços",
+    "arquivo": "estrategia-pilares-minha-historia-e-meus-tropecos.webp",
+    "destino": "portal/persona/opts/estrategia-pilares-minha-historia-e-meus-tropecos.webp",
+    "prompt": "Photorealistic photograph: a behind-the-scenes photograph of this kind of content being made in Brazil. The scene must read, at a glance and with no words, as: \"Minha história e meus tropeços\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.naoFalar",
+    "rotulo": "Promessa de resultado garantido",
+    "arquivo": "estrategia-naoFalar-promessa-de-resultado-garantido.webp",
+    "destino": "portal/persona/opts/estrategia-naoFalar-promessa-de-resultado-garantido.webp",
+    "prompt": "Photorealistic photograph: a restrained, tasteful still life that stands for this subject without depicting anyone taking a side. The scene must read, at a glance and with no words, as: \"Promessa de resultado garantido\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.naoFalar",
+    "rotulo": "Polêmica de internet",
+    "arquivo": "estrategia-naoFalar-polemica-de-internet.webp",
+    "destino": "portal/persona/opts/estrategia-naoFalar-polemica-de-internet.webp",
+    "prompt": "Photorealistic photograph: a restrained, tasteful still life that stands for this subject without depicting anyone taking a side. The scene must read, at a glance and with no words, as: \"Polêmica de internet\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.assinatura",
+    "rotulo": "Link na bio",
+    "arquivo": "estrategia-assinatura-link-na-bio.webp",
+    "destino": "portal/persona/opts/estrategia-assinatura-link-na-bio.webp",
+    "prompt": "Photorealistic photograph: a Brazilian creator making this exact invitation gesture to camera. The scene must read, at a glance and with no words, as: \"Link na bio\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.assinatura",
+    "rotulo": "Chama no WhatsApp e a gente conversa sem compromisso",
+    "arquivo": "estrategia-assinatura-chama-no-whatsapp-e-a-gente-conversa-sem-comprom.webp",
+    "destino": "portal/persona/opts/estrategia-assinatura-chama-no-whatsapp-e-a-gente-conversa-sem-comprom.webp",
+    "prompt": "Photorealistic photograph: a Brazilian creator making this exact invitation gesture to camera. The scene must read, at a glance and with no words, as: \"Chama no WhatsApp e a gente conversa sem compromisso\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.assinatura",
+    "rotulo": "Segue que amanhã tem a parte 2",
+    "arquivo": "estrategia-assinatura-segue-que-amanha-tem-a-parte-2.webp",
+    "destino": "portal/persona/opts/estrategia-assinatura-segue-que-amanha-tem-a-parte-2.webp",
+    "prompt": "Photorealistic photograph: a Brazilian creator making this exact invitation gesture to camera. The scene must read, at a glance and with no words, as: \"Segue que amanhã tem a parte 2\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.porSemana",
+    "rotulo": "5 por semana",
+    "arquivo": "estrategia-porSemana-5.webp",
+    "destino": "portal/persona/opts/estrategia-porSemana-5.webp",
+    "prompt": "Photorealistic photograph: a workspace scene whose density and calendar rhythm shows this publishing pace. The scene must read, at a glance and with no words, as: \"5 por semana\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "estrategia.porSemana",
+    "rotulo": "Mais de um por dia",
+    "arquivo": "estrategia-porSemana-14.webp",
+    "destino": "portal/persona/opts/estrategia-porSemana-14.webp",
+    "prompt": "Photorealistic photograph: a workspace scene whose density and calendar rhythm shows this publishing pace. The scene must read, at a glance and with no words, as: \"Mais de um por dia\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.objetivo",
+    "rotulo": "Montar um serviço novo usando IA e vender o primeiro",
+    "arquivo": "aprendizado-objetivo-montar-um-servico-novo-usando-ia-e-vender-o-prim.webp",
+    "destino": "portal/persona/opts/aprendizado-objetivo-montar-um-servico-novo-usando-ia-e-vender-o-prim.webp",
+    "prompt": "Photorealistic photograph: a Brazilian entrepreneur at the moment this goal lands, celebratory but real. The scene must read, at a glance and with no words, as: \"Montar um serviço novo usando IA e vender o primeiro\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.objetivo",
+    "rotulo": "Virar referência do assunto no meu nicho",
+    "arquivo": "aprendizado-objetivo-virar-referencia-do-assunto-no-meu-nicho.webp",
+    "destino": "portal/persona/opts/aprendizado-objetivo-virar-referencia-do-assunto-no-meu-nicho.webp",
+    "prompt": "Photorealistic photograph: a Brazilian entrepreneur at the moment this goal lands, celebratory but real. The scene must read, at a glance and with no words, as: \"Virar referência do assunto no meu nicho\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.objetivo",
+    "rotulo": "Usar IA no trabalho e ser promovido",
+    "arquivo": "aprendizado-objetivo-usar-ia-no-trabalho-e-ser-promovido.webp",
+    "destino": "portal/persona/opts/aprendizado-objetivo-usar-ia-no-trabalho-e-ser-promovido.webp",
+    "prompt": "Photorealistic photograph: a Brazilian entrepreneur at the moment this goal lands, celebratory but real. The scene must read, at a glance and with no words, as: \"Usar IA no trabalho e ser promovido\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.ferramentas",
+    "rotulo": "Instagram/Meta Business",
+    "arquivo": "aprendizado-ferramentas-instagram-meta-business.webp",
+    "destino": "portal/persona/opts/aprendizado-ferramentas-instagram-meta-business.webp",
+    "prompt": "Photorealistic photograph: hands using this kind of software on a real screen, abstract glowing interface only. The scene must read, at a glance and with no words, as: \"Instagram/Meta Business\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.ferramentas",
+    "rotulo": "Midjourney",
+    "arquivo": "aprendizado-ferramentas-midjourney.webp",
+    "destino": "portal/persona/opts/aprendizado-ferramentas-midjourney.webp",
+    "prompt": "Photorealistic photograph: hands using this kind of software on a real screen, abstract glowing interface only. The scene must read, at a glance and with no words, as: \"Midjourney\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.ferramentas",
+    "rotulo": "E-mail marketing",
+    "arquivo": "aprendizado-ferramentas-e-mail-marketing.webp",
+    "destino": "portal/persona/opts/aprendizado-ferramentas-e-mail-marketing.webp",
+    "prompt": "Photorealistic photograph: hands using this kind of software on a real screen, abstract glowing interface only. The scene must read, at a glance and with no words, as: \"E-mail marketing\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.ferramentas",
+    "rotulo": "Nenhuma ainda — começo agora",
+    "arquivo": "aprendizado-ferramentas-nenhuma-ainda-comeco-agora.webp",
+    "destino": "portal/persona/opts/aprendizado-ferramentas-nenhuma-ainda-comeco-agora.webp",
+    "prompt": "Photorealistic photograph: hands using this kind of software on a real screen, abstract glowing interface only. The scene must read, at a glance and with no words, as: \"Nenhuma ainda — começo agora\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.travando",
+    "rotulo": "Começo e não termino por falta de tempo",
+    "arquivo": "aprendizado-travando-comeco-e-nao-termino-por-falta-de-tempo.webp",
+    "destino": "portal/persona/opts/aprendizado-travando-comeco-e-nao-termino-por-falta-de-tempo.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person visibly stuck at this exact obstacle, in front of a screen. The scene must read, at a glance and with no words, as: \"Começo e não termino por falta de tempo\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.travando",
+    "rotulo": "Tem ferramenta demais e eu não sei por onde começar",
+    "arquivo": "aprendizado-travando-tem-ferramenta-demais-e-eu-nao-sei-por-onde-come.webp",
+    "destino": "portal/persona/opts/aprendizado-travando-tem-ferramenta-demais-e-eu-nao-sei-por-onde-come.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person visibly stuck at this exact obstacle, in front of a screen. The scene must read, at a glance and with no words, as: \"Tem ferramenta demais e eu não sei por onde começar\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "aprendizado.travando",
+    "rotulo": "Não sei o que vale a pena pagar",
+    "arquivo": "aprendizado-travando-nao-sei-o-que-vale-a-pena-pagar.webp",
+    "destino": "portal/persona/opts/aprendizado-travando-nao-sei-o-que-vale-a-pena-pagar.webp",
+    "prompt": "Photorealistic photograph: a Brazilian person visibly stuck at this exact obstacle, in front of a screen. The scene must read, at a glance and with no words, as: \"Não sei o que vale a pena pagar\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Serviço feito por mim, sob encomenda",
+    "arquivo": "negocio-oQueVende-servico-feito-por-mim-sob-encomenda.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-servico-feito-por-mim-sob-encomenda.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Serviço feito por mim, sob encomenda\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Produto físico próprio",
+    "arquivo": "negocio-oQueVende-produto-fisico-proprio.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-produto-fisico-proprio.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Produto físico próprio\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Produto de revenda",
+    "arquivo": "negocio-oQueVende-produto-de-revenda.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-produto-de-revenda.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Produto de revenda\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Serviço digital recorrente",
+    "arquivo": "negocio-oQueVende-servico-digital-recorrente.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-servico-digital-recorrente.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Serviço digital recorrente\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Serviço de beleza/estética",
+    "arquivo": "negocio-oQueVende-servico-de-beleza-estetica.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-servico-de-beleza-estetica.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Serviço de beleza/estética\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Serviço pet",
+    "arquivo": "negocio-oQueVende-servico-pet.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-servico-pet.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Serviço pet\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Comida e bebida",
+    "arquivo": "negocio-oQueVende-comida-e-bebida.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-comida-e-bebida.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Comida e bebida\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Imóveis",
+    "arquivo": "negocio-oQueVende-imoveis.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-imoveis.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Imóveis\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Consultoria e assessoria",
+    "arquivo": "negocio-oQueVende-consultoria-e-assessoria.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-consultoria-e-assessoria.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Consultoria e assessoria\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.oQueVende",
+    "rotulo": "Manutenção e reparo",
+    "arquivo": "negocio-oQueVende-manutencao-e-reparo.webp",
+    "destino": "portal/persona/opts/negocio-oQueVende-manutencao-e-reparo.webp",
+    "prompt": "Photorealistic photograph: this Brazilian trade being practised, the work itself in the frame. The scene must read, at a glance and with no words, as: \"Manutenção e reparo\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.canal",
+    "rotulo": "WhatsApp",
+    "arquivo": "negocio-canal-whatsapp.webp",
+    "destino": "portal/persona/opts/negocio-canal-whatsapp.webp",
+    "prompt": "Photorealistic photograph: a real Brazilian sale happening through this channel. The scene must read, at a glance and with no words, as: \"WhatsApp\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.canal",
+    "rotulo": "Instagram (direct)",
+    "arquivo": "negocio-canal-instagram-direct.webp",
+    "destino": "portal/persona/opts/negocio-canal-instagram-direct.webp",
+    "prompt": "Photorealistic photograph: a real Brazilian sale happening through this channel. The scene must read, at a glance and with no words, as: \"Instagram (direct)\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.canal",
+    "rotulo": "Telefone",
+    "arquivo": "negocio-canal-telefone.webp",
+    "destino": "portal/persona/opts/negocio-canal-telefone.webp",
+    "prompt": "Photorealistic photograph: a real Brazilian sale happening through this channel. The scene must read, at a glance and with no words, as: \"Telefone\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.canal",
+    "rotulo": "Indicação de cliente",
+    "arquivo": "negocio-canal-indicacao-de-cliente.webp",
+    "destino": "portal/persona/opts/negocio-canal-indicacao-de-cliente.webp",
+    "prompt": "Photorealistic photograph: a real Brazilian sale happening through this channel. The scene must read, at a glance and with no words, as: \"Indicação de cliente\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.canal",
+    "rotulo": "Google Meu Negócio",
+    "arquivo": "negocio-canal-google-meu-negocio.webp",
+    "destino": "portal/persona/opts/negocio-canal-google-meu-negocio.webp",
+    "prompt": "Photorealistic photograph: a real Brazilian sale happening through this channel. The scene must read, at a glance and with no words, as: \"Google Meu Negócio\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.canal",
+    "rotulo": "LinkedIn",
+    "arquivo": "negocio-canal-linkedin.webp",
+    "destino": "portal/persona/opts/negocio-canal-linkedin.webp",
+    "prompt": "Photorealistic photograph: a real Brazilian sale happening through this channel. The scene must read, at a glance and with no words, as: \"LinkedIn\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.canal",
+    "rotulo": "Feiras e eventos",
+    "arquivo": "negocio-canal-feiras-e-eventos.webp",
+    "destino": "portal/persona/opts/negocio-canal-feiras-e-eventos.webp",
+    "prompt": "Photorealistic photograph: a real Brazilian sale happening through this channel. The scene must read, at a glance and with no words, as: \"Feiras e eventos\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.objecao",
+    "rotulo": "Agora não é um bom momento",
+    "arquivo": "negocio-objecao-agora-nao-e-um-bom-momento.webp",
+    "destino": "portal/persona/opts/negocio-objecao-agora-nao-e-um-bom-momento.webp",
+    "prompt": "Photorealistic photograph: the face and posture of a Brazilian customer at the instant of this hesitation. The scene must read, at a glance and with no words, as: \"Agora não é um bom momento\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.objecao",
+    "rotulo": "Vou pesquisar mais um pouco",
+    "arquivo": "negocio-objecao-vou-pesquisar-mais-um-pouco.webp",
+    "destino": "portal/persona/opts/negocio-objecao-vou-pesquisar-mais-um-pouco.webp",
+    "prompt": "Photorealistic photograph: the face and posture of a Brazilian customer at the instant of this hesitation. The scene must read, at a glance and with no words, as: \"Vou pesquisar mais um pouco\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.objecao",
+    "rotulo": "Isso funciona mesmo para o meu caso?",
+    "arquivo": "negocio-objecao-isso-funciona-mesmo-para-o-meu-caso.webp",
+    "destino": "portal/persona/opts/negocio-objecao-isso-funciona-mesmo-para-o-meu-caso.webp",
+    "prompt": "Photorealistic photograph: the face and posture of a Brazilian customer at the instant of this hesitation. The scene must read, at a glance and with no words, as: \"Isso funciona mesmo para o meu caso?\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.objecao",
+    "rotulo": "Já tentei algo parecido e não deu certo",
+    "arquivo": "negocio-objecao-ja-tentei-algo-parecido-e-nao-deu-certo.webp",
+    "destino": "portal/persona/opts/negocio-objecao-ja-tentei-algo-parecido-e-nao-deu-certo.webp",
+    "prompt": "Photorealistic photograph: the face and posture of a Brazilian customer at the instant of this hesitation. The scene must read, at a glance and with no words, as: \"Já tentei algo parecido e não deu certo\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.ticket",
+    "rotulo": "Até R$ 50",
+    "arquivo": "negocio-ticket-50.webp",
+    "destino": "portal/persona/opts/negocio-ticket-50.webp",
+    "prompt": "Photorealistic photograph: a tasteful still life whose objects imply this price bracket without any figures shown. The scene must read, at a glance and with no words, as: \"Até R$ 50\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.ticket",
+    "rotulo": "R$ 5.000 ou mais",
+    "arquivo": "negocio-ticket-5000.webp",
+    "destino": "portal/persona/opts/negocio-ticket-5000.webp",
+    "prompt": "Photorealistic photograph: a tasteful still life whose objects imply this price bracket without any figures shown. The scene must read, at a glance and with no words, as: \"R$ 5.000 ou mais\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  },
+  {
+    "campo": "negocio.clientesPorMes",
+    "rotulo": "Mais de 100 por mês",
+    "arquivo": "negocio-clientesPorMes-100.webp",
+    "destino": "portal/persona/opts/negocio-clientesPorMes-100.webp",
+    "prompt": "Photorealistic photograph: a Brazilian business at exactly this level of movement and footfall. The scene must read, at a glance and with no words, as: \"Mais de 100 por mês\". Editorial documentary photography, full-frame 35mm, natural available light, shallow depth of field, warm golden key light against cool background, rich colour, filmic grain, sharp on the subject, 4:3 crop with the subject centred. ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no brand marks, no readable screen copy. Screens show only abstract glowing shapes."
+  }
+]
