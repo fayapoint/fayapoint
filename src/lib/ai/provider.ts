@@ -77,23 +77,25 @@ export interface BudgetStatus {
 // VAZIO e o texto fica em `reasoning`. Quem chamar com orçamento apertado
 // recebe string vazia, não erro. Nenhuma chamada abaixo de ~1500 é segura.
 const DEFAULT_MODELS: ModelConfig[] = [
-  // Free tier
+  // ⚠️⚠️ O TIER "FREE" NÃO É MAIS GRÁTIS — e por um tempo não foi nada.
+  //
+  // Medido em 12/08/2026 chamando a OpenRouter direto: `google/gemini-3-flash
+  // -preview:free` e `meta-llama/llama-3.3-70b-instruct:free` devolvem **404**
+  // ("This model is unavailable for free"). O sufixo `:free` foi retirado dos
+  // dois. Quem chamasse com `tier: 'free'` percorria a lista inteira tomando
+  // 404 e acabava caindo no budget — que é o DeepSeek, e ele **levou 52s e
+  // devolveu `content` vazio** na mesma medição. Ou seja: o tier mais barato
+  // era o mais lento e o menos confiável do sistema.
+  //
+  // O de baixo é o MESMO modelo sem o sufixo: 2,4s de ponta a ponta na mesma
+  // medição, resposta completa. Custa $0,50/$3,00 por 1M — não é zero, mas é o
+  // preço de ter uma resposta.
   {
-    id: 'google/gemini-3-flash-preview:free',
-    name: 'Gemini 3 Flash Preview (Free)',
+    id: 'google/gemini-3-flash-preview',
+    name: 'Gemini 3 Flash Preview',
     provider: 'openrouter',
-    costPer1MInput: 0,
-    costPer1MOutput: 0,
-    tier: 'free',
-    maxTokens: 8192,
-    enabled: true,
-  },
-  {
-    id: 'meta-llama/llama-3.3-70b-instruct:free',
-    name: 'Llama 3.3 70B (Free)',
-    provider: 'openrouter',
-    costPer1MInput: 0,
-    costPer1MOutput: 0,
+    costPer1MInput: 0.5,
+    costPer1MOutput: 3,
     tier: 'free',
     maxTokens: 8192,
     enabled: true,
@@ -187,7 +189,11 @@ const DEFAULT_MODELS: ModelConfig[] = [
 ];
 
 const DEFAULT_DAILY_LIMITS: Record<ModelTier, number> = {
-  free: 999,   // Unlimited free
+  // ⚠️ Era 999 ("unlimited free") de quando o tier realmente custava zero. O
+  // `:free` morreu (ver o bloco dos modelos) e o tier agora gasta de verdade,
+  // então precisa de teto como os outros — 999 num tier pago é uma torneira
+  // aberta esperando um laço mal escrito. $2/dia dá ~600 mil tokens de saída.
+  free: 2.0,
   budget: 2.0, // $2/day
   premium: 5.0, // $5/day
 };
@@ -334,7 +340,10 @@ export async function generate(request: AIRequest): Promise<AIResponse> {
   const models = getModelChain(request.model, request.tier);
 
   for (const model of models) {
-    if (!canAfford(model.tier) && model.tier !== 'free') {
+    // ⚠️ A exceção `&& model.tier !== 'free'` saiu junto com o `:free`: ela
+    // existia porque o tier custava zero. Mantê-la agora seria deixar o único
+    // tier sem teto ser um tier que gasta.
+    if (!canAfford(model.tier)) {
       console.log(`[AI] Budget exceeded for ${model.tier}, skipping ${model.name}`);
       fallbacksUsed++;
       continue;
