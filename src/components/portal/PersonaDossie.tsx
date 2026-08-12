@@ -24,7 +24,8 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { RITMOS, TEMPOS, ROTULO_FOTO, TIPOS_FOTO, type Dossie, type DimensaoDossie, type FotoPersona, type TipoFoto } from "@/lib/persona";
-import { artePreset, CAMPOS_COM_ARTE, presetsDe, type Preset } from "@/lib/persona-presets";
+import { artePreset, presetsDe, type Preset } from "@/lib/persona-presets";
+import { temArtePreset } from "@/lib/persona-arte";
 import { cn } from "@/lib/utils";
 
 /**
@@ -68,8 +69,15 @@ const ICONES: Record<string, typeof UserIcon> = {
   camera: Camera,
 };
 
-/** Como cada lacuna é respondida. Sem isto todo campo vira caixa de texto. */
-type Editor =
+/**
+ * Como cada lacuna é respondida. Sem isto todo campo vira caixa de texto.
+ *
+ * ⚠️ Exportado desde 12/08 porque o Console da Persona
+ * (`PersonaConsole.tsx`) responde as MESMAS lacunas numa tela só. Duas cópias
+ * desta tabela é a receita para um campo ganhar editor num lugar e continuar
+ * caixa de texto no outro.
+ */
+export type Editor =
   | { tipo: "texto"; dica?: string }
   | { tipo: "paragrafo"; dica?: string; linhas?: number }
   | { tipo: "itens"; dica?: string; max?: number }
@@ -78,7 +86,7 @@ type Editor =
   | { tipo: "escolha"; opcoes: Record<string, string> }
   | { tipo: "foto"; vaga: TipoFoto };
 
-const EDITORES: Record<string, Editor> = {
+export const EDITORES: Record<string, Editor> = {
   /**
    * ⚠️ Todo campo que aparece em `conhecido` com `campo` PRECISA de editor
    * aqui — sem editor, `Lacuna` devolve `null` e o botão "editar" da linha
@@ -806,7 +814,7 @@ function Prateleira({
       <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-white/35">
         {T("Toque para usar — depois é só editar")}
       </p>
-      <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {visiveis.map((op) => (
           <Ladrilho key={String(op.valor)} campo={campo} op={op} cor={cor} marcado={marcado(op)} onClick={() => escolher(op)} />
         ))}
@@ -838,8 +846,10 @@ function Ladrilho({
   onClick: () => void;
 }) {
   const T = useT();
-  // Só pede a imagem de quem já tem arte no disco — ver `CAMPOS_COM_ARTE`.
-  const [temArte, setTemArte] = useState(CAMPOS_COM_ARTE.has(campo));
+  // Só pede a imagem de quem já tem arte no disco — o manifesto é gerado por
+  // `scripts/persona_arte_manifesto.mjs` e é por ARQUIVO, não por campo,
+  // porque a arte chega em lotes e um campo atravessa vários.
+  const [temArte, setTemArte] = useState(temArtePreset(campo, op.valor));
 
   return (
     <button
@@ -866,16 +876,21 @@ function Ladrilho({
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : null}
-        <span className="absolute inset-0 grid place-items-center text-[19px]" style={{ opacity: temArte ? 0 : 1 }}>
+        {/* A queda sem arte não é mais um emoji miúdo no meio do vazio: emoji
+            grande o bastante para ser lido de relance. Ricardo, 11/08:
+            "não quero emojis pequenos, quero letras mais visíveis". */}
+        <span className="absolute inset-0 grid place-items-center text-[44px] leading-none" style={{ opacity: temArte ? 0 : 1 }}>
           {op.emoji}
         </span>
+        {/* Véu que garante o contraste da legenda por cima da foto. */}
+        {temArte && <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/75 to-transparent" />}
         {marcado && (
           <span className="absolute right-1 top-1 grid h-4 w-4 place-items-center rounded-full" style={{ background: cor }}>
             <Check size={10} className="text-black" />
           </span>
         )}
       </span>
-      <span className="block px-1.5 py-1 text-[10px] font-semibold leading-tight" style={{ color: marcado ? "#fff" : "rgba(255,255,255,.6)" }}>
+      <span className="block px-2 py-1.5 text-[12.5px] font-semibold leading-snug" style={{ color: marcado ? "#fff" : "rgba(255,255,255,.82)" }}>
         {T(op.rotulo)}
       </span>
     </button>

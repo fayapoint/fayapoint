@@ -75,21 +75,15 @@ export function artePreset(campo: string, valor: string | number): string {
 }
 
 /**
- * Campos cuja arte JÁ existe em `/portal/persona/opts/`.
+ * Quem sabe se a arte existe é `lib/persona-arte.ts`, GERADO do disco por
+ * `scripts/persona_arte_manifesto.mjs`.
  *
- * ⚠️ Sem esta lista o componente pedia a imagem de toda opção e colhia um 404
- * por ladrilho — quarenta requisições perdidas e o console cheio de vermelho a
- * cada dimensão aberta. O `onError` funcionava (caía no gradiente), mas erro
- * esperado no console é como alarme que toca sempre: some com o alarme de
- * verdade.
- *
- * **Ao acrescentar arte, acrescente o campo aqui — é o único passo.** O nome do
- * arquivo sai de `artePreset()`.
+ * Aqui existia uma lista escrita à mão, por CAMPO. Ela errava dos dois lados:
+ * campo esquecido = imagem no disco que ninguém via; campo marcado cedo demais
+ * = um 404 por ladrilho, console vermelho, e o alarme de verdade escondido no
+ * meio. Como a arte chega em lotes (o Higgsfield grátis gera uma por vez), a
+ * granularidade certa é o ARQUIVO. **Depois de baixar um lote, rode o script.**
  */
-export const CAMPOS_COM_ARTE = new Set<string>([
-  // As cinco dimensões visuais do construtor já têm arte (industry-*.webp etc.),
-  // mas elas são desenhadas pela `PersonaSection`, não por esta prateleira.
-]);
 
 const p = (emoji: string, rotulo: string, valor?: string | number): Preset => ({
   emoji,

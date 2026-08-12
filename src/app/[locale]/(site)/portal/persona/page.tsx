@@ -3,41 +3,43 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowRight, BookOpen, ImageIcon, Loader2, MessageSquare, Sparkles, Wand2 } from "lucide-react";
+import { Camera, Loader2, Wand2, X } from "lucide-react";
 import { useT } from "@/i18n/dicionario";
-import PersonaDossie, { GaleriaDeFotos } from "@/components/portal/PersonaDossie";
+import PersonaConsole from "@/components/portal/PersonaConsole";
+import { GaleriaDeFotos } from "@/components/portal/PersonaDossie";
 import { PersonaSection } from "@/components/portal/PersonaSection";
 import { getClientAuthHeaders, getClientBearerToken } from "@/lib/client-auth";
 import type { Dossie, FotoPersona } from "@/lib/persona";
 
 /**
- * O Estúdio da Persona — `/portal/persona` (10/08/2026).
+ * O Estúdio da Persona — `/portal/persona`.
  *
- * ## Por que uma página inteira para isto
+ * ## 12/08/2026 — de rolo para console
  *
- * A persona é o insumo de TUDO que o site entrega com a cara da pessoa: o curso
- * personalizado, as imagens do contexto dela, os posts. E morava numa placa
- * angulada de 320px na coluna lateral de uma aba chamada "Perfil Social", com
- * acordeões fechados. Ricardo, em 10/08:
+ * A primeira versão (10/08) já tinha resolvido o problema certo: a persona
+ * ganhou endereço próprio em vez de morar numa placa de 320px dentro de uma
+ * aba. Mas resolveu criando outro: **a página virou um rolo.** Herói alto,
+ * sete acordeões, dossiê aberto passando de 3000px, galeria e construtor visual
+ * embaixo. Ricardo, em 12/08:
  *
- * > *"o que devia ser a parte mais importante do site fica escondida, eu só vi
- * > agora quando cliquei que podia editar"*
+ * > *"a interface (…) fica muito longa (…) e a página não fica gigante para
+ * > baixo, temos marcadores claros de onde estamos"*
  *
- * É a segunda vez que o mesmo diagnóstico aparece — em 03/08 foi o Ateliê, que
- * morava num `<select>` dentro de uma aba. O padrão é sempre o mesmo: a coisa
- * que dá valor ao produto nasce como detalhe de outra tela. A correção também é
- * sempre a mesma: **endereço próprio, largura inteira, e a ação visível sem
- * clique de descoberta.**
+ * A troca: a página **não rola**. Ela é uma tela só — árvore à esquerda,
+ * pergunta no centro, personagem à direita (`PersonaConsole`). O que rola, rola
+ * dentro do seu painel.
  *
- * ## O que esta página faz que a placa não fazia
+ * ## Onde foram parar a galeria e o construtor visual
  *
- * 1. **URL própria** — dá para mandar link, dá para o menu apontar, dá para o
- *    Ateliê trazer a pessoa para cá e devolver.
- * 2. **Largura** — as oito dimensões cabem abertas, com a prateleira de
- *    entradas prontas em ladrilhos ilustrados (`lib/persona-presets.ts`).
- * 3. **Consequência à vista** — o topo diz, em três blocos, o que cada ponto de
- *    confiança muda no que a pessoa recebe. Perfil sem consequência visível é
- *    formulário; com ela, é investimento.
+ * Para dentro de uma camada, aberta pelo botão "Fotos e visual". Não foram
+ * removidos — eles continuam sendo o insumo do rosto nas imagens geradas — mas
+ * empilhados abaixo do console faziam a página voltar a crescer, que é
+ * exatamente o defeito que esta versão existe para consertar.
+ *
+ * ⚠️ O herói explicativo saiu. A consequência ("isto muda os seus cursos, as
+ * suas imagens, o que você publica") virou uma linha no topo do console: quem
+ * chega aqui já clicou para chegar, e três cartões de explicação custavam a
+ * altura de duas perguntas.
  */
 export default function EstudioDaPersonaPage() {
   const T = useT();
@@ -49,6 +51,7 @@ export default function EstudioDaPersonaPage() {
   const [fotos, setFotos] = useState<FotoPersona[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [token, setToken] = useState("");
+  const [visual, setVisual] = useState(false);
 
   useEffect(() => {
     setToken(getClientBearerToken() || "");
@@ -95,120 +98,73 @@ export default function EstudioDaPersonaPage() {
     };
   }, [locale, router, carregarFotos]);
 
-  const confianca = dossie?.confianca ?? 0;
+  // Esc fecha a camada, e o corpo trava enquanto ela está aberta. Camada que
+  // ignora Esc é armadilha de teclado; página que rola atrás dá a impressão de
+  // que o clique vazou.
+  useEffect(() => {
+    if (!visual) return;
+    const aoTeclar = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setVisual(false);
+    };
+    window.addEventListener("keydown", aoTeclar);
+    return () => window.removeEventListener("keydown", aoTeclar);
+  }, [visual]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-24 pt-24 sm:px-6">
-      {/* ═══ O QUE ISTO É, E O QUE MUDA ═══ */}
-      <div className="relative overflow-hidden rounded-3xl border border-amber-400/25 p-5 sm:p-7">
-        {/* eslint-disable-next-line @next/next/no-img-element -- arte de fundo, sem next/image por política do projeto */}
-        <img
-          src="/portal/persona/vidente-hero.webp"
-          alt=""
-          aria-hidden
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-25"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
+    /* `overflow-hidden` aqui é o que cumpre "a página não desce". A rolagem
+       existe, mas dentro dos painéis do console. */
+    <div className="flex h-[100dvh] flex-col overflow-hidden pt-16">
+      <header className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2 sm:px-4">
+        <h1 className="text-[17px] font-black leading-none text-white sm:text-[19px]">
+          {T("O que a FayAI sabe")} <span className="text-amber-400">{T("sobre você")}</span>
+        </h1>
+        <p className="hidden text-[13px] text-white/65 md:block">
+          {T("Cada resposta muda o texto dos seus cursos, os exemplos das aulas e as imagens que geramos.")}
+        </p>
 
-        <div className="relative">
-          <p className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-amber-400">
-            <Sparkles size={11} /> {T("Estúdio da persona")}
-          </p>
-          <h1 className="mt-2 text-2xl font-black leading-tight sm:text-4xl">
-            {T("O que a FayAI sabe")} <span className="text-amber-400">{T("sobre você")}</span>
-          </h1>
-          {/* Parágrafo longo em `text-white/75`, não em `muted`: cinza médio
-              sobre marrom quase preto passa o mínimo de contraste por pouco e
-              cansa em texto corrido. `muted` fica para metadado de uma linha. */}
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/75">
-            {T(
-              "Este é o insumo de tudo que sai com a sua cara. Cada resposta aqui muda o texto dos seus cursos, os exemplos das aulas e as imagens que a gente gera para você. Toque em qualquer dimensão para editar — e use as opções prontas quando não quiser digitar.",
-            )}
-          </p>
-
-          <div className="mt-5 grid gap-2.5 sm:grid-cols-3">
-            <Consequencia
-              icone={<BookOpen size={15} />}
-              titulo="Nos seus cursos"
-              texto="Abertura, exemplo e tarefa reescritos com o seu ramo, o seu ticket e a sua objeção"
-            />
-            <Consequencia
-              icone={<ImageIcon size={15} />}
-              titulo="Nas suas imagens"
-              texto="Cenas do seu contexto e do seu público — e, com as fotos, do seu rosto"
-            />
-            <Consequencia
-              icone={<MessageSquare size={15} />}
-              titulo="No que você publica"
-              texto="Seu tom, seus bordões, sua chamada no fim de cada peça"
-            />
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            <div className="rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-2">
-              <p className="text-[10px] uppercase tracking-wider text-amber-200/70">{T("Confiança")}</p>
-              <p className="text-2xl font-black tabular-nums text-amber-300">
-                {carregando ? "—" : `${confianca}%`}
-              </p>
-            </div>
-            <Link href={`/${locale}/cursos`}>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 px-4 py-2 text-[12.5px] font-extrabold text-black transition-opacity hover:opacity-90">
-                <Wand2 size={14} />
-                {T("Usar isto num curso")}
-                <ArrowRight size={14} />
-              </span>
-            </Link>
-          </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setVisual(true)}
+            className="inline-flex min-h-[38px] cursor-pointer items-center gap-1.5 rounded-xl border border-white/15 bg-white/[0.05] px-3 text-[13px] font-bold text-white transition-colors hover:bg-white/[0.12]"
+          >
+            <Camera size={15} /> {T("Fotos e visual")}
+          </button>
+          <Link href={`/${locale}/cursos`}>
+            <span className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 px-3.5 text-[13px] font-extrabold text-black transition-opacity hover:opacity-90">
+              <Wand2 size={15} /> {T("Usar num curso")}
+            </span>
+          </Link>
         </div>
-      </div>
+      </header>
 
       {carregando ? (
-        <div className="mt-10 flex justify-center py-16">
+        <div className="grid flex-1 place-items-center">
           <Loader2 className="h-6 w-6 animate-spin text-amber-400" />
         </div>
       ) : (
-        /**
-         * Uma coluna só, empilhada.
-         *
-         * ⚠️ Duas colunas foram tentadas e reprovadas duas vezes pelo mesmo
-         * motivo: as peças têm alturas MUITO diferentes (o dossiê aberto passa
-         * de 3000px; a galeria de fotos tem 200px), então qualquer arranjo
-         * lado a lado deixa metade da tela vazia ao lado de uma coluna cheia.
-         * E o construtor visual, espremido em 360px, cortava cada rótulo no
-         * meio da palavra: "Tec", "Ven", "Edu".
-         */
-        <div className="mt-8 space-y-8">
-          {/* Sem título fora do cartão: a placa já traz o próprio cabeçalho
-              ("o que eu sei de você" + a nota de confiança). Dois títulos
-              empilhados criavam duas hierarquias competindo no mesmo bloco. */}
-          <div className="min-w-0">
-            <PersonaDossie
-              dossie={dossie}
-              fotos={fotos}
-              onSalvo={(d) => setDossie(d)}
-              aoRecarregarFotos={carregarFotos}
-              sempreReta
-            />
+        <PersonaConsole dossie={dossie} onSalvo={(d) => setDossie(d)} />
+      )}
+
+      {visual && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-black/80 backdrop-blur-sm" role="dialog" aria-modal="true">
+          <div className="flex shrink-0 items-center gap-3 px-4 py-3">
+            <h2 className="text-[16px] font-black text-white">{T("Fotos e visual")}</h2>
+            <button
+              type="button"
+              onClick={() => setVisual(false)}
+              aria-label={T("Fechar")}
+              className="ml-auto grid h-10 w-10 cursor-pointer place-items-center rounded-xl border border-white/15 text-white hover:bg-white/10"
+            >
+              <X size={18} />
+            </button>
           </div>
-
-          <GaleriaDeFotos fotos={fotos} token={token} aoRecarregar={carregarFotos} />
-
-          <PersonaSection />
+          <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-4 pb-10">
+            <GaleriaDeFotos fotos={fotos} token={token} aoRecarregar={carregarFotos} />
+            <PersonaSection />
+          </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function Consequencia({ icone, titulo, texto }: { icone: React.ReactNode; titulo: string; texto: string }) {
-  const T = useT();
-  return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-      <p className="flex items-center gap-1.5 text-[12px] font-bold text-white">
-        <span className="text-amber-400">{icone}</span>
-        {T(titulo)}
-      </p>
-      <p className="mt-1 text-[11.5px] leading-snug text-muted-foreground">{T(texto)}</p>
     </div>
   );
 }
