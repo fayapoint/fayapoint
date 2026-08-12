@@ -898,8 +898,17 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
                   </Button>
                 </Link>
               ) : (
+                /* ⚠️ Vai para o ESTÚDIO, não escreve aqui. A geração acontecia
+                   nesta página com um `toast` no fim: trinta capítulos, dez
+                   minutos, nada para olhar e nenhuma porta no final. O laço
+                   mudou de casa (`meu/escrevendo`), onde tem palco e leva ao
+                   livro. `gerar()` continua aqui só como retaguarda. */
                 <Button
-                  onClick={gerar}
+                  onClick={() =>
+                    router.push(
+                      `/${locale}/curso/${curso.slug}/meu/escrevendo?pacote=${encodeURIComponent(escolhidas[0] || "escrito")}`,
+                    )
+                  }
                   disabled={total === 0}
                   className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 py-6 text-base font-extrabold text-black hover:opacity-90"
                   size="lg"
