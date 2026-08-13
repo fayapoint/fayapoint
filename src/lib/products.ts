@@ -501,6 +501,17 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function invalidateProductCache(): Promise<void> {
   await invalidateCachePattern('products:*');
   await invalidateCachePattern('product:*');
+  /**
+   * ⚠️ O texto do curso picado em capítulos também é cache de produto.
+   *
+   * `livro:capitulos:*` e `atelie:capitulos:*` guardam o `courseContent` já
+   * dividido, com uma hora de validade (ver as duas rotas do Ateliê). Sem estas
+   * duas linhas, editar um curso no painel deixava o livro do aluno servindo o
+   * texto ANTIGO por até uma hora — e o sintoma seria "editei e não mudou nada",
+   * que manda depurar no lugar errado.
+   */
+  await invalidateCachePattern('livro:capitulos:*');
+  await invalidateCachePattern('atelie:capitulos:*');
 }
 
 // Get products by category

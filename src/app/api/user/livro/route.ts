@@ -7,6 +7,7 @@ import LivroCompartilhado from "@/models/LivroCompartilhado";
 import { getAuthUser } from "@/lib/auth";
 import { getMongoClient } from "@/lib/products";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
+import { getOrSet, CACHE_TTL } from "@/lib/redis";
 
 export const dynamic = "force-dynamic";
 
@@ -29,18 +30,61 @@ export const dynamic = "force-dynamic";
  * link, senão quem já tinha recebido ficaria com um endereço morto.
  */
 
-async function montar(userId: string, courseSlug: string) {
-  const client = await getMongoClient();
-  const produto = await client
-    .db("fayapointProdutos")
-    .collection("products")
-    .findOne(
-      { slug: courseSlug },
-      { projection: { courseContent: 1, name: 1, shortName: 1, thumbnail: 1, level: 1 } }
-    );
-  if (!produto?.courseContent) return null;
+/**
+ * A parte do livro que é IGUAL PARA TODO MUNDO, em cache.
+ *
+ * ⚠️ Esta rota é chamada A CADA 4 SEGUNDOS pelo estúdio de escrita, enquanto o
+ * laço de geração roda (ver `meu/escrevendo/page.tsx`). Sem cache, cada uma
+ * dessas batidas puxava do Mongo os **92 KB de `courseContent`** e picava o
+ * markdown em capítulos de novo — para devolver exatamente o mesmo resultado,
+ * quinze vezes por minuto, enquanto o usuário assiste.
+ *
+ * Medido em produção em 13/08/2026, antes: 12,6s na instância fria e **2,5s em
+ * regime**. Era esse laço que enchia as conexões do Atlas que estouraram o
+ * alerta de "nearing the connection limit" — e era ele que fazia o estúdio
+ * mostrar "0 de 0", porque a tela desenhava antes de a resposta chegar.
+ *
+ * O conteúdo do curso muda quando alguém edita o curso, não a cada 4 segundos.
+ * `COURSE_CONTENT` já existia com uma hora de validade e ninguém usava aqui.
+ *
+ * ⚠️ Só o que é do CURSO entra no cache. A camada do aluno (`UserCourseLayer`)
+ * fica de fora de propósito: ela muda a cada capítulo escrito, e é justamente a
+ * parte que o estúdio está esperando ver mudar.
+ */
+async function capitulosDoCurso(courseSlug: string) {
+  return getOrSet(
+    `livro:capitulos:${courseSlug}`,
+    async () => {
+      const client = await getMongoClient();
+      const produto = await client
+        .db("fayapointProdutos")
+        .collection("products")
+        .findOne(
+          { slug: courseSlug },
+          { projection: { courseContent: 1, name: 1, shortName: 1, thumbnail: 1, level: 1 } }
+        );
+      if (!produto?.courseContent) return null;
 
-  const capitulos = dividirCapitulos(produto.courseContent as string);
+      return {
+        capitulos: dividirCapitulos(produto.courseContent as string),
+        produto: {
+          name: produto.name as string | undefined,
+          shortName: produto.shortName as string | undefined,
+          thumbnail: produto.thumbnail as string | undefined,
+          level: produto.level as string | undefined,
+        },
+      };
+    },
+    CACHE_TTL.COURSE_CONTENT,
+  );
+}
+
+async function montar(userId: string, courseSlug: string) {
+  const doCurso = await capitulosDoCurso(courseSlug);
+  if (!doCurso) return null;
+
+  const { capitulos } = doCurso;
+  const produto = doCurso.produto;
   const camadas = await UserCourseLayer.find({ userId, courseSlug }).select(
     "capitulo tituloCapitulo abertura exemplo tarefa generatedAt"
   );

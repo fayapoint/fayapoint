@@ -15,6 +15,7 @@ import {
 import { getPrecos } from "@/lib/precos-runtime";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
+import { getOrSet, CACHE_TTL } from "@/lib/redis";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { debitar, saldoParaGastar, custoDe, saldoDe, garantirCreditos } from "@/lib/creditos";
@@ -274,17 +275,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const client = await getMongoClient();
-    const produto = await client
-      .db("fayapointProdutos")
-      .collection("products")
-      .findOne({ slug: curso }, { projection: { courseContent: 1, name: 1 } });
-    if (!produto?.courseContent) {
+    /**
+     * ⚠️ Em cache, e o motivo é o laço de escrita.
+     *
+     * Este POST é chamado uma vez POR LOTE — um livro de 16 capítulos em lotes
+     * de 2 são oito chamadas, e cada uma puxava os mesmos **92 KB de
+     * `courseContent`** do Mongo e picava o markdown de novo. Somado ao
+     * `/api/user/livro`, que o estúdio bate a cada 4 segundos, escrever UM
+     * livro fazia dezenas de leituras idênticas de 92 KB em poucos minutos.
+     *
+     * Era esse tráfego que enchia as conexões do Atlas até o alerta de
+     * "nearing the connection limit" em 13/08/2026.
+     *
+     * O conteúdo do curso não muda durante a escrita. A camada do aluno, que
+     * muda, continua vindo direto do banco logo abaixo.
+     */
+    const emCache = await getOrSet(
+      `atelie:capitulos:${curso}`,
+      async () => {
+        const client = await getMongoClient();
+        const produto = await client
+          .db("fayapointProdutos")
+          .collection("products")
+          .findOne({ slug: curso }, { projection: { courseContent: 1, name: 1 } });
+        if (!produto?.courseContent) return null;
+        const texto = sanitizeCourseContent(String(produto.courseContent)).content || "";
+        return { capitulos: dividirCapitulos(texto), nome: (produto.name as string) || curso };
+      },
+      CACHE_TTL.COURSE_CONTENT,
+    );
+
+    if (!emCache) {
       return NextResponse.json({ error: "Curso não encontrado" }, { status: 404 });
     }
 
-    const conteudo = sanitizeCourseContent(String(produto.courseContent)).content || "";
-    const capitulos = dividirCapitulos(conteudo);
+    const produto = { name: emCache.nome };
+    const capitulos = emCache.capitulos;
     if (!capitulos.length) {
       return NextResponse.json({ error: "Este curso ainda não tem capítulos" }, { status: 400 });
     }
