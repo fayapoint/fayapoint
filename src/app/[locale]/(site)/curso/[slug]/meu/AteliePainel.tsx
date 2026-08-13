@@ -385,24 +385,66 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
           O Ateliê continuava sendo uma página de compra depois de o livro
           existir e estar pago: *"entrei e não vi o livro no ateliê e nem na
           minha seção de cursos"*. Quem já tem capítulo escrito precisa
-          encontrar o que é dele no primeiro olhar, não abaixo do orçamento. */}
-      {camada.capitulos > 0 && (
-        <Link
-          href={`/${locale}/curso/${curso.slug}/meu/livro`}
-          className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-amber-400/40 bg-amber-400/[0.09] px-4 py-3.5 transition-colors hover:bg-amber-400/[0.15]"
-        >
-          <BookOpen size={20} className="shrink-0 text-amber-300" />
-          <div className="min-w-0">
-            <p className="text-[15px] font-black leading-tight text-white">{T("O seu livro está pronto para ler")}</p>
-            <p className="text-[12.5px] text-amber-100/70">
-              {camada.capitulos} {T("de")} {orcamento.capitulos} {T("capítulos com a sua cara · compartilhe com quem quiser")}
-            </p>
-          </div>
-          <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-2 text-[13px] font-extrabold text-black">
-            {T("Abrir")} <ArrowRight size={14} />
-          </span>
-        </Link>
-      )}
+          encontrar o que é dele no primeiro olhar, não abaixo do orçamento.
+
+          ⚠️ E ELA PRECISA DIZER A VERDADE. Antes, esta faixa anunciava "O seu
+          livro está pronto para ler" sempre que existisse UM capítulo — o
+          número real ficava embaixo, em cinza, como se fosse detalhe.
+
+          Ricardo, 13/08/2026: *"o livro ficou com 1 capítulo escrito, nunca me
+          foi dito que seria apenas 1, não sei onde consigo que ele continue
+          escrevendo"*. Ele tinha pago 25 créditos por este curso — a compra
+          está gravada em `AtelieConfig.pacotePago` — e a tela dizia "pronto"
+          para 1 de 16, sem nenhuma porta para continuar. Dinheiro parado e
+          nenhum caminho à vista.
+
+          Agora são três estados, e só um deles diz "pronto". */}
+      {camada.capitulos > 0 && (() => {
+        const faltam = Math.max(0, orcamento.capitulos - camada.capitulos);
+        const completo = faltam === 0;
+        // `pacotePago` é o degrau já comprado. Ele é o que separa "amostra" de
+        // "trabalho pago que parou no meio" — e só o segundo pode ser retomado
+        // sem cobrar de novo.
+        const pago = !!orcamento.pacotePago;
+        const interrompido = pago && !completo;
+
+        const destino = interrompido ? "escrevendo" : "livro";
+        const titulo = completo
+          ? T("O seu livro está pronto para ler")
+          : interrompido
+            ? T("A escrita parou no meio — e você já pagou por ela")
+            : T("Você tem uma amostra deste livro");
+        const detalhe = completo
+          ? `${camada.capitulos} ${T("de")} ${orcamento.capitulos} ${T("capítulos · compartilhe com quem quiser")}`
+          : interrompido
+            ? `${camada.capitulos} ${T("de")} ${orcamento.capitulos} ${T("escritos · faltam")} ${faltam}, ${T("sem cobrar de novo")}`
+            : `${camada.capitulos} ${T("de")} ${orcamento.capitulos} ${T("capítulos · o resto ainda não foi escrito")}`;
+        const acao = completo ? T("Abrir") : interrompido ? T("Continuar") : T("Ver");
+
+        return (
+          <Link
+            href={`/${locale}/curso/${curso.slug}/meu/${destino}`}
+            className={`mb-4 flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3.5 transition-colors ${
+              interrompido
+                ? "border-orange-400/50 bg-orange-400/[0.10] hover:bg-orange-400/[0.16]"
+                : "border-amber-400/40 bg-amber-400/[0.09] hover:bg-amber-400/[0.15]"
+            }`}
+          >
+            <BookOpen size={20} className={`shrink-0 ${interrompido ? "text-orange-300" : "text-amber-300"}`} />
+            <div className="min-w-0">
+              <p className="text-[15px] font-black leading-tight text-white">{titulo}</p>
+              <p className={`text-[12.5px] ${interrompido ? "text-orange-100/75" : "text-amber-100/70"}`}>{detalhe}</p>
+            </div>
+            <span
+              className={`ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-[13px] font-extrabold text-black ${
+                interrompido ? "bg-orange-400" : "bg-amber-400"
+              }`}
+            >
+              {acao} <ArrowRight size={14} />
+            </span>
+          </Link>
+        );
+      })()}
 
       <div className="grid gap-6 rounded-3xl border border-amber-400/25 bg-gradient-to-br from-amber-500/[0.09] via-transparent to-violet-500/[0.06] p-5 sm:p-7 md:grid-cols-[150px_1fr]">
         {curso.capa && (
