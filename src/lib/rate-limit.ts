@@ -73,9 +73,21 @@ export async function rateLimit(params: {
   try {
     const count = await comTeto(redis.incr(key));
     if (count === 1) {
-      // Sem `await`: a janela é criada no primeiro pedido dela, e esperar a
-      // confirmação não muda nenhuma decisão desta chamada.
-      redis.expire(key, windowSeconds).catch(() => {});
+      /**
+       * ⚠️ ESTE `await` NÃO PODE SAIR.
+       *
+       * Ele estava solto (`.catch(() => {})`, sem esperar) para poupar uns
+       * milissegundos. Só que isto roda numa edge function: promessa pendente
+       * quando a resposta é enviada pode simplesmente ser descartada. Se o
+       * `EXPIRE` não chega ao Redis, a chave do contador **nunca expira** — e
+       * um contador que só cresce acaba passando do limite para sempre. O
+       * efeito não é lentidão: é o site respondendo 429 a um visitante legítimo
+       * e nunca mais parando.
+       *
+       * O custo é uma ida ao Redis no PRIMEIRO pedido de cada janela por IP,
+       * não em todos.
+       */
+      await comTeto(redis.expire(key, windowSeconds));
     }
 
     const allowed = count <= limit;

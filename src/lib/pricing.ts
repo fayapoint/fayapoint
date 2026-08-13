@@ -1,4 +1,5 @@
 import { Collection, MongoClient } from "mongodb";
+import { OPCOES_MONGO } from "@/lib/mongo-opcoes";
 import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
 
 const DEFAULT_MONGODB_URI = '';
@@ -23,7 +24,7 @@ export async function getMongoClient(): Promise<MongoClient> {
     return cachedClient;
   }
 
-  const client = new MongoClient(MONGODB_URI);
+  const client = new MongoClient(MONGODB_URI, OPCOES_MONGO);
   await client.connect();
   cachedClient = client;
   return client;

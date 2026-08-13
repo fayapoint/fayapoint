@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { OPCOES_MONGO } from '@/lib/mongo-opcoes';
+
 const DB_NAME = 'fayapoint';
 const RAW_URI = process.env.MONGODB_URI || '';
 
@@ -58,6 +60,9 @@ async function dbConnect() {
       bufferCommands: false,
       // Belt AND suspenders: dbName in both the URI and the options
       dbName: DB_NAME,
+      // O teto de conexões. Ver `mongo-opcoes.ts` — sem isto, este pool sozinho
+      // podia abrir 100 conexões das 500 do cluster.
+      ...OPCOES_MONGO,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
