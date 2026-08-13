@@ -8,6 +8,19 @@ import { getAuthUser } from "@/lib/auth";
 import { getMongoClient } from "@/lib/products";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { getOrSet, CACHE_TTL } from "@/lib/redis";
+import AtelieConfig from "@/models/AtelieConfig";
+import {
+  AJUSTES_PADRAO,
+  EXTENSOES,
+  FOCOS,
+  PROFUNDIDADES,
+  TONS_AJUSTE,
+  acharOpcao,
+  normalizarAjustes,
+  type Ajustes,
+} from "@/lib/atelie";
+import { contarPorModelo } from "@/lib/modelos-do-atelie";
+import { NARRADORES } from "@/data/narradores";
 
 export const dynamic = "force-dynamic";
 
@@ -85,8 +98,22 @@ async function montar(userId: string, courseSlug: string) {
 
   const { capitulos } = doCurso;
   const produto = doCurso.produto;
+  /**
+   * ⚠️ `modelUsed` e `personaVersion` entram aqui porque a tela precisa deles.
+   *
+   * Ricardo, 13/08/2026: *"deveria ter inclusive quando clicamos no livro, o
+   * controle do que foi feito e o que podemos mudar, exibindo os modelos a
+   * serem utilizados"*. O dado já existia — `usercourselayers.modelUsed` — e
+   * nunca tinha saído desta rota, então nenhuma tela podia mostrá-lo.
+   *
+   * E ele não é detalhe de bastidor. Os 16 capítulos do `chatgpt-masterclass`
+   * dele foram escritos por **três modelos diferentes** numa mesma sessão
+   * (`~deepseek/deepseek-v4-flash-latest`, `deepseek-v4-flash-0731` e
+   * `deepseek-v4-pro`), porque o provedor escalona sozinho quando um falha.
+   * Isso muda o texto que a pessoa lê. Esconder é decidir por ela.
+   */
   const camadas = await UserCourseLayer.find({ userId, courseSlug }).select(
-    "capitulo tituloCapitulo abertura exemplo tarefa generatedAt"
+    "capitulo tituloCapitulo abertura exemplo tarefa generatedAt modelUsed personaVersion"
   );
   const porIndice = new Map(camadas.map((c) => [c.capitulo, c]));
 
@@ -104,6 +131,14 @@ async function montar(userId: string, courseSlug: string) {
         abertura: camada?.abertura || "",
         exemplo: camada?.exemplo || "",
         tarefa: camada?.tarefa || "",
+        escritoEm: camada?.generatedAt ? new Date(camada.generatedAt).toISOString() : null,
+        modelo: camada?.modelUsed || null,
+        personaVersion: camada?.personaVersion ?? null,
+        // Quantos caracteres tem cada peça — é o que deixa "capítulo curto"
+        // visível sem abrir os dezesseis um por um.
+        tamanho: camada
+          ? (camada.abertura || "").length + (camada.exemplo || "").length + (camada.tarefa || "").length
+          : 0,
       };
     });
 
@@ -135,12 +170,62 @@ export async function GET(request: NextRequest) {
     const livro = await montar(String(user._id), courseSlug);
     if (!livro) return NextResponse.json({ error: "Curso não encontrado" }, { status: 404 });
 
-    const share = await LivroCompartilhado.findOne({ userId: String(user._id), courseSlug });
+    const [share, config] = await Promise.all([
+      LivroCompartilhado.findOne({ userId: String(user._id), courseSlug }),
+      AtelieConfig.findOne({ userId: String(user._id), courseSlug }).lean(),
+    ]);
+
+    /**
+     * A FICHA TÉCNICA DO LIVRO — o "controle do que foi feito" que faltava.
+     *
+     * Três coisas que a tela não tinha como mostrar porque a rota não mandava:
+     *
+     *  1. **Com que ajustes** ele foi escrito (tom, profundidade, tamanho,
+     *     foco). Estavam gravados em `AtelieConfig` e só a rota de escrita
+     *     lia. A pessoa mudava o tom no Ateliê e não tinha onde conferir com
+     *     qual tom o livro que ela já tem foi feito.
+     *  2. **Quem escreveu** cada capítulo — ver `lib/modelos-do-atelie.ts`.
+     *  3. **O que já foi pago**, para a tela poder dizer "continuar" sem
+     *     insinuar cobrança nova.
+     */
+    const ajustes = normalizarAjustes(config as Partial<Ajustes> | null);
 
     return NextResponse.json({
       ...livro,
       autor: user.name || "",
       compartilhado: share ? { ativo: share.ativo, token: share.token, visitas: share.visitas } : null,
+      ajustes: {
+        ...ajustes,
+        // Os rótulos junto do id: a tela não deve ter que reimplementar a
+        // tradução de "espelho" para "Do meu jeito" — e se reimplementasse,
+        // um dia os dois textos discordariam.
+        rotulos: {
+          tom: acharOpcao(TONS_AJUSTE, ajustes.tom, AJUSTES_PADRAO.tom),
+          profundidade: acharOpcao(PROFUNDIDADES, ajustes.profundidade, AJUSTES_PADRAO.profundidade),
+          extensao: acharOpcao(EXTENSOES, ajustes.extensao, AJUSTES_PADRAO.extensao),
+          /**
+           * ⚠️ `foco` é LISTA (até 3), não escolha única — ver `Ajustes`.
+           * Tratá-lo como string mostrava "undefined" na ficha, e um livro sem
+           * foco escolhido (o caso do Ricardo) ficava com um campo vazio sem
+           * explicação. Sem foco tem significado: o livro seguiu só a persona.
+           */
+          foco: (ajustes.foco || []).map((f) => acharOpcao(FOCOS, f, FOCOS[0].id)),
+          narrador: NARRADORES.find((n) => n.id === ajustes.narrador) || null,
+        },
+      },
+      opcoes: { tons: TONS_AJUSTE, profundidades: PROFUNDIDADES, extensoes: EXTENSOES, focos: FOCOS },
+      pacote: config?.pacotePago
+        ? {
+            id: config.pacotePago.id,
+            creditos: config.pacotePago.creditos,
+            pagoEm: config.pacotePago.pagoEm,
+          }
+        : null,
+      /** Quem escreveu, e quantos capítulos cada um. */
+      modelos: contarPorModelo(livro.sumario.map((c) => c.modelo)).map((m) => ({
+        ...m.ficha,
+        capitulos: m.capitulos,
+      })),
     });
   } catch (error) {
     console.error("livro GET error:", error);

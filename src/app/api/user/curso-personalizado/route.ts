@@ -70,7 +70,42 @@ export async function GET(request: NextRequest) {
       // A vitrine mostra saldo, então concede antes de ler — é a leitura do
       // saldo que faz o refill acontecer (não há cron). Ver `lib/creditos.ts`.
       await garantirCreditos(String(user._id));
-      const slugs = [...new Set((user.enrolledCourses || []).filter((c) => c.isActive).map((c) => c.courseSlug))];
+
+      /**
+       * ⚠️ A lista NÃO é a das matrículas ativas. Já foi, e escondia livro pago.
+       *
+       * Medido na conta do Ricardo em 13/08/2026:
+       *
+       *     chatgpt-masterclass  isActive: false   pacotePago: 25 créditos
+       *                          16 capítulos escritos em usercourselayers
+       *
+       * Ele pagou, o livro foi escrito inteiro, e o curso **não aparecia nesta
+       * lista** — porque a matrícula tinha sido desligada em algum momento
+       * depois da compra. A queixa dele foi exatamente essa: *"Na parte dos
+       * meus cursos também não vi o curso"*. O livro existia no banco o tempo
+       * todo; era a porta que tinha sumido.
+       *
+       * O erro de fundo é tratar `enrolledCourses.isActive` como se fosse a
+       * lista de coisas que a pessoa POSSUI. Ela é a lista do que ela pode
+       * LER agora — coisa diferente, e que muda com assinatura, com suporte,
+       * com script de manutenção. Um livro escrito e pago é dela para sempre,
+       * e a única fonte de verdade sobre isso são as duas coleções abaixo.
+       *
+       * Por isso a união dos três conjuntos. As matrículas ativas continuam
+       * mandando em quem PODE começar um livro novo (a portaria do POST cuida
+       * disso); estas duas outras garantem que nada já comprado desapareça.
+       */
+      const matriculados = (user.enrolledCourses || [])
+        .filter((c) => c.isActive)
+        .map((c) => c.courseSlug);
+      const [comLivro, comPacote] = await Promise.all([
+        UserCourseLayer.distinct("courseSlug", { userId: String(user._id) }),
+        AtelieConfig.distinct("courseSlug", {
+          userId: String(user._id),
+          "pacotePago.id": { $exists: true },
+        }),
+      ]);
+      const slugs = [...new Set([...matriculados, ...comLivro, ...comPacote])];
       if (!slugs.length) return NextResponse.json({ cursos: [] });
 
       const client = await getMongoClient();
@@ -248,7 +283,29 @@ export async function POST(request: NextRequest) {
       (c: { courseSlug: string; isActive: boolean }) => c.courseSlug === curso && c.isActive,
     );
     const planoLeTudo = TIER_CONFIGS[resolvePlan(user.subscription?.plan || "free")].limits.unlimited;
-    if (!temNoAcervo && !planoLeTudo && user.role !== "admin") {
+
+    /**
+     * ⚠️ Quem JÁ PAGOU este livro sempre pode terminá-lo.
+     *
+     * Sem esta linha, a matrícula desligando depois da compra prendia o livro
+     * pela metade: a lista do Ateliê passou a mostrar o curso (ver o GET), o
+     * botão "continuar escrevendo" aparecia, e a chamada voltava 403
+     * "ainda não está no seu acervo" — para um livro que a pessoa comprou.
+     * Aconteceu de verdade com o `chatgpt-masterclass` do Ricardo.
+     *
+     * A portaria continua valendo para começar um livro NOVO, que é o gasto
+     * que ela existe para evitar. Terminar o que já foi pago não é gasto novo:
+     * `custoPrevisto` sai zero mais abaixo, porque `pacotePago` já está lá.
+     */
+    const jaComprouEsteCurso = Boolean(
+      await AtelieConfig.exists({
+        userId: String(user._id),
+        courseSlug: curso,
+        "pacotePago.id": { $exists: true },
+      }),
+    );
+
+    if (!temNoAcervo && !planoLeTudo && !jaComprouEsteCurso && user.role !== "admin") {
       return NextResponse.json(
         {
           error:
@@ -342,7 +399,32 @@ export async function POST(request: NextRequest) {
      * punição, e é justamente esse o comportamento que queremos premiar.
      */
     const aulas = capitulos.filter((c) => c.numero !== null);
-    const listaPendente = refazer
+
+    /**
+     * ── REGERAR UM CAPÍTULO SÓ (13/08/2026) ────────────────────────────────
+     *
+     * `{ capitulos: [7] }` reescreve exatamente aqueles índices, mesmo que já
+     * existam e estejam em dia. É o que faz o botão "regerar este" do painel
+     * do livro funcionar.
+     *
+     * Ricardo: *"deveria ter inclusive quando clicamos no livro, o controle do
+     * que foi feito e o que podemos mudar"*. Poder mudar sem poder refazer só
+     * aquele capítulo seria uma promessa vazia: até aqui, mudar o tom obrigava
+     * a refazer o livro inteiro (`refazer: true`) — dezesseis chamadas de
+     * modelo para trocar uma.
+     *
+     * ⚠️ Não cobra de novo em curso já pago: `custoPrevisto` sai zero quando
+     * `pacotePago` existe, e a caixa registradora lá embaixo só roda com
+     * `custoPrevisto > 0`. Num curso ainda NÃO pago, regerar compra o pacote —
+     * o que está certo, é a primeira escrita.
+     */
+    const alvos = Array.isArray(body.capitulos)
+      ? [...new Set((body.capitulos as unknown[]).map(Number).filter(Number.isInteger))]
+      : null;
+
+    const listaPendente = alvos?.length
+      ? aulas.filter((cap) => alvos.includes(cap.indice))
+      : refazer
       ? aulas
       : aulas.filter((cap) => {
           const anterior = jaTem.get(cap.indice);

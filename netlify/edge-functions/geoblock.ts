@@ -113,8 +113,35 @@ const CRAWLER_RANGE_SOURCES = [
 ];
 
 const RANGES_TTL_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Prazo para o Google e a Bing responderem com as faixas de IP.
+ *
+ * ⚠️ Sem isto, um `fetch` pendurado pendura o Googlebot junto.
+ *
+ * Estas cinco buscas acontecem no meio do caminho de quem se diz Googlebot ou
+ * bingbot, e o `Promise.allSettled` só termina quando a ÚLTIMA termina. Sem
+ * prazo, uma dessas URLs lenta segurava a requisição até a borda desistir — e
+ * quem via o erro era o rastreador do Google, na página que a gente quer
+ * indexar. O `isVerifiedCrawlerIp` já sabe cair para `null` ("não consegui
+ * conferir") e a chamadora deixa passar, então perder as faixas é barato:
+ * custa um bot não verificado. Ficar esperando é que era caro.
+ */
+const RANGES_FETCH_TIMEOUT_MS = 3_000;
+
+/**
+ * Quanto esperar antes de tentar de novo quando as cinco buscas falham.
+ *
+ * Sem isto, feed fora do ar significava CINCO buscas externas por requisição
+ * de rastreador, para sempre — `crawlerRanges` continuava `null` e nada
+ * lembrava da tentativa. O intervalo curto mantém a recuperação rápida sem
+ * transformar uma queda do Google numa enxurrada saindo da nossa borda.
+ */
+const RANGES_RETRY_MS = 5 * 60 * 1000;
+
 let crawlerRanges: { v4: Array<[bigint, bigint]>; v6: Array<[bigint, bigint]> } | null = null;
 let rangesFetchedAt = 0;
+let ultimaFalhaEm = 0;
 
 function ipToBigInt(ip: string): { value: bigint; bits: number } | null {
   if (ip.includes(":")) {
@@ -158,10 +185,15 @@ function cidrToRange(cidr: string): { start: bigint; end: bigint; bits: number }
 
 async function loadCrawlerRanges() {
   if (crawlerRanges && Date.now() - rangesFetchedAt < RANGES_TTL_MS) return crawlerRanges;
+  // Falhou há pouco: não repete as cinco buscas agora.
+  if (!crawlerRanges && Date.now() - ultimaFalhaEm < RANGES_RETRY_MS) return null;
+
   const v4: Array<[bigint, bigint]> = [];
   const v6: Array<[bigint, bigint]> = [];
   const results = await Promise.allSettled(
-    CRAWLER_RANGE_SOURCES.map((u) => fetch(u).then((r) => r.json()))
+    CRAWLER_RANGE_SOURCES.map((u) =>
+      fetch(u, { signal: AbortSignal.timeout(RANGES_FETCH_TIMEOUT_MS) }).then((r) => r.json())
+    )
   );
   for (const res of results) {
     if (res.status !== "fulfilled") continue;
@@ -176,6 +208,9 @@ async function loadCrawlerRanges() {
   if (v4.length || v6.length) {
     crawlerRanges = { v4, v6 };
     rangesFetchedAt = Date.now();
+    ultimaFalhaEm = 0;
+  } else {
+    ultimaFalhaEm = Date.now();
   }
   return crawlerRanges;
 }
@@ -312,14 +347,39 @@ export default async (request: Request, context: Context) => {
 
   // =========================================================================
   // 5. ALLOWED - Brazil traffic passes through
+  //
+  // ⚠️ NÃO volte a esperar a resposta aqui. Foi isto que apareceu como
+  // "This edge function has crashed / the edge function timed out".
+  //
+  // A versão anterior fazia:
+  //
+  //     const response = await context.next();
+  //     const newResponse = new Response(response.body, response);
+  //     newResponse.headers.set("x-geo-country", country);
+  //
+  // Três defeitos numa coisa só:
+  //
+  //  1. **O cabeçalho não servia para nada.** O único lugar do site que lê
+  //     `x-geo-country` é `/api/health` — e `/api/health` está em
+  //     `BYPASS_PATHS`, ou seja, sai no passo 1 e nunca chega aqui. O
+  //     cabeçalho era escrito para um leitor que, por construção, não podia
+  //     recebê-lo. (E `/api/health` já tenta antes o
+  //     `x-nf-client-geo-country`, que a própria Netlify entrega.)
+  //
+  //  2. **Custava o site inteiro passando pela borda.** Cada página de HTML —
+  //     a home tem 578 KB — era lida e reembrulhada num `Response` novo.
+  //
+  //  3. **Amarrava o relógio da borda ao servidor.** Esperando aqui, qualquer
+  //     lentidão do origin virava "a função da borda quebrou": a pilha do
+  //     incidente de 13/08/2026 apontava exatamente esta linha. Sem o `await`,
+  //     origin lento continua sendo origin lento — que é a verdade, e que dá
+  //     para consertar no lugar certo.
+  //
+  // Devolver sem valor é o "passe adiante" da Netlify: a resposta vai do
+  // servidor ao visitante sem escala. O bloqueio continua idêntico — quem não
+  // é do Brasil já foi barrado nos passos acima e nunca chega aqui.
   // =========================================================================
-  const response = await context.next();
-
-  // Add country header for downstream middleware
-  const newResponse = new Response(response.body, response);
-  newResponse.headers.set("x-geo-country", country);
-
-  return newResponse;
+  return;
 };
 
 // Return 403 directly - NO redirect, NO page render = minimal bandwidth

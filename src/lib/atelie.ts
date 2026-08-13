@@ -137,7 +137,7 @@ export const AJUSTES_PADRAO: Ajustes = {
 };
 
 /** Um ajuste desconhecido (veio de uma versão antiga da tela) cai no padrão. */
-function acharOpcao(lista: OpcaoAjuste[], id: string, padrao: string): OpcaoAjuste {
+export function acharOpcao(lista: OpcaoAjuste[], id: string, padrao: string): OpcaoAjuste {
   return lista.find((o) => o.id === id) || lista.find((o) => o.id === padrao)!;
 }
 

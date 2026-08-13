@@ -277,6 +277,44 @@ export function paraVitrine(produtos: Product[]): Product[] {
   });
 }
 
+/**
+ * O que NÃO sai do Mongo quando se lê uma LISTA de produtos.
+ *
+ * ⚠️ ISTO DERRUBOU O SITE. Não remova sem medir de novo.
+ *
+ * `paraVitrine` (acima) resolve a fronteira do Client Component — impede que o
+ * texto das aulas seja serializado no HTML público. Mas ele age tarde demais
+ * para o banco: quando ele roda, os megabytes já viajaram do Atlas até a
+ * função, já foram normalizados e já foram gravados no Redis.
+ *
+ * Medido em 13/08/2026 contra a produção, os 22 cursos ativos:
+ *
+ *     sem projeção : 3,99 MB em 41.793 ms
+ *     com projeção : 0,22 MB em  2.580 ms
+ *
+ * Quarenta e dois segundos. A home é ISR de 30 minutos: quando a validade
+ * vence, o primeiro visitante paga essa conta inteira enquanto a `geoblock`
+ * espera na borda — e a borda desiste antes. É exatamente o
+ * "This edge function has crashed / the edge function timed out" que o Ricardo
+ * fotografou, e o mesmo `MongoNetworkTimeoutError` que aparece no log de
+ * `6e18ce3`. Naquele dia a conclusão foi "o teto do pool é menor que o
+ * trabalho". Era verdade, mas incompleta: **o trabalho é que estava errado.**
+ * Nenhuma tela de lista mostra o corpo das aulas.
+ *
+ * Confirmado ao vivo antes do conserto: `GET /api/products?type=course`
+ * respondeu **500 depois de 36.471 ms** em produção.
+ *
+ * ⚠️ É lista de EXCLUSÃO, como a de cima e pelo mesmo motivo: esquecer um campo
+ * custa peso, nunca tela quebrada. E `i18n` fica de FORA desta lista de
+ * propósito — `paraIdioma` precisa dele para servir a vitrine em inglês; são
+ * ~5 KB por curso contra ~280 KB do `courseContent`.
+ *
+ * Quem precisa do corpo do curso lê UM curso: `getProductBySlug`,
+ * `getConteudoTraduzido` ou a rota `/api/courses/[slug]/content`, todas com a
+ * própria projeção. Lá o custo é de um curso, não de vinte e dois.
+ */
+const PROJECAO_DE_LISTA = { courseContent: 0, detailedCurriculum: 0 } as const;
+
 // ---------------------------------------------------------------------------
 // IDIOMA
 // ---------------------------------------------------------------------------
@@ -473,7 +511,7 @@ export async function getAllProducts(options?: {
       }
 
       const products = await collection
-        .find(query)
+        .find(query, { projection: PROJECAO_DE_LISTA })
         .sort(sort)
         .limit(options?.limit || 100)
         .toArray();
@@ -518,10 +556,10 @@ export async function invalidateProductCache(): Promise<void> {
 export async function getProductsByCategory(category: string): Promise<Product[]> {
   const collection = await getProductsCollection();
   const products = await collection
-    .find({ 
+    .find({
       categoryPrimary: category,
       status: 'active'
-    })
+    }, { projection: PROJECAO_DE_LISTA })
     .sort({ 'metrics.students': -1 })
     .toArray();
   
@@ -532,10 +570,10 @@ export async function getProductsByCategory(category: string): Promise<Product[]
 export async function getProductsByTag(tag: string): Promise<Product[]> {
   const collection = await getProductsCollection();
   const products = await collection
-    .find({ 
+    .find({
       tags: tag,
       status: 'active'
-    })
+    }, { projection: PROJECAO_DE_LISTA })
     .sort({ 'metrics.students': -1 })
     .toArray();
   
@@ -570,7 +608,7 @@ export async function getAllCategories(): Promise<Array<{ name: string; count: n
 export async function getFeaturedProducts(limit: number = 3): Promise<Product[]> {
   const collection = await getProductsCollection();
   const products = await collection
-    .find({ status: 'active' })
+    .find({ status: 'active' }, { projection: PROJECAO_DE_LISTA })
     .sort({
       featured: -1,
       featuredOrder: 1,
@@ -604,7 +642,7 @@ export async function searchProducts(query: string, type?: 'course' | 'tool'): P
   }
 
   const products = await collection
-    .find(mongoQuery)
+    .find(mongoQuery, { projection: PROJECAO_DE_LISTA })
     .sort({ 'metrics.students': -1 })
     .toArray();
   
@@ -659,7 +697,7 @@ export async function getRelatedProducts(slug: string, limit: number = 3): Promi
         { categoryPrimary: currentProduct.categoryPrimary },
         { tags: { $in: currentProduct.tags } }
       ]
-    })
+    }, { projection: PROJECAO_DE_LISTA })
     .sort({ 'metrics.students': -1 })
     .limit(limit)
     .toArray();
