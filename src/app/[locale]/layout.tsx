@@ -24,6 +24,7 @@ import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import { UsoTracker } from "@/components/UsoTracker";
 import { routing } from "@/i18n/routing";
+import { CLASSE_DO_CORPO } from "../fontes";
 
 // Analytics IDs
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
@@ -183,6 +184,40 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * ⚠️ O `<html>` E O `<body>` MORAM AQUI, E NÃO EM `app/layout.tsx`. NÃO MOVER.
+ *
+ * Havia um layout raiz acima deste que escrevia `<html lang={await
+ * getLocale()}>`. `getLocale()` lê o pedido — e, no TOPO da árvore, um leitor
+ * de pedido derruba a renderização estática do site INTEIRO: nenhuma página
+ * pode ser gerada no build se o `<html>` que a embrulha só se decide quando o
+ * pedido chega.
+ *
+ * Medido em produção em 13/08/2026, antes desta mudança:
+ *
+ *   - `prerender-manifest.json`: 11 rotas geradas no build, de um site com
+ *     ~40 páginas públicas e 22 cursos. As únicas páginas reais da lista eram
+ *     as três que declaram `dynamic = "force-static"` na mão.
+ *   - Toda resposta de página vinha com `Cache-Control: private, no-cache,
+ *     no-store` e `Cache-Status: "Netlify Durable"; fwd=bypass` — ou seja, o
+ *     CDN não guardava nada e cada visita rodava React + MongoDB + Redis.
+ *   - 50 pedidos simultâneos à home: 45 responderam entre 7s e 12s e **5
+ *     morreram com HTTP 500 aos 36s**, na tela "This edge function has
+ *     crashed — the edge function timed out". O middleware (`src/proxy.ts`) é
+ *     uma edge function da Netlify e embrulha a renderização inteira; quando a
+ *     fila passa do teto, é ele que a Netlify mata.
+ *
+ * Cinquenta pedidos é pouco: uma visita já dispara a página mais os prefetches
+ * RSC. Um rastreador ou um punhado de pessoas ao mesmo tempo tirava o site do
+ * ar. Não era pico de tráfego — era o site inteiro sem cache.
+ *
+ * Aqui embaixo o idioma vem de `params`, que o Next conhece no build via
+ * `generateStaticParams`. O `lang` continua correto em `/en` (que foi o que o
+ * `cdf8ab0` consertou), e as páginas voltam a poder ser estáticas.
+ *
+ * A página `/blocked` vive fora de `[locale]` e por isso tem o seu próprio
+ * layout raiz, em `app/blocked/layout.tsx`.
+ */
 export default async function RootLayout({
   children,
   params,
@@ -224,7 +259,20 @@ export default async function RootLayout({
   };
 
   return (
-    <UserProvider>
+    <html lang={locale} className="dark" suppressHydrationWarning>
+      <body suppressHydrationWarning className={CLASSE_DO_CORPO}>
+        {/* Google Tag Manager (noscript) */}
+        {GTM_ID && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            />
+          </noscript>
+        )}
+        <UserProvider>
       <ServiceCartProvider>
         <PostHogProvider>
         <NextIntlClientProvider locale={locale} messages={messages}>
@@ -314,6 +362,23 @@ export default async function RootLayout({
         </NextIntlClientProvider>
         </PostHogProvider>
       </ServiceCartProvider>
-    </UserProvider>
+        </UserProvider>
+        <Script id="hotmart-checkout" strategy="lazyOnload">
+          {`
+            function importHotmart(){
+              var imported = document.createElement('script');
+              imported.src = 'https://static.hotmart.com/checkout/widget.min.js';
+              document.head.appendChild(imported);
+              var link = document.createElement('link');
+              link.rel = 'stylesheet';
+              link.type = 'text/css';
+              link.href = 'https://static.hotmart.com/css/hotmart-fb.min.css';
+              document.head.appendChild(link);
+            }
+            importHotmart();
+          `}
+        </Script>
+      </body>
+    </html>
   );
 }

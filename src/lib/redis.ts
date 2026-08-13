@@ -11,6 +11,15 @@ const realRedis = isRedisConfigured
   ? new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+      /**
+       * O padrão do cliente é 5 tentativas com espera exponencial
+       * (`exp(i) * 50ms`): ~4,3s de espera SOMADA por comando, antes de
+       * desistir. Numa pane do Upstash isso não é resiliência — é o middleware
+       * inteiro parado enquanto a edge function da Netlify conta o tempo dela.
+       *
+       * Uma repetição cobre o soluço de rede, que é o que repetição resolve.
+       */
+      retry: { retries: 1, backoff: () => 100 },
     })
   : null;
 
