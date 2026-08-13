@@ -49,11 +49,35 @@ const NO_BUILD = {
   maxPoolSize: 20,
   minPoolSize: 0,
   maxIdleTimeMS: 60_000,
-  serverSelectionTimeoutMS: 30_000,
-  socketTimeoutMS: 120_000,
 };
 
-/** No ar: pool pequeno, e falhar rápido em vez de pendurar a tela de alguém. */
+/**
+ * No ar: só o teto do pool. NADA de prazo inventado.
+ *
+ * ⚠️ AQUI EU JÁ DERRUBEI O SITE UMA VEZ. Não repita.
+ *
+ * A primeira versão desta constante trazia `socketTimeoutMS: 20_000` e
+ * `serverSelectionTimeoutMS: 5_000`, escolhidos por parecerem generosos — sem
+ * eu ter medido quanto o trabalho realmente leva. Resultado em produção, em
+ * 13/08/2026, poucos minutos depois do deploy:
+ *
+ *     Duration: 60000 ms
+ *     Redis getOrSet error: MongoNetworkTimeoutError: connection 2 ... timed out
+ *
+ * e a home devolvendo **500 em 5 de 5 pedidos**, com "the edge function timed
+ * out". Medido depois, com o prazo padrão: a PRIMEIRA regeneração de uma página
+ * ISR contra o Mongo leva **30 e poucos segundos** (a home levou 33s; depois
+ * caiu para 0,9s). Com prazo de 20s ela nunca terminava — a página nunca ficava
+ * pronta, e todo pedido seguinte repetia o mesmo erro para sempre.
+ *
+ * **Um teto mais curto que o trabalho não protege: ele transforma "lento" em
+ * "nunca".** E o custo aparece só quando a primeira página vence a validade,
+ * bem depois de o deploy parecer bem-sucedido.
+ *
+ * O que resolvia o problema medido (228 das 500 conexões abertas com o site
+ * parado) era o **teto do pool**, e só ele. Os prazos foram invenção minha em
+ * cima. Ficam os padrões do driver — que funcionavam.
+ */
 const NO_AR = {
   /**
    * Cinco por pool. Uma função serverless atende um pedido por vez, então uma
@@ -68,17 +92,6 @@ const NO_AR = {
 
   /** Conexão parada há 30s volta para o cluster em vez de morrer com a instância. */
   maxIdleTimeMS: 30_000,
-
-  /**
-   * O padrão é 30s. Quando o cluster está sem conexão livre, esse padrão é
-   * exatamente a tela girando: o pedido não é recusado, ele ESPERA. Cinco
-   * segundos ainda é generoso para um cluster que responde em 28ms, e
-   * transforma "o site travou" num erro que dá para tratar.
-   */
-  serverSelectionTimeoutMS: 5_000,
-
-  /** Consulta que passa disso está travada, não lenta. */
-  socketTimeoutMS: 20_000,
 };
 
 export const OPCOES_MONGO = EH_BUILD ? NO_BUILD : NO_AR;
