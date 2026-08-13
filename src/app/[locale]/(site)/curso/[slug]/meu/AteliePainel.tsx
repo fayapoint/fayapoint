@@ -381,6 +381,29 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         <span className="text-amber-400">{T("O seu")}</span>
       </div>
 
+      {/* ⚠️ A PORTA DO LIVRO, e ela vem ANTES de tudo.
+          O Ateliê continuava sendo uma página de compra depois de o livro
+          existir e estar pago: *"entrei e não vi o livro no ateliê e nem na
+          minha seção de cursos"*. Quem já tem capítulo escrito precisa
+          encontrar o que é dele no primeiro olhar, não abaixo do orçamento. */}
+      {camada.capitulos > 0 && (
+        <Link
+          href={`/${locale}/curso/${curso.slug}/meu/livro`}
+          className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-amber-400/40 bg-amber-400/[0.09] px-4 py-3.5 transition-colors hover:bg-amber-400/[0.15]"
+        >
+          <BookOpen size={20} className="shrink-0 text-amber-300" />
+          <div className="min-w-0">
+            <p className="text-[15px] font-black leading-tight text-white">{T("O seu livro está pronto para ler")}</p>
+            <p className="text-[12.5px] text-amber-100/70">
+              {camada.capitulos} {T("de")} {orcamento.capitulos} {T("capítulos com a sua cara · compartilhe com quem quiser")}
+            </p>
+          </div>
+          <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-2 text-[13px] font-extrabold text-black">
+            {T("Abrir")} <ArrowRight size={14} />
+          </span>
+        </Link>
+      )}
+
       <div className="grid gap-6 rounded-3xl border border-amber-400/25 bg-gradient-to-br from-amber-500/[0.09] via-transparent to-violet-500/[0.06] p-5 sm:p-7 md:grid-cols-[150px_1fr]">
         {curso.capa && (
           <div className="relative mx-auto aspect-[720/1040] w-[150px] overflow-hidden rounded-xl shadow-2xl shadow-black/60 md:mx-0">

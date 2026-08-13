@@ -40,7 +40,12 @@ const SISTEMA =
   "(1) português do Brasil, segunda pessoa, falando COM o aluno; " +
   "(2) cite o ramo e a rotina dele de forma concreta — nada de 'sua empresa' genérico; " +
   "(3) não invente fatos sobre ferramentas nem números de mercado; números do exemplo devem ser plausíveis e declarados como exemplo; " +
-  "(4) abertura em até 2 frases, exemplo em até 5 frases, tarefa em 1 frase executável hoje; " +
+  // ⚠️ **O TAMANHO NÃO MORA AQUI.** Ele vem da escada `TAMANHOS` de
+  // `lib/atelie.ts`, que entra como "ajustes deste aluno" e vence qualquer
+  // número escrito antes. Repetir a medida nas duas pontas garante que um dia
+  // a tela prometa um tamanho e o texto saia outro — foi assim que o "padrão
+  // da casa" ficou em dez frases por capítulo sem ninguém decidir isso.
+  "(4) siga à risca o tamanho e a estrutura pedidos nos ajustes do aluno; " +
   "(5) nada de saudação, título ou markdown de cabeçalho — só o texto.";
 
 /**
@@ -113,15 +118,17 @@ export async function escreverCamada({
 
   const pedir = async (reforco: boolean): Promise<CamadaEscrita> => {
     const res = await generate({
-      // Barato primeiro, caro só quando o barato falha — a mesma ordem que o
-      // curso ensina. O tier budget entrega JSON com uma chave vazia em ~13%
-      // dos capítulos mesmo com o reforço no prompt.
-      tier: reforco ? "premium" : "budget",
+      // ⚠️ `free` = Gemini 3 Flash desde 12/08, e a troca vale por três razões
+      // medidas no mesmo dia: o budget é o DeepSeek, que levou **52s** contra
+      // 2,4s do Gemini na mesma chamada; que devolvia JSON com chave vazia em
+      // ~13% dos capítulos; e que gastava metade do orçamento de tokens
+      // raciocinando — era ele quem apertava o texto que o Ricardo achou
+      // pequeno. Um livro de 16 capítulos deixa de levar doze minutos.
+      tier: reforco ? "premium" : "free",
       json: true,
-      // ⚠️ 3000, não 1000: o DeepSeek V4 raciocina antes de responder e o
-      // pensamento sai do mesmo orçamento — apertado, ele devolve `content`
-      // VAZIO sem erro nenhum.
-      maxTokens: 3000,
+      // 4000 (era 3000) porque o texto cresceu: exemplo de 10 a 14 frases e
+      // tarefa em passos não cabem no orçamento antigo sem sair truncados.
+      maxTokens: 4000,
       temperature: 0.7,
       messages: [
         { role: "system", content: SISTEMA },

@@ -95,6 +95,21 @@ export async function GET(request: NextRequest) {
         .lean();
       const pagoPorSlug = new Map(pagos.map((c) => [c.courseSlug, c.pacotePago?.id as IdPacote | undefined]));
 
+      /**
+       * Quantos capítulos JÁ existem escritos por curso.
+       *
+       * ⚠️ É o que dá porta de entrada ao livro. Sem este número a vitrine não
+       * tem como distinguir "curso que você pode personalizar" de "livro que já
+       * é seu, escrito e pago" — e foi assim que o livro sumiu depois de
+       * pronto: *"entrei e não vi o livro no ateliê e nem na minha seção de
+       * cursos"*. Uma agregação, não uma consulta por curso.
+       */
+      const porCurso = await UserCourseLayer.aggregate<{ _id: string; n: number }>([
+        { $match: { userId: String(user._id), courseSlug: { $in: slugs } } },
+        { $group: { _id: "$courseSlug", n: { $sum: 1 } } },
+      ]);
+      const escritosPorSlug = new Map(porCurso.map((c) => [c._id, c.n]));
+
       return NextResponse.json({
         saldo: saldo.total,
         /**
@@ -121,6 +136,8 @@ export async function GET(request: NextRequest) {
             capa: p?.thumbnail || null,
             nivel: p?.level || null,
             capitulos,
+            /** > 0 = já existe livro deste curso, e ele precisa aparecer. */
+            escritos: escritosPorSlug.get(s) || 0,
             pacotePago: pacoteJaPago,
             // O que falta pagar para o degrau de entrada. Zero = já é dele.
             custo: diferencaDePacote(pacoteJaPago, "escrito", precosVitrine.custos),

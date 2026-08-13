@@ -57,6 +57,8 @@ interface CursoVitrine {
   nivel: string | null;
   capitulos: number | null;
   custo: number | null;
+  /** Capítulos JÁ escritos. > 0 = existe livro, e o cartão muda de assunto. */
+  escritos?: number;
 }
 
 interface Resposta {
@@ -259,10 +261,21 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {cursos.map((c) => {
               const podePagar = c.custo != null && (d?.saldo ?? 0) >= c.custo;
+              /**
+               * ⚠️ Curso com livro pronto NÃO é oferta.
+               *
+               * O cartão nasceu para vender a personalização, e continuou
+               * mostrando preço e "dá para fazer" depois de o livro existir e
+               * estar pago — o que fez o livro sumir justamente de quem o
+               * comprou: *"entrei e não vi o livro no ateliê e nem na minha
+               * seção de cursos"*. Quando há capítulo escrito, o cartão troca
+               * de assunto: leva ao livro, não à compra.
+               */
+              const temLivro = (c.escritos || 0) > 0;
               return (
                 <Link
                   key={c.slug}
-                  href={`/curso/${c.slug}/meu`}
+                  href={temLivro ? `/curso/${c.slug}/meu/livro` : `/curso/${c.slug}/meu`}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-secondary/20 transition-all hover:-translate-y-0.5 hover:border-amber-400/50"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
@@ -280,9 +293,14 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 to-transparent" />
-                    {c.nivel && (
+                    {c.nivel && !temLivro && (
                       <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white backdrop-blur">
                         {T(c.nivel)}
+                      </span>
+                    )}
+                    {temLivro && (
+                      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-black">
+                        <BookOpen size={10} /> {T("o seu livro")}
                       </span>
                     )}
                     <h3 className="absolute inset-x-3 bottom-2.5 line-clamp-2 text-sm font-bold leading-tight text-white">
@@ -292,27 +310,41 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
 
                   <div className="flex flex-1 items-center justify-between gap-3 p-3.5">
                     <div className="min-w-0">
-                      <div className="flex items-baseline gap-1">
-                        <Coins size={13} className="shrink-0 text-amber-400" />
-                        <span className="text-lg font-extrabold tabular-nums text-amber-300">
-                          {c.custo ?? "—"}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-muted-foreground">
-                        {c.capitulos
-                          ? `${c.capitulos} ${T("capítulos")}`
-                          : T("sob consulta")}
-                      </p>
+                      {temLivro ? (
+                        <>
+                          <p className="text-lg font-extrabold tabular-nums text-amber-300">
+                            {c.escritos}
+                            {c.capitulos ? <span className="text-muted-foreground">/{c.capitulos}</span> : null}
+                          </p>
+                          <p className="text-[11px] text-muted-foreground">
+                            {T("capítulos com a sua cara")}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-baseline gap-1">
+                            <Coins size={13} className="shrink-0 text-amber-400" />
+                            <span className="text-lg font-extrabold tabular-nums text-amber-300">
+                              {c.custo ?? "—"}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-muted-foreground">
+                            {c.capitulos ? `${c.capitulos} ${T("capítulos")}` : T("sob consulta")}
+                          </p>
+                        </>
+                      )}
                     </div>
                     <span
                       className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
-                        podePagar
-                          ? "bg-amber-500/15 text-amber-200 group-hover:bg-amber-500/25"
-                          : "bg-secondary text-muted-foreground"
+                        temLivro
+                          ? "bg-amber-400 text-black group-hover:opacity-90"
+                          : podePagar
+                            ? "bg-amber-500/15 text-amber-200 group-hover:bg-amber-500/25"
+                            : "bg-secondary text-muted-foreground"
                       }`}
                     >
-                      {podePagar ? <Check size={12} /> : <Coins size={12} />}
-                      {podePagar ? T("dá para fazer") : T("ver")}
+                      {temLivro ? <BookOpen size={12} /> : podePagar ? <Check size={12} /> : <Coins size={12} />}
+                      {temLivro ? T("abrir o livro") : podePagar ? T("dá para fazer") : T("ver")}
                       <ArrowRight size={12} />
                     </span>
                   </div>

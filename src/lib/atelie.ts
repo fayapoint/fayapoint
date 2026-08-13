@@ -96,9 +96,27 @@ export const PROFUNDIDADES: OpcaoAjuste[] = [
 ];
 
 export const EXTENSOES: OpcaoAjuste[] = [
-  { id: 'curta', rotulo: 'Enxuta', emoji: '⚡', descricao: 'O essencial, para ler no intervalo', instrucao: 'Camada curta: abertura de 1 frase, exemplo de até 3 frases, tarefa de 1 linha.' },
-  { id: 'media', rotulo: 'Na medida', emoji: '📄', descricao: 'O padrão da casa', instrucao: 'Camada padrão: abertura de até 2 frases, exemplo de até 5 frases, tarefa de 1 frase.' },
-  { id: 'longa', rotulo: 'Detalhada', emoji: '📚', descricao: 'Com mais contexto e mais exemplo', instrucao: 'Camada detalhada: abertura de até 3 frases, exemplo de até 8 frases com números concretos, tarefa com 2 passos.' },
+  /**
+   * ⚠️ A ESCADA INTEIRA SUBIU UM DEGRAU EM 12/08/2026 — e é aqui que o tamanho
+   * do livro se decide, não no prompt do sistema.
+   *
+   * O padrão da casa era "abertura de até 2 frases, exemplo de até 5, tarefa de
+   * 1 frase": dez frases por capítulo. Num curso de 16, tudo que o aluno paga
+   * para ter de si mesmo cabia em duas páginas. Ricardo, com o livro pronto na
+   * frente: *"a versão que eu vi parecia muito pequena"*.
+   *
+   * O que era "detalhada" virou o padrão, e cada degrau ganhou o que faltava
+   * para o texto ser material de trabalho: número no exemplo, antes/depois, e
+   * tarefa em passos — um parágrafo bonito sobre o ramo dele não se usa na
+   * segunda-feira.
+   *
+   * ⚠️ **Não repita estes números no prompt do sistema.** Eles entram como
+   * "ajustes deste aluno" e vencem o que vier antes; ter o tamanho em dois
+   * lugares é a receita para a tela prometer um tamanho e o texto sair outro.
+   */
+  { id: 'curta', rotulo: 'Enxuta', emoji: '⚡', descricao: 'O essencial, para ler no intervalo', instrucao: 'Camada curta: abertura de 2 frases, exemplo de até 5 frases com pelo menos um número concreto, tarefa em 2 passos numerados.' },
+  { id: 'media', rotulo: 'Na medida', emoji: '📄', descricao: 'O padrão da casa', instrucao: 'Camada padrão: abertura de 3 a 4 frases; exemplo de 8 a 10 frases, com um caso concreto do ramo dele, números plausíveis declarados como exemplo e o antes/depois; tarefa em 3 passos numerados (use "1)", "2)", "3)" com quebra de linha entre eles).' },
+  { id: 'longa', rotulo: 'Detalhada', emoji: '📚', descricao: 'Com mais contexto e mais exemplo', instrucao: 'Camada detalhada: abertura de 4 a 5 frases; exemplo de 12 a 16 frases com o caso desenvolvido do começo ao fim, números plausíveis declarados como exemplo, o antes/depois e o erro mais comum; tarefa em 4 a 6 passos numerados (use "1)", "2)", "3)" com quebra de linha), terminando por como ele sabe que deu certo.' },
 ];
 
 export const FOCOS: OpcaoAjuste[] = [
