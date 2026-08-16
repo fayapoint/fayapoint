@@ -67,7 +67,7 @@ const SISTEMA = `Você é editor de cursos técnicos em português do Brasil. Su
 REGRAS INVIOLÁVEIS:
 1. PRESERVE o conteúdo factual do original. Toda afirmação técnica, número, nome de ferramenta e exemplo do texto original deve sobreviver, realocado na seção certa. Você pode reescrever a FRASE; não pode trocar o FATO.
 2. NÃO INVENTE. Nenhum fato, número, preço, data, nome de modelo ou funcionalidade que não esteja no texto original. Se uma seção do gabarito não tem matéria-prima no original, construa-a a partir do que o original JÁ afirma — não de conhecimento externo.
-3. Os marcadores {{fact:alguma-coisa}} são variáveis do sistema. Copie-os EXATAMENTE como aparecem, na mesma quantidade. Jamais substitua por um nome de modelo.
+3. Os marcadores §F0§, §F1§, §F2§… são âncoras do sistema. Copie-os EXATAMENTE como aparecem, na mesma quantidade e sem alterar o número. Nunca crie âncoras novas, nunca apague uma existente, nunca escreva nada parecido com §…§ por conta própria.
 4. Mantenha a primeira linha (o título "# ...") EXATAMENTE como veio.
 5. Português do Brasil, segunda pessoa, tom de quem conversa. Sem jargão de consultoria.
 
@@ -85,8 +85,50 @@ ENTRE "## Erros Comuns" e "## Exercício Prático", insira UMA linha de citaçã
 > **Dica Pro:** <uma dica prática e específica deste capítulo, 2 a 3 frases>
 
 PROIBIDO: cabeçalhos "###", tabelas, blocos de código com crase tripla, imagens markdown, saudação, comentário sobre a tarefa.
-TAMANHO ALVO: cerca de 8000 caracteres no total.
-DEVOLVA SÓ O MARKDOWN DO CAPÍTULO.`;
+TAMANHO: nunca devolva menos texto do que recebeu. O alvo é cerca de 8000 caracteres, e capítulos maiores que isso devem CRESCER, não encolher. Você está reorganizando e completando, jamais resumindo.
+DEVOLVA SÓ O MARKDOWN DO CAPÍTULO, do "# " até o fim do Resumo. Não pare no meio.`;
+
+/**
+ * ── AS ÂNCORAS (16/08/2026) ─────────────────────────────────────────────
+ *
+ * A primeira versão pedia ao modelo, em português, para preservar os
+ * `{{fact:}}`. Ele não preservou, e falhou nas duas direções ao mesmo tempo:
+ *
+ *   - **inventou** dez tokens que não existem, num capítulo só
+ *     (`{{fact:Marina}}`, `{{fact:Magalu}}`, `{{fact:Dafiti}}`) — porque a
+ *     sintaxe `{{fact:nome}}` PARECE um lugar para colocar nomes próprios;
+ *   - **apagou** três dos nove `{{fact:openai-flagship}}` de outro capítulo.
+ *
+ * A causa é a própria forma do token: ele se parece com conteúdo. Trocá-lo por
+ * uma âncora opaca (`§F3§`) tira a semântica que convidava o modelo a
+ * "colaborar" — não há nome dentro dela para ele querer completar.
+ *
+ * ⚠️ A verificação continua depois de destravar. Máscara reduz a chance; só a
+ * conferência garante.
+ */
+function mascarar(texto: string): { mascarado: string; mapa: string[] } {
+  const mapa: string[] = [];
+  const mascarado = texto.replace(/\{\{fact:[^}]+\}\}/g, (m) => {
+    // O mesmo fato repetido reusa a MESMA âncora: nove ocorrências de
+    // `openai-flagship` viram nove `§F0§`, e não `§F0§`…`§F8§`. Assim o modelo
+    // vê repetição onde há repetição, que é o que o texto original diz.
+    let i = mapa.indexOf(m);
+    if (i < 0) i = mapa.push(m) - 1;
+    return `§F${i}§`;
+  });
+  return { mascarado, mapa };
+}
+
+function desmascarar(texto: string, mapa: string[]): string {
+  return texto.replace(/§F(\d+)§/g, (inteiro, n) => mapa[Number(n)] ?? inteiro);
+}
+
+/** Âncoras que o modelo inventou e que não existem no mapa. */
+function ancorasInventadas(saida: string, mapa: string[]): string[] {
+  return [...new Set(saida.match(/§F\d+§/g) || [])].filter(
+    (a) => mapa[Number(a.slice(2, -1))] === undefined,
+  );
+}
 
 function capitulos(markdown: string) {
   return markdown
@@ -111,13 +153,26 @@ function reprovar(original: string, saida: string): string | null {
 
   if (!/^>\s*\*\*Dica Pro:/im.test(saida)) return "sem a Dica Pro";
 
-  // ⚠️ A checagem que mais importa. Um `{{fact:}}` perdido congela no texto uma
-  // informação que existe para não congelar.
-  const antes = tokensDeFato(original);
-  const depois = tokensDeFato(saida);
-  if (antes.join("|") !== depois.join("|")) {
-    return `os {{fact:}} mudaram — antes [${antes.join(", ")}] depois [${depois.join(", ")}]`;
-  }
+  /**
+   * ⚠️ Compara o CONJUNTO de fatos, não a contagem — e a diferença foi medida.
+   *
+   * A primeira versão comparava multiconjuntos e reprovou seis capítulos por
+   * "os {{fact:}} mudaram": 3 `claude-flagship` viraram 8, 3 `openai-flagship`
+   * viraram 9. Isso não é erro. O capítulo cresceu de 5.900 para 10.200
+   * caracteres, e um texto maior cita o modelo mais vezes — cada citação
+   * resolvendo para o mesmo fato, que é exatamente o que o token existe para
+   * fazer. Reprovar ali era exigir que o texto crescesse sem falar mais do
+   * assunto do capítulo.
+   *
+   * O que continua sendo defeito, e continua reprovando:
+   *   - **fato que SUMIU** — a informação deixou de ser dita (aqui);
+   *   - **âncora inventada** — token que não existe no mapa (em
+   *     `ancorasInventadas`, antes de destravar, e determinístico).
+   */
+  const antes = new Set(tokensDeFato(original));
+  const depois = new Set(tokensDeFato(saida));
+  const sumiram = [...antes].filter((f) => !depois.has(f));
+  if (sumiram.length) return `perdeu os fatos: ${sumiram.join(", ")}`;
 
   if (/^###\s/m.test(saida)) return "usou cabeçalho ###";
   if (/```/.test(saida)) return "usou bloco de código";
@@ -129,32 +184,63 @@ function reprovar(original: string, saida: string): string | null {
   return null;
 }
 
+/** O que reprovou a tentativa anterior — vira instrução na próxima. */
+let motivoAnterior = "";
+
 async function padronizarCapitulo(corpo: string, nomeDoCurso: string, tentativa = 0): Promise<string> {
+  const { mascarado, mapa } = mascarar(corpo);
+
   const res = await generate({
     tier: "free",
-    maxTokens: 8000,
+    // ⚠️ 14000, não 8000. O Gemini gasta parte do orçamento raciocinando, e um
+    // capítulo de 9.000 caracteres que precisa CRESCER não cabia — a saída
+    // vinha truncada no meio, sem erro, e caía na reprovação genérica de
+    // "faltam seções" (que era o sintoma, não a causa).
+    maxTokens: 14000,
     temperature: 0.4,
     messages: [
       { role: "system", content: SISTEMA },
       {
         role: "user",
         content:
-          `CURSO: ${nomeDoCurso}\n\nCAPÍTULO ORIGINAL:\n\n${corpo}\n\n` +
-          `Reorganize este capítulo no gabarito. Preserve todo fato e todo {{fact:}}.` +
-          (tentativa > 0 ? `\n\nATENÇÃO: a tentativa anterior foi reprovada. Siga o gabarito à risca.` : ""),
+          `CURSO: ${nomeDoCurso}
+
+CAPÍTULO ORIGINAL (${corpo.length} caracteres):
+
+${mascarado}
+
+` +
+          `Reorganize no gabarito. O resultado deve ter NO MÍNIMO ${corpo.length} caracteres.` +
+          (mapa.length
+            ? ` Há ${mapa.length} âncora(s) distinta(s) neste capítulo (${mapa.map((_, i) => `§F${i}§`).join(", ")}); todas devem aparecer no resultado.`
+            : " Este capítulo não tem âncoras — não invente nenhuma.") +
+          (tentativa > 0 ? `
+
+ATENÇÃO: a tentativa anterior foi reprovada por: ${motivoAnterior}. Corrija exatamente isso.` : ""),
       },
     ],
   });
-  const saida = String(res.content || "")
+
+  const bruto = String(res.content || "")
     .trim()
     .replace(/^```(?:markdown|md)?\s*/i, "")
     .replace(/```\s*$/, "")
     .trim();
 
-  const erro = reprovar(corpo, saida);
+  const inventadas = ancorasInventadas(bruto, mapa);
+  const saida = desmascarar(bruto, mapa);
+
+  const erro = inventadas.length
+    ? `inventou âncoras inexistentes: ${inventadas.join(", ")}`
+    : reprovar(corpo, saida);
+
   if (erro) {
-    if (tentativa >= 1) throw new Error(erro);
-    console.log(`      ↻ reprovado (${erro}) — refazendo`);
+    if (tentativa >= 2) {
+      throw new Error(`${erro}${bruto ? "" : " (o modelo devolveu vazio)"}`);
+    }
+    console.log(`
+      ↻ ${erro} — refazendo`);
+    motivoAnterior = erro;
     return padronizarCapitulo(corpo, nomeDoCurso, tentativa + 1);
   }
   return saida;
