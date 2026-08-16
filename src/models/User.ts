@@ -270,6 +270,8 @@ export interface IUser extends Document {
       missao?: string;
       valores?: string[];
       site?: string;
+      /** 'masculino' | 'feminino' | 'neutro' — ver `TRATAMENTOS` em `lib/persona.ts`. */
+      tratamento?: string;
     };
     voz?: {
       emoji?: number;
@@ -607,6 +609,18 @@ const UserSchema = new Schema<IUser>({
       missao: { type: String, default: '' },
       valores: [{ type: String }],
       site: { type: String, default: '' },
+      /**
+       * ⚠️ Sem esta linha o campo NÃO EXISTE. O Mongoose descarta em silêncio o
+       * que não está declarado: a tela salva, mostra "Anotado ✨", e o dado some
+       * — foi o que aconteceu com `socialPersona.negocio` por uma semana em
+       * agosto. Ver `reference_mongoose_campo_fantasma`.
+       *
+       * Sem `default`, de propósito: 'não respondeu' e 'pediu neutro' precisam
+       * ser distinguíveis. `blocoDePersona` trata ausência como neutro na hora
+       * de escrever, mas o console precisa saber que a pergunta ainda está
+       * aberta para continuar cobrando.
+       */
+      tratamento: { type: String },
     },
     voz: {
       emoji: { type: Number },

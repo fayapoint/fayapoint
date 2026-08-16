@@ -40,6 +40,24 @@ const SISTEMA =
   "(1) português do Brasil, segunda pessoa, falando COM o aluno; " +
   "(2) cite o ramo e a rotina dele de forma concreta — nada de 'sua empresa' genérico; " +
   "(3) não invente fatos sobre ferramentas nem números de mercado; números do exemplo devem ser plausíveis e declarados como exemplo; " +
+  /**
+   * ── A REGRA 3B, DE 16/08/2026 ────────────────────────────────────────────
+   *
+   * Ricardo: *"num momento ele me chamou de mulher de aproximadamente 35 anos"*.
+   *
+   * O conserto principal é estrutural e mora em `gruposDePrompt`: o público
+   * deixou de morar dentro do bloco do aluno. Esta regra é o cinto de segunda
+   * volta — porque a estrutura organiza o que o modelo LÊ, e a regra diz o que
+   * ele NÃO PODE ESCREVER. Custa 40 tokens e evita a única falha deste produto
+   * que faz alguém fechar a página e não voltar.
+   *
+   * ⚠️ Ela nomeia os quatro traços concretos (gênero, idade, profissão, dores).
+   * "Não confunda o aluno com o público" é abstrato demais para um modelo
+   * pequeno; "não escreva que ele é uma mulher de 35 anos" não é.
+   */
+  "(3b) IDENTIDADE — o aluno e o público do aluno são pessoas DIFERENTES. " +
+  "Nunca atribua ao aluno o gênero, a idade, a profissão ou as dores que estiverem descritos no bloco do PÚBLICO. " +
+  "Se o gênero ou a idade do aluno não estiverem declarados no bloco do ALUNO, escreva sem citar nenhum dos dois — jamais suponha; " +
   // ⚠️ **O TAMANHO NÃO MORA AQUI.** Ele vem da escada `TAMANHOS` de
   // `lib/atelie.ts`, que entra como "ajustes deste aluno" e vence qualquer
   // número escrito antes. Repetir a medida nas duas pontas garante que um dia
@@ -90,6 +108,7 @@ export interface CamadaEscrita {
  */
 export async function escreverCamada({
   persona,
+  nomeDoAluno,
   nomeDoCurso,
   numero,
   titulo,
@@ -97,6 +116,14 @@ export async function escreverCamada({
   ajustes,
 }: {
   persona: PersonaProfunda;
+  /**
+   * O nome de conta do aluno. Vai como primeira linha do bloco ALUNO.
+   *
+   * ⚠️ Não é enfeite: sem nome, a descrição mais concreta de uma pessoa em todo
+   * o prompt era a do público — e o modelo escreve sobre quem ele consegue
+   * enxergar. Um nome próprio no topo do bloco certo ancora o "você".
+   */
+  nomeDoAluno?: string;
   nomeDoCurso: string;
   numero: number;
   titulo: string;
@@ -113,11 +140,21 @@ export async function escreverCamada({
    */
   ajustes?: Ajustes;
 }): Promise<CamadaEscrita> {
-  const contexto = blocoDePersona(persona, "curso");
-  const comoEscrever = ajustes ? instrucoesDeAjuste(ajustes) : "";
+  const contexto = blocoDePersona(persona, "curso", { nome: nomeDoAluno });
+  const comoEscrever = ajustes ? instrucoesDeAjuste(ajustes, persona.voz?.emoji) : "";
+  /**
+   * O modelo que ESTE aluno escolheu para ESTE curso, se escolheu.
+   *
+   * `generate` trata `model` como preferência, não como ordem: ele entra na
+   * frente da corrente e o resto continua atrás como rede. É a semântica certa
+   * — a escolha do aluno é respeitada, e uma indisponibilidade da OpenRouter
+   * não vira um livro que não escreve.
+   */
+  const preferido = ajustes?.modelo && ajustes.modelo !== "auto" ? ajustes.modelo : undefined;
 
   const pedir = async (reforco: boolean): Promise<CamadaEscrita> => {
     const res = await generate({
+      model: reforco ? undefined : preferido,
       // ⚠️ `free` = Gemini 3 Flash desde 12/08, e a troca vale por três razões
       // medidas no mesmo dia: o budget é o DeepSeek, que levou **52s** contra
       // 2,4s do Gemini na mesma chamada; que devolvia JSON com chave vazia em

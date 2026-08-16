@@ -69,6 +69,28 @@ export interface Ajustes {
   /** Até 3 — acima disso o prompt perde foco e todos os pesos se anulam. */
   foco: string[];
   narrador: string;
+  /**
+   * ── OS DOIS AJUSTES DE 16/08/2026 ──────────────────────────────────────
+   *
+   * Ricardo: *"a escolha do modelo utilizado entre outras opções que podem
+   * estar disponíveis, como a presença de emojis e sobre profundidade das
+   * explicações"*.
+   *
+   * `emojis` porque era o único traço de voz que o foco `curso` jogava fora:
+   * `blocoDePersona(p, 'curso')` pula o bloco inteiro da voz, então o controle
+   * de emoji da persona — que existe e a pessoa mexeu — não chegava ao livro.
+   * O resultado ficava por conta do humor do modelo, e variava entre capítulos.
+   *
+   * `modelo` porque `usercourselayers.modelUsed` já provava que três modelos
+   * diferentes escreveram o mesmo livro sem ninguém escolher. Mostrar quem
+   * escreveu sem deixar escolher é meia informação.
+   *
+   * ⚠️ Ambos são opcionais no tipo porque `AtelieConfig` antigos não os têm.
+   * `normalizarAjustes` garante o valor; nunca leia estes campos direto.
+   */
+  emojis?: string;
+  /** Um id de `MODELOS_DO_ATELIE`, ou `'auto'` (a corrente decide). */
+  modelo?: string;
 }
 
 export interface OpcaoAjuste {
@@ -89,10 +111,85 @@ export const TONS_AJUSTE: OpcaoAjuste[] = [
   { id: 'analitico', rotulo: 'Analítico', emoji: '📊', descricao: 'Números e critério antes da opinião', instrucao: 'Priorize números, critérios de decisão e comparações antes de qualquer opinião.' },
 ];
 
+/**
+ * ⚠️ **VIROU UMA ESCALA DE CINCO EM 16/08/2026 — e as pontas são extremas de
+ * propósito.**
+ *
+ * Ricardo: *"sobre profundidade das explicações, que podemos dar respostas
+ * diretas ou explicarmos todo o conceito por trás, mudando drasticamente o
+ * approach de cada curso"*.
+ *
+ * Os três degraus antigos (`pratico`, `equilibrado`, `fundo`) descreviam a
+ * mesma aula com três dosagens de "porquê" — a diferença entre eles cabia numa
+ * frase, e um controle cuja ponta esquerda é parecida com a ponta direita não é
+ * um controle, é um enfeite. Ricardo pediu *drasticamente*, e drasticamente
+ * significa que `resposta` e `dominio` precisam produzir textos que ninguém
+ * confundiria como sendo do mesmo curso.
+ *
+ * Por isso as instruções novas não pedem "mais" ou "menos" profundidade: pedem
+ * **formas diferentes**. `resposta` proíbe explicar; `dominio` obriga a contar
+ * de onde a ideia veio e onde ela quebra. Os três do meio ficaram como estavam
+ * — livros já escritos apontam para eles, e mudar o significado de um id que
+ * está gravado no banco reescreveria o passado sem avisar.
+ */
 export const PROFUNDIDADES: OpcaoAjuste[] = [
+  {
+    id: 'resposta',
+    rotulo: 'Só a resposta',
+    emoji: '⚡',
+    descricao: 'O que fazer, sem uma linha de teoria',
+    /**
+     * ⚠️ **Ela NÃO fala de tamanho, e a primeira versão falava.**
+     *
+     * O texto original terminava em "se uma frase pode ser cortada sem mudar o
+     * que ele vai fazer, corte" — e isso brigava de frente com a escada de
+     * `EXTENSOES`, que na mesma lista manda "exemplo de 8 a 10 frases". Duas
+     * instruções numeradas, contraditórias, e o modelo obedecendo a que
+     * quisesse: é a mesma armadilha que a nota de `EXTENSOES` descreve, de ter
+     * o tamanho decidido em dois lugares.
+     *
+     * Os dois eixos são independentes: **profundidade decide o QUE entra,
+     * extensão decide QUANTO**. Aqui o espaço que sobra vai para mais passos,
+     * nunca para explicação.
+     */
+    instrucao:
+      'PROIBIDO explicar por quê. Todo o espaço vai para a ação: o que fazer, com que ferramenta, em que ordem, com o que clicar. Nada de contexto, nada de história, nada de justificativa teórica. Se sobrar espaço, gaste em MAIS passos e mais detalhe de execução — nunca em explicação.',
+  },
   { id: 'pratico', rotulo: 'Mão na massa', emoji: '🛠️', descricao: 'O que fazer, na ordem', instrucao: 'Foque no passo a passo executável; teoria só quando muda a execução.' },
   { id: 'equilibrado', rotulo: 'Equilibrado', emoji: '⚖️', descricao: 'Porquê curto, prática longa', instrucao: 'Dê o porquê em uma frase e gaste o resto na prática.' },
   { id: 'fundo', rotulo: 'Vai fundo', emoji: '🔬', descricao: 'Entender antes de aplicar', instrucao: 'Aprofunde o mecanismo por trás do que está sendo ensinado antes de aplicar.' },
+  {
+    id: 'dominio',
+    rotulo: 'O conceito inteiro',
+    emoji: '🧠',
+    descricao: 'De onde a ideia veio e onde ela quebra',
+    instrucao:
+      'Ensine o CONCEITO antes da ferramenta: de onde a ideia veio, que problema ela resolve, por que funciona, e — obrigatoriamente — em que situação ela FALHA e o que fazer nesse caso. O aluno deve terminar capaz de decidir sozinho quando aplicar, não só de repetir o passo a passo.',
+  },
+];
+
+/**
+ * ── EMOJI (16/08/2026) ──────────────────────────────────────────────────
+ *
+ * ⚠️ O buraco que este catálogo tapa: `blocoDePersona(p, 'curso')` **pula o
+ * bloco inteiro da voz** — é uma decisão antiga e correta para tom e bordões,
+ * que são de post. Só que o controle de emoji da persona ia junto no pulo. A
+ * pessoa mexia no medidor de emoji no console, e o livro dela ignorava.
+ *
+ * `espelho` é o padrão porque respeita quem já respondeu; quem não respondeu
+ * cai em "poucos", que é o comportamento que os livros de agosto já tinham.
+ */
+export const EMOJIS: OpcaoAjuste[] = [
+  {
+    id: 'espelho',
+    rotulo: 'Como na minha persona',
+    emoji: '🪞',
+    descricao: 'Segue o medidor de emoji do seu perfil',
+    instrucao: '', // resolvido em `instrucoesDeAjuste`, que tem a persona à mão
+  },
+  { id: 'nenhum', rotulo: 'Nenhum', emoji: '🚫', descricao: 'Texto limpo, zero emoji', instrucao: 'NÃO use emoji nenhum no texto que você escrever.' },
+  { id: 'poucos', rotulo: 'Pontuais', emoji: '🙂', descricao: 'Um aqui e ali, no fim de parágrafo', instrucao: 'Use emoji com parcimônia: no máximo um por parágrafo, e só no fim.' },
+  { id: 'muitos', rotulo: 'Bem à vontade', emoji: '🎉', descricao: 'Emoji marcando o ritmo do texto', instrucao: 'Use emoji à vontade, inclusive no meio das frases, para marcar o ritmo — sem virar poluição.' },
 ];
 
 export const EXTENSOES: OpcaoAjuste[] = [
@@ -128,12 +225,36 @@ export const FOCOS: OpcaoAjuste[] = [
   { id: 'custo', rotulo: 'Cortar custo', emoji: '✂️', descricao: 'Onde para de sangrar', instrucao: 'Mostre onde o capítulo corta custo ou desperdício no negócio do aluno.' },
 ];
 
+/**
+ * Os modelos que o aluno pode escolher, na ordem em que a mesa os mostra.
+ *
+ * ⚠️ **`auto` é o primeiro e é o padrão, e isso não é covardia de produto.**
+ * A corrente de `lib/ai/provider.ts` escalona quando um modelo devolve JSON
+ * vazio ou some do ar — e isso acontece de verdade: ~13% dos capítulos no
+ * DeepSeek. Um aluno que fixa um modelo trocando `auto` por preferência ainda
+ * tem a rede (o `model` de `generate` é preferência, não ordem), mas quem não
+ * quer decidir nada continua com a decisão certa tomada por nós.
+ *
+ * ⚠️ A lista de ids tem de bater com `MODELOS_DO_ATELIE` (`lib/modelos-do-
+ * atelie.ts`), que é quem tem a ficha, o retrato e o custo. Aqui só mora a
+ * permissão de escolher: `local` fica de fora porque é o modelo de emergência,
+ * não uma opção de menu.
+ */
+export const MODELOS_ESCOLHIVEIS = [
+  'auto',
+  'google/gemini-3-flash-preview',
+  '~deepseek/deepseek-v4-flash-latest',
+  'deepseek/deepseek-v4-pro',
+] as const;
+
 export const AJUSTES_PADRAO: Ajustes = {
   tom: 'espelho',
   profundidade: 'equilibrado',
   extensao: 'media',
   foco: [],
   narrador: 'fernando_borges',
+  emojis: 'espelho',
+  modelo: 'auto',
 };
 
 /** Um ajuste desconhecido (veio de uma versão antiga da tela) cai no padrão. */
@@ -143,12 +264,19 @@ export function acharOpcao(lista: OpcaoAjuste[], id: string, padrao: string): Op
 
 export function normalizarAjustes(bruto: Partial<Ajustes> | null | undefined): Ajustes {
   const a = bruto || {};
+  const modelo = String(a.modelo || '');
   return {
     tom: acharOpcao(TONS_AJUSTE, String(a.tom || ''), AJUSTES_PADRAO.tom).id,
     profundidade: acharOpcao(PROFUNDIDADES, String(a.profundidade || ''), AJUSTES_PADRAO.profundidade).id,
     extensao: acharOpcao(EXTENSOES, String(a.extensao || ''), AJUSTES_PADRAO.extensao).id,
     foco: (Array.isArray(a.foco) ? a.foco : []).filter((f) => FOCOS.some((o) => o.id === f)).slice(0, 3),
     narrador: String(a.narrador || AJUSTES_PADRAO.narrador),
+    emojis: acharOpcao(EMOJIS, String(a.emojis || ''), AJUSTES_PADRAO.emojis!).id,
+    // ⚠️ Um modelo que saiu da rotação (aposentado no `provider`) não pode
+    // continuar valendo só porque está gravado no banco: cairia na corrente
+    // como preferência inexistente e o aluno veria o nome de um autor que nunca
+    // mais escreve nada dele.
+    modelo: (MODELOS_ESCOLHIVEIS as readonly string[]).includes(modelo) ? modelo : 'auto',
   };
 }
 
@@ -159,11 +287,33 @@ export function normalizarAjustes(bruto: Partial<Ajustes> | null | undefined): A
  * desenha: separar os dois é como o rótulo de um botão acaba prometendo uma
  * coisa e o prompt pedindo outra.
  */
-export function instrucoesDeAjuste(a: Ajustes): string {
+export function instrucoesDeAjuste(a: Ajustes, emojiDaPersona?: number): string {
+  /**
+   * `espelho` é o único que precisa de contexto de fora — ele traduz o medidor
+   * de emoji da persona. Resolvido aqui, e não no catálogo, porque o catálogo
+   * também desenha a tela e a tela não tem (nem deve ter) a persona à mão.
+   *
+   * ⚠️ Sem persona respondida ele cai em "poucos": é o comportamento que os
+   * livros escritos até 15/08 já tinham, e um ajuste novo não deve mudar em
+   * silêncio o texto de quem não pediu nada.
+   */
+  const emojis = acharOpcao(EMOJIS, a.emojis || AJUSTES_PADRAO.emojis!, AJUSTES_PADRAO.emojis!);
+  const instrucaoEmoji =
+    emojis.id !== 'espelho'
+      ? emojis.instrucao
+      : typeof emojiDaPersona === 'number'
+        ? emojiDaPersona < 20
+          ? EMOJIS.find((e) => e.id === 'nenhum')!.instrucao
+          : emojiDaPersona > 65
+            ? EMOJIS.find((e) => e.id === 'muitos')!.instrucao
+            : EMOJIS.find((e) => e.id === 'poucos')!.instrucao
+        : EMOJIS.find((e) => e.id === 'poucos')!.instrucao;
+
   const linhas = [
     acharOpcao(TONS_AJUSTE, a.tom, AJUSTES_PADRAO.tom).instrucao,
     acharOpcao(PROFUNDIDADES, a.profundidade, AJUSTES_PADRAO.profundidade).instrucao,
     acharOpcao(EXTENSOES, a.extensao, AJUSTES_PADRAO.extensao).instrucao,
+    instrucaoEmoji,
     ...a.foco.map((f) => FOCOS.find((o) => o.id === f)?.instrucao).filter(Boolean),
   ];
   return linhas.map((l, i) => `${i + 1}. ${l}`).join('\n');

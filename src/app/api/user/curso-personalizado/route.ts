@@ -534,6 +534,10 @@ export async function POST(request: NextRequest) {
         // `atelie-servidor.ts` — os mesmos que a amostra grátis usa.
         const { abertura, exemplo, tarefa, model } = await escreverCamada({
           persona,
+          // ⚠️ O nome ancora o "você" no bloco do ALUNO. Sem ele, a descrição
+          // mais concreta de uma pessoa no prompt inteiro era a do PÚBLICO —
+          // e foi de lá que saiu "mulher de aproximadamente 35 anos".
+          nomeDoAluno: String(user.name || ""),
           nomeDoCurso: String(produto.name || curso),
           numero: cap.numero ?? 1,
           titulo: cap.titulo,

@@ -5,7 +5,7 @@ import { getAuthUser } from "@/lib/auth";
 import { getMongoClient } from "@/lib/products";
 import { parseExampleSlots } from "@/lib/course-examples";
 import { generate } from "@/lib/ai/provider";
-import { blocoDePersona, type PersonaProfunda } from "@/lib/persona";
+import { blocoDePersona, gruposDePrompt, personaVazia, type PersonaProfunda } from "@/lib/persona";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -47,6 +47,11 @@ const SISTEMA =
   "- Use o que o perfil diz de forma CONCRETA (a cidade, o que vende, o ticket, a objeção que ouve). Nunca genérico.\n" +
   "- Envolva em «guilhemets» APENAS os trechos que só existem por causa do perfil. O resto do texto fica sem marcação.\n" +
   "- Não invente dado que o perfil não tem. O que não sabemos, não afirme.\n" +
+  // ⚠️ 16/08/2026 — a mesma regra que entrou no Ateliê, pelo mesmo motivo: o
+  // bloco do perfil descreve DUAS pessoas (o aluno e os clientes dele), e sem
+  // esta linha o modelo escreve para a mais vívida das duas. Ver
+  // `gruposDePrompt` em `lib/persona.ts`.
+  "- O ALUNO e o PÚBLICO DO ALUNO são pessoas diferentes. Jamais atribua ao aluno o gênero, a idade, a profissão ou as dores listadas no bloco do PÚBLICO. Se o gênero ou a idade dele não estiverem declarados, escreva sem citar nenhum dos dois.\n" +
   "- Devolva SÓ o trecho reescrito: sem título, sem saudação, sem comentário.";
 
 /** Um parágrafo de verdade do capítulo, quando o curso não tem slot de exemplo. */
@@ -68,14 +73,23 @@ export async function POST(request: NextRequest) {
     if (!authUser) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
     await dbConnect();
-    const user = await User.findById(authUser.id).select("socialPersona enrolledCourses");
+    const user = await User.findById(authUser.id).select("socialPersona enrolledCourses name");
     if (!user) return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
 
     const persona = (user.socialPersona || {}) as unknown as PersonaProfunda;
-    const perfil = blocoDePersona(persona, "curso");
+    const perfil = blocoDePersona(persona, "curso", { nome: user.name });
 
-    // Sem nenhuma resposta não há o que provar — o cliente mostra o convite.
-    if (!perfil || perfil.trim().length < 12) {
+    /**
+     * Sem nenhuma resposta não há o que provar — o cliente mostra o convite.
+     *
+     * ⚠️ Era `perfil.trim().length < 12`, e essa medida MORREU em 16/08/2026:
+     * o bloco passou a emitir sempre duas linhas de segurança ("não sabemos o
+     * gênero", "não sabemos a idade"), então o tamanho nunca mais é pequeno e o
+     * atalho nunca mais dispararia — gastando uma chamada de modelo para
+     * reescrever um trecho com persona vazia. `personaVazia` olha os campos,
+     * não o comprimento.
+     */
+    if (personaVazia(persona)) {
       return NextResponse.json({ vazio: true });
     }
 
@@ -137,12 +151,20 @@ export async function POST(request: NextRequest) {
       slug,
       original: recorte,
       personalizado,
-      // Os rótulos das linhas do bloco de persona: é o "com o que fizemos isto",
-      // e é o que dá à pessoa a régua do quanto falta.
-      usados: perfil
-        .split("\n")
-        .map((l) => l.split(":")[0]?.trim())
-        .filter((l): l is string => !!l && l.length < 40),
+      /**
+       * Os rótulos das linhas do bloco de persona: é o "com o que fizemos
+       * isto", e é o que dá à pessoa a régua do quanto falta.
+       *
+       * ⚠️ Sai de `gruposDePrompt`, não de um `split("\n")` do texto montado. O
+       * bloco agora tem cabeçalhos, avisos entre parênteses e duas linhas que
+       * dizem o que NÃO sabemos — fatiar o texto cru transformaria "Idade dele:
+       * NÃO SABEMOS" numa etiqueta anunciando que sabemos a idade dele.
+       */
+      usados: gruposDePrompt(persona, "curso", { nome: user.name })
+        .flatMap((g) => g.linhas)
+        .filter((l) => !!l.campo || ["Nome", "Área", "Nível com IA"].includes(l.rotulo))
+        .map((l) => l.rotulo)
+        .filter((l) => l.length < 40),
       modelo: res.model,
     });
   } catch (error) {

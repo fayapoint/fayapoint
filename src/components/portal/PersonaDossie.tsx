@@ -23,7 +23,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { RITMOS, TEMPOS, ROTULO_FOTO, TIPOS_FOTO, type Dossie, type DimensaoDossie, type FotoPersona, type TipoFoto } from "@/lib/persona";
+import { RITMOS, TEMPOS, TRATAMENTOS, ROTULO_FOTO, TIPOS_FOTO, type Dossie, type DimensaoDossie, type FotoPersona, type TipoFoto } from "@/lib/persona";
 import { artePreset, presetsDe, type Preset } from "@/lib/persona-presets";
 import { temArtePreset } from "@/lib/persona-arte";
 import { cn } from "@/lib/utils";
@@ -95,6 +95,17 @@ export const EDITORES: Record<string, Editor> = {
    * tinham por onde ser mudados.
    */
   "identidade.marca": { tipo: "texto", dica: "O nome que aparece para o cliente — o seu ou o da empresa" },
+  /**
+   * ⚠️ Um clique, e é a pergunta mais importante do console (16/08/2026).
+   *
+   * Ricardo: *"num momento ele me chamou de mulher de aproximadamente 35 anos,
+   * isso mostra que não sabemos nada do nosso cliente e expulsamos ele."*
+   * Era verdade nas duas pontas: o prompt confundia o aluno com o público
+   * (consertado em `gruposDePrompt`) **e** nunca perguntamos como falar com
+   * ele. Escolha, não caixa de texto: é um clique, e o que estava em jogo era
+   * grande demais para depender de alguém digitar.
+   */
+  "identidade.tratamento": { tipo: "escolha", opcoes: TRATAMENTOS },
   "identidade.cidade": { tipo: "texto", dica: "Ex.: Curitiba, PR" },
   "publico.lugares": { tipo: "itens", dica: "Onde o seu público está", max: 6 },
   "voz.vocabulario": { tipo: "texto", dica: "Como você escolhe as palavras" },

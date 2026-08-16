@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   BookOpen,
@@ -23,7 +24,7 @@ import { EDITORES, type Editor } from "@/components/portal/PersonaDossie";
 import { Atmosfera, SeletorAtmosfera } from "@/components/portal/PersonaAtmosfera";
 import { artePreset, presetsDe, type Preset } from "@/lib/persona-presets";
 import { temArtePreset } from "@/lib/persona-arte";
-import type { Dossie, DimensaoDossie } from "@/lib/persona";
+import { CAMPOS_CRITICOS, type Dossie, type DimensaoDossie } from "@/lib/persona";
 
 /**
  * O Console da Persona — `/portal/persona` (12/08/2026).
@@ -97,6 +98,14 @@ interface Folha {
   dimTitulo: string;
   cor: string;
   icone: string;
+  /**
+   * A CONSEQUÊNCIA de deixar em branco, quando este campo é crítico.
+   *
+   * ⚠️ Vem de `CAMPOS_CRITICOS` (`lib/persona.ts`), não de uma lista aqui:
+   * criticidade é regra de produto e tem de valer igual no console, na mesa de
+   * ajustes do Ateliê e em qualquer tela futura. Duas listas divergem sempre.
+   */
+  critico?: string;
 }
 
 /**
@@ -116,13 +125,14 @@ function folhasDe(dossie: Dossie): Folha[] {
         pergunta: c.rotulo,
         ganho: d.paraQue,
         valor: c.valor,
+        critico: CAMPOS_CRITICOS[c.campo],
         ...base,
       });
     }
     for (const f of d.faltando) {
       if (!EDITORES[f.campo]) continue;
       if (out.some((o) => o.campo === f.campo)) continue;
-      out.push({ campo: f.campo, pergunta: f.pergunta, ganho: f.ganho, valor: "", ...base });
+      out.push({ campo: f.campo, pergunta: f.pergunta, ganho: f.ganho, valor: "", critico: CAMPOS_CRITICOS[f.campo], ...base });
     }
   }
   return out;
@@ -195,6 +205,10 @@ export default function PersonaConsole({
   }
 
   const respondidas = folhas.filter((f) => f.valor).length;
+  /** Índices das folhas críticas ainda em branco — a fila que o atalho percorre. */
+  const criticasAbertas = folhas
+    .map((f, i) => (f.critico && !f.valor ? i : -1))
+    .filter((i) => i >= 0);
   const indiceNaDimensao = folhas.filter((f) => f.dimId === folha.dimId).findIndex((f) => f.campo === folha.campo);
   const totalNaDimensao = folhas.filter((f) => f.dimId === folha.dimId).length;
 
@@ -236,9 +250,30 @@ export default function PersonaConsole({
             desabilitado={atual === 0}
             onClick={() => setAtual((i) => Math.max(0, i - 1))}
           />
-          <p className="text-[13px] font-semibold tabular-nums text-white/70">
-            {respondidas}/{folhas.length} {T("respondidas")}
-          </p>
+          {/* ⚠️ Sem este atalho, "ressaltar as críticas" seria só pintar de
+              âmbar: a pessoa veria o aviso e teria de caçar a folha na árvore
+              entre 27. Ele salta para a PRÓXIMA crítica em aberto a partir de
+              onde ela está, e some quando não há nenhuma — um botão que
+              desaparece ao ser resolvido é o próprio recibo do trabalho. */}
+          {criticasAbertas.length > 0 ? (
+            <button
+              type="button"
+              onClick={() => {
+                const proxima =
+                  criticasAbertas.find((i) => i > atual) ?? criticasAbertas[0];
+                setAtual(proxima);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/45 bg-amber-400/10 px-3 py-1.5 text-[12.5px] font-bold text-amber-100 transition-colors hover:bg-amber-400/20"
+            >
+              <AlertTriangle size={13} className="text-amber-300" />
+              {criticasAbertas.length}{" "}
+              {criticasAbertas.length === 1 ? T("crítica em branco") : T("críticas em branco")}
+            </button>
+          ) : (
+            <p className="text-[13px] font-semibold tabular-nums text-white/70">
+              {respondidas}/{folhas.length} {T("respondidas")}
+            </p>
+          )}
           <Passo
             direcao="frente"
             rotulo={T("Próxima")}
@@ -396,6 +431,17 @@ function Arvore({
                           >
                             {T(f.pergunta)}
                           </span>
+                          {/* ⚠️ O aviso só aparece em folha CRÍTICA E APAGADA.
+                              Marcar as críticas já respondidas encheria o mapa
+                              de âmbar sem nada a fazer — e um alerta que não
+                              pede ação treina a pessoa a ignorar alertas. */}
+                          {f.critico && !f.valor && (
+                            <AlertTriangle
+                              size={12}
+                              className="shrink-0 text-amber-400"
+                              aria-label={T("informação crítica em branco")}
+                            />
+                          )}
                         </button>
                       </li>
                     );
@@ -494,6 +540,29 @@ function Palco({
 
       {/* ─── A pergunta ─── */}
       <div className="relative shrink-0 px-5 pb-3 pt-5 sm:px-7 sm:pt-6">
+        {/* ⚠️ A FAIXA CRÍTICA VEM ANTES DO TÍTULO (16/08/2026).
+            Ricardo: *"devemos ressaltar áreas críticas (…) partes que contenham
+            informações que mudam muito como o texto é enxergado"*. Ela mostra a
+            CONSEQUÊNCIA de deixar em branco, não um selo de "importante":
+            "campo importante" é uma opinião nossa, "sem isto o texto te chama
+            pelo gênero errado" é um fato que a pessoa reconhece. */}
+        {folha.critico && (
+          <p
+            className={`mb-2.5 flex items-start gap-2 rounded-xl border px-3 py-2 text-[12.5px] leading-snug ${
+              folha.valor
+                ? "border-emerald-400/25 bg-emerald-400/[0.07] text-emerald-100/80"
+                : "border-amber-400/45 bg-amber-400/[0.10] text-amber-100"
+            }`}
+          >
+            <AlertTriangle size={14} className={`mt-px shrink-0 ${folha.valor ? "text-emerald-300" : "text-amber-300"}`} />
+            <span>
+              <strong className="font-extrabold">
+                {folha.valor ? T("Crítica — e você já respondeu.") : T("Crítica.")}
+              </strong>{" "}
+              {T(folha.critico)}
+            </span>
+          </p>
+        )}
         <h2 className="text-[21px] font-black leading-[1.15] text-white sm:text-[28px] lg:text-[31px]">
           {T(folha.pergunta)}
         </h2>
@@ -896,6 +965,20 @@ function Personagem({
   const T = useT();
   const fechadas = dimensoes.filter((d) => d.confianca >= 60).length;
 
+  /**
+   * O corte é a marca `Escreve para:` que `resumir()` emite.
+   *
+   * ⚠️ Se um dia a frase mudar de forma lá, este corte tem de mudar junto — por
+   * isso ele degrada bem: sem a marca, tudo cai em "sobre você" e o painel volta
+   * a ser o de antes, em vez de mostrar nada.
+   */
+  const [sobreEle, sobreOPublico] = (() => {
+    const marca = "Escreve para:";
+    const i = resumo.indexOf(marca);
+    if (i < 0) return [resumo, ""];
+    return [resumo.slice(0, i).trim(), resumo.slice(i + marca.length).trim()];
+  })();
+
   return (
     <aside className="flex shrink-0 flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] lg:w-72">
       {/* ⚠️ `lg:w-72` (escala padrão), NÃO `lg:w-[300px]`. Medido em 12/08: a
@@ -911,11 +994,27 @@ function Personagem({
           o resumo em linguagem natural de TUDO que já sabemos: é a resposta
           para "o que vocês têm sobre mim", que era a primeira pergunta de quem
           chega e não estava em lugar nenhum da tela. */}
+      {/* ⚠️ E ELE É PARTIDO EM DOIS (16/08/2026).
+          A frase inteira, num parágrafo só, dizia isto no painel do Ricardo:
+          *"Ricardo — Trabalho com tecnologia (…) fala com dona de pequeno
+          negócio, 30 a 45 anos, faz tudo sozinha…"* — sob um título que promete
+          "o que já sabemos SOBRE VOCÊ". Lida assim, ela descreve o Ricardo como
+          uma mulher dona de pequeno negócio. `resumir()` já separa os sujeitos
+          em duas frases; aqui elas ganham rótulos diferentes, para que nem uma
+          leitura de canto de olho possa confundir uma com a outra. */}
       <div className="shrink-0 border-b border-white/10 px-3 py-2.5">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-white/35">{T("o que já sabemos")}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-white/35">{T("sobre você")}</p>
         <p className="mt-1 text-[12.5px] leading-snug text-white/80">
-          {resumo || T("Nada ainda — a primeira resposta já escreve esta frase.")}
+          {sobreEle || T("Nada ainda — a primeira resposta já escreve esta frase.")}
         </p>
+        {sobreOPublico && (
+          <>
+            <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-sky-300/60">
+              {T("o público DELE — não é você")}
+            </p>
+            <p className="mt-0.5 text-[12.5px] leading-snug text-white/55">{sobreOPublico}</p>
+          </>
+        )}
       </div>
 
       {/* ⚠️ Esticar o SVG NÃO aumenta o busto: com `meet` num viewBox quadrado

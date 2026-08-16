@@ -316,13 +316,6 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
     }
   };
 
-  const alternarFoco = (id: string) => {
-    if (!dados) return;
-    const atual = dados.ajustes.foco || [];
-    const novo = atual.includes(id) ? atual.filter((f) => f !== id) : [...atual, id].slice(0, 3);
-    void mudarAjuste({ foco: novo });
-  };
-
   /**
    * Quanto a confiança SOBE se esta dimensão for completada.
    *
@@ -558,64 +551,84 @@ export default function AteliePainel({ slug, locale }: { slug: string; locale: s
         )}
       </section>
 
-      {/* ═══ 2. OS AJUSTES ═══ */}
+      {/* ═══ 2. OS AJUSTES ═══
+          ⚠️ **DEIXOU DE SER UM PAINEL E VIROU UMA PORTA (16/08/2026).**
+
+          Os quatro seletores moravam aqui, no meio de uma página que também
+          vende o pacote, mostra a amostra, escolhe o narrador e mede a persona.
+          Ricardo pediu *"uma nova área de customização"* — e a mudança não é só
+          de endereço: a mesa (`/meu/ajustes`) tem duas coisas que NÃO cabiam
+          aqui sem transformar esta página num painel de controle de avião —
+          a revisão do que vai para o escritor e a escolha do modelo.
+
+          Duplicar os seletores nos dois lugares seria pior do que não tê-los:
+          o dia em que um ganhasse uma opção nova, o outro passaria a prometer
+          um controle que não existe mais. Aqui fica o RESUMO do que está
+          valendo, que é a informação que esta página precisa dar, e o caminho
+          para mexer. */}
       <section className="mt-10">
         <Cabecalho
           numero={2}
           icone={<SlidersHorizontal size={15} className="text-white" />}
           cor="from-sky-500 to-indigo-600"
           titulo="Como você quer ESTE curso"
-          sub="Sua persona diz quem você é. Aqui você diz como quer este curso — e cada escolha muda o texto que sai."
+          sub="Sua persona diz quem você é. A mesa de ajustes diz como você quer este curso — e cada escolha lá muda o texto que sai."
         />
 
-        <div className="space-y-4 rounded-2xl border border-border bg-card/60 p-4 sm:p-5">
-          <Escolha
-            titulo="O tom"
-            sub="Como o texto conversa com você"
-            opcoes={dados.catalogo.tons}
-            marcado={(o) => dados.ajustes.tom === o.id}
-            aoEscolher={(o) => mudarAjuste({ tom: o.id })}
-          />
-          <Escolha
-            titulo="A profundidade"
-            sub="Quanto porquê antes do como"
-            opcoes={dados.catalogo.profundidades}
-            marcado={(o) => dados.ajustes.profundidade === o.id}
-            aoEscolher={(o) => mudarAjuste({ profundidade: o.id })}
-          />
-          <Escolha
-            titulo="O tamanho"
-            sub="Quanto texto novo entra em cada capítulo"
-            opcoes={dados.catalogo.extensoes}
-            marcado={(o) => dados.ajustes.extensao === o.id}
-            aoEscolher={(o) => mudarAjuste({ extensao: o.id })}
-          />
-          <Escolha
-            titulo="O foco"
-            sub={`Até 3 — para onde todo exemplo é puxado (${(dados.ajustes.foco || []).length}/3)`}
-            opcoes={dados.catalogo.focos}
-            marcado={(o) => (dados.ajustes.foco || []).includes(o.id)}
-            aoEscolher={(o) => alternarFoco(o.id)}
-          />
+        <Link
+          href={`/${locale}/curso/${curso.slug}/meu/ajustes`}
+          className="block rounded-2xl border border-sky-400/30 bg-sky-500/[0.06] p-4 transition-colors hover:border-sky-400/60 hover:bg-sky-500/[0.11] sm:p-5"
+        >
+          <div className="flex flex-wrap items-center gap-3">
+            <SlidersHorizontal size={18} className="shrink-0 text-sky-300" />
+            <p className="text-[15px] font-black text-white">{T("Abrir a mesa de ajustes")}</p>
+            <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-sky-400 px-3.5 py-2 text-[13px] font-extrabold text-black">
+              {T("Ajustar")} <ArrowRight size={14} />
+            </span>
+          </div>
+          <p className="mt-1.5 text-[12.5px] leading-snug text-sky-100/70">
+            {T("Revise o que o escritor vai saber sobre você, escolha quem escreve, a profundidade das explicações, o tom, o tamanho, o emoji e o foco.")}
+          </p>
 
-          {amostra && (
-            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-sky-400/25 bg-sky-500/[0.06] px-3 py-2">
-              <p className="text-[11.5px] text-sky-100/80">
-                {T("Mudou os ajustes? A amostra acima ainda é a antiga — refazer é de graça.")}
-              </p>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => gerarAmostra(true)}
-                disabled={gerandoAmostra}
-                className="border-sky-400/40 text-sky-200 hover:bg-sky-500/10"
-              >
-                {gerandoAmostra ? <Loader2 size={13} className="mr-1.5 animate-spin" /> : <Wand2 size={13} className="mr-1.5" />}
-                {T("Refazer a amostra")}
-              </Button>
-            </div>
-          )}
-        </div>
+          {/* O que está valendo agora — para a decisão de abrir a mesa ser
+              informada, e não uma caixa-preta. */}
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {[
+              dados.catalogo.profundidades.find((o) => o.id === dados.ajustes.profundidade),
+              dados.catalogo.tons.find((o) => o.id === dados.ajustes.tom),
+              dados.catalogo.extensoes.find((o) => o.id === dados.ajustes.extensao),
+              ...(dados.ajustes.foco || []).map((f) => dados.catalogo.focos.find((o) => o.id === f)),
+            ]
+              .filter(Boolean)
+              .map((o) => (
+                <span
+                  key={o!.id}
+                  className="rounded-full border border-white/12 bg-black/25 px-2.5 py-1 text-[11.5px] font-semibold text-white/70"
+                >
+                  {o!.emoji ? `${o!.emoji} ` : ""}
+                  {T(o!.rotulo)}
+                </span>
+              ))}
+          </div>
+        </Link>
+
+        {amostra && (
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-sky-400/25 bg-sky-500/[0.06] px-3 py-2">
+            <p className="text-[11.5px] text-sky-100/80">
+              {T("Mudou os ajustes? A amostra acima ainda é a antiga — refazer é de graça.")}
+            </p>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => gerarAmostra(true)}
+              disabled={gerandoAmostra}
+              className="border-sky-400/40 text-sky-200 hover:bg-sky-500/10"
+            >
+              {gerandoAmostra ? <Loader2 size={13} className="mr-1.5 animate-spin" /> : <Wand2 size={13} className="mr-1.5" />}
+              {T("Refazer a amostra")}
+            </Button>
+          </div>
+        )}
       </section>
 
       {/* ═══ 3. QUEM NARRA ═══ */}
@@ -1023,65 +1036,6 @@ function Cabecalho({
           {T(titulo)}
         </h2>
         <p className="text-[11.5px] leading-snug text-muted-foreground">{T(sub)}</p>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Uma linha de ajuste em ladrilhos.
- *
- * ⚠️ Não é `<select>`. O Ateliê nasceu de um `<select>` escondido e a lição
- * daquele dia vale aqui: escolha que importa precisa estar VISÍVEL sem clique
- * de descoberta, com o rótulo E a consequência lado a lado. Um menu suspenso
- * esconde as cinco outras opções e some com a explicação de cada uma.
- */
-function Escolha({
-  titulo,
-  sub,
-  opcoes,
-  marcado,
-  aoEscolher,
-}: {
-  titulo: string;
-  sub: string;
-  opcoes: OpcaoAjuste[];
-  marcado: (o: OpcaoAjuste) => boolean;
-  aoEscolher: (o: OpcaoAjuste) => void;
-}) {
-  const T = useT();
-  return (
-    <div>
-      <div className="mb-2 flex flex-wrap items-baseline gap-x-2">
-        <p className="text-[12.5px] font-bold text-white">{T(titulo)}</p>
-        <p className="text-[11px] text-muted-foreground">{T(sub)}</p>
-      </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {opcoes.map((o) => {
-          const ativo = marcado(o);
-          return (
-            <button
-              key={o.id}
-              onClick={() => aoEscolher(o)}
-              aria-pressed={ativo}
-              className={cn(
-                "flex cursor-pointer items-start gap-2 rounded-xl border p-2.5 text-left transition-all",
-                ativo
-                  ? "border-sky-400/60 bg-sky-500/[0.12]"
-                  : "border-white/10 bg-white/[0.02] hover:border-white/25",
-              )}
-            >
-              <span className="text-[17px] leading-none">{o.emoji}</span>
-              <span className="min-w-0">
-                <span className={cn("block text-[12px] font-bold", ativo ? "text-white" : "text-white/75")}>
-                  {T(o.rotulo)}
-                </span>
-                <span className="mt-0.5 block text-[10.5px] leading-snug text-muted-foreground">{T(o.descricao)}</span>
-              </span>
-              {ativo && <Check size={13} className="ml-auto shrink-0 text-sky-300" />}
-            </button>
-          );
-        })}
       </div>
     </div>
   );

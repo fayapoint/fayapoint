@@ -129,6 +129,29 @@ export const TEMPOS: Record<string, string> = {
   'fim-de-semana': 'Só no fim de semana',
 };
 
+/**
+ * ── COMO NOS DIRIGIMOS A ELE (16/08/2026) ────────────────────────────────
+ *
+ * Ricardo, depois de responder o console inteiro: *"num momento ele me chamou
+ * de mulher de aproximadamente 35 anos, isso mostra que não sabemos nada do
+ * nosso cliente e expulsamos ele."*
+ *
+ * Ele tem razão duas vezes. A primeira é o defeito de engenharia, consertado em
+ * `blocoDePersona` — o público DELE estava no mesmo bloco que ele, sob o título
+ * "ALUNO:", e o modelo pegou a descrição mais vívida que encontrou. A segunda é
+ * mais simples e mais funda: **nunca perguntamos**. Sem perguntar, sobra chutar,
+ * e chutar gênero erra em quase metade das vezes.
+ *
+ * Então passa a ser um campo, com uma saída honesta ("não marque") como padrão
+ * de quem não respondeu. `neutro` não é indecisão: é a instrução que evita
+ * "bem-vinda" e "você mesma" quando não sabemos.
+ */
+export const TRATAMENTOS: Record<string, string> = {
+  masculino: 'No masculino ("bem-vindo", "você mesmo")',
+  feminino: 'No feminino ("bem-vinda", "você mesma")',
+  neutro: 'Sem marcar gênero — reescreva a frase se for preciso',
+};
+
 export const TIPOS_FOTO = ['perfil', 'profissional', 'casual', 'pessoal'] as const;
 export type TipoFoto = (typeof TIPOS_FOTO)[number];
 
@@ -177,6 +200,11 @@ export interface PersonaProfunda {
     missao?: string;
     valores?: string[];
     site?: string;
+    /**
+     * Chave de `TRATAMENTOS`. Vazio = `neutro`, e neutro é uma instrução ATIVA
+     * ("não marque gênero"), não a ausência de uma. Ver `TRATAMENTOS`.
+     */
+    tratamento?: string;
   };
   voz?: {
     /** 0 = nenhum emoji, 100 = emoji em toda frase */
@@ -272,6 +300,43 @@ export interface CampoFaltando {
   ganho: string;
 }
 
+/**
+ * ── OS CAMPOS QUE NÃO PODEM FICAR EM BRANCO (16/08/2026) ─────────────────
+ *
+ * Ricardo: *"devemos ressaltar áreas críticas, como nome do negócio, ou área de
+ * trabalho atual, e outras partes que contenham informações que mudam muito
+ * como o texto é enxergado pelo nosso escritor."*
+ *
+ * O console tratava as 27 perguntas como iguais — mesma cor, mesma vez na fila,
+ * mesmo peso na barra. Não são. Um campo em branco aqui não deixa o texto
+ * "menos afiado": deixa o texto ERRADO, e errado de um jeito que a pessoa lê
+ * como desprezo. `publico.quemE` sem `identidade.papel` do lado foi exatamente
+ * o que produziu "mulher de aproximadamente 35 anos".
+ *
+ * ⚠️ O valor não é um rótulo, é a CONSEQUÊNCIA de deixar em branco — é isso que
+ * a tela mostra. "Campo importante" não move ninguém; "sem isto o texto te
+ * chama pelo gênero errado" move.
+ */
+export const CAMPOS_CRITICOS: Record<string, string> = {
+  'identidade.tratamento':
+    'Sem isto o texto pode te tratar no gênero errado — o erro que mais faz alguém fechar a página.',
+  'identidade.marca':
+    'É o nome que aparece dentro dos exemplos. Em branco, todo capítulo diz "a sua empresa".',
+  'identidade.papel':
+    'Define o ramo do livro inteiro. Errado aqui, erram os 16 capítulos de uma vez.',
+  'publico.quemE':
+    'É o CLIENTE do aluno, não o aluno. É o campo que o escritor mais confunde — e a confusão soa como se não te conhecêssemos.',
+  'negocio.oQueVende': 'É o que transforma "imagine um produto seu" no seu produto, com nome.',
+  'negocio.ticket': 'É o número de toda conta de retorno. Sem ele o exemplo inventa um.',
+  'negocio.objecao': 'É a matéria-prima das tarefas — a que ataca o que te custa dinheiro hoje.',
+  'voz.amostra': 'Vale mais que todos os outros juntos: é daqui que sai o seu ritmo de frase.',
+  'aprendizado.travando': 'Faz o curso atacar o SEU travamento em vez do travamento médio.',
+};
+
+export function ehCritico(campo: string | undefined): boolean {
+  return !!campo && campo in CAMPOS_CRITICOS;
+}
+
 export interface DimensaoDossie {
   id: string;
   titulo: string;
@@ -349,6 +414,9 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
         [!!(extras?.nome || identidade.marca), 3],
         [!!identidade.papel, 3],
         [areas.length > 0, 3],
+        // ⚠️ Peso 3, igual ao papel. Tratamento errado não deixa o texto pior —
+        // deixa o texto ofensivo, e a barra tem de cobrar isso como cobra o resto.
+        [!!identidade.tratamento, 3],
         [!!identidade.missao, 2],
         [(identidade.valores || []).length > 0, 2],
         [!!identidade.cidade, 1],
@@ -358,11 +426,21 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
         extras?.nome && !identidade.marca ? { rotulo: 'Nome', valor: extras.nome, campo: 'identidade.marca' } : null,
         identidade.papel ? { rotulo: 'O que você faz', valor: identidade.papel, campo: 'identidade.papel' } : null,
         areas.length ? { rotulo: 'Área', valor: areas.join(' · ') } : null,
+        identidade.tratamento
+          ? { rotulo: 'Como falar com você', valor: TRATAMENTOS[identidade.tratamento] ?? identidade.tratamento, campo: 'identidade.tratamento' }
+          : null,
         identidade.cidade ? { rotulo: 'Onde', valor: identidade.cidade, campo: 'identidade.cidade' } : null,
         identidade.missao ? { rotulo: 'Missão', valor: identidade.missao, campo: 'identidade.missao' } : null,
         (identidade.valores || []).length ? { rotulo: 'Valores', valor: (identidade.valores || []).join(' · '), campo: 'identidade.valores' } : null,
       ].filter(Boolean) as DimensaoDossie['conhecido'],
       faltando: [
+        // ⚠️ PRIMEIRO da fila de propósito. É a pergunta mais barata do console
+        // (um clique) e a única cujo erro faz a pessoa ir embora.
+        !identidade.tratamento && {
+          campo: 'identidade.tratamento',
+          pergunta: 'Como eu devo falar com você?',
+          ganho: 'Evita o pior erro possível: te tratar no gênero errado dentro do seu próprio livro',
+        },
         !identidade.papel && {
           campo: 'identidade.papel',
           pergunta: 'Numa frase, o que você faz para quem?',
@@ -686,6 +764,24 @@ export function montarDossie(p: PersonaProfunda, extras?: { nome?: string; temFo
  * Uma frase em português com o que sabemos. É o topo do painel — e a prova
  * mais honesta de quanto (ou quão pouco) conhecemos a pessoa: quando sai
  * genérica, o usuário vê sozinho que precisa completar.
+ *
+ * ## ⚠️ Por que ela foi partida em DUAS frases (16/08/2026)
+ *
+ * A versão antiga emendava tudo numa oração só e produzia, no painel "VOCÊ,
+ * MONTADO", esta linha:
+ *
+ * > *Ricardo — Trabalho com tecnologia e quero usar IA no meu trabalho — fala
+ * > com dona de pequeno negócio, 30 a 45 anos, faz tudo sozinha e não tem tempo
+ * > de aprender ferramenta nova num tom descontraído…*
+ *
+ * Lida em voz alta, essa frase descreve o Ricardo como uma dona de pequeno
+ * negócio de 30 a 45 anos. O painel se chama "o que já sabemos **sobre você**",
+ * e o que ele mostrava era o público. Era o mesmo defeito de `blocoDePersona`,
+ * só que na tela em vez de no prompt — e a tela é onde a pessoa descobre se
+ * confia na gente.
+ *
+ * Agora são duas frases com sujeitos diferentes, e a segunda começa por "Escreve
+ * para:" — impossível ler como se fosse ele.
  */
 export function resumir(p: PersonaProfunda, nome?: string): string {
   const area = traduz(lista(p.industry), AREAS)[0];
@@ -695,22 +791,346 @@ export function resumir(p: PersonaProfunda, nome?: string): string {
   const papel = p.identidade?.papel;
   const quem = p.publico?.quemE;
 
-  const partes: string[] = [];
-  partes.push(nome ? nome.split(' ')[0] : 'Você');
-  if (papel) partes.push(`— ${papel} —`);
-  else if (area) partes.push(`trabalha com ${area.toLowerCase()}`);
-  if (quem) partes.push(`fala com ${quem.toLowerCase()}`);
-  if (tom) partes.push(`num tom ${tom.toLowerCase()}`);
-  if (meta) partes.push(`para ${meta.toLowerCase()}`);
-  if (nivel) partes.push(`e está ${nivel} com IA`);
+  // Frase 1 — o SUJEITO é ele.
+  const dele: string[] = [];
+  dele.push(nome ? nome.split(' ')[0] : 'Você');
+  if (papel) dele.push(`— ${papel}`);
+  else if (area) dele.push(`— trabalha com ${area.toLowerCase()}`);
+  if (tom) dele.push(`— escreve num tom ${tom.toLowerCase()}`);
+  if (meta) dele.push(`para ${meta.toLowerCase()}`);
+  if (nivel) dele.push(`e está ${nivel} com IA`);
 
-  if (partes.length <= 2) return 'Ainda não sei quase nada sobre você — e é por isso que o conteúdo sai com cara de genérico.';
-  return partes.join(' ').replace(/\s+/g, ' ').trim() + '.';
+  const frases: string[] = [];
+  if (dele.length > 1) frases.push(dele.join(' ').replace(/\s+/g, ' ').trim() + '.');
+
+  // Frase 2 — o SUJEITO é o público. Sujeito próprio, ponto próprio.
+  if (quem) frases.push(`Escreve para: ${quem.trim().replace(/\.$/, '')}.`);
+
+  if (!frases.length || (frases.length === 1 && !papel && !area && !tom && !meta && !nivel)) {
+    return 'Ainda não sei quase nada sobre você — e é por isso que o conteúdo sai com cara de genérico.';
+  }
+  return frases.join(' ');
+}
+
+/**
+ * A persona está literalmente vazia?
+ *
+ * ⚠️ Existe porque `blocoDePersona` deixou de poder ser medido pelo tamanho.
+ * Ele agora emite SEMPRE duas linhas de segurança ("não sabemos o gênero", "não
+ * sabemos a idade") — que é justamente o ponto — e o `perfil.length < 12` que
+ * a prévia usava para detectar "nada preenchido" passaria a nunca disparar,
+ * gastando uma chamada de modelo para provar coisa nenhuma.
+ */
+export function personaVazia(p: PersonaProfunda): boolean {
+  const grupos = gruposDePrompt(p, 'curso');
+  const aluno = grupos.find((g) => g.id === 'aluno');
+  // Só o grupo do aluno, e nele só as duas linhas de segurança = ninguém
+  // respondeu nada. (Escolher o tratamento não cria linha nova: ele muda o
+  // valor da linha que já existia.)
+  return grupos.length === 1 && (aluno?.linhas.length ?? 0) <= 2;
 }
 
 // ─────────────────────────────────────────────────────────────────────
 // Saída para os modelos
 // ─────────────────────────────────────────────────────────────────────
+
+/**
+ * ── UMA LINHA DO QUE VAI PARA O MODELO ───────────────────────────────────
+ *
+ * `campo` existe para a tela de revisão poder abrir o editor certo. Uma linha
+ * que a pessoa lê e não pode consertar é pior do que não mostrar: ela vê o erro
+ * e fica sem saída.
+ */
+export interface LinhaDePrompt {
+  rotulo: string;
+  valor: string;
+  campo?: string;
+  critico?: boolean;
+  /**
+   * A linha existe, mas o que ela diz é "não sabemos".
+   *
+   * ⚠️ Sem esta marca a tela de revisão contaria as duas linhas de segurança
+   * como dado preenchido — e o alerta de "informação crítica em branco" ficaria
+   * mudo justamente para o campo que originou o problema todo (o tratamento).
+   */
+  emBranco?: boolean;
+}
+
+export interface GrupoDePrompt {
+  id: 'aluno' | 'voz' | 'publico' | 'estrategia' | 'negocio' | 'aprendizado' | 'proibido';
+  /** O cabeçalho EXATO que o modelo lê. A tela mostra o mesmo. */
+  titulo: string;
+  /** A frase de desambiguação que vai junto do cabeçalho, quando é preciso. */
+  aviso?: string;
+  linhas: LinhaDePrompt[];
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════
+ * O QUE O ESCRITOR RECEBE, EM GRUPOS COM DONO (16/08/2026)
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ * ## O defeito que esta função existe para matar
+ *
+ * Ricardo, 16/08/2026: *"eu escolhi tudo, respondi tudo que me foi pedido, e num
+ * momento ele me chamou de mulher de aproximadamente 35 anos, isso mostra que
+ * não sabemos nada do nosso cliente e expulsamos ele."*
+ *
+ * Não era falta de dado. Era o dado certo com o dono errado. O bloco antigo era
+ * uma lista chapada de `Rótulo: valor` que o `atelie-servidor` mandava assim:
+ *
+ *     ALUNO:
+ *     O que faz: Trabalho com tecnologia e quero usar IA no meu trabalho
+ *     Área: Tecnologia
+ *     Público: dona de pequeno negócio, 30 a 45 anos, faz tudo sozinha…
+ *     Idade do público: 30-45
+ *
+ * Sob o título **ALUNO** havia uma mulher de 30 a 45 anos descrita com muito
+ * mais cor e muito mais detalhe do que o próprio aluno. O sistema mandava
+ * "escreva na segunda pessoa, cite a rotina dele de forma concreta" — e a única
+ * rotina concreta ali era a dela. O modelo fez exatamente o que foi pedido.
+ *
+ * ## As três regras que os grupos impõem
+ *
+ * 1. **Todo dado tem dono declarado.** `publico.*` mora sob um cabeçalho que
+ *    diz, em maiúsculas, que aquilo é o CLIENTE do aluno.
+ * 2. **O que não sabemos é dito, não omitido.** Campo ausente vira uma linha
+ *    "não sabemos — não invente", porque silêncio o modelo preenche sozinho:
+ *    foi assim que "aproximadamente 35 anos" apareceu do nada.
+ * 3. **A tela lê a MESMA estrutura.** `gruposDePrompt` alimenta o prompt e a
+ *    aba "o que vai ser usado" da mesa de ajustes. Se um dia divergirem, a
+ *    pessoa revisa um texto e o modelo recebe outro — que é o defeito de
+ *    confiança mais caro que este produto pode ter.
+ */
+export function gruposDePrompt(
+  p: PersonaProfunda,
+  foco: 'post' | 'curso' | 'imagem' = 'post',
+  extras?: { nome?: string },
+): GrupoDePrompt[] {
+  const id = p.identidade || {};
+  const voz = p.voz || {};
+  const pub = p.publico || {};
+  const est = p.estrategia || {};
+  const apr = p.aprendizado || {};
+  const neg = p.negocio || {};
+  const grupos: GrupoDePrompt[] = [];
+
+  const linha = (rotulo: string, valor: string | null | undefined, campo?: string): LinhaDePrompt | null =>
+    valor ? { rotulo, valor, campo, critico: ehCritico(campo) } : null;
+  const limpar = (xs: Array<LinhaDePrompt | null>) => xs.filter(Boolean) as LinhaDePrompt[];
+
+  // ── 1. O ALUNO ─────────────────────────────────────────────────────────
+  const areas = traduz(lista(p.industry), AREAS);
+  const tratamento = id.tratamento || 'neutro';
+  const alunoLinhas = limpar([
+    linha('Nome', extras?.nome),
+    linha('Marca', id.marca, 'identidade.marca'),
+    linha('O que faz', id.papel, 'identidade.papel'),
+    areas.length ? { rotulo: 'Área', valor: areas.join(', ') } : null,
+    linha('Onde vive', id.cidade, 'identidade.cidade'),
+    linha('Por que faz', id.missao, 'identidade.missao'),
+    (id.valores || []).length
+      ? { rotulo: 'Valores inegociáveis', valor: (id.valores || []).join(', '), campo: 'identidade.valores' }
+      : null,
+    {
+      // ⚠️ Esta linha sai SEMPRE, inclusive (principalmente) quando não sabemos.
+      // Era o buraco por onde entrava o chute de gênero.
+      rotulo: 'Como tratá-lo',
+      valor:
+        tratamento === 'masculino'
+          ? 'no masculino'
+          : tratamento === 'feminino'
+            ? 'no feminino'
+            : 'ELE NÃO INFORMOU O GÊNERO. Escreva sem nenhuma marca de gênero — nada de "bem-vinda/bem-vindo", "você mesma/mesmo", nem adjetivo flexionado referindo-se a ele. Reescreva a frase se for preciso.',
+      campo: 'identidade.tratamento',
+      critico: true,
+      emBranco: !id.tratamento,
+    },
+    {
+      // A idade do aluno NÃO é coletada em lugar nenhum. Dizer isso é o que
+      // impede o modelo de tomar a idade do público emprestada.
+      rotulo: 'Idade dele',
+      valor: 'NÃO SABEMOS e não perguntamos. Jamais cite, sugira ou suponha a idade do aluno.',
+      critico: true,
+      emBranco: true,
+    },
+  ]);
+  grupos.push({
+    id: 'aluno',
+    titulo: 'QUEM É O ALUNO — é com ESTA pessoa que você fala, na segunda pessoa',
+    aviso:
+      'Tudo neste bloco descreve o aluno. Nenhum outro bloco descreve o aluno. Se um traço não estiver aqui, ele não é do aluno.',
+    linhas: alunoLinhas,
+  });
+
+  // ── 2. A VOZ ───────────────────────────────────────────────────────────
+  if (foco !== 'curso') {
+    const tons = traduz(lista(p.toneOfVoice), TONS);
+    const recursos = [
+      voz.usaHumor && 'humor',
+      voz.usaPergunta && 'perguntas diretas',
+      voz.usaHistoria && 'histórias pessoais',
+      voz.usaCta && 'chamada para ação no fim',
+    ].filter(Boolean) as string[];
+    const vozLinhas = limpar([
+      tons.length ? { rotulo: 'Tom de voz', valor: tons.join(', ') } : null,
+      typeof voz.formalidade === 'number'
+        ? {
+            rotulo: 'Formalidade',
+            valor:
+              voz.formalidade < 35
+                ? 'baixa — escreva como quem conversa, pode usar contração e gíria leve'
+                : voz.formalidade > 70
+                  ? 'alta — evite gíria, frases completas, terceira pessoa quando couber'
+                  : 'média — profissional mas próximo',
+            campo: 'voz.formalidade',
+          }
+        : null,
+      typeof voz.emoji === 'number'
+        ? {
+            rotulo: 'Emoji',
+            valor:
+              voz.emoji < 20
+                ? 'quase nenhum'
+                : voz.emoji > 65
+                  ? 'muitos, inclusive no meio da frase'
+                  : 'poucos, no fim de parágrafo',
+            campo: 'voz.emoji',
+          }
+        : null,
+      (voz.bordoes || []).length
+        ? { rotulo: 'Expressões que são a cara dele', valor: (voz.bordoes || []).join(' / '), campo: 'voz.bordoes' }
+        : null,
+      linha('Vocabulário', voz.vocabulario),
+      recursos.length ? { rotulo: 'Usa', valor: recursos.join(', ') } : null,
+      voz.amostra
+        ? {
+            rotulo: 'AMOSTRA REAL DA ESCRITA DELE (imite o ritmo de frase, não o assunto)',
+            valor: `\n"""\n${voz.amostra.slice(0, 900)}\n"""`,
+            campo: 'voz.amostra',
+            critico: true,
+          }
+        : null,
+    ]);
+    if (vozLinhas.length) {
+      grupos.push({ id: 'voz', titulo: 'COMO O ALUNO ESCREVE', linhas: vozLinhas });
+    }
+  }
+
+  // ── 3. O PÚBLICO — o bloco que causou o estrago ────────────────────────
+  const publicoLinhas = limpar([
+    linha('Quem é', pub.quemE, 'publico.quemE'),
+    Array.isArray(pub.idade) ? { rotulo: 'Idade DELES', valor: `${pub.idade[0]}-${pub.idade[1]} anos` } : null,
+    (pub.lugares || []).length
+      ? { rotulo: 'Onde estão', valor: (pub.lugares || []).join(', '), campo: 'publico.lugares' }
+      : null,
+    (pub.dores || []).length
+      ? { rotulo: 'Dores DELES', valor: (pub.dores || []).join('; '), campo: 'publico.dores' }
+      : null,
+    (pub.desejos || []).length
+      ? { rotulo: 'Desejos DELES', valor: (pub.desejos || []).join('; '), campo: 'publico.desejos' }
+      : null,
+    linha('Sinais coletados sobre eles', p.audienceInsights?.slice(0, 400)),
+  ]);
+  if (publicoLinhas.length) {
+    grupos.push({
+      id: 'publico',
+      titulo: 'QUEM É O PÚBLICO DO ALUNO — são os CLIENTES dele, NÃO ele',
+      aviso:
+        'PROIBIDO atribuir ao aluno qualquer traço deste bloco. A idade, o gênero, a profissão e as dores aqui são de terceiros. Escrever "você, dona de pequeno negócio de 35 anos" quando isto está descrito aqui é o erro mais grave possível nesta tarefa.',
+      linhas: publicoLinhas,
+    });
+  }
+
+  // ── 4. ESTRATÉGIA ──────────────────────────────────────────────────────
+  const metas = traduz(lista(p.marketingGoals), OBJETIVOS);
+  const estLinhas = limpar([
+    metas.length ? { rotulo: 'Objetivos', valor: metas.join(', ') } : null,
+    (est.pilares || []).length
+      ? { rotulo: 'Pilares de conteúdo', valor: (est.pilares || []).join(', '), campo: 'estrategia.pilares' }
+      : null,
+    linha('Chamada para ação preferida', est.assinatura, 'estrategia.assinatura'),
+    ...(foco === 'post'
+      ? [
+          traduz(lista(p.contentTypes), FORMATOS).length
+            ? { rotulo: 'Formatos que ele produz', valor: traduz(lista(p.contentTypes), FORMATOS).join(', ') }
+            : null,
+          (p.topHashtags || []).length
+            ? {
+                rotulo: 'Hashtags dele',
+                valor: (p.topHashtags || []).slice(0, 10).map((h) => `#${h.replace(/^#/, '')}`).join(' '),
+              }
+            : null,
+        ]
+      : []),
+  ]);
+  if (estLinhas.length) {
+    grupos.push({ id: 'estrategia', titulo: 'O QUE O ALUNO PUBLICA E ONDE QUER CHEGAR', linhas: estLinhas });
+  }
+
+  /**
+   * ── 5. O NEGÓCIO ──────────────────────────────────────────────────────
+   *
+   * Entra em TODOS os focos — inclusive imagem. É o bloco que dá número ao
+   * exemplo do curso, contexto ao post e cenário à imagem. Ticket e objeção
+   * primeiro: são os dois que o modelo mais usa.
+   */
+  const negLinhas = limpar([
+    linha('O que vende', neg.oQueVende, 'negocio.oQueVende'),
+    neg.ticket
+      ? {
+          rotulo: 'Ticket médio',
+          valor: `R$ ${neg.ticket} — use ESTE número nas contas de retorno`,
+          campo: 'negocio.ticket',
+          critico: true,
+        }
+      : null,
+    neg.objecao
+      ? { rotulo: 'Objeção que mais ouve', valor: `"${neg.objecao}"`, campo: 'negocio.objecao', critico: true }
+      : null,
+    linha('Onde vende', neg.canal, 'negocio.canal'),
+    neg.clientesPorMes
+      ? { rotulo: 'Clientes por mês', valor: `cerca de ${neg.clientesPorMes}`, campo: 'negocio.clientesPorMes' }
+      : null,
+    linha('Do que mais se orgulha', neg.orgulho, 'negocio.orgulho'),
+    (neg.referencias || []).length
+      ? { rotulo: 'Referências que admira', valor: (neg.referencias || []).join(', '), campo: 'negocio.referencias' }
+      : null,
+  ]);
+  if (negLinhas.length) {
+    grupos.push({ id: 'negocio', titulo: 'O NEGÓCIO DO ALUNO', linhas: negLinhas });
+  }
+
+  // ── 6. COMO ELE APRENDE ────────────────────────────────────────────────
+  if (foco === 'curso') {
+    const aprLinhas = limpar([
+      p.experienceLevel
+        ? { rotulo: 'Nível com IA', valor: NIVEIS[p.experienceLevel] ?? p.experienceLevel }
+        : null,
+      apr.ritmo ? { rotulo: 'Como aprende melhor', valor: RITMOS[apr.ritmo] ?? apr.ritmo, campo: 'aprendizado.ritmo' } : null,
+      apr.tempo ? { rotulo: 'Tempo disponível', valor: TEMPOS[apr.tempo] ?? apr.tempo, campo: 'aprendizado.tempo' } : null,
+      (apr.ferramentas || []).length
+        ? { rotulo: 'Ferramentas que já usa', valor: (apr.ferramentas || []).join(', '), campo: 'aprendizado.ferramentas' }
+        : null,
+      linha('O que já tentou e não deu certo', apr.travando, 'aprendizado.travando'),
+      linha('Meta dos próximos 90 dias', apr.objetivo, 'aprendizado.objetivo'),
+    ]);
+    if (aprLinhas.length) {
+      grupos.push({ id: 'aprendizado', titulo: 'COMO O ALUNO APRENDE', linhas: aprLinhas });
+    }
+  }
+
+  // ── 7. A TRAVA ─────────────────────────────────────────────────────────
+  if ((est.naoFalar || []).length) {
+    grupos.push({
+      id: 'proibido',
+      titulo: 'PROIBIDO MENCIONAR',
+      linhas: [{ rotulo: 'Assuntos vetados por ele', valor: (est.naoFalar || []).join(', '), campo: 'estrategia.naoFalar' }],
+    });
+  }
+
+  return grupos;
+}
 
 /**
  * O bloco de persona que entra em TODA geração — post, imagem ou exemplo de
@@ -719,86 +1139,22 @@ export function resumir(p: PersonaProfunda, nome?: string): string {
  *
  * `foco` muda o recorte: para post interessa voz e público; para curso
  * interessa nível, ritmo e o que está travando.
+ *
+ * ⚠️ Isto é só a RENDERIZAÇÃO de `gruposDePrompt`. Toda decisão de conteúdo
+ * mora lá — inclusive a separação entre o aluno e o público dele, que é o que
+ * impede o modelo de trocar um pelo outro.
  */
-export function blocoDePersona(p: PersonaProfunda, foco: 'post' | 'curso' | 'imagem' = 'post'): string {
-  const l: string[] = [];
-  const id = p.identidade || {};
-  const voz = p.voz || {};
-  const pub = p.publico || {};
-  const est = p.estrategia || {};
-  const apr = p.aprendizado || {};
-
-  if (id.marca) l.push(`Marca: ${id.marca}`);
-  if (id.papel) l.push(`O que faz: ${id.papel}`);
-  const areas = traduz(lista(p.industry), AREAS);
-  if (areas.length) l.push(`Área: ${areas.join(', ')}`);
-  if (id.cidade) l.push(`Onde vive: ${id.cidade}`);
-  if (id.missao) l.push(`Por que faz: ${id.missao}`);
-  if ((id.valores || []).length) l.push(`Valores inegociáveis: ${(id.valores || []).join(', ')}`);
-
-  if (foco !== 'curso') {
-    const tons = traduz(lista(p.toneOfVoice), TONS);
-    if (tons.length) l.push(`Tom de voz: ${tons.join(', ')}`);
-    if (typeof voz.formalidade === 'number') {
-      l.push(
-        `Formalidade: ${voz.formalidade < 35 ? 'baixa — escreva como quem conversa, pode usar contração e gíria leve' : voz.formalidade > 70 ? 'alta — evite gíria, frases completas, terceira pessoa quando couber' : 'média — profissional mas próximo'}`
-      );
-    }
-    if (typeof voz.emoji === 'number') {
-      l.push(`Emoji: ${voz.emoji < 20 ? 'quase nenhum' : voz.emoji > 65 ? 'muitos, inclusive no meio da frase' : 'poucos, no fim de parágrafo'}`);
-    }
-    if ((voz.bordoes || []).length) l.push(`Expressões que são a cara dele: ${(voz.bordoes || []).join(' / ')}`);
-    if (voz.vocabulario) l.push(`Vocabulário: ${voz.vocabulario}`);
-    const recursos = [voz.usaHumor && 'humor', voz.usaPergunta && 'perguntas diretas', voz.usaHistoria && 'histórias pessoais', voz.usaCta && 'chamada para ação no fim'].filter(Boolean);
-    if (recursos.length) l.push(`Usa: ${recursos.join(', ')}`);
-    if (voz.amostra) l.push(`AMOSTRA REAL DA ESCRITA DELE (imite o ritmo de frase, não o assunto):\n"""\n${voz.amostra.slice(0, 900)}\n"""`);
-  }
-
-  if (pub.quemE) l.push(`Público: ${pub.quemE}`);
-  if (Array.isArray(pub.idade)) l.push(`Idade do público: ${pub.idade[0]}-${pub.idade[1]}`);
-  if ((pub.dores || []).length) l.push(`Dores do público: ${(pub.dores || []).join('; ')}`);
-  if ((pub.desejos || []).length) l.push(`Desejos do público: ${(pub.desejos || []).join('; ')}`);
-  if (p.audienceInsights) l.push(`Sinais coletados sobre ele: ${p.audienceInsights.slice(0, 400)}`);
-
-  const metas = traduz(lista(p.marketingGoals), OBJETIVOS);
-  if (metas.length) l.push(`Objetivos: ${metas.join(', ')}`);
-  if ((est.pilares || []).length) l.push(`Pilares de conteúdo: ${(est.pilares || []).join(', ')}`);
-  if (est.assinatura) l.push(`Chamada para ação preferida: ${est.assinatura}`);
-
-  if (foco === 'post') {
-    const formatos = traduz(lista(p.contentTypes), FORMATOS);
-    if (formatos.length) l.push(`Formatos que ele produz: ${formatos.join(', ')}`);
-    if ((p.topHashtags || []).length) l.push(`Hashtags dele: ${(p.topHashtags || []).slice(0, 10).map((h) => `#${h.replace(/^#/, '')}`).join(' ')}`);
-  }
-
-  /**
-   * O negócio entra em TODOS os focos — inclusive imagem.
-   *
-   * É o bloco que dá número ao exemplo do curso, contexto ao post e cenário à
-   * imagem. Ticket e objeção primeiro: são os dois que o modelo mais usa e os
-   * dois que mais mudam a frase que sai.
-   */
-  const neg = p.negocio || {};
-  if (neg.oQueVende) l.push(`O que vende: ${neg.oQueVende}`);
-  if (neg.ticket) l.push(`Ticket médio: R$ ${neg.ticket} — use ESTE número nas contas de retorno`);
-  if (neg.objecao) l.push(`Objeção que mais ouve: "${neg.objecao}"`);
-  if (neg.canal) l.push(`Onde vende: ${neg.canal}`);
-  if (neg.clientesPorMes) l.push(`Clientes por mês: cerca de ${neg.clientesPorMes}`);
-  if (neg.orgulho) l.push(`Do que mais se orgulha: ${neg.orgulho}`);
-  if ((neg.referencias || []).length) l.push(`Referências que admira: ${(neg.referencias || []).join(', ')}`);
-
-  if (foco === 'curso') {
-    if (p.experienceLevel) l.push(`Nível com IA: ${NIVEIS[p.experienceLevel] ?? p.experienceLevel}`);
-    if (apr.ritmo) l.push(`Como aprende melhor: ${RITMOS[apr.ritmo] ?? apr.ritmo}`);
-    if (apr.tempo) l.push(`Tempo disponível: ${TEMPOS[apr.tempo] ?? apr.tempo}`);
-    if ((apr.ferramentas || []).length) l.push(`Ferramentas que já usa: ${(apr.ferramentas || []).join(', ')}`);
-    if (apr.travando) l.push(`O que já tentou e não deu certo: ${apr.travando}`);
-    if (apr.objetivo) l.push(`Meta dos próximos 90 dias: ${apr.objetivo}`);
-  }
-
-  if ((est.naoFalar || []).length) l.push(`PROIBIDO mencionar: ${(est.naoFalar || []).join(', ')}`);
-
-  return l.join('\n');
+export function blocoDePersona(
+  p: PersonaProfunda,
+  foco: 'post' | 'curso' | 'imagem' = 'post',
+  extras?: { nome?: string },
+): string {
+  return gruposDePrompt(p, foco, extras)
+    .map((g) => {
+      const cabeca = `### ${g.titulo}` + (g.aviso ? `\n(${g.aviso})` : '');
+      return `${cabeca}\n${g.linhas.map((l) => `${l.rotulo}: ${l.valor}`).join('\n')}`;
+    })
+    .join('\n\n');
 }
 
 /** Quantos campos profundos estão preenchidos — usado no XP e no selo. */

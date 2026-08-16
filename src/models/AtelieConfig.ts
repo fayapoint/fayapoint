@@ -30,6 +30,19 @@ export interface IAtelieConfig extends Document {
   extensao: string;
   foco: string[];
   narrador: string;
+  /**
+   * ── OS DOIS DE 16/08/2026 ────────────────────────────────────────────────
+   *
+   * `emojis` (chave de `EMOJIS`) e `modelo` (id de `MODELOS_ESCOLHIVEIS`).
+   *
+   * ⚠️ Estão declarados no schema abaixo, e é isso que os separa de existirem
+   * ou não. Foi assim que `socialPersona.negocio` se perdeu por uma semana
+   * inteira em agosto: campo ausente do schema, Mongoose descartando em
+   * silêncio, tela salvando com sucesso e nada gravado. Ver
+   * `reference_mongoose_campo_fantasma`.
+   */
+  emojis: string;
+  modelo: string;
   atualizadoEm: Date;
   /**
    * ── O PACOTE JÁ PAGO DESTE CURSO (11/08/2026) ────────────────────────────
@@ -63,6 +76,8 @@ const AtelieConfigSchema = new Schema<IAtelieConfig>(
     extensao: { type: String, default: 'media' },
     foco: { type: [String], default: [] },
     narrador: { type: String, default: 'fernando_borges' },
+    emojis: { type: String, default: 'espelho' },
+    modelo: { type: String, default: 'auto' },
     atualizadoEm: { type: Date, default: Date.now },
     // ⚠️ Campo NOVO. Se ele não estiver declarado aqui, o Mongoose descarta a
     // compra em silêncio (foi o defeito de `socialPersona.negocio`, 03–10/08) e

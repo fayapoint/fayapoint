@@ -9,20 +9,23 @@ import { resolvePlan, TIER_CONFIGS } from "@/lib/course-tiers";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
 import { dividirCapitulos } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
-import { montarDossie, type PersonaProfunda } from "@/lib/persona";
+import { montarDossie, gruposDePrompt, CAMPOS_CRITICOS, type PersonaProfunda } from "@/lib/persona";
 import { saldoDe, garantirCreditos } from "@/lib/creditos";
 import { getPrecos } from "@/lib/precos-runtime";
 import {
   montarOrcamento,
   calibrar,
   normalizarAjustes,
+  EMOJIS,
   EXTENSOES,
   FOCOS,
+  MODELOS_ESCOLHIVEIS,
   PROFUNDIDADES,
   TONS_AJUSTE,
   type Ajustes,
   type IdOpcao,
 } from "@/lib/atelie";
+import { MODELOS_DO_ATELIE } from "@/lib/modelos-do-atelie";
 import AtelieConfig from "@/models/AtelieConfig";
 import { NARRADORES, temNarracaoPronta } from "@/data/narradores";
 import { MINIMA_CONFIANCA, primeiroCapituloUtil } from "@/lib/atelie-servidor";
@@ -208,10 +211,48 @@ export async function GET(request: NextRequest) {
         profundidades: PROFUNDIDADES,
         extensoes: EXTENSOES,
         focos: FOCOS,
+        emojis: EMOJIS,
+        /**
+         * Os modelos escolhíveis, já casados com a ficha que a mesa desenha.
+         *
+         * ⚠️ `auto` NÃO está em `MODELOS_DO_ATELIE` (aquele catálogo traduz ids
+         * técnicos gravados em `modelUsed`, e "auto" nunca é gravado). Ele é
+         * montado aqui, à mão, e é o primeiro da lista.
+         */
+        modelos: [
+          {
+            id: "auto",
+            nome: "Escolha automática",
+            fabricante: "FayAI",
+            oQueE: "Nós escolhemos, e trocamos sozinhos se um modelo falhar.",
+            jeitoDeEscrever:
+              "O padrão. Começa pelo mais rápido e sobe para o mais caro quando o capítulo é difícil ou a primeira resposta vem incompleta.",
+            velocidade: "muito rápido",
+            custo1M: 0,
+            cores: ["#f5c04e", "#a78bfa"] as [string, string],
+          },
+          ...MODELOS_DO_ATELIE.filter(
+            (m) => m.id !== "auto" && (MODELOS_ESCOLHIVEIS as readonly string[]).includes(m.id),
+          ),
+        ],
         narradores: NARRADORES.map((n) => ({
           ...n,
           jaGravado: temNarracaoPronta(curso, n.id),
         })),
+      },
+      /**
+       * ── O QUE VAI SER USADO, LITERALMENTE (16/08/2026) ──────────────────
+       *
+       * Ricardo pediu *"a opção de revisar o que vai ser utilizado"*. Esta
+       * chave não é um resumo do que o modelo recebe: é o que o modelo recebe,
+       * pela MESMA função que monta o prompt (`gruposDePrompt`). Um painel que
+       * descrevesse o prompt por fora envelheceria na primeira mudança do
+       * motor e ninguém perceberia — e a pessoa estaria revisando um texto que
+       * não é o que vai ser usado, que é pior do que não revisar nada.
+       */
+      oQueVaiSerUsado: {
+        grupos: gruposDePrompt(persona, "curso", { nome: user.name }),
+        criticos: CAMPOS_CRITICOS,
       },
       /** O material que a prévia de estúdio toca — vídeo mudo + voz. */
       previa: {
@@ -362,6 +403,9 @@ export async function POST(request: NextRequest) {
 
     const escrita = await escreverCamada({
       persona,
+      // A amostra tem de sair do MESMO prompt da geração paga — inclusive o
+      // nome. Ver a nota gêmea em `curso-personalizado`.
+      nomeDoAluno: String(user.name || ""),
       nomeDoCurso: String(produto.name || curso),
       numero: cap.numero ?? 1,
       titulo: cap.titulo,

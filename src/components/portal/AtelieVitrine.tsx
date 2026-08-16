@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { Coins, Sparkles, ArrowRight, Loader2, User2, Wand2, BookOpen, Check } from "lucide-react";
+import { Coins, Sparkles, ArrowRight, Loader2, SlidersHorizontal, User2, Wand2, BookOpen, Check } from "lucide-react";
 import { useT } from "@/i18n/dicionario";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 
@@ -273,10 +273,13 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
                */
               const temLivro = (c.escritos || 0) > 0;
               return (
-                <Link
+                <div
                   key={c.slug}
-                  href={temLivro ? `/curso/${c.slug}/meu/livro` : `/curso/${c.slug}/meu`}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-secondary/20 transition-all hover:-translate-y-0.5 hover:border-amber-400/50"
+                >
+                <Link
+                  href={temLivro ? `/curso/${c.slug}/meu/livro` : `/curso/${c.slug}/meu`}
+                  className="flex flex-1 flex-col"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                     {c.capa ? (
@@ -349,6 +352,26 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
                     </span>
                   </div>
                 </Link>
+
+                {/**
+                 * ⚠️ A SEGUNDA PORTA — "customizar" (16/08/2026).
+                 *
+                 * Ricardo: *"quando eu clico num livro para customizar, preciso
+                 * ir para uma nova área de customização"*. O cartão inteiro
+                 * levava à leitura (ou à compra), e quem clicava querendo MUDAR
+                 * o livro caía numa vitrine. Um cartão, duas intenções: ler o
+                 * que está pronto, e mexer em como ele é feito.
+                 *
+                 * Fora do `<Link>` de cima, e não dentro — âncora dentro de
+                 * âncora é HTML inválido e o navegador desmancha a de dentro.
+                 */}
+                <Link
+                  href={`/curso/${c.slug}/meu/ajustes`}
+                  className="flex items-center justify-center gap-1.5 border-t border-border/70 px-3 py-2 text-[11.5px] font-bold text-muted-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-200"
+                >
+                  <SlidersHorizontal size={11} /> {T("customizar como é escrito")}
+                </Link>
+                </div>
               );
             })}
           </div>

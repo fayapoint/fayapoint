@@ -331,6 +331,16 @@ export default function MeuLivro() {
                 : `${T("Escrever os")} ${faltam} ${T("que faltam")}`}
             </Link>
           )}
+          {/* ⚠️ A porta para MUDAR, ao lado da porta para LER (16/08/2026).
+              Esta página mostra como o livro foi feito e não tinha por onde
+              mudar nada: a ficha técnica mandava "volte ao Ateliê", e o Ateliê
+              é a página de compra. Agora o caminho é direto. */}
+          <Link
+            href={`/${locale}/curso/${slug}/meu/ajustes`}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-[14px] font-bold text-white hover:bg-white/10"
+          >
+            <SlidersHorizontal size={15} /> {T("Mudar como é escrito")}
+          </Link>
         </div>
       </div>
 
@@ -369,9 +379,9 @@ export default function MeuLivro() {
                 ))}
               </div>
               <p className="mt-2 text-[12px] text-white/45">
-                {T("Para mudar, volte ao Ateliê e escolha outro — depois use “regerar” no capítulo que quiser refazer com o ajuste novo.")}{" "}
-                <Link href={`/${locale}/curso/${slug}/meu`} className="font-bold text-amber-300 hover:underline">
-                  {T("Abrir o Ateliê")}
+                {T("Para mudar qualquer um destes — e também quem escreve e quanto emoji entra — use a mesa de ajustes; depois “regerar” no capítulo que quiser refazer com o ajuste novo.")}{" "}
+                <Link href={`/${locale}/curso/${slug}/meu/ajustes`} className="font-bold text-amber-300 hover:underline">
+                  {T("Abrir a mesa de ajustes")}
                 </Link>
               </p>
             </div>

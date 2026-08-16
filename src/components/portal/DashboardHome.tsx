@@ -37,6 +37,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { TrailMap } from "@/components/portal/TrailMap";
 import { CartaoPersona } from "@/components/portal/CartaoPersona";
+import { FaixaAtelie } from "@/components/portal/FaixaAtelie";
 import { PortalTour } from "@/components/portal/PortalTour";
 import { ArcadeBanner } from "@/components/portal/MinigamesPanel";
 import { allCourses, getNormalizedLevel } from "@/data/courses";
@@ -338,6 +339,21 @@ export function DashboardHome({
             </div>
           </div>
         </div>
+      </motion.div>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          O ATELIÊ — logo abaixo do cumprimento (pedido do Ricardo 16/08)
+
+          ⚠️ Ela vem ANTES das pílulas de ação rápida, e o lugar é o argumento:
+          o Ateliê é a razão de existir do site e estava com o mesmo destaque de
+          "Recompensas" — uma aba na lateral. Uma pílula a mais na fileira o
+          deixaria empatado com a loja POD.
+
+          A faixa se desenha sozinha conforme o estado do aluno (livro parado no
+          meio, livro pronto, ou nada ainda). Ver `FaixaAtelie`.
+          ═══════════════════════════════════════════════════════════════ */}
+      <motion.div variants={itemVariants}>
+        <FaixaAtelie onAbrir={() => onTabChange("atelie")} />
       </motion.div>
 
       {/* ── QUICK ACTIONS — compact pill row ── */}
