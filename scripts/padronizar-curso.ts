@@ -148,7 +148,16 @@ function reprovar(original: string, saida: string): string | null {
   const faltando = SECOES.filter((s) => !new RegExp(`^##\\s+${s}\\s*$`, "im").test(saida));
   if (faltando.length) return `faltam seções: ${faltando.join(", ")}`;
 
-  const passos = (saida.match(/^\s*[1-5]\.\s+\*\*/gm) || []).length;
+  /**
+   * ⚠️ Conta os passos DENTRO do Fluxo, não no capítulo inteiro.
+   *
+   * A primeira versão varria a página toda e reprovou dois capítulos por
+   * "Fluxo de Execução com 8 passos" — quando o Fluxo tinha os 5 certos e o
+   * que sobrava eram itens numerados em negrito do Exercício e do Checklist.
+   * O verificador estava vendo o gabarito ser cumprido e chamando de erro.
+   */
+  const fluxo = saida.split(/^##\s+/m).find((x) => /^Fluxo de Execução/i.test(x)) || "";
+  const passos = (fluxo.match(/^\s*\d+\.\s+\*\*/gm) || []).length;
   if (passos !== 5) return `Fluxo de Execução com ${passos} passos em negrito, não 5`;
 
   if (!/^>\s*\*\*Dica Pro:/im.test(saida)) return "sem a Dica Pro";
@@ -284,6 +293,23 @@ async function main() {
       saida.push(bloco);
       continue;
     }
+    /**
+     * ⚠️ Capítulo que JÁ está no gabarito passa intacto — e a falta disto
+     * custou caro em 16/08.
+     *
+     * Reprocessei `crie-agentes-de-ia-autonomos` para pegar um capítulo que
+     * tinha falhado, e o script reestruturou também os catorze que já estavam
+     * prontos. Como a instrução do modelo manda NUNCA encolher, o curso
+     * inflou de 163k para 198k caracteres numa passada. Reprocessar tem de ser
+     * seguro, senão consertar um capítulo estraga o curso.
+     */
+    if (!reprovar(bloco, bloco)) {
+      console.log(`  ${String(i).padStart(2)} ⏭  já no gabarito — intacto`);
+      saida.push(bloco);
+      convertidos++;
+      continue;
+    }
+
     process.stdout.write(`  ${String(i).padStart(2)} ⏳ ${titulo.slice(0, 48)}… `);
     try {
       const novo = await padronizarCapitulo(bloco, String(doc.name));
