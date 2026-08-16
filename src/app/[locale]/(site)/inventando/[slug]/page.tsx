@@ -43,13 +43,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const m = getMicrocurso(slug);
   if (!m) return { robots: { index: false, follow: true } };
 
-  return generatePageMetadata({
+  const meta = generatePageMetadata({
     locale,
     path: `/inventando/${slug}`,
     title: `${m.titulo} — microcurso grátis | FayAI`,
     description: m.resumo,
     image: capaDe(m),
   });
+
+  /**
+   * ⚠️ `/en/inventando/*` é a ÚNICA seção que ainda serve português.
+   *
+   * O `noindex` geral de `/en` saiu em 16/08/2026 porque a tradução ficou
+   * pronta — mas os microcursos não entraram nela: conferido em produção,
+   * `/en/inventando/instella-...`, `/kimi-k3-...` e `/phi-zero-...` devolvem
+   * o título em português. Anunciar isso como versão inglesa é declarar
+   * duplicata de nós mesmos, que é justamente o que a regra antiga evitava.
+   *
+   * `follow` fica ligado: a página continua passando valor pelos links
+   * internos, ela só não compete consigo mesma no índice. E ela também sai do
+   * sitemap em inglês — sitemap que anuncia página `noindex` é instrução
+   * contraditória, e foi o que o Search Console reclamou.
+   *
+   * **Quando os microcursos forem traduzidos, apague este bloco.**
+   */
+  if (locale === "en") {
+    return { ...meta, robots: { index: false, follow: true } };
+  }
+
+  return meta;
 }
 
 export default async function MicrocursoGratisPage({ params }: Props) {

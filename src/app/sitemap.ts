@@ -32,8 +32,24 @@ const SITE_URL =
  */
 const LOCALES = ["pt-BR", "en"] as const;
 
-/** O par de idiomas de um caminho, no formato que o sitemap do Next espera. */
-function alternates(path: string) {
+/**
+ * O par de idiomas de um caminho, no formato que o sitemap do Next espera.
+ *
+ * `somentePt` existe para o conteúdo que **não** tem versão inglesa de
+ * verdade (hoje, os microcursos de `/inventando`). Declarar `hreflang="en"`
+ * apontando para uma URL que serve português e responde `noindex` é a mesma
+ * contradição que o Search Console reclamou em 16/08 — só que escondida no
+ * hreflang em vez de no `<loc>`.
+ */
+function alternates(path: string, somentePt = false) {
+  if (somentePt) {
+    return {
+      languages: {
+        "pt-BR": url(`/pt-BR${path}`),
+        "x-default": url(`/pt-BR${path}`),
+      },
+    };
+  }
   return {
     languages: {
       "pt-BR": url(`/pt-BR${path}`),
@@ -210,14 +226,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
      * pode é declarar no sitemap uma URL que responde vazia para quem não
      * pagou, e não é o caso.
      */
-    for (const m of microcursos) {
-      entries.push({
-        url: url(`/${locale}/inventando/${m.slug}`),
-        alternates: alternates(`/inventando/${m.slug}`),
-        lastModified: new Date(m.publicadoEm),
-        changeFrequency: "monthly",
-        priority: 0.75,
-      });
+    /**
+     * ⚠️ Os microcursos entram só em português (16/08/2026).
+     *
+     * `/en/inventando/*` ainda serve texto em português e por isso declara
+     * `noindex` (ver `inventando/[slug]/page.tsx`). Anunciá-los aqui seria
+     * repetir o erro que este arquivo já evita para `/status` e companhia:
+     * sitemap que declara página `noindex` é instrução contraditória, e o
+     * Search Console reclama dela — reclamou em 16/08.
+     *
+     * Quando a tradução dos microcursos sair, some o `if` e o `noindex` de lá.
+     */
+    if (locale === "pt-BR") {
+      for (const m of microcursos) {
+        entries.push({
+          url: url(`/${locale}/inventando/${m.slug}`),
+          alternates: alternates(`/inventando/${m.slug}`, true),
+          lastModified: new Date(m.publicadoEm),
+          changeFrequency: "monthly",
+          priority: 0.75,
+        });
+      }
     }
 
     for (const slug of courseSlugs) {

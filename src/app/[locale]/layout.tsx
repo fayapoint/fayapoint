@@ -144,18 +144,29 @@ export async function generateMetadata({
   return {
     ...metadata,
     /**
-     * `/en/` sai do índice enquanto servir português.
+     * `/en/` VOLTOU ao índice em 16/08/2026.
      *
-     * A rota continua funcionando — quem chegar nela vê o site. O que muda é
-     * o que dizemos ao Google: hoje `/en/qualquer-coisa` devolve o mesmo texto
-     * em português de `/pt-BR/qualquer-coisa`, e anunciar isso como versão
-     * inglesa é duplicata declarada por nós mesmos. Num domínio sem
-     * autoridade, gastar metade do rastreamento em cópia é caro.
+     * A regra anterior tirava todo o `/en` do índice, e a razão era boa na
+     * época: `/en/qualquer-coisa` devolvia o mesmo texto em português de
+     * `/pt-BR/qualquer-coisa`, e anunciar isso como versão inglesa seria
+     * duplicata declarada por nós mesmos.
      *
-     * `follow` fica ligado: as páginas continuam passando valor pelos links
-     * internos; elas só não competem consigo mesmas no índice.
+     * **Essa premissa caiu.** A tradução fechou em 06/08 e foi conferida em
+     * produção em 16/08: `/en/cursos` serve "AI & Automation Courses" com
+     * `<html lang="en">`, `/en/curso/chatgpt-zero` serve "ChatGPT from Scratch
+     * Course", `/en/noticias/claude-opus-5` e `/en/ferramentas/chatgpt`
+     * idem. É conteúdo inglês de verdade, não cópia.
+     *
+     * O que a regra virou custava caro: o sitemap declarava 402 URLs, e as
+     * 201 de `/en` eram todas `noindex`. Metade do sitemap era instrução
+     * contraditória — "indexe esta página" e "não indexe esta página" ao
+     * mesmo tempo. É a origem do aviso "Excluída pela tag noindex" nas
+     * páginas de um sitemap, no Search Console de 16/08.
+     *
+     * ⚠️ A exceção que sobrou é `/en/inventando/*`, que **continua** em
+     * português — ela declara o próprio `noindex` e fica fora do sitemap em
+     * inglês. Ver `inventando/[slug]/page.tsx` e `sitemap.ts`.
      */
-    ...(locale === "en" && { robots: { index: false, follow: true } }),
     /**
      * O layout NÃO declara `alternates.canonical` — de propósito.
      *
