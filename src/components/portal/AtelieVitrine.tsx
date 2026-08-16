@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { Coins, Sparkles, ArrowRight, Loader2, SlidersHorizontal, User2, Wand2, BookOpen, Check } from "lucide-react";
 import { useT } from "@/i18n/dicionario";
 import { getClientAuthHeaders } from "@/lib/client-auth";
+import { LivroNoPortal } from "@/components/portal/LivroNoPortal";
 
 /**
  * A vitrine do Ateliê — escolher QUAL curso ganha a sua cara.
@@ -101,6 +102,15 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
   const T = useT();
   const [d, setD] = useState<Resposta | null>(null);
   const [carregando, setCarregando] = useState(true);
+  /**
+   * ⚠️ O livro abre AQUI, não noutra página (16/08/2026).
+   *
+   * Ricardo: *"do jeito que está eu tenho que clicar mais 3 vezes para ver meu
+   * curso."* O cartão levava para `/curso/<slug>/meu/livro`, fora do portal —
+   * e de lá era mais um clique para os ajustes. Estado local em vez de
+   * navegação: o Ateliê passa a ter duas vistas, a prateleira e o livro.
+   */
+  const [aberto, setAberto] = useState<string | null>(null);
 
   useEffect(() => {
     let vivo = true;
@@ -128,6 +138,8 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
       </div>
     );
   }
+
+  if (aberto) return <LivroNoPortal slug={aberto} aoVoltar={() => setAberto(null)} />;
 
   const cursos = d?.cursos || [];
 
@@ -277,9 +289,13 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
                   key={c.slug}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-secondary/20 transition-all hover:-translate-y-0.5 hover:border-amber-400/50"
                 >
-                <Link
-                  href={temLivro ? `/curso/${c.slug}/meu/livro` : `/curso/${c.slug}/meu`}
-                  className="flex flex-1 flex-col"
+                {/* Livro existente abre a vista de dentro; curso ainda sem
+                    livro continua indo ao Ateliê do curso, que é onde se
+                    compra — comprar exige a página inteira. */}
+                <button
+                  type="button"
+                  onClick={() => (temLivro ? setAberto(c.slug) : (window.location.href = `/curso/${c.slug}/meu`))}
+                  className="flex flex-1 flex-col text-left"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                     {c.capa ? (
@@ -351,7 +367,7 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
                       <ArrowRight size={12} />
                     </span>
                   </div>
-                </Link>
+                </button>
 
                 {/**
                  * ⚠️ A SEGUNDA PORTA — "customizar" (16/08/2026).
