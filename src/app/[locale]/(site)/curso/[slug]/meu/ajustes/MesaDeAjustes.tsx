@@ -79,6 +79,8 @@ interface ModeloNaTela {
   custo1M: number;
   cores: [string, string];
   imagem?: string;
+  /** Créditos a mais por fixar ESTE modelo. Ver `ACRESCIMO_POR_MODELO`. */
+  acrescimoCreditos?: number;
 }
 
 interface Ajustes {
@@ -483,6 +485,18 @@ export default function MesaDeAjustes({ slug, locale }: { slug: string; locale: 
                   <span className="flex flex-wrap items-baseline gap-x-2">
                     <span className={`text-[13.5px] font-bold ${on ? "text-amber-100" : "text-white"}`}>{m.nome}</span>
                     <span className="text-[11px] text-white/35">{m.fabricante}</span>
+                    {/* ⚠️ O preço fica ao lado do NOME, não no rodapé do cartão.
+                        Um acréscimo que só aparece no orçamento lá embaixo é uma
+                        surpresa na hora de pagar — e este produto já tomou essa
+                        lição uma vez, quando o preço só existia depois da escolha
+                        do curso. */}
+                    {(m.acrescimoCreditos ?? 0) > 0 ? (
+                      <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[11px] font-bold text-amber-200">
+                        +{m.acrescimoCreditos} {T("créditos")}
+                      </span>
+                    ) : (
+                      <span className="text-[11px] font-semibold text-emerald-300/80">{T("sem acréscimo")}</span>
+                    )}
                     {on && <Check size={13} className="text-amber-300" />}
                   </span>
                   <span className="mt-0.5 block text-[12px] leading-snug text-white/60">{m.oQueE}</span>
@@ -503,6 +517,15 @@ export default function MesaDeAjustes({ slug, locale }: { slug: string; locale: 
             )}
           </p>
         )}
+        {/* ⚠️ A razão do acréscimo, escrita. "Modelo caro custa mais" seria a
+            explicação errada — o `auto` já começa pelo mais caro por token. O
+            que se cobra é ele perder o direito de descer para o barato quando
+            o capítulo é fácil. Ver `ACRESCIMO_POR_MODELO`. */}
+        <p className="mt-2 text-[12px] leading-snug text-white/45">
+          {T(
+            "Por que fixar custa mais: no automático nós começamos pelo rápido e só subimos para o caro quando o capítulo exige. Fixar um modelo tira essa economia do curso inteiro — por isso o acréscimo, cobrado uma vez junto com o pacote.",
+          )}
+        </p>
       </section>
 
       {/* ═══ 3. COMO ESCREVE ═══ */}
@@ -558,7 +581,7 @@ export default function MesaDeAjustes({ slug, locale }: { slug: string; locale: 
           n={4}
           icone={<Sparkles size={15} />}
           titulo="Veja o efeito antes de gastar"
-          sub="Um capítulo escrito com os ajustes desta tela. Não custa crédito nenhum, e pode ser refeito quantas vezes você quiser."
+          sub="Um capítulo escrito com os ajustes desta tela. A amostra é grátis — é o livro inteiro que se paga."
         />
 
         {provaVelha && prova && (
@@ -629,7 +652,7 @@ export default function MesaDeAjustes({ slug, locale }: { slug: string; locale: 
           <Link href={`/${locale}/curso/${slug}/meu/livro`} className="font-bold text-amber-300 hover:underline">
             {T("sumário do livro")}
           </Link>
-          {T(" — em curso já pago, regerar não cobra de novo.")}
+          {T(" — reescrever um capítulo já pronto custa 2 créditos, mesmo em curso pago.")}
         </p>
       )}
     </div>

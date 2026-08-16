@@ -21,7 +21,7 @@ import { montarDossie, type PersonaProfunda } from "@/lib/persona";
 import { debitar, saldoParaGastar, custoDe, saldoDe, garantirCreditos } from "@/lib/creditos";
 import { MINIMA_CONFIANCA, impressao, escreverCamada } from "@/lib/atelie-servidor";
 import AtelieConfig from "@/models/AtelieConfig";
-import { normalizarAjustes, type Ajustes } from "@/lib/atelie";
+import { custoDoAtelie, normalizarAjustes, type Ajustes } from "@/lib/atelie";
 import { podePersonalizar, motivoSemPersonalizacao } from "@/lib/curso-personalizavel";
 
 export const dynamic = "force-dynamic";
@@ -455,7 +455,50 @@ export async function POST(request: NextRequest) {
     const pacoteDesejado = acharPacote(typeof body.pacote === "string" ? body.pacote : "escrito").id;
     const jaPago = (configCurso?.pacotePago?.id as IdPacote | undefined) || null;
     const precos = await getPrecos();
-    const custoPrevisto = diferencaDePacote(jaPago, pacoteDesejado, precos.custos);
+    /**
+     * ── 4. FIXAR UM MODELO CUSTA (16/08/2026) ─────────────────────────────
+     *
+     * O acréscimo por modelo entra AQUI, na mesma conta que a tela mostra
+     * (`montarOrcamento` chama as mesmas funções). Ver `custoDoAtelie` para o
+     * porquê de o acréscimo não ser proporcional ao preço do token.
+     *
+     * ⚠️ O modelo vem de `AtelieConfig`, **nunca do corpo da requisição**. O
+     * cliente escolhe o modelo pelo PATCH; deixá-lo mandar o modelo junto do
+     * pedido de geração seria deixá-lo escolher o próprio preço.
+     */
+    const modeloFixado = normalizarAjustes(configCurso as Partial<Ajustes> | null).modelo;
+    const precoBaseDesejado = precos.custos[acharPacote(pacoteDesejado).acao] ?? 0;
+    const custoDoPacote = custoDoAtelie({
+      precoBase: precoBaseDesejado,
+      modelo: modeloFixado,
+      jaPagoCreditos: configCurso?.pacotePago?.creditos || 0,
+    });
+
+    /**
+     * ── 5. REGERAR CUSTA (16/08/2026) ─────────────────────────────────────
+     *
+     * Ricardo: *"ele não pode custar zero para gerar outro nunca, pois assim
+     * poderíamos ter um sem fim de requisições só porque é de graça."*
+     *
+     * Ele está certo e o desenho anterior era meu erro. "Pagou uma vez, é seu"
+     * virou uma torneira aberta: com o pacote pago, `custoPrevisto` dava zero e
+     * cada clique em "regerar" disparava uma chamada de modelo de graça, sem
+     * teto e sem atrito nenhum. Um curso de 30 capítulos podia ser reescrito
+     * cem vezes numa tarde.
+     *
+     * ⚠️ **A distinção que faz isso ser justo, e que não pode se perder:**
+     *
+     *   - **Terminar** o que foi pago é grátis. Capítulo sem camada nenhuma já
+     *     foi comprado no pacote — cobrar de novo seria cobrar duas vezes pela
+     *     mesma entrega, que é exatamente o defeito que `pacotePago` conserta.
+     *   - **Reescrever** o que já existe custa. É trabalho novo sobre entrega
+     *     já feita, e é o único caminho por onde o laço infinito passa.
+     *
+     * Por isso a conta olha `jaTem`: capítulo com camada gravada é regeração.
+     */
+    const regeracoes = listaPendente.filter((cap) => jaTem.has(cap.indice)).length;
+    const custoRegeracao = custoDoPacote > 0 ? 0 : regeracoes * (precos.custos.curso_regerar_capitulo ?? 2);
+    const custoPrevisto = custoDoPacote + custoRegeracao;
 
     const saldo = await saldoParaGastar(String(user._id));
     if (pendentes > 0 && custoPrevisto > 0 && saldo.total < custoPrevisto) {
@@ -600,13 +643,23 @@ export async function POST(request: NextRequest) {
      */
     let cobranca: { gasto: number; restante: number } | null = null;
     if (geradas > 0 && custoPrevisto > 0) {
+      // ⚠️ Regeração pura entra no extrato com a própria ação. "Ateliê — curso
+      // escrito" numa cobrança de 4 créditos por dois capítulos refeitos faria
+      // a fatura mentir sobre o que foi comprado.
+      const soRegeracao = custoDoPacote === 0 && custoRegeracao > 0;
       const r = await debitar(
         String(user._id),
-        acharPacote(pacoteDesejado).acao,
-        1,
-        jaPago
+        soRegeracao ? "curso_regerar_capitulo" : acharPacote(pacoteDesejado).acao,
+        soRegeracao ? regeracoes : 1,
+        soRegeracao
+          ? `Ateliê — ${regeracoes} ${regeracoes === 1 ? "capítulo reescrito" : "capítulos reescritos"}: ${produto.name || curso}`
+          : jaPago
           ? `Ateliê — subiu para "${acharPacote(pacoteDesejado).titulo}": ${produto.name || curso}`
           : `Ateliê — "${acharPacote(pacoteDesejado).titulo}": ${produto.name || curso}`,
+        // ⚠️ O valor exato, e não a linha da tabela. Com o acréscimo de modelo,
+        // `CREDIT_COSTS[acao] × 1` deixou de ser o preço — cobrar por ele faria
+        // a tela prometer 35 e o caixa levar 25.
+        custoPrevisto,
       );
       if (r.ok) {
         cobranca = { gasto: r.gasto, restante: r.restante };

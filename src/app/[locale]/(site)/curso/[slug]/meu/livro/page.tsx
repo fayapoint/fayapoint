@@ -430,7 +430,7 @@ export default function MeuLivro() {
                 <p className="text-[13.5px] text-white/70">
                   <span className="font-bold text-white">{dados.pacote.creditos} {T("créditos")}</span>{" "}
                   {T("em")} {quando(dados.pacote.pagoEm, T)}.{" "}
-                  {T("O curso inteiro está incluso — continuar e regerar não cobram de novo.")}
+                  {T("O curso inteiro está incluso: terminar os capítulos que faltam não cobra nada. Reescrever um capítulo já pronto custa 2 créditos.")}
                 </p>
               </div>
             )}
@@ -575,8 +575,12 @@ export default function MeuLivro() {
                       {T("Regerar este capítulo")}
                     </button>
                     <span className="text-[12px] text-white/40">
+                      {/* ⚠️ Dizia "sem cobrança nova" e virou torneira aberta:
+                          cada clique disparava uma chamada de modelo de graça.
+                          Terminar o curso pago continua grátis; REESCREVER o que
+                          já existe custa. Ver `curso_regerar_capitulo`. */}
                       {dados.pacote
-                        ? T("sem cobrança nova — este curso já está pago")
+                        ? T("reescrever um capítulo já pronto custa 2 créditos")
                         : T("escrever este curso cobra o pacote uma única vez")}
                     </span>
                   </div>

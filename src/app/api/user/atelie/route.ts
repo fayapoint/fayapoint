@@ -20,6 +20,7 @@ import {
   EXTENSOES,
   FOCOS,
   MODELOS_ESCOLHIVEIS,
+  precoDoPacoteComModelo,
   PROFUNDIDADES,
   TONS_AJUSTE,
   type Ajustes,
@@ -125,6 +126,12 @@ export async function GET(request: NextRequest) {
     const configSalva = await AtelieConfig.findOne({ userId: String(user._id), courseSlug: curso }).lean();
     const ajustes = normalizarAjustes(configSalva as Partial<Ajustes> | null);
 
+    // ⚠️ Uma leitura só da tabela viva, reaproveitada. `await` dentro de um
+    // `.map()` não espera nada — devolve promessas — e chamar `getPrecos()`
+    // três vezes na mesma requisição é ir ao Redis três vezes pelo mesmo dado.
+    const precosVivos = (await getPrecos()).custos;
+    const precoEntrada = precosVivos.curso_escrito ?? 0;
+
     const orcamento = montarOrcamento({
       capitulos: capitulos.length,
       capitulosJaFeitos: camadasValidas.length,
@@ -133,10 +140,14 @@ export async function GET(request: NextRequest) {
       // O degrau que este aluno já comprou neste curso: é ele que faz o segundo
       // lote (e o "refazer") custarem zero, e a subida custar só a diferença.
       pacotePago: (configSalva?.pacotePago?.id as IdOpcao | undefined) || null,
+      // ⚠️ Os dois de 16/08: o modelo fixado muda o preço, e a base da conta
+      // passou a ser o dinheiro já pago, não o degrau. Ver `custoDoAtelie`.
+      modelo: ajustes.modelo,
+      jaPagoCreditos: configSalva?.pacotePago?.creditos || 0,
       narracaoPronta: temNarracaoPronta(curso, ajustes.narrador),
       // ⚠️ A tabela VIVA. Sem isto, o Ateliê mostraria o preço compilado e o
       // `POST /api/user/curso-personalizado` cobraria o do Mission Control.
-      precos: (await getPrecos()).custos,
+      precos: precosVivos,
     });
 
     // O capítulo que serve de amostra é escolhido aqui e no POST pela MESMA
@@ -234,7 +245,17 @@ export async function GET(request: NextRequest) {
           ...MODELOS_DO_ATELIE.filter(
             (m) => m.id !== "auto" && (MODELOS_ESCOLHIVEIS as readonly string[]).includes(m.id),
           ),
-        ],
+        ].map((m) => ({
+          ...m,
+          /**
+           * O acréscimo em CRÉDITOS sobre o degrau de entrada, já calculado.
+           *
+           * ⚠️ Vai pronto do servidor porque a tabela de preços é viva (Mission
+           * Control) — a tela não pode multiplicar percentual por um preço
+           * compilado, ou mostraria um número e o caixa cobraria outro.
+           */
+          acrescimoCreditos: precoDoPacoteComModelo(precoEntrada, m.id) - precoEntrada,
+        })),
         narradores: NARRADORES.map((n) => ({
           ...n,
           jaGravado: temNarracaoPronta(curso, n.id),

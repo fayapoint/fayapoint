@@ -485,6 +485,21 @@ export const CREDIT_COSTS = {
    * 30 custam o mesmo. É pior para a nossa conta no curso grande e muito melhor
    * para a vitrine: o preço vira tabela, e tabela é o que se anuncia.
    */
+  /**
+   * ⚠️ Regerar um capítulo JÁ ESCRITO custa (16/08/2026).
+   *
+   * Ricardo: *"ele não pode custar zero para gerar outro nunca, pois assim
+   * poderíamos ter um sem fim de requisições só porque é de graça."*
+   *
+   * "Pagou uma vez, é seu" continua valendo para TERMINAR o curso — capítulo
+   * sem camada nenhuma já está comprado no pacote. O que passa a custar é
+   * REESCREVER o que já foi entregue, que era o único caminho por onde um laço
+   * infinito de chamadas de modelo passava sem atrito.
+   *
+   * Editável na tabela viva (`/precos-creditos` no Mission Control), como todo
+   * preço desta lista.
+   */
+  curso_regerar_capitulo: 2,
   curso_escrito: 25,
   curso_ilustrado: 45,
   curso_narrado: 70,

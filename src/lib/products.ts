@@ -59,6 +59,15 @@ export interface Product {
   slug: string;
   type: 'course' | 'service' | 'product';
   status: 'active' | 'inactive' | 'draft';
+  /**
+   * Saiu do catálogo mas continua legível por quem já tem. Ver `SEM_APOSENTADOS`.
+   *
+   * ⚠️ NÃO use `status: 'inactive'` para aposentar: aquilo derruba a página do
+   * curso e leva junto o livro pago de quem comprou.
+   */
+  aposentado?: boolean;
+  /** Para onde mandar quem procurava este curso. Slug do sucessor. */
+  sucessor?: string;
   name: string;
   shortName: string;
   tool: string;
@@ -183,6 +192,30 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
+
+/**
+ * ── APOSENTADO ≠ INATIVO (16/08/2026) ─────────────────────────────────────
+ *
+ * Ricardo mandou tirar do catálogo os cursos repetidos — os que ensinam o mesmo
+ * tema que um curso já no padrão do `chatgpt-zero` (n8n, Midjourney, Perplexity
+ * e ChatGPT tinham cada um dois).
+ *
+ * O caminho óbvio era `status: 'inactive'`. **Ele quebra quem já comprou.**
+ * `getProductBySlug` filtra `status: 'active'`, e a página `/curso/<slug>` faz
+ * `notFound()` sem produto — então o botão "Ler no curso" do livro que o
+ * Ricardo pagou (`chatgpt-masterclass`, 25 créditos, 16 capítulos escritos)
+ * cairia num 404. É a mesma lição de 13/08, quando `enrolledCourses.isActive`
+ * escondeu esse mesmo livro: **desligar a vitrine não pode desligar a porta de
+ * quem já entrou.**
+ *
+ * `aposentado: true` separa as duas coisas:
+ *   - some das LISTAS (catálogo, busca, destaques, relacionados) → não se vende;
+ *   - a PÁGINA continua resolvendo → quem tem, lê; e a URL indexada não vira 404.
+ *
+ * ⚠️ Toda consulta de LISTA precisa de `SEM_APOSENTADOS`. Consulta por slug
+ * NÃO leva — é justamente o que mantém a porta aberta.
+ */
+export const SEM_APOSENTADOS = { aposentado: { $ne: true } } as const;
 
 function normalizeProduct(product: unknown): Product {
   const safeProduct = (product || {}) as Product;
@@ -505,7 +538,7 @@ export async function getAllProducts(options?: {
           sort = { featured: -1, featuredOrder: 1, 'metrics.students': -1 };
       }
       
-      const query: Record<string, unknown> = { status: 'active' };
+      const query: Record<string, unknown> = { status: 'active', ...SEM_APOSENTADOS };
       if (options?.type) {
         query.type = options.type;
       }
@@ -558,7 +591,8 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   const products = await collection
     .find({
       categoryPrimary: category,
-      status: 'active'
+      status: 'active',
+      ...SEM_APOSENTADOS,
     }, { projection: PROJECAO_DE_LISTA })
     .sort({ 'metrics.students': -1 })
     .toArray();
@@ -572,7 +606,8 @@ export async function getProductsByTag(tag: string): Promise<Product[]> {
   const products = await collection
     .find({
       tags: tag,
-      status: 'active'
+      status: 'active',
+      ...SEM_APOSENTADOS,
     }, { projection: PROJECAO_DE_LISTA })
     .sort({ 'metrics.students': -1 })
     .toArray();
@@ -584,7 +619,7 @@ export async function getProductsByTag(tag: string): Promise<Product[]> {
 export async function getAllCategories(): Promise<Array<{ name: string; count: number }>> {
   const collection = await getProductsCollection();
   const categories = await collection.aggregate([
-    { $match: { status: 'active' } },
+    { $match: { status: 'active', ...SEM_APOSENTADOS } },
     { 
       $group: {
         _id: '$categoryPrimary',
@@ -608,7 +643,7 @@ export async function getAllCategories(): Promise<Array<{ name: string; count: n
 export async function getFeaturedProducts(limit: number = 3): Promise<Product[]> {
   const collection = await getProductsCollection();
   const products = await collection
-    .find({ status: 'active' }, { projection: PROJECAO_DE_LISTA })
+    .find({ status: 'active', ...SEM_APOSENTADOS }, { projection: PROJECAO_DE_LISTA })
     .sort({
       featured: -1,
       featuredOrder: 1,
@@ -628,6 +663,7 @@ export async function searchProducts(query: string, type?: 'course' | 'tool'): P
   
   const mongoQuery: Record<string, unknown> = {
     status: 'active',
+    ...SEM_APOSENTADOS,
     $or: [
       { name: searchRegex },
       { shortName: searchRegex },
@@ -654,7 +690,7 @@ export async function getProductStats() {
   const collection = await getProductsCollection();
   
   const stats = await collection.aggregate([
-    { $match: { status: 'active' } },
+    { $match: { status: 'active', ...SEM_APOSENTADOS } },
     {
       $group: {
         _id: null,
@@ -692,6 +728,7 @@ export async function getRelatedProducts(slug: string, limit: number = 3): Promi
   const products = await collection
     .find({
       status: 'active',
+      ...SEM_APOSENTADOS,
       slug: { $ne: slug },
       $or: [
         { categoryPrimary: currentProduct.categoryPrimary },

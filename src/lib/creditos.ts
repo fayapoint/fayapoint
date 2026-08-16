@@ -320,8 +320,25 @@ export async function debitar(
   action: CreditAction,
   quantidade: number,
   descricao: string,
+  /**
+   * O valor EXATO a cobrar, quando quem chama já fez a conta.
+   *
+   * ⚠️ Existe desde 16/08/2026 por causa do acréscimo de modelo do Ateliê
+   * (`custoDoAtelie`): o preço deixou de ser "linha da tabela × quantidade"
+   * porque fixar um modelo soma um percentual, e o que já foi pago é subtraído
+   * do total. Sem isto, a tela mostraria 35 e o caixa cobraria 25 — e a
+   * divergência entre preço mostrado e preço cobrado é o defeito que o
+   * `montarOrcamento` foi escrito para nunca deixar acontecer.
+   *
+   * `action` continua obrigatório e continua indo para o extrato: o aluno tem
+   * de conseguir ler "Ateliê — curso escrito" na fatura, não um valor solto.
+   */
+  creditosExatos?: number,
 ): Promise<ResultadoDebito> {
-  const custo = await custoDe(action, quantidade);
+  const custo =
+    typeof creditosExatos === 'number'
+      ? Math.max(0, Math.round(creditosExatos))
+      : await custoDe(action, quantidade);
   const user = await User.findById(userId);
   if (!user) return { ok: false, gasto: 0, restante: 0, faltam: custo };
 

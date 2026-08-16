@@ -247,6 +247,77 @@ export const MODELOS_ESCOLHIVEIS = [
   'deepseek/deepseek-v4-pro',
 ] as const;
 
+/**
+ * ── QUANTO CUSTA FIXAR UM MODELO (16/08/2026) ────────────────────────────
+ *
+ * Ricardo: *"conserte também a alteração do preço do modelo para funcionar e
+ * efetivamente aumentar o custo."*
+ *
+ * A escolha de modelo entrou hoje sem preço nenhum — o aluno fixava o modelo
+ * mais caro da casa e pagava os mesmos 25. Isso é um buraco de margem, e é
+ * também uma promessa torta: um controle que muda o custo real e não aparece
+ * na conta ensina que a conta não é séria.
+ *
+ * ## ⚠️ O que se está cobrando aqui NÃO é "modelo caro"
+ *
+ * A tentação é ranquear por `custo1M` e cobrar proporcional. Não fecha, e o
+ * motivo é medido: `tier: 'free'` da corrente é o **Gemini 3 Flash**, o mais
+ * caro por token da lista ($3/1M de saída). Ou seja, `auto` já COMEÇA pelo
+ * caro. Cobrar "porque o modelo é caro" cobraria pelo que já está incluso.
+ *
+ * O que `auto` tem e um modelo fixado não tem é **o direito de descer**: se o
+ * capítulo é fácil, ou se o caro falha, a corrente cai para o DeepSeek a
+ * $0,18. Fixar um modelo remove essa economia do lado de cá, capítulo a
+ * capítulo, no curso inteiro. É isso que o acréscimo cobra.
+ *
+ * Por isso o DeepSeek Flash fixado custa **zero a mais**: fixar o barato não
+ * tira economia nenhuma de nós. E o acréscimo é percentual sobre o degrau, e
+ * não um número fixo, porque o trabalho poupado cresce com o tamanho do curso.
+ *
+ * ⚠️ Percentual sobre o PACOTE, nunca sobre o token. O crédito é preço de
+ * venda (1 crédito = R$1); atrelar isto ao custo de token faria a tabela do
+ * site mudar toda vez que a OpenRouter mexesse no preço dela.
+ */
+export const ACRESCIMO_POR_MODELO: Record<string, number> = {
+  auto: 0,
+  '~deepseek/deepseek-v4-flash-latest': 0,
+  'deepseek/deepseek-v4-pro': 0.2,
+  'google/gemini-3-flash-preview': 0.4,
+};
+
+/** O preço cheio de um degrau com um modelo fixado. */
+export function precoDoPacoteComModelo(
+  precoBase: number,
+  modelo: string | undefined,
+): number {
+  return Math.round(precoBase * (1 + (ACRESCIMO_POR_MODELO[modelo || 'auto'] ?? 0)));
+}
+
+/**
+ * O que este aluno paga AGORA por este (degrau, modelo).
+ *
+ * ⚠️ **A base é `pacotePago.creditos`, o total já pago — não o id do degrau.**
+ * `diferencaDePacote` comparava degrau com degrau, e com o acréscimo de modelo
+ * isso deixaria de fechar: quem pagou 25 no "escrito" com `auto` e depois fixa
+ * o Gemini deve os 10 de diferença, e nenhuma comparação de ids enxerga isso.
+ * Somar o que entrou no caixa e subtrair é a única conta que fecha nos dois
+ * eixos ao mesmo tempo.
+ *
+ * Nunca negativo, pela mesma razão de sempre: descer de degrau (ou trocar para
+ * um modelo mais barato) não devolve crédito.
+ */
+export function custoDoAtelie({
+  precoBase,
+  modelo,
+  jaPagoCreditos,
+}: {
+  precoBase: number;
+  modelo?: string;
+  jaPagoCreditos: number;
+}): number {
+  return Math.max(0, precoDoPacoteComModelo(precoBase, modelo) - Math.max(0, jaPagoCreditos));
+}
+
 export const AJUSTES_PADRAO: Ajustes = {
   tom: 'espelho',
   profundidade: 'equilibrado',
@@ -361,6 +432,15 @@ export interface EntradaOrcamento {
   narracaoPronta?: boolean;
   /** A tabela viva do Mission Control. Sem ela, o padrão de fábrica. */
   precos?: Record<string, number>;
+  /** O modelo fixado na mesa de ajustes — muda o preço. Ver `ACRESCIMO_POR_MODELO`. */
+  modelo?: string;
+  /**
+   * Quanto este aluno JÁ pagou neste curso, somado (`pacotePago.creditos`).
+   *
+   * ⚠️ É a base da conta desde 16/08. `pacotePago` (o id) continua servindo
+   * para dizer "já é seu" na tela; quem decide o preço é o dinheiro.
+   */
+  jaPagoCreditos?: number;
 }
 
 /**
@@ -385,10 +465,27 @@ export function montarOrcamento(e: EntradaOrcamento): Orcamento {
   const indicePago = pago ? PACOTES_CURSO.findIndex((p) => p.id === pago) : -1;
   const escolhido = (e.escolhidas[0] || 'escrito') as IdPacote;
 
+  const acrescimo = ACRESCIMO_POR_MODELO[e.modelo || 'auto'] ?? 0;
+  const jaPagoCreditos = e.jaPagoCreditos ?? 0;
+
   const itens: ItemOrcamento[] = PACOTES_CURSO.map((p, i) => {
-    const cheio = precos[p.acao as CreditAction] ?? 0;
-    const aPagar = diferencaDePacote(pago, p.id, precos);
-    const jaFeito = i <= indicePago;
+    const base = precos[p.acao as CreditAction] ?? 0;
+    const cheio = precoDoPacoteComModelo(base, e.modelo);
+    /**
+     * ⚠️ `diferencaDePacote` saiu da conta em 16/08 — ver `custoDoAtelie`.
+     * Ele comparava degrau com degrau e não enxergava troca de modelo: quem
+     * pagou 25 e fixa o Gemini continuaria vendo "nada a pagar".
+     *
+     * O fallback para o comportamento antigo mora no `?? `: sem
+     * `jaPagoCreditos` (chamada velha), a conta é a de sempre.
+     */
+    const aPagar =
+      e.jaPagoCreditos === undefined
+        ? diferencaDePacote(pago, p.id, precos)
+        : custoDoAtelie({ precoBase: base, modelo: e.modelo, jaPagoCreditos });
+    // "Já feito" continua sendo sobre o DEGRAU (o conteúdo entregue), não
+    // sobre o dinheiro: subir de modelo não desfaz o que já foi escrito.
+    const jaFeito = i <= indicePago && aPagar === 0;
     // A narração só é "em breve" enquanto não houver áudio pronto para este
     // curso nesta voz. Com áudio pronto, o degrau é entregável.
     const emBreve = p.emBreve === true && !(p.id === 'narrado' && e.narracaoPronta === true);
@@ -404,9 +501,11 @@ export function montarOrcamento(e: EntradaOrcamento): Orcamento {
       precoCheio: cheio,
       conta: jaFeito
         ? 'Você já tem este pacote neste curso — nada a pagar'
-        : indicePago >= 0
-          ? `${cheio} créditos − ${cheio - aPagar} que você já pagou = ${aPagar}`
-          : `${cheio} créditos pelo curso inteiro (${e.capitulos} capítulos), uma vez só`,
+        : jaPagoCreditos > 0
+          ? `${cheio} créditos − ${Math.min(cheio, jaPagoCreditos)} que você já pagou = ${aPagar}`
+          : acrescimo > 0
+            ? `${base} pelo curso inteiro (${e.capitulos} capítulos) + ${cheio - base} por fixar o modelo = ${cheio}, uma vez só`
+            : `${cheio} créditos pelo curso inteiro (${e.capitulos} capítulos), uma vez só`,
       jaFeito,
       emBreve,
     };
