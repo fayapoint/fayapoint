@@ -79,6 +79,8 @@ import { STUDIO_MODELS, planAtLeast, type StudioModel as StudioModelType } from 
 // Components
 import { DashboardSidebar } from "@/components/portal/DashboardSidebar";
 import { DashboardHome } from "@/components/portal/DashboardHome";
+import { TransicaoConstrucao } from "@/components/portal/TransicaoConstrucao";
+import { registrarEntrada } from "@/components/portal/esqueletoPortal";
 import { AchievementsPanel } from "@/components/portal/AchievementsPanel";
 import { LeaderboardPanel } from "@/components/portal/LeaderboardPanel";
 import { ChallengesPanel } from "@/components/portal/ChallengesPanel";
@@ -256,6 +258,23 @@ export default function PortalPage() {
   const contentScrollRef = useRef<HTMLDivElement>(null);
 
   /**
+   * ── A entrada que se constrói ──────────────────────────────────────────
+   *
+   * O spinner girando dava lugar a nada: o aluno esperava olhando um círculo.
+   * Agora o esqueleto guardado da última visita é redesenhado em 3D enquanto
+   * a API responde. O tempo é o mesmo; a leitura é outra.
+   *
+   * ⚠️ `precisaConstruir` é capturado **no primeiro render**. O `useDashboard`
+   * tem cache em memória de 5 min: numa troca de aba ou volta rápida o dado já
+   * está lá, `isDashboardLoading` nasce `false`, e a transição não deve rodar.
+   * Só entrada fria constrói.
+   */
+  const [precisaConstruir] = useState(() => isDashboardLoading);
+  const [entregue, setEntregue] = useState(false);
+  const t0Portal = useRef(performance.now());
+  const duracaoEntrada = useRef<number | null>(null);
+
+  /**
    * ⚠️ Toda troca de aba passa por aqui, e não por `setActiveTabBruto`.
    *
    * O portal trocava de aba **só no estado do React**: a URL continuava
@@ -272,8 +291,17 @@ export default function PortalPage() {
    * histórico) e avisa o `UsoTracker`, que fecha o tempo da aba anterior e
    * começa a contar a nova.
    */
-  const setActiveTab = useCallback((tab: string) => {
+  /**
+   * O segundo argumento é o LIVRO a abrir junto (16/08/2026).
+   *
+   * "Abrir o livro" e "Customizar" da faixa do Ateliê mandavam o aluno para
+   * fora do portal. Agora trocam de aba **e** dizem em qual livro parar, para
+   * ninguém cair na vitrine e ter que procurar o próprio livro de novo.
+   */
+  const [livroAberto, setLivroAberto] = useState<string | null>(null);
+  const setActiveTab = useCallback((tab: string, livro?: string) => {
     setActiveTabBruto(tab);
+    setLivroAberto(livro ?? null);
     marcarArea(tab);
   }, []);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -547,6 +575,38 @@ export default function PortalPage() {
       setIsGenerating(false);
     }
   };
+
+  /* Duração REAL desta entrada — medida uma vez, quando o dado chega. É ela
+     que ensina a transição a "demorar o que costuma demorar". */
+  useEffect(() => {
+    if (dashboardData && duracaoEntrada.current === null) {
+      duracaoEntrada.current = performance.now() - t0Portal.current;
+    }
+  }, [dashboardData]);
+
+  /* Mede o esqueleto DEPOIS que o dashboard real pintou. O atraso não é
+     superstição: os blocos entram com animação do framer-motion, e medir no
+     meio do fade grava retângulos que ainda estão se movendo. */
+  useEffect(() => {
+    if (!dashboardData || activeTab !== "dashboard") return;
+    if (precisaConstruir && !entregue) return; // ainda no cross-fade da obra
+    const id = window.setTimeout(() => {
+      registrarEntrada(contentScrollRef.current, precisaConstruir ? duracaoEntrada.current : null);
+    }, 400);
+    return () => window.clearTimeout(id);
+  }, [dashboardData, activeTab, entregue, precisaConstruir]);
+
+  /* A obra. Fica no ar enquanto o dado não chega E até o cross-fade terminar.
+     Erro de sessão pula direto para os blocos de erro abaixo — construir um
+     dashboard que não vai aparecer seria mentir para o aluno. */
+  if (precisaConstruir && !entregue && !dashboardError) {
+    return (
+      <TransicaoConstrucao
+        pronto={!isDashboardLoading && !!dashboardData && !!user}
+        aoTerminar={() => setEntregue(true)}
+      />
+    );
+  }
 
   if (isDashboardLoading) {
     return (
@@ -900,7 +960,7 @@ export default function PortalPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                <AtelieVitrine nome={user?.name} avatar={user?.image} />
+                <AtelieVitrine nome={user?.name} avatar={user?.image} abrirInicial={livroAberto} />
               </motion.div>
             )}
 

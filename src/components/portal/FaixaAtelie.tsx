@@ -53,7 +53,16 @@ interface CursoVitrine {
   escritos?: number;
 }
 
-export function FaixaAtelie({ onAbrir }: { onAbrir: () => void }) {
+/**
+ * ⚠️ `onAbrir` recebe o SLUG (16/08/2026).
+ *
+ * Ricardo, com a tela aberta: *"se eu clicar em editar livro, tenho que ir pro
+ * ateliê com este livro aberto e com as opções para ele"*. Antes, "Abrir o
+ * livro" e "Customizar" eram `<Link>` para fora do portal
+ * (`/curso/<slug>/meu/livro` e `/meu/ajustes`) — o aluno saía do dashboard
+ * para mexer no próprio livro. Agora abrem o Ateliê JÁ nesse livro.
+ */
+export function FaixaAtelie({ onAbrir }: { onAbrir: (slug?: string) => void }) {
   const T = useT();
   const [cursos, setCursos] = useState<CursoVitrine[] | null>(null);
 
@@ -171,24 +180,26 @@ export function FaixaAtelie({ onAbrir }: { onAbrir: () => void }) {
             </Link>
           )}
           {estado === "pronto" && (
-            <Link
-              href={`/curso/${alvo.slug}/meu/livro`}
+            <button
+              type="button"
+              onClick={() => onAbrir(alvo.slug)}
               className="inline-flex items-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-2 text-[13px] font-extrabold text-black hover:opacity-90"
             >
               <BookOpen size={14} /> {T("Abrir o livro")}
-            </Link>
+            </button>
           )}
           {alvo && (
-            <Link
-              href={`/curso/${alvo.slug}/meu/ajustes`}
+            <button
+              type="button"
+              onClick={() => onAbrir(alvo.slug)}
               className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 px-3.5 py-2 text-[13px] font-bold text-white hover:bg-white/10"
             >
               <SlidersHorizontal size={13} /> {T("Customizar")}
-            </Link>
+            </button>
           )}
           <button
             type="button"
-            onClick={onAbrir}
+            onClick={() => onAbrir()}
             className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-[13px] font-extrabold ${
               estado === "convite"
                 ? "bg-amber-400 text-black hover:opacity-90"

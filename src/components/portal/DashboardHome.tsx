@@ -112,7 +112,7 @@ interface DashboardHomeProps {
     progressPercent: number;
     details?: { title: string; slug?: string; tool?: string; duration?: string; shortDescription?: string };
   }[];
-  onTabChange: (tab: string) => void;
+  onTabChange: (tab: string, livro?: string) => void;
   enrolledSlugs?: string[];
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -286,7 +286,14 @@ export function DashboardHome({
       className="space-y-4 min-w-0 overflow-hidden"
     >
       {/* ── HERO STRIP — tight, informative ── */}
-      <motion.div variants={itemVariants}>
+      {/* `data-esq*`: o que a transição de entrada mede e redesenha na próxima
+          visita. Ver `esqueletoPortal.ts` — só atributo, nada de layout. */}
+      <motion.div
+        variants={itemVariants}
+        data-esq="hero"
+        data-esq-rotulo={T(greeting)}
+        data-esq-valor={T(firstName)}
+      >
         <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-card via-amber-950/30 to-card border border-border px-4 py-3 md:px-5 md:py-3.5">
           <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/[0.06] rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
           <div className="relative flex items-center justify-between gap-3">
@@ -352,12 +359,12 @@ export function DashboardHome({
           A faixa se desenha sozinha conforme o estado do aluno (livro parado no
           meio, livro pronto, ou nada ainda). Ver `FaixaAtelie`.
           ═══════════════════════════════════════════════════════════════ */}
-      <motion.div variants={itemVariants}>
-        <FaixaAtelie onAbrir={() => onTabChange("atelie")} />
+      <motion.div variants={itemVariants} data-esq="atelie" data-esq-rotulo={T("Ateliê")}>
+        <FaixaAtelie onAbrir={(slug) => onTabChange("atelie", slug)} />
       </motion.div>
 
       {/* ── QUICK ACTIONS — compact pill row ── */}
-      <motion.div variants={itemVariants}>
+      <motion.div variants={itemVariants} data-esq="acoes">
         <div className="flex gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {[
             { icon: Wand2, label: "Studio AI", tab: "studio", gradient: "from-amber-600 to-yellow-500" },
@@ -392,6 +399,7 @@ export function DashboardHome({
       {/*  TRILHA — mapa de jornada com progresso REAL (F3)   */}
       {/* ═══════════════════════════════════════════════════ */}
       <PortalTour />
+      <div data-esq="trilha" data-esq-rotulo={T("Sua trilha")}>
       <TrailMap
         stats={{
           xp: stats.xp,
@@ -404,21 +412,24 @@ export function DashboardHome({
         userCourses={userCourses}
         onTabChange={onTabChange}
       />
+      </div>
 
       {/* ARCADE — destaque animado (F4) */}
-      <ArcadeBanner onOpen={() => onTabChange("games")} />
+      <div data-esq="arcade" data-esq-rotulo={T("Arcade")}>
+        <ArcadeBanner onOpen={() => onTabChange("games")} />
+      </div>
 
       {/* ═══════════════════════════════════════════════════ */}
       {/*  SUA PERSONA — em destaque (pedido do Ricardo 16/07) */}
       {/* ═══════════════════════════════════════════════════ */}
-      <motion.div variants={itemVariants}>
+      <motion.div variants={itemVariants} data-esq="persona" data-esq-rotulo={T("Sua persona")}>
         <CartaoPersona onAbrir={() => onTabChange("social")} />
       </motion.div>
 
       {/* ═══════════════════════════════════════════════════ */}
       {/*  ECOSSISTEMA — projetos FayAI                       */}
       {/* ═══════════════════════════════════════════════════ */}
-      <div className="rounded-2xl border border-border bg-card p-4">
+      <div className="rounded-2xl border border-border bg-card p-4" data-esq="ecossistema" data-esq-rotulo={T("Ecossistema FayAI")}>
         <div className="flex items-baseline justify-between mb-3">
           <h3 className="text-base font-bold">{T("Ecossistema FayAI")}</h3>
           <Link href="/projetos" className="text-[12px] font-semibold text-[var(--primary)] hover:opacity-80">{T("Ver todos ›")}</Link>
@@ -451,7 +462,7 @@ export function DashboardHome({
       {/* ═══════════════════════════════════════════════════ */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 min-w-0">
         {/* ── COL 1: Studio AI + Store — on mobile, appears second ── */}
-        <div className="space-y-4 order-2 md:order-1 min-w-0">
+        <div className="space-y-4 order-2 md:order-1 min-w-0" data-esq="col-1">
           {/* Studio AI — compact horizontal card */}
           <motion.div variants={itemVariants}>
             <Card
@@ -588,7 +599,7 @@ export function DashboardHome({
         </div>
 
         {/* ── COL 2: Sua Jornada — appears FIRST on mobile ── */}
-        <div className="space-y-4 order-1 md:order-2 min-w-0">
+        <div className="space-y-4 order-1 md:order-2 min-w-0" data-esq="col-2">
           <motion.div variants={itemVariants}>
             <Card className="relative border-emerald-500/15 bg-card p-4 min-w-0 overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element -- arte contextual §12 */}
@@ -768,7 +779,7 @@ export function DashboardHome({
         </div>
 
         {/* ── COL 3: Ranking + Assistant + Rewards + Store — last on mobile; sticky p/ não sobrar vazio no desktop ── */}
-        <div className="space-y-4 order-3 min-w-0 lg:sticky lg:top-4 lg:self-start">
+        <div className="space-y-4 order-3 min-w-0 lg:sticky lg:top-4 lg:self-start" data-esq="col-3">
           {/* Ranking — compact */}
           <motion.div variants={itemVariants}>
             <Card

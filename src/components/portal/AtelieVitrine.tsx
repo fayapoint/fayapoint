@@ -98,7 +98,23 @@ const PASSOS = [
   },
 ];
 
-export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string | null }) {
+export function AtelieVitrine({
+  nome,
+  avatar,
+  abrirInicial,
+}: {
+  nome?: string;
+  avatar?: string | null;
+  /**
+   * Abre já num livro, sem passar pela vitrine.
+   *
+   * ⚠️ É o que faz "Customizar" e "Abrir o livro" do dashboard chegarem no
+   * livro CERTO. Antes essas portas saíam do portal para
+   * `/curso/<slug>/meu/livro`, e quem queria mexer no próprio livro era
+   * despejado fora do dashboard.
+   */
+  abrirInicial?: string | null;
+}) {
   const T = useT();
   const [d, setD] = useState<Resposta | null>(null);
   const [carregando, setCarregando] = useState(true);
@@ -110,7 +126,7 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
    * e de lá era mais um clique para os ajustes. Estado local em vez de
    * navegação: o Ateliê passa a ter duas vistas, a prateleira e o livro.
    */
-  const [aberto, setAberto] = useState<string | null>(null);
+  const [aberto, setAberto] = useState<string | null>(abrirInicial ?? null);
 
   useEffect(() => {
     let vivo = true;
@@ -381,12 +397,34 @@ export function AtelieVitrine({ nome, avatar }: { nome?: string; avatar?: string
                  * Fora do `<Link>` de cima, e não dentro — âncora dentro de
                  * âncora é HTML inválido e o navegador desmancha a de dentro.
                  */}
-                <Link
-                  href={`/curso/${c.slug}/meu/ajustes`}
-                  className="flex items-center justify-center gap-1.5 border-t border-border/70 px-3 py-2 text-[11.5px] font-bold text-muted-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-200"
-                >
-                  <SlidersHorizontal size={11} /> {T("customizar como é escrito")}
-                </Link>
+                {/**
+                 * ⚠️ Quem JÁ TEM livro customiza aqui dentro (16/08/2026).
+                 *
+                 * Ricardo: *"se eu clicar em editar livro, tenho que ir pro
+                 * ateliê com este livro aberto e com as opções para ele"*. Este
+                 * link mandava todo mundo para `/curso/<slug>/meu/ajustes`, ou
+                 * seja, para fora do dashboard — mesmo com o livro escrito e o
+                 * painel dele aqui do lado, com os mesmos ajustes.
+                 *
+                 * Sem livro ainda, a mesa completa continua sendo o lugar: não
+                 * há livro para abrir.
+                 */}
+                {temLivro ? (
+                  <button
+                    type="button"
+                    onClick={() => setAberto(c.slug)}
+                    className="flex w-full items-center justify-center gap-1.5 border-t border-border/70 px-3 py-2 text-[11.5px] font-bold text-muted-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-200"
+                  >
+                    <SlidersHorizontal size={11} /> {T("customizar como é escrito")}
+                  </button>
+                ) : (
+                  <Link
+                    href={`/curso/${c.slug}/meu/ajustes`}
+                    className="flex items-center justify-center gap-1.5 border-t border-border/70 px-3 py-2 text-[11.5px] font-bold text-muted-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-200"
+                  >
+                    <SlidersHorizontal size={11} /> {T("customizar como é escrito")}
+                  </Link>
+                )}
                 </div>
               );
             })}

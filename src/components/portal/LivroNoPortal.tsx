@@ -220,11 +220,16 @@ export function LivroNoPortal({ slug, aoVoltar }: { slug: string; aoVoltar: () =
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
+          {/* ⚠️ Vai para a LEITURA, não para a página do curso.
+              Isto apontava para `/curso/<slug>`, que é a página de VENDA: quem
+              já tinha o livro escrito clicava em "ler" e caía numa vitrine com
+              preço e botão de comprar, tendo que rolar até achar a faixa de
+              "continuar de onde parei". Quem clica em ler quer ler agora. */}
           <Link
-            href={`/curso/${slug}`}
+            href={`/portal/learn/${slug}`}
             className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 px-3.5 py-2 text-[13.5px] font-extrabold text-black hover:opacity-90"
           >
-            <BookOpen size={14} /> {T("Ler no curso")}
+            <BookOpen size={14} /> {T("Ler agora")}
           </Link>
           {faltam > 0 && (
             <Link

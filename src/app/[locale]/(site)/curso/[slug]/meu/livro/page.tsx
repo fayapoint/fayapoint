@@ -311,11 +311,16 @@ export default function MeuLivro() {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2.5">
+          {/* ⚠️ Vai para a LEITURA, não para a página do curso.
+              Isto apontava para `/curso/<slug>` — a página de VENDA. Com o
+              livro escrito e pago, "ler" abria uma vitrine com preço, e a
+              faixa de "continuar de onde parei" ficava acima da dobra: era
+              preciso rolar para baixo e voltar para achá-la. */}
           <Link
-            href={`/${locale}/curso/${slug}`}
+            href={`/${locale}/portal/learn/${slug}`}
             className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 px-4 py-2.5 text-[14px] font-extrabold text-black hover:opacity-90"
           >
-            <BookOpen size={15} /> {T("Ler no curso")}
+            <BookOpen size={15} /> {T("Ler agora")}
           </Link>
           {faltam > 0 && (
             <Link
