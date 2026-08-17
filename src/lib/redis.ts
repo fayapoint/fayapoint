@@ -174,6 +174,39 @@ const comVersao = (chave: string) => `${VERSAO_DO_CACHE}:${chave}`;
 type Envelope<T> = { v: T };
 
 /**
+ * Uma segunda chance para a busca na fonte — e ela existia por acidente.
+ *
+ * ⚠️ EU TIREI ISTO SEM PERCEBER, E O DASHBOARD DEU 500.
+ *
+ * A versão anterior do `getOrSet` chamava o `fetcher` DENTRO do `try` que
+ * protegia o Redis, e o `catch` terminava em `return await fetcher()`. A
+ * intenção era cobrir falha do Redis; o efeito colateral era uma repetição de
+ * graça sempre que a fonte falhasse. Ao separar as duas coisas — que está certo,
+ * porque falha de cache não deve fazer o Mongo trabalhar duas vezes — eu levei a
+ * repetição junto, e um erro passageiro do Mongo passou a virar 500 na cara de
+ * quem abriu o portal. Foi o que aconteceu em 17/08/2026, minutos depois do
+ * deploy: `/api/user/dashboard` deu 500 uma vez e carregou na segunda tentativa.
+ *
+ * Agora a repetição é DELIBERADA, e só da fonte:
+ *
+ * - **uma** tentativa extra, depois de 120ms. Soluço de rede e eleição de
+ *   primário no Atlas duram menos que isso; problema de verdade não se resolve
+ *   com dez tentativas, só multiplica carga no banco que já está sofrendo.
+ * - só para leitura. Todo `fetcher` deste arquivo enche cache — são consultas.
+ *   ⚠️ **Não passe por aqui nada que ESCREVA:** repetir escrita não idempotente
+ *   é como se cobra duas vezes pela mesma coisa.
+ */
+async function buscarComUmaSegundaChance<T>(fetcher: () => Promise<T>, chave: string): Promise<T> {
+  try {
+    return await fetcher();
+  } catch (erro) {
+    console.warn(`[cache] a fonte de "${chave}" falhou; uma segunda tentativa:`, (erro as Error)?.message);
+    await new Promise((r) => setTimeout(r, 120));
+    return await fetcher();
+  }
+}
+
+/**
  * Get cached value or fetch from source
  * @param key Cache key
  * @param fetcher Function to fetch data if cache miss
@@ -206,7 +239,7 @@ export async function getOrSet<T>(
     console.error('Redis getOrSet (leitura):', error);
   }
 
-  const data = await fetcher();
+  const data = await buscarComUmaSegundaChance(fetcher, key);
 
   /**
    * ⚠️ ESTE `await` NÃO PODE SAIR.

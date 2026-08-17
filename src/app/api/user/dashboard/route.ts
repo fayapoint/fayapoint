@@ -256,20 +256,43 @@ export async function GET(request: Request) {
       subscription?: { plan?: string };
     }
     
-    const leaderboard = await getOrSet<LeaderboardUser[]>(
-      CACHE_KEYS.LEADERBOARD,
-      async () => {
-        return User.find({})
-          .select('name image progress.weeklyXp progress.level subscription.plan')
-          .sort({ 'progress.weeklyXp': -1 })
-          .limit(10)
-          .lean() as Promise<LeaderboardUser[]>;
-      },
-      CACHE_TTL.LEADERBOARD
-    );
+    /**
+     * ⚠️ PLACAR E POSIÇÃO NÃO PODEM DERRUBAR O PORTAL.
+     *
+     * Em 17/08/2026 o Ricardo abriu `/pt-BR/portal` e recebeu "Instabilidade
+     * momentânea ao carregar seus dados", com 500 em `/api/user/dashboard` —
+     * e entrou na segunda tentativa. Um erro passageiro em QUALQUER consulta
+     * desta rota derruba a resposta inteira, e esta rota faz dez delas.
+     *
+     * Placar e posição no ranking são enfeite: sem eles o aluno ainda vê os
+     * cursos, o progresso e os pedidos, que é o produto. Falhar aqui devolve
+     * lista vazia e posição zero, não uma tela preta com um botão de "tentar
+     * novamente".
+     *
+     * ⚠️ Isto NÃO é desculpa para engolir erro do que importa. O `user`, o
+     * `progress` e os `orders` continuam podendo derrubar a rota de propósito:
+     * dashboard sem eles seria mentira, e mentira silenciosa é pior que erro.
+     */
+    let leaderboard: LeaderboardUser[] = [];
+    let userRank = 0;
+    try {
+      leaderboard = await getOrSet<LeaderboardUser[]>(
+        CACHE_KEYS.LEADERBOARD,
+        async () => {
+          return User.find({})
+            .select('name image progress.weeklyXp progress.level subscription.plan')
+            .sort({ 'progress.weeklyXp': -1 })
+            .limit(10)
+            .lean() as Promise<LeaderboardUser[]>;
+        },
+        CACHE_TTL.LEADERBOARD
+      );
 
-    // Find user's rank (quick count, not cached since it's user-specific)
-    const userRank = await User.countDocuments({ 'progress.weeklyXp': { $gt: user.progress?.weeklyXp || 0 } }) + 1;
+      // Find user's rank (quick count, not cached since it's user-specific)
+      userRank = await User.countDocuments({ 'progress.weeklyXp': { $gt: user.progress?.weeklyXp || 0 } }) + 1;
+    } catch (erro) {
+      console.error('[dashboard] placar indisponível (o portal segue sem ele):', erro);
+    }
 
     // Map achievements with unlock status
     const allAchievements = Object.values(ACHIEVEMENTS).map(achievement => {
