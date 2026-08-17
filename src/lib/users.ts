@@ -1,21 +1,8 @@
-import { MongoClient, Collection, ObjectId, Document } from 'mongodb';
-import { OPCOES_MONGO } from '@/lib/mongo-opcoes';
+import { type MongoClient, type Collection, ObjectId, type Document } from 'mongodb';
+import { clienteMongo } from '@/lib/mongo-cliente';
 
-const DEFAULT_MONGODB_URI = '';
-
-function resolveMongoUri() {
-  const envUri = process.env.MONGODB_URI;
-  if (!envUri || envUri.includes('your-mongodb-uri')) {
-    return DEFAULT_MONGODB_URI;
-  }
-  return envUri;
-}
-
-const MONGODB_URI = resolveMongoUri();
 const DATABASE_NAME = 'fayapoint';
 const COLLECTION_NAME = 'users';
-
-let cachedClient: MongoClient | null = null;
 
 export interface User {
   _id?: ObjectId;
@@ -74,15 +61,12 @@ export interface User {
   updatedAt: Date;
 }
 
+/**
+ * O cliente compartilhado — este módulo não abre mais pool próprio.
+ * Ver `mongo-cliente.ts`: cada cliente extra custava 4 conexões medidas.
+ */
 async function getMongoClient(): Promise<MongoClient> {
-  if (cachedClient) {
-    return cachedClient;
-  }
-  
-  const client = new MongoClient(MONGODB_URI, OPCOES_MONGO);
-  await client.connect();
-  cachedClient = client;
-  return client;
+  return clienteMongo();
 }
 
 async function getUsersCollection(): Promise<Collection> {

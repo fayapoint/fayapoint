@@ -360,6 +360,12 @@ export async function POST(request: NextRequest) {
         return { capitulos: dividirCapitulos(texto), nome: (produto.name as string) || curso };
       },
       CACHE_TTL.COURSE_CONTENT,
+      /**
+       * ⚠️ `null` aqui é "o `courseContent` ainda está vazio", não "não existe".
+       * Cachear isso mostraria "Curso não encontrado" para um curso cujo texto
+       * acabou de ser gravado. Ver `OpcoesDeCache.cachearNulo`.
+       */
+      { cachearNulo: false },
     );
 
     if (!emCache) {

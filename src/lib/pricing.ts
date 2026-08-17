@@ -1,33 +1,16 @@
-import { Collection, MongoClient } from "mongodb";
-import { OPCOES_MONGO } from "@/lib/mongo-opcoes";
+import type { Collection, MongoClient } from "mongodb";
+import { clienteMongo } from "@/lib/mongo-cliente";
 import { getOrSet, CACHE_TTL, CACHE_KEYS } from '@/lib/redis';
-
-const DEFAULT_MONGODB_URI = '';
-
-function resolveMongoUri() {
-  const envUri = process.env.MONGODB_URI;
-  if (!envUri || envUri.includes("your-mongodb-uri")) {
-    return DEFAULT_MONGODB_URI;
-  }
-  return envUri;
-}
-
-const MONGODB_URI = resolveMongoUri();
 
 const DATABASE_NAME = "fayapointProdutos";
 const COLLECTION_NAME = "products_prices";
 
-let cachedClient: MongoClient | null = null;
-
+/**
+ * O cliente compartilhado — este módulo não abre mais pool próprio.
+ * Ver `mongo-cliente.ts`: cada cliente extra custava 4 conexões medidas.
+ */
 export async function getMongoClient(): Promise<MongoClient> {
-  if (cachedClient) {
-    return cachedClient;
-  }
-
-  const client = new MongoClient(MONGODB_URI, OPCOES_MONGO);
-  await client.connect();
-  cachedClient = client;
-  return client;
+  return clienteMongo();
 }
 
 async function getPricesCollection(): Promise<Collection<ServicePriceDocument>> {

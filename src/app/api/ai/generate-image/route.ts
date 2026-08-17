@@ -8,6 +8,7 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import ImageCreation from '@/models/ImageCreation';
 import { invalidateCachePattern, invalidateCache, CACHE_KEYS } from '@/lib/redis';
+import { comTeto } from '@/lib/com-teto';
 import { resolvePlan } from '@/lib/course-tiers';
 import { DAILY_IMAGE_QUOTA, getStudioModel, planAtLeast } from '@/lib/studio-models';
 
@@ -302,19 +303,50 @@ export async function POST(request: Request) {
         provider: usedModel || primaryModel
     });
 
-    // REDIS: Invalidate caches (new image added)
-    invalidateCachePattern('gallery:*').catch(err => console.error('Gallery cache invalidation error:', err));
-    invalidateCachePattern('community:*').catch(err => console.error('Community cache invalidation error:', err));
-    invalidateCache(CACHE_KEYS.USER_CREATIONS(String(user._id))).catch(err => console.error('User creations cache invalidation error:', err));
-
-    // OPTIMIZATION: Award XP inline (saves 1 API call to /api/user/checkin)
-    User.findByIdAndUpdate(user._id, {
-      $inc: { 
-        'gamification.totalImagesGenerated': 1,
-        'progress.xp': 5,
-        'progress.weeklyXp': 5,
+    /**
+     * ⚠️ Estas quatro escritas estavam SOLTAS, sem `await`.
+     *
+     * Numa função serverless a instância é congelada quando a resposta sai:
+     * promessa pendente pode ser descartada (o mesmo erro documentado em
+     * `rate-limit.ts:77`). O prejuízo aqui é visível — o XP dos 5 pontos não
+     * entra, e a galeria continua servindo a lista SEM a imagem que a pessoa
+     * acabou de gerar, até o TTL vencer.
+     *
+     * As quatro vão juntas (`allSettled`), então o custo é o da mais lenta e não
+     * a soma — troco numa rota que leva segundos gerando a imagem. E
+     * `allSettled` porque invalidação que falha não pode derrubar a resposta de
+     * uma imagem que já foi gerada e paga.
+     */
+    const posGeracao: Array<[string, Promise<unknown>]> = [
+      ['invalidar galeria', invalidateCachePattern('gallery:*')],
+      ['invalidar comunidade', invalidateCachePattern('community:*')],
+      ['invalidar criações do usuário', invalidateCache(CACHE_KEYS.USER_CREATIONS(String(user._id)))],
+      /**
+       * Award XP inline (saves 1 API call to /api/user/checkin)
+       *
+       * ⚠️ Com teto, e por um motivo assimétrico: as três invalidações acima
+       * já têm o seu dentro do `redis.ts`, esta é a única do array que fala com
+       * o Mongo. `allSettled` só resolve quando TODAS resolvem — sem teto, uma
+       * escrita pendurada no cluster (que é compartilhado, e está sob escrita de
+       * curso agora) prenderia a resposta de uma imagem que a pessoa já pagou e
+       * que já está pronta. 3s é ~100× a escrita medida.
+       */
+      ['creditar XP', comTeto(User.findByIdAndUpdate(user._id, {
+        $inc: {
+          'gamification.totalImagesGenerated': 1,
+          'progress.xp': 5,
+          'progress.weeklyXp': 5,
+        }
+      }).exec(), 3000, 'creditar XP da imagem')],
+    ];
+    const efeitos = await Promise.allSettled(posGeracao.map(([, p]) => p));
+    efeitos.forEach((r, i) => {
+      // Rotulado: "não creditou XP" e "não invalidou a galeria" pedem consertos
+      // diferentes, e um log que só diz "falhou" não distingue os dois.
+      if (r.status === 'rejected') {
+        console.error(`Pós-geração de imagem — ${posGeracao[i][0]} falhou:`, r.reason);
       }
-    }).catch(err => console.error('Image XP update error:', err));
+    });
 
     return NextResponse.json({
         imageUrl: uploadResult.secure_url,

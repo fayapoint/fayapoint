@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
+import { comTeto } from '@/lib/com-teto';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { getAuthUser } from '@/lib/auth';
@@ -110,7 +111,15 @@ export async function POST(request: NextRequest) {
     if (anterior?.publicId) {
       // Uma vaga, uma foto: trocar sem apagar a antiga deixaria lixo pago no
       // Cloudinary para sempre.
-      cloudinary.uploader.destroy(anterior.publicId).catch(() => {});
+      //
+      // ⚠️ E "para sempre" era o resultado real, porque isto estava SEM `await`:
+      // numa função serverless a instância é congelada quando a resposta sai e a
+      // chamada pendente pode ser descartada (mesmo erro de `rate-limit.ts:77`).
+      // O `.catch` continua: falhar em apagar não pode impedir a troca da foto.
+      // Teto: esta rota tem `maxDuration = 60`, e esperar sem teto por um
+      // Cloudinary pendurado trocaria "lixo pago" por "tela girando um minuto".
+      await comTeto(cloudinary.uploader.destroy(anterior.publicId), 5000, 'apagar foto anterior')
+        .catch((e) => console.error('[persona-fotos] não apagou a foto anterior no Cloudinary:', e?.message));
     }
 
     const restantes = fotos.filter((f) => f.tipo !== tipo);
@@ -142,7 +151,12 @@ export async function DELETE(request: NextRequest) {
 
     const fotos = user.socialPersona.fotos || [];
     const alvo = fotos.find((f) => f.tipo === tipo);
-    if (alvo?.publicId) cloudinary.uploader.destroy(alvo.publicId).catch(() => {});
+    // `await` pelo mesmo motivo do POST: sem ele, o arquivo pago fica no
+    // Cloudinary depois de a pessoa ter apagado a foto aqui.
+    if (alvo?.publicId) {
+      await comTeto(cloudinary.uploader.destroy(alvo.publicId), 5000, 'apagar foto')
+        .catch((e) => console.error('[persona-fotos] não apagou a foto no Cloudinary:', e?.message));
+    }
 
     user.socialPersona.fotos = fotos.filter((f) => f.tipo !== tipo);
     user.markModified('socialPersona');

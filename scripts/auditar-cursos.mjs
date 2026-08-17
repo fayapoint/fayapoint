@@ -20,7 +20,7 @@
 
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import { MongoClient } from "mongodb";
+import { abrirMongo } from "./lib/mongo.mjs";
 
 /** O que hoje conta como desatualizado. Revise junto com o canon. */
 const MODELOS_ANTIGOS = [
@@ -79,8 +79,7 @@ async function slugsEstaticos() {
 async function main() {
   const estaticos = await slugsEstaticos();
 
-  const cliente = new MongoClient(process.env.MONGODB_URI);
-  await cliente.connect();
+  const cliente = await abrirMongo();
   const produtos = await cliente
     .db("fayapointProdutos")
     .collection("products")

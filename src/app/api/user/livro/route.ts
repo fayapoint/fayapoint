@@ -89,6 +89,14 @@ async function capitulosDoCurso(courseSlug: string) {
       };
     },
     CACHE_TTL.COURSE_CONTENT,
+    /**
+     * ⚠️ Aqui `null` quer dizer "o `courseContent` ainda está vazio", não "o
+     * curso não existe" — e é exatamente o estado de um curso sendo escrito. O
+     * estúdio bate nesta rota a cada 4 segundos; guardar esse nulo faria a tela
+     * dizer "sem conteúdo" por várias consultas seguidas depois de o texto já
+     * ter chegado.
+     */
+    { cachearNulo: false },
   );
 }
 

@@ -5,6 +5,8 @@
  * Resend, mesmo padrão do email-service; degrada graciosamente sem chave.
  */
 
+import { comTeto } from '@/lib/com-teto';
+
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@fayai.com.br';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'ricardofaya@gmail.com';
@@ -101,9 +103,30 @@ export async function notifyAdminNewUser(name: string, email: string, source?: s
   return sendViaResend(ADMIN_EMAIL, `🎉 Novo aluno: ${name}`, html);
 }
 
-/** Dispara os dois sem bloquear a resposta do cadastro */
-export function fireWelcomeFlow(name: string, email: string, source?: string) {
-  Promise.allSettled([sendWelcomeEmail(email, name), notifyAdminNewUser(name, email, source)]).catch(
-    () => { /* nunca derruba o cadastro */ }
-  );
+/**
+ * Manda as boas-vindas e avisa o admin — e ESPERA, com teto.
+ *
+ * ⚠️ Isto era disparado sem `await` "para não bloquear a resposta do cadastro".
+ * Numa função serverless a instância é congelada quando a resposta sai, e
+ * promessa pendente pode ser descartada (mesmo erro documentado em
+ * `rate-limit.ts:77`). O prejuízo é o pior possível para este arquivo: o aluno
+ * novo não recebe boas-vindas e o admin não sabe que ele existe — e nada erra em
+ * lugar nenhum, então ninguém descobre.
+ *
+ * O teto é o que mantém a promessa antiga: um Resend lento ou pendurado não pode
+ * segurar um cadastro que já foi gravado no banco. Estourou, o cadastro segue e
+ * fica o log.
+ */
+const TETO_EMAIL_MS = 2500;
+
+export async function fireWelcomeFlow(name: string, email: string, source?: string) {
+  try {
+    await comTeto(
+      Promise.allSettled([sendWelcomeEmail(email, name), notifyAdminNewUser(name, email, source)]),
+      TETO_EMAIL_MS,
+      'fluxo de boas-vindas',
+    );
+  } catch (erro) {
+    console.error('[welcome] fluxo de boas-vindas não completou:', (erro as Error)?.message);
+  }
 }

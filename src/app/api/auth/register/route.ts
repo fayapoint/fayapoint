@@ -109,9 +109,6 @@ export async function POST(request: Request) {
       }
     });
 
-    // P5: boas-vindas + aviso ao admin — fire-and-forget, nunca bloqueia
-    fireWelcomeFlow(newUser.name, newUser.email, source || 'onboarding_v2');
-
     // Create token
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email, role: newUser.role },
@@ -139,6 +136,22 @@ export async function POST(request: Request) {
 
     response.cookies.set('token', token, cookieOptions);
     response.cookies.set('fayai_token', token, cookieOptions);
+
+    /**
+     * P5: boas-vindas + aviso ao admin.
+     *
+     * ⚠️ Isto era disparado SEM `await`, e o comentário dizia "nunca bloqueia".
+     * Numa função serverless a instância é congelada quando a resposta sai, e a
+     * promessa pendente pode ser descartada — ou seja, "nunca bloqueia" também
+     * significava "às vezes nunca envia", e sem erro em lugar nenhum. Justamente
+     * o que este arquivo existe para evitar ("Ricardo nunca mais descobre usuário
+     * novo por acaso").
+     *
+     * Fica DEPOIS de a conta, o token e os cookies estarem prontos: se o Resend
+     * demorar, atrasa a resposta, nunca o cadastro. E o teto de 2,5s
+     * (`fireWelcomeFlow`) é o que impede um Resend pendurado de segurar a tela.
+     */
+    await fireWelcomeFlow(newUser.name, newUser.email, source || 'onboarding_v2');
 
     return response;
 

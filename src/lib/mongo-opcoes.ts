@@ -12,7 +12,7 @@
  * `/api/credits`) levando **11 a 23 segundos** — não porque a consulta é lenta
  * (medida daqui: 28ms), mas porque o pedido fica na fila esperando conexão.
  *
- * A causa é aritmética. O código abre **cinco pools independentes** por
+ * A causa é aritmética. O código abria **cinco pools independentes** por
  * instância — `mongodb.ts` (Mongoose), `database.ts`, `pricing.ts`,
  * `products.ts` e `users.ts`, cada um com o seu `cachedClient` — e nenhum deles
  * declarava `maxPoolSize`. O padrão do driver é **100**. Cinco pools de 100 dá
@@ -26,6 +26,33 @@
  *
  * `maxIdleTimeMS` é o que **devolve** conexão ao cluster: sem ele, uma conexão
  * aberta para uma consulta de 28ms fica pendurada enquanto a instância viver.
+ *
+ * ## 17/08/2026 — o teto era metade do conserto; a outra metade era o NÚMERO de pools
+ *
+ * ⚠️ A conta que estava escrita aqui — "cinco pools de cinco dá 25 por
+ * instância, cabem 20 instâncias no M0" — **nunca foi medida, e está errada**.
+ * Medido no cluster de verdade, um cliente por vez:
+ *
+ *     cliente com maxPoolSize:5, ocioso         → 2 conexões
+ *     o mesmo sob 8 operações em paralelo       → 4 conexões
+ *     CADA CLIENTE EXTRA                        → +4 conexões
+ *
+ * `maxPoolSize` é **por membro do replica set**, e a conexão de monitoramento
+ * (uma por nó, por cliente) não conta nele. Então o teto do pool nunca foi o
+ * número inteiro da história.
+ *
+ * E medido em produção, rajada de 24 pedidos paralelos em cada uma de 5 rotas,
+ * ainda com os cinco pools de pé:
+ *
+ *     pico 104 conexões (base 7) — 100 criadas, 0 falhas
+ *
+ * Na mesma proporção, ~120 visitantes simultâneos chegam nas 500 e o Atlas
+ * recusa conexão nova — para o site E para `mission-control`, `worldforge` e os
+ * scripts de curso, que dividem este mesmo cluster.
+ *
+ * O conserto de hoje não é mexer nos números daqui: é **haver um cliente só**.
+ * Ver `mongo-cliente.ts`. Estas opções continuam valendo — elas agora
+ * dimensionam UM pool em vez de cinco.
  */
 
 /**
@@ -80,10 +107,20 @@ const NO_BUILD = {
  */
 const NO_AR = {
   /**
-   * Cinco por pool. Uma função serverless atende um pedido por vez, então uma
-   * conexão já bastaria; cinco dá folga para as chamadas em paralelo de uma
-   * mesma rota sem multiplicar nada. Com cinco pools, são 25 por instância —
-   * cabem 20 instâncias simultâneas dentro do M0 sem chegar perto do teto.
+   * Cinco. Uma função serverless atende um pedido por vez, então uma conexão já
+   * bastaria; cinco dá folga para as chamadas em paralelo de uma mesma rota.
+   *
+   * Medido em 17/08/2026: oito operações em paralelo neste pool nunca passaram
+   * de **4 conexões** no primário — cinco sobra para o que o site faz hoje.
+   *
+   * ⚠️ Não aumente "por segurança". Agora que existe UM cliente por instância
+   * (`mongo-cliente.ts`), este número é o orçamento inteiro da instância. E os
+   * dois erros não custam igual: pool pequeno demais faz operação ESPERAR na
+   * fila (lento, e volta ao normal sozinho); pool grande demais esgota o
+   * cluster (site fora, e leva os outros projetos junto). Na dúvida, o menor.
+   *
+   * Se um dia faltar, o que se mede antes de mexer é a fila — não o palpite:
+   * `node scripts/mongo-saude.mjs` com o site sob carga.
    */
   maxPoolSize: 5,
 

@@ -1,9 +1,8 @@
-import { MongoClient } from "mongodb";
-import { OPCOES_MONGO } from "@/lib/mongo-opcoes";
+import type { MongoClient } from "mongodb";
+
+import { clienteMongo } from "@/lib/mongo-cliente";
 
 const DEFAULT_MONGODB_URI = '';
-
-let cachedClient: MongoClient | null = null;
 
 export function resolveMongoUri() {
   const envUri = process.env.MONGODB_URI;
@@ -13,13 +12,16 @@ export function resolveMongoUri() {
   return envUri;
 }
 
+/**
+ * O cliente compartilhado — não mais um pool próprio.
+ *
+ * Este módulo tinha o seu `cachedClient` e o seu `new MongoClient()`, um dos
+ * cinco pools que juntos custavam ~20 conexões por instância. Ver
+ * `mongo-cliente.ts` para os números medidos.
+ *
+ * A assinatura fica de pé de propósito: ~30 rotas chamam `getMongoClient()`
+ * daqui e continuam funcionando sem edição.
+ */
 export async function getMongoClient(): Promise<MongoClient> {
-  if (cachedClient) {
-    return cachedClient;
-  }
-
-  const client = new MongoClient(resolveMongoUri(), OPCOES_MONGO);
-  await client.connect();
-  cachedClient = client;
-  return client;
+  return clienteMongo();
 }

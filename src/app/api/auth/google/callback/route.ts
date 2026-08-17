@@ -244,7 +244,7 @@ export async function GET(request: NextRequest) {
         emailsVerificados: [googleUser.email.toLowerCase()],
       });
       // P5: boas-vindas + aviso ao admin — só em conta NOVA
-      fireWelcomeFlow(user.name, user.email, 'google-oauth');
+      await fireWelcomeFlow(user.name, user.email, 'google-oauth');
     }
 
     // A conta com que ele entrou passa a aparecer conectada na aba Contas —

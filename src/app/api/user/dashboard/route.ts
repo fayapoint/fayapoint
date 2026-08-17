@@ -332,18 +332,41 @@ export async function GET(request: Request) {
       const streakBonus = Math.min(newStreak * 5, 50);
       dailyXpEarned = 10 + streakBonus;
       
-      // Update user in background (don't await to speed up response)
-      User.findByIdAndUpdate(userId, {
-        $set: {
-          'progress.lastActiveDate': new Date(),
-          'progress.currentStreak': newStreak,
-          'progress.longestStreak': Math.max(newStreak, user.progress?.longestStreak || 0),
-        },
-        $inc: {
-          'progress.xp': dailyXpEarned,
-          'progress.weeklyXp': dailyXpEarned,
-        }
-      }).catch(err => console.error('Daily checkin update error:', err));
+      /**
+       * ⚠️ ESTE `await` NÃO PODE SAIR — e ele não estava aqui.
+       *
+       * A escrita ficava solta "para acelerar a resposta". Só que a resposta
+       * abaixo DEVOLVE `dailyXpEarned` e a sequência nova: a tela mostra o XP
+       * ganho e o dia contado. Se a instância é congelada antes da escrita
+       * chegar ao Mongo — que é o normal numa função serverless, e é o mesmo
+       * erro já documentado em `rate-limit.ts:77` — o aluno vê o XP e ele não
+       * existe. No dia seguinte a sequência quebra sem motivo visível.
+       *
+       * Custo: uma escrita (~30ms) UMA vez por dia por pessoa, só no ramo do
+       * check-in. Não é no caminho de todo pedido do dashboard.
+       *
+       * E o `catch` NÃO pode apenas registrar e seguir: se a escrita falhou de
+       * verdade (não por congelamento — por erro do Mongo), anunciar o XP na
+       * resposta produz o mesmo sintoma que o `await` veio consertar. Falhou,
+       * então não houve check-in: zera o que a resposta ia prometer.
+       */
+      try {
+        await User.findByIdAndUpdate(userId, {
+          $set: {
+            'progress.lastActiveDate': new Date(),
+            'progress.currentStreak': newStreak,
+            'progress.longestStreak': Math.max(newStreak, user.progress?.longestStreak || 0),
+          },
+          $inc: {
+            'progress.xp': dailyXpEarned,
+            'progress.weeklyXp': dailyXpEarned,
+          }
+        });
+      } catch (err) {
+        console.error('Daily checkin update error:', err);
+        dailyXpEarned = 0;
+        newStreak = user.progress?.currentStreak || 0;
+      }
     }
 
     return NextResponse.json({

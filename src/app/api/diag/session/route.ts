@@ -14,6 +14,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthUser } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
+import { clienteMongo } from '@/lib/mongo-cliente';
 import User from '@/models/User';
 import { resolvePlan } from '@/lib/course-tiers';
 
@@ -99,12 +100,19 @@ export async function GET() {
       passwordPrefix: userWithPwd?.password ? userWithPwd.password.slice(0, 7) : 'EMPTY',
     };
 
-    // 6. Raw MongoDB document (bypass Mongoose entirely)
-    const { MongoClient } = require('mongodb');
-    const uri = process.env.MONGODB_URI || '';
-    const client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000 });
+    /**
+     * 6. Raw MongoDB document (bypass Mongoose entirely)
+     *
+     * ⚠️ Isto abria `new MongoClient()` A CADA PEDIDO — um pool novo, sem
+     * `maxPoolSize`, e o `close()` estava DENTRO do `try`: consulta que falha
+     * deixava o pool aberto até a instância morrer. Agora usa o cliente
+     * compartilhado (ver `mongo-cliente.ts`), que ainda "burla o Mongoose" no
+     * que importa aqui — a leitura é pelo driver cru, sem schema nem cast.
+     *
+     * E por isso NÃO se fecha o cliente aqui: ele é o do resto do site.
+     */
     try {
-      await client.connect();
+      const client = await clienteMongo();
       const rawDoc = await client.db('fayapoint').collection('users').findOne(
         { email: user.email },
         { projection: { password: 0 } }
@@ -122,7 +130,6 @@ export async function GET() {
         xpMatch: user.progress?.xp === rawDoc?.progress?.xp,
         levelMatch: user.progress?.level === rawDoc?.progress?.level,
       };
-      await client.close();
     } catch (e) {
       diag.rawMongoDB = `Error: ${e instanceof Error ? e.message : 'unknown'}`;
     }

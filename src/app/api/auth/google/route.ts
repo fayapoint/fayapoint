@@ -134,7 +134,7 @@ export async function POST(request: Request) {
         emailsVerificados: [googleUser.email.toLowerCase()],
       });
       // P5: boas-vindas + aviso ao admin — só em conta NOVA
-      fireWelcomeFlow(user.name, user.email, 'google-oauth');
+      await fireWelcomeFlow(user.name, user.email, 'google-oauth');
     }
 
     // Mesma decisão do fluxo de código: quem entrou com o Google já tem o

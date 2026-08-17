@@ -1,5 +1,7 @@
 import { Redis } from '@upstash/redis';
 
+import { comTeto } from '@/lib/com-teto';
+
 // Initialize Upstash Redis client only when configured
 // Set these in Netlify env vars:
 // UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
@@ -73,6 +75,105 @@ export const CACHE_KEYS = {
 } as const;
 
 /**
+ * Dois tetos, e a diferença entre eles é o ponto.
+ *
+ * Uma ida ao Upstash foi medida em ~130ms. O que muda de um para o outro não é
+ * a velocidade esperada — é o que acontece quando o teto estoura. `comTeto` não
+ * cancela nada (ver `com-teto.ts`): ele só desiste de esperar.
+ *
+ * - **LEITURA (1500ms):** desistir é de graça. O pedido segue para o Mongo e
+ *   responde. Teto curto aqui é o que impede um Upstash pendurado de virar tela
+ *   girando — e `invalidateCache*`, que agora é esperada no fim de
+ *   `generate-image`, entra nesta classe: perder uma invalidação serve dado
+ *   velho por um TTL, mas travar a resposta perde a imagem que a pessoa pagou.
+ *
+ * - **ESCRITA (4000ms):** desistir custa a escrita. Neste ponto o `fetcher` já
+ *   terminou e a resposta ainda não saiu, então o `await` é justamente o que
+ *   mantém a instância viva o tempo de a escrita chegar ao Upstash. Um teto de
+ *   1500ms aqui NÃO protegeria a resposta (ela já está pronta) e transformaria
+ *   "escrita lenta" em "escrita perdida" — recriando, no caminho lento, o bug
+ *   de cache que nunca enche. 4s é ~30× o tempo medido: só estoura com o Upstash
+ *   realmente fora, e aí falha aberta.
+ *
+ *   E o teto não pode ser generoso demais: subir a versão da chave (`v2:`) faz o
+ *   PRIMEIRO pedido de cada rota ser miss garantido depois do deploy. Se o
+ *   Upstash pendurar justo aí, várias rotas pagam o teto ao mesmo tempo — e as
+ *   rotas de cache (`/api/store/featured`, `/api/public/gallery`,
+ *   `community-stats`, `dashboard`) não declaram `maxDuration` próprio. 4s cabe
+ *   com folga em qualquer teto de função; 8s começava a namorar o limite.
+ *
+ * `falhar` e `pendurar` não são a mesma coisa: `.catch()` cobre a primeira e não
+ * faz nada pela segunda.
+ */
+const TETO_LEITURA_MS = 1500;
+const TETO_ESCRITA_MS = 4000;
+
+/**
+ * O TTL de um resultado NULO, curto de propósito.
+ *
+ * Cachear "não existe" evita que robô pedindo slug inválido vá ao Mongo o dia
+ * inteiro. Mas com o TTL cheio (10 minutos para produto) um curso recém-criado
+ * que já tinha recebido um pedido antes de existir continuaria 404 por 10
+ * minutos — e `invalidateProductCache()` existe mas ninguém a chama, então nada
+ * corrigiria isso antes do TTL vencer.
+ *
+ * 30 segundos mata a enxurrada de robô (que é por segundo) e limita o dano a
+ * uma janela que ninguém percebe.
+ */
+const TTL_DO_NULO = 30;
+
+export type OpcoesDeCache = {
+  /**
+   * `false` quando o `null` deste fetcher significa **"ainda não"** e não
+   * **"não existe"**.
+   *
+   * ⚠️ A diferença é concreta e já custa caro aqui. `livro:capitulos:*` e
+   * `atelie:capitulos:*` devolvem `null` tanto para "curso inexistente" quanto
+   * para "curso existe e o `courseContent` ainda está vazio" — que é o estado
+   * dos cursos sendo escritos AGORA. E o estúdio de escrita bate nessas rotas a
+   * cada 4 segundos. Cachear esse `null` por 30s faria a tela dizer "sem
+   * conteúdo" durante sete ou oito consultas seguidas, para um curso cujo texto
+   * acabou de chegar.
+   *
+   * Só use `cachearNulo: false` quando o nulo for transitório assim. Para slug
+   * que não existe — que é o caso do robô — cachear é justamente o objetivo.
+   */
+  cachearNulo?: boolean;
+};
+
+/**
+ * `curto` para o que é de graça perder: leitura de cache e invalidação. `folgado`
+ * para a escrita do valor, que é a única operação daqui cujo abandono deixa o
+ * cache vazio para sempre.
+ */
+const curto = <T>(p: Promise<T>, oQue: string) => comTeto(p, TETO_LEITURA_MS, `redis ${oQue}`);
+const folgado = <T>(p: Promise<T>, oQue: string) => comTeto(p, TETO_ESCRITA_MS, `redis ${oQue}`);
+
+/**
+ * ⚠️ MUDOU A FORMA DO QUE VAI AO REDIS — POR ISSO A CHAVE MUDOU JUNTO.
+ *
+ * O valor agora é embrulhado (`{ v: dado }`) para que "não está no cache" e
+ * "está no cache, e é nulo" deixem de ser a mesma coisa. Chave sem versão com
+ * forma nova serve dado velho no formato errado — foi o que já aconteceu quando
+ * a forma do `getOrSet` mudou e o site serviu 16 minutos de dado antigo. Ao
+ * mudar a forma outra vez, **suba esta versão no mesmo commit**.
+ */
+const VERSAO_DO_CACHE = 'v2';
+const comVersao = (chave: string) => `${VERSAO_DO_CACHE}:${chave}`;
+
+/**
+ * ⚠️ O envelope guarda `null`, mas NÃO guarda `undefined`.
+ *
+ * O Upstash serializa objeto com `JSON.stringify`, e `JSON.stringify({v:
+ * undefined})` devolve `'{}'` — a chave `v` desaparece, a leitura não encontra
+ * envelope e trata como miss. Nenhum dos `getOrSet` de hoje devolve `undefined`
+ * (todos usam `null`, array ou objeto), então isto não morde ninguém agora. Mas
+ * um fetcher novo que devolva `undefined` fica com cache silenciosamente
+ * desligado: devolva `null`.
+ */
+type Envelope<T> = { v: T };
+
+/**
  * Get cached value or fetch from source
  * @param key Cache key
  * @param fetcher Function to fetch data if cache miss
@@ -81,34 +182,80 @@ export const CACHE_KEYS = {
 export async function getOrSet<T>(
   key: string,
   fetcher: () => Promise<T>,
-  ttl: number
+  ttl: number,
+  opcoes?: OpcoesDeCache,
 ): Promise<T> {
+  if (!realRedis) return await fetcher();
+
+  const chave = comVersao(key);
+
   try {
-    if (!realRedis) return await fetcher();
-
-    const cached = await redis.get<T>(key);
-    if (cached !== null) return cached;
-
-    const data = await fetcher();
-
-    redis.set(key, data, { ex: ttl }).catch(err => {
-      console.error('Redis set error:', err);
-    });
-
-    return data;
+    const guardado = await curto(redis.get<Envelope<T>>(chave), `get ${chave}`);
+    /**
+     * O envelope é o que permite cachear resultado NULO. Antes, `null` era lido
+     * como "não tem no cache": todo pedido por slug que não existe — e robô faz
+     * isso o dia inteiro — ia ao Mongo, guardava `null`, e o próximo ia de novo.
+     * Cacheado de verdade, o inexistente custa uma ida ao Redis.
+     */
+    if (guardado && typeof guardado === 'object' && 'v' in guardado) {
+      return guardado.v;
+    }
   } catch (error) {
-    console.error('Redis getOrSet error:', error);
-    return await fetcher();
+    // Leitura falhou ou estourou o teto: segue para a fonte. Cache é atalho,
+    // não caminho único.
+    console.error('Redis getOrSet (leitura):', error);
   }
+
+  const data = await fetcher();
+
+  /**
+   * ⚠️ ESTE `await` NÃO PODE SAIR.
+   *
+   * Esta escrita estava solta (`.catch()`, sem esperar). É o mesmo erro que já
+   * está documentado em `rate-limit.ts:77`: numa função serverless a instância
+   * é CONGELADA quando a resposta sai, e promessa pendente pode ser descartada
+   * ou terminar muito depois. Escrita de cache perdida não dá erro em lugar
+   * nenhum — ela reaparece como todo pedido indo ao Mongo, que é justamente a
+   * pressão de conexão que derrubou o site em 13/08.
+   *
+   * O custo é uma ida ao Upstash (~130ms) **só quando deu miss**, com teto e
+   * falhando aberto. O benefício é o cache existir.
+   */
+  const vazio = data === null || data === undefined;
+  if (vazio && opcoes?.cachearNulo === false) {
+    // Nulo transitório: não guarda nada, para que a próxima consulta veja o dado
+    // no instante em que ele existir. Ver `OpcoesDeCache.cachearNulo`.
+    return data;
+  }
+
+  try {
+    const envelope: Envelope<T> = { v: data };
+    const validade = vazio ? Math.min(ttl, TTL_DO_NULO) : ttl;
+    await folgado(redis.set(chave, envelope, { ex: validade }), `set ${chave}`);
+  } catch (error) {
+    console.error('Redis getOrSet (escrita):', error);
+  }
+
+  return data;
 }
 
 /**
  * Invalidate a cache key
+ *
+ * ⚠️ Apaga a chave VERSIONADA, a mesma que o `getOrSet` escreve. Invalidação que
+ * apaga `products:list` enquanto o cache guarda `v2:products:list` não dá erro
+ * nenhum — só deixa de invalidar, e o site serve dado velho até o TTL.
  */
 export async function invalidateCache(key: string): Promise<void> {
   try {
     if (!realRedis) return;
-    await redis.del(key);
+    /**
+     * Apaga a versionada E a legada. `invalidateCachePattern` já fazia as duas;
+     * esta fazia só uma. Enquanto houver chave `v1` viva no Upstash — inclusive
+     * escrita por uma instância do deploy anterior, que coexiste por alguns
+     * minutos —, invalidar de verdade é apagar as duas.
+     */
+    await curto(redis.del(comVersao(key), key), `del ${key}`);
   } catch (error) {
     console.error('Redis invalidate error:', error);
   }
@@ -116,13 +263,24 @@ export async function invalidateCache(key: string): Promise<void> {
 
 /**
  * Invalidate multiple cache keys by pattern (use with caution)
+ *
+ * O padrão recebido é o de sempre (`'products:*'`); a versão entra aqui, para
+ * quem chama não precisar saber que ela existe.
+ *
+ * ⚠️ Também apaga o que ficou da versão anterior do formato (`products:*` sem
+ * prefixo). Enquanto houver chave `v1` viva no Upstash, invalidar de verdade é
+ * apagar as duas — a antiga expira sozinha, mas até lá ela existe.
  */
 export async function invalidateCachePattern(pattern: string): Promise<void> {
   try {
     if (!realRedis) return;
-    const keys = await redis.keys(pattern);
+    const encontradas = await curto(
+      Promise.all([redis.keys(comVersao(pattern)), redis.keys(pattern)]),
+      `keys ${pattern}`,
+    );
+    const keys = encontradas.flat();
     if (keys.length > 0) {
-      await redis.del(...keys);
+      await curto(redis.del(...keys), `del ${keys.length} chaves`);
     }
   } catch (error) {
     console.error('Redis invalidate pattern error:', error);
@@ -131,11 +289,17 @@ export async function invalidateCachePattern(pattern: string): Promise<void> {
 
 /**
  * Set cache directly
+ *
+ * Mesmo envelope e mesma versão do `getOrSet`, para que os dois possam usar a
+ * mesma chave sem se atropelar.
  */
 export async function setCache<T>(key: string, data: T, ttl: number): Promise<void> {
   try {
     if (!realRedis) return;
-    await redis.set(key, data, { ex: ttl });
+    await folgado(
+      redis.set(comVersao(key), { v: data } satisfies Envelope<T>, { ex: ttl }),
+      `set ${key}`,
+    );
   } catch (error) {
     console.error('Redis set error:', error);
   }
@@ -147,7 +311,11 @@ export async function setCache<T>(key: string, data: T, ttl: number): Promise<vo
 export async function getCache<T>(key: string): Promise<T | null> {
   try {
     if (!realRedis) return null;
-    return await redis.get<T>(key);
+    const guardado = await curto(redis.get<Envelope<T>>(comVersao(key)), `get ${key}`);
+    if (guardado && typeof guardado === 'object' && 'v' in guardado) {
+      return guardado.v;
+    }
+    return null;
   } catch (error) {
     console.error('Redis get error:', error);
     return null;

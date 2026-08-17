@@ -51,6 +51,31 @@ async function dbConnect() {
     throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
   }
 
+  /**
+   * ⚠️ NÃO "conserte" isto reconectando quando `readyState !== 1`.
+   *
+   * Parece o cuidado óbvio — conexão em cache só serve se estiver viva — e eu
+   * cheguei a escrever exatamente isso aqui. É uma armadilha, e a prova está no
+   * código do Mongoose instalado:
+   *
+   *   `node_modules/mongoose/lib/drivers/node-mongodb-native/connection.js`
+   *
+   *   - ao PERDER o primário do replica set, ele faz
+   *     `conn.readyState = STATES.disconnected` (0) e deixa o `MongoClient`
+   *     vivo, porque o driver recupera sozinho (`topologyDescriptionChanged`);
+   *   - quando o primário volta, `_handleReconnect()` devolve o estado para 1;
+   *   - e `createClient()` faz `this.client = new mongodb.MongoClient(...)`
+   *     **sem fechar o cliente anterior**.
+   *
+   * Ou seja: `readyState === 0` é rotina numa eleição de primário na Atlas, e
+   * forçar reconexão nessa janela abandona um pool aberto e abre outro por cima
+   * — o vazamento que este trabalho existe para eliminar, disparado justamente
+   * na hora em que o cluster está instável.
+   *
+   * Nada mais fecha este cliente (o `close()` da rota de diagnóstico saiu), então
+   * "conectado mas morto para sempre" não é um estado que este código produza. A
+   * reconexão é trabalho do driver. Deixe com ele.
+   */
   if (cached.conn) {
     return cached.conn;
   }

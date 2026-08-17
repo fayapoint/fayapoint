@@ -1,3 +1,4 @@
+import { comTeto as comTetoCompartilhado } from "@/lib/com-teto";
 import redis from "@/lib/redis";
 
 export type RateLimitResult = {
@@ -38,19 +39,8 @@ export function getClientIpFromRequest(request: Request): string {
  */
 const TETO_MS = 800;
 
-async function comTeto<T>(promessa: Promise<T>): Promise<T> {
-  let temporizador: ReturnType<typeof setTimeout> | undefined;
-  try {
-    return await Promise.race([
-      promessa,
-      new Promise<never>((_, rejeita) => {
-        temporizador = setTimeout(() => rejeita(new Error("redis timeout")), TETO_MS);
-      }),
-    ]);
-  } finally {
-    if (temporizador) clearTimeout(temporizador);
-  }
-}
+/** A mecânica mora em `com-teto.ts`; aqui fica só o prazo da borda. */
+const comTeto = <T>(promessa: Promise<T>) => comTetoCompartilhado(promessa, TETO_MS, "redis na borda");
 
 export async function rateLimit(params: {
   key: string;

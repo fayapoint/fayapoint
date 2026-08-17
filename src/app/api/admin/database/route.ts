@@ -22,11 +22,53 @@ export async function GET(request: NextRequest) {
       try {
         await mongoose.connection.db?.admin().ping();
         const latency = Date.now() - startTime;
-        
+
+        /**
+         * As conexões do cluster, aqui dentro.
+         *
+         * Em 13/08/2026 o site ficou lento em tudo e a causa — 228 das 500
+         * conexões abertas com o site parado — só apareceu depois de escrever um
+         * script no meio do incêndio, porque nenhuma tela do admin mostrava este
+         * número. Agora mostra. O teto do plano grátis é 500, e ele é dividido
+         * com os outros bancos que moram neste mesmo cluster.
+         *
+         * `serverStatus` pode não ser permitido dependendo do usuário do banco:
+         * se falhar, o resto da resposta continua valendo.
+         */
+        let conexoes: Record<string, unknown> | { erro: string };
+        try {
+          const status = await mongoose.connection.db?.admin().serverStatus();
+          const c = status?.connections ?? {};
+          /**
+           * ⚠️ `typeof`, não truthy.
+           *
+           * `available === 0` é o estado de exaustão TOTAL — o incidente de
+           * 13/08 repetido, a única hora em que este painel realmente importa.
+           * E `0` é falsy: com `c.available ? ... : null` a porcentagem virava
+           * `null` e o alerta virava falso exatamente no pior momento. O painel
+           * apagava justo quando devia gritar.
+           */
+          const temNumeros = typeof c.current === 'number' && typeof c.available === 'number';
+          const teto = temNumeros ? c.current + c.available : null;
+          const fracao = teto && teto > 0 ? c.current / teto : null;
+          conexoes = {
+            emUso: c.current,
+            disponiveis: c.available,
+            criadasDesdeOBoot: c.totalCreated,
+            tetoDoCluster: teto,
+            porcentoDoTeto: fracao === null ? null : Math.round(fracao * 100),
+            /** ⚠️ 70% é onde a Atlas começa a alertar. Nas 500 ela recusa conexão nova. */
+            alerta: fracao === null ? null : fracao >= 0.7,
+          };
+        } catch (e) {
+          conexoes = { erro: `serverStatus indisponível: ${e instanceof Error ? e.message : 'desconhecido'}` };
+        }
+
         return NextResponse.json({
           success: true,
           status: 'connected',
           latency,
+          conexoes,
           connectionString: process.env.MONGODB_URI?.replace(/:[^:@]+@/, ':****@') || 'Not set',
         });
       } catch (e) {
