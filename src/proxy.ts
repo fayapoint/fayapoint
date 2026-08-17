@@ -403,11 +403,24 @@ export default async function middleware(request: NextRequest) {
     // Log for monitoring
     console.warn(`[HONEYPOT] IP: ${ip}, Path: ${pathname}, UA: ${userAgent.slice(0, 50)}`);
 
-    // Block this IP for 24 hours
+    /**
+     * REGISTRA o IP por 24h — não bloqueia, e o comentário antigo dizia que
+     * bloqueava.
+     *
+     * A seção "2. CHECK IF IP IS TEMPORARILY BLOCKED" mais abaixo é só prosa: a
+     * chave `blocked:ip:*` é escrita aqui e **nunca lida** no caminho do pedido.
+     * Quem a lê é o painel (`/api/admin/bandwidth-report` lista
+     * `blocked:ip:*`), e para isso ela serve.
+     *
+     * Deixo assim de propósito. Fazer valer o bloqueio custaria uma ida ao
+     * Redis em TODO pedido dentro da edge function — e a armadilha já responde
+     * 410 na hora, de graça, sem consultar nada. Trocar isso por latência em
+     * cada visita legítima é pagar caro para bloquear quem já foi bloqueado.
+     */
     await rateLimit({
       key: `blocked:ip:${ip}`,
       limit: 1,
-      windowSeconds: 86400, // 24 hours
+      windowSeconds: 86400, // 24 horas de registro, para o relatório
     });
 
     return new NextResponse("Gone", { status: 410 });

@@ -62,7 +62,24 @@ export const GOOD_BOTS = [
   "pinterest",
 ];
 
-// Paths that bots commonly probe (attack vectors)
+/**
+ * Paths that bots commonly probe (attack vectors).
+ *
+ * ⚠️ Cada item aqui é um SEGMENTO de caminho, e a comparação é por segmento
+ * inteiro (ver `isHoneypotPath`). Nunca volte a comparar com `includes()`:
+ * `"/database"` casava dentro de `/api/admin/database` e de
+ * `/pt-BR/admin/database`, e os dois passaram a responder **410 Gone** — o
+ * painel de banco do admin morreu em produção sem ninguém notar, porque a
+ * resposta é a mesma que um robô recebe.
+ *
+ * E a mina era maior que o painel: `"/test"` casa dentro de
+ * `/pt-BR/curso/testando-ia`, `"/db"` dentro de `/pt-BR/noticias/dbeaver-*`.
+ * Um slug novo começado por test, db, sql, console, debug, backup, manager,
+ * shell, cmd, exec, eval ou mysql viraria 410 — que para o Google não é
+ * "erro temporário", é **"esta página não existe mais, tire do índice"**.
+ * Nenhuma das 386 URLs do sitemap colide hoje (conferido em 17/08/2026); a
+ * comparação por segmento é o que garante que continue assim.
+ */
 export const HONEYPOT_PATHS = [
   "/wp-admin",
   "/wp-login.php",
@@ -155,9 +172,39 @@ export function isGoodBot(userAgent: string): boolean {
 /**
  * Check if path is a honeypot (commonly attacked path)
  */
+/**
+ * Rotas que são NOSSAS e nunca podem ser tratadas como armadilha, mesmo que um
+ * segmento coincida com um nome que robô também procura.
+ *
+ * `/api/admin/database` e `/pt-BR/admin/database` são telas do admin. Elas
+ * exigem token de admin — quem não tem recebe 401, que é a resposta certa. 410
+ * com bloqueio de IP é a resposta errada, e era a que estava no ar.
+ */
+const ROTAS_DA_CASA = [
+  /^\/api\/admin\//,
+  /^\/(pt-BR|en)\/admin\//i,
+];
+
+/**
+ * Armadilha é SEGMENTO, não pedaço de texto.
+ *
+ * `/database` casa `/database` e `/foo/database`; **não** casa
+ * `/pt-BR/curso/database-para-leigos` — ali `database-para-leigos` é outro
+ * segmento. Padrões com ponto (`/.env`, `/xmlrpc.php`) seguem a mesma regra: o
+ * segmento tem de ser igual.
+ *
+ * ⚠️ Antes disto a comparação era `lowerPath.includes(hp)`, e o efeito colateral
+ * não aparecia em teste nenhum: o robô continuava sendo barrado, então parecia
+ * funcionar — só as nossas próprias telas morriam junto, com a mesma cara de
+ * "410 Gone".
+ */
 export function isHoneypotPath(pathname: string): boolean {
-  const lowerPath = pathname.toLowerCase();
-  return HONEYPOT_PATHS.some(hp => lowerPath.includes(hp));
+  const caminho = pathname.toLowerCase();
+
+  if (ROTAS_DA_CASA.some((r) => r.test(pathname))) return false;
+
+  const segmentos = new Set(caminho.split("/").filter(Boolean));
+  return HONEYPOT_PATHS.some((hp) => segmentos.has(hp.replace(/^\//, "")));
 }
 
 /**
