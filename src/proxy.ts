@@ -54,9 +54,21 @@ const GEOBLOCK_CONFIG = {
   // For local testing: add ?_geo=BR or ?_geo=US to simulate countries
   testQueryParam: "_geo",
 
-  // Secret header for bypassing (for your own access from abroad)
+  /**
+   * Cabeçalho de bypass — SEM valor padrão, de propósito.
+   *
+   * Havia `|| "fayai-bypass-2024"` aqui: uma senha fixa, escrita num
+   * repositório público, que liberava o geoblock de qualquer país. Hoje o
+   * `enabled: false` acima mantém este bloco dormindo, então não era
+   * explorável — mas era uma mina armada para o dia em que alguém trocasse o
+   * `false` por `true`.
+   *
+   * `netlify/edge-functions/geoblock.ts` já tinha sido consertado assim; este
+   * ficou para trás. Sem a variável no ambiente, `null` nunca casa com um
+   * cabeçalho (a comparação abaixo exige o segredo definido).
+   */
   bypassHeader: "x-geobypass-secret",
-  bypassSecret: process.env.GEOBLOCK_BYPASS_SECRET || "fayai-bypass-2024",
+  bypassSecret: process.env.GEOBLOCK_BYPASS_SECRET || null,
 };
 
 // Get country code from various Netlify/Vercel/Cloudflare headers
@@ -119,7 +131,9 @@ function shouldBypassBotDetection(pathname: string): boolean {
 // Check if request has valid bypass secret
 function hasValidBypassSecret(request: NextRequest): boolean {
   const secret = request.headers.get(GEOBLOCK_CONFIG.bypassHeader);
-  return secret === GEOBLOCK_CONFIG.bypassSecret;
+  // Sem segredo configurado não há bypass. `null === null` seria verdadeiro para
+  // quem não mandasse cabeçalho nenhum — que é justamente todo mundo.
+  return Boolean(GEOBLOCK_CONFIG.bypassSecret) && secret === GEOBLOCK_CONFIG.bypassSecret;
 }
 
 // =============================================================================
@@ -574,6 +588,36 @@ export default async function middleware(request: NextRequest) {
   // -------------------------------------------------------------------------
   // 4. GLOBAL RATE LIMITING (page routes only — API routes handled in step 1.5)
   // -------------------------------------------------------------------------
+
+  /**
+   * ⚠️ CONTADO, PARA NINGUÉM "OTIMIZAR" ISTO DE NOVO.
+   *
+   * Ficou escrito numa lista de pendências que este arquivo faz "3 a 4
+   * `rateLimit()` sequenciais, cada um com uma ida ao Upstash, em toda visita" e
+   * que um pipeline resolveria. Contado caminho a caminho em 18/08/2026, é
+   * falso — e agir naquele número teria trocado uma coisa boa por uma pior.
+   *
+   * Há sete chamadas de `rateLimit()` no arquivo, mas elas são EXCLUDENTES.
+   * Numa visita comum (página, sem prefetch, fora de /admin, sem cair na
+   * armadilha nem na detecção de robô):
+   *
+   *     honeypot .................. não chama (só quando o caminho casa)
+   *     API (passo 1.5) ........... não chama (`isApiRoute` é falso)
+   *     pontuação de suspeita ..... não chama (`requestCount: 0`, de propósito)
+   *     prefetch .................. sai antes, sem tocar no Redis
+   *     ESTE (passo 4) ............ 1 comando `INCR`
+   *     admin (passo 5) ........... não chama (só sob /admin)
+   *
+   * Total: **um comando por visita**. Numa rota de API é também um (o passo 1.5,
+   * e este é pulado). Dois só sob `/admin`; três ou mais só nos caminhos de
+   * ABUSO — quem já estourou o limite, que é exatamente quem não merece que se
+   * gaste engenharia poupando-lhe latência.
+   *
+   * E o pipeline juntando `INCR`+`EXPIRE` (ver `rate-limit.ts`) pioraria o que
+   * mais importa aqui: o `EXPIRE` hoje sai UMA vez por janela de 60s por IP,
+   * enquanto o pipeline mandaria os dois comandos SEMPRE — dobrando o consumo
+   * da cota do Upstash para economizar uma ida a cada sessenta.
+   */
 
   // API routes already have their own rate limiter (step 1.5) with separate keys.
   // Only apply global rate limit to PAGE routes here to avoid double-counting.

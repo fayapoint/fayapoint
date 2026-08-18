@@ -1,9 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET_KEY || "1x0000000000000000000000000000000AA";
+/**
+ * ⚠️ SEM O PADRÃO "SEMPRE PASSA".
+ *
+ * Estava `|| "1x0000000000000000000000000000000AA"`, que é a chave de TESTE
+ * publicada pela Cloudflare: ela aprova qualquer token, inclusive um inventado.
+ * E `TURNSTILE_SECRET_KEY` não está configurada na Netlify — ou seja, a
+ * verificação em produção aprovava tudo. Hoje ninguém é ferido por isso porque
+ * `GateLandingPage` não está montada em página nenhuma (a rota existe e não é
+ * chamada), mas o dia em que o portão voltasse a ser usado ele nasceria aberto.
+ *
+ * `lib/turnstile.ts` já fazia certo — lê a variável e recusa sem ela. Este
+ * arquivo é a cópia que ficou para trás.
+ */
+const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET_KEY;
 
 export async function POST(request: NextRequest) {
   try {
+    if (!TURNSTILE_SECRET) {
+      console.error("[GATE] TURNSTILE_SECRET_KEY não configurada — recusando em vez de aprovar.");
+      return NextResponse.json({ error: "Verification unavailable" }, { status: 503 });
+    }
+
     const { token } = await request.json();
 
     if (!token) {

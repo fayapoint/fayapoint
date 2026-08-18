@@ -76,6 +76,14 @@ export async function rateLimit(params: {
        *
        * O custo é uma ida ao Redis no PRIMEIRO pedido de cada janela por IP,
        * não em todos.
+       *
+       * ⚠️ E é por isso que este `if` NÃO deve virar um pipeline
+       * `INCR`+`EXPIRE NX`. O pipeline economiza uma viagem de rede — mas manda
+       * DOIS comandos em todo pedido, enquanto isto aqui manda o segundo uma
+       * vez por janela de 60s por IP. O plano do Upstash é cobrado por comando,
+       * e este código roda em toda visita do site: seria dobrar a conta para
+       * poupar ~130ms uma vez a cada sessenta segundos. Medição completa dos
+       * caminhos em `src/proxy.ts`, passo 4.
        */
       await comTeto(redis.expire(key, windowSeconds));
     }
