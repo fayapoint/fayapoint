@@ -1,4 +1,4 @@
-import { getAllProducts, paraIdiomaLista } from "@/lib/products";
+import { getAllProducts } from "@/lib/products";
 import { toolsData } from "@/data/tools-complete";
 import { fichasDoIdioma } from "@/data/tools-idioma";
 
@@ -37,10 +37,19 @@ const SITE =
 export const revalidate = 3600;
 
 export async function GET() {
-  const brutos = await getAllProducts({ type: "course", limit: 200 }).catch(() => []);
-  const ativos = brutos.filter((c) => c.status !== "draft");
-  const pt = paraIdiomaLista(ativos, "pt-BR");
-  const en = paraIdiomaLista(ativos, "en");
+  /**
+   * Duas leituras, e não uma seguida de duas traduções: desde 18/08/2026 o
+   * `getAllProducts` resolve o idioma dentro e não devolve mais o `i18n` — eram
+   * 93 KB de tradução que todo chamador carregava e jogava fora. Aqui as duas
+   * línguas são necessárias de verdade, e as duas entradas de cache são as
+   * mesmas que as páginas já usam — isto não cria leitura nova.
+   */
+  const [brutosPt, brutosEn] = await Promise.all([
+    getAllProducts({ type: "course", limit: 200, locale: "pt-BR" }).catch(() => []),
+    getAllProducts({ type: "course", limit: 200, locale: "en" }).catch(() => []),
+  ]);
+  const pt = brutosPt.filter((c) => c.status !== "draft");
+  const en = brutosEn.filter((c) => c.status !== "draft");
 
   const ferramentasEn = fichasDoIdioma("en");
   const totalFerramentas = Object.keys(toolsData).length;

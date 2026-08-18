@@ -35,7 +35,7 @@ export default async function Home({
   const { locale } = await params;
   const [{ items }, brutos] = await Promise.all([
     getAiNews(3, locale),
-    getAllProducts({ type: "course" }),
+    getAllProducts({ type: "course", locale }),
   ]);
   const courses = paraIdiomaLista(brutos, locale);
 

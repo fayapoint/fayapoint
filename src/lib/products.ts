@@ -496,14 +496,44 @@ function fundir(
   return saida;
 }
 
-// Get all active products (CACHED: 10 minutes)
+/**
+ * O catálogo, JÁ NO IDIOMA PEDIDO.
+ *
+ * ## Por que o idioma se resolve aqui dentro, e não depois
+ *
+ * A tradução mora em `i18n.en` dentro de cada produto, e todo chamador já
+ * passava o resultado por `paraIdiomaLista`, que **apaga o `i18n`**. Ou seja: o
+ * campo era lido do Mongo, atravessava a rede, era gravado no Redis, era lido de
+ * volta — e então jogado fora, em toda leitura.
+ *
+ * Medido em 18/08/2026, catálogo de 22 cursos com a projeção de lista aplicada:
+ *
+ *     lista inteira ............ 228 KB
+ *     só o `i18n` dela ......... 93 KB   (41%)
+ *
+ * Resolvendo aqui, o português nem lê o campo do Mongo (sai na projeção) e o
+ * inglês o consome antes de guardar. As duas entradas de cache juntas ficam
+ * menores que a única entrada anterior.
+ *
+ * ⚠️ A CHAVE GANHOU O IDIOMA. Sem isso, o primeiro pedido decidiria a língua dos
+ * dez minutos seguintes para todo mundo — um visitante em `/en` encheria o cache
+ * e a `/pt-BR/cursos` passaria a servir inglês. É o mesmo motivo do `v2:` em
+ * `redis.ts`: mudou a forma do valor, muda a chave no mesmo commit.
+ *
+ * ⚠️ `locale` ausente significa português — exatamente o que
+ * `paraIdiomaLista(lista, 'pt-BR')` fazia com o resultado antigo. Por isso
+ * `sitemap.ts`, `monthly-offers` e `/api/products` não mudam de comportamento. E
+ * chamador que continue chamando `paraIdiomaLista` depois não quebra: sem `i18n`
+ * no documento, a função vira cópia.
+ */
 export async function getAllProducts(options?: {
   limit?: number;
   sortBy?: 'students' | 'rating' | 'price' | 'newest';
   type?: 'course' | 'tool';
+  locale?: string;
 }): Promise<Product[]> {
-  // Create a cache key based on options
-  const cacheKey = `${CACHE_KEYS.PRODUCTS}:${options?.sortBy || 'students'}:${options?.type || 'all'}:${options?.limit || 100}`;
+  const idioma = ehIngles(options?.locale) ? 'en' : 'pt';
+  const cacheKey = `${CACHE_KEYS.PRODUCTS}:${options?.sortBy || 'students'}:${options?.type || 'all'}:${options?.limit || 100}:${idioma}`;
   
   return getOrSet<Product[]>(
     cacheKey,
@@ -533,25 +563,67 @@ export async function getAllProducts(options?: {
         query.type = options.type;
       }
 
+      // Português nem lê a tradução do banco; inglês lê e consome antes de
+      // guardar. Nos dois casos o `i18n` não chega ao cache nem ao chamador.
+      const projecao = idioma === 'en' ? PROJECAO_DE_LISTA : { ...PROJECAO_DE_LISTA, i18n: 0 };
+
       const products = await collection
-        .find(query, { projection: PROJECAO_DE_LISTA })
+        .find(query, { projection: projecao })
         .sort(sort)
         .limit(options?.limit || 100)
         .toArray();
-      
-      return (products as unknown[]).map(normalizeProduct);
+
+      const normalizados = (products as unknown[]).map(normalizeProduct);
+      return paraIdiomaLista(normalizados, options?.locale ?? 'pt-BR');
     },
     CACHE_TTL.PRODUCTS
   );
 }
 
-// Get product by slug (CACHED: 10 minutes)
-export async function getProductBySlug(slug: string): Promise<Product | null> {
+/**
+ * UM produto — sem o texto das aulas, a menos que se peça.
+ *
+ * ## O número que motivou isto
+ *
+ * Não havia projeção nenhuma aqui: a função devolvia o documento inteiro, e
+ * `courseContent` é o curso todo. Medido em `chatgpt-zero`, 18/08/2026:
+ *
+ *     documento inteiro ........ 262 KB
+ *       courseContent .......... 248 KB   (95%)
+ *       detailedCurriculum ....... 9 KB
+ *       resto .................... 5 KB
+ *
+ * Esses 262 KB iam para o Redis a cada miss e voltavam a cada hit, e a rota
+ * pública `/api/products/[slug]` os servia inteiros — **292 KB de resposta**,
+ * com o texto das aulas legível sem login. É o mesmo estrago que
+ * `CAMPOS_FORA_DA_VITRINE` consertou na lista; a leitura por slug ficou para
+ * trás.
+ *
+ * De todos os chamadores, **um** precisa do texto: a página de prévia, que corta
+ * o primeiro capítulo. Ela pede `comConteudo: true` e cai numa chave de cache
+ * própria — assim o documento gordo não volta a ser o padrão das outras.
+ *
+ * ⚠️ `detailedCurriculum` FICA: a página de venda mostra a ementa, e são 9 KB.
+ * ⚠️ O `i18n` (2 KB) também fica — aqui quem resolve o idioma é o chamador,
+ * depois, e tirar o campo devolveria a página inglesa em português. Na LISTA é
+ * diferente: lá são 93 KB e o idioma se resolve dentro.
+ */
+export async function getProductBySlug(
+  slug: string,
+  opcoes?: { comConteudo?: boolean },
+): Promise<Product | null> {
+  const chave = opcoes?.comConteudo
+    ? `${CACHE_KEYS.PRODUCT(slug)}:completo`
+    : CACHE_KEYS.PRODUCT(slug);
+
   return getOrSet<Product | null>(
-    CACHE_KEYS.PRODUCT(slug),
+    chave,
     async () => {
       const collection = await getProductsCollection();
-      const product = await collection.findOne({ slug, status: 'active' });
+      const product = await collection.findOne(
+        { slug, status: 'active' },
+        opcoes?.comConteudo ? {} : { projection: { courseContent: 0 } },
+      );
       return product ? normalizeProduct(product) : null;
     },
     CACHE_TTL.PRODUCTS
@@ -587,6 +659,13 @@ const PADROES_DE_PRODUTO = [
    */
   'livro:capitulos:*',
   'atelie:capitulos:*',
+  /**
+   * A tabela de preços de serviço (`pricing.ts`, TTL de 30 min). Vive noutra
+   * coleção mas aparece nas MESMAS páginas, e `seed-service-prices.ts` a
+   * regrava — sem isto, mexer em preço pelo script deixava a página vendendo
+   * o valor anterior por meia hora.
+   */
+  'service:prices*',
 ] as const;
 
 /**
@@ -645,6 +724,9 @@ export async function invalidateProductCache(): Promise<number> {
  */
 export async function invalidarCursoNoCache(slug: string): Promise<number> {
   let apagadas = await invalidateCachePattern('products:*');
+  // `product:<slug>` ganhou variante (`:completo`). Chave exata sozinha deixaria
+  // a prévia servindo o texto anterior.
+  apagadas += await invalidateCachePattern(`product:${slug}:*`);
   for (const chave of [
     CACHE_KEYS.PRODUCT(slug),
     `conteudo:en:${slug}`,

@@ -22,7 +22,7 @@ export default async function Page({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const products = await getAllProducts({ type: "course", limit: 200 }).catch(
+  const products = await getAllProducts({ type: "course", limit: 200, locale }).catch(
     () => [],
   );
 

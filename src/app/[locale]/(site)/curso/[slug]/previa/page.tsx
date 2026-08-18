@@ -91,7 +91,9 @@ export default async function PreviaPage({ params }: Props) {
   let product = null;
   let bancoRespondeu = true;
   try {
-    const bruto = await getProductBySlug(slug);
+    // A ÚNICA chamada que precisa do texto das aulas: a prévia corta o primeiro
+  // capítulo. Ver o aviso em `getProductBySlug` — são 248 KB a mais.
+  const bruto = await getProductBySlug(slug, { comConteudo: true });
     // A prévia MOSTRA um capítulo inteiro — precisa do corpo traduzido, não só
     // da vitrine. `produtoCompletoNoIdioma` busca na coleção separada; sem
     // tradução, devolve o português e a página continua funcionando.
@@ -117,7 +119,7 @@ export default async function PreviaPage({ params }: Props) {
 
   // Sem isto a prévia é um beco: entra tráfego, lê, e não tem para onde ir.
   const catalogo = paraIdiomaLista(
-    await getAllProducts({ type: "course", limit: 200 }).catch(() => []),
+    await getAllProducts({ type: "course", limit: 200, locale }).catch(() => []),
     locale,
   );
   const vizinhos = relacionados(catalogo, product);
