@@ -66,11 +66,24 @@ export function messagesDoCliente(
   messages: Record<string, unknown>,
 ): Record<string, unknown> {
   /**
-   * Em português o dicionário nem existe nas `messages` (ver `request.ts`) —
-   * `traduzir` é a identidade. Não há o que reduzir, e criar a chave aqui faria
-   * a árvore portuguesa carregar um objeto vazio à toa.
+   * ⚠️ `{}` É TRUTHY, E ISSO ME CUSTOU UM DEPLOY.
+   *
+   * Em português, `request.ts` não omite a chave: ele põe um objeto VAZIO
+   * (`[CHAVE_DICIONARIO]: {}`), porque lá `traduzir` é a identidade. A primeira
+   * versão desta guarda era `if (!messages[CHAVE_DICIONARIO]) return messages`
+   * — e `!{}` é `false`. Resultado: a página PORTUGUESA trocava o objeto vazio
+   * pela fatia INGLESA e passava a carregar 580 KB que nunca usaria.
+   *
+   * Medido em produção antes do conserto: `/pt-BR/cursos` saltou de 553 KB para
+   * **1.174 KB** — o dobro. A otimização tinha piorado exatamente quem ela não
+   * devia tocar, e o inglês, que era o alvo, melhorou os 177 KB previstos.
+   *
+   * A pergunta certa não é "existe a chave?", é "tem tradução dentro?".
    */
-  if (!messages[CHAVE_DICIONARIO]) return messages;
+  const dicionario = messages[CHAVE_DICIONARIO];
+  const temTraducao =
+    dicionario && typeof dicionario === "object" && Object.keys(dicionario).length > 0;
+  if (!temTraducao) return messages;
 
   return { ...messages, [CHAVE_DICIONARIO]: fatia };
 }

@@ -46,7 +46,7 @@
  *
  * Roda no `prebuild`, para a fatia nunca envelhecer em relação ao código.
  */
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { execSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -101,15 +101,6 @@ function importacoesDe(txt) {
 }
 
 /**
- * Literais de string do arquivo.
- *
- * ⚠️ Varre em três passadas independentes (aspas duplas, simples, crase) em vez
- * de uma alternância só. Numa alternância, um apóstrofo no meio de uma frase em
- * português — "d'água", "não é o que o cliente pediu" — abre uma "string" falsa
- * que engole o resto da linha e some com literais legítimos. Foi medido: a
- * passada única perdia entradas que a varredura por trecho encontrava.
- */
-/**
  * Desfaz o escape de um literal — via `JSON.parse`, e não por um punhado de
  * `replace`.
  *
@@ -132,6 +123,14 @@ function desescapar(bruto) {
   }
 }
 
+/**
+ * Literais de string do arquivo.
+ *
+ * ⚠️ Três passadas independentes (aspas duplas, simples, crase) em vez de uma
+ * alternância só. Numa alternância, um apóstrofo no meio de uma frase em
+ * português abre uma "string" falsa que engole o resto da linha e some com
+ * literais legítimos.
+ */
 function literais(txt) {
   const out = [];
   for (const re of [/"((?:[^"\\\n]|\\.)*)"/g, /'((?:[^'\\\n]|\\.)*)'/g, /`([^`$\\]*)`/g]) {
@@ -148,10 +147,39 @@ function literais(txt) {
 const dicionario = JSON.parse(readFileSync(DICIONARIO, "utf8"));
 const chavesDoDicionario = new Set(Object.keys(dicionario));
 
-const todos = execSync("git ls-files src", { cwd: RAIZ, encoding: "utf8", maxBuffer: 1 << 26 })
-  .split("\n")
-  .filter((f) => /\.(tsx?|jsx?|mjs)$/.test(f))
-  .map((f) => path.join(RAIZ, f));
+/**
+ * A lista de arquivos-fonte.
+ *
+ * ⚠️ `git ls-files` é só o atalho rápido; a caminhada do disco é a reserva.
+ *
+ * Isto roda no `prebuild`, ou seja DENTRO do build da Netlify. Se o contêiner
+ * não tiver git, ou o deploy vier de um caminho que não é clone (rebuild pelo
+ * painel, restauração de cache), o `execSync` lança e derruba o build inteiro —
+ * por causa de uma otimização de i18n. Nenhuma economia de bytes vale um deploy
+ * que não sai.
+ */
+function fontes() {
+  try {
+    const saida = execSync("git ls-files src", { cwd: RAIZ, encoding: "utf8", maxBuffer: 1 << 26 });
+    const lista = saida.split("\n").filter((f) => /\.(tsx?|jsx?|mjs)$/.test(f));
+    if (lista.length) return lista.map((f) => path.join(RAIZ, f));
+  } catch {
+    /* sem git: cai na caminhada do disco */
+  }
+  const out = [];
+  const andar = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === "node_modules" || e.name.startsWith(".")) continue;
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) andar(p);
+      else if (/\.(tsx?|jsx?|mjs)$/.test(e.name)) out.push(p);
+    }
+  };
+  andar(SRC);
+  return out;
+}
+
+const todos = fontes();
 
 const conteudo = new Map();
 const ler = (f) => {
