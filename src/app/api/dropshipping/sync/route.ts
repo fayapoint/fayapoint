@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { porSegredoDeServico } from '@/lib/guarda-de-servico';
 import { getAuthUser } from '@/lib/auth';
 import { syncProductPrices, type MarginConfig } from '@/lib/dropshipping';
 
@@ -15,11 +16,10 @@ async function requireAdmin() {
 
 export async function POST(request: NextRequest) {
   try {
-    // Allow cron access via secret header
-    const cronSecret = request.headers.get('x-cron-secret');
-    const isAuthorizedCron = cronSecret === process.env.CRON_SECRET;
-
-    if (!isAuthorizedCron) {
+    // `CRON_SECRET` não existe no ambiente: a comparação nunca casava e a rota
+    // sempre caía no `requireAdmin()` abaixo — protegida, mas por acidente. Agora
+    // usa o segredo que existe, com o portão de admin como segunda barreira.
+    if (!porSegredoDeServico(request, ['x-social-secret', 'x-cron-secret'])) {
       const admin = await requireAdmin();
       if (!admin) {
         return NextResponse.json({ error: 'Admin access required' }, { status: 403 });

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { routing } from "@/i18n/routing";
 
-import { verifyAdminToken } from "@/lib/admin-auth";
+import { porSegredoOuAdmin } from "@/lib/guarda-de-servico";
 import { invalidarCursoNoCache, invalidateProductCache } from "@/lib/products";
 
 /**
@@ -41,16 +41,10 @@ import { invalidarCursoNoCache, invalidateProductCache } from "@/lib/products";
  */
 export const dynamic = "force-dynamic";
 
-async function autorizado(req: NextRequest): Promise<boolean> {
-  const segredo = process.env.SOCIAL_CRON_SECRET || process.env.AINEWS_SECRET;
-  if (segredo && req.headers.get("x-social-secret") === segredo) return true;
-
-  const admin = await verifyAdminToken(req).catch(() => null);
-  return Boolean(admin?.valid && admin.admin);
-}
-
 export async function POST(req: NextRequest) {
-  if (!(await autorizado(req))) {
+  // A regra (segredo que existe, falha fechada) mora em `lib/guarda-de-servico.ts`
+  // desde que a mesma decisão apareceu errada em três outras rotas.
+  if (!(await porSegredoOuAdmin(req))) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 

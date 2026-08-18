@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+
+import { porSegredoDeServico } from "@/lib/guarda-de-servico";
 import redis from "@/lib/redis";
 
 /**
@@ -25,10 +27,7 @@ import redis from "@/lib/redis";
  * com valor padrão no código é senha publicada.
  */
 export async function POST(request: NextRequest) {
-  const expectedSecret = process.env.SOCIAL_CRON_SECRET || process.env.AINEWS_SECRET;
-  const secret = request.headers.get("x-social-secret") || request.headers.get("x-admin-secret");
-
-  if (!expectedSecret || secret !== expectedSecret) {
+  if (!porSegredoDeServico(request, ["x-social-secret", "x-admin-secret"])) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

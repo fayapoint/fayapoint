@@ -22,11 +22,24 @@ import User from '@/models/User';
 const WEBHOOK_SECRET = process.env.PRINTIFY_WEBHOOK_SECRET || '';
 
 // Verify webhook signature
+/**
+ * ⚠️ WEBHOOK QUE ESCREVE PEDIDO NÃO PODE ACEITAR QUEM NÃO SE IDENTIFICA.
+ *
+ * Estava assim: sem `PRINTIFY_WEBHOOK_SECRET` configurada, a verificação era
+ * PULADA e o evento processado. A variável não existe na Netlify (conferido em
+ * 18/08/2026), ou seja: qualquer POST anônimo podia inventar um
+ * `order:updated` e mexer no estado dos pedidos.
+ *
+ * Falha fechada agora. O custo de estar errado nos dois sentidos não é igual:
+ * webhook recusado a Printify reenvia (e há **um** pedido de fulfillment na
+ * base inteira); pedido forjado aceito não tem volta.
+ *
+ * Para religar: pegue o segredo no painel da Printify e rode
+ *   npx netlify env:set PRINTIFY_WEBHOOK_SECRET "<valor>" --secret --context production
+ */
 function verifyWebhookSignature(payload: string, signature: string): boolean {
-  if (!WEBHOOK_SECRET) {
-    console.warn('[Webhook] No PRINTIFY_WEBHOOK_SECRET set, skipping verification');
-    return true; // Skip verification if no secret configured
-  }
+  if (!WEBHOOK_SECRET) return false;
+  if (!signature) return false;
 
   const hmac = crypto.createHmac('sha256', WEBHOOK_SECRET);
   hmac.update(payload);
@@ -44,8 +57,13 @@ export async function POST(request: NextRequest) {
     const payload = await request.text();
     const signature = request.headers.get('x-printify-signature') || '';
 
-    // Verify signature
-    if (WEBHOOK_SECRET && !verifyWebhookSignature(payload, signature)) {
+    // Sem segredo configurado, nada passa. Ver o aviso acima de
+    // `verifyWebhookSignature`.
+    if (!WEBHOOK_SECRET) {
+      console.error('[Webhook] PRINTIFY_WEBHOOK_SECRET ausente — recusando em vez de aceitar.');
+      return NextResponse.json({ error: 'Webhook verification unavailable' }, { status: 503 });
+    }
+    if (!verifyWebhookSignature(payload, signature)) {
       console.error('[Webhook] Invalid signature');
       return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }

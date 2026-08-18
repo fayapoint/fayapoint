@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { porSegredoDeServico } from '@/lib/guarda-de-servico';
 import dbConnect from '@/lib/mongodb';
 import { processAutoOrder } from '@/lib/dropshipping';
 
@@ -9,14 +10,20 @@ import { processAutoOrder } from '@/lib/dropshipping';
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify authorization (cron secret or internal call)
-    const cronSecret = request.headers.get('x-cron-secret');
-    const internalKey = request.headers.get('x-internal-key');
-    const isAuthorized =
-      cronSecret === process.env.CRON_SECRET ||
-      internalKey === process.env.INTERNAL_API_KEY;
-
-    if (!isAuthorized) {
+    /**
+     * ⚠️ ESTA ROTA GASTA DINHEIRO: ela manda o pedido ao fornecedor.
+     *
+     * A guarda comparava com `CRON_SECRET` e `INTERNAL_API_KEY`, e **nenhuma das
+     * duas existe no ambiente** (conferido com `netlify env:list`, 18/08/2026).
+     * Não abriu por sorte: `headers.get()` devolve `null`, variável ausente é
+     * `undefined`, e `null === undefined` é falso. Guarda que só segura por
+     * acidente de tipo cai na primeira refatoração que troque `headers.get()` por
+     * outra coisa — e aqui o prejuízo é pedido de verdade, com cartão de verdade.
+     *
+     * Agora usa o segredo que EXISTE e falha fechada por regra. Os nomes antigos
+     * de cabeçalho continuam aceitos, para não quebrar cron já configurado.
+     */
+    if (!porSegredoDeServico(request, ['x-social-secret', 'x-cron-secret', 'x-internal-key'])) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

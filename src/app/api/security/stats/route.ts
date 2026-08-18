@@ -1,14 +1,26 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+import { porSegredoOuAdmin } from "@/lib/guarda-de-servico";
 import redis from "@/lib/redis";
 
-// Security stats API - monitor bot activity and rate limiting
-export async function GET(request: Request) {
+/**
+ * Estatísticas de segurança — IPs bloqueados, strikes, contadores.
+ *
+ * ⚠️ ESTAVA ABERTA EM PRODUÇÃO, E O `POST` ERA PIOR QUE O `GET`.
+ *
+ * A guarda era `if (adminKey && authHeader !== ...)`, e `ADMIN_API_KEY` **não
+ * está configurada na Netlify** (conferido em 18/08/2026 com `netlify env:list`).
+ * Variável ausente faz a condição inteira desaparecer: o `GET` publicava a lista
+ * de IPs bloqueados e os contadores de abuso, e o `POST` deixava **qualquer um
+ * bloquear ou desbloquear qualquer IP** — negar o site a visitante legítimo, ou
+ * tirar da lista quem foi barrado, sem prova nenhuma.
+ *
+ * `if (SEGREDO && confere)` troca "não configurado" por "não protegido". A regra
+ * certa é a inversa, e agora mora em `lib/guarda-de-servico.ts`.
+ */
+export async function GET(request: NextRequest) {
   try {
-    // Check for admin auth (basic check - improve for production)
-    const authHeader = request.headers.get("authorization");
-    const adminKey = process.env.ADMIN_API_KEY;
-    
-    if (adminKey && authHeader !== `Bearer ${adminKey}`) {
+    if (!(await porSegredoOuAdmin(request, ["x-social-secret", "x-admin-secret"]))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -66,13 +78,11 @@ export async function GET(request: Request) {
   }
 }
 
-// Manual IP block/unblock
-export async function POST(request: Request) {
+// Bloqueia ou desbloqueia um IP à mão. Ver o aviso no `GET` acima: isto
+// respondia a quem pedisse.
+export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get("authorization");
-    const adminKey = process.env.ADMIN_API_KEY;
-    
-    if (adminKey && authHeader !== `Bearer ${adminKey}`) {
+    if (!(await porSegredoOuAdmin(request, ["x-social-secret", "x-admin-secret"]))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

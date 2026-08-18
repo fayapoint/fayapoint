@@ -30,12 +30,22 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get('x-printify-signature') || '';
     const webhookSecret = process.env.PRINTIFY_WEBHOOK_SECRET || '';
     
-    // Verify signature if secret is configured
-    if (webhookSecret && signature) {
-      if (!verifyPrintifySignature(rawBody, signature, webhookSecret)) {
-        console.warn('[Printify Webhook] Invalid signature');
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-      }
+    /**
+     * ⚠️ Falha FECHADA. Antes, `if (webhookSecret && signature)` pulava a
+     * verificação inteira quando faltasse qualquer um dos dois — e
+     * `PRINTIFY_WEBHOOK_SECRET` não existe na Netlify. Bastava omitir o
+     * cabeçalho de assinatura para escrever estado de pedido sem prova nenhuma.
+     *
+     * Para religar: pegue o segredo no painel da Printify e rode
+     *   npx netlify env:set PRINTIFY_WEBHOOK_SECRET "<valor>" --secret --context production
+     */
+    if (!webhookSecret) {
+      console.error('[Printify Webhook] PRINTIFY_WEBHOOK_SECRET ausente — recusando.');
+      return NextResponse.json({ error: 'Webhook verification unavailable' }, { status: 503 });
+    }
+    if (!signature || !verifyPrintifySignature(rawBody, signature, webhookSecret)) {
+      console.warn('[Printify Webhook] Invalid signature');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
     
     const body = JSON.parse(rawBody);
