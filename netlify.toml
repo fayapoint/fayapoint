@@ -109,10 +109,19 @@
     Cache-Control = "public, s-maxage=1800, stale-while-revalidate=3600"
 
 # Cache products
+#
+# ⚠️ O `Netlify-Vary` anda junto com o `Cache-Control`, e não é decoração: a
+# Netlify responde por padrão com `query=__nextDataReq|_rsc`, e `query=<lista>`
+# quer dizer "a chave do cache usa SÓ estes". Conferido em produção em
+# 18/08/2026: `?action=stats`, `?action=categories` e `?search=chatgpt` estavam
+# todos recebendo a LISTA DE PRODUTOS, com `Cache-Status: hit`. Ver
+# `CHAVE_DE_CACHE_DE_PRODUTOS` em `next.config.ts` — os dois arquivos têm de
+# concordar.
 [[headers]]
   for = "/api/products/*"
   [headers.values]
     Cache-Control = "public, s-maxage=600, stale-while-revalidate=1800"
+    Netlify-Vary = "query=__nextDataReq|_rsc|locale|type|category|tag|search|limit|sortBy|action,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data"
 
 # Cache store
 [[headers]]

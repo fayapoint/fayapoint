@@ -8,9 +8,11 @@
  * ## Por que o idioma vem da query
  *
  * Ver o cabeçalho de `../route.ts`: esta rota também é cacheada na borda por
- * 10 minutos, e cache de CDN é chaveado pela URL. Idioma fora da URL faria a
- * primeira leitura inglesa servir inglês a todos os leitores portugueses dos
- * dez minutos seguintes.
+ * 10 minutos, e o idioma precisa estar na CHAVE desse cache — na query, e
+ * declarado em `CHAVE_DE_CACHE_DE_PRODUTOS` (`next.config.ts`), porque a
+ * Netlify só considera os parâmetros que a gente lista. Sem isso, a primeira
+ * leitura inglesa serve inglês a todos os leitores portugueses dos dez minutos
+ * seguintes.
  *
  * ⚠️ `getProductBySlug` guarda no cache o documento CRU, com o subdocumento
  * `i18n` dentro — e é assim que tem de ser: um cache por idioma dobraria as

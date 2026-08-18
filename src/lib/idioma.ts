@@ -47,16 +47,17 @@ export function tagIntl(locale: string | undefined | null): string {
  *
  * Seria mais cômodo: a página `/en/cursos` manda o `Referer` sozinha e nenhuma
  * chamada precisaria mudar. E estaria errado, porque estas rotas são
- * **cacheadas na borda**:
+ * **cacheadas na borda** por dez minutos (`next.config.ts` e `netlify.toml`).
+ * Cache compartilhado com o idioma FORA da chave significa que o primeiro
+ * leitor inglês fixa inglês para os leitores portugueses dos dez minutos
+ * seguintes — um defeito intermitente, que é pior que o defeito visível.
  *
- *     next.config.ts → '/api/products/:path*'
- *                      'public, s-maxage=600, stale-while-revalidate=1800'
- *     netlify.toml   → o mesmo, repetido
- *
- * Cache de CDN é chaveado pela URL. Duas visitas com a mesma URL e `Referer`
- * diferente compartilham a resposta — quer dizer: o primeiro leitor inglês
- * envenenaria o catálogo em inglês para os próximos dez minutos de leitores
- * portugueses, e vice-versa. O idioma na query muda a URL, e portanto a chave.
+ * ⚠️ E "está na URL" não bastou: a Netlify responde com
+ * `Netlify-Vary: query=<lista>`, que quer dizer "a chave usa SÓ estes
+ * parâmetros". Foi preciso escrever a lista à mão — ver
+ * `CHAVE_DE_CACHE_DE_PRODUTOS` em `next.config.ts`. Quem acrescentar parâmetro
+ * novo a uma rota de produto acrescenta lá também, senão ele é ignorado pela
+ * borda em silêncio.
  *
  * ## Por que o padrão é português
  *

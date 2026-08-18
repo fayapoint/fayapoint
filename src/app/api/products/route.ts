@@ -21,10 +21,18 @@
  *
  * O idioma vem da query, e não do `Referer`, porque esta rota é cacheada na
  * borda por 10 minutos (`next.config.ts` e `netlify.toml`, os dois com
- * `s-maxage=600` para `/api/products/:path*`). Cache de CDN é chaveado pela
- * URL: com o idioma fora dela, a primeira visita inglesa serviria inglês a
- * todos os leitores portugueses dos dez minutos seguintes. Ver
- * `localeDaBusca` em `src/lib/idioma.ts`.
+ * `s-maxage=600` para `/api/products/:path*`): com o idioma fora da chave do
+ * cache, a primeira visita inglesa serviria inglês a todos os leitores
+ * portugueses dos dez minutos seguintes. Ver `localeDaBusca` em
+ * `src/lib/idioma.ts`.
+ *
+ * ⚠️ Estar na query NÃO basta sozinho. A Netlify responde com
+ * `Netlify-Vary: query=<lista>`, e a lista padrão do adaptador do Next tem só
+ * `__nextDataReq|_rsc` — todo o resto da query é ignorado pela chave. Medido em
+ * produção antes do conserto: `?action=stats`, `?action=categories` e
+ * `?search=chatgpt` recebiam todos a LISTA DE PRODUTOS, com `Cache-Status:
+ * hit`. Parâmetro novo aqui entra também em `CHAVE_DE_CACHE_DE_PRODUTOS`
+ * (`next.config.ts` e `netlify.toml`), senão a borda o ignora em silêncio.
  *
  * ⚠️ Tudo que sai daqui passa por `paraIdioma*`, inclusive os ramos que já
  * estavam em português por outro motivo. Não é só tradução: `paraIdioma`

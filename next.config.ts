@@ -3,6 +3,44 @@ import { NextConfig } from "next";
 
 const withNextIntl = createNextIntlPlugin();
 
+/**
+ * A chave do cache da BORDA para `/api/products*`, e por que ela precisa ser
+ * escrita à mão.
+ *
+ * ## O defeito, medido em produção em 18/08/2026
+ *
+ * A Netlify responde a estas rotas com
+ *
+ *     Netlify-Vary: query=__nextDataReq|_rsc, header=…, cookie=…
+ *
+ * e `query=<lista>` quer dizer **"a chave do cache usa SÓ estes parâmetros"**.
+ * Todos os outros são ignorados. Com `s-maxage=600` ligado logo abaixo, o
+ * resultado era este, conferido ao vivo:
+ *
+ *     GET /api/products?action=categories  → a lista de produtos
+ *     GET /api/products?action=stats       → a lista de produtos
+ *     GET /api/products?search=chatgpt     → a lista de produtos
+ *
+ * Todas com `Cache-Status: hit`. Uma rota com sete parâmetros estava servindo
+ * a resposta do primeiro visitante a todos os outros por dez minutos.
+ *
+ * ⚠️ É o que faria o `?locale=en` (18/08) não sair do lugar, e pior: o idioma
+ * viraria loteria — o primeiro leitor inglês fixaria inglês para os leitores
+ * portugueses dos dez minutos seguintes.
+ *
+ * ## O que está escrito aqui
+ *
+ * Os parâmetros que as rotas de produto de fato leem, mais os dois que o
+ * adaptador do Next já pedia. `header` e `cookie` vêm repetidos do valor que a
+ * Netlify mandava sozinha: este cabeçalho SUBSTITUI aquele, e omitir as duas
+ * cláusulas tiraria do jogo a variação por prévia e por dado de roteador.
+ */
+const CHAVE_DE_CACHE_DE_PRODUTOS =
+  "query=__nextDataReq|_rsc|locale|type|category|tag|search|limit|sortBy|action," +
+  "header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|" +
+  "next-router-segment-prefetch|next-router-state-tree|next-url|rsc," +
+  "cookie=__prerender_bypass|__next_preview_data";
+
 const config: NextConfig = {
   // Prevent 308 redirects on trailing slashes — critical for Asaas webhooks
   // Asaas sends POST to /api/payments/webhook/ (with trailing slash) and
@@ -70,9 +108,13 @@ const config: NextConfig = {
         ],
       },
       {
+        // ⚠️ O `Netlify-Vary` não é decoração: sem ele o `s-maxage` desta linha
+        // faz TODA query desta rota compartilhar uma resposta só. Ver
+        // `CHAVE_DE_CACHE_DE_PRODUTOS` no topo do arquivo.
         source: '/api/products/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, s-maxage=600, stale-while-revalidate=1800' },
+          { key: 'Netlify-Vary', value: CHAVE_DE_CACHE_DE_PRODUTOS },
         ],
       },
       {
