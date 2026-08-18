@@ -1,5 +1,6 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
+import { useLocale } from "next-intl";
 
 import { useState, useEffect, useRef } from "react";
 import { Link } from "@/i18n/navigation";
@@ -87,6 +88,7 @@ const services = [
 // ─── Main Homepage Component ────────────────────────────────────
 export function NewHomepage() {
   const T = useT();
+  const locale = useLocale();
   const { user } = useUser();
   const [stats, setStats] = useState<HomepageStats | null>(null);
   const [monthlyOffer, setMonthlyOffer] = useState<MonthlyOffer | null>(null);
@@ -108,7 +110,7 @@ export function NewHomepage() {
 
   // Fetch monthly offer
   useEffect(() => {
-    fetch("/api/courses/monthly-offers")
+    fetch(`/api/courses/monthly-offers?locale=${locale}`)
       .then((r) => r.json())
       .then((data) => {
         setMonthlyOffer(data);
@@ -118,7 +120,7 @@ export function NewHomepage() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [locale]);
 
   const featured = getFeaturedCourses().slice(0, 6);
 

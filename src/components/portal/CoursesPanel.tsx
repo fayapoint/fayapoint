@@ -1,5 +1,6 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
+import { useLocale } from "next-intl";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -178,6 +179,7 @@ export function CoursesPanel({
   onEnroll,
 }: CoursesPanelProps) {
   const T = useT();
+  const locale = useLocale();
   /**
    * Qual curso está sendo liberado agora. Ver o painel de vagas mais abaixo.
    *
@@ -227,13 +229,13 @@ export function CoursesPanel({
 
   const [apiFreeCourseSlug, setApiFreeCourseSlug] = useState<string | null>(null);
   useEffect(() => {
-    fetch("/api/courses/monthly-offers", { cache: "no-store" })
+    fetch(`/api/courses/monthly-offers?locale=${locale}`, { cache: "no-store" })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (data?.freeCourse?.slug) setApiFreeCourseSlug(data.freeCourse.slug);
       })
       .catch(() => {});
-  }, []);
+  }, [locale]);
 
   /**
    * O catálogo, com o BANCO mandando.
@@ -273,7 +275,7 @@ export function CoursesPanel({
    */
   const [cursosDoBanco, setCursosDoBanco] = useState<CourseData[] | null>(null);
   useEffect(() => {
-    fetch("/api/products?type=course&limit=200", { cache: "no-store" })
+    fetch(`/api/products?type=course&limit=200&locale=${locale}`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         const lista: unknown[] = data?.products ?? data?.data ?? (Array.isArray(data) ? data : []);
@@ -336,7 +338,7 @@ export function CoursesPanel({
         // Banco fora do ar: `cursosDoBanco` fica `null` e a lista estática
         // segura a biblioteca. Página incompleta é melhor que página vazia.
       });
-  }, []);
+  }, [locale]);
 
   const courseCatalog = useMemo(() => {
     return (cursosDoBanco ?? allCourses).map((course) => {

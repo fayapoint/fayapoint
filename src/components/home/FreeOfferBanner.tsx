@@ -41,7 +41,7 @@ export function FreeOfferBanner() {
   useEffect(() => {
     async function fetchMonthlyOffers() {
       try {
-        const response = await fetch("/api/courses/monthly-offers", { cache: "no-store" });
+        const response = await fetch(`/api/courses/monthly-offers?locale=${locale}`, { cache: "no-store" });
         if (!response.ok) return;
         const data = (await response.json()) as MonthlyOffersResponse;
         setMonthlyOffers(data);
@@ -51,7 +51,7 @@ export function FreeOfferBanner() {
     }
 
     void fetchMonthlyOffers();
-  }, []);
+  }, [locale]);
 
   const shouldHide = mounted && isLoggedIn && user?.subscription?.plan && user.subscription.plan !== "free";
   if (shouldHide) return null;

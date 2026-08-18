@@ -71,7 +71,7 @@ export default function CourseSalesPage({
     if (initialProduct) return;
     async function fetchProduct() {
       try {
-        const res = await fetch(`/api/products/${slug}`);
+        const res = await fetch(`/api/products/${slug}?locale=${locale}`);
         const data = await res.json();
         setProduct(data.product);
       } catch (error) {
@@ -81,7 +81,7 @@ export default function CourseSalesPage({
       }
     }
     fetchProduct();
-  }, [slug, initialProduct]);
+  }, [slug, initialProduct, locale]);
 
 
   if (loading) {

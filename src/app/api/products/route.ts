@@ -1,6 +1,6 @@
 /**
  * Products API Route
- * 
+ *
  * GET /api/products - Get all products with optional filters
  * Query params:
  *   - category: Filter by category
@@ -8,6 +8,29 @@
  *   - search: Search query
  *   - limit: Max results
  *   - sortBy: Sort order (students, rating, price, newest)
+ *   - locale: `en` serve o catálogo traduzido; qualquer outra coisa, português
+ *
+ * ## O `locale`, e por que ele TEM de estar na URL
+ *
+ * Até 18/08/2026 esta rota respondia sempre em português, para qualquer
+ * visitante: nenhum dos componentes que a chamam passava idioma, e a tradução
+ * do catálogo (`i18n.en` dentro de cada produto) nunca era aplicada. O leitor
+ * inglês via a vitrine renderizada no servidor em inglês e, assim que o
+ * `useEffect` trocava a lista pela resposta desta rota, os cartões voltavam ao
+ * português na frente dele.
+ *
+ * O idioma vem da query, e não do `Referer`, porque esta rota é cacheada na
+ * borda por 10 minutos (`next.config.ts` e `netlify.toml`, os dois com
+ * `s-maxage=600` para `/api/products/:path*`). Cache de CDN é chaveado pela
+ * URL: com o idioma fora dela, a primeira visita inglesa serviria inglês a
+ * todos os leitores portugueses dos dez minutos seguintes. Ver
+ * `localeDaBusca` em `src/lib/idioma.ts`.
+ *
+ * ⚠️ Tudo que sai daqui passa por `paraIdioma*`, inclusive os ramos que já
+ * estavam em português por outro motivo. Não é só tradução: `paraIdioma`
+ * também APAGA o subdocumento `i18n`, e sem ele as respostas de `category`,
+ * `tag`, `search` e `featured` viajavam com o catálogo inteiro nas duas
+ * línguas.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -19,8 +42,10 @@ import {
   getAllCategories,
   getFeaturedProducts,
   getProductStats,
+  paraIdiomaLista,
   type Product
 } from '@/lib/products';
+import { localeDaBusca } from '@/lib/idioma';
 import { allCourses, type CourseData } from '@/data/courses';
 
 // Convert static course data to Product format as fallback
@@ -105,6 +130,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '100');
     const sortBy = searchParams.get('sortBy') as 'students' | 'rating' | 'price' | 'newest' | undefined;
     const action = searchParams.get('action');
+    const locale = localeDaBusca(searchParams);
     
     // Handle special actions
     if (action === 'categories') {
@@ -114,7 +140,7 @@ export async function GET(request: NextRequest) {
     
     if (action === 'featured') {
       const featuredLimit = parseInt(searchParams.get('limit') || '3');
-      const products = await getFeaturedProducts(featuredLimit);
+      const products = paraIdiomaLista(await getFeaturedProducts(featuredLimit), locale);
       return NextResponse.json({ products, count: products.length });
     }
     
@@ -125,7 +151,7 @@ export async function GET(request: NextRequest) {
     
     // Search
     if (search) {
-      const products = await searchProducts(search, type);
+      const products = paraIdiomaLista(await searchProducts(search, type), locale);
       return NextResponse.json({ 
         products, 
         count: products.length,
@@ -135,7 +161,7 @@ export async function GET(request: NextRequest) {
     
     // Filter by category
     if (category) {
-      const products = await getProductsByCategory(category);
+      const products = paraIdiomaLista(await getProductsByCategory(category), locale);
       return NextResponse.json({ 
         products, 
         count: products.length,
@@ -145,7 +171,7 @@ export async function GET(request: NextRequest) {
     
     // Filter by tag
     if (tag) {
-      const products = await getProductsByTag(tag);
+      const products = paraIdiomaLista(await getProductsByTag(tag), locale);
       return NextResponse.json({ 
         products, 
         count: products.length,
@@ -154,9 +180,13 @@ export async function GET(request: NextRequest) {
     }
     
     // Get all products
-    const products = await getAllProducts({ limit, sortBy, type });
+    const products = await getAllProducts({ limit, sortBy, type, locale });
 
-    // Fallback to static course data when MongoDB is empty
+    // Fallback to static course data when MongoDB is empty.
+    // ⚠️ Continua em português nos dois idiomas: `@/data/courses` é um arquivo
+    // escrito à mão, sem tradução. É a rede de segurança para banco vazio —
+    // preferir texto em português a vitrine vazia. Traduzir isto seria
+    // traduzir um arquivo que só existe para o caso de o banco sumir.
     if (products.length === 0 && (!type || type === 'course')) {
       const fallback = type === 'course' ? staticCourseProducts : staticCourseProducts;
       return NextResponse.json({

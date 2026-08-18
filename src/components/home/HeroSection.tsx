@@ -68,7 +68,7 @@ export function HeroSection() {
   useEffect(() => {
     async function fetchMonthlyOffers() {
       try {
-        const response = await fetch("/api/courses/monthly-offers", { cache: "no-store" });
+        const response = await fetch(`/api/courses/monthly-offers?locale=${locale}`, { cache: "no-store" });
         if (!response.ok) return;
         const data = (await response.json()) as MonthlyOffersResponse;
         setMonthlyOffers(data);
@@ -78,7 +78,7 @@ export function HeroSection() {
     }
 
     void fetchMonthlyOffers();
-  }, []);
+  }, [locale]);
 
   const firstName = user?.name?.split(" ")[0] || "Aluno";
   const headlineLineOne =

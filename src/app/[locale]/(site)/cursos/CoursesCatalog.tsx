@@ -101,12 +101,12 @@ export default function CoursesCatalog({
     async function fetchData() {
       try {
         if (initialProducts.length === 0) {
-          const response = await fetch('/api/products?type=course');
+          const response = await fetch(`/api/products?type=course&locale=${locale}`);
           const data = await response.json();
           setProducts(data.products || []);
         }
 
-        const monthlyOffersResponse = await fetch('/api/courses/monthly-offers');
+        const monthlyOffersResponse = await fetch(`/api/courses/monthly-offers?locale=${locale}`);
         if (monthlyOffersResponse.ok) {
           const monthlyData = await monthlyOffersResponse.json();
           setMonthlyOffers(monthlyData);
@@ -118,7 +118,7 @@ export default function CoursesCatalog({
       }
     }
     fetchData();
-  }, [initialProducts.length]);
+  }, [initialProducts.length, locale]);
 
   const categories = useMemo(() => [
     allCategoriesLabel,

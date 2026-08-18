@@ -372,7 +372,7 @@ export default function PricingPage() {
   );
 
   useEffect(() => {
-    fetch("/api/courses/monthly-offers", { cache: "no-store" })
+    fetch(`/api/courses/monthly-offers?locale=${locale}`, { cache: "no-store" })
       .then((r) => r.ok ? r.json() : null)
       .then((d) => d && setMonthlyOffers(d))
       .catch(() => {});
@@ -385,7 +385,7 @@ export default function PricingPage() {
         if (Array.isArray(d.pacotes)) setPacotes(d.pacotes);
       })
       .catch(() => {});
-  }, []);
+  }, [locale]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-black to-gray-950 text-white">

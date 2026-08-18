@@ -1,5 +1,6 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
+import { useLocale } from "next-intl";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
@@ -163,6 +164,7 @@ export function DashboardHome({
   enrolledSlugs = [],
 }: DashboardHomeProps) {
   const T = useT();
+  const locale = useLocale();
   const greeting = getGreeting();
   const firstName = user.name?.split(" ")[0] || "Aluno";
 
@@ -199,7 +201,7 @@ export function DashboardHome({
   // Async truth: fetch from API which reads Mission Control override from MongoDB
   const [apiFreeCourseSlug, setApiFreeCourseSlug] = useState<string | null>(null);
   useEffect(() => {
-    fetch("/api/courses/monthly-offers", { cache: "no-store" })
+    fetch(`/api/courses/monthly-offers?locale=${locale}`, { cache: "no-store" })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (data?.freeCourse?.slug) {
@@ -207,7 +209,7 @@ export function DashboardHome({
         }
       })
       .catch(() => {});
-  }, []);
+  }, [locale]);
 
   // Use API slug to find the course in the full catalog (not just available/unenrolled)
   const freeCourseOfMonth = useMemo(() => {

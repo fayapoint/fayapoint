@@ -39,3 +39,31 @@ export function escolher<T>(locale: string | undefined | null, pt: T, en: T | nu
 export function tagIntl(locale: string | undefined | null): string {
   return ehIngles(locale) ? "en-US" : "pt-BR";
 }
+
+/**
+ * O idioma de uma chamada de API — lido da QUERY STRING, e de mais nada.
+ *
+ * ## Por que não do `Referer`, que seria automático
+ *
+ * Seria mais cômodo: a página `/en/cursos` manda o `Referer` sozinha e nenhuma
+ * chamada precisaria mudar. E estaria errado, porque estas rotas são
+ * **cacheadas na borda**:
+ *
+ *     next.config.ts → '/api/products/:path*'
+ *                      'public, s-maxage=600, stale-while-revalidate=1800'
+ *     netlify.toml   → o mesmo, repetido
+ *
+ * Cache de CDN é chaveado pela URL. Duas visitas com a mesma URL e `Referer`
+ * diferente compartilham a resposta — quer dizer: o primeiro leitor inglês
+ * envenenaria o catálogo em inglês para os próximos dez minutos de leitores
+ * portugueses, e vice-versa. O idioma na query muda a URL, e portanto a chave.
+ *
+ * ## Por que o padrão é português
+ *
+ * Sem `?locale=`, devolve o mesmo que a rota devolvia antes desta mudança.
+ * Chamador que ninguém lembrou de atualizar continua funcionando como sempre —
+ * texto em português, nunca resposta vazia ou erro.
+ */
+export function localeDaBusca(searchParams: URLSearchParams): string {
+  return ehIngles(searchParams.get("locale")) ? "en" : IDIOMA_PADRAO;
+}
