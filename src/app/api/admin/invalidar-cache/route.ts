@@ -1,4 +1,7 @@
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+
+import { routing } from "@/i18n/routing";
 
 import { verifyAdminToken } from "@/lib/admin-auth";
 import { invalidarCursoNoCache, invalidateProductCache } from "@/lib/products";
@@ -64,8 +67,45 @@ export async function POST(req: NextRequest) {
 
   const comecou = Date.now();
   let apagadas = 0;
+  const revalidadas: string[] = [];
   try {
     apagadas = slug ? await invalidarCursoNoCache(slug) : await invalidateProductCache();
+
+    /**
+     * ⚠️ APAGAR O REDIS NÃO BASTA — HÁ UMA SEGUNDA CAMADA, E ELA É DE FORA.
+     *
+     * Medido em produção, 18/08/2026, com os cabeçalhos das próprias páginas:
+     *
+     *     /pt-BR/curso/<slug>   Cache-Status: "Netlify Durable"; fwd=bypass
+     *                           → NÃO é cacheada no CDN. O Redis é a única
+     *                             camada, e a invalidação acima resolve.
+     *
+     *     /pt-BR/cursos         Cache-Status: "Netlify Durable"; fwd=stale
+     *                           → É. `export const revalidate = 900` (15 min),
+     *                             servindo velho enquanto revalida atrás.
+     *
+     *     /api/products         Cache-Status: "Netlify Edge"; hit; ttl=560
+     *                           → E o `Netlify-Vary` só varia por parâmetros do
+     *                             Next, então nem `?x=aleatório` fura.
+     *
+     * Ou seja: o catálogo, a home e a rota de lista podiam continuar mostrando
+     * título, preço e contagem de aulas antigos por mais 15 minutos DEPOIS de o
+     * Redis já estar limpo. Descobri isto porque a contagem de chaves apagadas
+     * dava 0 num alvo que eu tinha acabado de aquecer — o pedido de aquecimento
+     * nunca chegava à função.
+     *
+     * `revalidatePath` é o que fura essa camada. Alvos estreitos de propósito:
+     * `revalidatePath("/", "layout")` derrubaria as 453 páginas de uma vez.
+     */
+    for (const locale of routing.locales) {
+      const caminhos = slug
+        ? [`/${locale}/curso/${slug}`, `/${locale}/curso/${slug}/previa`, `/${locale}/cursos`, `/${locale}`]
+        : [`/${locale}/cursos`, `/${locale}`];
+      for (const caminho of caminhos) {
+        revalidatePath(caminho);
+        revalidadas.push(caminho);
+      }
+    }
   } catch (erro) {
     /**
      * `invalidateCachePattern` já engole os próprios erros e falha aberta, então
@@ -81,12 +121,15 @@ export async function POST(req: NextRequest) {
   }
 
   const ms = Date.now() - comecou;
-  console.log(`[invalidar-cache] ${slug || "TUDO"}: ${apagadas} chave(s) em ${ms}ms`);
+  console.log(
+    `[invalidar-cache] ${slug || "TUDO"}: ${apagadas} chave(s) do Redis, ` +
+      `${revalidadas.length} caminho(s) do Next, em ${ms}ms`,
+  );
   /**
    * `apagadas` é o que torna este conserto verificável de fora. Zero num alvo que
    * acabou de ser lido significa que a invalidação NÃO está casando com as
    * chaves que o `getOrSet` escreve — o defeito silencioso clássico daqui
    * (apagar `products:list` enquanto o cache guarda `v2:products:list`).
    */
-  return NextResponse.json({ ok: true, alvo: slug || "tudo", apagadas, ms });
+  return NextResponse.json({ ok: true, alvo: slug || "tudo", apagadas, revalidadas, ms });
 }
