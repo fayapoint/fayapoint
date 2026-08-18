@@ -63,12 +63,9 @@ export async function POST(req: NextRequest) {
   const slug = (daQuery || doCorpo || "").trim();
 
   const comecou = Date.now();
+  let apagadas = 0;
   try {
-    if (slug) {
-      await invalidarCursoNoCache(slug);
-    } else {
-      await invalidateProductCache();
-    }
+    apagadas = slug ? await invalidarCursoNoCache(slug) : await invalidateProductCache();
   } catch (erro) {
     /**
      * `invalidateCachePattern` já engole os próprios erros e falha aberta, então
@@ -84,6 +81,12 @@ export async function POST(req: NextRequest) {
   }
 
   const ms = Date.now() - comecou;
-  console.log(`[invalidar-cache] ${slug || "TUDO"} em ${ms}ms`);
-  return NextResponse.json({ ok: true, alvo: slug || "tudo", ms });
+  console.log(`[invalidar-cache] ${slug || "TUDO"}: ${apagadas} chave(s) em ${ms}ms`);
+  /**
+   * `apagadas` é o que torna este conserto verificável de fora. Zero num alvo que
+   * acabou de ser lido significa que a invalidação NÃO está casando com as
+   * chaves que o `getOrSet` escreve — o defeito silencioso clássico daqui
+   * (apagar `products:list` enquanto o cache guarda `v2:products:list`).
+   */
+  return NextResponse.json({ ok: true, alvo: slug || "tudo", apagadas, ms });
 }

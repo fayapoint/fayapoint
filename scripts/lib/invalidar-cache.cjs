@@ -97,7 +97,10 @@ async function invalidarCache(slug) {
       throw new Error(`HTTP ${resposta.status} ${(await resposta.text()).slice(0, 160)}`);
     }
     const dados = await resposta.json();
-    console.log(`🧹 cache do site invalidado (${dados.alvo}, ${dados.ms}ms)`);
+    // `apagadas` é o que separa "invalidou" de "rodou e não achou nada".
+    // Zero logo depois de gravar quer dizer que a chave do cache mudou de
+    // forma e a invalidação ficou apontando para o nome antigo.
+    console.log(`🧹 cache do site: ${dados.apagadas} chave(s) apagada(s) (${dados.alvo}, ${dados.ms}ms)`);
     return true;
   } catch (erro) {
     console.warn(

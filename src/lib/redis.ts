@@ -279,18 +279,19 @@ export async function getOrSet<T>(
  * apaga `products:list` enquanto o cache guarda `v2:products:list` não dá erro
  * nenhum — só deixa de invalidar, e o site serve dado velho até o TTL.
  */
-export async function invalidateCache(key: string): Promise<void> {
+export async function invalidateCache(key: string): Promise<number> {
   try {
-    if (!realRedis) return;
+    if (!realRedis) return 0;
     /**
      * Apaga a versionada E a legada. `invalidateCachePattern` já fazia as duas;
      * esta fazia só uma. Enquanto houver chave `v1` viva no Upstash — inclusive
      * escrita por uma instância do deploy anterior, que coexiste por alguns
      * minutos —, invalidar de verdade é apagar as duas.
      */
-    await curto(redis.del(comVersao(key), key), `del ${key}`);
+    return (await curto(redis.del(comVersao(key), key), `del ${key}`)) ?? 0;
   } catch (error) {
     console.error('Redis invalidate error:', error);
+    return 0;
   }
 }
 
@@ -304,19 +305,20 @@ export async function invalidateCache(key: string): Promise<void> {
  * prefixo). Enquanto houver chave `v1` viva no Upstash, invalidar de verdade é
  * apagar as duas — a antiga expira sozinha, mas até lá ela existe.
  */
-export async function invalidateCachePattern(pattern: string): Promise<void> {
+export async function invalidateCachePattern(pattern: string): Promise<number> {
   try {
-    if (!realRedis) return;
+    if (!realRedis) return 0;
     const encontradas = await curto(
       Promise.all([redis.keys(comVersao(pattern)), redis.keys(pattern)]),
       `keys ${pattern}`,
     );
     const keys = encontradas.flat();
-    if (keys.length > 0) {
-      await curto(redis.del(...keys), `del ${keys.length} chaves`);
-    }
+    if (keys.length === 0) return 0;
+    await curto(redis.del(...keys), `del ${keys.length} chaves`);
+    return keys.length;
   } catch (error) {
     console.error('Redis invalidate pattern error:', error);
+    return 0;
   }
 }
 

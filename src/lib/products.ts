@@ -609,8 +609,15 @@ const PADROES_DE_PRODUTO = [
  *
  * ⚠️ Não `await`-ar isto numa rota de escrita não é opção: a instância
  * serverless é congelada quando a resposta sai. Ver `redis.ts`.
+ *
+ * Devolve QUANTAS chaves foram apagadas — e isso não é enfeite. Sem esse
+ * número não dá para distinguir, de fora, "invalidou" de "rodou e não achou
+ * nada": o tempo de resposta da rota seguinte é dominado pelo arranque a frio
+ * da função da Netlify (medido: 3,5s a frio contra 0,29s morna, com e sem
+ * cache). Foi tentando provar este conserto em produção que a falta do número
+ * apareceu.
  */
-export async function invalidateProductCache(): Promise<void> {
+export async function invalidateProductCache(): Promise<number> {
   /**
    * Em série, de propósito. Cada `invalidateCachePattern` faz um `KEYS` e um
    * `DEL`, e o Upstash cobra por comando; em paralelo seriam dez idas
@@ -618,9 +625,11 @@ export async function invalidateProductCache(): Promise<void> {
    * cada, e isto roda em escrita de admin — não no caminho de leitura de
    * ninguém.
    */
+  let apagadas = 0;
   for (const padrao of PADROES_DE_PRODUTO) {
-    await invalidateCachePattern(padrao);
+    apagadas += await invalidateCachePattern(padrao);
   }
+  return apagadas;
 }
 
 /**
@@ -634,8 +643,8 @@ export async function invalidateProductCache(): Promise<void> {
  * e contagem de aulas do curso alterado. Invalidar só `product:<slug>` deixaria
  * a vitrine mostrando o número velho.
  */
-export async function invalidarCursoNoCache(slug: string): Promise<void> {
-  await invalidateCachePattern('products:*');
+export async function invalidarCursoNoCache(slug: string): Promise<number> {
+  let apagadas = await invalidateCachePattern('products:*');
   for (const chave of [
     CACHE_KEYS.PRODUCT(slug),
     `conteudo:en:${slug}`,
@@ -643,8 +652,9 @@ export async function invalidarCursoNoCache(slug: string): Promise<void> {
     `atelie:capitulos:${slug}`,
     CACHE_KEYS.COURSE_CONTENT(slug),
   ]) {
-    await invalidateCache(chave);
+    apagadas += await invalidateCache(chave);
   }
+  return apagadas;
 }
 
 // Get products by category
