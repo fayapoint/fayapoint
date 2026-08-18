@@ -11,6 +11,7 @@ const { MongoClient } = require('mongodb');
 // grátis inteiro tem 500 — divididas com os outros projetos.
 // Ver `scripts/lib/mongo.cjs`.
 const { OPCOES_DE_SCRIPT } = require("../lib/mongo.cjs");
+const { invalidarCache } = require("../lib/invalidar-cache.cjs");
 
 const SLUG = process.argv[2] || 'chatgpt-zero';
 const N_RAW = parseInt(process.argv[3] || '31', 10);
@@ -77,5 +78,8 @@ const img = (cap) => ({
   );
 
   console.log(`OK: ${groups.length} seções seedadas em ${SLUG} (hero+gallery); cleanup matched ${cleanup.matchedCount}`);
+  // Mexeu na mídia dos capítulos: o texto picado do livro e do Ateliê guarda
+  // cópia por 1 hora.
+  await invalidarCache();
   await client.close();
 })().catch((e) => { console.error(e); process.exit(1); });

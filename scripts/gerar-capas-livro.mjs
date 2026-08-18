@@ -42,6 +42,7 @@ import { MongoClient } from "mongodb";
 // grátis inteiro tem 500 — divididas com os outros projetos.
 // Ver `scripts/lib/mongo.cjs`.
 import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 import { v2 as cloudinary } from "cloudinary";
 
 const ARTES = path.join(process.cwd(), "scripts", "_capas_v2");
@@ -407,6 +408,8 @@ async function main() {
   }
 
   await cliente.close();
+  // A capa nova só chega à vitrine depois que o catálogo sai do cache.
+  await invalidarCache();
   console.log(`\n${feitas}/${produtos.length} capas-livro em ${SAIDA}`);
 }
 

@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 // grátis inteiro tem 500 — divididas com os outros projetos.
 // Ver `scripts/lib/mongo.cjs`.
 import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 import type { ServicePriceDocument } from "../src/lib/pricing";
 
 const DEFAULT_MONGODB_URI = '';
@@ -929,6 +930,8 @@ async function seed() {
     process.exitCode = 1;
   } finally {
     await client.close();
+    // `service:prices` tem TTL de 30 minutos — o mais longo do catálogo.
+    await invalidarCache();
     console.log("👋 Connection closed");
   }
 }

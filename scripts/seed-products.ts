@@ -10,6 +10,7 @@ import { MongoClient } from 'mongodb';
 // grátis inteiro tem 500 — divididas com os outros projetos.
 // Ver `scripts/lib/mongo.cjs`.
 import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 import { allCourses } from '../src/data/courses';
 import type { CourseData } from '../src/data/courses';
 
@@ -258,6 +259,8 @@ async function seedProducts() {
     process.exit(1);
   } finally {
     await client.close();
+    // Semeou produto: sem isto o catálogo serve a lista anterior por 10 min.
+    await invalidarCache();
     console.log('\n👋 Connection closed');
   }
 }
