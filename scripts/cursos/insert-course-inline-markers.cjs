@@ -26,14 +26,19 @@ if (!SLUG) {
   process.exit(1);
 }
 
-const BACKUP_COLL = `products_backup_leitura20_${SLUG.replace(/-/g, '_')}_20260718`;
+const BACKUP_COLL = `products_backup_leitura20_${SLUG.replace(/-/g, '_')}_20260816`;
 const BASE = `/cursos/media/${SLUG}/inline`;
 const MEDIA_DIR = path.join(__dirname, '..', '..', 'public', 'cursos', 'media', SLUG, 'inline');
 
 // Slots estruturais — todos ancorados por SEÇÃO/PARÁGRAFO, nenhum por frase
 // literal (a prosa é única por capítulo desde 18/07, então uma frase fixa
 // não existiria em todos os caps).
-const SLOTS = [
+//
+// ⚠️ 16/08/2026: o gabarito existe em DUAS línguas. `mastering-ai-with-chatgpt`
+// é o `chatgpt-zero` traduzido e usa "## Key Concepts" / "**Pro Tip:**". Com só
+// as âncoras em português ele marcava 0 slots e o script saía dizendo "âncora
+// NÃO ACHADA" 6× por capítulo, o que se lê como curso quebrado.
+const SLOTS_PT = [
   { slot: 'sistema', type: 'img', afterNthParagraphOf: ['## Conceitos-Chave', 1],
     caption: 'Qualidade em IA é um sistema em camadas: contexto, restrições, referências e critérios. Uma camada fraca e a resposta inteira perde valor.' },
   { slot: 'intencao', type: 'img', afterNthParagraphOf: ['## Conceitos-Chave', 2],
@@ -46,6 +51,21 @@ const SLOTS = [
     caption: 'A IA é parceira de rascunho, não autoridade final — quem valida e assina é você.' },
   { slot: 'dica', type: 'video', afterBlockquote: '**Dica Pro:**',
     caption: 'Escreva o checklist de avaliação antes do prompt: o hábito que mais melhora a qualidade das respostas.' },
+];
+
+const SLOTS_EN = [
+  { slot: 'sistema', type: 'img', afterNthParagraphOf: ['## Key Concepts', 1],
+    caption: 'Quality in AI is a layered system: context, constraints, references and criteria. One weak layer and the whole answer loses value.' },
+  { slot: 'intencao', type: 'img', afterNthParagraphOf: ['## Key Concepts', 2],
+    caption: 'Separate intent from execution: first define what a good answer looks like, only then delegate to the AI.' },
+  { slot: 'fluxo', type: 'video', afterSection: '## Execution Workflow',
+    caption: 'The step cycle: clarify → prepare context → execute → review → package.' },
+  { slot: 'cenario', type: 'img', afterNthParagraphOf: ['## Applied Scenarios', 1],
+    caption: 'From vague request to managed process: work, format, sources, tone and validation made explicit.' },
+  { slot: 'validacao', type: 'img', afterSection: '## Common Mistakes',
+    caption: 'AI is a drafting partner, not the final authority — you are the one who validates and signs off.' },
+  { slot: 'dica', type: 'video', afterBlockquote: '**Pro Tip:**',
+    caption: 'Write the evaluation checklist before the prompt: the habit that most improves answer quality.' },
 ];
 
 function buildMarker(cap, s) {
@@ -116,21 +136,53 @@ function findInsertPos(capText, s) {
   if (!p) throw new Error(`${SLUG} não encontrado`);
   const content = p.courseContent || '';
 
+  // A língua decide as âncoras de seção. Detectada pelo conteúdo, não pelo slug:
+  // o slug não diz o idioma (`mastering-ai-with-chatgpt` e `chatgpt-zero` são o
+  // mesmo curso em línguas diferentes).
+  const isEN = content.includes('## Key Concepts') && !content.includes('## Conceitos-Chave');
+  const SLOTS = isEN ? SLOTS_EN : SLOTS_PT;
+
+  // ⚠️ 16/08/2026: o capítulo NÃO é sempre "# Capítulo N:". Os 11 cursos que
+  // passaram pelo `padronizar-curso.ts` trazem as 8 seções do gabarito mas
+  // mantiveram o H1 temático próprio ("# Anatomia do Prompt Perfeito"), e a
+  // versão inglesa usa "# Chapter N:". A contagem fixa em 30 também estava
+  // errada: os cursos vão de 13 a 31 capítulos, e com o teto em 30 o capítulo
+  // 31 era engolido pelo slice do capítulo 30.
+  //
+  // ⚠️ E nem todo H1 é capítulo. A maioria dos cursos abre com um H1 de
+  // APRESENTAÇÃO ("# Automação com n8n", 719 chars, nenhuma seção) antes do
+  // primeiro capítulo. Numerar por H1 cru desloca tudo em 1 e gruda o marcador
+  // `cap01-*` no texto do capítulo 2 — o tipo de estrago que ninguém percebe
+  // até o aluno ver a imagem errada.
+  //
+  // Capítulo é o H1 cujo bloco carrega a seção de conceitos do gabarito.
+  const marcaDeCapitulo = isEN ? '## Key Concepts' : '## Conceitos-Chave';
+  const h1s = [];
+  const h1Re = /^# .+$/gm;
+  let m;
+  while ((m = h1Re.exec(content)) !== null) h1s.push(m.index);
+  if (h1s.length === 0) throw new Error(`Nenhum H1 encontrado em ${SLUG}`);
+
   const bounds = [];
-  for (let n = 1; n <= 30; n++) {
-    const start = content.indexOf(`# Capítulo ${n}:`);
-    if (start < 0) throw new Error(`Capítulo ${n} não encontrado em ${SLUG}`);
-    bounds.push({ n, start });
+  let pulados = 0;
+  for (let k = 0; k < h1s.length; k++) {
+    const start = h1s[k];
+    const end = k + 1 < h1s.length ? h1s[k + 1] : content.length;
+    if (!content.slice(start, end).includes(marcaDeCapitulo)) { pulados++; continue; }
+    bounds.push({ n: bounds.length + 1, start, end });
   }
-  bounds.push({ n: 31, start: content.length });
+  if (bounds.length === 0) throw new Error(`Nenhum capítulo com "${marcaDeCapitulo}" em ${SLUG}`);
+  console.log(
+    `${SLUG}: ${bounds.length} capítulos · âncoras em ${isEN ? 'inglês' : 'português'}` +
+    (pulados ? ` · ${pulados} H1 fora da numeração (abertura//fecho)` : '')
+  );
 
   let updated = '';
   let cursor = 0;
   let inserted = 0, skippedHas = 0, skippedMedia = 0, failed = 0;
 
-  for (let i = 0; i < 30; i++) {
-    const { n, start } = bounds[i];
-    const end = bounds[i + 1].start;
+  for (let i = 0; i < bounds.length; i++) {
+    const { n, start, end } = bounds[i];
     updated += content.slice(cursor, start);
     let cap = content.slice(start, end);
     cursor = end;

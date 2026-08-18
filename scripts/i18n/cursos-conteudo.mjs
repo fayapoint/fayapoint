@@ -33,7 +33,7 @@
  * bater, o capítulo é rejeitado e fica em português.
  *
  * Uso:
- *   node --env-file=.env.local scripts/i18n/cursos-conteudo.mjs [--so-um slug] [--secar]
+ *   node --env-file=.env.local scripts/i18n/cursos-conteudo.mjs [--so-um slug] [--secar] [--refazer]
  */
 
 import { MongoClient } from "mongodb";
@@ -148,6 +148,7 @@ async function main() {
   const argv = process.argv.slice(2);
   const soUm = argv.includes("--so-um") ? argv[argv.indexOf("--so-um") + 1] : null;
   const secar = argv.includes("--secar");
+  const refazer = argv.includes("--refazer");
   const paralelo = argv.includes("--paralelo")
     ? Number(argv[argv.indexOf("--paralelo") + 1])
     : 5;
@@ -172,7 +173,12 @@ async function main() {
     const jaTem = await traduzidos.findOne({ slug: c.slug, locale: "en" });
     // Curso com pedaço rejeitado é refeito: ficou meio em inglês, meio em
     // português, e é justamente o estado que não pode ir para o ar.
-    if (jaTem && !jaTem.rejeitados && !secar) {
+    // ⚠️ `--refazer` existe porque a tradução envelhece com o ORIGINAL, e o
+    // script não tem como saber disso sozinho: em 17/08/2026 dois cursos foram
+    // reescritos do zero e a coleção continuou servindo, em inglês, o texto oco
+    // que eles tinham antes. "Já traduzido" respondia a pergunta errada —
+    // traduzido de QUAL versão?
+    if (jaTem && !jaTem.rejeitados && !secar && !refazer) {
       console.log(`· ${c.slug} (já traduzido, pulando)`);
       continue;
     }

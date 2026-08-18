@@ -30,8 +30,21 @@ import { MongoClient } from "mongodb";
 // grátis inteiro tem 500 — divididas com os outros projetos.
 // Ver `scripts/lib/mongo.cjs`.
 import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+/**
+ * ⚠️ A régua estrutural, sozinha, DEU 8/8 AOS QUATRO CURSOS OCOS (16/08/2026).
+ *
+ * Estrutura perfeita e substância ausente é um estado possível — e era
+ * exatamente o estado de `automacao-n8n`, `midjourney-masterclass`,
+ * `mastering-ai-with-chatgpt` e o de Perplexity, todos com ~73% do texto sendo
+ * o mesmo parágrafo repetido. A partir de 17/08 a régua importa a medida de
+ * repetição e reprova por ela: um curso que se repete NUNCA mais aparece 🟢.
+ */
+import { medir, PORTAO_REPETICAO } from "./cursos/medir_repeticao.mjs";
 
 const REGUA = "chatgpt-zero";
+// O portao vem de `cursos/medir_repeticao.mjs`, que e quem define a medida.
+// Dois numeros em dois arquivos fariam a regua aprovar o que o portao reprova.
+const REPETICAO_MAXIMA = PORTAO_REPETICAO;
 
 /**
  * Os traços que fazem um capítulo ser material de trabalho e não um artigo.
@@ -257,7 +270,7 @@ if (alvo) {
     "curso".padEnd(larg + 2) +
       "caps" +
       cols.map((k) => k.slice(0, 10).padStart(12)).join("") +
-      "   %régua  seções  mídia",
+      "   %régua  seções  mídia   repet.",
   );
   const ordenado = cursos
     .map((c) => {
@@ -267,25 +280,31 @@ if (alvo) {
       // 6 peças de mídia existem. É o número que decide o trabalho.
       const sec = mediana(c.caps.map((x) => x.conformidade.secoesOk));
       const mid = mediana(c.caps.map((x) => x.conformidade.midiaOk));
-      return { c, p, pct, sec, mid };
+      const rep = medir(c.caps.map((x) => x.corpo ?? "").join("\n\n")).pct;
+      return { c, p, pct, sec, mid, rep };
     })
     .sort((a, b) => a.sec + a.mid - (b.sec + b.mid) || a.pct - b.pct);
 
-  for (const { c, p, pct, sec, mid } of ordenado) {
-    const conforme = sec === 8 && mid === 6;
-    const marca = c.slug === REGUA ? "★" : conforme ? "🟢" : sec >= 8 ? "🟡" : "🔴";
+  for (const { c, p, pct, sec, mid, rep } of ordenado) {
+    const repetido = rep > REPETICAO_MAXIMA;
+    const conforme = sec === 8 && mid === 6 && !repetido;
+    const marca = repetido ? "⛔" : c.slug === REGUA ? "★" : conforme ? "🟢" : sec >= 8 ? "🟡" : "🔴";
     console.log(
       `${marca} ${c.slug.padEnd(larg)}${String(c.caps.length).padStart(4)}` +
         cols.map((k) => String(p[k].mediana).padStart(12)).join("") +
         `${String(pct).padStart(8)}%` +
         `${String(sec).padStart(7)}/8` +
-        `${String(mid).padStart(6)}/6`,
+        `${String(mid).padStart(6)}/6` +
+        `${rep.toFixed(1).padStart(8)}%`,
     );
   }
   console.log(
     "\n(medianas POR CAPÍTULO · %régua = caracteres vs. chatgpt-zero · seções = das 8 do gabarito · mídia = das 6 peças)",
   );
-  console.log("🔴 falta estrutura · 🟡 tem as seções, falta mídia · 🟢 conforme");
+  console.log(
+    "🔴 falta estrutura · 🟡 tem as seções, falta mídia · 🟢 conforme · " +
+      `⛔ acima de ${REPETICAO_MAXIMA}% de parágrafo repetido (estrutura não salva conteúdo copiado)`,
+  );
   console.log("Para o detalhe de um curso: --curso=<slug>");
 }
 

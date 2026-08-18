@@ -94,26 +94,71 @@ async function getQuestionsFromBank(courseSlug: string, config: any): Promise<Qu
     return null;
   }
 
-  // Weighted random selection (prefer higher quality)
-  const weights = qualityQuestions.map((q: BankedQuestion) => q.qualityScore / 10);
+  /**
+   * ── A MISTURA DE DIFICULDADE (17/08/2026) ────────────────────────────────
+   *
+   * Antes, a seleção sorteava ponderando **só por `qualityScore`** e ignorava o
+   * `difficultyScore` que cada questão carrega. Consequência: duas provas do
+   * mesmo curso podiam sair uma fácil e outra impossível, por sorteio — com a
+   * MESMA nota de corte de 70% para as duas. Isso não é rigor, é ruído, e ainda
+   * por cima num portão que emite certificado.
+   *
+   * A cota é a do plano de 16/08: **4 fáceis · 2 médias · 4 difíceis** em cada
+   * prova de 10. Se uma faixa não tiver questões suficientes, o que falta é
+   * preenchido com o resto do banco — devolver uma prova de 7 perguntas seria
+   * pior que devolver uma prova com a mistura torta.
+   *
+   * A ponderação por qualidade continua valendo DENTRO de cada faixa.
+   */
+  const FAIXAS = {
+    facil: (q: BankedQuestion) => q.difficultyScore <= 4,
+    media: (q: BankedQuestion) => q.difficultyScore > 4 && q.difficultyScore <= 7,
+    dificil: (q: BankedQuestion) => q.difficultyScore > 7,
+  };
+  const COTA: Array<[keyof typeof FAIXAS, number]> = [
+    ['dificil', 4],
+    ['media', 2],
+    ['facil', 4],
+  ];
+
   const selected: BankedQuestion[] = [];
-
-  for (let i = 0; i < QUIZ_CONFIG.TOTAL_QUESTIONS && qualityQuestions.length > 0; i++) {
-    const totalWeight = weights.reduce((a, b) => a + b, 0);
-    let random = Math.random() * totalWeight;
-
-    for (let j = 0; j < qualityQuestions.length; j++) {
-      random -= weights[j];
-      if (random <= 0) {
-        const question = qualityQuestions[j];
-        selected.push(question);
-
-        // Remove from selection to avoid duplicates
-        qualityQuestions.splice(j, 1);
-        weights.splice(j, 1);
-        break;
+  const sortearDe = (pool: BankedQuestion[], quantas: number) => {
+    const pesos = pool.map((q) => Math.max(0.1, q.qualityScore / 10));
+    for (let i = 0; i < quantas && pool.length > 0; i++) {
+      const total = pesos.reduce((a, b) => a + b, 0);
+      let r = Math.random() * total;
+      for (let j = 0; j < pool.length; j++) {
+        r -= pesos[j];
+        if (r <= 0) {
+          selected.push(pool[j]);
+          pool.splice(j, 1);
+          pesos.splice(j, 1);
+          break;
+        }
       }
     }
+  };
+
+  const restante = [...qualityQuestions];
+  for (const [faixa, quantas] of COTA) {
+    const antes = selected.length;
+    sortearDe(restante.filter(FAIXAS[faixa]), quantas);
+    // Tira do restante o que já entrou, para o preenchimento não repetir.
+    for (const q of selected.slice(antes)) {
+      const i = restante.indexOf(q);
+      if (i !== -1) restante.splice(i, 1);
+    }
+  }
+  // Faixa magra: completa com o que sobrou, mantendo as 10 perguntas.
+  if (selected.length < QUIZ_CONFIG.TOTAL_QUESTIONS) {
+    sortearDe(restante, QUIZ_CONFIG.TOTAL_QUESTIONS - selected.length);
+  }
+
+  // Sem embaralhar, a prova sairia sempre na mesma ordem — 4 difíceis, 2 médias,
+  // 4 fáceis — e o aluno aprenderia a ORDEM em vez do conteúdo.
+  for (let i = selected.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [selected[i], selected[j]] = [selected[j], selected[i]];
   }
 
   return selected.map(q => ({
