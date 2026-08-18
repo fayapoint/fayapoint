@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import fatia from "../../../../../messages/rotas/portal.json";
+import { ProvedorDeRota } from "@/i18n/rota";
 
 /**
  * `portal` fora do índice.
@@ -18,6 +20,17 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return (
+    <ProvedorDeRota locale={locale} fatia={fatia}>
+      {children}
+    </ProvedorDeRota>
+  );
 }

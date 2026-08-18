@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { generatePageMetadata, pageMetadataConfig } from "@/lib/metadata";
+import fatia from "../../../../../messages/rotas/cursos.json";
+import { ProvedorDeRota } from "@/i18n/rota";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -18,6 +20,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default function CursosLayout({ children }: Props) {
-  return children;
+export default async function CursosLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return (
+    <ProvedorDeRota locale={locale} fatia={fatia}>
+      {children}
+    </ProvedorDeRota>
+  );
 }

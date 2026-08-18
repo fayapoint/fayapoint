@@ -5,6 +5,8 @@ import { getAiNews } from "@/lib/ai-news";
 import { getAllProducts, paraIdiomaLista } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { ORDEM_POR_VARIACAO_DE_CAPA } from "@/data/ordem-variacao-capas";
+import fatia from "../../../messages/rotas/home.json";
+import { ProvedorDeRota } from "@/i18n/rota";
 
 // Home oficial (12/07/2026): a experiência de imersão gamificada substituiu o
 // gate de hype e o cubo 3D. O gate segue existindo apenas como código
@@ -75,9 +77,9 @@ export default async function Home({
   }));
 
   return (
-    <>
+    <ProvedorDeRota locale={locale} fatia={fatia}>
       <NovaLanding news={items} featuredCourses={featuredCourses} />
       <WhatsAppButton />
-    </>
+    </ProvedorDeRota>
   );
 }

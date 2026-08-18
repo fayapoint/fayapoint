@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { routeMetadata } from "@/lib/metadata";
+import fatia from "../../../../../messages/rotas/aula-gratis.json";
+import { ProvedorDeRota } from "@/i18n/rota";
 
 /**
  * Canônica própria de `/aula-gratis`.
@@ -23,6 +25,17 @@ export async function generateMetadata({
   return routeMetadata({ locale, path: "/aula-gratis" });
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return (
+    <ProvedorDeRota locale={locale} fatia={fatia}>
+      {children}
+    </ProvedorDeRota>
+  );
 }

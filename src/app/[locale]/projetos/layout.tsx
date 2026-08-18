@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
+import fatia from "../../../../messages/rotas/projetos.json";
+import { ProvedorDeRota } from "@/i18n/rota";
 
 /**
  * Canônica própria de `/projetos`.
@@ -23,6 +25,17 @@ export async function generateMetadata({
   return { alternates };
 }
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return (
+    <ProvedorDeRota locale={locale} fatia={fatia}>
+      {children}
+    </ProvedorDeRota>
+  );
 }

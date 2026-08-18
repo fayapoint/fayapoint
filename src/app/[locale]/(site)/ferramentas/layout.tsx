@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/metadata";
+import fatia from "../../../../../messages/rotas/ferramentas.json";
+import { ProvedorDeRota } from "@/i18n/rota";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -30,6 +32,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default function FerramentasLayout({ children }: Props) {
-  return children;
+export default async function FerramentasLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return (
+    <ProvedorDeRota locale={locale} fatia={fatia}>
+      {children}
+    </ProvedorDeRota>
+  );
 }

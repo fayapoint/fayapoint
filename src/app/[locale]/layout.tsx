@@ -258,9 +258,16 @@ export default async function RootLayout({
    *     /pt-BR/cursos    88 KB
    *     /en/cursos      341 KB     ← +253 KB por visita, quase tudo dicionário
    *
-   * `messagesDoCliente` troca o dicionário pela fatia que o código de cliente
-   * pode alcançar (ver `src/i18n/fatia-do-cliente.ts`). O resto — a prosa das
-   * páginas de conteúdo, que só Server Component renderiza — fica no servidor.
+   * `messagesDoCliente` troca o dicionário pela fatia da RAIZ — 8,8 KB, o que
+   * este layout e as rotas leves alcançam (ver `src/i18n/fatia-do-cliente.ts`).
+   * As rotas pesadas trazem a sua própria fatia por um provedor aninhado, no
+   * layout delas (ver `src/i18n/rota.tsx`). O resto — a prosa das páginas de
+   * conteúdo, que só Server Component renderiza — fica no servidor.
+   *
+   * Medido no build depois do recorte por rota:
+   *
+   *     /en/sobre   224 KB   ← agora MENOR que /pt-BR/sobre (226 KB)
+   *     /en/cursos  682 KB   ← era 1.155 KB
    */
   const messages = await getMessages();
   const messagesParaOCliente = messagesDoCliente(messages);
