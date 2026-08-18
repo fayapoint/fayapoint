@@ -7,7 +7,7 @@
 
 import type { MongoClient, Collection } from 'mongodb';
 import { clienteMongo } from '@/lib/mongo-cliente';
-import { getOrSet, CACHE_TTL, CACHE_KEYS, invalidateCachePattern } from '@/lib/redis';
+import { getOrSet, CACHE_TTL, CACHE_KEYS, invalidateCache, invalidateCachePattern } from '@/lib/redis';
 import {
   computeLessonContentCoverage,
   normalizeEditorialVerification,
@@ -558,21 +558,93 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   );
 }
 
-// Invalidate product cache (call when products are updated)
-export async function invalidateProductCache(): Promise<void> {
-  await invalidateCachePattern('products:*');
-  await invalidateCachePattern('product:*');
+/**
+ * Tudo que guarda cópia de um produto/curso. Um lugar só, porque a lista abaixo
+ * já esqueceu um campo uma vez.
+ *
+ * ⚠️ Ao criar um `getOrSet` novo que leia produto ou `courseContent`, o padrão
+ * da chave entra AQUI no mesmo commit. O sintoma de esquecer é "editei e não
+ * mudou nada", que manda depurar no lugar errado — no banco, onde o dado já
+ * está certo.
+ */
+const PADROES_DE_PRODUTO = [
+  'products:*',   // a lista do catálogo (getAllProducts)
+  'product:*',    // o produto por slug (getProductBySlug)
+  /**
+   * A tradução do CORPO do curso (`getConteudoTraduzido`). Estava faltando, e o
+   * buraco era real: `scripts/i18n/cursos-conteudo.mjs` regrava a tradução na
+   * coleção `conteudoTraduzido`, e a versão inglesa da aula continuava servindo
+   * o texto anterior por até 10 minutos depois de o script dizer "pronto".
+   */
+  'conteudo:en:*',
   /**
    * ⚠️ O texto do curso picado em capítulos também é cache de produto.
    *
    * `livro:capitulos:*` e `atelie:capitulos:*` guardam o `courseContent` já
    * dividido, com uma hora de validade (ver as duas rotas do Ateliê). Sem estas
    * duas linhas, editar um curso no painel deixava o livro do aluno servindo o
-   * texto ANTIGO por até uma hora — e o sintoma seria "editei e não mudou nada",
-   * que manda depurar no lugar errado.
+   * texto ANTIGO por até uma hora.
    */
-  await invalidateCachePattern('livro:capitulos:*');
-  await invalidateCachePattern('atelie:capitulos:*');
+  'livro:capitulos:*',
+  'atelie:capitulos:*',
+] as const;
+
+/**
+ * Apaga o cache de catálogo e de conteúdo de curso.
+ *
+ * ## Por que isto passou meses sem ser chamado
+ *
+ * A função existia desde sempre e **nenhum arquivo a chamava** — nem o painel de
+ * admin (que edita produto), nem os scripts (que gravam `courseContent`). O
+ * efeito é o pior tipo de defeito: nada quebra, nada dá erro, e o site
+ * simplesmente serve o texto anterior por até 10 minutos depois de a pessoa
+ * salvar. Quem edita conclui que o salvar não funcionou e edita de novo.
+ *
+ * Agora é chamada em três lugares, e os três importam:
+ *
+ * 1. as rotas de admin de produto (`POST`, `PUT`, `DELETE`);
+ * 2. a rota `/api/admin/invalidar-cache`, que é como um script de terminal
+ *    invalida — os scripts não têm as chaves do Upstash;
+ * 3. `scripts/lib/invalidar-cache.mjs`, chamado no fim de quem grava curso.
+ *
+ * ⚠️ Não `await`-ar isto numa rota de escrita não é opção: a instância
+ * serverless é congelada quando a resposta sai. Ver `redis.ts`.
+ */
+export async function invalidateProductCache(): Promise<void> {
+  /**
+   * Em série, de propósito. Cada `invalidateCachePattern` faz um `KEYS` e um
+   * `DEL`, e o Upstash cobra por comando; em paralelo seriam dez idas
+   * simultâneas de dentro de uma função que já está respondendo. São ~130ms
+   * cada, e isto roda em escrita de admin — não no caminho de leitura de
+   * ninguém.
+   */
+  for (const padrao of PADROES_DE_PRODUTO) {
+    await invalidateCachePattern(padrao);
+  }
+}
+
+/**
+ * O mesmo, para UM curso — o que os scripts de conteúdo precisam.
+ *
+ * A lista inteira é `KEYS` sobre cinco padrões; esta versão apaga as chaves
+ * exatas do slug e só varre padrão onde a chave depende de mais coisa (a lista
+ * do catálogo, que muda porque o curso mudou).
+ *
+ * ⚠️ `products:*` continua aqui e tem que continuar: a lista traz título, preço
+ * e contagem de aulas do curso alterado. Invalidar só `product:<slug>` deixaria
+ * a vitrine mostrando o número velho.
+ */
+export async function invalidarCursoNoCache(slug: string): Promise<void> {
+  await invalidateCachePattern('products:*');
+  for (const chave of [
+    CACHE_KEYS.PRODUCT(slug),
+    `conteudo:en:${slug}`,
+    `livro:capitulos:${slug}`,
+    `atelie:capitulos:${slug}`,
+    CACHE_KEYS.COURSE_CONTENT(slug),
+  ]) {
+    await invalidateCache(chave);
+  }
 }
 
 // Get products by category

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import { verifyAdminToken, logAdminAction } from '@/lib/admin-auth';
+import { invalidateProductCache } from '@/lib/products';
 import mongoose from 'mongoose';
 
 // GET - List all products from both databases
@@ -93,6 +94,21 @@ export async function POST(request: NextRequest) {
     };
 
     const result = await col.insertOne(productData);
+
+    /**
+     * ⚠️ Sem isto, o produto novo não aparece no site por até 10 minutos.
+     *
+     * `getAllProducts` guarda a lista em `products:list` com TTL de 10 min
+     * (`CACHE_TTL.PRODUCTS`). Criar produto sem invalidar faz o painel dizer
+     * "criado com sucesso" e o catálogo continuar sem ele — que se lê como
+     * "o salvar não funcionou", e manda procurar defeito no lugar errado.
+     *
+     * Esperada, não solta: a instância serverless é congelada quando a resposta
+     * sai (ver `redis.ts`). E antes do `logAdminAction`, porque o log é
+     * auditoria — se algo falhar, o que não pode ficar por fazer é a
+     * invalidação.
+     */
+    await invalidateProductCache();
 
     // Log action
     await logAdminAction(

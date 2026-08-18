@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import { verifyAdminToken, logAdminAction } from '@/lib/admin-auth';
+import { invalidarCursoNoCache, invalidateProductCache } from '@/lib/products';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongodb';
 
@@ -102,6 +103,26 @@ export async function PUT(
       return NextResponse.json({ error: 'Produto não encontrado' }, { status: 404 });
     }
 
+    /**
+     * ⚠️ ISTO É O QUE FAZ "EDITEI E NÃO MUDOU NADA" DEIXAR DE ACONTECER.
+     *
+     * A edição grava no Mongo na hora, mas quem serve a página é o cache: a
+     * lista (`products:list`, 10 min), o produto (`product:<slug>`, 10 min), a
+     * tradução do corpo (`conteudo:en:<slug>`) e os capítulos já picados do
+     * livro e do Ateliê (1 hora). Sem invalidar, o painel confirma o salvamento
+     * e o site continua mostrando o texto anterior por até uma hora.
+     *
+     * `invalidarCursoNoCache` quando sabemos o slug (apaga chave exata, mais
+     * barato); a limpeza geral quando não sabemos — produto sem slug existe
+     * nesta coleção.
+     */
+    const slugAlterado = (result as { slug?: string } | null)?.slug ?? (data as { slug?: string })?.slug;
+    if (slugAlterado) {
+      await invalidarCursoNoCache(slugAlterado);
+    } else {
+      await invalidateProductCache();
+    }
+
     // Log action
     await logAdminAction(
       authResult.admin.id,
@@ -169,6 +190,15 @@ export async function DELETE(
     } catch {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await col.deleteOne({ _id: id as any });
+    }
+
+    // Apagado do banco, mas ainda no cache: sem isto o curso excluído continua
+    // na lista e na própria página por até 10 minutos, com botão de compra.
+    const slugApagado = (product as { slug?: string })?.slug;
+    if (slugApagado) {
+      await invalidarCursoNoCache(slugApagado);
+    } else {
+      await invalidateProductCache();
     }
 
     // Log action
