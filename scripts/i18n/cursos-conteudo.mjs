@@ -37,6 +37,11 @@
  */
 
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "../lib/mongo.mjs";
+import { invalidarCache } from "../lib/invalidar-cache.mjs";
 import { traduzirMapa, MODELOS, dinheiro } from "./traduzir.mjs";
 
 const URI = process.env.MONGODB_URI;
@@ -147,7 +152,7 @@ async function main() {
     ? Number(argv[argv.indexOf("--paralelo") + 1])
     : 5;
 
-  const cliente = new MongoClient(URI);
+  const cliente = new MongoClient(URI, OPCOES_DE_SCRIPT);
   await cliente.connect();
   const bd = cliente.db("fayapointProdutos");
   const produtos = bd.collection("products");
@@ -306,6 +311,10 @@ async function main() {
   }
 
   await cliente.close();
+  // A tradução do CORPO é cacheada em `conteudo:en:<slug>` por 10 minutos.
+  // Sem isto, a aula em inglês continua servindo a tradução ANTERIOR, e o
+  // script já terá dito "gravado".
+  if (feitos) await invalidarCache();
   console.log(`\n${feitos} curso(s). Custo total: ${dinheiro(custoTotal)}`);
 }
 

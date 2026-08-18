@@ -9,6 +9,11 @@
  *       node scripts/cursos/tokenize-facts.cjs --apply    (grava com backup)
  */
 const { MongoClient } = require('mongodb');
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+const { OPCOES_DE_SCRIPT } = require("../lib/mongo.cjs");
+const { invalidarCache } = require("../lib/invalidar-cache.cjs");
 
 const APPLY = process.argv.includes('--apply');
 const BACKUP_COLL = 'products_backup_tokens_20260716';
@@ -23,7 +28,7 @@ const RULES = [
 ];
 
 (async () => {
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const client = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
   await client.connect();
   const db = client.db('fayapointProdutos');
   const products = db.collection('products');
@@ -67,6 +72,8 @@ const RULES = [
       );
     }
   }
+
+  if (APPLY) await invalidarCache();
 
   console.log(APPLY ? 'APLICADO' : 'DRY-RUN', '| cursos afetados:', perCourse.length, '| substituições:', totalRepl);
   perCourse.forEach((c) => console.log(' ', c.slug, JSON.stringify(c.counts)));

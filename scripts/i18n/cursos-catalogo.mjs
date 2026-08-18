@@ -33,6 +33,11 @@
  */
 
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "../lib/mongo.mjs";
+import { invalidarCache } from "../lib/invalidar-cache.mjs";
 import { traduzirMapa, MODELOS, dinheiro } from "./traduzir.mjs";
 
 const URI = process.env.MONGODB_URI;
@@ -123,7 +128,7 @@ async function main() {
   const soUm = argv.includes("--so-um") ? argv[argv.indexOf("--so-um") + 1] : null;
   const secar = argv.includes("--secar"); // dry run: mostra e não grava
 
-  const cliente = new MongoClient(URI);
+  const cliente = new MongoClient(URI, OPCOES_DE_SCRIPT);
   await cliente.connect();
   const col = cliente.db("fayapointProdutos").collection("products");
 
@@ -188,6 +193,8 @@ async function main() {
   }
 
   await cliente.close();
+  // `i18n.en` vive DENTRO do produto, e o produto é cacheado por 10 minutos.
+  if (feitos) await invalidarCache();
   console.log(`\n${feitos} curso(s) traduzido(s). Custo: ${dinheiro(custoTotal)}`);
 }
 

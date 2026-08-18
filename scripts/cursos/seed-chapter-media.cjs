@@ -7,6 +7,10 @@
  * Uso: node scripts/cursos/seed-chapter-media.cjs [slug] [nCapsBrutos]
  */
 const { MongoClient } = require('mongodb');
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+const { OPCOES_DE_SCRIPT } = require("../lib/mongo.cjs");
 
 const SLUG = process.argv[2] || 'chatgpt-zero';
 const N_RAW = parseInt(process.argv[3] || '31', 10);
@@ -35,7 +39,7 @@ const img = (cap) => ({
 });
 
 (async () => {
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const client = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
   await client.connect();
   const col = client.db('mission-control').collection('content-forge-chapters');
 

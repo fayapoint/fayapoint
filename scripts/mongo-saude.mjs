@@ -57,13 +57,23 @@ async function estado() {
    *
    * Construir um MongoClient não conecta nada — dá para inspecionar de graça.
    */
+  // sem-teto-de-proposito: este cliente existe para LER a URI e nunca conecta.
   const semOpcoes = new MongoClient(URI).options;
-  console.log(`\nO QUE A URI DECLARA (é o que vale para os ~40 scripts, que não passam opção)`);
+  console.log(`\nO QUE A URI DECLARA (a rede de segurança, não mais a única proteção)`);
   console.log(`  maxPoolSize: ${semOpcoes.maxPoolSize}   minPoolSize: ${semOpcoes.minPoolSize}   maxIdleTimeMS: ${semOpcoes.maxIdleTimeMS}`);
   if (semOpcoes.maxPoolSize >= 100) {
-    console.log(`  ⚠️  100 é o PADRÃO do driver, não uma escolha. Um script com pool de 100`);
-    console.log(`      pode consumir um quinto do cluster sozinho. Ponha`);
-    console.log(`      "&maxPoolSize=5&maxIdleTimeMS=30000" na MONGODB_URI.`);
+    /**
+     * Até 18/08/2026 esta linha era o ÚNICO teto dos scripts, e por isso o aviso
+     * dizia "ponha na URI". Não é mais: os 29 scripts passam `OPCOES_DE_SCRIPT`
+     * (`scripts/lib/mongo.cjs`), que está no Git e vale em qualquer máquina.
+     * A URI virou cinto e suspensório — útil para script novo que ainda não
+     * importou de lá, e para o `mongosh` na mão.
+     *
+     * `node scripts/conferir-teto-de-pool.mjs` é quem garante o resto.
+     */
+    console.log(`  ⚠️  100 é o PADRÃO do driver, não uma escolha. Os scripts do repo já`);
+    console.log(`      passam o teto no código, mas um script novo (ou o mongosh) herda este.`);
+    console.log(`      Acrescente "&maxPoolSize=5&maxIdleTimeMS=30000" na MONGODB_URI.`);
   }
   return c;
 }

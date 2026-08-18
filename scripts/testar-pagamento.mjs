@@ -29,6 +29,10 @@
  */
 
 import { MongoClient, ObjectId } from 'mongodb';
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
 import fs from 'node:fs';
 
 const env = fs.readFileSync('.env.local', 'utf8');
@@ -68,7 +72,7 @@ async function webhook(corpo) {
   return { status: r.status, corpo: await r.json().catch(() => null) };
 }
 
-const cliente = new MongoClient(URI);
+const cliente = new MongoClient(URI, OPCOES_DE_SCRIPT);
 let userId = null;
 
 try {

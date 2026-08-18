@@ -4,6 +4,11 @@
  * Uso: node assemble_and_apply_courseContent.cjs <slug> [--apply]
  */
 const { MongoClient } = require('mongodb');
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+const { OPCOES_DE_SCRIPT } = require("../lib/mongo.cjs");
+const { invalidarCache } = require("../lib/invalidar-cache.cjs");
 const fs = require('fs');
 const path = require('path');
 
@@ -41,7 +46,7 @@ const courseContent = chapters.map((c) => c.content.trim()).join('\n\n');
 console.log(`${SLUG}: ${chapters.length} capítulos montados, ${courseContent.length} chars`);
 
 (async () => {
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const client = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
   await client.connect();
   const db = client.db('fayapointProdutos');
   const products = db.collection('products');
@@ -57,6 +62,9 @@ console.log(`${SLUG}: ${chapters.length} capítulos montados, ${courseContent.le
     );
     await products.updateOne({ _id: p._id }, { $set: { courseContent, contentUpdatedAt: new Date() } });
     console.log(`GRAVADO (backup do texto anterior em ${backupColl})`);
+    // Sem isto o texto novo só aparece quando o TTL vencer: 10 min no
+    // catálogo, 1h nos capítulos já picados do livro e do Ateliê.
+    await invalidarCache(SLUG);
   } else {
     console.log('DRY-RUN — nada gravado. Rode com --apply para gravar.');
   }

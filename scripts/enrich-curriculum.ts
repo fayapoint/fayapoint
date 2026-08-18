@@ -6,6 +6,11 @@
  */
 
 import { MongoClient } from 'mongodb';
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -719,7 +724,7 @@ curricula.push({
 });
 
 async function enrichCurriculum() {
-  const client = new MongoClient(MONGODB_URI);
+  const client = new MongoClient(MONGODB_URI, OPCOES_DE_SCRIPT);
   
   try {
     console.log('🔌 Connecting to MongoDB...');
@@ -768,6 +773,8 @@ async function enrichCurriculum() {
     process.exit(1);
   } finally {
     await client.close();
+    // O currículo detalhado entra na página de venda, cacheada por 10 minutos.
+    await invalidarCache();
   }
 }
 

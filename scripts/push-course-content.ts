@@ -8,6 +8,11 @@
  */
 
 import { MongoClient } from 'mongodb';
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 import * as fs from 'fs';
 import * as path from 'path';
 import {
@@ -287,7 +292,7 @@ const NEW_PRODUCTS: Record<string, any> = {
 };
 
 async function pushCourseContent() {
-  const client = new MongoClient(MONGODB_URI);
+  const client = new MongoClient(MONGODB_URI, OPCOES_DE_SCRIPT);
 
   try {
     console.log('🔌 Connecting to MongoDB...');
@@ -368,6 +373,9 @@ async function pushCourseContent() {
     process.exit(1);
   } finally {
     await client.close();
+    // O curso já está no banco; a página pública ainda serve o texto anterior
+    // por até 10 min (1h nos capítulos do livro) se ninguém avisar o site.
+    await invalidarCache();
     console.log('\n🔌 Disconnected from MongoDB');
   }
 }

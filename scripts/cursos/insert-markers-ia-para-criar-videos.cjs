@@ -11,6 +11,11 @@
  *       node scripts/cursos/insert-course-inline-markers.cjs <slug> --apply    (grava com backup)
  */
 const { MongoClient } = require('mongodb');
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+const { OPCOES_DE_SCRIPT } = require("../lib/mongo.cjs");
+const { invalidarCache } = require("../lib/invalidar-cache.cjs");
 const fs = require('fs');
 const path = require('path');
 
@@ -103,7 +108,7 @@ function findInsertPos(capText, s) {
 }
 
 (async () => {
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const client = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
   await client.connect();
   const db = client.db('fayapointProdutos');
   const products = db.collection('products');
@@ -159,6 +164,9 @@ function findInsertPos(capText, s) {
     );
     await products.updateOne({ _id: p._id }, { $set: { courseContent: updated } });
     console.log('GRAVADO (backup em', BACKUP_COLL + ')');
+    // Sem isto o texto novo só aparece quando o TTL vencer: 10 min no
+    // catálogo, 1h nos capítulos já picados do livro e do Ateliê.
+    await invalidarCache(p.slug);
   }
   await client.close();
 })().catch((e) => { console.error(e.message); process.exit(1); });

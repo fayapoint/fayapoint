@@ -49,6 +49,11 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 import { generate } from "../src/lib/ai/provider";
 
 const SECOES = [
@@ -265,7 +270,7 @@ async function main() {
     process.exit(1);
   }
 
-  const client = new MongoClient(process.env.MONGODB_URI!);
+  const client = new MongoClient(process.env.MONGODB_URI!, OPCOES_DE_SCRIPT);
   await client.connect();
   const col = client.db("fayapointProdutos").collection("products");
   const doc = await col.findOne({ slug }, { projection: { courseContent: 1, name: 1 } });
@@ -337,11 +342,10 @@ async function main() {
 
   if (valendo) {
     await col.updateOne({ slug }, { $set: { courseContent: conteudoNovo, padronizadoEm: new Date() } });
-    console.log(
-      "\n✅ gravado no banco.\n" +
-        "⚠️ O texto picado em capítulos é cacheado (`livro:capitulos:*`, `atelie:capitulos:*`, 1h).\n" +
-        "   Sem invalidar, o livro do aluno serve o texto ANTIGO por até uma hora.",
-    );
+    console.log("\n✅ gravado no banco.");
+    // O aviso que ficava aqui — "o texto picado em capítulos é cacheado por 1h,
+    // sem invalidar o livro do aluno serve o texto ANTIGO" — virou a chamada.
+    await invalidarCache(slug);
   } else {
     console.log("\n(nada gravado — use --valendo)");
   }

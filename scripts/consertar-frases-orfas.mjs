@@ -34,6 +34,11 @@
  */
 
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 
 const SLUG = "ia-no-whatsapp";
 
@@ -86,7 +91,7 @@ function trocarNaArvore(no, contador) {
   return no;
 }
 
-const cli = new MongoClient(process.env.MONGODB_URI_PRODUTOS || process.env.MONGODB_URI);
+const cli = new MongoClient(process.env.MONGODB_URI_PRODUTOS || process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
 await cli.connect();
 try {
   const col = cli.db("fayapointProdutos").collection("products");
@@ -108,6 +113,7 @@ try {
     console.log(`\nEnsaio: ${total} troca(s) prontas. Rode com --gravar para aplicar.`);
   } else {
     await col.updateOne({ slug: SLUG }, { $set: { courseContent: novo } });
+    await invalidarCache(SLUG);
     console.log(`\nGravado: ${total} troca(s) em ${SLUG}.`);
   }
 

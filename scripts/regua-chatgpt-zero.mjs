@@ -26,6 +26,10 @@
  */
 
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
 
 const REGUA = "chatgpt-zero";
 
@@ -185,7 +189,7 @@ if (!uri) {
 
 const alvo = (process.argv.find((a) => a.startsWith("--curso=")) || "").split("=")[1];
 
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, OPCOES_DE_SCRIPT);
 await client.connect();
 const col = client.db("fayapointProdutos").collection("products");
 

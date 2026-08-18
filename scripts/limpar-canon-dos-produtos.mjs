@@ -28,10 +28,15 @@
  */
 
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 
 const gravar = process.argv.includes("--gravar");
 
-const cliente = new MongoClient(process.env.MONGODB_URI);
+const cliente = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
 await cliente.connect();
 const col = cliente.db("fayapointProdutos").collection("products");
 
@@ -59,5 +64,9 @@ if (gravar) {
 } else {
   console.log("\nEnsaio. Rode com --gravar para remover o canonModels (o verifiedAt fica).");
 }
+
+// Mexeu em produto: sem invalidar, a lista serve o documento anterior por
+// até 10 minutos.
+if (gravar) await invalidarCache();
 
 await cliente.close();

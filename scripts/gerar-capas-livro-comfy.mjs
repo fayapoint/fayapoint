@@ -56,6 +56,10 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
 
 import { motivo } from "./gerar-capas-cursos.mjs";
 
@@ -492,7 +496,7 @@ async function gerar(prompt, semente, slug) {
 async function produtos(slugs) {
   const uri = process.env.MONGODB_URI_PRODUTOS || process.env.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI_PRODUTOS ausente — rode com --env-file=.env.local");
-  const cli = new MongoClient(uri);
+  const cli = new MongoClient(uri, OPCOES_DE_SCRIPT);
   await cli.connect();
   try {
     const col = cli.db("fayapointProdutos").collection("products");

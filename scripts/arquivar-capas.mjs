@@ -41,6 +41,10 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
 
 import { motivo, promptDe, promptLivro, NEGATIVO, PARAMETROS } from "./gerar-capas-cursos.mjs";
 import { composicaoDe } from "./gerar-capas-livro.mjs";
@@ -294,7 +298,7 @@ rode o arquivador de novo — este arquivo é a memória do que foi feito.</sub>
 async function main() {
   const gravar = process.argv.includes("--gravar");
 
-  const cliente = new MongoClient(process.env.MONGODB_URI);
+  const cliente = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
   await cliente.connect();
   const produtos = await cliente
     .db("fayapointProdutos")

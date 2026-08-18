@@ -1,4 +1,8 @@
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
 import type { ServicePriceDocument } from "../src/lib/pricing";
 
 const DEFAULT_MONGODB_URI = '';
@@ -871,7 +875,7 @@ const servicePrices: ServicePriceDocument[] = [
 
 async function seed() {
   const uri = process.env.MONGODB_URI ?? DEFAULT_MONGODB_URI;
-  const client = new MongoClient(uri);
+  const client = new MongoClient(uri, OPCOES_DE_SCRIPT);
 
   try {
     console.log("🔌 Connecting to MongoDB...");

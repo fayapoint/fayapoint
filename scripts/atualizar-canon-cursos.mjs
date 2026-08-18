@@ -45,6 +45,11 @@
  */
 
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 
 /**
  * Uma regra = um slug, uma string exata, uma troca.
@@ -423,7 +428,7 @@ const REGRAS = [
 async function main() {
   const gravar = process.argv.includes("--gravar");
 
-  const cliente = new MongoClient(process.env.MONGODB_URI);
+  const cliente = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
   await cliente.connect();
   const col = cliente.db("fayapointProdutos").collection("products");
 
@@ -476,6 +481,8 @@ async function main() {
   }
 
   await cliente.close();
+  // Trocou texto de curso: o catálogo e o corpo do curso estão em cache.
+  if (gravar && trocasTotais) await invalidarCache();
   console.log(`\n${trocasTotais} trocas, ${problemas} regra(s) com problema.`);
   if (problemas) {
     console.log("Regra que não casa NÃO é aplicada — o texto do curso mudou desde que a tabela foi escrita.");

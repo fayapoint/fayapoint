@@ -15,6 +15,10 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
 import type { TermoRadar } from "../src/data/landing/radar-nichos";
 
 const DB = "fayapoint";
@@ -41,7 +45,7 @@ async function main() {
   const caminho = join(process.cwd(), "src/data/landing/radar-seed.json");
   const snapshot = JSON.parse(readFileSync(caminho, "utf-8")) as Snapshot;
 
-  const client = new MongoClient(uri);
+  const client = new MongoClient(uri, OPCOES_DE_SCRIPT);
   await client.connect();
   const col = client.db(DB).collection(COLECAO);
 

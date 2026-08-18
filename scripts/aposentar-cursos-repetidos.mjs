@@ -27,6 +27,11 @@
  */
 
 import { MongoClient } from "mongodb";
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { invalidarCache } from "./lib/invalidar-cache.mjs";
 
 /** repetido → o curso no padrão que fica no lugar dele. */
 const APOSENTAR = {
@@ -45,7 +50,7 @@ if (!uri) {
 const valendo = process.argv.includes("--valendo");
 const desfazer = process.argv.includes("--desfazer");
 
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, OPCOES_DE_SCRIPT);
 await client.connect();
 const col = client.db("fayapointProdutos").collection("products");
 
@@ -80,11 +85,11 @@ for (const [repetido, sucessor] of Object.entries(APOSENTAR)) {
   }
 }
 
+// O catálogo é cacheado (`products:*`, 10 min): sem invalidar, a lista
+// continua servindo os aposentados. O aviso que ficava aqui — "chame
+// invalidateProductCache() ou espere o TTL" — virou a chamada de verdade.
 if (valendo || desfazer) {
-  console.log(
-    "\n⚠️ O catálogo é cacheado (`products:*`). Chame `invalidateProductCache()` " +
-      "ou espere o TTL — senão a lista continua servindo os aposentados.",
-  );
+  await invalidarCache();
 }
 
 await client.close();

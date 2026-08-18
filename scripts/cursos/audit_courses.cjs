@@ -1,4 +1,8 @@
 const { MongoClient } = require('mongodb');
+// O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
+// grátis inteiro tem 500 — divididas com os outros projetos.
+// Ver `scripts/lib/mongo.cjs`.
+const { OPCOES_DE_SCRIPT } = require("../lib/mongo.cjs");
 
 function h1Headings(content) {
   return [...content.matchAll(/^# ([^#\n].*)$/gm)].map(m => m[1].trim());
@@ -22,7 +26,7 @@ function jaccard(a, b) {
 }
 
 (async () => {
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const client = new MongoClient(process.env.MONGODB_URI, OPCOES_DE_SCRIPT);
   await client.connect();
   const dbC = client.db('fayapoint');
   const dbP = client.db('fayapointProdutos');
