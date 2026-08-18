@@ -28,18 +28,21 @@ const withNextIntl = createNextIntlPlugin();
  * viraria loteria — o primeiro leitor inglês fixaria inglês para os leitores
  * portugueses dos dez minutos seguintes.
  *
- * ## O que está escrito aqui
+ * ## O que está escrito aqui — e o que NÃO precisa estar
  *
- * Os parâmetros que as rotas de produto de fato leem, mais os dois que o
- * adaptador do Next já pedia. `header` e `cookie` vêm repetidos do valor que a
- * Netlify mandava sozinha: este cabeçalho SUBSTITUI aquele, e omitir as duas
- * cláusulas tiraria do jogo a variação por prévia e por dado de roteador.
+ * Só os parâmetros que as rotas de produto de fato leem. A Netlify **mescla**
+ * este valor com o que ela mesma emite, em vez de substituí-lo — conferido no
+ * deploy: pedindo apenas `query=…|locale|type|…`, a resposta volta com
+ * `query=__nextDataReq|_rsc|locale|type|…` e com as cláusulas `header=` e
+ * `cookie=` do adaptador intactas. Repetir aqui o que ela já manda só duplica
+ * a lista.
+ *
+ * ⚠️ Parâmetro novo em rota de produto entra nesta linha no mesmo commit. O
+ * sintoma de esquecer é a borda ignorá-lo em silêncio por dez minutos, que
+ * manda depurar no lugar errado — na rota, onde o código está certo.
  */
 const CHAVE_DE_CACHE_DE_PRODUTOS =
-  "query=__nextDataReq|_rsc|locale|type|category|tag|search|limit|sortBy|action," +
-  "header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|" +
-  "next-router-segment-prefetch|next-router-state-tree|next-url|rsc," +
-  "cookie=__prerender_bypass|__next_preview_data";
+  "query=locale|type|category|tag|search|limit|sortBy|action";
 
 const config: NextConfig = {
   // Prevent 308 redirects on trailing slashes — critical for Asaas webhooks

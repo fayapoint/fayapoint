@@ -121,7 +121,7 @@
   for = "/api/products/*"
   [headers.values]
     Cache-Control = "public, s-maxage=600, stale-while-revalidate=1800"
-    Netlify-Vary = "query=__nextDataReq|_rsc|locale|type|category|tag|search|limit|sortBy|action,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data"
+    Netlify-Vary = "query=locale|type|category|tag|search|limit|sortBy|action"
 
 # Cache store
 [[headers]]
