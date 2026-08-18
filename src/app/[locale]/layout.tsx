@@ -14,6 +14,8 @@ export const viewport: Viewport = {
   colorScheme: "dark light",
 };
 import { getMessages, setRequestLocale } from "next-intl/server";
+
+import { messagesDoCliente } from "@/i18n/fatia-do-cliente";
 import { Suspense } from "react";
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
@@ -243,7 +245,25 @@ export default async function RootLayout({
   }
 
   setRequestLocale(locale);
+  /**
+   * ⚠️ O QUE VAI PARA O NAVEGADOR NÃO É O QUE O SERVIDOR USA.
+   *
+   * `getMessages()` traz o dicionário de interface INTEIRO (7.712 entradas,
+   * 806 KB), e está certo que traga: os Server Components traduzem com ele e
+   * não custam um byte de rede. Mas tudo que for entregue ao
+   * `NextIntlClientProvider` é serializado no HTML de toda página `/en`.
+   *
+   * Medido em 18/08/2026, com compressão, como o navegador pede:
+   *
+   *     /pt-BR/cursos    88 KB
+   *     /en/cursos      341 KB     ← +253 KB por visita, quase tudo dicionário
+   *
+   * `messagesDoCliente` troca o dicionário pela fatia que o código de cliente
+   * pode alcançar (ver `src/i18n/fatia-do-cliente.ts`). O resto — a prosa das
+   * páginas de conteúdo, que só Server Component renderiza — fica no servidor.
+   */
   const messages = await getMessages();
+  const messagesParaOCliente = messagesDoCliente(messages);
 
   const organizationLd = {
     "@context": "https://schema.org",
@@ -286,7 +306,7 @@ export default async function RootLayout({
         <UserProvider>
       <ServiceCartProvider>
         <PostHogProvider>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messagesParaOCliente}>
           {/* Google Tag Manager */}
           {GTM_ID && (
             <>

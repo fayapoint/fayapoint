@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
+    "prebuild": "node scripts/i18n/fatiar-dicionario.mjs",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
