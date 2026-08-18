@@ -126,10 +126,17 @@ export async function POST(req: NextRequest) {
       `${revalidadas.length} caminho(s) do Next, em ${ms}ms`,
   );
   /**
-   * `apagadas` é o que torna este conserto verificável de fora. Zero num alvo que
-   * acabou de ser lido significa que a invalidação NÃO está casando com as
-   * chaves que o `getOrSet` escreve — o defeito silencioso clássico daqui
-   * (apagar `products:list` enquanto o cache guarda `v2:products:list`).
+   * `apagadas` é o que torna este conserto verificável de fora: zero num alvo que
+   * acabou de ser lido denuncia invalidação que não casa com as chaves que o
+   * `getOrSet` escreve — o defeito silencioso clássico daqui (apagar
+   * `products:list` enquanto o cache guarda `v2:products:list`).
+   *
+   * ⚠️ Mas zero tem DUAS causas, e confundi-las custa tempo. A outra é a chave
+   * simplesmente não existir — ou porque o TTL venceu, ou porque o pedido com
+   * que você "aqueceu" o cache **nunca chegou até aqui**: a Netlify responde
+   * `/api/products` da borda dela por 560s, e o `Netlify-Vary` só varia por
+   * parâmetros do Next, então nem `?x=aleatório` fura. Para aquecer de verdade,
+   * confira `Cache-Status` na resposta antes de concluir qualquer coisa.
    */
   return NextResponse.json({ ok: true, alvo: slug || "tudo", apagadas, revalidadas, ms });
 }
