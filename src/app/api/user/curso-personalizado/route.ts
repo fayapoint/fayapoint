@@ -14,7 +14,7 @@ import {
 } from "@/lib/course-tiers";
 import { getPrecos } from "@/lib/precos-runtime";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
-import { dividirCapitulos } from "@/lib/curso-personalizado";
+import { dividirCapitulos, digestDoCapitulo, impressaoDoCapitulo } from "@/lib/curso-personalizado";
 import { getOrSet, CACHE_TTL } from "@/lib/redis";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, type PersonaProfunda } from "@/lib/persona";
@@ -200,7 +200,7 @@ export async function GET(request: NextRequest) {
       if (prod?.courseContent) {
         const texto = sanitizeCourseContent(String(prod.courseContent)).content || "";
         hashAtual = new Map(
-          dividirCapitulos(texto).map((c) => [c.indice, impressao(c.corpo.slice(0, 2600))])
+          dividirCapitulos(texto).map((c) => [c.indice, impressaoDoCapitulo(c.corpo, impressao)])
         );
       }
     } catch {
@@ -436,7 +436,7 @@ export async function POST(request: NextRequest) {
           const anterior = jaTem.get(cap.indice);
           if (anterior === undefined) return true;
           if (anterior.versao < versao) return true;
-          return anterior.hash !== impressao(cap.corpo.slice(0, 2600));
+          return anterior.hash !== impressaoDoCapitulo(cap.corpo, impressao);
         });
     const pendentes = listaPendente.length;
 
@@ -569,12 +569,17 @@ export async function POST(request: NextRequest) {
 
     const resultados = await Promise.allSettled(
       loteAtual.map(async (cap) => {
-        const trecho = cap.corpo.slice(0, 2600);
+        // A janela é um DIGEST das seções, não os primeiros 2.600 caracteres:
+        // no corte cego, tudo da seção 4 em diante era invisível para a camada.
+        const trecho = digestDoCapitulo(cap.corpo);
+        // E o hash é do capítulo INTEIRO sem marcador de mídia, não da janela:
+        // reescrever o miolo tem de envelhecer a camada, inserir uma figura não.
+        //
         // O hash fica sobre o texto CRU, com os `{{fact:…}}` no lugar. Se
         // resolvesse antes de hashear, cada atualização do registry mudaria a
         // impressão de todos os capítulos e mandaria regerar a camada de todos
         // os alunos — uma conta de LLM por trocar o nome de um modelo.
-        const hash = impressao(trecho);
+        const hash = impressaoDoCapitulo(cap.corpo, impressao);
         // Já o que vai para o modelo é resolvido: ele não deve ver token, e
         // muito menos copiar um para dentro do texto que o aluno lê.
         const trechoResolvido = applyContentFacts(trecho, fatos);

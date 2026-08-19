@@ -7,7 +7,7 @@ import { getAuthUser } from "@/lib/auth";
 import { getMongoClient } from "@/lib/products";
 import { resolvePlan, TIER_CONFIGS } from "@/lib/course-tiers";
 import { sanitizeCourseContent } from "@/lib/course-content-sanitizer";
-import { dividirCapitulos } from "@/lib/curso-personalizado";
+import { dividirCapitulos, digestDoCapitulo } from "@/lib/curso-personalizado";
 import { applyContentFacts, getContentFacts } from "@/lib/content-facts";
 import { montarDossie, gruposDePrompt, CAMPOS_CRITICOS, type PersonaProfunda } from "@/lib/persona";
 import { saldoDe, garantirCreditos } from "@/lib/creditos";
@@ -420,7 +420,9 @@ export async function POST(request: NextRequest) {
 
     const { escreverCamada } = await import("@/lib/atelie-servidor");
     const fatos = await getContentFacts();
-    const trecho = applyContentFacts(cap.corpo.slice(0, 2600), fatos);
+    // A MESMA janela da geração paga (digest das seções, não o corte cego em
+    // 2.600): a amostra tem de prometer o que o curso pago entrega.
+    const trecho = applyContentFacts(digestDoCapitulo(cap.corpo), fatos);
 
     const escrita = await escreverCamada({
       persona,
