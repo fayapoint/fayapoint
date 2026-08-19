@@ -1638,6 +1638,24 @@ export default function CourseReaderPage() {
       return "";
     };
 
+    /**
+     * O título da seção, nas DUAS línguas.
+     *
+     * ⚠️ Até 19/08/2026 estes testes só conheciam português, e o leitor em
+     * inglês perdia o sistema de seções inteiro — ícone, cor e a régua embaixo
+     * do cabeçalho. Não é enfeite: é o que faz "Erros Comuns" parecer aviso e
+     * "Exercício Prático" parecer tarefa. Medido nas 28 traduções, eram ~2.800
+     * cabeçalhos caindo no ramo sem tratamento.
+     *
+     * As variantes vêm da CONTAGEM do que está no banco, não de palpite: o
+     * tradutor escreveu "Execution Flow" 325 vezes e "Execution Workflow" 35,
+     * "Common Mistakes" 353 e "Common Errors" 7. Título novo que apareça em
+     * volume entra aqui — e o jeito de descobrir é contar `^## ` na coleção
+     * `conteudoTraduzido`.
+     */
+    const casaTitulo = (...titulos: string[]) => (t: string) =>
+      titulos.some((titulo) => t.includes(titulo));
+
     const createHeading = (level: 1 | 2 | 3) => {
       return ({ children, className: cls, ...props }: HeadingProps) => {
         const text = getHeadingText(children);
@@ -1654,21 +1672,21 @@ export default function CourseReaderPage() {
             chip: string;
             icon: string;
           }[] = [
-            { test: (t) => t.includes("Exercício Prático") || t.includes("Exercicio Pratico"),
+            { test: casaTitulo("Exercício Prático", "Exercicio Pratico", "Practical Exercise", "Hands-On Exercise"),
               Icon: Pencil, border: "border-amber-400/30", chip: "bg-amber-500/15 border-amber-400/20", icon: "text-amber-400" },
-            { test: (t) => t.includes("Resumo do Capítulo") || t.includes("Resumo do Capitulo"),
+            { test: casaTitulo("Resumo do Capítulo", "Resumo do Capitulo", "Chapter Summary"),
               Icon: ListChecks, border: "border-emerald-400/30", chip: "bg-emerald-500/15 border-emerald-400/20", icon: "text-emerald-400" },
-            { test: (t) => t.includes("Erros Comuns") || t.includes("Erros comuns"),
+            { test: casaTitulo("Erros Comuns", "Erros comuns", "Common Mistakes", "Common Errors"),
               Icon: AlertTriangle, border: "border-rose-400/30", chip: "bg-rose-500/15 border-rose-400/20", icon: "text-rose-400" },
-            { test: (t) => t.includes("Visão Geral") || t.includes("Visao Geral"),
+            { test: casaTitulo("Visão Geral", "Visao Geral", "Overview"),
               Icon: BookOpen, border: "border-violet-400/30", chip: "bg-violet-500/15 border-violet-400/20", icon: "text-violet-400" },
-            { test: (t) => t.includes("Conceitos-Chave") || t.includes("Conceitos Chave"),
+            { test: casaTitulo("Conceitos-Chave", "Conceitos Chave", "Key Concepts"),
               Icon: Sparkles, border: "border-fuchsia-400/30", chip: "bg-fuchsia-500/15 border-fuchsia-400/20", icon: "text-fuchsia-400" },
-            { test: (t) => t.includes("Fluxo de Execução") || t.includes("Fluxo de Execucao"),
+            { test: casaTitulo("Fluxo de Execução", "Fluxo de Execucao", "Execution Flow", "Execution Workflow"),
               Icon: Play, border: "border-cyan-400/30", chip: "bg-cyan-500/15 border-cyan-400/20", icon: "text-cyan-400" },
-            { test: (t) => t.includes("Cenários Aplicados") || t.includes("Cenarios Aplicados"),
+            { test: casaTitulo("Cenários Aplicados", "Cenarios Aplicados", "Applied Scenarios"),
               Icon: MousePointerClick, border: "border-emerald-400/30", chip: "bg-emerald-500/15 border-emerald-400/20", icon: "text-emerald-400" },
-            { test: (t) => t.includes("Checklist de Implementação") || t.includes("Checklist de Implementacao"),
+            { test: casaTitulo("Checklist de Implementação", "Checklist de Implementacao", "Implementation Checklist"),
               Icon: CheckCircle2, border: "border-emerald-400/30", chip: "bg-emerald-500/15 border-emerald-400/20", icon: "text-emerald-400" },
           ];
 
@@ -1799,7 +1817,17 @@ export default function CourseReaderPage() {
           icon: string;
           body: string;
         }[] = [
-          { test: (t) => t.startsWith("Dica Pro:") || t.startsWith("Dica:"),
+          /**
+           * ⚠️ "Pro Tip:" é o mesmo bloco em inglês, e sem ele o destaque âmbar
+           * — o único callout que TODO capítulo tem — saía sem cor e sem ícone
+           * na árvore /en. Contados no banco: 376 blocos.
+           *
+           * Só "Pro Tip" entra porque só ele existe: varri os blocos `>` das 28
+           * traduções e não há equivalente inglês de "Erro comum:" nem de
+           * "Exemplo:". Adivinhar tradução para regra que ninguém escreve é
+           * como se cria código morto que parece cobertura.
+           */
+          { test: (t) => t.startsWith("Dica Pro:") || t.startsWith("Dica:") || t.startsWith("Pro Tip:"),
             Icon: Lightbulb,
             wrap: "bg-gradient-to-br from-amber-500/[0.08] via-amber-400/[0.04] to-yellow-500/[0.02] border-amber-400/20 shadow-amber-900/10",
             bar: "bg-gradient-to-r from-amber-400/60 via-yellow-400/40 to-amber-400/20",
