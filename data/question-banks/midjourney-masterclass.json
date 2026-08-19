@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "midjourney-masterclass",
+  "lastUpdated": "2026-08-17T11:33:14.909Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "midjourney-masterclass-q001",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que aconteceu com a linha Imagen em 17 de agosto de 2026?",
+      "options": [
+        "Foi atualizada para a versão 5, com melhorias de qualidade.",
+        "Três modelos foram desligados, sem sucessor direto.",
+        "Todos os modelos foram renomeados para Nano Banana.",
+        "O Google anunciou que a linha ficaria gratuita."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 relata que o Google desligou três modelos da linha Imagen, sem sucessor, recomendando migração para Nano Banana.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q002",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que o slider de 'passos' controla em um modelo de difusão?",
+      "options": [
+        "O número de vezes que o modelo refina a imagem removendo ruído.",
+        "A quantidade de imagens geradas em paralelo na mesma execução.",
+        "O tamanho da imagem final em pixels, como 512 ou 1024.",
+        "A velocidade de processamento, quanto maior, mais rápido."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 explica que a difusão remove ruído passo a passo, e mais passos significam mais refinamento.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q003",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que um modelo agente faz antes de gerar a imagem?",
+      "options": [
+        "Ele expande o prompt, decide o layout e às vezes busca referências.",
+        "Ele verifica se o usuário pagou pela geração antes de começar.",
+        "Ele comprime a imagem para um espaço latente para economizar memória.",
+        "Ele aplica filtros de estilo pré-definidos pelo fabricante."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 descreve que o modelo agente expande o prompt, decide layout e consulta a web antes de gerar.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q004",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Por que um prompt com intenção e restrição sobrevive à troca de modelo?",
+      "options": [
+        "Porque o modelo reescreve o prompt e ignora modificadores desnecessários.",
+        "Porque intenção e restrição dependem do objetivo, não da ferramenta.",
+        "Porque modificadores são proibidos pelas novas versões dos modelos.",
+        "Porque o modelo entende melhor adjetivos do que frases de propósito."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma que intenção e restrição são a camada de direção, independente da ferramenta.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q005",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Por que o Midjourney não aparece no topo do Artificial Analysis Arena?",
+      "options": [
+        "Porque o Arena mede aderência ao prompt, e a Midjourney otimiza estilo.",
+        "Porque a Midjourney não participa das votações desde 2025.",
+        "Porque o Arena exclui modelos que cobram por assinatura.",
+        "Porque a Midjourney tem menos usuários votando no sistema."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que o Arena mede aderência ao prompt, enquanto a Midjourney vende assinatura estética.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q006",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Marcos tem um script que usa um modelo descontinuado. Qual é a ação mais alinhada com o capítulo 1?",
+      "options": [
+        "Esperar o modelo voltar, pois descontinuações são temporárias.",
+        "Substituir o nome do modelo por uma variável configurável.",
+        "Reescrever o script inteiro usando uma linguagem mais nova.",
+        "Contatar o suporte do Google para reativar o modelo antigo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 recomenda usar variável para o nome do modelo, facilitando migração futura.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q007",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um cliente pede um banner com texto legível. Qual arquitetura é mais adequada segundo o capítulo 2?",
+      "options": [
+        "GAN, pois gera imagens nítidas com texto claro.",
+        "Difusão latente, pois comprime a imagem sem perder detalhes.",
+        "Diffusion Transformer, pois escala melhor e escreve texto legível.",
+        "Difusão pura, pois é a mais rápida para gerar texto."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 afirma que o Diffusion Transformer (2022-2023) melhorou a legibilidade de texto nas imagens.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q008",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Como verificar se a notícia de um novo modelo é verdadeira, segundo o capítulo 6?",
+      "options": [
+        "Procurar no changelog oficial e na página de pricing do fornecedor.",
+        "Conferir em fóruns e grupos de discussão especializados.",
+        "Esperar o modelo aparecer no Artificial Analysis Arena.",
+        "Perguntar para outros usuários em redes sociais."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 diz que a fonte primária é o changelog oficial e a página de pricing, não boatos.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q009",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual modelo de imagem é o mais indicado para seguir instruções complexas com muitos elementos e texto?",
+      "options": [
+        "Nano Banana 2, da Google, especializado em pessoas críveis.",
+        "GPT Image 2, da OpenAI, que entende a frase inteira.",
+        "Seedream 5, da ByteDance, com separação em camadas.",
+        "Reve 2.1, que aceita até oito imagens de referência."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que o GPT Image 2 é o que melhor segue instrução complicada, entendendo a frase inteira.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q010",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Para qual tipo de tarefa o Midjourney ainda é a melhor escolha?",
+      "options": [
+        "Quando o objetivo é parecer arte, não parecer foto.",
+        "Quando se precisa de aderência literal a um layout.",
+        "Quando se exige separação em camadas com alpha.",
+        "Quando se busca consistência de elenco em poses."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 diz que o Midjourney continua sendo a ferramenta mais forte quando o objetivo é parecer arte, não parecer foto.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q011",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que caracteriza a camada gratuita das ferramentas de imagem em 2026?",
+      "options": [
+        "Cotas generosas, sem marca d'água e com direitos comerciais.",
+        "Cotas reduzidas, marca d'água e restrições de direitos.",
+        "Cotas ilimitadas, mas com fila lenta e resolução menor.",
+        "Cotas diárias acumuláveis e propriedade intelectual do usuário."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que as cotas caíram, a marca d'água apareceu e o direito comercial sumiu da letra miúda.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q012",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual modelo de peso aberto permite uso comercial sem custo de licença?",
+      "options": [
+        "FLUX.2 [klein], que exige camada paga para uso comercial.",
+        "HiDream-O1-Image, com ecossistema de LoRA reduzido.",
+        "Z-Image Turbo, distribuído sob licença Apache 2.0.",
+        "Qwen-Image 3.0, que foi fechado pela Alibaba."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que o Z-Image Turbo é Apache 2.0, liberando quase tudo, enquanto outros têm restrições.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q013",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual é a principal limitação do Recraft V4 para quem precisa de vetor?",
+      "options": [
+        "Ele não gera imagens raster, apenas vetores complexos.",
+        "O export SVG só está disponível nos planos Pro e Team.",
+        "Ele não aceita prompts em português, apenas inglês.",
+        "Ele tem um limite de 10 imagens por dia no plano gratuito."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 destaca que o export SVG só existe nos planos Pro e Team do Recraft.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q014",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual situação caracteriza a franquia disfarçada de 'recurso principal atrás do paywall'?",
+      "options": [
+        "A imagem sai com marca d'água visível na versão gratuita.",
+        "A plataforma detém a propriedade intelectual das criações.",
+        "O export SVG é bloqueado no plano gratuito do Recraft.",
+        "A API gratuita do Gemini não oferece nenhuma cota de imagem."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 cita o Recraft como exemplo de recurso principal (SVG) atrás do paywall.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q015",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um cliente precisa de um banner com fundo transparente para montar no Figma. Qual ferramenta é a única que entrega camadas separadas?",
+      "options": [
+        "GPT Image 2, que edita sem destruir o resto do quadro.",
+        "Seedream 5, que gera 10 ou mais camadas PNG independentes.",
+        "Nano Banana 2, que mantém consistência de elenco.",
+        "MAI-Image-2.5, que preserva rostos em edição localizada."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que o Seedream 5 tem separação em camadas, recurso que ninguém mais tem.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q016",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual é a diferença entre a franquia disfarçada de imagem pública e a de propriedade intelectual retida?",
+      "options": [
+        "Imagem pública é a que aparece no feed; PI retida é a plataforma ser dona.",
+        "Imagem pública é quando você pode vender; PI retida é quando não pode.",
+        "São a mesma coisa, ambas inviabilizam uso comercial.",
+        "Imagem pública só ocorre em planos pagos; PI retida no gratuito."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 distingue imagem pública (vira vitrine) de PI retida (plataforma é dona), que são moedas diferentes.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q017",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que significa 'aberto' quando falamos de um modelo de IA?",
+      "options": [
+        "Que o modelo pode ser usado para qualquer fim, inclusive vender.",
+        "Que o acesso ao peso do modelo está disponível para download.",
+        "Que a licença permite uso comercial sem pagar nada.",
+        "Que o modelo é gratuito e sem restrições de uso."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 define 'aberto' como acesso ao peso do modelo, não à licença de uso.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q018",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que é quantização em um modelo de imagem?",
+      "options": [
+        "É o processo de treinar o modelo com mais dados para melhorar a qualidade.",
+        "É a compressão do modelo para ocupar menos memória com pequena perda.",
+        "É a técnica de gerar imagens em alta resolução usando mais passos.",
+        "É a forma de conectar o modelo a um fluxo de trabalho em nós."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que quantização comprime o modelo para caber em menos VRAM com pequena perda.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q019",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Quais são os três gargalos da camada gratuita de serviços de imagem?",
+      "options": [
+        "Volume, direito de uso e consistência visual.",
+        "Velocidade de resposta, qualidade de imagem e preço.",
+        "Número de modelos, tamanho do prompt e suporte técnico.",
+        "Marca d'água, resolução máxima e tempo de espera."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 lista volume, direito de uso e consistência como os três gargalos da camada gratuita.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q020",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual é a principal diferença entre a camada gratuita do Gemini e a do Firefly em agosto de 2026?",
+      "options": [
+        "O Gemini dá 20 por dia, o Firefly 25 por mês.",
+        "O Gemini não tem marca d'água, o Firefly tem.",
+        "O Gemini dá direito comercial, o Firefly não.",
+        "O Gemini gera em segundos, o Firefly leva minutos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 mostra que em agosto de 2026 o Gemini permite 20 imagens por dia e o Firefly 25 por mês.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q021",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Como calcular o custo mensal real de uma placa de vídeo para decidir se vale a pena comprar?",
+      "options": [
+        "Divida o preço por 24 meses e some o custo de energia.",
+        "Multiplique o preço pela quantidade de imagens geradas.",
+        "Compare o preço com o custo de uma assinatura de nuvem.",
+        "Some o preço da placa ao preço do computador novo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 ensina a dividir o preço por 24 meses e somar energia para achar o custo mensal.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q022",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um cliente pede imagens geradas com FLUX.2 [dev] para vender. O que você deve fazer antes de aceitar?",
+      "options": [
+        "Verificar a licença do modelo para uso comercial.",
+        "Baixar o modelo do repositório oficial e testar.",
+        "Usar o modelo local com quantização para economizar.",
+        "Comparar o preço da placa com o custo da nuvem."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 alerta que o FLUX.2 [dev] exige licença paga para uso comercial, então é preciso verificar.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q023",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Você tem uma placa com 8 GB de VRAM e precisa gerar imagens para um cliente. Qual modelo é o mais adequado?",
+      "options": [
+        "Z-Image Turbo quantizado, roda em 6 a 8 GB.",
+        "FLUX.2 [dev] em FP8, que exige 16 GB de VRAM.",
+        "SDXL em FP16, que precisa de 12 GB de memória.",
+        "Qwen-Image 2512 nativo, que usa 24 GB de VRAM."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 indica que o Z-Image Turbo quantizado roda em 6 a 8 GB, ideal para placas de 8 GB.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q024",
+      "courseSlug": "midjourney-masterclass",
+      "question": "No Mac com M5 Max, qual é a principal vantagem do Draw Things sobre o ComfyUI?",
+      "options": [
+        "Usa Metal FlashAttention e Neural Accelerators para acelerar.",
+        "Ele permite rodar modelos em 16 bits sem quantização.",
+        "Ele gera imagens em resolução 4K sem perder qualidade.",
+        "Ele não precisa de internet para baixar os modelos do repositório."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 destaca que o Draw Things usa Metal FlashAttention e Neural Accelerators, acelerando a geração.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q025",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual é o ganho de usar NVFP4 em uma RTX 5090 comparado ao FP16?",
+      "options": [
+        "Acelera até 2,7 vezes e usa cerca de 55% menos VRAM",
+        "Reduz a velocidade para economizar energia e memória",
+        "Aumenta a precisão numérica dos pesos do modelo",
+        "Permite rodar modelos maiores sem quantização"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que NVFP4 proporciona até 2,7 vezes de velocidade com cerca de 55% menos VRAM em relação ao FP16.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q026",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Segundo o capítulo, qual é a alternativa mais barata para quem gera até 2.000 imagens por mês?",
+      "options": [
+        "Comprar uma placa de vídeo e gerar localmente",
+        "Assinar um serviço com geração ilimitada em modo relax",
+        "Pagar por imagem em uma API de alto custo",
+        "Usar um agregador de pesos abertos com preço baixo"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 explica que entre 500 e 2.000 imagens, a assinatura com relax ilimitado ganha da placa própria e da API.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q027",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Por que uma imagem gerada por IA não pode ser registrada como obra autoral?",
+      "options": [
+        "Porque a lei exige autoria humana para proteção autoral",
+        "Porque a máquina é considerada autora legal da obra",
+        "Porque o registro é automático e não requer pedido",
+        "Porque a imagem é considerada domínio público"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 afirma que a proteção autoral exige autoria humana, e a Suprema Corte recusou o caso Thaler.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q028",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que a decisão do Reino Unido em 04/11/2025 confirmou sobre as saídas da Stability AI?",
+      "options": [
+        "Que a Stability violou copyright em todas as imagens geradas",
+        "Que a presença de marcas da Getty nas saídas violou marcas",
+        "Que treinar IA com obra protegida é legal no Reino Unido",
+        "Que a Getty perdeu todas as alegações, incluindo marcas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 diz que o tribunal confirmou a violação de marcas da Getty nas saídas, mas não decidiu sobre copyright.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q029",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Para cumprir o Artigo 50 do AI Act, o que um gerador de imagens deve fazer além de adicionar um selo visual?",
+      "options": [
+        "Inserir metadados legíveis por máquina e garantir que permaneçam após edições",
+        "Registrar a obra no escritório de direitos autorais",
+        "Obter autorização do autor do modelo de IA",
+        "Publicar o código-fonte do modelo e treinar dados"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 exige marcação legível por máquina e alerta que pós-processamento pode remover metadados, exigindo verificação.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q030",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um usuário tem uma RTX 3060 e baixa uma versão NVFP4 do modelo. Qual é o resultado esperado?",
+      "options": [
+        "A velocidade aumenta 2,7 vezes porque o formato é mais leve",
+        "A velocidade não melhora e pode até piorar, pois falta hardware dedicado",
+        "A velocidade aumenta 1,6 vezes, igual ao FP8",
+        "O modelo não carrega, pois NVFP4 é incompatível com RTX 30"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que NVFP4 é específico das RTX 50; em placas sem suporte, a velocidade não melhora e pode piorar.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q031",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um freelancer gera 300 imagens por mês e pensa em comprar uma RTX 5060 Ti. Qual é a decisão correta segundo o capítulo?",
+      "options": [
+        "Comprar, pois o ponto de equilíbrio é atingido em 3.500 imagens",
+        "Não comprar, pois abaixo de 500 imagens a assinatura é mais vantajosa",
+        "Comprar, pois a máquina se paga em 1 mês com 300 imagens",
+        "Não comprar, pois a API é mais barata que a assinatura"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 conclui que abaixo de 500 imagens por mês, a assinatura com relax ilimitado é a decisão certa.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q032",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um cliente imobiliário pede para remover um carro da frente de uma foto. O que Marcos deve fazer segundo o capítulo?",
+      "options": [
+        "Entregar a imagem sem aviso, pois não há lei de IA no Brasil",
+        "Recusar o trabalho, pois é proibido alterar fotos",
+        "Alterar a imagem e identificar a alteração no contrato e nos metadados",
+        "Pedir autorização ao autor da foto original"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 mostra que a corretagem exige divulgação de alterações, então Marcos deve identificar a alteração.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q033",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que faz o padrão C2PA em imagens geradas por IA?",
+      "options": [
+        "Embute marca d'água invisível nos pixels da imagem.",
+        "Anexa metadados criptográficos com origem e edições.",
+        "Remove metadados para esconder a origem da imagem.",
+        "Detecta imagens geradas por IA em qualquer plataforma."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 define C2PA como um padrão que anexa metadados criptográficos com a cadeia de origem e edições.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q034",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Qual é o principal argumento que fecha venda no serviço de foto de produto com IA?",
+      "options": [
+        "Reduzir custo de produção em até 95% com IA.",
+        "Aumentar a conversão com try-on virtual em 35%.",
+        "Reduzir a devolução em 25% a 40% com try-on.",
+        "Economizar em estúdio, fotógrafo e modelo."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 afirma que o número que fecha é a redução de devolução, pois protege receita, não apenas corta custo.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q035",
+      "courseSlug": "midjourney-masterclass",
+      "question": "O que é curadoria no contexto de marketing com IA generativa?",
+      "options": [
+        "Gerar muitas imagens e escolher a mais bonita.",
+        "Escolher com base em critérios explícitos definidos antes.",
+        "Deixar o cliente escolher entre vinte opções.",
+        "Usar a primeira imagem que parece boa."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 define curadoria como escolha baseada em critérios explícitos, não em gosto pessoal.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q036",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Por que o staging virtual tem alta margem, mas exige declaração legal?",
+      "options": [
+        "Porque custa centavos e vende caro, mas exige declarar alteração.",
+        "Porque a IA substitui o editor, mas a lei exige aviso.",
+        "Porque o custo é baixo, mas a margem é alta e a lei obriga.",
+        "Porque o preço é alto, mas a declaração é opcional."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 mostra que o custo é baixo (US$ 0,25 a US$ 2,00) e o preço alto (US$ 16 a US$ 75), mas a regra de corretagem exige declarar alteração.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "media"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q037",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Em arquitetura, quando se deve usar IA para gerar renders?",
+      "options": [
+        "Para o render final aprovado para obra, com pipeline tradicional.",
+        "Para a fase de exploração, gerando variações para decisão.",
+        "Para substituir o arquiteto na entrega final do projeto.",
+        "Para reduzir o custo do render final em 90% com IA."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 explica que a IA substitui a fase de exploração, não a entrega final, que continua no pipeline tradicional.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q038",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um cliente pede imagens para uma campanha. Você tem a rotina de recheque trimestral. O que deve fazer primeiro?",
+      "options": [
+        "Reabrir o leaderboard e anotar as três primeiras posições.",
+        "Ler o changelog do fornecedor e ajustar o prompt.",
+        "Comparar preços e recalcular a margem do projeto.",
+        "Reescrever o método de direção e revisão."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 define o primeiro passo do recheque como reabrir o leaderboard e anotar as três primeiras posições.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q039",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um cliente pede para remover metadados de uma imagem gerada por IA para esconder a origem. O que explicar?",
+      "options": [
+        "Que o SynthID sobrevive à remoção e ainda detecta a imagem.",
+        "Que o C2PA é criptográfico e não pode ser removido.",
+        "Que a remoção de metadados é legal e segura para o cliente.",
+        "Que a plataforma de destino não detecta imagens alteradas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 afirma que o SynthID sobrevive à remoção de metadados, então esconder é inútil.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "midjourney-masterclass-q040",
+      "courseSlug": "midjourney-masterclass",
+      "question": "Um cliente de eletrônicos tem alta devolução porque a foto do produto não bate com o real. O que propor?",
+      "options": [
+        "Usar try-on virtual para aumentar a conversão em 35%.",
+        "Refazer as fotos com IA ajustando o acabamento real.",
+        "Reduzir o preço do produto para compensar a devolução.",
+        "Esconder a origem da imagem para não gerar desconfiança."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T11:33:14.909Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 mostra que a IA deve ajustar a imagem para ser fiel ao produto real, atacando a causa da devolução.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    }
+  ]
+}

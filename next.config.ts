@@ -60,6 +60,23 @@ const config: NextConfig = {
   turbopack: {
     root: '.',
   },
+
+  /**
+   * Os bancos de questões precisam VIAJAR com a função.
+   *
+   * `/api/courses/[slug]/quiz` lê `data/question-banks/<slug>.json` com um
+   * caminho montado em tempo de execução. O rastreador do Next segue `import`,
+   * não `path.join(process.cwd(), …)` — então o arquivo fica no repositório, o
+   * `git` mostra o commit, e **a função em produção não o encontra**.
+   *
+   * O defeito é mudo, que é o pior formato: `readQuestionBank` devolve `null`,
+   * a rota cai no caminho de gerar a prova por LLM, e o aluno recebe uma
+   * avaliação plausível. Ninguém vê erro nenhum — só se paga OpenRouter por
+   * prova e se joga fora as 120 questões calibradas dos três cursos.
+   */
+  outputFileTracingIncludes: {
+    "/api/courses/[slug]/quiz": ["./data/question-banks/**"],
+  },
   
   async headers() {
     return [

@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+  "lastUpdated": "2026-08-17T10:05:15.271Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q001",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "No fluxo de pesquisa com IA, o que a resposta pronta com citação numerada exige do usuário?",
+      "options": [
+        "Aceitar a resposta como verdadeira, pois a citação garante a fonte.",
+        "Conferir se a fonte citada sustenta exatamente a frase da resposta.",
+        "Ignorar as citações, pois são apenas enfeites visuais.",
+        "Copiar a resposta sem verificar, pois a IA é confiável."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 mostra que a resposta pronta move o trabalho para depois, exigindo conferência da fonte citada.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q002",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Dos quatro modos de falha de citação descritos no capítulo, qual é o mais comum?",
+      "options": [
+        "Conteúdo fabricado, quando a ferramenta inventa a fonte inteira.",
+        "Citação falsa, quando o link aponta para outra passagem.",
+        "Fonte deturpada, quando a página existe mas não afirma o que a resposta diz.",
+        "Conselho desatualizado, quando a informação mudou desde a data original."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 afirma que a fonte deturpada é o modo mais comum, pois o link funciona e o leitor para ali.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q003",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual é o nome atual do recurso do Perplexity que antes se chamava Collections e depois Spaces?",
+      "options": [
+        "Projects, que reúne conversas, arquivos e instruções num contêiner.",
+        "Folders, que organiza pesquisas em pastas separadas.",
+        "Workspaces, que integra com ferramentas externas.",
+        "Dashboards, que exibe estatísticas de uso do sistema."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que o recurso foi renomeado para Projects, confirmado na página do Help Center.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q004",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Considerando os estudos Tow Center e EBU/BBC, qual conclusão comum sobre a acurácia de citações?",
+      "options": [
+        "O Perplexity errou 37% das citações, o melhor entre os testados.",
+        "O ChatGPT Search errou mais de 60% das citações em ambos os estudos.",
+        "Todos os chatbots apresentaram erros de atribuição em proporções significativas.",
+        "A versão paga sempre supera a gratuita em acurácia de citação."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 mostra que ambos os estudos encontraram erros significativos em todos os modelos, com o Perplexity como melhor, mas ainda com 37% de erro.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q005",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "No protocolo de seis passos, qual passo é específico para evitar usar informação desatualizada?",
+      "options": [
+        "Abrir o link da citação antes de ler o parágrafo.",
+        "Procurar a frase exata com Ctrl+F na página.",
+        "Conferir a data da fonte, não a da resposta.",
+        "Rodar a mesma pergunta em dois modelos diferentes."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve o passo 3 como conferir a data da fonte para atacar informação desatualizada.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q006",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Um advogado usa IA para citar jurisprudência numa petição. O link abre, mas o texto não contém a decisão citada. Qual modo de falha e qual consequência provável?",
+      "options": [
+        "Fonte fabricada; multa e representação à OAB.",
+        "Fonte deturpada; multa e representação à OAB.",
+        "Citação falsa; apenas advertência do juiz.",
+        "Conselho desatualizado; nova pesquisa necessária."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 mostra que a fonte deturpada ocorre quando a página existe mas não sustenta a frase, e o caso brasileiro resultou em multa e representação à OAB.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q007",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "No protocolo, quando a afirmação cai em domínio regulado (ex.: norma da Receita), qual passo adicional é obrigatório?",
+      "options": [
+        "Exigir que a fonte esteja em base oficial, como site do governo.",
+        "Confiar no link se a página carregar sem erro.",
+        "Usar apenas a resposta do Perplexity como suficiente.",
+        "Rodar a pergunta em três modelos para garantir."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 estabelece o passo 6: em domínio regulado, exigir base oficial, pois o link de blog não basta.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q008",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Renata precisa compartilhar um projeto com dados sensíveis apenas com o time interno. Qual escopo de acesso deve escolher?",
+      "options": [
+        "Restricted, que limita o acesso apenas ao dono.",
+        "Anyone with the link, que permite qualquer pessoa ver.",
+        "Organization can view, que restringe ao time da organização.",
+        "Organization can edit, que permite edição por todos."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que Organization can view é o escopo para compartilhar com o time interno, enquanto Restricted é só o dono.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q009",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "No seletor de modos do Perplexity, o que significa a opção 'Best'?",
+      "options": [
+        "É um modo separado que prioriza respostas rápidas.",
+        "É a escolha automática de modelo dentro do Search.",
+        "É um modo que gera relatórios longos com várias etapas.",
+        "É um modo que busca apenas em fontes acadêmicas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 explica que 'Best' não é um modo separado, mas a escolha automática de modelo dentro do Search.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q010",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Quando a Perplexity deixa de publicar um número de limite no site oficial, o que isso significa?",
+      "options": [
+        "O número virou variável e pode mudar sem aviso.",
+        "O número é fixo e garantido por contrato, sem revisão.",
+        "O número está disponível apenas para assinantes.",
+        "O número foi removido por erro de atualização."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 afirma que limite não publicado é variável, decisão de negócio revisável.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q011",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Segundo o capítulo 9, qual é a fonte confiável para saber quais modelos estão disponíveis na sua conta?",
+      "options": [
+        "A documentação oficial do Perplexity, que é sempre atualizada.",
+        "O seletor de modelos na tela do Perplexity, a fonte de verdade.",
+        "O site do fornecedor do modelo, que lista todas as integrações.",
+        "Os blogs especializados, que testam as versões mais recentes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 diz que a tela é a fonte de verdade, pois a documentação muda rápido.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q012",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Em quais planos o Model Council está disponível, segundo o capítulo 10?",
+      "options": [
+        "Apenas nos planos Max e Enterprise Max, somente na web.",
+        "Em todos os planos pagos, incluindo Pro e Education Pro, sem restrição.",
+        "No plano Free e no Pro, mas com limitação de uso.",
+        "No Enterprise Pro e no Max, mas apenas no aplicativo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que o Model Council existe só nos planos Max e Enterprise Max, e funciona apenas na web.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q013",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "O que o estudo da EBU/BBC de 21/10/2025 concluiu sobre o Gemini?",
+      "options": [
+        "Foi o pior assistente, com 76% de respostas com problema.",
+        "Foi o melhor em atribuição, com apenas 37% de erros, superando o Perplexity.",
+        "Ficou em segundo lugar, atrás do Perplexity, com boa precisão.",
+        "Não apresentou problemas de atribuição nas respostas testadas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 cita o estudo da EBU/BBC que colocou o Gemini como o pior, com 76% de respostas com problema significativo.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q014",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Por que o mesmo modelo pode se comportar de forma diferente dentro do Perplexity em comparação ao site do fornecedor?",
+      "options": [
+        "Porque o Perplexity injeta contexto próprio e limita o tamanho da resposta.",
+        "Porque o fornecedor bloqueia o uso do modelo em outras plataformas.",
+        "Porque o Perplexity usa uma versão antiga do modelo sem atualização.",
+        "Porque o modelo é treinado novamente com dados exclusivos do Perplexity."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que o Perplexity injeta contexto próprio, limita o tamanho da resposta e adapta o modelo ao formato de busca.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q015",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Ao conferir uma citação do ChatGPT, qual é a abordagem correta, segundo o capítulo 11?",
+      "options": [
+        "Buscar a frase exata na fonte citada, pois o modelo copia trechos literais e não parafraseia.",
+        "Procurar o conceito na fonte, pois o modelo parafraseia e pode não repetir as palavras.",
+        "Confiar na citação se a fonte existir, sem precisar ler o conteúdo, pois a URL é suficiente.",
+        "Verificar apenas se a URL está ativa, sem comparar com o texto da resposta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 diz que o ChatGPT parafraseia, então você deve procurar o conceito, não a frase exata.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q016",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Por que o AI Mode do Google, apesar da grande escala, tem pior atribuição de fontes?",
+      "options": [
+        "Porque ele combina o ranking tradicional com um modelo que reescreve a informação.",
+        "Porque ele indexa menos páginas que o Bing e o DuckDuckGo, limitando a cobertura e a precisão.",
+        "Porque ele não usa inteligência artificial, apenas busca por palavras-chave, sem síntese e sem contexto.",
+        "Porque ele prioriza sites pagos em detrimento de fontes confiáveis, distorcendo os resultados."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 explica que o AI Mode sintetiza com IA generativa, o que leva a erros de atribuição.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q017",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Quando o Claude não encontra uma resposta confiável na web, ele:",
+      "options": [
+        "Ele recusa responder e afirma que não encontrou fonte confiável.",
+        "Ele inventa uma resposta e a apresenta como se fosse verdadeira.",
+        "Ele cita uma fonte qualquer sem verificar se ela existe de fato.",
+        "Ele responde com base em conhecimento de memória e sem citar fontes."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que o Claude recusa responder quando não encontra fonte confiável, em vez de inventar.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q018",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "O que é necessário para o Copilot acessar seus e-mails e arquivos?",
+      "options": [
+        "Ativar o modo Trabalho e aceitar as permissões de acesso.",
+        "Usar uma conta gratuita da Microsoft e ativar a busca na web.",
+        "Pagar a assinatura Premium e configurar o histórico de conversas.",
+        "Instalar o aplicativo no celular e conectar a conta corporativa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que o Work Mode é necessário para o Copilot acessar e-mails e arquivos.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q019",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual ferramenta publica a latência de cada modo de busca?",
+      "options": [
+        "A Exa publica os tempos de Search, Deep Search e deep-reasoning.",
+        "A Kagi publica o tempo de resposta do modo Research em segundos.",
+        "O Perplexity mostra o painel de progresso com as fontes lidas.",
+        "O Copilot mostra o histórico de conversas salvas no Word."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 mostra que a Exa publica a latência de cada modo de busca, ao contrário das outras.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q020",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual é o elemento mais valioso de uma pesquisa profunda do Perplexity?",
+      "options": [
+        "O painel de progresso, pois permite auditar as fontes durante a execução.",
+        "O relatório final com citações numeradas e resumo executivo completo.",
+        "A capacidade de fazer perguntas de esclarecimento antes de começar a pesquisa.",
+        "O sandbox de código que permite calcular e validar números complexos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 destaca que o painel de progresso é a parte auditável da pesquisa profunda.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q021",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Quais são as quatro dimensões que um pedido de pesquisa profunda deve conter?",
+      "options": [
+        "Escopo, data, fonte e formato da resposta final.",
+        "Título, resumo, conclusão e lista de referências bibliográficas.",
+        "Pergunta, contexto, objetivo e público-alvo da decisão final.",
+        "Tema, palavras-chave, idioma e quantidade de fontes desejadas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 define as quatro dimensões do pedido: escopo, data, fonte e formato.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q022",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual é a principal lacuna de evidência sobre o Claude com busca?",
+      "options": [
+        "Nenhum estudo independente mediu a acurácia de citação em notícias.",
+        "Ele não tem navegador próprio e depende de conteúdo público da web.",
+        "Ele recusa responder com frequência, o que limita a coleta de dados.",
+        "Ele não mantém base de conhecimento persistente como os Projects."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 aponta que não há estudo independente sobre a acurácia de citação do Claude.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q023",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "O que aconteceu com o Deep Research do consumidor do Copilot?",
+      "options": [
+        "Foi desligado em agosto de 2026 e substituído pelo Researcher pago.",
+        "Ficou gratuito para todos os usuários do Microsoft 365 pessoal.",
+        "Passou a exigir assinatura do Microsoft 365 Premium para acesso.",
+        "Continuou ativo apenas para contas corporativas com licença completa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 informa que o Deep Research do consumidor foi desligado em agosto de 2026.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q024",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual método o capítulo recomenda para verificar um relatório de pesquisa profunda?",
+      "options": [
+        "Selecionar cinco afirmações críticas e conferir cada uma na fonte.",
+        "Ler o relatório inteiro novamente para não perder nenhum detalhe.",
+        "Conferir todas as citações numeradas do relatório, uma por uma.",
+        "Confiar no resumo executivo, pois ele sintetiza as conclusões principais."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 recomenda selecionar cinco afirmações críticas e verificar cada uma na fonte.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q025",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Quais serviços publicam tempos de resposta para deep research?",
+      "options": [
+        "Exa e Kagi são os que publicam latência.",
+        "Perplexity e ChatGPT não publicam nenhum tempo.",
+        "Gemini Notebook e Copilot publicam seus tempos.",
+        "Todos os grandes serviços publicam tempos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que Exa e Kagi são os únicos que publicam tempos de resposta.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q026",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual é a regra da AP sobre conteúdo gerado por IA?",
+      "options": [
+        "Deve ser revisado e editado por jornalistas.",
+        "Pode ser publicado sem qualquer revisão humana.",
+        "É permitido apenas para uso interno, não público.",
+        "Deve ser claramente rotulado como gerado por IA."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 cita a regra da AP: todo output gerado por IA é revisado e editado por jornalistas.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q027",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual é a principal característica do Gemini Notebook?",
+      "options": [
+        "Responde apenas com base nas fontes enviadas.",
+        "Busca respostas em toda a internet aberta.",
+        "Gera imagens a partir de descrições textuais.",
+        "Fornece dados de mercado em tempo real contínuo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 explica que o Gemini Notebook responde apenas com base nas fontes enviadas.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q028",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual é o limite de upload por arquivo no Perplexity Projects?",
+      "options": [
+        "O limite é de 40 MB por arquivo para todos os tipos.",
+        "O limite é de 100 MB por arquivo para PDFs.",
+        "O limite é de 10 MB por arquivo para vídeos.",
+        "Não há limite de tamanho para nenhum tipo de arquivo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 diz que o limite de upload é 40 MB por arquivo para todos os tipos.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q029",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "O que acontece ao enviar um documento de 200 páginas ao Perplexity?",
+      "options": [
+        "Ele lê todas as páginas e responde qualquer detalhe.",
+        "Ele extrai apenas as partes mais importantes.",
+        "Ele rejeita arquivos com mais de 100 páginas.",
+        "Ele resume o documento em uma única página."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 diz que o Perplexity extrai as partes mais importantes de documentos longos.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q030",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Você precisa de uma pesquisa profunda com prazo garantido. Qual serviço escolher?",
+      "options": [
+        "Perplexity Pro, porque publica limites mensais.",
+        "Exa, porque publica faixas de latência claras.",
+        "Gemini Notebook, porque é gratuito e rápido.",
+        "Copilot, porque tem suporte corporativo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 mostra que apenas a Exa publica faixas de latência, garantindo prazo.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q031",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Segundo as diretrizes da AP, qual tarefa a IA pode fazer sem revisão humana?",
+      "options": [
+        "Verificar a veracidade de uma notícia de última hora.",
+        "Transcrever uma entrevista para edição posterior.",
+        "Confirmar a identidade de uma fonte confiável.",
+        "Tomar decisões editoriais sobre a cobertura."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 lista transcrição como uso permitido, enquanto verificação e decisão editorial são proibidas.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q032",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Por que é importante colocar a data no nome do arquivo ao montar uma base?",
+      "options": [
+        "Porque a ferramenta ordena arquivos alfabeticamente.",
+        "Para impedir que versões desatualizadas vençam.",
+        "Para tornar o nome do arquivo mais profissional.",
+        "Porque as instruções do projeto exigem data."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 ensina que a data no nome impede que versões antigas vençam por padrão.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q033",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "O que fazer com um item da base que perdeu a validade?",
+      "options": [
+        "Arquivar por via das dúvidas para uso futuro.",
+        "Deletar sem dó, pois o que venceu venceu.",
+        "Manter para referência, pois pode ser útil.",
+        "Mover para outra pasta para melhor organização."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 orienta a deletar sem dó o que venceu, pois manter item morto aumenta o ruído nas respostas.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q034",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Sua base contém um link para 'Collections'. O que aconteceu com esse recurso?",
+      "options": [
+        "Foi renomeado para Spaces e depois Projects.",
+        "Foi descontinuado sem substituto direto.",
+        "Continua com o mesmo nome até hoje em dia.",
+        "Agora se chama Gemini Notebook, não Projects."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 registra que Collections virou Spaces e depois Projects, quebrando links antigos.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q035",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual a principal obrigação imposta pela Resolução CNJ 615/2025 para uso de IA no Judiciário?",
+      "options": [
+        "Supervisão humana em toda decisão final.",
+        "Uso exclusivo de IA para agilizar processos.",
+        "Proibição total do uso de IA no Judiciário.",
+        "Registro de todas as decisões em blockchain."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 estabelece que a Resolução CNJ 615/2025 proíbe decisão exclusiva por IA, exigindo supervisão humana.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "media"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q036",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Um médico usa IA para buscar informações sobre um tratamento. Segundo a Resolução CFM 2.454/2026, o que ele deve fazer?",
+      "options": [
+        "Informar o paciente e registrar no prontuário.",
+        "Não precisa informar se for apenas uma busca.",
+        "Deixar a IA decidir o tratamento mais adequado.",
+        "Registrar apenas se houver diagnóstico final."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 exige informar o paciente e registrar no prontuário sempre que a IA for usada como apoio.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q037",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "O que o Artigo 50 do AI Act exige para conteúdo gerado por IA?",
+      "options": [
+        "Rotulagem clara e metadados legíveis por máquina.",
+        "Remoção imediata de todo conteúdo sintético.",
+        "Autorização prévia de uma autoridade europeia.",
+        "Pagamento de taxa para cada publicação gerada."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 explica que o Artigo 50 do AI Act obriga a rotulagem clara e metadados legíveis por máquina.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q038",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Um pesquisador usou IA para gerar uma lista de referências. O que ele deve fazer antes de citá-las?",
+      "options": [
+        "Verificar cada referência na fonte primária.",
+        "Citar a IA como autor da lista de referências.",
+        "Confiar na lista sem checar, pois IA é precisa.",
+        "Usar apenas referências de blogs e fóruns."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 manda verificar cada referência na fonte primária, pois a IA pode inventar citações.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q039",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "Qual a frequência recomendada para rechecar seus recursos de IA?",
+      "options": [
+        "A cada três meses, em dia fixo do calendário.",
+        "Uma vez por ano, no início de cada ano novo.",
+        "A cada seis meses, sem data fixa no calendário.",
+        "Nunca, pois as ferramentas se atualizam sozinhas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 recomenda rechecar recursos a cada três meses, com dia fixo no calendário.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "facil"
+      ]
+    },
+    {
+      "id": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo-q040",
+      "courseSlug": "perplexity-pesquisa-inteligente-e-conhecimento-instantaneo",
+      "question": "O que diferencia a camada de protocolo da camada de recursos no trabalho com IA?",
+      "options": [
+        "Protocolo independe do nome da ferramenta.",
+        "Recursos são imutáveis e permanentes ao longo do tempo.",
+        "Protocolo muda a cada renomeação do produto.",
+        "Recursos são mais importantes que o protocolo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:05:15.271Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 distingue protocolo de recursos, afirmando que o protocolo independe do nome da ferramenta.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}

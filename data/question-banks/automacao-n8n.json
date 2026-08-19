@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "automacao-n8n",
+  "lastUpdated": "2026-08-17T10:48:56.046Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "automacao-n8n-q001",
+      "courseSlug": "automacao-n8n",
+      "question": "O que o n8n cobra por execução de workflow, independente do número de passos. Qual é a unidade de cobrança do n8n?",
+      "options": [
+        "Por execução de workflow, independente do número de passos",
+        "Por chamada de módulo, cada passo custa um crédito",
+        "Por workflow ativo, cobrado mensalmente por workflow",
+        "Por passo executado, com descontos para fluxos longos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que o n8n cobra por execução de workflow, com passos ilimitados.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q002",
+      "courseSlug": "automacao-n8n",
+      "question": "Todo fluxo de automação tem três partes essenciais. Quais são elas?",
+      "options": [
+        "Gatilho que acorda, passos que transformam, e destino final",
+        "Webhook, módulo e sistema de notificação por e-mail",
+        "Entrada, processamento e saída com tratamento de erro",
+        "Início, meio e fim com ramificações condicionais"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 define gatilho, passos e destino como a anatomia de qualquer fluxo.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q003",
+      "courseSlug": "automacao-n8n",
+      "question": "Qual é a garantia de entrega da maioria dos webhooks, segundo o capítulo 3?",
+      "options": [
+        "Entrega pelo menos uma vez, então duplicatas são esperadas",
+        "Entrega exatamente uma vez, garantindo não haver duplicatas",
+        "Entrega no máximo uma vez, perdendo eventos ocasionalmente",
+        "Entrega garantida sem retries ou repetições"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 explica que a garantia 'pelo menos uma vez' torna a duplicação um comportamento normal.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q004",
+      "courseSlug": "automacao-n8n",
+      "question": "Por que um fluxo precisa de estado externo para evitar processamento duplicado?",
+      "options": [
+        "Porque fluxos não têm memória entre execuções",
+        "Porque webhooks sempre enviam eventos duplicados",
+        "Porque a ferramenta armazena dados apenas durante a execução",
+        "Porque gatilhos não conseguem identificar eventos únicos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma que todo fluxo é sem estado, então é preciso consultar um armazenamento externo para saber o que já foi processado.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q005",
+      "courseSlug": "automacao-n8n",
+      "question": "Antes de escolher entre n8n e Make, o que o capítulo 5 recomenda fazer?",
+      "options": [
+        "Desenhar o fluxo e calcular o volume mensal de execuções",
+        "Selecionar a ferramenta com base na interface preferida do cliente",
+        "Testar ambas as ferramentas com um fluxo de amostra pequeno",
+        "Verificar qual ferramenta tem mais integrações pré-construídas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 diz que a sexta pergunta, sobre volume mensal, é a que decide a ferramenta.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q006",
+      "courseSlug": "automacao-n8n",
+      "question": "Um cliente tem um fluxo que roda 200 vezes por mês com 25 passos. Qual ferramenta é mais barata?",
+      "options": [
+        "n8n, porque cobra por execução, não por passo",
+        "Make, porque cobra por módulo, não por fluxo",
+        "Ambas custam o mesmo, pois o fluxo é curto",
+        "A ferramenta mais barata depende dos limites do plano"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 mostra que fluxo longo e pouco frequente favorece o n8n, que cobra por execução.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q007",
+      "courseSlug": "automacao-n8n",
+      "question": "Por que a chave de idempotência deve ser armazenada externamente e registrada antes do processamento?",
+      "options": [
+        "Porque o fluxo não tem memória e precisa verificar eventos anteriores",
+        "Porque webhooks sempre enviam duplicatas, então o armazenamento externo é obrigatório",
+        "Porque o fluxo só consegue acessar dados durante a execução",
+        "Porque a chave deve ser única e não pode ser gerada internamente"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 combina a falta de memória do fluxo com a necessidade de registrar o ID antes de processar para evitar duplicatas em caso de falha.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q008",
+      "courseSlug": "automacao-n8n",
+      "question": "Um cliente precisa de 15.000 execuções por mês, com picos de 10 simultâneas. Qual plano do n8n atende?",
+      "options": [
+        "Starter, porque não tem limite de workflows ativos",
+        "Pro, porque permite 20 execuções simultâneas",
+        "Business, porque oferece 40 mil execuções por mês",
+        "Community, porque é gratuito e sem limites"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 lista os limites: Starter 2,5 mil, Pro 10 mil, Business 40 mil; 15 mil exige Business.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q009",
+      "courseSlug": "automacao-n8n",
+      "question": "No plano gratuito do Make, qual é o intervalo mínimo entre execuções de um cenário?",
+      "options": [
+        "O intervalo mínimo é de 1 minuto entre execuções.",
+        "O intervalo mínimo é de 5 minutos entre execuções.",
+        "O intervalo mínimo é de 15 minutos entre execuções.",
+        "O intervalo mínimo é de 30 minutos entre execuções."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que no plano gratuito o intervalo mínimo é de 15 minutos.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q010",
+      "courseSlug": "automacao-n8n",
+      "question": "Por que um cenário com módulo de IA no Make pode consumir mais créditos que o esperado?",
+      "options": [
+        "Módulos de IA consomem créditos extras por token.",
+        "Módulos de IA consomem créditos por execução.",
+        "Módulos de IA consomem créditos por complexidade.",
+        "Módulos de IA consomem créditos por chamada."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 explica que alguns módulos de IA consomem mais de 1 crédito devido à complexidade de processamento.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q011",
+      "courseSlug": "automacao-n8n",
+      "question": "No n8n, como é calculado o custo de um workflow em termos de execuções?",
+      "options": [
+        "O custo é calculado por nó executado no workflow.",
+        "O custo é calculado por execução do workflow.",
+        "O custo é calculado por módulo ativado no workflow.",
+        "O custo é calculado por crédito consumido no workflow."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 afirma que o n8n cobra por execução, independente do número de nós.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q012",
+      "courseSlug": "automacao-n8n",
+      "question": "Qual é o principal motivo para escolher o self-hosting do n8n, mesmo com custos de infraestrutura?",
+      "options": [
+        "Manter os dados do cliente na própria infraestrutura.",
+        "Reduzir o custo mensal em comparação com planos pagos.",
+        "Obter suporte técnico especializado da comunidade.",
+        "Acessar recursos exclusivos da versão Community Edition."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 destaca que o argumento decisivo é o controle sobre onde os dados do cliente são armazenados.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q013",
+      "courseSlug": "automacao-n8n",
+      "question": "No n8n 2.0, o que ocorre se um workflow é salvo sem clicar em Publish?",
+      "options": [
+        "O workflow continua executando a versão anterior.",
+        "O workflow é descartado e precisa ser recriado.",
+        "O workflow é publicado automaticamente após salvar.",
+        "O workflow fica em modo de espera até ser ativado."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 explica que salvar cria um rascunho e a versão publicada continua rodando.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q014",
+      "courseSlug": "automacao-n8n",
+      "question": "Qual tipo de gatilho só executa o fluxo quando é chamado por outro sistema?",
+      "options": [
+        "O gatilho de agendamento dispara em horários fixos.",
+        "O gatilho de polling verifica mudanças periodicamente.",
+        "O gatilho de webhook aguarda uma chamada externa.",
+        "O gatilho manual é acionado pelo usuário diretamente."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 define webhook como o gatilho que é chamado pelo sistema de origem.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q015",
+      "courseSlug": "automacao-n8n",
+      "question": "Em qual situação o agendamento é mais adequado que o polling, mesmo gastando execuções fixas?",
+      "options": [
+        "Quando a tarefa precisa ocorrer em horário fixo.",
+        "Quando o sistema de origem não oferece webhook.",
+        "Quando o volume de dados é muito alto para polling.",
+        "Quando a resposta precisa ser imediata ao evento."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que agendamento é para tarefas que precisam acontecer em horário fixo, independente de novidade.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q016",
+      "courseSlug": "automacao-n8n",
+      "question": "Quando o uso do nó Code se justifica em uma transformação de dados?",
+      "options": [
+        "Quando é preciso renomear um campo do item.",
+        "Quando a lógica exige mais de duas condições.",
+        "Quando é necessário converter o formato de uma data.",
+        "Quando se deseja montar um texto com vários campos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 diz que código entra quando a lógica passa de duas condições encadeadas.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q017",
+      "courseSlug": "automacao-n8n",
+      "question": "O que indica o código de resposta HTTP 401?",
+      "options": [
+        "Credencial ausente ou incorreta na requisição.",
+        "Endereço do recurso não foi encontrado no servidor.",
+        "Limite de chamadas à API foi excedido e é preciso esperar.",
+        "Problema ocorreu no servidor, não na configuração do cliente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 lista 401 como credencial errada ou ausente.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q018",
+      "courseSlug": "automacao-n8n",
+      "question": "Qual é o objetivo do retry com espera crescente?",
+      "options": [
+        "Repetir a chamada imediatamente até obter sucesso.",
+        "Aguardar um tempo fixo entre tentativas para não sobrecarregar o servidor.",
+        "Repetir com espera crescente a cada falha, resolvendo erros transitórios.",
+        "Enviar um alerta para o responsável após a primeira falha."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define retry com espera crescente como repetir com intervalos que dobram para resolver erros transitórios.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q019",
+      "courseSlug": "automacao-n8n",
+      "question": "No n8n 2.0, o que acontece quando você salva um fluxo sem publicar?",
+      "options": [
+        "O fluxo é atualizado na versão ativa imediatamente após salvar sem confirmação.",
+        "A edição fica apenas no rascunho, sem afetar o que está em produção.",
+        "O n8n pergunta se você deseja publicar antes de salvar.",
+        "O fluxo é versionado no Git automaticamente a cada publicação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 explica que salvar atualiza o rascunho e publicar é um ato explícito para levar à versão ativa.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q020",
+      "courseSlug": "automacao-n8n",
+      "question": "Por que a regra 'agente decide, ferramenta age' é importante em fluxos com IA?",
+      "options": [
+        "Porque o agente não tem capacidade de executar ações.",
+        "Porque o agente erra com confiança e a ação deve ser controlada para evitar danos.",
+        "Porque o agente precisa de permissão para usar qualquer ferramenta.",
+        "Porque o agente não sabe distinguir ações reversíveis das irreversíveis."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 afirma que o agente erra com confiança e não tem noção de consequência, por isso ações irreversíveis não devem ficar na mão dele.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q021",
+      "courseSlug": "automacao-n8n",
+      "question": "Quando é mais adequado usar um sub-workflow em vez de um servidor MCP para expor uma ferramenta ao agente?",
+      "options": [
+        "Quando a ferramenta precisa ser consumida por sistemas externos.",
+        "Quando o fluxo é interno ao n8n e não precisa de infraestrutura extra.",
+        "Quando a ferramenta precisa ser compartilhada com outros times via MCP.",
+        "Quando a ferramenta executa ações irreversíveis e precisa de aprovação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 indica que sub-workflow é interno ao n8n, sem infraestrutura extra, enquanto MCP é para expor a outros sistemas.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q022",
+      "courseSlug": "automacao-n8n",
+      "question": "Uma API retorna status 404. Qual é a causa mais provável e qual a primeira ação correta?",
+      "options": [
+        "Credencial inválida; verifique o token no cofre de credenciais e tente novamente.",
+        "Endereço não encontrado; confira a URL e o método na documentação.",
+        "Limite de chamadas excedido; aguarde e tente novamente após um intervalo.",
+        "Erro no servidor; avise o cliente que o problema é do provedor."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 diz que 404 é endereço não encontrado, então deve-se conferir a URL e o método.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q023",
+      "courseSlug": "automacao-n8n",
+      "question": "Em um fluxo que processa um lote de 100 pedidos, um deles falha por dado inválido. Qual é a abordagem correta para não perder o lote?",
+      "options": [
+        "Reexecutar o lote inteiro após corrigir o dado do pedido.",
+        "Desviar o pedido que falhou para uma fila e continuar o resto.",
+        "Parar o fluxo e aguardar a correção manual de todos os pedidos.",
+        "Enviar um alerta e reprocessar o lote inteiro depois."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 ensina a separar o item que falhou em uma fila própria para não derrubar o lote.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q024",
+      "courseSlug": "automacao-n8n",
+      "question": "Um agente possui uma ferramenta que envia e-mails de cobrança. Segundo o capítulo, essa ferramenta deve exigir aprovação humana?",
+      "options": [
+        "Não, porque enviar e-mail é uma ação reversível e de baixo risco.",
+        "Sim, porque cobrança é uma ação irreversível que afeta o cliente.",
+        "Não, porque o agente é confiável e treinado para isso.",
+        "Sim, porque qualquer ação executada por agente precisa de aprovação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 define que ações irreversíveis, como enviar cobrança, exigem aprovação humana antes da execução.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q025",
+      "courseSlug": "automacao-n8n",
+      "question": "O que o Make Grid permite fazer desde julho de 2026?",
+      "options": [
+        "Executar workflows do n8n internamente, sem conexão externa.",
+        "Rodar workflows do n8n lado a lado com cenários nativos.",
+        "Substituir completamente o n8n por módulos próprios.",
+        "Converter automaticamente fluxos do n8n para o Make."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que o Grid permite rodar workflows do n8n lado a lado com cenários nativos.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q026",
+      "courseSlug": "automacao-n8n",
+      "question": "Por que o custo de um fluxo com agente não é linear?",
+      "options": [
+        "Porque o agente decide quantas chamadas fará, variando o consumo.",
+        "Porque cada módulo custa um crédito fixo, independente do uso.",
+        "Porque o Make cobra um valor fixo mensal, sem variação.",
+        "Porque o n8n não cobra por execução, apenas por token."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 explica que o agente decide quantas chamadas fará, tornando o custo variável.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q027",
+      "courseSlug": "automacao-n8n",
+      "question": "O que é fair-code, segundo o capítulo?",
+      "options": [
+        "Uma licença que permite uso comercial irrestrito como open-source.",
+        "Uma licença que restringe o uso a finalidade interna do negócio.",
+        "Uma licença que proíbe qualquer cobrança por serviços.",
+        "Uma licença que exige pagamento de royalties por uso."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 define fair-code como uma licença que restringe o uso a finalidade interna.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q028",
+      "courseSlug": "automacao-n8n",
+      "question": "Onde a credencial fica guardada no n8n e no Make?",
+      "options": [
+        "Dentro do nó que usa a conexão, em texto puro.",
+        "Em um arquivo versionado no repositório do projeto.",
+        "No cofre da ferramenta, criptografada e separada dos nós.",
+        "No servidor do cliente, sem criptografia."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 diz que a credencial mora no cofre da ferramenta, criptografada.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q029",
+      "courseSlug": "automacao-n8n",
+      "question": "O que o Artigo 50 do AI Act exige para conteúdo gerado por IA?",
+      "options": [
+        "Apenas um aviso visual ao usuário, sem metadados.",
+        "Marcação legível por máquina e detectável como IA.",
+        "Registro do modelo usado e do custo de geração.",
+        "Aprovação prévia de autoridade regulatória."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 cita que o Artigo 50 exige marcação legível por máquina e detectável.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q030",
+      "courseSlug": "automacao-n8n",
+      "question": "Em um fluxo híbrido, quando é melhor usar o n8n em vez do Make, segundo o capítulo?",
+      "options": [
+        "Quando o processo exige integrações prontas e lógica visual simples.",
+        "Quando a etapa exige customização e controle fino de execução.",
+        "Quando o cliente quer reduzir custos de licença e créditos.",
+        "Quando o fluxo é curto e não precisa de tratamento de dados."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 indica que o n8n é forte em customização e controle fino de execução.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q031",
+      "courseSlug": "automacao-n8n",
+      "question": "Um agente de suporte faz duas consultas típicas. Qual teto de chamadas por execução é mais adequado, segundo o capítulo?",
+      "options": [
+        "Uma chamada, para garantir custo mínimo.",
+        "Duas chamadas, igual à resposta típica.",
+        "Três chamadas, uma acima da típica.",
+        "Sem teto, para não limitar a capacidade do agente."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 recomenda limitar a três chamadas quando a típica usa duas.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q032",
+      "courseSlug": "automacao-n8n",
+      "question": "Um cliente usa n8n na nuvem gerenciada. A plataforma muda um nó e o fluxo quebra. Quem deve pagar a adaptação, segundo o capítulo?",
+      "options": [
+        "O cliente, pois a mudança é externa ao prestador.",
+        "O prestador, pois ele é responsável pelo fluxo.",
+        "O fornecedor da plataforma, por causar a mudança.",
+        "Quem paga é definido no contrato, não por padrão."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 afirma que a definição de quem paga deve estar no contrato, não presumida.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q033",
+      "courseSlug": "automacao-n8n",
+      "question": "Quais são as três perguntas de dono que a automação deve responder na proposta?",
+      "options": [
+        "Assinatura, credenciais e edição definidas no contrato.",
+        "Preço, prazo e escopo do serviço contratado.",
+        "Quem paga, quem opera e quem recebe o relatório.",
+        "Quem monta, quem testa e quem entrega o fluxo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 25, as três perguntas de dono são assinatura, credenciais e edição, que devem ser respondidas na proposta.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q034",
+      "courseSlug": "automacao-n8n",
+      "question": "Quais são os dois preços que o capítulo define para automação?",
+      "options": [
+        "Montagem e manutenção, cobrados separadamente.",
+        "Hora e execução, somados no valor final do contrato.",
+        "Projeto e entrega, com taxa única mensal.",
+        "Setup e suporte, incluídos no preço total."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 26, automação tem dois preços: montagem e manutenção, cobrados separadamente.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q035",
+      "courseSlug": "automacao-n8n",
+      "question": "Quais são os três números mínimos do relatório mensal?",
+      "options": [
+        "Execuções, falhas e o que foi feito com elas.",
+        "Leads, vendas e tempo economizado no mês.",
+        "Erros, alertas e horas de manutenção usadas.",
+        "Custos, receitas e lucro do fluxo mensal do cliente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 27, o relatório mensal mínimo tem três números: execuções, falhas e o que foi feito com elas.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q036",
+      "courseSlug": "automacao-n8n",
+      "question": "Qual é o ponto crítico do fluxo de cobrança e conciliação?",
+      "options": [
+        "A deduplicação por identificador antes de gravar.",
+        "A idempotência para evitar cobrança duplicada.",
+        "O agendamento para rodar em horário fixo.",
+        "A coleta de dados de múltiplas fontes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 28, o fluxo de cobrança exige idempotência para evitar cobrança duplicada.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "media"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q037",
+      "courseSlug": "automacao-n8n",
+      "question": "Um prestador mantém a conta do n8n no próprio nome e o cliente paga por fora. Segundo o capítulo, qual é a consequência direta desse arranjo?",
+      "options": [
+        "O cliente não consegue exportar o fluxo ao final.",
+        "O prestador fica responsável pela fatura e pela parada.",
+        "O prestador perde o acesso de edição ao fluxo do cliente.",
+        "O cliente fica impedido de contratar outro fornecedor."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 25, manter a conta no nome do prestador com pagamento por fora faz com que ele seja responsável pela fatura e pela parada do fluxo.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q038",
+      "courseSlug": "automacao-n8n",
+      "question": "Um cliente propõe pagar por execução do fluxo. Qual é o principal risco apontado no capítulo?",
+      "options": [
+        "O prestador perde receita se o fluxo rodar menos.",
+        "O cliente paga mais sem entender o motivo.",
+        "A plataforma cobra créditos adicionais por execução.",
+        "O fluxo pode rodar mais vezes que o previsto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 26, cobrar por execução transfere ao cliente um risco que ele não entende, gerando desconfiança.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q039",
+      "courseSlug": "automacao-n8n",
+      "question": "Um trecho de fluxo é longo e pouco frequente, mas será mantido por uma pessoa sem conhecimento técnico. Qual ferramenta o capítulo recomenda para esse trecho?",
+      "options": [
+        "n8n, porque processa muitos registros por execução.",
+        "Make, porque a interface visual reduz o custo de manutenção.",
+        "n8n self-hosted, porque mantém o dado na infra do cliente.",
+        "Make Grid, porque aceita workflows do n8n sem recriar lógica."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 29, o critério de manutenção vence o de forma, então um trecho mantido por não técnico deve usar o Make.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "automacao-n8n-q040",
+      "courseSlug": "automacao-n8n",
+      "question": "Durante o recheque, você descobre que uma versão nova do n8n mudou o comportamento de um módulo que você usa. Qual é a conduta correta segundo o capítulo?",
+      "options": [
+        "Atualizar o fluxo imediatamente para a nova versão.",
+        "Testar a mudança em ambiente de rascunho antes de aplicar.",
+        "Redesenhar o fluxo para se adaptar à nova versão do n8n.",
+        "Ignorar a mudança até o cliente reclamar do fluxo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-17T10:48:56.046Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Segundo o capítulo 30, toda mudança de versão deve ser testada em ambiente de rascunho antes de aplicar em produção.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}
