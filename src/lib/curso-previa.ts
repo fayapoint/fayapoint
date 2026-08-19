@@ -35,8 +35,28 @@ export interface PreviaCurso {
   amostra: { numero: number; titulo: string; html: string } | null;
 }
 
-const RX_CAPITULO = /^# (Cap[íi]tulo\s+(\d+)\s*[:—-]\s*(.+))$/gm;
-const RX_MODULO = /^## (M[óo]dulo\s+(\d+)\s*[:—-]\s*(.+))$/gm;
+/**
+ * ⚠️ AS DUAS LÍNGUAS. O catálogo tem uma árvore /en, e ela usa
+ * `# Chapter N:` e `## Module N:` — o tradutor traduz o cabeçalho porque ele é
+ * conteúdo visível, e deve traduzir mesmo.
+ *
+ * Com só o português aqui, medido em 19/08/2026 sobre as 28 traduções:
+ *
+ *   `RX_CAPITULO` não casava nada em inglês, então `acharCapitulos` caía no
+ *   ramo "todo H1 é capítulo". Nos 7 cursos cujo conteúdo tem preâmbulo (o
+ *   título do curso como H1, 2,7 a 5,1 mil caracteres), **o título virava o
+ *   capítulo 1**: a prévia em inglês mostrava a ementa no lugar da aula, sem
+ *   nenhuma das seis figuras, e o total de capítulos saía com um a mais.
+ *   `chatgpt-zero [en]` escapou por acaso — ele não tem preâmbulo.
+ *
+ *   `RX_MODULO` não casava nada em inglês em **nenhuma** tradução: a prévia
+ *   /en listava zero módulos, em todas.
+ *
+ * Nada disso dá erro. A página monta, o texto está em inglês, e o que falta
+ * ninguém procura — porque em português está certo.
+ */
+const RX_CAPITULO = /^# ((?:Cap[íi]tulo|Chapter)\s+(\d+)\s*[:—-]\s*(.+))$/gm;
+const RX_MODULO = /^## ((?:M[óo]dulo|Module)\s+(\d+)\s*[:—-]\s*(.+))$/gm;
 /** Qualquer H1. É o que sobra quando o curso não escreve "Capítulo N:". */
 const RX_H1 = /^# ([^#\n].*)$/gm;
 
@@ -255,7 +275,7 @@ export function montarPrevia(courseContent: string, slug: string, capituloAmostr
   }
 
   // Parágrafos de abertura: o que vem antes do primeiro "## Módulo".
-  const fimIntro = preambulo.search(/^## M[óo]dulo/m);
+  const fimIntro = preambulo.search(/^## (?:M[óo]dulo|Module)/m);
   const intro = preambulo
     .slice(0, fimIntro === -1 ? preambulo.length : fimIntro)
     .split("\n")
