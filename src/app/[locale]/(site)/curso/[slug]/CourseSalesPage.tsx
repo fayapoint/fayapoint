@@ -108,6 +108,34 @@ export default function CourseSalesPage({
     );
   }
 
+  /**
+   * `copy.benefits` pode não existir — e a página inteira caía por isso.
+   *
+   * Havia duas leituras diretas, `product.copy.benefits.slice(0, 4)` e
+   * `product.copy.benefits.map(...)`. A primeira tinha um `|| [...]` com uma
+   * lista de reserva que **nunca podia rodar**: `.slice()` de `undefined`
+   * estoura antes de o `||` ser avaliado.
+   *
+   * Não é hipótese. Os seis cursos gravados por `publicar_curso.mjs` nascem com
+   * `copy: { shortDescription, fullDescription }` e nada mais — em 19/08/2026
+   * eram 7 produtos sem o array. Todos ainda `draft`, então nada quebrou; o
+   * primeiro `status: active` derrubaria a página de venda do curso, que é a
+   * única página que existe para vendê-lo.
+   *
+   * A reserva aqui é genérica de propósito e serve de rede, não de conteúdo:
+   * curso sem benefício escrito não deveria ser ligado, e quem barra isso é
+   * `scripts/cursos/ligar_curso.mjs`.
+   */
+  const beneficios =
+    Array.isArray(product.copy?.benefits) && product.copy.benefits.length
+      ? product.copy.benefits
+      : [
+          T("Conteúdo completo, capítulo a capítulo"),
+          T("Exercício prático em todos os capítulos"),
+          T("Checklist de implementação para aplicar hoje"),
+          T("Certificado digital ao concluir"),
+        ];
+
   const discount = Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100);
   const savings = product.pricing.originalPrice - product.pricing.price;
   const isPtBr = locale === 'pt-BR';
@@ -459,12 +487,7 @@ export default function CourseSalesPage({
                     {t("highlights.guaranteedResults")}
                   </h3>
                   <div className="space-y-3">
-                    {(product.copy.benefits.slice(0, 4) || [
-                      T("Domine ChatGPT do básico ao avançado"),
-                      "Automatize tarefas e economize tempo",
-                      T("Crie conteúdo profissional com IA"),
-                      T("Aumente sua produtividade em 10x")
-                    ]).map((benefit, i) => (
+                    {beneficios.slice(0, 4).map((benefit, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
                           <Check className="text-green-400" size={14} />
@@ -850,7 +873,7 @@ export default function CourseSalesPage({
               <CenaDoCurso slug={slug} indice={2} className="mb-12" />
 
               <div className="grid md:grid-cols-2 gap-6">
-                {product.copy.benefits.map((benefit, i) => (
+                {beneficios.map((benefit, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 20 }}

@@ -100,7 +100,20 @@ async function invalidarCache(slug) {
     // `apagadas` é o que separa "invalidou" de "rodou e não achou nada".
     // Zero logo depois de gravar quer dizer que a chave do cache mudou de
     // forma e a invalidação ficou apontando para o nome antigo.
-    console.log(`🧹 cache do site: ${dados.apagadas} chave(s) apagada(s) (${dados.alvo}, ${dados.ms}ms)`);
+    /**
+     * ⚠️ Imprimir SÓ `apagadas` fazia a linha mentir por omissão. Há duas
+     * camadas de cache, e a rota mexe nas duas: o Redis (`apagadas`) e o cache
+     * de página do Next (`revalidadas`). Curso recém-gravado quase nunca tem
+     * chave quente no Redis, então a linha dizia "0 chave(s) apagada(s)" depois
+     * de um trabalho que funcionou — e "0" lido sozinho manda procurar defeito
+     * onde não há. Com os dois números, zero no primeiro é informação, não
+     * susto.
+     */
+    const caminhos = Array.isArray(dados.revalidadas) ? dados.revalidadas.length : 0;
+    console.log(
+      `🧹 cache do site: ${dados.apagadas} chave(s) do Redis + ${caminhos} caminho(s) do Next ` +
+        `(${dados.alvo}, ${dados.ms}ms)`,
+    );
     return true;
   } catch (erro) {
     console.warn(

@@ -77,6 +77,22 @@ export function motivo({ slug = "", tool = "" }) {
   const tem = (...ks) => ks.some((k) => s.includes(k));
 
   if (tem("whatsapp")) return "a floating crystal speech bubble with a smaller one nested inside, message glyphs as light particles";
+
+  /**
+   * Os cursos de PROFISSÃO entram antes das marcas: eles são "Multi-tool" e o
+   * assunto está só no slug. Sem estes ramos os seis caem no poliedro genérico
+   * — seis capas iguais lado a lado na grade, que é o mesmo que capa nenhuma.
+   *
+   * ⚠️ `rh` casado como `para-rh`, nunca como `rh` solto: duas letras tão
+   * curtas casam dentro de qualquer palavra e roubariam a capa do curso ao lado.
+   * O `NEGATIVO` proíbe livro e rosto humano, então nada aqui pede os dois.
+   */
+  if (tem("estudar", "concurso", "vestibular")) return "a crystal hourglass whose falling grains reassemble into an ordered luminous lattice below it";
+  if (tem("advogado", "juridic", "jurídic")) return "a crystal balance scale in perfect equilibrium, both pans glowing from within";
+  if (tem("consultorio", "consultório", "medic", "clinic", "saude", "saúde")) return "a crystal pulse line rising in a single arc above a faceted glass slab, light travelling along its path";
+  if (tem("para-rh", "recrutamento", "recursos humanos")) return "a wide crystal funnel of faceted glass narrowing to one bright point, small luminous shards descending through it";
+  if (tem("dinheiro", "renda", "freelanc")) return "a stack of crystal coins refracting light, luminous streams spiralling upward from the top coin";
+  if (tem("professor", "ensino", "docente")) return "a crystal compass rose radiating wide beams of teal light toward a semicircle of small glass spheres";
   if (tem("video", "vídeo")) return "a crystal film strip curling in a spiral, frames glowing from within";
   if (tem("midjourney", "leonardo")) return "a crystal painter's palette dissolving into a swarm of luminous pixels";
   if (tem("perplexity", "pesquisa")) return "a crystal magnifying lens focusing beams of light into a bright point";
