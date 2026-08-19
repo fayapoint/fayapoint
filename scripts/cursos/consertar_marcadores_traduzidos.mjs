@@ -135,8 +135,38 @@ function consertar(textoEn, mapaPt) {
     const modelo = k ? mapaPt.get(k) : null;
     const cap = legenda(t);
 
-    // Já está na forma que o leitor renderiza E aponta para o lugar certo.
-    if (CANONICO.test(t) && modelo && src(t) === src(modelo)) {
+    /**
+     * Já está bom? Três coisas, não uma — e faltavam duas.
+     *
+     * ⚠️ Esta condição deixava passar o pior caso da varredura, e ele estava no
+     * GABARITO. Em `chatgpt-zero [en]`, dois marcadores do capítulo 25 eram
+     * canônicos e apontavam para o `src` certo, então caíam aqui e saíam
+     * "consertados" sem ninguém tocar neles. Só que o tradutor havia trocado
+     * `caption=` por `alt=` — e `curso-previa.ts` lê `caption`. A figura
+     * aparecia com `<figcaption>` VAZIO: a legenda, que é um parágrafo que
+     * ensina e é o único texto indexável daquela figura, sumia da árvore /en
+     * sem nada quebrar.
+     *
+     * O `id` entra pelo mesmo motivo de fundo: `q-25-flow` no lugar de
+     * `chatgp-cap25-fluxo` não muda o que se vê hoje, mas faz as duas árvores
+     * pararem de casar id a id — e é assim que `conferir_marcadores_pt_en.mjs`
+     * descobre marcador APAGADO pela tradução. Id que não bate transforma o
+     * conferidor em alarme falso, e alarme falso é como se para de olhar.
+     */
+    if (
+      CANONICO.test(t) &&
+      modelo &&
+      src(t) === src(modelo) &&
+      atributo(t, "caption") &&
+      atributo(t, "id") === atributo(modelo, "id") &&
+      // ⚠️ E não pode ser a SEGUNDA vez que esta figura aparece. A remoção de
+      // cópia vazada vivia depois deste `if`, então a cópia PERFEITA passava
+      // por aqui e nunca chegava lá. Foi o que aconteceu em `ia-para-estudar
+      // [en]`: o capítulo 11 tinha o `cenario` duas vezes, com legendas
+      // diferentes, e o `dica` em lugar nenhum — seis marcadores no capítulo,
+      // o número certo, e uma figura repetida no lugar de outra.
+      !jaVistos.has(k)
+    ) {
       jaVistos.add(k);
       saida.push(linha);
       continue;

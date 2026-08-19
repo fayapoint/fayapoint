@@ -89,7 +89,11 @@ export function motivo({ slug = "", tool = "" }) {
    */
   if (tem("estudar", "concurso", "vestibular")) return "a crystal hourglass whose falling grains reassemble into an ordered luminous lattice below it";
   if (tem("advogado", "juridic", "jurídic")) return "a crystal balance scale in perfect equilibrium, both pans glowing from within";
-  if (tem("consultorio", "consultório", "medic", "clinic", "saude", "saúde")) return "a crystal pulse line rising in a single arc above a faceted glass slab, light travelling along its path";
+  // ⚠️ A primeira versão pedia "uma linha de pulso subindo sobre uma laje" e
+  // veio o que o modelo entendeu: dois cristais alongados cruzados, bonitos e
+  // mudos. Capa cujo objeto não se nomeia em uma palavra não cumpre a função —
+  // numa grade de trinta, ela é a que ninguém identifica.
+  if (tem("consultorio", "consultório", "medic", "clinic", "saude", "saúde")) return "a thick upright crystal medical cross with equal arms, glowing from within, a thin luminous pulse line arcing across its centre";
   if (tem("para-rh", "recrutamento", "recursos humanos")) return "a wide crystal funnel of faceted glass narrowing to one bright point, small luminous shards descending through it";
   if (tem("dinheiro", "renda", "freelanc")) return "a stack of crystal coins refracting light, luminous streams spiralling upward from the top coin";
   if (tem("professor", "ensino", "docente")) return "a crystal compass rose radiating wide beams of teal light toward a semicircle of small glass spheres";

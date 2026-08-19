@@ -29,8 +29,10 @@
  *   URLs e imagens
  *
  * O motor já é instruído sobre os três. A verificação depois da tradução
- * confere que a contagem de tokens `{{fact:}}` e de cercas ``` bate — se não
- * bater, o capítulo é rejeitado e fica em português.
+ * confere que batem: tokens `{{fact:}}`, cercas ```, **marcadores de mídia**,
+ * **contagem de seções `##`** e a presença da citação. Se não bater, o pedaço
+ * é traduzido de novo (duas tentativas, a segunda no modelo caro) e, se ainda
+ * assim não bater, fica em português.
  *
  * Uso:
  *   node --env-file=.env.local scripts/i18n/cursos-conteudo.mjs [--so-um slug] [--secar] [--refazer]
@@ -90,6 +92,9 @@ function fatiar(markdown, alvo = 9000) {
 
 const CONTA_FATO = (s) => (s.match(/\{\{fact:[^}]*\}\}/g) ?? []).length;
 const CONTA_CERCA = (s) => (s.match(/^\s*```/gm) ?? []).length;
+const CONTA_MIDIA = (s) => (s.match(/<!--\s*media:/g) ?? []).length;
+const CONTA_SECAO = (s) => (s.match(/^##\s/gm) ?? []).length;
+const CONTA_CITACAO = (s) => (s.match(/^>\s/gm) ?? []).length;
 
 /**
  * O pedaço traduzido preserva o que não é texto?
@@ -106,6 +111,35 @@ function conferir(pt, en) {
   }
   if (CONTA_CERCA(pt) !== CONTA_CERCA(en)) {
     return `cercas de código: ${CONTA_CERCA(pt)} → ${CONTA_CERCA(en)}`;
+  }
+  /**
+   * ⚠️ ESTRUTURA — os três que faltavam, e que custaram um curso em 19/08.
+   *
+   * A tradução do `ia-para-estudar` passou nas conferências acima e mesmo
+   * assim entregou dois capítulos estragados, sem nada reclamar:
+   *
+   *   cap11  8 seções → 9, a citação `> **Dica Pro:**` DESAPARECEU, e o
+   *          marcador `dica` foi substituído por uma **segunda cópia** do
+   *          `cenario` — seis marcadores no capítulo, o número certo, uma
+   *          figura repetida no lugar de outra;
+   *   cap28  8 seções → 11 (cabeçalhos duplicados) e 2 marcadores perdidos.
+   *
+   * Nada disso é "tradução ruim": é conteúdo que sumiu. E o laço de repetição
+   * logo abaixo já existia e já funcionava — só nunca era acionado, porque
+   * ninguém contava estas três coisas.
+   *
+   * A citação é conferida por PRESENÇA, não por igualdade: o modelo às vezes
+   * quebra o bloco em duas linhas `>` legitimamente, e reprovar isso deixaria
+   * o capítulo em português por um detalhe de formatação — troca ruim.
+   */
+  if (CONTA_MIDIA(pt) !== CONTA_MIDIA(en)) {
+    return `marcadores de mídia: ${CONTA_MIDIA(pt)} → ${CONTA_MIDIA(en)}`;
+  }
+  if (CONTA_SECAO(pt) !== CONTA_SECAO(en)) {
+    return `seções "##": ${CONTA_SECAO(pt)} → ${CONTA_SECAO(en)}`;
+  }
+  if (CONTA_CITACAO(pt) > 0 && CONTA_CITACAO(en) === 0) {
+    return "a citação (Dica Pro) sumiu";
   }
   // Tradução que encolhe demais quase sempre é resumo, não tradução.
   if (en.length < pt.length * 0.45) {
