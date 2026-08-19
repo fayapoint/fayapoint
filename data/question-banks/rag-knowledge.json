@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "rag-knowledge",
+  "lastUpdated": "2026-08-19T11:50:19.029Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "rag-knowledge-q001",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é a principal mudança de arquitetura introduzida pelo RAG?",
+      "options": [
+        "Depender apenas do conhecimento do modelo treinado.",
+        "Buscar trechos relevantes e injetá-los no prompt.",
+        "Usar fine-tuning para incorporar novos fatos.",
+        "Aumentar a janela de contexto do modelo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que RAG busca trechos relevantes e os injeta no prompt antes de pedir a resposta.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q002",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual eixo de planejamento define a frequência com que os documentos devem ser reindexados?",
+      "options": [
+        "Inventário de fontes de dados com formato e volume.",
+        "Orçamento de frescor e latência para atualização.",
+        "Controle de acesso por ACL na camada de busca.",
+        "Critérios de sucesso mensuráveis e comparáveis."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 define orçamento de frescor como a pergunta sobre quão desatualizada uma resposta pode estar.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q003",
+      "courseSlug": "rag-knowledge",
+      "question": "No ciclo de vida de uma consulta em RAG, qual etapa transforma a pergunta em um vetor?",
+      "options": [
+        "Reformulação da consulta para torná-la autocontida.",
+        "Geração de embedding para buscar na base vetorial.",
+        "Reranking dos candidatos para melhorar a precisão.",
+        "Montagem do prompt final com contexto e instruções."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 descreve que a consulta reformulada é transformada em um vetor de embedding para buscar na base.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q004",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual prática é essencial para evitar que mudanças no pipeline degradem silenciosamente a qualidade?",
+      "options": [
+        "Testar manualmente com perguntas favoráveis e simples.",
+        "Usar um golden dataset com processo de regressão.",
+        "Aumentar o tamanho do chunk para melhorar recall.",
+        "Remover o reranking para reduzir a latência."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 recomenda estabelecer um processo de regressão com golden dataset para reavaliar o pipeline após mudanças.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q005",
+      "courseSlug": "rag-knowledge",
+      "question": "No documento de arquitetura, qual seção define o que o sistema não deve responder?",
+      "options": [
+        "Inventário de fontes de dados com características detalhadas.",
+        "Fluxo de consulta típica com etapas nomeadas.",
+        "Limites explícitos do sistema com recusa e escalonamento.",
+        "Critérios de sucesso mensuráveis e comparáveis."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 destaca a seção de limites explícitos como a mais valiosa para evitar respostas problemáticas.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q006",
+      "courseSlug": "rag-knowledge",
+      "question": "Uma transcrição de reunião longa e sem estrutura deve ser chunking com qual estratégia?",
+      "options": [
+        "Chunking por cláusula numerada para documentos estruturados.",
+        "Chunking recursivo por caractere com fronteiras naturais.",
+        "Chunking semântico por similaridade entre sentenças.",
+        "Chunking fixo por contagem de tokens sem contexto."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 recomenda chunking semântico para textos sem hierarquia, como transcrições, detectando mudanças de assunto.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q007",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual limitação estrutural de LLMs é diretamente atacada pelo RAG ao injetar contexto externo?",
+      "options": [
+        "Custo de treinamento do modelo para novos dados.",
+        "Cutoff de conhecimento e alucinação com tom de certeza.",
+        "Velocidade de inferência em produção com latência alta.",
+        "Capacidade de seguir instruções complexas em prompts."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 lista cutoff e alucinação como limitações que RAG resolve ao fornecer contexto relevante.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q008",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um sistema RAG, o que caracteriza um vazamento de contexto entre fronteiras de acesso?",
+      "options": [
+        "Usuário recebe trecho de documento sem permissão.",
+        "Resposta gerada não cita a fonte exata do trecho.",
+        "Documento obsoleto é retornado como atual.",
+        "Busca retorna candidatos abaixo do limiar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 descreve vazamento de contexto quando retrieval não respeita permissões, recuperando documento fora do escopo do usuário.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q009",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é a finalidade do overlap entre chunks em um pipeline de ingestão?",
+      "options": [
+        "Aumentar a precisão dos embeddings em consultas pontuais",
+        "Preservar contexto que fica na fronteira entre dois cortes",
+        "Reduzir o custo de armazenamento do índice vetorial",
+        "Eliminar a necessidade de reindexação após atualizações"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que o overlap existe para preservar contexto que fica na fronteira entre dois cortes, evitando perda de informação.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q010",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é a fronteira primária de chunking para contratos jurídicos?",
+      "options": [
+        "Parágrafos internos de cada cláusula do contrato",
+        "Cláusulas numeradas como unidade primária de corte",
+        "Tamanho fixo de tokens para uniformizar os chunks",
+        "Páginas do documento para preservar o layout original"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 descreve o uso da numeração de cláusula como fronteira primária para preservar a estrutura jurídica.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q011",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é o sintoma típico de um chunk cortado no meio de uma frase?",
+      "options": [
+        "Erro de execução que interrompe o pipeline de ingestão",
+        "Resposta plausível, levemente errada, sem erro visível",
+        "Queda brusca na latência das consultas ao sistema",
+        "Aumento do custo de armazenamento do índice vetorial"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que um chunk mal cortado gera resposta plausível e levemente errada, sem erro visível.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q012",
+      "courseSlug": "rag-knowledge",
+      "question": "Por que blocos de código devem ser indexados separadamente do texto prosa?",
+      "options": [
+        "Para reduzir o tamanho do índice e acelerar as buscas",
+        "Para evitar que o embedding misture código e prosa",
+        "Para permitir filtros por linguagem de programação",
+        "Para facilitar a atualização de trechos de código"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que misturar código e prosa dilui o embedding, prejudicando a precisão de buscas técnicas.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q013",
+      "courseSlug": "rag-knowledge",
+      "question": "Por que o mesmo modelo de embedding deve ser usado para indexar documentos e consultas?",
+      "options": [
+        "Porque cada modelo aprende um espaço vetorial próprio",
+        "Para garantir que os vetores tenham a mesma dimensão",
+        "Porque modelos diferentes produzem vetores mais lentos",
+        "Para reduzir o custo de armazenamento dos embeddings"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 diz que vetores de modelos diferentes não são comparáveis, pois cada modelo aprende seu próprio espaço vetorial.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q014",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um índice HNSW, qual parâmetro pode ser ajustado em produção sem reconstruir o índice?",
+      "options": [
+        "M, que controla as conexões do grafo entre vizinhos",
+        "efConstruction, que define a qualidade da construção",
+        "efSearch, que controla a amplitude da busca na consulta",
+        "nlist, que define o número de clusters na construção"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 destaca que efSearch é o parâmetro de ajuste fino que não exige reconstrução do índice.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q015",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual prática de configuração evita que documentos removidos da fonte continuem sendo recuperados?",
+      "options": [
+        "Reindexar o corpus inteiro a cada remoção de documento",
+        "Manter um cache dos documentos removidos para referência",
+        "Remover os chunks do documento no índice vetorial",
+        "Ignorar remoções, pois o conteúdo pode ser útil depois"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que chunks de documentos removidos precisam ser removidos do índice para não serem recuperados.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q016",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um corpus de contratos com cláusulas longas, qual metadado permite recuperar a cláusula inteira quando só um fragmento é encontrado?",
+      "options": [
+        "Identificador do cliente e número do contrato",
+        "Campo apontando para o container imediatamente superior",
+        "Timestamp de ingestão e hash de conteúdo",
+        "Status do contrato e tipo de documento"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 recomenda gravar o campo de cláusula-pai para permitir expansão de contexto sob demanda.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q017",
+      "courseSlug": "rag-knowledge",
+      "question": "Por que a busca híbrida é recomendada para documentação técnica?",
+      "options": [
+        "Porque captura termos exatos via BM25 e semântica via vetores.",
+        "Porque usa apenas similaridade de cosseno para ranquear.",
+        "Porque dispensa o uso de índices vetoriais na recuperação.",
+        "Porque garante que todos os documentos sejam retornados."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que a busca híbrida supera as abordagens isoladas porque o BM25 captura correspondência exata de termos técnicos.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q018",
+      "courseSlug": "rag-knowledge",
+      "question": "O que um cross-encoder faz de diferente em relação a um bi-encoder?",
+      "options": [
+        "Processa pergunta e documento juntos nas camadas de atenção.",
+        "Codifica pergunta e documento separadamente em vetores fixos.",
+        "Pré-computa vetores de documento antes da consulta existir.",
+        "Utiliza apenas similaridade de cosseno para comparar vetores."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 explica que o cross-encoder processa o par (pergunta, documento) concatenado através das mesmas camadas de atenção.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q019",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é o objetivo da deduplicação por SKU após o reranking?",
+      "options": [
+        "Impedir que um único produto domine o contexto final.",
+        "Garantir que todos os produtos apareçam igualmente.",
+        "Aumentar o número de chunks por produto no prompt.",
+        "Remover produtos descontinuados da busca inicial."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 descreve a deduplicação por SKU para limitar chunks do mesmo produto e priorizar diversidade.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q020",
+      "courseSlug": "rag-knowledge",
+      "question": "Que problema silencioso ocorre quando o modelo de embedding diverge entre indexação e consulta?",
+      "options": [
+        "Os vetores gerados não são comparáveis, degradando a busca.",
+        "O sistema lança um erro explícito que interrompe a busca.",
+        "A latência da busca aumenta drasticamente em produção.",
+        "Os resultados ficam corretos, mas com custo maior."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 diz que vetores de modelos diferentes não são comparáveis, causando degradação silenciosa.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q021",
+      "courseSlug": "rag-knowledge",
+      "question": "Por que o efeito 'lost in the middle' importa na montagem do prompt?",
+      "options": [
+        "Modelos prestam mais atenção ao início e fim do contexto.",
+        "Modelos ignoram completamente o meio do contexto.",
+        "O meio do contexto é processado mais rapidamente.",
+        "A posição dos chunks não afeta a resposta gerada."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 menciona que modelos prestam mais atenção ao início e fim do contexto, por isso o posicionamento importa.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q022",
+      "courseSlug": "rag-knowledge",
+      "question": "Em uma busca por código de erro exato, por que o Reciprocal Rank Fusion ajuda mais que a média de scores?",
+      "options": [
+        "Usa posições nos rankings, evitando escalas incompatíveis.",
+        "Usa scores brutos de similaridade diretamente na fusão.",
+        "Atribui peso maior à busca vetorial em todos os casos.",
+        "Elimina a necessidade de busca por palavra-chave."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 explica que o RRF usa posições para evitar comparar escalas incompatíveis.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q023",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um sistema de apoio a decisões clínicas, por que sinalizar baixa confiança é melhor que sintetizar resposta de evidência fraca?",
+      "options": [
+        "Síntese confiante sobre evidência fraca é perigosa nesse domínio.",
+        "Responder com incerteza sempre reduz a satisfação do usuário.",
+        "Evidência fraca nunca deve ser mencionada na resposta final.",
+        "O modelo deve sempre gerar uma resposta completa e confiante."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 afirma que síntese confiante sobre evidência fraca é mais perigosa que admitir a lacuna.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q024",
+      "courseSlug": "rag-knowledge",
+      "question": "Na escolha entre reranker via API e self-hosted, que fator pode superar a qualidade do ranking?",
+      "options": [
+        "Restrições de compliance sobre onde o dado pode trafegar.",
+        "O custo de latência da chamada de rede síncrona.",
+        "A facilidade de escalar a infraestrutura de GPU própria.",
+        "A necessidade de manter um benchmark interno atualizado."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 aponta que compliance pode impedir o envio de dados a API externa, superando a qualidade.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q025",
+      "courseSlug": "rag-knowledge",
+      "question": "Sobre validação de reranking, qual métrica pondera a posição do documento correto no ranking?",
+      "options": [
+        "Hit-rate@k, que apenas verifica se o documento está entre os k primeiros.",
+        "NDCG@k, que considera a posição e dá peso maior a posições superiores.",
+        "Precisão média, que calcula a média de precisão em cada posição relevante.",
+        "Recall@k, que mede a proporção de documentos relevantes recuperados."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 define NDCG@k como a métrica que pondera a posição do documento correto, ao contrário do hit-rate@k que só verifica presença no top-k.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q026",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual métrica avalia se cada afirmação da resposta é sustentada pelo contexto recuperado?",
+      "options": [
+        "Faithfulness, que mede se cada afirmação da resposta é sustentada pelo contexto.",
+        "Answer relevancy, que verifica se a resposta aborda a pergunta feita.",
+        "Context precision, que mede a proporção de chunks relevantes recuperados.",
+        "Context recall, que mede a proporção de informação necessária recuperada."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 define faithfulness como a métrica que verifica se cada afirmação da resposta pode ser sustentada pelo contexto recuperado.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q027",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é a fonte ideal para construir um golden dataset de avaliação de RAG?",
+      "options": [
+        "Perguntas criadas por um LLM a partir dos próprios documentos da base.",
+        "Registros reais como tickets de suporte e perguntas de usuários.",
+        "Perguntas elaboradas pela equipe de desenvolvimento do sistema.",
+        "Uma combinação de perguntas sintéticas e reais, sem validação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 afirma que a fonte ideal são registros reais, como tickets de suporte, pois refletem o vocabulário real dos usuários.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q028",
+      "courseSlug": "rag-knowledge",
+      "question": "No projeto de reranking para wiki interna, qual é a principal função do metadado de departamento?",
+      "options": [
+        "Permitir filtragem contextual e desambiguação de termos no reranking.",
+        "Reduzir o custo computacional do reranker cross-encoder.",
+        "Aumentar o número de candidatos recuperados no retrieval inicial.",
+        "Substituir a necessidade de um reranker cross-encoder."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 destaca que o metadado de departamento é usado para filtragem contextual e desambiguação antes do reranking.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q029",
+      "courseSlug": "rag-knowledge",
+      "question": "No teste A/B do sistema de sinistros, qual foi a principal razão para o retrieval híbrido melhorar o recall em perguntas com códigos específicos?",
+      "options": [
+        "A busca densa captura melhor termos exatos como números de cláusula.",
+        "O BM25 complementa a busca semântica com correspondência lexical.",
+        "O reranker passou a ser aplicado antes da fusão dos resultados.",
+        "O aumento do K permitiu incluir mais chunks no contexto final."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 explica que o BM25 complementa a busca semântica com correspondência lexical exata, melhorando o recall em códigos específicos.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q030",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um sistema de suporte com catálogo em constante mudança, qual prática evita o erro de avaliar apenas no lançamento?",
+      "options": [
+        "Documentar cada mudança de configuração com o delta de métricas e as decisões.",
+        "Estabelecer um pipeline de reavaliação periódica com golden dataset atualizado.",
+        "Aumentar o número de perguntas do conjunto de teste inicial do sistema completo.",
+        "Usar um modelo juiz da mesma família do gerador para consistência total."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 recomenda reavaliação periódica com golden dataset atualizado para detectar degradação contínua, não apenas no lançamento.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q031",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é a consequência de não monitorar o orçamento de tokens em produção após mudanças no corpus?",
+      "options": [
+        "O reranker passa a receber chunks irrelevantes e degrada a precisão.",
+        "O truncamento silencioso corta documentos longos e importantes.",
+        "O modelo gerador passa a alucinar mais por falta de contexto.",
+        "A busca vetorial perde eficiência e aumenta a latência."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 alerta que a falta de monitoramento do orçamento de tokens causa truncamento silencioso, cortando documentos longos e importantes.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q032",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um sistema com context recall alto e faithfulness baixo, qual é a causa mais provável?",
+      "options": [
+        "O retrieval não está recuperando documentos suficientes na base.",
+        "O modelo gerador sintetiza informações incorretamente.",
+        "O reranker está priorizando chunks irrelevantes no contexto.",
+        "O golden dataset tem perguntas sem resposta na base."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 explica que recall alto com faithfulness baixo indica problema de geração, pois o modelo não usa corretamente o contexto recuperado.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q033",
+      "courseSlug": "rag-knowledge",
+      "question": "Quais são os três componentes desacoplados de um harness de avaliação?",
+      "options": [
+        "Armazenamento do golden dataset, executor do pipeline e avaliador de métricas.",
+        "Dataset de treino, executor de consultas e avaliador de similaridade.",
+        "Recuperação de contexto, reranking de resultados e geração de resposta.",
+        "Baseline de desempenho, hipótese de melhoria e relatório final."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 define explicitamente os três componentes desacoplados do harness: armazenamento do golden dataset, executor e avaliador.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q034",
+      "courseSlug": "rag-knowledge",
+      "question": "Por que um índice vetorial deve ser tratado como um armazenamento de dados sensível?",
+      "options": [
+        "Porque armazena os embeddings e metadados dos chunks indexados.",
+        "Porque contém uma cópia navegável do conteúdo original indexado.",
+        "Porque é acessível a qualquer usuário com a chave de API da plataforma.",
+        "Porque é usado para recuperar contexto para o modelo gerador de respostas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 afirma que um índice vetorial é funcionalmente uma cópia navegável do conteúdo original, portanto sensível.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q035",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é o princípio constante na implementação de RLS em armazenamentos vetoriais?",
+      "options": [
+        "Aplicar o filtro de permissão antes ou durante a busca por similaridade.",
+        "Usar namespaces obrigatórios para separar os dados de cada tenant específico.",
+        "Armazenar os vetores em tabelas separadas por nível de permissão.",
+        "Confiar na aplicação para filtrar os resultados após a consulta."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 diz que o princípio constante é aplicar o filtro antes ou durante a busca, nunca depois.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q036",
+      "courseSlug": "rag-knowledge",
+      "question": "No assistente clínico descrito, quais são os dois níveis da base de conhecimento?",
+      "options": [
+        "Diretrizes clínicas compartilhadas e prontuários individuais de pacientes.",
+        "Protocolos de diagnóstico e bulários de medicamentos atualizados.",
+        "Guias de tratamento e históricos de evolução médica narrativa.",
+        "Documentos de qualidade e registros de encaminhamento com permissão registrada."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 descreve dois níveis: diretrizes clínicas compartilhadas e prontuários individuais com acesso restrito.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q037",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um projeto de melhoria de RAG, a equipe implementou duas mudanças ao mesmo tempo e obteve ganho de 10% no recall. O que se pode concluir corretamente?",
+      "options": [
+        "O ganho é atribuível à combinação das duas mudanças implementadas.",
+        "Não é possível atribuir o ganho a uma mudança específica.",
+        "A mudança mais recente foi a responsável pelo ganho.",
+        "O ganho é inválido porque as mudanças foram simultâneas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 alerta que testar múltiplas hipóteses simultâneas impede atribuir o resultado à mudança correta.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q038",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um sistema de RAG para prontuários médicos, qual é a principal desvantagem da redação de PII em relação ao controle de acesso?",
+      "options": [
+        "A redação não protege contra vazamento futuro do dado original armazenado.",
+        "A redação pode destruir informação clínica operacionalmente necessária.",
+        "A redação exige monitoramento contínuo para garantir que nunca falhe.",
+        "A redação impede a recuperação semântica por similaridade."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 afirma que a redação destrói informação operacionalmente necessária, enquanto o controle de acesso a preserva.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q039",
+      "courseSlug": "rag-knowledge",
+      "question": "Qual é o risco de reindexar apenas documentos novos com um novo modelo de embedding, mantendo os antigos com o modelo anterior no mesmo índice?",
+      "options": [
+        "Os resultados de busca ficam sutilmente piores por incompatibilidade de similaridade.",
+        "Os documentos antigos ficam inacessíveis para consultas por similaridade vetorial.",
+        "O custo de armazenamento aumenta sem ganho de qualidade de resposta.",
+        "A redação de PII é aplicada de forma inconsistente entre os documentos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 afirma que misturar vetores de versões diferentes corrompe a similaridade, gerando degradação sutil.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "rag-knowledge-q040",
+      "courseSlug": "rag-knowledge",
+      "question": "Em um projeto de RAG, por que a validação do controle de acesso deve preceder a otimização da qualidade de resposta?",
+      "options": [
+        "Porque sem acesso correto, melhorias de qualidade ampliam o risco de vazamento.",
+        "Porque a otimização de resposta depende de métricas de avaliação confiáveis e estáveis.",
+        "Porque o controle de acesso é mais barato de implementar do que reranking.",
+        "Porque a qualidade de resposta é irrelevante se o acesso está correto."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:50:19.029Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 explica que sem acesso correto, melhorias de qualidade tornam o sistema mais convincente ao vazar informação.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}

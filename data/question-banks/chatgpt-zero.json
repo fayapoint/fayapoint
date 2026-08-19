@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "chatgpt-zero",
+  "lastUpdated": "2026-08-19T11:53:50.559Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "chatgpt-zero-q001",
+      "courseSlug": "chatgpt-zero",
+      "question": "Why can ChatGPT state a false fact with confidence?",
+      "options": [
+        "It has no access to a database of verified facts.",
+        "It is trained to be persuasive rather than accurate.",
+        "It predicts the most plausible sequence of words.",
+        "It sometimes chooses to lie to avoid uncertainty."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o modelo prevê a sequência de texto mais provável, não consulta fatos, então ele pode gerar afirmações falsas com tom confiante.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q002",
+      "courseSlug": "chatgpt-zero",
+      "question": "What is the purpose of the first box in personalized instructions?",
+      "options": [
+        "To tell the model facts about you that are stable.",
+        "To specify the tone and style of responses.",
+        "To store temporary information for one conversation.",
+        "To upload files for the model to reference later."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 diz que a primeira caixa serve para fatos estáveis sobre você, como profissão e restrições.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q003",
+      "courseSlug": "chatgpt-zero",
+      "question": "Why does the project recommend keeping a written log of attempts?",
+      "options": [
+        "To have a record for future reference and sharing.",
+        "Because memory tends to filter out frustrations and errors.",
+        "To prove to others that you completed the exercises.",
+        "To avoid repeating the same prompt twice in a row."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que o registro por escrito compensa o viés da memória, que tende a filtrar frustrações e erros.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q004",
+      "courseSlug": "chatgpt-zero",
+      "question": "When the model suggests a salary range for your position, what should you do before using it?",
+      "options": [
+        "Accept it as accurate because the model is well-trained.",
+        "Adjust it slightly to be more conservative in your favor.",
+        "Check it against a reliable external salary research source.",
+        "Ask the model to recalculate with more precise data."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 orienta verificar externamente qualquer dado de mercado citado pelo modelo antes de usá-lo como argumento.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q005",
+      "courseSlug": "chatgpt-zero",
+      "question": "What is the difference between a theme and a task in a prompt?",
+      "options": [
+        "A theme is broad; a task is a specific actionable request.",
+        "A theme is about the topic; a task is about the format.",
+        "A theme is for writing; a task is for analysis.",
+        "A theme is the subject; a task is the audience."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 distingue tema de tarefa: tema é amplo, tarefa é um pedido específico e acionável.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q006",
+      "courseSlug": "chatgpt-zero",
+      "question": "Why should you not trust a well-formatted response more than a poorly formatted one?",
+      "options": [
+        "Formatting is a sign of the model's language skill, not factual accuracy.",
+        "The model uses formatting to hide errors from the user.",
+        "Well-formatted responses are usually generated by different models.",
+        "Formatting is random and has no relation to content quality."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 alerta que formatação boa é sinal de habilidade linguística, não de precisão factual.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q007",
+      "courseSlug": "chatgpt-zero",
+      "question": "A user asks 'give me ideas for a marketing campaign' and receives generic suggestions. Which of the four prompt elements is most likely missing?",
+      "options": [
+        "The role, because the model doesn't know if it's an expert.",
+        "The task, because the request is not specific and actionable.",
+        "The context, because the model lacks audience and constraints.",
+        "The format, because the output structure is not defined."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 mostra que confundir tema com tarefa é erro comum; o pedido é vago e não específico, faltando a tarefa definida.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q008",
+      "courseSlug": "chatgpt-zero",
+      "question": "Based on the nature of ChatGPT as a text predictor, which of the following tasks is it best suited for?",
+      "options": [
+        "Summarizing a long document into key points.",
+        "Calculating the exact tax due on a complex income.",
+        "Providing a definitive medical diagnosis from symptoms.",
+        "Reciting the current stock price of a company."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que o modelo é bom em tarefas de linguagem, como resumir, reescrever, explicar e estruturar.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q009",
+      "courseSlug": "chatgpt-zero",
+      "question": "Segundo o capítulo 7, qual é a causa mais comum de respostas genéricas do ChatGPT?",
+      "options": [
+        "Faltar material de apoio que já estava disponível no prompt.",
+        "Usar busca na web para informações que não precisam dela.",
+        "Reescrever o mesmo tipo de prompt do zero toda vez.",
+        "Pedir tarefas demais numa única mensagem sem prioridade."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que juntar material de apoio antes de escrever o prompt evita a primeira causa mais comum de resposta genérica.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q010",
+      "courseSlug": "chatgpt-zero",
+      "question": "Segundo o capítulo 8, qual é a abordagem recomendada para tarefas de criação de conteúdo?",
+      "options": [
+        "Começar com um prompt largo e ir estreitando a cada resposta.",
+        "Especificar todos os detalhes numa única mensagem inicial.",
+        "Pedir variações de assunto e adaptar para outro canal de uma vez.",
+        "Revisar manualmente todos os dados concretos antes de publicar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 recomenda começar largo e ir estreitando a cada rodada, em vez de especificar tudo de uma vez.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q011",
+      "courseSlug": "chatgpt-zero",
+      "question": "Segundo o capítulo 9, qual é o primeiro padrão de falha a verificar quando uma resposta sai ruim?",
+      "options": [
+        "Instruções contraditórias no prompt enviado.",
+        "Acúmulo de tarefas numa única mensagem longa.",
+        "Contexto perdido em conversas muito longas.",
+        "Falta de material de apoio no prompt inicial."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 lista como primeiro padrão a instrução contraditória, a ser verificado antes de qualquer outra coisa.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q012",
+      "courseSlug": "chatgpt-zero",
+      "question": "Segundo o capítulo 10, o que distingue um template reutilizável de um prompt salvo comum?",
+      "options": [
+        "Ter espaços reservados para o que muda e manter fixo o que não varia.",
+        "Ser testado com casos reais antes de ser considerado pronto.",
+        "Estar organizado num único documento com nomes curtos.",
+        "Conter papel, tarefa, contexto e formato em todos os usos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que um template reutilizável tem espaços reservados claros para o que varia, mantendo fixo o que não varia.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q013",
+      "courseSlug": "chatgpt-zero",
+      "question": "Segundo o capítulo 11, qual é o erro de mentalidade mais comum ao usar ChatGPT para organização?",
+      "options": [
+        "Tratar o ChatGPT como se tivesse acesso automático à sua agenda.",
+        "Esperar que ele lembre da sua lista de tarefas entre conversas.",
+        "Deixar decisões de prioridade inteiramente por conta do modelo.",
+        "Não transferir o resultado para o sistema real de tarefas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 aponta como erro mais comum tratar o modelo como se tivesse acesso automático à agenda, e-mail ou lista de tarefas.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q014",
+      "courseSlug": "chatgpt-zero",
+      "question": "No exemplo do capítulo 10, por que o bloco 'em risco' de um template de relatório de progresso tende a sair vazio?",
+      "options": [
+        "Porque a própria pessoa evita nomear problemas reais no relatório.",
+        "Porque o template não incluiu uma seção para riscos no início.",
+        "Porque o modelo não consegue identificar riscos sem dados concretos.",
+        "Porque o usuário esquece de preencher o bloco por falta de hábito."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 explica que o bloco sai vazio porque a própria pessoa evita nomear problemas, um padrão revelado pelo uso repetido.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q015",
+      "courseSlug": "chatgpt-zero",
+      "question": "Segundo o capítulo 11, qual é a responsabilidade que permanece exclusiva do usuário ao usar ChatGPT para organização?",
+      "options": [
+        "Decidir prioridades reais e transferir o resultado para o sistema de registro.",
+        "Estruturar informação bagunçada e sugerir uma ordem de prioridade.",
+        "Processar anotações de reunião e extrair decisões e próximos passos.",
+        "Reafirmar restrições importantes quando a conversa fica longa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que decidir prioridades reais e transferir o resultado para o sistema de registro permanece responsabilidade do usuário.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q016",
+      "courseSlug": "chatgpt-zero",
+      "question": "No capítulo 12, o que acontece se um usuário mantém um arquivo de referência desatualizado num projeto?",
+      "options": [
+        "O modelo responde com base nos dados antigos, sem avisar que estão desatualizados.",
+        "O modelo solicita automaticamente uma versão atualizada do arquivo.",
+        "O modelo ignora o arquivo antigo e responde com conhecimento geral.",
+        "O modelo apaga o arquivo antigo e pede para subir um novo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 afirma que arquivos desatualizados continuam presentes e o modelo não tem como saber que mudaram, respondendo com dados antigos.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q017",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a recomendação do capítulo sobre o material bruto das reuniões?",
+      "options": [
+        "Resumir antes de colar para facilitar a leitura e interpretação do modelo.",
+        "Colar sem pré-editar, pois o material cru carrega mais sinal.",
+        "Organizar em tópicos antes de pedir ajuda ao modelo.",
+        "Pedir ao modelo para resumir antes de organizar o plano."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que colar o material cru sem pré-editar preserva detalhes que permitem identificar quem disse o quê e distinguir decisões de ideias.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q018",
+      "courseSlug": "chatgpt-zero",
+      "question": "Por que um cronograma bem formatado pode enganar?",
+      "options": [
+        "Porque a formatação bonita garante prazos realistas e confiáveis.",
+        "Porque a aparência organizada não garante que os prazos sejam realistas.",
+        "Porque o modelo sempre erra prazos ao gerar cronogramas complexos e detalhados.",
+        "Porque prazos gerados são sempre irreais por definição e não conferem."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que a aparência organizada de um plano gera falsa sensação de prontidão, mas não garante que os prazos sejam realistas.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q019",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a diferença entre conteúdo e voz em um texto?",
+      "options": [
+        "Conteúdo é o que se diz; voz é o jeito como se diz.",
+        "Conteúdo é o estilo; voz é a estrutura do texto e sua organização.",
+        "Conteúdo é o argumento; voz é a gramática usada no texto.",
+        "Conteúdo é o tema; voz é a formatação visual do texto."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 define conteúdo como o que é dito e voz como o jeito específico de dizer, incluindo vocabulário e ritmo.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q020",
+      "courseSlug": "chatgpt-zero",
+      "question": "Por que especificar a estrutura de saída (responsável, prazo, status) é importante?",
+      "options": [
+        "Porque o modelo não consegue gerar planos sem isso.",
+        "Porque força o modelo a extrair exatamente essa informação e revela lacunas.",
+        "Porque deixa o texto mais bonito e organizado visualmente para o leitor final.",
+        "Porque evita a atribuição errada de responsabilidade automaticamente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 mostra que definir os campos esperados força o modelo a extrair exatamente essa informação e revela onde ela está faltando.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q021",
+      "courseSlug": "chatgpt-zero",
+      "question": "O que diferencia um ritual semanal de um exercício isolado?",
+      "options": [
+        "O ritual é mais rápido de executar que um exercício isolado e repetitivo.",
+        "O ritual se prova comparando planejado com realizado ao longo do tempo.",
+        "O ritual não precisa de ajustes depois de definido.",
+        "O ritual usa um prompt fixo sem variação entre semanas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 explica que um ritual se prova ao longo do tempo, comparando o planejado com o realizado, e não pela aparência do plano.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q022",
+      "courseSlug": "chatgpt-zero",
+      "question": "Uma equipe recebe um plano gerado pelo ChatGPT com prazos apertados. O que deve ser feito antes de oficializar?",
+      "options": [
+        "Confiar no plano porque foi bem formatado e estruturado pelo ChatGPT.",
+        "Confrontar os prazos com a experiência real e revisar prioridades com informação interna.",
+        "Pedir ao modelo para gerar outro plano com prazos maiores e mais folgados.",
+        "Compartilhar imediatamente com a equipe para ganhar tempo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 orienta confrontar prazos com a experiência real e trazer informação interna que o modelo não tem antes de aceitar o plano.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q023",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a diferença entre descrever a voz com adjetivos vagos e com características observáveis?",
+      "options": [
+        "Adjetivos vagos são mais precisos para o modelo entender a intenção do autor.",
+        "Características observáveis dão instruções acionáveis que mudam o resultado.",
+        "Não há diferença prática para o ChatGPT em termos de resultado final.",
+        "Adjetivos vagos são mais rápidos de escrever no prompt inicial."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 afirma que características observáveis, como tamanho de frase e uso de emojis, dão instruções acionáveis que mudam o resultado, enquanto adjetivos vagos não.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q024",
+      "courseSlug": "chatgpt-zero",
+      "question": "Ao adaptar uma mensagem para diferentes canais, qual é a prática recomendada?",
+      "options": [
+        "Gerar cada texto separadamente para cada canal sem relação entre eles e sem base comum.",
+        "Gerar a versão mais completa primeiro e depois pedir adaptações específicas.",
+        "Usar o mesmo texto com formatação diferente em cada canal de comunicação.",
+        "Pedir ao modelo para encurtar o texto original para todos os canais."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 recomenda gerar a versão mais completa primeiro e depois pedir adaptações específicas ao comportamento de cada canal, preservando consistência.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q025",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é o primeiro padrão de erro de qualidade em texto assistido por IA citado no capítulo?",
+      "options": [
+        "Afirmações factuais erradas ou desatualizadas incorporadas ao texto.",
+        "O sotaque de IA: tiques de escrita que aparecem sem edição.",
+        "Autoplágio funcional: repetir estruturas de abertura e fechamento.",
+        "Conectivos formais em excesso e listas com três itens paralelos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 define o sotaque de IA como o primeiro padrão de erro de qualidade listado.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q026",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a solução para evitar fragmentação e repetição em um projeto de conteúdo de uma semana?",
+      "options": [
+        "Gerar cada peça em uma conversa separada com o mesmo kit de contexto.",
+        "Planejar a semana inteira em um só documento antes de gerar qualquer peça.",
+        "Reunir todas as peças num documento único e fazer checagem cruzada.",
+        "Usar instruções personalizadas salvas para padronizar as sessões de estudo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 afirma que planejar a semana em um documento antes de gerar qualquer peça evita os dois problemas.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q027",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a diferença entre pesquisar e aprender segundo o capítulo?",
+      "options": [
+        "Pesquisar é achar um fato específico; aprender é reter uma estrutura para usar depois.",
+        "Pesquisar é pedir uma resposta; aprender é entender o processo da conversa.",
+        "Pesquisar é buscar um dado; aprender é reter uma lógica para aplicar.",
+        "Pesquisar é obter um fato; aprender é dominar um raciocínio para reproduzir."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 distingue pesquisar como busca de informação específica e aprender como internalização de estrutura de pensamento.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q028",
+      "courseSlug": "chatgpt-zero",
+      "question": "Por que é importante declarar seu nível de partida em uma sessão de estudo com ChatGPT?",
+      "options": [
+        "Para que o modelo explique com o nível certo de detalhe, evitando excesso ou falta.",
+        "Para evitar que o modelo assuma um nível médio e explique demais ou de menos.",
+        "Para que a explicação seja personalizada ao seu conhecimento prévio do assunto.",
+        "Para que o modelo não explique conceitos que você já domina com clareza."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 explica que declarar o nível evita explicação condescendente ou avançada demais, pois o modelo assume nível médio sem isso.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q029",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a ordem correta das etapas em uma análise de dados próprios com ChatGPT?",
+      "options": [
+        "Contexto do negócio, padrões observáveis, hipóteses, ação testável.",
+        "Padrões observáveis, contexto do negócio, hipóteses, ação testável.",
+        "Hipóteses, padrões observáveis, contexto do negócio, ação testável.",
+        "Ação testável, hipóteses, padrões observáveis, contexto do negócio."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 estabelece a ordem: padrões observáveis primeiro, depois contexto, depois hipóteses e ação testável.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q030",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a regra prática para usar citações ou estatísticas geradas por IA em decisões reais?",
+      "options": [
+        "Confirmar cada uma em fonte independente e buscável fora da conversa.",
+        "Tratar como verdadeiras se soarem plausíveis e específicas o bastante.",
+        "Pedir ao modelo para gerar a referência completa e citável do estudo.",
+        "Usar apenas em contextos informais, sem impacto em decisões importantes."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 afirma que nenhuma citação ou estatística deve ser usada sem confirmação em fonte independente e verificável.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q031",
+      "courseSlug": "chatgpt-zero",
+      "question": "Por que pedir padrões antes de causas em análise de dados evita erros?",
+      "options": [
+        "Porque impede que hipóteses plausíveis sejam aceitas como fatos confirmados.",
+        "Porque o modelo inventa causas sem conhecer o contexto real do negócio.",
+        "Porque a ordem inversa leva a conclusões definitivas sem base nos dados.",
+        "Porque o contexto do negócio deve vir antes para orientar a análise."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 diz que pedir padrões antes de causas evita que suposições plausíveis sejam lidas como fatos confirmados.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q032",
+      "courseSlug": "chatgpt-zero",
+      "question": "Como quebrar a convergência de estilo em publicações frequentes com IA?",
+      "options": [
+        "Manter um documento com as últimas aberturas e pedir para evitar repeti-las.",
+        "Gerar cada peça em conversas separadas sem colar o kit de contexto.",
+        "Pedir ao modelo para variar o gancho a cada nova peça da semana.",
+        "Usar o mesmo prompt de abertura para todas as peças da semana."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 recomenda manter um documento com as últimas aberturas e pedir explicitamente para não repetir esses padrões.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q033",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é a principal diferença entre um plano de estudo que funciona e um que vira documento esquecido?",
+      "options": [
+        "A presença de checkpoints de validação ao longo do cronograma.",
+        "A divisão do conteúdo em blocos semanais bem distribuídos.",
+        "A definição de um objetivo final claro e com prazo definido.",
+        "A escolha de uma habilidade concreta para desenvolver."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 afirma que a diferença entre um plano que funciona e um esquecido está nos checkpoints de validação real, não no calendário de temas.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q034",
+      "courseSlug": "chatgpt-zero",
+      "question": "O que separa quem estagnou de quem evoluiu no uso do ChatGPT?",
+      "options": [
+        "A frequência com que a ferramenta é usada no dia a dia.",
+        "A quantidade de conversas mantidas com a ferramenta.",
+        "A forma como a ferramenta é usada, não o quanto é usada.",
+        "O tempo de experiência acumulado com a ferramenta."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 diz que a pergunta que separa quem estagnou de quem evoluiu é 'como uso?', não 'uso a ferramenta?'.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q035",
+      "courseSlug": "chatgpt-zero",
+      "question": "O que são instruções personalizadas no ChatGPT?",
+      "options": [
+        "Configurações que se aplicam automaticamente a toda nova conversa.",
+        "Um documento com prompts testados e organizados por categoria.",
+        "Uma lista de erros comuns a evitar ao usar a ferramenta.",
+        "Um conjunto de pastas para separar conversas por contexto."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 define instruções personalizadas como uma configuração da conta que se aplica automaticamente a toda conversa nova, sem repetição manual.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q036",
+      "courseSlug": "chatgpt-zero",
+      "question": "Qual é o primeiro passo da auditoria de uso descrita no capítulo?",
+      "options": [
+        "Revisar o histórico de conversas recentes com distância.",
+        "Criar templates para os padrões mais frequentes.",
+        "Contar quantas vezes cada padrão aparece no mês.",
+        "Definir uma data para repetir a auditoria."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 descreve o primeiro passo da auditoria como abrir o histórico e revisar com distância, como se fosse conversa de outra pessoa.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q037",
+      "courseSlug": "chatgpt-zero",
+      "question": "Em um plano de estudo, qual é a diferença entre validar progresso relendo material e testar recuperação sem consulta?",
+      "options": [
+        "Reler reforça a memória, enquanto testar recuperação mede retenção real.",
+        "Reler é mais rápido, enquanto testar recuperação exige mais tempo.",
+        "Reler é indicado para iniciantes, enquanto testar recuperação é para avançados.",
+        "Reler evita erros, enquanto testar recuperação aumenta a ansiedade."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 diferencia validar por releitura (passiva) de testar recuperação sem consulta, que revela lacunas reais de retenção.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q038",
+      "courseSlug": "chatgpt-zero",
+      "question": "Um profissional percebe que sempre reescreve o mesmo contexto em prompts diferentes. O que isso indica?",
+      "options": [
+        "Que esse contexto deve virar uma instrução personalizada.",
+        "Que ele deve parar de usar a ferramenta para essas tarefas.",
+        "Que ele precisa criar uma biblioteca de prompts mais ampla.",
+        "Que ele deve separar as conversas por projetos distintos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 mostra que reexplicar o mesmo contexto em prompts diferentes é candidato a virar configuração permanente, como no exemplo do gerente.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q039",
+      "courseSlug": "chatgpt-zero",
+      "question": "Uma resposta do ChatGPT parece razoável, mas estranha para o seu contexto atual. O que investigar primeiro?",
+      "options": [
+        "Se as instruções personalizadas estão desatualizadas.",
+        "Se o template usado está muito genérico para a tarefa.",
+        "Se a biblioteca de prompts precisa de mais exemplos.",
+        "Se a conversa foi iniciada no projeto correto."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 alerta que respostas 'razoáveis mas estranhas' costumam ser sinal de instrução configurada desatualizada, não falha pontual da IA.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-zero-q040",
+      "courseSlug": "chatgpt-zero",
+      "question": "Por que o manual pessoal de uso precisa ter um ritual de revisão com data definida?",
+      "options": [
+        "Para evitar que instruções e templates fiquem desatualizados.",
+        "Para garantir que o documento seja escrito na primeira sessão.",
+        "Para que a biblioteca de prompts seja organizada por categoria.",
+        "Para que os casos de uso sejam listados em ordem de frequência."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:53:50.559Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 afirma que um manual sem ritual de revisão vira, com o tempo, o problema de instruções desatualizadas descrito no capítulo anterior.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}

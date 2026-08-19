@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "primeiras-automacoes",
+  "lastUpdated": "2026-08-19T11:41:29.634Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "primeiras-automacoes-q001",
+      "courseSlug": "primeiras-automacoes",
+      "question": "O que acontece quando se automatiza um processo ruim?",
+      "options": [
+        "O processo melhora sozinho com a automação",
+        "O erro acontece mais rápido e com menos gente percebendo",
+        "A automação corrige as falhas do processo manual",
+        "O processo fica mais lento até ser revisado"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que automatizar um processo ruim não o conserta, apenas faz o erro acontecer mais rápido e com menos gente percebendo.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q002",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é a função da linha de base no processo de automação?",
+      "options": [
+        "Definir quais ferramentas serão usadas na automação",
+        "Registrar como o processo funciona hoje para comparar depois",
+        "Listar todos os processos que podem ser automatizados",
+        "Medir o custo de erro de cada processo candidato"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 explica que a linha de base serve para registrar como o processo funciona hoje, sem automação, permitindo provar melhoria depois.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q003",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é o propósito do Mapa de Automação?",
+      "options": [
+        "Substituir a ferramenta de automação escolhida",
+        "Consolidar a análise dos capítulos anteriores em um documento",
+        "Ensinar a usar ferramentas como n8n, Make ou Zapier",
+        "Listar todas as ferramentas usadas no negócio"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 diz que o Mapa de Automação transforma tudo que os capítulos anteriores construíram em um único entregável concreto.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q004",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual combinação de fatores levou Renata a escolher a resposta de status como primeiro projeto?",
+      "options": [
+        "Maior tempo recuperável e menor complexidade de implementação",
+        "Menor frequência e maior custo de erro no processo",
+        "Maior julgamento humano e menor tempo recuperável",
+        "Menor tempo recuperável e integração já pronta"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 3, Renata escolheu a resposta de status por ter o maior volume de tempo recuperável e por poder ser construída inteiramente dentro do sistema já usado.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q005",
+      "courseSlug": "primeiras-automacoes",
+      "question": "No mapeamento de um processo, qual é a diferença entre entrada e transformação?",
+      "options": [
+        "É o evento que inicia o processo, como um formulário enviado",
+        "É o que acontece com o dado entre a entrada e a saída",
+        "É o resultado final entregue pelo processo",
+        "É a ferramenta usada para automatizar o fluxo"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 define transformação como o que acontece com o dado entre a entrada e a saída, incluindo validações e buscas.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q006",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Considere dois processos: A ocorre 30 vezes por mês, leva 2 minutos cada, e erros são baratos. B ocorre 5 vezes por mês, leva 20 minutos, e erros são caros. Segundo o capítulo 1, qual é o melhor candidato inicial?",
+      "options": [
+        "Processo A, por ter alta frequência e baixo custo de erro",
+        "Processo B, por ter maior tempo total mensal",
+        "Processo A, por ter menor tempo por ocorrência",
+        "Processo B, por ter menor frequência mensal"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 indica que os melhores candidatos têm frequência alta, tempo somado alto e baixo custo de erro; o processo A se encaixa melhor que B.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q007",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual erro de seleção é cometido quando se mede o tempo de um processo apenas uma vez, em um dia de baixo movimento?",
+      "options": [
+        "Viés de recência emocional na escolha do processo",
+        "Automação de processo mal definido na empresa",
+        "Validação insuficiente da linha de base medida",
+        "Falta de inventário de ferramentas do negócio"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 descreve a validação insuficiente da linha de base como medir o processo uma única vez em um dia não representativo.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q008",
+      "courseSlug": "primeiras-automacoes",
+      "question": "No processo de lembrete de fatura vencida descrito no capítulo 6, qual etapa é uma transformação?",
+      "options": [
+        "A data de vencimento que chega no sistema",
+        "A busca do nome e valor do cliente para montar a mensagem",
+        "O envio da mensagem de cobrança por e-mail",
+        "O registro de que o lembrete foi enviado"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 exemplifica a transformação como a busca de dados adicionais para formatar a mensagem, entre a entrada e a saída.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q009",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é o primeiro item do kit de preparação para mapear um processo?",
+      "options": [
+        "Amostra de dado real com três a cinco exemplos da entrada",
+        "Acesso técnico completo às ferramentas envolvidas no processo",
+        "Glossário de campos com nome, formato e obrigatoriedade",
+        "Lista de inconsistências encontradas na amostra de dados"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define a amostra de dado real como o primeiro item do kit, pois ela revela inconsistências que a descrição teórica esconde.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q010",
+      "courseSlug": "primeiras-automacoes",
+      "question": "No fluxo do Fala Fluente, qual é a primeira transformação aplicada ao dado?",
+      "options": [
+        "Validar se o e-mail tem formato reconhecível com @ e domínio",
+        "Padronizar o telefone adicionando o código do país quando ausente",
+        "Verificar se o e-mail já existe na base de leads anteriores",
+        "Direcionar o lead para a trilha conforme o idioma escolhido"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 lista a validação de e-mail como o primeiro passo da transformação, antes de qualquer outra ação.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q011",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é a forma mais comum de autenticação para Google Sheets e Gmail em ferramentas no-code?",
+      "options": [
+        "Login direto via OAuth com poucos cliques de autorização",
+        "Chave de API gerada no painel do aplicativo de destino",
+        "Webhook manual configurado para cada integração necessária",
+        "Login com senha e usuário direto na ferramenta de automação"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 explica que OAuth é o padrão para apps como Google Sheets e Gmail, sendo mais simples que chave de API.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q012",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual técnica de validação de mapa consiste em seguir manualmente cada exemplo real pelo fluxo?",
+      "options": [
+        "Checagem de simetria de saída para cada entrada possível",
+        "Teste com dado real contra o mapa (dry run manual)",
+        "Pedir para outra pessoa seguir o mapa sem explicação verbal",
+        "Releitura cuidadosa do mapa para encontrar lacunas lógicas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 descreve o dry run manual como o teste de percorrer cada exemplo real passo a passo pelo mapa.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q013",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual seção do Mapa de Fluxo lista pontos que ainda dependem de confirmação externa?",
+      "options": [
+        "Entrada detalhada com todos os campos e formatos de dados",
+        "Sequência de transformação numerada com validações inclusas",
+        "Ramificações condicionais desenhadas como perguntas sim ou não",
+        "Decisões em aberto que dependem de confirmação de terceiros"
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define a seção de decisões em aberto para registrar pontos que dependem de outras pessoas.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q014",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Um mapa define saída para pagamento em dia e atraso até 5 dias, mas não para atraso acima de 30 dias. Qual técnica de validação revelaria essa lacuna?",
+      "options": [
+        "Teste com dado real contra o mapa, seguindo cada exemplo passo a passo",
+        "Checagem de simetria de saída para cada entrada possível",
+        "Pedir para outra pessoa seguir o mapa sem explicação verbal",
+        "Releitura cuidadosa do mapa para encontrar lacunas lógicas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A checagem de simetria de saída exige uma saída definida para cada entrada, incluindo casos raros como atraso longo.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q015",
+      "courseSlug": "primeiras-automacoes",
+      "question": "No Mapa de Fluxo, qual seção documenta o que fazer quando um dado chega fora do padrão esperado?",
+      "options": [
+        "Entrada detalhada com todos os campos e formatos de dados",
+        "Sequência de transformação numerada com validações inclusas",
+        "Casos de exceção validados com saída definida para cada um",
+        "Ramificações condicionais desenhadas como perguntas sim ou não"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 inclui a seção de casos de exceção validados para tratar dados fora do padrão.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q016",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual ferramenta no-code é mais indicada para um processo com várias ramificações condicionais e volume mensal alto?",
+      "options": [
+        "Zapier pela simplicidade e integrações prontas para iniciantes",
+        "Make por equilibrar poder e curva de aprendizado acessível",
+        "n8n por oferecer self-hosted e controle total dos dados",
+        "Nenhuma, pois a escolha depende do processo e do volume"
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que não existe ferramenta universalmente melhor; a escolha depende do processo e do volume.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q017",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é o primeiro nó de qualquer fluxo de automação?",
+      "options": [
+        "O nó de ação de saída, que executa a tarefa final do fluxo.",
+        "O nó de gatilho, que inicia o fluxo ao detectar um evento.",
+        "O nó de condição, que decide qual caminho seguir.",
+        "O nó de transformação, que formata os dados recebidos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que o primeiro nó de qualquer fluxo é sempre o gatilho, que inicia o fluxo ao detectar um evento.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q018",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Por que é recomendado configurar a notificação de erro em um canal separado do canal de notificação normal do fluxo?",
+      "options": [
+        "Para que o aviso de erro não se perca entre as mensagens normais.",
+        "Para que o fluxo pare de funcionar imediatamente quando algo falhar.",
+        "Para que a equipe receba menos notificações de sucesso no dia a dia.",
+        "Para que o custo da ferramenta de automação seja reduzido no plano."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que um canal separado para falhas garante que o aviso de erro chame atenção, em vez de se perder no volume normal de mensagens.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q019",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Um estúdio de tatuagem revisou seus mapas antes de construir a automação de confirmação de agendamento e descobriu que mudou de aplicativo de agendamento. Qual fase do projeto orientado a entrega ele estava executando?",
+      "options": [
+        "A fase de publicação com rede de segurança, configurando o tratamento de erro.",
+        "A fase de construção com disciplina de teste, validando cada nó individualmente.",
+        "A fase de confirmação da base, que revisa se os mapas refletem a realidade.",
+        "A fase de revisão do histórico, agendando a primeira checagem para sete dias."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 descreve a fase de confirmação da base como a revisão dos mapas para garantir que ainda refletem a realidade antes da construção.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q020",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Quais são os três critérios do tripé para escolher o que automatizar?",
+      "options": [
+        "Frequência, mecanicidade e custo do erro são os três.",
+        "Tempo gasto, complexidade e retorno financeiro são os três.",
+        "Volume, urgência e necessidade de supervisão são os três.",
+        "Simplicidade, rapidez e economia de recursos são os três."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 define o tripé frequência, mecanicidade e custo do erro como o filtro para priorizar automações.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q021",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Por que uma tarefa feita uma vez por trimestre não é boa candidata a automação?",
+      "options": [
+        "Porque a frequência baixa não compensa o esforço.",
+        "Porque a tarefa é muito complexa para ser automatizada.",
+        "Porque o custo do erro é sempre alto nesse tipo de tarefa.",
+        "Porque a automação exige julgamento humano constante."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 afirma que uma tarefa de baixa frequência raramente compensa o esforço de configurar e manter uma automação.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q022",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é o primeiro passo da preparação antes de construir uma automação?",
+      "options": [
+        "Mapear o processo manual atual com exceções.",
+        "Configurar a ferramenta de automação escolhida.",
+        "Testar a automação com dados reais de clientes.",
+        "Definir o critério de sucesso mensurável."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 indica que o primeiro passo é mapear o processo manual atual, incluindo exceções, antes de qualquer construção.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q023",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Em uma automação de agendamento via WhatsApp, quando o cliente responde algo ambíguo como 'posso levar meu filho?', o que a automação deve fazer?",
+      "options": [
+        "Encaminhar a conversa para atendimento manual com notificação.",
+        "Tentar adivinhar a resposta e enviar uma confirmação automática.",
+        "Ignorar a mensagem e aguardar a próxima interação do cliente.",
+        "Responder com uma mensagem genérica pedindo para reformular."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 mostra que mensagens ambíguas devem ser encaminhadas para atendimento manual, aplicando o modelo híbrido do capítulo 16.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q024",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é a sequência correta dos cinco blocos funcionais de uma automação de agendamento via WhatsApp?",
+      "options": [
+        "Gatilho, interpretação, consulta, condição, registro e confirmação.",
+        "Gatilho, consulta, interpretação, condição, registro e confirmação.",
+        "Interpretação, gatilho, consulta, condição, registro e confirmação.",
+        "Consulta, gatilho, interpretação, condição, registro e confirmação."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 descreve os cinco blocos na ordem: gatilho, interpretação, consulta, condição e registro/confirmação.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q025",
+      "courseSlug": "primeiras-automacoes",
+      "question": "O que é essencial para evitar incomodar clientes em sequências automáticas de lembrete?",
+      "options": [
+        "Definir apenas as condições de início dos lembretes automáticos.",
+        "Definir explicitamente as condições de parada da sequência.",
+        "Aumentar a frequência dos lembretes para garantir resposta.",
+        "Enviar lembretes até o cliente confirmar o recebimento."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que validar qualidade exige desenhar explicitamente as condições de parada de uma sequência automática, não só as condições de início.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q026",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Em um sistema de cobrança e follow-up, qual é a função da camada de escalada?",
+      "options": [
+        "Enviar lembretes automáticos com tom cada vez mais agressivo.",
+        "Notificar uma pessoa quando as tentativas automáticas se esgotam.",
+        "Registrar o status de cada cliente em um painel central.",
+        "Gerar o primeiro lembrete antes do vencimento da fatura."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 define a camada de escalada como a que notifica uma pessoa após um número definido de tentativas automáticas sem resposta.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q027",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é a diferença entre uma automação funcionar e ser confiável?",
+      "options": [
+        "Funcionar é operar sem erros mesmo com condições alteradas.",
+        "Confiável é continuar funcionando mesmo quando algo muda.",
+        "Funcionar exige monitoramento constante e alertas ativos.",
+        "Confiável significa nunca precisar de manutenção ou ajuste."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 explica que confiável significa continuar produzindo o resultado esperado mesmo quando uma condição muda, ao contrário de apenas funcionar em condições ideais.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q028",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Para testar mudanças em uma automação sem arriscar dados reais, qual é a prática recomendada?",
+      "options": [
+        "Executar a alteração diretamente no fluxo de produção.",
+        "Criar uma cópia da automação com contas e dados de teste.",
+        "Testar apenas os casos ideais para economizar tempo.",
+        "Depender de alertas para descobrir falhas depois."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 recomenda duplicar a automação em um ambiente de teste com contas e dados fictícios antes de alterar produção.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q029",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Para lidar com falhas temporárias em uma integração externa, qual é o padrão recomendado?",
+      "options": [
+        "Interromper o fluxo e aguardar ação manual imediata.",
+        "Tentar novamente com intervalos crescentes entre as tentativas.",
+        "Ignorar a falha e continuar com os dados incompletos.",
+        "Enviar uma notificação de erro para todos os usuários."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 descreve o padrão retry com backoff, que tenta novamente com intervalos crescentes para superar falhas temporárias.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q030",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Uma automação continua executando sem erros, mas processa dados incorretos porque um provedor externo mudou o formato de resposta. Que tipo de falha é essa?",
+      "options": [
+        "Falha silenciosa por esgotamento de limite de uso mensal.",
+        "Falha silenciosa por mudança externa não avisada.",
+        "Falha visível por erro de configuração do fluxo.",
+        "Falha intermitente por instabilidade de rede local."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 identifica a quebra por mudança externa não avisada como uma falha silenciosa que ocorre quando um provedor altera o formato de resposta.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q031",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Em uma automação de agendamento, dois clientes tentam marcar o mesmo horário quase simultaneamente. Que problema isso revela e qual a correção típica?",
+      "options": [
+        "Problema de fuso horário, resolvido ajustando o servidor.",
+        "Condição de corrida, corrigida com reserva temporária do horário.",
+        "Excesso de automação, resolvido reduzindo lembretes.",
+        "Falha de formato de data, corrigida validando a entrada."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 menciona a condição de corrida e sugere adicionar uma trava com reserva temporária do horário para evitar confirmações duplicadas.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q032",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Em um sistema de cobrança com múltiplos clientes e pagamentos em datas variadas, qual é a principal função do registro de estado central?",
+      "options": [
+        "Armazenar os dados pessoais de todos os clientes com segurança.",
+        "Controlar quem já foi contatado e em que etapa está cada um.",
+        "Gerar relatórios financeiros detalhados de cada cliente.",
+        "Substituir a necessidade de escalada para atendimento humano."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 afirma que o registro de estado central permite saber quem já foi contatado e em que etapa cada cliente está, evitando lembretes duplicados.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q033",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é a função principal de uma automação watchdog?",
+      "options": [
+        "Monitora outras automações e alerta sobre falhas.",
+        "Executa tarefas automáticas em horários fixos.",
+        "Substitui a supervisão humana por verificações manuais.",
+        "Gera relatórios diários de todas as atividades."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 define o watchdog como um sistema que verifica periodicamente se as automações críticas continuam funcionando e alerta quando algo sai do esperado.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q034",
+      "courseSlug": "primeiras-automacoes",
+      "question": "O que o 'teste do ônibus' avalia em cada automação?",
+      "options": [
+        "Se outra pessoa conseguiria mantê-la sem você.",
+        "Se a automação é rápida o suficiente para uso diário.",
+        "Se a automação tem um padrão de nomenclatura claro.",
+        "Se a automação gera impacto mensurável no negócio."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 apresenta o 'teste do ônibus' como forma de verificar se outra pessoa conseguiria manter a automação sem você.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q035",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é o propósito de um inventário central de automações?",
+      "options": [
+        "Listar todas as automações e seus detalhes em um só lugar.",
+        "Armazenar cópias de backup de todas as configurações.",
+        "Fornecer uma ferramenta única para criar novas automações.",
+        "Testar automaticamente as automações após cada alteração."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 explica que o inventário central é uma única planilha que lista todas as automações em produção com seus detalhes.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q036",
+      "courseSlug": "primeiras-automacoes",
+      "question": "O que se deve fazer antes de alterar significativamente uma automação em produção?",
+      "options": [
+        "Duplicá-la e manter a cópia como versão anterior.",
+        "Migrá-la para uma plataforma de automação diferente.",
+        "Apagar a versão antiga e criar uma nova do zero.",
+        "Pedir a um colega que revise a alteração antes de aplicar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 recomenda duplicar a automação como versão anterior antes de qualquer alteração significativa em produção.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q037",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Em um sistema watchdog, quando um alerta imediato deve ser enviado em vez de aguardar o resumo diário?",
+      "options": [
+        "Quando uma automação falha uma vez, mas a repetição resolve automaticamente.",
+        "Quando uma automação crítica fica sem execução por várias horas.",
+        "Quando uma automação não crítica apresenta um erro menor no log.",
+        "Quando o próprio watchdog falha ao rodar no horário agendado."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 diz que uma parada prolongada de automação crítica merece alerta imediato, enquanto erros isolados resolvidos por retry podem ficar para o digest diário.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q038",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Uma empresa tem cinco automações. Uma é tecnicamente impressionante, mas economiza pouco tempo; outra é simples, mas economiza muitas horas semanais. Segundo o capítulo, qual deve ser priorizada para melhoria?",
+      "options": [
+        "A impressionante, porque demonstra habilidade técnica.",
+        "A simples, porque tem maior impacto medido.",
+        "A que teve desenvolvimento mais recente.",
+        "A que foi construída primeiro e tem mais histórico."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 ensina a priorizar por retorno medido, não por novidade ou sofisticação técnica.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q039",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Qual é o principal risco de concentrar o conhecimento sobre automações críticas em uma única pessoa?",
+      "options": [
+        "Essa pessoa pode ficar sobrecarregada com outras tarefas.",
+        "As automações podem parar de funcionar se essa pessoa estiver indisponível.",
+        "As automações ficarão menos eficientes sem supervisão.",
+        "A pessoa pode esquecer de atualizar o inventário central."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 destaca que o conhecimento concentrado em uma única pessoa cria um ponto único de falha organizacional.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "primeiras-automacoes-q040",
+      "courseSlug": "primeiras-automacoes",
+      "question": "Ao montar um roadmap de três meses, qual é a proporção recomendada de tempo para manutenção das automações existentes?",
+      "options": [
+        "Entre 10% e 20% do tempo total disponível.",
+        "Entre 20% e 30% do tempo total disponível.",
+        "Entre 30% e 40% do tempo total disponível.",
+        "Entre 40% e 50% do tempo total disponível."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T11:41:29.634Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 sugere reservar entre 20% e 30% do tempo de cada ciclo para manutenção do que já existe.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}
