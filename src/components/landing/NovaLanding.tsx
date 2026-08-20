@@ -1077,6 +1077,31 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               </Link>
             ))}
           </div>
+          {/* Grade de links secundária — 20/08/2026.
+              A home é a página mais forte do site (96 das 286 impressões dos
+              últimos 28 dias) e não distribuía link interno nenhum: os cinco
+              cartões acima cobrem cinco destinos, e o resto do site — serviços,
+              recursos, ajuda, instrutores, parcerias — não recebia link de
+              lugar nenhum. O rodapé completo não existe aqui, porque a home
+              mora fora do grupo `(site)` e não usa o `SiteChrome`.
+              Uma linha de texto discreta resolve sem tocar na experiência. */}
+          <nav aria-label={T("Mapa do site")} className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[11px] text-white/40">
+            {[
+              ["/cursos/por-ferramenta", "Cursos por ferramenta"],
+              ["/recursos", "Recursos gratuitos"],
+              ["/servicos", "Serviços"],
+              ["/precos", "Preços"],
+              ["/ajuda", "Central de Ajuda"],
+              ["/instrutores", "Instrutores"],
+              ["/sobre", "Sobre"],
+              ["/parcerias", "Parcerias"],
+              ["/contato", "Contato"],
+            ].map(([href, rotulo]) => (
+              <Link key={href} href={rota(href)} className="hover:text-white/80 transition-colors">
+                {T(rotulo)}
+              </Link>
+            ))}
+          </nav>
           <p className="mt-3 text-center text-[11px] text-white/35">
             {/* String, não número: o ICU formata número com separador de
                 milhar e o ano viraria "2.026". */}
